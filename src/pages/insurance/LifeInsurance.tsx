@@ -196,6 +196,76 @@ const LifeInsurance = () => {
           </ScrollReveal>
         </section>
 
+        {/* Article Content */}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto space-y-12 text-right">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">למה ביטוח חיים חשוב?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                ביטוח חיים הוא אחד הכלים הפיננסיים החשובים ביותר להגנה על המשפחה שלכם. במקרה של אירוע טרגי, ביטוח חיים מבטיח שבני המשפחה יוכלו להמשיך לחיות ברמת החיים שהם רגילים אליה, לשלם את המשכנתא, לממן את לימודי הילדים ולכסות את ההוצאות השוטפות.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                רבים חושבים שביטוח חיים נחוץ רק לאנשים מבוגרים, אך למעשה, הצורך בו גדול במיוחד דווקא אצל משפחות צעירות עם ילדים קטנים ומשכנתא. ביטוח חיים מעניק שקט נפשי ומאפשר לכם לדעת שהמשפחה מוגנת בכל תרחיש.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מתי כדאי לרכוש ביטוח חיים?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                הזמן האידיאלי לרכוש ביטוח חיים הוא כאשר יש לכם אנשים התלויים בכם כלכלית. נקודות ציון מרכזיות כוללות: נישואים, לידת ילד, רכישת דירה או לקיחת משכנתא. ככל שמצטרפים מוקדם יותר, הפרמיה נמוכה יותר והתנאים טובים יותר.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                כמו כן, ביטוח חיים נדרש לעיתים כתנאי לקבלת משכנתא מהבנק. במקרה כזה, חשוב לדעת שאינכם חייבים לרכוש את הביטוח דרך הבנק - השוואה בין חברות יכולה לחסוך אלפי שקלים.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מה חשוב לדעת?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                בבחירת ביטוח חיים יש לשים לב לסכום הביטוח (שצריך לכסות את ההתחייבויות הפיננסיות של המשפחה), תקופת הביטוח, חריגים בפוליסה, ונספחים כמו כיסוי אובדן כושר עבודה ונכות. חשוב גם לעדכן את הפוליסה בכל שינוי משמעותי בחיים.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                ב-SeelD אנחנו מבצעים עבורכם השוואה מקיפה בין כל חברות הביטוח, מוודאים שסכום הביטוח מתאים לצרכים שלכם, ומלווים אתכם לאורך כל הדרך.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">שאלות נפוצות</h2>
+              <div className="space-y-6">
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">מה ההבדל בין ביטוח חיים ריסק לביטוח חיים עם חיסכון?</h3>
+                  <p className="text-muted-foreground">ביטוח ריסק מכסה מקרה פטירה בלבד ועלותו נמוכה. ביטוח חיים עם חיסכון משלב גם מרכיב חיסכון, אך הפרמיה גבוהה יותר. ברוב המקרים מומלץ ביטוח ריסק בשילוב חיסכון נפרד.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">כמה סכום ביטוח אני צריך?</h3>
+                  <p className="text-muted-foreground">כלל אצבע: סכום הביטוח צריך לכסות 5-10 שנות הכנסה, בתוספת יתרת המשכנתא והוצאות עתידיות צפויות כמו לימודי הילדים. יועץ מקצועי יעזור לכם לחשב את הסכום המדויק.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">האם ביטוח חיים שמשולם דרך הפנסיה מספיק?</h3>
+                  <p className="text-muted-foreground">הכיסוי בקרן הפנסיה (ביטוח שאירים) הוא חלקי ומבוסס על גובה ההפקדות. במקרים רבים הוא אינו מספיק, ומומלץ להשלים עם ביטוח חיים פרטי.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Companies Section */}
+        <section className="py-16 bg-muted/20 rounded-3xl my-8">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold tracking-tight mb-3 text-[#0a3d3d]">חברות שאנחנו משווקים</h2>
+              <p className="text-lg text-muted-foreground">אנחנו עובדים עם חברות הביטוח המובילות בישראל כדי להביא לכם את ההצעה הטובה ביותר</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              {["הפניקס", "מגדל", "הראל", "כלל", "מנורה מבטחים", "איילון", "הכשרה", "ביטוח ישיר", "שלמה ביטוח", "AIG", "ליברה"].map((company) => (
+                <span key={company} className="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-[#0a3d3d] border border-[#5ec6c6]/30 shadow-sm hover:shadow-md hover:border-[#5ec6c6] transition-all">
+                  {company}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Enrollment Form */}
         <section id="contact-form" className="py-16 scroll-mt-24">
           <div className="max-w-2xl mx-auto">

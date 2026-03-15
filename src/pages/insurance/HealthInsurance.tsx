@@ -218,6 +218,76 @@ const HealthInsurance = () => {
           </ScrollReveal>
         </section>
 
+        {/* Article Content */}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto space-y-12 text-right">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">למה ביטוח בריאות פרטי חשוב?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                מערכת הבריאות הציבורית בישראל מספקת שירותים בסיסיים, אך לעיתים קרובות זמני ההמתנה ארוכים, הבחירה ברופא מוגבלת, ותרופות חדשניות אינן כלולות בסל הבריאות. ביטוח בריאות פרטי מאפשר לכם לקבל את הטיפול הרפואי הטוב ביותר בזמן הנכון, עם גישה לרופאים מומחים, טכנולוגיות מתקדמות ותרופות שאינן בסל.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                במקרה של מחלה או ניתוח, ביטוח בריאות פרטי יכול לחסוך לכם חודשים של המתנה ולהעניק לכם שליטה מלאה על הטיפול שלכם. מדובר בהשקעה בבריאות שלכם ושל משפחתכם, שמשתלמת במיוחד ברגעי האמת.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מתי כדאי לרכוש ביטוח בריאות?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                התשובה הקצרה היא: כמה שיותר מוקדם, יותר טוב. ככל שמצטרפים בגיל צעיר יותר, הפרמיה החודשית נמוכה יותר ותנאי הקבלה קלים יותר. חשוב במיוחד לרכוש ביטוח בריאות לפני שמתפתחות בעיות רפואיות, מכיוון שמצב רפואי קיים עלול להוביל לחריגים בפוליסה.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                מומלץ לרכוש ביטוח בריאות בשלבי חיים משמעותיים: כניסה לשוק העבודה, לידת ילד ראשון, או מעבר לגיל 40. אלו הרגעים שבהם הצורך בכיסוי רפואי איכותי הופך לקריטי.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מה חשוב לדעת לפני שרוכשים?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                בבחירת ביטוח בריאות, חשוב לשים לב למספר נקודות מפתח: תקופת אכשרה (תקופת המתנה לפני שניתן לממש את הביטוח), חריגים בפוליסה, גובה ההשתתפות העצמית, ורשת הרופאים והמוסדות הרפואיים הזמינים. השוואה בין חברות ביטוח יכולה לחסוך מאות שקלים בחודש תוך שמירה על כיסוי מקיף.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                ב-SeelD אנחנו משווים עבורכם בין כל חברות הביטוח המובילות ומוצאים את הפוליסה המתאימה ביותר לצרכים ולתקציב שלכם, ללא עלות נוספת.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">שאלות נפוצות</h2>
+              <div className="space-y-6">
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">האם ביטוח בריאות פרטי מחליף את קופת החולים?</h3>
+                  <p className="text-muted-foreground">לא. ביטוח בריאות פרטי משלים את השירותים של קופת החולים ומעניק כיסוי לטיפולים, תרופות וניתוחים שאינם כלולים בסל הבריאות הממלכתי.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">מהי תקופת אכשרה?</h3>
+                  <p className="text-muted-foreground">תקופת אכשרה היא פרק זמן (בדרך כלל 3-12 חודשים) מרגע הצטרפות לביטוח ועד שניתן לממש את הכיסוי. תקופה זו משתנה בין חברות ובין סוגי כיסויים.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">האם אפשר לבטח את כל המשפחה?</h3>
+                  <p className="text-muted-foreground">בהחלט. רוב חברות הביטוח מציעות פוליסות משפחתיות במחיר מוזל, הכוללות כיסוי להורים ולילדים תחת פוליסה אחת.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Companies Section */}
+        <section className="py-16 bg-muted/20 rounded-3xl my-8">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold tracking-tight mb-3 text-[#0a3d3d]">חברות שאנחנו משווקים</h2>
+              <p className="text-lg text-muted-foreground">אנחנו עובדים עם חברות הביטוח המובילות בישראל כדי להביא לכם את ההצעה הטובה ביותר</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              {["הפניקס", "מגדל", "הראל", "כלל", "מנורה מבטחים", "איילון", "הכשרה", "ביטוח ישיר", "שלמה ביטוח", "AIG", "ליברה"].map((company) => (
+                <span key={company} className="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-[#0a3d3d] border border-[#5ec6c6]/30 shadow-sm hover:shadow-md hover:border-[#5ec6c6] transition-all">
+                  {company}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Enrollment Form */}
         <section id="contact-form" className="py-16 scroll-mt-24">
           <div className="max-w-2xl mx-auto">

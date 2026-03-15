@@ -123,6 +123,76 @@ const GemelFunds = () => {
           </ScrollReveal>
         </section>
 
+        {/* Article Content */}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto space-y-12 text-right">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">למה קופת גמל חשובה?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                קופת גמל היא מכשיר חיסכון ייחודי המשלב גמישות מקסימלית עם הטבות מס משמעותיות. בניגוד לקרן פנסיה, קופת גמל מאפשרת לכם לבחור בפרישה בין משיכת הכסף כסכום חד פעמי (משיכה הונית) לבין קבלת קצבה חודשית - גמישות שלא קיימת במוצרים פנסיוניים אחרים.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                קופת גמל להשקעה, שהושקה בשנת 2016, היא מוצר חיסכון מעולה גם לטווח בינוני. היא מאפשרת הפקדות ללא תקרה, ניהול מקצועי של ההשקעות, ופטור ממס רווחי הון בעת משיכה כקצבה. זהו מכשיר חיסכון שכל משק בית צריך לשקול.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מתי כדאי לפתוח קופת גמל?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                קופת גמל מתאימה בכל שלב בחיים. עצמאים יכולים להפקיד לקופת גמל וליהנות מהטבות מס משמעותיות. שכירים יכולים להפקיד מעבר להפקדות החובה של המעסיק כדי להגדיל את החיסכון. גם הורים יכולים לפתוח קופת גמל להשקעה עבור הילדים כחיסכון לטווח ארוך.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                מומלץ לבצע ניתוח תקופתי של קופות הגמל הקיימות שלכם, לבדוק את דמי הניהול ואת ביצועי ההשקעות, ולוודא שהכסף שלכם מנוהל בצורה אופטימלית.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מה חשוב לדעת?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                ישנם מספר סוגי קופות גמל: קופת גמל לחיסכון (המשך הקופות הישנות), קופת גמל להשקעה (מוצר חדש וגמיש), וקופת גמל לתגמולים. לכל סוג תנאים שונים בנוגע למשיכה, מיסוי והטבות. חשוב לבחור את המוצר הנכון בהתאם למטרת החיסכון ולאופק ההשקעה.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                ב-SeelD אנחנו מנתחים את כל קופות הגמל שלכם, בודקים דמי ניהול, תשואות ומסלולי השקעה, ומוודאים שהכסף שלכם עובד בצורה הטובה ביותר. הייעוץ שלנו חינמי ואובייקטיבי.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">שאלות נפוצות</h2>
+              <div className="space-y-6">
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">מה ההבדל בין קופת גמל לקרן פנסיה?</h3>
+                  <p className="text-muted-foreground">קרן פנסיה כוללת כיסויים ביטוחיים (נכות ושאירים) ומחייבת קבלת קצבה חודשית. קופת גמל היא מוצר חיסכון טהור עם גמישות רבה יותר, כולל אפשרות למשיכה הונית. לרוב מומלץ שילוב של שניהם.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">מתי אפשר למשוך כסף מקופת גמל?</h3>
+                  <p className="text-muted-foreground">קופת גמל לחיסכון ניתנת למשיכה בגיל 60. קופת גמל להשקעה ניתנת למשיכה בכל עת (לאחר 6 שנים מההפקדה הראשונה עם פטור ממס רווחי הון, או לפני כן עם תשלום מס).</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">האם כדאי להעביר קופת גמל ישנה?</h3>
+                  <p className="text-muted-foreground">במקרים רבים כן. קופות גמל ישנות עשויות לגבות דמי ניהול גבוהים ולהשקיע במסלולים שאינם אופטימליים. העברת קופת גמל היא תהליך פשוט וללא עלות, וניתוח מקצועי יחשוף האם כדאי לבצע מהלך כזה.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Companies Section */}
+        <section className="py-16 bg-muted/20 rounded-3xl my-8">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold tracking-tight mb-3 text-[#0a3d3d]">חברות שאנחנו משווקים</h2>
+              <p className="text-lg text-muted-foreground">אנחנו עובדים עם הגופים המוסדיים המובילים בישראל כדי להביא לכם את התנאים הטובים ביותר</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              {["הפניקס", "מגדל", "הראל", "כלל", "מנורה מבטחים", "איילון", "הכשרה", "ביטוח ישיר", "שלמה ביטוח", "AIG", "ליברה"].map((company) => (
+                <span key={company} className="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-[#0a3d3d] border border-[#5ec6c6]/30 shadow-sm hover:shadow-md hover:border-[#5ec6c6] transition-all">
+                  {company}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Analysis Form */}
         <section id="analysis-form" className="py-16 scroll-mt-24">
           <div className="max-w-2xl mx-auto">

@@ -187,6 +187,76 @@ const PensionFunds = () => {
           </ScrollReveal>
         </section>
 
+        {/* Article Content */}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto space-y-12 text-right">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">למה קרן פנסיה חשובה?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                קרן הפנסיה היא עמוד התווך של הביטחון הפיננסי שלכם בפרישה. היא מבטיחה הכנסה חודשית קבועה לאחר שתפסיקו לעבוד, ומספקת גם כיסויים ביטוחיים חיוניים כמו ביטוח נכות (אובדן כושר עבודה) וביטוח שאירים להגנה על המשפחה.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                בישראל, הפקדה לפנסיה היא חובה על כל עובד שכיר מכוח צו הרחבה לפנסיה חובה. עם זאת, רבים אינם מודעים לכך שבחירה נכונה של קרן פנסיה ומסלול השקעה יכולה לשנות באופן דרמטי את גובה הקצבה החודשית בפרישה - הפרש שיכול להגיע למאות אלפי שקלים לאורך שנות הפנסיה.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מתי כדאי לבדוק את קרן הפנסיה?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                מומלץ לבדוק את קרן הפנסיה לפחות אחת לשנה. בדקו את דמי הניהול (שצריכים להיות הנמוכים ביותר האפשריים), את מסלול ההשקעה (שצריך להתאים לגיל ולרמת הסיכון שלכם), ואת ביצועי הקרן בהשוואה לקרנות מתחרות.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                שינויים בחיים כמו מעבר מקום עבודה, נישואים, לידת ילד או עלייה בשכר הם הזדמנויות מצוינות לבצע ניתוח פנסיוני מקיף. גם אם אתם מרוצים מהקרן הנוכחית, ייתכן שתוכלו להוריד את דמי הניהול ולחסוך עשרות אלפי שקלים לאורך השנים.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מה חשוב לדעת?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                דמי ניהול הם הגורם המשמעותי ביותר להפרש בחיסכון הפנסיוני לאורך זמן. הפרש של 0.5% בדמי ניהול יכול להסתכם במאות אלפי שקלים לאורך עשרות שנות חיסכון. בנוסף, חשוב לוודא שהכיסויים הביטוחיים (נכות ושאירים) מותאמים לצרכים שלכם ואינם מיותרים.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                ב-SeelD אנו מבצעים ניתוח פנסיוני מקיף וחינמי, בודקים את דמי הניהול, מסלולי ההשקעה והכיסויים הביטוחיים, ומוודאים שהכסף שלכם עובד בצורה הטובה ביותר עבורכם.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">שאלות נפוצות</h2>
+              <div className="space-y-6">
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">מה ההבדל בין פנסיה מקיפה לפנסיה כללית?</h3>
+                  <p className="text-muted-foreground">פנסיה מקיפה כוללת חיסכון + כיסויים ביטוחיים (נכות ושאירים). פנסיה כללית היא חיסכון בלבד ללא כיסויים ביטוחיים, ולכן דמי הניהול בה נמוכים יותר והתשואה הפוטנציאלית גבוהה יותר. רוב העובדים צריכים פנסיה מקיפה.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">האם אפשר להעביר קרן פנסיה?</h3>
+                  <p className="text-muted-foreground">כן, ניתן להעביר קרן פנסיה מחברה אחת לאחרת ללא עלות. התהליך פשוט ונמשך כ-10 ימי עסקים. חשוב לבדוק שהתנאים בקרן החדשה טובים יותר לפני המעבר.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">מהם דמי ניהול סבירים בקרן פנסיה?</h3>
+                  <p className="text-muted-foreground">דמי ניהול ממוצעים הם כ-0.2%-0.5% מהצבירה ו-1.5%-4% מההפקדה. עם משא ומתן נכון ניתן להגיע לדמי ניהול נמוכים משמעותית, במיוחד אם יש לכם צבירה גבוהה.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Companies Section */}
+        <section className="py-16 bg-muted/20 rounded-3xl my-8">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold tracking-tight mb-3 text-[#0a3d3d]">חברות שאנחנו משווקים</h2>
+              <p className="text-lg text-muted-foreground">אנחנו עובדים עם הגופים המוסדיים המובילים בישראל כדי להביא לכם את התנאים הטובים ביותר</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              {["הפניקס", "מגדל", "הראל", "כלל", "מנורה מבטחים", "איילון", "הכשרה", "ביטוח ישיר", "שלמה ביטוח", "AIG", "ליברה"].map((company) => (
+                <span key={company} className="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-[#0a3d3d] border border-[#5ec6c6]/30 shadow-sm hover:shadow-md hover:border-[#5ec6c6] transition-all">
+                  {company}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Analysis Form */}
         <section id="analysis-form" className="py-16 scroll-mt-24">
           <div className="max-w-2xl mx-auto">
