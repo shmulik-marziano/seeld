@@ -179,25 +179,25 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6" dir="rtl">
-      {/* Top header */}
+    <div className="space-y-5 max-w-[1400px] mx-auto" dir="rtl">
+      {/* Top header - premium */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
+        className="flex items-center justify-between bg-gradient-to-l from-primary/[0.04] to-transparent rounded-2xl px-5 py-4"
       >
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center shadow-sm">
-            <LayoutDashboard className="h-5 w-5 text-primary" />
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center shadow-sm">
+            <LayoutDashboard className="h-6 w-6 text-primary" />
           </div>
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-foreground">{getGreeting()}</h1>
-            <p className="text-xs text-muted-foreground">{new Date().toLocaleDateString('he-IL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+            <h1 className="text-xl md:text-2xl font-extrabold text-foreground tracking-tight">{getGreeting()}</h1>
+            <p className="text-xs text-muted-foreground mt-0.5">{new Date().toLocaleDateString('he-IL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {/* Recent customer avatars */}
-          <div className="hidden md:flex items-center -space-x-2 space-x-reverse ml-3">
+          <div className="hidden md:flex items-center -space-x-2 space-x-reverse ml-2">
             {stats.recentCustomers.slice(0, 4).map((c, i) => (
               <motion.button
                 key={c.id}
@@ -205,7 +205,7 @@ export default function DashboardPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 + i * 0.08 }}
                 onClick={() => navigate(`/app/customers/${c.id}`)}
-                className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold border-2 border-background hover:ring-2 hover:ring-primary/30 transition-all ${avatarColor(c.fullName)}`}
+                className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold border-2 border-background hover:ring-2 hover:ring-primary/30 transition-all shadow-sm ${avatarColor(c.fullName)}`}
                 title={c.fullName}
               >
                 {c.firstName.charAt(0)}{c.lastName.charAt(0)}
@@ -214,14 +214,14 @@ export default function DashboardPage() {
             {stats.totalCustomers > 4 && (
               <button
                 onClick={() => navigate('/app/customers')}
-                className="w-9 h-9 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-muted-foreground border-2 border-background hover:bg-primary/10 transition-colors"
+                className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-muted-foreground border-2 border-background hover:bg-primary/10 transition-colors"
               >
                 +{stats.totalCustomers - 4}
               </button>
             )}
           </div>
-          <Button variant="outline" size="sm" onClick={() => navigate('/app/customers/new')} className="gap-1.5 rounded-lg shadow-sm">
-            <UserPlus className="h-3.5 w-3.5" />
+          <Button onClick={() => navigate('/app/customers/new')} className="gap-2 rounded-2xl h-10 px-5 font-bold shadow-md">
+            <UserPlus className="h-4 w-4" />
             <span className="hidden sm:inline">לקוח חדש</span>
           </Button>
         </div>
@@ -242,7 +242,7 @@ export default function DashboardPage() {
               { label: 'חיוב חודשי', value: `₪${stats.totalMonthly.toLocaleString()}`, icon: Wallet, color: 'text-accent', bg: 'bg-gradient-to-br from-seeld-sand/15 to-seeld-sand/5', path: '/app/customers' },
             ].map((s, i) => (
               <motion.div key={s.label} variants={item} whileHover={{ y: -2, scale: 1.01 }}>
-                <Card className="cursor-pointer hover:shadow-md transition-all border-0 shadow-sm" onClick={() => navigate(s.path)}>
+                <Card className="cursor-pointer hover:shadow-md transition-all border-0 shadow-sm rounded-2xl" onClick={() => navigate(s.path)}>
                   <CardContent className="p-4 flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${s.bg} shadow-sm`}>
                       <s.icon className={`h-5 w-5 ${s.color}`} />
@@ -259,22 +259,22 @@ export default function DashboardPage() {
 
           {/* Charts row */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-5">
-            {/* Donut chart */}
-            <motion.div variants={item}>
-              <Card className="h-full border-0 shadow-sm">
-                <CardContent className="p-5 flex flex-col items-center justify-center h-full">
-                  <p className="text-xs text-muted-foreground mb-3 self-start font-semibold flex items-center gap-1.5">
-                    <Target className="h-3.5 w-3.5" />
+            {/* Donut chart - PREMIUM */}
+            <motion.div variants={item} className="md:col-span-2">
+              <Card className="h-full border-0 shadow-sm rounded-2xl bg-gradient-to-br from-background to-primary/[0.02]">
+                <CardContent className="p-6 flex flex-col items-center justify-center h-full">
+                  <p className="text-sm text-foreground mb-4 self-start font-bold flex items-center gap-2">
+                    <Target className="h-4 w-4 text-primary" />
                     התפלגות החלטות
                   </p>
                   {stats.decisionData.length > 0 ? (
                     <div className="relative">
-                      <ResponsiveContainer width={160} height={160}>
+                      <ResponsiveContainer width={200} height={200}>
                         <PieChart>
                           <Pie
                             data={stats.decisionData}
                             cx="50%" cy="50%"
-                            innerRadius={48} outerRadius={72}
+                            innerRadius={60} outerRadius={90}
                             paddingAngle={3} dataKey="value"
                             stroke="none"
                           >
@@ -286,19 +286,33 @@ export default function DashboardPage() {
                         </PieChart>
                       </ResponsiveContainer>
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-2xl font-extrabold text-foreground">{stats.totalRecs}</span>
-                        <span className="text-[10px] text-muted-foreground">המלצות</span>
+                        <span className="text-4xl font-extrabold text-foreground">{stats.totalRecs}</span>
+                        <span className="text-xs text-muted-foreground font-medium">המלצות</span>
                       </div>
                     </div>
                   ) : (
-                    <div className="h-[160px] flex items-center justify-center text-muted-foreground text-xs">אין נתונים</div>
+                    <div className="h-[200px] flex flex-col items-center justify-center text-muted-foreground">
+                      <Target className="h-10 w-10 text-muted-foreground/20 mb-2" />
+                      <span className="text-xs">אין נתונים עדיין</span>
+                    </div>
                   )}
+                  {/* Avatars row */}
+                  <div className="flex items-center -space-x-2 space-x-reverse mt-4 mb-3">
+                    {stats.recentCustomers.slice(0, 5).map((c) => (
+                      <div key={c.id} className={`w-8 h-8 rounded-full flex items-center justify-center text-[9px] font-bold border-2 border-background shadow-sm ${avatarColor(c.fullName)}`}>
+                        {c.firstName.charAt(0)}{c.lastName.charAt(0)}
+                      </div>
+                    ))}
+                    {stats.totalCustomers > 5 && (
+                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-[9px] font-bold text-muted-foreground border-2 border-background">+{stats.totalCustomers - 5}</div>
+                    )}
+                  </div>
                   {/* Legend */}
-                  <div className="flex flex-wrap gap-2 mt-3 justify-center">
-                    {stats.decisionData.slice(0, 4).map((d, i) => (
-                      <div key={d.name} className="flex items-center gap-1">
-                        <div className="w-2 h-2 rounded-full" style={{ background: DONUT_COLORS[i] }} />
-                        <span className="text-[9px] text-muted-foreground">{d.name}</span>
+                  <div className="flex flex-wrap gap-3 mt-1 justify-center">
+                    {stats.decisionData.slice(0, 5).map((d, i) => (
+                      <div key={d.name} className="flex items-center gap-1.5">
+                        <div className="w-2.5 h-2.5 rounded-full" style={{ background: DONUT_COLORS[i] }} />
+                        <span className="text-[10px] text-muted-foreground font-medium">{d.name} ({d.value})</span>
                       </div>
                     ))}
                   </div>
@@ -307,8 +321,8 @@ export default function DashboardPage() {
             </motion.div>
 
             {/* Bar chart */}
-            <motion.div variants={item} className="md:col-span-4">
-              <Card className="h-full border-0 shadow-sm">
+            <motion.div variants={item} className="md:col-span-3">
+              <Card className="h-full border-0 shadow-sm rounded-2xl">
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between mb-4">
                     <p className="text-xs text-muted-foreground font-semibold flex items-center gap-1.5">
@@ -352,7 +366,7 @@ export default function DashboardPage() {
               { label: 'סיכום ביצועים', desc: 'תיעוד מה בוצע בפועל', icon: ClipboardCheck, path: '/app/customers', bg: 'bg-gradient-to-br from-primary/12 to-primary/4', color: 'text-primary' },
               { label: 'יומן פעולות', desc: 'כל הפעילות מתועדת', icon: FileText, path: '/app/activity-log', bg: 'bg-gradient-to-br from-seeld-sand/12 to-seeld-sand/4', color: 'text-accent' },
             ].map(action => (
-              <Card key={action.label} className="cursor-pointer hover:shadow-md transition-all group border-0 shadow-sm" onClick={() => navigate(action.path)}>
+              <Card key={action.label} className="cursor-pointer hover:shadow-md transition-all group border-0 shadow-sm rounded-2xl" onClick={() => navigate(action.path)}>
                 <CardContent className="p-4 space-y-3">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${action.bg} group-hover:scale-110 transition-transform shadow-sm`}>
                     <action.icon className={`h-4.5 w-4.5 ${action.color}`} />
@@ -372,7 +386,7 @@ export default function DashboardPage() {
 
           {/* Insights card */}
           <motion.div variants={item}>
-            <Card className="border-0 shadow-sm overflow-hidden">
+            <Card className="border-0 shadow-sm rounded-2xl overflow-hidden">
               <div className="h-1 bg-gradient-to-l from-primary/60 via-primary/30 to-transparent" />
               <CardContent className="p-5 space-y-3">
                 <div className="flex items-center justify-between">
@@ -457,7 +471,7 @@ export default function DashboardPage() {
 
           {/* Recent customers */}
           <motion.div variants={item}>
-            <Card className="border-0 shadow-sm">
+            <Card className="border-0 shadow-sm rounded-2xl">
               <CardContent className="p-5">
                 <div className="flex items-center justify-between mb-4">
                   <p className="text-xs font-semibold text-foreground flex items-center gap-1.5">
@@ -498,7 +512,7 @@ export default function DashboardPage() {
 
           {/* Recent activity */}
           <motion.div variants={item}>
-            <Card className="border-0 shadow-sm">
+            <Card className="border-0 shadow-sm rounded-2xl">
               <CardContent className="p-5">
                 <div className="flex items-center justify-between mb-4">
                   <p className="text-xs font-semibold text-foreground flex items-center gap-1.5">
