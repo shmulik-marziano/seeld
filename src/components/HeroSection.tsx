@@ -1,13 +1,49 @@
 import { ArrowDownLeft, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+
+// Animated counter hook
+function useCountUp(end: number, duration = 2000, startOnView = true) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref as React.RefObject<Element>, { once: true, margin: "-50px" });
+  const hasStarted = useRef(false);
+
+  useEffect(() => {
+    if (!startOnView || !inView || hasStarted.current) return;
+    hasStarted.current = true;
+    const startTime = Date.now();
+    const step = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease out quad
+      const eased = 1 - (1 - progress) * (1 - progress);
+      setCount(Math.floor(eased * end));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [inView, end, duration, startOnView]);
+
+  return { count, ref };
+}
 
 const HeroSection = () => {
+  const stat1 = useCountUp(15, 1800);
+  const stat2 = useCountUp(5000, 2200);
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-bl from-[#0a3d3d] via-[#0d4a4a] to-[#062e2e] rounded-2xl sm:rounded-3xl">
-      {/* Subtle overlay for depth */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(255,255,255,0.04)_0%,_transparent_60%)]" />
+      {/* Animated gradient overlay */}
+      <motion.div
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(94,198,198,0.08)_0%,_transparent_60%)]"
+        animate={{
+          opacity: [0.5, 1, 0.5],
+        }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(255,255,255,0.03)_0%,_transparent_50%)]" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-16 py-12 sm:py-20 lg:py-28">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
@@ -73,19 +109,32 @@ const HeroSection = () => {
           </motion.div>
         </div>
 
-        {/* Trust indicators */}
+        {/* Trust indicators with animated counters */}
         <motion.div
           className="mt-12 sm:mt-16 pt-8 border-t border-white/10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.6 }}
         >
-          <div className="flex flex-wrap items-center justify-center gap-x-6 sm:gap-x-8 gap-y-2 text-xs sm:text-sm text-white/40">
-            <span>15+ שנות ניסיון</span>
+          <div className="flex flex-wrap items-center justify-center gap-x-8 sm:gap-x-12 gap-y-4 text-white/50">
+            <div className="flex items-center gap-2">
+              <span ref={stat1.ref} className="text-lg sm:text-xl font-bold text-[#5ec6c6]">
+                {stat1.count}+
+              </span>
+              <span className="text-xs sm:text-sm">שנות ניסיון</span>
+            </div>
             <span className="hidden sm:inline text-white/20">|</span>
-            <span>5,000+ לקוחות מרוצים</span>
+            <div className="flex items-center gap-2">
+              <span ref={stat2.ref} className="text-lg sm:text-xl font-bold text-[#5ec6c6]">
+                {stat2.count.toLocaleString()}+
+              </span>
+              <span className="text-xs sm:text-sm">לקוחות מרוצים</span>
+            </div>
             <span className="hidden sm:inline text-white/20">|</span>
-            <span>שירות אישי ומקצועי</span>
+            <div className="flex items-center gap-2">
+              <span className="text-lg sm:text-xl font-bold text-[#5ec6c6]">98%</span>
+              <span className="text-xs sm:text-sm">שביעות רצון</span>
+            </div>
           </div>
         </motion.div>
       </div>
