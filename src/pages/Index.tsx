@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { LogIn } from "lucide-react";
 import Header from "@/components/Header";
@@ -14,9 +15,34 @@ import { LogoDotsDivider, LogoDotsBackground } from "@/components/LogoBrandEleme
 import { articles } from "@/data/articles";
 import travelLogos from "@/assets/travel-insurance-logos.jpeg";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
+import { siteSupabase } from "@/integrations/supabase/site-client";
 
 const Index = () => {
   const featuredArticles = articles.slice(0, 6);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail) return;
+    setNewsletterSubmitting(true);
+    try {
+      const { error } = await siteSupabase.from("contact_submissions").insert([{
+        email: newsletterEmail,
+        subject: "newsletter",
+        name: "",
+        message: "Newsletter signup",
+      }]);
+      if (error) throw error;
+      toast.success("נרשמתם בהצלחה! נשלח לכם עדכונים בקרוב.");
+      setNewsletterEmail("");
+    } catch (err) {
+      toast.error("שגיאה בהרשמה, נסו שוב.");
+    } finally {
+      setNewsletterSubmitting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -227,20 +253,25 @@ const Index = () => {
                 <p className="text-sm sm:text-base md:text-lg text-primary-foreground/70 leading-relaxed px-2">
                   הירשמו לקבלת טיפים פיננסיים, מדריכים בנושאי ביטוח והטבות בלעדיות ישירות לתיבת הדואר שלכם.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
                   <input
                     type="email"
                     placeholder="האימייל שלכם"
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                    required
                     className="flex-1 px-5 sm:px-6 py-3.5 sm:py-4 rounded-full bg-white/15 border border-white/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-white/30 focus:bg-white/20 transition-all text-right backdrop-blur-sm text-sm sm:text-base"
                   />
                   <motion.button
-                    className="px-8 sm:px-10 py-3.5 sm:py-4 rounded-full bg-primary-foreground text-primary font-semibold hover:bg-primary-foreground/90 transition-all shadow-lg text-sm sm:text-base"
+                    type="submit"
+                    disabled={newsletterSubmitting}
+                    className="px-8 sm:px-10 py-3.5 sm:py-4 rounded-full bg-primary-foreground text-primary font-semibold hover:bg-primary-foreground/90 transition-all shadow-lg text-sm sm:text-base disabled:opacity-60"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.97 }}
                   >
-                    הרשמה
+                    {newsletterSubmitting ? "שולח..." : "הרשמה"}
                   </motion.button>
-                </div>
+                </form>
               </div>
             </div>
           </section>

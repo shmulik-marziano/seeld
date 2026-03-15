@@ -263,6 +263,17 @@ export interface Recommendation {
   recommendedInvestmentTrack?: string;
   recommendedInvestmentTrackCustom?: string;
   recommendedRiskLevel?: string;
+  urgency?: string;
+  problemGap?: string;
+  recommendedCompany?: string;
+  recommendedTrack?: string;
+  costBefore?: number;
+  costAfter?: number;
+  recommendationType?: string;
+  productSnapshot?: any;
+  advantages?: string;
+  disadvantages?: string;
+  sortOrder?: number;
   createdAt: string;
   updatedAt: string;
 }

@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const ADMIN_PASSWORD = Deno.env.get("ADMIN_PASSWORD") || "shmuel2025";
+const ADMIN_PASSWORD = Deno.env.get("ADMIN_PASSWORD");
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -14,6 +14,13 @@ serve(async (req) => {
   }
 
   try {
+    if (!ADMIN_PASSWORD) {
+      return new Response(JSON.stringify({ error: "Admin password not configured" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const { password, action } = await req.json();
 
     if (!password || typeof password !== "string" || password.length > 100) {

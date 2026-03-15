@@ -127,6 +127,17 @@ function mapRecommendation(row: any): Recommendation {
     recommendedInvestmentTrack: row.recommended_investment_track || undefined,
     recommendedInvestmentTrackCustom: row.recommended_investment_track_custom || undefined,
     recommendedRiskLevel: row.recommended_risk_level || undefined,
+    urgency: row.urgency || undefined,
+    problemGap: row.problem_gap || undefined,
+    recommendedCompany: row.recommended_company || undefined,
+    recommendedTrack: row.recommended_track || undefined,
+    costBefore: row.cost_before != null ? Number(row.cost_before) : undefined,
+    costAfter: row.cost_after != null ? Number(row.cost_after) : undefined,
+    recommendationType: row.recommendation_type || undefined,
+    productSnapshot: row.product_snapshot || undefined,
+    advantages: row.advantages || undefined,
+    disadvantages: row.disadvantages || undefined,
+    sortOrder: row.sort_order != null ? Number(row.sort_order) : undefined,
     createdAt: row.created_at, updatedAt: row.updated_at,
   };
 }
