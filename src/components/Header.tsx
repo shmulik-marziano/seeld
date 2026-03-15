@@ -101,7 +101,7 @@ const Header = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg hover:bg-muted/60 transition-colors"
+              className="p-2.5 rounded-lg hover:bg-muted/60 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
               aria-label="החלף ערכת נושא"
             >
               {isDark ? (
@@ -119,7 +119,7 @@ const Header = () => {
 
             {/* Mobile Menu Button */}
             <button
-              className="lg:hidden p-2 rounded-lg hover:bg-muted/60 transition-colors"
+              className="lg:hidden p-2.5 rounded-lg hover:bg-muted/60 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
               onClick={() => setIsMenuOpen(true)}
               aria-label="פתח תפריט"
             >
@@ -153,7 +153,7 @@ const Header = () => {
                 <span className="font-bold text-lg">תפריט</span>
                 <button
                   onClick={() => setIsMenuOpen(false)}
-                  className="p-2 rounded-lg hover:bg-muted/60 transition-colors"
+                  className="p-2.5 rounded-lg hover:bg-muted/60 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -163,7 +163,7 @@ const Header = () => {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-muted/60 transition-colors"
+                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-muted/60 transition-colors min-h-[48px]"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <link.icon className="w-5 h-5 text-[#0a3d3d] dark:text-[#5ec6c6]" />

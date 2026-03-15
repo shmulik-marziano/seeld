@@ -4,9 +4,9 @@ import { Phone, Mail, MapPin } from "lucide-react";
 const Footer = () => {
   return (
     <footer className="bg-[#0a3d3d] text-white/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-20">
         {/* Links Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 mb-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 mb-10 sm:mb-14">
           {/* Column 1 - Services */}
           <div>
             <h3 className="font-bold text-white text-sm mb-5">שירותים</h3>
@@ -59,7 +59,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="mailto:info@seeld-ins.co.il" className="flex items-center gap-2.5 hover:text-white transition-colors">
+                <a href="mailto:info@seeld-ins.co.il" className="flex items-center gap-2.5 hover:text-white transition-colors break-all">
                   <Mail className="w-4 h-4 flex-shrink-0" />
                   info@seeld-ins.co.il
                 </a>
@@ -91,7 +91,7 @@ const Footer = () => {
             <p className="text-xs text-white/30">
               &copy; {new Date().getFullYear()} SEELD — סוכנות לביטוח ופיננסים. כל הזכויות שמורות.
             </p>
-            <div className="flex items-center gap-5 text-xs text-white/30">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-2 text-xs text-white/30">
               <Link to="/privacy" className="hover:text-white/60 transition-colors">מדיניות פרטיות</Link>
               <Link to="/terms" className="hover:text-white/60 transition-colors">תנאי שימוש</Link>
               <Link to="/accessibility" className="hover:text-white/60 transition-colors">נגישות</Link>

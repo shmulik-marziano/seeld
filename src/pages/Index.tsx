@@ -97,7 +97,7 @@ const Index = () => {
         </div>
 
         {/* Services Section */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
           <ScrollReveal>
             <div className="text-center mb-12 sm:mb-16">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
@@ -109,11 +109,11 @@ const Index = () => {
             </div>
           </ScrollReveal>
 
-          <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {services.map((service, i) => (
               <ScrollReveal key={service.title} delay={i * 80}>
                 <Link to={service.href} className="block h-full">
-                  <div className="h-full bg-background border border-border/50 rounded-2xl p-6 sm:p-8 hover:shadow-md hover:border-border transition-all duration-300 group">
+                  <div className="h-full bg-background border border-border/50 rounded-2xl p-5 sm:p-8 hover:shadow-md hover:border-border transition-all duration-300 group">
                     <h3 className="text-lg sm:text-xl font-bold mb-3 group-hover:text-[#0a3d3d] dark:group-hover:text-[#5ec6c6] transition-colors">
                       {service.title}
                     </h3>
@@ -132,7 +132,7 @@ const Index = () => {
 
         {/* Why SEELD Section */}
         <section className="bg-muted/30 border-y border-border/30">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
             <ScrollReveal>
               <div className="text-center mb-12 sm:mb-16">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
@@ -144,7 +144,7 @@ const Index = () => {
               </div>
             </ScrollReveal>
 
-            <div className="grid sm:grid-cols-3 gap-8 sm:gap-10">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10">
               {whySeeld.map((item, i) => (
                 <ScrollReveal key={item.title} delay={i * 100}>
                   <div className="text-center">
@@ -161,7 +161,7 @@ const Index = () => {
         </section>
 
         {/* Stats / Numbers Section */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
           <ScrollReveal>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
               {[
@@ -171,7 +171,7 @@ const Index = () => {
                 { value: "24/7", label: "זמינות" },
               ].map((stat) => (
                 <div key={stat.label}>
-                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#0a3d3d] dark:text-[#5ec6c6] mb-1">
+                  <div className="text-2xl sm:text-3xl md:text-5xl font-bold text-[#0a3d3d] dark:text-[#5ec6c6] mb-1">
                     {stat.value}
                   </div>
                   <div className="text-sm text-muted-foreground">{stat.label}</div>
@@ -224,7 +224,7 @@ const Index = () => {
         </div>
 
         {/* Agent Platform CTA */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 sm:pb-24">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-20 lg:pb-24">
           <ScrollReveal>
             <div className="rounded-2xl border border-border/50 bg-background p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6">
               <div className="space-y-2 text-center sm:text-right">
