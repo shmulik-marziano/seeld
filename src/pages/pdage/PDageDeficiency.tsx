@@ -70,7 +70,7 @@ export default function PDageDeficiency() {
         details: selectedDef ? `נבחר: ${selectedDef.title}` : `טקסט חופשי: ${freeText}`,
       });
 
-      navigate(`/pdage/job/${jobId}/room`);
+      navigate(`/app/pdage/job/${jobId}/room`);
     } catch (err: any) {
       toast.error('שגיאה בשמירה');
       console.error(err);

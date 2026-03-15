@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { LogIn } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleCard from "@/components/ArticleCard";
@@ -198,6 +200,27 @@ const Index = () => {
                   </button>
                 </div>
               </div>
+            </div>
+          </section>
+        </ScrollReveal>
+
+        {/* Agent Platform CTA */}
+        <ScrollReveal>
+          <section className="my-12 md:my-16">
+            <div className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-sm p-8 md:p-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="space-y-2 text-center sm:text-right">
+                <h3 className="text-xl md:text-2xl font-bold">סוכן ביטוח? הכלים שלך מחכים כאן</h3>
+                <p className="text-sm text-muted-foreground max-w-md">
+                  פורטל SEELD לסוכנים — ניהול לקוחות, מעקב פוליסות, חישובים מתקדמים וכלי עבודה חכמים במקום אחד.
+                </p>
+              </div>
+              <Link
+                to="/app/auth"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent text-white font-semibold hover:bg-accent/90 hover:scale-105 transition-all shadow-lg shrink-0"
+              >
+                <LogIn className="w-5 h-5" />
+                כניסה לפורטל סוכנים
+              </Link>
             </div>
           </section>
         </ScrollReveal>

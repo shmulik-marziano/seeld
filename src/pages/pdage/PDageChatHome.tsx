@@ -15,10 +15,10 @@ import { usePdageChat } from '@/hooks/usePdageChat';
 import { format } from 'date-fns';
 
 const quickActions = [
-  { label: 'העלאת מסמך', icon: Upload, path: '/pdage/upload', color: 'from-primary to-accent' },
-  { label: 'היסטוריה', icon: History, path: '/pdage/history', color: 'from-blue-500 to-blue-600' },
-  { label: 'בנק חוסרים', icon: BookOpen, path: '/pdage/deficiency-bank', color: 'from-amber-500 to-orange-500' },
-  { label: 'דשבורד', icon: LayoutDashboard, path: '/pdage/overview', color: 'from-violet-500 to-purple-600' },
+  { label: 'העלאת מסמך', icon: Upload, path: '/app/pdage/upload', color: 'from-primary to-accent' },
+  { label: 'היסטוריה', icon: History, path: '/app/pdage/history', color: 'from-blue-500 to-blue-600' },
+  { label: 'בנק חוסרים', icon: BookOpen, path: '/app/pdage/deficiency-bank', color: 'from-amber-500 to-orange-500' },
+  { label: 'דשבורד', icon: LayoutDashboard, path: '/app/pdage/overview', color: 'from-violet-500 to-purple-600' },
 ];
 
 const suggestions = [
@@ -207,7 +207,7 @@ export default function PDageChatHome() {
                       return (
                         <button
                           key={job.id}
-                          onClick={() => navigate(`/pdage/job/${job.id}`)}
+                          onClick={() => navigate(`/app/pdage/job/${job.id}`)}
                           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border border-border hover:border-primary/30 hover:bg-muted/50 transition-all text-right"
                         >
                           <FileText className="h-4 w-4 text-muted-foreground shrink-0" />

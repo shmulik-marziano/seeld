@@ -61,7 +61,7 @@ serve(async (req) => {
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY")!;
+    const googleAiApiKey = Deno.env.get("GOOGLE_AI_API_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     const token = authHeader.replace("Bearer ", "");
@@ -135,22 +135,23 @@ serve(async (req) => {
 שדות (null אם לא נמצא): firstName, lastName, idNumber, mobilePhone, email, birthDate (YYYY-MM-DD), gender (זכר/נקבה).
 החזר JSON אחד בלבד, בלי markdown.`;
 
-          const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-            method: "POST",
-            headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },
-            body: JSON.stringify({
-              model: "google/gemini-2.5-flash",
-              messages: [
-                { role: "system", content: customerPrompt },
-                { role: "user", content: `קובץ: ${fileName}\nסוג: ${fileType}\n\n${textContent.substring(0, 40000)}` },
-              ],
-              temperature: 0.1,
-            }),
-          });
+          const customerUserContent = `${customerPrompt}\n\nקובץ: ${fileName}\nסוג: ${fileType}\n\n${textContent.substring(0, 40000)}`;
+
+          const aiResponse = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${googleAiApiKey}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                contents: [{ role: "user", parts: [{ text: customerUserContent }] }],
+                generationConfig: { temperature: 0.1 },
+              }),
+            }
+          );
 
           if (aiResponse.ok) {
             const aiData = await aiResponse.json();
-            let content = aiData.choices?.[0]?.message?.content || "{}";
+            let content = aiData.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
             content = content.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
             try { customerInfo = JSON.parse(content); } catch { /* keep what we have */ }
           }
@@ -239,40 +240,33 @@ ${commonRules}`;
 ${commonRules}`;
     }
 
-    const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${lovableApiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-pro",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: `שם הקובץ: ${fileName}\nסוג: ${fileType}\n\nתוכן:\n${textContent.substring(0, 80000)}` },
-        ],
-        temperature: 0.1,
-      }),
-    });
+    const productUserContent = `${systemPrompt}\n\nשם הקובץ: ${fileName}\nסוג: ${fileType}\n\nתוכן:\n${textContent.substring(0, 80000)}`;
+
+    const aiResponse = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${googleAiApiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text: productUserContent }] }],
+          generationConfig: { temperature: 0.1 },
+        }),
+      }
+    );
 
     if (!aiResponse.ok) {
       const errText = await aiResponse.text();
-      console.error("AI error:", aiResponse.status, errText);
+      console.error("Gemini API error:", aiResponse.status, errText);
       if (aiResponse.status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded, please try again later" }), {
           status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      if (aiResponse.status === 402) {
-        return new Response(JSON.stringify({ error: "Payment required" }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       throw new Error("AI parsing failed: " + errText);
     }
 
     const aiData = await aiResponse.json();
-    let content = aiData.choices?.[0]?.message?.content || "[]";
+    let content = aiData.candidates?.[0]?.content?.parts?.[0]?.text || "[]";
     console.log("AI raw response (first 1000):", content.substring(0, 1000));
     
     content = content.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();

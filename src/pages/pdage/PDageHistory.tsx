@@ -101,7 +101,7 @@ export default function PDageHistory() {
                     </div>
 
                     <div className="flex gap-1 shrink-0">
-                      <Button variant="ghost" size="sm" onClick={() => navigate(`/pdage/job/${job.id}`)}>
+                      <Button variant="ghost" size="sm" onClick={() => navigate(`/app/pdage/job/${job.id}`)}>
                         פתח
                       </Button>
                       {job.status === 'done' && job.output_file_path && (

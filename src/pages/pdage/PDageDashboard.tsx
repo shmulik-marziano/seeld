@@ -98,7 +98,7 @@ export default function PDageDashboard() {
               const st = statusMap[job.status] || statusMap.pending;
               const customer = job.pdage_customers as any;
               return (
-                <Card key={job.id} className="hover:shadow-md transition-shadow cursor-pointer border-none shadow-sm" onClick={() => navigate(`/pdage/job/${job.id}`)}>
+                <Card key={job.id} className="hover:shadow-md transition-shadow cursor-pointer border-none shadow-sm" onClick={() => navigate(`/app/pdage/job/${job.id}`)}>
                   <CardContent className="p-4 flex items-center gap-4">
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-foreground truncate">{customer?.full_name || 'ללא לקוח'}</p>

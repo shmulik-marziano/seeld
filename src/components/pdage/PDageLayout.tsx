@@ -9,11 +9,11 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { MessageCircle } from 'lucide-react';
 
 const navItems = [
-  { path: '/pdage', label: 'צ׳אט AI', icon: MessageCircle },
-  { path: '/pdage/overview', label: 'דשבורד', icon: LayoutDashboard },
-  { path: '/pdage/upload', label: 'העלאת מסמך', icon: Upload },
-  { path: '/pdage/history', label: 'היסטוריית תיקונים', icon: History },
-  { path: '/pdage/deficiency-bank', label: 'בנק חוסרים', icon: BookOpen },
+  { path: '/app/pdage', label: 'צ׳אט AI', icon: MessageCircle },
+  { path: '/app/pdage/overview', label: 'דשבורד', icon: LayoutDashboard },
+  { path: '/app/pdage/upload', label: 'העלאת מסמך', icon: Upload },
+  { path: '/app/pdage/history', label: 'היסטוריית תיקונים', icon: History },
+  { path: '/app/pdage/deficiency-bank', label: 'בנק חוסרים', icon: BookOpen },
 ];
 
 export function PDageLayout({ children }: { children: ReactNode }) {
@@ -30,7 +30,7 @@ export function PDageLayout({ children }: { children: ReactNode }) {
   const handleSignOut = async () => {
     await signOut();
     toast.success('התנתקת בהצלחה');
-    navigate('/auth');
+    navigate('/app/auth');
   };
 
   const handleNav = (path: string) => {

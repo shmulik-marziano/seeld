@@ -247,13 +247,13 @@ export default function PDageJobView() {
         {/* Actions */}
         <div className="flex gap-3 justify-end">
           {(job.status === 'pending' || job.status === 'review') && (
-            <Button onClick={() => navigate(`/pdage/job/${job.id}/room`)} size="lg" className="gap-2">
+            <Button onClick={() => navigate(`/app/pdage/job/${job.id}/room`)} size="lg" className="gap-2">
               <Pencil className="h-4 w-4" />
               כניסה לחדר ניתוח
             </Button>
           )}
           {job.status === 'done' && (
-            <Button onClick={() => navigate(`/pdage/job/${job.id}/room`)} size="lg" variant="outline" className="gap-2">
+            <Button onClick={() => navigate(`/app/pdage/job/${job.id}/room`)} size="lg" variant="outline" className="gap-2">
               <Pencil className="h-4 w-4" />
               חדר ניתוח
             </Button>

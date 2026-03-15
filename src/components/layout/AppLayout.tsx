@@ -2,7 +2,7 @@ import { ReactNode, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
-import { Users, UserPlus, Bell, Zap, FileText, LogOut, LayoutDashboard, ClipboardPlus, BookOpen, Library, Menu, X, ClipboardCheck, Settings, FolderUp, FileEdit } from 'lucide-react';
+import { Users, UserPlus, Bell, Zap, FileText, LogOut, LayoutDashboard, ClipboardPlus, BookOpen, Library, Menu, X, ClipboardCheck, Settings, FolderUp, FileEdit, Globe } from 'lucide-react';
 import { toast } from 'sonner';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { SeeIDLogo } from '@/components/brand/SeeIDLogo';
@@ -113,7 +113,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           <Settings className="h-3.5 w-3.5" />הגדרות סוכנות
         </Button>
         <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="w-full justify-start gap-2 text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 text-xs">
-          <span>🌐</span>לדף הבית הראשי
+          <Globe className="h-3.5 w-3.5" />חזרה לאתר הראשי
         </Button>
         <Button variant="ghost" size="sm" onClick={handleSignOut} className="w-full justify-start gap-2 text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50">
           <LogOut className="h-3.5 w-3.5" />התנתק

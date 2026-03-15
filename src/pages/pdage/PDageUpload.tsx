@@ -99,7 +99,7 @@ export default function PDageUpload() {
       });
 
       toast.success('הקובץ הועלה בהצלחה');
-      navigate(`/pdage/job/${job.id}/deficiency`);
+      navigate(`/app/pdage/job/${job.id}/deficiency`);
     } catch (err: any) {
       console.error(err);
       toast.error('שגיאה בהעלאת הקובץ: ' + (err.message || ''));

@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import SeeIDLogo from "@/components/SeeIDLogo";
 import { Phone, Mail, MapPin } from "lucide-react";
 
@@ -27,6 +26,10 @@ const Footer = () => {
               <a href="mailto:info@seeld-ins.co.il" className="inline-flex items-center gap-2 hover:text-accent transition-colors">
                 <Mail className="w-3.5 h-3.5" />
                 info@seeld-ins.co.il
+              </a>
+              <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-accent transition-colors">
+                <Phone className="w-3.5 h-3.5" />
+                WhatsApp
               </a>
               <span className="inline-flex items-center gap-2">
                 <MapPin className="w-3.5 h-3.5" />
@@ -91,6 +94,7 @@ const Footer = () => {
                 <li><Link to="/faq" className="hover:text-foreground transition-colors">שאלות נפוצות</Link></li>
                 <li><a href="https://seeld.co.il" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-accent/10 text-accent hover:bg-accent/20 transition-colors text-xs font-medium">שמוליק מרציאנו ←</a></li>
                 <li><a href="https://perspective-bloom-317.lovable.app" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-accent/10 text-accent hover:bg-accent/20 transition-colors text-xs font-medium">שירותים בקליק ←</a></li>
+                <li><Link to="/app/auth" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors text-xs font-medium">כניסה לסוכנים ←</Link></li>
               </ul>
               <h3 className="font-bold mb-4 text-xs tracking-widest uppercase text-muted-foreground/50">משפטי</h3>
               <ul className="space-y-2.5 text-sm text-muted-foreground">
@@ -113,9 +117,14 @@ const Footer = () => {
           <div className="pt-6 border-t border-border/30">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               <p className="text-xs text-muted-foreground/50">
-                © {new Date().getFullYear()} SeelD פיננסים וביטוח. כל הזכויות שמורות.
+                © {new Date().getFullYear()} SEELD — סוכנות לביטוח ופיננסים בבעלות שמוליק מרציאנו. כל הזכויות שמורות.
               </p>
-              <span className="text-xs text-muted-foreground/40">בנוי באהבה 🇮🇱</span>
+              <div className="flex items-center gap-4">
+                <Link to="/app/auth" className="text-xs text-muted-foreground/50 hover:text-accent transition-colors">
+                  פורטל סוכנים
+                </Link>
+                <span className="text-xs text-muted-foreground/40">בנוי באהבה 🇮🇱</span>
+              </div>
             </div>
           </div>
         </div>

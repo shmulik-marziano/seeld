@@ -16,8 +16,8 @@ serve(async (req) => {
     const { jobId, fields } = await req.json();
     if (!jobId || !fields) throw new Error("jobId and fields are required");
 
-    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
-    if (!lovableApiKey) throw new Error("LOVABLE_API_KEY is not configured");
+    const googleAiApiKey = Deno.env.get("GOOGLE_AI_API_KEY");
+    if (!googleAiApiKey) throw new Error("GOOGLE_AI_API_KEY is not configured");
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -63,33 +63,28 @@ ${deficiency?.description ? `תיאור: ${deficiency.description}` : ""}
 
 החזר JSON בלבד.`;
 
+    const combinedPrompt = `${systemPrompt}\n\n${userPrompt}`;
+
     const aiResponse = await fetch(
-      "https://ai.gateway.lovable.dev/v1/chat/completions",
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${googleAiApiKey}`,
       {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${lovableApiKey}`,
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "google/gemini-3-flash-preview",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt },
-          ],
-          stream: false,
+          contents: [{ role: "user", parts: [{ text: combinedPrompt }] }],
         }),
       }
     );
 
     if (!aiResponse.ok) {
       if (aiResponse.status === 429) throw new Error("מערכת ה-AI עמוסה, נסה שוב מאוחר יותר");
-      if (aiResponse.status === 402) throw new Error("נדרש חידוש מנוי AI");
+      const errText = await aiResponse.text();
+      console.error("Gemini API error:", aiResponse.status, errText);
       throw new Error("שגיאה בשירות ה-AI");
     }
 
     const aiResult = await aiResponse.json();
-    const content = aiResult.choices?.[0]?.message?.content || "";
+    const content = aiResult.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
     // Parse JSON from response
     let parsed: { score: number; warnings: string[] };

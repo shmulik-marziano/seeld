@@ -19,9 +19,9 @@ serve(async (req) => {
     const authHeader = req.headers.get("Authorization");
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
+    const googleAiApiKey = Deno.env.get("GOOGLE_AI_API_KEY");
 
-    if (!lovableApiKey) throw new Error("LOVABLE_API_KEY is not configured");
+    if (!googleAiApiKey) throw new Error("GOOGLE_AI_API_KEY is not configured");
 
     // Use service role to access data
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
@@ -97,42 +97,33 @@ serve(async (req) => {
 - השתמש בנקודות וכותרות ברורות
 - התייחס ספציפית לסוג החוסר שנבחר`;
 
-    // Call Lovable AI
+    // Call Google Gemini API
+    const combinedPrompt = `${systemPrompt}\n\n${userPrompt}`;
+
     const aiResponse = await fetch(
-      "https://ai.gateway.lovable.dev/v1/chat/completions",
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${googleAiApiKey}`,
       {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${lovableApiKey}`,
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "google/gemini-3-flash-preview",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt },
-          ],
-          stream: false,
+          contents: [{ role: "user", parts: [{ text: combinedPrompt }] }],
         }),
       }
     );
 
     if (!aiResponse.ok) {
       const errText = await aiResponse.text();
-      console.error("AI gateway error:", aiResponse.status, errText);
+      console.error("Gemini API error:", aiResponse.status, errText);
 
       if (aiResponse.status === 429) {
         throw new Error("מערכת ה-AI עמוסה כרגע, נסה שוב מאוחר יותר");
-      }
-      if (aiResponse.status === 402) {
-        throw new Error("נדרש חידוש מנוי AI, פנה לתמיכה");
       }
       throw new Error("שגיאה בשירות ה-AI");
     }
 
     const aiResult = await aiResponse.json();
     const aiContent =
-      aiResult.choices?.[0]?.message?.content || "לא התקבלה תשובה מה-AI";
+      aiResult.candidates?.[0]?.content?.parts?.[0]?.text || "לא התקבלה תשובה מה-AI";
 
     // Update the job with AI results
     await supabase

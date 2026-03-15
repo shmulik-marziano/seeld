@@ -53,8 +53,8 @@ serve(async (req) => {
   }
 
   try {
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
+    const GOOGLE_AI_API_KEY = Deno.env.get('GOOGLE_AI_API_KEY');
+    if (!GOOGLE_AI_API_KEY) throw new Error('GOOGLE_AI_API_KEY is not configured');
 
     const { fileName, fileBase64 } = await req.json();
 
@@ -117,49 +117,38 @@ serve(async (req) => {
 - חלץ כל מוצר ייחודי שנמצא בקובץ
 - אם הקובץ לא מכיל מידע רלוונטי - החזר customer ריק ומערך products ריק`;
 
-    // Send PDF as base64 to Gemini with inline_data for vision
-    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          {
+    // Send PDF as base64 to Gemini with inline_data
+    const userText = `${systemPrompt}\n\nנתח את קובץ ה-PDF הבא (${fileName || 'policy.pdf'}) וחלץ את כל פרטי הלקוח והמוצרים הביטוחיים/פנסיוניים. החזר JSON בלבד.`;
+
+    const aiResponse = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GOOGLE_AI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
             role: 'user',
-            content: [
+            parts: [
+              { text: userText },
               {
-                type: 'text',
-                text: `נתח את קובץ ה-PDF הבא (${fileName || 'policy.pdf'}) וחלץ את כל פרטי הלקוח והמוצרים הביטוחיים/פנסיוניים. החזר JSON בלבד.`,
-              },
-              {
-                type: 'image_url',
-                image_url: {
-                  url: `data:application/pdf;base64,${fileBase64}`,
+                inlineData: {
+                  mimeType: 'application/pdf',
+                  data: fileBase64,
                 },
               },
             ],
-          },
-        ],
-        temperature: 0.1,
-      }),
-    });
+          }],
+          generationConfig: { temperature: 0.1 },
+        }),
+      }
+    );
 
     if (!aiResponse.ok) {
       const errText = await aiResponse.text();
-      console.error('AI gateway error:', aiResponse.status, errText);
+      console.error('Gemini API error:', aiResponse.status, errText);
       if (aiResponse.status === 429) {
         return new Response(JSON.stringify({ error: 'שירות ה-AI עמוס, נסה שוב בעוד דקה' }), {
           status: 429,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-      if (aiResponse.status === 402) {
-        return new Response(JSON.stringify({ error: 'נדרשת הוספת קרדיטים לשימוש ב-AI' }), {
-          status: 402,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
@@ -167,7 +156,7 @@ serve(async (req) => {
     }
 
     const aiData = await aiResponse.json();
-    let content = aiData.choices?.[0]?.message?.content || '{}';
+    let content = aiData.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
     console.log('AI raw response (first 500):', content.substring(0, 500));
 
     // Clean markdown wrappers

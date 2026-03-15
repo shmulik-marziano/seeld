@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import SeeIDLogo from "@/components/SeeIDLogo";
-import { Menu, Moon, Sun, ChevronDown, ChevronLeft, Home, Shield, Wallet, Zap, BookOpen, MousePointerClick, User } from "lucide-react";
+import { Menu, Moon, Sun, ChevronDown, ChevronLeft, Home, Shield, Wallet, Zap, BookOpen, MousePointerClick, User, Phone } from "lucide-react";
 import SiteSearch from "@/components/SiteSearch";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -254,6 +254,9 @@ const Header = () => {
             <Link to="/about" className="text-sm font-medium hover:bg-muted/60 rounded-full px-4 py-2 transition-all">
               אודות
             </Link>
+            <Link to="/contact" className="text-sm font-medium hover:bg-muted/60 rounded-full px-4 py-2 transition-all">
+              צור קשר
+            </Link>
           </nav>
 
           {/* Actions */}
@@ -274,6 +277,12 @@ const Header = () => {
             <Link to="/personal-area">
               <Button className="hidden md:flex bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8 py-2 hover:scale-105 transition-all">
                 לאזור האישי
+              </Button>
+            </Link>
+
+            <Link to="/app/auth">
+              <Button variant="outline" className="hidden md:flex border-accent text-accent hover:bg-accent hover:text-white rounded-full px-6 py-2 hover:scale-105 transition-all font-semibold">
+                כניסה לסוכנים
               </Button>
             </Link>
 
@@ -418,15 +427,34 @@ const Header = () => {
                       <span className="text-sm font-medium">אודות</span>
                     </Link>
 
-                    {/* Personal Area CTA */}
-                    <div className="mt-4 pt-4 border-t border-border">
-                      <Link 
+                    {/* Contact link */}
+                    <Link
+                      to="/contact"
+                      className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-muted/60 transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Phone className="w-5 h-5 text-primary" />
+                      <span className="text-sm font-medium">צור קשר</span>
+                    </Link>
+
+                    {/* Personal Area + Agent Login CTAs */}
+                    <div className="mt-4 pt-4 border-t border-border space-y-3">
+                      <Link
                         to="/personal-area"
                         className="w-full"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full w-full">
                           לאזור האישי
+                        </Button>
+                      </Link>
+                      <Link
+                        to="/app/auth"
+                        className="w-full block"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-white rounded-full w-full font-semibold">
+                          כניסה לסוכנים
                         </Button>
                       </Link>
                     </div>

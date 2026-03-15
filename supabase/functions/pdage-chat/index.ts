@@ -84,15 +84,15 @@ serve(async (req) => {
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
+    const googleAiApiKey = Deno.env.get("GOOGLE_AI_API_KEY");
 
-    if (!lovableApiKey) throw new Error("LOVABLE_API_KEY is not configured");
+    if (!googleAiApiKey) throw new Error("GOOGLE_AI_API_KEY is not configured");
 
     const aiHeaders = {
-      Authorization: `Bearer ${lovableApiKey}`,
+      Authorization: `Bearer ${googleAiApiKey}`,
       "Content-Type": "application/json",
     };
-    const aiUrl = "https://ai.gateway.lovable.dev/v1/chat/completions";
+    const aiUrl = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
 
     let systemPrompt: string;
     const useTools = !!jobId;
@@ -183,7 +183,7 @@ ${fieldsContext || "  (אין שדות מלאים עדיין)"}
         method: "POST",
         headers: aiHeaders,
         body: JSON.stringify({
-          model: "google/gemini-3-flash-preview",
+          model: "gemini-2.0-flash",
           messages: allMessages,
           tools: fieldTools,
           tool_choice: "auto",
@@ -230,7 +230,7 @@ ${fieldsContext || "  (אין שדות מלאים עדיין)"}
           method: "POST",
           headers: aiHeaders,
           body: JSON.stringify({
-            model: "google/gemini-3-flash-preview",
+            model: "gemini-2.0-flash",
             messages: confirmMessages,
             stream: true,
           }),
@@ -275,7 +275,7 @@ ${fieldsContext || "  (אין שדות מלאים עדיין)"}
           method: "POST",
           headers: aiHeaders,
           body: JSON.stringify({
-            model: "google/gemini-3-flash-preview",
+            model: "gemini-2.0-flash",
             messages: allMessages,
             stream: true,
           }),
@@ -296,7 +296,7 @@ ${fieldsContext || "  (אין שדות מלאים עדיין)"}
       method: "POST",
       headers: aiHeaders,
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "gemini-2.0-flash",
         messages: allMessages,
         stream: true,
       }),
@@ -345,6 +345,6 @@ async function handleAiError(response: Response) {
     );
   }
   const t = await response.text();
-  console.error("AI gateway error:", response.status, t);
+  console.error("Gemini API error:", response.status, t);
   throw new Error("שגיאה בשירות ה-AI");
 }
