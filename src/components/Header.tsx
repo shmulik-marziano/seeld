@@ -362,7 +362,7 @@ const Header = () => {
                         <Link
                           key={item.href}
                           to={item.href}
-                          className="block text-sm text-muted-foreground hover:text-foreground py-2 px-3 rounded-lg hover:bg-muted/40 transition-colors"
+                          className="block text-sm text-muted-foreground hover:text-foreground py-2.5 px-3 rounded-lg hover:bg-muted/40 transition-colors min-h-[44px] flex items-center"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           {item.label}
@@ -382,7 +382,7 @@ const Header = () => {
                             <Link
                               key={idx}
                               to={item.href}
-                              className="block text-sm text-muted-foreground hover:text-foreground py-1.5 px-3 rounded-lg hover:bg-muted/40 transition-colors"
+                              className="block text-sm text-muted-foreground hover:text-foreground py-2.5 px-3 rounded-lg hover:bg-muted/40 transition-colors min-h-[44px] flex items-center"
                               onClick={() => setIsMenuOpen(false)}
                             >
                               {item.name}
@@ -404,7 +404,7 @@ const Header = () => {
                             <Link
                               key={idx}
                               to={item.href}
-                              className="block text-sm text-muted-foreground hover:text-foreground py-1.5 px-3 rounded-lg hover:bg-muted/40 transition-colors"
+                              className="block text-sm text-muted-foreground hover:text-foreground py-2.5 px-3 rounded-lg hover:bg-muted/40 transition-colors min-h-[44px] flex items-center"
                               onClick={() => setIsMenuOpen(false)}
                             >
                               {item.name}
@@ -426,7 +426,7 @@ const Header = () => {
                             <Link
                               key={idx}
                               to={item.href}
-                              className="block text-sm text-muted-foreground hover:text-foreground py-1.5 px-3 rounded-lg hover:bg-muted/40 transition-colors"
+                              className="block text-sm text-muted-foreground hover:text-foreground py-2.5 px-3 rounded-lg hover:bg-muted/40 transition-colors min-h-[44px] flex items-center"
                               onClick={() => setIsMenuOpen(false)}
                             >
                               {item.name}
@@ -448,7 +448,7 @@ const Header = () => {
                             <Link
                               key={idx}
                               to={item.href}
-                              className="block text-sm text-muted-foreground hover:text-foreground py-1.5 px-3 rounded-lg hover:bg-muted/40 transition-colors"
+                              className="block text-sm text-muted-foreground hover:text-foreground py-2.5 px-3 rounded-lg hover:bg-muted/40 transition-colors min-h-[44px] flex items-center"
                               onClick={() => setIsMenuOpen(false)}
                             >
                               {item.name}
@@ -485,7 +485,7 @@ const Header = () => {
                         className="w-full block"
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full w-full py-3 text-sm font-semibold shadow-lg shadow-primary/10">
+                        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full w-full py-3 min-h-[48px] text-base font-semibold shadow-lg shadow-primary/10">
                           לאזור האישי
                         </Button>
                       </Link>
@@ -494,7 +494,7 @@ const Header = () => {
                         className="w-full block"
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-white rounded-full w-full py-3 font-semibold text-sm">
+                        <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-white rounded-full w-full py-3 min-h-[48px] font-semibold text-base">
                           כניסה לסוכנים
                         </Button>
                       </Link>

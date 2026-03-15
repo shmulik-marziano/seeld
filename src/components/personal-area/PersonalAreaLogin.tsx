@@ -90,7 +90,7 @@ const PersonalAreaLogin = () => {
                   />
                 </div>
               </div>
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button type="submit" className="w-full min-h-[48px] text-base" disabled={loading}>
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
@@ -123,7 +123,7 @@ const PersonalAreaLogin = () => {
               </div>
               <Button
                 onClick={handleVerifyOtp}
-                className="w-full"
+                className="w-full min-h-[48px] text-base"
                 disabled={loading || otp.length !== 6}
               >
                 {loading ? (
@@ -136,14 +136,14 @@ const PersonalAreaLogin = () => {
                 <button
                   type="button"
                   onClick={() => { setStep("email"); setOtp(""); }}
-                  className="text-primary hover:underline"
+                  className="text-primary hover:underline min-h-[44px] px-2"
                 >
                   שנה כתובת מייל
                 </button>
                 <button
                   type="button"
                   onClick={handleSendOtp}
-                  className="text-muted-foreground hover:underline"
+                  className="text-muted-foreground hover:underline min-h-[44px] px-2"
                   disabled={loading}
                 >
                   שלח קוד מחדש

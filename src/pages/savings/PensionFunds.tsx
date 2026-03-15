@@ -52,7 +52,7 @@ const PensionFunds = () => {
               <p className="text-xl text-muted-foreground leading-relaxed">
                 קרן פנסיה היא מכשיר חיסכון ארוך טווח המבטיח לכם הכנסה חודשית קבועה לאחר הפרישה. עם הייעוץ המקצועי שלנו, תבחרו את הקרן המתאימה ביותר.
               </p>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
                 <a href="#analysis-form" className="px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 hover:scale-105 transition-all">
                   ניתוח תיק פנסיוני חינם
                 </a>

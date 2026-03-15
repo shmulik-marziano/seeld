@@ -69,7 +69,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
       case 'vehicle':
         return (
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="vehicleType">סוג רכב</Label>
                 <Select value={vehicleType} onValueChange={setVehicleType}>
@@ -95,7 +95,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="vehicleManufacturer">יצרן</Label>
                 <Input 
@@ -145,7 +145,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                 </SelectContent>
               </Select>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="propertySizeSqm">שטח במ"ר</Label>
                 <Input 
@@ -198,7 +198,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                 </SelectContent>
               </Select>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="businessEmployees">מספר עובדים</Label>
                 <Input 
@@ -235,7 +235,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                 placeholder="תאילנד, אירופה..."
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="travelStartDate">תאריך יציאה</Label>
                 <Input 
@@ -489,11 +489,11 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                   />
                 </div>
               </div>
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 onClick={() => setStep(2)}
                 disabled={!fullName || !phone || !email}
-                className="w-full"
+                className="w-full min-h-[48px] text-base"
               >
                 המשך לפרטי הביטוח
               </Button>
@@ -515,18 +515,18 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                 />
               </div>
               <div className="flex gap-2">
-                <Button 
-                  type="button" 
+                <Button
+                  type="button"
                   variant="outline"
                   onClick={() => setStep(1)}
-                  className="flex-1"
+                  className="flex-1 min-h-[48px] text-base"
                 >
                   חזרה
                 </Button>
-                <Button 
-                  type="button" 
+                <Button
+                  type="button"
                   onClick={() => setStep(3)}
-                  className="flex-1"
+                  className="flex-1 min-h-[48px] text-base"
                 >
                   המשך
                 </Button>
@@ -562,18 +562,18 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                 />
               </div>
               <div className="flex gap-2">
-                <Button 
-                  type="button" 
+                <Button
+                  type="button"
                   variant="outline"
                   onClick={() => setStep(2)}
-                  className="flex-1"
+                  className="flex-1 min-h-[48px] text-base"
                 >
                   חזרה
                 </Button>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={isSubmitting}
-                  className="flex-1"
+                  className="flex-1 min-h-[48px] text-base"
                 >
                   {isSubmitting ? (
                     "שולח..."

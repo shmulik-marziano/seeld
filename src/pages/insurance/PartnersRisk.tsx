@@ -27,7 +27,7 @@ const PartnersRisk = () => {
               <p className="text-xl text-muted-foreground leading-relaxed">
                 ביטוח חיים לשותפים מבטיח את המשכיות העסק במקרה של פטירת אחד השותפים. הגנה חיונית לכל שותפות עסקית.
               </p>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
                 <a href="#contact-form" className="px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 hover:scale-105 transition-all">
                   להצטרפות ל-SeelD
                 </a>

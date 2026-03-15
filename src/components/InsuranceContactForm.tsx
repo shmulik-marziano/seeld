@@ -86,7 +86,7 @@ const InsuranceContactForm = ({
   };
 
   return (
-    <div className="bg-card rounded-2xl border border-border p-8 text-right">
+    <div className="bg-card rounded-2xl border border-border p-4 sm:p-8 text-right">
       <div className="text-center mb-8">
         <h3 className="text-2xl font-bold mb-2">{title}</h3>
         <p className="text-muted-foreground">{subtitle}</p>
@@ -148,7 +148,7 @@ const InsuranceContactForm = ({
         
         <Button 
           type="submit" 
-          className="w-full rounded-full py-6 text-lg font-medium hover:scale-105 transition-all"
+          className="w-full rounded-full py-6 text-lg font-medium hover:scale-105 transition-all min-h-[48px]"
           disabled={isLoading}
         >
           {isLoading ? "שולח..." : (

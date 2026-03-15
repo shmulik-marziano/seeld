@@ -21,12 +21,12 @@ const PersonalAreaDashboard = () => {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Welcome header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold">שלום, {displayName} 👋</h1>
-          <p className="text-muted-foreground mt-1">ברוכים הבאים לאזור האישי שלך ב-SeelD</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">שלום, {displayName}</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">ברוכים הבאים לאזור האישי שלך ב-SeelD</p>
         </div>
-        <Button variant="outline" onClick={handleSignOut} className="gap-2">
+        <Button variant="outline" onClick={handleSignOut} className="gap-2 min-h-[44px]">
           <LogOut className="w-4 h-4" />
           התנתק
         </Button>
@@ -34,12 +34,12 @@ const PersonalAreaDashboard = () => {
 
       {/* Main tabs */}
       <Tabs defaultValue="profile" dir="rtl">
-        <TabsList className="w-full grid grid-cols-2 mb-6">
-          <TabsTrigger value="profile" className="gap-2">
+        <TabsList className="w-full grid grid-cols-2 mb-6 h-auto">
+          <TabsTrigger value="profile" className="gap-2 min-h-[44px] text-sm">
             <User className="w-4 h-4" />
             הפרופיל שלי
           </TabsTrigger>
-          <TabsTrigger value="policies" className="gap-2">
+          <TabsTrigger value="policies" className="gap-2 min-h-[44px] text-sm">
             <FileText className="w-4 h-4" />
             הפוליסות שלי
           </TabsTrigger>

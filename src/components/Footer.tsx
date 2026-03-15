@@ -73,65 +73,65 @@ const Footer = () => {
             <div>
               <h3 className="font-bold mb-4 sm:mb-5 text-xs tracking-widest uppercase text-accent">שירותים</h3>
               <ul className="space-y-2 sm:space-y-2.5 text-sm text-muted-foreground">
-                <li><Link to="/onboarding" className="hover:text-foreground transition-colors inline-block py-0.5">שאלון הצטרפות</Link></li>
-                <li><Link to="/direct-debit" className="hover:text-foreground transition-colors inline-block py-0.5">מילוי טופס הו"ק</Link></li>
-                <li><Link to="/insurance/health" className="hover:text-foreground transition-colors inline-block py-0.5">ביטוח בריאות</Link></li>
-                <li><a href="https://perspective-bloom-317.lovable.app/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors inline-block py-0.5">ביטוח בקליק</a></li>
-                <li><Link to="/insurance/vehicle" className="hover:text-foreground transition-colors inline-block py-0.5">ביטוח רכב</Link></li>
-                <li><Link to="/savings/pension-funds" className="hover:text-foreground transition-colors inline-block py-0.5">חיסכון ופנסיה</Link></li>
-                <li><Link to="/calculators" className="hover:text-foreground transition-colors inline-block py-0.5">מחשבונים</Link></li>
-                <li><Link to="/return-tables" className="hover:text-foreground transition-colors inline-block py-0.5">טבלאות תשואה</Link></li>
+                <li><Link to="/onboarding" className="hover:text-foreground transition-colors inline-block py-1.5">שאלון הצטרפות</Link></li>
+                <li><Link to="/direct-debit" className="hover:text-foreground transition-colors inline-block py-1.5">מילוי טופס הו"ק</Link></li>
+                <li><Link to="/insurance/health" className="hover:text-foreground transition-colors inline-block py-1.5">ביטוח בריאות</Link></li>
+                <li><a href="https://perspective-bloom-317.lovable.app/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors inline-block py-1.5">ביטוח בקליק</a></li>
+                <li><Link to="/insurance/vehicle" className="hover:text-foreground transition-colors inline-block py-1.5">ביטוח רכב</Link></li>
+                <li><Link to="/savings/pension-funds" className="hover:text-foreground transition-colors inline-block py-1.5">חיסכון ופנסיה</Link></li>
+                <li><Link to="/calculators" className="hover:text-foreground transition-colors inline-block py-1.5">מחשבונים</Link></li>
+                <li><Link to="/return-tables" className="hover:text-foreground transition-colors inline-block py-1.5">טבלאות תשואה</Link></li>
               </ul>
             </div>
 
             <div>
               <h3 className="font-bold mb-4 sm:mb-5 text-xs tracking-widest uppercase text-accent">ביטוחים</h3>
               <ul className="space-y-2 sm:space-y-2.5 text-sm text-muted-foreground">
-                <li><Link to="/insurance/life" className="hover:text-foreground transition-colors inline-block py-0.5">ביטוח חיים</Link></li>
-                <li><Link to="/insurance/mortgage" className="hover:text-foreground transition-colors inline-block py-0.5">ביטוח משכנתא</Link></li>
-                <li><Link to="/insurance/critical-illness" className="hover:text-foreground transition-colors inline-block py-0.5">מחלות קשות</Link></li>
-                <li><Link to="/insurance/disability" className="hover:text-foreground transition-colors inline-block py-0.5">אובדן כושר עבודה</Link></li>
-                <li><Link to="/insurance/accidents" className="hover:text-foreground transition-colors inline-block py-0.5">תאונות אישיות</Link></li>
-                <li><Link to="/insurance/home" className="hover:text-foreground transition-colors inline-block py-0.5">ביטוח דירה</Link></li>
-                <li><Link to="/insurance/travel" className="hover:text-foreground transition-colors inline-block py-0.5">ביטוח נסיעות</Link></li>
-                <li><Link to="/insurance/dental" className="hover:text-foreground transition-colors inline-block py-0.5">ביטוח שיניים</Link></li>
-                <li><Link to="/insurance/nursing" className="hover:text-foreground transition-colors inline-block py-0.5">ביטוח סיעודי</Link></li>
-                <li><Link to="/insurance/business" className="hover:text-foreground transition-colors inline-block py-0.5">ביטוח עסק</Link></li>
+                <li><Link to="/insurance/life" className="hover:text-foreground transition-colors inline-block py-1.5">ביטוח חיים</Link></li>
+                <li><Link to="/insurance/mortgage" className="hover:text-foreground transition-colors inline-block py-1.5">ביטוח משכנתא</Link></li>
+                <li><Link to="/insurance/critical-illness" className="hover:text-foreground transition-colors inline-block py-1.5">מחלות קשות</Link></li>
+                <li><Link to="/insurance/disability" className="hover:text-foreground transition-colors inline-block py-1.5">אובדן כושר עבודה</Link></li>
+                <li><Link to="/insurance/accidents" className="hover:text-foreground transition-colors inline-block py-1.5">תאונות אישיות</Link></li>
+                <li><Link to="/insurance/home" className="hover:text-foreground transition-colors inline-block py-1.5">ביטוח דירה</Link></li>
+                <li><Link to="/insurance/travel" className="hover:text-foreground transition-colors inline-block py-1.5">ביטוח נסיעות</Link></li>
+                <li><Link to="/insurance/dental" className="hover:text-foreground transition-colors inline-block py-1.5">ביטוח שיניים</Link></li>
+                <li><Link to="/insurance/nursing" className="hover:text-foreground transition-colors inline-block py-1.5">ביטוח סיעודי</Link></li>
+                <li><Link to="/insurance/business" className="hover:text-foreground transition-colors inline-block py-1.5">ביטוח עסק</Link></li>
               </ul>
             </div>
 
             <div>
               <h3 className="font-bold mb-4 sm:mb-5 text-xs tracking-widest uppercase text-accent">חיסכון ופנסיה</h3>
               <ul className="space-y-2 sm:space-y-2.5 text-sm text-muted-foreground">
-                <li><Link to="/savings/pension-funds" className="hover:text-foreground transition-colors inline-block py-0.5">קרנות פנסיה</Link></li>
-                <li><Link to="/savings/gemel-funds" className="hover:text-foreground transition-colors inline-block py-0.5">קופות גמל</Link></li>
-                <li><Link to="/savings/training-funds" className="hover:text-foreground transition-colors inline-block py-0.5">קרנות השתלמות</Link></li>
-                <li><Link to="/savings/gemel-investment" className="hover:text-foreground transition-colors inline-block py-0.5">גמל להשקעה</Link></li>
-                <li><Link to="/savings/child-savings" className="hover:text-foreground transition-colors inline-block py-0.5">חיסכון לילד</Link></li>
-                <li><Link to="/savings/pre-retirement" className="hover:text-foreground transition-colors inline-block py-0.5">לקראת פרישה</Link></li>
-                <li><Link to="/savings/post-retirement" className="hover:text-foreground transition-colors inline-block py-0.5">אחרי פרישה</Link></li>
-                <li><Link to="/savings/financial-planning" className="hover:text-foreground transition-colors inline-block py-0.5">תכנון פיננסי</Link></li>
+                <li><Link to="/savings/pension-funds" className="hover:text-foreground transition-colors inline-block py-1.5">קרנות פנסיה</Link></li>
+                <li><Link to="/savings/gemel-funds" className="hover:text-foreground transition-colors inline-block py-1.5">קופות גמל</Link></li>
+                <li><Link to="/savings/training-funds" className="hover:text-foreground transition-colors inline-block py-1.5">קרנות השתלמות</Link></li>
+                <li><Link to="/savings/gemel-investment" className="hover:text-foreground transition-colors inline-block py-1.5">גמל להשקעה</Link></li>
+                <li><Link to="/savings/child-savings" className="hover:text-foreground transition-colors inline-block py-1.5">חיסכון לילד</Link></li>
+                <li><Link to="/savings/pre-retirement" className="hover:text-foreground transition-colors inline-block py-1.5">לקראת פרישה</Link></li>
+                <li><Link to="/savings/post-retirement" className="hover:text-foreground transition-colors inline-block py-1.5">אחרי פרישה</Link></li>
+                <li><Link to="/savings/financial-planning" className="hover:text-foreground transition-colors inline-block py-1.5">תכנון פיננסי</Link></li>
               </ul>
             </div>
 
             <div>
               <h3 className="font-bold mb-4 sm:mb-5 text-xs tracking-widest uppercase text-accent">אודות</h3>
               <ul className="space-y-2 sm:space-y-2.5 text-sm text-muted-foreground mb-6">
-                <li><Link to="/about" className="hover:text-foreground transition-colors inline-block py-0.5">הסיפור שלנו</Link></li>
-                <li><Link to="/authors" className="hover:text-foreground transition-colors inline-block py-0.5">הצוות</Link></li>
-                <li><Link to="/contact" className="hover:text-foreground transition-colors inline-block py-0.5">יצירת קשר</Link></li>
-                <li><a href="/#articles" className="hover:text-foreground transition-colors inline-block py-0.5">מאמרים</a></li>
-                <li><Link to="/faq" className="hover:text-foreground transition-colors inline-block py-0.5">שאלות נפוצות</Link></li>
+                <li><Link to="/about" className="hover:text-foreground transition-colors inline-block py-1.5">הסיפור שלנו</Link></li>
+                <li><Link to="/authors" className="hover:text-foreground transition-colors inline-block py-1.5">הצוות</Link></li>
+                <li><Link to="/contact" className="hover:text-foreground transition-colors inline-block py-1.5">יצירת קשר</Link></li>
+                <li><a href="/#articles" className="hover:text-foreground transition-colors inline-block py-1.5">מאמרים</a></li>
+                <li><Link to="/faq" className="hover:text-foreground transition-colors inline-block py-1.5">שאלות נפוצות</Link></li>
                 <li><a href="https://seeld.co.il" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 text-accent hover:bg-accent/20 transition-colors text-xs font-medium mt-1">שמוליק מרציאנו ←</a></li>
                 <li><a href="https://perspective-bloom-317.lovable.app" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 text-accent hover:bg-accent/20 transition-colors text-xs font-medium">שירותים בקליק ←</a></li>
                 <li><Link to="/app/auth" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors text-xs font-medium">כניסה לסוכנים ←</Link></li>
               </ul>
               <h3 className="font-bold mb-3 sm:mb-4 text-xs tracking-widest uppercase text-muted-foreground/50">משפטי</h3>
               <ul className="space-y-2 sm:space-y-2.5 text-sm text-muted-foreground">
-                <li><Link to="/privacy" className="hover:text-foreground transition-colors inline-block py-0.5">מדיניות פרטיות</Link></li>
-                <li><Link to="/terms" className="hover:text-foreground transition-colors inline-block py-0.5">תנאי שימוש</Link></li>
-                <li><Link to="/accessibility" className="hover:text-foreground transition-colors inline-block py-0.5">הצהרת נגישות</Link></li>
-                <li><Link to="/cookie-policy" className="hover:text-foreground transition-colors inline-block py-0.5">מדיניות עוגיות</Link></li>
+                <li><Link to="/privacy" className="hover:text-foreground transition-colors inline-block py-1.5">מדיניות פרטיות</Link></li>
+                <li><Link to="/terms" className="hover:text-foreground transition-colors inline-block py-1.5">תנאי שימוש</Link></li>
+                <li><Link to="/accessibility" className="hover:text-foreground transition-colors inline-block py-1.5">הצהרת נגישות</Link></li>
+                <li><Link to="/cookie-policy" className="hover:text-foreground transition-colors inline-block py-1.5">מדיניות עוגיות</Link></li>
               </ul>
             </div>
           </motion.div>

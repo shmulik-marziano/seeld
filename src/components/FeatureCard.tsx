@@ -40,7 +40,7 @@ const FeatureCard = ({ title, description, bgColor, doodle, buttonText, buttonHr
         {buttonText && buttonHref && (
           <Link to={buttonHref}>
             <motion.span
-              className="inline-flex items-center gap-2 mt-2 sm:mt-3 px-5 sm:px-6 py-2 sm:py-2.5 border border-foreground/20 rounded-full text-xs sm:text-sm font-medium hover:bg-foreground hover:text-background transition-all duration-300 group/link"
+              className="inline-flex items-center gap-2 mt-2 sm:mt-3 px-5 sm:px-6 py-2.5 sm:py-2.5 min-h-[44px] border border-foreground/20 rounded-full text-xs sm:text-sm font-medium hover:bg-foreground hover:text-background transition-all duration-300 group/link"
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
             >

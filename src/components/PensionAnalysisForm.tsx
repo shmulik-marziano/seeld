@@ -259,11 +259,11 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                   onChange={(e) => setBirthDate(e.target.value)}
                 />
               </div>
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 onClick={() => setStep(2)}
                 disabled={!fullName || !phone || !email}
-                className="w-full"
+                className="w-full min-h-[48px] text-base"
               >
                 המשך לפרטי תעסוקה
               </Button>
@@ -323,14 +323,14 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                   type="button" 
                   variant="outline"
                   onClick={() => setStep(1)}
-                  className="flex-1"
+                  className="flex-1 min-h-[48px] text-base"
                 >
                   חזרה
                 </Button>
                 <Button 
                   type="button" 
                   onClick={() => setStep(3)}
-                  className="flex-1"
+                  className="flex-1 min-h-[48px] text-base"
                 >
                   המשך
                 </Button>
@@ -368,7 +368,7 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                           <Trash2 className="w-4 h-4 text-destructive" />
                         </Button>
                       </div>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                           <Label>סוג מוצר</Label>
                           <Select 
@@ -422,14 +422,14 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                   type="button" 
                   variant="outline"
                   onClick={() => setStep(2)}
-                  className="flex-1"
+                  className="flex-1 min-h-[48px] text-base"
                 >
                   חזרה
                 </Button>
                 <Button 
                   type="button" 
                   onClick={() => setStep(4)}
-                  className="flex-1"
+                  className="flex-1 min-h-[48px] text-base"
                 >
                   המשך
                 </Button>
@@ -482,7 +482,7 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
               
               <div>
                 <Label className="mb-3 block">מטרות עיקריות (ניתן לבחור מספר)</Label>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {[
                     { value: 'retirement', label: 'הבטחת פרישה נוחה' },
                     { value: 'disability_coverage', label: 'כיסוי אובדן כושר עבודה' },
@@ -510,14 +510,14 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                   type="button" 
                   variant="outline"
                   onClick={() => setStep(3)}
-                  className="flex-1"
+                  className="flex-1 min-h-[48px] text-base"
                 >
                   חזרה
                 </Button>
                 <Button 
                   type="button" 
                   onClick={() => setStep(5)}
-                  className="flex-1"
+                  className="flex-1 min-h-[48px] text-base"
                 >
                   המשך
                 </Button>
@@ -581,14 +581,14 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                   type="button" 
                   variant="outline"
                   onClick={() => setStep(4)}
-                  className="flex-1"
+                  className="flex-1 min-h-[48px] text-base"
                 >
                   חזרה
                 </Button>
                 <Button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="flex-1"
+                  className="flex-1 min-h-[48px] text-base"
                 >
                   {isSubmitting ? (
                     "שולח..."

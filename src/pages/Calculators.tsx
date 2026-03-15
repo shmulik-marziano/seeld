@@ -64,24 +64,24 @@ const Calculators = () => {
 
         {/* Tabs for Calculators */}
         <Tabs defaultValue="mortgage" className="space-y-8">
-          <TabsList className="w-full flex flex-wrap h-auto gap-2 bg-muted p-2 rounded-2xl">
-            <TabsTrigger value="mortgage" className="flex-1 min-w-[100px] rounded-xl flex items-center gap-2 text-sm">
+          <TabsList className="w-full flex flex-wrap h-auto gap-2 bg-muted p-2 rounded-2xl justify-center">
+            <TabsTrigger value="mortgage" className="flex-1 min-w-[80px] min-h-[44px] rounded-xl flex items-center gap-2 text-sm">
               <Home className="w-4 h-4" />
               משכנתא
             </TabsTrigger>
-            <TabsTrigger value="pension" className="flex-1 min-w-[100px] rounded-xl flex items-center gap-2 text-sm">
+            <TabsTrigger value="pension" className="flex-1 min-w-[80px] min-h-[44px] rounded-xl flex items-center gap-2 text-sm">
               <PiggyBank className="w-4 h-4" />
               פנסיה
             </TabsTrigger>
-            <TabsTrigger value="savings" className="flex-1 min-w-[100px] rounded-xl flex items-center gap-2 text-sm">
+            <TabsTrigger value="savings" className="flex-1 min-w-[80px] min-h-[44px] rounded-xl flex items-center gap-2 text-sm">
               <Wallet className="w-4 h-4" />
               חיסכון
             </TabsTrigger>
-            <TabsTrigger value="goal" className="flex-1 min-w-[100px] rounded-xl flex items-center gap-2 text-sm">
+            <TabsTrigger value="goal" className="flex-1 min-w-[80px] min-h-[44px] rounded-xl flex items-center gap-2 text-sm">
               <Target className="w-4 h-4" />
               יעד
             </TabsTrigger>
-            <TabsTrigger value="compare" className="flex-1 min-w-[100px] rounded-xl flex items-center gap-2 text-sm">
+            <TabsTrigger value="compare" className="flex-1 min-w-[80px] min-h-[44px] rounded-xl flex items-center gap-2 text-sm">
               <BarChart3 className="w-4 h-4" />
               השוואה
             </TabsTrigger>

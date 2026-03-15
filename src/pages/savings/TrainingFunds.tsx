@@ -31,7 +31,7 @@ const TrainingFunds = () => {
               <p className="text-xl text-muted-foreground leading-relaxed">
                 קרן השתלמות היא אפיק החיסכון המועדף בישראל - פטור מלא ממס רווחי הון ונזילות לאחר 6 שנים בלבד.
               </p>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
                 <a href="#analysis-form" className="px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 hover:scale-105 transition-all">
                   ניתוח קרנות חינם
                 </a>

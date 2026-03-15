@@ -30,7 +30,7 @@ const BusinessInsurance = () => {
               <p className="text-xl text-muted-foreground leading-relaxed">
                 ביטוח עסקי מקיף שמגן על המבנה, התכולה, העובדים והפעילות העסקית שלכם.
               </p>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
                 <a href="#enrollment-form" className="px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 hover:scale-105 transition-all">
                   להצטרפות ל-SeelD
                 </a>

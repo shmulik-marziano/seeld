@@ -94,7 +94,7 @@ const Contact = () => {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form */}
           <ScrollReveal direction="right">
-            <div className="rounded-2xl bg-card p-8">
+            <div className="rounded-2xl bg-card p-4 sm:p-8">
               <h2 className="text-2xl font-bold mb-6">השאירו פרטים</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
@@ -108,7 +108,7 @@ const Contact = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring text-right"
+                    className="w-full px-4 py-3 h-12 text-base rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring text-right"
                     placeholder="השם שלכם" />
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
@@ -123,7 +123,7 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring text-right"
+                      className="w-full px-4 py-3 h-12 text-base rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring text-right"
                       placeholder="email@example.com"
                       dir="ltr" />
                   </div>
@@ -138,7 +138,7 @@ const Contact = () => {
                       value={formData.phone}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring text-right"
+                      className="w-full px-4 py-3 h-12 text-base rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring text-right"
                       placeholder="050-1234567"
                       dir="ltr" />
                   </div>
@@ -153,7 +153,7 @@ const Contact = () => {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring text-right">
+                    className="w-full px-4 py-3 h-12 text-base rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring text-right">
                     <option value="">בחרו נושא</option>
                     <option value="pension">תכנון פנסיוני</option>
                     <option value="health-insurance">ביטוח בריאות</option>
@@ -174,13 +174,14 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleChange}
                     rows={4}
-                    className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring resize-none text-right"
+                    className="w-full px-4 py-3 text-base rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring resize-none text-right"
                     placeholder="ספרו לנו במה נוכל לעזור..." />
                 </div>
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full py-6">
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full py-6 min-h-[48px] text-base"
+                >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
                 </Button>
               </form>

@@ -182,7 +182,7 @@ const AIChatBot = () => {
           <button
             onClick={() => setIsExpanded(true)}
             className={cn(
-              "fixed bottom-6 left-6 z-50 transition-all duration-300",
+              "fixed bottom-6 left-4 sm:left-6 z-50 transition-all duration-300",
               isExpanded && "opacity-0 pointer-events-none scale-0"
             )}
             aria-label="פתח צ'אט עם אריק"
@@ -212,7 +212,7 @@ const AIChatBot = () => {
       {/* Expanded Chat Panel - Fixed bottom left */}
       <div
         className={cn(
-          "fixed bottom-6 left-6 z-50 w-[400px] max-w-[calc(100vw-3rem)] transition-all duration-300 origin-bottom-left",
+          "fixed bottom-6 left-4 sm:left-6 z-50 w-[calc(100vw-2rem)] sm:w-[400px] sm:max-w-[calc(100vw-3rem)] transition-all duration-300 origin-bottom-left",
           isExpanded ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
         )}
       >
@@ -264,7 +264,7 @@ const AIChatBot = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="שאלו את אריק..."
-              className="flex-1 bg-transparent border-none focus:outline-none text-right text-sm py-2"
+              className="flex-1 bg-transparent border-none focus:outline-none text-right text-base sm:text-sm py-2"
               disabled={isLoading}
             />
             <button

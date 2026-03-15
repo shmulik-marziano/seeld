@@ -189,8 +189,8 @@ function DateMaskInput({
         maxLength={10}
         placeholder={placeholder ?? "DD/MM/YYYY"}
         className={cn(
-          "w-full h-11 px-4 pr-11 rounded-xl border border-border/60 bg-card/50 backdrop-blur-sm",
-          "text-sm text-foreground placeholder:text-muted-foreground/50",
+          "w-full h-12 px-4 pr-11 rounded-xl border border-border/60 bg-card/50 backdrop-blur-sm",
+          "text-base sm:text-sm text-foreground placeholder:text-muted-foreground/50",
           "focus:outline-none focus:border-accent focus:bg-card focus:shadow-[0_0_0_3px_hsl(var(--accent)/0.15)]",
           "transition-all duration-200 font-mono tracking-widest",
           error && "border-destructive",
@@ -268,8 +268,8 @@ function CityInput({
         onFocus={() => setOpen(true)}
         placeholder="תל אביב"
         className={cn(
-          "w-full h-11 px-4 rounded-xl border border-border/60 bg-card/50 backdrop-blur-sm",
-          "text-sm text-foreground placeholder:text-muted-foreground/50",
+          "w-full h-12 px-4 rounded-xl border border-border/60 bg-card/50 backdrop-blur-sm",
+          "text-base sm:text-sm text-foreground placeholder:text-muted-foreground/50",
           "focus:outline-none focus:border-accent focus:bg-card focus:shadow-[0_0_0_3px_hsl(var(--accent)/0.15)]",
           "transition-all duration-200",
           error && "border-destructive",
@@ -277,13 +277,13 @@ function CityInput({
         )}
       />
       {open && filtered.length > 0 && (
-        <div className="absolute z-[100] top-full mt-1 w-full rounded-xl border border-border/60 bg-card shadow-xl overflow-hidden">
+        <div className="absolute z-[100] top-full mt-1 w-full rounded-xl border border-border/60 bg-card shadow-xl overflow-hidden max-h-60 overflow-y-auto">
           {filtered.map(city => (
             <button
               key={city}
               type="button"
               onMouseDown={() => select(city)}
-              className="w-full text-right px-4 py-2.5 text-sm hover:bg-accent/10 hover:text-accent transition-colors border-b border-border/30 last:border-0"
+              className="w-full text-right px-4 py-3 min-h-[44px] text-sm hover:bg-accent/10 hover:text-accent transition-colors border-b border-border/30 last:border-0"
             >
               {city}
             </button>
@@ -331,21 +331,21 @@ function StreetInput({
         onFocus={() => setOpen(true)}
         placeholder="שם הרחוב"
         className={cn(
-          "w-full h-11 px-4 rounded-xl border border-border/60 bg-card/50 backdrop-blur-sm",
-          "text-sm text-foreground placeholder:text-muted-foreground/50",
+          "w-full h-12 px-4 rounded-xl border border-border/60 bg-card/50 backdrop-blur-sm",
+          "text-base sm:text-sm text-foreground placeholder:text-muted-foreground/50",
           "focus:outline-none focus:border-accent focus:bg-card focus:shadow-[0_0_0_3px_hsl(var(--accent)/0.15)]",
           "transition-all duration-200",
           className
         )}
       />
       {open && filtered.length > 0 && (
-        <div className="absolute z-[100] top-full mt-1 w-full rounded-xl border border-border/60 bg-card shadow-xl overflow-hidden">
+        <div className="absolute z-[100] top-full mt-1 w-full rounded-xl border border-border/60 bg-card shadow-xl overflow-hidden max-h-60 overflow-y-auto">
           {filtered.map(street => (
             <button
               key={street}
               type="button"
               onMouseDown={() => { onChange(street); setQuery(street); setOpen(false); }}
-              className="w-full text-right px-4 py-2.5 text-sm hover:bg-accent/10 hover:text-accent transition-colors border-b border-border/30 last:border-0"
+              className="w-full text-right px-4 py-3 min-h-[44px] text-sm hover:bg-accent/10 hover:text-accent transition-colors border-b border-border/30 last:border-0"
             >
               {street}
             </button>
@@ -467,8 +467,8 @@ function TechInput({ className, ...props }: React.InputHTMLAttributes<HTMLInputE
     <input
       {...props}
       className={cn(
-        "w-full h-11 px-4 rounded-xl border border-border/60 bg-card/50 backdrop-blur-sm",
-        "text-sm text-foreground placeholder:text-muted-foreground/50",
+        "w-full h-12 px-4 rounded-xl border border-border/60 bg-card/50 backdrop-blur-sm",
+        "text-base sm:text-sm text-foreground placeholder:text-muted-foreground/50",
         "focus:outline-none focus:border-accent focus:bg-card focus:shadow-[0_0_0_3px_hsl(var(--accent)/0.15)]",
         "transition-all duration-200",
         className
@@ -938,7 +938,7 @@ export default function Onboarding() {
               <div className="space-y-4">
                 {/* Personal */}
                 <TechSection title="פרטי זיהוי" icon={<User className="w-4 h-4" />}>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <GlassInput label="שם פרטי" error={errors.firstName} required>
                       <TechInput value={form.firstName} onChange={e => set("firstName", e.target.value)}
                         placeholder="ישראל" className={errors.firstName ? "border-destructive" : ""} />
@@ -948,7 +948,7 @@ export default function Onboarding() {
                         placeholder="ישראלי" className={errors.lastName ? "border-destructive" : ""} />
                     </GlassInput>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <GlassInput label="מספר תעודת זהות" error={errors.idNumber} required>
                       <TechInput value={form.idNumber}
                         onChange={e => set("idNumber", e.target.value.replace(/\D/g, ""))}
@@ -963,7 +963,7 @@ export default function Onboarding() {
                       />
                     </GlassInput>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <GlassInput label="תאריך לידה" error={errors.birthDate} required>
                       <DateMaskInput
                         value={form.birthDate}
@@ -980,7 +980,7 @@ export default function Onboarding() {
 
                 {/* Contact */}
                 <TechSection title="פרטי קשר" icon={<Phone className="w-4 h-4" />}>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <GlassInput label="טלפון נייד" error={errors.phone} required>
                       <TechInput value={form.phone} onChange={e => set("phone", e.target.value)}
                         inputMode="tel" placeholder="050-0000000"
@@ -997,8 +997,8 @@ export default function Onboarding() {
 
                 {/* Address */}
                 <TechSection title="כתובת מגורים" icon={<MapPin className="w-4 h-4" />}>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="col-span-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="sm:col-span-2">
                       <GlassInput label="רחוב">
                         <StreetInput
                           value={form.street}
@@ -1011,7 +1011,7 @@ export default function Onboarding() {
                       <TechInput value={form.houseNumber} onChange={e => set("houseNumber", e.target.value)} placeholder="1" />
                     </GlassInput>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <GlassInput label="עיר" error={errors.city} required>
                       <CityInput
                         value={form.city}
@@ -1042,7 +1042,7 @@ export default function Onboarding() {
                           type="button"
                           onClick={() => { set("maritalStatus", opt); setErrors(e => ({ ...e, maritalStatus: undefined })); }}
                           className={cn(
-                            "px-4 py-2 rounded-xl border-2 text-sm font-medium transition-all duration-200",
+                            "px-4 py-2.5 min-h-[44px] rounded-xl border-2 text-sm font-medium transition-all duration-200",
                             form.maritalStatus === opt
                               ? "border-accent bg-accent/10 text-accent shadow-[0_0_12px_hsl(var(--accent)/0.2)]"
                               : "border-border/50 bg-card/50 text-muted-foreground hover:border-accent/40 hover:text-foreground"
@@ -1063,7 +1063,7 @@ export default function Onboarding() {
                           type="button"
                           onClick={() => set("healthFund", form.healthFund === opt ? "" : opt)}
                           className={cn(
-                            "px-4 py-2 rounded-xl border-2 text-sm font-medium transition-all duration-200",
+                            "px-4 py-2.5 min-h-[44px] rounded-xl border-2 text-sm font-medium transition-all duration-200",
                             form.healthFund === opt
                               ? "border-accent bg-accent/10 text-accent shadow-[0_0_12px_hsl(var(--accent)/0.2)]"
                               : "border-border/50 bg-card/50 text-muted-foreground hover:border-accent/40 hover:text-foreground"
@@ -1082,7 +1082,7 @@ export default function Onboarding() {
                         <button
                           type="button"
                           onClick={() => set("childrenCount", Math.max(0, form.childrenCount - 1))}
-                          className="w-9 h-9 rounded-xl border-2 border-border/50 bg-card/50 text-foreground font-bold text-lg flex items-center justify-center hover:border-accent/50 hover:bg-accent/10 transition-all"
+                          className="w-11 h-11 rounded-xl border-2 border-border/50 bg-card/50 text-foreground font-bold text-lg flex items-center justify-center hover:border-accent/50 hover:bg-accent/10 transition-all"
                         >−</button>
                         <span className="w-12 text-center text-2xl font-extrabold font-mono text-accent">
                           {form.childrenCount}
@@ -1090,7 +1090,7 @@ export default function Onboarding() {
                         <button
                           type="button"
                           onClick={() => set("childrenCount", Math.min(24, form.childrenCount + 1))}
-                          className="w-9 h-9 rounded-xl border-2 border-border/50 bg-card/50 text-foreground font-bold text-lg flex items-center justify-center hover:border-accent/50 hover:bg-accent/10 transition-all"
+                          className="w-11 h-11 rounded-xl border-2 border-border/50 bg-card/50 text-foreground font-bold text-lg flex items-center justify-center hover:border-accent/50 hover:bg-accent/10 transition-all"
                         >+</button>
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -1100,7 +1100,7 @@ export default function Onboarding() {
                             type="button"
                             onClick={() => set("childrenCount", n)}
                             className={cn(
-                              "w-8 h-8 rounded-lg border text-xs font-bold transition-all",
+                              "w-10 h-10 rounded-lg border text-xs font-bold transition-all",
                               form.childrenCount === n
                                 ? "border-accent bg-accent/15 text-accent"
                                 : "border-border/40 bg-card/40 text-muted-foreground hover:border-accent/30"
@@ -1136,7 +1136,7 @@ export default function Onboarding() {
                               set("employmentStatus", selected ? cur.filter(x => x !== opt) : [...cur, opt]);
                             }}
                             className={cn(
-                              "px-4 py-2 rounded-xl border-2 text-sm font-medium transition-all duration-200",
+                              "px-4 py-2.5 min-h-[44px] rounded-xl border-2 text-sm font-medium transition-all duration-200",
                               selected
                                 ? "border-accent bg-accent/10 text-accent shadow-[0_0_12px_hsl(var(--accent)/0.2)]"
                                 : "border-border/50 bg-card/50 text-muted-foreground hover:border-accent/40 hover:text-foreground"
@@ -1164,7 +1164,7 @@ export default function Onboarding() {
                           type="button"
                           onClick={() => set("annualIncome", opt.value)}
                           className={cn(
-                            "px-4 py-2 rounded-xl border-2 text-sm font-medium transition-all duration-200",
+                            "px-4 py-2.5 min-h-[44px] rounded-xl border-2 text-sm font-medium transition-all duration-200",
                             form.annualIncome === opt.value
                               ? "border-accent bg-accent/10 text-accent shadow-[0_0_12px_hsl(var(--accent)/0.2)]"
                               : "border-border/50 bg-card/50 text-muted-foreground hover:border-accent/40 hover:text-foreground"
@@ -1184,7 +1184,7 @@ export default function Onboarding() {
                           type="button"
                           onClick={() => { set("smoker", opt.value); if (!opt.value) set("cigarettesPerDay", ""); }}
                           className={cn(
-                            "px-6 py-2 rounded-xl border-2 text-sm font-medium transition-all duration-200",
+                            "px-6 py-2.5 min-h-[44px] rounded-xl border-2 text-sm font-medium transition-all duration-200",
                             form.smoker === opt.value
                               ? "border-accent bg-accent/10 text-accent shadow-[0_0_12px_hsl(var(--accent)/0.2)]"
                               : "border-border/50 bg-card/50 text-muted-foreground hover:border-accent/40 hover:text-foreground"
@@ -1382,7 +1382,7 @@ export default function Onboarding() {
                 onClick={step === 2 ? handleSubmit : goNext}
                 disabled={submitting}
                 className={cn(
-                  "relative flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-sm transition-all duration-300",
+                  "relative flex items-center gap-2 px-8 py-3 min-h-[48px] rounded-xl font-bold text-base sm:text-sm transition-all duration-300",
                   "bg-primary text-primary-foreground",
                   "hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)] hover:scale-105",
                   "disabled:opacity-60 disabled:scale-100 disabled:shadow-none",
