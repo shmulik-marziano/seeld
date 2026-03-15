@@ -1,0 +1,22 @@
+project_id = "xddeqljarsswwsslhaoj"
+
+[functions.generate-recommendation]
+verify_jwt = false
+
+[functions.invite-agent]
+verify_jwt = false
+
+[functions.parse-import-file]
+verify_jwt = false
+
+[functions.parse-pdf-policy]
+verify_jwt = false
+
+[functions.process-correction]
+verify_jwt = false
+
+[functions.pdage-chat]
+verify_jwt = false
+
+[functions.validate-correction]
+verify_jwt = false

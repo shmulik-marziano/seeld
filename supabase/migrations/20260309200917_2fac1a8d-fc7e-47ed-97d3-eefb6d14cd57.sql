@@ -1,0 +1,1 @@
+ALTER TABLE public.source_files ALTER COLUMN type SET DEFAULT 'מסלקה';
