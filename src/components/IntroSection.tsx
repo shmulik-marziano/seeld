@@ -133,7 +133,7 @@ const IntroSection = () => {
           setTimeout(startScan, 600);
         }
       },
-      { threshold: 0.4 }
+      { threshold: 0.3 }
     );
     const el = document.getElementById("client-scanner");
     if (el) observer.observe(el);
@@ -141,8 +141,8 @@ const IntroSection = () => {
   }, []);
 
   return (
-    <section className="max-w-5xl mx-auto py-16 md:py-24 px-4" id="client-scanner">
-      <div className="text-center space-y-5 mb-14">
+    <section className="max-w-5xl mx-auto py-10 sm:py-16 md:py-24 px-2 sm:px-4" id="client-scanner">
+      <div className="text-center space-y-3 sm:space-y-5 mb-8 sm:mb-14">
         <motion.div
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border/40 bg-card/60 backdrop-blur-sm"
           initial={{ opacity: 0, y: -10 }}
@@ -153,7 +153,7 @@ const IntroSection = () => {
           <span className="text-xs text-muted-foreground font-medium">סריקה חכמה</span>
         </motion.div>
         <motion.h2
-          className="text-3xl md:text-5xl font-bold leading-tight tracking-tight"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -162,7 +162,7 @@ const IntroSection = () => {
           סורק תיק לקוח
         </motion.h2>
         <motion.p
-          className="text-muted-foreground max-w-xl mx-auto text-base"
+          className="text-muted-foreground max-w-xl mx-auto text-xs sm:text-sm md:text-base px-2"
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -174,7 +174,7 @@ const IntroSection = () => {
 
       {/* Scanner card */}
       <motion.div
-        className="relative rounded-3xl border border-border/30 overflow-hidden max-w-2xl mx-auto shadow-xl"
+        className="relative rounded-2xl sm:rounded-3xl border border-border/30 overflow-hidden max-w-2xl mx-auto shadow-xl"
         style={{
           background: "linear-gradient(180deg, hsl(var(--card)) 0%, hsl(var(--background)) 100%)",
         }}
@@ -184,44 +184,45 @@ const IntroSection = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
       >
         {/* Header bar */}
-        <div className="flex items-center justify-between px-6 py-3.5 border-b border-border/20 bg-muted/20">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-3.5 border-b border-border/20 bg-muted/20">
           <div className="flex items-center gap-3">
             <div className="flex gap-1.5">
-              <div className="w-3 h-3 rounded-full" style={{ backgroundColor: brandDots[1].fill }} />
-              <div className="w-3 h-3 rounded-full" style={{ backgroundColor: brandDots[2].fill }} />
-              <div className="w-3 h-3 rounded-full" style={{ backgroundColor: brandDots[3].fill }} />
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full" style={{ backgroundColor: brandDots[1].fill }} />
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full" style={{ backgroundColor: brandDots[2].fill }} />
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full" style={{ backgroundColor: brandDots[3].fill }} />
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <FileText className="w-3.5 h-3.5 text-muted-foreground/40" />
-            <span className="text-[11px] text-muted-foreground/50 font-mono tracking-wider">SeelD — סורק תיק לקוח</span>
+            <FileText className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-muted-foreground/40" />
+            <span className="text-[10px] sm:text-[11px] text-muted-foreground/50 font-mono tracking-wider hidden sm:inline">SeelD — סורק תיק לקוח</span>
+            <span className="text-[10px] text-muted-foreground/50 font-mono tracking-wider sm:hidden">SeelD Scanner</span>
           </div>
         </div>
 
-        <div className="p-7 md:p-10 min-h-[280px] flex flex-col justify-center">
+        <div className="p-4 sm:p-7 md:p-10 min-h-[240px] sm:min-h-[280px] flex flex-col justify-center">
           {/* Idle */}
           {scanState === "idle" && (
-            <div className="text-center space-y-6">
+            <div className="text-center space-y-4 sm:space-y-6">
               <motion.div
                 animate={{ y: [0, -6, 0] }}
                 transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
               >
-                <FileSearch className="w-14 h-14 mx-auto text-accent/50" />
+                <FileSearch className="w-10 h-10 sm:w-14 sm:h-14 mx-auto text-accent/50" />
               </motion.div>
-              <p className="text-sm text-muted-foreground">מתחיל סריקה...</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">מתחיל סריקה...</p>
             </div>
           )}
 
           {/* Scanning */}
           {scanState === "scanning" && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Progress */}
-              <div className="space-y-2">
-                <div className="flex justify-between items-center text-[11px] text-muted-foreground/60 font-mono">
+              <div className="space-y-1.5 sm:space-y-2">
+                <div className="flex justify-between items-center text-[10px] sm:text-[11px] text-muted-foreground/60 font-mono">
                   <span>{Math.round(progress)}%</span>
                   <span>סריקת תיק לקוח</span>
                 </div>
-                <div className="h-1.5 rounded-full bg-muted/40 overflow-hidden">
+                <div className="h-1 sm:h-1.5 rounded-full bg-muted/40 overflow-hidden">
                   <motion.div
                     className="h-full rounded-full transition-colors duration-300"
                     style={{
@@ -233,7 +234,7 @@ const IntroSection = () => {
               </div>
 
               {/* Steps log — typewriter style */}
-              <div className="space-y-2 font-mono text-sm" dir="rtl">
+              <div className="space-y-1.5 sm:space-y-2 font-mono text-xs sm:text-sm" dir="rtl">
                 {scanSteps.map((step, i) => {
                   const StepIcon = step.icon;
                   const isCompleted = completedSteps.includes(i);
@@ -245,7 +246,7 @@ const IntroSection = () => {
                   return (
                     <motion.div
                       key={i}
-                      className="flex items-center gap-3 py-1"
+                      className="flex items-center gap-2 sm:gap-3 py-0.5 sm:py-1"
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.3 }}
@@ -256,14 +257,14 @@ const IntroSection = () => {
                           animate={{ scale: 1 }}
                           transition={{ type: "spring", stiffness: 400, damping: 15 }}
                         >
-                          <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: step.color }} />
+                          <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" style={{ color: step.color }} />
                         </motion.div>
                       ) : (
                         <motion.div
                           animate={{ rotate: 360 }}
                           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                         >
-                          <StepIcon className="w-4 h-4 flex-shrink-0 text-muted-foreground/60" />
+                          <StepIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 text-muted-foreground/60" />
                         </motion.div>
                       )}
                       <span className={`${isCompleted ? "text-foreground/70" : "text-muted-foreground"}`}>
@@ -283,22 +284,22 @@ const IntroSection = () => {
           {/* Done */}
           {scanState === "done" && (
             <motion.div
-              className="space-y-8"
+              className="space-y-5 sm:space-y-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
               {/* Completed steps summary */}
-              <div className="space-y-1.5 font-mono text-sm" dir="rtl">
+              <div className="space-y-1 sm:space-y-1.5 font-mono text-xs sm:text-sm" dir="rtl">
                 {scanSteps.map((step, i) => (
                   <motion.div
                     key={i}
-                    className="flex items-center gap-3 py-0.5"
+                    className="flex items-center gap-2 sm:gap-3 py-0.5"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.05 }}
                   >
-                    <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: step.color }} />
+                    <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" style={{ color: step.color }} />
                     <span className="text-foreground/60">{step.text}</span>
                   </motion.div>
                 ))}
@@ -308,53 +309,55 @@ const IntroSection = () => {
               <div className="flex items-center gap-3">
                 <div className="flex-1 h-px bg-border/30" />
                 <motion.span
-                  className="text-xs font-bold text-accent"
+                  className="text-[10px] sm:text-xs font-bold text-accent"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.3, type: "spring" }}
                 >
-                  ✓ הסריקה הושלמה
+                  הסריקה הושלמה
                 </motion.span>
                 <div className="flex-1 h-px bg-border/30" />
               </div>
 
               {/* Results */}
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-2 sm:gap-4">
                 {findings.map((f, i) => (
                   <motion.div
                     key={f.label}
-                    className="text-center p-4 rounded-2xl bg-muted/30 border border-border/20"
+                    className="text-center p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-muted/30 border border-border/20"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 + i * 0.15, type: "spring", stiffness: 200 }}
                   >
-                    <f.icon className="w-5 h-5 mx-auto mb-2.5 text-accent" />
-                    <div className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
+                    <f.icon className="w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-1.5 sm:mb-2.5 text-accent" />
+                    <div className="text-lg sm:text-2xl md:text-3xl font-bold text-foreground tracking-tight">
                       <AnimatedCounter target={f.value} duration={1.5} />
                     </div>
-                    <div className="text-[11px] text-muted-foreground mt-1.5 leading-tight">{f.label}</div>
+                    <div className="text-[9px] sm:text-[11px] text-muted-foreground mt-1 sm:mt-1.5 leading-tight">{f.label}</div>
                   </motion.div>
                 ))}
               </div>
 
               {/* CTA */}
               <motion.div
-                className="text-center space-y-3"
+                className="text-center space-y-2 sm:space-y-3"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1 }}
               >
                 <Link to="/onboarding">
-                  <Button size="lg" className="rounded-full px-10 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all hover:scale-105">
-                    <HeartHandshake className="ml-2 w-5 h-5" />
-                    קבלו ניתוח מלא — בחינם
-                  </Button>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+                    <Button size="lg" className="rounded-full px-6 sm:px-10 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all text-xs sm:text-sm">
+                      <HeartHandshake className="ml-1.5 sm:ml-2 w-4 h-4 sm:w-5 sm:h-5" />
+                      קבלו ניתוח מלא — בחינם
+                    </Button>
+                  </motion.div>
                 </Link>
                 <div>
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-muted-foreground hover:text-foreground text-xs"
+                    className="text-muted-foreground hover:text-foreground text-[10px] sm:text-xs"
                     onClick={() => { setScanState("idle"); setCurrentStep(0); setProgress(0); setCompletedSteps([]); setTimeout(startScan, 400); }}
                   >
                     סרוק שוב

@@ -55,13 +55,13 @@ function MarqueeRow({
   const isRtl = direction === "rtl";
 
   return (
-    <div className="relative overflow-hidden py-2">
+    <div className="relative overflow-hidden py-1.5 sm:py-2">
       {/* Fade edges */}
-      <div className="absolute top-0 bottom-0 right-0 w-20 md:w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-      <div className="absolute top-0 bottom-0 left-0 w-20 md:w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+      <div className="absolute top-0 bottom-0 right-0 w-12 sm:w-20 md:w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+      <div className="absolute top-0 bottom-0 left-0 w-12 sm:w-20 md:w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
 
       <motion.div
-        className="flex gap-4 w-max"
+        className="flex gap-2.5 sm:gap-4 w-max"
         animate={{
           x: isRtl ? ["0%", "-50%"] : ["-50%", "0%"],
         }}
@@ -77,13 +77,13 @@ function MarqueeRow({
           <Link
             key={`${item.label}-${i}`}
             to={item.href}
-            className="group flex-shrink-0 inline-flex items-center gap-2.5 px-5 py-3 rounded-full border border-border/40 bg-card/60 backdrop-blur-sm hover:bg-card hover:border-border hover:shadow-md transition-all duration-300 hover:scale-105"
+            className="group flex-shrink-0 inline-flex items-center gap-2 sm:gap-2.5 px-3.5 sm:px-5 py-2 sm:py-3 rounded-full border border-border/40 bg-card/60 backdrop-blur-sm hover:bg-card hover:border-border hover:shadow-md transition-all duration-300 hover:scale-105"
           >
             <span
-              className="w-2 h-2 rounded-full flex-shrink-0 transition-transform duration-300 group-hover:scale-150"
+              className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full flex-shrink-0 transition-transform duration-300 group-hover:scale-150"
               style={{ backgroundColor: item.dotColor }}
             />
-            <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors whitespace-nowrap">
+            <span className="text-xs sm:text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors whitespace-nowrap">
               {item.label}
             </span>
           </Link>
@@ -95,16 +95,16 @@ function MarqueeRow({
 
 const StatsSection = () => {
   return (
-    <section className="py-16 md:py-24 -mx-4 sm:-mx-6 lg:-mx-8">
+    <section className="py-10 sm:py-16 md:py-24 -mx-4 sm:-mx-6 lg:-mx-8">
       <motion.div
-        className="text-center mb-10 px-4"
+        className="text-center mb-6 sm:mb-10 px-4"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
         <motion.div
-          className="inline-flex items-center gap-2 mb-5"
+          className="inline-flex items-center gap-1.5 sm:gap-2 mb-4 sm:mb-5"
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -112,7 +112,7 @@ const StatsSection = () => {
           {brandDots.map((dot, i) => (
             <motion.span
               key={i}
-              className="w-2 h-2 rounded-full"
+              className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full"
               style={{ backgroundColor: dot.fill }}
               initial={{ scale: 0 }}
               whileInView={{ scale: 1 }}
@@ -121,15 +121,15 @@ const StatsSection = () => {
             />
           ))}
         </motion.div>
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-3">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-2 sm:mb-3">
           כל השירותים במקום אחד
         </h2>
-        <p className="text-muted-foreground max-w-lg mx-auto">
+        <p className="text-muted-foreground max-w-lg mx-auto text-xs sm:text-sm md:text-base">
           גישה מהירה לכל המוצרים והשירותים שלנו — לחצו לפרטים
         </p>
       </motion.div>
 
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         <MarqueeRow items={row1} direction="rtl" speed={40} />
         <MarqueeRow items={row2} direction="ltr" speed={35} />
         <MarqueeRow items={row3} direction="rtl" speed={45} />

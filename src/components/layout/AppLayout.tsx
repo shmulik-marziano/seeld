@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { SeeIDLogo } from '@/components/brand/SeeIDLogo';
 import { CreateSummaryWizard } from '@/components/modals/CreateSummaryWizard';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const navItems = [
   { path: '/app/dashboard', label: 'דשבורד', icon: LayoutDashboard },
@@ -35,6 +36,16 @@ export function AppLayout({ children }: { children: ReactNode }) {
     if (isMobile) setSidebarOpen(false);
   }, [location.pathname, isMobile]);
 
+  // Prevent body scroll when sidebar is open on mobile
+  useEffect(() => {
+    if (isMobile && sidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isMobile, sidebarOpen]);
+
   const counts = {
     followUp: data.recommendations.filter(r => ['טיוטה', 'נשלח', 'נצפה', 'רוצה לחשוב'].includes(r.decisionStatus)).length,
     execution: data.recommendations.filter(r => ['מאשר', 'עבר לביצוע'].includes(r.decisionStatus) && r.executionStatus !== 'הושלם').length,
@@ -55,8 +66,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
   const sidebarContent = (
     <>
-      <div className="px-5 pt-6 pb-5 border-b border-sidebar-border flex items-center justify-between">
-        <button onClick={() => navigate('/app/dashboard')} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+      <div className="px-4 sm:px-5 pt-5 sm:pt-6 pb-4 sm:pb-5 border-b border-sidebar-border flex items-center justify-between">
+        <button onClick={() => navigate('/app/dashboard')} className="flex items-center gap-3 hover:opacity-80 transition-opacity min-h-[44px]">
           <div className="p-1.5 rounded-2xl" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))' }}>
             <SeeIDLogo size={38} />
           </div>
@@ -66,13 +77,16 @@ export function AppLayout({ children }: { children: ReactNode }) {
           </div>
         </button>
         {isMobile && (
-          <button onClick={() => setSidebarOpen(false)} className="text-sidebar-foreground/70 hover:text-sidebar-foreground p-1">
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="text-sidebar-foreground/70 hover:text-sidebar-foreground p-2.5 -ml-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg active:bg-sidebar-accent/30 transition-colors"
+          >
             <X className="h-5 w-5" />
           </button>
         )}
       </div>
 
-      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+      <nav className="flex-1 p-2 sm:p-3 space-y-0.5 sm:space-y-1 overflow-y-auto overscroll-contain">
         {navItems.map(item => {
           const isActive = location.pathname === item.path;
           const count = item.countKey ? counts[item.countKey] : 0;
@@ -80,13 +94,13 @@ export function AppLayout({ children }: { children: ReactNode }) {
             <button
               key={item.path}
               onClick={() => handleNav(item.path)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
+              className={`w-full flex items-center gap-3 px-3 py-3 sm:py-2.5 rounded-lg text-sm transition-colors min-h-[44px] active:scale-[0.98] ${
                 isActive
                   ? 'bg-sidebar-accent text-sidebar-primary font-semibold'
                   : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
               }`}
             >
-              <item.icon className="h-4 w-4 shrink-0" />
+              <item.icon className="h-[18px] w-[18px] sm:h-4 sm:w-4 shrink-0" />
               <span className="flex-1 text-right">{item.label}</span>
               {count > 0 && (
                 <span className="bg-sidebar-primary text-sidebar-primary-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
@@ -100,23 +114,23 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <div className="px-3 pt-2">
           <button
             onClick={() => setShowSummaryWizard(true)}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm bg-sidebar-primary/10 text-sidebar-primary hover:bg-sidebar-primary/20 transition-colors font-medium"
+            className="w-full flex items-center gap-3 px-3 py-3 sm:py-2.5 rounded-lg text-sm bg-sidebar-primary/10 text-sidebar-primary hover:bg-sidebar-primary/20 transition-colors font-medium min-h-[44px] active:scale-[0.98]"
           >
-            <ClipboardCheck className="h-4 w-4 shrink-0" />
+            <ClipboardCheck className="h-[18px] w-[18px] sm:h-4 sm:w-4 shrink-0" />
             <span className="flex-1 text-right">סיכום ביצועים</span>
           </button>
         </div>
       </nav>
 
-      <div className="p-3 border-t border-sidebar-border space-y-1">
-        <Button variant="ghost" size="sm" onClick={() => navigate('/app/settings')} className="w-full justify-start gap-2 text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50">
-          <Settings className="h-3.5 w-3.5" />הגדרות סוכנות
+      <div className="p-2 sm:p-3 border-t border-sidebar-border space-y-0.5 sm:space-y-1">
+        <Button variant="ghost" size="sm" onClick={() => navigate('/app/settings')} className="w-full justify-start gap-2 text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 min-h-[44px] sm:min-h-0">
+          <Settings className="h-4 w-4 sm:h-3.5 sm:w-3.5" />הגדרות סוכנות
         </Button>
-        <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="w-full justify-start gap-2 text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 text-xs">
-          <Globe className="h-3.5 w-3.5" />חזרה לאתר הראשי
+        <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="w-full justify-start gap-2 text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 text-xs min-h-[44px] sm:min-h-0">
+          <Globe className="h-4 w-4 sm:h-3.5 sm:w-3.5" />חזרה לאתר הראשי
         </Button>
-        <Button variant="ghost" size="sm" onClick={handleSignOut} className="w-full justify-start gap-2 text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50">
-          <LogOut className="h-3.5 w-3.5" />התנתק
+        <Button variant="ghost" size="sm" onClick={handleSignOut} className="w-full justify-start gap-2 text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 min-h-[44px] sm:min-h-0">
+          <LogOut className="h-4 w-4 sm:h-3.5 sm:w-3.5" />התנתק
         </Button>
       </div>
     </>
@@ -126,36 +140,60 @@ export function AppLayout({ children }: { children: ReactNode }) {
     <div className="flex h-screen overflow-hidden" dir="rtl">
       {/* Mobile top bar */}
       {isMobile && (
-        <div className="fixed top-0 left-0 right-0 z-40 bg-sidebar text-sidebar-foreground h-14 flex items-center px-4 gap-3 shadow-lg">
-          <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg hover:bg-sidebar-accent/50 transition-colors">
+        <motion.div
+          initial={{ y: -56 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+          className="fixed top-0 left-0 right-0 z-40 bg-sidebar text-sidebar-foreground h-14 flex items-center px-3 gap-2 shadow-lg"
+        >
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="p-2.5 rounded-lg hover:bg-sidebar-accent/50 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center active:bg-sidebar-accent/70"
+          >
             <Menu className="h-5 w-5" />
           </button>
-          <button onClick={() => navigate('/app/dashboard')} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <button onClick={() => navigate('/app/dashboard')} className="flex items-center gap-2 hover:opacity-80 transition-opacity min-h-[44px]">
             <SeeIDLogo size={28} />
             <h1 className="text-lg font-bold text-sidebar-primary">SeeID</h1>
           </button>
-        </div>
+        </motion.div>
       )}
 
-      {/* Mobile overlay */}
-      {isMobile && sidebarOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
-      )}
+      {/* Mobile overlay + Sidebar with AnimatePresence */}
+      <AnimatePresence>
+        {isMobile && sidebarOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+              onClick={() => setSidebarOpen(false)}
+            />
+            <motion.aside
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+              className="fixed top-0 right-0 bottom-0 z-50 w-[280px] max-w-[85vw] bg-sidebar text-sidebar-foreground flex flex-col shadow-2xl"
+            >
+              {sidebarContent}
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
-      {/* Sidebar */}
-      <aside className={`
-        ${isMobile
-          ? `fixed top-0 right-0 bottom-0 z-50 w-72 transform transition-transform duration-300 ease-out ${sidebarOpen ? 'translate-x-0' : 'translate-x-full'}`
-          : 'w-64 shrink-0'
-        }
-        bg-sidebar text-sidebar-foreground flex flex-col
-      `}>
-        {sidebarContent}
-      </aside>
+      {/* Desktop Sidebar */}
+      {!isMobile && (
+        <aside className="w-64 shrink-0 bg-sidebar text-sidebar-foreground flex flex-col">
+          {sidebarContent}
+        </aside>
+      )}
 
       {/* Main content */}
       <main className={`flex-1 overflow-y-auto bg-background ${isMobile ? 'pt-14' : ''}`}>
-        <div className="p-4 md:p-6">{children}</div>
+        <div className="p-3 sm:p-4 md:p-6">{children}</div>
       </main>
 
       <CreateSummaryWizard open={showSummaryWizard} onOpenChange={setShowSummaryWizard} />
