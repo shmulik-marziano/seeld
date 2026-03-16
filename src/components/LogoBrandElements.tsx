@@ -101,8 +101,8 @@ export const LogoDropIcon = ({ size = 24, className = "" }: { size?: number; cla
   >
     <defs>
       <linearGradient id="dropIconGrad" x1="12" y1="4" x2="12" y2="22" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#7CC5B0" />
-        <stop offset="100%" stopColor="#5BAF9A" />
+        <stop offset="0%" stopColor="#5ec6c6" />
+        <stop offset="100%" stopColor="#0a3d3d" />
       </linearGradient>
     </defs>
     <path

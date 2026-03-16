@@ -111,10 +111,10 @@ export default function ReasoningBankPage() {
     <div className="space-y-6" dir="rtl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">בנק נימוקים</h1>
+          <h1 className="text-2xl font-bold text-[#0a3d3d]">בנק נימוקים</h1>
           <p className="text-sm text-muted-foreground">נימוקים מוכנים לשימוש בהמלצות</p>
         </div>
-        <Button onClick={() => handleOpen()} className="gap-2">
+        <Button onClick={() => handleOpen()} className="gap-2 rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15">
           <Plus className="h-4 w-4" />נימוק חדש
         </Button>
       </div>
@@ -122,20 +122,20 @@ export default function ReasoningBankPage() {
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
         <div className="flex-1 min-w-[200px]">
-          <div className="relative">
-            <Search className="h-4 w-4 absolute right-3 top-3 text-muted-foreground" />
-            <Input placeholder="חיפוש..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pr-10" />
+          <div className="relative group">
+            <Search className="h-4 w-4 absolute right-3 top-3 text-muted-foreground group-focus-within:text-[#0a3d3d]" />
+            <Input placeholder="חיפוש..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pr-10 rounded-xl border-border/60 focus:border-[#5ec6c6]" />
           </div>
         </div>
         <Select value={filterCategory} onValueChange={setFilterCategory}>
-          <SelectTrigger className="w-40"><SelectValue placeholder="קטגוריה" /></SelectTrigger>
+          <SelectTrigger className="w-40 rounded-xl"><SelectValue placeholder="קטגוריה" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">כל הקטגוריות</SelectItem>
             {categories.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
           </SelectContent>
         </Select>
         <Select value={filterType} onValueChange={setFilterType}>
-          <SelectTrigger className="w-40"><SelectValue placeholder="סוג המלצה" /></SelectTrigger>
+          <SelectTrigger className="w-40 rounded-xl"><SelectValue placeholder="סוג המלצה" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">כל הסוגים</SelectItem>
             {recTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
@@ -156,12 +156,12 @@ export default function ReasoningBankPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {filteredEntries.map(entry => (
-            <Card key={entry.id} className="hover:shadow-md transition-shadow">
+            <Card key={entry.id} className="hover:shadow-md transition-shadow rounded-2xl border-border/50">
               <CardContent className="p-4">
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="flex gap-2 flex-wrap">
-                    <Badge variant="outline" className="text-xs">{entry.category}</Badge>
-                    <Badge variant="secondary" className="text-xs">{entry.recommendation_type}</Badge>
+                    <Badge variant="outline" className="text-xs rounded-full border-[#5ec6c6]/30 text-[#0a3d3d] bg-[#5ec6c6]/5">{entry.category}</Badge>
+                    <Badge variant="secondary" className="text-xs rounded-full bg-[#f4a261]/10 text-[#f4a261]">{entry.recommendation_type}</Badge>
                   </div>
                   <div className="flex gap-1 shrink-0">
                     <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => handleOpen(entry)}>
@@ -176,7 +176,7 @@ export default function ReasoningBankPage() {
                 {entry.tags.length > 0 && (
                   <div className="flex gap-1 flex-wrap mt-2">
                     {entry.tags.map(tag => (
-                      <span key={tag} className="text-xs bg-muted px-2 py-0.5 rounded-full text-muted-foreground">
+                      <span key={tag} className="text-xs bg-[#0a3d3d]/5 px-2 py-0.5 rounded-full text-[#0a3d3d]/70">
                         <Tag className="h-2.5 w-2.5 inline mr-1" />{tag}
                       </span>
                     ))}

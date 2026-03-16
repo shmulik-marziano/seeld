@@ -107,13 +107,13 @@ export default function CustomerCardPage() {
     <div className="px-3 sm:p-6 max-w-7xl mx-auto animate-fade-in" dir="rtl">
       {/* Breadcrumbs */}
       <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-muted-foreground mb-3 overflow-x-auto scrollbar-none">
-        <button onClick={() => navigate('/')} className="hover:text-primary transition-colors flex items-center gap-1 shrink-0 min-h-[44px] sm:min-h-0">
+        <button onClick={() => navigate('/')} className="hover:text-[#0a3d3d] transition-colors flex items-center gap-1 shrink-0 min-h-[44px] sm:min-h-0">
           <span>ראשי</span>
         </button>
         <span className="text-muted-foreground/50 shrink-0">‹</span>
-        <button onClick={() => navigate('/app/dashboard')} className="hover:text-primary transition-colors shrink-0">דשבורד</button>
+        <button onClick={() => navigate('/app/dashboard')} className="hover:text-[#0a3d3d] transition-colors shrink-0">דשבורד</button>
         <span className="text-muted-foreground/50 shrink-0">‹</span>
-        <button onClick={() => navigate('/app/customers')} className="hover:text-primary transition-colors shrink-0">לקוחות</button>
+        <button onClick={() => navigate('/app/customers')} className="hover:text-[#0a3d3d] transition-colors shrink-0">לקוחות</button>
         <span className="text-muted-foreground/50 shrink-0">‹</span>
         <span className="text-foreground font-medium truncate">{customer.fullName}</span>
       </div>
@@ -121,10 +121,10 @@ export default function CustomerCardPage() {
       {/* Header - stacks on mobile */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 sm:mb-6 gap-3">
         <div className="flex items-center gap-2 sm:gap-3">
-          <Button variant="ghost" size="sm" onClick={() => navigate('/app/customers')} className="min-w-[44px] min-h-[44px] p-0 flex items-center justify-center"><ArrowRight className="h-4 w-4" /></Button>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/app/customers')} className="min-w-[44px] min-h-[44px] p-0 flex items-center justify-center hover:bg-[#5ec6c6]/10"><ArrowRight className="h-4 w-4" /></Button>
           <div className="min-w-0">
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-              <h1 className="text-xl sm:text-2xl font-bold truncate">{customer.fullName}</h1>
+              <h1 className="text-xl sm:text-2xl font-bold truncate text-[#0a3d3d]">{customer.fullName}</h1>
               <StatusBadge type="customer" status={customer.status} />
             </div>
             <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">ת.ז {customer.idNumber} · גיל {customer.age}</p>
@@ -132,23 +132,23 @@ export default function CustomerCardPage() {
         </div>
         {/* Action buttons - horizontal scroll on mobile */}
         <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1 -mx-1 px-1">
-          <Button variant="outline" size="sm" onClick={handleCopyLink} className="gap-1.5 shrink-0 min-h-[40px] text-xs sm:text-sm"><Link2 className="h-3.5 w-3.5" />העתק לינק</Button>
-          <Button variant="outline" size="sm" onClick={() => setShowPresentation(true)} className="gap-1.5 shrink-0 min-h-[40px] text-xs sm:text-sm"><Presentation className="h-3.5 w-3.5" />מצגת</Button>
-          <Button variant="outline" size="sm" onClick={() => setCustomerModalOpen(true)} className="gap-1.5 shrink-0 min-h-[40px] text-xs sm:text-sm"><Pencil className="h-3.5 w-3.5" />עריכה</Button>
-          <Button variant="outline" size="sm" onClick={handleDelete} className="gap-1.5 text-destructive hover:text-destructive shrink-0 min-h-[40px] text-xs sm:text-sm"><Trash2 className="h-3.5 w-3.5" />מחיקה</Button>
+          <Button variant="outline" size="sm" onClick={handleCopyLink} className="gap-1.5 shrink-0 min-h-[40px] text-xs sm:text-sm rounded-full border-[#5ec6c6]/30 hover:bg-[#5ec6c6]/10 hover:border-[#5ec6c6]"><Link2 className="h-3.5 w-3.5 text-[#5ec6c6]" />העתק לינק</Button>
+          <Button variant="outline" size="sm" onClick={() => setShowPresentation(true)} className="gap-1.5 shrink-0 min-h-[40px] text-xs sm:text-sm rounded-full border-[#f4a261]/30 hover:bg-[#f4a261]/10 hover:border-[#f4a261]"><Presentation className="h-3.5 w-3.5 text-[#f4a261]" />מצגת</Button>
+          <Button variant="outline" size="sm" onClick={() => setCustomerModalOpen(true)} className="gap-1.5 shrink-0 min-h-[40px] text-xs sm:text-sm rounded-full border-[#0a3d3d]/20 hover:bg-[#0a3d3d]/5"><Pencil className="h-3.5 w-3.5" />עריכה</Button>
+          <Button variant="outline" size="sm" onClick={handleDelete} className="gap-1.5 text-[#e76f51] hover:text-[#e76f51] shrink-0 min-h-[40px] text-xs sm:text-sm rounded-full border-[#e76f51]/30 hover:bg-[#e76f51]/10"><Trash2 className="h-3.5 w-3.5" />מחיקה</Button>
         </div>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-3 sm:space-y-4">
         {/* Horizontally scrollable tabs on mobile */}
         <div className="overflow-x-auto scrollbar-none -mx-3 px-3 sm:mx-0 sm:px-0">
-          <TabsList className="bg-muted/50 p-1 inline-flex w-auto min-w-full sm:min-w-0 sm:w-auto">
-            <TabsTrigger value="overview" className="min-h-[40px] sm:min-h-0 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap">סקירה</TabsTrigger>
-            <TabsTrigger value="products" className="min-h-[40px] sm:min-h-0 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap">מוצרים ({products.length})</TabsTrigger>
-            <TabsTrigger value="recommendations" className="min-h-[40px] sm:min-h-0 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap">המלצות ({recs.length})</TabsTrigger>
-            <TabsTrigger value="execution" className="min-h-[40px] sm:min-h-0 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap">ביצוע {execRecs.length > 0 && `(${execRecs.length})`}</TabsTrigger>
-            <TabsTrigger value="summary" className="min-h-[40px] sm:min-h-0 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap">סיכום ביצועים {execSummaries.length > 0 && `(${execSummaries.length})`}</TabsTrigger>
-            <TabsTrigger value="log" className="min-h-[40px] sm:min-h-0 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap">יומן ({activities.length})</TabsTrigger>
+          <TabsList className="bg-[#0a3d3d]/5 p-1 inline-flex w-auto min-w-full sm:min-w-0 sm:w-auto rounded-full">
+            <TabsTrigger value="overview" className="min-h-[40px] sm:min-h-0 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap rounded-full data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white">סקירה</TabsTrigger>
+            <TabsTrigger value="products" className="min-h-[40px] sm:min-h-0 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap rounded-full data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white">מוצרים ({products.length})</TabsTrigger>
+            <TabsTrigger value="recommendations" className="min-h-[40px] sm:min-h-0 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap rounded-full data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white">המלצות ({recs.length})</TabsTrigger>
+            <TabsTrigger value="execution" className="min-h-[40px] sm:min-h-0 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap rounded-full data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white">ביצוע {execRecs.length > 0 && `(${execRecs.length})`}</TabsTrigger>
+            <TabsTrigger value="summary" className="min-h-[40px] sm:min-h-0 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap rounded-full data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white">סיכום ביצועים {execSummaries.length > 0 && `(${execSummaries.length})`}</TabsTrigger>
+            <TabsTrigger value="log" className="min-h-[40px] sm:min-h-0 text-xs sm:text-sm px-3 sm:px-4 whitespace-nowrap rounded-full data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white">יומן ({activities.length})</TabsTrigger>
           </TabsList>
         </div>
 
@@ -164,8 +164,8 @@ export default function CustomerCardPage() {
 
           {/* Source Files */}
           {sourceFiles.length > 0 && (
-            <Card>
-              <CardHeader className="px-4 sm:px-6"><CardTitle className="text-sm sm:text-base flex items-center gap-2"><FileText className="h-4 w-4" />קבצי מקור</CardTitle></CardHeader>
+            <Card className="rounded-2xl border-border/50 shadow-sm">
+              <CardHeader className="px-4 sm:px-6"><CardTitle className="text-sm sm:text-base flex items-center gap-2"><FileText className="h-4 w-4 text-[#0a3d3d]" />קבצי מקור</CardTitle></CardHeader>
               <CardContent className="px-4 sm:px-6">
                 <div className="space-y-2">
                   {sourceFiles.map(sf => (
@@ -202,7 +202,7 @@ export default function CustomerCardPage() {
         <TabsContent value="products" className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-base sm:text-lg font-bold">מוצרים</h2>
-            <Button size="sm" onClick={() => setProductModal({ open: true })} className="gap-1.5 min-h-[40px]"><Plus className="h-3.5 w-3.5" />מוצר חדש</Button>
+            <Button size="sm" onClick={() => setProductModal({ open: true })} className="gap-1.5 min-h-[40px] rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15"><Plus className="h-3.5 w-3.5" />מוצר חדש</Button>
           </div>
 
           <ProductTable
@@ -230,7 +230,7 @@ export default function CustomerCardPage() {
         <TabsContent value="recommendations" className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-base sm:text-lg font-bold">המלצות</h2>
-            <Button size="sm" onClick={() => setRecModal({ open: true })} className="gap-1.5 min-h-[40px]"><Plus className="h-3.5 w-3.5" />המלצה חדשה</Button>
+            <Button size="sm" onClick={() => setRecModal({ open: true })} className="gap-1.5 min-h-[40px] rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15"><Plus className="h-3.5 w-3.5" />המלצה חדשה</Button>
           </div>
 
           <div className="space-y-3">
@@ -238,7 +238,7 @@ export default function CustomerCardPage() {
               const linkedProduct = r.linkedProductId ? products.find(p => p.id === r.linkedProductId) : undefined;
               const expanded = expandedRecs.has(r.id);
               return (
-                <Card key={r.id} className={r.decisionStatus === 'בוצע' ? 'opacity-60' : ''}>
+                <Card key={r.id} className={`rounded-2xl border-border/50 shadow-sm ${r.decisionStatus === 'בוצע' ? 'opacity-60' : ''}`}>
                   <CardContent className="pt-4 sm:pt-5 px-4 sm:px-6">
                     <div className="flex items-start justify-between mb-2 gap-2">
                       <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap min-w-0">
@@ -271,10 +271,10 @@ export default function CustomerCardPage() {
 
                     {['טיוטה', 'נשלח', 'נצפה', 'רוצה לחשוב'].includes(r.decisionStatus) && (
                       <div className="flex gap-2 mt-3 pt-3 border-t flex-wrap">
-                        {r.decisionStatus === 'טיוטה' && <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { decisionStatus: 'נשלח' })} className="min-h-[40px] text-xs">שלח ללקוח</Button>}
-                        <Button size="sm" variant="default" onClick={() => updateRecommendation(r.id, { decisionStatus: 'מאשר' })} className="bg-success hover:bg-success/90 min-h-[40px] text-xs">מאשר</Button>
-                        <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { decisionStatus: 'רוצה לחשוב' })} className="min-h-[40px] text-xs">רוצה לחשוב</Button>
-                        <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { decisionStatus: 'לא מעוניין' })} className="text-destructive min-h-[40px] text-xs">לא מעוניין</Button>
+                        {r.decisionStatus === 'טיוטה' && <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { decisionStatus: 'נשלח' })} className="min-h-[40px] text-xs rounded-full">שלח ללקוח</Button>}
+                        <Button size="sm" variant="default" onClick={() => updateRecommendation(r.id, { decisionStatus: 'מאשר' })} className="bg-[#90be6d] hover:bg-[#90be6d]/90 min-h-[40px] text-xs rounded-full text-white">מאשר</Button>
+                        <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { decisionStatus: 'רוצה לחשוב' })} className="min-h-[40px] text-xs rounded-full border-[#f4a261]/30 text-[#f4a261] hover:bg-[#f4a261]/10">רוצה לחשוב</Button>
+                        <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { decisionStatus: 'לא מעוניין' })} className="text-[#e76f51] min-h-[40px] text-xs rounded-full border-[#e76f51]/30 hover:bg-[#e76f51]/10">לא מעוניין</Button>
                       </div>
                     )}
                     {r.decisionStatus === 'מאשר' && !r.executionStatus && (
@@ -287,7 +287,7 @@ export default function CustomerCardPage() {
                             missingForExecution: missing.length > 0 ? missing.join(', ') : undefined,
                           });
                           toast.success('עבר לביצוע');
-                        }} className="min-h-[40px] text-xs">העבר לביצוע</Button>
+                        }} className="min-h-[40px] text-xs rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90">העבר לביצוע</Button>
                         <Button size="sm" variant="outline" onClick={() => navigate(`/execution-summary/${customer.id}`)} className="gap-1 min-h-[40px] text-xs">
                           <ClipboardCheck className="h-3.5 w-3.5" />עבור לסיכום
                         </Button>
@@ -317,11 +317,11 @@ export default function CustomerCardPage() {
             const stepIdx = getExecStepIndex(r.executionStatus);
             const missing = r.missingForExecution?.split(', ').filter(Boolean) || [];
             return (
-              <Card key={r.id}>
+              <Card key={r.id} className="rounded-2xl border-border/50 shadow-sm">
                 <CardContent className="pt-4 sm:pt-5 px-4 sm:px-6 space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between flex-wrap gap-2">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm">{r.title}</span>
+                      <span className="font-bold text-sm text-[#0a3d3d]">{r.title}</span>
                       <StatusBadge type="action" status={r.actionType} />
                     </div>
                     {r.executionStatus && <StatusBadge type="execution" status={r.executionStatus} />}
@@ -331,7 +331,7 @@ export default function CustomerCardPage() {
                   <div className="flex items-center gap-0.5 sm:gap-1">
                     {EXEC_STEPS.map((step, i) => (
                       <div key={step} className="flex items-center flex-1">
-                        <div className={`flex-1 h-2 rounded-full ${i <= stepIdx ? 'bg-success' : 'bg-muted'}`} />
+                        <div className={`flex-1 h-2 rounded-full ${i <= stepIdx ? 'bg-[#90be6d]' : 'bg-muted'}`} />
                       </div>
                     ))}
                   </div>
@@ -365,14 +365,14 @@ export default function CustomerCardPage() {
                   {r.executionStatus && r.executionStatus !== 'הושלם' && (
                     <div className="flex gap-2 pt-2 border-t flex-wrap">
                       {stepIdx >= 0 && stepIdx < EXEC_STEPS.length - 1 && (
-                        <Button size="sm" onClick={() => updateRecommendation(r.id, { executionStatus: EXEC_STEPS[stepIdx + 1] })} className="min-h-[40px] text-xs">
+                        <Button size="sm" onClick={() => updateRecommendation(r.id, { executionStatus: EXEC_STEPS[stepIdx + 1] })} className="min-h-[40px] text-xs rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90">
                           קדם ל-{EXEC_STEPS[stepIdx + 1]}
                         </Button>
                       )}
-                      <Button size="sm" variant="outline" className="text-destructive min-h-[40px] text-xs" onClick={() => updateRecommendation(r.id, { executionStatus: 'חזר ליקוי' })}>
+                      <Button size="sm" variant="outline" className="text-[#e76f51] min-h-[40px] text-xs rounded-full border-[#e76f51]/30 hover:bg-[#e76f51]/10" onClick={() => updateRecommendation(r.id, { executionStatus: 'חזר ליקוי' })}>
                         חזר ליקוי
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { executionStatus: 'הושלם', decisionStatus: 'בוצע' })} className="text-success min-h-[40px] text-xs">
+                      <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { executionStatus: 'הושלם', decisionStatus: 'בוצע' })} className="text-[#90be6d] min-h-[40px] text-xs rounded-full border-[#90be6d]/30 hover:bg-[#90be6d]/10">
                         <CheckCircle2 className="h-3.5 w-3.5 ml-1" />סמן כהושלם
                       </Button>
                     </div>
@@ -388,7 +388,7 @@ export default function CustomerCardPage() {
           <div className="flex items-center justify-between flex-wrap gap-2">
             <h2 className="text-base sm:text-lg font-bold flex items-center gap-2"><ClipboardCheck className="h-5 w-5" />סיכום ביצועים</h2>
             {recs.some(r => ['מאשר', 'עבר לביצוע', 'בוצע'].includes(r.decisionStatus)) && (
-              <Button size="sm" onClick={() => navigate(`/execution-summary/${customer.id}`)} className="gap-1.5 min-h-[40px] text-xs sm:text-sm">
+              <Button size="sm" onClick={() => navigate(`/execution-summary/${customer.id}`)} className="gap-1.5 min-h-[40px] text-xs sm:text-sm rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15">
                 <Plus className="h-3.5 w-3.5" />
                 {execSummaries.length > 0 ? 'צפה / ערוך סיכום' : 'צור סיכום ביצועים'}
               </Button>
@@ -409,11 +409,11 @@ export default function CustomerCardPage() {
           ) : (
             <div className="space-y-3">
               {execSummaries.map(s => (
-                <Card key={s.id} className="cursor-pointer hover:shadow-md transition-all active:scale-[0.99]" onClick={() => navigate(`/execution-summary/${customer.id}?summaryId=${s.id}`)}>
+                <Card key={s.id} className="cursor-pointer hover:shadow-md transition-all active:scale-[0.99] rounded-2xl border-border/50" onClick={() => navigate(`/execution-summary/${customer.id}?summaryId=${s.id}`)}>
                   <CardContent className="p-3 sm:p-4 flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                        <ClipboardCheck className="h-5 w-5 text-primary" />
+                      <div className="w-10 h-10 rounded-xl bg-[#0a3d3d]/10 flex items-center justify-center shrink-0">
+                        <ClipboardCheck className="h-5 w-5 text-[#0a3d3d]" />
                       </div>
                       <div className="min-w-0">
                         <p className="font-semibold text-xs sm:text-sm">סיכום #{s.summaryNumber}</p>
@@ -421,9 +421,9 @@ export default function CustomerCardPage() {
                       </div>
                     </div>
                     <span className={`text-[10px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-full font-medium shrink-0 ${
-                      s.status === 'completed' ? 'bg-success/10 text-success' :
-                      s.status === 'partial' ? 'bg-warning/10 text-warning' :
-                      s.status === 'in_progress' ? 'bg-info/10 text-info' :
+                      s.status === 'completed' ? 'bg-[#90be6d]/10 text-[#90be6d]' :
+                      s.status === 'partial' ? 'bg-[#f4a261]/10 text-[#f4a261]' :
+                      s.status === 'in_progress' ? 'bg-[#5ec6c6]/10 text-[#5ec6c6]' :
                       'bg-muted text-muted-foreground'
                     }`}>
                       {SUMMARY_STATUS_LABELS[s.status as ExecutionSummaryStatus] || s.status}
@@ -445,7 +445,7 @@ export default function CustomerCardPage() {
               <p className="text-center text-muted-foreground py-8 text-sm">אין פעולות</p>
             ) : activities.map(a => (
               <div key={a.id} className="flex items-start gap-2 sm:gap-3 p-3 bg-card rounded-lg border">
-                <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${a.level === 'הצלחה' ? 'bg-success' : a.level === 'אזהרה' ? 'bg-warning' : 'bg-info'}`} />
+                <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${a.level === 'הצלחה' ? 'bg-[#90be6d]' : a.level === 'אזהרה' ? 'bg-[#f4a261]' : 'bg-[#5ec6c6]'}`} />
                 <div className="flex-1 min-w-0">
                   <p className="text-xs sm:text-sm font-medium">{a.title}</p>
                   {a.detail && <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{a.detail}</p>}

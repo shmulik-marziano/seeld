@@ -33,15 +33,15 @@ const queueFilters: { key: QueueFilter; label: string; }[] = [
 
 function getDecisionBadge(status: string) {
   switch (status) {
-    case 'טיוטה': return <Badge variant="outline" className="text-xs">טיוטה</Badge>;
-    case 'נשלח': return <Badge className="text-xs bg-info/10 text-info border-info/20">נשלח</Badge>;
-    case 'נצפה': return <Badge className="text-xs bg-info/10 text-info border-info/20">נצפה</Badge>;
-    case 'מאשר': return <Badge className="text-xs bg-success/10 text-success border-success/20">מאשר</Badge>;
-    case 'רוצה לחשוב': return <Badge className="text-xs bg-warning/10 text-warning border-warning/20">לחשוב</Badge>;
-    case 'לא מעוניין': return <Badge className="text-xs bg-destructive/10 text-destructive border-destructive/20">לא מעוניין</Badge>;
-    case 'עבר לביצוע': return <Badge className="text-xs bg-primary/10 text-primary border-primary/20">בביצוע</Badge>;
-    case 'בוצע': return <Badge className="text-xs bg-success/10 text-success border-success/20">בוצע</Badge>;
-    default: return <Badge variant="outline" className="text-xs">{status}</Badge>;
+    case 'טיוטה': return <Badge variant="outline" className="text-xs rounded-full">טיוטה</Badge>;
+    case 'נשלח': return <Badge className="text-xs bg-[#5ec6c6]/10 text-[#5ec6c6] border-[#5ec6c6]/20 rounded-full">נשלח</Badge>;
+    case 'נצפה': return <Badge className="text-xs bg-[#5ec6c6]/10 text-[#5ec6c6] border-[#5ec6c6]/20 rounded-full">נצפה</Badge>;
+    case 'מאשר': return <Badge className="text-xs bg-[#90be6d]/10 text-[#90be6d] border-[#90be6d]/20 rounded-full">מאשר</Badge>;
+    case 'רוצה לחשוב': return <Badge className="text-xs bg-[#f4a261]/10 text-[#f4a261] border-[#f4a261]/20 rounded-full">לחשוב</Badge>;
+    case 'לא מעוניין': return <Badge className="text-xs bg-[#e76f51]/10 text-[#e76f51] border-[#e76f51]/20 rounded-full">לא מעוניין</Badge>;
+    case 'עבר לביצוע': return <Badge className="text-xs bg-[#0a3d3d]/10 text-[#0a3d3d] border-[#0a3d3d]/20 rounded-full">בביצוע</Badge>;
+    case 'בוצע': return <Badge className="text-xs bg-[#90be6d]/10 text-[#90be6d] border-[#90be6d]/20 rounded-full">בוצע</Badge>;
+    default: return <Badge variant="outline" className="text-xs rounded-full">{status}</Badge>;
   }
 }
 
@@ -147,11 +147,11 @@ export default function RecommendationBankPage() {
         actions={
           <div className="flex gap-2">
             {filtered.length > 0 && (
-              <Button variant="outline" onClick={() => setShowPresentation(true)} className="gap-2">
-                <Presentation className="h-4 w-4" />מצגת
+              <Button variant="outline" onClick={() => setShowPresentation(true)} className="gap-2 rounded-full border-[#f4a261]/30 hover:bg-[#f4a261]/10">
+                <Presentation className="h-4 w-4 text-[#f4a261]" />מצגת
               </Button>
             )}
-            <Button onClick={() => navigate('/app/recommendations/new')} className="gap-2">
+            <Button onClick={() => navigate('/app/recommendations/new')} className="gap-2 rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15">
               <FileText className="h-4 w-4" />המלצה חדשה
             </Button>
           </div>
@@ -166,15 +166,15 @@ export default function RecommendationBankPage() {
         className="grid grid-cols-3 md:grid-cols-7 gap-2"
       >
         {[
-          { label: 'סה"כ', value: stats.total, color: 'text-foreground' },
+          { label: 'סה"כ', value: stats.total, color: 'text-[#0a3d3d]' },
           { label: 'טיוטות', value: stats.drafts, color: 'text-muted-foreground' },
-          { label: 'נשלחו', value: stats.sent, color: 'text-info' },
-          { label: 'ממתינות', value: stats.thinking, color: 'text-warning' },
-          { label: 'מאושרות', value: stats.approved, color: 'text-success' },
-          { label: 'בוצעו', value: stats.executed, color: 'text-primary' },
-          { label: 'נדחו', value: stats.rejected, color: 'text-destructive' },
+          { label: 'נשלחו', value: stats.sent, color: 'text-[#5ec6c6]' },
+          { label: 'ממתינות', value: stats.thinking, color: 'text-[#f4a261]' },
+          { label: 'מאושרות', value: stats.approved, color: 'text-[#90be6d]' },
+          { label: 'בוצעו', value: stats.executed, color: 'text-[#0a3d3d]' },
+          { label: 'נדחו', value: stats.rejected, color: 'text-[#e76f51]' },
         ].map(s => (
-          <Card key={s.label}>
+          <Card key={s.label} className="rounded-2xl border-border/50 shadow-sm">
             <CardContent className="p-3 text-center">
               <div className={`text-xl font-bold ${s.color}`}>{s.value}</div>
               <p className="text-xs text-muted-foreground">{s.label}</p>
@@ -185,12 +185,12 @@ export default function RecommendationBankPage() {
 
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-3">
-        <div className="flex-1 relative">
-          <Search className="h-4 w-4 absolute right-3 top-3 text-muted-foreground" />
-          <Input placeholder="חיפוש לפי שם לקוח, ת.ז, כותרת, חברה..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pr-10" />
+        <div className="flex-1 relative group">
+          <Search className="h-4 w-4 absolute right-3 top-3 text-muted-foreground group-focus-within:text-[#0a3d3d]" />
+          <Input placeholder="חיפוש לפי שם לקוח, ת.ז, כותרת, חברה..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pr-10 rounded-xl border-border/60 focus:border-[#5ec6c6]" />
         </div>
         <Select value={sortBy} onValueChange={v => setSortBy(v as any)}>
-          <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-40 rounded-xl"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="date">לפי תאריך</SelectItem>
             <SelectItem value="customer">לפי לקוח</SelectItem>
@@ -200,9 +200,9 @@ export default function RecommendationBankPage() {
 
       {/* Queue tabs */}
       <Tabs value={queue} onValueChange={v => setQueue(v as QueueFilter)}>
-        <TabsList className="flex-wrap h-auto gap-1 bg-muted/50 p-1">
+        <TabsList className="flex-wrap h-auto gap-1 bg-[#0a3d3d]/5 p-1 rounded-full">
           {queueFilters.map(f => (
-            <TabsTrigger key={f.key} value={f.key} className="text-xs px-3 py-1.5">
+            <TabsTrigger key={f.key} value={f.key} className="text-xs px-3 py-1.5 rounded-full data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white">
               {f.label}
             </TabsTrigger>
           ))}
@@ -226,7 +226,7 @@ export default function RecommendationBankPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.2, delay: Math.min(i * 0.03, 0.3) }}
             >
-              <Card className="hover:shadow-sm transition-all hover:-translate-y-0.5">
+              <Card className="hover:shadow-md transition-all hover:-translate-y-0.5 rounded-2xl border-border/50">
                 <CardContent className="p-4">
                   <div className="flex items-start gap-3">
                     <div className="flex-1 min-w-0">
