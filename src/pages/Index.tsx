@@ -99,8 +99,8 @@ const calculators = [
 ];
 
 const partners = [
-  "הפניקס", "מגדל", "הראל", "כלל", "מנורה מבטחים",
-  "איילון", "מיטב", "ילין לפידות", "אנליסט", "אלטשולר שחם", "הכשרה",
+  "הראל", "מנורה מבטחים", "מגדל", "כלל", "איילון", "הפניקס",
+  "מיטב", "מור", "ילין לפידות", "אנליסט", "איפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה",
 ];
 
 const faqItems = [
@@ -666,21 +666,32 @@ const Index = () => {
                 עובדים עם <span className="text-[#5ec6c6]">מיטב החברות</span>
               </h2>
               <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                גישה לכל חברות הביטוח והפנסיה המובילות בישראל
+                עובדים עם כל חברות הביטוח ובתי ההשקעות
               </p>
             </div>
           </ScrollReveal>
 
           <ScrollReveal delay={100}>
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-              {partners.map((name) => (
-                <span
-                  key={name}
-                  className="px-6 sm:px-8 py-3 sm:py-3.5 rounded-full bg-[#f8f9fc] border border-[#0a3d3d]/[0.06] text-sm sm:text-base font-bold text-[#0a3d3d]/50 hover:text-[#0a3d3d] hover:border-[#5ec6c6]/30 hover:bg-white transition-all duration-200 cursor-default"
-                >
-                  {name}
-                </span>
-              ))}
+            {/* Auto-scrolling marquee */}
+            <div className="relative overflow-hidden py-4">
+              {/* Fade edges */}
+              <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-transparent to-white z-10 pointer-events-none" />
+              <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-transparent to-white z-10 pointer-events-none" />
+              <motion.div
+                className="flex gap-6 sm:gap-8 whitespace-nowrap"
+                animate={{ x: ["0%", "-50%"] }}
+                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+              >
+                {[...partners, ...partners].map((name, i) => (
+                  <span
+                    key={`${name}-${i}`}
+                    className="inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-[#f8f9fc] border border-[#0a3d3d]/[0.06] text-base sm:text-lg font-bold text-[#0a3d3d]/60 shrink-0"
+                  >
+                    <span className="w-3 h-3 rounded-full bg-[#5ec6c6]/40" />
+                    {name}
+                  </span>
+                ))}
+              </motion.div>
             </div>
           </ScrollReveal>
         </section>
