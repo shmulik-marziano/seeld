@@ -415,13 +415,13 @@ const Index = () => {
         </section>
 
         {/* 4. WHY SEELD */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
           <ScrollReveal>
-            <div className="text-center mb-14 sm:mb-20 relative">
+            <div className="text-center mb-8 sm:mb-14 relative">
               <div className="absolute top-1 right-[12%] w-5 h-5 rounded-full bg-[#5ec6c6] opacity-20 hidden sm:block" />
               <div className="absolute top-10 left-[10%] w-4 h-4 rounded-full bg-[#f4a261] opacity-25 hidden sm:block" />
               <SectionLabel>WHY SEELD</SectionLabel>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                 למה <span className="text-[#5ec6c6]">SEELD</span>?
               </h2>
               <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
@@ -478,14 +478,14 @@ const Index = () => {
 
         {/* 5. ALL INSURANCE TYPES GRID */}
         <section className="bg-[#f8f9fc]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
             <ScrollReveal>
-              <div className="text-center mb-14 sm:mb-20 relative">
+              <div className="text-center mb-8 sm:mb-14 relative">
                 {/* Decorative solid circles */}
                 <div className="absolute top-0 right-[10%] w-6 h-6 rounded-full bg-[#e76f51] opacity-20 hidden sm:block" />
                 <div className="absolute top-8 left-[12%] w-4 h-4 rounded-full bg-[#5ec6c6] opacity-25 hidden sm:block" />
                 <SectionLabel>INSURANCE</SectionLabel>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                   ביטוח — <span className="text-[#e76f51]">כל הסוגים, מקום אחד</span>
                 </h2>
                 <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
@@ -557,14 +557,14 @@ const Index = () => {
         <WaveDivider color="#ffffff" flip />
 
         {/* 6. SAVINGS / PENSION GRID */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
           <ScrollReveal>
-            <div className="text-center mb-14 sm:mb-20 relative">
+            <div className="text-center mb-8 sm:mb-14 relative">
               {/* Decorative solid circles */}
               <div className="absolute top-2 left-[8%] w-5 h-5 rounded-full bg-[#90be6d] opacity-25 hidden sm:block" />
               <div className="absolute top-10 right-[15%] w-3 h-3 rounded-full bg-[#f4a261] opacity-20 hidden sm:block" />
               <SectionLabel>SAVINGS & PENSION</SectionLabel>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                 חיסכון <span className="text-[#90be6d]">ופנסיה</span>
               </h2>
               <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
@@ -611,13 +611,13 @@ const Index = () => {
 
         {/* 7. CALCULATORS */}
         <section className="bg-[#f8f9fc]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
             <ScrollReveal>
-              <div className="text-center mb-14 sm:mb-20 relative">
+              <div className="text-center mb-8 sm:mb-14 relative">
                 <div className="absolute top-0 right-[12%] w-5 h-5 rounded-full bg-[#6c63ff] opacity-20 hidden sm:block" />
                 <div className="absolute top-12 left-[10%] w-4 h-4 rounded-full bg-[#f4a261] opacity-20 hidden sm:block" />
                 <SectionLabel>TOOLS</SectionLabel>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                   <span className="text-[#6c63ff]">המחשבונים</span> שלנו
                 </h2>
                 <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
@@ -671,12 +671,12 @@ const Index = () => {
         <WaveDivider color="#ffffff" flip />
 
         {/* 8. PARTNERS - Clean badge row */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
           <ScrollReveal>
             <div className="text-center mb-12 sm:mb-16 relative">
               <div className="absolute top-1 left-[15%] w-4 h-4 rounded-full bg-[#5ec6c6] opacity-25 hidden sm:block" />
               <SectionLabel>PARTNERS</SectionLabel>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                 עובדים עם <span className="text-[#5ec6c6]">מיטב החברות</span>
               </h2>
               <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
@@ -725,7 +725,7 @@ const Index = () => {
               <path d="M180,20 C140,60 60,80 20,180" stroke="#5ec6c6" strokeWidth="1.5" strokeDasharray="8 6" strokeLinecap="round" opacity="0.1"/>
             </svg>
           </div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32 relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24 relative">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
               {/* Right side - About */}
               <ScrollReveal>
@@ -793,12 +793,12 @@ const Index = () => {
         <WaveDivider color="#ffffff" flip />
 
         {/* PROCESS PIPELINE — Tech System Flow */}
-        <section className="py-16 sm:py-24 lg:py-32 overflow-hidden">
+        <section className="py-10 sm:py-16 lg:py-24 overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
-              <div className="text-center mb-14 sm:mb-20">
+              <div className="text-center mb-8 sm:mb-14">
                 <SectionLabel>PROCESS</SectionLabel>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                   איך <span className="text-[#5ec6c6]">SEELD</span> עובד בשבילך
                 </h2>
                 <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
@@ -908,7 +908,7 @@ const Index = () => {
 
         {/* PORTFOLIO SCANNER */}
         <section className="bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
             <ScrollReveal>
               <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
                 <div className="space-y-6 text-center lg:text-right">
@@ -978,13 +978,13 @@ const Index = () => {
 
         {/* 10. FAQ PREVIEW */}
         <section className="bg-[#f8f9fc]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
             <ScrollReveal>
-              <div className="text-center mb-14 sm:mb-20 relative">
+              <div className="text-center mb-8 sm:mb-14 relative">
                 <div className="absolute top-1 right-[10%] w-4 h-4 rounded-full bg-[#ff6b9d] opacity-25 hidden sm:block" />
                 <div className="absolute top-8 left-[8%] w-5 h-5 rounded-full bg-[#5ec6c6] opacity-20 hidden sm:block" />
                 <SectionLabel>FAQ</SectionLabel>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                   שאלות <span className="text-[#ff6b9d]">נפוצות</span>
                 </h2>
                 <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
@@ -1102,7 +1102,7 @@ const Index = () => {
         </motion.section>
 
         {/* Contact Form — standalone below the strip */}
-        <section className="py-16 sm:py-24">
+        <section className="py-10 sm:py-16">
           <div className="max-w-2xl mx-auto px-4 sm:px-6">
             <ScrollReveal>
               <div className="text-center mb-10">

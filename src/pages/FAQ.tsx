@@ -93,7 +93,7 @@ const FAQ = () => {
 
       <main>
         {/* FAQ Categories */}
-        <section className="py-16 sm:py-20">
+        <section className="py-10 sm:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="max-w-3xl space-y-14">
               {faqCategories.map((category, catIdx) => (
@@ -127,7 +127,7 @@ const FAQ = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 sm:py-20 bg-[#f8f9fc] relative overflow-hidden">
+        <section className="py-10 sm:py-16 bg-[#f8f9fc] relative overflow-hidden">
           <div className="absolute top-6 right-[8%] w-4 h-4 rounded-full bg-[#f4a261] hidden sm:block" />
           <div className="absolute bottom-10 left-[10%] w-3 h-3 rounded-full bg-[#90be6d] hidden sm:block" />
           <div className="max-w-5xl mx-auto px-4 sm:px-6">

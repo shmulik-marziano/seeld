@@ -74,7 +74,7 @@ const HeroSection = () => {
 
             {/* Heading */}
             <motion.h1
-              className="text-[2.75rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold leading-[1] tracking-tight"
+              className="text-3xl sm:text-5xl md:text-7xl lg:text-[5.5rem] font-extrabold leading-[1.05] tracking-tight"
               initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
@@ -128,9 +128,9 @@ const HeroSection = () => {
             </motion.div>
           </div>
 
-          {/* Left side - Colored circles composition (the one you loved!) */}
+          {/* Left side - Colored circles composition - hidden on mobile */}
           <motion.div
-            className="relative flex items-center justify-center lg:justify-start"
+            className="hidden sm:flex relative items-center justify-center lg:justify-start"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}

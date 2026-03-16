@@ -86,8 +86,8 @@ const Insurances = () => {
           <path d="M0 80 Q200 20 400 60 T800 30" stroke="#5ec6c6" strokeWidth="2" strokeDasharray="8 6" />
           <polygon points="795,28 800,30 795,32" fill="#5ec6c6" />
         </svg>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20 relative z-10">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16 relative z-10">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
             מוצרי ביטוח
           </h1>
           <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
@@ -107,7 +107,7 @@ const Insurances = () => {
 
       <main>
         {/* Insurance Categories Grid */}
-        <section className="py-16 sm:py-20">
+        <section className="py-10 sm:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {insuranceCategories.map((category) => (
@@ -145,7 +145,7 @@ const Insurances = () => {
         </section>
 
         {/* Value Props */}
-        <section className="py-16 sm:py-20 bg-[#f0f0f8]">
+        <section className="py-10 sm:py-16 bg-[#f0f0f8]">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="grid sm:grid-cols-3 gap-8 text-center">
               <div>
@@ -180,7 +180,7 @@ const Insurances = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 sm:py-20">
+        <section className="py-10 sm:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="bg-[#f8f9fc] rounded-2xl p-8 sm:p-12 text-center relative overflow-hidden">
               <div className="absolute top-4 right-6 w-20 h-20 rounded-full bg-[#5ec6c6] opacity-10" />

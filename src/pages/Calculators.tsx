@@ -72,7 +72,7 @@ const Calculators = () => {
 
       <main>
         {/* Calculator Tabs */}
-        <section className="py-16 sm:py-20">
+        <section className="py-10 sm:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <Tabs defaultValue="mortgage" className="space-y-8">
               <TabsList className="w-full flex flex-wrap h-auto gap-2 bg-[#f8f9fc] p-2 rounded-full justify-center border border-[#0a3d3d]/[0.06]">
@@ -177,7 +177,7 @@ const Calculators = () => {
         </section>
 
         {/* Coming Soon */}
-        <section className="py-16 sm:py-20 bg-[#f8f9fc] relative overflow-hidden">
+        <section className="py-10 sm:py-16 bg-[#f8f9fc] relative overflow-hidden">
           <div className="absolute top-8 left-[8%] w-4 h-4 rounded-full bg-[#5ec6c6] hidden sm:block" />
           <div className="absolute bottom-12 right-[6%] w-3 h-3 rounded-full bg-[#f4a261] hidden sm:block" />
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
@@ -201,7 +201,7 @@ const Calculators = () => {
         </section>
 
         {/* CTA */}
-        <section className="py-16 sm:py-20">
+        <section className="py-10 sm:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="bg-[#0a3d3d] rounded-3xl p-8 sm:p-12 text-center text-white relative overflow-hidden">
               <div className="absolute top-[-25px] right-[-25px] w-[90px] h-[90px] rounded-full bg-[#5ec6c6] opacity-20" />

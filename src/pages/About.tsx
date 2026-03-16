@@ -45,7 +45,7 @@ const About = () => {
 
       <main>
         {/* Story Section */}
-        <section className="py-16 sm:py-20">
+        <section className="py-10 sm:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="max-w-3xl relative">
               <div className="absolute top-0 left-0 w-6 h-6 rounded-full bg-[#5ec6c6] hidden sm:block" />
@@ -68,7 +68,7 @@ const About = () => {
         </section>
 
         {/* Mission Section */}
-        <section className="py-16 sm:py-20 bg-[#f8f9fc] relative overflow-hidden">
+        <section className="py-10 sm:py-16 bg-[#f8f9fc] relative overflow-hidden">
           {/* Decorative pill shape */}
           <div className="absolute bottom-8 right-8 hidden lg:block">
             <svg width="50" height="100" viewBox="0 0 50 100" fill="none">
@@ -104,7 +104,7 @@ const About = () => {
         </section>
 
         {/* Values Section */}
-        <section className="py-16 sm:py-20 relative">
+        <section className="py-10 sm:py-16 relative">
           <div className="absolute top-10 right-[5%] w-3 h-3 rounded-full bg-[#5ec6c6] hidden sm:block" />
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="relative mb-10">
@@ -137,7 +137,7 @@ const About = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 sm:py-20 bg-[#f8f9fc] relative overflow-hidden">
+        <section className="py-10 sm:py-16 bg-[#f8f9fc] relative overflow-hidden">
           <div className="absolute top-4 left-[8%] w-5 h-5 rounded-full bg-[#90be6d] hidden sm:block" />
           <div className="absolute bottom-8 right-[12%] w-3 h-3 rounded-full bg-[#e76f51] hidden sm:block" />
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
