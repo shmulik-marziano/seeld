@@ -1,150 +1,142 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import ScrollReveal from "@/components/ScrollReveal";
-import DoodleDecoration from "@/components/DoodleDecoration";
-import FeatureCard from "@/components/FeatureCard";
-import { LogoDotsDivider, LogoDotsBackground } from "@/components/LogoBrandElements";
+import { ChevronLeft, Eye, Award, ShieldCheck, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-background animate-fade-in">
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
-      
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Hero Section */}
-        <div className="mb-16 text-center space-y-6 relative">
-          <div className="absolute top-0 left-4 hidden md:block">
-            <DoodleDecoration type="handshake" size="lg" className="opacity-25 rotate-6" />
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-slide-down">
+
+      {/* Hero Banner */}
+      <section className="bg-[#0a3d3d] text-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">
             אודות SeelD
           </h1>
-          <p className="text-lg text-muted-foreground leading-relaxed animate-slide-up stagger-1">
+          <p className="text-lg sm:text-xl text-white/80 max-w-2xl leading-relaxed">
             הבית שלכם לפתרונות פיננסיים וביטוחיים מותאמים אישית.
           </p>
         </div>
+      </section>
 
+      {/* Breadcrumb */}
+      <div className="border-b border-gray-100">
+        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
+          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
+          <ChevronLeft className="w-3.5 h-3.5" />
+          <span className="text-[#0a3d3d] font-medium">אודות</span>
+        </nav>
+      </div>
+
+      <main>
         {/* Story Section */}
-        <ScrollReveal>
-          <section className="mb-16 space-y-6 text-muted-foreground relative">
-            <div className="absolute -right-16 top-8 hidden xl:block">
-              <DoodleDecoration type="growth" size="md" className="opacity-20" />
+        <section className="py-16 sm:py-20">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="max-w-3xl">
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-6">הסיפור שלנו</h2>
+              <div className="space-y-4 text-gray-600 leading-relaxed text-base sm:text-lg">
+                <p>
+                  SEELD הוא חלק מבית עמיתים הון — סוכנות ביטוח ופיננסים מבוססת. אנחנו מאמינים שכל אדם ומשפחה ראויים לקבל ייעוץ פיננסי וביטוחי מקצועי, נגיש ואמין — בגובה העיניים.
+                </p>
+                <p>
+                  שמוליק מרציאנו, סוכן ביטוח פנסיוני מורשה, מלווה את הלקוחות שלנו בצורה אישית ומקצועית. אנחנו מאמינים בשקיפות מלאה, בשירות אישי ובהתאמה מדויקת לצרכים הייחודיים של כל לקוח.
+                </p>
+                <p>
+                  אנחנו כאן כדי לעזור לכם להבין את עולם הביטוח והפנסיה בצורה פשוטה וברורה, ולבחור את הפתרונות שמתאימים בדיוק לכם.
+                </p>
+              </div>
             </div>
-            <h2 className="text-3xl font-bold text-foreground mb-6">הסיפור שלנו</h2>
-            <p>
-              SeelD נוסדה מתוך אמונה פשוטה: כל אדם ומשפחה ראויים לקבל ייעוץ פיננסי וביטוחי 
-              מקצועי, נגיש ואמין. ראינו שוק מלא בהצעות מורכבות ואותיות קטנות, והחלטנו לעשות את זה אחרת.
-            </p>
-            <p>
-              הצוות שלנו מורכב ממומחים מנוסים בתחומי הפיננסים, הביטוח והחיסכון, שמביאים 
-              יחד עשרות שנות ניסיון. אנחנו מאמינים בשקיפות מלאה, בשירות אישי ובהתאמה מדויקת 
-              לצרכים הייחודיים של כל לקוח.
-            </p>
-            <p>
-              מאז הקמתנו, עזרנו ללקוחות רבים לתכנן את עתידם הפיננסי, לבחור ביטוחים מותאמים 
-              ולחסוך כסף משמעותי. אנחנו גאים בקשרים ארוכי הטווח שבנינו עם הלקוחות שלנו.
-            </p>
-          </section>
-        </ScrollReveal>
-
-        <LogoDotsDivider />
+          </div>
+        </section>
 
         {/* Mission Section */}
-        <ScrollReveal delay={100}>
-          <section className="mb-16 rounded-2xl bg-card p-8 md:p-12 relative overflow-hidden">
-            <div className="absolute bottom-4 left-4 hidden md:block">
-              <DoodleDecoration type="family" size="sm" className="opacity-20 -rotate-6" />
-            </div>
-            <h2 className="text-3xl font-bold mb-6">המשימה שלנו</h2>
-            <div className="space-y-4 text-muted-foreground">
-              <p>
-                אנחנו מאמינים שניהול פיננסי נכון מתחיל בידע ובהבנה. SeelD מוקדשת 
-                לספק ללקוחותינו:
+        <section className="py-16 sm:py-20 bg-gray-50">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="max-w-3xl">
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-6">המשימה שלנו</h2>
+              <p className="text-gray-600 leading-relaxed text-base sm:text-lg mb-6">
+                אנחנו מאמינים שניהול פיננסי נכון מתחיל בידע ובהבנה. SeelD מוקדשת לספק ללקוחותינו:
               </p>
-              <ul className="space-y-3 mr-6">
-                <li className="flex items-start">
-                  <span className="ml-3 mt-1">•</span>
-                  <span>ייעוץ מקצועי ואובייקטיבי בתחומי חיסכון, פנסיה וביטוח</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="ml-3 mt-1">•</span>
-                  <span>השוואה מקיפה בין כל חברות הביטוח וקרנות הפנסיה בשוק</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="ml-3 mt-1">•</span>
-                  <span>ליווי אישי לאורך כל שלבי החיים הפיננסיים</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="ml-3 mt-1">•</span>
-                  <span>חיסכון משמעותי בעלויות הביטוח והחיסכון שלכם</span>
-                </li>
+              <ul className="space-y-4">
+                {[
+                  "ייעוץ מקצועי ואובייקטיבי בתחומי חיסכון, פנסיה וביטוח",
+                  "השוואה מקיפה בין כל חברות הביטוח וקרנות הפנסיה בשוק",
+                  "ליווי אישי לאורך כל שלבי החיים הפיננסיים",
+                  "חיסכון משמעותי בעלויות הביטוח והחיסכון שלכם",
+                ].map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3 text-gray-600 text-base sm:text-lg">
+                    <span className="w-2 h-2 rounded-full bg-[#5ec6c6] mt-2.5 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
               </ul>
             </div>
-          </section>
-        </ScrollReveal>
+          </div>
+        </section>
 
-        <LogoDotsDivider />
-
-        {/* Values as Feature Cards */}
-        <section className="mb-16 space-y-6 relative">
-          <LogoDotsBackground />
-          <ScrollReveal>
-            <h2 className="text-3xl font-bold mb-8">הערכים שלנו</h2>
-          </ScrollReveal>
-          <ScrollReveal delay={0}>
-            <FeatureCard
-              title="שקיפות"
-              description="אנחנו מאמינים בחשיפה מלאה של כל המידע, העמלות והתנאים — ללא הפתעות ואותיות קטנות."
-              bgColor="bg-[hsl(var(--muted))]"
-              doodle="lightbulb"
-            />
-          </ScrollReveal>
-          <ScrollReveal delay={100}>
-            <FeatureCard
-              title="מקצועיות"
-              description="הצוות שלנו מורכב ממומחים מוסמכים עם ניסיון רב בתחום הפיננסי והביטוחי."
-              bgColor="bg-primary/5"
-              doodle="target"
-            />
-          </ScrollReveal>
-          <ScrollReveal delay={200}>
-            <FeatureCard
-              title="אמינות"
-              description="אנחנו תמיד שמים את האינטרס של הלקוח במקום הראשון ופועלים בהתאם."
-              bgColor="bg-accent/10"
-              doodle="key"
-            />
-          </ScrollReveal>
-          <ScrollReveal delay={300}>
-            <FeatureCard
-              title="נגישות"
-              description="פיננסים וביטוח צריכים להיות מובנים לכולם. אנחנו מסבירים בשפה ברורה ופשוטה."
-              bgColor="bg-[hsl(var(--muted))]"
-              doodle="handshake"
-            />
-          </ScrollReveal>
+        {/* Values Section */}
+        <section className="py-16 sm:py-20">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-10">הערכים שלנו</h2>
+            <div className="grid sm:grid-cols-2 gap-6">
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+                <div className="w-12 h-12 rounded-xl bg-[#5ec6c6]/10 flex items-center justify-center mb-4">
+                  <Eye className="w-6 h-6 text-[#0a3d3d]" />
+                </div>
+                <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">שקיפות</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  אנחנו מאמינים בחשיפה מלאה של כל המידע, העמלות והתנאים — ללא הפתעות ואותיות קטנות.
+                </p>
+              </div>
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+                <div className="w-12 h-12 rounded-xl bg-[#5ec6c6]/10 flex items-center justify-center mb-4">
+                  <Award className="w-6 h-6 text-[#0a3d3d]" />
+                </div>
+                <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">מקצועיות</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  הצוות שלנו מורכב ממומחים מוסמכים עם ניסיון רב בתחום הפיננסי והביטוחי.
+                </p>
+              </div>
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+                <div className="w-12 h-12 rounded-xl bg-[#5ec6c6]/10 flex items-center justify-center mb-4">
+                  <ShieldCheck className="w-6 h-6 text-[#0a3d3d]" />
+                </div>
+                <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">אמינות</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  אנחנו תמיד שמים את האינטרס של הלקוח במקום הראשון ופועלים בהתאם.
+                </p>
+              </div>
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+                <div className="w-12 h-12 rounded-xl bg-[#5ec6c6]/10 flex items-center justify-center mb-4">
+                  <Users className="w-6 h-6 text-[#0a3d3d]" />
+                </div>
+                <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">נגישות</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  פיננסים וביטוח צריכים להיות מובנים לכולם. אנחנו מסבירים בשפה ברורה ופשוטה.
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* CTA Section */}
-        <ScrollReveal direction="scale">
-          <section className="text-center py-12 rounded-2xl bg-card relative overflow-hidden">
-            <div className="absolute top-4 right-4 hidden md:block">
-              <DoodleDecoration type="shield" size="sm" className="opacity-20 rotate-12" />
-            </div>
-            <h2 className="text-3xl font-bold mb-4">בואו נתחיל לתכנן יחד</h2>
-            <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-              השאירו פרטים ונחזור אליכם לשיחת ייעוץ ראשונית ללא עלות וללא התחייבות.
-            </p>
-            <a href="/contact">
-              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8">
-                <Mail className="ml-2 h-4 w-4" />
+        <section className="py-16 sm:py-20 bg-gray-50">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="bg-[#0a3d3d] rounded-2xl p-8 sm:p-12 text-center text-white">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-3">בואו נתחיל לתכנן יחד</h2>
+              <p className="text-white/70 text-base sm:text-lg mb-8 max-w-xl mx-auto">
+                השאירו פרטים ונחזור אליכם לשיחת ייעוץ ראשונית ללא עלות וללא התחייבות.
+              </p>
+              <Link
+                to="/contact"
+                className="inline-block px-8 py-3.5 bg-[#5ec6c6] text-[#0a3d3d] font-semibold rounded-full hover:bg-[#4db5b5] transition-colors"
+              >
                 צרו קשר
-              </Button>
-            </a>
-          </section>
-        </ScrollReveal>
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
 
       <Footer />

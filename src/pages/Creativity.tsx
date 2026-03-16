@@ -62,7 +62,7 @@ const Creativity = () => {
           <h2 className="text-3xl font-bold mb-8 text-center">למה לבחור ב-SeelD?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">15+</div>
+              <div className="text-4xl font-bold text-primary mb-2">מגוון</div>
               <p className="text-muted-foreground">חברות ביטוח להשוואה</p>
             </div>
             <div className="text-center">

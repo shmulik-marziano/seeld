@@ -551,8 +551,8 @@ export default function NewRecommendationPage() {
   return (
     <div className="max-w-3xl mx-auto animate-fade-in px-0">
       {/* Header */}
-      <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-8">
-        <Button variant="ghost" size="sm" onClick={goBack} className="hover:bg-primary/10 shrink-0 h-8 w-8 p-0 md:h-9 md:w-auto md:px-3">
+      <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+        <Button variant="ghost" size="sm" onClick={goBack} className="hover:bg-[#5ec6c6]/10 shrink-0 h-9 w-9 p-0 md:h-10 md:w-10 rounded-xl min-h-[44px]">
           <ArrowRight className="h-4 w-4" />
         </Button>
         <div className="flex-1 min-w-0">
@@ -561,31 +561,39 @@ export default function NewRecommendationPage() {
         </div>
       </div>
 
-      {/* Progress bar */}
-      <div className="flex gap-1 md:gap-1.5 mb-4 md:mb-8">
+      {/* Progress bar - premium segmented design */}
+      <div className="flex gap-1 md:gap-1.5 mb-5 md:mb-8">
         {allSteps.map((s, i) => (
-          <div key={s} className={`h-1 md:h-1.5 flex-1 rounded-full transition-colors ${i < stepNumber ? 'bg-primary' : 'bg-border'}`} />
+          <div key={s} className="flex-1 relative">
+            <div className={`h-1.5 md:h-2 rounded-full transition-all duration-500 ease-out ${
+              i < stepNumber
+                ? 'bg-gradient-to-l from-[#0a3d3d] to-[#5ec6c6] shadow-sm shadow-[#5ec6c6]/20'
+                : i === stepNumber - 1
+                  ? 'bg-[#0a3d3d]'
+                  : 'bg-border/50'
+            }`} />
+          </div>
         ))}
       </div>
 
       {/* Step 1: Choose customer type */}
       {step === 'choose-customer' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-          <Card className="cursor-pointer hover:border-primary/50 hover:shadow-md transition-all group" onClick={() => handleChooseMode('existing')}>
-            <CardContent className="flex flex-col items-center gap-2 md:gap-3 p-6 md:p-8">
-              <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                <Users className="h-6 w-6 md:h-8 md:w-8 text-primary" />
+          <Card className="cursor-pointer hover:border-[#5ec6c6]/50 hover:shadow-xl hover:shadow-[#0a3d3d]/5 transition-all duration-300 group rounded-2xl hover:-translate-y-1" onClick={() => handleChooseMode('existing')}>
+            <CardContent className="flex flex-col items-center gap-2 md:gap-3 p-6 md:p-10">
+              <div className="w-14 h-14 md:w-18 md:h-18 rounded-2xl bg-[#0a3d3d]/8 flex items-center justify-center group-hover:bg-[#0a3d3d]/15 group-hover:shadow-lg group-hover:shadow-[#0a3d3d]/10 transition-all duration-300">
+                <Users className="h-7 w-7 md:h-8 md:w-8 text-[#0a3d3d]" />
               </div>
-              <h3 className="text-base md:text-lg font-semibold">לקוח קיים</h3>
+              <h3 className="text-base md:text-lg font-bold text-foreground">לקוח קיים</h3>
               <p className="text-xs md:text-sm text-muted-foreground text-center">בחר מרשימת הלקוחות הקיימים</p>
             </CardContent>
           </Card>
-          <Card className="cursor-pointer hover:border-primary/50 hover:shadow-md transition-all group" onClick={() => handleChooseMode('new')}>
-            <CardContent className="flex flex-col items-center gap-2 md:gap-3 p-6 md:p-8">
-              <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                <UserPlus className="h-6 w-6 md:h-8 md:w-8 text-primary" />
+          <Card className="cursor-pointer hover:border-[#5ec6c6]/50 hover:shadow-xl hover:shadow-[#0a3d3d]/5 transition-all duration-300 group rounded-2xl hover:-translate-y-1" onClick={() => handleChooseMode('new')}>
+            <CardContent className="flex flex-col items-center gap-2 md:gap-3 p-6 md:p-10">
+              <div className="w-14 h-14 md:w-18 md:h-18 rounded-2xl bg-[#5ec6c6]/10 flex items-center justify-center group-hover:bg-[#5ec6c6]/20 group-hover:shadow-lg group-hover:shadow-[#5ec6c6]/10 transition-all duration-300">
+                <UserPlus className="h-7 w-7 md:h-8 md:w-8 text-[#0a3d3d]" />
               </div>
-              <h3 className="text-base md:text-lg font-semibold">לקוח חדש</h3>
+              <h3 className="text-base md:text-lg font-bold text-foreground">לקוח חדש</h3>
               <p className="text-xs md:text-sm text-muted-foreground text-center">צור לקוח חדש והוסף המלצה</p>
             </CardContent>
           </Card>
@@ -594,27 +602,36 @@ export default function NewRecommendationPage() {
 
       {/* Step 2a: Select existing customer */}
       {step === 'customer-details' && customerMode === 'existing' && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Search className="h-5 w-5 text-primary" />חיפוש לקוח
+        <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
+          <CardHeader className="bg-gradient-to-b from-[#0a3d3d]/3 to-transparent">
+            <CardTitle className="text-lg flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-[#0a3d3d]/10 flex items-center justify-center">
+                <Search className="h-4 w-4 text-[#0a3d3d]" />
+              </div>
+              חיפוש לקוח
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <Input placeholder="חפש לפי שם, ת.ז או טלפון..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} autoFocus />
+          <CardContent className="space-y-4 p-4 md:p-6">
+            <Input placeholder="חפש לפי שם, ת.ז או טלפון..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} autoFocus
+              className="rounded-xl h-12 border-border/60 focus:border-[#5ec6c6] transition-colors text-sm" />
             <div className="space-y-1 max-h-80 overflow-y-auto">
-              {filteredCustomers.length === 0 && <p className="text-sm text-muted-foreground text-center py-4">לא נמצאו לקוחות</p>}
+              {filteredCustomers.length === 0 && (
+                <div className="text-center py-8">
+                  <Users className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">לא נמצאו לקוחות</p>
+                </div>
+              )}
               {filteredCustomers.map(c => (
                 <button key={c.id} onClick={() => handleSelectExistingCustomer(c.id)}
-                  className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-primary/5 transition-colors text-right">
-                  <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
+                  className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#5ec6c6]/5 transition-all duration-200 text-right group min-h-[52px]">
+                  <div className="w-10 h-10 rounded-xl bg-[#0a3d3d]/8 flex items-center justify-center text-[#0a3d3d] font-bold text-sm group-hover:bg-[#0a3d3d]/12 group-hover:shadow-md transition-all duration-200">
                     {c.firstName[0]}{c.lastName[0]}
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium">{c.fullName}</p>
+                    <p className="text-sm font-medium group-hover:text-[#0a3d3d] transition-colors">{c.fullName}</p>
                     <p className="text-xs text-muted-foreground">{c.idNumber} · {c.mobilePhone}</p>
                   </div>
-                  <ArrowLeft className="h-4 w-4 text-muted-foreground" />
+                  <ArrowLeft className="h-4 w-4 text-muted-foreground/40 group-hover:text-[#0a3d3d] group-hover:translate-x-[-2px] transition-all duration-200" />
                 </button>
               ))}
             </div>
@@ -625,40 +642,47 @@ export default function NewRecommendationPage() {
       {/* Step 2b: New customer form */}
       {step === 'customer-details' && customerMode === 'new' && (
         <div className="space-y-6">
-          <Card>
-            <CardHeader><CardTitle className="text-lg">פרטי לקוח חדש</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>שם פרטי *</Label>
-                  <Input value={form.firstName} onChange={e => setForm(p => ({ ...p, firstName: e.target.value }))} />
+          <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
+            <CardHeader className="bg-gradient-to-b from-[#0a3d3d]/3 to-transparent">
+              <CardTitle className="text-lg flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[#0a3d3d]/10 flex items-center justify-center">
+                  <UserPlus className="h-4 w-4 text-[#0a3d3d]" />
+                </div>
+                פרטי לקוח חדש
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 p-4 md:p-6">
+              <div className="grid grid-cols-2 gap-3 md:gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium text-muted-foreground">שם פרטי *</Label>
+                  <Input value={form.firstName} onChange={e => setForm(p => ({ ...p, firstName: e.target.value }))} className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6]" />
                   {errors.firstName && <p className="text-xs text-destructive mt-1">{errors.firstName}</p>}
                 </div>
-                <div>
-                  <Label>שם משפחה *</Label>
-                  <Input value={form.lastName} onChange={e => setForm(p => ({ ...p, lastName: e.target.value }))} />
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium text-muted-foreground">שם משפחה *</Label>
+                  <Input value={form.lastName} onChange={e => setForm(p => ({ ...p, lastName: e.target.value }))} className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6]" />
                   {errors.lastName && <p className="text-xs text-destructive mt-1">{errors.lastName}</p>}
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>תעודת זהות *</Label>
-                  <Input value={form.idNumber} onChange={e => setForm(p => ({ ...p, idNumber: e.target.value }))} />
+              <div className="grid grid-cols-2 gap-3 md:gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium text-muted-foreground">תעודת זהות *</Label>
+                  <Input value={form.idNumber} onChange={e => setForm(p => ({ ...p, idNumber: e.target.value }))} className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6]" />
                   {errors.idNumber && <p className="text-xs text-destructive mt-1">{errors.idNumber}</p>}
                 </div>
-                <div>
-                  <Label>טלפון נייד *</Label>
-                  <Input value={form.mobilePhone} onChange={e => setForm(p => ({ ...p, mobilePhone: e.target.value }))} />
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium text-muted-foreground">טלפון נייד *</Label>
+                  <Input value={form.mobilePhone} onChange={e => setForm(p => ({ ...p, mobilePhone: e.target.value }))} className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6]" />
                   {errors.mobilePhone && <p className="text-xs text-destructive mt-1">{errors.mobilePhone}</p>}
                 </div>
               </div>
-              <div>
-                <Label>אימייל</Label>
-                <Input value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} type="email" />
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-muted-foreground">אימייל</Label>
+                <Input value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} type="email" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6]" />
               </div>
             </CardContent>
           </Card>
-          <Button onClick={handleCreateAndContinue} size="lg" className="gap-2" disabled={saving}>
+          <Button onClick={handleCreateAndContinue} size="lg" className="gap-2 rounded-2xl bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5" disabled={saving}>
             {saving && <Loader2 className="h-4 w-4 animate-spin" />}
             צור לקוח והמשך
           </Button>
@@ -669,30 +693,32 @@ export default function NewRecommendationPage() {
       {step === 'manage-products' && (
         <div className="space-y-4">
           {selectedCustomer && (
-            <div className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg mb-4">
-              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
+            <div className="flex items-center gap-3 p-3.5 bg-gradient-to-l from-[#0a3d3d]/5 to-[#5ec6c6]/5 rounded-2xl mb-4 border border-[#5ec6c6]/10">
+              <div className="w-10 h-10 rounded-xl bg-[#0a3d3d]/10 flex items-center justify-center text-[#0a3d3d] font-bold text-sm shadow-sm">
                 {selectedCustomer.firstName[0]}{selectedCustomer.lastName[0]}
               </div>
               <div>
-                <p className="text-sm font-medium">{selectedCustomer.fullName}</p>
+                <p className="text-sm font-semibold text-foreground">{selectedCustomer.fullName}</p>
                 <p className="text-xs text-muted-foreground">{selectedCustomer.idNumber}</p>
               </div>
             </div>
           )}
 
           {/* Pre-treatment file upload */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base flex items-center gap-2">
-                <Upload className="h-4 w-4 text-primary" />
+          <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
+            <CardHeader className="pb-3 bg-gradient-to-b from-[#0a3d3d]/3 to-transparent">
+              <CardTitle className="text-base flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-[#0a3d3d]/10 flex items-center justify-center">
+                  <Upload className="h-3.5 w-3.5 text-[#0a3d3d]" />
+                </div>
                 העלאת קובץ טרום טיפול
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 md:p-6">
               <div
-                className={`border-2 border-dashed rounded-lg p-5 text-center cursor-pointer transition-colors ${
-                  fileDragging ? 'border-primary bg-primary/10 scale-[1.01]' :
-                  fileUploading ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50 hover:bg-muted/30'
+                className={`border-2 border-dashed rounded-2xl p-5 text-center cursor-pointer transition-all duration-300 ${
+                  fileDragging ? 'border-[#5ec6c6] bg-[#5ec6c6]/10 scale-[1.01]' :
+                  fileUploading ? 'border-[#5ec6c6] bg-[#5ec6c6]/5' : 'border-border/60 hover:border-[#5ec6c6]/50 hover:bg-[#5ec6c6]/5'
                 }`}
                 onClick={() => !fileUploading && pretreatmentFileRef.current?.click()}
                 onDragOver={(e) => { e.preventDefault(); setFileDragging(true); }}
@@ -701,14 +727,21 @@ export default function NewRecommendationPage() {
                 onDrop={handlePretreatmentDrop}
               >
                 {fileUploading ? (
-                  <div className="flex flex-col items-center gap-2">
-                    <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                    <p className="text-sm font-medium text-primary">{fileUploadStatus}</p>
+                  <div className="flex flex-col items-center gap-3 py-2">
+                    <div className="relative">
+                      <div className="w-12 h-12 rounded-full border-2 border-[#5ec6c6]/20 flex items-center justify-center">
+                        <Loader2 className="h-6 w-6 animate-spin text-[#0a3d3d]" />
+                      </div>
+                      <div className="absolute inset-0 w-12 h-12 rounded-full border-2 border-transparent border-t-[#5ec6c6] animate-spin" style={{ animationDuration: '1.5s' }} />
+                    </div>
+                    <p className="text-sm font-semibold text-[#0a3d3d]">{fileUploadStatus}</p>
                     <p className="text-xs text-muted-foreground">מוצרי רכב ודירה מסוננים אוטומטית</p>
                   </div>
                 ) : (
                   <>
-                    <Upload className="h-6 w-6 mx-auto text-muted-foreground mb-1.5" />
+                    <div className="w-12 h-12 rounded-2xl bg-[#0a3d3d]/8 flex items-center justify-center mx-auto mb-2">
+                      <Upload className="h-5 w-5 text-[#0a3d3d]/60" />
+                    </div>
                     <p className="text-sm font-medium">{fileDragging ? 'שחרר כאן' : 'לחץ או גרור קובץ טרום טיפול'}</p>
                     <p className="text-xs text-muted-foreground mt-1">ZIP, CSV, XLSX, XML · ביטוחי רכב ודירה מסוננים אוטומטית</p>
                   </>
@@ -725,13 +758,16 @@ export default function NewRecommendationPage() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
+          <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
+            <CardHeader className="bg-gradient-to-b from-[#5ec6c6]/3 to-transparent">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Package className="h-5 w-5 text-primary" />מוצרים ({customerProducts.length})
+                <CardTitle className="text-lg flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-[#5ec6c6]/15 flex items-center justify-center">
+                    <Package className="h-4 w-4 text-[#0a3d3d]" />
+                  </div>
+                  מוצרים ({customerProducts.length})
                 </CardTitle>
-                <Button size="sm" variant="outline" className="gap-1.5" onClick={() => { setEditingProduct(undefined); setProductModalOpen(true); }}>
+                <Button size="sm" variant="outline" className="gap-1.5 rounded-xl min-h-[36px] border-[#0a3d3d]/20 text-[#0a3d3d] hover:bg-[#0a3d3d]/5" onClick={() => { setEditingProduct(undefined); setProductModalOpen(true); }}>
                   <Plus className="h-3.5 w-3.5" />הוסף מוצר
                 </Button>
               </div>
@@ -789,15 +825,15 @@ export default function NewRecommendationPage() {
                   )}
 
                   {/* Progress indicator */}
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-cream-dark/50">
+                  <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-gradient-to-l from-[#0a3d3d]/5 to-[#5ec6c6]/5 border border-[#5ec6c6]/10">
                     <div className="flex-1">
-                      <div className="flex justify-between text-xs mb-1">
-                        <span className="text-muted-foreground">המלצות נוצרו</span>
-                        <span className="font-medium">{recDrafts.length} / {customerProducts.length}</span>
+                      <div className="flex justify-between text-xs mb-1.5">
+                        <span className="text-muted-foreground font-medium">המלצות נוצרו</span>
+                        <span className="font-bold text-[#0a3d3d]">{recDrafts.length} / {customerProducts.length}</span>
                       </div>
-                      <div className="h-1.5 bg-border rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-primary rounded-full transition-all duration-500"
+                      <div className="h-2 bg-[#0a3d3d]/10 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-l from-[#0a3d3d] to-[#5ec6c6] rounded-full transition-all duration-500 ease-out shadow-sm shadow-[#5ec6c6]/30"
                           style={{ width: `${customerProducts.length > 0 ? (recDrafts.length / customerProducts.length) * 100 : 0}%` }}
                         />
                       </div>
@@ -809,7 +845,7 @@ export default function NewRecommendationPage() {
           </Card>
 
           <div className="flex gap-3">
-            <Button onClick={handleContinueToRecs} size="lg" className="gap-2" disabled={customerProducts.length === 0}>
+            <Button onClick={handleContinueToRecs} size="lg" className="gap-2 rounded-2xl bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5" disabled={customerProducts.length === 0}>
               המשך לכתיבת המלצות ({recDrafts.length}) <ArrowLeft className="h-4 w-4" />
             </Button>
           </div>
@@ -828,8 +864,15 @@ export default function NewRecommendationPage() {
       {/* Step 4: Write recommendations */}
       {step === 'write-recommendations' && (
         <div className="space-y-6">
-          <div className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg">
-            {selectedCustomer && <span className="font-medium text-sm">{selectedCustomer.fullName}</span>}
+          <div className="flex items-center gap-3 p-3.5 bg-gradient-to-l from-[#0a3d3d]/5 to-[#5ec6c6]/5 rounded-2xl border border-[#5ec6c6]/10">
+            {selectedCustomer && (
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-[#0a3d3d]/10 flex items-center justify-center text-[#0a3d3d] font-bold text-[10px]">
+                  {selectedCustomer.firstName[0]}{selectedCustomer.lastName[0]}
+                </div>
+                <span className="font-semibold text-sm">{selectedCustomer.fullName}</span>
+              </div>
+            )}
             <span className="text-sm text-muted-foreground">· {recDrafts.length} מוצרים</span>
           </div>
 
@@ -837,25 +880,32 @@ export default function NewRecommendationPage() {
             const product = customerProducts.find(p => p.id === draft.productId);
             if (!product) return null;
             return (
-              <Card key={draft.productId}>
-                <CardHeader className="pb-3 px-3 md:px-6">
+              <Card key={draft.productId} className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
+                <CardHeader className="pb-3 px-3 md:px-6 bg-gradient-to-b from-muted/30 to-transparent">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <CardTitle className="text-sm md:text-base flex items-center gap-2">
-                      <span className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-primary text-primary-foreground text-[10px] md:text-xs flex items-center justify-center font-bold shrink-0">
+                      <span className="w-6 h-6 md:w-7 md:h-7 rounded-xl bg-[#0a3d3d] text-white text-[10px] md:text-xs flex items-center justify-center font-bold shrink-0 shadow-sm shadow-[#0a3d3d]/20">
                         {idx + 1}
                       </span>
                       <span className="truncate">{product.company} — {product.productType}</span>
                     </CardTitle>
-                    <div className="flex gap-1 shrink-0">
-                      <Button variant="outline" size="sm" className="gap-1 text-[10px] md:text-xs h-7 px-2" onClick={() => generateAiRecommendation(draft.productId)}
+                    <div className="flex gap-1.5 shrink-0">
+                      <Button variant="outline" size="sm"
+                        className="gap-1 text-[10px] md:text-xs h-8 px-2.5 rounded-xl border-[#5ec6c6]/30 text-[#0a3d3d] hover:bg-[#5ec6c6]/10 min-h-[32px] transition-all duration-200"
+                        onClick={() => generateAiRecommendation(draft.productId)}
                         disabled={aiLoading[draft.productId]}>
-                        {aiLoading[draft.productId] ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                        {aiLoading[draft.productId] ? (
+                          <div className="relative">
+                            <Sparkles className="h-3 w-3 animate-pulse" />
+                            <div className="absolute inset-0 w-3 h-3 rounded-full border border-transparent border-t-[#5ec6c6] animate-spin" />
+                          </div>
+                        ) : <Sparkles className="h-3 w-3" />}
                         AI
                       </Button>
-                      <Button variant="outline" size="sm" className="gap-1 text-[10px] md:text-xs h-7 px-2" onClick={() => openReasoningBank(draft.productId)}>
+                      <Button variant="outline" size="sm" className="gap-1 text-[10px] md:text-xs h-8 px-2.5 rounded-xl min-h-[32px]" onClick={() => openReasoningBank(draft.productId)}>
                         <BookOpen className="h-3 w-3" /><span className="hidden sm:inline">בנק נימוקים</span>
                       </Button>
-                      <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive h-7 w-7 p-0" onClick={() => removeDraft(draft.productId)}>
+                      <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive h-8 w-8 p-0 rounded-xl min-h-[32px] hover:bg-destructive/10" onClick={() => removeDraft(draft.productId)}>
                         <Trash2 className="h-3.5 w-3.5" />
                       </Button>
                     </div>
@@ -983,10 +1033,10 @@ export default function NewRecommendationPage() {
           })}
 
           <div className="flex gap-3">
-            <Button onClick={() => setStep('preview')} size="lg" className="gap-2">
+            <Button onClick={() => setStep('preview')} size="lg" className="gap-2 rounded-2xl bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5">
               תצוגה מקדימה <Eye className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="lg" onClick={() => setStep('manage-products')}>חזור</Button>
+            <Button variant="outline" size="lg" onClick={() => setStep('manage-products')} className="rounded-2xl min-h-[48px]">חזור</Button>
           </div>
         </div>
       )}
@@ -994,9 +1044,10 @@ export default function NewRecommendationPage() {
       {/* Step 5: Preview */}
       {step === 'preview' && (
         <div className="space-y-6">
-          <Card className="border-primary/20 bg-primary/5">
-            <CardContent className="p-4">
-              <p className="text-sm text-center text-muted-foreground">תצוגה מקדימה — כך הלקוח יראה את ההמלצות</p>
+          <Card className="border-[#5ec6c6]/20 bg-gradient-to-l from-[#0a3d3d]/5 to-[#5ec6c6]/5 rounded-2xl">
+            <CardContent className="p-4 flex items-center justify-center gap-2">
+              <Eye className="h-4 w-4 text-[#0a3d3d]" />
+              <p className="text-sm text-center text-[#0a3d3d] font-medium">תצוגה מקדימה — כך הלקוח יראה את ההמלצות</p>
             </CardContent>
           </Card>
 
@@ -1073,11 +1124,11 @@ export default function NewRecommendationPage() {
           })}
 
           <div className="flex gap-3">
-            <Button onClick={handleSubmitAll} size="lg" className="gap-2" disabled={saving}>
+            <Button onClick={handleSubmitAll} size="lg" className="gap-2 rounded-2xl bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5" disabled={saving}>
               {saving && <Loader2 className="h-4 w-4 animate-spin" />}
               צור {recDrafts.filter(d => d.title.trim() && d.rationale.trim()).length} המלצות
             </Button>
-            <Button variant="outline" size="lg" onClick={() => setStep('write-recommendations')}>חזור לעריכה</Button>
+            <Button variant="outline" size="lg" onClick={() => setStep('write-recommendations')} className="rounded-2xl min-h-[48px]">חזור לעריכה</Button>
           </div>
         </div>
       )}
@@ -1085,28 +1136,31 @@ export default function NewRecommendationPage() {
       {/* Step 6: Summary + generate link */}
       {step === 'summary' && (
         <div className="space-y-6">
-          <Card className="border-primary/20">
-            <CardContent className="p-8 text-center space-y-4">
-              <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mx-auto">
-                <CheckCircle2 className="h-8 w-8 text-success" />
+          <Card className="border-[#5ec6c6]/20 rounded-2xl overflow-hidden">
+            <CardContent className="p-8 md:p-10 text-center space-y-4 bg-gradient-to-b from-emerald-50/30 dark:from-emerald-900/5 to-transparent">
+              <div className="w-18 h-18 rounded-full bg-emerald-100/60 dark:bg-emerald-900/20 flex items-center justify-center mx-auto shadow-lg shadow-emerald-200/20">
+                <CheckCircle2 className="h-9 w-9 text-emerald-500" />
               </div>
-              <h2 className="text-xl font-bold">גרסה {summaryVersion} — ההמלצות נוצרו בהצלחה!</h2>
+              <h2 className="text-xl md:text-2xl font-bold">גרסה {summaryVersion} — ההמלצות נוצרו בהצלחה!</h2>
               <p className="text-muted-foreground text-sm">
                 {createdRecIds.length} המלצות נוצרו עבור {selectedCustomer?.fullName}
               </p>
               {summaryVersion > 1 && (
-                <p className="text-xs text-muted-foreground">גרסאות קודמות נשמרות בהיסטוריה ואינן מוצגות ללקוח.</p>
+                <p className="text-xs text-muted-foreground bg-muted/50 rounded-xl px-3 py-1.5 inline-block">גרסאות קודמות נשמרות בהיסטוריה ואינן מוצגות ללקוח.</p>
               )}
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
+          <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
+            <CardHeader className="bg-gradient-to-b from-[#0a3d3d]/3 to-transparent">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Link2 className="h-5 w-5 text-primary" />שליחה ונעילה
+                <CardTitle className="text-lg flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-[#0a3d3d]/10 flex items-center justify-center">
+                    <Link2 className="h-4 w-4 text-[#0a3d3d]" />
+                  </div>
+                  שליחה ונעילה
                 </CardTitle>
-                <Button size="sm" className="gap-1.5" onClick={handleSendSummary}>
+                <Button size="sm" className="gap-1.5 rounded-xl bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 min-h-[36px]" onClick={handleSendSummary}>
                   <LockIcon className="h-3.5 w-3.5" />שלח ונעל
                 </Button>
               </div>
@@ -1148,7 +1202,7 @@ export default function NewRecommendationPage() {
           </Card>
 
           <div className="flex gap-2 md:gap-3 flex-wrap">
-            <Button variant="outline" size="lg" className="gap-2" onClick={() => {
+            <Button variant="outline" size="lg" className="gap-2 rounded-2xl min-h-[48px]" onClick={() => {
               const activeDrafts = recDrafts.filter(d => d.title.trim());
               downloadRecommendationPdf({
                 customerName: selectedCustomer?.fullName || '',
@@ -1183,13 +1237,13 @@ export default function NewRecommendationPage() {
             }}>
               <FileText className="h-4 w-4" />הורד PDF
             </Button>
-            <Button onClick={() => navigate('/app/recommendation-bank')} size="lg">
+            <Button onClick={() => navigate('/app/recommendation-bank')} size="lg" className="rounded-2xl min-h-[48px] bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20">
               עבור לבנק המלצות
             </Button>
-            <Button onClick={() => navigate(`/customers/${selectedCustomerId}`)} variant="outline" size="lg">
+            <Button onClick={() => navigate(`/customers/${selectedCustomerId}`)} variant="outline" size="lg" className="rounded-2xl min-h-[48px]">
               כרטיס הלקוח
             </Button>
-            <Button variant="outline" size="lg" onClick={() => navigate('/')}>
+            <Button variant="outline" size="lg" onClick={() => navigate('/')} className="rounded-2xl min-h-[48px]">
               חזרה לדשבורד
             </Button>
           </div>
@@ -1239,8 +1293,8 @@ function WizardProductRow({ product, hasDraft, onAddDraft, onEdit, onDelete }: {
   onAddDraft: () => void; onEdit: () => void; onDelete: () => void;
 }) {
   return (
-    <div className={`flex items-center gap-3 px-3 py-2.5 transition-colors ${hasDraft ? 'bg-primary/5' : 'hover:bg-muted/30'}`}>
-      <div className={`w-2 h-2 rounded-full shrink-0 ${product.isActive ? 'bg-success' : 'bg-muted-foreground'}`} />
+    <div className={`flex items-center gap-3 px-3 py-3 transition-all duration-200 ${hasDraft ? 'bg-[#5ec6c6]/5' : 'hover:bg-muted/30'}`}>
+      <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${product.isActive ? 'bg-emerald-400 shadow-sm shadow-emerald-300/50' : 'bg-muted-foreground/40'}`} />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium truncate">{product.company} — {product.productType}</p>
         <p className="text-[10px] text-muted-foreground truncate">
@@ -1250,20 +1304,20 @@ function WizardProductRow({ product, hasDraft, onAddDraft, onEdit, onDelete }: {
           {product.managementFeeDeposit ? ` · דמ״נ: ${product.managementFeeDeposit}%` : ''}
         </p>
       </div>
-      <div className="flex items-center gap-1 shrink-0">
+      <div className="flex items-center gap-1.5 shrink-0">
         {hasDraft ? (
-          <Badge variant="secondary" className="text-[10px] gap-1 bg-primary/10 text-primary border-primary/20">
+          <Badge variant="secondary" className="text-[10px] gap-1 bg-[#0a3d3d]/10 text-[#0a3d3d] border-[#0a3d3d]/15 rounded-lg">
             <CheckCircle2 className="h-3 w-3" />יש המלצה
           </Badge>
         ) : (
-          <Button variant="outline" size="sm" className="text-[10px] gap-1 h-7 px-2.5 border-primary/30 text-primary hover:bg-primary/10" onClick={onAddDraft}>
+          <Button variant="outline" size="sm" className="text-[10px] gap-1 h-8 px-2.5 border-[#0a3d3d]/20 text-[#0a3d3d] hover:bg-[#0a3d3d]/5 rounded-xl min-h-[32px]" onClick={onAddDraft}>
             <Plus className="h-3 w-3" />צור המלצה
           </Button>
         )}
-        <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={onEdit}>
+        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-xl min-h-[32px]" onClick={onEdit}>
           <Pencil className="h-3.5 w-3.5" />
         </Button>
-        <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={onDelete}>
+        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-xl min-h-[32px] text-destructive hover:text-destructive hover:bg-destructive/10" onClick={onDelete}>
           <Trash2 className="h-3.5 w-3.5" />
         </Button>
       </div>

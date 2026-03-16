@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import {
   LogIn, Car, HeartPulse, Landmark, PiggyBank, Calculator, PhoneCall,
   Shield, Users, Award, Home, Plane, Heart, Baby, Briefcase, Umbrella,
-  Building2, HandCoins, TrendingUp, GraduationCap, UserCheck, Clock,
+  Building2, HandCoins, TrendingUp, GraduationCap, UserCheck,
   Wallet, BarChart3, DollarSign, HelpCircle, Mail, MapPin, Phone,
   MessageCircle, ChevronLeft, Stethoscope, Key, UserPlus, Globe,
   Scale, Activity, Banknote, Target, CalendarCheck, FileText
@@ -11,37 +11,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import ScrollReveal from "@/components/ScrollReveal";
-import { motion, useInView } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import travelLogos from "@/assets/travel-insurance-logos.jpeg";
-
-// ── Animated counter for stats section ──
-function AnimatedNumber({ value, suffix = "", prefix = "" }: { value: number; suffix?: string; prefix?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref as React.RefObject<Element>, { once: true, margin: "-80px" });
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    if (!inView) return;
-    const duration = 2000;
-    const start = Date.now();
-    const step = () => {
-      const elapsed = Date.now() - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - (1 - progress) * (1 - progress);
-      setDisplay(Math.floor(eased * value));
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [inView, value]);
-
-  return (
-    <div ref={ref} className="text-2xl sm:text-3xl md:text-5xl font-bold text-[#0a3d3d] dark:text-[#5ec6c6] mb-1">
-      {prefix}{display.toLocaleString()}{suffix}
-    </div>
-  );
-}
 
 // ── Data ──
 
@@ -85,7 +57,7 @@ const whySeeld = [
   {
     icon: Shield,
     title: "מקצועיות ואמינות",
-    description: "ניסיון של למעלה מ-15 שנה בתחום הביטוח והפיננסים עם מאות לקוחות מרוצים.",
+    description: "חלק מבית עמיתים הון — סוכנות ביטוח ופיננסים מבוססת עם מוניטין של מקצועיות.",
   },
   {
     icon: Users,
@@ -141,7 +113,7 @@ const calculators = [
 
 const trustPoints = [
   { icon: Award, title: "רישיון סוכן ביטוח פנסיוני", description: "מורשה ומפוקח ע״י רשות שוק ההון" },
-  { icon: Clock, title: "15+ שנות ניסיון", description: "ליווי אלפי לקוחות ומשפחות בכל הארץ" },
+  { icon: Building2, title: "חלק מבית עמיתים הון", description: "סוכנות ביטוח ופיננסים מבוססת ומוכרת" },
   { icon: UserCheck, title: "שירות אישי ונגיש", description: "מענה מהיר, ליווי צמוד ויחס אנושי" },
   { icon: Scale, title: "אובייקטיביות מלאה", description: "עבודה מול כל חברות הביטוח — ההמלצה הכי טובה עבורכם" },
 ];
@@ -436,11 +408,11 @@ const Index = () => {
                   <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white mb-2">
                     שמוליק מרציאנו
                   </h2>
-                  <p className="text-[#5ec6c6] font-medium text-lg">סוכן ביטוח פנסיוני מורשה | מייסד SEELD</p>
+                  <p className="text-[#5ec6c6] font-medium text-lg">סוכן ביטוח פנסיוני מורשה</p>
                   <p className="text-white/60 text-sm sm:text-base leading-relaxed">
-                    עם ניסיון של למעלה מ-15 שנה בתחום הביטוח והפיננסים, שמוליק מציע ליווי אישי ומקצועי
-                    לכל לקוח. מהתכנון הפנסיוני הראשון ועד ניהול פוליסות מורכבות — הגישה שלנו היא תמיד
-                    אישית, שקופה ומבוססת על הצרכים שלכם.
+                    שמוליק מרציאנו, סוכן ביטוח פנסיוני מורשה, מלווה לקוחות בצורה אישית ומקצועית.
+                    SEELD הוא חלק מבית עמיתים הון — סוכנות ביטוח ופיננסים מבוססת.
+                    אנחנו כאן כדי לעזור לכם להבין את עולם הביטוח והפנסיה בצורה פשוטה וברורה.
                   </p>
                   <div className="flex flex-wrap gap-4 pt-2">
                     <Link
@@ -481,21 +453,21 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Stats / Numbers Section */}
+        {/* Value Proposition Section */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
           <ScrollReveal>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
               <div>
-                <AnimatedNumber value={15} suffix="+" />
-                <div className="text-sm text-muted-foreground">שנות ניסיון</div>
+                <div className="text-2xl sm:text-3xl md:text-5xl font-bold text-[#0a3d3d] dark:text-[#5ec6c6] mb-1">
+                  עמיתים הון
+                </div>
+                <div className="text-sm text-muted-foreground">סוכנות ביטוח ופיננסים מבוססת</div>
               </div>
               <div>
-                <AnimatedNumber value={5000} suffix="+" />
-                <div className="text-sm text-muted-foreground">לקוחות</div>
-              </div>
-              <div>
-                <AnimatedNumber value={98} suffix="%" />
-                <div className="text-sm text-muted-foreground">שביעות רצון</div>
+                <div className="text-2xl sm:text-3xl md:text-5xl font-bold text-[#0a3d3d] dark:text-[#5ec6c6] mb-1">
+                  אישי
+                </div>
+                <div className="text-sm text-muted-foreground">שירות מקצועי בגובה העיניים</div>
               </div>
               <div>
                 <div className="text-2xl sm:text-3xl md:text-5xl font-bold text-[#0a3d3d] dark:text-[#5ec6c6] mb-1">
