@@ -443,7 +443,7 @@ export default function Admin() {
           <div className="text-center mb-6">
             <Shield className="w-10 h-10 mx-auto mb-3 text-primary" />
             <h1 className="text-xl font-bold">כניסה למנהל</h1>
-            <p className="text-sm text-muted-foreground mt-1">SeelD Admin Panel</p>
+            <p className="text-sm text-muted-foreground mt-1">SEELD Admin Panel</p>
           </div>
           <div className="space-y-4">
             <Input
@@ -467,7 +467,7 @@ export default function Admin() {
       {/* Header */}
       <div className="border-b border-border bg-card px-6 py-4 flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold">ניהול לקוחות – SeelD</h1>
+          <h1 className="text-xl font-bold">ניהול לקוחות – SEELD</h1>
           <p className="text-sm text-muted-foreground">{filtered.length} לקוחות נמצאו</p>
         </div>
         <div className="flex items-center gap-2">

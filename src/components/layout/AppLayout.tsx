@@ -72,8 +72,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
             <SeeIDLogo size={38} />
           </div>
           <div>
-            <h1 className="text-lg font-extrabold text-white tracking-tight">SeeID</h1>
-            <p className="text-[10px] text-white/30 font-light">תכנון פיננסי וביטוח</p>
+            <h1 className="text-lg font-extrabold text-white tracking-tight">SEELD</h1>
+            <p className="text-[10px] text-white/30 font-light">ביטוח, חיסכון ופנסיה</p>
           </div>
         </button>
         {isMobile && (
@@ -156,7 +156,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           </button>
           <button onClick={() => navigate('/app/dashboard')} className="flex items-center gap-2 hover:opacity-80 transition-opacity min-h-[44px]">
             <SeeIDLogo size={28} />
-            <h1 className="text-lg font-extrabold" style={{ color: '#5ec6c6' }}>SeeID</h1>
+            <h1 className="text-lg font-extrabold" style={{ color: '#5ec6c6' }}>SEELD</h1>
           </button>
         </motion.div>
       )}

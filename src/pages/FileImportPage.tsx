@@ -568,19 +568,21 @@ export default function FileImportPage() {
       <PageHeader title="העלאת קבצים" subtitle="ייבוא קבצי לקוחות, הר ביטוח, דוחות ומסלקה" />
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="upload" className="gap-2"><Upload className="h-4 w-4" />העלאה וייבוא</TabsTrigger>
-          <TabsTrigger value="history" className="gap-2"><History className="h-4 w-4" />היסטוריית ייבוא</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 rounded-full bg-[#0a3d3d]/5 p-1">
+          <TabsTrigger value="upload" className="gap-2 rounded-full data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white"><Upload className="h-4 w-4" />העלאה וייבוא</TabsTrigger>
+          <TabsTrigger value="history" className="gap-2 rounded-full data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white"><History className="h-4 w-4" />היסטוריית ייבוא</TabsTrigger>
         </TabsList>
 
         <TabsContent value="upload" className="space-y-6">
           {/* Upload Area */}
-          <Card>
-            <CardHeader className="pb-3">
+          <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
+            <CardHeader className="pb-3 bg-gradient-to-b from-[#0a3d3d]/3 to-transparent">
               <div className="flex items-center justify-between flex-wrap gap-3">
                 <div>
                   <CardTitle className="text-base flex items-center gap-2">
-                    <Upload className="h-4 w-4" />
+                    <div className="w-7 h-7 rounded-lg bg-[#0a3d3d]/10 flex items-center justify-center">
+                      <Upload className="h-3.5 w-3.5 text-[#0a3d3d]" />
+                    </div>
                     העלאת קבצים
                   </CardTitle>
                   <CardDescription>גרור קבצים לכאן או לחץ לבחירה</CardDescription>
@@ -602,8 +604,8 @@ export default function FileImportPage() {
             </CardHeader>
             <CardContent>
               <div
-                className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${
-                  dragging ? 'border-primary bg-primary/5 scale-[1.01]' : 'border-border hover:border-primary/50 hover:bg-muted/30'
+                className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 ${
+                  dragging ? 'border-[#5ec6c6] bg-[#5ec6c6]/10 scale-[1.02]' : 'border-border/60 hover:border-[#5ec6c6]/50 hover:bg-[#5ec6c6]/5'
                 }`}
                 onClick={() => fileInputRef.current?.click()}
                 onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
@@ -615,7 +617,9 @@ export default function FileImportPage() {
                   if (e.dataTransfer.files.length > 0) handleFilesSelected(e.dataTransfer.files);
                 }}
               >
-                <Upload className="h-10 w-10 mx-auto text-muted-foreground mb-3" />
+                <div className="w-14 h-14 rounded-2xl bg-[#0a3d3d]/8 flex items-center justify-center mx-auto mb-3">
+                  <Upload className="h-7 w-7 text-[#0a3d3d]/60" />
+                </div>
                 <p className="text-sm font-semibold">{dragging ? 'שחרר כאן' : 'לחץ או גרור קבצים להעלאה'}</p>
                 <p className="text-xs text-muted-foreground mt-2">
                   XLSX, XLS, XML, PDF, ZIP • CustomersExport, HbResults, דוח לסוכן, קיט טרום טיפול, מסלקה, פוליסות PDF
@@ -634,10 +638,10 @@ export default function FileImportPage() {
 
           {/* File Type Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="border-primary/20 hover:border-primary/40 transition-colors cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+            <Card className="border-[#5ec6c6]/20 hover:border-[#5ec6c6]/40 transition-colors cursor-pointer rounded-2xl" onClick={() => fileInputRef.current?.click()}>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <Users className="h-4 w-4 text-primary" />
+                  <Users className="h-4 w-4 text-[#5ec6c6]" />
                   ייבוא מרובה לקוחות
                 </CardTitle>
               </CardHeader>
@@ -648,10 +652,10 @@ export default function FileImportPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-accent/20 hover:border-accent/40 transition-colors cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+            <Card className="border-[#f4a261]/20 hover:border-[#f4a261]/40 transition-colors cursor-pointer rounded-2xl" onClick={() => fileInputRef.current?.click()}>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <User className="h-4 w-4 text-accent-foreground" />
+                  <User className="h-4 w-4 text-[#f4a261]" />
                   קובץ ללקוח בודד
                 </CardTitle>
               </CardHeader>
@@ -662,10 +666,10 @@ export default function FileImportPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-secondary/20 hover:border-secondary/40 transition-colors cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+            <Card className="border-[#90be6d]/20 hover:border-[#90be6d]/40 transition-colors cursor-pointer rounded-2xl" onClick={() => fileInputRef.current?.click()}>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <FolderArchive className="h-4 w-4 text-secondary-foreground" />
+                  <FolderArchive className="h-4 w-4 text-[#90be6d]" />
                   ZIP / קיט / מסלקה
                 </CardTitle>
               </CardHeader>
@@ -679,10 +683,10 @@ export default function FileImportPage() {
 
           {/* Processing Status */}
           {uploads.length > 0 && (
-            <Card>
+            <Card className="rounded-2xl border-border/50 shadow-sm">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  {isProcessing ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileSpreadsheet className="h-4 w-4" />}
+                  {isProcessing ? <Loader2 className="h-4 w-4 animate-spin text-[#5ec6c6]" /> : <FileSpreadsheet className="h-4 w-4 text-[#0a3d3d]" />}
                   סטטוס עיבוד קבצים
                 </CardTitle>
               </CardHeader>

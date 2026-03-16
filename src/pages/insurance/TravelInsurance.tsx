@@ -111,7 +111,7 @@ const TravelInsurance = () => {
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="rounded-2xl bg-[#0a3d3d] p-8 sm:p-12 text-center space-y-6">
               <h2 className="text-2xl sm:text-3xl font-bold text-white">רכשו ביטוח נסיעות לחו״ל עכשיו</h2>
-              <p className="text-white/70 text-base sm:text-lg">רכישה מהירה ומאובטחת דרך הראל ביטוח — הסוכן שלכם ב-SeelD</p>
+              <p className="text-white/70 text-base sm:text-lg">רכישה מהירה ומאובטחת דרך הראל ביטוח — הסוכן שלכם ב-SEELD</p>
               <div className="relative inline-block">
                 <img
                   src={travelLogos}
@@ -170,7 +170,7 @@ const TravelInsurance = () => {
                   בבחירת ביטוח נסיעות, שימו לב לסכום הכיסוי הרפואי (מומלץ לפחות מיליון דולר ליעדים יקרים), חריגי הפוליסה, כיסוי ספורט אתגרי, כיסוי מצבים רפואיים קודמים, ומוקד חירום 24/7 בעברית. יש הבדלים גדולים בין פוליסות שנראות דומות.
                 </p>
                 <p>
-                  ב-SeelD אנחנו משווים עבורכם בין כל חברות הביטוח המובילות ומוצאים את הפוליסה המתאימה ביותר ליעד, למשך הנסיעה ולצרכים הספציפיים שלכם.
+                  ב-SEELD אנחנו משווים עבורכם בין כל חברות הביטוח המובילות ומוצאים את הפוליסה המתאימה ביותר ליעד, למשך הנסיעה ולצרכים הספציפיים שלכם.
                 </p>
               </div>
             </div>

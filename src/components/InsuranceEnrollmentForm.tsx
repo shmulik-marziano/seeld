@@ -420,7 +420,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
           <CheckCircle className="w-16 h-16 text-primary mx-auto mb-4" />
           <h3 className="text-xl font-bold mb-2">הפרטים נשלחו בהצלחה!</h3>
           <p className="text-muted-foreground">
-            נציג מומחה מ-SeelD ייצור איתך קשר תוך 24 שעות עם הצעה מותאמת אישית.
+            נציג מומחה מ-SEELD ייצור איתך קשר תוך 24 שעות עם הצעה מותאמת אישית.
           </p>
         </CardContent>
       </Card>

@@ -87,7 +87,7 @@ const VehicleInsurance = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 mt-6">
             <a href="#enrollment-form" className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-all min-h-[48px]">
-              להצטרפות ל-SeelD
+              להצטרפות ל-SEELD
             </a>
             <a href="#coverage" className="inline-flex items-center justify-center px-8 py-3 rounded-full border border-[#0a3d3d]/15 text-[#0a3d3d] font-semibold text-base hover:bg-[#0a3d3d]/5 transition-all min-h-[48px]">
               סוגי כיסויים
@@ -166,7 +166,7 @@ const VehicleInsurance = () => {
                   שימו לב לגובה ההשתתפות העצמית, לתנאי הפוליסה בנוגע לרכב חלופי, כיסוי שמשות, ומוסכי הסדר. בדקו אם יש הנחות לנהגים ותיקים, התקנת מערכות מיגון, או נהיגה ללא תביעות. כמו כן, חשוב לוודא שהכיסוי כולל הגנה משפטית ואובדן גמור.
                 </p>
                 <p>
-                  ב-SeelD אנחנו משווים בין כל חברות הביטוח ומציגים לכם את ההצעה המשתלמת ביותר, תוך התחשבות בכל הפרמטרים החשובים.
+                  ב-SEELD אנחנו משווים בין כל חברות הביטוח ומציגים לכם את ההצעה המשתלמת ביותר, תוך התחשבות בכל הפרמטרים החשובים.
                 </p>
               </div>
             </div>
@@ -232,7 +232,7 @@ const VehicleInsurance = () => {
             <div className="max-w-2xl mx-auto">
               <InsuranceEnrollmentForm
                 insuranceType="vehicle"
-                title="להצטרפות ל-SeelD – ביטוח רכב"
+                title="להצטרפות ל-SEELD – ביטוח רכב"
                 description="מלאו את הפרטים ונחזור אליכם עם ההצעה המשתלמת ביותר"
               />
             </div>

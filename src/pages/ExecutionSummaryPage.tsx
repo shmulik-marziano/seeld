@@ -183,11 +183,11 @@ export default function ExecutionSummaryPage() {
     <div className="p-4 md:p-6 max-w-7xl mx-auto space-y-5" dir="rtl">
       {/* Breadcrumbs */}
       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <button onClick={() => navigate('/')} className="hover:text-primary transition-colors">ראשי</button>
+        <button onClick={() => navigate('/')} className="hover:text-[#0a3d3d] transition-colors">ראשי</button>
         <span className="text-muted-foreground/50">‹</span>
-        <button onClick={() => navigate('/app/customers')} className="hover:text-primary transition-colors">לקוחות</button>
+        <button onClick={() => navigate('/app/customers')} className="hover:text-[#0a3d3d] transition-colors">לקוחות</button>
         <span className="text-muted-foreground/50">‹</span>
-        <button onClick={() => navigate(`/customers/${customerId}`)} className="hover:text-primary transition-colors">{customer.fullName}</button>
+        <button onClick={() => navigate(`/customers/${customerId}`)} className="hover:text-[#0a3d3d] transition-colors">{customer.fullName}</button>
         <span className="text-muted-foreground/50">‹</span>
         <span className="text-foreground font-medium">סיכום ביצועים</span>
       </div>
@@ -195,12 +195,12 @@ export default function ExecutionSummaryPage() {
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" onClick={() => navigate(`/customers/${customerId}`)}>
+          <Button variant="ghost" size="sm" onClick={() => navigate(`/customers/${customerId}`)} className="hover:bg-[#5ec6c6]/10">
             <ArrowRight className="h-4 w-4" />
           </Button>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-xl md:text-2xl font-bold">סיכום ביצועים</h1>
+              <h1 className="text-xl md:text-2xl font-bold text-[#0a3d3d]">סיכום ביצועים</h1>
               {activeSummary && (
                 <span className="text-xs px-2 py-1 rounded-full bg-muted font-medium">
                   #{activeSummary.summaryNumber} · {SUMMARY_STATUS_LABELS[activeSummary.status as ExecutionSummaryStatus] || activeSummary.status}
@@ -213,25 +213,25 @@ export default function ExecutionSummaryPage() {
         <div className="flex gap-2">
           {activeSummary && (
             <>
-              <Button variant="outline" size="sm" onClick={handleShareWhatsApp} className="gap-1.5 text-success border-success/30 hover:bg-success/5">
+              <Button variant="outline" size="sm" onClick={handleShareWhatsApp} className="gap-1.5 text-[#90be6d] border-[#90be6d]/30 hover:bg-[#90be6d]/5 rounded-full">
                 <MessageCircle className="h-3.5 w-3.5" />WhatsApp
               </Button>
-              <Button variant="outline" size="sm" onClick={handleShareLink} className="gap-1.5">
-                <Share2 className="h-3.5 w-3.5" />העתק לינק
+              <Button variant="outline" size="sm" onClick={handleShareLink} className="gap-1.5 rounded-full border-[#5ec6c6]/30 hover:bg-[#5ec6c6]/10">
+                <Share2 className="h-3.5 w-3.5 text-[#5ec6c6]" />העתק לינק
               </Button>
-              <Button variant="outline" size="sm" onClick={handleExportPdf} className="gap-1.5">
+              <Button variant="outline" size="sm" onClick={handleExportPdf} className="gap-1.5 rounded-full">
                 <Download className="h-3.5 w-3.5" />PDF
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setShowPresentation(true)} className="gap-1.5">
-                <Presentation className="h-3.5 w-3.5" />מצגת
+              <Button variant="outline" size="sm" onClick={() => setShowPresentation(true)} className="gap-1.5 rounded-full border-[#f4a261]/30 hover:bg-[#f4a261]/10">
+                <Presentation className="h-3.5 w-3.5 text-[#f4a261]" />מצגת
               </Button>
-              <Button variant="outline" size="sm" onClick={handleSave} disabled={saving} className="gap-1.5">
+              <Button variant="outline" size="sm" onClick={handleSave} disabled={saving} className="gap-1.5 rounded-full">
                 <Save className="h-3.5 w-3.5" />שמירה
               </Button>
             </>
           )}
           {canCreate && (
-            <Button size="sm" onClick={handleCreate} className="gap-1.5">
+            <Button size="sm" onClick={handleCreate} className="gap-1.5 rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15">
               <ClipboardCheck className="h-3.5 w-3.5" />סיכום חדש
             </Button>
           )}
@@ -280,7 +280,7 @@ export default function ExecutionSummaryPage() {
       {activeSummary && (
         <div className="space-y-5">
           {/* Status bar */}
-          <Card>
+          <Card className="rounded-2xl border-border/50 shadow-sm">
             <CardContent className="p-4">
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
                 <div>
@@ -289,19 +289,19 @@ export default function ExecutionSummaryPage() {
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">סטטוס</p>
-                  <p className="font-medium">{SUMMARY_STATUS_LABELS[activeSummary.status as ExecutionSummaryStatus]}</p>
+                  <p className="font-medium text-[#0a3d3d]">{SUMMARY_STATUS_LABELS[activeSummary.status as ExecutionSummaryStatus]}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">בוצע מלא</p>
-                  <p className="font-semibold text-success">{completedCount}/{totalItems}</p>
+                  <p className="font-semibold text-[#90be6d]">{completedCount}/{totalItems}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">בוצע חלקית</p>
-                  <p className="font-medium text-warning">{partialCount}</p>
+                  <p className="font-medium text-[#f4a261]">{partialCount}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">לא בוצע</p>
-                  <p className="font-medium text-destructive">{totalItems - completedCount - partialCount}</p>
+                  <p className="font-medium text-[#e76f51]">{totalItems - completedCount - partialCount}</p>
                 </div>
               </div>
             </CardContent>
@@ -320,7 +320,7 @@ export default function ExecutionSummaryPage() {
 
               return (
                 <motion.div key={si.id} variants={item} initial="hidden" animate="show" transition={{ delay: idx * 0.05 }}>
-                  <Card className={`transition-all ${si.executionStatus === 'fully_executed' ? 'border-success/30 bg-success/5' : si.executionStatus === 'partially_executed' ? 'border-warning/30 bg-warning/5' : ''}`}>
+                  <Card className={`transition-all rounded-2xl border-border/50 shadow-sm ${si.executionStatus === 'fully_executed' ? 'border-[#90be6d]/30 bg-[#90be6d]/5' : si.executionStatus === 'partially_executed' ? 'border-[#f4a261]/30 bg-[#f4a261]/5' : ''}`}>
                     <CardContent className="p-5 space-y-4">
                       {/* Header */}
                       <div className="flex items-start justify-between">
@@ -329,8 +329,8 @@ export default function ExecutionSummaryPage() {
                             <span className="font-bold text-sm">{rec?.title || 'המלצה'}</span>
                             {rec && <StatusBadge type="action" status={rec.actionType} />}
                             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                              si.executionStatus === 'fully_executed' ? 'bg-success/10 text-success' :
-                              si.executionStatus === 'partially_executed' ? 'bg-warning/10 text-warning' :
+                              si.executionStatus === 'fully_executed' ? 'bg-[#90be6d]/10 text-[#90be6d]' :
+                              si.executionStatus === 'partially_executed' ? 'bg-[#f4a261]/10 text-[#f4a261]' :
                               'bg-muted text-muted-foreground'
                             }`}>
                               {ITEM_STATUS_LABELS[si.executionStatus as ItemExecutionStatus]}
@@ -444,17 +444,17 @@ export default function ExecutionSummaryPage() {
 
           {/* Bottom actions */}
           <div className="flex items-center justify-between pt-2 pb-6">
-            <Button variant="outline" onClick={() => navigate(`/customers/${customerId}`)}>
+            <Button variant="outline" onClick={() => navigate(`/customers/${customerId}`)} className="rounded-full">
               <ArrowRight className="h-4 w-4 ml-1.5" />חזרה לכרטיס לקוח
             </Button>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={handleSave} disabled={saving} className="gap-1.5">
+              <Button variant="outline" onClick={handleSave} disabled={saving} className="gap-1.5 rounded-full">
                 <Save className="h-4 w-4" />שמירה
               </Button>
-              <Button variant="outline" onClick={handleExportPdf} className="gap-1.5">
+              <Button variant="outline" onClick={handleExportPdf} className="gap-1.5 rounded-full">
                 <Download className="h-4 w-4" />שמירה + PDF
               </Button>
-              <Button onClick={handleComplete} disabled={saving} className="gap-1.5">
+              <Button onClick={handleComplete} disabled={saving} className="gap-1.5 rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15">
                 <CheckCircle2 className="h-4 w-4" />סיום וסימון לקוח
               </Button>
             </div>

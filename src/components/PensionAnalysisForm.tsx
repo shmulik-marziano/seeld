@@ -181,7 +181,7 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
           <CheckCircle className="w-16 h-16 text-primary mx-auto mb-4" />
           <h3 className="text-xl font-bold mb-2">הפרטים נשלחו בהצלחה!</h3>
           <p className="text-muted-foreground">
-            יועץ פנסיוני מוסמך מ-SeelD ייצור איתך קשר תוך 24 שעות לניתוח התיק שלך.
+            יועץ פנסיוני מוסמך מ-SEELD ייצור איתך קשר תוך 24 שעות לניתוח התיק שלך.
           </p>
         </CardContent>
       </Card>

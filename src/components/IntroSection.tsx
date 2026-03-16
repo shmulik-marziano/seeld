@@ -194,8 +194,8 @@ const IntroSection = () => {
           </div>
           <div className="flex items-center gap-2">
             <FileText className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-muted-foreground/40" />
-            <span className="text-[10px] sm:text-[11px] text-muted-foreground/50 font-mono tracking-wider hidden sm:inline">SeelD — סורק תיק לקוח</span>
-            <span className="text-[10px] text-muted-foreground/50 font-mono tracking-wider sm:hidden">SeelD Scanner</span>
+            <span className="text-[10px] sm:text-[11px] text-muted-foreground/50 font-mono tracking-wider hidden sm:inline">SEELD — סורק תיק לקוח</span>
+            <span className="text-[10px] text-muted-foreground/50 font-mono tracking-wider sm:hidden">SEELD Scanner</span>
           </div>
         </div>
 

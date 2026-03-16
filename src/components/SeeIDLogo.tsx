@@ -86,7 +86,7 @@ const SeeIDLogo = ({ className = "", size = "md" }: { className?: string; size?:
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 0.4, ease: "easeOut" }}
           >
-            SeelD
+            SEELD
           </motion.span>
           <motion.span
             className={`${s.sub} text-muted-foreground/60 font-medium mt-0.5`}
@@ -94,7 +94,7 @@ const SeeIDLogo = ({ className = "", size = "md" }: { className?: string; size?:
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.4 }}
           >
-            תכנון פיננסי וביטוח
+            ביטוח, חיסכון ופנסיה
           </motion.span>
         </div>
       </motion.div>

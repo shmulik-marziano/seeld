@@ -29,7 +29,7 @@ const Creativity = () => {
           </p>
           <Link to="/contact">
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-10 py-6 text-lg hover:scale-105 transition-all animate-slide-up stagger-2">
-              להצטרפות ל-SeelD
+              להצטרפות ל-SEELD
             </Button>
           </Link>
         </div>
@@ -59,7 +59,7 @@ const Creativity = () => {
 
         {/* Why Choose Us */}
         <section className="mb-16 rounded-[2.5rem] bg-muted p-8 md:p-12">
-          <h2 className="text-3xl font-bold mb-8 text-center">למה לבחור ב-SeelD?</h2>
+          <h2 className="text-3xl font-bold mb-8 text-center">למה לבחור ב-SEELD?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="text-4xl font-bold text-primary mb-2">מגוון</div>

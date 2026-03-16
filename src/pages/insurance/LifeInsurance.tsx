@@ -82,7 +82,7 @@ const LifeInsurance = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 mt-6">
             <a href="#contact-form" className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-all min-h-[48px]">
-              להצטרפות ל-SeelD
+              להצטרפות ל-SEELD
             </a>
             <a href="#coverage" className="inline-flex items-center justify-center px-8 py-3 rounded-full border border-[#0a3d3d]/15 text-[#0a3d3d] font-semibold text-base hover:bg-[#0a3d3d]/5 transition-all min-h-[48px]">
               סוגי כיסויים
@@ -196,7 +196,7 @@ const LifeInsurance = () => {
                   בבחירת ביטוח חיים יש לשים לב לסכום הביטוח (שצריך לכסות את ההתחייבויות הפיננסיות של המשפחה), תקופת הביטוח, חריגים בפוליסה, ונספחים כמו כיסוי אובדן כושר עבודה ונכות. חשוב גם לעדכן את הפוליסה בכל שינוי משמעותי בחיים.
                 </p>
                 <p>
-                  ב-SeelD אנחנו מבצעים עבורכם השוואה מקיפה בין כל חברות הביטוח, מוודאים שסכום הביטוח מתאים לצרכים שלכם, ומלווים אתכם לאורך כל הדרך.
+                  ב-SEELD אנחנו מבצעים עבורכם השוואה מקיפה בין כל חברות הביטוח, מוודאים שסכום הביטוח מתאים לצרכים שלכם, ומלווים אתכם לאורך כל הדרך.
                 </p>
               </div>
             </div>

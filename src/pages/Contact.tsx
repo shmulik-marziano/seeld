@@ -71,10 +71,10 @@ const Contact = () => {
       {/* Hero Section - Bold design */}
       <section className="bg-[#f8f9fc] relative overflow-hidden">
         {/* Solid colored circles */}
-        <div className="absolute top-[15%] left-[8%] w-[80px] h-[80px] rounded-full bg-[#5ec6c6]" />
-        <div className="absolute bottom-[20%] right-[5%] w-[60px] h-[60px] rounded-full bg-[#e76f51]" />
-        <div className="absolute top-[50%] right-[20%] w-[35px] h-[35px] rounded-full bg-[#f4a261]" />
-        <div className="absolute bottom-[30%] left-[15%] w-[25px] h-[25px] rounded-full bg-[#90be6d]" />
+        <div className="absolute top-[15%] left-[8%] w-[50px] h-[50px] sm:w-[80px] sm:h-[80px] rounded-full bg-[#5ec6c6] opacity-20 sm:opacity-100" />
+        <div className="absolute bottom-[20%] right-[5%] w-[40px] h-[40px] sm:w-[60px] sm:h-[60px] rounded-full bg-[#e76f51] opacity-20 sm:opacity-100" />
+        <div className="absolute top-[50%] right-[20%] w-[25px] h-[25px] sm:w-[35px] sm:h-[35px] rounded-full bg-[#f4a261] hidden sm:block" />
+        <div className="absolute bottom-[30%] left-[15%] w-[20px] h-[20px] sm:w-[25px] sm:h-[25px] rounded-full bg-[#90be6d] hidden sm:block" />
 
         {/* Dashed curved line */}
         <div className="absolute top-8 right-[15%] hidden lg:block">
@@ -84,8 +84,8 @@ const Contact = () => {
           </svg>
         </div>
 
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20 sm:py-28 relative text-center">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-28 relative text-center">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
             צרו <span className="text-[#5ec6c6]">קשר</span>
           </h1>
           <p className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
@@ -173,7 +173,7 @@ const Contact = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="bg-[#0a3d3d] text-white rounded-full px-10 py-4 font-semibold text-base hover:bg-[#0d4a4a] transition-colors shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] flex items-center justify-center gap-2"
+                className="w-full sm:w-auto bg-[#0a3d3d] text-white rounded-full px-10 py-4 font-semibold text-base hover:bg-[#0d4a4a] transition-colors shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] flex items-center justify-center gap-2"
               >
                 {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
               </button>

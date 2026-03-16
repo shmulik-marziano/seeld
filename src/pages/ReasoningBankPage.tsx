@@ -221,8 +221,8 @@ export default function ReasoningBankPage() {
               <Input value={form.tagsInput} onChange={e => setForm(p => ({ ...p, tagsInput: e.target.value }))} placeholder="דמי ניהול, מסלול השקעה, כפל כיסויים" />
             </div>
             <div className="flex gap-3 pt-2">
-              <Button onClick={handleSave}>{editEntry ? 'שמור שינויים' : 'הוסף נימוק'}</Button>
-              <Button variant="outline" onClick={() => setModalOpen(false)}>ביטול</Button>
+              <Button onClick={handleSave} className="rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90">{editEntry ? 'שמור שינויים' : 'הוסף נימוק'}</Button>
+              <Button variant="outline" onClick={() => setModalOpen(false)} className="rounded-full">ביטול</Button>
             </div>
           </div>
         </DialogContent>

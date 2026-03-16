@@ -74,7 +74,7 @@ const HomeInsurance = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 mt-6">
             <a href="#enrollment-form" className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-all min-h-[48px]">
-              להצטרפות ל-SeelD
+              להצטרפות ל-SEELD
             </a>
             <a href="#coverage" className="inline-flex items-center justify-center px-8 py-3 rounded-full border border-[#0a3d3d]/15 text-[#0a3d3d] font-semibold text-base hover:bg-[#0a3d3d]/5 transition-all min-h-[48px]">
               סוגי כיסויים
@@ -153,7 +153,7 @@ const HomeInsurance = () => {
                   וודאו שסכום ביטוח המבנה תואם את עלות הבנייה מחדש (לא שווי השוק), ושסכום ביטוח התכולה מכסה את שווי כל הרכוש בדירה. שימו לב להחרגות כמו נזקי רטיבות כרוניים, בלאי טבעי, ונזקים שנגרמו ברשלנות. בדקו גם את גובה ההשתתפות העצמית ואת הכיסוי לצד שלישי.
                 </p>
                 <p>
-                  ב-SeelD נעזור לכם לבנות פוליסה מותאמת אישית שמכסה בדיוק את מה שאתם צריכים, במחיר הטוב ביותר בשוק.
+                  ב-SEELD נעזור לכם לבנות פוליסה מותאמת אישית שמכסה בדיוק את מה שאתם צריכים, במחיר הטוב ביותר בשוק.
                 </p>
               </div>
             </div>

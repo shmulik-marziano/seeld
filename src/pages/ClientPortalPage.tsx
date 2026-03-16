@@ -852,7 +852,7 @@ export default function ClientPortalPage() {
               <SeeIDLogo size={36} />
             </div>
             <div>
-              <p className="text-[11px] font-semibold tracking-widest uppercase text-[hsl(var(--accent))]">SeeID</p>
+              <p className="text-[11px] font-semibold tracking-widest uppercase text-[hsl(var(--accent))]">SEELD</p>
               <h1 className="text-xl font-extrabold text-white">שלום, {customer?.first_name} 👋</h1>
               <p className="text-xs mt-0.5 text-white/50">הנה סקירת המצב וההמלצות שלך</p>
             </div>

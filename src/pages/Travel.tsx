@@ -37,10 +37,10 @@ const Travel = () => {
 
         <section className="mt-16 rounded-2xl bg-card p-8 md:p-12">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-6">הצטרפו ל-SeelD תוך דקות</h2>
+            <h2 className="text-3xl font-bold mb-6">הצטרפו ל-SEELD תוך דקות</h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
-                ב-SeelD אנחנו מאמינים שביטוח צריך להיות פשוט ונגיש. לכן פיתחנו תהליך 
+                ב-SEELD אנחנו מאמינים שביטוח צריך להיות פשוט ונגיש. לכן פיתחנו תהליך 
                 מהיר וקל לקבלת הצעות מחיר לביטוח רכב ודירה.
               </p>
               <p>

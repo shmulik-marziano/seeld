@@ -874,7 +874,7 @@ const Index = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-6 gap-4 relative z-10">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 relative z-10">
                   {processSteps.map((step, i) => (
                     <motion.div
                       key={step.number}
@@ -886,7 +886,7 @@ const Index = () => {
                     >
                       {/* Numbered circle */}
                       <motion.div
-                        className="w-[104px] h-[104px] rounded-full flex items-center justify-center mb-5 border-[3px] border-white shadow-xl relative"
+                        className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] lg:w-[104px] lg:h-[104px] rounded-full flex items-center justify-center mb-5 border-[3px] border-white shadow-xl relative"
                         style={{ backgroundColor: step.color, boxShadow: `0 8px 30px ${step.color}40` }}
                         whileHover={{ scale: 1.1 }}
                         transition={{ type: "spring", stiffness: 300 }}

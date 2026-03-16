@@ -284,7 +284,7 @@ export default function AuthPage() {
         >
           <SeeIDLogo size={100} />
           <div className="space-y-3">
-            <h2 className="text-4xl font-extrabold text-[#0a3d3d] tracking-tight">SeeID</h2>
+            <h2 className="text-4xl font-extrabold text-[#0a3d3d] tracking-tight">SEELD</h2>
             <p className="text-lg text-gray-500 font-light">תכנון פיננסי וביטוח</p>
           </div>
           <div className="pt-4 space-y-2.5">
@@ -327,7 +327,7 @@ export default function AuthPage() {
               <SeeIDLogo size={50} />
             </div>
             <div className="text-center">
-              <h2 className="text-xl font-extrabold text-foreground">SeeID</h2>
+              <h2 className="text-xl font-extrabold text-foreground">SEELD</h2>
               <p className="text-xs text-muted-foreground">תכנון פיננסי וביטוח</p>
             </div>
           </motion.div>

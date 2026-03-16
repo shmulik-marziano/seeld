@@ -200,7 +200,7 @@ function ThemeSettingsPanel({
               value={theme.agencyName}
               onChange={e => onChange({ ...theme, agencyName: e.target.value })}
               className="h-8 bg-white/10 border-white/20 text-white text-xs"
-              placeholder="SeeID"
+              placeholder="SEELD"
             />
           </div>
           <div className="space-y-2">

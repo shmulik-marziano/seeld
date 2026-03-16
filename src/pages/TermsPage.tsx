@@ -13,7 +13,7 @@ export default function TermsPage() {
       <section>
         <h2 className="text-lg font-bold text-[#0a3d3d] mb-3">1. כללי</h2>
         <p>
-          ברוכים הבאים למערכת SeeID (להלן: "המערכת"), המופעלת על ידי חברת SeelD (להלן: "החברה").
+          ברוכים הבאים למערכת SEELD (להלן: "המערכת"), המופעלת על ידי חברת SEELD (להלן: "החברה").
           השימוש במערכת כפוף לתנאי שימוש אלו. בעצם הגישה למערכת ו/או השימוש בה, הנך מאשר/ת כי
           קראת והבנת תנאים אלו ומסכים/ה להם במלואם.
         </p>
@@ -22,7 +22,7 @@ export default function TermsPage() {
       <section>
         <h2 className="text-lg font-bold text-[#0a3d3d] mb-3">2. הגדרות</h2>
         <ul className="list-disc pr-6 space-y-1">
-          <li><strong>"המערכת"</strong> — פלטפורמת SeeID לניהול לקוחות, המלצות ביטוח פנסיוניות וסיכומי ביצועים.</li>
+          <li><strong>"המערכת"</strong> — פלטפורמת SEELD לניהול לקוחות, המלצות ביטוח פנסיוניות וסיכומי ביצועים.</li>
           <li><strong>"משתמש"</strong> — סוכן ביטוח, יועץ פנסיוני או גורם מורשה אחר המשתמש במערכת.</li>
           <li><strong>"לקוח קצה"</strong> — אדם שפרטיו מנוהלים במערכת על ידי המשתמש.</li>
           <li><strong>"תוכן"</strong> — כל מידע, נתון, מסמך, המלצה או דוח המוזן או נוצר במערכת.</li>
@@ -144,7 +144,7 @@ export default function TermsPage() {
       <hr className="border-gray-100" />
 
       <p className="text-xs text-gray-400 text-center">
-        &copy; {new Date().getFullYear()} SeelD — כל הזכויות שמורות. תנאי שימוש אלו מהווים את ההסכם
+        &copy; {new Date().getFullYear()} SEELD — כל הזכויות שמורות. תנאי שימוש אלו מהווים את ההסכם
         המלא בין המשתמש לחברה בנוגע לשימוש במערכת.
       </p>
     </div>

@@ -13,7 +13,7 @@ const StyleGuide = () => {
             מדריך עיצוב
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed animate-slide-up stagger-1">
-            הצגה של מערכת העיצוב, טיפוגרפיה ודפוסי רכיבים של SeelD.
+            הצגה של מערכת העיצוב, טיפוגרפיה ודפוסי רכיבים של SEELD.
           </p>
         </div>
 

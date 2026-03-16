@@ -841,7 +841,7 @@ export default function Onboarding() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#5ec6c6]/30 bg-[#5ec6c6]/5 text-xs font-semibold tracking-widest uppercase text-[#0a3d3d]">
               <div className="w-2 h-2 rounded-full bg-[#5ec6c6]" />
-              SeelD — פתיחת תיק לקוח
+              SEELD — פתיחת תיק לקוח
               <Sparkles className="w-3.5 h-3.5 text-[#5ec6c6]" />
             </div>
 

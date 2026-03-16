@@ -81,7 +81,7 @@ const TestimonialsSection = () => {
               <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-primary/40" />
             </div>
             <div className="flex-1 text-center">
-              <span className="text-[10px] sm:text-[11px] text-muted-foreground/60 font-mono">SeelD Scanner v2.0</span>
+              <span className="text-[10px] sm:text-[11px] text-muted-foreground/60 font-mono">SEELD Scanner v2.0</span>
             </div>
             <motion.div
               animate={isScanning ? { opacity: [1, 0.3, 1] } : { opacity: 1 }}

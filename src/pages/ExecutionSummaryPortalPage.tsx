@@ -236,7 +236,7 @@ export default function ExecutionSummaryPortalPage() {
 
         {/* Footer */}
         <div className="text-center py-6 text-xs text-muted-foreground/50">
-          <p>מופק על ידי SeeID · {new Date(summary?.created_at || '').toLocaleDateString('he-IL')}</p>
+          <p>מופק על ידי SEELD · {new Date(summary?.created_at || '').toLocaleDateString('he-IL')}</p>
         </div>
       </div>
     </div>

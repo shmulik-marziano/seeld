@@ -46,7 +46,7 @@ function SlideHeader({ title, subtitle, pageNum }: { title: string; subtitle?: s
 
 function SlideFooter({ agencyName, date }: { agencyName?: string; date?: string }) {
   const t = useSlideTheme();
-  const displayName = t.footerText || agencyName || t.agencyName || 'SeeID';
+  const displayName = t.footerText || agencyName || t.agencyName || 'SEELD';
   return (
     <div className="mt-auto pt-6 flex items-center justify-between text-[18px]" style={{ borderTop: `1px solid ${GRAY_200}`, color: GRAY_500 }}>
       <span>{displayName}</span>
@@ -344,7 +344,7 @@ function ThankYouSlideContent({ agencyName }: { agencyName?: string }) {
       )}
       <h1 className="text-[72px] font-extrabold" style={{ color: GRAY_900 }}>תודה רבה!</h1>
       <p className="text-[32px] mt-6" style={{ color: GRAY_500 }}>
-        {t.agencyName || agencyName || 'SeeID'} · תכנון פיננסי וביטוח
+        {t.agencyName || agencyName || 'SEELD'} · ביטוח, חיסכון ופנסיה
       </p>
       <p className="text-[24px] mt-4" style={{ color: GRAY_500 }}>{new Date().toLocaleDateString('he-IL')}</p>
     </SlideLayout>

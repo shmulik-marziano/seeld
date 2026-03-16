@@ -8,7 +8,7 @@ interface LogoDotsDecorationProps {
 }
 
 /**
- * Decorative scattered dots inspired by the SeelD logo's dot crown pattern.
+ * Decorative scattered dots inspired by the SEELD logo's dot crown pattern.
  * Use as section decorations, backgrounds, or dividers.
  */
 export const LogoDotsDecoration = ({ className = "", size = 120, animate = true }: LogoDotsDecorationProps) => {

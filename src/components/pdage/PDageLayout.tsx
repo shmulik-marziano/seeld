@@ -79,7 +79,7 @@ export function PDageLayout({ children }: { children: ReactNode }) {
 
       <div className="p-3 border-t border-sidebar-border space-y-1">
         <Button variant="ghost" size="sm" onClick={() => navigate('/app/dashboard')} className="w-full justify-start gap-2 text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 text-xs">
-          <ArrowRight className="h-3.5 w-3.5" />חזרה ל-SeeID
+          <ArrowRight className="h-3.5 w-3.5" />חזרה ל-SEELD
         </Button>
         <Button variant="ghost" size="sm" onClick={handleSignOut} className="w-full justify-start gap-2 text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50">
           <LogOut className="h-3.5 w-3.5" />התנתק

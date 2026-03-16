@@ -1207,7 +1207,7 @@ export default function NewRecommendationPage() {
               downloadRecommendationPdf({
                 customerName: selectedCustomer?.fullName || '',
                 customerId: selectedCustomer?.idNumber || '',
-                agencyName: 'SeelD',
+                agencyName: 'SEELD',
                 products: customerProducts.map(p => ({
                   company: p.company, productType: p.productType, category: p.category,
                   policyNumber: p.policyNumber, monthlyPremium: p.monthlyPremium,

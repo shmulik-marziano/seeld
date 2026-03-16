@@ -139,8 +139,12 @@ export default function DashboardPage() {
       <div className="space-y-6 px-1 sm:px-0" dir="rtl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <div className="max-w-2xl mx-auto py-6 sm:py-12">
-            <Card className="text-center py-10 sm:py-16 border-0 shadow-lg rounded-2xl relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#5ec6c6]/[0.04] via-transparent to-[#f4a261]/[0.04]" />
+            <Card className="text-center py-10 sm:py-16 border border-gray-100 shadow-lg rounded-3xl relative overflow-hidden bg-[#f8f9fc]">
+              {/* Decorative circles like the landing page */}
+              <div className="absolute top-6 right-8 w-16 h-16 rounded-full bg-[#5ec6c6] opacity-15" />
+              <div className="absolute top-20 right-24 w-10 h-10 rounded-full bg-[#e76f51] opacity-15" />
+              <div className="absolute bottom-10 left-12 w-12 h-12 rounded-full bg-[#f4a261] opacity-15" />
+              <div className="absolute bottom-20 left-28 w-8 h-8 rounded-full bg-[#90be6d] opacity-15" />
               <CardContent className="flex flex-col items-center gap-5 sm:gap-6 relative z-10 px-4 sm:px-6">
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}

@@ -13,7 +13,7 @@ export default function PrivacyPage() {
       <section className="space-y-3">
         <h2 className="text-lg font-bold text-[#0a3d3d]">1. כללי</h2>
         <p>
-          מערכת SeeID (להלן: "המערכת") מופעלת על ידי חברת SeeID בע"מ (להלן: "החברה").
+          מערכת SEELD (להלן: "המערכת") מופעלת על ידי חברת SEELD בע"מ (להלן: "החברה").
           מדיניות פרטיות זו מתארת כיצד אנו אוספים, משתמשים, מאחסנים ומגנים על מידע אישי
           של משתמשי המערכת, לרבות סוכני ביטוח, יועצים פיננסיים ולקוחות קצה.
         </p>
@@ -142,7 +142,7 @@ export default function PrivacyPage() {
           ניתן לפנות אלינו:
         </p>
         <div className="bg-[#f8f9fc] rounded-xl p-4 space-y-1">
-          <p><strong className="text-[#0a3d3d]">SeeID בע"מ</strong></p>
+          <p><strong className="text-[#0a3d3d]">SEELD בע"מ</strong></p>
           <p>דואר אלקטרוני: info@seeld-ins.co.il</p>
           <p>אתר: seeld-ins.co.il</p>
         </div>
@@ -151,7 +151,7 @@ export default function PrivacyPage() {
       <hr className="border-gray-100" />
 
       <div className="text-center text-xs text-gray-400 pt-4">
-        <p>&copy; {new Date().getFullYear()} SeeID — כל הזכויות שמורות.</p>
+        <p>&copy; {new Date().getFullYear()} SEELD — כל הזכויות שמורות.</p>
       </div>
     </div>
   );

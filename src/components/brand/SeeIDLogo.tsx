@@ -57,7 +57,7 @@ export function SeeIDLogo({ size = 40, showText = false, showSubtitle = false, c
             letterSpacing: '-0.02em',
           }}
         >
-          SeeID
+          SEELD
         </span>
       )}
 
@@ -70,7 +70,7 @@ export function SeeIDLogo({ size = 40, showText = false, showSubtitle = false, c
             letterSpacing: '0.02em',
           }}
         >
-          תכנון פיננסי וביטוח
+          ביטוח, חיסכון ופנסיה
         </span>
       )}
     </div>
