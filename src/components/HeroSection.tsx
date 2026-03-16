@@ -42,7 +42,7 @@ const HeroSection = () => {
             >
               <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#0a3d3d]/[0.06] border border-[#0a3d3d]/10 text-sm text-[#0a3d3d] font-medium">
                 <span className="w-2 h-2 rounded-full bg-[#5ec6c6] animate-pulse" />
-                חלק מבית עמיתים הון
+                SEELD — סוכנות לפיננסים וביטוח
               </span>
             </motion.div>
 

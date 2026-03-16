@@ -142,7 +142,7 @@ const Footer = () => {
         <div className="pt-6 border-t border-white/10">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-xs text-white/30">
-              &copy; {new Date().getFullYear()} SEELD — חלק מבית עמיתים הון, סוכנות ביטוח ופיננסים. כל הזכויות שמורות.
+              &copy; {new Date().getFullYear()} SEELD — סוכנות לפיננסים וביטוח | מבית עמיתים הון. כל הזכויות שמורות.
             </p>
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-2 text-xs text-white/30">
               <Link to="/privacy" className="hover:text-white/60 transition-colors">מדיניות פרטיות</Link>

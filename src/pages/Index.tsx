@@ -40,8 +40,8 @@ const whySeeld = [
   },
   {
     icon: Handshake,
-    title: "חלק מבית עמיתים הון",
-    description: "סוכנות ביטוח ופיננסים מבוססת עם מוניטין ארוך שנים. אתם בידיים טובות.",
+    title: "סוכנות מבוססת ומוכרת",
+    description: "סוכנות ביטוח ופיננסים עם מוניטין ארוך שנים, מפוקחת ומורשית. אתם בידיים טובות.",
     accent: "#f4a261",
   },
   {
@@ -128,7 +128,7 @@ const faqItems = [
 
 const trustPoints = [
   { icon: Award, title: "רישיון סוכן ביטוח פנסיוני", description: "מורשה ומפוקח ע״י רשות שוק ההון", accent: "#5ec6c6" },
-  { icon: Building2, title: "חלק מבית עמיתים הון", description: "סוכנות ביטוח ופיננסים מבוססת ומוכרת", accent: "#f4a261" },
+  { icon: Building2, title: "סוכנות מבוססת ומוכרת", description: "SEELD — סוכנות לפיננסים וביטוח, מפוקחת ומורשית", accent: "#f4a261" },
   { icon: UserCheck, title: "שירות אישי ונגיש", description: "מענה מהיר, ליווי צמוד ויחס אנושי", accent: "#90be6d" },
   { icon: Scale, title: "אובייקטיביות מלאה", description: "עבודה מול כל חברות הביטוח — ההמלצה הכי טובה עבורכם", accent: "#e76f51" },
 ];
@@ -199,8 +199,8 @@ const RegulatoryBadgesBar = () => (
           { icon: Handshake, text: "חברים בלשכת סוכני\nהביטוח בישראל", color: "#90be6d" },
         ].map((item, i) => (
           <div key={i} className="flex flex-col items-center gap-3">
-            <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ backgroundColor: `${item.color}15`, border: `1px solid ${item.color}30` }}>
-              <item.icon className="w-6 h-6" style={{ color: item.color }} />
+            <div className="w-14 h-14 rounded-full flex items-center justify-center shadow-md" style={{ backgroundColor: item.color, boxShadow: `0 4px 16px ${item.color}30` }}>
+              <item.icon className="w-6 h-6 text-white" />
             </div>
             <p className="text-white/80 text-sm font-medium leading-snug whitespace-pre-line">
               {item.text}
@@ -387,12 +387,12 @@ const Index = () => {
                     className="flex flex-col items-center gap-3 py-5 px-2 rounded-2xl hover:bg-[#f8f9fc] transition-all duration-200 group"
                   >
                     <div
-                      className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-200 group-hover:shadow-md group-hover:scale-105"
-                      style={{ backgroundColor: `${action.color}15` }}
+                      className="w-16 h-16 rounded-full flex items-center justify-center transition-all duration-200 group-hover:shadow-lg group-hover:scale-110 shadow-md"
+                      style={{ backgroundColor: action.color, boxShadow: `0 6px 20px ${action.color}35` }}
                     >
-                      <action.icon className="w-6 h-6" style={{ color: action.color }} />
+                      <action.icon className="w-7 h-7 text-white" />
                     </div>
-                    <span className="text-xs font-bold text-[#0a3d3d]/60 group-hover:text-[#0a3d3d] transition-colors text-center leading-tight">
+                    <span className="text-xs font-bold text-[#0a3d3d]/70 group-hover:text-[#0a3d3d] transition-colors text-center leading-tight">
                       {action.label}
                     </span>
                   </Link>
@@ -424,19 +424,23 @@ const Index = () => {
                   whileHover={{ y: -6 }}
                   transition={{ duration: 0.25 }}
                 >
-                  {/* Colored accent dot */}
+                  {/* Solid colored accent circle at top-left */}
                   <div
-                    className="absolute top-6 left-6 w-3 h-3 rounded-full opacity-60 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-5 left-5 w-5 h-5 rounded-full opacity-80 group-hover:opacity-100 group-hover:scale-125 transition-all"
                     style={{ backgroundColor: item.accent }}
                   />
+                  {/* Small dashed connector from circle to icon */}
+                  <svg className="absolute top-[28px] left-[38px] w-[30px] h-[30px]" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+                    <path d="M0,2 C10,2 20,15 28,28" stroke={item.accent} strokeWidth="1.5" strokeDasharray="4 3" strokeLinecap="round" opacity="0.3"/>
+                  </svg>
                   <div className="relative">
                     <div
-                      className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all"
-                      style={{ backgroundColor: `${item.accent}12` }}
+                      className="w-16 h-16 rounded-full flex items-center justify-center mb-6 transition-all shadow-md"
+                      style={{ backgroundColor: item.accent, boxShadow: `0 6px 20px ${item.accent}30` }}
                     >
-                      <item.icon className="w-6 h-6" style={{ color: item.accent }} />
+                      <item.icon className="w-7 h-7 text-white" />
                     </div>
-                    <h3 className="text-lg font-extrabold mb-3 text-[#0a3d3d] group-hover:text-[#0a3d3d] transition-colors">
+                    <h3 className="text-xl font-extrabold mb-3 text-[#0a3d3d] group-hover:text-[#0a3d3d] transition-colors">
                       {item.title}
                     </h3>
                     <p className="text-sm text-[#0a3d3d]/45 leading-relaxed">
@@ -456,10 +460,13 @@ const Index = () => {
         <section className="bg-[#f8f9fc]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
             <ScrollReveal>
-              <div className="text-center mb-14 sm:mb-20">
+              <div className="text-center mb-14 sm:mb-20 relative">
+                {/* Decorative solid circles */}
+                <div className="absolute top-0 right-[10%] w-6 h-6 rounded-full bg-[#e76f51] opacity-20 hidden sm:block" />
+                <div className="absolute top-8 left-[12%] w-4 h-4 rounded-full bg-[#5ec6c6] opacity-25 hidden sm:block" />
                 <SectionLabel>INSURANCE</SectionLabel>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                  ביטוח — הגנה מקיפה
+                  ביטוח — <span className="text-[#e76f51]">הגנה מקיפה</span>
                 </h2>
                 <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                   מגוון פתרונות ביטוח מקיפים לכל תחומי החיים — הכל במקום אחד
@@ -497,12 +504,12 @@ const Index = () => {
                       }}
                     >
                       <div
-                        className="w-11 h-11 rounded-xl flex items-center justify-center mb-3 transition-all"
-                        style={{ backgroundColor: `${accentColors[i % accentColors.length]}12` }}
+                        className="w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-all shadow-sm"
+                        style={{ backgroundColor: accentColors[i % accentColors.length], boxShadow: `0 4px 14px ${accentColors[i % accentColors.length]}25` }}
                       >
-                        <item.icon className="w-5 h-5" style={{ color: accentColors[i % accentColors.length] }} />
+                        <item.icon className="w-5 h-5 text-white" />
                       </div>
-                      <h3 className="text-sm font-bold mb-1 text-[#0a3d3d] group-hover:text-[#0a3d3d] transition-colors">
+                      <h3 className="text-sm font-extrabold mb-1 text-[#0a3d3d] group-hover:text-[#0a3d3d] transition-colors">
                         {item.title}
                       </h3>
                       <p className="text-xs text-[#0a3d3d]/40">{item.description}</p>
@@ -532,10 +539,13 @@ const Index = () => {
         {/* 6. SAVINGS / PENSION GRID */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
           <ScrollReveal>
-            <div className="text-center mb-14 sm:mb-20">
+            <div className="text-center mb-14 sm:mb-20 relative">
+              {/* Decorative solid circles */}
+              <div className="absolute top-2 left-[8%] w-5 h-5 rounded-full bg-[#90be6d] opacity-25 hidden sm:block" />
+              <div className="absolute top-10 right-[15%] w-3 h-3 rounded-full bg-[#f4a261] opacity-20 hidden sm:block" />
               <SectionLabel>SAVINGS & PENSION</SectionLabel>
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                חיסכון ופנסיה
+                חיסכון <span className="text-[#90be6d]">ופנסיה</span>
               </h2>
               <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                 בניית עתיד פיננסי חזק — קרנות פנסיה, חיסכון, השקעות ותכנון לפרישה
@@ -560,12 +570,12 @@ const Index = () => {
                     transition={{ duration: 0.2 }}
                   >
                     <div
-                      className="w-11 h-11 rounded-xl flex items-center justify-center mb-3 transition-all"
-                      style={{ backgroundColor: `${accentColors[i % accentColors.length]}12` }}
+                      className="w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-all shadow-sm"
+                      style={{ backgroundColor: accentColors[i % accentColors.length], boxShadow: `0 4px 14px ${accentColors[i % accentColors.length]}25` }}
                     >
-                      <item.icon className="w-5 h-5" style={{ color: accentColors[i % accentColors.length] }} />
+                      <item.icon className="w-5 h-5 text-white" />
                     </div>
-                    <h3 className="text-sm font-bold mb-1 text-[#0a3d3d] transition-colors">
+                    <h3 className="text-sm font-extrabold mb-1 text-[#0a3d3d] transition-colors">
                       {item.title}
                     </h3>
                     <p className="text-xs text-[#0a3d3d]/40">{item.description}</p>
@@ -583,10 +593,12 @@ const Index = () => {
         <section className="bg-[#f8f9fc]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
             <ScrollReveal>
-              <div className="text-center mb-14 sm:mb-20">
+              <div className="text-center mb-14 sm:mb-20 relative">
+                <div className="absolute top-0 right-[12%] w-5 h-5 rounded-full bg-[#6c63ff] opacity-20 hidden sm:block" />
+                <div className="absolute top-12 left-[10%] w-4 h-4 rounded-full bg-[#f4a261] opacity-20 hidden sm:block" />
                 <SectionLabel>TOOLS</SectionLabel>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                  המחשבונים שלנו
+                  <span className="text-[#6c63ff]">המחשבונים</span> שלנו
                 </h2>
                 <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                   כלים חכמים שיעזרו לכם לקבל החלטות פיננסיות מושכלות
@@ -604,14 +616,16 @@ const Index = () => {
                       transition={{ duration: 0.25 }}
                     >
                       {/* Colored top bar */}
-                      <div className="absolute top-0 left-0 right-0 h-1 transition-all group-hover:h-1.5" style={{ backgroundColor: calc.color }} />
+                      <div className="absolute top-0 left-0 right-0 h-1.5 transition-all group-hover:h-2" style={{ backgroundColor: calc.color }} />
+                      {/* Decorative small circle accent */}
+                      <div className="absolute top-4 left-4 w-4 h-4 rounded-full opacity-30 group-hover:opacity-50 transition-opacity" style={{ backgroundColor: calc.color }} />
                       <motion.div
-                        className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 relative"
-                        style={{ backgroundColor: `${calc.color}12` }}
+                        className="w-16 h-16 rounded-full flex items-center justify-center mb-6 relative shadow-md"
+                        style={{ backgroundColor: calc.color, boxShadow: `0 6px 20px ${calc.color}30` }}
                         whileHover={{ rotate: [0, -5, 5, 0] }}
                         transition={{ duration: 0.5 }}
                       >
-                        <calc.icon className="w-7 h-7" style={{ color: calc.color }} />
+                        <calc.icon className="w-7 h-7 text-white" />
                       </motion.div>
                       <h3 className="text-lg font-extrabold text-[#0a3d3d] mb-2 relative">{calc.title}</h3>
                       <p className="text-sm text-[#0a3d3d]/40 leading-relaxed mb-6 flex-1 relative">{calc.description}</p>
@@ -633,10 +647,11 @@ const Index = () => {
         {/* 8. PARTNERS - Clean badge row */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
           <ScrollReveal>
-            <div className="text-center mb-12 sm:mb-16">
+            <div className="text-center mb-12 sm:mb-16 relative">
+              <div className="absolute top-1 left-[15%] w-4 h-4 rounded-full bg-[#5ec6c6] opacity-25 hidden sm:block" />
               <SectionLabel>PARTNERS</SectionLabel>
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                עובדים עם מיטב החברות
+                עובדים עם <span className="text-[#5ec6c6]">מיטב החברות</span>
               </h2>
               <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                 גישה לכל חברות הביטוח והפנסיה המובילות בישראל
@@ -682,7 +697,7 @@ const Index = () => {
                   </div>
                   <p className="text-white/45 text-base sm:text-lg leading-relaxed">
                     שמוליק מרציאנו, סוכן ביטוח פנסיוני מורשה, מלווה לקוחות בצורה אישית ומקצועית.
-                    SEELD הוא חלק מבית עמיתים הון — סוכנות ביטוח ופיננסים מבוססת.
+                    SEELD — סוכנות לפיננסים וביטוח, מפוקחת ומורשית.
                     אנחנו כאן כדי לעזור לכם להבין את עולם הביטוח והפנסיה בצורה פשוטה וברורה — בגובה העיניים, בלי ז׳רגון מיותר.
                   </p>
                   <div className="flex flex-wrap gap-4 pt-2">
@@ -712,10 +727,10 @@ const Index = () => {
                       transition={{ duration: 0.2 }}
                     >
                       <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                        style={{ backgroundColor: `${point.accent}15` }}
+                        className="w-14 h-14 rounded-full flex items-center justify-center mb-4 shadow-md"
+                        style={{ backgroundColor: point.accent, boxShadow: `0 6px 18px ${point.accent}30` }}
                       >
-                        <point.icon className="w-5 h-5" style={{ color: point.accent }} />
+                        <point.icon className="w-6 h-6 text-white" />
                       </div>
                       <h3 className="text-base font-bold text-white mb-1.5">{point.title}</h3>
                       <p className="text-sm text-white/35 leading-relaxed">{point.description}</p>
@@ -763,12 +778,16 @@ const Index = () => {
                     {/* Card */}
                     <div className={`flex-1 ${i % 2 === 0 ? 'md:text-left' : 'md:text-right'}`}>
                       <motion.div
-                        className="bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-6 sm:p-7 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300"
+                        className="bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-6 sm:p-7 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300 relative overflow-hidden"
                         whileHover={{ y: -3, scale: 1.02 }}
                         transition={{ duration: 0.25 }}
                       >
+                        {/* Decorative corner circle */}
+                        <div className="absolute top-[-12px] left-[-12px] w-10 h-10 rounded-full opacity-15" style={{ backgroundColor: step.color }} />
                         <div className="flex items-center gap-3 mb-3">
-                          <step.icon className="w-5 h-5" style={{ color: step.color }} />
+                          <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: step.color }}>
+                            <step.icon className="w-4 h-4 text-white" />
+                          </div>
                           <h3 className="text-lg font-extrabold text-[#0a3d3d]">{step.title}</h3>
                         </div>
                         <p className="text-sm text-[#0a3d3d]/45 leading-relaxed">{step.description}</p>
@@ -835,7 +854,7 @@ const Index = () => {
                     >
                       <AccordionTrigger className="text-sm sm:text-base font-bold hover:no-underline py-5 text-[#0a3d3d]">
                         <div className="flex items-center gap-3">
-                          <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: accentColors[i % accentColors.length] }} />
+                          <span className="w-3.5 h-3.5 rounded-full flex-shrink-0 shadow-sm" style={{ backgroundColor: accentColors[i % accentColors.length], boxShadow: `0 2px 8px ${accentColors[i % accentColors.length]}40` }} />
                           {item.question}
                         </div>
                       </AccordionTrigger>
@@ -895,10 +914,10 @@ const Index = () => {
                       onClick={() => item.href && window.open(item.href, item.external ? '_blank' : '_self')}
                     >
                       <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                        style={{ backgroundColor: `${item.color}12` }}
+                        className="w-13 h-13 rounded-full flex items-center justify-center mb-4 shadow-md w-[52px] h-[52px]"
+                        style={{ backgroundColor: item.color, boxShadow: `0 4px 16px ${item.color}25` }}
                       >
-                        <item.icon className="w-5 h-5" style={{ color: item.color }} />
+                        <item.icon className="w-5 h-5 text-white" />
                       </div>
                       <h3 className="text-base font-bold text-[#0a3d3d] mb-1">{item.title}</h3>
                       <p className="text-sm text-[#0a3d3d]/40" dir={item.dir}>{item.info}</p>
@@ -989,8 +1008,7 @@ const Index = () => {
           </ScrollReveal>
         </section>
 
-        {/* REGULATORY BADGES BAR */}
-        <RegulatoryBadgesBar />
+        {/* Regulatory badges are in Footer */}
       </main>
 
       <Footer />
