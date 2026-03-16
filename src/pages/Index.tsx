@@ -21,34 +21,40 @@ import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 // ── Data ──
 
 const quickActions = [
-  { icon: Landmark, label: "תכנון פנסיוני", href: "/savings/pension-funds" },
-  { icon: HeartPulse, label: "ביטוח חיים ובריאות", href: "/insurance/health" },
-  { icon: Home, label: "ביטוח רכוש", href: "/insurance/apartment" },
-  { icon: PiggyBank, label: "חיסכון והשקעות", href: "/savings/gemel-investment" },
-  { icon: Calculator, label: "מחשבונים", href: "/calculators" },
-  { icon: PhoneCall, label: "צור קשר", href: "/contact" },
+  { icon: Landmark, label: "תכנון פנסיוני", href: "/savings/pension-funds", color: "#5ec6c6" },
+  { icon: HeartPulse, label: "ביטוח חיים ובריאות", href: "/insurance/health", color: "#e76f51" },
+  { icon: Home, label: "ביטוח רכוש", href: "/insurance/apartment", color: "#f4a261" },
+  { icon: PiggyBank, label: "חיסכון והשקעות", href: "/savings/gemel-investment", color: "#90be6d" },
+  { icon: Calculator, label: "מחשבונים", href: "/calculators", color: "#6c63ff" },
+  { icon: PhoneCall, label: "צור קשר", href: "/contact", color: "#e07cc6" },
 ];
+
+const accentColors = ["#5ec6c6", "#f4a261", "#90be6d", "#e76f51"];
 
 const whySeeld = [
   {
     icon: Users,
     title: "שירות אישי בגובה העיניים",
     description: "לא קול סנטר ולא צ׳אטבוט — אתם מדברים ישירות עם שמוליק. מענה אנושי, ליווי צמוד, יחס אישי.",
+    accent: "#5ec6c6",
   },
   {
     icon: Handshake,
     title: "חלק מבית עמיתים הון",
     description: "סוכנות ביטוח ופיננסים מבוססת עם מוניטין ארוך שנים. אתם בידיים טובות.",
+    accent: "#f4a261",
   },
   {
     icon: Scale,
     title: "עבודה עם כל החברות",
     description: "לא משווקים חברה אחת — אנחנו משווים את כל השוק ומוצאים את הפתרון הכי טוב עבורכם.",
+    accent: "#90be6d",
   },
   {
     icon: Zap,
     title: "טכנולוגיה מתקדמת",
     description: "כלים דיגיטליים חכמים — מחשבונים, פורטל לקוחות, מעקב פוליסות — הכל זמין ונגיש.",
+    accent: "#e76f51",
   },
 ];
 
@@ -86,10 +92,10 @@ const savingsProducts = [
 ];
 
 const calculators = [
-  { icon: Landmark, title: "מחשבון משכנתא", description: "חשבו החזר חודשי, ריביות ולוח סילוקין", color: "from-[#0a3d3d] to-[#0d5a5a]" },
-  { icon: Wallet, title: "מחשבון פנסיה", description: "גלו כמה תקבלו בפנסיה ומהי ההפקדה האידיאלית", color: "from-[#0d4a4a] to-[#0a3d3d]" },
-  { icon: PiggyBank, title: "מחשבון חיסכון", description: "תכננו את החיסכון — ריבית דריבית ותשואות", color: "from-[#062e2e] to-[#0d4a4a]" },
-  { icon: BarChart3, title: "השוואת השקעות", description: "השוו בין מסלולי השקעה וקבלו תמונה מלאה", color: "from-[#0a3d3d] to-[#062e2e]" },
+  { icon: Landmark, title: "מחשבון משכנתא", description: "חשבו החזר חודשי, ריביות ולוח סילוקין", color: "#5ec6c6" },
+  { icon: Wallet, title: "מחשבון פנסיה", description: "גלו כמה תקבלו בפנסיה ומהי ההפקדה האידיאלית", color: "#f4a261" },
+  { icon: PiggyBank, title: "מחשבון חיסכון", description: "תכננו את החיסכון — ריבית דריבית ותשואות", color: "#90be6d" },
+  { icon: BarChart3, title: "השוואת השקעות", description: "השוו בין מסלולי השקעה וקבלו תמונה מלאה", color: "#e76f51" },
 ];
 
 const partners = [
@@ -121,10 +127,10 @@ const faqItems = [
 ];
 
 const trustPoints = [
-  { icon: Award, title: "רישיון סוכן ביטוח פנסיוני", description: "מורשה ומפוקח ע״י רשות שוק ההון" },
-  { icon: Building2, title: "חלק מבית עמיתים הון", description: "סוכנות ביטוח ופיננסים מבוססת ומוכרת" },
-  { icon: UserCheck, title: "שירות אישי ונגיש", description: "מענה מהיר, ליווי צמוד ויחס אנושי" },
-  { icon: Scale, title: "אובייקטיביות מלאה", description: "עבודה מול כל חברות הביטוח — ההמלצה הכי טובה עבורכם" },
+  { icon: Award, title: "רישיון סוכן ביטוח פנסיוני", description: "מורשה ומפוקח ע״י רשות שוק ההון", accent: "#5ec6c6" },
+  { icon: Building2, title: "חלק מבית עמיתים הון", description: "סוכנות ביטוח ופיננסים מבוססת ומוכרת", accent: "#f4a261" },
+  { icon: UserCheck, title: "שירות אישי ונגיש", description: "מענה מהיר, ליווי צמוד ויחס אנושי", accent: "#90be6d" },
+  { icon: Scale, title: "אובייקטיביות מלאה", description: "עבודה מול כל חברות הביטוח — ההמלצה הכי טובה עבורכם", accent: "#e76f51" },
 ];
 
 const leadSubjects = [
@@ -140,7 +146,7 @@ const leadSubjects = [
 
 // ── Reusable Design Components ──
 
-const WaveDivider = ({ color = '#f9fafb', flip = false }: { color?: string; flip?: boolean }) => (
+const WaveDivider = ({ color = '#f8f9fc', flip = false }: { color?: string; flip?: boolean }) => (
   <div className={flip ? 'rotate-180' : ''} aria-hidden="true">
     <svg viewBox="0 0 1440 80" fill="none" className="w-full h-[40px] sm:h-[60px]">
       <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,20 1440,40 L1440,80 L0,80 Z" fill={color} />
@@ -148,12 +154,8 @@ const WaveDivider = ({ color = '#f9fafb', flip = false }: { color?: string; flip
   </div>
 );
 
-const DecorativeDots = () => (
-  <div className="flex items-center gap-2 justify-center mb-4" aria-hidden="true">
-    <span className="w-2 h-2 rounded-full bg-[#5ec6c6]" />
-    <span className="w-2 h-2 rounded-full bg-[#f4a261]" />
-    <span className="w-2 h-2 rounded-full bg-[#90be6d]" />
-  </div>
+const SectionLabel = ({ children }: { children: string }) => (
+  <p className="text-[#5ec6c6] text-xs font-bold tracking-[0.2em] uppercase mb-4">{children}</p>
 );
 
 const processSteps = [
@@ -162,55 +164,49 @@ const processSteps = [
     title: "פנייה ראשונית",
     description: "פונים אלינו בטלפון, WhatsApp או דרך האתר",
     icon: PhoneCall,
+    color: "#5ec6c6",
   },
   {
     number: 2,
     title: "פגישת היכרות",
     description: "נפגשים, מבינים את הצרכים שלכם לעומק",
     icon: UserPlus,
+    color: "#f4a261",
   },
   {
     number: 3,
     title: "ניתוח והצעה",
     description: "מנתחים את המצב הקיים ומגישים הצעה מותאמת",
     icon: Search,
+    color: "#90be6d",
   },
   {
     number: 4,
     title: "ליווי שוטף",
     description: "מלווים אתכם לאורך כל הדרך, תמיד זמינים",
     icon: HeartHandshake,
+    color: "#e76f51",
   },
 ];
 
 const RegulatoryBadgesBar = () => (
-  <div className="bg-[#1a1a2e] py-8 sm:py-10">
+  <div className="bg-[#0a3d3d] py-10 sm:py-12">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 items-center text-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center">
-            <FileText className="w-5 h-5 text-[#5ec6c6]" />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 items-center text-center">
+        {[
+          { icon: FileText, text: "בעלי רישיון סוכנות ביטוח\nמטעם משרד האוצר", color: "#5ec6c6" },
+          { icon: ShieldCheck, text: "לשכת סוכני הביטוח\nבישראל", color: "#f4a261" },
+          { icon: Handshake, text: "חברים בלשכת סוכני\nהביטוח בישראל", color: "#90be6d" },
+        ].map((item, i) => (
+          <div key={i} className="flex flex-col items-center gap-3">
+            <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ backgroundColor: `${item.color}15`, border: `1px solid ${item.color}30` }}>
+              <item.icon className="w-6 h-6" style={{ color: item.color }} />
+            </div>
+            <p className="text-white/80 text-sm font-medium leading-snug whitespace-pre-line">
+              {item.text}
+            </p>
           </div>
-          <p className="text-white/80 text-sm font-medium leading-snug">
-            בעלי רישיון סוכנות ביטוח<br />מטעם משרד האוצר
-          </p>
-        </div>
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center">
-            <ShieldCheck className="w-5 h-5 text-[#5ec6c6]" />
-          </div>
-          <p className="text-white/80 text-sm font-medium leading-snug">
-            לשכת סוכני הביטוח<br />בישראל
-          </p>
-        </div>
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center">
-            <Handshake className="w-5 h-5 text-[#5ec6c6]" />
-          </div>
-          <p className="text-white/80 text-sm font-medium leading-snug">
-            חברים בלשכת סוכני<br />הביטוח בישראל
-          </p>
-        </div>
+        ))}
       </div>
     </div>
   </div>
@@ -307,58 +303,53 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
       <main>
-        {/* ═══════════ 1. HERO ═══════════ */}
+        {/* 1. HERO */}
         <HeroSection />
 
-        {/* ═══════════ 2. INLINE LEAD FORM ═══════════ */}
-        <section className="relative -mt-1">
-          <div className="bg-gradient-to-b from-[#041f1f] via-[#0a3d3d] to-[#0d4a4a] py-14 sm:py-16">
-            {/* Subtle grid overlay */}
-            <div className="absolute inset-0 opacity-[0.03]" style={{
-              backgroundImage: `linear-gradient(rgba(94,198,198,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(94,198,198,0.4) 1px, transparent 1px)`,
-              backgroundSize: "40px 40px",
-            }} />
+        {/* 2. INLINE LEAD FORM - Light gray background */}
+        <section className="relative bg-[#f8f9fc]">
+          <div className="py-16 sm:py-20">
             <div className="relative max-w-4xl mx-auto px-4 sm:px-6">
               <ScrollReveal>
-                <div className="text-center mb-8">
-                  <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
-                    רוצים לשמוע עוד? השאירו פרטים
+                <div className="text-center mb-10">
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] mb-3">
+                    רוצים לשמוע עוד?
                   </h2>
-                  <p className="text-white/40 text-sm">
-                    נחזור אליכם תוך שעות עבודה ספורות
+                  <p className="text-[#0a3d3d]/40 text-base sm:text-lg">
+                    השאירו פרטים ונחזור אליכם תוך שעות עבודה ספורות
                   </p>
                 </div>
               </ScrollReveal>
 
               <ScrollReveal delay={100}>
                 <form onSubmit={handleLeadSubmit}>
-                  <div className="bg-white/[0.06] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-4 sm:p-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 sm:gap-4">
+                  <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-xl shadow-[#0a3d3d]/[0.04]">
+                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 sm:gap-5">
                       <input
                         type="text"
                         placeholder="שם מלא"
                         value={leadForm.name}
                         onChange={(e) => setLeadForm(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full px-4 py-3.5 rounded-xl bg-white/[0.07] border border-white/[0.1] text-white placeholder:text-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-[#5ec6c6]/40 focus:border-[#5ec6c6]/50 transition-all"
+                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] placeholder:text-[#0a3d3d]/30 text-sm focus:outline-none focus:border-[#5ec6c6] transition-all"
                       />
                       <input
                         type="tel"
                         placeholder="טלפון"
                         value={leadForm.phone}
                         onChange={(e) => setLeadForm(prev => ({ ...prev, phone: e.target.value }))}
-                        className="w-full px-4 py-3.5 rounded-xl bg-white/[0.07] border border-white/[0.1] text-white placeholder:text-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-[#5ec6c6]/40 focus:border-[#5ec6c6]/50 transition-all"
+                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] placeholder:text-[#0a3d3d]/30 text-sm focus:outline-none focus:border-[#5ec6c6] transition-all"
                         dir="ltr"
                       />
                       <select
                         value={leadForm.subject}
                         onChange={(e) => setLeadForm(prev => ({ ...prev, subject: e.target.value }))}
-                        className="w-full px-4 py-3.5 rounded-xl bg-white/[0.07] border border-white/[0.1] text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#5ec6c6]/40 focus:border-[#5ec6c6]/50 transition-all appearance-none cursor-pointer [&>option]:bg-[#0a3d3d] [&>option]:text-white"
+                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-sm focus:outline-none focus:border-[#5ec6c6] transition-all appearance-none cursor-pointer"
                       >
-                        <option value="" className="text-white/30">בחר נושא</option>
+                        <option value="" className="text-[#0a3d3d]/30">בחר נושא</option>
                         {leadSubjects.map((s) => (
                           <option key={s} value={s}>{s}</option>
                         ))}
@@ -366,16 +357,16 @@ const Index = () => {
                       <motion.button
                         type="submit"
                         disabled={leadSubmitting}
-                        className="w-full px-6 py-3.5 rounded-full bg-[#5ec6c6] text-[#0a3d3d] font-bold text-sm hover:bg-[#4db8b8] transition-all disabled:opacity-60 shadow-lg shadow-[#5ec6c6]/20"
+                        className="w-full px-6 py-3.5 rounded-full bg-[#0a3d3d] text-white font-bold text-sm hover:bg-[#0d4a4a] transition-all disabled:opacity-60 shadow-lg shadow-[#0a3d3d]/15"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
                         {leadSubmitting ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "שלחו לי הצעה"}
                       </motion.button>
                     </div>
-                    <div className="text-center mt-4">
-                      <span className="text-white/30 text-xs">או חייגו: </span>
-                      <a href="tel:0523097444" className="text-[#5ec6c6] text-xs font-semibold hover:underline" dir="ltr">052-309-7444</a>
+                    <div className="text-center mt-5">
+                      <span className="text-[#0a3d3d]/30 text-xs">או חייגו: </span>
+                      <a href="tel:0523097444" className="text-[#5ec6c6] text-xs font-bold hover:underline" dir="ltr">052-309-7444</a>
                     </div>
                   </div>
                 </form>
@@ -384,24 +375,24 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Wave: dark lead form -> white */}
-        <WaveDivider color="var(--background, #ffffff)" />
-
-        {/* ═══════════ 3. QUICK SERVICES BAR ═══════════ */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+        {/* 3. QUICK SERVICES BAR */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
           <ScrollReveal>
-            <div className="bg-background border border-border/40 rounded-2xl shadow-lg shadow-black/[0.03] p-5 sm:p-7">
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 sm:gap-5">
+            <div className="bg-white border border-[#0a3d3d]/[0.06] rounded-3xl shadow-xl shadow-[#0a3d3d]/[0.03] p-6 sm:p-8">
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 sm:gap-6">
                 {quickActions.map((action) => (
                   <Link
                     key={action.label}
                     to={action.href}
-                    className="flex flex-col items-center gap-3 py-4 px-2 rounded-xl hover:bg-[#0a3d3d]/[0.04] dark:hover:bg-[#5ec6c6]/[0.06] transition-all duration-200 group"
+                    className="flex flex-col items-center gap-3 py-5 px-2 rounded-2xl hover:bg-[#f8f9fc] transition-all duration-200 group"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0a3d3d]/10 to-[#5ec6c6]/10 dark:from-[#5ec6c6]/10 dark:to-[#5ec6c6]/5 flex items-center justify-center group-hover:from-[#0a3d3d]/18 group-hover:to-[#5ec6c6]/18 transition-all duration-200 group-hover:shadow-md group-hover:shadow-[#5ec6c6]/5">
-                      <action.icon className="w-5 h-5 text-[#0a3d3d] dark:text-[#5ec6c6]" />
+                    <div
+                      className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-200 group-hover:shadow-md group-hover:scale-105"
+                      style={{ backgroundColor: `${action.color}15` }}
+                    >
+                      <action.icon className="w-6 h-6" style={{ color: action.color }} />
                     </div>
-                    <span className="text-xs font-semibold text-muted-foreground group-hover:text-foreground transition-colors text-center leading-tight">
+                    <span className="text-xs font-bold text-[#0a3d3d]/60 group-hover:text-[#0a3d3d] transition-colors text-center leading-tight">
                       {action.label}
                     </span>
                   </Link>
@@ -411,38 +402,44 @@ const Index = () => {
           </ScrollReveal>
         </section>
 
-        {/* ═══════════ 4. WHY SEELD ═══════════ */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
+        {/* 4. WHY SEELD */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
           <ScrollReveal>
-            <div className="text-center mb-12 sm:mb-16">
-              <DecorativeDots />
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
-                למה <span className="text-[#0a3d3d] dark:text-[#5ec6c6]">SEELD</span>?
+            <div className="text-center mb-14 sm:mb-20">
+              <SectionLabel>WHY SEELD</SectionLabel>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
+                למה <span className="text-[#5ec6c6]">SEELD</span>?
               </h2>
-              <p className="text-muted-foreground text-sm sm:text-base max-w-lg mx-auto">
+              <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                 אנחנו מאמינים שביטחון פיננסי מגיע לכולם — ושהדרך לשם צריכה להיות פשוטה ואנושית
               </p>
             </div>
           </ScrollReveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {whySeeld.map((item, i) => (
               <ScrollReveal key={item.title} delay={i * 80}>
                 <motion.div
-                  className="relative bg-background border border-border/40 rounded-2xl p-6 sm:p-7 hover:shadow-lg hover:border-[#5ec6c6]/20 transition-all duration-300 group h-full overflow-hidden"
-                  whileHover={{ y: -5 }}
+                  className="relative bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-7 sm:p-8 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300 group h-full overflow-hidden"
+                  whileHover={{ y: -6 }}
                   transition={{ duration: 0.25 }}
                 >
-                  {/* Subtle corner accent */}
-                  <div className="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-[#5ec6c6]/[0.04] to-transparent rounded-bl-none rounded-tl-2xl" />
+                  {/* Colored accent dot */}
+                  <div
+                    className="absolute top-6 left-6 w-3 h-3 rounded-full opacity-60 group-hover:opacity-100 transition-opacity"
+                    style={{ backgroundColor: item.accent }}
+                  />
                   <div className="relative">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0a3d3d]/10 to-[#5ec6c6]/10 dark:from-[#5ec6c6]/15 dark:to-[#5ec6c6]/5 flex items-center justify-center mb-5 group-hover:from-[#0a3d3d]/16 group-hover:to-[#5ec6c6]/16 transition-all">
-                      <item.icon className="w-5 h-5 text-[#0a3d3d] dark:text-[#5ec6c6]" />
+                    <div
+                      className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all"
+                      style={{ backgroundColor: `${item.accent}12` }}
+                    >
+                      <item.icon className="w-6 h-6" style={{ color: item.accent }} />
                     </div>
-                    <h3 className="text-base font-bold mb-2 group-hover:text-[#0a3d3d] dark:group-hover:text-[#5ec6c6] transition-colors">
+                    <h3 className="text-lg font-extrabold mb-3 text-[#0a3d3d] group-hover:text-[#0a3d3d] transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                    <p className="text-sm text-[#0a3d3d]/45 leading-relaxed">
                       {item.description}
                     </p>
                   </div>
@@ -452,26 +449,25 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Wave: white -> gray */}
-        <WaveDivider color="#f5f5f5" />
+        {/* Wave to gray section */}
+        <WaveDivider color="#f8f9fc" />
 
-        {/* ═══════════ 5. ALL INSURANCE TYPES GRID ═══════════ */}
-        <section className="bg-muted/30 border-y border-border/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
+        {/* 5. ALL INSURANCE TYPES GRID */}
+        <section className="bg-[#f8f9fc]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
             <ScrollReveal>
-              <div className="text-center mb-12 sm:mb-16">
-                <DecorativeDots />
-                <p className="text-[#5ec6c6] text-xs font-bold tracking-widest uppercase mb-3">INSURANCE</p>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
-                  ביטוח — הגנה מקיפה לכל תחום
+              <div className="text-center mb-14 sm:mb-20">
+                <SectionLabel>INSURANCE</SectionLabel>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
+                  ביטוח — הגנה מקיפה
                 </h2>
-                <p className="text-muted-foreground text-sm sm:text-base max-w-lg mx-auto">
+                <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                   מגוון פתרונות ביטוח מקיפים לכל תחומי החיים — הכל במקום אחד
                 </p>
               </div>
             </ScrollReveal>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
               {insuranceTypes.map((item, i) => (
                 <motion.div
                   key={item.title}
@@ -483,17 +479,33 @@ const Index = () => {
                 >
                   <Link to={item.href} className="block h-full">
                     <motion.div
-                      className="h-full bg-background border border-border/40 rounded-xl p-4 sm:p-5 hover:shadow-lg hover:border-[#5ec6c6]/25 transition-all duration-300 group"
+                      className="h-full bg-white border border-[#0a3d3d]/[0.06] rounded-xl p-5 sm:p-6 transition-all duration-300 group"
                       whileHover={{ scale: 1.03, y: -4 }}
                       transition={{ duration: 0.2 }}
+                      style={{ borderRightWidth: '3px', borderRightColor: 'transparent' }}
+                      onHoverStart={(e) => {
+                        const el = e as unknown as { target: HTMLElement };
+                        if (el.target && el.target.style) {
+                          el.target.style.borderRightColor = accentColors[i % accentColors.length];
+                        }
+                      }}
+                      onHoverEnd={(e) => {
+                        const el = e as unknown as { target: HTMLElement };
+                        if (el.target && el.target.style) {
+                          el.target.style.borderRightColor = 'transparent';
+                        }
+                      }}
                     >
-                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#0a3d3d]/8 to-[#5ec6c6]/8 dark:from-[#5ec6c6]/10 dark:to-[#5ec6c6]/5 flex items-center justify-center mb-3 group-hover:from-[#0a3d3d]/16 group-hover:to-[#5ec6c6]/16 transition-all">
-                        <item.icon className="w-5 h-5 text-[#0a3d3d] dark:text-[#5ec6c6]" />
+                      <div
+                        className="w-11 h-11 rounded-xl flex items-center justify-center mb-3 transition-all"
+                        style={{ backgroundColor: `${accentColors[i % accentColors.length]}12` }}
+                      >
+                        <item.icon className="w-5 h-5" style={{ color: accentColors[i % accentColors.length] }} />
                       </div>
-                      <h3 className="text-sm font-bold mb-1 group-hover:text-[#0a3d3d] dark:group-hover:text-[#5ec6c6] transition-colors">
+                      <h3 className="text-sm font-bold mb-1 text-[#0a3d3d] group-hover:text-[#0a3d3d] transition-colors">
                         {item.title}
                       </h3>
-                      <p className="text-xs text-muted-foreground">{item.description}</p>
+                      <p className="text-xs text-[#0a3d3d]/40">{item.description}</p>
                     </motion.div>
                   </Link>
                 </motion.div>
@@ -501,10 +513,10 @@ const Index = () => {
             </div>
 
             <ScrollReveal delay={200}>
-              <div className="text-center mt-8">
+              <div className="text-center mt-10">
                 <Link
                   to="/insurances"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-[#0a3d3d] dark:text-[#5ec6c6] hover:underline"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-[#0a3d3d] hover:text-[#5ec6c6] transition-colors"
                 >
                   לכל הביטוחים שלנו
                   <ChevronLeft className="w-4 h-4" />
@@ -515,24 +527,23 @@ const Index = () => {
         </section>
 
         {/* Wave: gray -> white */}
-        <WaveDivider color="var(--background, #ffffff)" flip />
+        <WaveDivider color="#ffffff" flip />
 
-        {/* ═══════════ 6. SAVINGS / PENSION GRID ═══════════ */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
+        {/* 6. SAVINGS / PENSION GRID */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
           <ScrollReveal>
-            <div className="text-center mb-12 sm:mb-16">
-              <DecorativeDots />
-              <p className="text-[#5ec6c6] text-xs font-bold tracking-widest uppercase mb-3">SAVINGS & PENSION</p>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
-                חיסכון ופנסיה — תכנון חכם לעתיד
+            <div className="text-center mb-14 sm:mb-20">
+              <SectionLabel>SAVINGS & PENSION</SectionLabel>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
+                חיסכון ופנסיה
               </h2>
-              <p className="text-muted-foreground text-sm sm:text-base max-w-lg mx-auto">
+              <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                 בניית עתיד פיננסי חזק — קרנות פנסיה, חיסכון, השקעות ותכנון לפרישה
               </p>
             </div>
           </ScrollReveal>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
             {savingsProducts.map((item, i) => (
               <motion.div
                 key={item.title}
@@ -544,17 +555,20 @@ const Index = () => {
               >
                 <Link to={item.href} className="block h-full">
                   <motion.div
-                    className="h-full bg-background border border-border/40 rounded-xl p-4 sm:p-5 hover:shadow-lg hover:border-[#5ec6c6]/25 transition-all duration-300 group"
+                    className="h-full bg-white border border-[#0a3d3d]/[0.06] rounded-xl p-5 sm:p-6 transition-all duration-300 group hover:shadow-lg"
                     whileHover={{ scale: 1.03, y: -4 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#0a3d3d]/8 to-[#5ec6c6]/8 dark:from-[#5ec6c6]/10 dark:to-[#5ec6c6]/5 flex items-center justify-center mb-3 group-hover:from-[#0a3d3d]/16 group-hover:to-[#5ec6c6]/16 transition-all">
-                      <item.icon className="w-5 h-5 text-[#0a3d3d] dark:text-[#5ec6c6]" />
+                    <div
+                      className="w-11 h-11 rounded-xl flex items-center justify-center mb-3 transition-all"
+                      style={{ backgroundColor: `${accentColors[i % accentColors.length]}12` }}
+                    >
+                      <item.icon className="w-5 h-5" style={{ color: accentColors[i % accentColors.length] }} />
                     </div>
-                    <h3 className="text-sm font-bold mb-1 group-hover:text-[#0a3d3d] dark:group-hover:text-[#5ec6c6] transition-colors">
+                    <h3 className="text-sm font-bold mb-1 text-[#0a3d3d] transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground">{item.description}</p>
+                    <p className="text-xs text-[#0a3d3d]/40">{item.description}</p>
                   </motion.div>
                 </Link>
               </motion.div>
@@ -563,50 +577,48 @@ const Index = () => {
         </section>
 
         {/* Wave: white -> gray */}
-        <WaveDivider color="#f5f5f5" />
+        <WaveDivider color="#f8f9fc" />
 
-        {/* ═══════════ 7. CALCULATORS ═══════════ */}
-        <section className="bg-muted/30 border-y border-border/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
+        {/* 7. CALCULATORS */}
+        <section className="bg-[#f8f9fc]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
             <ScrollReveal>
-              <div className="text-center mb-12 sm:mb-16">
-                <DecorativeDots />
-                <p className="text-[#5ec6c6] text-xs font-bold tracking-widest uppercase mb-3">TOOLS</p>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
+              <div className="text-center mb-14 sm:mb-20">
+                <SectionLabel>TOOLS</SectionLabel>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                   המחשבונים שלנו
                 </h2>
-                <p className="text-muted-foreground text-sm sm:text-base max-w-lg mx-auto">
+                <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                   כלים חכמים שיעזרו לכם לקבל החלטות פיננסיות מושכלות
                 </p>
               </div>
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {calculators.map((calc, i) => (
                 <ScrollReveal key={calc.title} delay={i * 80}>
                   <Link to="/calculators" className="block h-full">
                     <motion.div
-                      className="h-full rounded-2xl overflow-hidden group cursor-pointer"
+                      className="h-full bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-7 sm:p-8 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300 group overflow-hidden relative"
                       whileHover={{ scale: 1.04, y: -5 }}
                       transition={{ duration: 0.25 }}
                     >
-                      <div className={`bg-gradient-to-br ${calc.color} p-6 sm:p-8 h-full flex flex-col relative overflow-hidden`}>
-                        {/* Glassmorphism accent */}
-                        <div className="absolute top-[-50%] right-[-30%] w-[80%] h-[80%] rounded-full bg-white/[0.03] blur-2xl" />
-                        <motion.div
-                          className="w-12 h-12 rounded-xl bg-white/[0.08] backdrop-blur-sm border border-white/[0.06] flex items-center justify-center mb-5 relative"
-                          whileHover={{ rotate: [0, -5, 5, 0] }}
-                          transition={{ duration: 0.5 }}
-                        >
-                          <calc.icon className="w-6 h-6 text-white" />
-                        </motion.div>
-                        <h3 className="text-base font-bold text-white mb-2 relative">{calc.title}</h3>
-                        <p className="text-sm text-white/50 leading-relaxed mb-6 flex-1 relative">{calc.description}</p>
-                        <span className="inline-flex items-center gap-2 text-sm font-semibold text-[#5ec6c6] group-hover:text-white transition-colors relative">
-                          חשב עכשיו
-                          <ChevronLeft className="w-4 h-4" />
-                        </span>
-                      </div>
+                      {/* Colored top bar */}
+                      <div className="absolute top-0 left-0 right-0 h-1 transition-all group-hover:h-1.5" style={{ backgroundColor: calc.color }} />
+                      <motion.div
+                        className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 relative"
+                        style={{ backgroundColor: `${calc.color}12` }}
+                        whileHover={{ rotate: [0, -5, 5, 0] }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <calc.icon className="w-7 h-7" style={{ color: calc.color }} />
+                      </motion.div>
+                      <h3 className="text-lg font-extrabold text-[#0a3d3d] mb-2 relative">{calc.title}</h3>
+                      <p className="text-sm text-[#0a3d3d]/40 leading-relaxed mb-6 flex-1 relative">{calc.description}</p>
+                      <span className="inline-flex items-center gap-2 text-sm font-bold group-hover:text-[#0a3d3d] transition-colors relative" style={{ color: calc.color }}>
+                        חשב עכשיו
+                        <ChevronLeft className="w-4 h-4" />
+                      </span>
                     </motion.div>
                   </Link>
                 </ScrollReveal>
@@ -616,44 +628,32 @@ const Index = () => {
         </section>
 
         {/* Wave: gray -> white */}
-        <WaveDivider color="var(--background, #ffffff)" flip />
+        <WaveDivider color="#ffffff" flip />
 
-        {/* ═══════════ 8. PARTNERS CAROUSEL ═══════════ */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24 overflow-hidden">
+        {/* 8. PARTNERS - Clean badge row */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
           <ScrollReveal>
-            <div className="text-center mb-10 sm:mb-14">
-              <DecorativeDots />
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
+            <div className="text-center mb-12 sm:mb-16">
+              <SectionLabel>PARTNERS</SectionLabel>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                 עובדים עם מיטב החברות
               </h2>
-              <p className="text-muted-foreground text-sm sm:text-base max-w-lg mx-auto">
+              <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                 גישה לכל חברות הביטוח והפנסיה המובילות בישראל
               </p>
             </div>
           </ScrollReveal>
 
           <ScrollReveal delay={100}>
-            <div className="relative">
-              {/* Fade edges */}
-              <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-              <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-
-              <motion.div
-                className="flex gap-5 sm:gap-6"
-                animate={{ x: ["0%", "-50%"] }}
-                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-              >
-                {[...partners, ...partners].map((name, i) => (
-                  <div
-                    key={`${name}-${i}`}
-                    className="flex-shrink-0 px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-muted/50 border border-border/30 backdrop-blur-sm"
-                  >
-                    <span className="text-sm sm:text-base font-semibold text-muted-foreground whitespace-nowrap">
-                      {name}
-                    </span>
-                  </div>
-                ))}
-              </motion.div>
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+              {partners.map((name) => (
+                <span
+                  key={name}
+                  className="px-6 sm:px-8 py-3 sm:py-3.5 rounded-full bg-[#f8f9fc] border border-[#0a3d3d]/[0.06] text-sm sm:text-base font-bold text-[#0a3d3d]/50 hover:text-[#0a3d3d] hover:border-[#5ec6c6]/30 hover:bg-white transition-all duration-200 cursor-default"
+                >
+                  {name}
+                </span>
+              ))}
             </div>
           </ScrollReveal>
         </section>
@@ -661,40 +661,40 @@ const Index = () => {
         {/* Wave: white -> dark */}
         <WaveDivider color="#0a3d3d" />
 
-        {/* ═══════════ 9. ABOUT / TRUST SECTION ═══════════ */}
-        <section className="bg-[#0a3d3d] dark:bg-[#041f1f] relative overflow-hidden">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-[0.02]" style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(94,198,198,0.5) 1px, transparent 0)`,
-            backgroundSize: "32px 32px",
-          }} />
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24 relative">
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        {/* 9. ABOUT / TRUST SECTION */}
+        <section className="bg-[#0a3d3d] relative overflow-hidden">
+          {/* Background decorative circles */}
+          <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <div className="absolute top-[10%] left-[5%] w-[200px] h-[200px] rounded-full bg-[#5ec6c6]/[0.03]" />
+            <div className="absolute bottom-[10%] right-[5%] w-[150px] h-[150px] rounded-full bg-[#f4a261]/[0.03]" />
+          </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32 relative">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
               {/* Right side - About */}
               <ScrollReveal>
-                <div className="space-y-6">
+                <div className="space-y-7">
                   <div>
-                    <p className="text-[#5ec6c6] text-xs font-bold tracking-widest uppercase mb-4">ABOUT</p>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white mb-2">
+                    <SectionLabel>ABOUT</SectionLabel>
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-3">
                       שמוליק מרציאנו
                     </h2>
-                    <p className="text-[#5ec6c6] font-medium text-lg">סוכן ביטוח פנסיוני מורשה</p>
+                    <p className="text-[#5ec6c6] font-semibold text-xl">סוכן ביטוח פנסיוני מורשה</p>
                   </div>
-                  <p className="text-white/50 text-sm sm:text-base leading-relaxed">
+                  <p className="text-white/45 text-base sm:text-lg leading-relaxed">
                     שמוליק מרציאנו, סוכן ביטוח פנסיוני מורשה, מלווה לקוחות בצורה אישית ומקצועית.
                     SEELD הוא חלק מבית עמיתים הון — סוכנות ביטוח ופיננסים מבוססת.
                     אנחנו כאן כדי לעזור לכם להבין את עולם הביטוח והפנסיה בצורה פשוטה וברורה — בגובה העיניים, בלי ז׳רגון מיותר.
                   </p>
-                  <div className="flex flex-wrap gap-3 pt-2">
+                  <div className="flex flex-wrap gap-4 pt-2">
                     <Link
                       to="/contact"
-                      className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-[#0a3d3d] font-bold text-sm hover:bg-white/90 transition-all shadow-lg shadow-black/20"
+                      className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-[#0a3d3d] font-bold text-base hover:bg-white/90 transition-all shadow-xl shadow-black/20"
                     >
                       קבעו פגישת ייעוץ
                     </Link>
                     <Link
                       to="/about"
-                      className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-white/15 text-white font-semibold text-sm hover:bg-white/[0.06] transition-all backdrop-blur-sm"
+                      className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/15 text-white font-semibold text-base hover:bg-white/[0.06] transition-all"
                     >
                       עוד עלינו
                     </Link>
@@ -703,19 +703,22 @@ const Index = () => {
               </ScrollReveal>
 
               {/* Left side - Trust points */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {trustPoints.map((point, i) => (
                   <ScrollReveal key={point.title} delay={i * 80}>
                     <motion.div
-                      className="bg-white/[0.04] border border-white/[0.06] rounded-xl p-5 backdrop-blur-md"
+                      className="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 backdrop-blur-md"
                       whileHover={{ scale: 1.03, backgroundColor: "rgba(255,255,255,0.06)" }}
                       transition={{ duration: 0.2 }}
                     >
-                      <div className="w-10 h-10 rounded-lg bg-[#5ec6c6]/10 flex items-center justify-center mb-3">
-                        <point.icon className="w-5 h-5 text-[#5ec6c6]" />
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                        style={{ backgroundColor: `${point.accent}15` }}
+                      >
+                        <point.icon className="w-5 h-5" style={{ color: point.accent }} />
                       </div>
-                      <h3 className="text-sm font-bold text-white mb-1">{point.title}</h3>
-                      <p className="text-xs text-white/40 leading-relaxed">{point.description}</p>
+                      <h3 className="text-base font-bold text-white mb-1.5">{point.title}</h3>
+                      <p className="text-sm text-white/35 leading-relaxed">{point.description}</p>
                     </motion.div>
                   </ScrollReveal>
                 ))}
@@ -725,50 +728,60 @@ const Index = () => {
         </section>
 
         {/* Wave: dark -> white */}
-        <WaveDivider color="var(--background, #ffffff)" flip />
+        <WaveDivider color="#ffffff" flip />
 
-        {/* ═══════════ PROCESS TIMELINE — "איך מתחילים?" ═══════════ */}
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
+        {/* PROCESS TIMELINE with dashed SVG connectors */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
           <ScrollReveal>
-            <div className="text-center mb-12 sm:mb-16">
-              <DecorativeDots />
-              <p className="text-[#5ec6c6] text-xs font-bold tracking-widest uppercase mb-3">PROCESS</p>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
+            <div className="text-center mb-14 sm:mb-20">
+              <SectionLabel>PROCESS</SectionLabel>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                 איך מתחילים?
               </h2>
-              <p className="text-muted-foreground text-sm sm:text-base max-w-lg mx-auto">
+              <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                 תהליך פשוט וברור — מהפנייה הראשונה ועד ליווי שוטף
               </p>
             </div>
           </ScrollReveal>
 
           <div className="relative">
-            {/* Vertical line */}
-            <div className="absolute right-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#5ec6c6]/40 via-[#0a3d3d]/30 to-[#5ec6c6]/40 hidden md:block" aria-hidden="true" />
+            {/* Dashed vertical connector line for desktop */}
+            <svg className="absolute right-1/2 top-0 bottom-0 w-[40px] h-full hidden md:block" style={{ transform: 'translateX(50%)' }} aria-hidden="true">
+              <line
+                x1="20" y1="30" x2="20" y2="100%"
+                stroke="#0a3d3d"
+                strokeWidth="2"
+                strokeDasharray="8 8"
+                opacity="0.12"
+              />
+            </svg>
 
-            <div className="space-y-8 md:space-y-12">
+            <div className="space-y-8 md:space-y-14">
               {processSteps.map((step, i) => (
                 <ScrollReveal key={step.number} delay={i * 100}>
-                  <div className={`flex flex-col md:flex-row items-center gap-4 md:gap-8 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                  <div className={`flex flex-col md:flex-row items-center gap-4 md:gap-10 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
                     {/* Card */}
                     <div className={`flex-1 ${i % 2 === 0 ? 'md:text-left' : 'md:text-right'}`}>
                       <motion.div
-                        className="bg-background border border-border/40 rounded-2xl p-5 sm:p-6 hover:shadow-lg hover:border-[#5ec6c6]/20 transition-all duration-300"
+                        className="bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-6 sm:p-7 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300"
                         whileHover={{ y: -3, scale: 1.02 }}
                         transition={{ duration: 0.25 }}
                       >
-                        <div className="flex items-center gap-3 mb-2">
-                          <step.icon className="w-5 h-5 text-[#5ec6c6]" />
-                          <h3 className="text-base font-bold">{step.title}</h3>
+                        <div className="flex items-center gap-3 mb-3">
+                          <step.icon className="w-5 h-5" style={{ color: step.color }} />
+                          <h3 className="text-lg font-extrabold text-[#0a3d3d]">{step.title}</h3>
                         </div>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
+                        <p className="text-sm text-[#0a3d3d]/45 leading-relaxed">{step.description}</p>
                       </motion.div>
                     </div>
 
-                    {/* Number circle */}
+                    {/* Number circle - each step gets its own color */}
                     <div className="relative z-10 flex-shrink-0 order-first md:order-none">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0a3d3d] to-[#5ec6c6] flex items-center justify-center shadow-lg shadow-[#5ec6c6]/20 border-4 border-background">
-                        <span className="text-white font-bold text-lg">{step.number}</span>
+                      <div
+                        className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg border-4 border-white"
+                        style={{ backgroundColor: step.color, boxShadow: `0 8px 24px ${step.color}30` }}
+                      >
+                        <span className="text-white font-extrabold text-xl">{step.number}</span>
                       </div>
                     </div>
 
@@ -778,154 +791,141 @@ const Index = () => {
                 </ScrollReveal>
               ))}
             </div>
+
+            {/* Decorative dashed curved lines between steps - desktop only */}
+            <svg className="absolute top-0 left-0 w-full h-full hidden md:block pointer-events-none" aria-hidden="true">
+              <path
+                d="M50%,80 C55%,120 45%,160 50%,200"
+                stroke="#0a3d3d"
+                strokeWidth="1.5"
+                strokeDasharray="6 5"
+                fill="none"
+                opacity="0.06"
+              />
+            </svg>
           </div>
         </section>
 
-        {/* ═══════════ 10. FAQ PREVIEW ═══════════ */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
-          <ScrollReveal>
-            <div className="text-center mb-12 sm:mb-16">
-              <DecorativeDots />
-              <p className="text-[#5ec6c6] text-xs font-bold tracking-widest uppercase mb-3">FAQ</p>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
-                שאלות נפוצות
-              </h2>
-              <p className="text-muted-foreground text-sm sm:text-base max-w-lg mx-auto">
-                תשובות לשאלות שנשאלות הכי הרבה
-              </p>
-            </div>
-          </ScrollReveal>
+        {/* Wave: white -> gray */}
+        <WaveDivider color="#f8f9fc" />
 
-          <ScrollReveal delay={100}>
-            <div className="max-w-2xl mx-auto">
-              <Accordion type="single" collapsible className="space-y-3">
-                {faqItems.map((item, i) => (
-                  <AccordionItem
-                    key={i}
-                    value={`faq-${i}`}
-                    className="bg-background border border-border/40 rounded-xl px-5 overflow-hidden"
-                  >
-                    <AccordionTrigger className="text-sm sm:text-base font-medium hover:no-underline py-4">
-                      {item.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
-                      {item.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-
-              <div className="text-center mt-8">
-                <Link
-                  to="/faq"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-[#0a3d3d] dark:text-[#5ec6c6] hover:underline"
-                >
-                  לכל השאלות הנפוצות
-                  <ChevronLeft className="w-4 h-4" />
-                </Link>
+        {/* 10. FAQ PREVIEW */}
+        <section className="bg-[#f8f9fc]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
+            <ScrollReveal>
+              <div className="text-center mb-14 sm:mb-20">
+                <SectionLabel>FAQ</SectionLabel>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
+                  שאלות נפוצות
+                </h2>
+                <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
+                  תשובות לשאלות שנשאלות הכי הרבה
+                </p>
               </div>
-            </div>
-          </ScrollReveal>
+            </ScrollReveal>
+
+            <ScrollReveal delay={100}>
+              <div className="max-w-2xl mx-auto">
+                <Accordion type="single" collapsible className="space-y-4">
+                  {faqItems.map((item, i) => (
+                    <AccordionItem
+                      key={i}
+                      value={`faq-${i}`}
+                      className="bg-white border border-[#0a3d3d]/[0.06] rounded-xl px-6 overflow-hidden shadow-sm"
+                    >
+                      <AccordionTrigger className="text-sm sm:text-base font-bold hover:no-underline py-5 text-[#0a3d3d]">
+                        <div className="flex items-center gap-3">
+                          <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: accentColors[i % accentColors.length] }} />
+                          {item.question}
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-[#0a3d3d]/50 leading-relaxed pb-5">
+                        {item.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+
+                <div className="text-center mt-10">
+                  <Link
+                    to="/faq"
+                    className="inline-flex items-center gap-2 text-sm font-bold text-[#0a3d3d] hover:text-[#5ec6c6] transition-colors"
+                  >
+                    לכל השאלות הנפוצות
+                    <ChevronLeft className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            </ScrollReveal>
+          </div>
         </section>
 
-        {/* ═══════════ 11. CONTACT SECTION ═══════════ */}
-        <section className="bg-muted/30 border-y border-border/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
+        {/* Wave: gray -> white */}
+        <WaveDivider color="#ffffff" flip />
+
+        {/* 11. CONTACT SECTION */}
+        <section className="py-16 sm:py-24 lg:py-32">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
-              <div className="text-center mb-12 sm:mb-16">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
+              <div className="text-center mb-14 sm:mb-20">
+                <SectionLabel>CONTACT</SectionLabel>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                   צרו קשר
                 </h2>
-                <p className="text-muted-foreground text-sm sm:text-base max-w-lg mx-auto">
+                <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                   אנחנו כאן בשבילכם — בכל שאלה, התייעצות או בקשה
                 </p>
               </div>
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
               {/* Contact Info Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <ScrollReveal delay={0}>
-                  <motion.a
-                    href="tel:097742103"
-                    className="block bg-background border border-border/40 rounded-xl p-5 hover:shadow-lg hover:border-[#5ec6c6]/25 transition-all duration-300"
-                    whileHover={{ scale: 1.03, y: -3 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#0a3d3d]/8 to-[#5ec6c6]/8 dark:from-[#5ec6c6]/10 dark:to-[#5ec6c6]/5 flex items-center justify-center mb-3">
-                      <Phone className="w-5 h-5 text-[#0a3d3d] dark:text-[#5ec6c6]" />
-                    </div>
-                    <h3 className="text-sm font-bold mb-1">טלפון</h3>
-                    <p className="text-xs text-muted-foreground" dir="ltr">09-774-2103</p>
-                  </motion.a>
-                </ScrollReveal>
-
-                <ScrollReveal delay={60}>
-                  <motion.a
-                    href="https://wa.me/972523097444"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block bg-background border border-border/40 rounded-xl p-5 hover:shadow-lg hover:border-[#5ec6c6]/25 transition-all duration-300"
-                    whileHover={{ scale: 1.03, y: -3 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#0a3d3d]/8 to-[#5ec6c6]/8 dark:from-[#5ec6c6]/10 dark:to-[#5ec6c6]/5 flex items-center justify-center mb-3">
-                      <MessageCircle className="w-5 h-5 text-[#0a3d3d] dark:text-[#5ec6c6]" />
-                    </div>
-                    <h3 className="text-sm font-bold mb-1">וואטסאפ</h3>
-                    <p className="text-xs text-muted-foreground" dir="ltr">052-309-7444</p>
-                  </motion.a>
-                </ScrollReveal>
-
-                <ScrollReveal delay={120}>
-                  <motion.a
-                    href="mailto:info@seeld.co.il"
-                    className="block bg-background border border-border/40 rounded-xl p-5 hover:shadow-lg hover:border-[#5ec6c6]/25 transition-all duration-300"
-                    whileHover={{ scale: 1.03, y: -3 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#0a3d3d]/8 to-[#5ec6c6]/8 dark:from-[#5ec6c6]/10 dark:to-[#5ec6c6]/5 flex items-center justify-center mb-3">
-                      <Mail className="w-5 h-5 text-[#0a3d3d] dark:text-[#5ec6c6]" />
-                    </div>
-                    <h3 className="text-sm font-bold mb-1">אימייל</h3>
-                    <p className="text-xs text-muted-foreground">info@seeld.co.il</p>
-                  </motion.a>
-                </ScrollReveal>
-
-                <ScrollReveal delay={180}>
-                  <motion.div
-                    className="bg-background border border-border/40 rounded-xl p-5"
-                    whileHover={{ scale: 1.03, y: -3 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#0a3d3d]/8 to-[#5ec6c6]/8 dark:from-[#5ec6c6]/10 dark:to-[#5ec6c6]/5 flex items-center justify-center mb-3">
-                      <MapPin className="w-5 h-5 text-[#0a3d3d] dark:text-[#5ec6c6]" />
-                    </div>
-                    <h3 className="text-sm font-bold mb-1">משרדים</h3>
-                    <p className="text-xs text-muted-foreground">רעננה | ירושלים</p>
-                  </motion.div>
-                </ScrollReveal>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {[
+                  { icon: Phone, title: "טלפון", info: "09-774-2103", href: "tel:097742103", color: "#5ec6c6", dir: "ltr" },
+                  { icon: MessageCircle, title: "וואטסאפ", info: "052-309-7444", href: "https://wa.me/972523097444", color: "#90be6d", dir: "ltr", external: true },
+                  { icon: Mail, title: "אימייל", info: "info@seeld.co.il", href: "mailto:info@seeld.co.il", color: "#f4a261" },
+                  { icon: MapPin, title: "משרדים", info: "רעננה | ירושלים", color: "#e76f51" },
+                ].map((item, i) => (
+                  <ScrollReveal key={item.title} delay={i * 60}>
+                    <motion.div
+                      className="block bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-6 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300 cursor-pointer"
+                      whileHover={{ scale: 1.03, y: -3 }}
+                      transition={{ duration: 0.2 }}
+                      onClick={() => item.href && window.open(item.href, item.external ? '_blank' : '_self')}
+                    >
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                        style={{ backgroundColor: `${item.color}12` }}
+                      >
+                        <item.icon className="w-5 h-5" style={{ color: item.color }} />
+                      </div>
+                      <h3 className="text-base font-bold text-[#0a3d3d] mb-1">{item.title}</h3>
+                      <p className="text-sm text-[#0a3d3d]/40" dir={item.dir}>{item.info}</p>
+                    </motion.div>
+                  </ScrollReveal>
+                ))}
               </div>
 
               {/* Inline Contact Form */}
               <ScrollReveal delay={100}>
-                <div className="bg-background border border-border/40 rounded-2xl p-6 sm:p-8">
-                  <h3 className="text-lg font-bold mb-6">השאירו פרטים ונחזור אליכם</h3>
-                  <form className="space-y-4" onSubmit={handleContactSubmit}>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-7 sm:p-9 shadow-lg shadow-[#0a3d3d]/[0.03]">
+                  <h3 className="text-xl font-extrabold text-[#0a3d3d] mb-7">השאירו פרטים ונחזור אליכם</h3>
+                  <form className="space-y-5" onSubmit={handleContactSubmit}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <input
                         type="text"
                         placeholder="שם מלא"
                         value={contactForm.name}
                         onChange={(e) => setContactForm(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full px-4 py-3 rounded-xl border border-border/40 bg-background text-sm focus:outline-none focus:ring-2 focus:ring-[#5ec6c6]/40 focus:border-[#5ec6c6] transition-all"
+                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all"
                       />
                       <input
                         type="tel"
                         placeholder="טלפון"
                         value={contactForm.phone}
                         onChange={(e) => setContactForm(prev => ({ ...prev, phone: e.target.value }))}
-                        className="w-full px-4 py-3 rounded-xl border border-border/40 bg-background text-sm focus:outline-none focus:ring-2 focus:ring-[#5ec6c6]/40 focus:border-[#5ec6c6] transition-all"
+                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all"
                         dir="ltr"
                       />
                     </div>
@@ -934,19 +934,19 @@ const Index = () => {
                       placeholder="אימייל (לא חובה)"
                       value={contactForm.email}
                       onChange={(e) => setContactForm(prev => ({ ...prev, email: e.target.value }))}
-                      className="w-full px-4 py-3 rounded-xl border border-border/40 bg-background text-sm focus:outline-none focus:ring-2 focus:ring-[#5ec6c6]/40 focus:border-[#5ec6c6] transition-all"
+                      className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all"
                     />
                     <textarea
                       placeholder="במה נוכל לעזור?"
                       rows={3}
                       value={contactForm.message}
                       onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}
-                      className="w-full px-4 py-3 rounded-xl border border-border/40 bg-background text-sm focus:outline-none focus:ring-2 focus:ring-[#5ec6c6]/40 focus:border-[#5ec6c6] transition-all resize-none"
+                      className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all resize-none"
                     />
                     <motion.button
                       type="submit"
                       disabled={contactSubmitting}
-                      className="w-full px-6 py-3.5 rounded-full bg-[#0a3d3d] text-white font-bold text-sm hover:bg-[#0d4a4a] transition-colors disabled:opacity-60"
+                      className="w-full px-6 py-4 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-colors disabled:opacity-60 shadow-lg shadow-[#0a3d3d]/15"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
@@ -959,26 +959,28 @@ const Index = () => {
           </div>
         </section>
 
-        {/* ═══════════ 12. AGENT CTA ═══════════ */}
+        {/* 12. AGENT CTA */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <ScrollReveal>
-            <div className="relative rounded-2xl border border-border/40 bg-background overflow-hidden">
-              {/* Subtle accent gradient */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#0a3d3d] via-[#5ec6c6] to-[#0a3d3d]" />
-              <div className="p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6">
-                <div className="space-y-2 text-center sm:text-right">
-                  <h3 className="text-xl sm:text-2xl font-bold">סוכן ביטוח? הכלים שלך מחכים כאן</h3>
-                  <p className="text-sm text-muted-foreground max-w-md">
+            <div className="relative rounded-3xl border border-[#0a3d3d]/[0.06] bg-white overflow-hidden shadow-lg shadow-[#0a3d3d]/[0.03]">
+              {/* Colored accent bar */}
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#5ec6c6] via-[#f4a261] to-[#90be6d]" />
+              {/* Decorative circle */}
+              <div className="absolute top-[-60px] left-[-60px] w-[180px] h-[180px] rounded-full bg-[#5ec6c6]/[0.04]" />
+              <div className="p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-8 relative">
+                <div className="space-y-3 text-center sm:text-right">
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d]">סוכן ביטוח? הכלים שלך מחכים כאן</h3>
+                  <p className="text-base text-[#0a3d3d]/40 max-w-md">
                     פורטל SEELD לסוכנים — ניהול לקוחות, מעקב פוליסות וכלי עבודה חכמים במקום אחד.
                   </p>
                 </div>
                 <Link to="/app/auth" className="w-full sm:w-auto flex-shrink-0">
                   <motion.span
-                    className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#0a3d3d] text-white font-bold hover:bg-[#0d4a4a] transition-all w-full sm:w-auto text-sm shadow-lg shadow-[#0a3d3d]/20"
+                    className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full bg-[#0a3d3d] text-white font-bold hover:bg-[#0d4a4a] transition-all w-full sm:w-auto text-base shadow-lg shadow-[#0a3d3d]/15"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <LogIn className="w-4 h-4" />
+                    <LogIn className="w-5 h-5" />
                     כניסה לפורטל סוכנים
                   </motion.span>
                 </Link>
@@ -986,7 +988,8 @@ const Index = () => {
             </div>
           </ScrollReveal>
         </section>
-        {/* ═══════════ REGULATORY BADGES BAR ═══════════ */}
+
+        {/* REGULATORY BADGES BAR */}
         <RegulatoryBadgesBar />
       </main>
 

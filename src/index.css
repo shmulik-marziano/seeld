@@ -140,6 +140,57 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Dashed decorative connector */
+.dashed-connector {
+  border: none;
+  border-top: 2px dashed #0a3d3d;
+  opacity: 0.15;
+}
+
+.dashed-connector-vertical {
+  border: none;
+  border-right: 2px dashed #0a3d3d;
+  opacity: 0.12;
+}
+
+/* Colored accent dot */
+.accent-dot::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-inline-end: 8px;
+  flex-shrink: 0;
+}
+
+/* Bold section headings override */
+.section-heading {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* Minimal form input - bottom border only */
+.input-minimal {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(10, 61, 61, 0.1);
+  border-radius: 0;
+  padding: 0.875rem 0.25rem;
+  font-size: 0.875rem;
+  transition: border-color 0.2s ease;
+}
+
+.input-minimal:focus {
+  outline: none;
+  border-bottom-color: #5ec6c6;
+}
+
+.input-minimal::placeholder {
+  color: rgba(10, 61, 61, 0.25);
+}
+
 /* Better touch targets on mobile */
 @media (max-width: 640px) {
   a, button {
