@@ -3,9 +3,9 @@ import { useApp } from '@/contexts/AppContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
-  Users, FileText, CheckCircle2, Clock, TrendingUp, ArrowUpRight,
-  Sparkles, LayoutDashboard, UserPlus, Bell, Zap, ArrowLeft,
-  Shield, Wallet, Target, AlertTriangle, ChevronLeft, ClipboardCheck,
+  Users, FileText, CheckCircle2, Clock, TrendingUp,
+  Sparkles, LayoutDashboard, UserPlus, Bell, Zap,
+  Shield, Wallet, Target, ChevronLeft, ClipboardCheck,
   Activity, BarChart3,
 } from 'lucide-react';
 import {
@@ -16,21 +16,29 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { SeeIDLogo } from '@/components/brand/SeeIDLogo';
 
-const CHART_GREENS = [
-  'hsl(152, 42%, 30%)',
-  'hsl(152, 38%, 42%)',
-  'hsl(160, 42%, 55%)',
-  'hsl(160, 35%, 68%)',
-  'hsl(152, 25%, 78%)',
+// New bold color palette
+const PALETTE = {
+  teal: '#0a3d3d',
+  mint: '#5ec6c6',
+  orange: '#f4a261',
+  green: '#90be6d',
+  coral: '#e76f51',
+};
+
+const CHART_COLORS = [
+  PALETTE.teal,
+  PALETTE.mint,
+  PALETTE.green,
+  PALETTE.orange,
+  PALETTE.coral,
 ];
 
 const DONUT_COLORS = [
-  'hsl(152, 42%, 35%)',
-  'hsl(160, 42%, 55%)',
-  'hsl(35, 35%, 75%)',
-  'hsl(0, 55%, 72%)',
-  'hsl(355, 50%, 76%)',
-  'hsl(210, 25%, 72%)',
+  PALETTE.green,
+  PALETTE.mint,
+  PALETTE.orange,
+  PALETTE.coral,
+  '#6b7280',
 ];
 
 const container = {
@@ -108,11 +116,11 @@ export default function DashboardPage() {
   // Generate initials avatar color
   const avatarColor = (name: string) => {
     const colors = [
-      'bg-seeld-mint/20 text-seeld-teal',
-      'bg-seeld-coral/20 text-seeld-coral',
-      'bg-seeld-sky/20 text-info',
-      'bg-seeld-sand/20 text-accent',
-      'bg-seeld-blush/20 text-seeld-blush',
+      `bg-[${PALETTE.mint}]/20 text-[${PALETTE.teal}]`,
+      `bg-[${PALETTE.coral}]/20 text-[${PALETTE.coral}]`,
+      `bg-[${PALETTE.orange}]/20 text-[${PALETTE.orange}]`,
+      `bg-[${PALETTE.green}]/20 text-[${PALETTE.green}]`,
+      'bg-gray-100 text-gray-600',
     ];
     return colors[name.length % colors.length];
   };
@@ -131,8 +139,8 @@ export default function DashboardPage() {
       <div className="space-y-6 px-1 sm:px-0" dir="rtl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <div className="max-w-2xl mx-auto py-6 sm:py-12">
-            <Card className="text-center py-10 sm:py-16 border-0 shadow-lg relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] via-transparent to-accent/[0.03]" />
+            <Card className="text-center py-10 sm:py-16 border-0 shadow-lg rounded-2xl relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#5ec6c6]/[0.04] via-transparent to-[#f4a261]/[0.04]" />
               <CardContent className="flex flex-col items-center gap-5 sm:gap-6 relative z-10 px-4 sm:px-6">
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
@@ -143,21 +151,21 @@ export default function DashboardPage() {
                   <SeeIDLogo size={90} showText showSubtitle className="mb-2 hidden sm:block" />
                 </motion.div>
                 <div className="space-y-2">
-                  <h2 className="text-xl sm:text-2xl font-bold text-foreground">{getGreeting()}, ברוכים הבאים!</h2>
-                  <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto leading-relaxed px-2">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d]">{getGreeting()}, ברוכים הבאים!</h2>
+                  <p className="text-sm text-gray-500 max-w-md mx-auto leading-relaxed px-2">
                     התחל על ידי הוספת הלקוח הראשון שלך. המערכת תנתח את המוצרים ותייצר המלצות חכמות בעזרת AI.
                   </p>
                 </div>
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                  <Button onClick={() => navigate('/app/customers/new')} size="lg" className="gap-2 rounded-xl h-12 px-6 sm:px-8 text-base font-bold shadow-md min-w-[200px]">
+                  <Button onClick={() => navigate('/app/customers/new')} size="lg" className="gap-2 rounded-full h-12 px-8 text-base font-bold shadow-md min-w-[200px] bg-[#0a3d3d] hover:bg-[#0d4a4a]">
                     <UserPlus className="h-5 w-5" />הוסף לקוח ראשון
                   </Button>
                 </motion.div>
-                <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 pt-4 text-xs text-muted-foreground">
+                <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 pt-4 text-xs text-gray-500">
                   {[
-                    { icon: Sparkles, text: 'המלצות AI אוטומטיות' },
-                    { icon: Shield, text: 'ניהול תיק מלא' },
-                    { icon: BarChart3, text: 'דוחות וניתוח' },
+                    { icon: Sparkles, text: 'המלצות AI אוטומטיות', color: PALETTE.mint },
+                    { icon: Shield, text: 'ניהול תיק מלא', color: PALETTE.green },
+                    { icon: BarChart3, text: 'דוחות וניתוח', color: PALETTE.orange },
                   ].map((f, i) => (
                     <motion.span
                       key={i}
@@ -166,7 +174,9 @@ export default function DashboardPage() {
                       transition={{ delay: 0.5 + i * 0.1 }}
                       className="flex items-center gap-1.5"
                     >
-                      <f.icon className="h-3.5 w-3.5 text-primary/60" />
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: f.color }}>
+                        <f.icon className="h-3 w-3 text-white" />
+                      </div>
                       {f.text}
                     </motion.span>
                   ))}
@@ -185,15 +195,15 @@ export default function DashboardPage() {
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between bg-gradient-to-l from-primary/[0.04] to-transparent rounded-xl sm:rounded-2xl px-3 sm:px-5 py-3 sm:py-4 gap-3"
+        className="flex items-center justify-between bg-[#f8f9fc] rounded-2xl px-4 sm:px-6 py-4 sm:py-5 gap-3 border border-gray-100"
       >
         <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center shadow-sm shrink-0">
-            <LayoutDashboard className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shadow-sm shrink-0" style={{ backgroundColor: PALETTE.teal }}>
+            <LayoutDashboard className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
           </div>
           <div className="min-w-0">
-            <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold text-foreground tracking-tight truncate">{getGreeting()}</h1>
-            <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 truncate">{new Date().toLocaleDateString('he-IL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#0a3d3d] tracking-tight truncate">{getGreeting()}</h1>
+            <p className="text-[11px] sm:text-xs text-gray-400 mt-0.5 truncate">{new Date().toLocaleDateString('he-IL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -206,7 +216,7 @@ export default function DashboardPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 + i * 0.08 }}
                 onClick={() => navigate(`/app/customers/${c.id}`)}
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold border-2 border-background hover:ring-2 hover:ring-primary/30 transition-all shadow-sm ${avatarColor(c.fullName)}`}
+                className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold border-2 border-white hover:ring-2 hover:ring-[${PALETTE.mint}]/30 transition-all shadow-sm ${avatarColor(c.fullName)}`}
                 title={c.fullName}
               >
                 {c.firstName.charAt(0)}{c.lastName.charAt(0)}
@@ -215,13 +225,13 @@ export default function DashboardPage() {
             {stats.totalCustomers > 4 && (
               <button
                 onClick={() => navigate('/app/customers')}
-                className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-muted-foreground border-2 border-background hover:bg-primary/10 transition-colors"
+                className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-500 border-2 border-white hover:bg-[#5ec6c6]/10 transition-colors"
               >
                 +{stats.totalCustomers - 4}
               </button>
             )}
           </div>
-          <Button onClick={() => navigate('/app/customers/new')} className="gap-2 rounded-xl sm:rounded-2xl h-10 px-3 sm:px-5 font-bold shadow-md text-xs sm:text-sm min-h-[44px]">
+          <Button onClick={() => navigate('/app/customers/new')} className="gap-2 rounded-full h-11 px-5 font-bold shadow-md text-sm min-h-[44px] bg-[#0a3d3d] hover:bg-[#0d4a4a]">
             <UserPlus className="h-4 w-4" />
             <span className="hidden sm:inline">לקוח חדש</span>
           </Button>
@@ -235,22 +245,22 @@ export default function DashboardPage() {
         <motion.div variants={container} initial="hidden" animate="show" className="lg:col-span-8 space-y-4 sm:space-y-5">
 
           {/* Top stats strip - 2 cols on mobile, 4 on md+ */}
-          <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
+          <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { label: 'לקוחות פעילים', value: stats.totalCustomers, icon: Users, color: 'text-seeld-teal', bg: 'bg-gradient-to-br from-seeld-mint/15 to-seeld-mint/5', path: '/app/customers' },
-              { label: 'מוצרים בתיק', value: stats.totalProducts, icon: Shield, color: 'text-info', bg: 'bg-gradient-to-br from-seeld-sky/15 to-seeld-sky/5', path: '/app/customers' },
-              { label: 'המלצות שאושרו', value: stats.completedRecs + stats.approvedRecs, icon: CheckCircle2, color: 'text-success', bg: 'bg-gradient-to-br from-seeld-mint/15 to-seeld-mint/5', path: '/app/recommendation-bank' },
-              { label: 'חיוב חודשי', value: `₪${stats.totalMonthly.toLocaleString()}`, icon: Wallet, color: 'text-accent', bg: 'bg-gradient-to-br from-seeld-sand/15 to-seeld-sand/5', path: '/app/customers' },
-            ].map((s, i) => (
+              { label: 'לקוחות פעילים', value: stats.totalCustomers, icon: Users, color: PALETTE.teal, path: '/app/customers' },
+              { label: 'מוצרים בתיק', value: stats.totalProducts, icon: Shield, color: PALETTE.mint, path: '/app/customers' },
+              { label: 'המלצות שאושרו', value: stats.completedRecs + stats.approvedRecs, icon: CheckCircle2, color: PALETTE.green, path: '/app/recommendation-bank' },
+              { label: 'חיוב חודשי', value: `₪${stats.totalMonthly.toLocaleString()}`, icon: Wallet, color: PALETTE.orange, path: '/app/customers' },
+            ].map((s) => (
               <motion.div key={s.label} variants={item} whileHover={{ y: -2, scale: 1.01 }} whileTap={{ scale: 0.98 }}>
-                <Card className="cursor-pointer hover:shadow-md transition-all border-0 shadow-sm rounded-xl sm:rounded-2xl active:scale-[0.98]" onClick={() => navigate(s.path)}>
-                  <CardContent className="p-3 sm:p-4 flex items-center gap-2.5 sm:gap-3">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center ${s.bg} shadow-sm shrink-0`}>
-                      <s.icon className={`h-4 w-4 sm:h-5 sm:w-5 ${s.color}`} />
+                <Card className="cursor-pointer hover:shadow-lg transition-all border border-gray-100 shadow-sm rounded-2xl active:scale-[0.98]" onClick={() => navigate(s.path)}>
+                  <CardContent className="p-4 sm:p-5 flex items-center gap-3">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-sm shrink-0" style={{ backgroundColor: s.color }}>
+                      <s.icon className="h-5 w-5 sm:h-5.5 sm:w-5.5 text-white" />
                     </div>
                     <div className="min-w-0">
-                      <div className="text-lg sm:text-xl font-bold text-foreground tracking-tight truncate">{s.value}</div>
-                      <p className="text-[9px] sm:text-[10px] text-muted-foreground font-medium truncate">{s.label}</p>
+                      <div className="text-xl sm:text-2xl font-extrabold text-[#0a3d3d] tracking-tight truncate">{s.value}</div>
+                      <p className="text-[10px] sm:text-xs text-gray-400 font-medium truncate">{s.label}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -260,12 +270,14 @@ export default function DashboardPage() {
 
           {/* Charts row - stacked on mobile */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 sm:gap-5">
-            {/* Donut chart - PREMIUM */}
+            {/* Donut chart */}
             <motion.div variants={item} className="md:col-span-2">
-              <Card className="h-full border-0 shadow-sm rounded-xl sm:rounded-2xl bg-gradient-to-br from-background to-primary/[0.02]">
+              <Card className="h-full border border-gray-100 shadow-sm rounded-2xl">
                 <CardContent className="p-4 sm:p-6 flex flex-col items-center justify-center h-full">
-                  <p className="text-sm text-foreground mb-3 sm:mb-4 self-start font-bold flex items-center gap-2">
-                    <Target className="h-4 w-4 text-primary" />
+                  <p className="text-sm text-[#0a3d3d] mb-3 sm:mb-4 self-start font-bold flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: PALETTE.mint }}>
+                      <Target className="h-3.5 w-3.5 text-white" />
+                    </div>
                     התפלגות החלטות
                   </p>
                   {stats.decisionData.length > 0 ? (
@@ -287,33 +299,33 @@ export default function DashboardPage() {
                         </PieChart>
                       </ResponsiveContainer>
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-3xl sm:text-4xl font-extrabold text-foreground">{stats.totalRecs}</span>
-                        <span className="text-[10px] sm:text-xs text-muted-foreground font-medium">המלצות</span>
+                        <span className="text-3xl sm:text-4xl font-extrabold text-[#0a3d3d]">{stats.totalRecs}</span>
+                        <span className="text-[10px] sm:text-xs text-gray-400 font-medium">המלצות</span>
                       </div>
                     </div>
                   ) : (
-                    <div className="h-[180px] sm:h-[200px] flex flex-col items-center justify-center text-muted-foreground">
-                      <Target className="h-10 w-10 text-muted-foreground/20 mb-2" />
-                      <span className="text-xs">אין נתונים עדיין</span>
+                    <div className="h-[180px] sm:h-[200px] flex flex-col items-center justify-center text-gray-300">
+                      <Target className="h-10 w-10 mb-2" />
+                      <span className="text-xs text-gray-400">אין נתונים עדיין</span>
                     </div>
                   )}
                   {/* Avatars row */}
                   <div className="flex items-center -space-x-2 space-x-reverse mt-3 sm:mt-4 mb-2 sm:mb-3">
                     {stats.recentCustomers.slice(0, 5).map((c) => (
-                      <div key={c.id} className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[8px] sm:text-[9px] font-bold border-2 border-background shadow-sm ${avatarColor(c.fullName)}`}>
+                      <div key={c.id} className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[8px] sm:text-[9px] font-bold border-2 border-white shadow-sm ${avatarColor(c.fullName)}`}>
                         {c.firstName.charAt(0)}{c.lastName.charAt(0)}
                       </div>
                     ))}
                     {stats.totalCustomers > 5 && (
-                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-muted flex items-center justify-center text-[8px] sm:text-[9px] font-bold text-muted-foreground border-2 border-background">+{stats.totalCustomers - 5}</div>
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gray-100 flex items-center justify-center text-[8px] sm:text-[9px] font-bold text-gray-500 border-2 border-white">+{stats.totalCustomers - 5}</div>
                     )}
                   </div>
                   {/* Legend */}
                   <div className="flex flex-wrap gap-2 sm:gap-3 mt-1 justify-center">
                     {stats.decisionData.slice(0, 5).map((d, i) => (
                       <div key={d.name} className="flex items-center gap-1 sm:gap-1.5">
-                        <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full" style={{ background: DONUT_COLORS[i] }} />
-                        <span className="text-[9px] sm:text-[10px] text-muted-foreground font-medium">{d.name} ({d.value})</span>
+                        <div className="w-2.5 h-2.5 rounded-full" style={{ background: DONUT_COLORS[i] }} />
+                        <span className="text-[9px] sm:text-[10px] text-gray-500 font-medium">{d.name} ({d.value})</span>
                       </div>
                     ))}
                   </div>
@@ -321,37 +333,39 @@ export default function DashboardPage() {
               </Card>
             </motion.div>
 
-            {/* Bar chart - full width on mobile */}
+            {/* Bar chart */}
             <motion.div variants={item} className="md:col-span-3">
-              <Card className="h-full border-0 shadow-sm rounded-xl sm:rounded-2xl">
-                <CardContent className="p-3 sm:p-5">
+              <Card className="h-full border border-gray-100 shadow-sm rounded-2xl">
+                <CardContent className="p-4 sm:p-5">
                   <div className="flex items-center justify-between mb-3 sm:mb-4 flex-wrap gap-2">
-                    <p className="text-xs text-muted-foreground font-semibold flex items-center gap-1.5">
-                      <Activity className="h-3.5 w-3.5" />
+                    <p className="text-sm text-[#0a3d3d] font-bold flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: PALETTE.orange }}>
+                        <Activity className="h-3.5 w-3.5 text-white" />
+                      </div>
                       פעילות חודשית
                     </p>
                     <div className="flex gap-2 sm:gap-3">
                       {[
-                        { label: 'לקוחות', color: CHART_GREENS[0] },
-                        { label: 'המלצות', color: CHART_GREENS[2] },
-                        { label: 'מוצרים', color: CHART_GREENS[4] },
+                        { label: 'לקוחות', color: PALETTE.teal },
+                        { label: 'המלצות', color: PALETTE.mint },
+                        { label: 'מוצרים', color: PALETTE.green },
                       ].map(l => (
                         <div key={l.label} className="flex items-center gap-1">
-                          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-sm" style={{ background: l.color }} />
-                          <span className="text-[9px] sm:text-[10px] text-muted-foreground">{l.label}</span>
+                          <div className="w-2.5 h-2.5 rounded-full" style={{ background: l.color }} />
+                          <span className="text-[9px] sm:text-[10px] text-gray-500">{l.label}</span>
                         </div>
                       ))}
                     </div>
                   </div>
                   <ResponsiveContainer width="100%" height={160} className="sm:!h-[180px]">
                     <BarChart data={stats.monthlyData} barGap={2} barSize={10}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(35, 16%, 90%)" />
-                      <XAxis dataKey="name" tick={{ fontSize: 9, fill: 'hsl(30, 8%, 48%)' }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fontSize: 9, fill: 'hsl(30, 8%, 48%)' }} axisLine={false} tickLine={false} allowDecimals={false} width={25} />
-                      <RTooltip contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid hsl(35, 16%, 86%)' }} />
-                      <Bar dataKey="לקוחות" fill={CHART_GREENS[0]} radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="המלצות" fill={CHART_GREENS[2]} radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="מוצרים" fill={CHART_GREENS[4]} radius={[4, 4, 0, 0]} />
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                      <XAxis dataKey="name" tick={{ fontSize: 9, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 9, fill: '#9ca3af' }} axisLine={false} tickLine={false} allowDecimals={false} width={25} />
+                      <RTooltip contentStyle={{ fontSize: 11, borderRadius: 12, border: '1px solid #e5e7eb' }} />
+                      <Bar dataKey="לקוחות" fill={PALETTE.teal} radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="המלצות" fill={PALETTE.mint} radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="מוצרים" fill={PALETTE.green} radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -359,22 +373,22 @@ export default function DashboardPage() {
             </motion.div>
           </div>
 
-          {/* Quick action cards -- bottom row: 2 cols on mobile */}
-          <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
+          {/* Quick action cards */}
+          <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { label: 'לקוח חדש', desc: 'הוסף לקוח ונתח מוצרים', icon: UserPlus, path: '/app/customers/new', bg: 'bg-gradient-to-br from-seeld-mint/12 to-seeld-mint/4', color: 'text-seeld-teal' },
-              { label: 'יצירת המלצה', desc: 'המלצת AI חכמה', icon: Sparkles, path: '/app/recommendations/new', bg: 'bg-gradient-to-br from-seeld-coral/12 to-seeld-coral/4', color: 'text-seeld-coral' },
-              { label: 'סיכום ביצועים', desc: 'תיעוד מה בוצע בפועל', icon: ClipboardCheck, path: '/app/customers', bg: 'bg-gradient-to-br from-primary/12 to-primary/4', color: 'text-primary' },
-              { label: 'יומן פעולות', desc: 'כל הפעילות מתועדת', icon: FileText, path: '/app/activity-log', bg: 'bg-gradient-to-br from-seeld-sand/12 to-seeld-sand/4', color: 'text-accent' },
+              { label: 'לקוח חדש', desc: 'הוסף לקוח ונתח מוצרים', icon: UserPlus, path: '/app/customers/new', color: PALETTE.teal },
+              { label: 'יצירת המלצה', desc: 'המלצת AI חכמה', icon: Sparkles, path: '/app/recommendations/new', color: PALETTE.coral },
+              { label: 'סיכום ביצועים', desc: 'תיעוד מה בוצע בפועל', icon: ClipboardCheck, path: '/app/customers', color: PALETTE.mint },
+              { label: 'יומן פעולות', desc: 'כל הפעילות מתועדת', icon: FileText, path: '/app/activity-log', color: PALETTE.orange },
             ].map(action => (
-              <Card key={action.label} className="cursor-pointer hover:shadow-md transition-all group border-0 shadow-sm rounded-xl sm:rounded-2xl active:scale-[0.98]" onClick={() => navigate(action.path)}>
-                <CardContent className="p-3 sm:p-4 space-y-2 sm:space-y-3">
-                  <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center ${action.bg} group-hover:scale-110 transition-transform shadow-sm`}>
-                    <action.icon className={`h-4 w-4 sm:h-4.5 sm:w-4.5 ${action.color}`} />
+              <Card key={action.label} className="cursor-pointer hover:shadow-lg transition-all group border border-gray-100 shadow-sm rounded-2xl active:scale-[0.98]" onClick={() => navigate(action.path)}>
+                <CardContent className="p-4 sm:p-5 space-y-3">
+                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm" style={{ backgroundColor: action.color }}>
+                    <action.icon className="h-4.5 w-4.5 sm:h-5 sm:w-5 text-white" />
                   </div>
                   <div>
-                    <p className="text-xs sm:text-sm font-semibold text-foreground group-hover:text-primary transition-colors">{action.label}</p>
-                    <p className="text-[9px] sm:text-[10px] text-muted-foreground leading-relaxed hidden sm:block">{action.desc}</p>
+                    <p className="text-sm font-bold text-[#0a3d3d] group-hover:text-[#5ec6c6] transition-colors">{action.label}</p>
+                    <p className="text-[10px] text-gray-400 leading-relaxed hidden sm:block">{action.desc}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -387,18 +401,18 @@ export default function DashboardPage() {
 
           {/* Insights card */}
           <motion.div variants={item}>
-            <Card className="border-0 shadow-sm rounded-xl sm:rounded-2xl overflow-hidden">
-              <div className="h-1 bg-gradient-to-l from-primary/60 via-primary/30 to-transparent" />
-              <CardContent className="p-4 sm:p-5 space-y-2.5 sm:space-y-3">
+            <Card className="border border-gray-100 shadow-sm rounded-2xl overflow-hidden">
+              <div className="h-1.5" style={{ background: `linear-gradient(to left, ${PALETTE.mint}, ${PALETTE.teal})` }} />
+              <CardContent className="p-4 sm:p-5 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <Sparkles className="h-3.5 w-3.5 text-primary" />
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: PALETTE.green }}>
+                      <Sparkles className="h-4 w-4 text-white" />
                     </div>
-                    <h3 className="text-xs sm:text-sm font-bold text-foreground">תובנות ופעולות נדרשות</h3>
+                    <h3 className="text-sm font-bold text-[#0a3d3d]">תובנות ופעולות נדרשות</h3>
                   </div>
                   {stats.approvalRate > 0 && (
-                    <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full text-white" style={{ backgroundColor: PALETTE.green }}>
                       {stats.approvalRate}% אישור
                     </span>
                   )}
@@ -406,63 +420,63 @@ export default function DashboardPage() {
                 <div className="space-y-2">
                   {/* Insight 1 */}
                   {stats.pendingFollowUps > 0 && (
-                    <button onClick={() => navigate('/app/follow-up')} className="w-full text-right p-3 rounded-xl bg-background border border-border/50 hover:border-primary/30 hover:shadow-sm transition-all group min-h-[44px] active:scale-[0.99]">
+                    <button onClick={() => navigate('/app/follow-up')} className="w-full text-right p-3 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#5ec6c6]/40 hover:shadow-sm transition-all group min-h-[44px] active:scale-[0.99]">
                       <div className="flex items-start gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-warning/10 flex items-center justify-center shrink-0">
-                          <Bell className="h-4 w-4 text-warning" />
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: PALETTE.orange }}>
+                          <Bell className="h-4 w-4 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold text-foreground">פולו-אפ בהמתנה</p>
-                          <p className="text-[10px] text-muted-foreground mt-0.5">{stats.pendingFollowUps} לקוחות מחכים לתשובה שלך</p>
+                          <p className="text-xs font-bold text-[#0a3d3d]">פולו-אפ בהמתנה</p>
+                          <p className="text-[10px] text-gray-400 mt-0.5">{stats.pendingFollowUps} לקוחות מחכים לתשובה שלך</p>
                         </div>
-                        <ChevronLeft className="h-3.5 w-3.5 text-muted-foreground/40 mt-1.5 group-hover:text-primary group-hover:-translate-x-0.5 transition-all" />
+                        <ChevronLeft className="h-3.5 w-3.5 text-gray-300 mt-1.5 group-hover:text-[#5ec6c6] group-hover:-translate-x-0.5 transition-all" />
                       </div>
                     </button>
                   )}
 
                   {/* Insight 2 */}
                   {stats.openRecs > 0 && (
-                    <button onClick={() => navigate('/app/recommendation-bank')} className="w-full text-right p-3 rounded-xl bg-background border border-border/50 hover:border-primary/30 hover:shadow-sm transition-all group min-h-[44px] active:scale-[0.99]">
+                    <button onClick={() => navigate('/app/recommendation-bank')} className="w-full text-right p-3 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#5ec6c6]/40 hover:shadow-sm transition-all group min-h-[44px] active:scale-[0.99]">
                       <div className="flex items-start gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-seeld-mint/15 flex items-center justify-center shrink-0">
-                          <FileText className="h-4 w-4 text-seeld-teal" />
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: PALETTE.mint }}>
+                          <FileText className="h-4 w-4 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold text-foreground">המלצות פתוחות</p>
-                          <p className="text-[10px] text-muted-foreground mt-0.5">{stats.openRecs} המלצות ממתינות לטיפול הלקוח</p>
+                          <p className="text-xs font-bold text-[#0a3d3d]">המלצות פתוחות</p>
+                          <p className="text-[10px] text-gray-400 mt-0.5">{stats.openRecs} המלצות ממתינות לטיפול הלקוח</p>
                         </div>
-                        <ChevronLeft className="h-3.5 w-3.5 text-muted-foreground/40 mt-1.5 group-hover:text-primary group-hover:-translate-x-0.5 transition-all" />
+                        <ChevronLeft className="h-3.5 w-3.5 text-gray-300 mt-1.5 group-hover:text-[#5ec6c6] group-hover:-translate-x-0.5 transition-all" />
                       </div>
                     </button>
                   )}
 
                   {/* Insight 3 */}
                   {stats.inExecution > 0 && (
-                    <button onClick={() => navigate('/app/execution')} className="w-full text-right p-3 rounded-xl bg-background border border-border/50 hover:border-primary/30 hover:shadow-sm transition-all group min-h-[44px] active:scale-[0.99]">
+                    <button onClick={() => navigate('/app/execution')} className="w-full text-right p-3 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#5ec6c6]/40 hover:shadow-sm transition-all group min-h-[44px] active:scale-[0.99]">
                       <div className="flex items-start gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-seeld-coral/10 flex items-center justify-center shrink-0">
-                          <Zap className="h-4 w-4 text-seeld-coral" />
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: PALETTE.coral }}>
+                          <Zap className="h-4 w-4 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold text-foreground">בתהליך ביצוע</p>
-                          <p className="text-[10px] text-muted-foreground mt-0.5">{stats.inExecution} המלצות בשלבי ביצוע שונים</p>
+                          <p className="text-xs font-bold text-[#0a3d3d]">בתהליך ביצוע</p>
+                          <p className="text-[10px] text-gray-400 mt-0.5">{stats.inExecution} המלצות בשלבי ביצוע שונים</p>
                         </div>
-                        <ChevronLeft className="h-3.5 w-3.5 text-muted-foreground/40 mt-1.5 group-hover:text-primary group-hover:-translate-x-0.5 transition-all" />
+                        <ChevronLeft className="h-3.5 w-3.5 text-gray-300 mt-1.5 group-hover:text-[#5ec6c6] group-hover:-translate-x-0.5 transition-all" />
                       </div>
                     </button>
                   )}
 
-                  {/* Portfolio summary -- always show */}
-                  <button onClick={() => navigate('/app/customers')} className="w-full text-right p-3 rounded-xl bg-background border border-border/50 hover:border-primary/30 hover:shadow-sm transition-all group min-h-[44px] active:scale-[0.99]">
+                  {/* Portfolio summary */}
+                  <button onClick={() => navigate('/app/customers')} className="w-full text-right p-3 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#5ec6c6]/40 hover:shadow-sm transition-all group min-h-[44px] active:scale-[0.99]">
                     <div className="flex items-start gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                        <TrendingUp className="h-4 w-4 text-primary" />
+                      <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: PALETTE.teal }}>
+                        <TrendingUp className="h-4 w-4 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-foreground">סיכום התיק</p>
-                        <p className="text-[10px] text-muted-foreground mt-0.5">{stats.moneyProducts} מוצרי כסף · {stats.insuranceProducts} ביטוח · ₪{stats.totalAccumulation.toLocaleString()} צבירה</p>
+                        <p className="text-xs font-bold text-[#0a3d3d]">סיכום התיק</p>
+                        <p className="text-[10px] text-gray-400 mt-0.5">{stats.moneyProducts} מוצרי כסף · {stats.insuranceProducts} ביטוח · ₪{stats.totalAccumulation.toLocaleString()} צבירה</p>
                       </div>
-                      <ChevronLeft className="h-3.5 w-3.5 text-muted-foreground/40 mt-1.5 group-hover:text-primary group-hover:-translate-x-0.5 transition-all" />
+                      <ChevronLeft className="h-3.5 w-3.5 text-gray-300 mt-1.5 group-hover:text-[#5ec6c6] group-hover:-translate-x-0.5 transition-all" />
                     </div>
                   </button>
                 </div>
@@ -472,14 +486,16 @@ export default function DashboardPage() {
 
           {/* Recent customers */}
           <motion.div variants={item}>
-            <Card className="border-0 shadow-sm rounded-xl sm:rounded-2xl">
+            <Card className="border border-gray-100 shadow-sm rounded-2xl">
               <CardContent className="p-4 sm:p-5">
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
-                  <p className="text-xs font-semibold text-foreground flex items-center gap-1.5">
-                    <Users className="h-3.5 w-3.5 text-muted-foreground" />
+                  <p className="text-sm font-bold text-[#0a3d3d] flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: PALETTE.teal }}>
+                      <Users className="h-3.5 w-3.5 text-white" />
+                    </div>
                     לקוחות אחרונים
                   </p>
-                  <button onClick={() => navigate('/app/customers')} className="text-[10px] text-primary hover:underline font-medium flex items-center gap-0.5 min-h-[44px] px-2">
+                  <button onClick={() => navigate('/app/customers')} className="text-[10px] font-bold flex items-center gap-0.5 min-h-[44px] px-3 rounded-full hover:bg-gray-50 transition-colors" style={{ color: PALETTE.mint }}>
                     הצג הכל
                     <ChevronLeft className="h-3 w-3" />
                   </button>
@@ -492,16 +508,16 @@ export default function DashboardPage() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.3 + i * 0.06 }}
                       onClick={() => navigate(`/app/customers/${c.id}`)}
-                      className="w-full text-right flex items-center gap-3 p-2.5 rounded-xl hover:bg-muted/50 transition-colors group min-h-[44px] active:bg-muted/70"
+                      className="w-full text-right flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors group min-h-[44px] active:bg-gray-100"
                     >
                       <div className={`w-9 h-9 rounded-full flex items-center justify-center text-[10px] font-bold ${avatarColor(c.fullName)} shadow-sm shrink-0`}>
                         {c.firstName.charAt(0)}{c.lastName.charAt(0)}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium text-foreground truncate group-hover:text-primary transition-colors">{c.fullName}</p>
-                        <p className="text-[10px] text-muted-foreground">{c.status}</p>
+                        <p className="text-xs font-medium text-[#0a3d3d] truncate group-hover:text-[#5ec6c6] transition-colors">{c.fullName}</p>
+                        <p className="text-[10px] text-gray-400">{c.status}</p>
                       </div>
-                      <span className="text-[9px] text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded shrink-0">
+                      <span className="text-[9px] text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full shrink-0">
                         {new Date(c.createdAt).toLocaleDateString('he-IL', { day: 'numeric', month: 'short' })}
                       </span>
                     </motion.button>
@@ -513,35 +529,37 @@ export default function DashboardPage() {
 
           {/* Recent activity */}
           <motion.div variants={item}>
-            <Card className="border-0 shadow-sm rounded-xl sm:rounded-2xl">
+            <Card className="border border-gray-100 shadow-sm rounded-2xl">
               <CardContent className="p-4 sm:p-5">
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
-                  <p className="text-xs font-semibold text-foreground flex items-center gap-1.5">
-                    <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+                  <p className="text-sm font-bold text-[#0a3d3d] flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: PALETTE.coral }}>
+                      <Clock className="h-3.5 w-3.5 text-white" />
+                    </div>
                     פעילות אחרונה
                   </p>
-                  <button onClick={() => navigate('/app/activity-log')} className="text-[10px] text-primary hover:underline font-medium flex items-center gap-0.5 min-h-[44px] px-2">
+                  <button onClick={() => navigate('/app/activity-log')} className="text-[10px] font-bold flex items-center gap-0.5 min-h-[44px] px-3 rounded-full hover:bg-gray-50 transition-colors" style={{ color: PALETTE.mint }}>
                     הצג הכל
                     <ChevronLeft className="h-3 w-3" />
                   </button>
                 </div>
                 {data.activityLog.length === 0 ? (
                   <div className="text-center py-6">
-                    <Clock className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
-                    <p className="text-xs text-muted-foreground">אין פעילות מתועדת עדיין</p>
+                    <Clock className="h-8 w-8 text-gray-200 mx-auto mb-2" />
+                    <p className="text-xs text-gray-400">אין פעילות מתועדת עדיין</p>
                   </div>
                 ) : (
                   <div className="space-y-1 max-h-[200px] overflow-y-auto overscroll-contain">
                     {data.activityLog.slice(0, 8).map((entry) => (
-                      <div key={entry.id} className="flex items-start gap-2.5 py-2.5 border-b border-border/40 last:border-0">
-                        <div className={`mt-1.5 h-2 w-2 rounded-full shrink-0 ${
-                          entry.level === 'הצלחה' ? 'bg-seeld-mint' : entry.level === 'אזהרה' ? 'bg-warning' : 'bg-seeld-sky'
-                        }`} />
+                      <div key={entry.id} className="flex items-start gap-2.5 py-2.5 border-b border-gray-50 last:border-0">
+                        <div className={`mt-1.5 h-2.5 w-2.5 rounded-full shrink-0`} style={{
+                          backgroundColor: entry.level === 'הצלחה' ? PALETTE.green : entry.level === 'אזהרה' ? PALETTE.orange : PALETTE.mint
+                        }} />
                         <div className="min-w-0 flex-1">
-                          <p className="text-[11px] font-medium text-foreground truncate">{entry.title}</p>
-                          {entry.detail && <p className="text-[10px] text-muted-foreground truncate">{entry.detail}</p>}
+                          <p className="text-[11px] font-medium text-[#0a3d3d] truncate">{entry.title}</p>
+                          {entry.detail && <p className="text-[10px] text-gray-400 truncate">{entry.detail}</p>}
                         </div>
-                        <span className="text-[9px] text-muted-foreground whitespace-nowrap mt-0.5 bg-muted/50 px-1.5 py-0.5 rounded shrink-0">
+                        <span className="text-[9px] text-gray-400 whitespace-nowrap mt-0.5 bg-gray-50 px-2 py-0.5 rounded-full shrink-0">
                           {new Date(entry.timestamp).toLocaleDateString('he-IL', { day: 'numeric', month: 'short' })}
                         </span>
                       </div>

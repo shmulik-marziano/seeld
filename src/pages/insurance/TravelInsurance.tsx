@@ -1,142 +1,117 @@
 import Header from "@/components/Header";
-import { Plane, Globe, Shield, Briefcase, Heart, CheckCircle } from "lucide-react";
-import FeatureCard from "@/components/FeatureCard";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import InsuranceEnrollmentForm from "@/components/InsuranceEnrollmentForm";
 import Footer from "@/components/Footer";
-import DoodleDecoration from "@/components/DoodleDecoration";
-import { LogoDotsDivider } from "@/components/LogoBrandElements";
+import InsuranceEnrollmentForm from "@/components/InsuranceEnrollmentForm";
+import { Plane, Heart, Briefcase, ChevronLeft } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Link } from "react-router-dom";
 import travelLogos from "@/assets/travel-insurance-logos.jpeg";
 
 const TravelInsurance = () => {
+  const faqItems = [
+    {
+      q: "האם ביטוח נסיעות מכסה גם קורונה?",
+      a: "רוב הפוליסות העדכניות כוללות כיסוי לקורונה ומחלות מדבקות אחרות, כולל אשפוז, בידוד וביטול נסיעה. חשוב לוודא שהכיסוי מפורט בתנאי הפוליסה.",
+    },
+    {
+      q: "מה קורה אם אני צריך פינוי רפואי?",
+      a: "ביטוח נסיעות מקיף כולל כיסוי לפינוי רפואי לישראל או למדינה קרובה עם בית חולים מתאים. זהו אחד הרכיבים היקרים ביותר שהביטוח מכסה ויכול להגיע למאות אלפי דולרים.",
+    },
+    {
+      q: "האם כרטיס אשראי מספק ביטוח נסיעות?",
+      a: "חלק מכרטיסי האשראי מציעים ביטוח נסיעות בסיסי, אך הכיסוי בדרך כלל מוגבל מאוד — סכומים נמוכים, חריגים רבים, ותהליך תביעות מסובך. מומלץ תמיד לרכוש ביטוח ייעודי.",
+    },
+  ];
+
+  const companies = ["הראל", "מנורה מבטחים", "מגדל", "כלל", "איילון", "הפניקס", "מיטב", "מור", "ילין לפידות", "אנליסט", "איפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה"];
+
   return (
-    <div className="min-h-screen bg-background animate-fade-in" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Section */}
-        <section className="py-12 md:py-20 relative">
-          <div className="absolute bottom-8 left-4 hidden lg:block">
-            <DoodleDecoration type="shield" size="md" className="opacity-25 rotate-12" parallax parallaxSpeed={0.12} />
+
+      {/* Hero Banner */}
+      <section className="bg-[#f8f9fc] relative overflow-hidden">
+        <div className="absolute top-8 left-8 w-20 h-20 rounded-full bg-[#5ec6c6] opacity-15" />
+        <div className="absolute bottom-6 right-12 w-14 h-14 rounded-full bg-[#e76f51] opacity-12" />
+        <div className="absolute top-16 right-1/3 w-8 h-8 rounded-full bg-[#f4a261] opacity-20" />
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16 relative">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 rounded-full bg-[#e76f51] flex items-center justify-center">
+              <Plane className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-sm font-bold text-[#0a3d3d]/50">ביטוח נסיעות</span>
           </div>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6 text-right animate-slide-up">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium">
-                <Plane className="w-4 h-4" />
-                ביטוח נסיעות
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-4 leading-tight text-[#0a3d3d]">
+            ביטוח נסיעות לחו״ל
+          </h1>
+          <p className="text-base sm:text-lg text-[#0a3d3d]/50 max-w-2xl leading-relaxed">
+            טסים בראש שקט לכל מקום בעולם — כיסוי רפואי, אובדן מזוודות, ביטול טיסה ועוד.
+          </p>
+          <div className="mt-6">
+            <a href="#contact-form" className="inline-flex items-center px-8 py-3 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-all min-h-[48px]">
+              רכשו ביטוח עכשיו
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Breadcrumb */}
+      <div className="border-b border-gray-100">
+        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
+          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
+          <ChevronLeft className="w-3.5 h-3.5" />
+          <Link to="/insurance" className="hover:text-[#0a3d3d] transition-colors">ביטוח</Link>
+          <ChevronLeft className="w-3.5 h-3.5" />
+          <span className="text-[#0a3d3d] font-medium">ביטוח נסיעות</span>
+        </nav>
+      </div>
+
+      <main>
+        {/* Key Points Cards */}
+        <section className="py-10 sm:py-16">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+                <div className="w-12 h-12 rounded-xl bg-[#5ec6c6]/10 flex items-center justify-center mb-4">
+                  <Heart className="w-6 h-6 text-[#0a3d3d]" />
+                </div>
+                <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">כיסוי רפואי</h3>
+                <p className="text-gray-600 leading-relaxed text-sm">
+                  טיפול רפואי ואשפוז בכל מקום בעולם, פינוי רפואי וטיפולי שיניים חירום.
+                </p>
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                טסים בראש שקט
-                <span className="text-primary"> לכל מקום בעולם</span>
-              </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                ביטוח נסיעות לחו״ל מכסה אתכם בכל מקרה - טיפול רפואי, אובדן מזוודות, ביטול טיסה ועוד.
-              </p>
-              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
-                <a href="#enrollment-form" className="px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary/90 hover:scale-105 transition-all">
-                  רכשו ביטוח עכשיו
-                </a>
-                <a href="#coverage" className="px-8 py-4 rounded-full border border-border font-medium hover:bg-muted/60 transition-all">
-                  מה כולל הביטוח?
-                </a>
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+                <div className="w-12 h-12 rounded-xl bg-[#5ec6c6]/10 flex items-center justify-center mb-4">
+                  <Briefcase className="w-6 h-6 text-[#0a3d3d]" />
+                </div>
+                <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">מזוודות וכבודה</h3>
+                <p className="text-gray-600 leading-relaxed text-sm">
+                  פיצוי במקרה של אובדן מזוודות, עיכוב כבודה או נזק לציוד אישי.
+                </p>
+              </div>
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow sm:col-span-2 lg:col-span-1">
+                <div className="w-12 h-12 rounded-xl bg-[#5ec6c6]/10 flex items-center justify-center mb-4">
+                  <Plane className="w-6 h-6 text-[#0a3d3d]" />
+                </div>
+                <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">ביטול נסיעה</h3>
+                <p className="text-gray-600 leading-relaxed text-sm">
+                  החזר הוצאות במקרה של ביטול טיסה, קיצור נסיעה או איחור בטיסה.
+                </p>
               </div>
             </div>
-            <div className="relative animate-scale-in">
-              <div className="w-full aspect-square bg-gradient-to-br from-primary/20 to-primary/5 rounded-[2.5rem] flex items-center justify-center">
-                <Plane className="w-32 h-32 text-primary" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <LogoDotsDivider />
-
-        {/* Coverage Types */}
-        <section id="coverage" className="py-16 scroll-mt-24 relative">
-          <div className="absolute -top-4 right-8 hidden lg:block">
-            <DoodleDecoration type="handshake" size="sm" className="opacity-20 -rotate-12" parallax parallaxSpeed={0.08} />
-          </div>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">מה כולל הביטוח?</h2>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Heart className="w-5 h-5 text-primary" />
-                  כיסוי רפואי
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  טיפול רפואי ואשפוז בכל מקום בעולם
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> אשפוז עד מיליון דולר</li>
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> פינוי רפואי</li>
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> טיפולי שיניים חירום</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Briefcase className="w-5 h-5 text-primary" />
-                  מזוודות וכבודה
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  פיצוי במקרה של אובדן או נזק
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> אובדן מזוודות</li>
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> עיכוב כבודה</li>
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> נזק לציוד</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Plane className="w-5 h-5 text-primary" />
-                  ביטול נסיעה
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  החזר הוצאות במקרה של ביטול
-                </p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> ביטול טיסה</li>
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> קיצור נסיעה</li>
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> איחור בטיסה</li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
-        {/* Feature Cards */}
-        <section className="py-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">למה לבטח דרכנו?</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-6">
-            <FeatureCard title="כיסוי עולמי" description="הגנה בכל מקום בעולם - אירופה, אסיה, אמריקה ועוד" bgColor="bg-blue-50/80 dark:bg-blue-950/20" doodle="umbrella" />
-            <FeatureCard title="רכישה מהירה" description="קנו ביטוח נסיעות תוך דקות ספורות ישירות מהאתר" bgColor="bg-green-50/80 dark:bg-green-950/20" doodle="calculator" />
-            <FeatureCard title="מוקד חירום" description="מוקד סיוע בינלאומי זמין 24/7 בכל שפה" bgColor="bg-amber-50/80 dark:bg-amber-950/20" doodle="shield" />
-            <FeatureCard title="מחיר משתלם" description="ביטוח מקיף במחירים תחרותיים עם כיסוי רחב" bgColor="bg-purple-50/80 dark:bg-purple-950/20" doodle="savings" />
           </div>
         </section>
 
         {/* Quick Purchase Banner */}
-        <section className="py-16">
-          <div className="max-w-3xl mx-auto">
-            <div className="rounded-3xl bg-[hsl(210,30%,15%)] p-8 md:p-12 text-center space-y-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-white">רכשו ביטוח נסיעות לחו״ל עכשיו</h2>
-              <p className="text-white/70 text-lg">רכישה מהירה ומאובטחת דרך הראל ביטוח — הסוכן שלכם ב-SeelD</p>
+        <section className="py-10 sm:py-16">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="rounded-2xl bg-[#0a3d3d] p-8 sm:p-12 text-center space-y-6">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white">רכשו ביטוח נסיעות לחו״ל עכשיו</h2>
+              <p className="text-white/70 text-base sm:text-lg">רכישה מהירה ומאובטחת דרך הראל ביטוח — הסוכן שלכם ב-SeelD</p>
               <div className="relative inline-block">
                 <img
                   src={travelLogos}
@@ -144,7 +119,6 @@ const TravelInsurance = () => {
                   className="max-w-xs md:max-w-sm mx-auto rounded-xl shadow-lg border border-white/10"
                 />
                 <div className="absolute inset-0 flex">
-                  {/* Harel Link (Left zone) */}
                   <a
                     href="https://digital.harel-group.co.il/travel-policy?guid=bee1d408-c6a7-410e-b4ee-ac690224bdd3&an=025318"
                     target="_blank"
@@ -152,7 +126,6 @@ const TravelInsurance = () => {
                     className="w-1/2 h-full cursor-pointer rounded-l-xl hover:bg-white/5 transition-colors"
                     title="רכישת ביטוח הראל"
                   />
-                  {/* PassportCard Link (Right zone) */}
                   <a
                     href="https://buy.passportcard.co.il/?AffiliateId=fOYE25Ik9VYSMk30irogAg%3D%3D"
                     target="_blank"
@@ -167,69 +140,81 @@ const TravelInsurance = () => {
           </div>
         </section>
 
-        {/* Article Content */}
-        <section className="py-16">
-          <div className="max-w-4xl mx-auto space-y-12 text-right">
-            <div>
-              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">למה זה חשוב?</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
-                נסיעה לחו״ל ללא ביטוח היא הימור מסוכן. טיפול רפואי בחו״ל עולה עשרות ואף מאות אלפי שקלים — אשפוז של כמה ימים בארה״ב יכול להגיע לסכומים אסטרונומיים. גם אירועים כמו ביטול טיסה, אובדן מזוודות או גניבת דרכון יכולים להפוך חופשה לסיוט כלכלי.
-              </p>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
-                ביטוח נסיעות מעניק לכם שקט נפשי מוחלט: כיסוי רפואי מלא, פינוי רפואי, סיוע בשפה שלכם, החזר הוצאות בגין ביטולים, ופיצוי על אובדן כבודה. בעלות של כמה עשרות שקלים ליום, אתם קונים ביטחון שלא יסולא בפז.
-              </p>
-            </div>
+        {/* Main Article Content */}
+        <section className="pb-10 sm:pb-16">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="max-w-3xl">
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-6">למה זה חשוב?</h2>
+              <div className="space-y-4 text-gray-600 leading-relaxed text-base sm:text-lg">
+                <p>
+                  נסיעה לחו״ל ללא ביטוח היא הימור מסוכן. טיפול רפואי בחו״ל עולה עשרות ואף מאות אלפי שקלים — אשפוז של כמה ימים בארה״ב יכול להגיע לסכומים אסטרונומיים. גם אירועים כמו ביטול טיסה, אובדן מזוודות או גניבת דרכון יכולים להפוך חופשה לסיוט כלכלי.
+                </p>
+                <p>
+                  ביטוח נסיעות מעניק לכם שקט נפשי מוחלט: כיסוי רפואי מלא, פינוי רפואי, סיוע בשפה שלכם, החזר הוצאות בגין ביטולים, ופיצוי על אובדן כבודה. בעלות של כמה עשרות שקלים ליום, אתם קונים ביטחון שלא יסולא בפז.
+                </p>
+              </div>
 
-            <div>
-              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מתי כדאי לרכוש?</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
-                כדאי לרכוש ביטוח נסיעות מיד עם הזמנת הטיסה או חבילת הנופש. כך תהנו גם מכיסוי לביטול הנסיעה מסיבות רפואיות או אחרות. ככל שתרכשו מוקדם יותר, כך הכיסוי שלכם רחב יותר ואתם מוגנים מרגע הרכישה.
-              </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                חשוב במיוחד לדאוג לביטוח כשנוסעים ליעדים עם עלויות רפואיות גבוהות כמו ארה״ב או אירופה, כשנוסעים עם ילדים, כשמתכננים פעילויות ספורט אתגרי, או כשיש מצב רפואי קיים שדורש הצהרת בריאות מוקדמת.
-              </p>
-            </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mt-14 mb-6">מתי כדאי לרכוש?</h2>
+              <div className="space-y-4 text-gray-600 leading-relaxed text-base sm:text-lg">
+                <p>
+                  כדאי לרכוש ביטוח נסיעות מיד עם הזמנת הטיסה או חבילת הנופש. כך תהנו גם מכיסוי לביטול הנסיעה מסיבות רפואיות או אחרות. ככל שתרכשו מוקדם יותר, כך הכיסוי שלכם רחב יותר ואתם מוגנים מרגע הרכישה.
+                </p>
+                <p>
+                  חשוב במיוחד לדאוג לביטוח כשנוסעים ליעדים עם עלויות רפואיות גבוהות כמו ארה״ב או אירופה, כשנוסעים עם ילדים, כשמתכננים פעילויות ספורט אתגרי, או כשיש מצב רפואי קיים שדורש הצהרת בריאות מוקדמת.
+                </p>
+              </div>
 
-            <div>
-              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מה חשוב לדעת?</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
-                בבחירת ביטוח נסיעות, שימו לב לסכום הכיסוי הרפואי (מומלץ לפחות מיליון דולר ליעדים יקרים), חריגי הפוליסה, כיסוי ספורט אתגרי, כיסוי מצבים רפואיים קודמים, ומוקד חירום 24/7 בעברית. יש הבדלים גדולים בין פוליסות שנראות דומות.
-              </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                ב-SeelD אנחנו משווים עבורכם בין כל חברות הביטוח המובילות ומוצאים את הפוליסה המתאימה ביותר ליעד, למשך הנסיעה ולצרכים הספציפיים שלכם.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">שאלות נפוצות</h2>
-              <div className="space-y-6">
-                <div className="bg-muted/30 rounded-2xl p-6">
-                  <h3 className="text-lg font-semibold mb-2">האם ביטוח נסיעות מכסה גם קורונה?</h3>
-                  <p className="text-muted-foreground">רוב הפוליסות העדכניות כוללות כיסוי לקורונה ומחלות מדבקות אחרות, כולל אשפוז, בידוד וביטול נסיעה. חשוב לוודא שהכיסוי מפורט בתנאי הפוליסה.</p>
-                </div>
-                <div className="bg-muted/30 rounded-2xl p-6">
-                  <h3 className="text-lg font-semibold mb-2">מה קורה אם אני צריך פינוי רפואי?</h3>
-                  <p className="text-muted-foreground">ביטוח נסיעות מקיף כולל כיסוי לפינוי רפואי לישראל או למדינה קרובה עם בית חולים מתאים. זהו אחד הרכיבים היקרים ביותר שהביטוח מכסה ויכול להגיע למאות אלפי דולרים.</p>
-                </div>
-                <div className="bg-muted/30 rounded-2xl p-6">
-                  <h3 className="text-lg font-semibold mb-2">האם כרטיס אשראי מספק ביטוח נסיעות?</h3>
-                  <p className="text-muted-foreground">חלק מכרטיסי האשראי מציעים ביטוח נסיעות בסיסי, אך הכיסוי בדרך כלל מוגבל מאוד — סכומים נמוכים, חריגים רבים, ותהליך תביעות מסובך. מומלץ תמיד לרכוש ביטוח ייעודי.</p>
-                </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mt-14 mb-6">מה חשוב לדעת?</h2>
+              <div className="space-y-4 text-gray-600 leading-relaxed text-base sm:text-lg">
+                <p>
+                  בבחירת ביטוח נסיעות, שימו לב לסכום הכיסוי הרפואי (מומלץ לפחות מיליון דולר ליעדים יקרים), חריגי הפוליסה, כיסוי ספורט אתגרי, כיסוי מצבים רפואיים קודמים, ומוקד חירום 24/7 בעברית. יש הבדלים גדולים בין פוליסות שנראות דומות.
+                </p>
+                <p>
+                  ב-SeelD אנחנו משווים עבורכם בין כל חברות הביטוח המובילות ומוצאים את הפוליסה המתאימה ביותר ליעד, למשך הנסיעה ולצרכים הספציפיים שלכם.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Companies Section */}
-        <section className="py-16 bg-muted/20 rounded-3xl my-8">
-          <div className="max-w-4xl mx-auto px-6">
-            <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold tracking-tight mb-3 text-[#0a3d3d]">חברות שאנחנו משווקים</h2>
-              <p className="text-lg text-muted-foreground">אנחנו עובדים עם חברות הביטוח המובילות בישראל כדי להביא לכם את ההצעה הטובה ביותר</p>
+        {/* FAQ Accordion */}
+        <section className="py-10 sm:py-16">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="max-w-3xl">
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">שאלות נפוצות</h2>
+              <Accordion type="multiple" className="space-y-3">
+                {faqItems.map((item, idx) => (
+                  <AccordionItem
+                    key={idx}
+                    value={`faq-${idx}`}
+                    className="bg-white border border-gray-200 rounded-2xl px-6 overflow-hidden data-[state=open]:shadow-sm"
+                  >
+                    <AccordionTrigger className="text-right text-base font-semibold text-[#0a3d3d] hover:no-underline py-5">
+                      {item.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-600 leading-relaxed pb-5 text-sm sm:text-base">
+                      {item.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
             </div>
-            <div className="flex flex-wrap justify-center gap-4">
-              {["הראל", "מנורה מבטחים", "מגדל", "כלל", "איילון", "הפניקס", "מיטב", "מור", "ילין לפידות", "אנליסט", "איפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה"].map((company) => (
-                <span key={company} className="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-[#0a3d3d] border border-[#5ec6c6]/30 shadow-sm hover:shadow-md hover:border-[#5ec6c6] transition-all">
+          </div>
+        </section>
+
+        {/* Companies Badges */}
+        <section className="py-10 sm:py-16 bg-gray-50">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-3">חברות שאנחנו משווקים</h2>
+            <p className="text-gray-500 mb-10 text-base sm:text-lg">
+              אנחנו עובדים עם חברות הביטוח המובילות בישראל כדי להביא לכם את ההצעה הטובה ביותר
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              {companies.map((company) => (
+                <span
+                  key={company}
+                  className="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-[#0a3d3d] border border-gray-200 hover:border-[#5ec6c6] hover:shadow-sm transition-all"
+                >
                   {company}
                 </span>
               ))}
@@ -237,17 +222,28 @@ const TravelInsurance = () => {
           </div>
         </section>
 
-        {/* Enrollment Form */}
-        <section id="enrollment-form" className="py-16 scroll-mt-24">
-          <div className="max-w-2xl mx-auto">
-            <InsuranceEnrollmentForm
-              insuranceType="travel"
-              title="רכישת ביטוח נסיעות"
-              description="מלאו את פרטי הנסיעה ונחזור אליכם עם הצעה"
-            />
+        {/* Lead Form CTA */}
+        <section id="contact-form" className="py-10 sm:py-16 scroll-mt-24">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="bg-[#f8f9fc] border border-[#0a3d3d]/[0.06] rounded-2xl p-8 sm:p-12 text-center mb-10 relative overflow-hidden">
+              <div className="absolute top-4 left-6 w-10 h-10 rounded-full bg-[#5ec6c6] opacity-15" />
+              <div className="absolute bottom-4 right-8 w-8 h-8 rounded-full bg-[#f4a261] opacity-15" />
+              <h2 className="text-2xl sm:text-3xl font-extrabold mb-3 text-[#0a3d3d]">רוצים הצעת מחיר מותאמת?</h2>
+              <p className="text-[#0a3d3d]/50 text-base sm:text-lg max-w-xl mx-auto">
+                מלאו את הפרטים ונחזור אליכם עם הצעה מותאמת אישית מחברות הביטוח המובילות
+              </p>
+            </div>
+            <div className="max-w-2xl mx-auto">
+              <InsuranceEnrollmentForm
+                insuranceType="travel"
+                title="רכישת ביטוח נסיעות"
+                description="מלאו את פרטי הנסיעה ונחזור אליכם עם הצעה"
+              />
+            </div>
           </div>
         </section>
       </main>
+
       <Footer />
     </div>
   );

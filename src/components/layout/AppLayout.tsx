@@ -66,44 +66,44 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
   const sidebarContent = (
     <>
-      <div className="px-4 sm:px-5 pt-5 sm:pt-6 pb-4 sm:pb-5 border-b border-sidebar-border flex items-center justify-between">
+      <div className="px-4 sm:px-5 pt-5 sm:pt-6 pb-4 sm:pb-5 border-b border-white/[0.08] flex items-center justify-between">
         <button onClick={() => navigate('/app/dashboard')} className="flex items-center gap-3 hover:opacity-80 transition-opacity min-h-[44px]">
-          <div className="p-1.5 rounded-2xl" style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))' }}>
+          <div className="p-1.5 rounded-2xl bg-white/[0.06]">
             <SeeIDLogo size={38} />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-sidebar-foreground tracking-tight">SeeID</h1>
-            <p className="text-[10px] text-sidebar-foreground/40 font-light">תכנון פיננסי וביטוח</p>
+            <h1 className="text-lg font-extrabold text-white tracking-tight">SeeID</h1>
+            <p className="text-[10px] text-white/30 font-light">תכנון פיננסי וביטוח</p>
           </div>
         </button>
         {isMobile && (
           <button
             onClick={() => setSidebarOpen(false)}
-            className="text-sidebar-foreground/70 hover:text-sidebar-foreground p-2.5 -ml-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg active:bg-sidebar-accent/30 transition-colors"
+            className="text-white/70 hover:text-white p-2.5 -ml-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg active:bg-white/[0.06] transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
         )}
       </div>
 
-      <nav className="flex-1 p-2 sm:p-3 space-y-0.5 sm:space-y-1 overflow-y-auto overscroll-contain">
-        {navItems.map(item => {
-          const isActive = location.pathname === item.path;
-          const count = item.countKey ? counts[item.countKey] : 0;
+      <nav className="flex-1 p-2 sm:p-3 space-y-0.5 overflow-y-auto overscroll-contain">
+        {navItems.map(navItem => {
+          const isActive = location.pathname === navItem.path;
+          const count = navItem.countKey ? counts[navItem.countKey] : 0;
           return (
             <button
-              key={item.path}
-              onClick={() => handleNav(item.path)}
-              className={`w-full flex items-center gap-3 px-3 py-3 sm:py-2.5 rounded-lg text-sm transition-colors min-h-[44px] active:scale-[0.98] ${
+              key={navItem.path}
+              onClick={() => handleNav(navItem.path)}
+              className={`w-full flex items-center gap-3 px-3 py-3 sm:py-2.5 rounded-xl text-sm transition-all min-h-[44px] active:scale-[0.98] ${
                 isActive
-                  ? 'bg-sidebar-accent text-sidebar-primary font-semibold'
-                  : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
+                  ? 'bg-[#5ec6c6]/15 text-[#5ec6c6] font-bold'
+                  : 'text-white/60 hover:bg-white/[0.06] hover:text-white/90'
               }`}
             >
-              <item.icon className="h-[18px] w-[18px] sm:h-4 sm:w-4 shrink-0" />
-              <span className="flex-1 text-right">{item.label}</span>
+              <navItem.icon className="h-[18px] w-[18px] sm:h-4 sm:w-4 shrink-0" />
+              <span className="flex-1 text-right">{navItem.label}</span>
               {count > 0 && (
-                <span className="bg-sidebar-primary text-sidebar-primary-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center text-white" style={{ backgroundColor: '#5ec6c6' }}>
                   {count}
                 </span>
               )}
@@ -111,10 +111,11 @@ export function AppLayout({ children }: { children: ReactNode }) {
           );
         })}
         {/* Execution Summary quick action */}
-        <div className="px-3 pt-2">
+        <div className="px-1 pt-2">
           <button
             onClick={() => setShowSummaryWizard(true)}
-            className="w-full flex items-center gap-3 px-3 py-3 sm:py-2.5 rounded-lg text-sm bg-sidebar-primary/10 text-sidebar-primary hover:bg-sidebar-primary/20 transition-colors font-medium min-h-[44px] active:scale-[0.98]"
+            className="w-full flex items-center gap-3 px-3 py-3 sm:py-2.5 rounded-xl text-sm font-medium min-h-[44px] active:scale-[0.98] transition-all"
+            style={{ backgroundColor: 'rgba(94, 198, 198, 0.1)', color: '#5ec6c6' }}
           >
             <ClipboardCheck className="h-[18px] w-[18px] sm:h-4 sm:w-4 shrink-0" />
             <span className="flex-1 text-right">סיכום ביצועים</span>
@@ -122,14 +123,14 @@ export function AppLayout({ children }: { children: ReactNode }) {
         </div>
       </nav>
 
-      <div className="p-2 sm:p-3 border-t border-sidebar-border space-y-0.5 sm:space-y-1">
-        <Button variant="ghost" size="sm" onClick={() => navigate('/app/settings')} className="w-full justify-start gap-2 text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 min-h-[44px] sm:min-h-0">
+      <div className="p-2 sm:p-3 border-t border-white/[0.08] space-y-0.5">
+        <Button variant="ghost" size="sm" onClick={() => navigate('/app/settings')} className="w-full justify-start gap-2 text-white/50 hover:text-white hover:bg-white/[0.06] min-h-[44px] sm:min-h-0 rounded-xl">
           <Settings className="h-4 w-4 sm:h-3.5 sm:w-3.5" />הגדרות סוכנות
         </Button>
-        <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="w-full justify-start gap-2 text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 text-xs min-h-[44px] sm:min-h-0">
+        <Button variant="ghost" size="sm" onClick={() => navigate('/')} className="w-full justify-start gap-2 text-white/35 hover:text-white hover:bg-white/[0.06] text-xs min-h-[44px] sm:min-h-0 rounded-xl">
           <Globe className="h-4 w-4 sm:h-3.5 sm:w-3.5" />חזרה לאתר הראשי
         </Button>
-        <Button variant="ghost" size="sm" onClick={handleSignOut} className="w-full justify-start gap-2 text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 min-h-[44px] sm:min-h-0">
+        <Button variant="ghost" size="sm" onClick={handleSignOut} className="w-full justify-start gap-2 text-white/50 hover:text-white hover:bg-white/[0.06] min-h-[44px] sm:min-h-0 rounded-xl">
           <LogOut className="h-4 w-4 sm:h-3.5 sm:w-3.5" />התנתק
         </Button>
       </div>
@@ -144,17 +145,18 @@ export function AppLayout({ children }: { children: ReactNode }) {
           initial={{ y: -56 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="fixed top-0 left-0 right-0 z-40 bg-sidebar text-sidebar-foreground h-14 flex items-center px-3 gap-2 shadow-lg"
+          className="fixed top-0 left-0 right-0 z-40 h-14 flex items-center px-3 gap-2 shadow-lg"
+          style={{ backgroundColor: '#0a3d3d' }}
         >
           <button
             onClick={() => setSidebarOpen(true)}
-            className="p-2.5 rounded-lg hover:bg-sidebar-accent/50 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center active:bg-sidebar-accent/70"
+            className="p-2.5 rounded-lg hover:bg-white/[0.08] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center active:bg-white/[0.12] text-white"
           >
             <Menu className="h-5 w-5" />
           </button>
           <button onClick={() => navigate('/app/dashboard')} className="flex items-center gap-2 hover:opacity-80 transition-opacity min-h-[44px]">
             <SeeIDLogo size={28} />
-            <h1 className="text-lg font-bold text-sidebar-primary">SeeID</h1>
+            <h1 className="text-lg font-extrabold" style={{ color: '#5ec6c6' }}>SeeID</h1>
           </button>
         </motion.div>
       )}
@@ -176,7 +178,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-              className="fixed top-0 right-0 bottom-0 z-50 w-[280px] max-w-[85vw] bg-sidebar text-sidebar-foreground flex flex-col shadow-2xl"
+              className="fixed top-0 right-0 bottom-0 z-50 w-[280px] max-w-[85vw] flex flex-col shadow-2xl text-white"
+              style={{ backgroundColor: '#0a3d3d' }}
             >
               {sidebarContent}
             </motion.aside>
@@ -186,13 +189,13 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
       {/* Desktop Sidebar */}
       {!isMobile && (
-        <aside className="w-64 shrink-0 bg-sidebar text-sidebar-foreground flex flex-col">
+        <aside className="w-64 shrink-0 flex flex-col text-white" style={{ backgroundColor: '#0a3d3d' }}>
           {sidebarContent}
         </aside>
       )}
 
       {/* Main content */}
-      <main className={`flex-1 overflow-y-auto bg-background ${isMobile ? 'pt-14' : ''}`}>
+      <main className={`flex-1 overflow-y-auto bg-white ${isMobile ? 'pt-14' : ''}`}>
         <div className="p-3 sm:p-4 md:p-6">{children}</div>
       </main>
 
