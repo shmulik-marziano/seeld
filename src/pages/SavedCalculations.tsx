@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Header";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Trash2, Calculator, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -25,6 +25,14 @@ const calculatorTypeLabels: Record<string, string> = {
   savings: "חיסכון",
   goal: "יעד פיננסי",
   compare: "השוואת מסלולים",
+};
+
+const calculatorTypeColors: Record<string, string> = {
+  mortgage: "#e76f51",
+  pension: "#5ec6c6",
+  savings: "#90be6d",
+  goal: "#f4a261",
+  compare: "#6c63ff",
 };
 
 const SavedCalculations = () => {
@@ -112,95 +120,127 @@ const SavedCalculations = () => {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-white">
         <Header />
         <div className="flex items-center justify-center h-[60vh]">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#5ec6c6]" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
-      <main className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-bold">החישובים שלי</h1>
-            <Button onClick={() => navigate("/calculators")} variant="outline">
-              <Calculator className="w-4 h-4 mr-2" />
-              למחשבונים
-            </Button>
-          </div>
 
-          {!user ? (
-            <Card>
-              <CardContent className="py-12 text-center">
-                <p className="text-muted-foreground mb-4">
-                  התחבר כדי לראות את החישובים השמורים שלך
-                </p>
-                <Button onClick={() => setShowAuthModal(true)}>התחבר</Button>
-              </CardContent>
-            </Card>
-          ) : calculations.length === 0 ? (
-            <Card>
-              <CardContent className="py-12 text-center">
-                <Calculator className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                <p className="text-muted-foreground mb-4">
-                  אין לך חישובים שמורים עדיין
-                </p>
-                <Button onClick={() => navigate("/calculators")}>
-                  עבור למחשבונים
-                </Button>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="space-y-4">
-              {calculations.map((calc) => (
-                <Card key={calc.id} className="hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-2">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
-                          {calculatorTypeLabels[calc.calculator_type]}
-                        </span>
-                        <CardTitle className="text-lg mt-2">{calc.title}</CardTitle>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => deleteCalculation(calc.id)}
-                        className="text-muted-foreground hover:text-destructive"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-lg font-medium text-primary mb-2">
-                      {formatResultSummary(calc)}
-                    </p>
-                    {calc.tips && calc.tips.length > 0 && (
-                      <div className="bg-muted/50 rounded-lg p-3 mt-3">
-                        <p className="text-sm font-medium mb-1">טיפים:</p>
-                        <ul className="text-sm text-muted-foreground list-disc list-inside">
-                          {calc.tips.slice(0, 2).map((tip, i) => (
-                            <li key={i}>{tip}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    <p className="text-xs text-muted-foreground mt-3">
-                      {formatDate(calc.created_at)}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
+      {/* Hero */}
+      <section className="relative bg-[#f8f9fc] overflow-hidden">
+        <div className="absolute top-6 left-10 w-20 h-20 rounded-full bg-[#f4a261] opacity-10" />
+        <div className="absolute bottom-4 right-16 w-14 h-14 rounded-full bg-[#5ec6c6] opacity-15" />
+        <svg className="absolute bottom-0 left-0 w-full h-16 opacity-10 pointer-events-none" viewBox="0 0 800 60" fill="none">
+          <path d="M0 50 Q200 10 400 40 T800 20" stroke="#f4a261" strokeWidth="2" strokeDasharray="8 6" />
+          <polygon points="795,18 800,20 795,22" fill="#f4a261" />
+        </svg>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0a3d3d] mb-2">החישובים שלי</h1>
+              <p className="text-gray-500">כל החישובים השמורים שלך במקום אחד</p>
             </div>
-          )}
+            <button
+              onClick={() => navigate("/calculators")}
+              className="hidden sm:inline-flex items-center gap-2 px-6 py-2.5 border-2 border-[#0a3d3d] text-[#0a3d3d] rounded-full text-sm font-semibold hover:bg-[#0a3d3d] hover:text-white transition-colors"
+            >
+              <Calculator className="w-4 h-4" />
+              למחשבונים
+            </button>
+          </div>
         </div>
+      </section>
+
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+        {/* Mobile button */}
+        <div className="sm:hidden mb-6">
+          <button
+            onClick={() => navigate("/calculators")}
+            className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#5ec6c6] text-white rounded-full font-semibold"
+          >
+            <Calculator className="w-4 h-4" />
+            למחשבונים
+          </button>
+        </div>
+
+        {!user ? (
+          <div className="rounded-2xl bg-[#f8f9fc] border border-gray-100 py-16 text-center">
+            <p className="text-gray-500 mb-6">
+              התחבר כדי לראות את החישובים השמורים שלך
+            </p>
+            <button
+              onClick={() => setShowAuthModal(true)}
+              className="px-8 py-3 bg-[#5ec6c6] text-white rounded-full font-semibold hover:bg-[#4db5b5] transition-colors"
+            >
+              התחבר
+            </button>
+          </div>
+        ) : calculations.length === 0 ? (
+          <div className="rounded-2xl bg-[#f8f9fc] border border-gray-100 py-16 text-center">
+            <div className="w-16 h-16 rounded-full bg-[#f4a261] flex items-center justify-center mx-auto mb-4">
+              <Calculator className="w-7 h-7 text-white" />
+            </div>
+            <p className="text-gray-500 mb-6">
+              אין לך חישובים שמורים עדיין
+            </p>
+            <button
+              onClick={() => navigate("/calculators")}
+              className="px-8 py-3 bg-[#5ec6c6] text-white rounded-full font-semibold hover:bg-[#4db5b5] transition-colors"
+            >
+              עבור למחשבונים
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {calculations.map((calc) => (
+              <div key={calc.id} className="rounded-2xl bg-white border border-gray-100 p-6 hover:shadow-md transition-shadow">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <span
+                      className="text-xs px-3 py-1 rounded-full font-medium text-white"
+                      style={{ backgroundColor: calculatorTypeColors[calc.calculator_type] || "#5ec6c6" }}
+                    >
+                      {calculatorTypeLabels[calc.calculator_type]}
+                    </span>
+                    <h3 className="text-lg font-bold text-[#0a3d3d] mt-2">{calc.title}</h3>
+                  </div>
+                  <button
+                    onClick={() => deleteCalculation(calc.id)}
+                    className="text-gray-300 hover:text-red-500 transition-colors p-1"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+                <p className="text-lg font-semibold text-[#5ec6c6] mt-3">
+                  {formatResultSummary(calc)}
+                </p>
+                {calc.tips && calc.tips.length > 0 && (
+                  <div className="bg-[#f8f9fc] rounded-xl p-3 mt-3">
+                    <p className="text-sm font-medium text-[#0a3d3d] mb-1">טיפים:</p>
+                    <ul className="text-sm text-gray-500 list-disc list-inside">
+                      {calc.tips.slice(0, 2).map((tip, i) => (
+                        <li key={i}>{tip}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <p className="text-xs text-gray-400 mt-3">
+                  {formatDate(calc.created_at)}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
+
+      <Footer />
 
       <AuthModal
         isOpen={showAuthModal}

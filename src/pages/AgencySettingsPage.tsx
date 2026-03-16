@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useApp } from '@/contexts/AppContext';
 import { supabase } from '@/integrations/supabase/client';
-import { PageHeader } from '@/components/layout/PageHeader';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -145,10 +144,16 @@ export default function AgencySettingsPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6" dir="rtl">
-      <PageHeader
-        title="הגדרות סוכנות"
-        subtitle="ניהול פרטי הסוכנות, מיתוג, צבעים ומסלולי השקעה"
-      />
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-2">
+        <div className="w-12 h-12 rounded-full bg-[#5ec6c6] flex items-center justify-center">
+          <Building2 className="h-5 w-5 text-white" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-extrabold text-[#0a3d3d]">הגדרות סוכנות</h1>
+          <p className="text-sm text-gray-400">ניהול פרטי הסוכנות, מיתוג, צבעים ומסלולי השקעה</p>
+        </div>
+      </div>
 
       <Tabs defaultValue="general" className="space-y-6">
         <TabsList className="bg-muted/50 p-1">
@@ -352,7 +357,7 @@ export default function AgencySettingsPage() {
 
       {/* Save */}
       <div className="flex justify-end pb-8">
-        <Button onClick={handleSave} disabled={saving} className="gap-2 px-8">
+        <Button onClick={handleSave} disabled={saving} className="gap-2 px-8 rounded-full">
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           שמור הגדרות
         </Button>

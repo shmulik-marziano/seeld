@@ -249,18 +249,22 @@ export default function AuthPage() {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row" dir="rtl">
       {/* Right side -- branding hero (hidden on mobile, shown on lg+) */}
-      <div className="hidden lg:flex lg:w-[45%] relative items-center justify-center overflow-hidden"
-        style={{ background: 'linear-gradient(165deg, hsl(160, 42%, 65%) 0%, hsl(168, 38%, 42%) 50%, hsl(220, 15%, 25%) 100%)' }}>
+      <div className="hidden lg:flex lg:w-[45%] relative items-center justify-center overflow-hidden bg-[#f8f9fc]">
 
         <div className="absolute inset-0">
           <motion.div animate={{ y: [0, -15, 0] }} transition={{ duration: 6, repeat: Infinity }}
-            className="absolute top-[15%] right-[20%] w-16 h-16 rounded-full opacity-20" style={{ background: 'hsl(0, 55%, 72%)' }} />
+            className="absolute top-[15%] right-[20%] w-16 h-16 rounded-full bg-[#5ec6c6] opacity-20" />
           <motion.div animate={{ y: [0, 12, 0] }} transition={{ duration: 8, repeat: Infinity, delay: 1 }}
-            className="absolute top-[35%] left-[15%] w-12 h-12 rounded-full opacity-15" style={{ background: 'hsl(210, 30%, 75%)' }} />
+            className="absolute top-[35%] left-[15%] w-12 h-12 rounded-full bg-[#6c63ff] opacity-15" />
           <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 7, repeat: Infinity, delay: 2 }}
-            className="absolute bottom-[25%] right-[30%] w-10 h-10 rounded-full opacity-20" style={{ background: 'hsl(35, 40%, 76%)' }} />
+            className="absolute bottom-[25%] right-[30%] w-10 h-10 rounded-full bg-[#f4a261] opacity-20" />
           <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 5, repeat: Infinity, delay: 0.5 }}
-            className="absolute bottom-[40%] left-[25%] w-14 h-14 rounded-full opacity-15" style={{ background: 'hsl(355, 50%, 76%)' }} />
+            className="absolute bottom-[40%] left-[25%] w-14 h-14 rounded-full bg-[#e76f51] opacity-15" />
+          {/* Dashed curved line */}
+          <svg className="absolute bottom-10 left-0 w-full h-24 opacity-10 pointer-events-none" viewBox="0 0 400 80" fill="none">
+            <path d="M0 60 Q100 10 200 45 T400 25" stroke="#5ec6c6" strokeWidth="2" strokeDasharray="8 6" />
+            <polygon points="395,23 400,25 395,27" fill="#5ec6c6" />
+          </svg>
         </div>
 
         <motion.div
@@ -271,8 +275,8 @@ export default function AuthPage() {
         >
           <SeeIDLogo size={100} />
           <div className="space-y-3">
-            <h2 className="text-4xl font-extrabold text-white tracking-tight">SeeID</h2>
-            <p className="text-lg text-white/70 font-light">תכנון פיננסי וביטוח</p>
+            <h2 className="text-4xl font-extrabold text-[#0a3d3d] tracking-tight">SeeID</h2>
+            <p className="text-lg text-gray-500 font-light">תכנון פיננסי וביטוח</p>
           </div>
           <div className="pt-4 space-y-2.5">
             {['ניהול לקוחות חכם', 'המלצות AI מותאמות', 'פורטל לקוח דיגיטלי', 'סיכום ביצועים מקצועי'].map((text, i) => (
@@ -281,9 +285,9 @@ export default function AuthPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 + i * 0.15 }}
-                className="flex items-center gap-2 justify-center text-white/60 text-sm"
+                className="flex items-center gap-2 justify-center text-gray-400 text-sm"
               >
-                <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                <div className="w-2 h-2 rounded-full bg-[#5ec6c6]" />
                 {text}
               </motion.div>
             ))}
@@ -306,8 +310,7 @@ export default function AuthPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="lg:hidden flex flex-col items-center gap-3 pb-2"
           >
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center shadow-lg"
-              style={{ background: 'linear-gradient(145deg, hsl(160, 42%, 65%), hsl(168, 38%, 42%))' }}>
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center shadow-lg bg-[#f8f9fc] border border-gray-100">
               <SeeIDLogo size={50} />
             </div>
             <div className="text-center">
@@ -340,7 +343,7 @@ export default function AuthPage() {
               >
                 <Button
                   variant="outline"
-                  className="w-full gap-3 h-12 sm:h-12 rounded-xl text-sm font-medium border-border/80 hover:bg-muted/50 min-h-[48px]"
+                  className="w-full gap-3 h-12 sm:h-12 rounded-full text-sm font-medium border-border/80 hover:bg-muted/50 min-h-[48px]"
                   onClick={handleGoogleLogin}
                   disabled={googleLoading}
                 >
@@ -380,7 +383,7 @@ export default function AuthPage() {
                         placeholder="••••••••" className="h-12 sm:h-11 pr-10 rounded-xl text-base sm:text-sm" />
                     </div>
                   </div>
-                  <Button type="submit" className="w-full h-12 sm:h-11 rounded-xl gap-2 font-semibold text-base sm:text-sm min-h-[48px]" disabled={loading}>
+                  <Button type="submit" className="w-full h-12 sm:h-11 rounded-full gap-2 font-semibold text-base sm:text-sm min-h-[48px]" disabled={loading}>
                     {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowLeft className="h-4 w-4" />}
                     התחבר
                   </Button>
@@ -499,7 +502,7 @@ export default function AuthPage() {
                   </label>
                 </div>
 
-                <Button type="submit" className="w-full h-12 rounded-xl gap-2 font-bold text-base min-h-[48px]" disabled={loading}>
+                <Button type="submit" className="w-full h-12 rounded-full gap-2 font-bold text-base min-h-[48px]" disabled={loading}>
                   {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <FileCheck className="h-5 w-5" />}
                   צור חשבון סוכנות
                 </Button>
@@ -578,7 +581,7 @@ export default function AuthPage() {
                   </label>
                 </div>
 
-                <Button type="submit" className="w-full h-12 rounded-xl gap-2 font-bold text-base min-h-[48px]" disabled={loading}>
+                <Button type="submit" className="w-full h-12 rounded-full gap-2 font-bold text-base min-h-[48px]" disabled={loading}>
                   {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <FileCheck className="h-5 w-5" />}
                   השלם הרשמה
                 </Button>

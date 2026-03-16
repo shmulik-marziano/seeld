@@ -1,8 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FundReturnTable from "@/components/FundReturnTable";
-import { TrendingUp, Calendar, Info, Download } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { TrendingUp, Calendar, Info } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   studyFundsGeneral,
@@ -15,113 +14,128 @@ import {
 
 const ReturnTables = () => {
   return (
-    <div className="min-h-screen bg-background animate-fade-in" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
-      
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Hero Section */}
-        <div className="mb-12 text-center space-y-6">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-slide-down">
+
+      {/* Hero Section */}
+      <section className="relative bg-[#f8f9fc] overflow-hidden">
+        <div className="absolute top-8 right-10 w-20 h-20 rounded-full bg-[#90be6d] opacity-15" />
+        <div className="absolute bottom-6 left-16 w-16 h-16 rounded-full bg-[#5ec6c6] opacity-10" />
+        <div className="absolute top-1/2 right-1/3 w-10 h-10 rounded-full bg-[#f4a261] opacity-10" />
+        <svg className="absolute bottom-0 left-0 w-full h-20 opacity-10 pointer-events-none" viewBox="0 0 800 80" fill="none">
+          <path d="M0 60 Q200 15 400 45 T800 25" stroke="#90be6d" strokeWidth="2" strokeDasharray="8 6" />
+          <polygon points="795,23 800,25 795,27" fill="#90be6d" />
+        </svg>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-18 relative z-10 text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
             לוחות תשואה
           </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-slide-up stagger-1">
+          <p className="text-lg text-gray-500 max-w-3xl mx-auto leading-relaxed">
             נתוני תשואות עדכניים של קרנות השתלמות, קופות גמל וקרנות פנסיה בישראל
           </p>
-          <div className="flex items-center justify-center gap-4 animate-slide-up stagger-2">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center justify-center gap-4 mt-4">
+            <div className="flex items-center gap-2 text-sm text-gray-400">
               <Calendar className="w-4 h-4" />
               עדכון אחרון: {lastUpdateDate}
             </div>
           </div>
         </div>
+      </section>
 
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Tabs for different fund types */}
         <Tabs defaultValue="study-general" className="space-y-8">
-          <TabsList className="w-full flex flex-wrap h-auto gap-2 bg-muted p-2 rounded-2xl">
-            <TabsTrigger value="study-general" className="flex-1 min-w-[120px] rounded-xl">
+          <TabsList className="w-full flex flex-wrap h-auto gap-2 bg-[#f0f0f8] p-2 rounded-full">
+            <TabsTrigger value="study-general" className="flex-1 min-w-[120px] rounded-full">
               השתלמות כללי
             </TabsTrigger>
-            <TabsTrigger value="study-stocks" className="flex-1 min-w-[120px] rounded-xl">
+            <TabsTrigger value="study-stocks" className="flex-1 min-w-[120px] rounded-full">
               השתלמות מניות
             </TabsTrigger>
-            <TabsTrigger value="gemel" className="flex-1 min-w-[120px] rounded-xl">
+            <TabsTrigger value="gemel" className="flex-1 min-w-[120px] rounded-full">
               קופות גמל
             </TabsTrigger>
-            <TabsTrigger value="pension" className="flex-1 min-w-[120px] rounded-xl">
+            <TabsTrigger value="pension" className="flex-1 min-w-[120px] rounded-full">
               קרנות פנסיה
             </TabsTrigger>
-            <TabsTrigger value="savings" className="flex-1 min-w-[120px] rounded-xl">
+            <TabsTrigger value="savings" className="flex-1 min-w-[120px] rounded-full">
               פוליסות חיסכון
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="study-general" className="animate-fade-in">
-            <FundReturnTable 
-              funds={studyFundsGeneral} 
-              title="קרנות השתלמות - מסלול כללי" 
+          <TabsContent value="study-general">
+            <FundReturnTable
+              funds={studyFundsGeneral}
+              title="קרנות השתלמות - מסלול כללי"
             />
           </TabsContent>
 
-          <TabsContent value="study-stocks" className="animate-fade-in">
-            <FundReturnTable 
-              funds={studyFundsStocks} 
-              title="קרנות השתלמות - מסלול מניות" 
+          <TabsContent value="study-stocks">
+            <FundReturnTable
+              funds={studyFundsStocks}
+              title="קרנות השתלמות - מסלול מניות"
             />
           </TabsContent>
 
-          <TabsContent value="gemel" className="animate-fade-in">
-            <FundReturnTable 
-              funds={pensionFundsGeneral} 
-              title="קופות גמל - מסלול כללי" 
+          <TabsContent value="gemel">
+            <FundReturnTable
+              funds={pensionFundsGeneral}
+              title="קופות גמל - מסלול כללי"
             />
           </TabsContent>
 
-          <TabsContent value="pension" className="animate-fade-in">
-            <FundReturnTable 
-              funds={pensionPlansGeneral} 
-              title="קרנות פנסיה - מסלול כללי" 
+          <TabsContent value="pension">
+            <FundReturnTable
+              funds={pensionPlansGeneral}
+              title="קרנות פנסיה - מסלול כללי"
             />
           </TabsContent>
 
-          <TabsContent value="savings" className="animate-fade-in">
-            <FundReturnTable 
-              funds={savingsPolicies} 
-              title="פוליסות חיסכון" 
+          <TabsContent value="savings">
+            <FundReturnTable
+              funds={savingsPolicies}
+              title="פוליסות חיסכון"
             />
           </TabsContent>
         </Tabs>
 
         {/* Summary Stats */}
         <section className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="rounded-2xl bg-gradient-to-br from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-800/20 p-6 text-center">
-            <TrendingUp className="w-10 h-10 mx-auto mb-3 text-green-600" />
-            <p className="text-3xl font-bold text-green-600">17.21%</p>
-            <p className="text-sm text-muted-foreground">תשואה שנתית מקסימלית</p>
-            <p className="text-xs text-muted-foreground mt-1">אלטשולר שחם השתלמות</p>
+          <div className="rounded-2xl bg-white border border-gray-100 p-6 text-center">
+            <div className="w-14 h-14 rounded-full bg-[#90be6d] flex items-center justify-center mx-auto mb-3">
+              <TrendingUp className="w-6 h-6 text-white" />
+            </div>
+            <p className="text-3xl font-extrabold text-[#0a3d3d]">17.21%</p>
+            <p className="text-sm text-gray-500 mt-1">תשואה שנתית מקסימלית</p>
+            <p className="text-xs text-gray-400 mt-1">אלטשולר שחם השתלמות</p>
           </div>
-          <div className="rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-800/20 p-6 text-center">
-            <Calendar className="w-10 h-10 mx-auto mb-3 text-blue-600" />
-            <p className="text-3xl font-bold text-blue-600">52.34%</p>
-            <p className="text-sm text-muted-foreground">תשואה ל-5 שנים מקסימלית</p>
-            <p className="text-xs text-muted-foreground mt-1">אלטשולר שחם השתלמות</p>
+          <div className="rounded-2xl bg-white border border-gray-100 p-6 text-center">
+            <div className="w-14 h-14 rounded-full bg-[#5ec6c6] flex items-center justify-center mx-auto mb-3">
+              <Calendar className="w-6 h-6 text-white" />
+            </div>
+            <p className="text-3xl font-extrabold text-[#0a3d3d]">52.34%</p>
+            <p className="text-sm text-gray-500 mt-1">תשואה ל-5 שנים מקסימלית</p>
+            <p className="text-xs text-gray-400 mt-1">אלטשולר שחם השתלמות</p>
           </div>
-          <div className="rounded-2xl bg-gradient-to-br from-purple-100 to-purple-50 dark:from-purple-900/30 dark:to-purple-800/20 p-6 text-center">
-            <Info className="w-10 h-10 mx-auto mb-3 text-purple-600" />
-            <p className="text-3xl font-bold text-purple-600">26</p>
-            <p className="text-sm text-muted-foreground">קרנות במעקב</p>
-            <p className="text-xs text-muted-foreground mt-1">5 קטגוריות שונות</p>
+          <div className="rounded-2xl bg-white border border-gray-100 p-6 text-center">
+            <div className="w-14 h-14 rounded-full bg-[#6c63ff] flex items-center justify-center mx-auto mb-3">
+              <Info className="w-6 h-6 text-white" />
+            </div>
+            <p className="text-3xl font-extrabold text-[#0a3d3d]">26</p>
+            <p className="text-sm text-gray-500 mt-1">קרנות במעקב</p>
+            <p className="text-xs text-gray-400 mt-1">5 קטגוריות שונות</p>
           </div>
         </section>
 
         {/* Disclaimer */}
-        <section className="mt-12 rounded-[2.5rem] bg-muted p-8 md:p-12">
-          <h2 className="text-2xl font-bold mb-4">הבהרה חשובה</h2>
-          <p className="text-muted-foreground leading-relaxed">
-            הנתונים המוצגים מבוססים על מידע ממקורות ציבוריים ומיועדים להשוואה כללית בלבד. 
+        <section className="mt-12 rounded-2xl bg-[#f8f9fc] p-8 md:p-12">
+          <h2 className="text-2xl font-extrabold text-[#0a3d3d] mb-4">הבהרה חשובה</h2>
+          <p className="text-gray-500 leading-relaxed">
+            הנתונים המוצגים מבוססים על מידע ממקורות ציבוריים ומיועדים להשוואה כללית בלבד.
             תשואות עבר אינן מעידות על תשואות עתידיות. דמי הניהול אינם כלולים בחישוב התשואות.
             לפני קבלת החלטות פיננסיות, מומלץ להתייעץ עם יועץ פנסיוני או פיננסי מוסמך.
             <br /><br />
-            <strong>מקור הנתונים:</strong> משרד האוצר, אתרי חברות הביטוח והגופים המוסדיים.
+            <strong className="text-[#0a3d3d]">מקור הנתונים:</strong> משרד האוצר, אתרי חברות הביטוח והגופים המוסדיים.
           </p>
         </section>
       </main>

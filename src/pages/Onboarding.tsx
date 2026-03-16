@@ -829,7 +829,7 @@ export default function Onboarding() {
         .animate-pulse-ring { animation: pulse-ring 2s ease-out infinite; }
       `}</style>
 
-      <div className="min-h-screen bg-background" dir="rtl">
+      <div className="min-h-screen bg-white" dir="rtl">
         <ParticleBg />
         <Header />
         <div ref={topRef} />
@@ -839,20 +839,20 @@ export default function Onboarding() {
           {/* ── Hero Header ── */}
           <div className="text-center mb-10 space-y-4">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/30 bg-accent/5 backdrop-blur-sm text-xs font-semibold tracking-widest uppercase text-accent">
-              <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#5ec6c6]/30 bg-[#5ec6c6]/5 text-xs font-semibold tracking-widest uppercase text-[#0a3d3d]">
+              <div className="w-2 h-2 rounded-full bg-[#5ec6c6]" />
               SeelD — פתיחת תיק לקוח
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5 text-[#5ec6c6]" />
             </div>
 
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-none">
-              <span className="block">שאלון</span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-l from-accent via-accent/80 to-accent/50">
+              <span className="block text-[#0a3d3d]">שאלון</span>
+              <span className="block text-[#5ec6c6]">
                 הצטרפות
               </span>
             </h1>
 
-            <p className="text-sm text-muted-foreground font-mono">
+            <p className="text-sm text-gray-400 font-mono">
               שמוליק מרציאנו · סוכן ביטוח ופנסיה מוסמך
             </p>
           </div>
@@ -889,10 +889,8 @@ export default function Onboarding() {
 
               {/* Text */}
               <div className="space-y-3">
-                <h2 className="text-4xl font-extrabold tracking-tight">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-l from-accent via-accent/80 to-accent/50">
+                <h2 className="text-4xl font-extrabold tracking-tight text-[#0a3d3d]">
                     תודה רבה!
-                  </span>
                 </h2>
                 <p className="text-lg font-semibold text-foreground">
                   {form.firstName}, התיק שלך נשלח בהצלחה

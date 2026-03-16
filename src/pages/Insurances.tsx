@@ -10,6 +10,7 @@ interface InsuranceCategory {
   href: string;
   icon: React.ComponentType<{ className?: string }>;
   highlights: string[];
+  color: string;
 }
 
 const insuranceCategories: InsuranceCategory[] = [
@@ -20,6 +21,7 @@ const insuranceCategories: InsuranceCategory[] = [
     href: "/insurance/health",
     icon: Heart,
     highlights: ["ניתוחים בארץ ובחו״ל", "תרופות מחוץ לסל", "ייעוץ ובדיקות"],
+    color: "#e76f51",
   },
   {
     id: "critical",
@@ -28,6 +30,7 @@ const insuranceCategories: InsuranceCategory[] = [
     href: "/insurance/critical-illness",
     icon: Shield,
     highlights: ["מענק חד פעמי", "כיסוי מגוון מחלות", "ללא תלות בהוצאות"],
+    color: "#6c63ff",
   },
   {
     id: "accidents",
@@ -36,6 +39,7 @@ const insuranceCategories: InsuranceCategory[] = [
     href: "/insurance/accidents",
     icon: AlertTriangle,
     highlights: ["כיסוי 24/7", "נכות תעסוקתית", "הרחבות לספורט"],
+    color: "#f4a261",
   },
   {
     id: "life",
@@ -44,6 +48,7 @@ const insuranceCategories: InsuranceCategory[] = [
     href: "/insurance/life",
     icon: Users,
     highlights: ["ביטוח חיים זוגי", "שחרור מפרמיה", "כיסוי נכות"],
+    color: "#90be6d",
   },
   {
     id: "mortgage",
@@ -52,6 +57,7 @@ const insuranceCategories: InsuranceCategory[] = [
     href: "/insurance/mortgage",
     icon: Home,
     highlights: ["כיסוי יתרת משכנתא", "פרמיה יורדת", "התאמה אישית"],
+    color: "#5ec6c6",
   },
   {
     id: "partners",
@@ -60,6 +66,7 @@ const insuranceCategories: InsuranceCategory[] = [
     href: "/insurance/partners",
     icon: Handshake,
     highlights: ["הגנה על העסק", "רכישת מניות", "המשכיות עסקית"],
+    color: "#e76f51",
   },
 ];
 
@@ -68,13 +75,22 @@ const Insurances = () => {
     <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* Hero Banner */}
-      <section className="bg-[#0a3d3d] text-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">
+      {/* Hero Banner - Light design */}
+      <section className="relative bg-[#f8f9fc] overflow-hidden">
+        {/* Decorative circles */}
+        <div className="absolute top-10 left-10 w-24 h-24 rounded-full bg-[#5ec6c6] opacity-15" />
+        <div className="absolute bottom-6 right-16 w-16 h-16 rounded-full bg-[#e76f51] opacity-10" />
+        <div className="absolute top-1/2 left-1/3 w-12 h-12 rounded-full bg-[#f4a261] opacity-10" />
+        {/* Dashed curved line */}
+        <svg className="absolute bottom-0 left-0 w-full h-24 opacity-10 pointer-events-none" viewBox="0 0 800 100" fill="none">
+          <path d="M0 80 Q200 20 400 60 T800 30" stroke="#5ec6c6" strokeWidth="2" strokeDasharray="8 6" />
+          <polygon points="795,28 800,30 795,32" fill="#5ec6c6" />
+        </svg>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20 relative z-10">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
             מוצרי ביטוח
           </h1>
-          <p className="text-lg sm:text-xl text-white/80 max-w-2xl leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
             סקירה מקיפה של כל סוגי הביטוחים והכיסויים הזמינים עבורכם. בחרו את הקטגוריה המתאימה וקבלו מידע מפורט.
           </p>
         </div>
@@ -100,8 +116,9 @@ const Insurances = () => {
                   to={category.href}
                   className="group bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all duration-200 block"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-[#5ec6c6]/10 flex items-center justify-center mb-5">
-                    <category.icon className="w-6 h-6 text-[#0a3d3d]" />
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-5"
+                    style={{ backgroundColor: category.color + "18" }}>
+                    <category.icon className="w-6 h-6" style={{ color: category.color }} />
                   </div>
                   <h3 className="text-xl font-bold text-[#0a3d3d] mb-2">{category.title}</h3>
                   <p className="text-gray-500 text-sm leading-relaxed mb-5">
@@ -111,7 +128,7 @@ const Insurances = () => {
                     {category.highlights.map((highlight, idx) => (
                       <span
                         key={idx}
-                        className="text-xs px-3 py-1 bg-gray-50 text-[#0a3d3d] rounded-full border border-gray-100"
+                        className="text-xs px-3 py-1 bg-[#f8f9fc] text-[#0a3d3d] rounded-full border border-gray-100"
                       >
                         {highlight}
                       </span>
@@ -128,12 +145,12 @@ const Insurances = () => {
         </section>
 
         {/* Value Props */}
-        <section className="py-16 sm:py-20 bg-gray-50">
+        <section className="py-16 sm:py-20 bg-[#f0f0f8]">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="grid sm:grid-cols-3 gap-8 text-center">
               <div>
-                <div className="w-14 h-14 rounded-2xl bg-white border border-gray-200 flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-6 h-6 text-[#0a3d3d]" />
+                <div className="w-14 h-14 rounded-full bg-[#5ec6c6] flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">ייעוץ מקצועי</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">
@@ -141,8 +158,8 @@ const Insurances = () => {
                 </p>
               </div>
               <div>
-                <div className="w-14 h-14 rounded-2xl bg-white border border-gray-200 flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-6 h-6 text-[#0a3d3d]" />
+                <div className="w-14 h-14 rounded-full bg-[#6c63ff] flex items-center justify-center mx-auto mb-4">
+                  <Users className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">הגנה מלאה למשפחה</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">
@@ -150,8 +167,8 @@ const Insurances = () => {
                 </p>
               </div>
               <div>
-                <div className="w-14 h-14 rounded-2xl bg-white border border-gray-200 flex items-center justify-center mx-auto mb-4">
-                  <Handshake className="w-6 h-6 text-[#0a3d3d]" />
+                <div className="w-14 h-14 rounded-full bg-[#e76f51] flex items-center justify-center mx-auto mb-4">
+                  <Handshake className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">ליווי בתביעות</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">
@@ -165,14 +182,16 @@ const Insurances = () => {
         {/* CTA Section */}
         <section className="py-16 sm:py-20">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="bg-[#0a3d3d] rounded-2xl p-8 sm:p-12 text-center text-white">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-3">רוצים לדעת יותר?</h2>
-              <p className="text-white/70 text-base sm:text-lg mb-8 max-w-xl mx-auto">
+            <div className="bg-[#f8f9fc] rounded-2xl p-8 sm:p-12 text-center relative overflow-hidden">
+              <div className="absolute top-4 right-6 w-20 h-20 rounded-full bg-[#5ec6c6] opacity-10" />
+              <div className="absolute bottom-4 left-10 w-14 h-14 rounded-full bg-[#e76f51] opacity-10" />
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d] mb-3 relative z-10">רוצים לדעת יותר?</h2>
+              <p className="text-gray-500 text-base sm:text-lg mb-8 max-w-xl mx-auto relative z-10">
                 צרו קשר עם הסוכנים שלנו לקבלת הצעת מחיר מותאמת אישית
               </p>
               <Link
                 to="/contact"
-                className="inline-block px-8 py-3.5 bg-[#5ec6c6] text-[#0a3d3d] font-semibold rounded-full hover:bg-[#4db5b5] transition-colors"
+                className="inline-block px-8 py-3.5 bg-[#5ec6c6] text-white font-semibold rounded-full hover:bg-[#4db5b5] transition-colors relative z-10"
               >
                 צרו קשר
               </Link>
