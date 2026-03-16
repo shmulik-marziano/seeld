@@ -161,31 +161,45 @@ const SectionLabel = ({ children }: { children: string }) => (
 const processSteps = [
   {
     number: 1,
-    title: "פנייה ראשונית",
-    description: "טלפון, וואטסאפ או דרך האתר — איך שנוח לכם",
+    title: "השארת פרטים",
+    description: "פונים אלינו או משאירים פרטים באתר",
     icon: PhoneCall,
     color: "#5ec6c6",
   },
   {
     number: 2,
-    title: "פגישת היכרות",
-    description: "שיחה קצרה להבין מה יש, מה חסר ומה חשוב לכם",
-    icon: UserPlus,
+    title: "סריקת התיק",
+    description: "סורקים את כל הפוליסות, הפנסיה והחיסכון",
+    icon: Search,
     color: "#f4a261",
   },
   {
     number: 3,
-    title: "ניתוח והצעה",
-    description: "בודקים את הפוליסות הקיימות, משווים ומגישים הצעה ברורה",
-    icon: Search,
+    title: "זיהוי הזדמנויות",
+    description: "מוצאים כפלים, דמי ניהול גבוהים, כיסויים חסרים",
+    icon: Target,
     color: "#90be6d",
   },
   {
     number: 4,
-    title: "מעקב ועדכון שוטף",
-    description: "חידושים, שינויים, תביעות — אנחנו תמיד בתמונה",
-    icon: HeartHandshake,
+    title: "הצעה מותאמת",
+    description: "מגישים הצעה ברורה עם השוואה בין כל החברות",
+    icon: BarChart3,
     color: "#e76f51",
+  },
+  {
+    number: 5,
+    title: "ביצוע ומעבר",
+    description: "מטפלים בכל הבירוקרטיה — אתם רק מאשרים",
+    icon: Handshake,
+    color: "#5ec6c6",
+  },
+  {
+    number: 6,
+    title: "מעקב שוטף",
+    description: "סורקים מחדש כל שנה, מוודאים שהכל עדכני",
+    icon: CalendarCheck,
+    color: "#f4a261",
   },
 ];
 
@@ -778,91 +792,117 @@ const Index = () => {
         {/* Wave: dark -> white */}
         <WaveDivider color="#ffffff" flip />
 
-        {/* PROCESS TIMELINE with dashed SVG connectors */}
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
-          <ScrollReveal>
-            <div className="text-center mb-14 sm:mb-20 relative">
-              <div className="absolute top-0 right-[8%] w-5 h-5 rounded-full bg-[#f4a261] opacity-25 hidden sm:block" />
-              <div className="absolute top-10 left-[14%] w-3 h-3 rounded-full bg-[#e76f51] opacity-20 hidden sm:block" />
-              <SectionLabel>PROCESS</SectionLabel>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                איך <span className="text-[#f4a261]">מתחילים?</span>
-              </h2>
-              <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                ארבעה שלבים מהפנייה הראשונה ועד שהכל מסודר
-              </p>
-            </div>
-          </ScrollReveal>
+        {/* PROCESS PIPELINE — Tech System Flow */}
+        <section className="py-16 sm:py-24 lg:py-32 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <ScrollReveal>
+              <div className="text-center mb-14 sm:mb-20">
+                <SectionLabel>PROCESS</SectionLabel>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
+                  איך <span className="text-[#5ec6c6]">SEELD</span> עובד בשבילך
+                </h2>
+                <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
+                  שישה שלבים מהפנייה הראשונה ועד מעקב שנתי — הכל מנוהל
+                </p>
+              </div>
+            </ScrollReveal>
 
-          <div className="relative">
-            {/* Dashed vertical connector line for desktop */}
-            <svg className="absolute right-1/2 top-0 bottom-0 w-[40px] h-full hidden md:block" style={{ transform: 'translateX(50%)' }} aria-hidden="true">
-              <line
-                x1="20" y1="30" x2="20" y2="100%"
-                stroke="#0a3d3d"
-                strokeWidth="2"
-                strokeDasharray="8 8"
-                opacity="0.12"
-              />
-            </svg>
+            {/* Desktop: horizontal pipeline */}
+            <div className="hidden md:block">
+              <div className="relative">
+                {/* Gradient pipeline line */}
+                <div className="absolute top-[52px] right-[8%] left-[8%] h-[3px] z-0">
+                  <motion.div
+                    className="h-full rounded-full"
+                    style={{ background: "linear-gradient(to left, #5ec6c6, #f4a261, #90be6d, #e76f51, #5ec6c6, #f4a261)" }}
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    /* transform origin for RTL: line fills from right */
+                    {...{ style: { background: "linear-gradient(to left, #5ec6c6, #f4a261, #90be6d, #e76f51, #5ec6c6, #f4a261)", transformOrigin: "right" } }}
+                  />
+                </div>
 
-            <motion.div
-              className="space-y-8 md:space-y-14"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-              variants={staggerContainer}
-            >
-              {processSteps.map((step, i) => (
-                <motion.div key={step.number} variants={staggerItem}>
-                  <div className={`flex flex-col md:flex-row items-center gap-4 md:gap-10 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-                    {/* Card */}
-                    <div className={`flex-1 ${i % 2 === 0 ? 'md:text-left' : 'md:text-right'}`}>
+                <div className="grid grid-cols-6 gap-4 relative z-10">
+                  {processSteps.map((step, i) => (
+                    <motion.div
+                      key={step.number}
+                      className="flex flex-col items-center text-center"
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ delay: 0.15 * i + 0.3, duration: 0.5, ease: "easeOut" }}
+                    >
+                      {/* Numbered circle */}
                       <motion.div
-                        className="bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-6 sm:p-7 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300 relative overflow-hidden"
-                        whileHover={{ y: -3, scale: 1.02 }}
-                        transition={{ duration: 0.25 }}
+                        className="w-[104px] h-[104px] rounded-full flex items-center justify-center mb-5 border-[3px] border-white shadow-xl relative"
+                        style={{ backgroundColor: step.color, boxShadow: `0 8px 30px ${step.color}40` }}
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ type: "spring", stiffness: 300 }}
                       >
-                        {/* Decorative corner circle */}
-                        <div className="absolute top-[-12px] left-[-12px] w-10 h-10 rounded-full opacity-15" style={{ backgroundColor: step.color }} />
-                        <div className="flex items-center gap-3 mb-3">
-                          <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: step.color }}>
-                            <step.icon className="w-4 h-4 text-white" />
-                          </div>
-                          <h3 className="text-lg font-extrabold text-[#0a3d3d]">{step.title}</h3>
+                        {/* Step number badge */}
+                        <div className="absolute -top-1.5 -right-1.5 w-7 h-7 rounded-full bg-[#0a3d3d] flex items-center justify-center shadow-md">
+                          <span className="text-white text-xs font-extrabold">{step.number}</span>
+                        </div>
+                        <step.icon className="w-8 h-8 text-white" />
+                      </motion.div>
+                      {/* Title */}
+                      <h3 className="text-base font-extrabold text-[#0a3d3d] mb-2 leading-tight">{step.title}</h3>
+                      {/* Description */}
+                      <p className="text-xs text-[#0a3d3d]/45 leading-relaxed max-w-[160px]">{step.description}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile: vertical pipeline (line on the right side - RTL) */}
+            <div className="md:hidden">
+              <div className="relative pr-14">
+                {/* Vertical gradient line on the right */}
+                <div className="absolute right-[22px] top-0 bottom-0 w-[3px] z-0">
+                  <motion.div
+                    className="w-full h-full rounded-full"
+                    style={{ background: "linear-gradient(to bottom, #5ec6c6, #f4a261, #90be6d, #e76f51, #5ec6c6, #f4a261)" }}
+                    initial={{ scaleY: 0 }}
+                    whileInView={{ scaleY: 1 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 1.2, ease: "easeOut" }}
+                    {...{ style: { background: "linear-gradient(to bottom, #5ec6c6, #f4a261, #90be6d, #e76f51, #5ec6c6, #f4a261)", transformOrigin: "top" } }}
+                  />
+                </div>
+
+                <div className="space-y-8">
+                  {processSteps.map((step, i) => (
+                    <motion.div
+                      key={step.number}
+                      className="relative flex items-start gap-5"
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-30px" }}
+                      transition={{ delay: 0.12 * i, duration: 0.5, ease: "easeOut" }}
+                    >
+                      {/* Circle on the line */}
+                      <div
+                        className="absolute right-[-56px] top-0 w-[44px] h-[44px] rounded-full flex items-center justify-center border-[3px] border-white shadow-lg z-10"
+                        style={{ backgroundColor: step.color, boxShadow: `0 4px 16px ${step.color}35` }}
+                      >
+                        <span className="text-white text-sm font-extrabold">{step.number}</span>
+                      </div>
+                      {/* Content card */}
+                      <div className="bg-white border border-[#0a3d3d]/[0.06] rounded-xl p-5 flex-1 shadow-sm">
+                        <div className="flex items-center gap-2.5 mb-2">
+                          <step.icon className="w-4 h-4 flex-shrink-0" style={{ color: step.color }} />
+                          <h3 className="text-base font-extrabold text-[#0a3d3d]">{step.title}</h3>
                         </div>
                         <p className="text-sm text-[#0a3d3d]/45 leading-relaxed">{step.description}</p>
-                      </motion.div>
-                    </div>
-
-                    {/* Number circle - each step gets its own color */}
-                    <div className="relative z-10 flex-shrink-0 order-first md:order-none">
-                      <div
-                        className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg border-4 border-white"
-                        style={{ backgroundColor: step.color, boxShadow: `0 8px 24px ${step.color}30` }}
-                      >
-                        <span className="text-white font-extrabold text-xl">{step.number}</span>
                       </div>
-                    </div>
-
-                    {/* Spacer for alternating layout */}
-                    <div className="flex-1 hidden md:block" />
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Decorative dashed curved lines between steps - desktop only */}
-            <svg className="absolute top-0 left-0 w-full h-full hidden md:block pointer-events-none" aria-hidden="true">
-              <path
-                d="M50%,80 C55%,120 45%,160 50%,200"
-                stroke="#0a3d3d"
-                strokeWidth="1.5"
-                strokeDasharray="6 5"
-                fill="none"
-                opacity="0.06"
-              />
-            </svg>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -1000,106 +1040,128 @@ const Index = () => {
         {/* Wave: gray -> white */}
         <WaveDivider color="#ffffff" flip />
 
-        {/* 11. CONTACT SECTION */}
-        <section className="py-16 sm:py-24 lg:py-32">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* 11. CONTACT STRIP — Premium minimal bar */}
+        <motion.section
+          className="bg-[#0a3d3d]"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-0 sm:divide-x sm:divide-white/10" style={{ direction: "rtl" }}>
+              {/* Phone */}
+              <a
+                href="tel:0523097444"
+                className="flex items-center justify-center gap-3 py-3 sm:py-4 px-2 group transition-colors hover:bg-white/[0.04] rounded-lg sm:rounded-none"
+              >
+                <Phone className="w-[18px] h-[18px] text-[#5ec6c6] flex-shrink-0" />
+                <div className="text-center sm:text-right">
+                  <span className="block text-white/90 text-sm font-bold group-hover:text-white transition-colors">טלפון</span>
+                  <span className="block text-white/40 text-xs mt-0.5" dir="ltr">052-309-7444</span>
+                  <span className="block text-white/30 text-[10px]" dir="ltr">09-774-2103</span>
+                </div>
+              </a>
+
+              {/* WhatsApp */}
+              <a
+                href="https://wa.me/972523097444"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-3 py-3 sm:py-4 px-2 group transition-colors hover:bg-white/[0.04] rounded-lg sm:rounded-none"
+              >
+                <MessageCircle className="w-[18px] h-[18px] text-[#90be6d] flex-shrink-0" />
+                <div className="text-center sm:text-right">
+                  <span className="block text-white/90 text-sm font-bold group-hover:text-white transition-colors">WhatsApp</span>
+                  <span className="block text-white/40 text-xs mt-0.5">שלחו הודעה</span>
+                </div>
+              </a>
+
+              {/* Email */}
+              <a
+                href="mailto:info@seeld.co.il"
+                className="flex items-center justify-center gap-3 py-3 sm:py-4 px-2 group transition-colors hover:bg-white/[0.04] rounded-lg sm:rounded-none"
+              >
+                <Mail className="w-[18px] h-[18px] text-[#f4a261] flex-shrink-0" />
+                <div className="text-center sm:text-right">
+                  <span className="block text-white/90 text-sm font-bold group-hover:text-white transition-colors">אימייל</span>
+                  <span className="block text-white/40 text-xs mt-0.5" dir="ltr">info@seeld.co.il</span>
+                </div>
+              </a>
+
+              {/* Offices */}
+              <div className="flex items-center justify-center gap-3 py-3 sm:py-4 px-2">
+                <MapPin className="w-[18px] h-[18px] text-[#e76f51] flex-shrink-0" />
+                <div className="text-center sm:text-right">
+                  <span className="block text-white/90 text-sm font-bold">משרדים</span>
+                  <span className="block text-white/40 text-xs mt-0.5">רעננה | ירושלים</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Contact Form — standalone below the strip */}
+        <section className="py-16 sm:py-24">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6">
             <ScrollReveal>
-              <div className="text-center mb-14 sm:mb-20 relative">
-                <div className="absolute top-0 left-[10%] w-5 h-5 rounded-full bg-[#e76f51] opacity-20 hidden sm:block" />
-                <div className="absolute top-12 right-[12%] w-3 h-3 rounded-full bg-[#90be6d] opacity-25 hidden sm:block" />
+              <div className="text-center mb-10">
                 <SectionLabel>CONTACT</SectionLabel>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                  צרו קשר
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-3">
+                  השאירו פרטים
                 </h2>
-                <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                  שאלה, בקשה או סתם רוצים לבדוק משהו — דברו איתנו
+                <p className="text-[#0a3d3d]/40 text-base sm:text-lg">
+                  ונחזור אליכם תוך שעות עבודה ספורות
                 </p>
               </div>
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-              {/* Contact Info Cards */}
-              <motion.div
-                className="grid grid-cols-1 sm:grid-cols-2 gap-5"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-50px" }}
-                variants={staggerContainer}
-              >
-                {[
-                  { icon: Phone, title: "טלפון", info: "09-774-2103", href: "tel:097742103", color: "#5ec6c6", dir: "ltr" },
-                  { icon: MessageCircle, title: "וואטסאפ", info: "052-309-7444", href: "https://wa.me/972523097444", color: "#90be6d", dir: "ltr", external: true },
-                  { icon: Mail, title: "אימייל", info: "info@seeld.co.il", href: "mailto:info@seeld.co.il", color: "#f4a261" },
-                  { icon: MapPin, title: "משרדים", info: "רעננה | ירושלים", color: "#e76f51" },
-                ].map((item) => (
-                  <motion.div
-                    key={item.title}
-                    variants={staggerItem}
-                    className="block bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-6 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300 cursor-pointer"
-                    whileHover={{ scale: 1.03, y: -3 }}
-                    onClick={() => item.href && window.open(item.href, item.external ? '_blank' : '_self')}
-                  >
-                    <div
-                      className="w-[52px] h-[52px] rounded-full flex items-center justify-center mb-4 shadow-md"
-                      style={{ backgroundColor: item.color, boxShadow: `0 4px 16px ${item.color}25` }}
-                    >
-                      <item.icon className="w-5 h-5 text-white" />
-                    </div>
-                    <h3 className="text-base font-bold text-[#0a3d3d] mb-1">{item.title}</h3>
-                    <p className="text-sm text-[#0a3d3d]/40" dir={item.dir}>{item.info}</p>
-                  </motion.div>
-                ))}
-              </motion.div>
-
-              {/* Inline Contact Form */}
-              <ScrollReveal delay={100}>
-                <div className="bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-7 sm:p-9 shadow-lg shadow-[#0a3d3d]/[0.03]">
-                  <h3 className="text-xl font-extrabold text-[#0a3d3d] mb-7">השאירו פרטים ונחזור אליכם</h3>
-                  <form className="space-y-5" onSubmit={handleContactSubmit}>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <input
-                        type="text"
-                        placeholder="שם מלא"
-                        value={contactForm.name}
-                        onChange={(e) => setContactForm(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-base sm:text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all min-h-[44px]"
-                      />
-                      <input
-                        type="tel"
-                        placeholder="טלפון"
-                        value={contactForm.phone}
-                        onChange={(e) => setContactForm(prev => ({ ...prev, phone: e.target.value }))}
-                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-base sm:text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all min-h-[44px]"
-                        dir="ltr"
-                      />
-                    </div>
+            <ScrollReveal delay={100}>
+              <div className="bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-7 sm:p-9 shadow-lg shadow-[#0a3d3d]/[0.03]">
+                <form className="space-y-5" onSubmit={handleContactSubmit}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <input
-                      type="email"
-                      placeholder="אימייל (לא חובה)"
-                      value={contactForm.email}
-                      onChange={(e) => setContactForm(prev => ({ ...prev, email: e.target.value }))}
+                      type="text"
+                      placeholder="שם מלא"
+                      value={contactForm.name}
+                      onChange={(e) => setContactForm(prev => ({ ...prev, name: e.target.value }))}
                       className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-base sm:text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all min-h-[44px]"
                     />
-                    <textarea
-                      placeholder="במה נוכל לעזור?"
-                      rows={3}
-                      value={contactForm.message}
-                      onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}
-                      className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all resize-none"
+                    <input
+                      type="tel"
+                      placeholder="טלפון"
+                      value={contactForm.phone}
+                      onChange={(e) => setContactForm(prev => ({ ...prev, phone: e.target.value }))}
+                      className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-base sm:text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all min-h-[44px]"
+                      dir="ltr"
                     />
-                    <motion.button
-                      type="submit"
-                      disabled={contactSubmitting}
-                      className="w-full px-6 py-4 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-colors disabled:opacity-60 shadow-lg shadow-[#0a3d3d]/15 min-h-[48px]"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      {contactSubmitting ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "שליחה"}
-                    </motion.button>
-                  </form>
-                </div>
-              </ScrollReveal>
-            </div>
+                  </div>
+                  <input
+                    type="email"
+                    placeholder="אימייל (לא חובה)"
+                    value={contactForm.email}
+                    onChange={(e) => setContactForm(prev => ({ ...prev, email: e.target.value }))}
+                    className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-base sm:text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all min-h-[44px]"
+                  />
+                  <textarea
+                    placeholder="במה נוכל לעזור?"
+                    rows={3}
+                    value={contactForm.message}
+                    onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}
+                    className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all resize-none"
+                  />
+                  <motion.button
+                    type="submit"
+                    disabled={contactSubmitting}
+                    className="w-full px-6 py-4 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-colors disabled:opacity-60 shadow-lg shadow-[#0a3d3d]/15 min-h-[48px]"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {contactSubmitting ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "שליחה"}
+                  </motion.button>
+                </form>
+              </div>
+            </ScrollReveal>
           </div>
         </section>
 
