@@ -34,7 +34,7 @@ const urgencyLevels = [
   { value: 'אפשר להמתין', label: 'אפשר להמתין', color: 'text-muted-foreground', icon: Clock },
 ];
 
-const insuranceCompanies = ['הראל', 'מגדל', 'כלל', 'פניקס', 'מיטב', 'אלטשולר שחם', 'מנורה', 'AIG', 'פסגות', 'מור', 'ילין לפידות'];
+const insuranceCompanies = ['מנורה מבטחים', 'הראל', 'מגדל', 'כלל', 'הפניקס', 'איילון', 'מיטב', 'ילין לפידות', 'אנליסט', 'אלטשולר שחם', 'הכשרה'];
 
 interface RecDraft {
   productId: string;

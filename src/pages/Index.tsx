@@ -100,7 +100,7 @@ const calculators = [
 
 const partners = [
   "הפניקס", "מגדל", "הראל", "כלל", "מנורה מבטחים",
-  "איילון", "הכשרה", "ביטוח ישיר", "שלמה", "AIG", "ליברה",
+  "איילון", "מיטב", "ילין לפידות", "אנליסט", "אלטשולר שחם", "הכשרה",
 ];
 
 const faqItems = [
@@ -315,9 +315,11 @@ const Index = () => {
           <div className="py-16 sm:py-20">
             <div className="relative max-w-4xl mx-auto px-4 sm:px-6">
               <ScrollReveal>
-                <div className="text-center mb-10">
+                <div className="text-center mb-10 relative">
+                  <div className="absolute top-0 right-[15%] w-4 h-4 rounded-full bg-[#e76f51] opacity-20 hidden sm:block" />
+                  <div className="absolute top-6 left-[18%] w-3 h-3 rounded-full bg-[#90be6d] opacity-25 hidden sm:block" />
                   <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] mb-3">
-                    רוצים לשמוע עוד?
+                    רוצים <span className="text-[#5ec6c6]">לשמוע עוד?</span>
                   </h2>
                   <p className="text-[#0a3d3d]/40 text-base sm:text-lg">
                     השאירו פרטים ונחזור אליכם תוך שעות עבודה ספורות
@@ -405,7 +407,9 @@ const Index = () => {
         {/* 4. WHY SEELD */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
           <ScrollReveal>
-            <div className="text-center mb-14 sm:mb-20">
+            <div className="text-center mb-14 sm:mb-20 relative">
+              <div className="absolute top-1 right-[12%] w-5 h-5 rounded-full bg-[#5ec6c6] opacity-20 hidden sm:block" />
+              <div className="absolute top-10 left-[10%] w-4 h-4 rounded-full bg-[#f4a261] opacity-25 hidden sm:block" />
               <SectionLabel>WHY SEELD</SectionLabel>
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                 למה <span className="text-[#5ec6c6]">SEELD</span>?
@@ -678,10 +682,15 @@ const Index = () => {
 
         {/* 9. ABOUT / TRUST SECTION */}
         <section className="bg-[#0a3d3d] relative overflow-hidden">
-          {/* Background decorative circles */}
+          {/* Background decorative solid circles */}
           <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-            <div className="absolute top-[10%] left-[5%] w-[200px] h-[200px] rounded-full bg-[#5ec6c6]/[0.03]" />
-            <div className="absolute bottom-[10%] right-[5%] w-[150px] h-[150px] rounded-full bg-[#f4a261]/[0.03]" />
+            <div className="absolute top-[8%] left-[3%] w-[180px] h-[180px] rounded-full bg-[#5ec6c6]/[0.06]" />
+            <div className="absolute bottom-[8%] right-[3%] w-[140px] h-[140px] rounded-full bg-[#f4a261]/[0.06]" />
+            <div className="absolute top-[50%] left-[40%] w-[60px] h-[60px] rounded-full bg-[#90be6d]/[0.05]" />
+            {/* Dashed connector */}
+            <svg className="absolute top-[15%] right-[10%] w-[200px] h-[200px] hidden lg:block" viewBox="0 0 200 200" fill="none">
+              <path d="M180,20 C140,60 60,80 20,180" stroke="#5ec6c6" strokeWidth="1.5" strokeDasharray="8 6" strokeLinecap="round" opacity="0.1"/>
+            </svg>
           </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32 relative">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -748,10 +757,12 @@ const Index = () => {
         {/* PROCESS TIMELINE with dashed SVG connectors */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
           <ScrollReveal>
-            <div className="text-center mb-14 sm:mb-20">
+            <div className="text-center mb-14 sm:mb-20 relative">
+              <div className="absolute top-0 right-[8%] w-5 h-5 rounded-full bg-[#f4a261] opacity-25 hidden sm:block" />
+              <div className="absolute top-10 left-[14%] w-3 h-3 rounded-full bg-[#e76f51] opacity-20 hidden sm:block" />
               <SectionLabel>PROCESS</SectionLabel>
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                איך מתחילים?
+                איך <span className="text-[#f4a261]">מתחילים?</span>
               </h2>
               <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                 תהליך פשוט וברור — מהפנייה הראשונה ועד ליווי שוטף
@@ -832,10 +843,12 @@ const Index = () => {
         <section className="bg-[#f8f9fc]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
             <ScrollReveal>
-              <div className="text-center mb-14 sm:mb-20">
+              <div className="text-center mb-14 sm:mb-20 relative">
+                <div className="absolute top-1 right-[10%] w-4 h-4 rounded-full bg-[#ff6b9d] opacity-25 hidden sm:block" />
+                <div className="absolute top-8 left-[8%] w-5 h-5 rounded-full bg-[#5ec6c6] opacity-20 hidden sm:block" />
                 <SectionLabel>FAQ</SectionLabel>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                  שאלות נפוצות
+                  שאלות <span className="text-[#ff6b9d]">נפוצות</span>
                 </h2>
                 <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                   תשובות לשאלות שנשאלות הכי הרבה
@@ -886,7 +899,9 @@ const Index = () => {
         <section className="py-16 sm:py-24 lg:py-32">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
-              <div className="text-center mb-14 sm:mb-20">
+              <div className="text-center mb-14 sm:mb-20 relative">
+                <div className="absolute top-0 left-[10%] w-5 h-5 rounded-full bg-[#e76f51] opacity-20 hidden sm:block" />
+                <div className="absolute top-12 right-[12%] w-3 h-3 rounded-full bg-[#90be6d] opacity-25 hidden sm:block" />
                 <SectionLabel>CONTACT</SectionLabel>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                   צרו קשר
