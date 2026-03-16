@@ -306,87 +306,6 @@ const Index = () => {
         {/* 1. HERO */}
         <HeroSection />
 
-        {/* PORTFOLIO SCANNER - Interactive demo */}
-        <section className="bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-            <ScrollReveal>
-              <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-                {/* Text side */}
-                <div className="space-y-6 text-center lg:text-right">
-                  <div className="flex items-center gap-2 justify-center lg:justify-start">
-                    <span className="w-3 h-3 rounded-full bg-[#5ec6c6]" />
-                    <span className="w-3 h-3 rounded-full bg-[#f4a261]" />
-                    <span className="w-3 h-3 rounded-full bg-[#90be6d]" />
-                  </div>
-                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] tracking-tight">
-                    הסורק של <span className="text-[#5ec6c6]">SEELD</span>
-                  </h2>
-                  <p className="text-[#0a3d3d]/50 text-base sm:text-lg max-w-md mx-auto lg:mx-0">
-                    בדיקה חכמה של תיק הביטוח והפנסיה שלכם — כפל ביטוחי, דמי ניהול גבוהים, מסלולי השקעה לא מתאימים, וכיסויים חסרים. הכל אוטומטי.
-                  </p>
-                  <Link to="/contact">
-                    <Button className="bg-[#0a3d3d] text-white hover:bg-[#0d4a4a] rounded-full px-8 py-5 text-base font-bold shadow-lg mt-4 min-h-[48px]">
-                      רוצים סריקה? השאירו פרטים
-                      <ArrowDownLeft className="w-5 h-5 mr-2" />
-                    </Button>
-                  </Link>
-                </div>
-
-                {/* Scanner card */}
-                <motion.div
-                  className="bg-white rounded-3xl shadow-2xl shadow-[#0a3d3d]/8 border border-[#0a3d3d]/[0.06] overflow-hidden max-w-md mx-auto w-full"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="bg-[#0a3d3d] px-5 py-3.5 flex items-center gap-3">
-                    <div className="flex gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#e76f51]" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#f4a261]" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#90be6d]" />
-                    </div>
-                    <span className="text-white/60 text-xs font-medium">SEELD — סריקת תיק ביטוח</span>
-                  </div>
-                  <div className="p-5 space-y-3">
-                    <div className="flex items-center gap-3 mb-1">
-                      <motion.div className="w-3 h-3 rounded-full bg-[#5ec6c6]" animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }} transition={{ duration: 1.5, repeat: Infinity }} />
-                      <span className="text-sm font-bold text-[#0a3d3d]">סורק את התיק...</span>
-                    </div>
-                    {[
-                      { label: "כפל ביטוחי", status: "נמצא", color: "#e76f51" },
-                      { label: "דמי ניהול גבוהים", status: "2 מוצרים", color: "#f4a261" },
-                      { label: "מסלול השקעה לא מתאים", status: "לבדוק", color: "#f4a261" },
-                      { label: "תשואה מתחת לממוצע", status: "קרן פנסיה", color: "#e76f51" },
-                      { label: "כיסוי אובדן כושר", status: "חסר", color: "#e76f51" },
-                      { label: "ביטוח בריאות", status: "תקין ✓", color: "#90be6d" },
-                      { label: "חיסכון לילדים", status: "תקין ✓", color: "#90be6d" },
-                    ].map((item, i) => (
-                      <motion.div key={i} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0"
-                        initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }} transition={{ delay: i * 0.15, duration: 0.4 }}>
-                        <span className="text-xs sm:text-sm text-[#0a3d3d]/70">{item.label}</span>
-                        <span className="text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full" style={{ backgroundColor: `${item.color}15`, color: item.color }}>{item.status}</span>
-                      </motion.div>
-                    ))}
-                    <motion.div className="mt-3 pt-3 border-t-2 border-[#0a3d3d]/[0.06]"
-                      initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 1.2 }}>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-[#0a3d3d]">פוטנציאל חיסכון שנתי</span>
-                        <motion.span className="text-lg font-extrabold text-[#5ec6c6]" initial={{ opacity: 0, scale: 0.5 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 1.4, type: "spring" }}>₪4,200</motion.span>
-                      </div>
-                      <motion.div className="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 1.5 }}>
-                        <motion.div className="h-full rounded-full bg-gradient-to-l from-[#5ec6c6] to-[#90be6d]" initial={{ width: "0%" }} whileInView={{ width: "72%" }} viewport={{ once: true }} transition={{ delay: 1.7, duration: 1, ease: "easeOut" }} />
-                      </motion.div>
-                      <p className="text-[10px] text-[#0a3d3d]/40 mt-1.5">72% מהתיק נסרק — נמצאו 3 הזדמנויות לשיפור</p>
-                    </motion.div>
-                  </div>
-                </motion.div>
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
-
         {/* 2. INLINE LEAD FORM - Light gray background */}
         <section className="relative bg-[#f8f9fc]">
           <div className="py-16 sm:py-20">
@@ -944,6 +863,73 @@ const Index = () => {
                 opacity="0.06"
               />
             </svg>
+          </div>
+        </section>
+
+        {/* PORTFOLIO SCANNER */}
+        <section className="bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+            <ScrollReveal>
+              <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+                <div className="space-y-6 text-center lg:text-right">
+                  <div className="flex items-center gap-2 justify-center lg:justify-start">
+                    <span className="w-3 h-3 rounded-full bg-[#5ec6c6]" />
+                    <span className="w-3 h-3 rounded-full bg-[#f4a261]" />
+                    <span className="w-3 h-3 rounded-full bg-[#90be6d]" />
+                  </div>
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] tracking-tight">
+                    הסורק של <span className="text-[#5ec6c6]">SEELD</span>
+                  </h2>
+                  <p className="text-[#0a3d3d]/50 text-base sm:text-lg max-w-md mx-auto lg:mx-0">
+                    בדיקה חכמה של תיק הביטוח והפנסיה שלכם — כפל ביטוחי, דמי ניהול גבוהים, מסלולי השקעה לא מתאימים, וכיסויים חסרים. הכל אוטומטי.
+                  </p>
+                  <Link to="/contact">
+                    <Button className="bg-[#0a3d3d] text-white hover:bg-[#0d4a4a] rounded-full px-8 py-5 text-base font-bold shadow-lg mt-4 min-h-[48px]">
+                      רוצים סריקה? השאירו פרטים
+                      <ArrowDownLeft className="w-5 h-5 mr-2" />
+                    </Button>
+                  </Link>
+                </div>
+                <motion.div className="bg-white rounded-3xl shadow-2xl shadow-[#0a3d3d]/8 border border-[#0a3d3d]/[0.06] overflow-hidden max-w-md mx-auto w-full"
+                  initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.6 }}>
+                  <div className="bg-[#0a3d3d] px-5 py-3.5 flex items-center gap-3">
+                    <div className="flex gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#e76f51]" /><span className="w-2.5 h-2.5 rounded-full bg-[#f4a261]" /><span className="w-2.5 h-2.5 rounded-full bg-[#90be6d]" /></div>
+                    <span className="text-white/60 text-xs font-medium">SEELD — סריקת תיק ביטוח</span>
+                  </div>
+                  <div className="p-5 space-y-3">
+                    <div className="flex items-center gap-3 mb-1">
+                      <motion.div className="w-3 h-3 rounded-full bg-[#5ec6c6]" animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }} transition={{ duration: 1.5, repeat: Infinity }} />
+                      <span className="text-sm font-bold text-[#0a3d3d]">סורק את התיק...</span>
+                    </div>
+                    {[
+                      { label: "כפל ביטוחי", status: "נמצא", color: "#e76f51" },
+                      { label: "דמי ניהול גבוהים", status: "2 מוצרים", color: "#f4a261" },
+                      { label: "מסלול השקעה לא מתאים", status: "לבדוק", color: "#f4a261" },
+                      { label: "תשואה מתחת לממוצע", status: "קרן פנסיה", color: "#e76f51" },
+                      { label: "כיסוי אובדן כושר", status: "חסר", color: "#e76f51" },
+                      { label: "ביטוח בריאות", status: "תקין ✓", color: "#90be6d" },
+                      { label: "חיסכון לילדים", status: "תקין ✓", color: "#90be6d" },
+                    ].map((item, i) => (
+                      <motion.div key={i} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0"
+                        initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15, duration: 0.4 }}>
+                        <span className="text-xs sm:text-sm text-[#0a3d3d]/70">{item.label}</span>
+                        <span className="text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full" style={{ backgroundColor: `${item.color}15`, color: item.color }}>{item.status}</span>
+                      </motion.div>
+                    ))}
+                    <motion.div className="mt-3 pt-3 border-t-2 border-[#0a3d3d]/[0.06]" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 1.2 }}>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-[#0a3d3d]">פוטנציאל חיסכון שנתי</span>
+                        <motion.span className="text-lg font-extrabold text-[#5ec6c6]" initial={{ opacity: 0, scale: 0.5 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 1.4, type: "spring" }}>₪4,200</motion.span>
+                      </div>
+                      <motion.div className="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 1.5 }}>
+                        <motion.div className="h-full rounded-full bg-gradient-to-l from-[#5ec6c6] to-[#90be6d]" initial={{ width: "0%" }} whileInView={{ width: "72%" }} viewport={{ once: true }} transition={{ delay: 1.7, duration: 1, ease: "easeOut" }} />
+                      </motion.div>
+                      <p className="text-[10px] text-[#0a3d3d]/40 mt-1.5">72% מהתיק נסרק — נמצאו 3 הזדמנויות לשיפור</p>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </div>
+            </ScrollReveal>
           </div>
         </section>
 
