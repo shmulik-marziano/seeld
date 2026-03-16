@@ -76,7 +76,7 @@ const Footer = () => {
                     onChange={(e) => setFormData(p => ({ ...p, name: e.target.value }))}
                     required
                     placeholder="שם מלא"
-                    className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] placeholder:text-gray-400 text-base transition-colors"
+                    className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] placeholder:text-gray-400 text-base transition-colors min-h-[44px]"
                   />
                 </div>
                 <div>
@@ -87,7 +87,7 @@ const Footer = () => {
                     required
                     placeholder="טלפון"
                     dir="ltr"
-                    className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] placeholder:text-gray-400 text-base transition-colors text-right"
+                    className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] placeholder:text-gray-400 text-base transition-colors text-right min-h-[44px]"
                   />
                 </div>
                 <div>
@@ -98,20 +98,20 @@ const Footer = () => {
                     required
                     placeholder="אימייל"
                     dir="ltr"
-                    className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] placeholder:text-gray-400 text-base transition-colors text-right"
+                    className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] placeholder:text-gray-400 text-base transition-colors text-right min-h-[44px]"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="bg-[#0a3d3d] text-white rounded-full px-10 py-3.5 font-semibold text-base hover:bg-[#0d4a4a] transition-colors shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto bg-[#0a3d3d] text-white rounded-full px-10 py-3.5 font-semibold text-base hover:bg-[#0d4a4a] transition-colors shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] flex items-center justify-center gap-2"
                 >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
                 </button>
               </form>
 
               {/* Social Icons */}
-              <div className="flex items-center gap-3 mt-8">
+              <div className="flex items-center gap-3 mt-8 flex-wrap">
                 {socialLinks.map((social) => (
                   <a
                     key={social.label}
@@ -119,7 +119,7 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="w-10 h-10 rounded-full bg-[#0a3d3d] flex items-center justify-center hover:bg-[#0d4a4a] transition-colors"
+                    className="w-11 h-11 rounded-full bg-[#0a3d3d] flex items-center justify-center hover:bg-[#0d4a4a] transition-colors min-w-[44px] min-h-[44px]"
                   >
                     <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">{social.icon}</svg>
                   </a>
@@ -163,13 +163,13 @@ const Footer = () => {
       {/* Regulatory Badges Bar */}
       <div className="bg-[#0a3d3d] py-8 sm:py-10 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 items-center text-center">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8 items-center text-center">
             <div className="flex flex-col items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-[#5ec6c6] flex items-center justify-center shadow-lg shadow-[#5ec6c6]/20">
                 <FileText className="w-5 h-5 text-white" />
               </div>
               <p className="text-white/80 text-sm font-medium leading-snug">
-                בעלי רישיון סוכנות ביטוח<br />מטעם משרד האוצר
+                רישיון סוכנות ביטוח<br />מטעם רשות שוק ההון
               </p>
             </div>
             <div className="flex flex-col items-center gap-3">
@@ -185,7 +185,7 @@ const Footer = () => {
                 <Handshake className="w-5 h-5 text-white" />
               </div>
               <p className="text-white/80 text-sm font-medium leading-snug">
-                חברים בלשכת סוכני<br />הביטוח בישראל
+                חלק מבית<br />עמיתים הון
               </p>
             </div>
           </div>
@@ -196,7 +196,7 @@ const Footer = () => {
       <div className="bg-[#0a3d3d] text-white/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-20">
           {/* Links Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 mb-10 sm:mb-14">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-10 mb-10 sm:mb-14">
             {/* Column 1 - Services */}
             <div>
               <h3 className="font-bold text-white text-sm mb-5">שירותים</h3>
@@ -275,7 +275,7 @@ const Footer = () => {
           <div className="pt-6 border-t border-white/10">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               <p className="text-xs text-white/30">
-                &copy; {new Date().getFullYear()} SEELD — סוכנות לפיננסים וביטוח | מבית עמיתים הון. כל הזכויות שמורות.
+                &copy; {new Date().getFullYear()} SEELD — ביטוח, חיסכון ופנסיה | מבית עמיתים הון. כל הזכויות שמורות.
               </p>
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-2 text-xs text-white/30">
                 <Link to="/privacy" className="hover:text-white/60 transition-colors">מדיניות פרטיות</Link>

@@ -29,7 +29,7 @@ const About = () => {
             אודות <span className="text-[#5ec6c6]">SEELD</span>
           </h1>
           <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
-            SEELD — סוכנות לפיננסים וביטוח. הבית שלכם לפתרונות מותאמים אישית.
+            SEELD — ביטוח, חיסכון ופנסיה. הכל שקוף, הכל מוסבר, הכל בגובה העיניים.
           </p>
         </div>
       </section>
@@ -54,13 +54,13 @@ const About = () => {
               </h2>
               <div className="space-y-4 text-gray-600 leading-relaxed text-base sm:text-lg">
                 <p>
-                  SEELD היא סוכנות לפיננסים וביטוח שמאמינה שכל אדם ומשפחה ראויים לקבל ייעוץ פיננסי וביטוחי מקצועי, נגיש ואמין — בגובה העיניים.
+                  SEELD היא סוכנות ביטוח, חיסכון ופנסיה. הקמנו אותה מתוך אמונה שייעוץ פיננסי טוב צריך להיות נגיש לכולם — לא רק למי שמבין את השפה המקצועית.
                 </p>
                 <p>
-                  שמוליק מרציאנו, סוכן ביטוח פנסיוני מורשה, מלווה את הלקוחות שלנו בצורה אישית ומקצועית. אנחנו מאמינים בשקיפות מלאה, בשירות אישי ובהתאמה מדויקת לצרכים הייחודיים של כל לקוח.
+                  שמוליק מרציאנו, סוכן ביטוח פנסיוני מורשה, עובד מול כל חברות הביטוח וקרנות הפנסיה בשוק. כל לקוח מקבל בדיקה מלאה של מה שיש לו, השוואה בין האפשרויות, והמלצה כנה — בלי לחץ.
                 </p>
                 <p>
-                  אנחנו כאן כדי לעזור לכם להבין את עולם הביטוח והפנסיה בצורה פשוטה וברורה, ולבחור את הפתרונות שמתאימים בדיוק לכם.
+                  המטרה: שתבינו בדיוק מה יש לכם, למה אתם משלמים, ומה כדאי לשנות. בלי מילים מסובכות, בלי אותיות קטנות.
                 </p>
               </div>
             </div>
@@ -84,14 +84,14 @@ const About = () => {
                 המשימה <span className="text-[#f4a261]">שלנו</span>
               </h2>
               <p className="text-gray-600 leading-relaxed text-base sm:text-lg mb-6">
-                אנחנו מאמינים שניהול פיננסי נכון מתחיל בידע ובהבנה. SEELD מוקדשת לספק ללקוחותינו:
+                ניהול פיננסי נכון מתחיל בהבנה של מה שיש לכם. זה מה שאנחנו עושים:
               </p>
               <ul className="space-y-4">
                 {[
-                  { text: "ייעוץ מקצועי ואובייקטיבי בתחומי חיסכון, פנסיה וביטוח", color: "#5ec6c6" },
-                  { text: "השוואה מקיפה בין כל חברות הביטוח וקרנות הפנסיה בשוק", color: "#f4a261" },
-                  { text: "ליווי אישי לאורך כל שלבי החיים הפיננסיים", color: "#90be6d" },
-                  { text: "חיסכון משמעותי בעלויות הביטוח והחיסכון שלכם", color: "#e76f51" },
+                  { text: "בדיקת כל הפוליסות והמוצרים הפנסיוניים שלכם — מול כל החברות בשוק", color: "#5ec6c6" },
+                  { text: "השוואת מחירים, כיסויים ודמי ניהול — כדי שתדעו שאתם לא משלמים מיותר", color: "#f4a261" },
+                  { text: "מעקב שוטף: חידושים, שינויים במשפחה, עדכוני רגולציה — אנחנו בתמונה", color: "#90be6d" },
+                  { text: "זיהוי כפל ביטוחי, כיסויים חסרים ודמי ניהול גבוהים — וטיפול מיידי", color: "#e76f51" },
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3 text-gray-600 text-base sm:text-lg">
                     <span className="w-4 h-4 rounded-full mt-1.5 flex-shrink-0 shadow-md" style={{ backgroundColor: item.color, boxShadow: `0 4px 12px ${item.color}40` }} />
@@ -115,10 +115,10 @@ const About = () => {
             </div>
             <div className="grid sm:grid-cols-2 gap-6">
               {[
-                { icon: Eye, title: "שקיפות", description: "אנחנו מאמינים בחשיפה מלאה של כל המידע, העמלות והתנאים — ללא הפתעות ואותיות קטנות.", color: "#5ec6c6" },
-                { icon: Award, title: "מקצועיות", description: "הצוות שלנו מורכב ממומחים מוסמכים עם ניסיון רב בתחום הפיננסי והביטוחי.", color: "#f4a261" },
-                { icon: ShieldCheck, title: "אמינות", description: "אנחנו תמיד שמים את האינטרס של הלקוח במקום הראשון ופועלים בהתאם.", color: "#e76f51" },
-                { icon: Users, title: "נגישות", description: "פיננסים וביטוח צריכים להיות מובנים לכולם. אנחנו מסבירים בשפה ברורה ופשוטה.", color: "#90be6d" },
+                { icon: Eye, title: "שקיפות", description: "תראו את כל התנאים, העמלות ודמי הניהול — לפני שמחליטים. בלי הפתעות, בלי אותיות קטנות.", color: "#5ec6c6" },
+                { icon: Award, title: "מקצועיות", description: "סוכן ביטוח פנסיוני מורשה, מעודכן ברגולציה ובשינויים בשוק. הידע הזה עובד בשבילכם.", color: "#f4a261" },
+                { icon: ShieldCheck, title: "אמינות", description: "האינטרס שלכם קודם. אם משהו לא מתאים — נגיד את זה ישירות.", color: "#e76f51" },
+                { icon: Users, title: "נגישות", description: "ביטוח ופנסיה לא צריכים להיות מסובכים. מסבירים בשפה ברורה, עונים על כל שאלה.", color: "#90be6d" },
               ].map((item, idx) => (
                 <div key={idx} className="bg-[#f8f9fc] border border-[#0a3d3d]/[0.06] rounded-2xl p-6 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300 relative overflow-hidden group">
                   {/* Colored accent line at top */}
@@ -145,9 +145,9 @@ const About = () => {
               {/* Solid decorative circles */}
               <div className="absolute top-[-30px] right-[-30px] w-[100px] h-[100px] rounded-full bg-[#5ec6c6] opacity-20" />
               <div className="absolute bottom-[-20px] left-[-20px] w-[80px] h-[80px] rounded-full bg-[#f4a261] opacity-15" />
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-3 relative">בואו נתחיל <span className="text-[#5ec6c6]">לתכנן יחד</span></h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-3 relative">רוצים לבדוק <span className="text-[#5ec6c6]">את המצב שלכם?</span></h2>
               <p className="text-white/60 text-base sm:text-lg mb-8 max-w-xl mx-auto relative">
-                השאירו פרטים ונחזור אליכם לשיחת ייעוץ ראשונית ללא עלות וללא התחייבות.
+                השאירו פרטים ונחזור אליכם לשיחה ראשונית — ללא עלות וללא התחייבות.
               </p>
               <Link
                 to="/contact"

@@ -332,20 +332,20 @@ const Index = () => {
                         placeholder="שם מלא"
                         value={leadForm.name}
                         onChange={(e) => setLeadForm(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] placeholder:text-[#0a3d3d]/30 text-sm focus:outline-none focus:border-[#5ec6c6] transition-all"
+                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] placeholder:text-[#0a3d3d]/30 text-base sm:text-sm focus:outline-none focus:border-[#5ec6c6] transition-all min-h-[44px]"
                       />
                       <input
                         type="tel"
                         placeholder="טלפון"
                         value={leadForm.phone}
                         onChange={(e) => setLeadForm(prev => ({ ...prev, phone: e.target.value }))}
-                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] placeholder:text-[#0a3d3d]/30 text-sm focus:outline-none focus:border-[#5ec6c6] transition-all"
+                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] placeholder:text-[#0a3d3d]/30 text-base sm:text-sm focus:outline-none focus:border-[#5ec6c6] transition-all min-h-[44px]"
                         dir="ltr"
                       />
                       <select
                         value={leadForm.subject}
                         onChange={(e) => setLeadForm(prev => ({ ...prev, subject: e.target.value }))}
-                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-sm focus:outline-none focus:border-[#5ec6c6] transition-all appearance-none cursor-pointer"
+                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-base sm:text-sm focus:outline-none focus:border-[#5ec6c6] transition-all appearance-none cursor-pointer min-h-[44px]"
                       >
                         <option value="" className="text-[#0a3d3d]/30">בחר נושא</option>
                         {leadSubjects.map((s) => (
@@ -355,7 +355,7 @@ const Index = () => {
                       <motion.button
                         type="submit"
                         disabled={leadSubmitting}
-                        className="w-full px-6 py-3.5 rounded-full bg-[#0a3d3d] text-white font-bold text-sm hover:bg-[#0d4a4a] transition-all disabled:opacity-60 shadow-lg shadow-[#0a3d3d]/15"
+                        className="w-full px-6 py-3.5 rounded-full bg-[#0a3d3d] text-white font-bold text-base sm:text-sm hover:bg-[#0d4a4a] transition-all disabled:opacity-60 shadow-lg shadow-[#0a3d3d]/15 min-h-[48px]"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
@@ -475,7 +475,7 @@ const Index = () => {
                   ביטוח — <span className="text-[#e76f51]">כל הסוגים, מקום אחד</span>
                 </h2>
                 <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                  מגוון פתרונות ביטוח מקיפים לכל תחומי החיים — הכל במקום אחד
+                  רכב, בריאות, דירה, חיים, עסק ועוד — משווים ובוחרים את הכיסוי הנכון
                 </p>
               </div>
             </ScrollReveal>
@@ -554,7 +554,7 @@ const Index = () => {
                 חיסכון <span className="text-[#90be6d]">ופנסיה</span>
               </h2>
               <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                בניית עתיד פיננסי חזק — קרנות פנסיה, חיסכון, השקעות ותכנון לפרישה
+                קרנות פנסיה, קופות גמל, קרנות השתלמות והכנה לפרישה — הכל מסודר ומנוהל
               </p>
             </div>
           </ScrollReveal>
@@ -607,7 +607,7 @@ const Index = () => {
                   <span className="text-[#6c63ff]">המחשבונים</span> שלנו
                 </h2>
                 <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                  כלים חכמים שיעזרו לכם לקבל החלטות פיננסיות מושכלות
+                  בדקו בעצמכם — חישובים מהירים לפני שמתחילים לדבר על מספרים
                 </p>
               </div>
             </ScrollReveal>
@@ -666,7 +666,7 @@ const Index = () => {
                 עובדים עם <span className="text-[#5ec6c6]">מיטב החברות</span>
               </h2>
               <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                עובדים עם כל חברות הביטוח ובתי ההשקעות
+                משווים בין כל חברות הביטוח וקרנות הפנסיה בשוק הישראלי
               </p>
             </div>
           </ScrollReveal>
@@ -724,9 +724,9 @@ const Index = () => {
                     <p className="text-[#5ec6c6] font-semibold text-xl">סוכן ביטוח פנסיוני מורשה</p>
                   </div>
                   <p className="text-white/45 text-base sm:text-lg leading-relaxed">
-                    שמוליק מרציאנו, סוכן ביטוח פנסיוני מורשה, מלווה לקוחות בצורה אישית ומקצועית.
-                    SEELD — סוכנות לפיננסים וביטוח, מפוקחת ומורשית.
-                    אנחנו כאן כדי לעזור לכם להבין את עולם הביטוח והפנסיה בצורה פשוטה וברורה — בגובה העיניים, בלי ז׳רגון מיותר.
+                    שמוליק מרציאנו, סוכן ביטוח פנסיוני מורשה. עובד מול כל חברות הביטוח ובתי ההשקעות בשוק.
+                    הגישה פשוטה: להבין מה יש לכם, מה חסר, ומה אפשר לשפר — בלי מילים גדולות, בלי לחץ.
+                    SEELD פועלת מתוך בית עמיתים הון, סוכנות מפוקחת ומורשית.
                   </p>
                   <div className="flex flex-wrap gap-4 pt-2">
                     <Link
@@ -789,7 +789,7 @@ const Index = () => {
                 איך <span className="text-[#f4a261]">מתחילים?</span>
               </h2>
               <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                תהליך פשוט וברור — מהפנייה הראשונה ועד ליווי שוטף
+                ארבעה שלבים מהפנייה הראשונה ועד שהכל מסודר
               </p>
             </div>
           </ScrollReveal>
@@ -881,7 +881,7 @@ const Index = () => {
                   שאלות <span className="text-[#ff6b9d]">נפוצות</span>
                 </h2>
                 <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                  תשובות לשאלות שנשאלות הכי הרבה
+                  תשובות קצרות וברורות לשאלות שעולות שוב ושוב
                 </p>
               </div>
             </ScrollReveal>
@@ -945,7 +945,7 @@ const Index = () => {
                   צרו קשר
                 </h2>
                 <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                  אנחנו כאן בשבילכם — בכל שאלה, התייעצות או בקשה
+                  שאלה, בקשה או סתם רוצים לבדוק משהו — דברו איתנו
                 </p>
               </div>
             </ScrollReveal>
@@ -995,14 +995,14 @@ const Index = () => {
                         placeholder="שם מלא"
                         value={contactForm.name}
                         onChange={(e) => setContactForm(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all"
+                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-base sm:text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all min-h-[44px]"
                       />
                       <input
                         type="tel"
                         placeholder="טלפון"
                         value={contactForm.phone}
                         onChange={(e) => setContactForm(prev => ({ ...prev, phone: e.target.value }))}
-                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all"
+                        className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-base sm:text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all min-h-[44px]"
                         dir="ltr"
                       />
                     </div>
@@ -1011,7 +1011,7 @@ const Index = () => {
                       placeholder="אימייל (לא חובה)"
                       value={contactForm.email}
                       onChange={(e) => setContactForm(prev => ({ ...prev, email: e.target.value }))}
-                      className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all"
+                      className="w-full px-1 py-3.5 bg-transparent border-b-2 border-[#0a3d3d]/10 text-[#0a3d3d] text-base sm:text-sm placeholder:text-[#0a3d3d]/25 focus:outline-none focus:border-[#5ec6c6] transition-all min-h-[44px]"
                     />
                     <textarea
                       placeholder="במה נוכל לעזור?"
@@ -1023,7 +1023,7 @@ const Index = () => {
                     <motion.button
                       type="submit"
                       disabled={contactSubmitting}
-                      className="w-full px-6 py-4 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-colors disabled:opacity-60 shadow-lg shadow-[#0a3d3d]/15"
+                      className="w-full px-6 py-4 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-colors disabled:opacity-60 shadow-lg shadow-[#0a3d3d]/15 min-h-[48px]"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
@@ -1048,7 +1048,7 @@ const Index = () => {
                 <div className="space-y-3 text-center sm:text-right">
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d]">סוכן ביטוח? הכלים שלך מחכים כאן</h3>
                   <p className="text-base text-[#0a3d3d]/40 max-w-md">
-                    פורטל SEELD לסוכנים — ניהול לקוחות, מעקב פוליסות וכלי עבודה חכמים במקום אחד.
+                    פורטל SEELD לסוכנים — ניהול לקוחות, מעקב פוליסות ומסמכים, הכל במקום אחד.
                   </p>
                 </div>
                 <Link to="/app/auth" className="w-full sm:w-auto flex-shrink-0">

@@ -16,20 +16,20 @@ import { motion } from "framer-motion";
 const features = [
   {
     icon: LayoutDashboard,
-    title: "דשבורד חכם",
-    description: "מבט-על על כל הסוכנות: לקוחות, מטלות, ביצועים ומעקב תיקים — הכול במקום אחד.",
+    title: "דשבורד סוכנות",
+    description: "מבט-על על לקוחות, מטלות פתוחות, ביצועים ותיקים — הכל נגיש ממסך אחד.",
     color: "#5ec6c6",
   },
   {
     icon: Users,
     title: "ניהול לקוחות",
-    description: "כרטיס לקוח מלא עם היסטוריית פוליסות, תביעות, פולואפ ומסמכים. חיפוש וסינון מתקדם.",
+    description: "כרטיס לקוח מלא: פוליסות, תביעות, תזכורות ומסמכים. חיפוש וסינון מהירים.",
     color: "#f4a261",
   },
   {
     icon: Brain,
     title: "המלצות AI",
-    description: "מנוע בינה מלאכותית שמנתח את מצב הלקוח ומייצר המלצות ביטוחיות ופנסיוניות מותאמות אישית.",
+    description: "מנוע AI שמנתח את תיק הלקוח ומייצר המלצות ביטוחיות ופנסיוניות רלוונטיות.",
     color: "#e76f51",
   },
   {
@@ -41,7 +41,7 @@ const features = [
   {
     icon: FileSearch,
     title: "עיבוד מסמכים",
-    description: "סריקה אוטומטית של פוליסות ומסמכים עם AI. חילוץ נתונים, זיהוי חוסרים והשוואת כיסויים.",
+    description: "סריקה אוטומטית של פוליסות ומסמכים. חילוץ נתונים, זיהוי כיסויים חסרים והשוואה בין מוצרים.",
     color: "#6c63ff",
   },
 ];
@@ -114,7 +114,7 @@ const AgentLandingPage = () => {
               הכלים שלך לניהול סוכנות ביטוח — <span className="text-[#5ec6c6]">מבית SEELD</span>
             </h1>
             <p className="text-base sm:text-xl text-gray-500 max-w-2xl leading-relaxed mb-8 sm:mb-10">
-              פלטפורמה מתקדמת לניהול סוכנות ביטוח. דשבורד, ניהול לקוחות, המלצות AI, פורטל לקוח ועיבוד מסמכים חכם.
+              דשבורד, ניהול לקוחות, המלצות AI, פורטל לקוח ועיבוד מסמכים — הכל בפלטפורמה אחת.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Link
@@ -149,10 +149,10 @@ const AgentLandingPage = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] mb-3 sm:mb-4">
-              הכול מה שצריך <span className="text-[#5ec6c6]">לסוכנות חכמה</span>
+              כל מה שצריך <span className="text-[#5ec6c6]">לניהול הסוכנות</span>
             </h2>
             <p className="text-gray-500 text-base sm:text-lg max-w-2xl mx-auto">
-              חמישה כלים מרכזיים שיעזרו לכם לנהל את הסוכנות בצורה יעילה ומקצועית יותר.
+              חמישה כלים שחוסכים זמן, מייעלים את העבודה ומשפרים את השירות ללקוחות.
             </p>
           </motion.div>
 
@@ -193,7 +193,7 @@ const AgentLandingPage = () => {
               <div className="absolute top-[-20px] right-[-20px] w-[60px] h-[60px] rounded-full bg-[#5ec6c6] opacity-20" />
               <div className="absolute bottom-[-15px] left-[-15px] w-[50px] h-[50px] rounded-full bg-[#f4a261] opacity-15" />
               <h3 className="text-xl font-extrabold text-white mb-3 relative">רוצים לראות בפעולה?</h3>
-              <p className="text-white/50 text-sm mb-6 relative">הירשמו בחינם ותתחילו לעבוד עם הכלים שלנו</p>
+              <p className="text-white/50 text-sm mb-6 relative">הרשמה בחינם, בלי התחייבות</p>
               <Link
                 to="/app/auth"
                 className="relative inline-flex items-center gap-2 px-8 py-3 bg-[#5ec6c6] text-[#0a3d3d] font-bold rounded-full hover:bg-[#4db5b5] transition-colors text-sm min-h-[44px]"
@@ -243,14 +243,14 @@ const AgentLandingPage = () => {
             variants={staggerContainer}
           >
             {[
-              "ממשק בעברית מלאה, מותאם לשוק הישראלי",
-              "מנוע AI שמייצר המלצות ביטוחיות מותאמות",
-              "פורטל לקוח דיגיטלי עם חתימה מקוונת",
-              "עיבוד מסמכים אוטומטי עם סריקת פוליסות",
-              "מעקב פולואפ ותזכורות אוטומטיות",
-              "אבטחת מידע מתקדמת ועמידה ברגולציה",
-              "דוחות ביצועים ואנליטיקה מתקדמת",
-              "תמיכה מקצועית ועדכונים שוטפים",
+              "ממשק בעברית מלאה, בנוי לשוק הישראלי",
+              "מנוע AI שמייצר המלצות ביטוחיות ופנסיוניות רלוונטיות",
+              "פורטל לקוח דיגיטלי עם חתימה מקוונת והעלאת מסמכים",
+              "סריקת פוליסות אוטומטית וחילוץ נתונים",
+              "תזכורות חידוש, פולואפ ומעקב תביעות",
+              "אבטחת מידע ועמידה בדרישות הרגולציה",
+              "דוחות ביצועים — עמלות, תיקים, שימור לקוחות",
+              "תמיכה טכנית ועדכוני מערכת שוטפים",
             ].map((benefit, idx) => (
               <motion.div key={idx} variants={staggerItem} className="flex items-start gap-3 min-h-[44px]">
                 <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: ["#5ec6c6", "#f4a261", "#e76f51", "#90be6d", "#6c63ff", "#5ec6c6", "#f4a261", "#e76f51"][idx] }} />
@@ -274,7 +274,7 @@ const AgentLandingPage = () => {
               תוכניות <span className="text-[#5ec6c6]">ומחירים</span>
             </h2>
             <p className="text-gray-500 text-base sm:text-lg mb-8 sm:mb-10 max-w-xl mx-auto">
-              בקרוב נפרסם את תוכניות המחירים שלנו. בינתיים, הירשמו ותתחילו בחינם.
+              תוכניות המחירים יפורסמו בקרוב. בינתיים — הרשמה בחינם.
             </p>
           </motion.div>
           <motion.div
@@ -322,7 +322,7 @@ const AgentLandingPage = () => {
               מה אומרים <span className="text-[#90be6d]">הסוכנים?</span>
             </h2>
             <p className="text-gray-500 text-base sm:text-lg mb-10 sm:mb-12 max-w-xl mx-auto">
-              סוכנים שכבר משתמשים בפלטפורמה שלנו
+              סוכנים שכבר עובדים עם הפלטפורמה
             </p>
           </motion.div>
           <motion.div
@@ -333,9 +333,9 @@ const AgentLandingPage = () => {
             variants={staggerContainer}
           >
             {[
-              { name: "סוכן 1", text: "הפלטפורמה חסכה לי שעות עבודה ביום. הכול נגיש ומסודר." },
-              { name: "סוכן 2", text: "מנוע ה-AI מייצר המלצות מדויקות שמרשימות את הלקוחות שלי." },
-              { name: "סוכן 3", text: "הפורטל ללקוחות שינה את רמת השירות שלי. מקצועי ומרשים." },
+              { name: "סוכן 1", text: "חוסך לי שעות כל יום. הכל מסודר ונגיש בלחיצה." },
+              { name: "סוכן 2", text: "ההמלצות של ה-AI חוסכות לי זמן ומרשימות את הלקוחות." },
+              { name: "סוכן 3", text: "הפורטל ללקוחות שידרג את רמת השירות. הם רואים הכל בעצמם." },
             ].map((testimonial, idx) => (
               <motion.div
                 key={idx}
@@ -381,7 +381,7 @@ const AgentLandingPage = () => {
               מוכנים <span className="text-[#5ec6c6]">להתחיל?</span>
             </h2>
             <p className="text-white/50 text-sm sm:text-lg mb-6 sm:mb-8 max-w-xl mx-auto relative">
-              הצטרפו לסוכנים שכבר מנהלים את הסוכנות שלהם בצורה חכמה יותר.
+              הצטרפו לסוכנים שכבר חוסכים זמן ומשפרים שירות עם SEELD.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center relative">
               <Link
