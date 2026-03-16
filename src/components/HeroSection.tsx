@@ -128,130 +128,80 @@ const HeroSection = () => {
             </motion.div>
           </div>
 
-          {/* Left side - Live Portfolio Scanner */}
+          {/* Left side - Colored circles composition (the one you loved!) */}
           <motion.div
             className="relative flex items-center justify-center lg:justify-start"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <div className="relative w-[320px] h-[420px] sm:w-[380px] sm:h-[480px] lg:w-[440px] lg:h-[520px]">
-              {/* Scanner card */}
+            <div className="relative w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] lg:w-[480px] lg:h-[480px]">
+              {/* Main colored circles */}
               <motion.div
-                className="absolute inset-x-0 top-0 bg-white rounded-3xl shadow-2xl shadow-[#0a3d3d]/10 border border-[#0a3d3d]/[0.06] overflow-hidden"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.6, type: "spring" }}
+                className="absolute top-[30%] right-[5%] w-[100px] h-[100px] sm:w-[130px] sm:h-[130px] rounded-full bg-[#5ec6c6] flex items-center justify-center"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
                 style={isDesktop ? { y: y1 } : undefined}
               >
-                {/* Scanner header */}
-                <div className="bg-[#0a3d3d] px-5 py-3.5 flex items-center gap-3">
-                  <div className="flex gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#e76f51]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#f4a261]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#90be6d]" />
-                  </div>
-                  <span className="text-white/60 text-xs font-medium">SEELD — סריקת תיק ביטוח</span>
-                </div>
-
-                {/* Scanner content */}
-                <div className="p-5 space-y-4">
-                  {/* Scanning animation */}
-                  <div className="flex items-center gap-3 mb-2">
-                    <motion.div
-                      className="w-3 h-3 rounded-full bg-[#5ec6c6]"
-                      animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    />
-                    <span className="text-sm font-bold text-[#0a3d3d]">סורק את התיק...</span>
-                  </div>
-
-                  {/* Scan results - animated lines */}
-                  {[
-                    { label: "כפל ביטוחי", status: "נמצא", color: "#e76f51", delay: 0.8 },
-                    { label: "דמי ניהול גבוהים", status: "2 מוצרים", color: "#f4a261", delay: 1.2 },
-                    { label: "מסלול השקעה לא מתאים", status: "לבדוק", color: "#f4a261", delay: 1.6 },
-                    { label: "תשואה מתחת לממוצע", status: "קרן פנסיה", color: "#e76f51", delay: 2.0 },
-                    { label: "כיסוי אובדן כושר", status: "חסר", color: "#e76f51", delay: 2.4 },
-                    { label: "ביטוח בריאות", status: "תקין ✓", color: "#90be6d", delay: 2.8 },
-                    { label: "חיסכון לילדים", status: "תקין ✓", color: "#90be6d", delay: 3.2 },
-                  ].map((item, i) => (
-                    <motion.div
-                      key={i}
-                      className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0"
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: item.delay, duration: 0.4 }}
-                    >
-                      <span className="text-xs sm:text-sm text-[#0a3d3d]/70">{item.label}</span>
-                      <span
-                        className="text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full"
-                        style={{ backgroundColor: `${item.color}15`, color: item.color }}
-                      >
-                        {item.status}
-                      </span>
-                    </motion.div>
-                  ))}
-
-                  {/* Summary bar */}
-                  <motion.div
-                    className="mt-3 pt-3 border-t-2 border-[#0a3d3d]/[0.06]"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 3.6, duration: 0.5 }}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#0a3d3d]">פוטנציאל חיסכון שנתי</span>
-                      <motion.span
-                        className="text-lg font-extrabold text-[#5ec6c6]"
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 3.8, type: "spring" }}
-                      >
-                        ₪4,200
-                      </motion.span>
-                    </div>
-                    <motion.div
-                      className="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 4 }}
-                    >
-                      <motion.div
-                        className="h-full rounded-full bg-gradient-to-l from-[#5ec6c6] to-[#90be6d]"
-                        initial={{ width: "0%" }}
-                        animate={{ width: "72%" }}
-                        transition={{ delay: 4.2, duration: 1, ease: "easeOut" }}
-                      />
-                    </motion.div>
-                    <p className="text-[10px] text-[#0a3d3d]/40 mt-1.5">72% מהתיק נסרק — נמצאו 3 הזדמנויות לשיפור</p>
-                  </motion.div>
-                </div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="w-10 h-10 sm:w-14 sm:h-14">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </motion.div>
 
-              {/* Decorative elements around scanner */}
               <motion.div
-                className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-[#5ec6c6]"
+                className="absolute top-[28%] right-[32%] w-[75px] h-[75px] sm:w-[95px] sm:h-[95px] rounded-full bg-[#e76f51]"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ delay: 0.3, type: "spring" }}
-                style={isDesktop ? { y: y1 } : undefined}
-              />
-              <motion.div
-                className="absolute top-[40%] -right-4 w-6 h-6 rounded-full bg-[#f4a261]"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.5, type: "spring" }}
+                transition={{ delay: 0.65, type: "spring", stiffness: 200 }}
                 style={isDesktop ? { y: y2 } : undefined}
               />
 
-              {/* Bottom decorative dot */}
               <motion.div
-                className="absolute bottom-4 left-[30%] w-5 h-5 rounded-full bg-[#90be6d]"
+                className="absolute top-[15%] right-[52%] w-[85px] h-[85px] sm:w-[110px] sm:h-[110px] rounded-full bg-[#f4a261] flex items-center justify-center"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ delay: 0.7, type: "spring" }}
-              />
+                transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
+                style={isDesktop ? { y: y3 } : undefined}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="w-8 h-8 sm:w-11 sm:h-11">
+                  <path d="M12 19V5M5 12l7-7 7 7" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </motion.div>
+
+              <motion.div
+                className="absolute top-[22%] right-[75%] w-[70px] h-[70px] sm:w-[90px] sm:h-[90px] rounded-full bg-[#90be6d] flex items-center justify-center"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.95, type: "spring", stiffness: 200 }}
+                style={isDesktop ? { y: y4 } : undefined}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" className="w-7 h-7 sm:w-9 sm:h-9">
+                  <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </motion.div>
+
+              {/* Pill/capsule shape */}
+              <motion.div
+                className="absolute top-[55%] right-[15%] w-[200px] sm:w-[280px] h-[60px] sm:h-[75px] rounded-full border-2 border-[#0a3d3d]/15 flex items-center px-4"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.1, duration: 0.6 }}
+              >
+                <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#5ec6c6]" />
+                <div className="flex-1 mx-3 h-[2px] bg-[#0a3d3d]/10 rounded-full" />
+              </motion.div>
+
+              {/* Small decorative dots */}
+              <motion.div className="absolute top-[10%] right-[40%] w-4 h-4 rounded-full bg-[#ffc929]" animate={{ y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity }} />
+              <motion.div className="absolute top-[75%] right-[60%] w-3 h-3 rounded-full bg-[#e76f51]/60" animate={{ y: [0, 5, 0] }} transition={{ duration: 4, repeat: Infinity, delay: 1 }} />
+              <motion.div className="absolute top-[80%] right-[20%] w-3 h-3 rounded-full bg-[#5ec6c6]/50" animate={{ scale: [1, 1.4, 1] }} transition={{ duration: 3, repeat: Infinity, delay: 0.5 }} />
+
+              {/* Dashed connector */}
+              <svg className="absolute top-[20%] right-[70%] w-[120px] h-[100px]" viewBox="0 0 120 100" fill="none">
+                <path d="M100,20 C70,10 40,50 20,80" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="6 5" strokeLinecap="round" opacity="0.2"/>
+                <polygon points="16,76 22,84 26,74" fill="#0a3d3d" opacity="0.2"/>
+              </svg>
             </div>
           </motion.div>
         </div>
