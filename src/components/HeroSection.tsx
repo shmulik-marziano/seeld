@@ -126,6 +126,19 @@ const HeroSection = () => {
                 </Button>
               </a>
             </motion.div>
+
+            {/* Mobile-only accent dots - visible below CTAs on small screens */}
+            <motion.div
+              className="flex sm:hidden items-center gap-3 pt-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <span className="w-5 h-5 rounded-full bg-[#5ec6c6]" />
+              <span className="w-4 h-4 rounded-full bg-[#e76f51]" />
+              <span className="w-6 h-6 rounded-full bg-[#f4a261]" />
+              <span className="w-4 h-4 rounded-full bg-[#90be6d]" />
+            </motion.div>
           </div>
 
           {/* Left side - Colored circles composition - hidden on mobile */}

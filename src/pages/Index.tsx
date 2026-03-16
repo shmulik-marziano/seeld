@@ -388,6 +388,13 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Decorative dots between sections */}
+        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
+          <span className="w-4 h-4 rounded-full bg-[#5ec6c6]" />
+          <span className="w-6 h-6 rounded-full bg-[#f4a261]" />
+          <span className="w-4 h-4 rounded-full bg-[#90be6d]" />
+        </div>
+
         {/* 3. QUICK SERVICES BAR */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
           <ScrollReveal>
@@ -414,6 +421,13 @@ const Index = () => {
             </div>
           </ScrollReveal>
         </section>
+
+        {/* Decorative dots between sections */}
+        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
+          <span className="w-4 h-4 rounded-full bg-[#e76f51]" />
+          <span className="w-6 h-6 rounded-full bg-[#5ec6c6]" />
+          <span className="w-4 h-4 rounded-full bg-[#f4a261]" />
+        </div>
 
         {/* 4. WHY SEELD */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
@@ -473,6 +487,13 @@ const Index = () => {
             ))}
           </motion.div>
         </section>
+
+        {/* Decorative dots between sections */}
+        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
+          <span className="w-4 h-4 rounded-full bg-[#90be6d]" />
+          <span className="w-6 h-6 rounded-full bg-[#e76f51]" />
+          <span className="w-4 h-4 rounded-full bg-[#5ec6c6]" />
+        </div>
 
         {/* Wave to gray section */}
         <WaveDivider color="#f8f9fc" />
@@ -557,6 +578,13 @@ const Index = () => {
         {/* Wave: gray -> white */}
         <WaveDivider color="#ffffff" flip />
 
+        {/* Decorative dots between sections */}
+        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
+          <span className="w-4 h-4 rounded-full bg-[#f4a261]" />
+          <span className="w-6 h-6 rounded-full bg-[#90be6d]" />
+          <span className="w-4 h-4 rounded-full bg-[#e76f51]" />
+        </div>
+
         {/* 6. SAVINGS / PENSION GRID */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
           <ScrollReveal>
@@ -606,6 +634,13 @@ const Index = () => {
             ))}
           </div>
         </section>
+
+        {/* Decorative dots between sections */}
+        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
+          <span className="w-4 h-4 rounded-full bg-[#5ec6c6]" />
+          <span className="w-6 h-6 rounded-full bg-[#f4a261]" />
+          <span className="w-4 h-4 rounded-full bg-[#90be6d]" />
+        </div>
 
         {/* Wave: white -> gray */}
         <WaveDivider color="#f8f9fc" />
@@ -670,6 +705,13 @@ const Index = () => {
 
         {/* Wave: gray -> white */}
         <WaveDivider color="#ffffff" flip />
+
+        {/* Decorative dots between sections */}
+        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
+          <span className="w-4 h-4 rounded-full bg-[#e76f51]" />
+          <span className="w-6 h-6 rounded-full bg-[#5ec6c6]" />
+          <span className="w-4 h-4 rounded-full bg-[#f4a261]" />
+        </div>
 
         {/* 8. PARTNERS - Clean badge row */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
@@ -792,6 +834,13 @@ const Index = () => {
 
         {/* Wave: dark -> white */}
         <WaveDivider color="#ffffff" flip />
+
+        {/* Decorative dots between sections */}
+        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
+          <span className="w-4 h-4 rounded-full bg-[#90be6d]" />
+          <span className="w-6 h-6 rounded-full bg-[#e76f51]" />
+          <span className="w-4 h-4 rounded-full bg-[#5ec6c6]" />
+        </div>
 
         {/* PROCESS PIPELINE — Tech System Flow */}
         <section className="py-10 sm:py-16 lg:py-24 overflow-hidden">
@@ -973,6 +1022,13 @@ const Index = () => {
             </ScrollReveal>
           </div>
         </section>
+
+        {/* Decorative dots between sections */}
+        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
+          <span className="w-4 h-4 rounded-full bg-[#f4a261]" />
+          <span className="w-6 h-6 rounded-full bg-[#5ec6c6]" />
+          <span className="w-4 h-4 rounded-full bg-[#e76f51]" />
+        </div>
 
         {/* Wave: white -> gray */}
         <WaveDivider color="#f8f9fc" />

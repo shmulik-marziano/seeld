@@ -85,14 +85,30 @@ const HealthInsurance = () => {
       <Header />
 
       {/* Hero Banner */}
-      <section className="bg-[#0a3d3d] text-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">
+      <section className="bg-[#f8f9fc] relative overflow-hidden">
+        {/* Decorative circles */}
+        <div className="absolute top-8 left-8 w-20 h-20 rounded-full bg-[#5ec6c6] opacity-15" />
+        <div className="absolute bottom-6 right-12 w-14 h-14 rounded-full bg-[#e76f51] opacity-12" />
+        <div className="absolute top-16 right-1/3 w-8 h-8 rounded-full bg-[#f4a261] opacity-20" />
+        <div className="absolute bottom-10 left-1/4 w-6 h-6 rounded-full bg-[#90be6d] opacity-18" />
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16 relative">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 rounded-full bg-[#e76f51] flex items-center justify-center">
+              <Heart className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-sm font-bold text-[#0a3d3d]/50">ביטוח בריאות</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-4 leading-tight text-[#0a3d3d]">
             ביטוח בריאות פרטי
           </h1>
-          <p className="text-lg sm:text-xl text-white/80 max-w-2xl leading-relaxed">
+          <p className="text-base sm:text-lg text-[#0a3d3d]/50 max-w-2xl leading-relaxed">
             גישה מהירה לרופאים מומחים, ניתוחים וטיפולים מתקדמים — הגנה מקיפה על הבריאות שלכם ושל משפחתכם.
           </p>
+          <div className="mt-6">
+            <a href="#contact-form" className="inline-flex items-center px-8 py-3 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-all min-h-[48px]">
+              קבלו הצעה מותאמת
+            </a>
+          </div>
         </div>
       </section>
 
@@ -109,7 +125,7 @@ const HealthInsurance = () => {
 
       <main>
         {/* Key Points Cards */}
-        <section className="py-16 sm:py-20">
+        <section className="py-10 sm:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
@@ -144,7 +160,7 @@ const HealthInsurance = () => {
         </section>
 
         {/* Main Article Content */}
-        <section className="pb-16 sm:pb-20">
+        <section className="pb-10 sm:pb-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="max-w-3xl">
               <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-6">למה ביטוח בריאות פרטי חשוב?</h2>
@@ -181,7 +197,7 @@ const HealthInsurance = () => {
         </section>
 
         {/* Coverage Types */}
-        <section className="py-16 sm:py-20 bg-gray-50">
+        <section className="py-10 sm:py-16 bg-gray-50">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-2">סוגי הכיסויים</h2>
             <p className="text-gray-500 mb-10 text-base sm:text-lg">מגוון רחב של כיסויים המותאמים לצרכים שלכם</p>
@@ -209,7 +225,7 @@ const HealthInsurance = () => {
         </section>
 
         {/* FAQ Accordion */}
-        <section className="py-16 sm:py-20">
+        <section className="py-10 sm:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="max-w-3xl">
               <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">שאלות נפוצות</h2>
@@ -234,7 +250,7 @@ const HealthInsurance = () => {
         </section>
 
         {/* Companies Badges */}
-        <section className="py-16 sm:py-20 bg-gray-50">
+        <section className="py-10 sm:py-16 bg-gray-50">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-3">חברות שאנחנו משווקים</h2>
             <p className="text-gray-500 mb-10 text-base sm:text-lg">
@@ -254,11 +270,13 @@ const HealthInsurance = () => {
         </section>
 
         {/* Lead Form CTA */}
-        <section id="contact-form" className="py-16 sm:py-20 scroll-mt-24">
+        <section id="contact-form" className="py-10 sm:py-16 scroll-mt-24">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="bg-[#0a3d3d] rounded-2xl p-8 sm:p-12 text-center text-white mb-10">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-3">רוצים הצעת מחיר מותאמת?</h2>
-              <p className="text-white/70 text-base sm:text-lg max-w-xl mx-auto">
+            <div className="bg-[#f8f9fc] border border-[#0a3d3d]/[0.06] rounded-2xl p-8 sm:p-12 text-center mb-10 relative overflow-hidden">
+              <div className="absolute top-4 left-6 w-10 h-10 rounded-full bg-[#5ec6c6] opacity-15" />
+              <div className="absolute bottom-4 right-8 w-8 h-8 rounded-full bg-[#f4a261] opacity-15" />
+              <h2 className="text-2xl sm:text-3xl font-extrabold mb-3 text-[#0a3d3d]">רוצים הצעת מחיר מותאמת?</h2>
+              <p className="text-[#0a3d3d]/50 text-base sm:text-lg max-w-xl mx-auto">
                 מלאו את הפרטים ונחזור אליכם עם הצעה מותאמת אישית מחברות הביטוח המובילות
               </p>
             </div>
