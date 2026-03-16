@@ -134,7 +134,8 @@ const PersonalAreaDashboard = () => {
 
         {/* Main tabs */}
         <Tabs defaultValue="overview" dir="rtl">
-          <TabsList className="w-full grid grid-cols-5 mb-8 h-auto bg-white rounded-2xl shadow-sm border p-1.5">
+          <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide mb-8">
+          <TabsList className="w-max sm:w-full grid grid-cols-5 h-auto bg-white rounded-2xl shadow-sm border p-1.5 min-w-[500px] sm:min-w-0">
             <TabsTrigger
               value="overview"
               className="gap-1.5 min-h-[44px] text-xs sm:text-sm rounded-xl data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
@@ -177,6 +178,7 @@ const PersonalAreaDashboard = () => {
               <span className="sm:hidden">צ'אט</span>
             </TabsTrigger>
           </TabsList>
+          </div>
 
           {/* Tab 1: Overview */}
           <TabsContent value="overview">

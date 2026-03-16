@@ -137,7 +137,8 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border overflow-hidden flex flex-col" style={{ height: "70vh", minHeight: 400 }}>
+    <div className="bg-white rounded-2xl shadow-sm border overflow-hidden flex flex-col relative" style={{ height: "calc(100dvh - 200px)", minHeight: 400 }}>
+      {/* On mobile, ensure full height usage */}
       {/* Chat header */}
       <div className="px-5 py-4 border-b flex items-center gap-3" style={{ background: "#0a3d3d" }}>
         <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
@@ -208,8 +209,8 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input area */}
-      <div className="border-t bg-white p-3">
+      {/* Input area - sticky at bottom */}
+      <div className="border-t bg-white p-3 sticky bottom-0 z-10 safe-area-pb">
         <div className="flex items-center gap-2">
           <input
             type="text"
@@ -217,13 +218,13 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="הקלד הודעה..."
-            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:border-[#0a3d3d] focus:ring-1 focus:ring-[#0a3d3d] transition-colors"
+            className="flex-1 rounded-full border border-gray-200 px-4 py-3 text-base sm:text-sm focus:outline-none focus:border-[#0a3d3d] focus:ring-1 focus:ring-[#0a3d3d] transition-colors min-h-[44px]"
             disabled={sending}
           />
           <button
             onClick={sendMessage}
             disabled={!newMessage.trim() || sending}
-            className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all disabled:opacity-40"
+            className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 transition-all disabled:opacity-40 min-w-[44px] min-h-[44px]"
             style={{ background: "#0a3d3d", color: "white" }}
           >
             {sending ? (

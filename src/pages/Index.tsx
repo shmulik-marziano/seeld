@@ -35,67 +35,67 @@ const whySeeld = [
   {
     icon: Users,
     title: "שירות אישי בגובה העיניים",
-    description: "לא קול סנטר ולא צ׳אטבוט — אתם מדברים ישירות עם שמוליק. מענה אנושי, ליווי צמוד, יחס אישי.",
+    description: "לא קולסנטר ולא צ׳אטבוט — אתם מדברים ישירות עם שמוליק. שאלות, שינויים, תביעות — תמיד יש למי לפנות.",
     accent: "#5ec6c6",
   },
   {
     icon: Handshake,
     title: "סוכנות מבוססת ומוכרת",
-    description: "סוכנות ביטוח ופיננסים עם מוניטין ארוך שנים, מפוקחת ומורשית. אתם בידיים טובות.",
+    description: "סוכנות מורשית ומפוקחת על ידי רשות שוק ההון. עובדים לפי הספר, בשקיפות מלאה.",
     accent: "#f4a261",
   },
   {
     icon: Scale,
     title: "עבודה עם כל החברות",
-    description: "לא משווקים חברה אחת — אנחנו משווים את כל השוק ומוצאים את הפתרון הכי טוב עבורכם.",
+    description: "לא קשורים לחברה אחת. משווים בין כל חברות הביטוח וקרנות הפנסיה, ומציעים את מה שבאמת מתאים לכם.",
     accent: "#90be6d",
   },
   {
     icon: Zap,
-    title: "טכנולוגיה מתקדמת",
-    description: "כלים דיגיטליים חכמים — מחשבונים, פורטל לקוחות, מעקב פוליסות — הכל זמין ונגיש.",
+    title: "הכל דיגיטלי וזמין",
+    description: "מחשבונים לבדיקת כדאיות, פורטל אישי לצפייה בפוליסות, ומעקב שוטף — הכל אונליין, בכל שעה.",
     accent: "#e76f51",
   },
 ];
 
 const insuranceTypes = [
   { icon: Car, title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳", href: "/insurance/vehicle" },
-  { icon: HeartPulse, title: "ביטוח בריאות", description: "כיסוי רפואי מורחב", href: "/insurance/health" },
-  { icon: Heart, title: "ביטוח חיים", description: "הגנה למשפחה שלכם", href: "/insurance/life" },
+  { icon: HeartPulse, title: "ביטוח בריאות", description: "ניתוחים, תרופות וטיפולים מעבר לסל", href: "/insurance/health" },
+  { icon: Heart, title: "ביטוח חיים", description: "ביטחון כלכלי למשפחה במקרה הצורך", href: "/insurance/life" },
   { icon: Home, title: "ביטוח דירה", description: "מבנה ותכולה", href: "/insurance/apartment" },
-  { icon: Key, title: "ביטוח שוכרים", description: "הגנה לדירה שכורה", href: "/insurance/renters" },
-  { icon: Building2, title: "ביטוח עסקי", description: "הגנה מקיפה לעסק", href: "/insurance/business" },
-  { icon: Plane, title: "ביטוח נסיעות", description: "כיסוי לחו״ל", href: "/insurance/travel" },
+  { icon: Key, title: "ביטוח שוכרים", description: "כיסוי תכולה ואחריות צד ג׳ לשוכרים", href: "/insurance/renters" },
+  { icon: Building2, title: "ביטוח עסקי", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק", href: "/insurance/business" },
+  { icon: Plane, title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", href: "/insurance/travel" },
   { icon: Stethoscope, title: "ביטוח שיניים", description: "טיפולי שיניים ואורתודנטיה", href: "/insurance/dental" },
-  { icon: Activity, title: "אובדן כושר עבודה", description: "הגנה על ההכנסה", href: "/insurance/disability" },
-  { icon: UserCheck, title: "ביטוח סיעודי", description: "כיסוי למצב סיעודי", href: "/insurance/nursing" },
-  { icon: Landmark, title: "ביטוח משכנתא", description: "הגנה על ההלוואה", href: "/insurance/mortgage" },
-  { icon: Shield, title: "מחלות קשות", description: "פיצוי חד-פעמי", href: "/insurance/critical-illness" },
-  { icon: Umbrella, title: "תאונות אישיות", description: "כיסוי לתאונות", href: "/insurance/personal-accidents" },
-  { icon: Briefcase, title: "ביטוח שותפים", description: "הגנה לשותפים עסקיים", href: "/insurance/partners" },
-  { icon: Globe, title: "עובדים זרים", description: "ביטוח חובה לעובדים", href: "/insurance/foreign-workers" },
-  { icon: Heart, title: "סיעודי כללית", description: "תוכנית סיעוד משלימה", href: "/insurance/nursing-clalit" },
+  { icon: Activity, title: "אובדן כושר עבודה", description: "תשלום חודשי אם לא תוכלו לעבוד", href: "/insurance/disability" },
+  { icon: UserCheck, title: "ביטוח סיעודי", description: "מימון טיפול סיעודי בבית או במוסד", href: "/insurance/nursing" },
+  { icon: Landmark, title: "ביטוח משכנתא", description: "שמירה על הדירה גם במקרה בלתי צפוי", href: "/insurance/mortgage" },
+  { icon: Shield, title: "מחלות קשות", description: "פיצוי כספי חד-פעמי עם אבחון מחלה", href: "/insurance/critical-illness" },
+  { icon: Umbrella, title: "תאונות אישיות", description: "פיצוי על ימי אשפוז, שבר או נכות מתאונה", href: "/insurance/personal-accidents" },
+  { icon: Briefcase, title: "ביטוח שותפים", description: "רציפות עסקית במקרה של אובדן שותף", href: "/insurance/partners" },
+  { icon: Globe, title: "עובדים זרים", description: "ביטוח חובה בהתאם לחוק", href: "/insurance/foreign-workers" },
+  { icon: Heart, title: "סיעודי כללית", description: "כיסוי סיעודי משלים לחברי כללית", href: "/insurance/nursing-clalit" },
 ];
 
 const savingsProducts = [
-  { icon: Landmark, title: "קרנות פנסיה", description: "חיסכון פנסיוני מקיף", href: "/savings/pension-funds" },
-  { icon: PiggyBank, title: "קופות גמל", description: "חיסכון לטווח ארוך", href: "/savings/gemel-funds" },
-  { icon: HandCoins, title: "גמל להשקעה", description: "חיסכון גמיש", href: "/savings/gemel-investment" },
-  { icon: Baby, title: "חיסכון לכל ילד", description: "חיסכון לעתיד הילדים", href: "/savings/child-savings" },
-  { icon: GraduationCap, title: "קרנות השתלמות", description: "חיסכון מוטב מס", href: "/savings/training-funds" },
-  { icon: TrendingUp, title: "השקעות", description: "ניהול תיק השקעות", href: "/savings/investment" },
-  { icon: Heart, title: "ביטוח חיים פנסיוני", description: "חיסכון + הגנה ביטוחית", href: "/insurance/life" },
-  { icon: Building2, title: "קופות מעסיקים", description: "פתרונות למעסיקים", href: "/savings/employer-funds" },
-  { icon: CalendarCheck, title: "טרום פרישה", description: "הכנה לפרישה מוקדמת", href: "/savings/pre-retirement" },
-  { icon: Wallet, title: "פוסט פרישה", description: "ניהול כספים בפרישה", href: "/savings/post-retirement" },
-  { icon: Target, title: "תכנון פיננסי", description: "תוכנית מותאמת אישית", href: "/savings/financial-planning" },
+  { icon: Landmark, title: "קרנות פנסיה", description: "הפקדות, כיסויים ובחירת מסלול נכון", href: "/savings/pension-funds" },
+  { icon: PiggyBank, title: "קופות גמל", description: "חיסכון לטווח ארוך עם הטבות מס", href: "/savings/gemel-funds" },
+  { icon: HandCoins, title: "גמל להשקעה", description: "חיסכון נזיל עם תשואת שוק ההון", href: "/savings/gemel-investment" },
+  { icon: Baby, title: "חיסכון לכל ילד", description: "ניהול כספי התוכנית הממשלתית", href: "/savings/child-savings" },
+  { icon: GraduationCap, title: "קרנות השתלמות", description: "חיסכון לשש שנים עם פטור ממס", href: "/savings/training-funds" },
+  { icon: TrendingUp, title: "השקעות", description: "בחירת מסלולי השקעה ומעקב תשואות", href: "/savings/investment" },
+  { icon: Heart, title: "ביטוח חיים פנסיוני", description: "חיסכון עם כיסוי למקרה מוות ונכות", href: "/insurance/life" },
+  { icon: Building2, title: "קופות מעסיקים", description: "הפקדות לעובדים, ציות לחוק ובחירת מוצרים", href: "/savings/employer-funds" },
+  { icon: CalendarCheck, title: "טרום פרישה", description: "בדיקת מוכנות ותכנון לפני היציאה לפנסיה", href: "/savings/pre-retirement" },
+  { icon: Wallet, title: "לאחר פרישה", description: "משיכת כספים, קצבאות ותכנון מס", href: "/savings/post-retirement" },
+  { icon: Target, title: "תכנון פיננסי", description: "מיפוי מלא של הנכסים ובניית תוכנית", href: "/savings/financial-planning" },
 ];
 
 const calculators = [
-  { icon: Landmark, title: "מחשבון משכנתא", description: "חשבו החזר חודשי, ריביות ולוח סילוקין", color: "#5ec6c6" },
-  { icon: Wallet, title: "מחשבון פנסיה", description: "גלו כמה תקבלו בפנסיה ומהי ההפקדה האידיאלית", color: "#f4a261" },
-  { icon: PiggyBank, title: "מחשבון חיסכון", description: "תכננו את החיסכון — ריבית דריבית ותשואות", color: "#90be6d" },
-  { icon: BarChart3, title: "השוואת השקעות", description: "השוו בין מסלולי השקעה וקבלו תמונה מלאה", color: "#e76f51" },
+  { icon: Landmark, title: "מחשבון משכנתא", description: "בדקו החזר חודשי, סך הריביות ולוח סילוקין מלא", color: "#5ec6c6" },
+  { icon: Wallet, title: "מחשבון פנסיה", description: "חשבו כמה תקבלו בגיל פרישה ומה כדאי להפקיד היום", color: "#f4a261" },
+  { icon: PiggyBank, title: "מחשבון חיסכון", description: "ראו איך הכסף גדל לאורך זמן עם ריבית דריבית", color: "#90be6d" },
+  { icon: BarChart3, title: "השוואת מסלולי השקעה", description: "השוו תשואות, דמי ניהול וסיכון בין מסלולים שונים", color: "#e76f51" },
 ];
 
 const partners = [
@@ -106,31 +106,31 @@ const partners = [
 const faqItems = [
   {
     question: "איך בוחרים ביטוח בריאות שמתאים לי?",
-    answer: "אנחנו משווים עבורכם את כל התוכניות בשוק, בוחנים את המצב הרפואי, הגיל והצרכים שלכם, וממליצים על הכיסוי המתאים ביותר — ללא עלות נוספת.",
+    answer: "בודקים מה יש לכם בקופ״ח, מה חסר, ומשווים בין כל התוכניות בשוק. ההמלצה מותאמת לגיל, מצב בריאותי וצרכים — בלי עלות נוספת.",
   },
   {
     question: "מה ההבדל בין קרן פנסיה לביטוח מנהלים?",
-    answer: "קרן פנסיה היא מוצר קולקטיבי עם מנגנון ביטוח הדדי, בעוד ביטוח מנהלים הוא פוליסה אישית. ההמלצה תלויה בגיל, מצב בריאותי ומצב תעסוקתי.",
+    answer: "בקרן פנסיה כולם חולקים את הסיכון — זה מוזיל עלויות. בביטוח מנהלים יש פוליסה אישית עם גמישות רבה יותר. מה עדיף? תלוי בגיל, בריאות ומצב תעסוקתי.",
   },
   {
     question: "האם אפשר לעבור ביטוח ללא תקופת אכשרה?",
-    answer: "במקרים רבים ניתן לעבור חברה עם שמירת ותק וללא תקופת אכשרה מחדש. אנחנו מוודאים שהמעבר נעשה בצורה חלקה ובטוחה.",
+    answer: "ברוב המקרים כן. אפשר לעבור חברה ולשמור על הוותק, בלי לחכות מחדש. אנחנו בודקים שהמעבר נעשה בלי לאבד כיסויים קיימים.",
   },
   {
     question: "כמה עולה פגישת ייעוץ פנסיוני?",
-    answer: "פגישת ייעוץ ראשונית אצלנו ללא עלות. אנחנו מאמינים שכל אדם זכאי לקבל תמונה מלאה של המצב הפנסיוני שלו.",
+    answer: "הפגישה הראשונה ללא עלות. תקבלו תמונה מלאה של מצב הפנסיה שלכם — הפקדות, כיסויים, דמי ניהול — ותבינו בדיוק איפה אתם עומדים.",
   },
   {
     question: "אתם עובדים עם חברת ביטוח ספציפית?",
-    answer: "לא. אנחנו עובדים מול כל חברות הביטוח בשוק — הפניקס, מגדל, הראל, כלל, מנורה מבטחים ועוד — כדי למצוא לכם את הפתרון הכי מתאים ומשתלם.",
+    answer: "לא. אנחנו עובדים מול כל החברות — הפניקס, מגדל, הראל, כלל, מנורה מבטחים ועוד. ככה אפשר להשוות ולמצוא את מה שמתאים ומשתלם באמת.",
   },
 ];
 
 const trustPoints = [
-  { icon: Award, title: "רישיון סוכן ביטוח פנסיוני", description: "מורשה ומפוקח ע״י רשות שוק ההון", accent: "#5ec6c6" },
-  { icon: Building2, title: "סוכנות מבוססת ומוכרת", description: "SEELD — סוכנות לפיננסים וביטוח, מפוקחת ומורשית", accent: "#f4a261" },
-  { icon: UserCheck, title: "שירות אישי ונגיש", description: "מענה מהיר, ליווי צמוד ויחס אנושי", accent: "#90be6d" },
-  { icon: Scale, title: "אובייקטיביות מלאה", description: "עבודה מול כל חברות הביטוח — ההמלצה הכי טובה עבורכם", accent: "#e76f51" },
+  { icon: Award, title: "רישיון סוכן ביטוח פנסיוני", description: "מורשה ומפוקח על ידי רשות שוק ההון, ביטוח וחיסכון", accent: "#5ec6c6" },
+  { icon: Building2, title: "חלק מבית עמיתים הון", description: "סוכנות מפוקחת עם גיבוי ארגוני מלא", accent: "#f4a261" },
+  { icon: UserCheck, title: "מענה אישי — לא מוקד", description: "שאלה? שינוי בפוליסה? טלפון או וואטסאפ — ומקבלים מענה", accent: "#90be6d" },
+  { icon: Scale, title: "לא קשורים לחברה אחת", description: "משווים בין כל חברות הביטוח וממליצים לפי הצורך שלכם", accent: "#e76f51" },
 ];
 
 const leadSubjects = [
@@ -162,28 +162,28 @@ const processSteps = [
   {
     number: 1,
     title: "פנייה ראשונית",
-    description: "פונים אלינו בטלפון, WhatsApp או דרך האתר",
+    description: "טלפון, וואטסאפ או דרך האתר — איך שנוח לכם",
     icon: PhoneCall,
     color: "#5ec6c6",
   },
   {
     number: 2,
     title: "פגישת היכרות",
-    description: "נפגשים, מבינים את הצרכים שלכם לעומק",
+    description: "שיחה קצרה להבין מה יש, מה חסר ומה חשוב לכם",
     icon: UserPlus,
     color: "#f4a261",
   },
   {
     number: 3,
     title: "ניתוח והצעה",
-    description: "מנתחים את המצב הקיים ומגישים הצעה מותאמת",
+    description: "בודקים את הפוליסות הקיימות, משווים ומגישים הצעה ברורה",
     icon: Search,
     color: "#90be6d",
   },
   {
     number: 4,
-    title: "ליווי שוטף",
-    description: "מלווים אתכם לאורך כל הדרך, תמיד זמינים",
+    title: "מעקב ועדכון שוטף",
+    description: "חידושים, שינויים, תביעות — אנחנו תמיד בתמונה",
     icon: HeartHandshake,
     color: "#e76f51",
   },
@@ -411,7 +411,7 @@ const Index = () => {
                 למה <span className="text-[#5ec6c6]">SEELD</span>?
               </h2>
               <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                אנחנו מאמינים שביטחון פיננסי מגיע לכולם — ושהדרך לשם צריכה להיות פשוטה ואנושית
+                ביטחון פיננסי מגיע לכולם. הדרך לשם לא חייבת להיות מסובכת
               </p>
             </div>
           </ScrollReveal>
@@ -472,7 +472,7 @@ const Index = () => {
                 <div className="absolute top-8 left-[12%] w-4 h-4 rounded-full bg-[#5ec6c6] opacity-25 hidden sm:block" />
                 <SectionLabel>INSURANCE</SectionLabel>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                  ביטוח — <span className="text-[#e76f51]">הגנה מקיפה</span>
+                  ביטוח — <span className="text-[#e76f51]">כל הסוגים, מקום אחד</span>
                 </h2>
                 <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
                   מגוון פתרונות ביטוח מקיפים לכל תחומי החיים — הכל במקום אחד

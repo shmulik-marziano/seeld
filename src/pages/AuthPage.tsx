@@ -253,17 +253,26 @@ export default function AuthPage() {
 
         <div className="absolute inset-0">
           <motion.div animate={{ y: [0, -15, 0] }} transition={{ duration: 6, repeat: Infinity }}
-            className="absolute top-[15%] right-[20%] w-16 h-16 rounded-full bg-[#5ec6c6] opacity-20" />
+            className="absolute top-[15%] right-[20%] w-20 h-20 rounded-full bg-[#5ec6c6] opacity-30" />
           <motion.div animate={{ y: [0, 12, 0] }} transition={{ duration: 8, repeat: Infinity, delay: 1 }}
-            className="absolute top-[35%] left-[15%] w-12 h-12 rounded-full bg-[#6c63ff] opacity-15" />
+            className="absolute top-[35%] left-[15%] w-14 h-14 rounded-full bg-[#6c63ff] opacity-20" />
           <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 7, repeat: Infinity, delay: 2 }}
-            className="absolute bottom-[25%] right-[30%] w-10 h-10 rounded-full bg-[#f4a261] opacity-20" />
+            className="absolute bottom-[25%] right-[30%] w-12 h-12 rounded-full bg-[#f4a261] opacity-25" />
           <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 5, repeat: Infinity, delay: 0.5 }}
-            className="absolute bottom-[40%] left-[25%] w-14 h-14 rounded-full bg-[#e76f51] opacity-15" />
-          {/* Dashed curved line */}
-          <svg className="absolute bottom-10 left-0 w-full h-24 opacity-10 pointer-events-none" viewBox="0 0 400 80" fill="none">
+            className="absolute bottom-[40%] left-[25%] w-16 h-16 rounded-full bg-[#e76f51] opacity-20" />
+          <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 9, repeat: Infinity, delay: 3 }}
+            className="absolute top-[60%] right-[10%] w-8 h-8 rounded-full bg-[#90be6d] opacity-25" />
+          <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 6, repeat: Infinity, delay: 2 }}
+            className="absolute top-[10%] left-[40%] w-10 h-10 rounded-full bg-[#5ec6c6] opacity-15" />
+          {/* Dashed curved line with arrow */}
+          <svg className="absolute bottom-10 left-0 w-full h-24 opacity-12 pointer-events-none" viewBox="0 0 400 80" fill="none">
             <path d="M0 60 Q100 10 200 45 T400 25" stroke="#5ec6c6" strokeWidth="2" strokeDasharray="8 6" />
             <polygon points="395,23 400,25 395,27" fill="#5ec6c6" />
+          </svg>
+          {/* Second dashed line */}
+          <svg className="absolute top-16 right-0 w-full h-20 opacity-8 pointer-events-none" viewBox="0 0 400 60" fill="none">
+            <path d="M400 50 Q300 5 200 30 T0 15" stroke="#f4a261" strokeWidth="1.5" strokeDasharray="6 5" />
+            <polygon points="5,15 0,13 5,11" fill="#f4a261" />
           </svg>
         </div>
 
@@ -303,14 +312,18 @@ export default function AuthPage() {
           transition={{ duration: 0.5 }}
           className={`w-full ${mode === 'signup' ? 'max-w-[480px]' : 'max-w-[400px]'} space-y-5 sm:space-y-6`}
         >
-          {/* Mobile logo - with gradient background */}
+          {/* Mobile logo - with colored circle decorations */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="lg:hidden flex flex-col items-center gap-3 pb-2"
+            className="lg:hidden flex flex-col items-center gap-3 pb-2 relative"
           >
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center shadow-lg bg-[#f8f9fc] border border-gray-100">
+            {/* Mobile decorative circles */}
+            <div className="absolute top-[-8px] right-[-12px] w-8 h-8 rounded-full bg-[#5ec6c6] opacity-20" />
+            <div className="absolute bottom-[-4px] left-[-8px] w-6 h-6 rounded-full bg-[#f4a261] opacity-20" />
+            <div className="absolute top-[50%] left-[-20px] w-4 h-4 rounded-full bg-[#90be6d] opacity-25" />
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center shadow-lg bg-[#f8f9fc] border border-gray-100 relative">
               <SeeIDLogo size={50} />
             </div>
             <div className="text-center">

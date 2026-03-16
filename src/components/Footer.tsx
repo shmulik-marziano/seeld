@@ -40,7 +40,7 @@ const Footer = () => {
   return (
     <footer>
       {/* Contact Section - Light lavender-gray background */}
-      <section className="bg-[#f0f0f8] relative overflow-hidden py-16 sm:py-20 lg:py-24">
+      <section className="bg-[#f0f0f8] relative overflow-hidden py-12 sm:py-20 lg:py-24">
         {/* Decorative capsule/pill shape on the left */}
         <div className="absolute top-16 left-8 hidden lg:block">
           <svg width="60" height="120" viewBox="0 0 60 120" fill="none">

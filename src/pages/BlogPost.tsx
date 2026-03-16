@@ -126,14 +126,14 @@ const BlogPost = () => {
       <Header />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-[#f8f9fc] dark:bg-gray-900 py-16 sm:py-24">
-        {/* Decorative circles */}
+      <section className="relative overflow-hidden bg-[#f8f9fc] dark:bg-gray-900 py-12 sm:py-24">
+        {/* Decorative circles - mobile-aware */}
         <div
-          className="absolute top-8 right-12 w-28 h-28 rounded-full opacity-20"
+          className="absolute top-6 right-4 sm:top-8 sm:right-12 w-16 h-16 sm:w-28 sm:h-28 rounded-full opacity-20"
           style={{ backgroundColor: accentColor }}
         />
-        <div className="absolute bottom-8 left-20 w-20 h-20 rounded-full bg-[#f4a261] opacity-15" />
-        <div className="absolute top-1/3 left-10 w-14 h-14 rounded-full bg-[#90be6d] opacity-15" />
+        <div className="absolute bottom-6 left-8 sm:bottom-8 sm:left-20 w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-[#f4a261] opacity-15" />
+        <div className="absolute top-1/3 left-4 sm:left-10 w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-[#90be6d] opacity-15 hidden sm:block" />
 
         <div className="max-w-3xl mx-auto px-4 relative z-10">
           {/* Back link */}
@@ -156,7 +156,7 @@ const BlogPost = () => {
           )}
 
           {/* Title */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0a3d3d] dark:text-white leading-tight mb-6">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#0a3d3d] dark:text-white leading-tight mb-5 sm:mb-6">
             {post.title}
           </h1>
 
@@ -177,9 +177,9 @@ const BlogPost = () => {
       </section>
 
       {/* Content */}
-      <article className="max-w-3xl mx-auto px-4 py-12 sm:py-16">
+      <article className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
         <div
-          className="prose prose-lg max-w-none dark:prose-invert
+          className="prose prose-base sm:prose-lg max-w-none dark:prose-invert
             prose-headings:text-[#0a3d3d] dark:prose-headings:text-white prose-headings:font-bold
             prose-p:text-[#0a3d3d]/80 dark:prose-p:text-white/70 prose-p:leading-relaxed
             prose-strong:text-[#0a3d3d] dark:prose-strong:text-white
@@ -193,10 +193,10 @@ const BlogPost = () => {
             <Share2 className="w-4 h-4" />
             שתפו את המאמר
           </p>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <button
               onClick={shareWhatsApp}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white transition-all hover:scale-105"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold text-white transition-all hover:scale-105 min-h-[44px]"
               style={{ backgroundColor: "#25D366" }}
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white">
@@ -207,7 +207,7 @@ const BlogPost = () => {
             </button>
             <button
               onClick={copyLink}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-[#f8f9fc] dark:bg-gray-800 text-[#0a3d3d] dark:text-white/70 hover:bg-[#0a3d3d]/10 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold bg-[#f8f9fc] dark:bg-gray-800 text-[#0a3d3d] dark:text-white/70 hover:bg-[#0a3d3d]/10 transition-all min-h-[44px]"
             >
               <Copy className="w-4 h-4" />
               העתק קישור
