@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SeeIDLogo from "@/components/SeeIDLogo";
-import { Menu, Moon, Sun, Home, Shield, Wallet, Calculator, User, Phone, X } from "lucide-react";
+import { Menu, Moon, Sun, Home, Shield, Wallet, Calculator, User, Phone, X, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -71,10 +71,10 @@ const Header = () => {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 transition-all duration-300 border-b",
+        "sticky top-0 z-50 transition-all duration-300",
         isScrolled
-          ? "bg-background/80 backdrop-blur-xl border-border/40 shadow-sm"
-          : "bg-background border-transparent"
+          ? "bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl border-b border-[#0a3d3d]/10 shadow-sm"
+          : "bg-white dark:bg-gray-950 border-b border-transparent"
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -90,7 +90,7 @@ const Header = () => {
               <Link
                 key={link.href}
                 to={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground px-4 py-2 rounded-lg transition-colors"
+                className="text-sm font-semibold text-[#0a3d3d] dark:text-white/80 hover:text-[#5ec6c6] px-4 py-2 rounded-full transition-colors"
               >
                 {link.label}
               </Link>
@@ -101,7 +101,7 @@ const Header = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-lg hover:bg-muted/60 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="p-2.5 rounded-full hover:bg-[#f8f9fc] dark:hover:bg-white/10 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center text-[#0a3d3d] dark:text-white/80"
               aria-label="החלף ערכת נושא"
             >
               {isDark ? (
@@ -111,15 +111,22 @@ const Header = () => {
               )}
             </button>
 
+            <Link to="/agents" className="hidden lg:block">
+              <Button variant="outline" className="border-[#0a3d3d] text-[#0a3d3d] dark:border-[#5ec6c6] dark:text-[#5ec6c6] rounded-full px-5 py-2 text-sm font-semibold transition-all hover:bg-[#0a3d3d]/5">
+                <LogIn className="w-4 h-4 ml-1.5" />
+                כניסה לסוכנים
+              </Button>
+            </Link>
+
             <Link to="/personal-area" className="hidden lg:block">
-              <Button className="bg-[#0a3d3d] hover:bg-[#0d4a4a] text-white rounded-lg px-6 py-2 text-sm font-medium transition-all">
+              <Button className="bg-[#0a3d3d] hover:bg-[#0d4a4a] text-white rounded-full px-6 py-2 text-sm font-semibold transition-all shadow-lg shadow-[#0a3d3d]/20">
                 כניסה לאזור האישי
               </Button>
             </Link>
 
             {/* Mobile Menu Button */}
             <button
-              className="lg:hidden p-2.5 rounded-lg hover:bg-muted/60 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="lg:hidden p-2.5 rounded-full hover:bg-[#f8f9fc] dark:hover:bg-white/10 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center text-[#0a3d3d] dark:text-white"
               onClick={() => setIsMenuOpen(true)}
               aria-label="פתח תפריט"
             >
@@ -143,19 +150,19 @@ const Header = () => {
             />
             {/* Panel */}
             <motion.div
-              className="fixed top-0 right-0 bottom-0 w-[85vw] sm:w-[360px] bg-background z-50 lg:hidden shadow-2xl"
+              className="fixed top-0 right-0 bottom-0 w-[85vw] sm:w-[360px] bg-white dark:bg-gray-950 z-50 lg:hidden shadow-2xl"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.25 }}
             >
-              <div className="flex items-center justify-between p-5 border-b border-border/30">
-                <span className="font-bold text-lg">תפריט</span>
+              <div className="flex items-center justify-between p-5 border-b border-[#0a3d3d]/10">
+                <span className="font-bold text-lg text-[#0a3d3d] dark:text-white">תפריט</span>
                 <button
                   onClick={() => setIsMenuOpen(false)}
-                  className="p-2.5 rounded-lg hover:bg-muted/60 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                  className="p-2.5 rounded-full hover:bg-[#f8f9fc] dark:hover:bg-white/10 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-5 w-5 text-[#0a3d3d] dark:text-white" />
                 </button>
               </div>
               <nav className="flex flex-col p-4 gap-1 overflow-y-auto h-[calc(100vh-80px)]">
@@ -163,30 +170,30 @@ const Header = () => {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-muted/60 transition-colors min-h-[48px]"
+                    className="flex items-center gap-3 px-4 py-3.5 rounded-full hover:bg-[#f8f9fc] dark:hover:bg-white/10 transition-colors min-h-[48px]"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <link.icon className="w-5 h-5 text-[#0a3d3d] dark:text-[#5ec6c6]" />
-                    <span className="text-sm font-medium">{link.label}</span>
+                    <span className="text-sm font-semibold text-[#0a3d3d] dark:text-white/80">{link.label}</span>
                   </Link>
                 ))}
 
-                <div className="mt-6 pt-4 border-t border-border/30 space-y-3">
+                <div className="mt-6 pt-4 border-t border-[#0a3d3d]/10 space-y-3">
                   <Link
                     to="/personal-area"
                     className="block"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <Button className="bg-[#0a3d3d] hover:bg-[#0d4a4a] text-white rounded-lg w-full py-3 min-h-[48px] text-base font-semibold">
+                    <Button className="bg-[#0a3d3d] hover:bg-[#0d4a4a] text-white rounded-full w-full py-3 min-h-[48px] text-base font-semibold shadow-lg shadow-[#0a3d3d]/20">
                       כניסה לאזור האישי
                     </Button>
                   </Link>
                   <Link
-                    to="/app/auth"
+                    to="/agents"
                     className="block"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <Button variant="outline" className="border-[#0a3d3d] text-[#0a3d3d] dark:border-[#5ec6c6] dark:text-[#5ec6c6] rounded-lg w-full py-3 min-h-[48px] font-semibold text-base">
+                    <Button variant="outline" className="border-[#0a3d3d] text-[#0a3d3d] dark:border-[#5ec6c6] dark:text-[#5ec6c6] rounded-full w-full py-3 min-h-[48px] font-semibold text-base">
                       כניסה לסוכנים
                     </Button>
                   </Link>

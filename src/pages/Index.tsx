@@ -7,7 +7,7 @@ import {
   Wallet, BarChart3, HelpCircle, Mail, MapPin, Phone,
   MessageCircle, ChevronLeft, Stethoscope, Key, Globe,
   Scale, Activity, Target, CalendarCheck, Loader2, Zap, Handshake,
-  FileText, ShieldCheck, HeartHandshake, Search, UserPlus
+  HeartHandshake, Search, UserPlus
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -188,29 +188,6 @@ const processSteps = [
     color: "#e76f51",
   },
 ];
-
-const RegulatoryBadgesBar = () => (
-  <div className="bg-[#0a3d3d] py-10 sm:py-12">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 items-center text-center">
-        {[
-          { icon: FileText, text: "בעלי רישיון סוכנות ביטוח\nמטעם משרד האוצר", color: "#5ec6c6" },
-          { icon: ShieldCheck, text: "לשכת סוכני הביטוח\nבישראל", color: "#f4a261" },
-          { icon: Handshake, text: "חברים בלשכת סוכני\nהביטוח בישראל", color: "#90be6d" },
-        ].map((item, i) => (
-          <div key={i} className="flex flex-col items-center gap-3">
-            <div className="w-14 h-14 rounded-full flex items-center justify-center shadow-md" style={{ backgroundColor: item.color, boxShadow: `0 4px 16px ${item.color}30` }}>
-              <item.icon className="w-6 h-6 text-white" />
-            </div>
-            <p className="text-white/80 text-sm font-medium leading-snug whitespace-pre-line">
-              {item.text}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-);
 
 // ── Animation variants ──
 const cardVariants = {
@@ -929,7 +906,7 @@ const Index = () => {
                       onClick={() => item.href && window.open(item.href, item.external ? '_blank' : '_self')}
                     >
                       <div
-                        className="w-13 h-13 rounded-full flex items-center justify-center mb-4 shadow-md w-[52px] h-[52px]"
+                        className="w-[52px] h-[52px] rounded-full flex items-center justify-center mb-4 shadow-md"
                         style={{ backgroundColor: item.color, boxShadow: `0 4px 16px ${item.color}25` }}
                       >
                         <item.icon className="w-5 h-5 text-white" />

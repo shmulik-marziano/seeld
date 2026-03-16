@@ -1,14 +1,10 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Mail, MapPin, Phone, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { useAuth } from "@/hooks/useAuth";
-import ScrollReveal from "@/components/ScrollReveal";
-import DoodleDecoration from "@/components/DoodleDecoration";
-import { LogoDotsDivider } from "@/components/LogoBrandElements";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -69,193 +65,192 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background animate-fade-in">
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
-      
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Hero Section */}
-        <div className="mb-16 text-center space-y-6 relative">
-          <div className="absolute top-0 left-8 hidden lg:block">
-            <DoodleDecoration type="handshake" size="lg" className="opacity-25 rotate-6" />
-          </div>
-          <div className="absolute top-0 right-8 hidden lg:block">
-            <DoodleDecoration type="family" size="md" className="opacity-20 -rotate-6" />
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-slide-down">
-            צרו קשר
+
+      {/* Hero Section - Bold design */}
+      <section className="bg-[#f8f9fc] relative overflow-hidden">
+        {/* Solid colored circles */}
+        <div className="absolute top-[15%] left-[8%] w-[80px] h-[80px] rounded-full bg-[#5ec6c6]" />
+        <div className="absolute bottom-[20%] right-[5%] w-[60px] h-[60px] rounded-full bg-[#e76f51]" />
+        <div className="absolute top-[50%] right-[20%] w-[35px] h-[35px] rounded-full bg-[#f4a261]" />
+        <div className="absolute bottom-[30%] left-[15%] w-[25px] h-[25px] rounded-full bg-[#90be6d]" />
+
+        {/* Dashed curved line */}
+        <div className="absolute top-8 right-[15%] hidden lg:block">
+          <svg width="160" height="100" viewBox="0 0 160 100" fill="none">
+            <path d="M10 80 C 40 10, 120 10, 150 50" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
+            <polygon points="150,50 142,44 146,56" fill="#0a3d3d" opacity="0.12" />
+          </svg>
+        </div>
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20 sm:py-28 relative text-center">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
+            צרו <span className="text-[#5ec6c6]">קשר</span>
           </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-slide-up stagger-1">
+          <p className="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
             רוצים לקבל הצעת מחיר? יש לכם שאלה בנושא ביטוח או חיסכון? נשמח לעזור.
           </p>
         </div>
+      </section>
 
-        <LogoDotsDivider />
-
-        <div className="grid lg:grid-cols-2 gap-12">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Contact Form */}
-          <ScrollReveal direction="right">
-            <div className="rounded-2xl bg-card p-4 sm:p-8">
-              <h2 className="text-2xl font-bold mb-6">השאירו פרטים</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d] mb-8">השאירו פרטים</h2>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] placeholder:text-gray-400 text-base transition-colors"
+                  placeholder="שם מלא"
+                />
+              </div>
+              <div className="grid sm:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium mb-2">
-                    שם מלא
-                  </label>
                   <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 h-12 text-base rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring text-right"
-                    placeholder="השם שלכם" />
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium mb-2">
-                      אימייל
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 h-12 text-base rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring text-right"
-                      placeholder="email@example.com"
-                      dir="ltr" />
-                  </div>
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                      טלפון
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 h-12 text-base rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring text-right"
-                      placeholder="050-1234567"
-                      dir="ltr" />
-                  </div>
+                    className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] placeholder:text-gray-400 text-base transition-colors text-right"
+                    placeholder="אימייל"
+                    dir="ltr"
+                  />
                 </div>
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                    נושא הפנייה
-                  </label>
-                  <select
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 h-12 text-base rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring text-right">
-                    <option value="">בחרו נושא</option>
-                    <option value="pension">תכנון פנסיוני</option>
-                    <option value="health-insurance">ביטוח בריאות</option>
-                    <option value="life-insurance">ביטוח חיים</option>
-                    <option value="car-insurance">ביטוח רכב</option>
-                    <option value="home-insurance">ביטוח דירה</option>
-                    <option value="savings">חיסכון והשקעות</option>
-                    <option value="other">אחר</option>
-                  </select>
+                    className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] placeholder:text-gray-400 text-base transition-colors text-right"
+                    placeholder="טלפון"
+                    dir="ltr"
+                  />
                 </div>
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-2">
-                    הודעה (אופציונלי)
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows={4}
-                    className="w-full px-4 py-3 text-base rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring resize-none text-right"
-                    placeholder="ספרו לנו במה נוכל לעזור..." />
-                </div>
-                <Button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full py-6 min-h-[48px] text-base"
+              </div>
+              <div>
+                <select
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  required
+                  className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] text-base transition-colors"
                 >
-                  {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
-                </Button>
-              </form>
-            </div>
-          </ScrollReveal>
+                  <option value="">בחרו נושא</option>
+                  <option value="pension">תכנון פנסיוני</option>
+                  <option value="health-insurance">ביטוח בריאות</option>
+                  <option value="life-insurance">ביטוח חיים</option>
+                  <option value="car-insurance">ביטוח רכב</option>
+                  <option value="home-insurance">ביטוח דירה</option>
+                  <option value="savings">חיסכון והשקעות</option>
+                  <option value="other">אחר</option>
+                </select>
+              </div>
+              <div>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] placeholder:text-gray-400 text-base transition-colors resize-none"
+                  placeholder="ספרו לנו במה נוכל לעזור..."
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="bg-[#0a3d3d] text-white rounded-full px-10 py-4 font-semibold text-base hover:bg-[#0d4a4a] transition-colors shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] flex items-center justify-center gap-2"
+              >
+                {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
+              </button>
+            </form>
+          </div>
 
           {/* Contact Information */}
           <div className="space-y-8">
-            <ScrollReveal direction="left">
-              <div className="rounded-2xl bg-card p-8">
-                <h2 className="text-2xl font-bold mb-6">דרכי התקשרות</h2>
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-1">טלפון</h3>
-                      <a href="tel:0523097444" className="text-muted-foreground hover:text-accent transition-colors" dir="ltr">052-309-7444</a>
-                      <p className="text-muted-foreground text-sm">א׳-ה׳, 9:00-18:00</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-1">אימייל</h3>
-                      <a href="mailto:info@seeld-ins.co.il" className="text-muted-foreground hover:text-accent transition-colors" dir="ltr">info@seeld-ins.co.il</a>
-                      <p className="text-muted-foreground text-sm">נענה תוך יום עסקים</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-1">משרדים</h3>
-                      <p className="text-muted-foreground">המלאכה 10, רעננה</p>
-                      <p className="text-muted-foreground">הסדנא 4, ירושלים</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </ScrollReveal>
+            <div className="bg-[#f8f9fc] rounded-2xl p-8 relative overflow-hidden">
+              {/* Decorative elements */}
+              <div className="absolute top-4 left-4 w-4 h-4 rounded-full bg-[#5ec6c6] opacity-40" />
+              <div className="absolute bottom-6 right-6 w-3 h-3 rounded-full bg-[#f4a261] opacity-30" />
 
-            <ScrollReveal direction="left" delay={150}>
-              <div className="rounded-2xl bg-muted p-8 relative overflow-hidden">
-                <div className="absolute bottom-2 left-2 hidden md:block">
-                  <DoodleDecoration type="shield" size="sm" className="opacity-15" />
+              <h2 className="text-2xl font-extrabold text-[#0a3d3d] mb-6">דרכי התקשרות</h2>
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#5ec6c6] flex items-center justify-center flex-shrink-0 shadow-md shadow-[#5ec6c6]/20">
+                    <Phone className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-[#0a3d3d] mb-1">טלפון</h3>
+                    <a href="tel:0523097444" className="text-gray-500 hover:text-[#0a3d3d] transition-colors" dir="ltr">052-309-7444</a>
+                    <p className="text-gray-400 text-sm">א'-ה', 9:00-18:00</p>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold mb-4">שאלות נפוצות</h3>
-                <div className="space-y-4 text-sm">
-                  <div>
-                    <h4 className="font-semibold mb-1">האם הייעוץ כרוך בתשלום?</h4>
-                    <p className="text-muted-foreground">
-                      פגישת הייעוץ הראשונית ללא עלות וללא התחייבות. נשמח להכיר אתכם ולהבין את הצרכים שלכם.
-                    </p>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#e76f51] flex items-center justify-center flex-shrink-0 shadow-md shadow-[#e76f51]/20">
+                    <Mail className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">כמה זמן לוקח לקבל הצעת מחיר?</h4>
-                    <p className="text-muted-foreground">
-                      אנחנו מחזירים הצעות מחיר תוך 24-48 שעות לאחר פגישת הייעוץ או שיחה טלפונית.
-                    </p>
+                    <h3 className="font-bold text-[#0a3d3d] mb-1">אימייל</h3>
+                    <a href="mailto:info@seeld-ins.co.il" className="text-gray-500 hover:text-[#0a3d3d] transition-colors" dir="ltr">info@seeld-ins.co.il</a>
+                    <p className="text-gray-400 text-sm">נענה תוך יום עסקים</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#f4a261] flex items-center justify-center flex-shrink-0 shadow-md shadow-[#f4a261]/20">
+                    <MapPin className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">עם אילו חברות ביטוח אתם עובדים?</h4>
-                    <p className="text-muted-foreground">
-                      אנחנו עובדים עם כל חברות הביטוח בישראל ומשווים עבורכם את כל האפשרויות בשוק.
-                    </p>
+                    <h3 className="font-bold text-[#0a3d3d] mb-1">משרדים</h3>
+                    <p className="text-gray-500">המלאכה 10, רעננה</p>
+                    <p className="text-gray-500">הסדנא 4, ירושלים</p>
                   </div>
                 </div>
               </div>
-            </ScrollReveal>
+            </div>
+
+            <div className="bg-[#f0f0f8] rounded-2xl p-8 relative overflow-hidden">
+              {/* Decorative dashed pill */}
+              <div className="absolute bottom-4 left-4 hidden md:block">
+                <svg width="30" height="60" viewBox="0 0 30 60" fill="none">
+                  <rect x="3" y="3" width="24" height="54" rx="12" stroke="#6c63ff" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.2" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-extrabold text-[#0a3d3d] mb-4">שאלות נפוצות</h3>
+              <div className="space-y-4 text-sm">
+                <div>
+                  <h4 className="font-bold text-[#0a3d3d] mb-1">האם הייעוץ כרוך בתשלום?</h4>
+                  <p className="text-gray-500">
+                    פגישת הייעוץ הראשונית ללא עלות וללא התחייבות. נשמח להכיר אתכם ולהבין את הצרכים שלכם.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-[#0a3d3d] mb-1">כמה זמן לוקח לקבל הצעת מחיר?</h4>
+                  <p className="text-gray-500">
+                    אנחנו מחזירים הצעות מחיר תוך 24-48 שעות לאחר פגישת הייעוץ או שיחה טלפונית.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-[#0a3d3d] mb-1">עם אילו חברות ביטוח אתם עובדים?</h4>
+                  <p className="text-gray-500">
+                    אנחנו עובדים עם כל חברות הביטוח בישראל ומשווים עבורכם את כל האפשרויות בשוק.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>

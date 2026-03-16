@@ -9,6 +9,8 @@ import {
 import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 
+const categoryColors = ["#5ec6c6", "#f4a261", "#e76f51", "#90be6d"];
+
 const faqCategories = [
   {
     title: "ביטוח",
@@ -54,13 +56,27 @@ const FAQ = () => {
     <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* Hero Banner */}
-      <section className="bg-[#0a3d3d] text-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">
-            שאלות נפוצות
+      {/* Hero Banner - Bold design */}
+      <section className="bg-[#f8f9fc] relative overflow-hidden">
+        {/* Solid colored circles */}
+        <div className="absolute top-[12%] left-[6%] w-[90px] h-[90px] rounded-full bg-[#5ec6c6]" />
+        <div className="absolute bottom-[18%] right-[7%] w-[60px] h-[60px] rounded-full bg-[#e76f51]" />
+        <div className="absolute top-[55%] left-[25%] w-[30px] h-[30px] rounded-full bg-[#f4a261]" />
+        <div className="absolute top-[25%] right-[18%] w-[25px] h-[25px] rounded-full bg-[#90be6d]" />
+
+        {/* Dashed curved line */}
+        <div className="absolute bottom-12 left-[12%] hidden lg:block">
+          <svg width="140" height="90" viewBox="0 0 140 90" fill="none">
+            <path d="M10 10 C 40 80, 100 80, 130 30" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
+            <polygon points="130,30 122,26 128,38" fill="#0a3d3d" opacity="0.12" />
+          </svg>
+        </div>
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20 sm:py-28 relative">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
+            שאלות <span className="text-[#5ec6c6]">נפוצות</span>
           </h1>
-          <p className="text-lg sm:text-xl text-white/80 max-w-2xl leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
             ריכזנו עבורכם תשובות לשאלות הנפוצות ביותר בתחומי ביטוח, פנסיה וחיסכון.
           </p>
         </div>
@@ -82,20 +98,23 @@ const FAQ = () => {
             <div className="max-w-3xl space-y-14">
               {faqCategories.map((category, catIdx) => (
                 <div key={category.title}>
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#0a3d3d] mb-5 pb-3 border-b border-gray-100">
-                    {category.title}
-                  </h2>
+                  <div className="flex items-center gap-3 mb-5 pb-3 border-b border-gray-100">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: categoryColors[catIdx % categoryColors.length] }} />
+                    <h2 className="text-xl sm:text-2xl font-extrabold text-[#0a3d3d]">
+                      {category.title}
+                    </h2>
+                  </div>
                   <Accordion type="multiple" className="space-y-3">
                     {category.questions.map((item, idx) => (
                       <AccordionItem
                         key={idx}
                         value={`${catIdx}-${idx}`}
-                        className="bg-white border border-gray-200 rounded-2xl px-6 overflow-hidden data-[state=open]:shadow-sm"
+                        className="bg-[#f8f9fc] border border-[#0a3d3d]/[0.06] rounded-2xl px-6 overflow-hidden data-[state=open]:shadow-md data-[state=open]:shadow-[#0a3d3d]/[0.04] transition-all"
                       >
-                        <AccordionTrigger className="text-right text-base font-semibold text-[#0a3d3d] hover:no-underline py-5">
+                        <AccordionTrigger className="text-right text-base font-bold text-[#0a3d3d] hover:no-underline py-5">
                           {item.q}
                         </AccordionTrigger>
-                        <AccordionContent className="text-gray-600 leading-relaxed pb-5 text-sm sm:text-base">
+                        <AccordionContent className="text-gray-500 leading-relaxed pb-5 text-sm sm:text-base">
                           {item.a}
                         </AccordionContent>
                       </AccordionItem>
@@ -108,16 +127,20 @@ const FAQ = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 sm:py-20 bg-gray-50">
+        <section className="py-16 sm:py-20 bg-[#f8f9fc] relative overflow-hidden">
+          <div className="absolute top-6 right-[8%] w-4 h-4 rounded-full bg-[#f4a261] hidden sm:block" />
+          <div className="absolute bottom-10 left-[10%] w-3 h-3 rounded-full bg-[#90be6d] hidden sm:block" />
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="bg-[#0a3d3d] rounded-2xl p-8 sm:p-12 text-center text-white">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-3">לא מצאתם תשובה?</h2>
-              <p className="text-white/70 text-base sm:text-lg mb-8 max-w-xl mx-auto">
+            <div className="bg-[#0a3d3d] rounded-3xl p-8 sm:p-12 text-center text-white relative overflow-hidden">
+              <div className="absolute top-[-30px] right-[-30px] w-[90px] h-[90px] rounded-full bg-[#5ec6c6] opacity-20" />
+              <div className="absolute bottom-[-20px] left-[-20px] w-[70px] h-[70px] rounded-full bg-[#e76f51] opacity-15" />
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-3 relative">לא מצאתם <span className="text-[#5ec6c6]">תשובה?</span></h2>
+              <p className="text-white/60 text-base sm:text-lg mb-8 max-w-xl mx-auto relative">
                 צרו איתנו קשר — נשמח לענות על כל שאלה ולתת ייעוץ מותאם אישית, ללא עלות.
               </p>
               <Link
                 to="/contact"
-                className="inline-block px-8 py-3.5 bg-[#5ec6c6] text-[#0a3d3d] font-semibold rounded-full hover:bg-[#4db5b5] transition-colors"
+                className="relative inline-block px-10 py-4 bg-[#5ec6c6] text-[#0a3d3d] font-bold rounded-full hover:bg-[#4db5b5] transition-colors shadow-xl shadow-[#5ec6c6]/20 text-base"
               >
                 צרו קשר
               </Link>

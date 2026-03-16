@@ -67,6 +67,7 @@ import Wellness from "@/pages/Wellness";
 import Travel from "@/pages/Travel";
 import Creativity from "@/pages/Creativity";
 import Growth from "@/pages/Growth";
+import AgentLandingPage from "@/pages/AgentLandingPage";
 
 // Insurance pages
 import HealthInsurance from "@/pages/insurance/HealthInsurance";
@@ -220,6 +221,9 @@ const App = () => (
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
                 <Route path="/install" element={<InstallPage />} />
+
+                {/* Agent Landing Page */}
+                <Route path="/agents" element={<AgentLandingPage />} />
 
                 {/* ═══ AGENT APP ROUTES (/app/*) ═══ */}
                 <Route path="/portal/:token" element={<ClientPortalPage />} />
