@@ -1,9 +1,40 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin, FileText, ShieldCheck, Handshake } from "lucide-react";
 
 const Footer = () => {
   return (
     <footer className="bg-[#0a3d3d] text-white/80">
+      {/* Regulatory Badges Bar */}
+      <div className="bg-[#1a1a2e] py-8 sm:py-10 border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 items-center text-center">
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center">
+                <FileText className="w-5 h-5 text-[#5ec6c6]" />
+              </div>
+              <p className="text-white/80 text-sm font-medium leading-snug">
+                בעלי רישיון סוכנות ביטוח<br />מטעם משרד האוצר
+              </p>
+            </div>
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center">
+                <ShieldCheck className="w-5 h-5 text-[#5ec6c6]" />
+              </div>
+              <p className="text-white/80 text-sm font-medium leading-snug">
+                לשכת סוכני הביטוח<br />בישראל
+              </p>
+            </div>
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center">
+                <Handshake className="w-5 h-5 text-[#5ec6c6]" />
+              </div>
+              <p className="text-white/80 text-sm font-medium leading-snug">
+                חברים בלשכת סוכני<br />הביטוח בישראל
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-20">
         {/* Links Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 mb-10 sm:mb-14">

@@ -6,7 +6,8 @@ import {
   Building2, HandCoins, TrendingUp, GraduationCap, UserCheck,
   Wallet, BarChart3, HelpCircle, Mail, MapPin, Phone,
   MessageCircle, ChevronLeft, Stethoscope, Key, Globe,
-  Scale, Activity, Target, CalendarCheck, Loader2, Zap, Handshake
+  Scale, Activity, Target, CalendarCheck, Loader2, Zap, Handshake,
+  FileText, ShieldCheck, HeartHandshake, Search, UserPlus
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -136,6 +137,84 @@ const leadSubjects = [
   "ביטוח נסיעות",
   "אחר",
 ];
+
+// ── Reusable Design Components ──
+
+const WaveDivider = ({ color = '#f9fafb', flip = false }: { color?: string; flip?: boolean }) => (
+  <div className={flip ? 'rotate-180' : ''} aria-hidden="true">
+    <svg viewBox="0 0 1440 80" fill="none" className="w-full h-[40px] sm:h-[60px]">
+      <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,20 1440,40 L1440,80 L0,80 Z" fill={color} />
+    </svg>
+  </div>
+);
+
+const DecorativeDots = () => (
+  <div className="flex items-center gap-2 justify-center mb-4" aria-hidden="true">
+    <span className="w-2 h-2 rounded-full bg-[#5ec6c6]" />
+    <span className="w-2 h-2 rounded-full bg-[#f4a261]" />
+    <span className="w-2 h-2 rounded-full bg-[#90be6d]" />
+  </div>
+);
+
+const processSteps = [
+  {
+    number: 1,
+    title: "פנייה ראשונית",
+    description: "פונים אלינו בטלפון, WhatsApp או דרך האתר",
+    icon: PhoneCall,
+  },
+  {
+    number: 2,
+    title: "פגישת היכרות",
+    description: "נפגשים, מבינים את הצרכים שלכם לעומק",
+    icon: UserPlus,
+  },
+  {
+    number: 3,
+    title: "ניתוח והצעה",
+    description: "מנתחים את המצב הקיים ומגישים הצעה מותאמת",
+    icon: Search,
+  },
+  {
+    number: 4,
+    title: "ליווי שוטף",
+    description: "מלווים אתכם לאורך כל הדרך, תמיד זמינים",
+    icon: HeartHandshake,
+  },
+];
+
+const RegulatoryBadgesBar = () => (
+  <div className="bg-[#1a1a2e] py-8 sm:py-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 items-center text-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center">
+            <FileText className="w-5 h-5 text-[#5ec6c6]" />
+          </div>
+          <p className="text-white/80 text-sm font-medium leading-snug">
+            בעלי רישיון סוכנות ביטוח<br />מטעם משרד האוצר
+          </p>
+        </div>
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center">
+            <ShieldCheck className="w-5 h-5 text-[#5ec6c6]" />
+          </div>
+          <p className="text-white/80 text-sm font-medium leading-snug">
+            לשכת סוכני הביטוח<br />בישראל
+          </p>
+        </div>
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center">
+            <Handshake className="w-5 h-5 text-[#5ec6c6]" />
+          </div>
+          <p className="text-white/80 text-sm font-medium leading-snug">
+            חברים בלשכת סוכני<br />הביטוח בישראל
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 // ── Animation variants ──
 const cardVariants = {
@@ -287,7 +366,7 @@ const Index = () => {
                       <motion.button
                         type="submit"
                         disabled={leadSubmitting}
-                        className="w-full px-6 py-3.5 rounded-xl bg-[#5ec6c6] text-[#0a3d3d] font-bold text-sm hover:bg-[#4db8b8] transition-all disabled:opacity-60 shadow-lg shadow-[#5ec6c6]/20"
+                        className="w-full px-6 py-3.5 rounded-full bg-[#5ec6c6] text-[#0a3d3d] font-bold text-sm hover:bg-[#4db8b8] transition-all disabled:opacity-60 shadow-lg shadow-[#5ec6c6]/20"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
@@ -304,6 +383,9 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        {/* Wave: dark lead form -> white */}
+        <WaveDivider color="var(--background, #ffffff)" />
 
         {/* ═══════════ 3. QUICK SERVICES BAR ═══════════ */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
@@ -333,6 +415,7 @@ const Index = () => {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
           <ScrollReveal>
             <div className="text-center mb-12 sm:mb-16">
+              <DecorativeDots />
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
                 למה <span className="text-[#0a3d3d] dark:text-[#5ec6c6]">SEELD</span>?
               </h2>
@@ -369,11 +452,15 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Wave: white -> gray */}
+        <WaveDivider color="#f5f5f5" />
+
         {/* ═══════════ 5. ALL INSURANCE TYPES GRID ═══════════ */}
         <section className="bg-muted/30 border-y border-border/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
             <ScrollReveal>
               <div className="text-center mb-12 sm:mb-16">
+                <DecorativeDots />
                 <p className="text-[#5ec6c6] text-xs font-bold tracking-widest uppercase mb-3">INSURANCE</p>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
                   ביטוח — הגנה מקיפה לכל תחום
@@ -427,10 +514,14 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Wave: gray -> white */}
+        <WaveDivider color="var(--background, #ffffff)" flip />
+
         {/* ═══════════ 6. SAVINGS / PENSION GRID ═══════════ */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
           <ScrollReveal>
             <div className="text-center mb-12 sm:mb-16">
+              <DecorativeDots />
               <p className="text-[#5ec6c6] text-xs font-bold tracking-widest uppercase mb-3">SAVINGS & PENSION</p>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
                 חיסכון ופנסיה — תכנון חכם לעתיד
@@ -471,11 +562,15 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Wave: white -> gray */}
+        <WaveDivider color="#f5f5f5" />
+
         {/* ═══════════ 7. CALCULATORS ═══════════ */}
         <section className="bg-muted/30 border-y border-border/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
             <ScrollReveal>
               <div className="text-center mb-12 sm:mb-16">
+                <DecorativeDots />
                 <p className="text-[#5ec6c6] text-xs font-bold tracking-widest uppercase mb-3">TOOLS</p>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
                   המחשבונים שלנו
@@ -520,10 +615,14 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Wave: gray -> white */}
+        <WaveDivider color="var(--background, #ffffff)" flip />
+
         {/* ═══════════ 8. PARTNERS CAROUSEL ═══════════ */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24 overflow-hidden">
           <ScrollReveal>
             <div className="text-center mb-10 sm:mb-14">
+              <DecorativeDots />
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
                 עובדים עם מיטב החברות
               </h2>
@@ -559,6 +658,9 @@ const Index = () => {
           </ScrollReveal>
         </section>
 
+        {/* Wave: white -> dark */}
+        <WaveDivider color="#0a3d3d" />
+
         {/* ═══════════ 9. ABOUT / TRUST SECTION ═══════════ */}
         <section className="bg-[#0a3d3d] dark:bg-[#041f1f] relative overflow-hidden">
           {/* Background pattern */}
@@ -586,13 +688,13 @@ const Index = () => {
                   <div className="flex flex-wrap gap-3 pt-2">
                     <Link
                       to="/contact"
-                      className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-white text-[#0a3d3d] font-bold text-sm hover:bg-white/90 transition-all shadow-lg shadow-black/20"
+                      className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-[#0a3d3d] font-bold text-sm hover:bg-white/90 transition-all shadow-lg shadow-black/20"
                     >
                       קבעו פגישת ייעוץ
                     </Link>
                     <Link
                       to="/about"
-                      className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl border border-white/15 text-white font-semibold text-sm hover:bg-white/[0.06] transition-all backdrop-blur-sm"
+                      className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-white/15 text-white font-semibold text-sm hover:bg-white/[0.06] transition-all backdrop-blur-sm"
                     >
                       עוד עלינו
                     </Link>
@@ -622,10 +724,68 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Wave: dark -> white */}
+        <WaveDivider color="var(--background, #ffffff)" flip />
+
+        {/* ═══════════ PROCESS TIMELINE — "איך מתחילים?" ═══════════ */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
+          <ScrollReveal>
+            <div className="text-center mb-12 sm:mb-16">
+              <DecorativeDots />
+              <p className="text-[#5ec6c6] text-xs font-bold tracking-widest uppercase mb-3">PROCESS</p>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
+                איך מתחילים?
+              </h2>
+              <p className="text-muted-foreground text-sm sm:text-base max-w-lg mx-auto">
+                תהליך פשוט וברור — מהפנייה הראשונה ועד ליווי שוטף
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <div className="relative">
+            {/* Vertical line */}
+            <div className="absolute right-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#5ec6c6]/40 via-[#0a3d3d]/30 to-[#5ec6c6]/40 hidden md:block" aria-hidden="true" />
+
+            <div className="space-y-8 md:space-y-12">
+              {processSteps.map((step, i) => (
+                <ScrollReveal key={step.number} delay={i * 100}>
+                  <div className={`flex flex-col md:flex-row items-center gap-4 md:gap-8 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                    {/* Card */}
+                    <div className={`flex-1 ${i % 2 === 0 ? 'md:text-left' : 'md:text-right'}`}>
+                      <motion.div
+                        className="bg-background border border-border/40 rounded-2xl p-5 sm:p-6 hover:shadow-lg hover:border-[#5ec6c6]/20 transition-all duration-300"
+                        whileHover={{ y: -3, scale: 1.02 }}
+                        transition={{ duration: 0.25 }}
+                      >
+                        <div className="flex items-center gap-3 mb-2">
+                          <step.icon className="w-5 h-5 text-[#5ec6c6]" />
+                          <h3 className="text-base font-bold">{step.title}</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
+                      </motion.div>
+                    </div>
+
+                    {/* Number circle */}
+                    <div className="relative z-10 flex-shrink-0 order-first md:order-none">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0a3d3d] to-[#5ec6c6] flex items-center justify-center shadow-lg shadow-[#5ec6c6]/20 border-4 border-background">
+                        <span className="text-white font-bold text-lg">{step.number}</span>
+                      </div>
+                    </div>
+
+                    {/* Spacer for alternating layout */}
+                    <div className="flex-1 hidden md:block" />
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ═══════════ 10. FAQ PREVIEW ═══════════ */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
           <ScrollReveal>
             <div className="text-center mb-12 sm:mb-16">
+              <DecorativeDots />
               <p className="text-[#5ec6c6] text-xs font-bold tracking-widest uppercase mb-3">FAQ</p>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3">
                 שאלות נפוצות
@@ -786,7 +946,7 @@ const Index = () => {
                     <motion.button
                       type="submit"
                       disabled={contactSubmitting}
-                      className="w-full px-6 py-3.5 rounded-xl bg-[#0a3d3d] text-white font-bold text-sm hover:bg-[#0d4a4a] transition-colors disabled:opacity-60"
+                      className="w-full px-6 py-3.5 rounded-full bg-[#0a3d3d] text-white font-bold text-sm hover:bg-[#0d4a4a] transition-colors disabled:opacity-60"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
@@ -814,7 +974,7 @@ const Index = () => {
                 </div>
                 <Link to="/app/auth" className="w-full sm:w-auto flex-shrink-0">
                   <motion.span
-                    className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[#0a3d3d] text-white font-bold hover:bg-[#0d4a4a] transition-all w-full sm:w-auto text-sm shadow-lg shadow-[#0a3d3d]/20"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#0a3d3d] text-white font-bold hover:bg-[#0d4a4a] transition-all w-full sm:w-auto text-sm shadow-lg shadow-[#0a3d3d]/20"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -826,6 +986,8 @@ const Index = () => {
             </div>
           </ScrollReveal>
         </section>
+        {/* ═══════════ REGULATORY BADGES BAR ═══════════ */}
+        <RegulatoryBadgesBar />
       </main>
 
       <Footer />
