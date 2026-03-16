@@ -7,7 +7,7 @@ import {
   Wallet, BarChart3, HelpCircle, Mail, MapPin, Phone,
   MessageCircle, ChevronLeft, Stethoscope, Key, Globe,
   Scale, Activity, Target, CalendarCheck, Loader2, Zap, Handshake,
-  HeartHandshake, Search, UserPlus
+  HeartHandshake, Search, UserPlus, ArrowDownLeft
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
