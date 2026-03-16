@@ -2,9 +2,6 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "rewrites": [
-    { "source": "/((?!assets/).*)", "destination": "/" }
-  ],
   "redirects": [
     { "source": "/", "has": [{ "type": "host", "value": "seeld-ins.com" }], "destination": "https://seeld.co.il/", "permanent": true },
     { "source": "/:path*", "has": [{ "type": "host", "value": "seeld-ins.com" }], "destination": "https://seeld.co.il/:path*", "permanent": true },
