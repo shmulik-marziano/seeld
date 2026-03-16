@@ -1,11 +1,37 @@
 import { ArrowDownLeft, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+
+const useIsDesktop = () => {
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth >= 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return isDesktop;
+};
 
 const HeroSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const isDesktop = useIsDesktop();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Parallax values - subtle movement for each circle at different speeds
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, 80]);   // 0.3x-ish
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, 120]);  // 0.4x-ish
+  const y3 = useTransform(scrollYProgress, [0, 1], [0, 100]);  // 0.35x
+  const y4 = useTransform(scrollYProgress, [0, 1], [0, 140]);  // 0.5x
+
   return (
-    <section className="relative min-h-[90vh] sm:min-h-[100vh] flex items-center overflow-hidden bg-[#f8f9fc]" dir="rtl">
+    <section ref={sectionRef} className="relative min-h-[90vh] sm:min-h-[100vh] flex items-center overflow-hidden bg-[#f8f9fc]" dir="rtl">
       {/* Dashed curved connector line */}
       <svg className="hidden lg:block absolute top-[5%] left-[0%] w-[500px] h-[600px]" viewBox="0 0 500 600" fill="none" aria-hidden="true">
         <motion.path
@@ -109,7 +135,7 @@ const HeroSection = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            {/* Colored circles composition - Autoflow style */}
+            {/* Colored circles composition - with parallax on desktop */}
             <div className="relative w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] lg:w-[480px] lg:h-[480px]">
               {/* Row of circles - main composition */}
               <motion.div
@@ -117,6 +143,7 @@ const HeroSection = () => {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+                style={isDesktop ? { y: y1 } : undefined}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="w-10 h-10 sm:w-14 sm:h-14">
                   <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" strokeLinecap="round" strokeLinejoin="round"/>
@@ -128,6 +155,7 @@ const HeroSection = () => {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.65, type: "spring", stiffness: 200 }}
+                style={isDesktop ? { y: y2 } : undefined}
               />
 
               <motion.div
@@ -135,6 +163,7 @@ const HeroSection = () => {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
+                style={isDesktop ? { y: y3 } : undefined}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="w-8 h-8 sm:w-11 sm:h-11">
                   <path d="M12 19V5M5 12l7-7 7 7" strokeLinecap="round" strokeLinejoin="round"/>
@@ -146,6 +175,7 @@ const HeroSection = () => {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.95, type: "spring", stiffness: 200 }}
+                style={isDesktop ? { y: y4 } : undefined}
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" className="w-7 h-7 sm:w-9 sm:h-9">
                   <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/>

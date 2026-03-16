@@ -13,6 +13,7 @@ import PageTransition from "@/components/PageTransition";
 import AIChatBot from "@/components/AIChatBot";
 import AccessibilityButton from "@/components/AccessibilityButton";
 import CookieConsent from "@/components/CookieConsent";
+import ScrollProgress from "@/components/ScrollProgress";
 
 // ── Agent App Pages ──
 import DashboardPage from "@/pages/DashboardPage";
@@ -68,6 +69,8 @@ import Travel from "@/pages/Travel";
 import Creativity from "@/pages/Creativity";
 import Growth from "@/pages/Growth";
 import AgentLandingPage from "@/pages/AgentLandingPage";
+import Blog from "@/pages/Blog";
+import BlogPost from "@/pages/BlogPost";
 
 // Insurance pages
 import HealthInsurance from "@/pages/insurance/HealthInsurance";
@@ -159,6 +162,7 @@ const App = () => (
           <Sonner />
           <PwaInstallBanner />
           <BrowserRouter>
+            <ScrollProgress />
             <ScrollToTop />
             <PageTransition>
               <Routes>
@@ -184,6 +188,8 @@ const App = () => (
                 <Route path="/travel" element={<Travel />} />
                 <Route path="/creativity" element={<Creativity />} />
                 <Route path="/growth" element={<Growth />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
 
                 {/* Insurance */}
                 <Route path="/insurances" element={<Insurances />} />

@@ -191,12 +191,31 @@ const processSteps = [
 
 // ── Animation variants ──
 const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.05, duration: 0.5, ease: "easeOut" },
+    transition: { delay: i * 0.1, duration: 0.6, ease: "easeOut" },
   }),
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+const staggerItem = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
 };
 
 const Index = () => {
@@ -397,9 +416,15 @@ const Index = () => {
             </div>
           </ScrollReveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {whySeeld.map((item, i) => (
-              <ScrollReveal key={item.title} delay={i * 80}>
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={staggerContainer}
+          >
+            {whySeeld.map((item) => (
+              <motion.div key={item.title} variants={staggerItem}>
                 <motion.div
                   className="relative bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-7 sm:p-8 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300 group h-full overflow-hidden"
                   whileHover={{ y: -6 }}
@@ -429,9 +454,9 @@ const Index = () => {
                     </p>
                   </div>
                 </motion.div>
-              </ScrollReveal>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </section>
 
         {/* Wave to gray section */}
@@ -462,7 +487,7 @@ const Index = () => {
                   custom={i}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: true, margin: "-30px" }}
+                  viewport={{ once: true, margin: "-50px" }}
                   variants={cardVariants}
                 >
                   <Link to={item.href} className="block h-full">
@@ -541,7 +566,7 @@ const Index = () => {
                 custom={i}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, margin: "-30px" }}
+                viewport={{ once: true, margin: "-50px" }}
                 variants={cardVariants}
               >
                 <Link to={item.href} className="block h-full">
@@ -587,9 +612,15 @@ const Index = () => {
               </div>
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {calculators.map((calc, i) => (
-                <ScrollReveal key={calc.title} delay={i * 80}>
+            <motion.div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={staggerContainer}
+            >
+              {calculators.map((calc) => (
+                <motion.div key={calc.title} variants={staggerItem}>
                   <Link to="/calculators" className="block h-full">
                     <motion.div
                       className="h-full bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-7 sm:p-8 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300 group overflow-hidden relative"
@@ -616,9 +647,9 @@ const Index = () => {
                       </span>
                     </motion.div>
                   </Link>
-                </ScrollReveal>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -704,26 +735,31 @@ const Index = () => {
               </ScrollReveal>
 
               {/* Left side - Trust points */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {trustPoints.map((point, i) => (
-                  <ScrollReveal key={point.title} delay={i * 80}>
-                    <motion.div
-                      className="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 backdrop-blur-md"
-                      whileHover={{ scale: 1.03, backgroundColor: "rgba(255,255,255,0.06)" }}
-                      transition={{ duration: 0.2 }}
+              <motion.div
+                className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={staggerContainer}
+              >
+                {trustPoints.map((point) => (
+                  <motion.div
+                    key={point.title}
+                    variants={staggerItem}
+                    className="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-6 backdrop-blur-md"
+                    whileHover={{ scale: 1.03, backgroundColor: "rgba(255,255,255,0.06)" }}
+                  >
+                    <div
+                      className="w-14 h-14 rounded-full flex items-center justify-center mb-4 shadow-md"
+                      style={{ backgroundColor: point.accent, boxShadow: `0 6px 18px ${point.accent}30` }}
                     >
-                      <div
-                        className="w-14 h-14 rounded-full flex items-center justify-center mb-4 shadow-md"
-                        style={{ backgroundColor: point.accent, boxShadow: `0 6px 18px ${point.accent}30` }}
-                      >
-                        <point.icon className="w-6 h-6 text-white" />
-                      </div>
-                      <h3 className="text-base font-bold text-white mb-1.5">{point.title}</h3>
-                      <p className="text-sm text-white/35 leading-relaxed">{point.description}</p>
-                    </motion.div>
-                  </ScrollReveal>
+                      <point.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-base font-bold text-white mb-1.5">{point.title}</h3>
+                    <p className="text-sm text-white/35 leading-relaxed">{point.description}</p>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -759,9 +795,15 @@ const Index = () => {
               />
             </svg>
 
-            <div className="space-y-8 md:space-y-14">
+            <motion.div
+              className="space-y-8 md:space-y-14"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={staggerContainer}
+            >
               {processSteps.map((step, i) => (
-                <ScrollReveal key={step.number} delay={i * 100}>
+                <motion.div key={step.number} variants={staggerItem}>
                   <div className={`flex flex-col md:flex-row items-center gap-4 md:gap-10 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
                     {/* Card */}
                     <div className={`flex-1 ${i % 2 === 0 ? 'md:text-left' : 'md:text-right'}`}>
@@ -795,9 +837,9 @@ const Index = () => {
                     {/* Spacer for alternating layout */}
                     <div className="flex-1 hidden md:block" />
                   </div>
-                </ScrollReveal>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             {/* Decorative dashed curved lines between steps - desktop only */}
             <svg className="absolute top-0 left-0 w-full h-full hidden md:block pointer-events-none" aria-hidden="true">
@@ -833,39 +875,47 @@ const Index = () => {
               </div>
             </ScrollReveal>
 
-            <ScrollReveal delay={100}>
-              <div className="max-w-2xl mx-auto">
-                <Accordion type="single" collapsible className="space-y-4">
-                  {faqItems.map((item, i) => (
-                    <AccordionItem
-                      key={i}
-                      value={`faq-${i}`}
-                      className="bg-white border border-[#0a3d3d]/[0.06] rounded-xl px-6 overflow-hidden shadow-sm"
-                    >
-                      <AccordionTrigger className="text-sm sm:text-base font-bold hover:no-underline py-5 text-[#0a3d3d]">
-                        <div className="flex items-center gap-3">
-                          <span className="w-3.5 h-3.5 rounded-full flex-shrink-0 shadow-sm" style={{ backgroundColor: accentColors[i % accentColors.length], boxShadow: `0 2px 8px ${accentColors[i % accentColors.length]}40` }} />
-                          {item.question}
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="text-sm text-[#0a3d3d]/50 leading-relaxed pb-5">
-                        {item.answer}
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
+            <div className="max-w-2xl mx-auto">
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-50px" }}
+                  variants={staggerContainer}
+                >
+                  <Accordion type="single" collapsible className="space-y-4">
+                    {faqItems.map((item, i) => (
+                      <motion.div key={i} variants={staggerItem}>
+                        <AccordionItem
+                          value={`faq-${i}`}
+                          className="bg-white border border-[#0a3d3d]/[0.06] rounded-xl px-6 overflow-hidden shadow-sm"
+                        >
+                          <AccordionTrigger className="text-sm sm:text-base font-bold hover:no-underline py-5 text-[#0a3d3d]">
+                            <div className="flex items-center gap-3">
+                              <span className="w-3.5 h-3.5 rounded-full flex-shrink-0 shadow-sm" style={{ backgroundColor: accentColors[i % accentColors.length], boxShadow: `0 2px 8px ${accentColors[i % accentColors.length]}40` }} />
+                              {item.question}
+                            </div>
+                          </AccordionTrigger>
+                          <AccordionContent className="text-sm text-[#0a3d3d]/50 leading-relaxed pb-5">
+                            {item.answer}
+                          </AccordionContent>
+                        </AccordionItem>
+                      </motion.div>
+                    ))}
+                  </Accordion>
+                </motion.div>
 
-                <div className="text-center mt-10">
-                  <Link
-                    to="/faq"
-                    className="inline-flex items-center gap-2 text-sm font-bold text-[#0a3d3d] hover:text-[#5ec6c6] transition-colors"
-                  >
-                    לכל השאלות הנפוצות
-                    <ChevronLeft className="w-4 h-4" />
-                  </Link>
-                </div>
+                <ScrollReveal delay={200}>
+                  <div className="text-center mt-10">
+                    <Link
+                      to="/faq"
+                      className="inline-flex items-center gap-2 text-sm font-bold text-[#0a3d3d] hover:text-[#5ec6c6] transition-colors"
+                    >
+                      לכל השאלות הנפוצות
+                      <ChevronLeft className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </ScrollReveal>
               </div>
-            </ScrollReveal>
           </div>
         </section>
 
@@ -891,32 +941,37 @@ const Index = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
               {/* Contact Info Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <motion.div
+                className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={staggerContainer}
+              >
                 {[
                   { icon: Phone, title: "טלפון", info: "09-774-2103", href: "tel:097742103", color: "#5ec6c6", dir: "ltr" },
                   { icon: MessageCircle, title: "וואטסאפ", info: "052-309-7444", href: "https://wa.me/972523097444", color: "#90be6d", dir: "ltr", external: true },
                   { icon: Mail, title: "אימייל", info: "info@seeld.co.il", href: "mailto:info@seeld.co.il", color: "#f4a261" },
                   { icon: MapPin, title: "משרדים", info: "רעננה | ירושלים", color: "#e76f51" },
-                ].map((item, i) => (
-                  <ScrollReveal key={item.title} delay={i * 60}>
-                    <motion.div
-                      className="block bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-6 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300 cursor-pointer"
-                      whileHover={{ scale: 1.03, y: -3 }}
-                      transition={{ duration: 0.2 }}
-                      onClick={() => item.href && window.open(item.href, item.external ? '_blank' : '_self')}
+                ].map((item) => (
+                  <motion.div
+                    key={item.title}
+                    variants={staggerItem}
+                    className="block bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-6 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300 cursor-pointer"
+                    whileHover={{ scale: 1.03, y: -3 }}
+                    onClick={() => item.href && window.open(item.href, item.external ? '_blank' : '_self')}
+                  >
+                    <div
+                      className="w-[52px] h-[52px] rounded-full flex items-center justify-center mb-4 shadow-md"
+                      style={{ backgroundColor: item.color, boxShadow: `0 4px 16px ${item.color}25` }}
                     >
-                      <div
-                        className="w-[52px] h-[52px] rounded-full flex items-center justify-center mb-4 shadow-md"
-                        style={{ backgroundColor: item.color, boxShadow: `0 4px 16px ${item.color}25` }}
-                      >
-                        <item.icon className="w-5 h-5 text-white" />
-                      </div>
-                      <h3 className="text-base font-bold text-[#0a3d3d] mb-1">{item.title}</h3>
-                      <p className="text-sm text-[#0a3d3d]/40" dir={item.dir}>{item.info}</p>
-                    </motion.div>
-                  </ScrollReveal>
+                      <item.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-base font-bold text-[#0a3d3d] mb-1">{item.title}</h3>
+                    <p className="text-sm text-[#0a3d3d]/40" dir={item.dir}>{item.info}</p>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
 
               {/* Inline Contact Form */}
               <ScrollReveal delay={100}>
