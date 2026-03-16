@@ -129,7 +129,7 @@ const faqItems = [
 
 const trustPoints = [
   { icon: Award, title: "רישיון סוכן ביטוח פנסיוני", description: "מורשה ומפוקח על ידי רשות שוק ההון, ביטוח וחיסכון", accent: "#5ec6c6" },
-  { icon: Building2, title: "חלק מבית עמיתים הון", description: "סוכנות מפוקחת עם גיבוי ארגוני מלא", accent: "#f4a261" },
+  { icon: Building2, title: "מבית עמיתים הון", description: "סוכנות מפוקחת עם גיבוי ארגוני מלא", accent: "#f4a261" },
   { icon: UserCheck, title: "מענה אישי — לא מוקד", description: "שאלה? שינוי בפוליסה? טלפון או וואטסאפ — ומקבלים מענה", accent: "#90be6d" },
   { icon: Scale, title: "לא קשורים לחברה אחת", description: "משווים בין כל חברות הביטוח וממליצים לפי הצורך שלכם", accent: "#e76f51" },
 ];
