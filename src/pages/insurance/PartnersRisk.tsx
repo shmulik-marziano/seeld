@@ -162,10 +162,80 @@ const PartnersRisk = () => {
           </div>
         </section>
 
+        {/* Article Content */}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto space-y-12 text-right">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">למה זה חשוב?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                שותפות עסקית בנויה על אמון ושיתוף פעולה. אבל מה קורה כשאחד השותפים נפטר באופן פתאומי? ללא הגנה מתאימה, יורשי השותף הנפטר הופכים לשותפים שלכם — אנשים שאולי אין להם ניסיון, עניין או יכולת לנהל את העסק. זה מתכון לקונפליקטים ואף לקריסת העסק.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                ביטוח ריסק שותפים פותר את הבעיה באלגנטיות: כל שותף מבוטח לטובת השותף האחר. במקרה פטירה, השותף הנותר מקבל את כספי הביטוח ורוכש את חלקו של הנפטר מהיורשים. כך העסק ממשיך לפעול, היורשים מקבלים תמורה הוגנת, ואיש לא נפגע.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מתי כדאי לרכוש?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                ביטוח ריסק שותפים צריך להיות חלק מהסכם השותפות מהיום הראשון. ברגע שנוצרת שותפות עסקית — בין אם חדשה או ותיקה — חיוני להגדיר מנגנון הגנה שמבטיח את המשכיות העסק. עורכי דין רבים ממליצים על כך כחלק בלתי נפרד מהסכם השותפות.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                חשוב לעדכן את סכום הביטוח בהתאם לשווי העסק. ככל שהעסק צומח, כך גם סכום הביטוח צריך לעלות בהתאם. בדיקה תקופתית מוודאת שהכיסוי תמיד מתאים למצב העדכני של העסק.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מה חשוב לדעת?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                ביטוח ריסק שותפים חייב להיות מגובה בהסכם משפטי (הסכם רכישה הדדי) שמגדיר את המנגנון המדויק. סכום הביטוח צריך לשקף את שווי חלקו של כל שותף בעסק, ולהתעדכן בהתאם לשינויים בשווי. ללא ההסכם, כספי הביטוח עלולים לא להגיע ליעדם.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                ב-SeelD אנחנו מלווים שותפויות עסקיות בבניית מנגנון ביטוחי מושלם. נעזור לכם לקבוע את סכום הביטוח הנכון, נשווה בין חברות הביטוח, ונוודא שהפוליסה מותאמת להסכם השותפות שלכם.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">שאלות נפוצות</h2>
+              <div className="space-y-6">
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">איך קובעים את סכום הביטוח?</h3>
+                  <p className="text-muted-foreground">סכום הביטוח נקבע לפי שווי חלקו של כל שותף בעסק. ניתן לקבוע את השווי באמצעות הערכת שמאי, מאזן העסק, או הסכמה בין השותפים. מומלץ לעדכן את הסכום כל שנה-שנתיים.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">מי משלם את הפרמיה?</h3>
+                  <p className="text-muted-foreground">בדרך כלל, כל שותף משלם את הפרמיה על חיי השותף האחר. לחילופין, העסק עצמו יכול לשאת בעלות. חשוב להתייעץ עם רואה חשבון לגבי ההשלכות המיסוייות של כל אפשרות.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">האם ביטוח ריסק שותפים מתאים גם לשותפות של יותר מ-2?</h3>
+                  <p className="text-muted-foreground">בהחלט. ניתן לבנות מנגנון ביטוחי לכל מספר שותפים — כל אחד מבוטח לטובת האחרים. במקרה של שותפות מורכבת, חשוב במיוחד להגדיר מנגנון ברור בהסכם.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Companies Section */}
+        <section className="py-16 bg-muted/20 rounded-3xl my-8">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold tracking-tight mb-3 text-[#0a3d3d]">חברות שאנחנו משווקים</h2>
+              <p className="text-lg text-muted-foreground">אנחנו עובדים עם חברות הביטוח המובילות בישראל כדי להביא לכם את ההצעה הטובה ביותר</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              {["הפניקס", "מגדל", "הראל", "כלל", "מנורה מבטחים", "איילון", "הכשרה", "ביטוח ישיר", "שלמה ביטוח", "AIG", "ליברה"].map((company) => (
+                <span key={company} className="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-[#0a3d3d] border border-[#5ec6c6]/30 shadow-sm hover:shadow-md hover:border-[#5ec6c6] transition-all">
+                  {company}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Contact Form */}
         <section id="contact-form" className="py-16 scroll-mt-24">
           <div className="max-w-2xl mx-auto">
-            <InsuranceContactForm 
+            <InsuranceContactForm
               insuranceType="ביטוח ריסק שותפים"
               title="מעוניינים בביטוח ריסק שותפים?"
               subtitle="צרו קשר לייעוץ מקצועי בהתאמת ביטוח לעסק שלכם"

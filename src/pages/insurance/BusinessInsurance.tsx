@@ -127,10 +127,80 @@ const BusinessInsurance = () => {
           </div>
         </section>
 
+        {/* Article Content */}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto space-y-12 text-right">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">למה זה חשוב?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                עסק הוא מערכת מורכבת שחשופה לסיכונים רבים — משריפה או הצפה ועד תביעות לקוחות, גניבת ציוד או נזק לצד שלישי. ביטוח עסקי מקיף הוא לא מותרות אלא הכרח. אירוע אחד בלתי צפוי ללא כיסוי ביטוחי יכול להוביל לסגירת העסק או לחובות כבדים שייקח שנים להתאושש מהם.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                ביטוח עסקי נכון מגן על הנכסים הפיזיים, על הפעילות השוטפת, על העובדים ועל המוניטין שלכם. הוא מאפשר לכם להתמקד בצמיחה ופיתוח העסק מתוך ידיעה שאם משהו ישתבש — יש לכם רשת ביטחון כלכלית.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מתי כדאי לרכוש?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                כל עסק זקוק לביטוח מהיום הראשון לפעילותו. בין אם מדובר בעסק חדש שזה עתה נפתח, או בעסק ותיק שמרחיב את פעילותו — ביטוח עסקי הוא תנאי בסיסי לניהול אחראי. ענפים רבים אף דורשים ביטוח אחריות מקצועית כתנאי לקבלת רישיון עסק.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                חשוב במיוחד לעדכן את הביטוח בכל שינוי משמעותי: הרחבת העסק, גיוס עובדים חדשים, רכישת ציוד יקר, מעבר למיקום חדש, או כניסה לתחום פעילות נוסף. ביטוח שלא מעודכן עלול להשאיר אתכם בלי כיסוי ברגע האמת.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מה חשוב לדעת?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                ביטוח עסקי בנוי ממספר שכבות: ביטוח מבנה ותכולה, ביטוח אחריות מקצועית, ביטוח חבות מעסיקים, ביטוח אובדן רווחים ועוד. חשוב לבנות פוליסה שמתאימה בדיוק לסוג העסק, לענף ולהיקף הפעילות שלכם. פוליסה גנרית לא תספק מענה אמיתי.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                ב-SeelD אנחנו מתמחים בהתאמת ביטוח עסקי מדויק. נבין את הצרכים הייחודיים של העסק שלכם, נשווה הצעות מכל חברות הביטוח, ונבנה חבילת כיסוי שמגנה על העסק בלי שתשלמו על דברים שאתם לא צריכים.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">שאלות נפוצות</h2>
+              <div className="space-y-6">
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">מה ההבדל בין ביטוח אחריות מקצועית לביטוח צד שלישי?</h3>
+                  <p className="text-muted-foreground">ביטוח אחריות מקצועית מכסה נזקים שנגרמו כתוצאה מטעות מקצועית או רשלנות בשירות, בעוד ביטוח צד שלישי מכסה נזקי גוף ורכוש שנגרמו לאחרים בשטח העסק או כתוצאה מפעילותו.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">האם ביטוח חבות מעסיקים הוא חובה?</h3>
+                  <p className="text-muted-foreground">כן, על פי חוק כל מעסיק בישראל חייב בביטוח חבות מעסיקים. הביטוח מכסה תביעות עובדים בגין נזקי גוף שנגרמו במהלך העבודה או כתוצאה ממנה.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">מה זה ביטוח אובדן רווחים?</h3>
+                  <p className="text-muted-foreground">ביטוח אובדן רווחים מפצה את העסק על הכנסות שאבדו בעקבות אירוע מבוטח, כמו שריפה שגרמה להשבתת העסק. הביטוח מכסה הוצאות קבועות ואובדן רווח למשך תקופת השיקום.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Companies Section */}
+        <section className="py-16 bg-muted/20 rounded-3xl my-8">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold tracking-tight mb-3 text-[#0a3d3d]">חברות שאנחנו משווקים</h2>
+              <p className="text-lg text-muted-foreground">אנחנו עובדים עם חברות הביטוח המובילות בישראל כדי להביא לכם את ההצעה הטובה ביותר</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              {["הפניקס", "מגדל", "הראל", "כלל", "מנורה מבטחים", "איילון", "הכשרה", "ביטוח ישיר", "שלמה ביטוח", "AIG", "ליברה"].map((company) => (
+                <span key={company} className="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-[#0a3d3d] border border-[#5ec6c6]/30 shadow-sm hover:shadow-md hover:border-[#5ec6c6] transition-all">
+                  {company}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Enrollment Form */}
         <section id="enrollment-form" className="py-16 scroll-mt-24">
           <div className="max-w-2xl mx-auto">
-            <InsuranceEnrollmentForm 
+            <InsuranceEnrollmentForm
               insuranceType="business"
               title="הצטרפות לביטוח עסקי"
               description="מלאו את פרטי העסק ונחזור אליכם עם הצעה מותאמת"

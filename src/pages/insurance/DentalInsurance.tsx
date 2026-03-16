@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { Smile, Shield, Star } from "lucide-react";
 import FeatureCard from "@/components/FeatureCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +9,7 @@ import { LogoDotsDivider } from "@/components/LogoBrandElements";
 
 const DentalInsurance = () => {
   return (
-    <div className="min-h-screen" dir="rtl">
+    <div className="min-h-screen bg-background animate-fade-in" dir="rtl">
       <Header />
        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
         <div className="absolute top-12 right-4 hidden lg:block">
@@ -80,12 +81,83 @@ const DentalInsurance = () => {
           </div>
         </section>
 
-        <InsuranceEnrollmentForm 
-          insuranceType="dental" 
+        {/* Article Content */}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto space-y-12 text-right">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">למה זה חשוב?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                טיפולי שיניים הם מהיקרים ביותר בתחום הרפואה בישראל, וסל הבריאות הציבורי כמעט אינו מכסה אותם. שתל דנטלי בודד עולה אלפי שקלים, כתר או גשר יכולים להגיע לעשרות אלפים, ויישור שיניים לילד עולה לעתים יותר מ-20,000 שקלים. ללא ביטוח שיניים, טיפולים אלו הופכים לנטל כלכלי משמעותי.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                ביטוח שיניים מאפשר לכם לקבל טיפולים איכותיים בעלות מופחתת בהרבה. הפוליסה מכסה מגוון רחב של טיפולים — מטיפולים משמרים בסיסיים כמו סתימות וניקוי, דרך טיפולים שיקומיים כמו כתרים ושתלים, ועד יישור שיניים לילדים ומבוגרים.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מתי כדאי לרכוש?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                הזמן הטוב ביותר לרכוש ביטוח שיניים הוא לפני שאתם צריכים טיפול יקר. ברוב הפוליסות יש תקופת אכשרה של מספר חודשים לטיפולים שיקומיים, כך שכדאי להצטרף מוקדם. אם יש לכם ילדים — ביטוח שיניים הוא חיוני במיוחד לתקופת יישור השיניים.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                מומלץ לרכוש ביטוח שיניים גם אם אתם חושבים שהשיניים שלכם בסדר. בדיקות שגרתיות וניקוי אבנית תקופתי חיוניים למניעת בעיות עתידיות, וביטוח שיניים מכסה גם את הטיפולים המונעים האלו.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מה חשוב לדעת?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                בבחירת ביטוח שיניים, שימו לב לתקופות האכשרה (בדרך כלל 3-6 חודשים לטיפולים משמרים ו-12-18 חודשים לטיפולים שיקומיים), תקרות הכיסוי לכל סוג טיפול, רשימת רופאי השיניים בהסכם, וגובה ההשתתפות העצמית. חברות שונות מציעות תנאים שונים מהותית.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                ב-SeelD אנחנו יודעים שביטוח שיניים הוא אחד הביטוחים הכי שווים לכל משפחה. נשווה עבורכם את כל ההצעות ונמצא את הפוליסה שנותנת לכם את הכיסוי הרחב ביותר במחיר הטוב ביותר.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">שאלות נפוצות</h2>
+              <div className="space-y-6">
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">האם ביטוח שיניים מכסה שתלים?</h3>
+                  <p className="text-muted-foreground">כן, רוב הפוליסות כוללות כיסוי לשתלים דנטליים, אם כי בדרך כלל לאחר תקופת אכשרה של 12-18 חודשים ועם תקרת כיסוי מוגדרת. השתתפות עצמית מופחתת יכולה לחסוך אלפי שקלים.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">מה כולל הכיסוי לילדים?</h3>
+                  <p className="text-muted-foreground">ביטוח שיניים לילדים כולל בדרך כלל טיפולים משמרים, אורתודונטיה (יישור שיניים), ציפויי פלואוריד, וסתימות. זהו אחד הרכיבים המשתלמים ביותר בביטוח שיניים משפחתי.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">האם אפשר לבחור רופא שיניים?</h3>
+                  <p className="text-muted-foreground">בהתאם לפוליסה, תוכלו לבחור מתוך רשת רופאי שיניים בהסכם (עם הנחות משמעותיות) או לפנות לכל רופא שיניים ולקבל החזר חלקי. פוליסות מסוימות מציעות גם שילוב של שני המסלולים.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Companies Section */}
+        <section className="py-16 bg-muted/20 rounded-3xl my-8">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold tracking-tight mb-3 text-[#0a3d3d]">חברות שאנחנו משווקים</h2>
+              <p className="text-lg text-muted-foreground">אנחנו עובדים עם חברות הביטוח המובילות בישראל כדי להביא לכם את ההצעה הטובה ביותר</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              {["הפניקס", "מגדל", "הראל", "כלל", "מנורה מבטחים", "איילון", "הכשרה", "ביטוח ישיר", "שלמה ביטוח", "AIG", "ליברה"].map((company) => (
+                <span key={company} className="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-[#0a3d3d] border border-[#5ec6c6]/30 shadow-sm hover:shadow-md hover:border-[#5ec6c6] transition-all">
+                  {company}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <InsuranceEnrollmentForm
+          insuranceType="dental"
           title="הצטרפות לביטוח שיניים"
           description="מלאו את הפרטים וקבלו הצעה מותאמת אישית לביטוח שיניים"
         />
       </main>
+      <Footer />
     </div>
   );
 };

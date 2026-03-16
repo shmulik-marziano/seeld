@@ -178,10 +178,80 @@ const CriticalIllness = () => {
           </ScrollReveal>
         </section>
 
+        {/* Article Content */}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto space-y-12 text-right">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">למה זה חשוב?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                אבחון של מחלה קשה כמו סרטן, התקף לב או שבץ מוחי הוא אירוע שמשנה חיים. מעבר להתמודדות הרפואית והנפשית, ישנן השלכות כלכליות כבדות: הוצאות על טיפולים שאינם בסל, אובדן הכנסה בתקופת ההחלמה, נסיעות לטיפולים, ולעתים צורך בהתאמות מיוחדות בבית.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                ביטוח מחלות קשות מעניק מענק כספי חד-פעמי מיד עם אבחון המחלה — סכום שיכול להגיע למאות אלפי שקלים. הכסף לרשותכם לכל מטרה: טיפול רפואי בארץ או בחו״ל, מימון תקופת החלמה, שמירה על רמת החיים, או כל דבר אחר שתצטרכו.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מתי כדאי לרכוש?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                ביטוח מחלות קשות כדאי לרכוש כמה שיותר מוקדם — בגיל צעיר הפרמיה נמוכה ותנאי הקבלה פשוטים. הסיכון לחלות במחלה קשה עולה עם הגיל, ולכן מי שרוכש ביטוח בגיל צעיר נהנה ממחיר נמוך לאורך שנים רבות.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                מומלץ במיוחד למשפחות עם ילדים — ביטוח מחלות קשות לילדים (מענקית זהב) מספק הגנה כלכלית חיונית במקרה של אבחון מחלה קשה אצל ילד, ומאפשר להורים להתמקד בטיפול ולא בדאגות כלכליות.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מה חשוב לדעת?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                חשוב לבדוק אילו מחלות כלולות בפוליסה — רשימת המחלות משתנה בין חברות. שימו לב גם להגדרות: מתי בדיוק נחשב "אירוע מבוטח" (למשל, האם כל סוג סרטן מכוסה), מה תקופת ההמתנה, והאם ניתן לקבל פיצוי על יותר ממחלה אחת.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                ב-SeelD אנחנו מנתחים עבורכם את כל הפוליסות, משווים את רשימות המחלות, התנאים והמחירים, ומוצאים את הכיסוי הרחב ביותר שמתאים לתקציב שלכם. ההבדלים בין הפוליסות יכולים להיות משמעותיים מאוד.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">שאלות נפוצות</h2>
+              <div className="space-y-6">
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">אילו מחלות מכוסות בביטוח?</h3>
+                  <p className="text-muted-foreground">רוב הפוליסות מכסות סרטן, התקף לב, שבץ מוחי, ניתוח מעקפים, השתלת איברים, אי ספיקת כליות, טרשת נפוצה ועוד. חלק מהפוליסות מכסות גם מחלות נוספות. חשוב לקרוא את רשימת המחלות בפוליסה הספציפית.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">האם הפיצוי הוא חד-פעמי או חודשי?</h3>
+                  <p className="text-muted-foreground">הפיצוי בביטוח מחלות קשות הוא חד-פעמי — סכום כסף שמשולם מיד עם אבחון המחלה. זה שונה מביטוח אובדן כושר עבודה שמשלם פיצוי חודשי. ניתן (ומומלץ) להחזיק את שני הביטוחים במקביל.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">האם ביטוח מחלות קשות מחליף ביטוח בריאות?</h3>
+                  <p className="text-muted-foreground">לא. ביטוח בריאות מכסה את עלויות הטיפול הרפואי עצמו, בעוד ביטוח מחלות קשות מעניק מענק כספי חופשי לשימוש. שני הביטוחים משלימים זה את זה ומומלץ להחזיק את שניהם.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Companies Section */}
+        <section className="py-16 bg-muted/20 rounded-3xl my-8">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold tracking-tight mb-3 text-[#0a3d3d]">חברות שאנחנו משווקים</h2>
+              <p className="text-lg text-muted-foreground">אנחנו עובדים עם חברות הביטוח המובילות בישראל כדי להביא לכם את ההצעה הטובה ביותר</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              {["הפניקס", "מגדל", "הראל", "כלל", "מנורה מבטחים", "איילון", "הכשרה", "ביטוח ישיר", "שלמה ביטוח", "AIG", "ליברה"].map((company) => (
+                <span key={company} className="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-[#0a3d3d] border border-[#5ec6c6]/30 shadow-sm hover:shadow-md hover:border-[#5ec6c6] transition-all">
+                  {company}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Contact Form */}
         <section id="contact-form" className="py-16 scroll-mt-24">
           <div className="max-w-2xl mx-auto">
-            <InsuranceContactForm 
+            <InsuranceContactForm
               insuranceType="ביטוח מחלות קשות"
               title="מעוניינים בביטוח מחלות קשות?"
               subtitle="השאירו פרטים ונחזור אליכם עם הצעה מותאמת אישית"

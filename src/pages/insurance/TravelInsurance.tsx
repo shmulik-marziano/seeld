@@ -167,10 +167,80 @@ const TravelInsurance = () => {
           </div>
         </section>
 
+        {/* Article Content */}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto space-y-12 text-right">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">למה זה חשוב?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                נסיעה לחו״ל ללא ביטוח היא הימור מסוכן. טיפול רפואי בחו״ל עולה עשרות ואף מאות אלפי שקלים — אשפוז של כמה ימים בארה״ב יכול להגיע לסכומים אסטרונומיים. גם אירועים כמו ביטול טיסה, אובדן מזוודות או גניבת דרכון יכולים להפוך חופשה לסיוט כלכלי.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                ביטוח נסיעות מעניק לכם שקט נפשי מוחלט: כיסוי רפואי מלא, פינוי רפואי, סיוע בשפה שלכם, החזר הוצאות בגין ביטולים, ופיצוי על אובדן כבודה. בעלות של כמה עשרות שקלים ליום, אתם קונים ביטחון שלא יסולא בפז.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מתי כדאי לרכוש?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                כדאי לרכוש ביטוח נסיעות מיד עם הזמנת הטיסה או חבילת הנופש. כך תהנו גם מכיסוי לביטול הנסיעה מסיבות רפואיות או אחרות. ככל שתרכשו מוקדם יותר, כך הכיסוי שלכם רחב יותר ואתם מוגנים מרגע הרכישה.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                חשוב במיוחד לדאוג לביטוח כשנוסעים ליעדים עם עלויות רפואיות גבוהות כמו ארה״ב או אירופה, כשנוסעים עם ילדים, כשמתכננים פעילויות ספורט אתגרי, או כשיש מצב רפואי קיים שדורש הצהרת בריאות מוקדמת.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">מה חשוב לדעת?</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                בבחירת ביטוח נסיעות, שימו לב לסכום הכיסוי הרפואי (מומלץ לפחות מיליון דולר ליעדים יקרים), חריגי הפוליסה, כיסוי ספורט אתגרי, כיסוי מצבים רפואיים קודמים, ומוקד חירום 24/7 בעברית. יש הבדלים גדולים בין פוליסות שנראות דומות.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                ב-SeelD אנחנו משווים עבורכם בין כל חברות הביטוח המובילות ומוצאים את הפוליסה המתאימה ביותר ליעד, למשך הנסיעה ולצרכים הספציפיים שלכם.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight mb-4 text-[#0a3d3d]">שאלות נפוצות</h2>
+              <div className="space-y-6">
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">האם ביטוח נסיעות מכסה גם קורונה?</h3>
+                  <p className="text-muted-foreground">רוב הפוליסות העדכניות כוללות כיסוי לקורונה ומחלות מדבקות אחרות, כולל אשפוז, בידוד וביטול נסיעה. חשוב לוודא שהכיסוי מפורט בתנאי הפוליסה.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">מה קורה אם אני צריך פינוי רפואי?</h3>
+                  <p className="text-muted-foreground">ביטוח נסיעות מקיף כולל כיסוי לפינוי רפואי לישראל או למדינה קרובה עם בית חולים מתאים. זהו אחד הרכיבים היקרים ביותר שהביטוח מכסה ויכול להגיע למאות אלפי דולרים.</p>
+                </div>
+                <div className="bg-muted/30 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold mb-2">האם כרטיס אשראי מספק ביטוח נסיעות?</h3>
+                  <p className="text-muted-foreground">חלק מכרטיסי האשראי מציעים ביטוח נסיעות בסיסי, אך הכיסוי בדרך כלל מוגבל מאוד — סכומים נמוכים, חריגים רבים, ותהליך תביעות מסובך. מומלץ תמיד לרכוש ביטוח ייעודי.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Companies Section */}
+        <section className="py-16 bg-muted/20 rounded-3xl my-8">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold tracking-tight mb-3 text-[#0a3d3d]">חברות שאנחנו משווקים</h2>
+              <p className="text-lg text-muted-foreground">אנחנו עובדים עם חברות הביטוח המובילות בישראל כדי להביא לכם את ההצעה הטובה ביותר</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              {["הפניקס", "מגדל", "הראל", "כלל", "מנורה מבטחים", "איילון", "הכשרה", "ביטוח ישיר", "שלמה ביטוח", "AIG", "ליברה"].map((company) => (
+                <span key={company} className="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-[#0a3d3d] border border-[#5ec6c6]/30 shadow-sm hover:shadow-md hover:border-[#5ec6c6] transition-all">
+                  {company}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Enrollment Form */}
         <section id="enrollment-form" className="py-16 scroll-mt-24">
           <div className="max-w-2xl mx-auto">
-            <InsuranceEnrollmentForm 
+            <InsuranceEnrollmentForm
               insuranceType="travel"
               title="רכישת ביטוח נסיעות"
               description="מלאו את פרטי הנסיעה ונחזור אליכם עם הצעה"
