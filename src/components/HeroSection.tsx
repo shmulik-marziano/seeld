@@ -91,21 +91,71 @@ const HeroSection = () => {
             </motion.div>
           </div>
 
-          {/* Image - Left side in RTL */}
+          {/* Illustration - Left side in RTL */}
           <motion.div
-            className="relative hidden lg:block"
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+            className="relative hidden lg:flex items-center justify-center"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           >
-            <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-black/30">
-              <img
-                src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200&q=80"
-                alt="תכנון פיננסי וביטוח"
-                className="w-full h-full object-cover"
+            <svg viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[480px]">
+              {/* Background circle */}
+              <circle cx="250" cy="200" r="160" fill="rgba(94,198,198,0.08)" />
+              <circle cx="250" cy="200" r="120" fill="rgba(94,198,198,0.06)" />
+
+              {/* Shield - protection */}
+              <motion.path
+                d="M250 60 L330 100 L330 200 C330 270 250 320 250 320 C250 320 170 270 170 200 L170 100 Z"
+                fill="rgba(94,198,198,0.15)"
+                stroke="#5ec6c6"
+                strokeWidth="2"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 1.5, delay: 0.5 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a3d3d]/40 via-transparent to-transparent" />
-            </div>
+
+              {/* Chart bars */}
+              <motion.rect x="200" y="180" width="24" height="80" rx="4" fill="#5ec6c6" opacity="0.6"
+                initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} transition={{ delay: 0.8, duration: 0.5 }} style={{ transformOrigin: 'bottom' }} />
+              <motion.rect x="232" y="150" width="24" height="110" rx="4" fill="#5ec6c6" opacity="0.8"
+                initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} transition={{ delay: 0.9, duration: 0.5 }} style={{ transformOrigin: 'bottom' }} />
+              <motion.rect x="264" y="120" width="24" height="140" rx="4" fill="#5ec6c6" opacity="1"
+                initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} transition={{ delay: 1.0, duration: 0.5 }} style={{ transformOrigin: 'bottom' }} />
+
+              {/* Trend line */}
+              <motion.path
+                d="M195 240 L215 200 L245 170 L275 130"
+                stroke="white"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ delay: 1.2, duration: 0.8 }}
+              />
+              <motion.circle cx="275" cy="130" r="5" fill="white"
+                initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1.8 }} />
+
+              {/* Floating elements */}
+              <motion.circle cx="370" cy="100" r="18" fill="rgba(255,180,150,0.3)" stroke="rgba(255,180,150,0.5)" strokeWidth="1.5"
+                animate={{ y: [0, -8, 0] }} transition={{ duration: 4, repeat: Infinity }} />
+              <motion.circle cx="130" cy="140" r="14" fill="rgba(180,220,255,0.3)" stroke="rgba(180,220,255,0.5)" strokeWidth="1.5"
+                animate={{ y: [0, 6, 0] }} transition={{ duration: 5, repeat: Infinity, delay: 1 }} />
+              <motion.circle cx="380" cy="280" r="10" fill="rgba(200,255,220,0.3)" stroke="rgba(200,255,220,0.5)" strokeWidth="1.5"
+                animate={{ y: [0, -5, 0] }} transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }} />
+
+              {/* Checkmark in small circle */}
+              <motion.g initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1.5, type: "spring" }}>
+                <circle cx="340" cy="170" r="20" fill="#5ec6c6" opacity="0.9" />
+                <path d="M330 170 L337 177 L352 162" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+              </motion.g>
+
+              {/* Coin/savings icon */}
+              <motion.g initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1.3, type: "spring" }}>
+                <circle cx="160" cy="250" r="22" fill="rgba(255,210,100,0.25)" stroke="rgba(255,210,100,0.5)" strokeWidth="1.5" />
+                <text x="160" y="256" textAnchor="middle" fill="rgba(255,210,100,0.8)" fontSize="18" fontWeight="bold">₪</text>
+              </motion.g>
+            </svg>
           </motion.div>
         </div>
 
