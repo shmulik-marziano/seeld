@@ -31,6 +31,8 @@ import ExecutionSummaryPage from "@/pages/ExecutionSummaryPage";
 import ExecutionSummaryPortalPage from "@/pages/ExecutionSummaryPortalPage";
 import AgencySettingsPage from "@/pages/AgencySettingsPage";
 import FileImportPage from "@/pages/FileImportPage";
+import LeadsPage from "@/pages/LeadsPage";
+import HelpPage from "@/pages/HelpPage";
 import AuthPage from "@/pages/AuthPage";
 import InstallPage from "@/pages/InstallPage";
 
@@ -251,6 +253,8 @@ const App = () => (
                   <Route path="/app/execution-summary/:customerId" element={<ExecutionSummaryPage />} />
                   <Route path="/app/activity-log" element={<ActivityLogPage />} />
                   <Route path="/app/file-import" element={<FileImportPage />} />
+                  <Route path="/app/leads" element={<LeadsPage />} />
+                  <Route path="/app/help" element={<HelpPage />} />
                   <Route path="/app/settings" element={<AgencySettingsPage />} />
                 </Route>
 
