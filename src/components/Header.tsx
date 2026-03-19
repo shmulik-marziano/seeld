@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SeeIDLogo from "@/components/SeeIDLogo";
-import { Menu, Moon, Sun, Home, Shield, Wallet, Calculator, User, Phone, X, LogIn, BookOpen } from "lucide-react";
+import { Menu, Moon, Sun, Home, Shield, Wallet, Calculator, User, Phone, X, LogIn, BookOpen, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,6 +10,7 @@ const navLinks = [
   { href: "/insurances", label: "ביטוח" },
   { href: "/savings/pension-funds", label: "חיסכון ופנסיה" },
   { href: "/calculators", label: "מחשבונים" },
+  { href: "/fund-finder", label: "השוואת קופות" },
   { href: "/blog", label: "בלוג" },
   { href: "/about", label: "אודות" },
   { href: "/contact", label: "צור קשר" },
@@ -20,6 +21,7 @@ const mobileNavLinks = [
   { href: "/insurances", label: "ביטוח", icon: Shield },
   { href: "/savings/pension-funds", label: "חיסכון ופנסיה", icon: Wallet },
   { href: "/calculators", label: "מחשבונים", icon: Calculator },
+  { href: "/fund-finder", label: "השוואת קופות", icon: Search },
   { href: "/blog", label: "בלוג", icon: BookOpen },
   { href: "/about", label: "אודות", icon: User },
   { href: "/contact", label: "צור קשר", icon: Phone },

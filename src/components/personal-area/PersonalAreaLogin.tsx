@@ -9,15 +9,16 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import {
   Loader2, Mail, ShieldCheck, ArrowLeft, Shield, Lock,
-  FileText, Heart, Wallet, CheckCircle2
+  FileText, Heart, Wallet, CheckCircle2, Phone
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import SeeIDLogo from "@/components/SeeIDLogo";
 
 const benefits = [
-  { icon: FileText, text: "צפייה בפוליסות", desc: "כל הביטוחים שלך במקום אחד" },
-  { icon: Heart, text: "המלצות מותאמות", desc: "ניתוח אישי של הכיסוי שלך" },
-  { icon: Wallet, text: "ניהול מסמכים", desc: "גישה לכל המסמכים בכל עת" },
+  { icon: FileText, text: "צפייה בפוליסות", desc: "כל הביטוחים שלך במקום אחד", color: "#5ec6c6" },
+  { icon: Heart, text: "המלצות מותאמות", desc: "ניתוח אישי של הכיסוי הביטוחי שלך", color: "#e76f51" },
+  { icon: Wallet, text: "מעקב חיסכון ופנסיה", desc: "נתונים עדכניים על החסכונות שלך", color: "#f4a261" },
+  { icon: Phone, text: "תקשורת עם הסוכן", desc: "צ'אט ישיר ועדכונים בזמן אמת", color: "#90be6d" },
 ];
 
 const PersonalAreaLogin = () => {
@@ -79,49 +80,48 @@ const PersonalAreaLogin = () => {
           background: "linear-gradient(165deg, #072e2e 0%, #0a3d3d 40%, #0d4a4a 70%, #0a3d3d 100%)",
         }}
       >
-        {/* Ambient glows */}
+        {/* Soft bubble background elements — conservative style */}
         <div className="absolute inset-0 overflow-hidden">
-          <div
-            className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-[0.07]"
-            style={{ background: "radial-gradient(circle, #5ec6c6 0%, transparent 70%)" }}
-          />
-          <div
-            className="absolute bottom-[-15%] left-[-5%] w-[400px] h-[400px] rounded-full opacity-[0.05]"
-            style={{ background: "radial-gradient(circle, #f4a261 0%, transparent 70%)" }}
-          />
-
-          {/* Floating orbs */}
+          {/* Large ambient bubbles */}
           <motion.div
-            animate={{ y: [0, -20, 0], opacity: [0.15, 0.25, 0.15] }}
-            transition={{ duration: 8, repeat: Infinity }}
-            className="absolute top-[12%] right-[18%] w-24 h-24 rounded-full bg-[#5ec6c6] opacity-15 blur-sm"
+            animate={{ y: [0, -15, 0], scale: [1, 1.05, 1] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[8%] right-[12%] w-[180px] h-[180px] rounded-full opacity-[0.04]"
+            style={{ background: "radial-gradient(circle, #5ec6c6, transparent 70%)" }}
           />
           <motion.div
-            animate={{ y: [0, 15, 0], opacity: [0.1, 0.2, 0.1] }}
-            transition={{ duration: 10, repeat: Infinity, delay: 2 }}
-            className="absolute top-[55%] left-[12%] w-16 h-16 rounded-full bg-[#f4a261] opacity-10 blur-sm"
+            animate={{ y: [0, 12, 0], scale: [1, 1.03, 1] }}
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 3 }}
+            className="absolute bottom-[12%] left-[8%] w-[220px] h-[220px] rounded-full opacity-[0.03]"
+            style={{ background: "radial-gradient(circle, #f4a261, transparent 70%)" }}
           />
           <motion.div
-            animate={{ y: [0, -12, 0] }}
-            transition={{ duration: 7, repeat: Infinity, delay: 1 }}
-            className="absolute bottom-[20%] right-[25%] w-10 h-10 rounded-full bg-[#e76f51] opacity-15 blur-sm"
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+            className="absolute top-[45%] right-[55%] w-[120px] h-[120px] rounded-full opacity-[0.05]"
+            style={{ background: "radial-gradient(circle, #e76f51, transparent 70%)" }}
           />
 
-          {/* Grid pattern */}
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-              backgroundSize: "40px 40px",
-            }}
+          {/* Small floating dots */}
+          <motion.div
+            animate={{ y: [0, -8, 0], opacity: [0.2, 0.35, 0.2] }}
+            transition={{ duration: 6, repeat: Infinity }}
+            className="absolute top-[20%] left-[25%] w-3 h-3 rounded-full bg-[#5ec6c6]"
+          />
+          <motion.div
+            animate={{ y: [0, 6, 0], opacity: [0.15, 0.3, 0.15] }}
+            transition={{ duration: 8, repeat: Infinity, delay: 2 }}
+            className="absolute bottom-[30%] right-[20%] w-2 h-2 rounded-full bg-[#f4a261]"
+          />
+          <motion.div
+            animate={{ y: [0, -5, 0], opacity: [0.1, 0.25, 0.1] }}
+            transition={{ duration: 7, repeat: Infinity, delay: 4 }}
+            className="absolute top-[65%] left-[15%] w-2.5 h-2.5 rounded-full bg-[#90be6d]"
           />
 
-          {/* Dashed decorative lines */}
-          <svg className="absolute bottom-16 left-0 w-full h-20 opacity-[0.08] pointer-events-none" viewBox="0 0 400 60" fill="none">
-            <path d="M0 45 Q100 10 200 35 T400 20" stroke="#5ec6c6" strokeWidth="1.5" strokeDasharray="8 6" />
-          </svg>
-          <svg className="absolute top-20 right-0 w-full h-16 opacity-[0.06] pointer-events-none" viewBox="0 0 400 50" fill="none">
-            <path d="M400 40 Q300 5 200 25 T0 15" stroke="#f4a261" strokeWidth="1" strokeDasharray="6 5" />
+          {/* Subtle curved dashed lines */}
+          <svg className="absolute bottom-20 left-0 w-full h-16 opacity-[0.06] pointer-events-none" viewBox="0 0 400 50" fill="none">
+            <path d="M0 35 Q100 10 200 30 T400 15" stroke="#5ec6c6" strokeWidth="1" strokeDasharray="8 6" />
           </svg>
         </div>
 
@@ -133,31 +133,34 @@ const PersonalAreaLogin = () => {
         >
           {/* Logo + title */}
           <div className="flex flex-col items-center text-center space-y-5">
-            <div className="w-20 h-20 rounded-2xl flex items-center justify-center bg-white/[0.08] backdrop-blur-sm border border-white/[0.08] shadow-lg">
+            <div className="w-20 h-20 rounded-2xl flex items-center justify-center bg-white/[0.07] backdrop-blur-sm border border-white/[0.06]">
               <SeeIDLogo size="lg" />
             </div>
             <div className="space-y-2">
               <h2 className="text-3xl font-extrabold text-white tracking-tight">האזור האישי</h2>
-              <p className="text-base text-white/50 font-light">ניהול חכם של הביטוחים והחסכונות שלך</p>
+              <p className="text-base text-white/45 font-light">ניהול חכם של הביטוחים והחסכונות שלך</p>
             </div>
           </div>
 
-          {/* Benefit cards */}
+          {/* Benefit bubble cards — conservative rounded style */}
           <div className="space-y-3">
             {benefits.map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: 30 }}
+                initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 + i * 0.15, duration: 0.5 }}
-                className="flex items-center gap-4 rounded-xl px-5 py-4 bg-white/[0.06] backdrop-blur-sm border border-white/[0.06] hover:bg-white/[0.09] transition-colors"
+                transition={{ delay: 0.4 + i * 0.12, duration: 0.5 }}
+                className="flex items-center gap-4 rounded-2xl px-5 py-4 bg-white/[0.05] backdrop-blur-sm border border-white/[0.05] hover:bg-white/[0.08] transition-all"
               >
-                <div className="w-10 h-10 rounded-lg bg-white/[0.1] flex items-center justify-center shrink-0">
-                  <item.icon className="w-5 h-5 text-[#5ec6c6]" />
+                <div
+                  className="w-11 h-11 rounded-full flex items-center justify-center shrink-0"
+                  style={{ background: `${item.color}20` }}
+                >
+                  <item.icon className="w-5 h-5" style={{ color: item.color }} />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-white/90">{item.text}</p>
-                  <p className="text-xs text-white/40 mt-0.5">{item.desc}</p>
+                  <p className="text-sm font-semibold text-white/85">{item.text}</p>
+                  <p className="text-xs text-white/35 mt-0.5">{item.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -167,11 +170,11 @@ const PersonalAreaLogin = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
+            transition={{ delay: 1.2 }}
             className="flex items-center justify-center gap-2 pt-2"
           >
-            <Shield className="w-3.5 h-3.5 text-white/30" />
-            <span className="text-xs text-white/30">מאובטח בתקן SSL | נתונים מוצפנים</span>
+            <Shield className="w-3.5 h-3.5 text-white/25" />
+            <span className="text-xs text-white/25">מאובטח בתקן SSL | נתונים מוצפנים</span>
           </motion.div>
         </motion.div>
       </div>
@@ -184,7 +187,7 @@ const PersonalAreaLogin = () => {
           transition={{ duration: 0.5 }}
           className="w-full max-w-[420px]"
         >
-          {/* Mobile hero header */}
+          {/* Mobile hero header with bubble style */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -195,37 +198,51 @@ const PersonalAreaLogin = () => {
               className="rounded-2xl p-6 text-center relative overflow-hidden"
               style={{ background: "linear-gradient(165deg, #072e2e 0%, #0a3d3d 50%, #0d4a4a 100%)" }}
             >
-              <div
-                className="absolute top-[-30%] right-[-20%] w-[200px] h-[200px] rounded-full opacity-[0.08]"
-                style={{ background: "radial-gradient(circle, #5ec6c6 0%, transparent 70%)" }}
-              />
+              {/* Mobile bubbles */}
+              <div className="absolute top-[-20%] right-[-15%] w-[140px] h-[140px] rounded-full opacity-[0.06]"
+                style={{ background: "radial-gradient(circle, #5ec6c6, transparent 70%)" }} />
+              <div className="absolute bottom-[-10%] left-[-10%] w-[100px] h-[100px] rounded-full opacity-[0.04]"
+                style={{ background: "radial-gradient(circle, #f4a261, transparent 70%)" }} />
               <div className="flex flex-col items-center gap-3 relative z-10">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white/[0.1] backdrop-blur-sm border border-white/[0.08]">
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white/[0.08] backdrop-blur-sm border border-white/[0.06]">
                   <SeeIDLogo size="md" />
                 </div>
                 <div>
                   <h2 className="text-xl font-extrabold text-white">האזור האישי</h2>
-                  <p className="text-xs text-white/50 mt-0.5">ניהול חכם של הביטוחים שלך</p>
+                  <p className="text-xs text-white/45 mt-0.5">ניהול חכם של הביטוחים שלך</p>
                 </div>
+              </div>
+
+              {/* Mobile benefit dots row */}
+              <div className="flex items-center justify-center gap-3 mt-4 relative z-10">
+                {benefits.map((b, i) => (
+                  <div
+                    key={i}
+                    className="w-9 h-9 rounded-full flex items-center justify-center"
+                    style={{ background: `${b.color}25` }}
+                  >
+                    <b.icon className="w-4 h-4" style={{ color: b.color }} />
+                  </div>
+                ))}
               </div>
             </div>
           </motion.div>
 
-          {/* Form card */}
-          <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm p-6 sm:p-8 space-y-5 sm:space-y-6">
+          {/* Form card — clean bubble style */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-lg shadow-gray-200/50 p-6 sm:p-8 space-y-5 sm:space-y-6">
             <div className="space-y-1.5 text-center">
-              <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-[#0a3d3d]/10 flex items-center justify-center">
+              <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-[#e0f2f1] flex items-center justify-center">
                 <ShieldCheck className="w-7 h-7 text-[#0a3d3d]" />
               </div>
               <h1 className="text-xl sm:text-2xl font-bold text-[#0a3d3d]">
-                {step === "choose" && "התחברות לאזור האישי"}
+                {step === "choose" && "כניסה לאזור האישי"}
                 {step === "email" && "התחברות עם אימייל"}
                 {step === "otp" && "אימות קוד"}
               </h1>
               <p className="text-xs sm:text-sm text-gray-500">
-                {step === "choose" && "התחבר כדי לצפות בפוליסות ובמידע שלך"}
+                {step === "choose" && "התחבר כדי לצפות בפוליסות, המלצות ומידע אישי"}
                 {step === "email" && "הזן את כתובת המייל שלך ונשלח לך קוד חד-פעמי"}
-                {step === "otp" && `הזן את הקוד שנשלח ל-${email}`}
+                {step === "otp" && `הזן את הקוד ששלחנו ל-${email}`}
               </p>
             </div>
 
@@ -238,12 +255,12 @@ const PersonalAreaLogin = () => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ duration: 0.3 }}
-                  className="space-y-4"
+                  className="space-y-3"
                 >
                   {/* Google */}
                   <Button
                     variant="outline"
-                    className="w-full gap-3 h-12 rounded-xl text-sm font-medium border-gray-200 hover:bg-gray-50 transition-all min-h-[48px] shadow-sm"
+                    className="w-full gap-3 h-12 rounded-full text-sm font-medium border-gray-200 hover:bg-gray-50 transition-all min-h-[48px] shadow-sm"
                     onClick={() => handleSocialLogin("google")}
                     disabled={!!socialLoading}
                   >
@@ -263,7 +280,7 @@ const PersonalAreaLogin = () => {
                   {/* Facebook */}
                   <Button
                     variant="outline"
-                    className="w-full gap-3 h-12 rounded-xl text-sm font-medium border-gray-200 hover:bg-gray-50 transition-all min-h-[48px] shadow-sm"
+                    className="w-full gap-3 h-12 rounded-full text-sm font-medium border-gray-200 hover:bg-gray-50 transition-all min-h-[48px] shadow-sm"
                     onClick={() => handleSocialLogin("facebook")}
                     disabled={!!socialLoading}
                   >
@@ -277,20 +294,20 @@ const PersonalAreaLogin = () => {
                     המשך עם Facebook
                   </Button>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 py-1">
                     <Separator className="flex-1" />
-                    <span className="text-xs text-gray-400 font-medium">או עם אימייל</span>
+                    <span className="text-xs text-gray-400 font-medium">או</span>
                     <Separator className="flex-1" />
                   </div>
 
-                  {/* Email OTP button */}
+                  {/* Email OTP */}
                   <Button
                     variant="outline"
-                    className="w-full gap-2 h-12 rounded-xl text-sm font-medium border-gray-200 hover:bg-gray-50 transition-all min-h-[48px] shadow-sm"
+                    className="w-full gap-2 h-12 rounded-full text-sm font-medium border-gray-200 hover:bg-gray-50 transition-all min-h-[48px] shadow-sm"
                     onClick={() => setStep("email")}
                   >
                     <Mail className="h-4 w-4 text-[#0a3d3d]" />
-                    התחברות עם קוד חד-פעמי
+                    התחברות עם קוד חד-פעמי באימייל
                   </Button>
                 </motion.div>
               )}
@@ -317,13 +334,13 @@ const PersonalAreaLogin = () => {
                         placeholder="your@email.com"
                         required
                         dir="ltr"
-                        className="h-12 sm:h-11 pr-10 rounded-xl text-base sm:text-sm border-gray-200 focus-visible:ring-[#0a3d3d]/30 text-left"
+                        className="h-12 sm:h-11 pr-10 rounded-full text-base sm:text-sm border-gray-200 focus-visible:ring-[#0a3d3d]/30 text-left"
                       />
                     </div>
                   </div>
                   <Button
                     type="submit"
-                    className="w-full h-12 sm:h-11 rounded-xl gap-2 font-semibold text-base sm:text-sm min-h-[48px] shadow-sm bg-[#0a3d3d] hover:bg-[#0d4a4a]"
+                    className="w-full h-12 sm:h-11 rounded-full gap-2 font-semibold text-base sm:text-sm min-h-[48px] shadow-lg shadow-[#0a3d3d]/20 bg-[#0a3d3d] hover:bg-[#0d4a4a]"
                     disabled={loading}
                   >
                     {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowLeft className="h-4 w-4" />}
@@ -349,10 +366,9 @@ const PersonalAreaLogin = () => {
                   transition={{ duration: 0.3 }}
                   className="space-y-5"
                 >
-                  {/* Info box */}
-                  <div className="flex items-center gap-3 bg-[#0a3d3d]/[0.06] border border-[#0a3d3d]/10 rounded-xl p-3.5">
+                  <div className="flex items-center gap-3 bg-[#e0f2f1] border border-[#0a3d3d]/10 rounded-xl p-3.5">
                     <CheckCircle2 className="w-5 h-5 text-[#0a3d3d] shrink-0" />
-                    <p className="text-xs sm:text-sm text-gray-600">
+                    <p className="text-xs sm:text-sm text-[#0a3d3d]/80">
                       שלחנו קוד חד-פעמי ל-<span className="font-semibold text-[#0a3d3d]" dir="ltr">{email}</span>
                     </p>
                   </div>
@@ -373,7 +389,7 @@ const PersonalAreaLogin = () => {
 
                   <Button
                     onClick={handleVerifyOtp}
-                    className="w-full h-12 sm:h-11 rounded-xl gap-2 font-semibold text-base sm:text-sm min-h-[48px] shadow-sm bg-[#0a3d3d] hover:bg-[#0d4a4a]"
+                    className="w-full h-12 sm:h-11 rounded-full gap-2 font-semibold text-base sm:text-sm min-h-[48px] shadow-lg shadow-[#0a3d3d]/20 bg-[#0a3d3d] hover:bg-[#0d4a4a]"
                     disabled={loading || otp.length !== 6}
                   >
                     {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "אמת והתחבר"}

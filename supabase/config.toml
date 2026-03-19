@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions.validate-correction]
 verify_jwt = false
+
+[functions.fetch-cma-data]
+verify_jwt = false

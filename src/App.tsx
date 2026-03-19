@@ -54,6 +54,7 @@ import Authors from "@/pages/Authors";
 import Contact from "@/pages/Contact";
 import Calculators from "@/pages/Calculators";
 import ReturnTables from "@/pages/ReturnTables";
+import FundFinder from "@/pages/FundFinder";
 import SavedCalculations from "@/pages/SavedCalculations";
 import PersonalArea from "@/pages/PersonalArea";
 import Insurances from "@/pages/Insurances";
@@ -179,6 +180,7 @@ const App = () => (
                 <Route path="/article/:id" element={<Article />} />
                 <Route path="/calculators" element={<Calculators />} />
                 <Route path="/return-tables" element={<ReturnTables />} />
+                <Route path="/fund-finder" element={<FundFinder />} />
                 <Route path="/saved-calculations" element={<SavedCalculations />} />
                 <Route path="/personal-area" element={<PersonalArea />} />
                 <Route path="/style-guide" element={<StyleGuide />} />

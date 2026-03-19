@@ -229,8 +229,8 @@ const HeroSection = () => {
           <div className="flex flex-wrap items-center justify-center gap-x-6 sm:gap-x-10 gap-y-4">
             {[
               { text: "מבית", highlight: "עמיתים הון", dotColor: "#5ec6c6" },
-              { text: "סוכנות מורשית ומפוקחת", dotColor: "#f4a261" },
-              { text: "ליווי אישי ומקצועי לכל לקוח", dotColor: "#90be6d" },
+              { text: "רישיון מטעם רשות שוק ההון", dotColor: "#f4a261" },
+              { text: "חברי לשכת סוכני הביטוח בישראל", dotColor: "#90be6d" },
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-2.5">
                 <span className="w-3 h-3 rounded-full" style={{ backgroundColor: item.dotColor }} />
