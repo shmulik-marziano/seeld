@@ -67,6 +67,9 @@ CREATE TABLE IF NOT EXISTS public.cma_funds (
   UNIQUE (fund_id, report_period, source)
 );
 
+-- Enable trigram extension for Hebrew text search
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
 -- אינדקסים לחיפוש מהיר
 CREATE INDEX IF NOT EXISTS idx_cma_funds_source ON public.cma_funds (source);
 CREATE INDEX IF NOT EXISTS idx_cma_funds_report_period ON public.cma_funds (report_period DESC);
@@ -74,9 +77,6 @@ CREATE INDEX IF NOT EXISTS idx_cma_funds_fund_id ON public.cma_funds (fund_id);
 CREATE INDEX IF NOT EXISTS idx_cma_funds_product_type ON public.cma_funds (product_type);
 CREATE INDEX IF NOT EXISTS idx_cma_funds_managing_company ON public.cma_funds (managing_company);
 CREATE INDEX IF NOT EXISTS idx_cma_funds_fund_name ON public.cma_funds USING gin (fund_name gin_trgm_ops);
-
--- Enable trigram extension for Hebrew text search
-CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 -- =====================================================
 -- טבלת סינכרון — מעקב אחרי ריצות
