@@ -193,7 +193,7 @@ export default function ExecutionSummaryPage() {
       </div>
 
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-start justify-between">
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm" onClick={() => navigate(`/customers/${customerId}`)} className="hover:bg-[#5ec6c6]/10">
             <ArrowRight className="h-4 w-4" />
@@ -282,7 +282,7 @@ export default function ExecutionSummaryPage() {
           {/* Status bar */}
           <Card className="rounded-2xl border-border/50 shadow-sm">
             <CardContent className="p-4">
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4 text-sm">
                 <div>
                   <p className="text-muted-foreground text-xs">תאריך יצירה</p>
                   <p className="font-medium">{new Date(activeSummary.createdAt).toLocaleDateString('he-IL')}</p>

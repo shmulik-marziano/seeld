@@ -75,25 +75,25 @@ const Calculators = () => {
         <section className="py-10 sm:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <Tabs defaultValue="mortgage" className="space-y-8">
-              <TabsList className="w-full flex flex-wrap h-auto gap-2 bg-[#f8f9fc] p-2 rounded-full justify-center border border-[#0a3d3d]/[0.06]">
-                <TabsTrigger value="mortgage" className="flex-1 min-w-[80px] min-h-[44px] rounded-full flex items-center gap-2 text-sm font-semibold data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-[#0a3d3d]/20 transition-all">
-                  <Home className="w-4 h-4" />
-                  משכנתא
+              <TabsList className="w-full flex flex-wrap h-auto gap-1.5 sm:gap-2 bg-[#f8f9fc] p-1.5 sm:p-2 rounded-2xl sm:rounded-full justify-center border border-[#0a3d3d]/[0.06]">
+                <TabsTrigger value="mortgage" className="flex-1 min-w-[60px] sm:min-w-[80px] min-h-[40px] sm:min-h-[44px] rounded-full flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm font-semibold data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-[#0a3d3d]/20 transition-all px-2 sm:px-3">
+                  <Home className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  <span className="hidden sm:inline">משכנתא</span><span className="sm:hidden">משכנתא</span>
                 </TabsTrigger>
-                <TabsTrigger value="pension" className="flex-1 min-w-[80px] min-h-[44px] rounded-full flex items-center gap-2 text-sm font-semibold data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-[#0a3d3d]/20 transition-all">
-                  <PiggyBank className="w-4 h-4" />
+                <TabsTrigger value="pension" className="flex-1 min-w-[60px] sm:min-w-[80px] min-h-[40px] sm:min-h-[44px] rounded-full flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm font-semibold data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-[#0a3d3d]/20 transition-all px-2 sm:px-3">
+                  <PiggyBank className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   פנסיה
                 </TabsTrigger>
-                <TabsTrigger value="savings" className="flex-1 min-w-[80px] min-h-[44px] rounded-full flex items-center gap-2 text-sm font-semibold data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-[#0a3d3d]/20 transition-all">
-                  <Wallet className="w-4 h-4" />
+                <TabsTrigger value="savings" className="flex-1 min-w-[60px] sm:min-w-[80px] min-h-[40px] sm:min-h-[44px] rounded-full flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm font-semibold data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-[#0a3d3d]/20 transition-all px-2 sm:px-3">
+                  <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   חיסכון
                 </TabsTrigger>
-                <TabsTrigger value="goal" className="flex-1 min-w-[80px] min-h-[44px] rounded-full flex items-center gap-2 text-sm font-semibold data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-[#0a3d3d]/20 transition-all">
-                  <Target className="w-4 h-4" />
+                <TabsTrigger value="goal" className="flex-1 min-w-[60px] sm:min-w-[80px] min-h-[40px] sm:min-h-[44px] rounded-full flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm font-semibold data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-[#0a3d3d]/20 transition-all px-2 sm:px-3">
+                  <Target className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   יעד
                 </TabsTrigger>
-                <TabsTrigger value="compare" className="flex-1 min-w-[80px] min-h-[44px] rounded-full flex items-center gap-2 text-sm font-semibold data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-[#0a3d3d]/20 transition-all">
-                  <BarChart3 className="w-4 h-4" />
+                <TabsTrigger value="compare" className="flex-1 min-w-[60px] sm:min-w-[80px] min-h-[40px] sm:min-h-[44px] rounded-full flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm font-semibold data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-[#0a3d3d]/20 transition-all px-2 sm:px-3">
+                  <BarChart3 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   השוואה
                 </TabsTrigger>
               </TabsList>

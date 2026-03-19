@@ -884,7 +884,7 @@ export default function FileImportPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                   <div className="text-center p-3 bg-background rounded-lg">
                     <p className="text-2xl font-bold text-green-600">{summary.customersCreated}</p>
                     <p className="text-xs text-muted-foreground">לקוחות נוצרו</p>
@@ -1032,7 +1032,7 @@ export default function FileImportPage() {
                     <User className="h-3.5 w-3.5" />
                     פרטי לקוח שחולצו
                   </h4>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                     {[
                       { label: 'שם פרטי', value: detailItem.parsedCustomer.firstName },
                       { label: 'שם משפחה', value: detailItem.parsedCustomer.lastName },

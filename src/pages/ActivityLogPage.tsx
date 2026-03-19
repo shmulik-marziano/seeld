@@ -24,9 +24,9 @@ export default function ActivityLogPage() {
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-8">
+      <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
         <div className="w-12 h-12 rounded-full bg-[#6c63ff] flex items-center justify-center">
           <FileText className="h-5 w-5 text-white" />
         </div>
@@ -37,13 +37,13 @@ export default function ActivityLogPage() {
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-gray-100 flex gap-3">
+        <div className="p-3 sm:p-4 border-b border-gray-100 flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input placeholder="חיפוש..." value={search} onChange={e => setSearch(e.target.value)} className="pr-10 rounded-full border-gray-200" />
+            <Input placeholder="חיפוש..." value={search} onChange={e => setSearch(e.target.value)} className="pr-10 rounded-full border-gray-200 min-h-[44px]" />
           </div>
           <Select value={levelFilter} onValueChange={setLevelFilter}>
-            <SelectTrigger className="w-36 rounded-full border-gray-200">
+            <SelectTrigger className="w-full sm:w-36 rounded-full border-gray-200 min-h-[44px]">
               <SelectValue placeholder="סוג אירוע" />
             </SelectTrigger>
             <SelectContent>

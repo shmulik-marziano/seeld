@@ -132,7 +132,7 @@ export default function PDageJobView() {
   const StatusIcon = st.icon;
 
   return (
-    <div className={`flex gap-6 ${chatOpen && !isMobile ? 'max-w-6xl' : 'max-w-3xl'} mx-auto transition-all`}>
+    <div className={`flex flex-col sm:flex-row gap-4 sm:gap-6 ${chatOpen && !isMobile ? 'max-w-6xl' : 'max-w-3xl'} mx-auto transition-all px-4 sm:px-0`}>
       {/* Main content */}
       <div className={`${chatOpen && !isMobile ? 'flex-1 min-w-0' : 'w-full'} space-y-6`}>
         <div className="flex items-center justify-between">

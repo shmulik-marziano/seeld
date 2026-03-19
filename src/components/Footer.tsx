@@ -185,7 +185,7 @@ const Footer = () => {
                 <Handshake className="w-5 h-5 text-white" />
               </div>
               <p className="text-white/80 text-sm font-medium leading-snug">
-                חלק מבית<br />עמיתים הון
+                מבית<br />עמיתים הון
               </p>
             </div>
           </div>

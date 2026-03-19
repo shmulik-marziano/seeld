@@ -160,7 +160,7 @@ export default function ExecutionSummaryPortalPage() {
 
       <div className="max-w-2xl mx-auto p-4 space-y-4">
         {/* Stats bar */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
           <Card className="border-success/30 bg-success/5">
             <CardContent className="p-3 text-center">
               <CheckCircle2 className="h-5 w-5 text-success mx-auto mb-1" />

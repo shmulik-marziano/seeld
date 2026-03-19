@@ -1,579 +1,857 @@
-import { useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useApp } from '@/contexts/AppContext';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import {
-  Users, FileText, CheckCircle2, Clock, TrendingUp,
-  Sparkles, LayoutDashboard, UserPlus, Bell, Zap,
-  Shield, Wallet, Target, ChevronLeft, ClipboardCheck,
-  Activity, BarChart3,
-} from 'lucide-react';
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RTooltip,
-  ResponsiveContainer, PieChart, Pie, Cell,
-} from 'recharts';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
+import {
+  LayoutDashboard, Target, Users, Zap, Briefcase, PhoneCall,
+  Calendar, FolderUp, BarChart3, Settings, HelpCircle,
+  Search, Bell, Cake, CheckSquare, User, LogOut,
+  Plus, Upload, Filter, ArrowUpDown, Columns, RefreshCw,
+  MoreVertical, FilePlus, List, Package, Activity, FileText,
+  Shield, Wallet, ClipboardCheck,
+  Copy, Mail, MessageCircle, Phone, Edit3, Send, Database,
+  CheckCircle2, ChevronUp, Lock, Globe, CreditCard,
+  Key, Hash, Layers, ToggleLeft, Download, PenTool, X,
+  UserPlus, Building, BarChart, FileCheck, Wrench,
+  RotateCcw, Check, Eye,
+} from 'lucide-react';
 import { SeeIDLogo } from '@/components/brand/SeeIDLogo';
 
-// New bold color palette
-const PALETTE = {
-  teal: '#0a3d3d',
-  mint: '#5ec6c6',
+import doodleShield    from '@/assets/doodle-shield.png';
+import doodleTarget    from '@/assets/doodle-target.png';
+import doodleCharts    from '@/assets/doodle-charts.png';
+import doodleGrowth    from '@/assets/doodle-growth.png';
+import doodleLightbulb from '@/assets/doodle-lightbulb.png';
+
+// ─── Palette ──────────────────────────────────────────────────────────────────
+const C = {
+  teal:   '#5ec6c6',
   orange: '#f4a261',
-  green: '#90be6d',
-  coral: '#e76f51',
+  coral:  '#e76f51',
+  green:  '#90be6d',
+  yellow: '#ffc929',
+  purple: '#6c63ff',
+  dark:   '#0a3d3d',
+  gray:   '#94a3b8',
 };
 
-const CHART_COLORS = [
-  PALETTE.teal,
-  PALETTE.mint,
-  PALETTE.green,
-  PALETTE.orange,
-  PALETTE.coral,
+type BubbleType = { label: string; icon: React.ElementType; path: string | null; e: boolean };
+type SectionType = { title: string; color: string; num: string; bubbles: BubbleType[] };
+
+// ─── Flat bubble (with section metadata) ──────────────────────────────────────
+type FlatBubble = BubbleType & {
+  color: string;
+  sectionTitle: string;
+  originalIndex: number; // index within its section
+};
+
+// ─── SECTIONS ─────────────────────────────────────────────────────────────────
+const SECTIONS: SectionType[] = [
+  {
+    title: 'ניווט ראשי', color: C.dark, num: '1–11',
+    bubbles: [
+      { label: 'דשבורד',       icon: LayoutDashboard, path: '/app/dashboard',   e: true  },
+      { label: 'לידים',        icon: Target,           path: '/app/leads',       e: false },
+      { label: 'לקוחות',       icon: Users,            path: '/app/customers',   e: true  },
+      { label: 'תהליכים',      icon: Zap,              path: '/app/processes',   e: false },
+      { label: 'מעסיקים',      icon: Briefcase,        path: '/app/employers',   e: false },
+      { label: 'אנשי קשר',     icon: PhoneCall,        path: '/app/contacts',    e: false },
+      { label: 'פגישות',       icon: Calendar,         path: '/app/meetings',    e: false },
+      { label: 'טעינת קבצים',  icon: FolderUp,         path: '/app/file-import', e: true  },
+      { label: 'דוחות',        icon: BarChart3,        path: '/app/reports',     e: false },
+      { label: 'הגדרות',       icon: Settings,         path: '/app/settings',    e: true  },
+      { label: 'עזרה',         icon: HelpCircle,       path: '/app/help',        e: false },
+    ],
+  },
+  {
+    title: 'סרגל עליון', color: C.teal, num: '12–17',
+    bubbles: [
+      { label: 'חיפוש',              icon: Search,      path: null,             e: false },
+      { label: 'יצירת תזכורת',       icon: Bell,        path: null,             e: false },
+      { label: 'ימי הולדת',          icon: Cake,        path: null,             e: false },
+      { label: 'המשימות שלי',        icon: CheckSquare, path: null,             e: false },
+      { label: 'התראות',             icon: Bell,        path: '/app/follow-up', e: true  },
+      { label: 'שמוליק מרציאנו',     icon: User,        path: '/app/settings',  e: true  },
+    ],
+  },
+  {
+    title: 'דשבורד', color: C.green, num: '18–19',
+    bubbles: [
+      { label: 'פעילים בלבד',       icon: ToggleLeft, path: null, e: false },
+      { label: '12 חודשים אחרונים', icon: Calendar,   path: null, e: false },
+    ],
+  },
+  {
+    title: 'מסך לידים', color: C.orange, num: '20–30',
+    bubbles: [
+      { label: 'דשבורד',         icon: LayoutDashboard, path: null, e: false },
+      { label: 'תצוגה ראשית',    icon: List,            path: null, e: false },
+      { label: 'context menu',   icon: MoreVertical,    path: null, e: false },
+      { label: 'הוספת תצוגה',    icon: Plus,            path: null, e: false },
+      { label: 'יצירת ליד',      icon: UserPlus,        path: null, e: false },
+      { label: 'ייבוא / ייצוא',  icon: Upload,          path: null, e: false },
+      { label: 'סנן עמודות',     icon: Filter,          path: null, e: false },
+      { label: 'מיון עמודות',    icon: ArrowUpDown,     path: null, e: false },
+      { label: 'בחירת עמודות',   icon: Columns,         path: null, e: false },
+      { label: 'חיפוש טבלה',     icon: Search,          path: null, e: false },
+      { label: 'רענון',          icon: RefreshCw,       path: null, e: false },
+    ],
+  },
+  {
+    title: 'מסך לקוחות', color: C.teal, num: '31–41',
+    bubbles: [
+      { label: 'דשבורד',         icon: LayoutDashboard, path: '/app/customers',     e: true  },
+      { label: 'תצוגה ראשית',    icon: List,            path: '/app/customers',     e: true  },
+      { label: 'context menu',   icon: MoreVertical,    path: null,                e: false },
+      { label: 'הוספת תצוגה',    icon: Plus,            path: null,                e: false },
+      { label: 'יצירת לקוח',     icon: UserPlus,        path: '/app/customers/new', e: true  },
+      { label: 'ייבוא / ייצוא',  icon: Upload,          path: null,                e: false },
+      { label: 'סנן עמודות',     icon: Filter,          path: null,                e: false },
+      { label: 'מיון עמודות',    icon: ArrowUpDown,     path: null,                e: false },
+      { label: 'בחירת עמודות',   icon: Columns,         path: null,                e: false },
+      { label: 'חיפוש טבלה',     icon: Search,          path: '/app/customers',    e: true  },
+      { label: 'רענון',          icon: RefreshCw,       path: null,                e: false },
+    ],
+  },
+  {
+    title: 'מסך תהליכים', color: C.purple, num: '42–53',
+    bubbles: [
+      { label: 'דשבורד',              icon: LayoutDashboard, path: null, e: false },
+      { label: 'תצוגה ראשית',         icon: List,            path: null, e: false },
+      { label: 'context menu',        icon: MoreVertical,    path: null, e: false },
+      { label: 'הוספת תצוגה',         icon: Plus,            path: null, e: false },
+      { label: 'יצירת תהליך',         icon: FilePlus,        path: null, e: false },
+      { label: 'ייבוא / ייצוא',       icon: Upload,          path: null, e: false },
+      { label: 'סנן עמודות',          icon: Filter,          path: null, e: false },
+      { label: 'מיון עמודות',         icon: ArrowUpDown,     path: null, e: false },
+      { label: 'בחירת עמודות',        icon: Columns,         path: null, e: false },
+      { label: 'חיפוש טבלה',          icon: Search,          path: null, e: false },
+      { label: 'רענון',               icon: RefreshCw,       path: null, e: false },
+      { label: '12 חודשים',           icon: Calendar,        path: null, e: false },
+    ],
+  },
+  {
+    title: 'מסך מעסיקים', color: C.coral, num: '54–63',
+    bubbles: [
+      { label: 'תצוגה ראשית',    icon: List,         path: null, e: false },
+      { label: 'context menu',   icon: MoreVertical, path: null, e: false },
+      { label: 'הוספת תצוגה',    icon: Plus,         path: null, e: false },
+      { label: 'יצירת מעסיק',    icon: Building,     path: null, e: false },
+      { label: 'ייבוא / ייצוא',  icon: Upload,       path: null, e: false },
+      { label: 'סנן עמודות',     icon: Filter,       path: null, e: false },
+      { label: 'מיון עמודות',    icon: ArrowUpDown,  path: null, e: false },
+      { label: 'בחירת עמודות',   icon: Columns,      path: null, e: false },
+      { label: 'חיפוש טבלה',     icon: Search,       path: null, e: false },
+      { label: 'רענון',          icon: RefreshCw,    path: null, e: false },
+    ],
+  },
+  {
+    title: 'מסך אנשי קשר', color: C.yellow, num: '64–73',
+    bubbles: [
+      { label: 'תצוגה ראשית',    icon: List,         path: null, e: false },
+      { label: 'context menu',   icon: MoreVertical, path: null, e: false },
+      { label: 'הוספת תצוגה',    icon: Plus,         path: null, e: false },
+      { label: 'יצירת איש קשר',  icon: UserPlus,     path: null, e: false },
+      { label: 'ייבוא / ייצוא',  icon: Upload,       path: null, e: false },
+      { label: 'סנן עמודות',     icon: Filter,       path: null, e: false },
+      { label: 'מיון עמודות',    icon: ArrowUpDown,  path: null, e: false },
+      { label: 'בחירת עמודות',   icon: Columns,      path: null, e: false },
+      { label: 'חיפוש טבלה',     icon: Search,       path: null, e: false },
+      { label: 'רענון',          icon: RefreshCw,    path: null, e: false },
+    ],
+  },
+  {
+    title: 'מסך פגישות', color: C.green, num: '74–83',
+    bubbles: [
+      { label: 'תצוגה ראשית',    icon: List,         path: null, e: false },
+      { label: 'context menu',   icon: MoreVertical, path: null, e: false },
+      { label: 'הוספת תצוגה',    icon: Plus,         path: null, e: false },
+      { label: 'יצירת פגישה',    icon: Calendar,     path: null, e: false },
+      { label: 'ייבוא / ייצוא',  icon: Upload,       path: null, e: false },
+      { label: 'סנן עמודות',     icon: Filter,       path: null, e: false },
+      { label: 'מיון עמודות',    icon: ArrowUpDown,  path: null, e: false },
+      { label: 'בחירת עמודות',   icon: Columns,      path: null, e: false },
+      { label: 'חיפוש טבלה',     icon: Search,       path: null, e: false },
+      { label: 'רענון',          icon: RefreshCw,    path: null, e: false },
+    ],
+  },
+  {
+    title: 'פאנל התראות', color: C.coral, num: '84–86',
+    bubbles: [
+      { label: 'סגירת כל ההתראות', icon: CheckCircle2, path: '/app/follow-up', e: true  },
+      { label: 'סגירת התראה',      icon: X,            path: null,             e: false },
+      { label: 'סגירת הפאנל',      icon: X,            path: null,             e: false },
+    ],
+  },
+  {
+    title: 'כרטיס לקוח — כותרת', color: C.dark, num: '87–92',
+    bubbles: [
+      { label: 'שם הלקוח',       icon: User,           path: null, e: false },
+      { label: 'העתקה / Copy',   icon: Copy,           path: null, e: false },
+      { label: 'העתקת מייל',     icon: FileText,       path: null, e: false },
+      { label: 'WhatsApp',       icon: MessageCircle,  path: null, e: false },
+      { label: 'נייד / חיוג',    icon: Phone,          path: null, e: false },
+      { label: 'שליחת מייל',     icon: Mail,           path: null, e: false },
+    ],
+  },
+  {
+    title: 'כרטיס לקוח — פעולות', color: C.teal, num: '93–97',
+    bubbles: [
+      { label: 'הערות',           icon: Edit3,    path: null, e: false },
+      { label: 'דוח שוטף',       icon: FileText, path: null, e: false },
+      { label: 'תעסוקה',         icon: Briefcase,path: null, e: false },
+      { label: 'לקוחות קשורים',  icon: Users,    path: null, e: false },
+      { label: 'אני רוצה... (+)', icon: Plus,     path: null, e: false },
+    ],
+  },
+  {
+    title: 'תפריט "אני רוצה..."', color: C.purple, num: '97א–97ז',
+    bubbles: [
+      { label: 'יפויי כוח מרחוק',       icon: Shield,        path: null, e: false },
+      { label: 'יפויי כוח בפגישה',       icon: Shield,        path: null, e: false },
+      { label: 'להזמין מסלקה',           icon: Database,      path: null, e: false },
+      { label: 'לשלוח דוח ללקוח',        icon: Send,          path: null, e: false },
+      { label: 'לקבוע פגישה',            icon: Calendar,      path: null, e: false },
+      { label: 'סיכום פגישה ללקוח',      icon: ClipboardCheck,path: null, e: false },
+      { label: 'הפקה ישירה (חדש)',        icon: Zap,           path: null, e: false },
+    ],
+  },
+  {
+    title: 'כרטיס לקוח — טאבים', color: C.orange, num: '98–106',
+    bubbles: [
+      { label: 'מוצרים',         icon: Package,    path: null, e: false },
+      { label: 'תהליכים',        icon: Zap,        path: null, e: false },
+      { label: 'פעילויות',       icon: Activity,   path: null, e: false },
+      { label: 'מסמכים',         icon: FileText,   path: null, e: false },
+      { label: 'פגישות',         icon: Calendar,   path: null, e: false },
+      { label: 'סיכומי פגישות',  icon: FileCheck,  path: null, e: false },
+      { label: 'דוחות',          icon: BarChart3,  path: null, e: false },
+      { label: 'לידים',          icon: Target,     path: null, e: false },
+      { label: 'אירועים',        icon: Bell,       path: null, e: false },
+    ],
+  },
+  {
+    title: 'טאב מוצרים', color: C.green, num: '107–120',
+    bubbles: [
+      { label: 'הוספת מוצרים',     icon: Plus,       path: null, e: false },
+      { label: 'ייצוא מוצרים',     icon: Download,   path: null, e: false },
+      { label: 'תצוגה גרפית',      icon: BarChart,   path: null, e: false },
+      { label: 'טרום טיפול',       icon: ToggleLeft, path: null, e: false },
+      { label: 'פרודוקציה',        icon: ToggleLeft, path: null, e: false },
+      { label: 'מסלקה (תאריך)',    icon: Database,   path: null, e: false },
+      { label: 'הר ביטוח (תאריך)', icon: BarChart3,  path: null, e: false },
+      { label: 'בקשת קבלת מידע',   icon: FileCheck,  path: null, e: false },
+      { label: 'סגירת קטגוריות',   icon: ChevronUp,  path: null, e: false },
+      { label: 'בחירת עמודות',     icon: Columns,    path: null, e: false },
+      { label: 'פנסיה',            icon: Wallet,     path: null, e: false },
+      { label: 'חיים',             icon: Shield,     path: null, e: false },
+      { label: 'בריאות',           icon: Package,    path: null, e: false },
+      { label: 'ביטוח רכב',        icon: Layers,     path: null, e: false },
+    ],
+  },
+  {
+    title: 'טאב פעילויות', color: C.yellow, num: '121–125',
+    bubbles: [
+      { label: 'יצירת פעילות',   icon: Plus,      path: null, e: false },
+      { label: 'סינון לפי סוג',  icon: Filter,    path: null, e: false },
+      { label: 'סינון לפי מטפל', icon: Filter,    path: null, e: false },
+      { label: 'סינון נוסף',     icon: Filter,    path: null, e: false },
+      { label: 'איפוס',          icon: RefreshCw, path: null, e: false },
+    ],
+  },
+  {
+    title: 'הגדרות — הגדרות שלי', color: C.gray, num: '126–129',
+    bubbles: [
+      { label: 'הגדרות משתמש',      icon: User,    path: '/app/settings', e: true  },
+      { label: 'הגדרות בעל רישיון', icon: Key,     path: null,            e: false },
+      { label: 'התראות',            icon: Bell,    path: null,            e: false },
+      { label: 'יומנים',            icon: Calendar,path: null,            e: false },
+    ],
+  },
+  {
+    title: 'הגדרות — סוכנויות ומשתמשים', color: C.dark, num: '130–132',
+    bubbles: [
+      { label: 'סוכנויות',      icon: Building, path: null, e: false },
+      { label: 'אבטחה והרשאות', icon: Lock,     path: null, e: false },
+      { label: 'צוותים',        icon: Users,    path: null, e: false },
+    ],
+  },
+  {
+    title: 'הגדרות — חשבון', color: C.teal, num: '133–134',
+    bubbles: [
+      { label: 'יצרנים', icon: Wrench,  path: null, e: false },
+      { label: 'מוצרים', icon: Package, path: null, e: false },
+    ],
+  },
+  {
+    title: 'הגדרות — עמיתים סוכנות', color: C.purple, num: '135–149',
+    bubbles: [
+      { label: 'פרטי הסוכנות',    icon: Building,      path: null, e: false },
+      { label: 'תשלומים',         icon: CreditCard,    path: null, e: false },
+      { label: 'משתמשים',         icon: Users,         path: null, e: false },
+      { label: 'דוח ללקוח (חדש)', icon: FileText,      path: null, e: false },
+      { label: 'קישורים קבועים',  icon: Globe,         path: null, e: false },
+      { label: 'בעלי רישיון',     icon: Key,           path: null, e: false },
+      { label: 'מספרי סוכן',      icon: Hash,          path: null, e: false },
+      { label: 'חשבונות מסלקה',   icon: Database,      path: null, e: false },
+      { label: 'בקשות קבלת מידע', icon: FileCheck,     path: null, e: false },
+      { label: 'פרודוקציה',       icon: BarChart3,     path: null, e: false },
+      { label: 'טלפוניה',         icon: Phone,         path: null, e: false },
+      { label: 'WhatsApp',        icon: MessageCircle, path: null, e: false },
+      { label: 'API / Webhooks',  icon: Wrench,        path: null, e: false },
+      { label: 'שמירה',          icon: FileCheck,     path: '/app/settings', e: true },
+      { label: 'ביטול שינויים',   icon: X,             path: null, e: false },
+    ],
+  },
+  {
+    title: 'כפתורי מערכת כלליים', color: C.gray, num: '150–157',
+    bubbles: [
+      { label: 'סינון (סנן)',    icon: Filter,      path: null, e: false },
+      { label: 'מיון',           icon: ArrowUpDown, path: null, e: false },
+      { label: 'עמודות',         icon: Columns,     path: null, e: false },
+      { label: 'חיפוש בטבלה',   icon: Search,      path: null, e: false },
+      { label: 'רענון',          icon: RefreshCw,   path: null, e: false },
+      { label: 'ייבוא / ייצוא', icon: Upload,      path: null, e: false },
+      { label: 'הוספת תצוגה',   icon: Plus,        path: null, e: false },
+      { label: 'context menu',   icon: MoreVertical,path: null, e: false },
+    ],
+  },
 ];
 
-const DONUT_COLORS = [
-  PALETTE.green,
-  PALETTE.mint,
-  PALETTE.orange,
-  PALETTE.coral,
-  '#6b7280',
-];
+// ─── Interleave sections for color mixing ─────────────────────────────────────
+function buildMixedBubbles(sections: SectionType[]): FlatBubble[] {
+  const bySec = sections.map(sec =>
+    sec.bubbles.map((b, bi): FlatBubble => ({
+      ...b, color: sec.color, sectionTitle: sec.title, originalIndex: bi,
+    }))
+  );
+  const result: FlatBubble[] = [];
+  const maxLen = Math.max(...bySec.map(a => a.length));
+  for (let i = 0; i < maxLen; i++)
+    for (const arr of bySec)
+      if (i < arr.length) result.push(arr[i]);
+  return result;
+}
 
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.06 } },
-};
+// ─── Persistence ──────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'seeld-dashboard-layout-v2';
+type LayoutData = { hiddenMap: Record<string, number[]> };
 
-const item = {
-  hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' as const } },
-};
+function loadLayout(): LayoutData | null {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch { return null; }
+}
+function saveLayout(d: LayoutData) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch {}
+}
 
-// Month labels in Hebrew
-const MONTHS = ['ינו', 'פבר', 'מרץ', 'אפר', 'מאי', 'יונ', 'יול', 'אוג', 'ספט', 'אוק', 'נוב', 'דצמ'];
+// ─── HoneycombCanvas ─────────────────────────────────────────────────────────
+interface HoneycombCanvasProps {
+  bubbles: FlatBubble[];
+  hiddenMap: Record<string, number[]>;
+  editMode: boolean;
+  onToggleBubble: (secTitle: string, idx: number) => void;
+  onBubbleClick: (b: FlatBubble) => void;
+}
 
-export default function DashboardPage() {
-  const { data } = useApp();
-  const navigate = useNavigate();
+function HoneycombCanvas({ bubbles, hiddenMap, editMode, onToggleBubble, onBubbleClick }: HoneycombCanvasProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const rafRef       = useRef<number | null>(null);
+  const [cw, setCw]  = useState(320);
+  const [mp, setMp]  = useState<{ x: number; y: number } | null>(null);
 
-  const stats = useMemo(() => {
-    const { customers, recommendations, products } = data;
-    const totalCustomers = customers.length;
-    const totalProducts = products.length;
-    const totalRecs = recommendations.length;
-    const openRecs = recommendations.filter(r => ['טיוטה', 'נשלח', 'נצפה'].includes(r.decisionStatus)).length;
-    const approvedRecs = recommendations.filter(r => r.decisionStatus === 'מאשר').length;
-    const inExecution = recommendations.filter(r => r.decisionStatus === 'עבר לביצוע' || r.executionStatus).length;
-    const completedRecs = recommendations.filter(r => r.decisionStatus === 'בוצע').length;
-    const thinkingRecs = recommendations.filter(r => r.decisionStatus === 'רוצה לחשוב').length;
-    const rejectedRecs = recommendations.filter(r => r.decisionStatus === 'לא מעוניין').length;
-    const totalPremium = products.filter(p => p.category === 'ביטוח').reduce((s, p) => s + (p.monthlyPremium || 0), 0);
-    const totalDeposit = products.filter(p => p.category === 'כסף').reduce((s, p) => s + (p.monthlyDeposit || 0), 0);
-    const totalMonthly = totalPremium + totalDeposit;
-    const totalAccumulation = products.reduce((s, p) => s + (p.accumulation || 0), 0);
-    const pendingFollowUps = customers.filter(c => c.nextFollowUp && new Date(c.nextFollowUp) <= new Date()).length;
-    const moneyProducts = products.filter(p => p.category === 'כסף').length;
-    const insuranceProducts = products.filter(p => p.category === 'ביטוח').length;
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    setCw(el.offsetWidth);
+    const ro = new ResizeObserver(e => setCw(e[0].contentRect.width));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
-    // Approval rate
-    const decidedRecs = approvedRecs + completedRecs + rejectedRecs;
-    const approvalRate = decidedRecs > 0 ? Math.round(((approvedRecs + completedRecs) / decidedRecs) * 100) : 0;
+  const onMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (rafRef.current !== null) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left, y = e.clientY - rect.top;
+    rafRef.current = requestAnimationFrame(() => { rafRef.current = null; setMp({ x, y }); });
+  }, []);
 
-    // Decision donut
-    const decisionData = [
-      { name: 'מאושר', value: approvedRecs + completedRecs },
-      { name: 'בביצוע', value: inExecution },
-      { name: 'ממתין', value: openRecs },
-      { name: 'לחשוב', value: thinkingRecs },
-      { name: 'נדחה', value: rejectedRecs },
-    ].filter(d => d.value > 0);
+  const onLeave = useCallback(() => {
+    if (rafRef.current !== null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
+    setMp(null);
+  }, []);
 
-    // Monthly bar chart data (simulated from creation dates)
-    const monthlyData = MONTHS.map((month, idx) => {
-      const monthCustomers = customers.filter(c => new Date(c.createdAt).getMonth() === idx).length;
-      const monthRecs = recommendations.filter(r => new Date(r.createdAt).getMonth() === idx).length;
-      const monthProducts = products.filter(p => new Date(p.createdAt).getMonth() === idx).length;
-      return { name: month, לקוחות: monthCustomers, המלצות: monthRecs, מוצרים: monthProducts };
-    }).filter((_, idx) => idx <= new Date().getMonth());
+  const SZ   = cw < 400 ? 88 : cw < 620 ? 104 : 128;
+  const GAP  = cw < 400 ? 6 : 4;
+  const cols = cw < 400 ? 3 : cw < 620 ? 4 : cw < 820 ? 5 : cw < 1020 ? 6 : 7;
 
-    // Recent customers (last 5)
-    const recentCustomers = [...customers].sort((a, b) =>
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    ).slice(0, 5);
+  const display = editMode
+    ? bubbles
+    : bubbles.filter(b => !(hiddenMap[b.sectionTitle] || []).includes(b.originalIndex));
 
-    return {
-      totalCustomers, totalProducts, totalRecs, openRecs, approvedRecs,
-      inExecution, completedRecs, thinkingRecs, rejectedRecs, totalPremium, totalDeposit, totalMonthly,
-      totalAccumulation, pendingFollowUps, moneyProducts, insuranceProducts,
-      decisionData, monthlyData, recentCustomers, approvalRate,
-    };
-  }, [data]);
-
-  const isEmpty = data.customers.length === 0;
-
-  // Generate initials avatar color
-  const avatarColor = (name: string) => {
-    const colors = [
-      `bg-[${PALETTE.mint}]/20 text-[${PALETTE.teal}]`,
-      `bg-[${PALETTE.coral}]/20 text-[${PALETTE.coral}]`,
-      `bg-[${PALETTE.orange}]/20 text-[${PALETTE.orange}]`,
-      `bg-[${PALETTE.green}]/20 text-[${PALETTE.green}]`,
-      'bg-gray-100 text-gray-600',
-    ];
-    return colors[name.length % colors.length];
+  const pos = (i: number) => {
+    const row = Math.floor(i / cols), col = i % cols;
+    const odd = row % 2 === 1;
+    const r   = col * (SZ + GAP) + (odd ? (SZ + GAP) / 2 : 0);
+    const t   = row * (SZ * 0.87 + GAP);
+    return { r, t, cx: cw - r - SZ / 2, cy: t + SZ / 2 };
   };
 
-  // Greeting based on time of day
+  const totalRows = Math.ceil(display.length / cols);
+  const H = totalRows === 0 ? 0 : totalRows * (SZ * 0.87 + GAP) + SZ;
+
+  const scale = (cx: number, cy: number) => {
+    if (!mp || editMode) return 1;
+    const d = Math.sqrt((mp.x - cx) ** 2 + (mp.y - cy) ** 2);
+    return 1 + 0.38 * Math.max(0, 1 - d / (SZ * 2.6));
+  };
+
+  const delay = (i: number) => Math.abs(i - Math.floor(display.length / 2)) * 0.008;
+
+  const FS = cw < 400 ? 9 : cw < 620 ? 10 : 11;
+  const IS = Math.round(SZ * 0.26);
+
+  return (
+    <div ref={containerRef} className="relative w-full" style={{ height: H }}
+      onPointerMove={onMove} onPointerLeave={onLeave}>
+      {display.map((b, i) => {
+        const Icon    = b.icon;
+        const hidden  = (hiddenMap[b.sectionTitle] || []).includes(b.originalIndex);
+        const { r, t, cx, cy } = pos(i);
+        const sc      = scale(cx, cy);
+
+        return (
+          <div key={`${b.sectionTitle}-${b.originalIndex}`} className="absolute"
+            style={{ right: r, top: t, width: SZ, height: SZ, zIndex: sc > 1.05 ? 10 : 1 }}>
+
+            {/* Fisheye scale wrapper */}
+            <div style={{
+              width: SZ, height: SZ, transformOrigin: 'center',
+              transform: `scale(${sc})`,
+              transition: 'transform 110ms cubic-bezier(0.2,0,0.2,1)',
+              willChange: 'transform',
+            }}>
+              <motion.button
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 20, delay: delay(i) }}
+                whileHover={!editMode && !hidden ? {
+                  boxShadow: `0 0 0 3px white, 0 0 0 6px ${b.color}cc, 0 14px 40px ${b.color}70`,
+                } : {}}
+                whileTap={{ scale: 0.88 }}
+                onClick={() => {
+                  if (hidden) { onToggleBubble(b.sectionTitle, b.originalIndex); return; }
+                  if (editMode) return;
+                  onBubbleClick(b);
+                }}
+                className="w-full h-full rounded-full flex flex-col items-center justify-center focus:outline-none relative"
+                style={{
+                  backgroundColor: hidden ? 'transparent'
+                    : b.e ? b.color : b.color + '92',
+                  boxShadow: hidden ? 'none'
+                    : b.e
+                      ? `0 10px 32px ${b.color}70, 0 4px 12px ${b.color}45, inset 0 1px 0 rgba(255,255,255,0.25)`
+                      : `0 5px 18px ${b.color}38, inset 0 1px 0 rgba(255,255,255,0.18)`,
+                  border: hidden ? `2px dashed ${b.color}70`
+                    : b.e ? '2px solid rgba(255,255,255,0.22)' : '1.5px solid rgba(255,255,255,0.14)',
+                  animation: editMode && !hidden
+                    ? `wiggle 0.55s ease-in-out infinite ${(b.originalIndex % 8) * 0.06}s`
+                    : 'none',
+                }}
+              >
+                {hidden ? (
+                  <div className="flex flex-col items-center gap-1">
+                    <Plus style={{ width: IS * 0.55, height: IS * 0.55, color: b.color + 'bb' }} />
+                    <span style={{
+                      fontSize: FS - 1, color: b.color + 'aa', maxWidth: SZ - 20,
+                      textAlign: 'center', fontWeight: 800, lineHeight: 1.25, padding: '0 4px',
+                      display: '-webkit-box', WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                      fontFamily: "'Plus Jakarta Sans','Heebo',sans-serif",
+                    }}>
+                      {b.label}
+                    </span>
+                  </div>
+                ) : (
+                  <>
+                    {/* Icon with drop-shadow for depth */}
+                    <Icon
+                      className="text-white"
+                      style={{
+                        width: IS, height: IS, marginBottom: 5,
+                        filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.22))',
+                      }}
+                    />
+                    {/* Label — crisp, bold, shadowed */}
+                    <span
+                      className="text-white text-center"
+                      style={{
+                        fontSize: FS,
+                        fontWeight: 800,
+                        fontFamily: "'Plus Jakarta Sans','Heebo',sans-serif",
+                        letterSpacing: '0.01em',
+                        lineHeight: 1.22,
+                        maxWidth: SZ - 14,
+                        padding: '0 6px',
+                        textShadow: '0 1px 4px rgba(0,0,0,0.28)',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      {b.label}
+                    </span>
+                    {/* Active indicator dot */}
+                    {b.e && (
+                      <div className="absolute bottom-2.5 w-1.5 h-1.5 rounded-full bg-white/70" />
+                    )}
+                    {!b.e && !editMode && (
+                      <div className="absolute top-2 left-2 w-3 h-3 rounded-full bg-white/20 flex items-center justify-center">
+                        <span className="text-[5px] font-black text-white/70">◦</span>
+                      </div>
+                    )}
+                  </>
+                )}
+              </motion.button>
+            </div>
+
+            {/* ✕ in edit mode */}
+            <AnimatePresence>
+              {editMode && !hidden && (
+                <motion.button
+                  initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  onClick={e => { e.stopPropagation(); onToggleBubble(b.sectionTitle, b.originalIndex); }}
+                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg z-20 border-2 border-white"
+                >
+                  <X className="w-3 h-3" />
+                </motion.button>
+              )}
+            </AnimatePresence>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
+export default function DashboardPage() {
+  const { data, signOut } = useApp();
+  const navigate = useNavigate();
+
+  const [editMode, setEditMode] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [hiddenMap, setHiddenMap] = useState<Record<string, number[]>>(
+    () => loadLayout()?.hiddenMap ?? {}
+  );
+
+  useEffect(() => { saveLayout({ hiddenMap }); }, [hiddenMap]);
+
+  const allBubbles = useMemo(() => buildMixedBubbles(SECTIONS), []);
+
+  // Filter bubbles by active section + deduplicate identical labels in "all" view
+  const displayBubbles = useMemo(() => {
+    if (activeSection) {
+      return allBubbles.filter(b => b.sectionTitle === activeSection);
+    }
+    // Deduplicate: keep first occurrence of each label (from highest-priority section)
+    const seen = new Set<string>();
+    return allBubbles.filter(b => {
+      if (seen.has(b.label)) return false;
+      seen.add(b.label);
+      return true;
+    });
+  }, [allBubbles, activeSection]);
+
+  const toggleSection = (title: string) => {
+    setActiveSection(prev => prev === title ? null : title);
+  };
+
   const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'בוקר טוב';
-    if (hour < 17) return 'צהריים טובים';
-    if (hour < 21) return 'ערב טוב';
+    const h = new Date().getHours();
+    if (h < 12) return 'בוקר טוב';
+    if (h < 17) return 'צהריים טובים';
+    if (h < 21) return 'ערב טוב';
     return 'לילה טוב';
   };
 
-  if (isEmpty) {
-    return (
-      <div className="space-y-6 px-1 sm:px-0" dir="rtl">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <div className="max-w-2xl mx-auto py-6 sm:py-12">
-            <Card className="text-center py-10 sm:py-16 border border-gray-100 shadow-lg rounded-3xl relative overflow-hidden bg-[#f8f9fc]">
-              {/* Decorative circles like the landing page */}
-              <div className="absolute top-6 right-8 w-16 h-16 rounded-full bg-[#5ec6c6] opacity-15" />
-              <div className="absolute top-20 right-24 w-10 h-10 rounded-full bg-[#e76f51] opacity-15" />
-              <div className="absolute bottom-10 left-12 w-12 h-12 rounded-full bg-[#f4a261] opacity-15" />
-              <div className="absolute bottom-20 left-28 w-8 h-8 rounded-full bg-[#90be6d] opacity-15" />
-              <CardContent className="flex flex-col items-center gap-5 sm:gap-6 relative z-10 px-4 sm:px-6">
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.5, type: 'spring' }}
-                >
-                  <SeeIDLogo size={70} showText showSubtitle className="mb-2 sm:hidden" />
-                  <SeeIDLogo size={90} showText showSubtitle className="mb-2 hidden sm:block" />
-                </motion.div>
-                <div className="space-y-2">
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d]">{getGreeting()}, ברוכים הבאים!</h2>
-                  <p className="text-sm text-gray-500 max-w-md mx-auto leading-relaxed px-2">
-                    התחל על ידי הוספת הלקוח הראשון שלך. המערכת תנתח את המוצרים ותייצר המלצות חכמות בעזרת AI.
-                  </p>
-                </div>
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                  <Button onClick={() => navigate('/app/customers/new')} size="lg" className="gap-2 rounded-full h-12 px-8 text-base font-bold shadow-md min-w-[200px] bg-[#0a3d3d] hover:bg-[#0d4a4a]">
-                    <UserPlus className="h-5 w-5" />הוסף לקוח ראשון
-                  </Button>
-                </motion.div>
-                <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 pt-4 text-xs text-gray-500">
-                  {[
-                    { icon: Sparkles, text: 'המלצות AI אוטומטיות', color: PALETTE.mint },
-                    { icon: Shield, text: 'ניהול תיק מלא', color: PALETTE.green },
-                    { icon: BarChart3, text: 'דוחות וניתוח', color: PALETTE.orange },
-                  ].map((f, i) => (
-                    <motion.span
-                      key={i}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 + i * 0.1 }}
-                      className="flex items-center gap-1.5"
-                    >
-                      <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: f.color }}>
-                        <f.icon className="h-3 w-3 text-white" />
-                      </div>
-                      {f.text}
-                    </motion.span>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
+  const handleBubbleClick = (b: FlatBubble) => {
+    if (b.e && b.path) navigate(b.path);
+    else toast(`${b.label} — בקרוב`, { icon: '🔜' });
+  };
+
+  const toggleBubble = (sec: string, idx: number) => {
+    setHiddenMap(prev => {
+      const curr = prev[sec] || [];
+      return { ...prev, [sec]: curr.includes(idx) ? curr.filter(i => i !== idx) : [...curr, idx] };
+    });
+  };
+
+  const showAll  = () => { setHiddenMap({}); toast('כל הבועות מוצגות', { icon: '👁️' }); setMenuOpen(false); };
+  const resetAll = () => { setHiddenMap({}); toast('הלוח אופס', { icon: '✅' }); setMenuOpen(false); };
+  const signOutFn = async () => { await signOut(); navigate('/app/auth'); };
+
+  const totalHidden = Object.values(hiddenMap).reduce((s, a) => s + a.length, 0);
+  const totalBubbles = SECTIONS.reduce((s, sec) => s + sec.bubbles.length, 0);
 
   return (
-    <div className="space-y-4 sm:space-y-5 max-w-[1400px] mx-auto" dir="rtl">
-      {/* Top header - premium */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between bg-[#f8f9fc] rounded-2xl px-4 sm:px-6 py-4 sm:py-5 gap-3 border border-gray-100"
-      >
-        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shadow-sm shrink-0" style={{ backgroundColor: PALETTE.teal }}>
-            <LayoutDashboard className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
-          </div>
-          <div className="min-w-0">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#0a3d3d] tracking-tight truncate">{getGreeting()}</h1>
-            <p className="text-[11px] sm:text-xs text-gray-400 mt-0.5 truncate">{new Date().toLocaleDateString('he-IL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          {/* Recent customer avatars */}
-          <div className="hidden md:flex items-center -space-x-2 space-x-reverse ml-2">
-            {stats.recentCustomers.slice(0, 4).map((c, i) => (
+    <div className="-m-3 sm:-m-4 md:-m-6 relative" style={{ backgroundColor: '#f8f9fc' }} dir="rtl">
+
+      {/* Wiggle keyframe */}
+      <style>{`
+        @keyframes wiggle {
+          0%,100% { transform: rotate(0deg); }
+          25%      { transform: rotate(-2.5deg); }
+          75%      { transform: rotate(2.5deg); }
+        }
+      `}</style>
+
+      {/* ── Background ── */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden select-none z-0">
+        <div className="absolute -top-48 -right-48 w-[560px] h-[560px] rounded-full blur-[100px] opacity-[0.08]" style={{ backgroundColor: '#5ec6c6' }} />
+        <div className="absolute top-[40%] -left-52 w-[420px] h-[420px] rounded-full blur-[100px] opacity-[0.06]" style={{ backgroundColor: '#f4a261' }} />
+        <div className="absolute bottom-0 right-[35%] w-[360px] h-[360px] rounded-full blur-[100px] opacity-[0.05]" style={{ backgroundColor: '#6c63ff' }} />
+        <svg className="absolute top-0 right-[2%] w-[500px] h-[650px] opacity-[0.1]" viewBox="0 0 500 600" fill="none">
+          <motion.path d="M450,30 C380,50 300,130 320,230 C340,330 220,380 160,450 C130,490 140,540 200,560"
+            stroke="#0a3d3d" strokeWidth="2.5" strokeDasharray="10 8" strokeLinecap="round" fill="none"
+            initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 3.5, delay: 0.3, ease: 'easeInOut' }} />
+        </svg>
+        <div className="absolute inset-0 opacity-[0.016]"
+          style={{ backgroundImage: 'radial-gradient(circle, #0a3d3d 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+        <img src={doodleShield}    alt="" className="absolute top-[4%]  left-[1%]   w-20 opacity-[0.06] rotate-[-14deg]" />
+        <img src={doodleTarget}    alt="" className="absolute top-[35%] left-[0.5%] w-16 opacity-[0.05] rotate-[10deg]"  />
+        <img src={doodleCharts}    alt="" className="absolute top-[65%] right-[1%]  w-20 opacity-[0.06] rotate-[7deg]"   />
+        <img src={doodleGrowth}    alt="" className="absolute top-[80%] left-[1%]   w-16 opacity-[0.05] rotate-[-8deg]"  />
+        <img src={doodleLightbulb} alt="" className="absolute top-[50%] right-[1%]  w-14 opacity-[0.05] rotate-[5deg]"   />
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap"
+          style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 160, fontWeight: 900,
+            color: '#0a3d3d', opacity: 0.018, letterSpacing: '0.3em' }}>SEELD</div>
+      </div>
+
+      {/* ── Page layout: legend left | main right ── */}
+      <div className="relative z-10 flex min-h-screen">
+
+        {/* ══ LEFT LEGEND (desktop only, sticky) ══ */}
+        <aside className="hidden lg:flex flex-col gap-1.5 pt-6 pb-10 px-3 sticky top-0 h-screen overflow-y-auto flex-shrink-0 border-l border-gray-100/80"
+          style={{ width: 178, backgroundColor: 'rgba(248,249,252,0.85)', backdropFilter: 'blur(10px)' }}>
+          <p className="text-[9px] font-black tracking-[0.22em] uppercase text-gray-400 px-1 mb-2">קטגוריות</p>
+          {SECTIONS.map(sec => {
+            const isActive = activeSection === sec.title;
+            return (
               <motion.button
-                key={c.id}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 + i * 0.08 }}
-                onClick={() => navigate(`/app/customers/${c.id}`)}
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold border-2 border-white hover:ring-2 hover:ring-[${PALETTE.mint}]/30 transition-all shadow-sm ${avatarColor(c.fullName)}`}
-                title={c.fullName}
+                key={sec.title}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ delay: SECTIONS.indexOf(sec) * 0.03 }}
+                onClick={() => toggleSection(sec.title)}
+                className="flex items-center gap-2 px-3 py-2.5 rounded-full text-right transition-all duration-200"
+                style={{
+                  backgroundColor: isActive ? sec.color : sec.color + '18',
+                  border: isActive ? `2px solid ${sec.color}` : `1.5px solid ${sec.color}45`,
+                  boxShadow: isActive ? `0 4px 16px ${sec.color}50` : 'none',
+                }}
               >
-                {c.firstName.charAt(0)}{c.lastName.charAt(0)}
+                <span className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: isActive ? 'white' : sec.color }} />
+                <span className="text-[10.5px] font-extrabold leading-tight"
+                  style={{ color: isActive ? 'white' : sec.color }}>
+                  {sec.title}
+                </span>
+                {isActive && <X className="w-3 h-3 mr-auto flex-shrink-0" style={{ color: 'rgba(255,255,255,0.7)' }} />}
               </motion.button>
-            ))}
-            {stats.totalCustomers > 4 && (
-              <button
-                onClick={() => navigate('/app/customers')}
-                className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-500 border-2 border-white hover:bg-[#5ec6c6]/10 transition-colors"
-              >
-                +{stats.totalCustomers - 4}
+            );
+          })}
+
+          {activeSection && (
+            <motion.button
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              onClick={() => setActiveSection(null)}
+              className="flex items-center justify-center gap-1.5 mt-3 px-3 py-2 rounded-full border-2 border-dashed border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors"
+            >
+              <RotateCcw className="w-3 h-3" />
+              <span className="text-[10px] font-bold">הצג הכל</span>
+            </motion.button>
+          )}
+        </aside>
+
+        {/* ══ MAIN CONTENT ══ */}
+        <div className="flex-1 min-w-0 px-4 sm:px-5 pt-6 pb-24 overflow-x-hidden">
+
+          {/* Header */}
+          <div className="flex items-center justify-between mb-5">
+            <button onClick={() => navigate('/app/dashboard')} className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
+              <SeeIDLogo size={30} />
+              <div>
+                <div className="text-sm font-black text-[#0a3d3d] leading-none"
+                  style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>SEELD</div>
+                <div className="text-[8px] font-bold tracking-[0.2em] text-gray-400 uppercase">Platform</div>
+              </div>
+            </button>
+
+            <div className="flex items-center gap-2">
+              {/* Pencil menu */}
+              <div className="relative">
+                <motion.button whileTap={{ scale: 0.9 }} onClick={() => setMenuOpen(v => !v)}
+                  className="w-9 h-9 rounded-full flex items-center justify-center shadow-sm transition-all"
+                  style={{
+                    backgroundColor: editMode || menuOpen ? '#0a3d3d' : 'white',
+                    color: editMode || menuOpen ? '#5ec6c6' : '#94a3b8',
+                    border: editMode ? '2px solid #5ec6c6' : '2px solid #e2e8f0',
+                  }}>
+                  <PenTool className="w-3.5 h-3.5" />
+                </motion.button>
+
+                <AnimatePresence>
+                  {menuOpen && (
+                    <>
+                      <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.88, y: -10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.88, y: -10 }}
+                        transition={{ type: 'spring', stiffness: 380, damping: 26 }}
+                        className="absolute left-0 top-11 z-50 w-52 rounded-2xl overflow-hidden border border-gray-100"
+                        style={{ backgroundColor: 'white', boxShadow: '0 12px 40px rgba(0,0,0,0.16)' }}
+                      >
+                        <div className="px-4 pt-3 pb-1.5">
+                          <p className="text-[9px] font-black tracking-[0.2em] uppercase text-gray-400">ניהול לוח</p>
+                        </div>
+
+                        <button onClick={() => { setEditMode(v => !v); setMenuOpen(false); }}
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-right">
+                          <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+                            style={{ backgroundColor: editMode ? '#0a3d3d' : '#f1f5f9' }}>
+                            <PenTool className="w-4 h-4" style={{ color: editMode ? '#5ec6c6' : '#64748b' }} />
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-gray-800 leading-none mb-0.5">
+                              {editMode ? 'סיום עריכה' : 'עריכת לוח'}
+                            </p>
+                            <p className="text-[10px] text-gray-400">הסתר ושחזר בועות</p>
+                          </div>
+                        </button>
+
+                        {totalHidden > 0 && (
+                          <button onClick={showAll}
+                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-blue-50 transition-colors text-right border-t border-gray-50">
+                            <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                              <Eye className="w-4 h-4 text-blue-500" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-bold text-blue-700 leading-none mb-0.5">הצג הכל</p>
+                              <p className="text-[10px] text-blue-400">{totalHidden} בועות מוסתרות</p>
+                            </div>
+                          </button>
+                        )}
+
+                        <button onClick={resetAll}
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors text-right border-t border-gray-50">
+                          <div className="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
+                            <RotateCcw className="w-4 h-4 text-red-400" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-red-600 leading-none mb-0.5">איפוס</p>
+                            <p className="text-[10px] text-red-400">חזרה לברירת מחדל</p>
+                          </div>
+                        </button>
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Sign out */}
+              <button onClick={signOutFn}
+                className="w-9 h-9 rounded-full flex items-center justify-center border-2 border-gray-100 text-gray-300 hover:text-red-400 hover:border-red-100 hover:bg-red-50 transition-all">
+                <LogOut className="w-3.5 h-3.5" />
               </button>
-            )}
+            </div>
           </div>
-          <Button onClick={() => navigate('/app/customers/new')} className="gap-2 rounded-full h-11 px-5 font-bold shadow-md text-sm min-h-[44px] bg-[#0a3d3d] hover:bg-[#0d4a4a]">
-            <UserPlus className="h-4 w-4" />
-            <span className="hidden sm:inline">לקוח חדש</span>
-          </Button>
-        </div>
-      </motion.div>
 
-      {/* Main grid: 2 columns on desktop, stacked on mobile */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5">
-
-        {/* LEFT COLUMN (wider) -- Charts */}
-        <motion.div variants={container} initial="hidden" animate="show" className="lg:col-span-8 space-y-4 sm:space-y-5">
-
-          {/* Top stats strip - 2 cols on mobile, 4 on md+ */}
-          <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              { label: 'לקוחות פעילים', value: stats.totalCustomers, icon: Users, color: PALETTE.teal, path: '/app/customers' },
-              { label: 'מוצרים בתיק', value: stats.totalProducts, icon: Shield, color: PALETTE.mint, path: '/app/customers' },
-              { label: 'המלצות שאושרו', value: stats.completedRecs + stats.approvedRecs, icon: CheckCircle2, color: PALETTE.green, path: '/app/recommendation-bank' },
-              { label: 'חיוב חודשי', value: `₪${stats.totalMonthly.toLocaleString()}`, icon: Wallet, color: PALETTE.orange, path: '/app/customers' },
-            ].map((s) => (
-              <motion.div key={s.label} variants={item} whileHover={{ y: -2, scale: 1.01 }} whileTap={{ scale: 0.98 }}>
-                <Card className="cursor-pointer hover:shadow-lg transition-all border border-gray-100 shadow-sm rounded-2xl active:scale-[0.98]" onClick={() => navigate(s.path)}>
-                  <CardContent className="p-4 sm:p-5 flex items-center gap-3">
-                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-sm shrink-0" style={{ backgroundColor: s.color }}>
-                      <s.icon className="h-5 w-5 sm:h-5.5 sm:w-5.5 text-white" />
+          {/* Edit banner */}
+          <AnimatePresence>
+            {editMode && (
+              <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }} className="overflow-hidden mb-5">
+                <div className="flex items-center justify-between px-5 py-3 rounded-2xl"
+                  style={{ backgroundColor: '#0a3d3d', boxShadow: '0 4px 20px rgba(10,61,61,0.25)' }}>
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-full bg-teal-400/20 flex items-center justify-center">
+                      <PenTool className="w-3.5 h-3.5 text-teal-300" />
                     </div>
-                    <div className="min-w-0">
-                      <div className="text-xl sm:text-2xl font-extrabold text-[#0a3d3d] tracking-tight truncate">{s.value}</div>
-                      <p className="text-[10px] sm:text-xs text-gray-400 font-medium truncate">{s.label}</p>
+                    <div>
+                      <p className="text-sm font-black text-white leading-none">מצב עריכה פעיל</p>
+                      <p className="text-[10px] text-teal-300/70 mt-0.5">לחץ ✕ להסתרת בועה · לחץ + לשחזור</p>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                  <button onClick={() => setEditMode(false)}
+                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-full font-bold text-xs"
+                    style={{ backgroundColor: '#5ec6c6', color: '#0a3d3d' }}>
+                    <Check className="w-3.5 h-3.5" /> סיום
+                  </button>
+                </div>
               </motion.div>
-            ))}
+            )}
+          </AnimatePresence>
+
+          {/* Greeting */}
+          <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
+            <p className="text-[9px] font-black tracking-[0.26em] uppercase text-gray-400 mb-0.5"
+              style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>SEELD • PLATFORM</p>
+            <h1 className="text-3xl font-black text-[#0a3d3d] leading-none"
+              style={{ fontFamily: "'Plus Jakarta Sans','Heebo',sans-serif" }}>{getGreeting()}</h1>
+            <p className="text-xs text-gray-400 mt-1">
+              {activeSection
+                ? <><span className="text-[#0a3d3d] font-bold">{activeSection}</span>{' · '}{displayBubbles.length} בועות</>
+                : <>{totalBubbles - totalHidden} בועות פעילות
+                    {totalHidden > 0 && <span className="text-orange-400"> · {totalHidden} מוסתרות</span>}
+                  </>
+              }
+            </p>
           </motion.div>
 
-          {/* Charts row - stacked on mobile */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 sm:gap-5">
-            {/* Donut chart */}
-            <motion.div variants={item} className="md:col-span-2">
-              <Card className="h-full border border-gray-100 shadow-sm rounded-2xl">
-                <CardContent className="p-4 sm:p-6 flex flex-col items-center justify-center h-full">
-                  <p className="text-sm text-[#0a3d3d] mb-3 sm:mb-4 self-start font-bold flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: PALETTE.mint }}>
-                      <Target className="h-3.5 w-3.5 text-white" />
-                    </div>
-                    התפלגות החלטות
-                  </p>
-                  {stats.decisionData.length > 0 ? (
-                    <div className="relative w-full flex justify-center">
-                      <ResponsiveContainer width={180} height={180} className="sm:!w-[200px] sm:!h-[200px]">
-                        <PieChart>
-                          <Pie
-                            data={stats.decisionData}
-                            cx="50%" cy="50%"
-                            innerRadius={50} outerRadius={78}
-                            paddingAngle={3} dataKey="value"
-                            stroke="none"
-                          >
-                            {stats.decisionData.map((_, i) => (
-                              <Cell key={i} fill={DONUT_COLORS[i % DONUT_COLORS.length]} />
-                            ))}
-                          </Pie>
-                          <RTooltip />
-                        </PieChart>
-                      </ResponsiveContainer>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-3xl sm:text-4xl font-extrabold text-[#0a3d3d]">{stats.totalRecs}</span>
-                        <span className="text-[10px] sm:text-xs text-gray-400 font-medium">המלצות</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="h-[180px] sm:h-[200px] flex flex-col items-center justify-center text-gray-300">
-                      <Target className="h-10 w-10 mb-2" />
-                      <span className="text-xs text-gray-400">אין נתונים עדיין</span>
-                    </div>
-                  )}
-                  {/* Avatars row */}
-                  <div className="flex items-center -space-x-2 space-x-reverse mt-3 sm:mt-4 mb-2 sm:mb-3">
-                    {stats.recentCustomers.slice(0, 5).map((c) => (
-                      <div key={c.id} className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[8px] sm:text-[9px] font-bold border-2 border-white shadow-sm ${avatarColor(c.fullName)}`}>
-                        {c.firstName.charAt(0)}{c.lastName.charAt(0)}
-                      </div>
-                    ))}
-                    {stats.totalCustomers > 5 && (
-                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gray-100 flex items-center justify-center text-[8px] sm:text-[9px] font-bold text-gray-500 border-2 border-white">+{stats.totalCustomers - 5}</div>
-                    )}
-                  </div>
-                  {/* Legend */}
-                  <div className="flex flex-wrap gap-2 sm:gap-3 mt-1 justify-center">
-                    {stats.decisionData.slice(0, 5).map((d, i) => (
-                      <div key={d.name} className="flex items-center gap-1 sm:gap-1.5">
-                        <div className="w-2.5 h-2.5 rounded-full" style={{ background: DONUT_COLORS[i] }} />
-                        <span className="text-[9px] sm:text-[10px] text-gray-500 font-medium">{d.name} ({d.value})</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Bar chart */}
-            <motion.div variants={item} className="md:col-span-3">
-              <Card className="h-full border border-gray-100 shadow-sm rounded-2xl">
-                <CardContent className="p-4 sm:p-5">
-                  <div className="flex items-center justify-between mb-3 sm:mb-4 flex-wrap gap-2">
-                    <p className="text-sm text-[#0a3d3d] font-bold flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: PALETTE.orange }}>
-                        <Activity className="h-3.5 w-3.5 text-white" />
-                      </div>
-                      פעילות חודשית
-                    </p>
-                    <div className="flex gap-2 sm:gap-3">
-                      {[
-                        { label: 'לקוחות', color: PALETTE.teal },
-                        { label: 'המלצות', color: PALETTE.mint },
-                        { label: 'מוצרים', color: PALETTE.green },
-                      ].map(l => (
-                        <div key={l.label} className="flex items-center gap-1">
-                          <div className="w-2.5 h-2.5 rounded-full" style={{ background: l.color }} />
-                          <span className="text-[9px] sm:text-[10px] text-gray-500">{l.label}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <ResponsiveContainer width="100%" height={160} className="sm:!h-[180px]">
-                    <BarChart data={stats.monthlyData} barGap={2} barSize={10}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-                      <XAxis dataKey="name" tick={{ fontSize: 9, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fontSize: 9, fill: '#9ca3af' }} axisLine={false} tickLine={false} allowDecimals={false} width={25} />
-                      <RTooltip contentStyle={{ fontSize: 11, borderRadius: 12, border: '1px solid #e5e7eb' }} />
-                      <Bar dataKey="לקוחות" fill={PALETTE.teal} radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="המלצות" fill={PALETTE.mint} radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="מוצרים" fill={PALETTE.green} radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            </motion.div>
+          {/* Mobile legend — horizontal scroll */}
+          <div className="flex lg:hidden gap-2 overflow-x-auto pb-3 mb-5 scrollbar-none" style={{ scrollbarWidth: 'none' }}>
+            {SECTIONS.map(sec => {
+              const isActive = activeSection === sec.title;
+              return (
+                <motion.button
+                  key={sec.title}
+                  whileTap={{ scale: 0.92 }}
+                  onClick={() => toggleSection(sec.title)}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full flex-shrink-0 transition-all duration-200"
+                  style={{
+                    backgroundColor: isActive ? sec.color : sec.color + 'dd',
+                    boxShadow: isActive
+                      ? `0 0 0 3px white, 0 0 0 5px ${sec.color}, 0 6px 20px ${sec.color}70`
+                      : `0 3px 10px ${sec.color}40`,
+                    transform: isActive ? 'scale(1.08)' : 'scale(1)',
+                  }}
+                >
+                  <span className="text-white text-[11px] font-black whitespace-nowrap"
+                    style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>{sec.title}</span>
+                  {isActive && <X className="w-3 h-3 text-white/80 ml-1" />}
+                </motion.button>
+              );
+            })}
           </div>
 
-          {/* Quick action cards */}
-          <motion.div variants={item} className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              { label: 'לקוח חדש', desc: 'הוסף לקוח ונתח מוצרים', icon: UserPlus, path: '/app/customers/new', color: PALETTE.teal },
-              { label: 'יצירת המלצה', desc: 'המלצת AI חכמה', icon: Sparkles, path: '/app/recommendations/new', color: PALETTE.coral },
-              { label: 'סיכום ביצועים', desc: 'תיעוד מה בוצע בפועל', icon: ClipboardCheck, path: '/app/customers', color: PALETTE.mint },
-              { label: 'יומן פעולות', desc: 'כל הפעילות מתועדת', icon: FileText, path: '/app/activity-log', color: PALETTE.orange },
-            ].map(action => (
-              <Card key={action.label} className="cursor-pointer hover:shadow-lg transition-all group border border-gray-100 shadow-sm rounded-2xl active:scale-[0.98]" onClick={() => navigate(action.path)}>
-                <CardContent className="p-4 sm:p-5 space-y-3">
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm" style={{ backgroundColor: action.color }}>
-                    <action.icon className="h-4.5 w-4.5 sm:h-5 sm:w-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-[#0a3d3d] group-hover:text-[#5ec6c6] transition-colors">{action.label}</p>
-                    <p className="text-[10px] text-gray-400 leading-relaxed hidden sm:block">{action.desc}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </motion.div>
-        </motion.div>
-
-        {/* RIGHT COLUMN -- Insights & Activity */}
-        <motion.div variants={container} initial="hidden" animate="show" className="lg:col-span-4 space-y-4 sm:space-y-5">
-
-          {/* Insights card */}
-          <motion.div variants={item}>
-            <Card className="border border-gray-100 shadow-sm rounded-2xl overflow-hidden">
-              <div className="h-1.5" style={{ background: `linear-gradient(to left, ${PALETTE.mint}, ${PALETTE.teal})` }} />
-              <CardContent className="p-4 sm:p-5 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: PALETTE.green }}>
-                      <Sparkles className="h-4 w-4 text-white" />
-                    </div>
-                    <h3 className="text-sm font-bold text-[#0a3d3d]">תובנות ופעולות נדרשות</h3>
-                  </div>
-                  {stats.approvalRate > 0 && (
-                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full text-white" style={{ backgroundColor: PALETTE.green }}>
-                      {stats.approvalRate}% אישור
-                    </span>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  {/* Insight 1 */}
-                  {stats.pendingFollowUps > 0 && (
-                    <button onClick={() => navigate('/app/follow-up')} className="w-full text-right p-3 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#5ec6c6]/40 hover:shadow-sm transition-all group min-h-[44px] active:scale-[0.99]">
-                      <div className="flex items-start gap-2.5">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: PALETTE.orange }}>
-                          <Bell className="h-4 w-4 text-white" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-bold text-[#0a3d3d]">פולו-אפ בהמתנה</p>
-                          <p className="text-[10px] text-gray-400 mt-0.5">{stats.pendingFollowUps} לקוחות מחכים לתשובה שלך</p>
-                        </div>
-                        <ChevronLeft className="h-3.5 w-3.5 text-gray-300 mt-1.5 group-hover:text-[#5ec6c6] group-hover:-translate-x-0.5 transition-all" />
-                      </div>
-                    </button>
-                  )}
-
-                  {/* Insight 2 */}
-                  {stats.openRecs > 0 && (
-                    <button onClick={() => navigate('/app/recommendation-bank')} className="w-full text-right p-3 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#5ec6c6]/40 hover:shadow-sm transition-all group min-h-[44px] active:scale-[0.99]">
-                      <div className="flex items-start gap-2.5">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: PALETTE.mint }}>
-                          <FileText className="h-4 w-4 text-white" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-bold text-[#0a3d3d]">המלצות פתוחות</p>
-                          <p className="text-[10px] text-gray-400 mt-0.5">{stats.openRecs} המלצות ממתינות לטיפול הלקוח</p>
-                        </div>
-                        <ChevronLeft className="h-3.5 w-3.5 text-gray-300 mt-1.5 group-hover:text-[#5ec6c6] group-hover:-translate-x-0.5 transition-all" />
-                      </div>
-                    </button>
-                  )}
-
-                  {/* Insight 3 */}
-                  {stats.inExecution > 0 && (
-                    <button onClick={() => navigate('/app/execution')} className="w-full text-right p-3 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#5ec6c6]/40 hover:shadow-sm transition-all group min-h-[44px] active:scale-[0.99]">
-                      <div className="flex items-start gap-2.5">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: PALETTE.coral }}>
-                          <Zap className="h-4 w-4 text-white" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-bold text-[#0a3d3d]">בתהליך ביצוע</p>
-                          <p className="text-[10px] text-gray-400 mt-0.5">{stats.inExecution} המלצות בשלבי ביצוע שונים</p>
-                        </div>
-                        <ChevronLeft className="h-3.5 w-3.5 text-gray-300 mt-1.5 group-hover:text-[#5ec6c6] group-hover:-translate-x-0.5 transition-all" />
-                      </div>
-                    </button>
-                  )}
-
-                  {/* Portfolio summary */}
-                  <button onClick={() => navigate('/app/customers')} className="w-full text-right p-3 rounded-2xl bg-gray-50 border border-gray-100 hover:border-[#5ec6c6]/40 hover:shadow-sm transition-all group min-h-[44px] active:scale-[0.99]">
-                    <div className="flex items-start gap-2.5">
-                      <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: PALETTE.teal }}>
-                        <TrendingUp className="h-4 w-4 text-white" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-[#0a3d3d]">סיכום התיק</p>
-                        <p className="text-[10px] text-gray-400 mt-0.5">{stats.moneyProducts} מוצרי כסף · {stats.insuranceProducts} ביטוח · ₪{stats.totalAccumulation.toLocaleString()} צבירה</p>
-                      </div>
-                      <ChevronLeft className="h-3.5 w-3.5 text-gray-300 mt-1.5 group-hover:text-[#5ec6c6] group-hover:-translate-x-0.5 transition-all" />
-                    </div>
-                  </button>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Recent customers */}
-          <motion.div variants={item}>
-            <Card className="border border-gray-100 shadow-sm rounded-2xl">
-              <CardContent className="p-4 sm:p-5">
-                <div className="flex items-center justify-between mb-3 sm:mb-4">
-                  <p className="text-sm font-bold text-[#0a3d3d] flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: PALETTE.teal }}>
-                      <Users className="h-3.5 w-3.5 text-white" />
-                    </div>
-                    לקוחות אחרונים
-                  </p>
-                  <button onClick={() => navigate('/app/customers')} className="text-[10px] font-bold flex items-center gap-0.5 min-h-[44px] px-3 rounded-full hover:bg-gray-50 transition-colors" style={{ color: PALETTE.mint }}>
-                    הצג הכל
-                    <ChevronLeft className="h-3 w-3" />
-                  </button>
-                </div>
-                <div className="space-y-0.5 sm:space-y-1">
-                  {stats.recentCustomers.map((c, i) => (
-                    <motion.button
-                      key={c.id}
-                      initial={{ opacity: 0, x: 8 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3 + i * 0.06 }}
-                      onClick={() => navigate(`/app/customers/${c.id}`)}
-                      className="w-full text-right flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors group min-h-[44px] active:bg-gray-100"
-                    >
-                      <div className={`w-9 h-9 rounded-full flex items-center justify-center text-[10px] font-bold ${avatarColor(c.fullName)} shadow-sm shrink-0`}>
-                        {c.firstName.charAt(0)}{c.lastName.charAt(0)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium text-[#0a3d3d] truncate group-hover:text-[#5ec6c6] transition-colors">{c.fullName}</p>
-                        <p className="text-[10px] text-gray-400">{c.status}</p>
-                      </div>
-                      <span className="text-[9px] text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full shrink-0">
-                        {new Date(c.createdAt).toLocaleDateString('he-IL', { day: 'numeric', month: 'short' })}
-                      </span>
-                    </motion.button>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Recent activity */}
-          <motion.div variants={item}>
-            <Card className="border border-gray-100 shadow-sm rounded-2xl">
-              <CardContent className="p-4 sm:p-5">
-                <div className="flex items-center justify-between mb-3 sm:mb-4">
-                  <p className="text-sm font-bold text-[#0a3d3d] flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: PALETTE.coral }}>
-                      <Clock className="h-3.5 w-3.5 text-white" />
-                    </div>
-                    פעילות אחרונה
-                  </p>
-                  <button onClick={() => navigate('/app/activity-log')} className="text-[10px] font-bold flex items-center gap-0.5 min-h-[44px] px-3 rounded-full hover:bg-gray-50 transition-colors" style={{ color: PALETTE.mint }}>
-                    הצג הכל
-                    <ChevronLeft className="h-3 w-3" />
-                  </button>
-                </div>
-                {data.activityLog.length === 0 ? (
-                  <div className="text-center py-6">
-                    <Clock className="h-8 w-8 text-gray-200 mx-auto mb-2" />
-                    <p className="text-xs text-gray-400">אין פעילות מתועדת עדיין</p>
-                  </div>
-                ) : (
-                  <div className="space-y-1 max-h-[200px] overflow-y-auto overscroll-contain">
-                    {data.activityLog.slice(0, 8).map((entry) => (
-                      <div key={entry.id} className="flex items-start gap-2.5 py-2.5 border-b border-gray-50 last:border-0">
-                        <div className={`mt-1.5 h-2.5 w-2.5 rounded-full shrink-0`} style={{
-                          backgroundColor: entry.level === 'הצלחה' ? PALETTE.green : entry.level === 'אזהרה' ? PALETTE.orange : PALETTE.mint
-                        }} />
-                        <div className="min-w-0 flex-1">
-                          <p className="text-[11px] font-medium text-[#0a3d3d] truncate">{entry.title}</p>
-                          {entry.detail && <p className="text-[10px] text-gray-400 truncate">{entry.detail}</p>}
-                        </div>
-                        <span className="text-[9px] text-gray-400 whitespace-nowrap mt-0.5 bg-gray-50 px-2 py-0.5 rounded-full shrink-0">
-                          {new Date(entry.timestamp).toLocaleDateString('he-IL', { day: 'numeric', month: 'short' })}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </motion.div>
-        </motion.div>
+          {/* ── ONE FLAT HONEYCOMB ── */}
+          <HoneycombCanvas
+            key={activeSection || '__all__'}
+            bubbles={displayBubbles}
+            hiddenMap={hiddenMap}
+            editMode={editMode}
+            onToggleBubble={toggleBubble}
+            onBubbleClick={handleBubbleClick}
+          />
+        </div>
       </div>
     </div>
   );

@@ -1,20 +1,28 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { StatusBadge } from '@/components/status/StatusBadge';
-import { PageHeader } from '@/components/layout/PageHeader';
-import { Search, UserPlus, Phone, Mail, Calendar, Users, ChevronLeft, Package, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import illustrationEmpty from '@/assets/illustration-empty.png';
+import { Search, UserPlus, X } from 'lucide-react';
 
-const filters = [
+const COLORS = ['#5ec6c6', '#f4a261', '#e76f51', '#90be6d', '#ffc929', '#6c63ff'];
+
+const STATUS_COLOR: Record<string, string> = {
+  'חדש': '#5ec6c6',
+  'בקליטה': '#f4a261',
+  'מוכן להמלצה': '#90be6d',
+  'ממתין לפולו-אפ': '#ffc929',
+  'בביצוע': '#e76f51',
+  'הושלם': '#6c63ff',
+};
+
+const SIZES = [96, 104, 88, 112, 92, 100, 84, 108, 96, 90];
+
+const FILTERS = [
   { label: 'הכל', value: 'all' },
   { label: 'חדש', value: 'חדש' },
   { label: 'בקליטה', value: 'בקליטה' },
   { label: 'מוכן להמלצה', value: 'מוכן להמלצה' },
-  { label: 'פולו־אפ', value: 'ממתין לפולו־אפ' },
+  { label: 'פולו-אפ', value: 'ממתין לפולו-אפ' },
   { label: 'בביצוע', value: 'בביצוע' },
   { label: 'הושלם', value: 'הושלם' },
 ];
@@ -24,6 +32,7 @@ export default function CustomerListPage() {
   const { data } = useApp();
   const [search, setSearch] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const filtered = data.customers.filter(c => {
     if (activeFilter !== 'all' && c.status !== activeFilter) return false;
@@ -34,195 +43,245 @@ export default function CustomerListPage() {
     return true;
   });
 
-  const productCount = (id: string) => data.products.filter(p => p.customerId === id).length;
-  const recCount = (id: string) => data.recommendations.filter(r => r.customerId === id).length;
-
   return (
-    <div className="max-w-5xl mx-auto">
-      <PageHeader
-        title="לקוחות"
-        subtitle={`${data.customers.length} לקוחות במערכת`}
-        icon={<Users className="h-5 w-5" />}
-        breadcrumbs={[{ label: 'דשבורד', path: '/dashboard' }, { label: 'לקוחות' }]}
-        actions={
-          <Button
-            onClick={() => navigate('/app/customers/new')}
-            size="sm"
-            className="gap-1.5 md:gap-2 text-xs md:text-sm min-h-[44px] rounded-2xl bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20 transition-all duration-200 hover:shadow-xl hover:shadow-[#0a3d3d]/30 hover:-translate-y-0.5"
-          >
-            <UserPlus className="h-4 w-4" />
-            <span className="hidden sm:inline">לקוח חדש</span>
-            <span className="sm:hidden">חדש</span>
-          </Button>
-        }
-      />
+    <div
+      className="-m-3 sm:-m-4 md:-m-6 min-h-screen relative overflow-x-hidden"
+      style={{ backgroundColor: '#f8f9fc' }}
+      dir="rtl"
+    >
+      {/* Background decorative orbs */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-[0.07] blur-3xl" style={{ backgroundColor: '#5ec6c6' }} />
+        <div className="absolute top-1/3 -left-32 w-80 h-80 rounded-full opacity-[0.06] blur-3xl" style={{ backgroundColor: '#f4a261' }} />
+        <div className="absolute bottom-0 right-1/3 w-72 h-72 rounded-full opacity-[0.05] blur-3xl" style={{ backgroundColor: '#6c63ff' }} />
+        {/* Watermark */}
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-[120px] font-black tracking-widest select-none opacity-[0.025] text-[#0a3d3d] whitespace-nowrap">
+          SEELD
+        </div>
+      </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="bg-card rounded-2xl border shadow-sm overflow-hidden"
+      {/* Top bar */}
+      <div
+        className="sticky top-0 z-30 px-5 py-4 flex items-center justify-between"
+        style={{ backgroundColor: 'rgba(248,249,252,0.92)', backdropFilter: 'blur(12px)' }}
       >
-        {/* Search & Filters */}
-        <div className="p-4 md:p-5 border-b space-y-3 md:space-y-4 bg-gradient-to-b from-muted/30 to-transparent">
-          <div className="relative group">
-            <Search className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-[#0a3d3d]" />
-            <Input
-              placeholder="חיפוש לפי שם, ת.ז או טלפון..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              className="pr-10 text-sm h-12 sm:h-11 rounded-xl w-full border-border/60 bg-background shadow-sm focus:shadow-md focus:border-[#5ec6c6] transition-all duration-200"
-            />
-          </div>
-          <div className="flex gap-1.5 flex-nowrap overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
-            {filters.map(f => {
-              const count = f.value !== 'all' ? data.customers.filter(c => c.status === f.value).length : data.customers.length;
-              return (
-                <Button
-                  key={f.value}
-                  variant={activeFilter === f.value ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setActiveFilter(f.value)}
-                  className={`text-[10px] md:text-xs h-9 md:h-8 px-3 md:px-3.5 shrink-0 min-h-[40px] md:min-h-0 rounded-xl transition-all duration-200 ${
-                    activeFilter === f.value
-                      ? 'bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15'
-                      : 'hover:border-[#5ec6c6]/50 hover:text-[#0a3d3d] hover:bg-[#5ec6c6]/5'
-                  }`}
-                >
-                  {f.label}
-                  <span className={`mr-1.5 rounded-full px-1.5 md:px-2 text-[9px] md:text-[10px] font-medium ${
-                    activeFilter === f.value
-                      ? 'bg-white/20'
-                      : 'bg-muted'
-                  }`}>
-                    {count}
-                  </span>
-                </Button>
-              );
-            })}
-          </div>
+        <div>
+          <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-400">SEELD PLATFORM</p>
+          <h1 className="text-2xl font-extrabold leading-tight" style={{ color: '#0a3d3d' }}>
+            לקוחות
+            <span className="mr-2 text-sm font-medium text-gray-400">({data.customers.length})</span>
+          </h1>
         </div>
-
-        {/* Customer list */}
-        <div className="divide-y divide-border/50">
-          <AnimatePresence mode="wait">
-            {filtered.length === 0 ? (
-              <motion.div
-                key="empty"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className="p-12 flex flex-col items-center gap-4 text-center"
-              >
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-muted/50 flex items-center justify-center">
-                  <img src={illustrationEmpty} alt="" className="h-14 sm:h-18 opacity-50" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-foreground/70 mb-1">לא נמצאו לקוחות</p>
-                  <p className="text-xs text-muted-foreground">נסה לשנות את מילות החיפוש או את המסנן</p>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => { setSearch(''); setActiveFilter('all'); }}
-                  className="rounded-xl text-xs"
-                >
-                  נקה חיפוש
-                </Button>
-              </motion.div>
-            ) : filtered.map((c, i) => (
-              <motion.button
-                key={c.id}
-                initial={{ opacity: 0, x: 8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.25, delay: Math.min(i * 0.03, 0.3), ease: 'easeOut' }}
-                onClick={() => navigate(`/customers/${c.id}`)}
-                className="w-full text-right p-3.5 sm:p-4 hover:bg-[#5ec6c6]/5 transition-all duration-200 group active:bg-[#5ec6c6]/10 min-h-[76px] relative"
-              >
-                {/* Hover accent line */}
-                <div className="absolute right-0 top-2 bottom-2 w-[3px] rounded-full bg-[#0a3d3d] scale-y-0 group-hover:scale-y-100 transition-transform duration-200 origin-center" />
-
-                {/* Mobile: Card layout */}
-                <div className="sm:hidden space-y-2.5">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                      <div className="w-9 h-9 rounded-xl bg-[#0a3d3d]/8 flex items-center justify-center text-[#0a3d3d] font-bold text-xs shrink-0 group-hover:bg-[#0a3d3d]/12 transition-colors">
-                        {c.firstName?.[0]}{c.lastName?.[0]}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <span className="font-bold text-sm text-foreground group-hover:text-[#0a3d3d] transition-colors block truncate">{c.fullName}</span>
-                      </div>
-                      <StatusBadge type="customer" status={c.status} className="text-[9px] shrink-0" />
-                    </div>
-                    <ChevronLeft className="h-4 w-4 text-muted-foreground/30 shrink-0 group-hover:text-[#0a3d3d] group-hover:translate-x-[-2px] transition-all duration-200" />
-                  </div>
-                  <div className="flex items-center justify-between gap-2 pr-11">
-                    <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
-                      <span className="flex items-center gap-1"><Phone className="h-3 w-3" />{c.mobilePhone}</span>
-                      <span>ת.ז {c.idNumber}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-[10px] text-muted-foreground shrink-0">
-                      <span className="flex items-center gap-0.5"><Package className="h-2.5 w-2.5" />{productCount(c.id)}</span>
-                      <span className="flex items-center gap-0.5"><FileText className="h-2.5 w-2.5" />{recCount(c.id)}</span>
-                    </div>
-                  </div>
-                  {c.nextFollowUp && (
-                    <div className="flex items-center gap-1 text-[10px] text-warning pr-11 font-medium">
-                      <Calendar className="h-3 w-3" />
-                      פולו-אפ: {new Date(c.nextFollowUp).toLocaleDateString('he-IL')}
-                    </div>
-                  )}
-                </div>
-
-                {/* Desktop: Row layout */}
-                <div className="hidden sm:flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <div className="w-10 h-10 rounded-xl bg-[#0a3d3d]/8 flex items-center justify-center text-[#0a3d3d] font-bold text-sm shrink-0 group-hover:bg-[#0a3d3d]/12 group-hover:shadow-md group-hover:shadow-[#0a3d3d]/5 transition-all duration-200">
-                      {c.firstName?.[0]}{c.lastName?.[0]}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 md:gap-3 mb-0.5">
-                        <span className="font-bold text-sm md:text-base text-foreground group-hover:text-[#0a3d3d] transition-colors truncate">{c.fullName}</span>
-                        <StatusBadge type="customer" status={c.status} className="text-[9px] md:text-xs shrink-0" />
-                      </div>
-                      <div className="flex items-center gap-2 md:gap-4 text-[10px] md:text-xs text-muted-foreground flex-wrap">
-                        <span className="flex items-center gap-1"><Phone className="h-3 w-3" />{c.mobilePhone}</span>
-                        {c.email && <span className="hidden md:flex items-center gap-1"><Mail className="h-3 w-3" />{c.email}</span>}
-                        <span>ת.ז {c.idNumber}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 shrink-0">
-                    <div className="text-left text-[10px] md:text-xs text-muted-foreground space-y-0.5">
-                      <div className="flex items-center gap-3">
-                        <span className="flex items-center gap-1"><Package className="h-3 w-3" />{productCount(c.id)} מוצרים</span>
-                        <span className="flex items-center gap-1"><FileText className="h-3 w-3" />{recCount(c.id)} המלצות</span>
-                      </div>
-                      {c.nextFollowUp && (
-                        <div className="flex items-center gap-1 text-warning font-medium">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(c.nextFollowUp).toLocaleDateString('he-IL')}
-                        </div>
-                      )}
-                    </div>
-                    <ChevronLeft className="h-4 w-4 text-muted-foreground/30 group-hover:text-[#0a3d3d] group-hover:translate-x-[-2px] transition-all duration-200" />
-                  </div>
-                </div>
-              </motion.button>
-            ))}
-          </AnimatePresence>
+        <div className="flex items-center gap-2.5">
+          <motion.button
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.93 }}
+            onClick={() => { setSearchOpen(v => !v); }}
+            className="w-11 h-11 rounded-full flex items-center justify-center shadow-md"
+            style={{ backgroundColor: searchOpen ? '#0a3d3d' : '#5ec6c6', color: 'white' }}
+          >
+            {searchOpen ? <X className="w-4 h-4" /> : <Search className="w-4 h-4" />}
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.93 }}
+            onClick={() => navigate('/app/customers/new')}
+            className="w-11 h-11 rounded-full flex items-center justify-center shadow-lg"
+            style={{ backgroundColor: '#0a3d3d', color: 'white' }}
+          >
+            <UserPlus className="w-4 h-4" />
+          </motion.button>
         </div>
+      </div>
 
-        {/* Footer with count */}
-        {filtered.length > 0 && (
-          <div className="px-4 py-2.5 border-t bg-muted/20 text-center">
-            <p className="text-[10px] text-muted-foreground">
-              מציג {filtered.length} מתוך {data.customers.length} לקוחות
-            </p>
-          </div>
+      {/* Search bar */}
+      <AnimatePresence>
+        {searchOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: 'easeInOut' }}
+            className="overflow-hidden relative z-20"
+          >
+            <div className="px-5 pb-3">
+              <div className="relative">
+                <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  autoFocus
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder="חיפוש לפי שם, ת.ז או טלפון..."
+                  className="w-full pr-11 pl-4 py-3 rounded-2xl border bg-white text-sm focus:outline-none transition-all"
+                  style={{ borderColor: '#5ec6c6', boxShadow: '0 2px 12px rgba(94,198,198,0.15)' }}
+                />
+                {search && (
+                  <button
+                    onClick={() => setSearch('')}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </motion.div>
         )}
-      </motion.div>
+      </AnimatePresence>
+
+      {/* Filter pills */}
+      <div className="px-5 pb-5 flex gap-2 flex-wrap relative z-10">
+        {FILTERS.map(f => {
+          const count =
+            f.value === 'all'
+              ? data.customers.length
+              : data.customers.filter(c => c.status === f.value).length;
+          const active = activeFilter === f.value;
+          return (
+            <button
+              key={f.value}
+              onClick={() => setActiveFilter(f.value)}
+              className="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200"
+              style={{
+                backgroundColor: active ? '#0a3d3d' : 'white',
+                color: active ? 'white' : '#6b7280',
+                border: `2px solid ${active ? '#0a3d3d' : '#e5e7eb'}`,
+                boxShadow: active ? '0 4px 12px rgba(10,61,61,0.2)' : 'none',
+              }}
+            >
+              {f.label}
+              <span className={`mr-1 text-[10px] ${active ? 'opacity-60' : 'opacity-40'}`}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Bubble canvas */}
+      <div className="px-5 pb-12 relative z-10 min-h-[60vh]">
+        {filtered.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center justify-center py-28 text-center"
+          >
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+              className="w-24 h-24 rounded-full flex items-center justify-center mb-5 shadow-xl"
+              style={{ backgroundColor: '#5ec6c6', boxShadow: '0 12px 32px rgba(94,198,198,0.35)' }}
+            >
+              <UserPlus className="w-10 h-10 text-white" />
+            </motion.div>
+            <p className="text-gray-500 font-semibold mb-1">לא נמצאו לקוחות</p>
+            <p className="text-xs text-gray-400 mb-4">נסה לשנות את החיפוש או המסנן</p>
+            <button
+              onClick={() => { setSearch(''); setActiveFilter('all'); }}
+              className="px-5 py-2 rounded-full text-xs font-bold text-white"
+              style={{ backgroundColor: '#0a3d3d' }}
+            >
+              נקה סינון
+            </button>
+          </motion.div>
+        ) : (
+          <motion.div
+            className="flex flex-wrap gap-5"
+            style={{ direction: 'rtl' }}
+          >
+            <AnimatePresence mode="popLayout">
+              {filtered.map((c, i) => {
+                const color = COLORS[i % COLORS.length];
+                const statusColor = STATUS_COLOR[c.status] || '#5ec6c6';
+                const size = SIZES[i % SIZES.length];
+                const floatDelay = (i % 6) * 0.5;
+
+                return (
+                  <motion.button
+                    key={c.id}
+                    layout
+                    initial={{ scale: 0, opacity: 0, y: 20 }}
+                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                    exit={{ scale: 0, opacity: 0, y: -10 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 320,
+                      damping: 22,
+                      delay: Math.min(i * 0.035, 0.55),
+                    }}
+                    whileHover={{ scale: 1.1, y: -6 }}
+                    whileTap={{ scale: 0.93 }}
+                    onClick={() => navigate(`/customers/${c.id}`)}
+                    className="flex flex-col items-center gap-2 focus:outline-none"
+                  >
+                    {/* Floating idle animation wrapper */}
+                    <motion.div
+                      animate={{ y: [0, -5, 0] }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 3.2 + floatDelay * 0.4,
+                        delay: floatDelay,
+                        ease: 'easeInOut',
+                      }}
+                      className="relative"
+                    >
+                      {/* Circle */}
+                      <div
+                        className="rounded-full flex items-center justify-center relative select-none"
+                        style={{
+                          width: size,
+                          height: size,
+                          backgroundColor: color,
+                          boxShadow: `0 10px 28px ${color}55, 0 2px 8px ${color}30`,
+                          border: `3px solid ${statusColor}`,
+                        }}
+                      >
+                        <span
+                          className="text-white font-black"
+                          style={{ fontSize: Math.round(size * 0.22) }}
+                        >
+                          {c.firstName?.[0]}{c.lastName?.[0]}
+                        </span>
+
+                        {/* Status dot */}
+                        <div
+                          className="absolute top-0.5 right-0.5 w-4 h-4 rounded-full border-2 border-white"
+                          style={{ backgroundColor: statusColor }}
+                        />
+                      </div>
+                    </motion.div>
+
+                    {/* Name */}
+                    <span
+                      className="text-xs font-bold text-center leading-tight"
+                      style={{
+                        color: '#0a3d3d',
+                        maxWidth: size + 12,
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      {c.fullName}
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-medium">{c.mobilePhone}</span>
+                  </motion.button>
+                );
+              })}
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </div>
+
+      {/* Count footer */}
+      {filtered.length > 0 && (
+        <div className="text-center pb-8 relative z-10">
+          <p className="text-xs text-gray-400">
+            מציג {filtered.length} מתוך {data.customers.length} לקוחות
+          </p>
+        </div>
+      )}
     </div>
   );
 }

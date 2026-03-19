@@ -329,7 +329,7 @@ export default function PDageCorrectionRoom() {
   const category = job.deficiency_categories as any;
 
   return (
-    <div className="flex gap-4 max-w-7xl mx-auto h-[calc(100vh-5rem)]">
+    <div className="flex flex-col sm:flex-row gap-4 max-w-7xl mx-auto h-auto sm:h-[calc(100vh-5rem)] px-4 sm:px-0">
       {/* Main editor area */}
       <div className={`${chatOpen && !isMobile ? 'flex-1 min-w-0' : 'w-full'} flex flex-col gap-4 overflow-y-auto pb-4`}>
         {/* Header */}

@@ -322,7 +322,7 @@ export default function NewCustomerPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 p-4 md:p-6">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">שם פרטי *</Label>
                   <Input value={form.firstName} onChange={e => updateField('firstName', e.target.value)} placeholder="שם פרטי" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
@@ -339,7 +339,7 @@ export default function NewCustomerPage() {
                   {errors.idNumber && <p className="text-xs text-destructive mt-1">{errors.idNumber}</p>}
                 </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">מגדר</Label>
                   <Select value={form.gender} onValueChange={v => updateField('gender', v)}>
@@ -376,7 +376,7 @@ export default function NewCustomerPage() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   transition={{ duration: 0.3 }}
-                  className="grid grid-cols-2 gap-4"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
                 >
                   <div className="space-y-1.5">
                     <Label className="text-xs font-medium text-muted-foreground">שם בן/בת זוג</Label>
@@ -398,7 +398,7 @@ export default function NewCustomerPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 md:p-6">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">טלפון נייד *</Label>
                   <Input value={form.mobilePhone} onChange={e => updateField('mobilePhone', e.target.value)} placeholder="05XXXXXXXX" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
@@ -423,7 +423,7 @@ export default function NewCustomerPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 md:p-6">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">עיר</Label>
                   <Input value={form.city} onChange={e => updateField('city', e.target.value)} placeholder="עיר" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
@@ -455,7 +455,7 @@ export default function NewCustomerPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 p-4 md:p-6">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">עיסוק</Label>
                   <Input value={form.occupation} onChange={e => updateField('occupation', e.target.value)} placeholder="עיסוק" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />

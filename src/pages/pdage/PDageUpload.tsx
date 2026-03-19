@@ -109,7 +109,7 @@ export default function PDageUpload() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-6 px-4 sm:px-0">
       <div>
         <h1 className="text-2xl font-bold text-foreground">העלאת מסמך</h1>
         <p className="text-sm text-muted-foreground">העלה PDF או ZIP ומלא את פרטי הלקוח</p>
@@ -123,7 +123,7 @@ export default function PDageUpload() {
         <CardContent>
           {!file ? (
             <div
-              className={`border-2 border-dashed rounded-xl p-10 text-center transition-colors cursor-pointer ${
+              className={`border-2 border-dashed rounded-xl p-6 sm:p-10 text-center transition-colors cursor-pointer ${
                 dragOver ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
               }`}
               onDragOver={e => { e.preventDefault(); setDragOver(true); }}

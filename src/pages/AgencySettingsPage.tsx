@@ -143,9 +143,9 @@ export default function AgencySettingsPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6" dir="rtl">
+    <div className="max-w-3xl mx-auto space-y-6 px-4 sm:px-0" dir="rtl">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-2">
+      <div className="flex items-center gap-3 sm:gap-4 mb-2">
         <div className="w-12 h-12 rounded-full bg-[#5ec6c6] flex items-center justify-center">
           <Building2 className="h-5 w-5 text-white" />
         </div>
