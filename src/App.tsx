@@ -61,6 +61,7 @@ import Insurances from "@/pages/Insurances";
 import Article from "@/pages/Article";
 import Onboarding from "@/pages/Onboarding";
 import Admin from "@/pages/Admin";
+import SiteAdmin from "@/pages/SiteAdmin";
 import DirectDebit from "@/pages/DirectDebit";
 import StyleGuide from "@/pages/StyleGuide";
 import FAQ from "@/pages/FAQ";
@@ -176,6 +177,7 @@ const App = () => (
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/site-admin" element={<SiteAdmin />} />
                 <Route path="/direct-debit" element={<DirectDebit />} />
                 <Route path="/article/:id" element={<Article />} />
                 <Route path="/calculators" element={<Calculators />} />
