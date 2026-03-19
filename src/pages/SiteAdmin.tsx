@@ -5,7 +5,6 @@ import { supabase as agentSupabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -55,12 +54,13 @@ const TABS: { id: AdminTab; label: string; icon: typeof LayoutDashboard }[] = [
 
 export default function SiteAdmin() {
   const { user, loading: authLoading, signInWithOtp, verifyOtp, signInWithGoogle, signOut } = useAuth();
-  const [step, setStep] = useState<"login" | "otp" | "denied" | "admin">("login");
+  const [step, setStep] = useState<"login" | "otp" | "magic-sent" | "denied" | "admin">("login");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
 
   // Determine auth state
   useEffect(() => {
@@ -72,9 +72,45 @@ export default function SiteAdmin() {
         setStep("denied");
       }
     } else {
-      setStep("login");
+      if (step === "admin" || step === "denied") setStep("login");
     }
   }, [user, authLoading]);
+
+  // Resend countdown
+  useEffect(() => {
+    if (resendTimer <= 0) return;
+    const t = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
+    return () => clearTimeout(t);
+  }, [resendTimer]);
+
+  const handleSendMagicLink = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    const targetEmail = email || ADMIN_EMAIL;
+    if (targetEmail.toLowerCase() !== ADMIN_EMAIL) {
+      toast.error("כתובת מייל לא מורשית");
+      return;
+    }
+    setEmail(targetEmail);
+    setLoading(true);
+    try {
+      // Send magic link (not OTP code) — more reliable delivery
+      const { error } = await siteSupabase.auth.signInWithOtp({
+        email: targetEmail,
+        options: {
+          shouldCreateUser: true,
+          emailRedirectTo: window.location.origin + "/site-admin",
+        },
+      });
+      if (error) throw error;
+      setStep("magic-sent");
+      setResendTimer(60);
+      toast.success("לינק כניסה נשלח למייל!");
+    } catch {
+      toast.error("שגיאה בשליחה. נסה Google login.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,6 +124,7 @@ export default function SiteAdmin() {
       const { error } = await signInWithOtp(email);
       if (error) throw error;
       setStep("otp");
+      setResendTimer(60);
       toast.success("קוד חד-פעמי נשלח למייל");
     } catch {
       toast.error("שגיאה בשליחת הקוד");
@@ -119,7 +156,7 @@ export default function SiteAdmin() {
   // ── Loading state ──
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8f9fc]">
+      <div className="min-h-screen flex items-center justify-center bg-[#f0f2f5]">
         <Loader2 className="w-8 h-8 animate-spin text-[#0a3d3d]" />
       </div>
     );
@@ -128,16 +165,16 @@ export default function SiteAdmin() {
   // ── Denied ──
   if (step === "denied") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8f9fc] px-4" dir="rtl">
-        <div className="bg-white rounded-2xl p-8 shadow-lg border max-w-sm text-center">
-          <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4">
-            <Shield className="w-8 h-8 text-red-500" />
+      <div className="min-h-screen flex items-center justify-center bg-[#f0f2f5] px-4" dir="rtl">
+        <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 max-w-sm text-center">
+          <div className="w-16 h-16 rounded-full bg-[#e76f51]/10 flex items-center justify-center mx-auto mb-4">
+            <Shield className="w-8 h-8 text-[#e76f51]" />
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">אין הרשאה</h2>
+          <h2 className="text-xl font-bold text-[#0a3d3d] mb-2">אין הרשאה</h2>
           <p className="text-gray-500 text-sm mb-6">
             המייל {user?.email} אינו מורשה לגשת לממשק הניהול.
           </p>
-          <Button onClick={handleSignOut} variant="outline" className="rounded-full gap-2">
+          <Button onClick={handleSignOut} variant="outline" className="rounded-full gap-2 border-gray-200">
             <LogOut className="w-4 h-4" />
             התנתק
           </Button>
@@ -146,27 +183,42 @@ export default function SiteAdmin() {
     );
   }
 
-  // ── Login / OTP ──
-  if (step === "login" || step === "otp") {
+  // ── Login / OTP / Magic Link ──
+  if (step === "login" || step === "otp" || step === "magic-sent") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f8f9fc] px-4" dir="rtl">
+      <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden" dir="rtl"
+        style={{ background: "#f0f2f5" }}
+      >
+        {/* Decorative bubbles matching site design */}
+        <div className="absolute top-[10%] left-[8%] w-[140px] h-[140px] rounded-full opacity-40 pointer-events-none"
+          style={{ background: "radial-gradient(circle, #f4a261, transparent 70%)" }} />
+        <div className="absolute top-[25%] left-[20%] w-[90px] h-[90px] rounded-full opacity-30 pointer-events-none"
+          style={{ background: "radial-gradient(circle, #e76f51, transparent 70%)" }} />
+        <div className="absolute top-[18%] left-[32%] w-[110px] h-[110px] rounded-full opacity-35 pointer-events-none"
+          style={{ background: "radial-gradient(circle, #5ec6c6, transparent 70%)" }} />
+        <div className="absolute bottom-[15%] right-[10%] w-[60px] h-[60px] rounded-full opacity-20 pointer-events-none bg-[#f4a261]" />
+        <div className="absolute bottom-[25%] right-[25%] w-[30px] h-[30px] rounded-full opacity-15 pointer-events-none bg-[#5ec6c6]" />
+        <div className="absolute top-[5%] right-[40%] w-3 h-3 rounded-full bg-[#f4a261] opacity-60 pointer-events-none" />
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-[400px]"
+          className="w-full max-w-[420px] relative z-10"
         >
-          <div className="bg-white rounded-2xl border shadow-lg p-8 space-y-6">
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-xl p-8 space-y-6">
             {/* Header */}
             <div className="text-center space-y-3">
-              <div
-                className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center"
-                style={{ background: "linear-gradient(135deg, #0a3d3d 0%, #0d4a4a 100%)" }}
-              >
-                <Shield className="w-8 h-8 text-white" />
+              <div className="flex items-center justify-center gap-3">
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center"
+                  style={{ background: "linear-gradient(135deg, #0a3d3d 0%, #125555 100%)" }}
+                >
+                  <Shield className="w-7 h-7 text-white" />
+                </div>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-[#0a3d3d]">ניהול האתר</h1>
-                <p className="text-sm text-gray-400">SEELD Site Admin</p>
+                <h1 className="text-2xl font-extrabold text-[#0a3d3d]">ניהול האתר</h1>
+                <p className="text-sm text-gray-400 mt-1">SEELD Site Admin</p>
               </div>
             </div>
 
@@ -182,7 +234,7 @@ export default function SiteAdmin() {
                   {/* Google Login — primary */}
                   <Button
                     variant="outline"
-                    className="w-full gap-3 h-12 rounded-full text-sm font-medium border-gray-200 hover:bg-gray-50 shadow-sm"
+                    className="w-full gap-3 h-13 rounded-full text-sm font-semibold border-gray-200 hover:bg-gray-50 shadow-sm min-h-[52px]"
                     onClick={async () => {
                       setLoading(true);
                       const { error } = await signInWithGoogle("/site-admin");
@@ -205,85 +257,187 @@ export default function SiteAdmin() {
 
                   <div className="flex items-center gap-3 py-1">
                     <div className="flex-1 h-px bg-gray-200" />
-                    <span className="text-xs text-gray-400">או</span>
+                    <span className="text-[11px] text-gray-400">או באימייל</span>
                     <div className="flex-1 h-px bg-gray-200" />
                   </div>
 
-                  {/* OTP fallback */}
+                  {/* Magic link + OTP */}
                   <form onSubmit={handleSendOtp} className="space-y-3">
                     <div className="relative">
-                      <Mail className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Mail className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                       <Input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="your@email.com"
+                        placeholder={ADMIN_EMAIL}
                         required
                         dir="ltr"
-                        className="h-12 pr-10 rounded-full text-sm border-gray-200 focus-visible:ring-[#0a3d3d]/30 text-left"
+                        className="h-12 pr-11 rounded-full text-sm border-gray-200 focus-visible:ring-[#5ec6c6]/40 text-left"
                       />
                     </div>
-                    <Button
-                      type="submit"
-                      variant="outline"
-                      className="w-full h-11 rounded-full gap-2 text-sm border-gray-200 hover:bg-gray-50"
-                      disabled={loading}
-                    >
-                      {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
-                      שלח קוד כניסה למייל
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        onClick={() => handleSendMagicLink()}
+                        className="flex-1 h-11 rounded-full gap-2 text-sm font-semibold bg-[#0a3d3d] hover:bg-[#125555] shadow-lg shadow-[#0a3d3d]/15"
+                        disabled={loading}
+                      >
+                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Link2 className="h-4 w-4" />}
+                        שלח לינק כניסה
+                      </Button>
+                      <Button
+                        type="submit"
+                        variant="outline"
+                        className="h-11 rounded-full gap-1.5 text-sm border-gray-200 px-4"
+                        disabled={loading}
+                      >
+                        <Mail className="h-3.5 w-3.5" />
+                        קוד OTP
+                      </Button>
+                    </div>
                   </form>
                 </motion.div>
               )}
 
+              {/* Magic link sent */}
+              {step === "magic-sent" && (
+                <motion.div
+                  key="magic"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  className="space-y-5 text-center"
+                >
+                  <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center" style={{ background: "#5ec6c620" }}>
+                    <Mail className="w-7 h-7 text-[#5ec6c6]" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-[#0a3d3d] text-lg mb-1">בדוק את המייל</h3>
+                    <p className="text-sm text-gray-500">
+                      שלחנו לינק כניסה ל-<span className="font-semibold text-[#0a3d3d]" dir="ltr">{email}</span>
+                    </p>
+                    <p className="text-xs text-gray-400 mt-2">לחץ על הלינק במייל כדי להתחבר. בדוק גם בספאם.</p>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => handleSendMagicLink()}
+                      disabled={resendTimer > 0 || loading}
+                      className="w-full rounded-full gap-2 h-11 border-gray-200"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                      {resendTimer > 0 ? `שלח שוב (${resendTimer}s)` : "שלח שוב"}
+                    </Button>
+                    <button
+                      type="button"
+                      onClick={() => { setStep("login"); setOtp(""); }}
+                      className="text-sm text-gray-400 hover:text-[#0a3d3d] py-2 transition-colors"
+                    >
+                      חזרה לאפשרויות התחברות
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* OTP verification */}
               {step === "otp" && (
                 <motion.div
                   key="otp"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
-                  className="space-y-4"
+                  className="space-y-5"
                 >
-                  <div className="bg-[#e0f2f1] rounded-xl p-3 flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#0a3d3d] shrink-0" />
+                  <div className="bg-[#5ec6c6]/10 rounded-2xl p-3.5 flex items-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-[#5ec6c6] shrink-0" />
                     <p className="text-xs text-[#0a3d3d]/80">
-                      קוד נשלח ל-<span className="font-semibold" dir="ltr">{email}</span>
+                      קוד נשלח ל-<span className="font-semibold text-[#0a3d3d]" dir="ltr">{email}</span>
                     </p>
                   </div>
-                  <div className="flex flex-col items-center gap-3">
-                    <InputOTP maxLength={6} value={otp} onChange={setOtp} dir="ltr">
-                      <InputOTPGroup>
-                        <InputOTPSlot index={0} />
-                        <InputOTPSlot index={1} />
-                        <InputOTPSlot index={2} />
-                        <InputOTPSlot index={3} />
-                        <InputOTPSlot index={4} />
-                        <InputOTPSlot index={5} />
-                      </InputOTPGroup>
-                    </InputOTP>
+
+                  {/* Circular OTP inputs */}
+                  <div className="flex justify-center gap-2.5" dir="ltr">
+                    {[0, 1, 2, 3, 4, 5].map((i) => (
+                      <input
+                        key={i}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={otp[i] || ""}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/\D/g, "");
+                          const newOtp = otp.split("");
+                          newOtp[i] = val;
+                          setOtp(newOtp.join("").slice(0, 6));
+                          if (val && i < 5) {
+                            const next = e.target.parentElement?.children[i + 1] as HTMLInputElement;
+                            next?.focus();
+                          }
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Backspace" && !otp[i] && i > 0) {
+                            const prev = (e.target as HTMLElement).parentElement?.children[i - 1] as HTMLInputElement;
+                            prev?.focus();
+                          }
+                        }}
+                        onPaste={(e) => {
+                          e.preventDefault();
+                          const paste = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+                          setOtp(paste);
+                          const target = (e.target as HTMLElement).parentElement?.children[Math.min(paste.length, 5)] as HTMLInputElement;
+                          target?.focus();
+                        }}
+                        className={cn(
+                          "w-12 h-12 rounded-full border-2 text-center text-lg font-bold text-[#0a3d3d] outline-none transition-all",
+                          otp[i]
+                            ? "border-[#5ec6c6] bg-[#5ec6c6]/5 shadow-sm"
+                            : "border-gray-200 bg-white hover:border-gray-300",
+                          "focus:border-[#5ec6c6] focus:ring-2 focus:ring-[#5ec6c6]/20"
+                        )}
+                      />
+                    ))}
                   </div>
+
                   <Button
                     onClick={handleVerifyOtp}
-                    className="w-full h-12 rounded-full font-semibold bg-[#0a3d3d] hover:bg-[#0d4a4a] shadow-lg shadow-[#0a3d3d]/20"
+                    className="w-full h-12 rounded-full font-semibold bg-[#0a3d3d] hover:bg-[#125555] shadow-lg shadow-[#0a3d3d]/15"
                     disabled={loading || otp.length !== 6}
                   >
                     {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "אמת והיכנס"}
                   </Button>
-                  <button
-                    type="button"
-                    onClick={() => { setStep("login"); setOtp(""); }}
-                    className="w-full text-sm text-gray-400 hover:text-[#0a3d3d]"
-                  >
-                    חזרה
-                  </button>
+
+                  <div className="flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={() => { setStep("login"); setOtp(""); }}
+                      className="text-sm text-gray-400 hover:text-[#0a3d3d] transition-colors"
+                    >
+                      חזרה
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => handleSendOtp(e as any)}
+                      disabled={resendTimer > 0 || loading}
+                      className={cn(
+                        "text-sm transition-colors flex items-center gap-1",
+                        resendTimer > 0 ? "text-gray-300" : "text-[#5ec6c6] hover:text-[#0a3d3d]"
+                      )}
+                    >
+                      <RefreshCw className="w-3 h-3" />
+                      {resendTimer > 0 ? `שלח שוב (${resendTimer}s)` : "שלח שוב"}
+                    </button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center justify-center gap-2 mt-4 text-gray-400">
+          <div className="flex items-center justify-center gap-2 mt-5 text-gray-400">
             <Lock className="w-3 h-3" />
             <span className="text-[10px]">גישה מורשית בלבד</span>
+            <div className="w-1 h-1 rounded-full bg-gray-300" />
+            <span className="text-[10px]">SEELD &copy; {new Date().getFullYear()}</span>
           </div>
         </motion.div>
       </div>
@@ -295,7 +449,7 @@ export default function SiteAdmin() {
   // ══════════════════════════════════════════════════════
 
   return (
-    <div className="min-h-screen bg-[#f8f9fc] flex" dir="rtl">
+    <div className="min-h-screen bg-[#f0f2f5] flex" dir="rtl">
       {/* ── Sidebar (desktop) ── */}
       <aside className="hidden lg:flex flex-col w-[260px] border-l bg-white shrink-0 sticky top-0 h-screen">
         <SidebarContent
