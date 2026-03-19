@@ -35,7 +35,7 @@ const Contact = () => {
       try {
         await supabase.functions.invoke("send-lead-notification", {
           body: {
-            type: "insurance",
+            type: "contact",
             leadData: {
               fullName: formData.name,
               phone: formData.phone,

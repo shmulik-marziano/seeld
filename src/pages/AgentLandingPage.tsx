@@ -643,15 +643,16 @@ export default function AgentLandingPage() {
           <motion.div className="text-center mb-10 sm:mb-14"
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-[#0a3d3d] mb-3">
-              המידע של הלקוחות שלך — <span className="text-[#5ec6c6]">באחריותנו</span>
+              אבטחת מידע <span className="text-[#5ec6c6]">ברמה הגבוהה ביותר</span>
             </h2>
+            <p className="text-sm text-[#0a3d3d]/40 max-w-xl mx-auto">המערכת בנויה על תשתיות מאובטחות. השימוש בפלטפורמה כפוף ל<Link to="/terms" className="underline hover:text-[#5ec6c6]">תנאי השימוש</Link> ול<Link to="/privacy" className="underline hover:text-[#5ec6c6]">מדיניות הפרטיות</Link> שלנו.</p>
           </motion.div>
           <motion.div className="space-y-6"
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
             {[
-              { color: "#5ec6c6", title: "הצפנה מלאה",       desc: "כל הנתונים מוגנים — בדרך ובאחסון" },
+              { color: "#5ec6c6", title: "הצפנה מלאה",       desc: "הנתונים מוגנים בהצפנה בתעבורה ובאחסון" },
               { color: "#f4a261", title: "הפרדה מוחלטת",     desc: "כל סוכנות רואה רק את הנתונים שלה" },
-              { color: "#90be6d", title: "מוכן לביקורת",     desc: "תיעוד מלא של כל פעולה, מסמך, והחלטה" },
+              { color: "#90be6d", title: "תיעוד מלא",        desc: "כל פעולה מתועדת לצורכי שקיפות ובקרה" },
             ].map(({ color, title, desc }, i) => (
               <motion.div key={i} variants={fadeUp} className="flex items-start gap-4">
                 <CheckCircle2 className="w-6 h-6 flex-shrink-0 mt-0.5" style={{ color }} />

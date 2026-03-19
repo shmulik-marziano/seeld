@@ -9,7 +9,7 @@ const corsHeaders = {
 };
 
 interface LeadNotificationRequest {
-  type: 'insurance' | 'pension';
+  type: 'insurance' | 'pension' | 'contact';
   leadData: {
     fullName: string;
     phone: string;
@@ -86,7 +86,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log('Received lead notification request:', { type });
 
     // Validate required fields
-    if (!type || !['insurance', 'pension'].includes(type)) {
+    if (!type || !['insurance', 'pension', 'contact'].includes(type)) {
       throw new Error("Invalid type");
     }
     if (!leadData || !leadData.fullName || !leadData.phone || !leadData.email) {
@@ -102,9 +102,18 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("Invalid phone");
     }
 
-    const subject = type === 'insurance' 
+    const subject = type === 'insurance'
       ? `ליד חדש לביטוח - ${insuranceTypeLabels[leadData.insuranceType || ''] || leadData.insuranceType}`
-      : `ליד חדש לניתוח פנסיוני - ${focusAreaLabels[leadData.focusArea || ''] || 'כללי'}`;
+      : type === 'pension'
+        ? `ליד חדש לניתוח פנסיוני - ${focusAreaLabels[leadData.focusArea || ''] || 'כללי'}`
+        : `פנייה חדשה מהאתר - ${sanitize(leadData.fullName)}`;
+
+    // Route emails by relevance:
+    // Insurance/pension leads (hot leads) → shmulik@seeld-ins.co.il
+    // General contact inquiries → info@seeld-ins.co.il
+    const notificationRecipient = type === 'contact'
+      ? "info@seeld-ins.co.il"
+      : "shmulik@seeld-ins.co.il";
 
     const htmlContent = `
       <div dir="rtl" style="font-family: Arial, sans-serif; padding: 20px;">
@@ -112,7 +121,7 @@ const handler = async (req: Request): Promise<Response> => {
         
         <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <h2 style="margin-top: 0;">פרטי הפנייה</h2>
-          <p><strong>סוג:</strong> ${type === 'insurance' ? 'ביטוח' : 'ניתוח פנסיוני'}</p>
+          <p><strong>סוג:</strong> ${type === 'insurance' ? 'ביטוח' : type === 'pension' ? 'ניתוח פנסיוני' : 'פנייה כללית'}</p>
           ${type === 'insurance' && leadData.insuranceType ? `
             <p><strong>סוג ביטוח:</strong> ${insuranceTypeLabels[leadData.insuranceType] || leadData.insuranceType}</p>
           ` : ''}
@@ -134,9 +143,9 @@ const handler = async (req: Request): Promise<Response> => {
       </div>
     `;
 
-    // Send notification email
+    // Send notification email to the relevant recipient
     const emailResponse = await sendEmail(
-      ["info@seeld-ins.co.il"],
+      [notificationRecipient],
       subject,
       htmlContent
     );
@@ -151,9 +160,11 @@ const handler = async (req: Request): Promise<Response> => {
         <p>שלום ${leadData.fullName},</p>
         
         <p>קיבלנו את פרטייך בהצלחה. ${
-          type === 'insurance' 
+          type === 'insurance'
             ? 'נציג ביטוח מומחה ייצור איתך קשר בהקדם עם הצעה מותאמת אישית.'
-            : 'יועץ פנסיוני מוסמך ייצור איתך קשר בהקדם לניתוח מקיף של התיק הפנסיוני שלך.'
+            : type === 'pension'
+              ? 'יועץ פנסיוני מוסמך ייצור איתך קשר בהקדם לניתוח מקיף של התיק הפנסיוני שלך.'
+              : 'נחזור אליך בהקדם האפשרי.'
         }</p>
         
         <p>בינתיים, אתה מוזמן לעיין במידע נוסף באתר שלנו.</p>

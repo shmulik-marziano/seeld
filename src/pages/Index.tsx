@@ -258,10 +258,11 @@ const Index = () => {
       try {
         await supabase.functions.invoke("send-lead-notification", {
           body: {
-            type: "insurance",
+            type: "contact",
             leadData: {
               fullName: leadForm.name.trim(),
               phone: leadForm.phone.trim(),
+              email: `${leadForm.phone.trim()}@lead.seeld.co.il`,
               insuranceType: leadForm.subject || "פנייה כללית",
             },
           },
@@ -294,12 +295,11 @@ const Index = () => {
       try {
         await supabase.functions.invoke("send-lead-notification", {
           body: {
-            type: "insurance",
+            type: "contact",
             leadData: {
               fullName: contactForm.name.trim(),
               phone: contactForm.phone.trim(),
-              email: contactForm.email.trim(),
-              insuranceType: "פנייה מתחתית העמוד",
+              email: contactForm.email.trim() || `${contactForm.phone.trim()}@lead.seeld.co.il`,
             },
           },
         });

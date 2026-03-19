@@ -19,6 +19,18 @@ const Footer = () => {
         message: `טלפון: ${formData.phone}`
       }]);
       if (error) throw error;
+      try {
+        await supabase.functions.invoke("send-lead-notification", {
+          body: {
+            type: "contact",
+            leadData: {
+              fullName: formData.name,
+              phone: formData.phone,
+              email: formData.email,
+            }
+          }
+        });
+      } catch { /* notification failure is non-blocking */ }
       toast.success("הפרטים נשלחו! נחזור אליכם בהקדם.");
       setFormData({ name: "", phone: "", email: "" });
     } catch {
