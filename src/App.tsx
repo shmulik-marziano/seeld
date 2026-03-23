@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, Outlet, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Outlet, Navigate, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,6 +14,25 @@ import AIChatBot from "@/components/AIChatBot";
 import AccessibilityButton from "@/components/AccessibilityButton";
 import CookieConsent from "@/components/CookieConsent";
 import ScrollProgress from "@/components/ScrollProgress";
+import { useEffect, useRef } from "react";
+import { siteSupabase } from "@/integrations/supabase/site-client";
+
+// ── Page View Tracker ──
+function PageViewTracker() {
+  const location = useLocation();
+  const lastPath = useRef<string>("");
+
+  useEffect(() => {
+    const slug = location.pathname;
+    if (slug === lastPath.current) return;
+    lastPath.current = slug;
+    // Skip admin paths to avoid self-tracking
+    if (slug.startsWith("/site-admin") || slug.startsWith("/admin")) return;
+    siteSupabase.from("page_views" as any).insert({ slug }).then(() => {});
+  }, [location.pathname]);
+
+  return null;
+}
 
 // ── Agent App Pages ──
 import DashboardPage from "@/pages/DashboardPage";
@@ -166,6 +185,7 @@ const App = () => (
           <Sonner />
           <PwaInstallBanner />
           <BrowserRouter>
+            <PageViewTracker />
             <ScrollProgress />
             <ScrollToTop />
             <PageTransition>

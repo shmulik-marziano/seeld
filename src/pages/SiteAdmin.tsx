@@ -1,7 +1,30 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Component, type ReactNode } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 import { supabase as agentSupabase } from "@/integrations/supabase/client";
+
+// Error boundary to catch runtime crashes
+class AdminErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null as Error | null };
+  static getDerivedStateFromError(error: Error) { return { error }; }
+  render() {
+    if (this.state.error) {
+      return (
+        <div dir="rtl" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0f2f5', padding: 20 }}>
+          <div style={{ background: 'white', borderRadius: 24, padding: 32, maxWidth: 500, textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
+            <h2 style={{ color: '#e76f51', fontSize: 20, fontWeight: 800, marginBottom: 8 }}>שגיאה בטעינת מנהל האתר</h2>
+            <p style={{ color: '#666', fontSize: 14, marginBottom: 16 }}>{this.state.error.message}</p>
+            <button onClick={() => { this.setState({ error: null }); window.location.reload(); }}
+              style={{ background: '#0a3d3d', color: 'white', border: 'none', padding: '10px 24px', borderRadius: 50, cursor: 'pointer', fontWeight: 700 }}>
+              נסה שוב
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,6 +52,7 @@ const ADMIN_EMAIL = "shmulik@seeld-ins.co.il";
 
 type AdminTab =
   | "overview"
+  | "analytics"
   | "blog"
   | "leads"
   | "client-invites"
@@ -39,6 +63,7 @@ type AdminTab =
 
 const TABS: { id: AdminTab; label: string; icon: typeof LayoutDashboard }[] = [
   { id: "overview", label: "סקירה כללית", icon: LayoutDashboard },
+  { id: "analytics", label: "אנליטיקה", icon: BarChart3 },
   { id: "blog", label: "ניהול בלוג", icon: PenTool },
   { id: "leads", label: "לידים ופניות", icon: MessageSquare },
   { id: "client-invites", label: "הזמנת לקוחות", icon: Link2 },
@@ -52,18 +77,38 @@ const TABS: { id: AdminTab; label: string; icon: typeof LayoutDashboard }[] = [
 //  MAIN COMPONENT
 // ══════════════════════════════════════════════════════
 
-export default function SiteAdmin() {
-  const { user, loading: authLoading, signInWithOtp, verifyOtp, signInWithGoogle, signOut } = useAuth();
+const ADMIN_PIN = "seeld2024!";
+
+function SiteAdminInner() {
+  let user: any = null, authLoading = false, signInWithOtp: any = () => Promise.resolve({ error: null }),
+      verifyOtp: any = () => Promise.resolve({ error: null }), signInWithGoogle: any = () => Promise.resolve({ error: null }),
+      signOut: any = () => Promise.resolve();
+  try {
+    const auth = useAuth();
+    user = auth.user; authLoading = auth.loading;
+    signInWithOtp = auth.signInWithOtp; verifyOtp = auth.verifyOtp;
+    signInWithGoogle = auth.signInWithGoogle; signOut = auth.signOut;
+  } catch { /* auth context not available — PIN login still works */ }
   const [step, setStep] = useState<"login" | "otp" | "magic-sent" | "denied" | "admin">("login");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
+  const [pin, setPin] = useState("");
+  const [pinError, setPinError] = useState("");
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [resendTimer, setResendTimer] = useState(0);
 
+  // Check if already authenticated via pin (session storage)
+  useEffect(() => {
+    if (sessionStorage.getItem("seeld_admin_auth") === "true") {
+      setStep("admin");
+    }
+  }, []);
+
   // Determine auth state
   useEffect(() => {
+    if (sessionStorage.getItem("seeld_admin_auth") === "true") return;
     if (authLoading) return;
     if (user) {
       if (user.email === ADMIN_EMAIL) {
@@ -75,6 +120,16 @@ export default function SiteAdmin() {
       if (step === "admin" || step === "denied") setStep("login");
     }
   }, [user, authLoading]);
+
+  const handlePinLogin = () => {
+    if (pin === ADMIN_PIN) {
+      sessionStorage.setItem("seeld_admin_auth", "true");
+      setStep("admin");
+      setPinError("");
+    } else {
+      setPinError("סיסמה שגויה");
+    }
+  };
 
   // Resend countdown
   useEffect(() => {
@@ -147,14 +202,16 @@ export default function SiteAdmin() {
   };
 
   const handleSignOut = async () => {
+    sessionStorage.removeItem("seeld_admin_auth");
     await signOut();
     setStep("login");
     setEmail("");
     setOtp("");
+    setPin("");
   };
 
-  // ── Loading state ──
-  if (authLoading) {
+  // ── Loading state (skip if already PIN authenticated) ──
+  if (authLoading && step !== "admin") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f0f2f5]">
         <Loader2 className="w-8 h-8 animate-spin text-[#0a3d3d]" />
@@ -231,7 +288,37 @@ export default function SiteAdmin() {
                   exit={{ opacity: 0, x: 20 }}
                   className="space-y-4"
                 >
-                  {/* Google Login — primary */}
+                  {/* Quick PIN login */}
+                  <div className="space-y-3">
+                    <div className="relative">
+                      <Lock className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        type="password"
+                        value={pin}
+                        onChange={(e) => { setPin(e.target.value); setPinError(""); }}
+                        onKeyDown={(e) => e.key === "Enter" && handlePinLogin()}
+                        placeholder="סיסמת מנהל"
+                        className="h-12 pr-11 rounded-full text-sm border-gray-200 focus-visible:ring-[#5ec6c6]/40 text-right"
+                      />
+                    </div>
+                    {pinError && <p className="text-red-500 text-xs text-center">{pinError}</p>}
+                    <Button
+                      type="button"
+                      onClick={handlePinLogin}
+                      className="w-full h-12 rounded-full gap-2 text-sm font-semibold bg-[#0a3d3d] hover:bg-[#125555] shadow-lg shadow-[#0a3d3d]/15"
+                    >
+                      <Shield className="h-4 w-4" />
+                      כניסה למנהל
+                    </Button>
+                  </div>
+
+                  <div className="flex items-center gap-3 py-1">
+                    <div className="flex-1 h-px bg-gray-200" />
+                    <span className="text-[11px] text-gray-400">או עם Google</span>
+                    <div className="flex-1 h-px bg-gray-200" />
+                  </div>
+
+                  {/* Google Login */}
                   <Button
                     variant="outline"
                     className="w-full gap-3 h-13 rounded-full text-sm font-semibold border-gray-200 hover:bg-gray-50 shadow-sm min-h-[52px]"
@@ -514,6 +601,7 @@ export default function SiteAdmin() {
         {/* Tab content */}
         <div className="p-4 sm:p-6 lg:p-8">
           {activeTab === "overview" && <OverviewModule />}
+          {activeTab === "analytics" && <AnalyticsModule />}
           {activeTab === "blog" && <BlogModule />}
           {activeTab === "leads" && <LeadsModule />}
           {activeTab === "client-invites" && <ClientInvitesModule />}
@@ -638,6 +726,250 @@ function EmptyState({ icon, title, subtitle }: {
       </div>
       <h3 className="font-semibold text-gray-600 mb-1">{title}</h3>
       <p className="text-sm text-gray-400">{subtitle}</p>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════
+//  MODULE: Analytics
+// ══════════════════════════════════════════════════════
+
+// actual DB schema: id (int8), slug (text), viewed_at (timestamptz)
+type PageViewRow = { slug: string; viewed_at: string };
+
+function AnalyticsModule() {
+  const [views, setViews] = useState<PageViewRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [range, setRange] = useState<"today" | "week" | "month" | "all">("today");
+
+  const fetchViews = useCallback(async () => {
+    setLoading(true);
+    const now = new Date();
+    let from: Date | null = null;
+    if (range === "today") {
+      from = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    } else if (range === "week") {
+      from = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    } else if (range === "month") {
+      from = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    }
+
+    let query = siteSupabase
+      .from("page_views" as any)
+      .select("slug, viewed_at")
+      .order("viewed_at", { ascending: false })
+      .limit(500);
+
+    if (from) {
+      query = query.gte("viewed_at", from.toISOString());
+    }
+
+    const { data } = await query;
+    setViews((data as PageViewRow[]) ?? []);
+    setLoading(false);
+  }, [range]);
+
+  useEffect(() => { fetchViews(); }, [fetchViews]);
+
+  const totalViews = views.length;
+
+  // Top pages
+  const pageCounts: Record<string, number> = {};
+  for (const v of views) {
+    pageCounts[v.slug] = (pageCounts[v.slug] ?? 0) + 1;
+  }
+  const topPages = Object.entries(pageCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10);
+  const maxPageCount = topPages[0]?.[1] ?? 1;
+
+  // Views per hour (today only for chart)
+  const hourlyMap: Record<number, number> = {};
+  for (let h = 0; h < 24; h++) hourlyMap[h] = 0;
+  if (range === "today") {
+    for (const v of views) {
+      const h = new Date(v.viewed_at).getHours();
+      hourlyMap[h] = (hourlyMap[h] ?? 0) + 1;
+    }
+  }
+
+  // "Live" = views in last 5 minutes
+  const liveCount = views.filter(v => new Date(v.viewed_at) >= new Date(Date.now() - 5 * 60 * 1000)).length;
+
+  const PAGE_LABELS: Record<string, string> = {
+    "/": "דף הבית",
+    "/calculators": "מחשבונים",
+    "/fund-finder": "מוצא קרנות",
+    "/blog": "בלוג",
+    "/contact": "צור קשר",
+    "/onboarding": "הצטרפות",
+    "/personal-area": "אזור אישי",
+    "/insurances": "ביטוחים",
+    "/direct-debit": "הוראת קבע",
+    "/about": "אודות",
+    "/faq": "שאלות ותשובות",
+    "/agents": "מערכת סוכנים",
+    "/app/dashboard": "דשבורד סוכן",
+  };
+
+  const label = (slug: string) => PAGE_LABELS[slug] ?? slug;
+
+  return (
+    <div className="space-y-6">
+      <ModuleHeader
+        title="אנליטיקה"
+        subtitle="מעקב ביקורים ונתוני גלישה באתר"
+        action={
+          <div className="flex items-center gap-2">
+            <div className="flex rounded-full border border-gray-200 overflow-hidden">
+              {(["today", "week", "month", "all"] as const).map((r) => (
+                <button
+                  key={r}
+                  onClick={() => setRange(r)}
+                  className={cn(
+                    "px-3 py-1.5 text-xs font-medium transition-colors",
+                    range === r ? "bg-[#0a3d3d] text-white" : "text-gray-500 hover:text-[#0a3d3d]"
+                  )}
+                >
+                  {r === "today" ? "היום" : r === "week" ? "שבוע" : r === "month" ? "חודש" : "הכל"}
+                </button>
+              ))}
+            </div>
+            <Button onClick={fetchViews} variant="outline" size="icon" className="rounded-full">
+              <RefreshCw className={cn("w-4 h-4", loading && "animate-spin")} />
+            </Button>
+          </div>
+        }
+      />
+
+      {/* Stat cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard
+          icon={<Eye className="w-5 h-5" />}
+          color="#0a3d3d" bg="#e0f2f1"
+          label="צפיות בעמודים"
+          value={loading ? "..." : totalViews}
+        />
+        <StatCard
+          icon={<Globe className="w-5 h-5" />}
+          color="#6366f1" bg="#ede9fe"
+          label="עמודים שונים"
+          value={loading ? "..." : Object.keys(pageCounts).length}
+        />
+        <StatCard
+          icon={<TrendingUp className="w-5 h-5" />}
+          color="#f59e0b" bg="#fef3c7"
+          label="ממוצע לשעה"
+          value={loading ? "..." : totalViews > 0 ? Math.round(totalViews / (range === "today" ? 24 : range === "week" ? 168 : range === "month" ? 720 : 720)) : 0}
+        />
+        <div className="bg-white rounded-2xl p-5 shadow-sm border hover:shadow-md transition-shadow">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-full flex items-center justify-center shrink-0" style={{ background: "#dcfce7", color: "#16a34a" }}>
+              <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+            </div>
+            <div>
+              <p className="text-2xl font-extrabold text-[#0a3d3d]">{liveCount}</p>
+              <p className="text-[11px] text-gray-400">פעיל 5 דק' אחרונות</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Hourly chart (today only) */}
+      {range === "today" && (
+        <div className="bg-white rounded-2xl p-6 shadow-sm border">
+          <h3 className="font-bold text-[#0a3d3d] mb-4 text-sm">צפיות לפי שעה — היום</h3>
+          <div className="flex items-end gap-1" style={{ height: 80 }}>
+            {Array.from({ length: 24 }, (_, h) => {
+              const count = hourlyMap[h] ?? 0;
+              const maxH = Math.max(...Object.values(hourlyMap), 1);
+              const pct = Math.round((count / maxH) * 100);
+              const isNow = new Date().getHours() === h;
+              return (
+                <div key={h} className="flex-1 flex flex-col items-center gap-1 group relative">
+                  <div
+                    className="w-full rounded-t transition-all duration-300"
+                    style={{
+                      height: `${Math.max(pct, count > 0 ? 8 : 2)}%`,
+                      background: isNow ? "#5ec6c6" : count > 0 ? "#0a3d3d" : "#e5e7eb",
+                      minHeight: 2,
+                    }}
+                  />
+                  {count > 0 && (
+                    <span className="absolute -top-5 text-[9px] font-bold text-[#0a3d3d] opacity-0 group-hover:opacity-100 transition-opacity">
+                      {count}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex justify-between mt-1 text-[9px] text-gray-400">
+            <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:00</span>
+          </div>
+        </div>
+      )}
+
+      {/* Top pages */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm border">
+        <h3 className="font-bold text-[#0a3d3d] mb-4 text-sm flex items-center gap-2">
+          <TrendingUp className="w-4 h-4 text-[#5ec6c6]" />
+          עמודים מובילים
+        </h3>
+        {loading ? (
+          <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#0a3d3d]" /></div>
+        ) : topPages.length === 0 ? (
+          <p className="text-sm text-gray-400 text-center py-6">אין נתונים עדיין — הנתונים יתחילו להצטבר מרגע הפריסה</p>
+        ) : (
+          <div className="space-y-2">
+            {topPages.map(([slug, count]) => (
+              <div key={slug} className="flex items-center gap-3">
+                <span className="text-sm text-[#0a3d3d] font-medium min-w-[140px] truncate" dir="ltr">{label(slug)}</span>
+                <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{
+                      width: `${Math.round((count / maxPageCount) * 100)}%`,
+                      background: "linear-gradient(90deg, #5ec6c6, #0a3d3d)",
+                    }}
+                  />
+                </div>
+                <span className="text-xs font-bold text-[#0a3d3d] min-w-[32px] text-left" dir="ltr">{count}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Recent activity */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm border">
+        <h3 className="font-bold text-[#0a3d3d] mb-4 text-sm flex items-center gap-2">
+          <Clock className="w-4 h-4 text-[#5ec6c6]" />
+          פעילות אחרונה
+        </h3>
+        {loading ? (
+          <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#0a3d3d]" /></div>
+        ) : views.length === 0 ? (
+          <p className="text-sm text-gray-400 text-center py-6">אין נתונים עדיין</p>
+        ) : (
+          <div className="space-y-1 max-h-64 overflow-y-auto">
+            {views.slice(0, 30).map((v, i) => {
+              const d = new Date(v.viewed_at);
+              const timeStr = d.toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" });
+              const dateStr = d.toLocaleDateString("he-IL", { day: "2-digit", month: "2-digit" });
+              const isToday = new Date().toDateString() === d.toDateString();
+              return (
+                <div key={i} className="flex items-center justify-between px-3 py-1.5 rounded-lg hover:bg-gray-50 text-sm">
+                  <span className="font-medium text-[#0a3d3d] truncate max-w-[220px]" dir="ltr">{label(v.slug)}</span>
+                  <span className="text-xs text-gray-400 shrink-0 mr-2" dir="ltr">
+                    {isToday ? timeStr : `${dateStr} ${timeStr}`}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -917,6 +1249,7 @@ function LeadsModule() {
 function ClientInvitesModule() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState<string[]>([]);
 
@@ -933,9 +1266,11 @@ function ClientInvitesModule() {
       });
       if (error) throw error;
       toast.success(`לינק כניסה נשלח ל-${name || email}`);
-      setSent(prev => [...prev, `${name || email} (${email}) — ${new Date().toLocaleTimeString("he-IL")}`]);
+      const info = [name || email, `(${email})`, phone ? `| ${phone}` : '', `— ${new Date().toLocaleTimeString("he-IL")}`].filter(Boolean).join(' ');
+      setSent(prev => [...prev, info]);
       setEmail("");
       setName("");
+      setPhone("");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "שגיאה בשליחה");
     } finally {
@@ -957,7 +1292,7 @@ function ClientInvitesModule() {
           <Link2 className="w-5 h-5" />
           שלח לינק כניסה
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           <div>
             <Label className="text-xs font-medium text-[#0a3d3d]">שם הלקוח</Label>
             <Input
@@ -965,6 +1300,17 @@ function ClientInvitesModule() {
               onChange={(e) => setName(e.target.value)}
               placeholder="ישראל ישראלי"
               className="mt-1 rounded-full border-gray-200"
+            />
+          </div>
+          <div>
+            <Label className="text-xs font-medium text-[#0a3d3d]">טלפון</Label>
+            <Input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="052-000-0000"
+              dir="ltr"
+              className="mt-1 rounded-full border-gray-200 text-left"
             />
           </div>
           <div>
@@ -1019,6 +1365,7 @@ function ClientInvitesModule() {
 
 function AgentManagementModule() {
   const [email, setEmail] = useState("");
+  const [agentPhone, setAgentPhone] = useState("");
   const [sending, setSending] = useState(false);
   const [agents, setAgents] = useState<any[]>([]);
   const [invitations, setInvitations] = useState<any[]>([]);
@@ -1071,6 +1418,7 @@ function AgentManagementModule() {
 
       toast.success(`הזמנה נשלחה ל-${email}`);
       setEmail("");
+      setAgentPhone("");
       fetchData();
     } catch (err: any) {
       toast.error(err.message || "שגיאה בשליחת ההזמנה");
@@ -1124,8 +1472,8 @@ function AgentManagementModule() {
           <UserPlus className="w-5 h-5" />
           הזמן סוכן חדש
         </h3>
-        <div className="flex gap-3 items-end">
-          <div className="flex-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
             <Label className="text-xs font-medium text-[#0a3d3d]">אימייל הסוכן</Label>
             <Input
               type="email"
@@ -1137,6 +1485,19 @@ function AgentManagementModule() {
               onKeyDown={(e) => e.key === "Enter" && handleInvite()}
             />
           </div>
+          <div>
+            <Label className="text-xs font-medium text-[#0a3d3d]">טלפון הסוכן</Label>
+            <Input
+              type="tel"
+              value={agentPhone}
+              onChange={(e) => setAgentPhone(e.target.value)}
+              placeholder="052-000-0000"
+              dir="ltr"
+              className="mt-1 rounded-full border-gray-200 text-left"
+            />
+          </div>
+        </div>
+        <div>
           <Button
             onClick={handleInvite}
             disabled={sending || !email.trim()}
@@ -1332,7 +1693,7 @@ function DirectDebitModule() {
               "Content-Type": "application/json",
               Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
             },
-            body: JSON.stringify({ password: "seeld2024!", action: "fetch" }),
+            body: JSON.stringify({ password: ADMIN_PIN, action: "fetch" }),
           }
         );
         if (response.ok) {
@@ -1461,5 +1822,17 @@ function LinkButton({ label, href }: { label: string; href: string }) {
       <Globe className="w-4 h-4 text-gray-400" />
       {label}
     </a>
+  );
+}
+
+// ══════════════════════════════════════════════════════
+//  EXPORT WITH ERROR BOUNDARY
+// ══════════════════════════════════════════════════════
+
+export default function SiteAdmin() {
+  return (
+    <AdminErrorBoundary>
+      <SiteAdminInner />
+    </AdminErrorBoundary>
   );
 }
