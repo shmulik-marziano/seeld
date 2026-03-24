@@ -734,92 +734,281 @@ function EmptyState({ icon, title, subtitle }: {
 //  MODULE: Analytics
 // ══════════════════════════════════════════════════════
 
-// actual DB schema: id (int8), slug (text), viewed_at (timestamptz)
-type PageViewRow = { slug: string; viewed_at: string };
+// actual DB schema: id (int8), slug (text), viewed_at (timestamptz), country, city, device, referrer, browser, session_id
+type PageViewRow = { slug: string; viewed_at: string; country?: string; city?: string; device?: string; referrer?: string; browser?: string; session_id?: string };
+
+const COUNTRY_MAP: Record<string, { flag: string; name: string }> = {
+  IL: { flag: "\u{1F1EE}\u{1F1F1}", name: "\u05D9\u05E9\u05E8\u05D0\u05DC" },
+  US: { flag: "\u{1F1FA}\u{1F1F8}", name: "\u05D0\u05E8\u05D4\"\u05D1" },
+  GB: { flag: "\u{1F1EC}\u{1F1E7}", name: "\u05D1\u05E8\u05D9\u05D8\u05E0\u05D9\u05D4" },
+  DE: { flag: "\u{1F1E9}\u{1F1EA}", name: "\u05D2\u05E8\u05DE\u05E0\u05D9\u05D4" },
+  FR: { flag: "\u{1F1EB}\u{1F1F7}", name: "\u05E6\u05E8\u05E4\u05EA" },
+  RU: { flag: "\u{1F1F7}\u{1F1FA}", name: "\u05E8\u05D5\u05E1\u05D9\u05D4" },
+  UA: { flag: "\u{1F1FA}\u{1F1E6}", name: "\u05D0\u05D5\u05E7\u05E8\u05D0\u05D9\u05E0\u05D4" },
+  CA: { flag: "\u{1F1E8}\u{1F1E6}", name: "\u05E7\u05E0\u05D3\u05D4" },
+  AU: { flag: "\u{1F1E6}\u{1F1FA}", name: "\u05D0\u05D5\u05E1\u05D8\u05E8\u05DC\u05D9\u05D4" },
+  IN: { flag: "\u{1F1EE}\u{1F1F3}", name: "\u05D4\u05D5\u05D3\u05D5" },
+  BR: { flag: "\u{1F1E7}\u{1F1F7}", name: "\u05D1\u05E8\u05D6\u05D9\u05DC" },
+  AR: { flag: "\u{1F1E6}\u{1F1F7}", name: "\u05D0\u05E8\u05D2\u05E0\u05D8\u05D9\u05E0\u05D4" },
+  TR: { flag: "\u{1F1F9}\u{1F1F7}", name: "\u05D8\u05D5\u05E8\u05E7\u05D9\u05D4" },
+  NL: { flag: "\u{1F1F3}\u{1F1F1}", name: "\u05D4\u05D5\u05DC\u05E0\u05D3" },
+  SE: { flag: "\u{1F1F8}\u{1F1EA}", name: "\u05E9\u05D5\u05D5\u05D3\u05D9\u05D4" },
+  CH: { flag: "\u{1F1E8}\u{1F1ED}", name: "\u05E9\u05D5\u05D5\u05D9\u05E5" },
+  IT: { flag: "\u{1F1EE}\u{1F1F9}", name: "\u05D0\u05D9\u05D8\u05DC\u05D9\u05D4" },
+  ES: { flag: "\u{1F1EA}\u{1F1F8}", name: "\u05E1\u05E4\u05E8\u05D3" },
+  TH: { flag: "\u{1F1F9}\u{1F1ED}", name: "\u05EA\u05D0\u05D9\u05DC\u05E0\u05D3" },
+  JP: { flag: "\u{1F1EF}\u{1F1F5}", name: "\u05D9\u05E4\u05DF" },
+};
+
+const PAGE_LABELS: Record<string, string> = {
+  "/": "\u05D3\u05E3 \u05D4\u05D1\u05D9\u05EA",
+  "/calculators": "\u05DE\u05D7\u05E9\u05D1\u05D5\u05E0\u05D9\u05DD",
+  "/fund-finder": "\u05DE\u05D5\u05E6\u05D0 \u05E7\u05E8\u05E0\u05D5\u05EA",
+  "/blog": "\u05D1\u05DC\u05D5\u05D2",
+  "/contact": "\u05E6\u05D5\u05E8 \u05E7\u05E9\u05E8",
+  "/onboarding": "\u05D4\u05E6\u05D8\u05E8\u05E4\u05D5\u05EA",
+  "/personal-area": "\u05D0\u05D6\u05D5\u05E8 \u05D0\u05D9\u05E9\u05D9",
+  "/insurances": "\u05D1\u05D9\u05D8\u05D5\u05D7\u05D9\u05DD",
+  "/direct-debit": "\u05D4\u05D5\u05E8\u05D0\u05EA \u05E7\u05D1\u05E2",
+  "/about": "\u05D0\u05D5\u05D3\u05D5\u05EA",
+  "/faq": "\u05E9\u05D0\u05DC\u05D5\u05EA \u05D5\u05EA\u05E9\u05D5\u05D1\u05D5\u05EA",
+  "/agents": "\u05DE\u05E2\u05E8\u05DB\u05EA \u05E1\u05D5\u05DB\u05E0\u05D9\u05DD",
+  "/app/dashboard": "\u05D3\u05E9\u05D1\u05D5\u05E8\u05D3 \u05E1\u05D5\u05DB\u05DF",
+};
+
+function Sparkline({ data, color = "#5ec6c6", width = 80, height = 28 }: { data: number[]; color?: string; width?: number; height?: number }) {
+  if (data.length < 2) return null;
+  const max = Math.max(...data, 1);
+  const points = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * width;
+    const y = height - (v / max) * (height - 2) - 1;
+    return `${x},${y}`;
+  }).join(" ");
+  return (
+    <svg width={width} height={height} className="shrink-0">
+      <polyline points={points} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 function AnalyticsModule() {
   const [views, setViews] = useState<PageViewRow[]>([]);
+  const [prevViews, setPrevViews] = useState<PageViewRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [range, setRange] = useState<"today" | "week" | "month" | "all">("all");
+  const [range, setRange] = useState<"today" | "week" | "month" | "all">("week");
+
+  const getRangeDates = useCallback((r: typeof range) => {
+    const now = new Date();
+    let from: Date | null = null;
+    if (r === "today") from = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    else if (r === "week") from = new Date(now.getTime() - 7 * 86400000);
+    else if (r === "month") from = new Date(now.getTime() - 30 * 86400000);
+    return from;
+  }, []);
+
+  const getPrevRangeDates = useCallback((r: typeof range) => {
+    const now = new Date();
+    if (r === "today") {
+      const end = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const start = new Date(end.getTime() - 86400000);
+      return { start, end };
+    } else if (r === "week") {
+      const end = new Date(now.getTime() - 7 * 86400000);
+      const start = new Date(end.getTime() - 7 * 86400000);
+      return { start, end };
+    } else if (r === "month") {
+      const end = new Date(now.getTime() - 30 * 86400000);
+      const start = new Date(end.getTime() - 30 * 86400000);
+      return { start, end };
+    }
+    return null;
+  }, []);
 
   const fetchViews = useCallback(async () => {
     setLoading(true);
-    const now = new Date();
-    let from: Date | null = null;
-    if (range === "today") {
-      from = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    } else if (range === "week") {
-      from = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    } else if (range === "month") {
-      from = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-    }
+    const from = getRangeDates(range);
 
     let query = siteSupabase
       .from("page_views" as any)
-      .select("slug, viewed_at")
+      .select("slug, viewed_at, country, city, device, referrer, browser, session_id")
       .order("viewed_at", { ascending: false })
-      .limit(500);
-
-    if (from) {
-      query = query.gte("viewed_at", from.toISOString());
-    }
+      .limit(5000);
+    if (from) query = query.gte("viewed_at", from.toISOString());
 
     const { data, error } = await query;
     if (error) console.warn("[Analytics] fetch failed:", error.message);
     setViews((data as PageViewRow[]) ?? []);
+
+    // Fetch previous period for comparison
+    const prev = getPrevRangeDates(range);
+    if (prev) {
+      let pq = siteSupabase
+        .from("page_views" as any)
+        .select("slug, viewed_at, country, city, device, referrer, browser, session_id")
+        .gte("viewed_at", prev.start.toISOString())
+        .lt("viewed_at", prev.end.toISOString())
+        .limit(5000);
+      const { data: pd } = await pq;
+      setPrevViews((pd as PageViewRow[]) ?? []);
+    } else {
+      setPrevViews([]);
+    }
     setLoading(false);
-  }, [range]);
+  }, [range, getRangeDates, getPrevRangeDates]);
 
   useEffect(() => { fetchViews(); }, [fetchViews]);
 
+  // Auto-refresh live feed every 30s
+  useEffect(() => {
+    const interval = setInterval(() => { fetchViews(); }, 30000);
+    return () => clearInterval(interval);
+  }, [fetchViews]);
+
+  // ── Computed stats ──
   const totalViews = views.length;
+  const prevTotalViews = prevViews.length;
+
+  const uniqueSessions = new Set(views.filter(v => v.session_id).map(v => v.session_id)).size || 0;
+  const prevUniqueSessions = new Set(prevViews.filter(v => v.session_id).map(v => v.session_id)).size || 0;
+
+  // Bounce rate: sessions with only 1 page view
+  const sessionCounts: Record<string, number> = {};
+  for (const v of views) {
+    if (v.session_id) sessionCounts[v.session_id] = (sessionCounts[v.session_id] ?? 0) + 1;
+  }
+  const totalSessions = Object.keys(sessionCounts).length || 1;
+  const bounceSessions = Object.values(sessionCounts).filter(c => c === 1).length;
+  const bounceRate = Math.round((bounceSessions / totalSessions) * 100);
+
+  const prevSessionCounts: Record<string, number> = {};
+  for (const v of prevViews) {
+    if (v.session_id) prevSessionCounts[v.session_id] = (prevSessionCounts[v.session_id] ?? 0) + 1;
+  }
+  const prevTotalSessions = Object.keys(prevSessionCounts).length || 1;
+  const prevBounceSessions = Object.values(prevSessionCounts).filter(c => c === 1).length;
+  const prevBounceRate = Math.round((prevBounceSessions / prevTotalSessions) * 100);
+
+  // Avg pages per session
+  const avgPages = totalSessions > 0 ? +(totalViews / totalSessions).toFixed(1) : 0;
+  const prevAvgPages = prevTotalSessions > 0 ? +(prevViews.length / prevTotalSessions).toFixed(1) : 0;
+
+  // % change helper
+  const pctChange = (curr: number, prev: number) => {
+    if (prev === 0) return curr > 0 ? 100 : 0;
+    return Math.round(((curr - prev) / prev) * 100);
+  };
+
+  // Sparkline data: split current period into 7 buckets
+  const getSparklineData = (rows: PageViewRow[]) => {
+    if (rows.length === 0) return [0, 0, 0, 0, 0, 0, 0];
+    const sorted = [...rows].sort((a, b) => new Date(a.viewed_at).getTime() - new Date(b.viewed_at).getTime());
+    const minT = new Date(sorted[0].viewed_at).getTime();
+    const maxT = new Date(sorted[sorted.length - 1].viewed_at).getTime();
+    const span = Math.max(maxT - minT, 1);
+    const buckets = [0, 0, 0, 0, 0, 0, 0];
+    for (const r of sorted) {
+      const t = new Date(r.viewed_at).getTime();
+      const idx = Math.min(Math.floor(((t - minT) / span) * 7), 6);
+      buckets[idx]++;
+    }
+    return buckets;
+  };
+
+  const sparkViews = getSparklineData(views);
+  const sparkSessions = (() => {
+    if (views.length === 0) return [0, 0, 0, 0, 0, 0, 0];
+    const sorted = [...views].sort((a, b) => new Date(a.viewed_at).getTime() - new Date(b.viewed_at).getTime());
+    const minT = new Date(sorted[0].viewed_at).getTime();
+    const maxT = new Date(sorted[sorted.length - 1].viewed_at).getTime();
+    const span = Math.max(maxT - minT, 1);
+    const buckets: Set<string>[] = Array.from({ length: 7 }, () => new Set());
+    for (const r of sorted) {
+      if (!r.session_id) continue;
+      const t = new Date(r.viewed_at).getTime();
+      const idx = Math.min(Math.floor(((t - minT) / span) * 7), 6);
+      buckets[idx].add(r.session_id);
+    }
+    return buckets.map(s => s.size);
+  })();
 
   // Top pages
   const pageCounts: Record<string, number> = {};
-  for (const v of views) {
-    pageCounts[v.slug] = (pageCounts[v.slug] ?? 0) + 1;
-  }
-  const topPages = Object.entries(pageCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10);
+  for (const v of views) pageCounts[v.slug] = (pageCounts[v.slug] ?? 0) + 1;
+  const topPages = Object.entries(pageCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
   const maxPageCount = topPages[0]?.[1] ?? 1;
 
-  // Views per hour (today only for chart)
-  const hourlyMap: Record<number, number> = {};
-  for (let h = 0; h < 24; h++) hourlyMap[h] = 0;
-  if (range === "today") {
-    for (const v of views) {
-      const h = new Date(v.viewed_at).getHours();
-      hourlyMap[h] = (hourlyMap[h] ?? 0) + 1;
+  // Daily views for bar chart
+  const dailyCounts: Record<string, number> = {};
+  for (const v of views) {
+    const day = new Date(v.viewed_at).toISOString().slice(0, 10);
+    dailyCounts[day] = (dailyCounts[day] ?? 0) + 1;
+  }
+  const dailyEntries = Object.entries(dailyCounts).sort((a, b) => a[0].localeCompare(b[0]));
+  const maxDaily = Math.max(...dailyEntries.map(e => e[1]), 1);
+
+  // Countries
+  const countryCounts: Record<string, number> = {};
+  for (const v of views) {
+    if (v.country) countryCounts[v.country] = (countryCounts[v.country] ?? 0) + 1;
+  }
+  const topCountries = Object.entries(countryCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  const maxCountry = topCountries[0]?.[1] ?? 1;
+
+  // Devices
+  const deviceCounts: Record<string, number> = { mobile: 0, desktop: 0, tablet: 0 };
+  for (const v of views) {
+    if (v.device && v.device in deviceCounts) deviceCounts[v.device]++;
+  }
+  const totalDevices = Math.max(Object.values(deviceCounts).reduce((a, b) => a + b, 0), 1);
+
+  // Browsers
+  const browserCounts: Record<string, number> = {};
+  for (const v of views) {
+    if (v.browser) browserCounts[v.browser] = (browserCounts[v.browser] ?? 0) + 1;
+  }
+  const topBrowsers = Object.entries(browserCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const totalBrowsers = Math.max(topBrowsers.reduce((a, e) => a + e[1], 0), 1);
+
+  // Referrers
+  const refCounts: Record<string, number> = {};
+  for (const v of views) {
+    if (v.referrer) {
+      try {
+        const domain = new URL(v.referrer).hostname.replace(/^www\./, "");
+        refCounts[domain] = (refCounts[domain] ?? 0) + 1;
+      } catch {
+        refCounts[v.referrer] = (refCounts[v.referrer] ?? 0) + 1;
+      }
     }
   }
-
-  // "Live" = views in last 5 minutes
-  const liveCount = views.filter(v => new Date(v.viewed_at) >= new Date(Date.now() - 5 * 60 * 1000)).length;
-
-  const PAGE_LABELS: Record<string, string> = {
-    "/": "דף הבית",
-    "/calculators": "מחשבונים",
-    "/fund-finder": "מוצא קרנות",
-    "/blog": "בלוג",
-    "/contact": "צור קשר",
-    "/onboarding": "הצטרפות",
-    "/personal-area": "אזור אישי",
-    "/insurances": "ביטוחים",
-    "/direct-debit": "הוראת קבע",
-    "/about": "אודות",
-    "/faq": "שאלות ותשובות",
-    "/agents": "מערכת סוכנים",
-    "/app/dashboard": "דשבורד סוכן",
-  };
+  const topReferrers = Object.entries(refCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
 
   const label = (slug: string) => PAGE_LABELS[slug] ?? slug;
+  const countryLabel = (code: string) => {
+    const c = COUNTRY_MAP[code];
+    return c ? `${c.flag} ${c.name}` : code;
+  };
+
+  const DEVICE_COLORS: Record<string, string> = { desktop: "#0a3d3d", mobile: "#5ec6c6", tablet: "#f4a261" };
+  const DEVICE_LABELS: Record<string, string> = { desktop: "\u05DE\u05D7\u05E9\u05D1", mobile: "\u05E0\u05D9\u05D9\u05D3", tablet: "\u05D8\u05D0\u05D1\u05DC\u05D8" };
+  const BROWSER_COLORS: Record<string, string> = { Chrome: "#0a3d3d", Safari: "#5ec6c6", Firefox: "#f4a261", Edge: "#90be6d", Other: "#e76f51" };
+  const DEVICE_ICONS: Record<string, string> = { desktop: "\u{1F5A5}", mobile: "\u{1F4F1}", tablet: "\u{1F4F1}" };
+
+  const TrendArrow = ({ value, invertColors = false }: { value: number; invertColors?: boolean }) => {
+    const isPositive = invertColors ? value < 0 : value > 0;
+    const isNegative = invertColors ? value > 0 : value < 0;
+    return (
+      <span className={cn("text-xs font-bold flex items-center gap-0.5", isPositive ? "text-green-500" : isNegative ? "text-red-500" : "text-gray-400")}>
+        {value > 0 ? "\u25B2" : value < 0 ? "\u25BC" : "\u2013"} {Math.abs(value)}%
+      </span>
+    );
+  };
 
   return (
     <div className="space-y-6">
       <ModuleHeader
-        title="אנליטיקה"
-        subtitle="מעקב ביקורים ונתוני גלישה באתר"
+        title="\u05D0\u05E0\u05DC\u05D9\u05D8\u05D9\u05E7\u05D4"
+        subtitle="\u05DE\u05E2\u05E7\u05D1 \u05D1\u05D9\u05E7\u05D5\u05E8\u05D9\u05DD \u05D5\u05E0\u05EA\u05D5\u05E0\u05D9 \u05D2\u05DC\u05D9\u05E9\u05D4 \u05D1\u05D0\u05EA\u05E8"
         action={
           <div className="flex items-center gap-2">
             <div className="flex rounded-full border border-gray-200 overflow-hidden">
@@ -832,7 +1021,7 @@ function AnalyticsModule() {
                     range === r ? "bg-[#0a3d3d] text-white" : "text-gray-500 hover:text-[#0a3d3d]"
                   )}
                 >
-                  {r === "today" ? "היום" : r === "week" ? "שבוע" : r === "month" ? "חודש" : "הכל"}
+                  {r === "today" ? "\u05D4\u05D9\u05D5\u05DD" : r === "week" ? "\u05E9\u05D1\u05D5\u05E2" : r === "month" ? "\u05D7\u05D5\u05D3\u05E9" : "\u05D4\u05DB\u05DC"}
                 </button>
               ))}
             </div>
@@ -843,128 +1032,289 @@ function AnalyticsModule() {
         }
       />
 
-      {/* Stat cards */}
+      {/* ── Section 1: KPI Strip ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          icon={<Eye className="w-5 h-5" />}
-          color="#0a3d3d" bg="#e0f2f1"
-          label="צפיות בעמודים"
-          value={loading ? "..." : totalViews}
-        />
-        <StatCard
-          icon={<Globe className="w-5 h-5" />}
-          color="#6366f1" bg="#ede9fe"
-          label="עמודים שונים"
-          value={loading ? "..." : Object.keys(pageCounts).length}
-        />
-        <StatCard
-          icon={<TrendingUp className="w-5 h-5" />}
-          color="#f59e0b" bg="#fef3c7"
-          label="ממוצע לשעה"
-          value={loading ? "..." : totalViews > 0 ? Math.round(totalViews / (range === "today" ? 24 : range === "week" ? 168 : range === "month" ? 720 : 720)) : 0}
-        />
-        <div className="bg-white rounded-2xl p-5 shadow-sm border hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full flex items-center justify-center shrink-0" style={{ background: "#dcfce7", color: "#16a34a" }}>
-              <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
-            </div>
-            <div>
-              <p className="text-2xl font-extrabold text-[#0a3d3d]">{liveCount}</p>
-              <p className="text-[11px] text-gray-400">פעיל 5 דק' אחרונות</p>
-            </div>
+        {/* Total Views */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-xs text-gray-400">{"\u05E6\u05E4\u05D9\u05D5\u05EA"}</p>
+            <TrendArrow value={pctChange(totalViews, prevTotalViews)} />
+          </div>
+          <p className="text-3xl font-extrabold text-[#0a3d3d]">{loading ? "..." : totalViews.toLocaleString()}</p>
+          <div className="mt-3">
+            <Sparkline data={sparkViews} color="#5ec6c6" />
+          </div>
+        </div>
+        {/* Unique Visitors */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-xs text-gray-400">{"\u05DE\u05D1\u05E7\u05E8\u05D9\u05DD \u05D9\u05D9\u05D7\u05D5\u05D3\u05D9\u05D9\u05DD"}</p>
+            <TrendArrow value={pctChange(uniqueSessions, prevUniqueSessions)} />
+          </div>
+          <p className="text-3xl font-extrabold text-[#0a3d3d]">{loading ? "..." : uniqueSessions.toLocaleString()}</p>
+          <div className="mt-3">
+            <Sparkline data={sparkSessions} color="#f4a261" />
+          </div>
+        </div>
+        {/* Bounce Rate */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-xs text-gray-400">{"\u05E9\u05D9\u05E2\u05D5\u05E8 \u05E0\u05D8\u05D9\u05E9\u05D4"}</p>
+            <TrendArrow value={pctChange(bounceRate, prevBounceRate)} invertColors />
+          </div>
+          <p className="text-3xl font-extrabold text-[#0a3d3d]">{loading ? "..." : `${bounceRate}%`}</p>
+          <div className="mt-3">
+            <Sparkline data={[0, 0, 0, 0, 0, 0, 0].map(() => bounceRate)} color="#e76f51" />
+          </div>
+        </div>
+        {/* Avg Pages / Session */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-xs text-gray-400">{"\u05DE\u05DE\u05D5\u05E6\u05E2 \u05E2\u05DE\u05D5\u05D3\u05D9\u05DD / \u05D1\u05D9\u05E7\u05D5\u05E8"}</p>
+            <TrendArrow value={pctChange(avgPages, prevAvgPages)} />
+          </div>
+          <p className="text-3xl font-extrabold text-[#0a3d3d]">{loading ? "..." : avgPages}</p>
+          <div className="mt-3">
+            <Sparkline data={[0, 0, 0, 0, 0, 0, 0].map(() => avgPages)} color="#90be6d" />
           </div>
         </div>
       </div>
 
-      {/* Hourly chart (today only) */}
-      {range === "today" && (
-        <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h3 className="font-bold text-[#0a3d3d] mb-4 text-sm">צפיות לפי שעה — היום</h3>
-          <div className="flex items-end gap-1" style={{ height: 80 }}>
-            {Array.from({ length: 24 }, (_, h) => {
-              const count = hourlyMap[h] ?? 0;
-              const maxH = Math.max(...Object.values(hourlyMap), 1);
-              const pct = Math.round((count / maxH) * 100);
-              const isNow = new Date().getHours() === h;
-              return (
-                <div key={h} className="flex-1 flex flex-col items-center gap-1 group relative">
-                  <div
-                    className="w-full rounded-t transition-all duration-300"
-                    style={{
-                      height: `${Math.max(pct, count > 0 ? 8 : 2)}%`,
-                      background: isNow ? "#5ec6c6" : count > 0 ? "#0a3d3d" : "#e5e7eb",
-                      minHeight: 2,
-                    }}
-                  />
-                  {count > 0 && (
-                    <span className="absolute -top-5 text-[9px] font-bold text-[#0a3d3d] opacity-0 group-hover:opacity-100 transition-opacity">
-                      {count}
-                    </span>
-                  )}
+      {/* ── Section 2: Main Grid ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Left Column */}
+        <div className="space-y-6">
+          {/* Views Over Time */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h3 className="text-sm font-bold text-[#0a3d3d] mb-4 flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-[#5ec6c6]" />
+              {"\u05E6\u05E4\u05D9\u05D5\u05EA \u05DC\u05D0\u05D5\u05E8\u05DA \u05D6\u05DE\u05DF"}
+            </h3>
+            {loading ? (
+              <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#0a3d3d]" /></div>
+            ) : dailyEntries.length === 0 ? (
+              <p className="text-sm text-gray-400 text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
+            ) : (
+              <div>
+                <div className="flex items-end gap-1" style={{ height: 120 }}>
+                  {dailyEntries.map(([day, count]) => {
+                    const pct = Math.round((count / maxDaily) * 100);
+                    return (
+                      <div key={day} className="flex-1 flex flex-col items-center group relative">
+                        <div
+                          className="w-full rounded-t-md transition-all duration-300 cursor-pointer"
+                          style={{
+                            height: `${Math.max(pct, count > 0 ? 8 : 2)}%`,
+                            background: "linear-gradient(180deg, #5ec6c6, #0a3d3d)",
+                            minHeight: 3,
+                          }}
+                        />
+                        <span className="absolute -top-6 text-[10px] font-bold text-[#0a3d3d] bg-white px-1.5 py-0.5 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                          {count}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
-          </div>
-          <div className="flex justify-between mt-1 text-[9px] text-gray-400">
-            <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:00</span>
-          </div>
-        </div>
-      )}
-
-      {/* Top pages */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border">
-        <h3 className="font-bold text-[#0a3d3d] mb-4 text-sm flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-[#5ec6c6]" />
-          עמודים מובילים
-        </h3>
-        {loading ? (
-          <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#0a3d3d]" /></div>
-        ) : topPages.length === 0 ? (
-          <p className="text-sm text-gray-400 text-center py-6">אין נתונים עדיין — הנתונים יתחילו להצטבר מרגע הפריסה</p>
-        ) : (
-          <div className="space-y-2">
-            {topPages.map(([slug, count]) => (
-              <div key={slug} className="flex items-center gap-3">
-                <span className="text-sm text-[#0a3d3d] font-medium min-w-[140px] truncate" dir="ltr">{label(slug)}</span>
-                <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full rounded-full transition-all"
-                    style={{
-                      width: `${Math.round((count / maxPageCount) * 100)}%`,
-                      background: "linear-gradient(90deg, #5ec6c6, #0a3d3d)",
-                    }}
-                  />
+                <div className="flex justify-between mt-2 text-[9px] text-gray-400">
+                  {dailyEntries.length > 0 && <span>{new Date(dailyEntries[0][0]).toLocaleDateString("he-IL", { day: "2-digit", month: "2-digit" })}</span>}
+                  {dailyEntries.length > 1 && <span>{new Date(dailyEntries[dailyEntries.length - 1][0]).toLocaleDateString("he-IL", { day: "2-digit", month: "2-digit" })}</span>}
                 </div>
-                <span className="text-xs font-bold text-[#0a3d3d] min-w-[32px] text-left" dir="ltr">{count}</span>
               </div>
-            ))}
+            )}
           </div>
-        )}
+
+          {/* Top Pages */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h3 className="text-sm font-bold text-[#0a3d3d] mb-4 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-[#5ec6c6]" />
+              {"\u05E2\u05DE\u05D5\u05D3\u05D9\u05DD \u05DE\u05D5\u05D1\u05D9\u05DC\u05D9\u05DD"}
+            </h3>
+            {loading ? (
+              <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#0a3d3d]" /></div>
+            ) : topPages.length === 0 ? (
+              <p className="text-sm text-gray-400 text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
+            ) : (
+              <div className="space-y-3">
+                {topPages.map(([slug, count]) => {
+                  const pct = Math.round((count / maxPageCount) * 100);
+                  return (
+                    <div key={slug} className="group">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm text-[#0a3d3d] font-medium truncate flex items-center gap-2">
+                          <FileText className="w-3.5 h-3.5 text-[#5ec6c6] shrink-0" />
+                          {label(slug)}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] text-gray-400">{pct}%</span>
+                          <span className="text-xs font-bold text-[#0a3d3d] min-w-[32px] text-left" dir="ltr">{count}</span>
+                        </div>
+                      </div>
+                      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all duration-500"
+                          style={{
+                            width: `${pct}%`,
+                            background: "linear-gradient(90deg, #5ec6c6, #0a3d3d)",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right Column */}
+        <div className="space-y-6">
+          {/* Countries */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h3 className="text-sm font-bold text-[#0a3d3d] mb-4 flex items-center gap-2">
+              <Globe className="w-4 h-4 text-[#5ec6c6]" />
+              {"\u05DE\u05D3\u05D9\u05E0\u05D5\u05EA"}
+            </h3>
+            {topCountries.length === 0 ? (
+              <p className="text-sm text-gray-400 text-center py-4">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9 \u05DE\u05D3\u05D9\u05E0\u05D5\u05EA"}</p>
+            ) : (
+              <div className="space-y-2.5">
+                {topCountries.map(([code, count]) => (
+                  <div key={code} className="flex items-center gap-3">
+                    <span className="text-sm min-w-[120px] truncate">{countryLabel(code)}</span>
+                    <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${Math.round((count / maxCountry) * 100)}%`,
+                          background: "linear-gradient(90deg, #5ec6c6, #0a3d3d)",
+                        }}
+                      />
+                    </div>
+                    <span className="text-xs font-bold text-[#0a3d3d] min-w-[28px] text-left" dir="ltr">{count}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Devices */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h3 className="text-sm font-bold text-[#0a3d3d] mb-4 flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-[#f4a261]" />
+              {"\u05DE\u05DB\u05E9\u05D9\u05E8\u05D9\u05DD"}
+            </h3>
+            {/* Stacked horizontal bar */}
+            <div className="h-8 rounded-full overflow-hidden flex mb-3">
+              {(["desktop", "mobile", "tablet"] as const).map((d) => {
+                const pct = Math.round((deviceCounts[d] / totalDevices) * 100);
+                if (pct === 0) return null;
+                return (
+                  <div
+                    key={d}
+                    className="h-full transition-all duration-500 flex items-center justify-center text-white text-[10px] font-bold"
+                    style={{ width: `${pct}%`, backgroundColor: DEVICE_COLORS[d], minWidth: pct > 0 ? 20 : 0 }}
+                  >
+                    {pct > 8 && `${pct}%`}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex items-center gap-4 justify-center flex-wrap">
+              {(["desktop", "mobile", "tablet"] as const).map((d) => (
+                <div key={d} className="flex items-center gap-1.5 text-xs text-gray-500">
+                  <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: DEVICE_COLORS[d] }} />
+                  <span>{DEVICE_LABELS[d]}</span>
+                  <span className="font-bold text-[#0a3d3d]">{deviceCounts[d]}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Browsers */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h3 className="text-sm font-bold text-[#0a3d3d] mb-4 flex items-center gap-2">
+              <Globe className="w-4 h-4 text-[#90be6d]" />
+              {"\u05D3\u05E4\u05D3\u05E4\u05E0\u05D9\u05DD"}
+            </h3>
+            {/* Stacked horizontal bar */}
+            <div className="h-8 rounded-full overflow-hidden flex mb-3">
+              {topBrowsers.map(([name, count]) => {
+                const pct = Math.round((count / totalBrowsers) * 100);
+                if (pct === 0) return null;
+                return (
+                  <div
+                    key={name}
+                    className="h-full transition-all duration-500 flex items-center justify-center text-white text-[10px] font-bold"
+                    style={{ width: `${pct}%`, backgroundColor: BROWSER_COLORS[name] ?? "#999", minWidth: pct > 0 ? 20 : 0 }}
+                  >
+                    {pct > 8 && `${pct}%`}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex items-center gap-4 justify-center flex-wrap">
+              {topBrowsers.map(([name, count]) => (
+                <div key={name} className="flex items-center gap-1.5 text-xs text-gray-500">
+                  <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: BROWSER_COLORS[name] ?? "#999" }} />
+                  <span>{name}</span>
+                  <span className="font-bold text-[#0a3d3d]">{count}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Top Referrers */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h3 className="text-sm font-bold text-[#0a3d3d] mb-4 flex items-center gap-2">
+              <Link2 className="w-4 h-4 text-[#e76f51]" />
+              {"\u05DE\u05E7\u05D5\u05E8\u05D5\u05EA \u05EA\u05E0\u05D5\u05E2\u05D4"}
+            </h3>
+            {topReferrers.length === 0 ? (
+              <p className="text-sm text-gray-400 text-center py-4">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9 \u05D4\u05E4\u05E0\u05D9\u05D5\u05EA"}</p>
+            ) : (
+              <div className="space-y-2">
+                {topReferrers.map(([domain, count]) => (
+                  <div key={domain} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-gray-50">
+                    <span className="text-sm text-[#0a3d3d] truncate max-w-[200px]" dir="ltr">{domain}</span>
+                    <span className="text-xs font-bold text-[#0a3d3d]">{count}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Recent activity */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border">
-        <h3 className="font-bold text-[#0a3d3d] mb-4 text-sm flex items-center gap-2">
+      {/* ── Section 3: Live Feed ── */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h3 className="text-sm font-bold text-[#0a3d3d] mb-4 flex items-center gap-2">
           <Clock className="w-4 h-4 text-[#5ec6c6]" />
-          פעילות אחרונה
+          {"\u05E4\u05E2\u05D9\u05DC\u05D5\u05EA \u05D0\u05D7\u05E8\u05D5\u05E0\u05D4"}
+          <span className="mr-auto text-[10px] text-gray-400 font-normal">{"\u05DE\u05EA\u05E2\u05D3\u05DB\u05DF \u05DB\u05DC 30 \u05E9\u05E0\u05D9\u05D5\u05EA"}</span>
         </h3>
         {loading ? (
           <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#0a3d3d]" /></div>
         ) : views.length === 0 ? (
-          <p className="text-sm text-gray-400 text-center py-6">אין נתונים עדיין</p>
+          <p className="text-sm text-gray-400 text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
         ) : (
-          <div className="space-y-1 max-h-64 overflow-y-auto">
-            {views.slice(0, 30).map((v, i) => {
+          <div className="space-y-1 max-h-80 overflow-y-auto">
+            {views.slice(0, 50).map((v, i) => {
               const d = new Date(v.viewed_at);
               const timeStr = d.toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" });
               const dateStr = d.toLocaleDateString("he-IL", { day: "2-digit", month: "2-digit" });
               const isToday = new Date().toDateString() === d.toDateString();
+              const cInfo = v.country ? COUNTRY_MAP[v.country] : null;
+              const deviceIcon = v.device ? (DEVICE_ICONS[v.device] ?? "") : "";
               return (
-                <div key={i} className="flex items-center justify-between px-3 py-1.5 rounded-lg hover:bg-gray-50 text-sm">
-                  <span className="font-medium text-[#0a3d3d] truncate max-w-[220px]" dir="ltr">{label(v.slug)}</span>
-                  <span className="text-xs text-gray-400 shrink-0 mr-2" dir="ltr">
+                <div key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 text-sm transition-colors">
+                  <span className="text-xs text-gray-400 shrink-0 min-w-[60px]" dir="ltr">
                     {isToday ? timeStr : `${dateStr} ${timeStr}`}
                   </span>
+                  <span className="font-medium text-[#0a3d3d] truncate flex-1">{label(v.slug)}</span>
+                  {cInfo && <span className="text-sm shrink-0" title={cInfo.name}>{cInfo.flag}</span>}
+                  {deviceIcon && <span className="text-sm shrink-0" title={v.device}>{deviceIcon}</span>}
+                  {v.browser && <span className="text-[10px] text-gray-400 shrink-0 bg-gray-100 px-1.5 py-0.5 rounded">{v.browser}</span>}
                 </div>
               );
             })}

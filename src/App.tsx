@@ -18,6 +18,46 @@ import { useEffect, useRef } from "react";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 
 // ── Page View Tracker ──
+function detectDevice(ua: string): "mobile" | "tablet" | "desktop" {
+  if (/tablet|ipad|playbook|silk/i.test(ua)) return "tablet";
+  if (/mobile|iphone|ipod|android.*mobile|windows phone|blackberry/i.test(ua)) return "mobile";
+  return "desktop";
+}
+
+function detectBrowser(ua: string): string {
+  if (/edg\//i.test(ua)) return "Edge";
+  if (/chrome|crios/i.test(ua) && !/edg\//i.test(ua)) return "Chrome";
+  if (/firefox|fxios/i.test(ua)) return "Firefox";
+  if (/safari/i.test(ua) && !/chrome|crios/i.test(ua)) return "Safari";
+  return "Other";
+}
+
+function getSessionId(): string {
+  let sid = sessionStorage.getItem("pv_session_id");
+  if (!sid) {
+    sid = crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    sessionStorage.setItem("pv_session_id", sid);
+  }
+  return sid;
+}
+
+async function getGeoData(): Promise<{ country: string | null; city: string | null }> {
+  const cached = sessionStorage.getItem("pv_geo");
+  if (cached) {
+    try { return JSON.parse(cached); } catch { /* fall through */ }
+  }
+  try {
+    const res = await fetch("https://ipapi.co/json/");
+    if (!res.ok) return { country: null, city: null };
+    const data = await res.json();
+    const geo = { country: data.country_code ?? null, city: data.city ?? null };
+    sessionStorage.setItem("pv_geo", JSON.stringify(geo));
+    return geo;
+  } catch {
+    return { country: null, city: null };
+  }
+}
+
 function PageViewTracker() {
   const location = useLocation();
   const lastPath = useRef<string>("");
@@ -28,9 +68,23 @@ function PageViewTracker() {
     lastPath.current = slug;
     // Skip admin paths to avoid self-tracking
     if (slug.startsWith("/site-admin") || slug.startsWith("/admin")) return;
-    siteSupabase.from("page_views" as any).insert({ slug }).then(({ error }) => {
+
+    // Non-blocking insert with enriched data
+    (async () => {
+      const ua = navigator.userAgent;
+      const geo = await getGeoData();
+      const row = {
+        slug,
+        device: detectDevice(ua),
+        browser: detectBrowser(ua),
+        referrer: document.referrer || null,
+        session_id: getSessionId(),
+        country: geo.country,
+        city: geo.city,
+      };
+      const { error } = await siteSupabase.from("page_views" as any).insert(row);
       if (error) console.warn("[PageView] insert failed:", error.message);
-    });
+    })();
   }, [location.pathname]);
 
   return null;
