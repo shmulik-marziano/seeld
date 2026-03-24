@@ -68,7 +68,7 @@ const HeroSection = () => {
             >
               <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#0a3d3d]/[0.06] border border-[#0a3d3d]/10 text-sm text-[#0a3d3d] font-medium">
                 <span className="w-2 h-2 rounded-full bg-[#5ec6c6] animate-pulse" />
-                SEELD — ביטוח, חיסכון ופנסיה
+                SEELD — הסוכן שלך לחיים
               </span>
             </motion.div>
 
@@ -79,11 +79,11 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
             >
-              <span className="text-[#0a3d3d]">הביטחון הפיננסי</span>
+              <span className="text-[#0a3d3d]">ביטוח, פנסיה וחיסכון</span>
               <br />
-              <span className="text-[#0a3d3d]">שלך </span>
+              <span className="text-[#0a3d3d]">עם מישהו </span>
               <span className="relative inline-block">
-                <span className="text-[#5ec6c6]">מתחיל כאן</span>
+                <span className="text-[#5ec6c6]">שמכיר אותך</span>
                 <motion.span
                   className="absolute -bottom-2 left-0 right-0 h-[5px] bg-[#f4a261] rounded-full"
                   initial={{ scaleX: 0 }}
@@ -101,9 +101,9 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.25 }}
             >
-              ביטוח שמתאים לכם, פנסיה שעובדת בשבילכם, חיסכון שגדל לאורך זמן.
+              שמוליק מרציאנו, סוכן ביטוח מורשה. משווה בין כל החברות, מתאים לכם בדיוק מה שצריך, ומטפל בכל הבירוקרטיה.
               <br />
-              הכל שקוף, הכל מוסבר, הכל בגובה העיניים.
+              אתם רק מאשרים.
             </motion.p>
 
             {/* CTAs */}
@@ -115,14 +115,14 @@ const HeroSection = () => {
             >
               <Link to="/contact" className="w-full sm:w-auto">
                 <Button className="bg-[#0a3d3d] text-white hover:bg-[#0d4a4a] rounded-full px-10 py-5 text-base font-bold shadow-xl shadow-[#0a3d3d]/10 w-full sm:w-auto min-h-[56px]">
-                  בדקו את הביטוח שלכם
+                  סרקו את התיק שלכם — חינם
                   <ArrowDownLeft className="w-5 h-5 mr-2" />
                 </Button>
               </Link>
               <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
                 <Button variant="outline" className="border-[#0a3d3d]/15 text-[#0a3d3d] hover:bg-[#0a3d3d]/5 rounded-full px-10 py-5 text-base font-semibold w-full sm:w-auto min-h-[56px]">
                   <Phone className="w-5 h-5 ml-2" />
-                  דברו איתנו
+                  שלחו וואטסאפ
                 </Button>
               </a>
             </motion.div>

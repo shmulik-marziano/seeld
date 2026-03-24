@@ -36,34 +36,34 @@ const whySeeld = [
   {
     icon: Users,
     title: "שירות אישי בגובה העיניים",
-    description: "אתם מדברים ישירות עם שמוליק — שאלות, שינויים, תביעות. תמיד יש למי לפנות ותמיד מקבלים מענה.",
+    description: "לא מוקד עם 50 נציגים. שמוליק — הסוכן שלכם. שואלים, מקבלים תשובה. תמיד.",
     accent: "#5ec6c6",
   },
   {
     icon: Handshake,
     title: "סוכנות מבוססת ומוכרת",
-    description: "סוכנות מורשית ומפוקחת על ידי רשות שוק ההון. עובדים לפי הספר, בשקיפות מלאה.",
+    description: "רישיון רשות שוק ההון. חברים בלשכת סוכני הביטוח. מבית עמיתים הון. עובדים לפי הספר.",
     accent: "#f4a261",
   },
   {
     icon: Scale,
     title: "עבודה עם כל החברות",
-    description: "לא קשורים לחברה אחת. משווים בין כל חברות הביטוח וקרנות הפנסיה, ומציעים את מה שבאמת מתאים לכם.",
+    description: "הראל, מגדל, כלל, הפניקס, איילון, מנורה ועוד 6 — משווים את כולם ובוחרים את מה שמתאים לכם. לא מה שמתאים לנו.",
     accent: "#90be6d",
   },
   {
     icon: Zap,
     title: "הכל דיגיטלי וזמין",
-    description: "מחשבונים לבדיקת כדאיות, פורטל אישי לצפייה בפוליסות, ומעקב שוטף — הכל אונליין, בכל שעה.",
+    description: "פורטל אישי לצפייה בפוליסות, מחשבונים לחישובים מהירים, סריקת תיק אוטומטית. 2026, לא 2006.",
     accent: "#e76f51",
   },
 ];
 
 const insuranceTypes = [
-  { icon: Car, title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳", href: "/insurance/vehicle" },
-  { icon: HeartPulse, title: "ביטוח בריאות", description: "ניתוחים, תרופות וטיפולים מעבר לסל", href: "/insurance/health" },
-  { icon: Heart, title: "ביטוח חיים", description: "ביטחון כלכלי למשפחה במקרה הצורך", href: "/insurance/life" },
-  { icon: Home, title: "ביטוח דירה", description: "מבנה ותכולה", href: "/insurance/apartment" },
+  { icon: Car, title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳ — השוואה בין כל החברות בדקות", href: "/insurance/vehicle" },
+  { icon: HeartPulse, title: "ביטוח בריאות", description: "ניתוחים, תרופות וטיפולים — כיסוי שמשלים את הסל ולא כופל אותו", href: "/insurance/health" },
+  { icon: Heart, title: "ביטוח חיים", description: "הגנה כלכלית למשפחה. לא מה שמנסים למכור לך — מה שאתה באמת צריך", href: "/insurance/life" },
+  { icon: Home, title: "ביטוח דירה", description: "מבנה ותכולה — שלא תגלו שמשהו חסר אחרי שכבר מאוחר", href: "/insurance/apartment" },
   { icon: Key, title: "ביטוח שוכרים", description: "כיסוי תכולה ואחריות צד ג׳ לשוכרים", href: "/insurance/renters" },
   { icon: Building2, title: "ביטוח עסקי", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק", href: "/insurance/business" },
   { icon: Plane, title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", href: "/insurance/travel" },
@@ -79,16 +79,16 @@ const insuranceTypes = [
 ];
 
 const savingsProducts = [
-  { icon: Landmark, title: "קרנות פנסיה", description: "הפקדות, כיסויים ובחירת מסלול נכון", href: "/savings/pension-funds" },
+  { icon: Landmark, title: "קרנות פנסיה", description: "הפקדות, כיסויים ומסלול נכון — כי ברירת המחדל היא לא תמיד הכי טובה", href: "/savings/pension-funds" },
   { icon: PiggyBank, title: "קופות גמל", description: "חיסכון לטווח ארוך עם הטבות מס", href: "/savings/gemel-funds" },
-  { icon: HandCoins, title: "גמל להשקעה", description: "חיסכון נזיל עם תשואת שוק ההון", href: "/savings/gemel-investment" },
+  { icon: HandCoins, title: "גמל להשקעה", description: "חיסכון נזיל בשוק ההון — בלי שקופות ובלי תקופות נעילה", href: "/savings/gemel-investment" },
   { icon: Baby, title: "חיסכון לכל ילד", description: "ניהול כספי התוכנית הממשלתית", href: "/savings/child-savings" },
   { icon: GraduationCap, title: "קרנות השתלמות", description: "חיסכון לשש שנים עם פטור ממס", href: "/savings/training-funds" },
   { icon: TrendingUp, title: "השקעות", description: "בחירת מסלולי השקעה ומעקב תשואות", href: "/savings/investment" },
   { icon: Heart, title: "ביטוח חיים פנסיוני", description: "חיסכון עם כיסוי למקרה מוות ונכות", href: "/insurance/life" },
   { icon: Building2, title: "קופות מעסיקים", description: "הפקדות לעובדים, ציות לחוק ובחירת מוצרים", href: "/savings/employer-funds" },
-  { icon: CalendarCheck, title: "טרום פרישה", description: "בדיקת מוכנות ותכנון לפני היציאה לפנסיה", href: "/savings/pre-retirement" },
-  { icon: Wallet, title: "לאחר פרישה", description: "משיכת כספים, קצבאות ותכנון מס", href: "/savings/post-retirement" },
+  { icon: CalendarCheck, title: "טרום פרישה", description: "עוד 5-10 שנים לפנסיה? עכשיו זה הזמן לבדוק שהכל מסודר", href: "/savings/pre-retirement" },
+  { icon: Wallet, title: "לאחר פרישה", description: "משיכת כספים, קצבאות ותכנון מס — שלא תפסידו שקל מיותר", href: "/savings/post-retirement" },
   { icon: Target, title: "תכנון פיננסי", description: "מיפוי מלא של הנכסים ובניית תוכנית", href: "/savings/financial-planning" },
 ];
 
@@ -101,7 +101,7 @@ const calculators = [
 
 const partners = [
   "הראל", "מנורה מבטחים", "מגדל", "כלל", "איילון", "הפניקס",
-  "מיטב", "מור", "ילין לפידות", "אנליסט", "איפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה",
+  "מיטב", "מור", "ילין לפידות", "אנליסט", "אינפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה",
 ];
 
 const faqItems = [
@@ -114,16 +114,24 @@ const faqItems = [
     answer: "בקרן פנסיה כולם חולקים את הסיכון — זה מוזיל עלויות. בביטוח מנהלים יש פוליסה אישית עם גמישות רבה יותר. מה עדיף? תלוי בגיל, בריאות ומצב תעסוקתי.",
   },
   {
-    question: "האם אפשר לעבור ביטוח ללא תקופת אכשרה?",
-    answer: "ברוב המקרים כן. אפשר לעבור חברה ולשמור על הוותק, בלי לחכות מחדש. אנחנו בודקים שהמעבר נעשה בלי לאבד כיסויים קיימים.",
-  },
-  {
     question: "כמה עולה פגישת ייעוץ פנסיוני?",
     answer: "הפגישה הראשונה ללא עלות. תקבלו תמונה מלאה של מצב הפנסיה שלכם — הפקדות, כיסויים, דמי ניהול — ותבינו בדיוק איפה אתם עומדים.",
   },
   {
     question: "אתם עובדים עם חברת ביטוח ספציפית?",
     answer: "לא. אנחנו עובדים מול כל החברות — הפניקס, מגדל, הראל, כלל, מנורה מבטחים ועוד. ככה אפשר להשוות ולמצוא את מה שמתאים ומשתלם באמת.",
+  },
+  {
+    question: "כמה זמן לוקח לעבור חברה?",
+    answer: "בין שבוע לחודש, תלוי בסוג המוצר. אנחנו מטפלים בהכל — טפסים, ניוד, בדיקה שלא נפגעים כיסויים קיימים.",
+  },
+  {
+    question: "מה זה סריקת תיק?",
+    answer: "בדיקה של כל מה שיש לכם — ביטוחים, פנסיה, חיסכון. מוצאים חסרים, כפלים, ודמי ניהול גבוהים. בלי עלות ובלי התחייבות.",
+  },
+  {
+    question: "מה קורה אם יש בעיה עם חברת הביטוח?",
+    answer: "שמוליק מטפל. זה בדיוק למה יש סוכן — שלא תצטרכו להתמודד עם החברה לבד. אנחנו הכתובת שלכם.",
   },
 ];
 
@@ -142,6 +150,8 @@ const leadSubjects = [
   "פנסיה וחיסכון",
   "ביטוח עסקי",
   "ביטוח נסיעות",
+  "סריקת תיק קיים",
+  "ניוד פנסיה",
   "אחר",
 ];
 
@@ -163,7 +173,7 @@ const processSteps = [
   {
     number: 1,
     title: "השארת פרטים",
-    description: "פונים אלינו או משאירים פרטים באתר",
+    description: "וואטסאפ, טלפון, או טופס באתר. שמוליק חוזר היום.",
     icon: PhoneCall,
     color: "#5ec6c6",
   },
@@ -191,14 +201,14 @@ const processSteps = [
   {
     number: 5,
     title: "ביצוע ומעבר",
-    description: "מטפלים בכל הבירוקרטיה — אתם רק מאשרים",
+    description: "אנחנו מטפלים בטפסים, בניוד, בחתימות. אתם רק מאשרים.",
     icon: Handshake,
     color: "#5ec6c6",
   },
   {
     number: 6,
     title: "מעקב שוטף",
-    description: "סורקים מחדש כל שנה, מוודאים שהכל עדכני",
+    description: "כל שנה סריקה מחדש. שהכסף שלכם תמיד במקום הנכון.",
     icon: CalendarCheck,
     color: "#f4a261",
   },
@@ -330,10 +340,10 @@ const Index = () => {
                   <div className="absolute top-0 right-[15%] w-4 h-4 rounded-full bg-[#e76f51] opacity-20 hidden sm:block" />
                   <div className="absolute top-6 left-[18%] w-3 h-3 rounded-full bg-[#90be6d] opacity-25 hidden sm:block" />
                   <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] mb-3">
-                    רוצים <span className="text-[#5ec6c6]">לשמוע עוד?</span>
+                    בואו נבדוק מה <span className="text-[#5ec6c6]">אפשר לשפר</span>
                   </h2>
                   <p className="text-[#0a3d3d]/40 text-base sm:text-lg">
-                    השאירו פרטים ונחזור אליכם תוך שעות עבודה ספורות
+                    השאירו פרטים. שמוליק יחזור אליכם היום.
                   </p>
                 </div>
               </ScrollReveal>
@@ -374,7 +384,7 @@ const Index = () => {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
-                        {leadSubmitting ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "שלחו לי הצעה"}
+                        {leadSubmitting ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "שלחו ונתחיל"}
                       </motion.button>
                     </div>
                     <div className="text-center mt-5">
@@ -657,7 +667,7 @@ const Index = () => {
                   <span className="text-[#6c63ff]">המחשבונים</span> שלנו
                 </h2>
                 <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                  בדקו בעצמכם — חישובים מהירים לפני שמתחילים לדבר על מספרים
+                  לפני שמדברים מספרים — בדקו בעצמכם. חינם, בלי הרשמה.
                 </p>
               </div>
             </ScrollReveal>
@@ -720,10 +730,10 @@ const Index = () => {
               <div className="absolute top-1 left-[15%] w-4 h-4 rounded-full bg-[#5ec6c6] opacity-25 hidden sm:block" />
               <SectionLabel>PARTNERS</SectionLabel>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                עובדים עם <span className="text-[#5ec6c6]">מיטב החברות</span>
+                לא עובדים בשביל חברה. <span className="text-[#5ec6c6]">עובדים בשבילכם.</span>
               </h2>
               <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                משווים בין כל חברות הביטוח וקרנות הפנסיה בשוק הישראלי
+                12 חברות ביטוח, 6 בתי השקעות. משווים, ממליצים, ואתם מחליטים.
               </p>
             </div>
           </ScrollReveal>
@@ -781,9 +791,7 @@ const Index = () => {
                     <p className="text-[#5ec6c6] font-semibold text-xl">סוכן ביטוח פנסיוני מורשה</p>
                   </div>
                   <p className="text-white/45 text-base sm:text-lg leading-relaxed">
-                    שמוליק מרציאנו, סוכן ביטוח פנסיוני מורשה. עובד מול כל חברות הביטוח ובתי ההשקעות בשוק.
-                    הגישה פשוטה: להבין מה יש לכם, מה חסר, ומה אפשר לשפר — בלי מילים גדולות, בלי לחץ.
-                    SEELD פועלת מתוך בית עמיתים הון, סוכנות מפוקחת ומורשית.
+                    סוכן ביטוח מורשה, מייסד SEELD. עובד מול כל חברות הביטוח ובתי ההשקעות בשוק הישראלי. הגישה פשוטה: להיות הסוכן שהיית רוצה שיהיה לך — כזה שעונה כשמתקשרים, מסביר במילים פשוטות, ומטפל בכל הניירת בלי שצריך לרדוף. מבית עמיתים הון, מאות לקוחות, אפס פשרות על שירות.
                   </p>
                   <div className="flex flex-wrap gap-4 pt-2">
                     <Link
@@ -971,11 +979,11 @@ const Index = () => {
                     הסורק של <span className="text-[#5ec6c6]">SEELD</span>
                   </h2>
                   <p className="text-[#0a3d3d]/50 text-base sm:text-lg max-w-md mx-auto lg:mx-0">
-                    בדיקה חכמה של תיק הביטוח והפנסיה שלכם — כפל ביטוחי, דמי ניהול גבוהים, מסלולי השקעה לא מתאימים, וכיסויים חסרים. הכל אוטומטי.
+                    רוצים לדעת אם אתם משלמים יותר מדי? סריקה חינמית של כל התיק — ביטוח, פנסיה וחיסכון. תוצאות תוך 48 שעות.
                   </p>
                   <Link to="/contact">
                     <Button className="bg-[#0a3d3d] text-white hover:bg-[#0d4a4a] rounded-full px-8 py-5 text-base font-bold shadow-lg mt-4 min-h-[48px]">
-                      רוצים סריקה? השאירו פרטים
+                      סרקו את התיק שלכם — חינם
                       <ArrowDownLeft className="w-5 h-5 mr-2" />
                     </Button>
                   </Link>
@@ -1234,7 +1242,7 @@ const Index = () => {
                 <div className="space-y-3 text-center sm:text-right">
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d]">סוכן ביטוח? הכלים שלך מחכים כאן</h3>
                   <p className="text-base text-[#0a3d3d]/40 max-w-md">
-                    פורטל SEELD לסוכנים — ניהול לקוחות, מעקב פוליסות ומסמכים, הכל במקום אחד.
+                    פורטל SEELD לסוכנים — כל הכלים שצריך בשביל לנהל סוכנות חכמה. CRM, ניתוח תיקים, ליקויים ומסמכים.
                   </p>
                 </div>
                 <Link to="/app/auth" className="w-full sm:w-auto flex-shrink-0">
