@@ -55,6 +55,29 @@ import HelpPage from "@/pages/HelpPage";
 import AuthPage from "@/pages/AuthPage";
 import InstallPage from "@/pages/InstallPage";
 
+// ── Platform Tools ──
+import CatchPage from "@/pages/tools/CatchPage";
+import LensPage from "@/pages/tools/LensPage";
+import RevealPage from "@/pages/tools/RevealPage";
+import XRayPage from "@/pages/tools/XRayPage";
+import WiseToolPage from "@/pages/tools/WisePage";
+import StagePage from "@/pages/tools/StagePage";
+import SignPage from "@/pages/tools/SignPage";
+import GatePage from "@/pages/tools/GatePage";
+import FillPage from "@/pages/tools/FillPage";
+import LaunchPage from "@/pages/tools/LaunchPage";
+import FixPage from "@/pages/tools/FixPage";
+import PulsePage from "@/pages/tools/PulsePage";
+import BondPage from "@/pages/tools/BondPage";
+import DeskPage from "@/pages/tools/DeskPage";
+import ShieldPage from "@/pages/tools/ShieldPage";
+import CoinPage from "@/pages/tools/CoinPage";
+import LinkPage from "@/pages/tools/LinkPage";
+import RadarPage from "@/pages/tools/RadarPage";
+import BridgePage from "@/pages/tools/BridgePage";
+import FlowPage from "@/pages/tools/FlowPage";
+import BrainPage from "@/pages/tools/BrainPage";
+
 // PDage module
 import { PDageLayout } from "@/components/pdage/PDageLayout";
 import PDageDashboard from "@/pages/pdage/PDageDashboard";
@@ -280,6 +303,34 @@ const App = () => (
                   <Route path="/app/leads" element={<LeadsPage />} />
                   <Route path="/app/help" element={<HelpPage />} />
                   <Route path="/app/settings" element={<AgencySettingsPage />} />
+
+                  {/* ═══ PLATFORM TOOLS ═══ */}
+                  {/* Phase 1: Entry */}
+                  <Route path="/app/tools/catch" element={<CatchPage />} />
+                  <Route path="/app/tools/lens" element={<LensPage />} />
+                  <Route path="/app/tools/reveal" element={<RevealPage />} />
+                  {/* Phase 2: Analysis */}
+                  <Route path="/app/tools/x-ray" element={<XRayPage />} />
+                  <Route path="/app/tools/wise" element={<WiseToolPage />} />
+                  <Route path="/app/tools/stage" element={<StagePage />} />
+                  {/* Phase 3: Execution */}
+                  <Route path="/app/tools/sign" element={<SignPage />} />
+                  <Route path="/app/tools/gate" element={<GatePage />} />
+                  <Route path="/app/tools/fill" element={<FillPage />} />
+                  <Route path="/app/tools/launch" element={<LaunchPage />} />
+                  <Route path="/app/tools/fix" element={<FixPage />} />
+                  <Route path="/app/tools/pulse" element={<PulsePage />} />
+                  {/* Phase 4: Maintenance */}
+                  <Route path="/app/tools/bond" element={<BondPage />} />
+                  <Route path="/app/tools/desk" element={<DeskPage />} />
+                  <Route path="/app/tools/shield" element={<ShieldPage />} />
+                  <Route path="/app/tools/coin" element={<CoinPage />} />
+                  <Route path="/app/tools/link" element={<LinkPage />} />
+                  {/* Phase 5: Infrastructure */}
+                  <Route path="/app/tools/radar" element={<RadarPage />} />
+                  <Route path="/app/tools/bridge" element={<BridgePage />} />
+                  <Route path="/app/tools/flow" element={<FlowPage />} />
+                  <Route path="/app/tools/brain" element={<BrainPage />} />
                 </Route>
 
                 <Route element={<PDageAuthGuard />}>
