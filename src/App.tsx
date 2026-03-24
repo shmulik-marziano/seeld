@@ -28,7 +28,9 @@ function PageViewTracker() {
     lastPath.current = slug;
     // Skip admin paths to avoid self-tracking
     if (slug.startsWith("/site-admin") || slug.startsWith("/admin")) return;
-    siteSupabase.from("page_views" as any).insert({ slug }).then(() => {});
+    siteSupabase.from("page_views" as any).insert({ slug }).then(({ error }) => {
+      if (error) console.warn("[PageView] insert failed:", error.message);
+    });
   }, [location.pathname]);
 
   return null;

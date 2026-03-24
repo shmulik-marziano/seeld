@@ -60,19 +60,19 @@ export function CreateSummaryWizard({ open, onOpenChange }: Props) {
   const handleSkipAndCreate = () => {
     if (!selectedCustomerId) return;
     handleClose(false);
-    navigate(`/execution-summary/${selectedCustomerId}?create=true`);
+    navigate(`/app/execution-summary/${selectedCustomerId}?create=true`);
   };
 
   const handleFromRecommendation = (recId: string) => {
     if (!selectedCustomerId) return;
     handleClose(false);
-    navigate(`/execution-summary/${selectedCustomerId}?create=true&recId=${recId}`);
+    navigate(`/app/execution-summary/${selectedCustomerId}?create=true&recId=${recId}`);
   };
 
   const handleCreateForAllApproved = () => {
     if (!selectedCustomerId) return;
     handleClose(false);
-    navigate(`/execution-summary/${selectedCustomerId}?create=true`);
+    navigate(`/app/execution-summary/${selectedCustomerId}?create=true`);
   };
 
   return (

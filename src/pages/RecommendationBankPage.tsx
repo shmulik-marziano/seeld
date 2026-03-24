@@ -263,7 +263,7 @@ export default function RecommendationBankPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => navigate(`/customers/${rec.customerId}`)}>
+                          <DropdownMenuItem onClick={() => navigate(`/app/customers/${rec.customerId}`)}>
                             <Eye className="h-3.5 w-3.5 ml-2" />פתח כרטיס לקוח
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleCopyLink(rec.customerId)}>

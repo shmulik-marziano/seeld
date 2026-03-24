@@ -1240,7 +1240,7 @@ export default function NewRecommendationPage() {
             <Button onClick={() => navigate('/app/recommendation-bank')} size="lg" className="rounded-2xl min-h-[48px] bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20">
               עבור לבנק המלצות
             </Button>
-            <Button onClick={() => navigate(`/customers/${selectedCustomerId}`)} variant="outline" size="lg" className="rounded-2xl min-h-[48px]">
+            <Button onClick={() => navigate(`/app/customers/${selectedCustomerId}`)} variant="outline" size="lg" className="rounded-2xl min-h-[48px]">
               כרטיס הלקוח
             </Button>
             <Button variant="outline" size="lg" onClick={() => navigate('/')} className="rounded-2xl min-h-[48px]">

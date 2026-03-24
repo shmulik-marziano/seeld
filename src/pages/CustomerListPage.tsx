@@ -21,8 +21,10 @@ const FILTERS = [
   { label: 'הכל', value: 'all' },
   { label: 'חדש', value: 'חדש' },
   { label: 'בקליטה', value: 'בקליטה' },
+  { label: 'השלמת מוצרים', value: 'בהשלמת מוצרים' },
   { label: 'מוכן להמלצה', value: 'מוכן להמלצה' },
   { label: 'פולו-אפ', value: 'ממתין לפולו-אפ' },
+  { label: 'מאושר לביצוע', value: 'מאושר לביצוע' },
   { label: 'בביצוע', value: 'בביצוע' },
   { label: 'הושלם', value: 'הושלם' },
 ];
@@ -211,7 +213,7 @@ export default function CustomerListPage() {
                     }}
                     whileHover={{ scale: 1.1, y: -6 }}
                     whileTap={{ scale: 0.93 }}
-                    onClick={() => navigate(`/customers/${c.id}`)}
+                    onClick={() => navigate(`/app/customers/${c.id}`)}
                     className="flex flex-col items-center gap-2 focus:outline-none"
                   >
                     {/* Floating idle animation wrapper */}

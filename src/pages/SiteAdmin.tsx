@@ -740,7 +740,7 @@ type PageViewRow = { slug: string; viewed_at: string };
 function AnalyticsModule() {
   const [views, setViews] = useState<PageViewRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [range, setRange] = useState<"today" | "week" | "month" | "all">("today");
+  const [range, setRange] = useState<"today" | "week" | "month" | "all">("all");
 
   const fetchViews = useCallback(async () => {
     setLoading(true);
@@ -764,7 +764,8 @@ function AnalyticsModule() {
       query = query.gte("viewed_at", from.toISOString());
     }
 
-    const { data } = await query;
+    const { data, error } = await query;
+    if (error) console.warn("[Analytics] fetch failed:", error.message);
     setViews((data as PageViewRow[]) ?? []);
     setLoading(false);
   }, [range]);

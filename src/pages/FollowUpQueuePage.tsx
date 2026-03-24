@@ -116,7 +116,7 @@ export default function FollowUpQueuePage() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                               <button
-                                onClick={() => navigate(`/customers/${item.customerId}`)}
+                                onClick={() => navigate(`/app/customers/${item.customerId}`)}
                                 className="font-bold text-sm hover:text-[#0a3d3d] transition-colors flex items-center gap-1.5"
                               >
                                 <div className="w-6 h-6 rounded-lg bg-[#0a3d3d]/8 flex items-center justify-center text-[10px] font-bold text-[#0a3d3d] shrink-0">
@@ -163,7 +163,7 @@ export default function FollowUpQueuePage() {
                             <Button
                               size="sm"
                               variant="ghost"
-                              onClick={() => navigate(`/customers/${item.customerId}`)}
+                              onClick={() => navigate(`/app/customers/${item.customerId}`)}
                               className="rounded-xl h-9 w-9 p-0 min-h-[36px] hover:bg-[#5ec6c6]/10"
                             >
                               <ArrowLeft className="h-4 w-4" />

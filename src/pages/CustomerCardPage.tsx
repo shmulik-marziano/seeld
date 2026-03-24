@@ -288,14 +288,14 @@ export default function CustomerCardPage() {
                           });
                           toast.success('עבר לביצוע');
                         }} className="min-h-[40px] text-xs rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90">העבר לביצוע</Button>
-                        <Button size="sm" variant="outline" onClick={() => navigate(`/execution-summary/${customer.id}`)} className="gap-1 min-h-[40px] text-xs">
+                        <Button size="sm" variant="outline" onClick={() => navigate(`/app/execution-summary/${customer.id}`)} className="gap-1 min-h-[40px] text-xs">
                           <ClipboardCheck className="h-3.5 w-3.5" />עבור לסיכום
                         </Button>
                       </div>
                     )}
                     {(r.decisionStatus === 'עבר לביצוע' || r.decisionStatus === 'בוצע') && (
                       <div className="flex gap-2 mt-2">
-                        <Button size="sm" variant="ghost" onClick={() => navigate(`/execution-summary/${customer.id}`)} className="gap-1 text-xs text-primary min-h-[40px]">
+                        <Button size="sm" variant="ghost" onClick={() => navigate(`/app/execution-summary/${customer.id}`)} className="gap-1 text-xs text-primary min-h-[40px]">
                           <ClipboardCheck className="h-3 w-3" />עבור לסיכום ביצועים
                         </Button>
                       </div>
@@ -388,7 +388,7 @@ export default function CustomerCardPage() {
           <div className="flex items-center justify-between flex-wrap gap-2">
             <h2 className="text-base sm:text-lg font-bold flex items-center gap-2"><ClipboardCheck className="h-5 w-5" />סיכום ביצועים</h2>
             {recs.some(r => ['מאשר', 'עבר לביצוע', 'בוצע'].includes(r.decisionStatus)) && (
-              <Button size="sm" onClick={() => navigate(`/execution-summary/${customer.id}`)} className="gap-1.5 min-h-[40px] text-xs sm:text-sm rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15">
+              <Button size="sm" onClick={() => navigate(`/app/execution-summary/${customer.id}`)} className="gap-1.5 min-h-[40px] text-xs sm:text-sm rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15">
                 <Plus className="h-3.5 w-3.5" />
                 {execSummaries.length > 0 ? 'צפה / ערוך סיכום' : 'צור סיכום ביצועים'}
               </Button>
@@ -409,7 +409,7 @@ export default function CustomerCardPage() {
           ) : (
             <div className="space-y-3">
               {execSummaries.map(s => (
-                <Card key={s.id} className="cursor-pointer hover:shadow-md transition-all active:scale-[0.99] rounded-2xl border-border/50" onClick={() => navigate(`/execution-summary/${customer.id}?summaryId=${s.id}`)}>
+                <Card key={s.id} className="cursor-pointer hover:shadow-md transition-all active:scale-[0.99] rounded-2xl border-border/50" onClick={() => navigate(`/app/execution-summary/${customer.id}?summaryId=${s.id}`)}>
                   <CardContent className="p-3 sm:p-4 flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-10 h-10 rounded-xl bg-[#0a3d3d]/10 flex items-center justify-center shrink-0">

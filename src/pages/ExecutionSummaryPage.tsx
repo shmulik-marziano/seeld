@@ -187,7 +187,7 @@ export default function ExecutionSummaryPage() {
         <span className="text-muted-foreground/50">‹</span>
         <button onClick={() => navigate('/app/customers')} className="hover:text-[#0a3d3d] transition-colors">לקוחות</button>
         <span className="text-muted-foreground/50">‹</span>
-        <button onClick={() => navigate(`/customers/${customerId}`)} className="hover:text-[#0a3d3d] transition-colors">{customer.fullName}</button>
+        <button onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:text-[#0a3d3d] transition-colors">{customer.fullName}</button>
         <span className="text-muted-foreground/50">‹</span>
         <span className="text-foreground font-medium">סיכום ביצועים</span>
       </div>
@@ -195,7 +195,7 @@ export default function ExecutionSummaryPage() {
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" onClick={() => navigate(`/customers/${customerId}`)} className="hover:bg-[#5ec6c6]/10">
+          <Button variant="ghost" size="sm" onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:bg-[#5ec6c6]/10">
             <ArrowRight className="h-4 w-4" />
           </Button>
           <div>
@@ -444,7 +444,7 @@ export default function ExecutionSummaryPage() {
 
           {/* Bottom actions */}
           <div className="flex items-center justify-between pt-2 pb-6">
-            <Button variant="outline" onClick={() => navigate(`/customers/${customerId}`)} className="rounded-full">
+            <Button variant="outline" onClick={() => navigate(`/app/customers/${customerId}`)} className="rounded-full">
               <ArrowRight className="h-4 w-4 ml-1.5" />חזרה לכרטיס לקוח
             </Button>
             <div className="flex gap-2">

@@ -506,7 +506,7 @@ export default function FileImportPage() {
     if (p.idNumber) params.set('idNumber', p.idNumber);
     if (p.mobilePhone) params.set('mobilePhone', p.mobilePhone);
     if (p.email) params.set('email', p.email);
-    navigate(`/customers/new?${params.toString()}`);
+    navigate(`/app/customers/new?${params.toString()}`);
   };
 
   const handleManualAssign = async (customerId: string, customerName: string) => {
@@ -849,7 +849,7 @@ export default function FileImportPage() {
                           <TableCell onClick={(e) => e.stopPropagation()}>
                             <div className="flex items-center gap-1">
                               {item.customerId && (
-                                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => navigate(`/customers/${item.customerId}`)}>
+                                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => navigate(`/app/customers/${item.customerId}`)}>
                                   <ExternalLink className="h-3.5 w-3.5" />
                                 </Button>
                               )}
@@ -972,7 +972,7 @@ export default function FileImportPage() {
                               </TableCell>
                               <TableCell>
                                 {item.customerId && (
-                                  <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => navigate(`/customers/${item.customerId}`)}>
+                                  <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => navigate(`/app/customers/${item.customerId}`)}>
                                     <ExternalLink className="h-3 w-3" />
                                   </Button>
                                 )}

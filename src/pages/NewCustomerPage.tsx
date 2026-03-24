@@ -173,7 +173,7 @@ export default function NewCustomerPage() {
         if (response.data?.count) { toast.success(`${entry.file.name}: נמצאו ${response.data.count} מוצרים`); }
       }
       toast.success('הלקוח נוצר בהצלחה');
-      navigate(`/customers/${customer.id}`);
+      navigate(`/app/customers/${customer.id}`);
     } catch (err: any) {
       toast.error(err.message || 'שגיאה ביצירת לקוח');
     } finally { setCreating(false); }
