@@ -60,37 +60,29 @@ const EmployerFunds = () => {
       <Header />
 
       {/* Hero Banner */}
-      <section className="relative overflow-hidden"
-        style={{ background: 'linear-gradient(165deg, hsl(168 42% 14%) 0%, hsl(152 42% 18%) 40%, hsl(160 38% 24%) 70%, hsl(145 30% 18%) 100%)' }}>
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[-15%] right-[-5%] w-[400px] h-[400px] rounded-full opacity-[0.06]"
-            style={{ background: 'radial-gradient(circle, #5ec6c6 0%, transparent 70%)' }} />
-          <div className="absolute bottom-[-10%] left-[-5%] w-[300px] h-[300px] rounded-full opacity-[0.04]"
-            style={{ background: 'radial-gradient(circle, hsl(28 45% 60%) 0%, transparent 70%)' }} />
-          <div className="absolute inset-0 opacity-[0.025]"
-            style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '50px 50px' }} />
-          <svg className="absolute bottom-10 left-0 w-full h-16 opacity-[0.06]" viewBox="0 0 800 50" fill="none">
-            <path d="M0 35 Q200 5 400 28 T800 15" stroke="hsl(160,50%,65%)" strokeWidth="1.5" strokeDasharray="8 6" />
+      <section className="bg-[#f8f9fc] relative overflow-hidden">
+        <div className="absolute top-[10%] left-[4%] w-[90px] h-[90px] rounded-full bg-[#5ec6c6]" />
+        <div className="absolute bottom-[15%] right-[6%] w-[65px] h-[65px] rounded-full bg-[#5ec6c6]" />
+        <div className="absolute top-[45%] left-[18%] w-[35px] h-[35px] rounded-full bg-[#f4a261]" />
+        <div className="absolute top-[20%] right-[12%] w-[28px] h-[28px] rounded-full bg-[#6c63ff]" />
+        <div className="absolute top-16 right-[15%] hidden lg:block">
+          <svg width="160" height="100" viewBox="0 0 160 100" fill="none">
+            <path d="M10 80 C 50 10, 110 10, 150 60" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
+            <polygon points="150,60 142,54 146,66" fill="#0a3d3d" opacity="0.12" />
           </svg>
         </div>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20 relative z-10">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-xl bg-[#5ec6c6] flex items-center justify-center shadow-lg">
-              <Building2 className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-sm font-bold text-white/40">קופות מרכזיות למעסיק</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-4 leading-tight text-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20 sm:py-28 relative">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
             פתרונות <span className="text-[#5ec6c6]">פנסיוניים ארגוניים</span>
           </h1>
-          <p className="text-base sm:text-lg text-white/50 max-w-2xl leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
             פתרונות פנסיוניים מותאמים לארגונים ולמעסיקים — דמי ניהול מוזלים, ניהול מרכזי וליווי מקצועי.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 mt-6">
-            <a href="#analysis-form" className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-white text-[#0a3d3d] font-bold text-base shadow-lg shadow-black/10 hover:bg-gray-100 transition-all min-h-[48px]">
+          <div className="flex flex-col sm:flex-row gap-3 mt-8">
+            <a href="#analysis-form" className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-all min-h-[48px]">
               ייעוץ לקופות מרכזיות
             </a>
-            <a href="#product-types" className="inline-flex items-center justify-center px-8 py-3 rounded-xl border border-white/15 text-white/80 font-semibold text-base hover:bg-white/5 transition-all min-h-[48px]">
+            <a href="#product-types" className="inline-flex items-center justify-center px-8 py-3.5 rounded-full border border-[#0a3d3d]/15 text-[#0a3d3d] font-semibold text-base hover:bg-[#0a3d3d]/5 transition-all min-h-[48px]">
               יתרונות למעסיק
             </a>
           </div>
@@ -98,8 +90,8 @@ const EmployerFunds = () => {
       </section>
 
       {/* Breadcrumb */}
-      <div className="border-b border-gray-100 bg-gray-50/50">
-        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-400">
+      <div className="border-b border-gray-100">
+        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
           <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
           <Link to="/savings" className="hover:text-[#0a3d3d] transition-colors">חיסכון ופנסיה</Link>
