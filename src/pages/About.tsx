@@ -72,10 +72,10 @@ const About = () => {
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {[
-                { number: "3,170+", label: "לקוחות", color: "#5ec6c6" },
-                { number: "443M", label: "₪ בניהול", color: "#f4a261" },
-                { number: "12+", label: "חברות ביטוח", color: "#90be6d" },
-                { number: "2.3M", label: "₪ הפקדות חודשיות", color: "#e76f51" },
+                { number: "12+", label: "חברות ביטוח ובתי השקעות", color: "#5ec6c6" },
+                { number: "100%", label: "שקיפות מול הלקוח", color: "#f4a261" },
+                { number: "24/7", label: "פורטל אישי זמין", color: "#90be6d" },
+                { number: "0 ₪", label: "עלות ייעוץ ראשוני", color: "#e76f51" },
               ].map((stat, i) => (
                 <div key={i} className="bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
                   <p className="text-3xl sm:text-4xl font-extrabold mb-1" style={{ color: stat.color }}>{stat.number}</p>
