@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { siteSupabase } from "@/integrations/supabase/site-client";
-import { FolderOpen, Loader2, FileText, Calendar, FileCheck } from "lucide-react";
+import { FolderOpen, Loader2, FileText, Calendar, FileCheck, Download } from "lucide-react";
+import { toast } from "sonner";
 
 type SourceFile = {
   id: string;
@@ -46,7 +47,7 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
       if (error) throw error;
       setFiles((data || []) as SourceFile[]);
     } catch {
-      console.error("Error fetching documents");
+      toast.error("שגיאה בטעינת המסמכים");
     } finally {
       setLoading(false);
     }
@@ -108,6 +109,19 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
                   </span>
                 </div>
               </div>
+
+              {/* Download button */}
+              {file.file_url && (
+                <a
+                  href={file.file_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 p-2 rounded-full hover:bg-gray-100 transition-colors text-[#5ec6c6] hover:text-[#0a3d3d]"
+                  title="הורד / צפה"
+                >
+                  <Download className="w-4 h-4" />
+                </a>
+              )}
 
               {/* Status badge */}
               <span

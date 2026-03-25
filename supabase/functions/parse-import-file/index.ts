@@ -37,7 +37,7 @@ interface ParsedCustomer {
 }
 
 interface ParsedProduct {
-  category: 'כסף' | 'ביטוח';
+  category: 'כסף' | 'ביטוח' | 'פנסיה' | 'גמל' | 'השתלמות' | 'חיסכון' | 'ביטוח מנהלים' | 'ביטוח חיים ובריאות' | 'ביטוח רכוש';
   company?: string;
   productType?: string;
   subDescription?: string;
@@ -48,6 +48,8 @@ interface ParsedProduct {
   track?: string;
   managementFeeDeposit?: number;
   managementFeeAccumulation?: number;
+  returnYear?: number;
+  isActive?: boolean;
   phase?: string;
   notes?: string;
 }
@@ -498,44 +500,77 @@ function parseCustomersExport(wb: XLSX.WorkBook): ParseResult {
   return { fileType: 'customers_export', customers };
 }
 
+function detectHbCategory(productType: string | undefined): ParsedProduct['category'] {
+  if (!productType) return 'ביטוח';
+  const t = productType;
+  // Savings / pension products
+  if (t.includes('פנסיה')) return 'פנסיה';
+  if (t.includes('גמל')) return 'גמל';
+  if (t.includes('השתלמות')) return 'השתלמות';
+  if (t.includes('חיסכון')) return 'חיסכון';
+  if (t.includes('ביטוח מנהלים')) return 'ביטוח מנהלים';
+  // Life & health insurance
+  if (t.includes('חיים') || t.includes('בריאות') || t.includes('סיעודי') || t.includes('אובדן כושר')) return 'ביטוח חיים ובריאות';
+  // Property insurance
+  if (t.includes('רכב') || t.includes('דירה') || t.includes('רכוש') || t.includes('עסק')) return 'ביטוח רכוש';
+  return 'ביטוח';
+}
+
 function parseHbResults(wb: XLSX.WorkBook): ParseResult {
   const sheetName = wb.SheetNames.find(s => s === 'תיק ביטוחי') || wb.SheetNames[0];
   const sheet = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: 1 }) as any[][];
-  
+
   const headerIdx = findHeaderRow(sheet, ['תעודת זהות', 'ענף', 'חברה', 'פוליסה']);
   const colMap = getColumnMap(sheet[headerIdx] || []);
-  
+
   let idNumber: string | undefined;
   const products: ParsedProduct[] = [];
-  
+
   for (let i = headerIdx + 1; i < sheet.length; i++) {
     const row = sheet[i];
     if (!row || row.every(c => !c)) continue;
-    
+
     const rowId = cleanStr(getVal(row, colMap, 'תעודת זהות', 'ת.ז', 'מספר מזהה'));
     if (rowId && !idNumber) idNumber = rowId;
     if (rowId) idNumber = rowId;
-    
-    const company = cleanStr(getVal(row, colMap, 'חברה'));
+
+    const company = cleanStr(getVal(row, colMap, 'חברה', 'שם יצרן', 'שם הספק', 'גוף מוסדי'));
     const productType = cleanStr(getVal(row, colMap, 'ענף ראשי', 'ענף'));
     const subType = cleanStr(getVal(row, colMap, 'ענף', 'סוג מוצר'));
-    const policyNumber = cleanStr(getVal(row, colMap, 'מספר פוליסה', 'פוליסה'));
-    const premium = cleanNum(getVal(row, colMap, 'פרמיה', 'פרמיה בש"ח'));
-    
+    const policyNumber = cleanStr(getVal(row, colMap, 'מספר פוליסה', 'פוליסה', 'מספר חשבון', 'מספר מוצר'));
+    const premium = cleanNum(getVal(row, colMap, 'פרמיה', 'פרמיה בש"ח', 'פרמיה חודשית', 'הפקדה חודשית', 'תשלום חודשי'));
+
+    // Additional fields
+    const accumulation = cleanNum(getVal(row, colMap, 'צבירה', 'יתרה'));
+    const managementFeeAccumulation = cleanNum(getVal(row, colMap, 'דמי ניהול מצבירה', 'דמ"נ צבירה', 'ד.נ צבירה'));
+    const managementFeeDeposit = cleanNum(getVal(row, colMap, 'דמי ניהול מהפקדה', 'דמ"נ הפקדה', 'ד.נ הפקדה'));
+    const track = cleanStr(getVal(row, colMap, 'מסלול', 'מסלול השקעה'));
+    const returnYear = cleanNum(getVal(row, colMap, 'תשואה שנתית', 'תשואה'));
+    const statusVal = cleanStr(getVal(row, colMap, 'סטטוס', 'מצב'));
+    const isActive = statusVal ? statusVal.includes('פעיל') : undefined;
+
     if (!company && !productType && !policyNumber) continue;
-    
+
+    const category = detectHbCategory(productType || subType);
+
     products.push({
-      category: 'ביטוח',
+      category,
       company,
       productType: productType || 'ביטוח',
       subDescription: subType !== productType ? subType : cleanStr(getVal(row, colMap, 'פרטים נוספים', 'סיווג תכנית')),
       policyNumber,
       monthlyPremium: premium,
-      phase: 'פעיל',
+      accumulation,
+      managementFeeAccumulation,
+      managementFeeDeposit,
+      track,
+      returnYear,
+      isActive,
+      phase: statusVal || 'פעיל',
       notes: cleanStr(getVal(row, colMap, 'פרטים נוספים', 'הערות')),
     });
   }
-  
+
   // Try to find ID from sheet metadata or first rows
   if (!idNumber) {
     for (let i = 0; i < Math.min(sheet.length, 5); i++) {
@@ -550,7 +585,7 @@ function parseHbResults(wb: XLSX.WorkBook): ParseResult {
       if (idNumber) break;
     }
   }
-  
+
   return {
     fileType: 'hb_results',
     customers: [{ customer: { idNumber }, products }],

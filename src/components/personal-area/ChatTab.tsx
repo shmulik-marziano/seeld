@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 import { Send, Loader2, MessageCircle } from "lucide-react";
+import { toast } from "sonner";
 
 type Message = {
   id: string;
@@ -67,7 +68,7 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
       if (error) throw error;
       setMessages((data || []) as Message[]);
     } catch {
-      console.error("Error fetching messages");
+      toast.error("שגיאה בטעינת ההודעות");
     } finally {
       setLoading(false);
     }
@@ -90,7 +91,7 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
       if (error) throw error;
       setNewMessage("");
     } catch {
-      console.error("Error sending message");
+      toast.error("שגיאה בשליחת ההודעה");
     } finally {
       setSending(false);
     }

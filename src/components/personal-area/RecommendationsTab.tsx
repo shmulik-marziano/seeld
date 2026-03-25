@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 import { Lightbulb, Loader2, Calendar } from "lucide-react";
+import { toast } from "sonner";
 
 type Recommendation = {
   id: string;
@@ -40,7 +41,7 @@ const RecommendationsTab = ({ customerId }: { customerId: string }) => {
       if (error) throw error;
       setRecommendations((data || []) as Recommendation[]);
     } catch {
-      console.error("Error fetching recommendations");
+      toast.error("שגיאה בטעינת ההמלצות");
     } finally {
       setLoading(false);
     }

@@ -406,7 +406,7 @@ const PersonalAreaLogin = () => {
                     <button
                       type="button"
                       onClick={(e) => handleSendOtp(e as any)}
-                      className="text-gray-400 hover:text-[#0a3d3d] hover:underline min-h-[44px] px-2 transition-colors"
+                      className="text-gray-400 hover:text-[#0a3d3d] hover:underline min-h-[44px] px-2 transition-colors disabled:opacity-40 disabled:pointer-events-none"
                       disabled={loading}
                     >
                       שלח קוד מחדש

@@ -123,8 +123,10 @@ const PersonalAreaDashboard = () => {
   const statusColor = customer?.status === "active" ? "#16a34a" : "#f59e0b";
 
   return (
-    <div dir="rtl">
-      {/* ══════ Welcome header with bubble avatar ══════ */}
+    <div dir="rtl" className="bg-white/95 backdrop-blur-2xl rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-white/60 p-5 sm:p-8 lg:p-10 relative overflow-hidden min-h-[60vh]">
+      {/* Soft inner glow absolute background */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-gradient-to-bl from-[#5ec6c6]/10 to-transparent pointer-events-none -translate-y-1/2 translate-x-1/3" />
+
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -175,20 +177,20 @@ const PersonalAreaDashboard = () => {
 
       {/* ══════ Main tabs ══════ */}
       <Tabs defaultValue="overview" dir="rtl">
-        <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide mb-8">
-          <TabsList className="w-max sm:w-full grid grid-cols-6 h-auto bg-white rounded-2xl shadow-sm border p-1.5 min-w-[620px] sm:min-w-0">
+        <div className="overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0 scrollbar-hide mb-8 sm:mb-12 relative z-10">
+          <TabsList className="w-max sm:w-full flex justify-between h-auto bg-[#f8f9fc]/80 backdrop-blur-md rounded-full shadow-inner border border-[#0a3d3d]/5 p-1.5 sm:p-2 min-w-[620px] sm:min-w-0 gap-1 sm:gap-2">
             {[
               { value: "overview", icon: LayoutDashboard, label: "סקירה", labelFull: "סקירה כללית" },
               { value: "policies", icon: FileText, label: "פוליסות", labelFull: "הפוליסות שלי" },
-              { value: "recommendations", icon: Lightbulb, label: "המלצות", labelFull: "המלצות" },
-              { value: "documents", icon: FolderOpen, label: "מסמכים", labelFull: "מסמכים" },
+              { value: "recommendations", icon: Lightbulb, label: "המלצות", labelFull: "המלצות הסוכן" },
+              { value: "documents", icon: FolderOpen, label: "מסמכים", labelFull: "מסמכים אישיים" },
               { value: "chat", icon: MessageCircle, label: "צ'אט", labelFull: "צ'אט עם הסוכן" },
               { value: "ai", icon: Bot, label: "עוזר", labelFull: "עוזר חכם" },
             ].map((tab) => (
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                className="gap-1.5 min-h-[42px] text-xs sm:text-sm rounded-xl data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+                className="flex-1 gap-2 min-h-[46px] text-[13px] sm:text-sm font-semibold rounded-full data-[state=active]:bg-white data-[state=active]:text-[#0a3d3d] data-[state=inactive]:text-[#0a3d3d]/60 data-[state=active]:shadow-[0_4px_20px_rgba(10,61,61,0.08)] transition-all duration-300"
               >
                 <tab.icon className="w-4 h-4" />
                 <span className="hidden sm:inline">{tab.labelFull}</span>
@@ -381,12 +383,12 @@ const BubbleStatCard = ({
 }: {
   icon: React.ReactNode; color: string; bg: string; label: string; value: string;
 }) => (
-  <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border text-center hover:shadow-md transition-shadow">
-    <div className="w-11 h-11 rounded-full flex items-center justify-center mx-auto mb-3" style={{ background: bg, color }}>
+  <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100 text-center hover:shadow-[0_8px_30px_rgba(10,61,61,0.06)] hover:-translate-y-1 transition-all duration-300 group">
+    <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-sm" style={{ background: bg, color }}>
       {icon}
     </div>
-    <p className="text-2xl font-extrabold text-[#0a3d3d] mb-0.5">{value}</p>
-    <p className="text-[11px] sm:text-xs text-gray-400">{label}</p>
+    <p className="text-3xl font-extrabold text-[#0a3d3d] mb-1">{value}</p>
+    <p className="text-xs font-medium text-gray-400">{label}</p>
   </div>
 );
 
@@ -413,26 +415,26 @@ const BubbleActionCard = ({
 }: {
   icon: React.ReactNode; gradient: string; shadow: string; title: string; subtitle: string; badge: string | null;
 }) => (
-  <div className="bg-white rounded-2xl p-6 shadow-sm border hover:shadow-md transition-all cursor-pointer group relative overflow-hidden">
+  <div className="bg-white rounded-[24px] p-6 sm:p-7 shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-100 hover:shadow-[0_12px_40px_rgba(10,61,61,0.08)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer group relative overflow-hidden">
     {/* Subtle bubble accent */}
-    <div className="absolute top-0 right-0 w-24 h-24 rounded-full opacity-[0.04] pointer-events-none -translate-y-1/2 translate-x-1/3"
+    <div className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-[0.03] group-hover:opacity-[0.06] transition-opacity pointer-events-none -translate-y-1/2 translate-x-1/3"
       style={{ background: gradient }} />
 
-    <div className="flex items-start justify-between mb-3">
+    <div className="flex items-start justify-between mb-4">
       <div
-        className="w-12 h-12 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform"
-        style={{ background: gradient, boxShadow: `0 4px 14px ${shadow}` }}
+        className="w-14 h-14 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+        style={{ background: gradient, boxShadow: `0 6px 20px ${shadow}` }}
       >
         {icon}
       </div>
       {badge && (
-        <span className="text-[10px] font-medium bg-[#d1fae5] text-[#065f46] rounded-full px-2.5 py-0.5">
+        <span className="text-[11px] font-bold tracking-wide bg-[#16a34a] text-white rounded-full px-3 py-1 shadow-sm">
           {badge}
         </span>
       )}
     </div>
-    <h4 className="font-bold text-base mb-1 text-[#0a3d3d]">{title}</h4>
-    <p className="text-xs text-gray-400 leading-relaxed">{subtitle}</p>
+    <h4 className="font-extrabold text-lg mb-1.5 text-[#0a3d3d]">{title}</h4>
+    <p className="text-sm text-gray-500 leading-relaxed font-medium">{subtitle}</p>
   </div>
 );
 
