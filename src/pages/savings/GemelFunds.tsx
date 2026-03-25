@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
+import DoodleIcon from "@/components/DoodleIcon";
 
 const GemelFunds = () => {
   const benefits = [
     {
       title: "ניהול מקצועי",
       icon: TrendingUp,
+      doodle: "growth",
       color: "#5ec6c6",
       description: "ניהול השקעות על ידי גופים מובילים בשוק ההון",
       items: ["מנהלי השקעות מנוסים", "פיזור סיכונים"],
@@ -23,6 +25,7 @@ const GemelFunds = () => {
     {
       title: "גמישות מלאה",
       icon: Shield,
+      doodle: "shield",
       color: "#f4a261",
       description: "בחירה בין משיכה הונית לקצבה",
       items: ["סכום חד פעמי", "קצבה חודשית"],
@@ -30,6 +33,7 @@ const GemelFunds = () => {
     {
       title: "הטבות מס",
       icon: Calculator,
+      doodle: "calculator",
       color: "#90be6d",
       description: "חיסכון משמעותי במס",
       items: ["זיכוי מס על הפקדות", "פטור ממס רווחי הון"],
@@ -111,8 +115,8 @@ const GemelFunds = () => {
               {benefits.map((benefit, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: benefit.color }}>
-                      <benefit.icon className="w-5 h-5 text-white" />
+                    <div className="w-14 h-14 flex items-center justify-center">
+                      <DoodleIcon name={benefit.doodle} size={48} />
                     </div>
                     <h3 className="text-lg font-bold text-[#0a3d3d]">{benefit.title}</h3>
                   </div>

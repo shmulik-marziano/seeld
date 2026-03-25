@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
+import DoodleIcon from "@/components/DoodleIcon";
 
 const PostRetirement = () => {
   const productTypes = [
     {
       title: "ניהול קצבה",
       icon: Banknote,
+      doodle: "savings",
       color: "#5ec6c6",
       description: "אופטימיזציה של הקצבה החודשית ותכנון תקציב",
       features: ["בדיקת קצבה", "תיאום מס", "מקסום הכנסה"],
@@ -23,6 +25,7 @@ const PostRetirement = () => {
     {
       title: "זכויות פנסיונרים",
       icon: HeartHandshake,
+      doodle: "family",
       color: "#f4a261",
       description: "מיצוי זכויות והטבות המגיעות לפנסיונרים",
       features: ["קצבת זקנה", "גמלת סיעוד", "הנחות והטבות"],
@@ -30,6 +33,7 @@ const PostRetirement = () => {
     {
       title: "הגנה על הון",
       icon: Umbrella,
+      doodle: "umbrella",
       color: "#90be6d",
       description: "שמירה על ערך החסכונות והשקעה בטוחה",
       features: ["ניהול סיכונים", "השקעות שמרניות", "ביטוח מתאים"],
@@ -111,14 +115,14 @@ const PostRetirement = () => {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">מה כולל ליווי אחרי פרישה?</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Banknote, title: "אופטימיזציית קצבה", desc: "מקסום הקצבה החודשית שלכם", color: "#5ec6c6" },
-                { icon: HeartHandshake, title: "מיצוי זכויות", desc: "ניצול כל ההטבות והזכויות", color: "#f4a261" },
-                { icon: Umbrella, title: "הגנה על הון", desc: "שמירה על ערך החסכונות", color: "#90be6d" },
-                { icon: Shield, title: "ביטוח מתאים", desc: "כיסוי רפואי וסיעודי מותאם", color: "#e76f51" },
+                { icon: Banknote, doodle: "savings", title: "אופטימיזציית קצבה", desc: "מקסום הקצבה החודשית שלכם", color: "#5ec6c6" },
+                { icon: HeartHandshake, doodle: "family", title: "מיצוי זכויות", desc: "ניצול כל ההטבות והזכויות", color: "#f4a261" },
+                { icon: Umbrella, doodle: "umbrella", title: "הגנה על הון", desc: "שמירה על ערך החסכונות", color: "#90be6d" },
+                { icon: Shield, doodle: "shield", title: "ביטוח מתאים", desc: "כיסוי רפואי וסיעודי מותאם", color: "#e76f51" },
               ].map((item, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group text-center">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: item.color }}>
-                    <item.icon className="w-6 h-6 text-white" />
+                  <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                    <DoodleIcon name={item.doodle} size={48} />
                   </div>
                   <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{item.title}</h3>
                   <p className="text-gray-600 text-sm">{item.desc}</p>
@@ -137,8 +141,8 @@ const PostRetirement = () => {
               {productTypes.map((type, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: type.color }}>
-                      <type.icon className="w-5 h-5 text-white" />
+                    <div className="w-14 h-14 flex items-center justify-center">
+                      <DoodleIcon name={type.doodle} size={48} />
                     </div>
                     <h3 className="text-lg font-bold text-[#0a3d3d]">{type.title}</h3>
                   </div>

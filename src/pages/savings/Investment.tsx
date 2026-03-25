@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
+import DoodleIcon from "@/components/DoodleIcon";
 
 const Investment = () => {
   const productTypes = [
     {
       title: "התאמה אישית",
       icon: Target,
+      doodle: "target",
       color: "#5ec6c6",
       description: "תיק השקעות מותאם לצרכים שלכם",
       features: ["פרופיל סיכון אישי", "יעדים ברורים", "אסטרטגיה מותאמת"],
@@ -23,6 +25,7 @@ const Investment = () => {
     {
       title: "ניהול מקצועי",
       icon: TrendingUp,
+      doodle: "growth",
       color: "#f4a261",
       description: "צוות מנהלי השקעות מנוסים",
       features: ["ניטור שוטף", "איזון תיק אוטומטי", "דוחות ביצועים"],
@@ -30,6 +33,7 @@ const Investment = () => {
     {
       title: "מגוון אפיקים",
       icon: BarChart3,
+      doodle: "charts",
       color: "#90be6d",
       description: "גישה למגוון רחב של השקעות",
       features: ["מניות ואג\"ח", "נדל\"ן וסחורות", "קרנות מחקות"],
@@ -111,14 +115,14 @@ const Investment = () => {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">פתרונות ההשקעה שלנו</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Target, title: "התאמה אישית", desc: "תיק השקעות מותאם לפרופיל שלכם", color: "#5ec6c6" },
-                { icon: TrendingUp, title: "ניהול מקצועי", desc: "צוות מנהלי השקעות מנוסים", color: "#f4a261" },
-                { icon: Coins, title: "פיזור סיכונים", desc: "אסטרטגיה חכמה להקטנת סיכון", color: "#90be6d" },
-                { icon: BarChart3, title: "מגוון אפיקים", desc: "גישה למניות, אג\"ח, נדל\"ן ועוד", color: "#e76f51" },
+                { icon: Target, doodle: "target", title: "התאמה אישית", desc: "תיק השקעות מותאם לפרופיל שלכם", color: "#5ec6c6" },
+                { icon: TrendingUp, doodle: "growth", title: "ניהול מקצועי", desc: "צוות מנהלי השקעות מנוסים", color: "#f4a261" },
+                { icon: Coins, doodle: "savings", title: "פיזור סיכונים", desc: "אסטרטגיה חכמה להקטנת סיכון", color: "#90be6d" },
+                { icon: BarChart3, doodle: "charts", title: "מגוון אפיקים", desc: "גישה למניות, אג\"ח, נדל\"ן ועוד", color: "#e76f51" },
               ].map((item, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group text-center">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: item.color }}>
-                    <item.icon className="w-6 h-6 text-white" />
+                  <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                    <DoodleIcon name={item.doodle} size={48} />
                   </div>
                   <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{item.title}</h3>
                   <p className="text-gray-600 text-sm">{item.desc}</p>
@@ -137,8 +141,8 @@ const Investment = () => {
               {productTypes.map((type, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: type.color }}>
-                      <type.icon className="w-5 h-5 text-white" />
+                    <div className="w-14 h-14 flex items-center justify-center">
+                      <DoodleIcon name={type.doodle} size={48} />
                     </div>
                     <h3 className="text-lg font-bold text-[#0a3d3d]">{type.title}</h3>
                   </div>

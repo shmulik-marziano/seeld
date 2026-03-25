@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
+import DoodleIcon from "@/components/DoodleIcon";
 
 const TrainingFunds = () => {
   const productTypes = [
     {
       title: "פטור ממס",
       icon: TrendingUp,
+      doodle: "growth",
       color: "#5ec6c6",
       description: "פטור מלא ממס רווחי הון — כל הרווחים שלכם",
       features: ["0% מס על רווחים", "ניכוי מס על הפקדות", "חיסכון של אלפי שקלים"],
@@ -23,6 +25,7 @@ const TrainingFunds = () => {
     {
       title: "נזילות מהירה",
       icon: Clock,
+      doodle: "target",
       color: "#f4a261",
       description: "משיכה פטורה לאחר 6 שנים בלבד",
       features: ["ללא קנסות", "שימוש חופשי בכספים", "לכל מטרה"],
@@ -30,6 +33,7 @@ const TrainingFunds = () => {
     {
       title: "מטרות מגוונות",
       icon: GraduationCap,
+      doodle: "lightbulb",
       color: "#90be6d",
       description: "לא רק להשתלמויות — לכל מטרה שתרצו",
       features: ["דירה לילדים", "חופשה גדולה", "כל יעד שתבחרו"],
@@ -111,14 +115,14 @@ const TrainingFunds = () => {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">למה קרן השתלמות?</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Banknote, title: "פטור מלא ממס", desc: "0% מס על כל הרווחים שצברתם", color: "#5ec6c6" },
-                { icon: Clock, title: "נזילות ב-6 שנים", desc: "כספים נזילים לאחר 6 שנים", color: "#f4a261" },
-                { icon: TrendingUp, title: "תשואות גבוהות", desc: "ביצועים מעולים לאורך זמן", color: "#90be6d" },
-                { icon: GraduationCap, title: "לכל מטרה", desc: "שימוש חופשי בכספים לאחר נזילות", color: "#e76f51" },
+                { icon: Banknote, doodle: "savings", title: "פטור מלא ממס", desc: "0% מס על כל הרווחים שצברתם", color: "#5ec6c6" },
+                { icon: Clock, doodle: "target", title: "נזילות ב-6 שנים", desc: "כספים נזילים לאחר 6 שנים", color: "#f4a261" },
+                { icon: TrendingUp, doodle: "growth", title: "תשואות גבוהות", desc: "ביצועים מעולים לאורך זמן", color: "#90be6d" },
+                { icon: GraduationCap, doodle: "lightbulb", title: "לכל מטרה", desc: "שימוש חופשי בכספים לאחר נזילות", color: "#e76f51" },
               ].map((item, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group text-center">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: item.color }}>
-                    <item.icon className="w-6 h-6 text-white" />
+                  <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                    <DoodleIcon name={item.doodle} size={48} />
                   </div>
                   <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{item.title}</h3>
                   <p className="text-gray-600 text-sm">{item.desc}</p>
@@ -137,8 +141,8 @@ const TrainingFunds = () => {
               {productTypes.map((type, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: type.color }}>
-                      <type.icon className="w-5 h-5 text-white" />
+                    <div className="w-14 h-14 flex items-center justify-center">
+                      <DoodleIcon name={type.doodle} size={48} />
                     </div>
                     <h3 className="text-lg font-bold text-[#0a3d3d]">{type.title}</h3>
                   </div>

@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
+import DoodleIcon from "@/components/DoodleIcon";
 
 const FinancialPlanning = () => {
   const productTypes = [
     {
       title: "ניתוח מקיף",
       icon: PieChart,
+      doodle: "charts",
       color: "#5ec6c6",
       description: "מיפוי מלא של המצב הכלכלי והגדרת יעדים",
       features: ["מיפוי הכנסות והוצאות", "הגדרת יעדים", "זיהוי הזדמנויות"],
@@ -23,6 +25,7 @@ const FinancialPlanning = () => {
     {
       title: "תוכנית פעולה",
       icon: Target,
+      doodle: "target",
       color: "#f4a261",
       description: "בניית אסטרטגיה מותאמת אישית להשגת היעדים",
       features: ["אסטרטגיה מותאמת", "לוחות זמנים", "יעדים מדידים"],
@@ -30,6 +33,7 @@ const FinancialPlanning = () => {
     {
       title: "ליווי שוטף",
       icon: Lightbulb,
+      doodle: "lightbulb",
       color: "#90be6d",
       description: "מעקב ועדכון התוכנית בהתאם לשינויים בחיים",
       features: ["פגישות תקופתיות", "עדכוני תוכנית", "תמיכה מקצועית"],
@@ -111,14 +115,14 @@ const FinancialPlanning = () => {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">למה תכנון כלכלי?</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: PieChart, title: "ניתוח מקיף", desc: "מיפוי מלא של המצב הכלכלי", color: "#5ec6c6" },
-                { icon: Target, title: "יעדים ברורים", desc: "הגדרת יעדים מדידים וריאליים", color: "#f4a261" },
-                { icon: TrendingUp, title: "מקסום הון", desc: "אסטרטגיה להגדלת ההון שלכם", color: "#90be6d" },
-                { icon: Lightbulb, title: "ליווי שוטף", desc: "מעקב ועדכון לאורך כל הדרך", color: "#e76f51" },
+                { icon: PieChart, doodle: "charts", title: "ניתוח מקיף", desc: "מיפוי מלא של המצב הכלכלי", color: "#5ec6c6" },
+                { icon: Target, doodle: "target", title: "יעדים ברורים", desc: "הגדרת יעדים מדידים וריאליים", color: "#f4a261" },
+                { icon: TrendingUp, doodle: "growth", title: "מקסום הון", desc: "אסטרטגיה להגדלת ההון שלכם", color: "#90be6d" },
+                { icon: Lightbulb, doodle: "lightbulb", title: "ליווי שוטף", desc: "מעקב ועדכון לאורך כל הדרך", color: "#e76f51" },
               ].map((item, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group text-center">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: item.color }}>
-                    <item.icon className="w-6 h-6 text-white" />
+                  <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                    <DoodleIcon name={item.doodle} size={48} />
                   </div>
                   <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{item.title}</h3>
                   <p className="text-gray-600 text-sm">{item.desc}</p>
@@ -137,8 +141,8 @@ const FinancialPlanning = () => {
               {productTypes.map((type, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: type.color }}>
-                      <type.icon className="w-5 h-5 text-white" />
+                    <div className="w-14 h-14 flex items-center justify-center">
+                      <DoodleIcon name={type.doodle} size={48} />
                     </div>
                     <h3 className="text-lg font-bold text-[#0a3d3d]">{type.title}</h3>
                   </div>

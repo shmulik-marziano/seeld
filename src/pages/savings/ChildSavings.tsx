@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
+import DoodleIcon from "@/components/DoodleIcon";
 
 const ChildSavings = () => {
   const productTypes = [
     {
       title: "הפקדה ממשלתית",
       icon: Gift,
+      doodle: "savings",
       color: "#f4a261",
       description: "המדינה מפקידה מדי חודש סכום קבוע עבור כל ילד",
       features: ["הפקדה אוטומטית", "ללא עלות להורים", "לכל ילד בישראל"],
@@ -23,6 +25,7 @@ const ChildSavings = () => {
     {
       title: "בחירת מסלול",
       icon: TrendingUp,
+      doodle: "growth",
       color: "#5ec6c6",
       description: "אפשרות לבחור את הגוף המנהל ומסלול ההשקעה",
       features: ["מגוון גופים מנהלים", "מסלולי השקעה שונים", "מעבר חינמי"],
@@ -30,6 +33,7 @@ const ChildSavings = () => {
     {
       title: "התחלה מושלמת",
       icon: Baby,
+      doodle: "family",
       color: "#90be6d",
       description: "הבטחת עתיד כלכלי יציב לילדיכם מגיל צעיר",
       features: ["קרן פתיחה בגיל 18", "פטור ממס", "ריבית דריבית"],
@@ -111,14 +115,14 @@ const ChildSavings = () => {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">יתרונות החיסכון לכל ילד</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Gift, title: "הפקדה ממשלתית", desc: "המדינה מפקידה כל חודש עבור כל ילד", color: "#f4a261" },
-                { icon: TrendingUp, title: "תשואה צוברת", desc: "הכסף צומח לאורך 18 שנה", color: "#5ec6c6" },
-                { icon: Baby, title: "פטור ממס", desc: "המשיכה בגיל 18 פטורה ממס", color: "#90be6d" },
-                { icon: Shield, title: "בחירה חופשית", desc: "בחרו את הגוף והמסלול הטובים ביותר", color: "#e76f51" },
+                { icon: Gift, doodle: "savings", title: "הפקדה ממשלתית", desc: "המדינה מפקידה כל חודש עבור כל ילד", color: "#f4a261" },
+                { icon: TrendingUp, doodle: "growth", title: "תשואה צוברת", desc: "הכסף צומח לאורך 18 שנה", color: "#5ec6c6" },
+                { icon: Baby, doodle: "family", title: "פטור ממס", desc: "המשיכה בגיל 18 פטורה ממס", color: "#90be6d" },
+                { icon: Shield, doodle: "shield", title: "בחירה חופשית", desc: "בחרו את הגוף והמסלול הטובים ביותר", color: "#e76f51" },
               ].map((item, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group text-center">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: item.color }}>
-                    <item.icon className="w-6 h-6 text-white" />
+                  <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                    <DoodleIcon name={item.doodle} size={48} />
                   </div>
                   <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{item.title}</h3>
                   <p className="text-gray-600 text-sm">{item.desc}</p>
@@ -137,8 +141,8 @@ const ChildSavings = () => {
               {productTypes.map((type, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: type.color }}>
-                      <type.icon className="w-5 h-5 text-white" />
+                    <div className="w-14 h-14 flex items-center justify-center">
+                      <DoodleIcon name={type.doodle} size={48} />
                     </div>
                     <h3 className="text-lg font-bold text-[#0a3d3d]">{type.title}</h3>
                   </div>

@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
+import DoodleIcon from "@/components/DoodleIcon";
 
 const EmployerFunds = () => {
   const productTypes = [
     {
       title: "ניהול קולקטיבי",
       icon: Users,
+      doodle: "handshake",
       color: "#5ec6c6",
       description: "ניהול מרוכז של זכויות העובדים בקופה אחת",
       features: ["ניהול מרכזי", "כוח מיקוח חזק", "יעילות תפעולית"],
@@ -23,6 +25,7 @@ const EmployerFunds = () => {
     {
       title: "חיסכון בעלויות",
       icon: Coins,
+      doodle: "savings",
       color: "#f4a261",
       description: "דמי ניהול מופחתים הודות לכוח המיקוח של הארגון",
       features: ["דמי ניהול מוזלים", "חיסכון לעובדים", "תנאים מועדפים"],
@@ -30,6 +33,7 @@ const EmployerFunds = () => {
     {
       title: "שירות ארגוני",
       icon: Building2,
+      doodle: "handshake",
       color: "#90be6d",
       description: "ליווי מקצועי למחלקת משאבי אנוש ולעובדים",
       features: ["הדרכות לעובדים", "תמיכה שוטפת", "דוחות תקופתיים"],
@@ -111,14 +115,14 @@ const EmployerFunds = () => {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">יתרונות הסדר ארגוני</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Users, title: "ניהול קולקטיבי", desc: "ניהול מרוכז של זכויות כל העובדים", color: "#5ec6c6" },
-                { icon: Coins, title: "דמי ניהול מוזלים", desc: "כוח מיקוח ארגוני לתנאים טובים", color: "#f4a261" },
-                { icon: Building2, title: "שירות ארגוני", desc: "ליווי מקצועי למשאבי אנוש", color: "#90be6d" },
-                { icon: Shield, title: "ביטחון לעובדים", desc: "הבטחת זכויות פנסיוניות מיטביות", color: "#e76f51" },
+                { icon: Users, doodle: "handshake", title: "ניהול קולקטיבי", desc: "ניהול מרוכז של זכויות כל העובדים", color: "#5ec6c6" },
+                { icon: Coins, doodle: "savings", title: "דמי ניהול מוזלים", desc: "כוח מיקוח ארגוני לתנאים טובים", color: "#f4a261" },
+                { icon: Building2, doodle: "handshake", title: "שירות ארגוני", desc: "ליווי מקצועי למשאבי אנוש", color: "#90be6d" },
+                { icon: Shield, doodle: "shield", title: "ביטחון לעובדים", desc: "הבטחת זכויות פנסיוניות מיטביות", color: "#e76f51" },
               ].map((item, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group text-center">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: item.color }}>
-                    <item.icon className="w-6 h-6 text-white" />
+                  <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                    <DoodleIcon name={item.doodle} size={48} />
                   </div>
                   <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{item.title}</h3>
                   <p className="text-gray-600 text-sm">{item.desc}</p>
@@ -137,8 +141,8 @@ const EmployerFunds = () => {
               {productTypes.map((type, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: type.color }}>
-                      <type.icon className="w-5 h-5 text-white" />
+                    <div className="w-14 h-14 flex items-center justify-center">
+                      <DoodleIcon name={type.doodle} size={48} />
                     </div>
                     <h3 className="text-lg font-bold text-[#0a3d3d]">{type.title}</h3>
                   </div>

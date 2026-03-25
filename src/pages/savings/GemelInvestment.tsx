@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
+import DoodleIcon from "@/components/DoodleIcon";
 
 const GemelInvestment = () => {
   const productTypes = [
     {
       title: "נזילות גבוהה",
       icon: TrendingUp,
+      doodle: "growth",
       color: "#5ec6c6",
       description: "אפשרות למשיכת כספים בכל עת ללא קנסות או הגבלות",
       features: ["משיכה מיידית", "ללא קנסות", "גמישות מלאה"],
@@ -23,6 +25,7 @@ const GemelInvestment = () => {
     {
       title: "דחיית מס",
       icon: PiggyBank,
+      doodle: "savings",
       color: "#f4a261",
       description: "דחיית תשלום מס רווחי הון עד למועד המשיכה בפועל",
       features: ["0% מס עד משיכה", "פטור בגיל 60 כקצבה", "ריבית דריבית מלאה"],
@@ -30,6 +33,7 @@ const GemelInvestment = () => {
     {
       title: "מסלולי השקעה",
       icon: Shield,
+      doodle: "shield",
       color: "#90be6d",
       description: "מגוון מסלולי השקעה המותאמים לפרופיל הסיכון שלכם",
       features: ["מסלולים מנוהלים", "התאמה אישית", "מעקב ביצועים"],
@@ -111,14 +115,14 @@ const GemelInvestment = () => {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">למה קופת גמל להשקעה?</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: TrendingUp, title: "נזילות מלאה", desc: "משיכת כספים בכל עת ללא קנסות", color: "#5ec6c6" },
-                { icon: PiggyBank, title: "דחיית מס", desc: "0% מס על רווחים עד למשיכה", color: "#f4a261" },
-                { icon: Calculator, title: "ריבית דריבית", desc: "הכסף עובד בצורה מלאה ללא ניכויים", color: "#90be6d" },
-                { icon: Shield, title: "מסלולים מגוונים", desc: "התאמת מסלול ההשקעה לפרופיל שלכם", color: "#e76f51" },
+                { icon: TrendingUp, doodle: "growth", title: "נזילות מלאה", desc: "משיכת כספים בכל עת ללא קנסות", color: "#5ec6c6" },
+                { icon: PiggyBank, doodle: "savings", title: "דחיית מס", desc: "0% מס על רווחים עד למשיכה", color: "#f4a261" },
+                { icon: Calculator, doodle: "calculator", title: "ריבית דריבית", desc: "הכסף עובד בצורה מלאה ללא ניכויים", color: "#90be6d" },
+                { icon: Shield, doodle: "shield", title: "מסלולים מגוונים", desc: "התאמת מסלול ההשקעה לפרופיל שלכם", color: "#e76f51" },
               ].map((item, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group text-center">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: item.color }}>
-                    <item.icon className="w-6 h-6 text-white" />
+                  <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                    <DoodleIcon name={item.doodle} size={48} />
                   </div>
                   <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{item.title}</h3>
                   <p className="text-gray-600 text-sm">{item.desc}</p>
@@ -137,8 +141,8 @@ const GemelInvestment = () => {
               {productTypes.map((type, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: type.color }}>
-                      <type.icon className="w-5 h-5 text-white" />
+                    <div className="w-14 h-14 flex items-center justify-center">
+                      <DoodleIcon name={type.doodle} size={48} />
                     </div>
                     <h3 className="text-lg font-bold text-[#0a3d3d]">{type.title}</h3>
                   </div>

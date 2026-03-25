@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
+import DoodleIcon from "@/components/DoodleIcon";
 
 const PreRetirement = () => {
   const productTypes = [
     {
       title: "תחשיב פנסיה",
       icon: Calculator,
+      doodle: "calculator",
       color: "#5ec6c6",
       description: "חישוב מדויק של הקצבה הצפויה והיערכות כלכלית",
       features: ["חישוב קצבה צפויה", "ניתוח פערים", "תוכנית השלמה"],
@@ -23,6 +25,7 @@ const PreRetirement = () => {
     {
       title: "איחוד חסכונות",
       icon: FileText,
+      doodle: "calculator",
       color: "#f4a261",
       description: "ריכוז כל החסכונות הפנסיוניים למקסום הזכויות",
       features: ["מיפוי כל החסכונות", "בדיקת זכויות", "אופטימיזציה"],
@@ -30,6 +33,7 @@ const PreRetirement = () => {
     {
       title: "תכנון מס",
       icon: Clock,
+      doodle: "target",
       color: "#90be6d",
       description: "אופטימיזציה של תשלומי המס בפרישה",
       features: ["תיאום מס", "פטורים והטבות", "אסטרטגיית משיכה"],
@@ -111,14 +115,14 @@ const PreRetirement = () => {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">מה כולל ליווי לפני פרישה?</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Calculator, title: "תחשיב קצבה", desc: "חישוב מדויק של הקצבה הצפויה", color: "#5ec6c6" },
-                { icon: FileText, title: "איחוד חסכונות", desc: "ריכוז כל החסכונות למקום אחד", color: "#f4a261" },
-                { icon: Clock, title: "תכנון מס", desc: "אופטימיזציה של המס בפרישה", color: "#90be6d" },
-                { icon: Shield, title: "הגנה מלאה", desc: "ביטוחים וזכויות מותאמים לפרישה", color: "#e76f51" },
+                { icon: Calculator, doodle: "calculator", title: "תחשיב קצבה", desc: "חישוב מדויק של הקצבה הצפויה", color: "#5ec6c6" },
+                { icon: FileText, doodle: "calculator", title: "איחוד חסכונות", desc: "ריכוז כל החסכונות למקום אחד", color: "#f4a261" },
+                { icon: Clock, doodle: "target", title: "תכנון מס", desc: "אופטימיזציה של המס בפרישה", color: "#90be6d" },
+                { icon: Shield, doodle: "shield", title: "הגנה מלאה", desc: "ביטוחים וזכויות מותאמים לפרישה", color: "#e76f51" },
               ].map((item, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group text-center">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: item.color }}>
-                    <item.icon className="w-6 h-6 text-white" />
+                  <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                    <DoodleIcon name={item.doodle} size={48} />
                   </div>
                   <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{item.title}</h3>
                   <p className="text-gray-600 text-sm">{item.desc}</p>
@@ -137,8 +141,8 @@ const PreRetirement = () => {
               {productTypes.map((type, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: type.color }}>
-                      <type.icon className="w-5 h-5 text-white" />
+                    <div className="w-14 h-14 flex items-center justify-center">
+                      <DoodleIcon name={type.doodle} size={48} />
                     </div>
                     <h3 className="text-lg font-bold text-[#0a3d3d]">{type.title}</h3>
                   </div>

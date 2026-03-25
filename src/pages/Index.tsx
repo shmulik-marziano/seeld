@@ -22,12 +22,12 @@ import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 // ── Data ──
 
 const quickActions = [
-  { icon: Landmark, label: "תכנון פנסיוני", href: "/savings/pension-funds", color: "#5ec6c6" },
-  { icon: HeartPulse, label: "ביטוח חיים ובריאות", href: "/insurance/health", color: "#e76f51" },
-  { icon: Home, label: "ביטוח רכוש", href: "/insurance/apartment", color: "#f4a261" },
-  { icon: PiggyBank, label: "חיסכון והשקעות", href: "/savings/gemel-investment", color: "#90be6d" },
-  { icon: Calculator, label: "מחשבונים", href: "/calculators", color: "#6c63ff" },
-  { icon: PhoneCall, label: "צור קשר", href: "/contact", color: "#e07cc6" },
+  { icon: Landmark, doodle: "pension", label: "תכנון פנסיוני", href: "/savings/pension-funds", color: "#5ec6c6" },
+  { icon: HeartPulse, doodle: "family", label: "ביטוח חיים ובריאות", href: "/insurance/health", color: "#e76f51" },
+  { icon: Home, doodle: "umbrella", label: "ביטוח רכוש", href: "/insurance/apartment", color: "#f4a261" },
+  { icon: PiggyBank, doodle: "savings", label: "חיסכון והשקעות", href: "/savings/gemel-investment", color: "#90be6d" },
+  { icon: Calculator, doodle: "calculator", label: "מחשבונים", href: "/calculators", color: "#6c63ff" },
+  { icon: PhoneCall, doodle: "handshake", label: "צור קשר", href: "/contact", color: "#e07cc6" },
 ];
 
 const accentColors = ["#5ec6c6", "#f4a261", "#90be6d", "#e76f51"];
@@ -35,24 +35,28 @@ const accentColors = ["#5ec6c6", "#f4a261", "#90be6d", "#e76f51"];
 const whySeeld = [
   {
     icon: Users,
+    doodle: "handshake",
     title: "שירות אישי בגובה העיניים",
     description: "לא מוקד עם 50 נציגים. שמוליק — הסוכן שלכם. שואלים, מקבלים תשובה. תמיד.",
     accent: "#5ec6c6",
   },
   {
     icon: Handshake,
+    doodle: "shield",
     title: "סוכנות מבוססת ומוכרת",
     description: "רישיון רשות שוק ההון. חברים בלשכת סוכני הביטוח. מבית עמיתים הון. עובדים לפי הספר.",
     accent: "#f4a261",
   },
   {
     icon: Scale,
+    doodle: "charts",
     title: "עבודה עם כל החברות",
     description: "הראל, מגדל, כלל, הפניקס, איילון, מנורה ועוד 6 — משווים את כולם ובוחרים את מה שמתאים לכם. לא מה שמתאים לנו.",
     accent: "#90be6d",
   },
   {
     icon: Zap,
+    doodle: "lightbulb",
     title: "הכל דיגיטלי וזמין",
     description: "פורטל אישי לצפייה בפוליסות, מחשבונים לחישובים מהירים, סריקת תיק אוטומטית. 2026, לא 2006.",
     accent: "#e76f51",
@@ -60,47 +64,48 @@ const whySeeld = [
 ];
 
 const insuranceTypes = [
-  { icon: Car, title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳ — השוואה בין כל החברות בדקות", href: "/insurance/vehicle" },
-  { icon: HeartPulse, title: "ביטוח בריאות", description: "ניתוחים, תרופות וטיפולים — כיסוי שמשלים את הסל ולא כופל אותו", href: "/insurance/health" },
-  { icon: Heart, title: "ביטוח חיים", description: "הגנה כלכלית למשפחה. לא מה שמנסים למכור לך — מה שאתה באמת צריך", href: "/insurance/life" },
-  { icon: Home, title: "ביטוח דירה", description: "מבנה ותכולה — שלא תגלו שמשהו חסר אחרי שכבר מאוחר", href: "/insurance/apartment" },
-  { icon: Key, title: "ביטוח שוכרים", description: "כיסוי תכולה ואחריות צד ג׳ לשוכרים", href: "/insurance/renters" },
-  { icon: Building2, title: "ביטוח עסקי", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק", href: "/insurance/business" },
-  { icon: Plane, title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", href: "/insurance/travel" },
-  { icon: Stethoscope, title: "ביטוח שיניים", description: "טיפולי שיניים ואורתודנטיה", href: "/insurance/dental" },
-  { icon: Activity, title: "אובדן כושר עבודה", description: "תשלום חודשי אם לא תוכלו לעבוד", href: "/insurance/disability" },
-  { icon: UserCheck, title: "ביטוח סיעודי", description: "מימון טיפול סיעודי בבית או במוסד", href: "/insurance/nursing" },
-  { icon: Landmark, title: "ביטוח משכנתא", description: "שמירה על הדירה גם במקרה בלתי צפוי", href: "/insurance/mortgage" },
-  { icon: Shield, title: "מחלות קשות", description: "פיצוי כספי חד-פעמי עם אבחון מחלה", href: "/insurance/critical-illness" },
-  { icon: Umbrella, title: "תאונות אישיות", description: "פיצוי על ימי אשפוז, שבר או נכות מתאונה", href: "/insurance/personal-accidents" },
-  { icon: Briefcase, title: "ביטוח שותפים", description: "רציפות עסקית במקרה של אובדן שותף", href: "/insurance/partners" },
-  { icon: Globe, title: "עובדים זרים", description: "ביטוח חובה בהתאם לחוק", href: "/insurance/foreign-workers" },
-  { icon: Heart, title: "סיעודי כללית", description: "כיסוי סיעודי משלים לחברי כללית", href: "/insurance/nursing-clalit" },
+  { icon: Car, doodle: "shield", title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳ — השוואה בין כל החברות בדקות", href: "/insurance/vehicle" },
+  { icon: HeartPulse, doodle: "family", title: "ביטוח בריאות", description: "ניתוחים, תרופות וטיפולים — כיסוי שמשלים את הסל ולא כופל אותו", href: "/insurance/health" },
+  { icon: Heart, doodle: "family", title: "ביטוח חיים", description: "הגנה כלכלית למשפחה. לא מה שמנסים למכור לך — מה שאתה באמת צריך", href: "/insurance/life" },
+  { icon: Home, doodle: "umbrella", title: "ביטוח דירה", description: "מבנה ותכולה — שלא תגלו שמשהו חסר אחרי שכבר מאוחר", href: "/insurance/apartment" },
+  { icon: Key, doodle: "key", title: "ביטוח שוכרים", description: "כיסוי תכולה ואחריות צד ג׳ לשוכרים", href: "/insurance/renters" },
+  { icon: Building2, doodle: "handshake", title: "ביטוח עסקי", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק", href: "/insurance/business" },
+  { icon: Plane, doodle: "target", title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", href: "/insurance/travel" },
+  { icon: Stethoscope, doodle: "shield", title: "ביטוח שיניים", description: "טיפולי שיניים ואורתודנטיה", href: "/insurance/dental" },
+  { icon: Activity, doodle: "shield", title: "אובדן כושר עבודה", description: "תשלום חודשי אם לא תוכלו לעבוד", href: "/insurance/disability" },
+  { icon: UserCheck, doodle: "family", title: "ביטוח סיעודי", description: "מימון טיפול סיעודי בבית או במוסד", href: "/insurance/nursing" },
+  { icon: Landmark, doodle: "pension", title: "ביטוח משכנתא", description: "שמירה על הדירה גם במקרה בלתי צפוי", href: "/insurance/mortgage" },
+  { icon: Shield, doodle: "shield", title: "מחלות קשות", description: "פיצוי כספי חד-פעמי עם אבחון מחלה", href: "/insurance/critical-illness" },
+  { icon: Umbrella, doodle: "umbrella", title: "תאונות אישיות", description: "פיצוי על ימי אשפוז, שבר או נכות מתאונה", href: "/insurance/personal-accidents" },
+  { icon: Briefcase, doodle: "handshake", title: "ביטוח שותפים", description: "רציפות עסקית במקרה של אובדן שותף", href: "/insurance/partners" },
+  { icon: Globe, doodle: "target", title: "עובדים זרים", description: "ביטוח חובה בהתאם לחוק", href: "/insurance/foreign-workers" },
+  { icon: Heart, doodle: "family", title: "סיעודי כללית", description: "כיסוי סיעודי משלים לחברי כללית", href: "/insurance/nursing-clalit" },
 ];
 
 const savingsProducts = [
-  { icon: Landmark, title: "קרנות פנסיה", description: "הפקדות, כיסויים ומסלול נכון — כי ברירת המחדל היא לא תמיד הכי טובה", href: "/savings/pension-funds" },
-  { icon: PiggyBank, title: "קופות גמל", description: "חיסכון לטווח ארוך עם הטבות מס", href: "/savings/gemel-funds" },
-  { icon: HandCoins, title: "גמל להשקעה", description: "חיסכון נזיל בשוק ההון — בלי שקופות ובלי תקופות נעילה", href: "/savings/gemel-investment" },
-  { icon: Baby, title: "חיסכון לכל ילד", description: "ניהול כספי התוכנית הממשלתית", href: "/savings/child-savings" },
-  { icon: GraduationCap, title: "קרנות השתלמות", description: "חיסכון לשש שנים עם פטור ממס", href: "/savings/training-funds" },
-  { icon: TrendingUp, title: "השקעות", description: "בחירת מסלולי השקעה ומעקב תשואות", href: "/savings/investment" },
-  { icon: Heart, title: "ביטוח חיים פנסיוני", description: "חיסכון עם כיסוי למקרה מוות ונכות", href: "/insurance/life" },
-  { icon: Building2, title: "קופות מעסיקים", description: "הפקדות לעובדים, ציות לחוק ובחירת מוצרים", href: "/savings/employer-funds" },
-  { icon: CalendarCheck, title: "טרום פרישה", description: "עוד 5-10 שנים לפנסיה? עכשיו זה הזמן לבדוק שהכל מסודר", href: "/savings/pre-retirement" },
-  { icon: Wallet, title: "לאחר פרישה", description: "משיכת כספים, קצבאות ותכנון מס — שלא תפסידו שקל מיותר", href: "/savings/post-retirement" },
-  { icon: Target, title: "תכנון פיננסי", description: "מיפוי מלא של הנכסים ובניית תוכנית", href: "/savings/financial-planning" },
+  { icon: Landmark, doodle: "pension", title: "קרנות פנסיה", description: "הפקדות, כיסויים ומסלול נכון — כי ברירת המחדל היא לא תמיד הכי טובה", href: "/savings/pension-funds" },
+  { icon: PiggyBank, doodle: "savings", title: "קופות גמל", description: "חיסכון לטווח ארוך עם הטבות מס", href: "/savings/gemel-funds" },
+  { icon: HandCoins, doodle: "savings", title: "גמל להשקעה", description: "חיסכון נזיל בשוק ההון — בלי שקופות ובלי תקופות נעילה", href: "/savings/gemel-investment" },
+  { icon: Baby, doodle: "family", title: "חיסכון לכל ילד", description: "ניהול כספי התוכנית הממשלתית", href: "/savings/child-savings" },
+  { icon: GraduationCap, doodle: "lightbulb", title: "קרנות השתלמות", description: "חיסכון לשש שנים עם פטור ממס", href: "/savings/training-funds" },
+  { icon: TrendingUp, doodle: "growth", title: "השקעות", description: "בחירת מסלולי השקעה ומעקב תשואות", href: "/savings/investment" },
+  { icon: Heart, doodle: "family", title: "ביטוח חיים פנסיוני", description: "חיסכון עם כיסוי למקרה מוות ונכות", href: "/insurance/life" },
+  { icon: Building2, doodle: "handshake", title: "קופות מעסיקים", description: "הפקדות לעובדים, ציות לחוק ובחירת מוצרים", href: "/savings/employer-funds" },
+  { icon: CalendarCheck, doodle: "target", title: "טרום פרישה", description: "עוד 5-10 שנים לפנסיה? עכשיו זה הזמן לבדוק שהכל מסודר", href: "/savings/pre-retirement" },
+  { icon: Wallet, doodle: "savings", title: "לאחר פרישה", description: "משיכת כספים, קצבאות ותכנון מס — שלא תפסידו שקל מיותר", href: "/savings/post-retirement" },
+  { icon: Target, doodle: "target", title: "תכנון פיננסי", description: "מיפוי מלא של הנכסים ובניית תוכנית", href: "/savings/financial-planning" },
 ];
 
 const calculators = [
-  { icon: Landmark, title: "מחשבון משכנתא", description: "בדקו החזר חודשי, סך הריביות ולוח סילוקין מלא", color: "#5ec6c6" },
-  { icon: Wallet, title: "מחשבון פנסיה", description: "חשבו כמה תקבלו בגיל פרישה ומה כדאי להפקיד היום", color: "#f4a261" },
-  { icon: PiggyBank, title: "מחשבון חיסכון", description: "ראו איך הכסף גדל לאורך זמן עם ריבית דריבית", color: "#90be6d" },
-  { icon: BarChart3, title: "השוואת מסלולי השקעה", description: "השוו תשואות, דמי ניהול וסיכון בין מסלולים שונים", color: "#e76f51" },
+  { icon: Landmark, doodle: "calculator", title: "מחשבון משכנתא", description: "בדקו החזר חודשי, סך הריביות ולוח סילוקין מלא", color: "#5ec6c6" },
+  { icon: Wallet, doodle: "pension", title: "מחשבון פנסיה", description: "חשבו כמה תקבלו בגיל פרישה ומה כדאי להפקיד היום", color: "#f4a261" },
+  { icon: PiggyBank, doodle: "savings", title: "מחשבון חיסכון", description: "ראו איך הכסף גדל לאורך זמן עם ריבית דריבית", color: "#90be6d" },
+  { icon: BarChart3, doodle: "charts", title: "השוואת מסלולי השקעה", description: "השוו תשואות, דמי ניהול וסיכון בין מסלולים שונים", color: "#e76f51" },
 ];
 
 import { COMPANIES } from "@/data/companies";
 import CompanyLogos from "@/components/CompanyLogos";
+import DoodleIcon from "@/components/DoodleIcon";
 
 const faqItems = [
   {
@@ -415,10 +420,9 @@ const Index = () => {
                     className="flex flex-col items-center gap-3 py-5 px-2 rounded-2xl hover:bg-[#f8f9fc] transition-all duration-200 group"
                   >
                     <div
-                      className="w-16 h-16 rounded-full flex items-center justify-center transition-all duration-200 group-hover:shadow-lg group-hover:scale-110 shadow-md"
-                      style={{ backgroundColor: action.color, boxShadow: `0 6px 20px ${action.color}35` }}
+                      className="w-16 h-16 flex items-center justify-center transition-all duration-200 group-hover:scale-110"
                     >
-                      <action.icon className="w-7 h-7 text-white" />
+                      <DoodleIcon name={action.doodle} size={52} />
                     </div>
                     <span className="text-xs font-bold text-[#0a3d3d]/70 group-hover:text-[#0a3d3d] transition-colors text-center leading-tight">
                       {action.label}
@@ -477,11 +481,8 @@ const Index = () => {
                     <path d="M0,2 C10,2 20,15 28,28" stroke={item.accent} strokeWidth="1.5" strokeDasharray="4 3" strokeLinecap="round" opacity="0.3"/>
                   </svg>
                   <div className="relative">
-                    <div
-                      className="w-16 h-16 rounded-full flex items-center justify-center mb-6 transition-all shadow-md"
-                      style={{ backgroundColor: item.accent, boxShadow: `0 6px 20px ${item.accent}30` }}
-                    >
-                      <item.icon className="w-7 h-7 text-white" />
+                    <div className="w-16 h-16 flex items-center justify-center mb-6">
+                      <DoodleIcon name={item.doodle} size={56} />
                     </div>
                     <h3 className="text-xl font-extrabold mb-3 text-[#0a3d3d] group-hover:text-[#0a3d3d] transition-colors">
                       {item.title}
@@ -553,11 +554,8 @@ const Index = () => {
                         }
                       }}
                     >
-                      <div
-                        className="w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-all shadow-sm"
-                        style={{ backgroundColor: accentColors[i % accentColors.length], boxShadow: `0 4px 14px ${accentColors[i % accentColors.length]}25` }}
-                      >
-                        <item.icon className="w-5 h-5 text-white" />
+                      <div className="w-14 h-14 flex items-center justify-center mb-3">
+                        <DoodleIcon name={item.doodle} size={48} />
                       </div>
                       <h3 className="text-sm font-extrabold mb-1 text-[#0a3d3d] group-hover:text-[#0a3d3d] transition-colors">
                         {item.title}
@@ -626,11 +624,8 @@ const Index = () => {
                     whileHover={{ scale: 1.03, y: -4 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div
-                      className="w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-all shadow-sm"
-                      style={{ backgroundColor: accentColors[i % accentColors.length], boxShadow: `0 4px 14px ${accentColors[i % accentColors.length]}25` }}
-                    >
-                      <item.icon className="w-5 h-5 text-white" />
+                    <div className="w-14 h-14 flex items-center justify-center mb-3">
+                      <DoodleIcon name={item.doodle} size={48} />
                     </div>
                     <h3 className="text-sm font-extrabold mb-1 text-[#0a3d3d] transition-colors">
                       {item.title}
@@ -690,12 +685,11 @@ const Index = () => {
                       {/* Decorative small circle accent */}
                       <div className="absolute top-4 left-4 w-4 h-4 rounded-full opacity-30 group-hover:opacity-50 transition-opacity" style={{ backgroundColor: calc.color }} />
                       <motion.div
-                        className="w-16 h-16 rounded-full flex items-center justify-center mb-6 relative shadow-md"
-                        style={{ backgroundColor: calc.color, boxShadow: `0 6px 20px ${calc.color}30` }}
+                        className="w-16 h-16 flex items-center justify-center mb-6 relative"
                         whileHover={{ rotate: [0, -5, 5, 0] }}
                         transition={{ duration: 0.5 }}
                       >
-                        <calc.icon className="w-7 h-7 text-white" />
+                        <DoodleIcon name={calc.doodle} size={56} />
                       </motion.div>
                       <h3 className="text-lg font-extrabold text-[#0a3d3d] mb-2 relative">{calc.title}</h3>
                       <p className="text-sm text-[#0a3d3d]/40 leading-relaxed mb-6 flex-1 relative">{calc.description}</p>

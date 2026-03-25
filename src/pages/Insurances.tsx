@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import DoodleIcon from "@/components/DoodleIcon";
 import { Heart, Shield, AlertTriangle, Users, Home, Handshake, ArrowLeft, ChevronLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -9,6 +10,7 @@ interface InsuranceCategory {
   description: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
+  doodle: string;
   highlights: string[];
   color: string;
 }
@@ -20,6 +22,7 @@ const insuranceCategories: InsuranceCategory[] = [
     description: "כיסוי מקיף לטיפולים רפואיים, ניתוחים, תרופות ובדיקות מתקדמות",
     href: "/insurance/health",
     icon: Heart,
+    doodle: "family",
     highlights: ["ניתוחים בארץ ובחו״ל", "תרופות מחוץ לסל", "ייעוץ ובדיקות"],
     color: "#e76f51",
   },
@@ -29,6 +32,7 @@ const insuranceCategories: InsuranceCategory[] = [
     description: "הגנה כלכלית במקרה של אבחון מחלה קשה עם מענק כספי חד פעמי",
     href: "/insurance/critical-illness",
     icon: Shield,
+    doodle: "shield",
     highlights: ["מענק חד פעמי", "כיסוי מגוון מחלות", "ללא תלות בהוצאות"],
     color: "#6c63ff",
   },
@@ -38,6 +42,7 @@ const insuranceCategories: InsuranceCategory[] = [
     description: "פיצוי במקרה של פגיעה או נכות כתוצאה מתאונה",
     href: "/insurance/accidents",
     icon: AlertTriangle,
+    doodle: "umbrella",
     highlights: ["כיסוי 24/7", "נכות תעסוקתית", "הרחבות לספורט"],
     color: "#f4a261",
   },
@@ -47,6 +52,7 @@ const insuranceCategories: InsuranceCategory[] = [
     description: "הבטחת עתיד המשפחה עם כיסוי למקרה מוות ונכות",
     href: "/insurance/life",
     icon: Users,
+    doodle: "family",
     highlights: ["ביטוח חיים זוגי", "שחרור מפרמיה", "כיסוי נכות"],
     color: "#90be6d",
   },
@@ -56,6 +62,7 @@ const insuranceCategories: InsuranceCategory[] = [
     description: "הגנה על הבית והמשפחה במקרה של פטירה או אובדן כושר עבודה",
     href: "/insurance/mortgage",
     icon: Home,
+    doodle: "pension",
     highlights: ["כיסוי יתרת משכנתא", "פרמיה יורדת", "התאמה אישית"],
     color: "#5ec6c6",
   },
@@ -65,6 +72,7 @@ const insuranceCategories: InsuranceCategory[] = [
     description: "הגנה על העסק והשותפים במקרה של פטירת אחד השותפים",
     href: "/insurance/partners",
     icon: Handshake,
+    doodle: "handshake",
     highlights: ["הגנה על העסק", "רכישת מניות", "המשכיות עסקית"],
     color: "#e76f51",
   },
@@ -117,9 +125,8 @@ const Insurances = () => {
                   to={category.href}
                   className="group bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 block"
                 >
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mb-5"
-                    style={{ backgroundColor: category.color + "18" }}>
-                    <category.icon className="w-6 h-6" style={{ color: category.color }} />
+                  <div className="w-14 h-14 flex items-center justify-center mb-5">
+                    <DoodleIcon name={category.doodle} size={48} />
                   </div>
                   <h3 className="text-xl font-bold text-[#0a3d3d] mb-2">{category.title}</h3>
                   <p className="text-gray-500 text-sm leading-relaxed mb-5">
@@ -150,8 +157,8 @@ const Insurances = () => {
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="grid sm:grid-cols-3 gap-8 text-center">
               <div>
-                <div className="w-14 h-14 rounded-full bg-[#5ec6c6] flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-6 h-6 text-white" />
+                <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                  <DoodleIcon name="shield" size={48} />
                 </div>
                 <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">ייעוץ מקצועי</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">
@@ -159,8 +166,8 @@ const Insurances = () => {
                 </p>
               </div>
               <div>
-                <div className="w-14 h-14 rounded-full bg-[#6c63ff] flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-6 h-6 text-white" />
+                <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                  <DoodleIcon name="family" size={48} />
                 </div>
                 <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">הגנה מלאה למשפחה</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">
@@ -168,8 +175,8 @@ const Insurances = () => {
                 </p>
               </div>
               <div>
-                <div className="w-14 h-14 rounded-full bg-[#e76f51] flex items-center justify-center mx-auto mb-4">
-                  <Handshake className="w-6 h-6 text-white" />
+                <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                  <DoodleIcon name="handshake" size={48} />
                 </div>
                 <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">ליווי בתביעות</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">

@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
+import DoodleIcon from "@/components/DoodleIcon";
 
 const PensionLifeInsurance = () => {
   const productTypes = [
     {
       title: "הגנה מלאה",
       icon: Shield,
+      doodle: "shield",
       color: "#e76f51",
       description: "ביטוח חיים שמגן על המשפחה במקרה של אובדן מפרנס",
       features: ["ביטוח חיים (ריסק)", "אובדן כושר עבודה", "פטור מפרמיות"],
@@ -23,6 +25,7 @@ const PensionLifeInsurance = () => {
     {
       title: "חיסכון מצטבר",
       icon: TrendingUp,
+      doodle: "growth",
       color: "#5ec6c6",
       description: "צבירת כספים לפנסיה במקביל לכיסוי ביטוחי",
       features: ["מרכיב חיסכון", "תשואה מנוהלת", "הטבות מס"],
@@ -30,6 +33,7 @@ const PensionLifeInsurance = () => {
     {
       title: "גמישות מלאה",
       icon: Heart,
+      doodle: "family",
       color: "#f4a261",
       description: "התאמת סכומי הביטוח והחיסכון לצרכים המשתנים",
       features: ["כיסויים מותאמים", "שינוי מסלולים", "עדכון תקופתי"],
@@ -111,14 +115,14 @@ const PensionLifeInsurance = () => {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">יתרונות ביטוח מנהלים</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Shield, title: "הגנה מקיפה", desc: "ביטוח חיים, נכות ופטור מפרמיות", color: "#e76f51" },
-                { icon: TrendingUp, title: "חיסכון לפנסיה", desc: "צבירת כספים מנוהלת לעתיד", color: "#5ec6c6" },
-                { icon: Heart, title: "גמישות", desc: "כיסויים מותאמים לצרכים שלכם", color: "#f4a261" },
-                { icon: Users, title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לאורך הדרך", color: "#90be6d" },
+                { icon: Shield, doodle: "shield", title: "הגנה מקיפה", desc: "ביטוח חיים, נכות ופטור מפרמיות", color: "#e76f51" },
+                { icon: TrendingUp, doodle: "growth", title: "חיסכון לפנסיה", desc: "צבירת כספים מנוהלת לעתיד", color: "#5ec6c6" },
+                { icon: Heart, doodle: "family", title: "גמישות", desc: "כיסויים מותאמים לצרכים שלכם", color: "#f4a261" },
+                { icon: Users, doodle: "handshake", title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לאורך הדרך", color: "#90be6d" },
               ].map((item, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group text-center">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: item.color }}>
-                    <item.icon className="w-6 h-6 text-white" />
+                  <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                    <DoodleIcon name={item.doodle} size={48} />
                   </div>
                   <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{item.title}</h3>
                   <p className="text-gray-600 text-sm">{item.desc}</p>
@@ -137,8 +141,8 @@ const PensionLifeInsurance = () => {
               {productTypes.map((type, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: type.color }}>
-                      <type.icon className="w-5 h-5 text-white" />
+                    <div className="w-14 h-14 flex items-center justify-center">
+                      <DoodleIcon name={type.doodle} size={48} />
                     </div>
                     <h3 className="text-lg font-bold text-[#0a3d3d]">{type.title}</h3>
                   </div>

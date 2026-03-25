@@ -10,12 +10,14 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
+import DoodleIcon from "@/components/DoodleIcon";
 
 const PensionFunds = () => {
   const pensionTypes = [
     {
       title: "פנסיה מקיפה חדשה",
       icon: Shield,
+      doodle: "shield",
       color: "#5ec6c6",
       description: "קרן פנסיה המשלבת חיסכון, ביטוח נכות וביטוח שאירים",
       features: ["תשואות מנוהלות", "כיסוי אובדן כושר עבודה", "פנסיית שאירים"],
@@ -23,6 +25,7 @@ const PensionFunds = () => {
     {
       title: "פנסיה כללית",
       icon: TrendingUp,
+      doodle: "growth",
       color: "#f4a261",
       description: "מסלול חיסכון בלבד ללא רכיבים ביטוחיים",
       features: ["תשואות גבוהות יותר", "גמישות מקסימלית", "דמי ניהול נמוכים"],
@@ -30,6 +33,7 @@ const PensionFunds = () => {
     {
       title: "פנסיה משלימה",
       icon: PiggyBank,
+      doodle: "savings",
       color: "#90be6d",
       description: "הפקדות נוספות מעבר לחובה לשיפור הפנסיה",
       features: ["הטבות מס", "הגדלת הקצבה", "חיסכון לטווח ארוך"],
@@ -111,15 +115,14 @@ const PensionFunds = () => {
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">יתרונות קרן הפנסיה</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: TrendingUp, title: "תשואות מנוהלות", desc: "הכספים מנוהלים על ידי מנהלי השקעות מקצועיים", color: "#5ec6c6" },
-                { icon: Shield, title: "כיסויים ביטוחיים", desc: "פנסיית נכות ושאירים להגנה על המשפחה", color: "#f4a261" },
-                { icon: Calculator, title: "הטבות מס", desc: "זיכוי מס והפחתת הכנסה חייבת במס", color: "#90be6d" },
-                { icon: Users, title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לבחירת המסלול המתאים", color: "#e76f51" },
+                { icon: TrendingUp, doodle: "growth", title: "תשואות מנוהלות", desc: "הכספים מנוהלים על ידי מנהלי השקעות מקצועיים", color: "#5ec6c6" },
+                { icon: Shield, doodle: "shield", title: "כיסויים ביטוחיים", desc: "פנסיית נכות ושאירים להגנה על המשפחה", color: "#f4a261" },
+                { icon: Calculator, doodle: "calculator", title: "הטבות מס", desc: "זיכוי מס והפחתת הכנסה חייבת במס", color: "#90be6d" },
+                { icon: Users, doodle: "handshake", title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לבחירת המסלול המתאים", color: "#e76f51" },
               ].map((item, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group text-center">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-sm transition-transform group-hover:scale-105"
-                    style={{ backgroundColor: item.color + '18' }}>
-                    <item.icon className="w-6 h-6" style={{ color: item.color }} />
+                  <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                    <DoodleIcon name={item.doodle} size={48} />
                   </div>
                   <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{item.title}</h3>
                   <p className="text-gray-600 text-sm">{item.desc}</p>
@@ -138,8 +141,8 @@ const PensionFunds = () => {
               {pensionTypes.map((type, idx) => (
                 <div key={idx} className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: type.color }}>
-                      <type.icon className="w-5 h-5 text-white" />
+                    <div className="w-14 h-14 flex items-center justify-center">
+                      <DoodleIcon name={type.doodle} size={48} />
                     </div>
                     <h3 className="text-lg font-bold text-[#0a3d3d]">{type.title}</h3>
                   </div>
