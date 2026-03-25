@@ -67,6 +67,38 @@ const About = () => {
           </div>
         </section>
 
+        {/* Numbers Section */}
+        <section className="py-10 sm:py-14">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {[
+                { number: "3,170+", label: "לקוחות", color: "#5ec6c6" },
+                { number: "443M", label: "₪ בניהול", color: "#f4a261" },
+                { number: "12+", label: "חברות ביטוח", color: "#90be6d" },
+                { number: "2.3M", label: "₪ הפקדות חודשיות", color: "#e76f51" },
+              ].map((stat, i) => (
+                <div key={i} className="bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
+                  <p className="text-3xl sm:text-4xl font-extrabold mb-1" style={{ color: stat.color }}>{stat.number}</p>
+                  <p className="text-sm text-gray-500">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+              {[
+                { label: "ע.מ", value: "305275653" },
+                { label: "רישיון סוכן ביטוח", value: "מורשה רשות שוק ההון 2026" },
+                { label: "מבית", value: "עמיתים הון" },
+              ].map((item, i) => (
+                <div key={i} className="bg-[#f8f9fc] rounded-xl px-4 py-3 text-sm">
+                  <span className="text-gray-400">{item.label}: </span>
+                  <span className="font-bold text-[#0a3d3d]">{item.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Mission Section */}
         <section className="py-10 sm:py-16 bg-[#f8f9fc] relative overflow-hidden">
           {/* Decorative pill shape */}

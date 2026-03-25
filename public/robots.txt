@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://wise-recommend-engine.lovable.app/sitemap.xml
+Sitemap: https://seeld.co.il/sitemap.xml
