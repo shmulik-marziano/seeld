@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import InsuranceEnrollmentForm from '@/components/InsuranceEnrollmentForm';
+import CompanyLogos from '@/components/CompanyLogos';
 import { ChevronLeft, CheckCircle2 } from 'lucide-react';
 import {
   Accordion,
@@ -342,24 +343,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
         )}
 
         {/* ══════ COMPANIES ══════ */}
-        <section className="py-12 sm:py-16 bg-[#fafbfd]">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-3">חברות שאנחנו משווקים</h2>
-            <p className="text-gray-400 mb-10 text-base sm:text-lg">
-              אנחנו עובדים עם חברות הביטוח המובילות בישראל כדי להביא לכם את ההצעה הטובה ביותר
-            </p>
-            <div className="flex flex-wrap justify-center gap-2.5">
-              {companies.map((company) => (
-                <span
-                  key={company}
-                  className="px-5 py-2.5 bg-white rounded-xl text-sm font-medium text-[#0a3d3d] border border-gray-100 hover:border-[#5ec6c6]/40 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
-                >
-                  {company}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
+        <CompanyLogos variant="grid" />
 
         {/* ══════ CTA + FORM ══════ */}
         <section id={enrollmentFormId} className="py-12 sm:py-16 scroll-mt-24">

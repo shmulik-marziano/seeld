@@ -99,10 +99,8 @@ const calculators = [
   { icon: BarChart3, title: "השוואת מסלולי השקעה", description: "השוו תשואות, דמי ניהול וסיכון בין מסלולים שונים", color: "#e76f51" },
 ];
 
-const partners = [
-  "הראל", "מנורה מבטחים", "מגדל", "כלל", "איילון", "הפניקס",
-  "מיטב", "מור", "ילין לפידות", "אנליסט", "אינפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה",
-];
+import { COMPANIES } from "@/data/companies";
+import CompanyLogos from "@/components/CompanyLogos";
 
 const faqItems = [
   {
@@ -723,45 +721,14 @@ const Index = () => {
           <span className="w-4 h-4 rounded-full bg-[#f4a261]" />
         </div>
 
-        {/* 8. PARTNERS - Clean badge row */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
-          <ScrollReveal>
-            <div className="text-center mb-12 sm:mb-16 relative">
-              <div className="absolute top-1 left-[15%] w-4 h-4 rounded-full bg-[#5ec6c6] opacity-25 hidden sm:block" />
-              <SectionLabel>PARTNERS</SectionLabel>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                לא עובדים בשביל חברה. <span className="text-[#5ec6c6]">עובדים בשבילכם.</span>
-              </h2>
-              <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                12 חברות ביטוח, 6 בתי השקעות. משווים, ממליצים, ואתם מחליטים.
-              </p>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={100}>
-            {/* Auto-scrolling marquee */}
-            <div className="relative overflow-hidden py-4">
-              {/* Fade edges */}
-              <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-transparent to-white z-10 pointer-events-none" />
-              <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-transparent to-white z-10 pointer-events-none" />
-              <motion.div
-                className="flex gap-6 sm:gap-8 whitespace-nowrap"
-                animate={{ x: ["0%", "-50%"] }}
-                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-              >
-                {[...partners, ...partners].map((name, i) => (
-                  <span
-                    key={`${name}-${i}`}
-                    className="inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-[#f8f9fc] border border-[#0a3d3d]/[0.06] text-base sm:text-lg font-bold text-[#0a3d3d]/60 shrink-0"
-                  >
-                    <span className="w-3 h-3 rounded-full bg-[#5ec6c6]/40" />
-                    {name}
-                  </span>
-                ))}
-              </motion.div>
-            </div>
-          </ScrollReveal>
-        </section>
+        {/* 8. PARTNERS - Logo marquee */}
+        <ScrollReveal>
+          <CompanyLogos
+            variant="marquee"
+            title="לא עובדים בשביל חברה. עובדים בשבילכם."
+            subtitle="12 חברות ביטוח, 6 בתי השקעות. משווים, ממליצים, ואתם מחליטים."
+          />
+        </ScrollReveal>
 
         {/* Wave: white -> dark */}
         <WaveDivider color="#0a3d3d" />

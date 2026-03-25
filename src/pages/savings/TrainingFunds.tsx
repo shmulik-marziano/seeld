@@ -9,6 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
+import CompanyLogos from "@/components/CompanyLogos";
 
 const TrainingFunds = () => {
   const productTypes = [
@@ -49,8 +50,6 @@ const TrainingFunds = () => {
       a: "כן, המעבר חינמי ופשוט. אפשר לעבור לקרן עם דמי ניהול נמוכים יותר או ביצועים טובים יותר בכל עת. אנחנו ב-SEELD מטפלים בכל התהליך עבורכם.",
     },
   ];
-
-  const companies = ["הראל", "מנורה מבטחים", "מגדל", "כלל", "איילון", "הפניקס", "מיטב", "מור", "ילין לפידות", "אנליסט", "אינפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה"];
 
   return (
     <div className="min-h-screen bg-white" dir="rtl">
@@ -220,25 +219,8 @@ const TrainingFunds = () => {
           </div>
         </section>
 
-        {/* Companies Badges */}
-        <section className="py-10 sm:py-16 bg-gray-50">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-3">חברות שאנחנו משווקים</h2>
-            <p className="text-gray-500 mb-10 text-base sm:text-lg">
-              אנחנו עובדים עם הגופים המוסדיים המובילים בישראל כדי להביא לכם את התנאים הטובים ביותר
-            </p>
-            <div className="flex flex-wrap justify-center gap-3">
-              {companies.map((company) => (
-                <span
-                  key={company}
-                  className="px-5 py-2.5 bg-white rounded-full text-sm font-medium text-[#0a3d3d] border border-gray-200 hover:border-[#5ec6c6] hover:shadow-sm transition-all"
-                >
-                  {company}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Companies */}
+        <CompanyLogos variant="grid" />
 
         {/* Analysis Form */}
         <section id="analysis-form" className="py-10 sm:py-16 scroll-mt-24">
