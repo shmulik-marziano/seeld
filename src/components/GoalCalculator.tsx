@@ -108,7 +108,7 @@ const GoalCalculator = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" dir="rtl">
       {/* Main Target Input - Big and Prominent */}
       <div className="relative">
         <div className="absolute -top-3 right-4 bg-background px-3 py-1 rounded-full text-sm font-semibold text-secondary z-10 border border-secondary/20">
@@ -204,7 +204,7 @@ const GoalCalculator = () => {
             max={2000000}
             step={10000}
           />
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="flex justify-between text-xs text-muted-foreground" dir="ltr">
             <span>₪0</span>
             <span>₪2,000,000</span>
           </div>
@@ -236,7 +236,7 @@ const GoalCalculator = () => {
             max={10}
             step={0.5}
           />
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="flex justify-between text-xs text-muted-foreground" dir="ltr">
             <span>0%</span>
             <span>10%</span>
           </div>
@@ -332,7 +332,7 @@ const GoalCalculator = () => {
                 )}
               </div>
             </div>
-            <div className="flex justify-between text-xs text-muted-foreground">
+            <div className="flex justify-between text-xs text-muted-foreground" dir="ltr">
               <span>₪0</span>
               <span>יעד: {formatCurrency(result.totalNeeded)}</span>
             </div>

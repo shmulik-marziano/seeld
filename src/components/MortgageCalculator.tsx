@@ -70,7 +70,7 @@ const MortgageCalculator = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" dir="rtl">
       {/* Input Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Loan Amount */}
@@ -95,7 +95,7 @@ const MortgageCalculator = () => {
             step={50000}
             className="mt-2"
           />
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="flex justify-between text-xs text-muted-foreground" dir="ltr">
             <span>₪100,000</span>
             <span>₪5,000,000</span>
           </div>
@@ -129,7 +129,7 @@ const MortgageCalculator = () => {
             step={0.1}
             className="mt-2"
           />
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="flex justify-between text-xs text-muted-foreground" dir="ltr">
             <span>0%</span>
             <span>10%</span>
           </div>
@@ -162,7 +162,7 @@ const MortgageCalculator = () => {
             step={1}
             className="mt-2"
           />
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="flex justify-between text-xs text-muted-foreground" dir="ltr">
             <span>5 שנים</span>
             <span>30 שנים</span>
           </div>

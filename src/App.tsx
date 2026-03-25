@@ -14,6 +14,7 @@ import AIChatBot from "@/components/AIChatBot";
 import AccessibilityButton from "@/components/AccessibilityButton";
 import CookieConsent from "@/components/CookieConsent";
 import ScrollProgress from "@/components/ScrollProgress";
+import FloatingShapes from "@/components/FloatingShapes";
 import { useEffect, useRef } from "react";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 

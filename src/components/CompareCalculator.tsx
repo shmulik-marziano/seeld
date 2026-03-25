@@ -113,7 +113,7 @@ const CompareCalculator = () => {
   const minProfit = Math.min(...results.map(r => r.profit));
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" dir="rtl">
       {/* Main Investment Input - Big and Prominent */}
       <div className="relative">
         <div className="absolute -top-3 right-4 bg-background px-3 py-1 rounded-full text-sm font-semibold text-secondary z-10 border border-secondary/20">
@@ -149,7 +149,7 @@ const CompareCalculator = () => {
           max={20}
           step={1}
         />
-        <div className="flex justify-between text-xs text-muted-foreground">
+        <div className="flex justify-between text-xs text-muted-foreground" dir="ltr">
           <span>שנה</span>
           <span>20 שנים</span>
         </div>

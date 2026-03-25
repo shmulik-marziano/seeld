@@ -123,7 +123,7 @@ const SavingsCalculator = () => {
     : 1;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" dir="rtl">
       {/* Input Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Initial Amount */}
@@ -146,7 +146,7 @@ const SavingsCalculator = () => {
             max={500000}
             step={5000}
           />
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="flex justify-between text-xs text-muted-foreground" dir="ltr">
             <span>₪0</span>
             <span>₪500,000</span>
           </div>
@@ -172,7 +172,7 @@ const SavingsCalculator = () => {
             max={20000}
             step={100}
           />
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="flex justify-between text-xs text-muted-foreground" dir="ltr">
             <span>₪0</span>
             <span>₪20,000</span>
           </div>
@@ -204,7 +204,7 @@ const SavingsCalculator = () => {
             max={15}
             step={0.5}
           />
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="flex justify-between text-xs text-muted-foreground" dir="ltr">
             <span>0%</span>
             <span>15%</span>
           </div>
@@ -235,7 +235,7 @@ const SavingsCalculator = () => {
             max={30}
             step={1}
           />
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <div className="flex justify-between text-xs text-muted-foreground" dir="ltr">
             <span>שנה</span>
             <span>30 שנים</span>
           </div>
