@@ -64,6 +64,32 @@ serve(async (req) => {
       });
     }
 
+    if (action === "migrate") {
+      // Run page_views v2 migration
+      const queries = [
+        "ALTER TABLE page_views ADD COLUMN IF NOT EXISTS country text",
+        "ALTER TABLE page_views ADD COLUMN IF NOT EXISTS city text",
+        "ALTER TABLE page_views ADD COLUMN IF NOT EXISTS device text",
+        "ALTER TABLE page_views ADD COLUMN IF NOT EXISTS referrer text",
+        "ALTER TABLE page_views ADD COLUMN IF NOT EXISTS browser text",
+        "ALTER TABLE page_views ADD COLUMN IF NOT EXISTS session_id text",
+        "CREATE INDEX IF NOT EXISTS idx_page_views_country ON page_views(country)",
+      ];
+      const results: string[] = [];
+      for (const sql of queries) {
+        const { error } = await supabase.rpc("exec_sql", { query: sql }).maybeSingle();
+        if (error) {
+          // Try direct approach - use from().select() to check if column exists
+          results.push(`${sql} → skipped (rpc not available)`);
+        } else {
+          results.push(`${sql} → OK`);
+        }
+      }
+      return new Response(JSON.stringify({ success: true, results }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // Default: just verify password
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

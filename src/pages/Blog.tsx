@@ -13,6 +13,7 @@ interface BlogPost {
   category: string | null;
   author: string | null;
   published_at: string | null;
+  cover_image_url: string | null;
 }
 
 const categoryColors: Record<string, string> = {
@@ -32,7 +33,7 @@ const Blog = () => {
     const fetchPosts = async () => {
       const { data, error } = await siteSupabase
         .from("blog_posts")
-        .select("id, slug, title, excerpt, category, author, published_at")
+        .select("id, slug, title, excerpt, category, author, published_at, cover_image_url")
         .eq("status", "published")
         .order("published_at", { ascending: false });
 
@@ -132,9 +133,20 @@ const Blog = () => {
                 key={post.id}
                 className="group bg-white dark:bg-gray-900 rounded-2xl border border-[#0a3d3d]/10 dark:border-white/10 overflow-hidden hover:shadow-xl hover:shadow-[#0a3d3d]/5 transition-all duration-300 hover:-translate-y-1"
               >
-                {/* Colored top bar */}
+                {/* Cover image */}
+                {post.cover_image_url && (
+                  <div className="w-full h-48 sm:h-56 overflow-hidden">
+                    <img
+                      src={post.cover_image_url}
+                      alt={post.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                )}
+
+                {/* Colored top bar (below image or at top if no image) */}
                 <div
-                  className="h-2 w-full"
+                  className="h-1.5 w-full"
                   style={{ backgroundColor: categoryColors[post.category || ""] || "#0a3d3d" }}
                 />
 

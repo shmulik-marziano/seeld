@@ -716,7 +716,7 @@ export default function DashboardPage() {
               <div>
                 <div className="text-sm font-black text-[#0a3d3d] leading-none"
                   style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>SEELD</div>
-                <div className="text-[8px] font-bold tracking-[0.2em] text-gray-400 uppercase">Platform</div>
+                <div className="text-[8px] font-bold tracking-[0.2em] text-gray-400 uppercase">פלטפורמה</div>
               </div>
             </button>
 
@@ -829,7 +829,7 @@ export default function DashboardPage() {
           {/* Greeting */}
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
             <p className="text-[9px] font-black tracking-[0.26em] uppercase text-gray-400 mb-0.5"
-              style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>SEELD • PLATFORM</p>
+              style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>SEELD • פלטפורמה</p>
             <h1 className="text-3xl font-black text-[#0a3d3d] leading-none"
               style={{ fontFamily: "'Plus Jakarta Sans','Heebo',sans-serif" }}>{getGreeting()}</h1>
             <p className="text-xs text-gray-400 mt-1">

@@ -56,7 +56,7 @@ const PersonalArea = () => {
           <path d="M0 20 Q200 5 400 18 T800 8" stroke="#5ec6c6" strokeWidth="1" strokeDasharray="8 6" />
         </svg>
 
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14 relative z-10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:pb-32 sm:pt-16 relative z-10">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-2">
             האזור האישי
           </h1>
@@ -66,7 +66,7 @@ const PersonalArea = () => {
         </div>
       </section>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 pb-8 sm:pb-10 -mt-8 sm:-mt-24 relative z-20">
         <PersonalAreaDashboard />
       </main>
       <Footer />

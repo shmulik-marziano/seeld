@@ -68,7 +68,7 @@ export default function CustomerListPage() {
         style={{ backgroundColor: 'rgba(248,249,252,0.92)', backdropFilter: 'blur(12px)' }}
       >
         <div>
-          <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-400">SEELD PLATFORM</p>
+          <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-400">SEELD פלטפורמה</p>
           <h1 className="text-2xl font-extrabold leading-tight" style={{ color: '#0a3d3d' }}>
             לקוחות
             <span className="mr-2 text-sm font-medium text-gray-400">({data.customers.length})</span>

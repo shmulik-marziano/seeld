@@ -40,11 +40,11 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
   // Mobile bottom tabs
   const mobileBottomTabs = [
-    { label: 'Deck', icon: LayoutDashboard, path: '/app/dashboard' },
-    { label: 'Catch', icon: Target, path: '/app/tools/catch' },
-    { label: 'Flow', icon: CheckSquare, path: '/app/tools/flow' },
-    { label: 'Bridge', icon: MessageSquare, path: '/app/tools/bridge' },
-    { label: 'More', icon: MoreHorizontal, path: '/app/tools' },
+    { label: 'ראשי', icon: LayoutDashboard, path: '/app/dashboard' },
+    { label: 'קליטה', icon: Target, path: '/app/tools/catch' },
+    { label: 'משימות', icon: CheckSquare, path: '/app/tools/flow' },
+    { label: 'הודעות', icon: MessageSquare, path: '/app/tools/bridge' },
+    { label: 'עוד', icon: MoreHorizontal, path: '/app/tools' },
   ];
 
   // Non-app routes: just render with existing back-bar logic
@@ -224,7 +224,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
               className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-[#0a3d3d] transition-colors"
             >
               <ChevronRight className="w-3.5 h-3.5 rotate-180" />
-              SEELD PLATFORM
+              SEELD פלטפורמה
             </button>
           </div>
         )}

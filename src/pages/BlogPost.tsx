@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
-import { CalendarDays, User, ArrowRight, Share2, Copy, Loader2 } from "lucide-react";
+import { CalendarDays, User, ArrowRight, Share2, Copy, Loader2, Send, CheckCircle2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteSupabase } from "@/integrations/supabase/site-client";
@@ -15,6 +15,7 @@ interface BlogPostData {
   category: string | null;
   author: string | null;
   published_at: string | null;
+  cover_image_url: string | null;
 }
 
 const categoryColors: Record<string, string> = {
@@ -30,6 +31,10 @@ const BlogPost = () => {
   const [post, setPost] = useState<BlogPostData | null>(null);
   const [related, setRelated] = useState<BlogPostData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [leadForm, setLeadForm] = useState({ name: "", phone: "", email: "" });
+  const [leadSubmitting, setLeadSubmitting] = useState(false);
+  const [leadSubmitted, setLeadSubmitted] = useState(false);
+  const leadFormRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -86,7 +91,203 @@ const BlogPost = () => {
     toast.success("הקישור הועתק!");
   };
 
+  const handleLeadSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!leadForm.name || !leadForm.phone) return;
+    setLeadSubmitting(true);
+
+    try {
+      const subject = post?.category || "בלוג";
+      const { error } = await siteSupabase.from("contact_submissions").insert([{
+        name: leadForm.name,
+        email: leadForm.email || null,
+        subject: `ליד מבלוג: ${post?.title || ""}`,
+        message: `טלפון: ${leadForm.phone}\nמקור: בלוג — ${post?.title}\nקטגוריה: ${subject}`
+      }]);
+
+      if (error) throw error;
+
+      try {
+        await siteSupabase.functions.invoke("send-lead-notification", {
+          body: {
+            type: "blog",
+            leadData: {
+              fullName: leadForm.name,
+              phone: leadForm.phone,
+              email: leadForm.email,
+              insuranceType: `בלוג: ${post?.title}`
+            }
+          }
+        });
+      } catch (emailErr) {
+        console.error("Failed to send email notification:", emailErr);
+      }
+
+      setLeadSubmitted(true);
+      setLeadForm({ name: "", phone: "", email: "" });
+      toast.success("הפרטים נשלחו! נחזור אליכם בהקדם.");
+    } catch (error) {
+      toast.error("שגיאה בשליחה, נסו שוב.");
+    } finally {
+      setLeadSubmitting(false);
+    }
+  };
+
+  // Handle CTA button clicks inside blog content — scroll to lead form
+  useEffect(() => {
+    const handleContentClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest('a[href="#lead-form"]');
+      if (anchor) {
+        e.preventDefault();
+        leadFormRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    };
+    document.addEventListener("click", handleContentClick);
+    return () => document.removeEventListener("click", handleContentClick);
+  }, []);
+
   const accentColor = categoryColors[post?.category || ""] || "#0a3d3d";
+
+  // Dynamic lead form text — tailored per article slug, with category fallback
+  const leadFormText = (() => {
+    const slugMap: Record<string, { title: string; desc: string; cta: string; successMsg: string }> = {
+      // ——— New 10 posts ———
+      "disability-insurance-guide": {
+        title: "רוצים לדעת אם יש לכם כיסוי לאובדן כושר עבודה?",
+        desc: "הרבה אנשים מגלים שהכיסוי שלהם חלקי, חסר, או כפול — ומשלמים על זה. נבדוק את הפוליסות שלכם ונוודא שאתם מוגנים באמת.",
+        cta: "בדיקת כיסוי אכ״ע",
+        successMsg: "נבדוק את הכיסוי שלכם ונחזור עם ממצאים תוך יום עסקים.",
+      },
+      "israel-capital-market-2026": {
+        title: "רוצים לדעת איפה אתם עומדים מבחינת השקעות?",
+        desc: "נסתכל ביחד על התמונה המלאה — פנסיה, קרן השתלמות, חסכונות, ותיק השקעות. נראה מה עובד, מה חסר, ומה אפשר לשפר.",
+        cta: "ניתוח תיק חינם",
+        successMsg: "נכין לכם ניתוח תיק השקעות מותאם ונחזור בהקדם.",
+      },
+      "nursing-care-insurance": {
+        title: "יש לכם כיסוי סיעודי? בואו נבדוק",
+        desc: "רוב האנשים לא יודעים מה בדיוק הביטוח הסיעודי שלהם מכסה — ומתי הוא נגמר. נעשה לכם סדר בשכבות הכיסוי ונוודא שאין חורים.",
+        cta: "בדיקת כיסוי סיעודי",
+        successMsg: "נבדוק את הכיסוי הסיעודי שלכם ונחזור עם המלצות.",
+      },
+      "training-fund-guide": {
+        title: "משלמים דמי ניהול גבוהים בקרן ההשתלמות?",
+        desc: "דמי ניהול גבוהים אוכלים את הרווח שלכם בשקט. נבדוק את הקרן שלכם, נשווה מול השוק, וננהל עבורכם משא ומתן — בחינם.",
+        cta: "בדיקת דמי ניהול",
+        successMsg: "נבדוק את קרן ההשתלמות שלכם ונחזור עם השוואה מול השוק.",
+      },
+      "payslip-checklist": {
+        title: "חושבים שהתלוש שלכם בסדר? בואו נבדוק ביחד",
+        desc: "נעבור על התלוש שלכם ונוודא שההפרשות, הניכויים, והזכויות מחושבים נכון. הרבה פעמים מגלים כסף שפשוט הלך לאיבוד.",
+        cta: "בדיקת תלוש חינם",
+        successMsg: "נעבור על התלוש שלכם ונחזור עם ממצאים תוך יום עסקים.",
+      },
+      "business-insurance-guide": {
+        title: "בעלי עסק? בואו נוודא שהעסק שלכם מוגן",
+        desc: "נעשה סקירה מקצועית של כל הסיכונים בעסק שלכם ונבנה חבילת ביטוח שמכסה את מה שבאמת צריך — בלי לשלם על מיותרים.",
+        cta: "סקירת ביטוח עסקי",
+        successMsg: "ניצור קשר לתיאום סקירת ביטוח עסקי מותאמת.",
+      },
+      "etf-passive-investing": {
+        title: "רוצים להתחיל להשקיע — אבל לא יודעים מאיפה?",
+        desc: "לפני שבוחרים קרנות, צריך להבין את התמונה הכוללת. נסתכל ביחד על המצב הפיננסי שלכם ונבנה תוכנית שמתאימה בדיוק לכם.",
+        cta: "שיחת ייעוץ ראשונית",
+        successMsg: "נחזור אליכם לשיחה קצרה על התמונה הפיננסית שלכם.",
+      },
+      "retirement-planning-guide": {
+        title: "הפנסיה שלכם תספיק? בואו נבדוק",
+        desc: "נעשה לכם תחזית פנסיונית אישית — כמה תקבלו, מה הפער, ומה אפשר לעשות היום כדי לסגור אותו. 15 דקות שיכולות לשנות את הפרישה שלכם.",
+        cta: "בדיקת פנסיה חינם",
+        successMsg: "נכין עבורכם תחזית פנסיונית אישית ונחזור בהקדם.",
+      },
+      "compound-interest-power": {
+        title: "רוצים לשים את ריבית הדריבית לעבוד בשבילכם?",
+        desc: "הצעד הראשון הוא לדעת מאיפה מתחילים. נסתכל ביחד על החיסכונות, הפנסיה, וההשקעות שלכם — ונבנה תוכנית שהזמן עובד לטובתה.",
+        cta: "בניית תוכנית חיסכון",
+        successMsg: "נבנה ביחד תוכנית חיסכון מותאמת אישית.",
+      },
+      "mortgage-insurance-tips": {
+        title: "משלמים על ביטוח משכנתא דרך הבנק? כנראה משלמים יותר מדי",
+        desc: "ב-5 דקות נבדוק כמה אתם משלמים היום ונשווה מול השוק. רוב הלקוחות שלנו חוסכים אלפי שקלים — בלי לשנות כלום בכיסוי.",
+        cta: "בדיקת ביטוח משכנתא",
+        successMsg: "נבדוק את ביטוח המשכנתא שלכם ונחזור עם השוואת מחירים.",
+      },
+      // ——— Original 5 posts ———
+      "financial-planning-importance": {
+        title: "רוצים לעשות סדר בתמונה הפיננסית?",
+        desc: "נשב ביחד ונסתכל על הכל — ביטוחים, פנסיה, חיסכונות, הוצאות. בלי מילים מסובכות, בלי לחץ. פשוט שיחה שנותנת בהירות.",
+        cta: "פגישת תכנון חינם",
+        successMsg: "נתאם פגישת תכנון פיננסי ראשונית — ללא עלות.",
+      },
+      "child-savings-guide": {
+        title: "רוצים לבחור את החיסכון הנכון לילדים?",
+        desc: "נשווה ביחד את האפשרויות — קופת גמל, תוכנית חיסכון, או קרן — ונמצא את מה שנותן הכי הרבה ערך לילדים שלכם לטווח ארוך.",
+        cta: "השוואת חיסכון לילדים",
+        successMsg: "נכין עבורכם השוואה מותאמת ונחזור בהקדם.",
+      },
+      "5-insurance-mistakes": {
+        title: "יש לכם כפל ביטוחים? בואו נבדוק",
+        desc: "הרבה אנשים משלמים על ביטוחים כפולים בלי לדעת. נעשה סריקה מקצועית של כל הפוליסות שלכם — ונחסוך לכם מה שמיותר.",
+        cta: "בדיקת כפל ביטוחים",
+        successMsg: "נעבור על הפוליסות שלכם ונזהה חפיפות וחיסכון אפשרי.",
+      },
+      "health-insurance-guide": {
+        title: "יש לכם ביטוח בריאות — אבל האם הוא מתאים?",
+        desc: "נשווה את הפוליסה שלכם מול מה שיש בשוק ונבדוק אם אתם מכוסים נכון, בלי לשלם על מה שלא צריך.",
+        cta: "השוואת ביטוח בריאות",
+        successMsg: "נשווה את הפוליסה שלכם מול השוק ונחזור עם המלצה.",
+      },
+      "guide-pension-fund": {
+        title: "מתי בפעם האחרונה בדקתם את הפנסיה?",
+        desc: "נעשה ניתוח תיק פנסיוני מלא — דמי ניהול, מסלול השקעה, כיסויים ביטוחיים, וכספים ישנים שאולי שכחתם. זה לוקח 15 דקות ויכול לחסוך אלפים.",
+        cta: "ניתוח פנסיה חינם",
+        successMsg: "נכין עבורכם ניתוח תיק פנסיוני מקיף ונחזור בהקדם.",
+      },
+    };
+
+    const categoryMap: Record<string, { title: string; desc: string; cta: string; successMsg: string }> = {
+      "ביטוח": {
+        title: "רוצים לוודא שאתם מכוסים נכון?",
+        desc: "נעשה סקירת ביטוחים מקצועית ונוודא שאין כפילויות, חורים, או תשלומים מיותרים. ללא עלות וללא התחייבות.",
+        cta: "סקירת ביטוחים חינם",
+        successMsg: "נעבור על הביטוחים שלכם ונחזור עם ממצאים.",
+      },
+      "פנסיה": {
+        title: "הפנסיה שלכם עובדת בשבילכם?",
+        desc: "נבדוק את דמי הניהול, מסלול ההשקעה, והכיסויים הביטוחיים — ונוודא שכל שקל עובד בשבילכם.",
+        cta: "בדיקת פנסיה חינם",
+        successMsg: "נבצע בדיקת פנסיה מקצועית ונחזור אליכם בהקדם.",
+      },
+      "חיסכון": {
+        title: "רוצים לחסוך חכם יותר?",
+        desc: "נסתכל ביחד על אפיקי החיסכון שלכם ונמצא את הדרך להפיק מהם יותר — בלי סיכונים מיותרים.",
+        cta: "ייעוץ חיסכון חינם",
+        successMsg: "נחזור אליכם לשיחת ייעוץ על אפיקי החיסכון שלכם.",
+      },
+      "פיננסים": {
+        title: "רוצים תמונה פיננסית ברורה?",
+        desc: "נסתכל ביחד על הכל — ביטוחים, פנסיה, חיסכונות, השקעות. ונבנה תוכנית שמתאימה בדיוק למצב ולמטרות שלכם.",
+        cta: "פגישת ייעוץ חינם",
+        successMsg: "נתאם פגישת ייעוץ ראשונית — ללא עלות וללא התחייבות.",
+      },
+      "טיפים": {
+        title: "רוצים לוודא שאתם לא מפסידים כסף?",
+        desc: "בדיקה קצרה יכולה לחשוף אלפי שקלים שאתם משלמים מיותר — על ביטוחים, דמי ניהול, או זכויות שלא מנצלים.",
+        cta: "בדיקה חינם",
+        successMsg: "נבדוק את המצב ונחזור אליכם עם ממצאים ברורים.",
+      },
+    };
+
+    if (slug && slugMap[slug]) return slugMap[slug];
+    if (post?.category && categoryMap[post.category]) return categoryMap[post.category];
+    return {
+      title: "נהניתם מהמאמר? בואו נדבר",
+      desc: "השאירו פרטים ונחזור אליכם לשיחת ייעוץ ראשונית — ללא עלות וללא התחייבות.",
+      cta: "דברו איתי",
+      successMsg: "אחד מהמומחים שלנו יחזור אליכם בהקדם.",
+    };
+  })();
 
   if (loading) {
     return (
@@ -176,6 +377,19 @@ const BlogPost = () => {
         </div>
       </section>
 
+      {/* Cover Image */}
+      {post.cover_image_url && (
+        <div className="max-w-4xl mx-auto px-4 -mt-8 sm:-mt-12 relative z-20">
+          <div className="rounded-2xl overflow-hidden shadow-2xl shadow-[#0a3d3d]/10">
+            <img
+              src={post.cover_image_url}
+              alt={post.title}
+              className="w-full h-56 sm:h-72 lg:h-96 object-cover"
+            />
+          </div>
+        </div>
+      )}
+
       {/* Content */}
       <article className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
         <div
@@ -215,6 +429,93 @@ const BlogPost = () => {
           </div>
         </div>
       </article>
+
+      {/* Lead Capture Form */}
+      <section id="lead-form" ref={leadFormRef} className="py-12 sm:py-20">
+        <div className="max-w-3xl mx-auto px-4">
+          <div
+            className="rounded-3xl overflow-hidden shadow-2xl"
+            style={{ background: `linear-gradient(135deg, #0a3d3d 0%, #145555 60%, ${accentColor}90 100%)` }}
+          >
+            {/* Top decorative bar */}
+            <div className="h-1.5 w-full" style={{ background: `linear-gradient(90deg, ${accentColor}, #f4a261, #5ec6c6)` }} />
+
+            <div className="px-6 sm:px-12 py-10 sm:py-14">
+              {leadSubmitted ? (
+                <div className="text-center py-6">
+                  <CheckCircle2 className="w-16 h-16 text-[#5ec6c6] mx-auto mb-5" />
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
+                    תודה! קיבלנו את הפרטים
+                  </h3>
+                  <p className="text-white/70 text-lg">
+                    {leadFormText.successMsg}
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="text-center mb-8 sm:mb-10">
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-3 leading-tight">
+                      {leadFormText.title}
+                    </h3>
+                    <p className="text-white/70 text-base sm:text-lg max-w-xl mx-auto">
+                      {leadFormText.desc}
+                    </p>
+                  </div>
+
+                  <form onSubmit={handleLeadSubmit} className="space-y-5 max-w-lg mx-auto">
+                    <div>
+                      <input
+                        type="text"
+                        value={leadForm.name}
+                        onChange={(e) => setLeadForm(prev => ({ ...prev, name: e.target.value }))}
+                        required
+                        placeholder="שם מלא *"
+                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-4 text-white placeholder:text-white/50 focus:outline-none focus:border-[#5ec6c6] focus:ring-2 focus:ring-[#5ec6c6]/30 transition-all text-base"
+                      />
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-5">
+                      <input
+                        type="tel"
+                        value={leadForm.phone}
+                        onChange={(e) => setLeadForm(prev => ({ ...prev, phone: e.target.value }))}
+                        required
+                        placeholder="טלפון *"
+                        dir="ltr"
+                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-4 text-white placeholder:text-white/50 focus:outline-none focus:border-[#5ec6c6] focus:ring-2 focus:ring-[#5ec6c6]/30 transition-all text-base text-right"
+                      />
+                      <input
+                        type="email"
+                        value={leadForm.email}
+                        onChange={(e) => setLeadForm(prev => ({ ...prev, email: e.target.value }))}
+                        placeholder="אימייל (לא חובה)"
+                        dir="ltr"
+                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-4 text-white placeholder:text-white/50 focus:outline-none focus:border-[#5ec6c6] focus:ring-2 focus:ring-[#5ec6c6]/30 transition-all text-base text-right"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={leadSubmitting}
+                      className="w-full bg-[#5ec6c6] hover:bg-[#4db8b8] text-white rounded-xl px-8 py-4 font-bold text-lg transition-all hover:shadow-lg hover:shadow-[#5ec6c6]/30 min-h-[56px] flex items-center justify-center gap-3 disabled:opacity-60"
+                    >
+                      {leadSubmitting ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <>
+                          <Send className="w-5 h-5" />
+                          {leadFormText.cta}
+                        </>
+                      )}
+                    </button>
+                    <p className="text-center text-white/40 text-xs">
+                      ללא עלות וללא התחייבות. נחזור אליכם בהקדם.
+                    </p>
+                  </form>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Related Posts */}
       {related.length > 0 && (

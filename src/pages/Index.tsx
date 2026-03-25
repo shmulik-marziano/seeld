@@ -445,7 +445,7 @@ const Index = () => {
             <div className="text-center mb-8 sm:mb-14 relative">
               <div className="absolute top-1 right-[12%] w-5 h-5 rounded-full bg-[#5ec6c6] opacity-20 hidden sm:block" />
               <div className="absolute top-10 left-[10%] w-4 h-4 rounded-full bg-[#f4a261] opacity-25 hidden sm:block" />
-              <SectionLabel>WHY SEELD</SectionLabel>
+              <SectionLabel>למה SEELD</SectionLabel>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
                 למה <span className="text-[#5ec6c6]">SEELD</span>?
               </h2>

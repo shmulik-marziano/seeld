@@ -50,36 +50,44 @@ const Investment = () => {
     },
   ];
 
-  const companies = ["הראל", "מנורה מבטחים", "מגדל", "כלל", "איילון", "הפניקס", "מיטב", "מור", "ילין לפידות", "אנליסט", "איפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה"];
+  const companies = ["הראל", "מנורה מבטחים", "מגדל", "כלל", "איילון", "הפניקס", "מיטב", "מור", "ילין לפידות", "אנליסט", "אינפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה"];
 
   return (
     <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
       {/* Hero Banner */}
-      <section className="bg-[#f8f9fc] relative overflow-hidden">
-        <div className="absolute top-6 left-8 w-24 h-24 rounded-full bg-[#5ec6c6] opacity-12" />
-        <div className="absolute bottom-8 right-14 w-16 h-16 rounded-full bg-[#f4a261] opacity-15" />
-        <div className="absolute top-20 right-1/3 w-10 h-10 rounded-full bg-[#90be6d] opacity-18" />
-        <div className="absolute bottom-14 left-1/4 w-6 h-6 rounded-full bg-[#e76f51] opacity-20" />
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16 relative">
+      <section className="relative overflow-hidden"
+        style={{ background: 'linear-gradient(165deg, hsl(168 42% 14%) 0%, hsl(152 42% 18%) 40%, hsl(160 38% 24%) 70%, hsl(145 30% 18%) 100%)' }}>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-[-15%] right-[-5%] w-[400px] h-[400px] rounded-full opacity-[0.06]"
+            style={{ background: 'radial-gradient(circle, #e76f51 0%, transparent 70%)' }} />
+          <div className="absolute bottom-[-10%] left-[-5%] w-[300px] h-[300px] rounded-full opacity-[0.04]"
+            style={{ background: 'radial-gradient(circle, hsl(28 45% 60%) 0%, transparent 70%)' }} />
+          <div className="absolute inset-0 opacity-[0.025]"
+            style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '50px 50px' }} />
+          <svg className="absolute bottom-10 left-0 w-full h-16 opacity-[0.06]" viewBox="0 0 800 50" fill="none">
+            <path d="M0 35 Q200 5 400 28 T800 15" stroke="hsl(160,50%,65%)" strokeWidth="1.5" strokeDasharray="8 6" />
+          </svg>
+        </div>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20 relative z-10">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-full bg-[#e76f51] flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-[#e76f51] flex items-center justify-center shadow-lg">
               <LineChart className="w-6 h-6 text-white" />
             </div>
-            <span className="text-sm font-bold text-[#0a3d3d]/50">חיסכון והשקעה</span>
+            <span className="text-sm font-bold text-white/40">חיסכון והשקעה</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-4 leading-tight text-[#0a3d3d]">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-4 leading-tight text-white">
             בנו את <span className="text-[#e76f51]">העתיד הפיננסי</span> שלכם
           </h1>
-          <p className="text-base sm:text-lg text-[#0a3d3d]/50 max-w-2xl leading-relaxed">
+          <p className="text-base sm:text-lg text-white/50 max-w-2xl leading-relaxed">
             פתרונות השקעה מותאמים אישית לבניית תיק השקעות אופטימלי המתאים לפרופיל הסיכון והיעדים שלכם.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 mt-6">
-            <a href="#analysis-form" className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-all min-h-[48px]">
+            <a href="#analysis-form" className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-white text-[#0a3d3d] font-bold text-base shadow-lg shadow-black/10 hover:bg-gray-100 transition-all min-h-[48px]">
               ייעוץ השקעות חינם
             </a>
-            <a href="#product-types" className="inline-flex items-center justify-center px-8 py-3 rounded-full border border-[#0a3d3d]/15 text-[#0a3d3d] font-semibold text-base hover:bg-[#0a3d3d]/5 transition-all min-h-[48px]">
+            <a href="#product-types" className="inline-flex items-center justify-center px-8 py-3 rounded-xl border border-white/15 text-white/80 font-semibold text-base hover:bg-white/5 transition-all min-h-[48px]">
               פתרונות השקעה
             </a>
           </div>
@@ -87,8 +95,8 @@ const Investment = () => {
       </section>
 
       {/* Breadcrumb */}
-      <div className="border-b border-gray-100">
-        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
+      <div className="border-b border-gray-100 bg-gray-50/50">
+        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-400">
           <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
           <Link to="/savings" className="hover:text-[#0a3d3d] transition-colors">חיסכון ופנסיה</Link>
@@ -109,7 +117,7 @@ const Investment = () => {
                 { icon: Coins, title: "פיזור סיכונים", desc: "אסטרטגיה חכמה להקטנת סיכון", color: "#90be6d" },
                 { icon: BarChart3, title: "מגוון אפיקים", desc: "גישה למניות, אג\"ח, נדל\"ן ועוד", color: "#e76f51" },
               ].map((item, idx) => (
-                <div key={idx} className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow text-center">
+                <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group text-center">
                   <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: item.color }}>
                     <item.icon className="w-6 h-6 text-white" />
                   </div>
@@ -128,7 +136,7 @@ const Investment = () => {
             <p className="text-gray-500 mb-10 text-base sm:text-lg">בחרו את הפתרון המתאים ליעדים הכלכליים שלכם</p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {productTypes.map((type, idx) => (
-                <div key={idx} className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+                <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: type.color }}>
                       <type.icon className="w-5 h-5 text-white" />
