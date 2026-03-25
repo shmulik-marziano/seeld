@@ -1,8 +1,9 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Mail, MapPin, Phone, Loader2 } from "lucide-react";
+import { Mail, MapPin, Phone, Loader2, ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -93,6 +94,15 @@ const Contact = () => {
           </p>
         </div>
       </section>
+
+      {/* Breadcrumb */}
+      <div className="border-b border-gray-100">
+        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
+          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
+          <ChevronLeft className="w-3.5 h-3.5" />
+          <span className="text-[#0a3d3d] font-medium">צור קשר</span>
+        </nav>
+      </div>
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">

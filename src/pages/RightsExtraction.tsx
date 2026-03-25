@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Search, CheckCircle, FileText, Users, ArrowLeft } from "lucide-react";
+import { Search, CheckCircle, FileText, Users, ArrowLeft, ChevronLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const RightsExtraction = () => {
@@ -53,6 +53,15 @@ const RightsExtraction = () => {
           </p>
         </div>
       </section>
+
+      {/* Breadcrumb */}
+      <div className="border-b border-gray-100">
+        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
+          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
+          <ChevronLeft className="w-3.5 h-3.5" />
+          <span className="text-[#0a3d3d] font-medium">מיצוי זכויות</span>
+        </nav>
+      </div>
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         {/* Rights Grid */}

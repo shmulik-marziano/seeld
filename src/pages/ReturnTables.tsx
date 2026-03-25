@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FundReturnTable from "@/components/FundReturnTable";
-import { TrendingUp, Calendar, Info, Search, Wifi, WifiOff } from "lucide-react";
+import { TrendingUp, Calendar, Info, Search, Wifi, WifiOff, ChevronLeft } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -107,6 +107,15 @@ const ReturnTables = () => {
           </div>
         </div>
       </section>
+
+      {/* Breadcrumb */}
+      <div className="border-b border-gray-100">
+        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
+          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
+          <ChevronLeft className="w-3.5 h-3.5" />
+          <span className="text-[#0a3d3d] font-medium">לוחות תשואה</span>
+        </nav>
+      </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Tabs for different fund types */}
