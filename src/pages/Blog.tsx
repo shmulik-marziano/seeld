@@ -134,15 +134,23 @@ const Blog = () => {
                 className="group bg-white dark:bg-gray-900 rounded-2xl border border-[#0a3d3d]/10 dark:border-white/10 overflow-hidden hover:shadow-xl hover:shadow-[#0a3d3d]/5 transition-all duration-300 hover:-translate-y-1"
               >
                 {/* Cover image */}
-                {post.cover_image_url && (
-                  <div className="w-full h-48 sm:h-56 overflow-hidden">
+                <div className="w-full h-48 sm:h-56 overflow-hidden"
+                  style={!post.cover_image_url ? { background: `linear-gradient(135deg, ${categoryColors[post.category || ""] || "#0a3d3d"}20, ${categoryColors[post.category || ""] || "#0a3d3d"}08)` } : undefined}>
+                  {post.cover_image_url ? (
                     <img
                       src={post.cover_image_url}
                       alt={post.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
                     />
-                  </div>
-                )}
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-5xl font-black opacity-10" style={{ color: categoryColors[post.category || ""] || "#0a3d3d" }}>
+                        SEELD
+                      </span>
+                    </div>
+                  )}
+                </div>
 
                 {/* Colored top bar (below image or at top if no image) */}
                 <div
