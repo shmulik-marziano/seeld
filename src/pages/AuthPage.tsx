@@ -34,7 +34,9 @@ export default function AuthPage() {
   const [searchParams] = useSearchParams();
   const isOnboarding = searchParams.get('onboarding') === 'true' || needsOnboarding;
   const invitationToken = searchParams.get('invitation');
-  const [mode, setMode] = useState<'login' | 'signup' | 'onboarding'>(isOnboarding && session ? 'onboarding' : 'login');
+  const [mode, setMode] = useState<'login' | 'signup' | 'onboarding'>(
+    isOnboarding && session ? 'onboarding' : invitationToken ? 'signup' : 'login'
+  );
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [pendingInvitation, setPendingInvitation] = useState<{ id: string; agency_id: string; email: string; token: string } | null>(null);
@@ -100,13 +102,13 @@ export default function AuthPage() {
     e.preventDefault();
     const f = signupForm;
 
+    if (!pendingInvitation) {
+      toast.error('הרשמה למערכת אפשרית רק באמצעות הזמנה. פנה למנהל המערכת.');
+      return;
+    }
     if (!f.fullName.trim()) { toast.error('יש להזין שם מלא'); return; }
     if (!f.email.trim()) { toast.error('יש להזין אימייל'); return; }
     if (!f.phone.trim()) { toast.error('יש להזין מספר טלפון'); return; }
-    if (!pendingInvitation) {
-      if (!f.agencyName.trim()) { toast.error('יש להזין שם סוכנות / גוף'); return; }
-      if (!f.licenseNumber.trim()) { toast.error('יש להזין מספר רישיון'); return; }
-    }
     if (f.password.length < 8) { toast.error('הסיסמה חייבת להכיל לפחות 8 תווים'); return; }
     if (f.password !== f.confirmPassword) { toast.error('הסיסמאות אינן תואמות'); return; }
     if (!f.acceptTerms) { toast.error('יש לאשר את תנאי השימוש'); return; }
@@ -486,8 +488,8 @@ export default function AuthPage() {
 
                   <Separator />
 
-                  {/* Agency info */}
-                  <div className="space-y-3">
+                  {/* Agency info — only shown if NOT via invitation (self-reg disabled but kept for safety) */}
+                  {!pendingInvitation && <div className="space-y-3">
                     <div className="flex items-center gap-2 text-xs font-bold text-foreground">
                       <div className="w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center">
                         <Building2 className="h-3.5 w-3.5 text-primary" />
@@ -515,7 +517,7 @@ export default function AuthPage() {
                         </SelectContent>
                       </Select>
                     </div>
-                  </div>
+                  </div>}
 
                   <Separator />
 
@@ -661,13 +663,27 @@ export default function AuthPage() {
                 transition={{ delay: 0.4 }}
                 className="text-center pt-1"
               >
-                <button
-                  type="button"
-                  onClick={() => setMode(m => m === 'login' ? 'signup' : 'login')}
-                  className="text-sm text-primary hover:underline font-medium min-h-[44px] px-4 inline-flex items-center"
-                >
-                  {mode === 'login' ? 'אין לך חשבון? הירשם עכשיו' : 'יש לך חשבון? התחבר'}
-                </button>
+                {mode === 'signup' ? (
+                  <button
+                    type="button"
+                    onClick={() => setMode('login')}
+                    className="text-sm text-primary hover:underline font-medium min-h-[44px] px-4 inline-flex items-center"
+                  >
+                    יש לך חשבון? התחבר
+                  </button>
+                ) : invitationToken ? (
+                  <button
+                    type="button"
+                    onClick={() => setMode('signup')}
+                    className="text-sm text-primary hover:underline font-medium min-h-[44px] px-4 inline-flex items-center"
+                  >
+                    אין לך חשבון? הירשם עם ההזמנה
+                  </button>
+                ) : (
+                  <p className="text-xs text-muted-foreground py-2">
+                    הרשמה למערכת אפשרית רק באמצעות הזמנה מהמנהל
+                  </p>
+                )}
               </motion.div>
             )}
           </div>
