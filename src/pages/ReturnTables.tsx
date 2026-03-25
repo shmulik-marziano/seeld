@@ -72,33 +72,26 @@ const ReturnTables = () => {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden"
-        style={{ background: 'linear-gradient(165deg, hsl(168 42% 14%) 0%, hsl(152 42% 18%) 40%, hsl(160 38% 24%) 70%, hsl(145 30% 18%) 100%)' }}>
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[-15%] right-[-5%] w-[400px] h-[400px] rounded-full opacity-[0.06]"
-            style={{ background: 'radial-gradient(circle, #90be6d 0%, transparent 70%)' }} />
-          <div className="absolute bottom-[-10%] left-[-5%] w-[300px] h-[300px] rounded-full opacity-[0.04]"
-            style={{ background: 'radial-gradient(circle, hsl(28 45% 60%) 0%, transparent 70%)' }} />
-          <div className="absolute inset-0 opacity-[0.025]"
-            style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '50px 50px' }} />
-          <svg className="absolute bottom-10 left-0 w-full h-16 opacity-[0.06]" viewBox="0 0 800 50" fill="none">
-            <path d="M0 35 Q200 5 400 28 T800 15" stroke="hsl(160,50%,65%)" strokeWidth="1.5" strokeDasharray="8 6" />
+      <section className="bg-[#f8f9fc] relative overflow-hidden">
+        <div className="absolute top-[10%] right-[5%] w-[85px] h-[85px] rounded-full bg-[#90be6d]" />
+        <div className="absolute bottom-[12%] left-[7%] w-[60px] h-[60px] rounded-full bg-[#5ec6c6]" />
+        <div className="absolute top-[50%] right-[20%] w-[30px] h-[30px] rounded-full bg-[#f4a261]" />
+        <div className="absolute top-[25%] left-[14%] w-[24px] h-[24px] rounded-full bg-[#6c63ff]" />
+        <div className="absolute top-16 left-[18%] hidden lg:block">
+          <svg width="160" height="100" viewBox="0 0 160 100" fill="none">
+            <path d="M10 80 C 50 10, 110 10, 150 60" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
+            <polygon points="150,60 142,54 146,66" fill="#0a3d3d" opacity="0.12" />
           </svg>
         </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 relative z-10 text-center">
-          <div className="flex items-center justify-center gap-3 mb-5">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg bg-[#90be6d]">
-              <TrendingUp className="w-6 h-6 text-white" />
-            </div>
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
-            לוחות תשואה
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 relative z-10 text-center">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
+            לוחות <span className="text-[#90be6d]">תשואה</span>
           </h1>
-          <p className="text-lg text-white/50 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-500 max-w-3xl mx-auto leading-relaxed">
             נתוני תשואות עדכניים של קרנות השתלמות, קופות גמל, קרנות פנסיה ופוליסות חיסכון בישראל
           </p>
           <div className="flex items-center justify-center gap-4 mt-4 flex-wrap">
-            <div className="flex items-center gap-2 text-sm text-white/30">
+            <div className="flex items-center gap-2 text-sm text-gray-400">
               <Calendar className="w-4 h-4" />
               עדכון אחרון: {syncStatus?.latestPeriod ? formatPeriod(syncStatus.latestPeriod) : cmaLastUpdate}
             </div>
@@ -107,9 +100,9 @@ const ReturnTables = () => {
               {isLive ? 'נתונים חיים' : 'נתונים מקומיים'}
             </Badge>
           </div>
-          <div className="mt-6">
+          <div className="mt-5">
             <Link to="/fund-finder">
-              <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 rounded-xl px-6 text-sm font-semibold">
+              <Button variant="outline" className="border-[#0a3d3d] text-[#0a3d3d] rounded-full px-6 text-sm font-semibold">
                 <Search className="w-4 h-4 ml-1.5" />
                 לכלי איתור והשוואת קופות מתקדם
               </Button>
@@ -119,8 +112,8 @@ const ReturnTables = () => {
       </section>
 
       {/* Breadcrumb */}
-      <div className="border-b border-gray-100 bg-gray-50/50">
-        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-400">
+      <div className="border-b border-gray-100">
+        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
           <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
           <span className="text-[#0a3d3d] font-medium">לוחות תשואה</span>
