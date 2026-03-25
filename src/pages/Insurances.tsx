@@ -75,30 +75,39 @@ const Insurances = () => {
     <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* Hero Banner - Light design */}
-      <section className="relative bg-[#f8f9fc] overflow-hidden">
-        {/* Decorative circles */}
-        <div className="absolute top-10 left-10 w-24 h-24 rounded-full bg-[#5ec6c6] opacity-15" />
-        <div className="absolute bottom-6 right-16 w-16 h-16 rounded-full bg-[#e76f51] opacity-10" />
-        <div className="absolute top-1/2 left-1/3 w-12 h-12 rounded-full bg-[#f4a261] opacity-10" />
-        {/* Dashed curved line */}
-        <svg className="absolute bottom-0 left-0 w-full h-24 opacity-10 pointer-events-none" viewBox="0 0 800 100" fill="none">
-          <path d="M0 80 Q200 20 400 60 T800 30" stroke="#5ec6c6" strokeWidth="2" strokeDasharray="8 6" />
-          <polygon points="795,28 800,30 795,32" fill="#5ec6c6" />
-        </svg>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16 relative z-10">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
+      {/* Hero Banner */}
+      <section className="relative overflow-hidden"
+        style={{ background: 'linear-gradient(165deg, hsl(168 42% 14%) 0%, hsl(152 42% 18%) 40%, hsl(160 38% 24%) 70%, hsl(145 30% 18%) 100%)' }}>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-[-15%] right-[-5%] w-[400px] h-[400px] rounded-full opacity-[0.06]"
+            style={{ background: 'radial-gradient(circle, #5ec6c6 0%, transparent 70%)' }} />
+          <div className="absolute bottom-[-10%] left-[-5%] w-[300px] h-[300px] rounded-full opacity-[0.04]"
+            style={{ background: 'radial-gradient(circle, hsl(28 45% 60%) 0%, transparent 70%)' }} />
+          <div className="absolute inset-0 opacity-[0.025]"
+            style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '50px 50px' }} />
+          <svg className="absolute bottom-10 left-0 w-full h-16 opacity-[0.06]" viewBox="0 0 800 50" fill="none">
+            <path d="M0 35 Q200 5 400 28 T800 15" stroke="hsl(160,50%,65%)" strokeWidth="1.5" strokeDasharray="8 6" />
+          </svg>
+        </div>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20 relative z-10">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg bg-[#5ec6c6]">
+              <Shield className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-sm font-semibold text-white/40">ביטוח</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
             מוצרי ביטוח
           </h1>
-          <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
+          <p className="text-base sm:text-lg text-white/50 max-w-2xl leading-relaxed">
             סקירה מקיפה של כל סוגי הביטוחים והכיסויים הזמינים עבורכם. בחרו את הקטגוריה המתאימה וקבלו מידע מפורט.
           </p>
         </div>
       </section>
 
       {/* Breadcrumb */}
-      <div className="border-b border-gray-100">
-        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
+      <div className="border-b border-gray-100 bg-gray-50/50">
+        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-400">
           <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
           <span className="text-[#0a3d3d] font-medium">ביטוח</span>
@@ -114,7 +123,7 @@ const Insurances = () => {
                 <Link
                   key={category.id}
                   to={category.href}
-                  className="group bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all duration-200 block"
+                  className="group bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 block"
                 >
                   <div className="w-12 h-12 rounded-full flex items-center justify-center mb-5"
                     style={{ backgroundColor: category.color + "18" }}>
@@ -145,7 +154,7 @@ const Insurances = () => {
         </section>
 
         {/* Value Props */}
-        <section className="py-10 sm:py-16 bg-[#f0f0f8]">
+        <section className="py-10 sm:py-16 bg-gray-50">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="grid sm:grid-cols-3 gap-8 text-center">
               <div>

@@ -72,23 +72,33 @@ const ReturnTables = () => {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative bg-[#f8f9fc] overflow-hidden">
-        <div className="absolute top-8 right-10 w-20 h-20 rounded-full bg-[#90be6d] opacity-15" />
-        <div className="absolute bottom-6 left-16 w-16 h-16 rounded-full bg-[#5ec6c6] opacity-10" />
-        <div className="absolute top-1/2 right-1/3 w-10 h-10 rounded-full bg-[#f4a261] opacity-10" />
-        <svg className="absolute bottom-0 left-0 w-full h-20 opacity-10 pointer-events-none" viewBox="0 0 800 80" fill="none">
-          <path d="M0 60 Q200 15 400 45 T800 25" stroke="#90be6d" strokeWidth="2" strokeDasharray="8 6" />
-          <polygon points="795,23 800,25 795,27" fill="#90be6d" />
-        </svg>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-18 relative z-10 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
+      <section className="relative overflow-hidden"
+        style={{ background: 'linear-gradient(165deg, hsl(168 42% 14%) 0%, hsl(152 42% 18%) 40%, hsl(160 38% 24%) 70%, hsl(145 30% 18%) 100%)' }}>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-[-15%] right-[-5%] w-[400px] h-[400px] rounded-full opacity-[0.06]"
+            style={{ background: 'radial-gradient(circle, #90be6d 0%, transparent 70%)' }} />
+          <div className="absolute bottom-[-10%] left-[-5%] w-[300px] h-[300px] rounded-full opacity-[0.04]"
+            style={{ background: 'radial-gradient(circle, hsl(28 45% 60%) 0%, transparent 70%)' }} />
+          <div className="absolute inset-0 opacity-[0.025]"
+            style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '50px 50px' }} />
+          <svg className="absolute bottom-10 left-0 w-full h-16 opacity-[0.06]" viewBox="0 0 800 50" fill="none">
+            <path d="M0 35 Q200 5 400 28 T800 15" stroke="hsl(160,50%,65%)" strokeWidth="1.5" strokeDasharray="8 6" />
+          </svg>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 relative z-10 text-center">
+          <div className="flex items-center justify-center gap-3 mb-5">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg bg-[#90be6d]">
+              <TrendingUp className="w-6 h-6 text-white" />
+            </div>
+          </div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
             לוחות תשואה
           </h1>
-          <p className="text-lg text-gray-500 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg text-white/50 max-w-3xl mx-auto leading-relaxed">
             נתוני תשואות עדכניים של קרנות השתלמות, קופות גמל, קרנות פנסיה ופוליסות חיסכון בישראל
           </p>
           <div className="flex items-center justify-center gap-4 mt-4 flex-wrap">
-            <div className="flex items-center gap-2 text-sm text-gray-400">
+            <div className="flex items-center gap-2 text-sm text-white/30">
               <Calendar className="w-4 h-4" />
               עדכון אחרון: {syncStatus?.latestPeriod ? formatPeriod(syncStatus.latestPeriod) : cmaLastUpdate}
             </div>
@@ -97,9 +107,9 @@ const ReturnTables = () => {
               {isLive ? 'נתונים חיים' : 'נתונים מקומיים'}
             </Badge>
           </div>
-          <div className="mt-5">
+          <div className="mt-6">
             <Link to="/fund-finder">
-              <Button variant="outline" className="border-[#0a3d3d] text-[#0a3d3d] rounded-full px-6 text-sm font-semibold">
+              <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 rounded-xl px-6 text-sm font-semibold">
                 <Search className="w-4 h-4 ml-1.5" />
                 לכלי איתור והשוואת קופות מתקדם
               </Button>
@@ -109,8 +119,8 @@ const ReturnTables = () => {
       </section>
 
       {/* Breadcrumb */}
-      <div className="border-b border-gray-100">
-        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
+      <div className="border-b border-gray-100 bg-gray-50/50">
+        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-400">
           <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
           <span className="text-[#0a3d3d] font-medium">לוחות תשואה</span>
