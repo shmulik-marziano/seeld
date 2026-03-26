@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import * as XLSX from "https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.mjs";
+import * as XLSX from "https://esm.sh/xlsx@0.18.5";
 
 /**
  * Edge Function: sync-tracks
@@ -17,7 +17,8 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const GEMELNET_URL = "https://gemelnet.mof.gov.il/GmulotNetReports/tsuotKupotRavHodshiRDL.xls";
+// gemelnet is only accessible from Israeli IPs, so we accept file upload
+// or try to fetch if accessible
 
 const COMPANY_MAP: Record<string, string> = {
   "אלטשולר שחם": "altshuler",
@@ -89,15 +90,24 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Download Excel from gemelnet
-    console.log("Downloading Excel from gemelnet...");
-    const response = await fetch(GEMELNET_URL);
-    if (!response.ok) {
-      throw new Error(`Failed to download: ${response.status}`);
-    }
+    // Accept Excel as base64 in POST body, or try to download from gemelnet
+    let data: Uint8Array;
+    const body = await req.json().catch(() => null);
 
-    const arrayBuffer = await response.arrayBuffer();
-    const data = new Uint8Array(arrayBuffer);
+    if (body?.fileBase64) {
+      // Manual upload from admin panel
+      console.log("Parsing uploaded Excel file...");
+      const binaryStr = atob(body.fileBase64);
+      data = new Uint8Array(binaryStr.length);
+      for (let i = 0; i < binaryStr.length; i++) data[i] = binaryStr.charCodeAt(i);
+    } else {
+      // Try gemelnet (works from Israeli IPs only)
+      console.log("Trying to download from gemelnet...");
+      const response = await fetch("https://gemelnet.mof.gov.il/GmulotNetReports/tsuotKupotRavHodshiRDL.xls");
+      if (!response.ok) throw new Error("Cannot download from gemelnet. Upload the file manually.");
+      const ab = await response.arrayBuffer();
+      data = new Uint8Array(ab);
+    }
     const workbook = XLSX.read(data, { type: "array" });
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[][];
