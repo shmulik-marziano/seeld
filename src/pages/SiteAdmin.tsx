@@ -1329,6 +1329,57 @@ function AnalyticsModule() {
 //  MODULE: Overview
 // ══════════════════════════════════════════════════════
 
+function TrackSyncCard() {
+  const [syncing, setSyncing] = useState(false);
+  const [result, setResult] = useState<string | null>(null);
+  const fileRef = useCallback((input: HTMLInputElement | null) => {
+    if (input) input.value = "";
+  }, []);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setSyncing(true);
+    setResult(null);
+
+    try {
+      const buffer = await file.arrayBuffer();
+      const bytes = new Uint8Array(buffer);
+      let binary = "";
+      for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+      const base64 = btoa(binary);
+
+      const { data, error } = await siteSupabase.functions.invoke("sync-tracks", {
+        body: { fileBase64: base64 },
+      });
+
+      if (error) throw error;
+      setResult(`סונכרנו ${data?.tracks_synced || 0} מסלולים מ-${data?.companies?.length || 0} חברות`);
+    } catch (err: any) {
+      setResult("שגיאה: " + (err.message || "לא ידוע"));
+    }
+    setSyncing(false);
+  };
+
+  return (
+    <div className="bg-white rounded-2xl p-5 shadow-sm border hover:shadow-md transition-all">
+      <div
+        className="w-12 h-12 rounded-full flex items-center justify-center mb-3"
+        style={{ background: "linear-gradient(135deg, #90be6d 0%, #6fa34d 100%)" }}
+      >
+        <RefreshCw className={cn("w-6 h-6 text-white", syncing && "animate-spin")} />
+      </div>
+      <h4 className="font-bold text-[#0a3d3d] mb-0.5">סנכרן מסלולי השקעה</h4>
+      <p className="text-xs text-gray-400 mb-3">העלה קובץ Excel מגמלנט/פנסיהנט</p>
+      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#90be6d] text-white text-xs font-semibold cursor-pointer hover:bg-[#7dab5a] transition-colors">
+        <input type="file" accept=".xls,.xlsx" onChange={handleFileUpload} className="hidden" ref={fileRef} />
+        {syncing ? "מסנכרן..." : "בחר קובץ"}
+      </label>
+      {result && <p className="text-xs mt-2 text-[#0a3d3d]">{result}</p>}
+    </div>
+  );
+}
+
 function OverviewModule() {
   const [stats, setStats] = useState({ leads: 0, onboarding: 0, blogPosts: 0, contacts: 0 });
   const [loading, setLoading] = useState(true);
@@ -1366,7 +1417,7 @@ function OverviewModule() {
       </div>
 
       {/* Quick actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <QuickActionCard
           icon={<UserPlus className="w-6 h-6 text-white" />}
           gradient="linear-gradient(135deg, #0a3d3d 0%, #125555 100%)"
@@ -1385,6 +1436,7 @@ function OverviewModule() {
           title="כתוב פוסט חדש"
           subtitle="הוסף תוכן לבלוג האתר"
         />
+        <TrackSyncCard />
       </div>
     </div>
   );
