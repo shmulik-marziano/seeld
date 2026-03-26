@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DoodleIcon from "@/components/DoodleIcon";
@@ -16,6 +17,185 @@ const fmtAssets = (m: number) => m >= 1000 ? (m / 1000).toFixed(1) + " מילי�
 
 type SortKey = "name" | "year1" | "year3" | "year5" | "fees" | "assets";
 type SortDir = "asc" | "desc";
+
+// ── Personal Track Checker ──
+function PersonalTrackChecker() {
+  const [selectedCompany, setSelectedCompany] = useState<ManagingCompany | "">("");
+  const [selectedProduct, setSelectedProduct] = useState<ProductType | "">("");
+  const [selectedFundId, setSelectedFundId] = useState<string>("");
+
+  const availableProducts = selectedCompany
+    ? [...new Set(allFunds.filter(f => f.company === selectedCompany).map(f => f.productType))]
+    : [];
+
+  const availableFunds = selectedCompany && selectedProduct
+    ? allFunds.filter(f => f.company === selectedCompany && f.productType === selectedProduct)
+    : [];
+
+  const selectedFund = allFunds.find(f => f.id === selectedFundId) || null;
+
+  const getPieData = (fund: Fund) => [
+    { name: "מניות", value: fund.deepDrill.stocksAndOptions, color: "#5ec6c6" },
+    { name: 'אג"ח ממשלתי', value: fund.deepDrill.govBondsTradable + fund.deepDrill.designatedBonds, color: "#90be6d" },
+    { name: 'אג"ח קונצרני', value: fund.deepDrill.corpBondsTradable + fund.deepDrill.corpBondsNonTradable, color: "#f4a261" },
+    { name: "מזומן", value: fund.deepDrill.cashEquivalents + fund.deepDrill.deposits, color: "#94a3b8" },
+    { name: "אחר", value: fund.deepDrill.mutualFunds + fund.deepDrill.otherAssets, color: "#6c63ff" },
+  ].filter(d => d.value > 0);
+
+  const getRiskLevel = (fund: Fund) => {
+    const stock = fund.stockExposure;
+    if (stock >= 80) return { level: "גבוהה", color: "#e76f51", tip: "המסלול מתאים למשקיעים אגרסיביים עם אופק של 10+ שנים. כדאי לוודא שרמת הסיכון מתאימה לגיל ולתוכניות שלכם." };
+    if (stock >= 40) return { level: "בינונית", color: "#f4a261", tip: "מסלול מאוזן שמתאים לרוב האנשים. פיזור טוב בין מניות לאג\"ח. מומלץ לבדוק את דמי הניהול מול חברות מתחרות." };
+    if (stock >= 10) return { level: "נמוכה-בינונית", color: "#90be6d", tip: "מסלול סולידי יחסית. מתאים למי שקרוב לפרישה או רוצה יציבות. כדאי לבדוק שהתשואה מספיקה לצרכים שלכם." };
+    return { level: "נמוכה", color: "#5ec6c6", tip: "מסלול שמרני מאוד. מתאים לטווח קצר או לפרישה קרובה. שווה לבדוק אם יש מסלולים עם תשואה טובה יותר באותה רמת סיכון." };
+  };
+
+  return (
+    <section className="mb-12">
+      <div className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
+        <div className="flex items-center gap-3 mb-6">
+          <DoodleIcon name="charts" size={40} />
+          <div>
+            <h2 className="text-xl sm:text-2xl font-extrabold text-[#0a3d3d]">בדקו את המסלול שלכם</h2>
+            <p className="text-sm text-gray-400">בחרו חברה, סוג מוצר ומסלול — ותראו לאן הכסף שלכם הולך</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          {/* Company */}
+          <div>
+            <label className="text-xs font-semibold text-gray-500 mb-1.5 block">חברה</label>
+            <select
+              value={selectedCompany}
+              onChange={e => { setSelectedCompany(e.target.value as ManagingCompany); setSelectedProduct(""); setSelectedFundId(""); }}
+              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
+            >
+              <option value="">בחרו חברה</option>
+              {[...new Set(allFunds.map(f => f.company))].map(c => (
+                <option key={c} value={c}>{companyLabels[c]}</option>
+              ))}
+            </select>
+          </div>
+          {/* Product type */}
+          <div>
+            <label className="text-xs font-semibold text-gray-500 mb-1.5 block">סוג מוצר</label>
+            <select
+              value={selectedProduct}
+              onChange={e => { setSelectedProduct(e.target.value as ProductType); setSelectedFundId(""); }}
+              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
+              disabled={!selectedCompany}
+            >
+              <option value="">בחרו מוצר</option>
+              {availableProducts.map(p => (
+                <option key={p} value={p}>{productTypeLabels[p]}</option>
+              ))}
+            </select>
+          </div>
+          {/* Fund */}
+          <div>
+            <label className="text-xs font-semibold text-gray-500 mb-1.5 block">מסלול</label>
+            <select
+              value={selectedFundId}
+              onChange={e => setSelectedFundId(e.target.value)}
+              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
+              disabled={!selectedProduct}
+            >
+              <option value="">בחרו מסלול</option>
+              {availableFunds.map(f => (
+                <option key={f.id} value={f.id}>{specializationLabels[f.specialization]} — {f.name}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Result */}
+        {selectedFund && (() => {
+          const pieData = getPieData(selectedFund);
+          const risk = getRiskLevel(selectedFund);
+          return (
+            <div className="bg-[#f8f9fc] rounded-2xl p-5 sm:p-6 border border-gray-100 space-y-6">
+              {/* Fund header */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                  <h3 className="text-lg font-bold text-[#0a3d3d]">{selectedFund.name}</h3>
+                  <p className="text-xs text-gray-400">קופה {selectedFund.fundNumber} | {companyLabels[selectedFund.company]}</p>
+                </div>
+                <div className="flex gap-3">
+                  <div className="bg-white rounded-xl px-4 py-2 border border-gray-100 text-center">
+                    <p className="text-xs text-gray-400">תשואה 12 חודשים</p>
+                    <p className="text-xl font-extrabold text-[#0a3d3d]">{fmt(selectedFund.returns.year1)}</p>
+                  </div>
+                  <div className="bg-white rounded-xl px-4 py-2 border border-gray-100 text-center">
+                    <p className="text-xs text-gray-400">רמת סיכון</p>
+                    <p className="text-xl font-extrabold" style={{ color: risk.color }}>{risk.level}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Pie chart + legend */}
+              <div className="flex flex-col sm:flex-row items-center gap-6 bg-white rounded-xl p-5 border border-gray-100">
+                <div className="w-[200px] h-[200px] shrink-0">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={90} strokeWidth={2} stroke="#fff">
+                        {pieData.map((d, idx) => <Cell key={idx} fill={d.color} />)}
+                      </Pie>
+                      <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="flex-1 space-y-2.5 w-full">
+                  {pieData.map((d, idx) => (
+                    <div key={idx} className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-2">
+                        <span className="w-3.5 h-3.5 rounded" style={{ background: d.color }} />
+                        <span className="text-gray-600">{d.name}</span>
+                      </div>
+                      <span className="font-bold text-[#0a3d3d]">{d.value.toFixed(1)}%</span>
+                    </div>
+                  ))}
+                  <div className="border-t border-gray-100 pt-2 mt-2 space-y-1">
+                    {selectedFund.deepDrill.foreignExposure > 0 && (
+                      <div className="flex justify-between text-xs text-gray-400">
+                        <span>חשיפה לחו"ל</span>
+                        <span className="font-semibold text-[#5ec6c6]">{selectedFund.deepDrill.foreignExposure}%</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between text-xs text-gray-400">
+                      <span>דמ"נ מצבירה</span>
+                      <span className="font-semibold text-[#0a3d3d]">{selectedFund.fees.savingsFeePercent}%</span>
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-400">
+                      <span>היקף נכסים</span>
+                      <span className="font-semibold text-[#0a3d3d]">{fmtAssets(selectedFund.totalAssets)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Recommendation */}
+              <div className="rounded-xl p-4 border-r-4" style={{ borderColor: risk.color, background: risk.color + "08" }}>
+                <p className="text-sm text-[#0a3d3d] leading-relaxed">
+                  <strong>המלצה:</strong> {risk.tip}
+                </p>
+                <Link to="/contact" className="inline-flex items-center gap-1 mt-2 text-sm font-bold text-[#5ec6c6] hover:underline">
+                  רוצים בדיקה מקצועית? דברו עם סוכן →
+                </Link>
+              </div>
+            </div>
+          );
+        })()}
+
+        {!selectedFund && selectedCompany === "" && (
+          <div className="text-center py-8 text-gray-300">
+            <DoodleIcon name="charts" size={64} className="mx-auto mb-3 opacity-30" />
+            <p className="text-sm">בחרו חברה, מוצר ומסלול כדי לראות את החשיפות</p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
 
 const InvestmentTracks = () => {
   const [search, setSearch] = useState("");
@@ -124,6 +304,9 @@ const InvestmentTracks = () => {
       </div>
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+        {/* Personal track checker */}
+        <PersonalTrackChecker />
+
         {/* Search + Filters */}
         <div className="space-y-4 mb-8">
           <div className="flex gap-3">
@@ -326,37 +509,72 @@ const InvestmentTracks = () => {
                               )}
                             </div>
 
-                            {/* Asset allocation bar */}
-                            <div className="mt-4 bg-white rounded-xl p-4 border border-gray-100">
-                              <h4 className="text-sm font-bold text-[#0a3d3d] mb-3">הרכב נכסים</h4>
-                              <div className="flex h-6 rounded-full overflow-hidden">
-                                {fund.deepDrill.stocksAndOptions > 0 && (
-                                  <div style={{ width: `${fund.deepDrill.stocksAndOptions}%`, background: "#5ec6c6" }} title={`מניות ${fund.deepDrill.stocksAndOptions}%`} />
-                                )}
-                                {fund.deepDrill.govBondsTradable > 0 && (
-                                  <div style={{ width: `${fund.deepDrill.govBondsTradable}%`, background: "#90be6d" }} title={`אג"ח ממשלתי ${fund.deepDrill.govBondsTradable}%`} />
-                                )}
-                                {fund.deepDrill.corpBondsTradable > 0 && (
-                                  <div style={{ width: `${fund.deepDrill.corpBondsTradable}%`, background: "#f4a261" }} title={`אג"ח קונצרני ${fund.deepDrill.corpBondsTradable}%`} />
-                                )}
-                                {fund.deepDrill.corpBondsNonTradable > 0 && (
-                                  <div style={{ width: `${fund.deepDrill.corpBondsNonTradable}%`, background: "#e76f51" }} title={`אג"ח לא סחיר ${fund.deepDrill.corpBondsNonTradable}%`} />
-                                )}
-                                {fund.deepDrill.cashEquivalents > 0 && (
-                                  <div style={{ width: `${fund.deepDrill.cashEquivalents}%`, background: "#94a3b8" }} title={`מזומן ${fund.deepDrill.cashEquivalents}%`} />
-                                )}
-                                {fund.deepDrill.otherAssets > 0 && (
-                                  <div style={{ width: `${fund.deepDrill.otherAssets}%`, background: "#6c63ff" }} title={`אחר ${fund.deepDrill.otherAssets}%`} />
-                                )}
-                              </div>
-                              <div className="flex flex-wrap gap-3 mt-2 text-xs text-gray-500">
-                                {fund.deepDrill.stocksAndOptions > 0 && <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-[#5ec6c6]" />מניות {fund.deepDrill.stocksAndOptions}%</span>}
-                                {fund.deepDrill.govBondsTradable > 0 && <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-[#90be6d]" />אג"ח ממשלתי {fund.deepDrill.govBondsTradable}%</span>}
-                                {fund.deepDrill.corpBondsTradable > 0 && <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-[#f4a261]" />אג"ח קונצרני {fund.deepDrill.corpBondsTradable}%</span>}
-                                {fund.deepDrill.cashEquivalents > 0 && <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-[#94a3b8]" />מזומן {fund.deepDrill.cashEquivalents}%</span>}
-                                {fund.deepDrill.foreignExposure > 0 && <span>| חשיפה לחו"ל: {fund.deepDrill.foreignExposure}%</span>}
-                              </div>
-                            </div>
+                            {/* Asset allocation — pie chart */}
+                            {(() => {
+                              const dd = fund.deepDrill;
+                              const pieData = [
+                                { name: "מניות", value: dd.stocksAndOptions, color: "#5ec6c6" },
+                                { name: 'אג"ח ממשלתי', value: dd.govBondsTradable + dd.designatedBonds, color: "#90be6d" },
+                                { name: 'אג"ח קונצרני', value: dd.corpBondsTradable + dd.corpBondsNonTradable, color: "#f4a261" },
+                                { name: "מזומן", value: dd.cashEquivalents + dd.deposits, color: "#94a3b8" },
+                                { name: "קרנות נאמנות", value: dd.mutualFunds, color: "#6c63ff" },
+                                { name: "אחר", value: dd.otherAssets, color: "#e76f51" },
+                              ].filter(d => d.value > 0);
+                              return (
+                                <div className="mt-4 bg-white rounded-xl p-4 border border-gray-100">
+                                  <h4 className="text-sm font-bold text-[#0a3d3d] mb-3">הרכב נכסים — חשיפות</h4>
+                                  <div className="flex flex-col sm:flex-row items-center gap-6">
+                                    {/* Pie Chart */}
+                                    <div className="w-[180px] h-[180px] shrink-0">
+                                      <ResponsiveContainer width="100%" height="100%">
+                                        <PieChart>
+                                          <Pie
+                                            data={pieData}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            cx="50%"
+                                            cy="50%"
+                                            innerRadius={45}
+                                            outerRadius={80}
+                                            strokeWidth={2}
+                                            stroke="#fff"
+                                          >
+                                            {pieData.map((d, idx) => (
+                                              <Cell key={idx} fill={d.color} />
+                                            ))}
+                                          </Pie>
+                                          <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
+                                        </PieChart>
+                                      </ResponsiveContainer>
+                                    </div>
+                                    {/* Legend */}
+                                    <div className="flex-1 space-y-2">
+                                      {pieData.map((d, idx) => (
+                                        <div key={idx} className="flex items-center justify-between text-sm border-b border-gray-50 pb-1.5">
+                                          <div className="flex items-center gap-2">
+                                            <span className="w-3 h-3 rounded" style={{ background: d.color }} />
+                                            <span className="text-gray-600">{d.name}</span>
+                                          </div>
+                                          <span className="font-bold text-[#0a3d3d]">{d.value.toFixed(1)}%</span>
+                                        </div>
+                                      ))}
+                                      {dd.foreignExposure > 0 && (
+                                        <div className="flex items-center justify-between text-sm pt-1">
+                                          <span className="text-gray-400">חשיפה לחו"ל</span>
+                                          <span className="font-semibold text-[#5ec6c6]">{dd.foreignExposure}%</span>
+                                        </div>
+                                      )}
+                                      {dd.currencyExposure > 0 && (
+                                        <div className="flex items-center justify-between text-sm">
+                                          <span className="text-gray-400">חשיפת מט"ח</span>
+                                          <span className="font-semibold text-[#f4a261]">{dd.currencyExposure}%</span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })()}
 
                             <div className="mt-3 text-center">
                               <Link to="/contact" className="text-sm text-[#5ec6c6] font-semibold hover:underline">
