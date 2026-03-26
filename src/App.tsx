@@ -158,6 +158,7 @@ import SavedCalculations from "@/pages/SavedCalculations";
 import PersonalArea from "@/pages/PersonalArea";
 import Insurances from "@/pages/Insurances";
 import Savings from "@/pages/Savings";
+import InvestmentTracks from "@/pages/InvestmentTracks";
 import Article from "@/pages/Article";
 import Onboarding from "@/pages/Onboarding";
 import Admin from "@/pages/Admin";
@@ -301,6 +302,7 @@ const App = () => (
                 {/* Insurance */}
                 <Route path="/insurances" element={<Insurances />} />
                 <Route path="/savings" element={<Savings />} />
+                <Route path="/investment-tracks" element={<InvestmentTracks />} />
                 <Route path="/insurance/health" element={<HealthInsurance />} />
                 <Route path="/insurance/critical-illness" element={<CriticalIllness />} />
                 <Route path="/insurance/accidents" element={<PersonalAccidents />} />
