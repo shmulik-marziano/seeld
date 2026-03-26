@@ -7,7 +7,8 @@ import DoodleIcon from "@/components/DoodleIcon";
 import { ChevronLeft, Search, ArrowUpDown, TrendingUp, TrendingDown, Filter, BarChart3, X, ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { allFunds } from "@/data/cmaFundsData";
+import { trackData as staticFunds } from "@/data/cmaFundsData";
+import { useInvestmentTracks } from "@/hooks/useInvestmentTracks";
 import { productTypeLabels, specializationLabels, companyLabels } from "@/types/fund";
 import type { Fund, ProductType, Specialization, ManagingCompany } from "@/types/fund";
 
@@ -19,20 +20,20 @@ type SortKey = "name" | "year1" | "year3" | "year5" | "fees" | "assets";
 type SortDir = "asc" | "desc";
 
 // ── Personal Track Checker ──
-function PersonalTrackChecker() {
+function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
   const [selectedCompany, setSelectedCompany] = useState<ManagingCompany | "">("");
   const [selectedProduct, setSelectedProduct] = useState<ProductType | "">("");
   const [selectedFundId, setSelectedFundId] = useState<string>("");
 
   const availableProducts = selectedCompany
-    ? [...new Set(allFunds.filter(f => f.company === selectedCompany).map(f => f.productType))]
+    ? [...new Set(trackData.filter(f => f.company === selectedCompany).map(f => f.productType))]
     : [];
 
   const availableFunds = selectedCompany && selectedProduct
-    ? allFunds.filter(f => f.company === selectedCompany && f.productType === selectedProduct)
+    ? trackData.filter(f => f.company === selectedCompany && f.productType === selectedProduct)
     : [];
 
-  const selectedFund = allFunds.find(f => f.id === selectedFundId) || null;
+  const selectedFund = trackData.find(f => f.id === selectedFundId) || null;
 
   const getPieData = (fund: Fund) => [
     { name: "מניות", value: fund.deepDrill.stocksAndOptions, color: "#5ec6c6" },
@@ -71,7 +72,7 @@ function PersonalTrackChecker() {
               className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
             >
               <option value="">בחרו חברה</option>
-              {[...new Set(allFunds.map(f => f.company))].map(c => (
+              {[...new Set(trackData.map(f => f.company))].map(c => (
                 <option key={c} value={c}>{companyLabels[c]}</option>
               ))}
             </select>
@@ -198,6 +199,7 @@ function PersonalTrackChecker() {
 }
 
 const InvestmentTracks = () => {
+  const { funds: trackData, isLive, loading: tracksLoading } = useInvestmentTracks();
   const [search, setSearch] = useState("");
   const [productFilter, setProductFilter] = useState<ProductType | "all">("all");
   const [specFilter, setSpecFilter] = useState<Specialization | "all">("all");
@@ -209,7 +211,7 @@ const InvestmentTracks = () => {
 
   // Filter + sort
   const filtered = useMemo(() => {
-    let list = allFunds;
+    let list = trackData;
     if (productFilter !== "all") list = list.filter(f => f.productType === productFilter);
     if (specFilter !== "all") list = list.filter(f => f.specialization === specFilter);
     if (companyFilter !== "all") list = list.filter(f => f.company === companyFilter);
@@ -244,9 +246,9 @@ const InvestmentTracks = () => {
   const uniqueCompanies = new Set(filtered.map(f => f.company)).size;
 
   // Active product types for tabs
-  const productTypes = [...new Set(allFunds.map(f => f.productType))];
+  const productTypes = [...new Set(trackData.map(f => f.productType))];
   const specializations = [...new Set(filtered.map(f => f.specialization))];
-  const companies = [...new Set(allFunds.map(f => f.company))];
+  const companies = [...new Set(trackData.map(f => f.company))];
 
   return (
     <div className="min-h-screen bg-white" dir="rtl">
@@ -275,11 +277,11 @@ const InvestmentTracks = () => {
           {/* Stat cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-white rounded-2xl p-4 border border-gray-100 text-center">
-              <p className="text-3xl font-extrabold text-[#0a3d3d]">{allFunds.length}</p>
+              <p className="text-3xl font-extrabold text-[#0a3d3d]">{trackData.length}</p>
               <p className="text-xs text-gray-400 mt-1">מסלולים במאגר</p>
             </div>
             <div className="bg-white rounded-2xl p-4 border border-gray-100 text-center">
-              <p className="text-3xl font-extrabold text-[#5ec6c6]">{new Set(allFunds.map(f => f.company)).size}</p>
+              <p className="text-3xl font-extrabold text-[#5ec6c6]">{new Set(trackData.map(f => f.company)).size}</p>
               <p className="text-xs text-gray-400 mt-1">חברות</p>
             </div>
             <div className="bg-white rounded-2xl p-4 border border-gray-100 text-center">
@@ -288,7 +290,7 @@ const InvestmentTracks = () => {
             </div>
             <div className="bg-white rounded-2xl p-4 border border-gray-100 text-center">
               <p className="text-3xl font-extrabold text-[#f4a261]">2026</p>
-              <p className="text-xs text-gray-400 mt-1">נתונים עדכניים</p>
+              <p className="text-xs text-gray-400 mt-1">{isLive ? "נתונים חיים" : "נתונים מקומיים"}</p>
             </div>
           </div>
         </div>
@@ -305,7 +307,7 @@ const InvestmentTracks = () => {
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
         {/* Personal track checker */}
-        <PersonalTrackChecker />
+        <PersonalTrackChecker trackData={trackData} />
 
         {/* Search + Filters */}
         <div className="space-y-4 mb-8">
@@ -341,7 +343,7 @@ const InvestmentTracks = () => {
               onClick={() => { setProductFilter("all"); setSpecFilter("all"); }}
               className={`px-4 py-2 rounded-full text-sm font-semibold shrink-0 transition-all ${productFilter === "all" ? "bg-[#0a3d3d] text-white" : "bg-[#f8f9fc] text-gray-500 hover:bg-gray-100"}`}
             >
-              הכל ({allFunds.length})
+              הכל ({trackData.length})
             </button>
             {productTypes.map(pt => (
               <button
@@ -349,7 +351,7 @@ const InvestmentTracks = () => {
                 onClick={() => { setProductFilter(pt); setSpecFilter("all"); }}
                 className={`px-4 py-2 rounded-full text-sm font-semibold shrink-0 transition-all ${productFilter === pt ? "bg-[#0a3d3d] text-white" : "bg-[#f8f9fc] text-gray-500 hover:bg-gray-100"}`}
               >
-                {productTypeLabels[pt]} ({allFunds.filter(f => f.productType === pt).length})
+                {productTypeLabels[pt]} ({trackData.filter(f => f.productType === pt).length})
               </button>
             ))}
           </div>
