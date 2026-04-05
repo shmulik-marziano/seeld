@@ -73,11 +73,11 @@ const HeroSection = () => {
             >
               <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/80 backdrop-blur-sm border border-[#0a3d3d]/10 text-[13px] text-[#0a3d3d] font-medium shadow-sm">
                 <Sparkles className="w-3.5 h-3.5 text-[#f4a261]" />
-                600+ משפחות · מבית עמיתים הון · 6 שנים של ניסיון
+                בית פיננסים וביטוח · מבית עמיתים הון
               </span>
             </motion.div>
 
-            {/* Headline — Bold, specific, cliché-free */}
+            {/* Headline — Institutional premium voice */}
             <motion.h1
               className="font-extrabold leading-[1.02] tracking-tight"
               initial={{ opacity: 0, y: 28 }}
@@ -85,17 +85,17 @@ const HeroSection = () => {
               transition={{ duration: 0.7, delay: 0.1 }}
             >
               <span className="block text-[2rem] sm:text-5xl md:text-6xl lg:text-[5rem] text-[#0a3d3d]">
-                כל שקל שאתה
+                הדרך הנכונה
               </span>
               <span className="block text-[2rem] sm:text-5xl md:text-6xl lg:text-[5rem] text-[#0a3d3d]">
-                משלם על ביטוח —
+                לנהל את
               </span>
               <span className="block text-[2rem] sm:text-5xl md:text-6xl lg:text-[5rem] mt-2">
                 <span className="relative inline-block">
                   <span
                     className="bg-gradient-to-l from-[#1a8f7d] via-[#5ec6c6] to-[#1a8f7d] bg-clip-text text-transparent bg-[length:200%_100%] animate-gradient-shift"
                   >
-                    חייב להיות מוצדק.
+                    הכסף שלך.
                   </span>
                   <motion.span
                     className="absolute -bottom-2 left-0 right-0 h-[6px] bg-[#f4a261] rounded-full"
@@ -108,18 +108,16 @@ const HeroSection = () => {
               </span>
             </motion.h1>
 
-            {/* Subtitle — Specific, warm, no clichés */}
+            {/* Subtitle — House voice, institutional premium */}
             <motion.p
-              className="text-base sm:text-lg md:text-xl text-[#0a3d3d]/65 leading-[1.7] max-w-xl font-normal"
+              className="text-base sm:text-lg md:text-xl text-[#0a3d3d]/70 leading-[1.75] max-w-xl font-normal"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.25 }}
             >
-              אנחנו סורקים את תיק הביטוח הקיים שלך, משווים מול{" "}
-              <span className="text-[#0a3d3d] font-semibold">כל החברות בשוק</span>,
-              ומראים לך{" "}
-              <span className="text-[#0a3d3d] font-semibold">בדיוק</span>{" "}
-              איפה משלמים יותר מדי — בלי להחליף כיסוי, בלי לוותר על כלום.
+              בית פיננסים וביטוח עצמאי. צוות של סוכני ביטוח ויועצי פנסיה שסוקרים את התיק שלך, משווים מול 12 חברות מובילות, וממליצים על הצעד הבא.
+              <br />
+              <span className="text-[#0a3d3d] font-semibold">פגישת הייעוץ הראשונה על חשבוננו.</span>
             </motion.p>
 
             {/* CTAs */}
@@ -133,7 +131,7 @@ const HeroSection = () => {
                 <Button
                   className="bg-[#0a3d3d] text-white hover:bg-[#0d4a4a] rounded-full px-10 py-6 text-base font-bold shadow-xl shadow-[#0a3d3d]/20 hover:shadow-2xl hover:shadow-[#0a3d3d]/30 hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto min-h-[60px] group-hover:scale-[1.02]"
                 >
-                  התחל סריקה חינם
+                  קביעת פגישת ייעוץ
                   <ArrowDownLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
                 </Button>
               </Link>
@@ -151,7 +149,7 @@ const HeroSection = () => {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#25D366]"></span>
                   </span>
-                  דברו עם שמוליק
+                  שיחה עם יועץ
                 </Button>
               </a>
             </motion.div>
@@ -164,9 +162,9 @@ const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.6 }}
             >
               {[
-                "ללא התחייבות",
-                "דוח תוך 48 שעות",
-                "פרטיות מלאה",
+                "ייעוץ עצמאי ובלתי תלוי",
+                "דוח מקצועי תוך 48 שעות",
+                "פגישה ראשונה ללא עלות",
               ].map((text, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <svg
@@ -313,17 +311,17 @@ const HeroSection = () => {
                 <div className="flex items-center gap-2.5 mb-2">
                   <div className="w-2 h-2 rounded-full bg-[#1a8f7d] animate-pulse" />
                   <span className="text-[11px] uppercase tracking-wider text-[#0a3d3d]/50 font-semibold">
-                    חיסכון שזיהינו השבוע
+                    חיסכון שזוהה השבוע
                   </span>
                 </div>
                 <div className="flex items-baseline gap-1 mb-1">
                   <span className="text-3xl font-extrabold text-[#0a3d3d] tabular-nums">
                     ₪4,280
                   </span>
-                  <span className="text-sm text-[#0a3d3d]/60">/ שנה</span>
+                  <span className="text-sm text-[#0a3d3d]/60">בשנה</span>
                 </div>
                 <div className="text-xs text-[#0a3d3d]/55">
-                  משפחה בת 4 · ללא שינוי בכיסוי
+                  תיק לקוח קיים · ללא שינוי בכיסוי
                 </div>
                 {/* Animated bar */}
                 <div className="mt-3 h-1 bg-[#0a3d3d]/[0.06] rounded-full overflow-hidden">

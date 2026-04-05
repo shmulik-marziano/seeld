@@ -36,29 +36,29 @@ const whySeeld = [
   {
     icon: Users,
     doodle: "handshake",
-    title: "המספר שלך הולך ישר לשמוליק",
-    description: "אין מוקד, אין תור, אין תפריט בן 12 שלוחות. שאלה אחת ותשובה אחת — באותו היום.",
+    title: "יועץ אישי לכל לקוח",
+    description: "כל לקוח בבית משובץ ליועץ ייעודי. אותו אדם מכיר את התיק, את הצרכים ואת המשפחה. קשר מקצועי, לא מוקד מתחלף.",
     accent: "#5ec6c6",
   },
   {
     icon: Handshake,
     doodle: "shield",
-    title: "אנחנו עובדים בשבילך, לא בשבילן",
-    description: "אנחנו לא מקבלים פרס מחברה ספציפית על לקוח. זו הסיבה שההמלצה שלנו מתאימה לך — ולא לה.",
+    title: "עצמאות מלאה",
+    description: "אין לנו יעדי מכירה של חברה ספציפית. אין בונוסים לקידום מוצר. ההמלצה מבוססת על מה שמתאים ללקוח, ולא על מה שמשתלם לנו.",
     accent: "#f4a261",
   },
   {
     icon: Scale,
     doodle: "charts",
-    title: "12 חברות על שולחן אחד",
-    description: "הראל, מגדל, כלל, הפניקס, איילון, מנורה, מיטב, אילון, ביטוח ישיר ועוד. משווים את כולן, מציגים לך את ההבדלים, ואתה מחליט.",
+    title: "12 חברות בהשוואה",
+    description: "הראל, מגדל, כלל, הפניקס, איילון, מנורה, מיטב ועוד. גישה מקצועית לכל השחקניות המובילות בשוק הישראלי בזמן אמת.",
     accent: "#90be6d",
   },
   {
     icon: Zap,
     doodle: "lightbulb",
-    title: "פורטל אישי — כל הפוליסות במקום אחד",
-    description: "לא צריך לחפש מסמכים במיילים ישנים. פוליסות, כיסויים, תאריכי חידוש ודוחות — בלחיצה אחת, מכל מכשיר.",
+    title: "תשתית מקצועית",
+    description: "פורטל לקוחות, מערכת ניהול תיקים וכלי השוואה מתקדמים. הטכנולוגיה מאפשרת לנו להתמקד במה שחשוב באמת: הייעוץ.",
     accent: "#e76f51",
   },
 ];
@@ -139,10 +139,10 @@ const faqItems = [
 ];
 
 const trustPoints = [
-  { icon: Award, title: "רישיון רשות שוק ההון", description: "מ.ר 138666 · סוכן ביטוח פנסיוני מורשה, מפוקח ומבוטח באחריות מקצועית", accent: "#5ec6c6" },
-  { icon: Building2, title: "מבית עמיתים הון", description: "סוכנות מובילה עם ותק, מוניטין וגיבוי מקצועי מלא", accent: "#f4a261" },
-  { icon: UserCheck, title: "יחס אישי, לא מוקד", description: "טלפון ישיר, וואטסאפ פתוח — אותו האדם בודק, ממליץ, ומלווה", accent: "#90be6d" },
-  { icon: Scale, title: "נאמנות ללקוח בלבד", description: "12 חברות ביטוח על השולחן. אתה מחליט. אנחנו לא מוטים", accent: "#e76f51" },
+  { icon: Award, title: "מורשים ומפוקחים", description: "סוכנות ביטוח פנסיונית מורשית תחת רשות שוק ההון, ביטוח וחיסכון. ביטוח אחריות מקצועית מלא.", accent: "#5ec6c6" },
+  { icon: Building2, title: "מבית עמיתים הון", description: "הבית המקצועי של SEELD. ותק, מוניטין, ותשתית של בית פיננסים מוביל בישראל.", accent: "#f4a261" },
+  { icon: UserCheck, title: "יועץ ייעודי לכל לקוח", description: "כל לקוח אצלנו מקבל יועץ אישי שמלווה את התיק שלו לאורך כל שנות הקשר. אדם אחד. רציף.", accent: "#90be6d" },
+  { icon: Scale, title: "עצמאות גמורה", description: "ללא התחייבות לחברה מסוימת. ללא יעדי מכירה. ההמלצה מבוססת אך ורק על מה שנכון ללקוח.", accent: "#e76f51" },
 ];
 
 const leadSubjects = [
@@ -175,43 +175,43 @@ const SectionLabel = ({ children }: { children: string }) => (
 const processSteps = [
   {
     number: 1,
-    title: "שיחה ראשונה",
-    description: "טלפון או וואטסאפ — 15 דקות להבין מה יש לך ומה חשוב לך.",
+    title: "פנייה ראשונית",
+    description: "שיחה קצרה להיכרות עם הצרכים שלך, הסוכן הייעודי שילווה אותך, והצעדים הבאים בתהליך.",
     icon: PhoneCall,
     color: "#5ec6c6",
   },
   {
     number: 2,
-    title: "איסוף הנתונים",
-    description: "אנחנו שולפים את כל הפוליסות והקופות ממקורות רשמיים. בלי לחפור במגירות.",
+    title: "מיפוי התיק",
+    description: "הצוות שלנו שולף את כל הפוליסות, הקרנות והחיסכון ממקורות רשמיים. תהליך מקצועי ומאובטח לחלוטין.",
     icon: Search,
     color: "#f4a261",
   },
   {
     number: 3,
-    title: "דוח מקצועי",
-    description: "תוך 48 שעות — מסמך שמראה בדיוק איפה יש בעיות, כמה עולה לך כל אחת, ומה ההזדמנויות.",
+    title: "ניתוח ודוח",
+    description: "תוך 48 שעות תקבל דוח מקצועי שמציג בצורה ברורה את המצב הקיים, הזדמנויות לשיפור וההמלצות המנומקות שלנו.",
     icon: Target,
     color: "#90be6d",
   },
   {
     number: 4,
-    title: "פגישת הסבר",
-    description: "יושבים (פיזית או בזום) ועוברים על הכל. אתה שואל, אני עונה. אין לחץ להחליט.",
+    title: "פגישת ייעוץ",
+    description: "ישיבה פרונטלית או בזום עם היועץ הייעודי שלך. מעבר מעמיק על כל סעיף, שאלות, והחלטה מושכלת ללא לחץ.",
     icon: BarChart3,
     color: "#e76f51",
   },
   {
     number: 5,
-    title: "הביצוע",
-    description: "כל הניירת, כל הניודים, כל החתימות — אנחנו מטפלים. אתה מאשר בלחיצה.",
+    title: "יישום מקצועי",
+    description: "הצוות שלנו מטפל בכל הניודים, הטפסים והאינטגרציות מול החברות. אתה מקבל עדכון בכל שלב.",
     icon: Handshake,
     color: "#5ec6c6",
   },
   {
     number: 6,
-    title: "ליווי לכל החיים",
-    description: "סריקה שנתית. שינויים? אירועי חיים? שיחה אחת ומסדרים. בלי להחליף סוכן.",
+    title: "ליווי שנתי",
+    description: "בחינה מחדש אחת לשנה ובכל אירוע חיים משמעותי. הקשר עם היועץ שלך ממשיך לאורך כל הדרך.",
     icon: CalendarCheck,
     color: "#f4a261",
   },
@@ -341,10 +341,10 @@ const Index = () => {
               <ScrollReveal>
                 <div className="text-center mb-10 relative">
                   <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] mb-3 leading-tight">
-                    בדיקה שמגלה <span className="text-[#1a8f7d]">את האמת</span>
+                    בדיקת תיק <span className="text-[#1a8f7d]">ללא עלות</span>
                   </h2>
                   <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
-                    השאירו פרטים, נבדוק את התיק הקיים שלכם ונחזור עם דוח מדויק — כמה משלמים יותר מדי, איפה יש כפלים, ומה הצעד ההגיוני הבא.
+                    השאירו פרטים, הצוות שלנו יבחן את התיק הקיים ויחזור אליכם עם דוח מקצועי הכולל המלצות מעשיות.
                   </p>
                 </div>
               </ScrollReveal>
@@ -431,12 +431,12 @@ const Index = () => {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
           <ScrollReveal>
             <div className="text-center mb-8 sm:mb-14">
-              <SectionLabel>השיטה שלנו</SectionLabel>
+              <SectionLabel>השיטה של SEELD</SectionLabel>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
-                ארבעה דברים שאתה <span className="text-[#1a8f7d]">לא תקבל</span> בשום מקום אחר
+                מה מייחד בית <span className="text-[#1a8f7d]">פיננסים עצמאי</span>
               </h2>
               <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                סוכני ביטוח רבים יגידו לך את אותו הדבר. מעטים באמת עומדים מאחורי זה.
+                ארבעה עקרונות שמגדירים את הדרך שבה אנחנו עובדים מול כל לקוח בבית.
               </p>
             </div>
           </ScrollReveal>
@@ -492,10 +492,10 @@ const Index = () => {
               <div className="text-center mb-8 sm:mb-14">
                 <SectionLabel>INSURANCE</SectionLabel>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
-                  16 סוגי ביטוח. <span className="text-[#e76f51]">סוכן אחד.</span>
+                  <span className="text-[#e76f51]">ספקטרום מלא</span> של פתרונות ביטוח
                 </h2>
                 <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                  כל הכיסויים שאתה עשוי להזדקק להם בחיים — מבדיקה, דרך רכישה, ועד ליווי שוטף. בלי להסתובב בין חברות.
+                  16 קטגוריות ביטוח תחת קורת גג אחת. בחינה, בחירה וליווי בכל שלב, מול כל חברות הביטוח בישראל.
                 </p>
               </div>
             </ScrollReveal>
@@ -566,10 +566,10 @@ const Index = () => {
             <div className="text-center mb-8 sm:mb-14">
               <SectionLabel>SAVINGS & PENSION</SectionLabel>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
-                הכסף שלך עובד. <span className="text-[#90be6d]">שאלה רק איפה.</span>
+                ניהול חיסכון <span className="text-[#90be6d]">לטווח ארוך</span>
               </h2>
               <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                פנסיה, גמל, השתלמות, חיסכון לילדים, תכנון פרישה — 11 מוצרים שונים, החלטה אחת: להניח אותו ביד הנכונה.
+                פנסיה, קופות גמל, קרנות השתלמות, חיסכון לילדים ותכנון פרישה. כל מוצרי החיסכון הפנסיוני בליווי צוות המומחים שלנו.
               </p>
             </div>
           </ScrollReveal>
@@ -615,10 +615,10 @@ const Index = () => {
               <div className="text-center mb-8 sm:mb-14">
                 <SectionLabel>TOOLS</SectionLabel>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
-                  לא בטוחים? <span className="text-[#6c63ff]">חשבו בעצמכם.</span>
+                  כלים <span className="text-[#6c63ff]">מקצועיים</span>
                 </h2>
                 <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                  מחשבונים מדויקים שבנינו מתוך אלפי שיחות עם לקוחות. בלי הרשמה, בלי דוא״ל, בלי טריקים — רק תוצאה.
+                  מחשבונים אנליטיים ברמה שבה הצוות שלנו עובד, זמינים גם לכם. ללא רישום, ללא מגבלות, חופשיים לשימוש.
                 </p>
               </div>
             </ScrollReveal>
@@ -695,8 +695,8 @@ const Index = () => {
         <ScrollReveal>
           <CompanyLogos
             variant="marquee"
-            title="כל החברות על שולחן אחד"
-            subtitle="12 חברות ביטוח ו-6 בתי השקעות — גישה שווה, ראייה אחת, והחלטה שלך."
+            title="עובדים מול כל השחקניות המובילות"
+            subtitle="12 חברות ביטוח ו-6 בתי השקעות בישראל. גישה מקצועית בזמן אמת. השוואה שקופה. המלצה מבוססת."
           />
         </ScrollReveal>
 
@@ -756,21 +756,24 @@ const Index = () => {
               <ScrollReveal>
                 <div className="space-y-8">
                   <div>
-                    <SectionLabel>הבן אדם מאחורי SEELD</SectionLabel>
+                    <SectionLabel>הבית של SEELD</SectionLabel>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-3 leading-[1.1]">
-                      שמוליק מרציאנו
+                      סוכנות בוטיק פיננסית.
                     </h2>
-                    <p className="text-[#6dd9d5] font-semibold text-lg">סוכן ביטוח פנסיוני · מ.ר 138666</p>
+                    <p className="text-[#6dd9d5] font-semibold text-lg">צוות קטן של יועצים עצמאיים. שירות ברמה שלא פגשת.</p>
                   </div>
-                  <div className="space-y-5 text-white/70 text-base sm:text-lg leading-[1.8]">
+                  <div className="space-y-5 text-white/75 text-base sm:text-lg leading-[1.85]">
                     <p>
-                      נכנסתי לעולם הביטוח מתוך תסכול אישי — הבנתי שרוב האנשים משלמים לדברים שהם לא מבינים, לחברות שהם לא בחרו, תחת תנאים שאף אחד מעולם לא הסביר להם.
+                      SEELD היא סוכנות ביטוח ופיננסים עצמאית, שנבנתה סביב עקרון אחד פשוט: להעמיד את הלקוח מעל כל שיקול אחר.
                     </p>
                     <p>
-                      <span className="text-white font-semibold">SEELD היא התשובה שלי לזה.</span> סוכנות קטנה, אישית, שעובדת כמו שהייתי רוצה שיעבדו איתי: ללא לחץ מכירה, ללא פחד ממספרים גדולים, וללא שום חברה אחת שאני ״חייב״ לה משהו.
+                      הצוות שלנו כולל סוכני ביטוח מורשים, יועצי פנסיה ומומחי פיננסים. כולם עצמאיים, כולם ללא תלות בחברה אחת. זו לא אמירה שיווקית. זו התשתית המשפטית והעסקית שלנו.
+                    </p>
+                    <p className="text-white font-semibold">
+                      לכל לקוח אצלנו יש יועץ אישי.
                     </p>
                     <p>
-                      אני עונה לטלפון. אני מסביר. אני בודק את התיק שלך כמו שהייתי בודק את של אחי. זה הכל.
+                      אדם אחד שמכיר את התיק שלך, את המשפחה שלך ואת השינויים שאתה עובר לאורך השנים. לא מוקד. לא נציג מתחלף. קשר מקצועי ארוך טווח עם מי שאחראי לתוצאה.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-4 pt-4">
@@ -778,20 +781,14 @@ const Index = () => {
                       to="/contact"
                       className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#f4a261] text-[#0a3d3d] font-bold text-base hover:bg-[#f5b17e] hover:scale-[1.02] transition-all shadow-xl shadow-[#f4a261]/25"
                     >
-                      קבעו שיחה עם שמוליק
+                      קביעת פגישת ייעוץ
                     </Link>
-                    <a
-                      href="https://wa.me/972523097444"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      to="/about"
                       className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/20 text-white font-semibold text-base hover:bg-white/[0.06] transition-all"
                     >
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-[#25D366]"></span>
-                      </span>
-                      וואטסאפ ישיר
-                    </a>
+                      הכירו את הצוות
+                    </Link>
                   </div>
                 </div>
               </ScrollReveal>
@@ -837,10 +834,10 @@ const Index = () => {
               <div className="text-center mb-8 sm:mb-14">
                 <SectionLabel>PROCESS</SectionLabel>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
-                  מהשיחה הראשונה ועד <span className="text-[#1a8f7d]">הליווי השנתי</span>
+                  תהליך העבודה <span className="text-[#1a8f7d]">של הבית</span>
                 </h2>
                 <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                  ששה שלבים ברורים. בלי הפתעות, בלי ניירת מיותרת, בלי לדרוש ממך זמן שאין לך.
+                  ששה שלבים מובנים מהפנייה הראשונית ועד ליווי שוטף. מתודולוגיה מקצועית שמבטיחה דיוק בכל שלב.
                 </p>
               </div>
             </ScrollReveal>
@@ -952,17 +949,17 @@ const Index = () => {
                 <div className="space-y-6 text-center lg:text-right">
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1a8f7d]/[0.08] border border-[#1a8f7d]/15">
                     <span className="w-2 h-2 rounded-full bg-[#1a8f7d] animate-pulse" />
-                    <span className="text-xs font-bold text-[#1a8f7d] tracking-wide">סריקה חינמית · 48 שעות</span>
+                    <span className="text-xs font-bold text-[#1a8f7d] tracking-wide">בדיקה מקצועית · 48 שעות</span>
                   </div>
                   <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] tracking-tight leading-[1.1]">
-                    רואים הכל. <span className="text-[#1a8f7d]">בלי הפתעות.</span>
+                    <span className="text-[#1a8f7d]">תמונה מלאה</span> של התיק
                   </h2>
                   <p className="text-[#0a3d3d]/60 text-base sm:text-lg max-w-md mx-auto lg:mx-0 leading-relaxed">
-                    הסורק של SEELD בודק את תיק הביטוח והחיסכון שלכם — מזהה כפלים, דמי ניהול גבוהים, כיסויים חסרים וקרנות עם ביצועים חלשים. דוח מפורט מגיע למייל.
+                    הכלי המקצועי של SEELD מאגד את כל הנתונים מהחברות, מזהה כפילויות, דמי ניהול חריגים וכיסויים חסרים. דוח מפורט במייל, פגישת הסבר עם יועץ ייעודי.
                   </p>
                   <Link to="/contact">
                     <Button className="bg-[#0a3d3d] text-white hover:bg-[#0d4a4a] rounded-full px-8 py-5 text-base font-bold shadow-xl shadow-[#0a3d3d]/20 hover:shadow-2xl hover:-translate-y-0.5 transition-all mt-4 min-h-[52px]">
-                      התחל סריקה עכשיו
+                      בקשת בדיקת תיק
                       <ArrowDownLeft className="w-5 h-5 mr-2" />
                     </Button>
                   </Link>
@@ -1021,10 +1018,10 @@ const Index = () => {
               <div className="text-center mb-8 sm:mb-14">
                 <SectionLabel>FAQ</SectionLabel>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
-                  הכל מה שרצית לשאול <span className="text-[#1a8f7d]">ולא ידעת ממי</span>
+                  שאלות <span className="text-[#1a8f7d]">שעולות בכל תיק</span>
                 </h2>
                 <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                  השאלות שכל לקוח מתחיל ממנה — והתשובות הכנות שאף אחד לא יגיד לך במוקד שירות.
+                  התשובות המקצועיות שהצוות שלנו נותן לכל לקוח חדש. מרוכז, ברור, ובלי המון מילים מיותרות.
                 </p>
               </div>
             </ScrollReveal>
@@ -1144,10 +1141,10 @@ const Index = () => {
               <div className="text-center mb-10">
                 <SectionLabel>CONTACT</SectionLabel>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-3 leading-[1.15]">
-                  הצעד הראשון — <span className="text-[#1a8f7d]">3 שדות</span>
+                  <span className="text-[#1a8f7d]">השיחה הראשונה</span> על חשבוננו
                 </h2>
                 <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-md mx-auto leading-relaxed">
-                  השאירו שם, טלפון ואת מה שמעניין אתכם. שמוליק יחזור היום.
+                  השאירו פרטים ויועץ מהצוות שלנו יצור קשר באותו יום עבודה.
                 </p>
               </div>
             </ScrollReveal>
