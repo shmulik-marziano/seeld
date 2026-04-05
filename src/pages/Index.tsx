@@ -36,29 +36,29 @@ const whySeeld = [
   {
     icon: Users,
     doodle: "handshake",
-    title: "שירות אישי בגובה העיניים",
-    description: "לא מוקד עם 50 נציגים. שמוליק — הסוכן שלכם. שואלים, מקבלים תשובה. תמיד.",
+    title: "המספר שלך הולך ישר לשמוליק",
+    description: "אין מוקד, אין תור, אין תפריט בן 12 שלוחות. שאלה אחת ותשובה אחת — באותו היום.",
     accent: "#5ec6c6",
   },
   {
     icon: Handshake,
     doodle: "shield",
-    title: "סוכנות מבוססת ומוכרת",
-    description: "רישיון רשות שוק ההון. חברים בלשכת סוכני הביטוח. מבית עמיתים הון. עובדים לפי הספר.",
+    title: "אנחנו עובדים בשבילך, לא בשבילן",
+    description: "אנחנו לא מקבלים פרס מחברה ספציפית על לקוח. זו הסיבה שההמלצה שלנו מתאימה לך — ולא לה.",
     accent: "#f4a261",
   },
   {
     icon: Scale,
     doodle: "charts",
-    title: "עבודה עם כל החברות",
-    description: "הראל, מגדל, כלל, הפניקס, איילון, מנורה ועוד 6 — משווים את כולם ובוחרים את מה שמתאים לכם. לא מה שמתאים לנו.",
+    title: "12 חברות על שולחן אחד",
+    description: "הראל, מגדל, כלל, הפניקס, איילון, מנורה, מיטב, אילון, ביטוח ישיר ועוד. משווים את כולן, מציגים לך את ההבדלים, ואתה מחליט.",
     accent: "#90be6d",
   },
   {
     icon: Zap,
     doodle: "lightbulb",
-    title: "הכל דיגיטלי וזמין",
-    description: "פורטל אישי לצפייה בפוליסות, מחשבונים לחישובים מהירים, סריקת תיק אוטומטית. 2026, לא 2006.",
+    title: "פורטל אישי — כל הפוליסות במקום אחד",
+    description: "לא צריך לחפש מסמכים במיילים ישנים. פוליסות, כיסויים, תאריכי חידוש ודוחות — בלחיצה אחת, מכל מכשיר.",
     accent: "#e76f51",
   },
 ];
@@ -139,10 +139,10 @@ const faqItems = [
 ];
 
 const trustPoints = [
-  { icon: Award, title: "רישיון סוכן ביטוח פנסיוני", description: "מורשה ומפוקח על ידי רשות שוק ההון, ביטוח וחיסכון", accent: "#5ec6c6" },
-  { icon: Building2, title: "מבית עמיתים הון", description: "סוכנות מפוקחת עם גיבוי ארגוני מלא", accent: "#f4a261" },
-  { icon: UserCheck, title: "מענה אישי — לא מוקד", description: "שאלה? שינוי בפוליסה? טלפון או וואטסאפ — ומקבלים מענה", accent: "#90be6d" },
-  { icon: Scale, title: "לא קשורים לחברה אחת", description: "משווים בין כל חברות הביטוח וממליצים לפי הצורך שלכם", accent: "#e76f51" },
+  { icon: Award, title: "רישיון רשות שוק ההון", description: "מ.ר 138666 · סוכן ביטוח פנסיוני מורשה, מפוקח ומבוטח באחריות מקצועית", accent: "#5ec6c6" },
+  { icon: Building2, title: "מבית עמיתים הון", description: "סוכנות מובילה עם ותק, מוניטין וגיבוי מקצועי מלא", accent: "#f4a261" },
+  { icon: UserCheck, title: "יחס אישי, לא מוקד", description: "טלפון ישיר, וואטסאפ פתוח — אותו האדם בודק, ממליץ, ומלווה", accent: "#90be6d" },
+  { icon: Scale, title: "נאמנות ללקוח בלבד", description: "12 חברות ביטוח על השולחן. אתה מחליט. אנחנו לא מוטים", accent: "#e76f51" },
 ];
 
 const leadSubjects = [
@@ -340,13 +340,11 @@ const Index = () => {
             <div className="relative max-w-4xl mx-auto px-4 sm:px-6">
               <ScrollReveal>
                 <div className="text-center mb-10 relative">
-                  <div className="absolute top-0 right-[15%] w-4 h-4 rounded-full bg-[#e76f51] opacity-20 hidden sm:block" />
-                  <div className="absolute top-6 left-[18%] w-3 h-3 rounded-full bg-[#90be6d] opacity-25 hidden sm:block" />
-                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] mb-3">
-                    בואו נבדוק מה <span className="text-[#5ec6c6]">אפשר לשפר</span>
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] mb-3 leading-tight">
+                    בדיקה שמגלה <span className="text-[#1a8f7d]">את האמת</span>
                   </h2>
-                  <p className="text-[#0a3d3d]/40 text-base sm:text-lg">
-                    השאירו פרטים. שמוליק יחזור אליכם היום.
+                  <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
+                    השאירו פרטים, נבדוק את התיק הקיים שלכם ונחזור עם דוח מדויק — כמה משלמים יותר מדי, איפה יש כפלים, ומה הצעד ההגיוני הבא.
                   </p>
                 </div>
               </ScrollReveal>
@@ -401,12 +399,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Decorative dots between sections */}
-        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
-          <span className="w-4 h-4 rounded-full bg-[#5ec6c6]" />
-          <span className="w-6 h-6 rounded-full bg-[#f4a261]" />
-          <span className="w-4 h-4 rounded-full bg-[#90be6d]" />
-        </div>
 
         {/* 3. QUICK SERVICES BAR */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
@@ -434,25 +426,17 @@ const Index = () => {
           </ScrollReveal>
         </section>
 
-        {/* Decorative dots between sections */}
-        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
-          <span className="w-4 h-4 rounded-full bg-[#e76f51]" />
-          <span className="w-6 h-6 rounded-full bg-[#5ec6c6]" />
-          <span className="w-4 h-4 rounded-full bg-[#f4a261]" />
-        </div>
 
         {/* 4. WHY SEELD */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
           <ScrollReveal>
-            <div className="text-center mb-8 sm:mb-14 relative">
-              <div className="absolute top-1 right-[12%] w-5 h-5 rounded-full bg-[#5ec6c6] opacity-20 hidden sm:block" />
-              <div className="absolute top-10 left-[10%] w-4 h-4 rounded-full bg-[#f4a261] opacity-25 hidden sm:block" />
-              <SectionLabel>למה SEELD</SectionLabel>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                למה <span className="text-[#5ec6c6]">SEELD</span>?
+            <div className="text-center mb-8 sm:mb-14">
+              <SectionLabel>השיטה שלנו</SectionLabel>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
+                ארבעה דברים שאתה <span className="text-[#1a8f7d]">לא תקבל</span> בשום מקום אחר
               </h2>
-              <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                ביטחון פיננסי מגיע לכולם. הדרך לשם לא חייבת להיות מסובכת
+              <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                סוכני ביטוח רבים יגידו לך את אותו הדבר. מעטים באמת עומדים מאחורי זה.
               </p>
             </div>
           </ScrollReveal>
@@ -497,12 +481,6 @@ const Index = () => {
           </motion.div>
         </section>
 
-        {/* Decorative dots between sections */}
-        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
-          <span className="w-4 h-4 rounded-full bg-[#90be6d]" />
-          <span className="w-6 h-6 rounded-full bg-[#e76f51]" />
-          <span className="w-4 h-4 rounded-full bg-[#5ec6c6]" />
-        </div>
 
         {/* Wave to gray section */}
         <WaveDivider color="#f8f9fc" />
@@ -511,16 +489,13 @@ const Index = () => {
         <section className="bg-[#f8f9fc]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
             <ScrollReveal>
-              <div className="text-center mb-8 sm:mb-14 relative">
-                {/* Decorative solid circles */}
-                <div className="absolute top-0 right-[10%] w-6 h-6 rounded-full bg-[#e76f51] opacity-20 hidden sm:block" />
-                <div className="absolute top-8 left-[12%] w-4 h-4 rounded-full bg-[#5ec6c6] opacity-25 hidden sm:block" />
+              <div className="text-center mb-8 sm:mb-14">
                 <SectionLabel>INSURANCE</SectionLabel>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                  ביטוח — <span className="text-[#e76f51]">כל הסוגים, מקום אחד</span>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
+                  16 סוגי ביטוח. <span className="text-[#e76f51]">סוכן אחד.</span>
                 </h2>
-                <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                  רכב, בריאות, דירה, חיים, עסק ועוד — משווים ובוחרים את הכיסוי הנכון
+                <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                  כל הכיסויים שאתה עשוי להזדקק להם בחיים — מבדיקה, דרך רכישה, ועד ליווי שוטף. בלי להסתובב בין חברות.
                 </p>
               </div>
             </ScrollReveal>
@@ -584,26 +559,17 @@ const Index = () => {
         {/* Wave: gray -> white */}
         <WaveDivider color="#ffffff" flip />
 
-        {/* Decorative dots between sections */}
-        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
-          <span className="w-4 h-4 rounded-full bg-[#f4a261]" />
-          <span className="w-6 h-6 rounded-full bg-[#90be6d]" />
-          <span className="w-4 h-4 rounded-full bg-[#e76f51]" />
-        </div>
 
         {/* 6. SAVINGS / PENSION GRID */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
           <ScrollReveal>
-            <div className="text-center mb-8 sm:mb-14 relative">
-              {/* Decorative solid circles */}
-              <div className="absolute top-2 left-[8%] w-5 h-5 rounded-full bg-[#90be6d] opacity-25 hidden sm:block" />
-              <div className="absolute top-10 right-[15%] w-3 h-3 rounded-full bg-[#f4a261] opacity-20 hidden sm:block" />
+            <div className="text-center mb-8 sm:mb-14">
               <SectionLabel>SAVINGS & PENSION</SectionLabel>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                חיסכון <span className="text-[#90be6d]">ופנסיה</span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
+                הכסף שלך עובד. <span className="text-[#90be6d]">שאלה רק איפה.</span>
               </h2>
-              <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                קרנות פנסיה, קופות גמל, קרנות השתלמות והכנה לפרישה — הכל מסודר ומנוהל
+              <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                פנסיה, גמל, השתלמות, חיסכון לילדים, תכנון פרישה — 11 מוצרים שונים, החלטה אחת: להניח אותו ביד הנכונה.
               </p>
             </div>
           </ScrollReveal>
@@ -638,12 +604,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Decorative dots between sections */}
-        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
-          <span className="w-4 h-4 rounded-full bg-[#5ec6c6]" />
-          <span className="w-6 h-6 rounded-full bg-[#f4a261]" />
-          <span className="w-4 h-4 rounded-full bg-[#90be6d]" />
-        </div>
 
         {/* Wave: white -> gray */}
         <WaveDivider color="#f8f9fc" />
@@ -652,15 +612,13 @@ const Index = () => {
         <section className="bg-[#f8f9fc]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
             <ScrollReveal>
-              <div className="text-center mb-8 sm:mb-14 relative">
-                <div className="absolute top-0 right-[12%] w-5 h-5 rounded-full bg-[#6c63ff] opacity-20 hidden sm:block" />
-                <div className="absolute top-12 left-[10%] w-4 h-4 rounded-full bg-[#f4a261] opacity-20 hidden sm:block" />
+              <div className="text-center mb-8 sm:mb-14">
                 <SectionLabel>TOOLS</SectionLabel>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                  <span className="text-[#6c63ff]">המחשבונים</span> שלנו
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
+                  לא בטוחים? <span className="text-[#6c63ff]">חשבו בעצמכם.</span>
                 </h2>
-                <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                  לפני שמדברים מספרים — בדקו בעצמכם. חינם, בלי הרשמה.
+                <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                  מחשבונים מדויקים שבנינו מתוך אלפי שיחות עם לקוחות. בלי הרשמה, בלי דוא״ל, בלי טריקים — רק תוצאה.
                 </p>
               </div>
             </ScrollReveal>
@@ -732,19 +690,13 @@ const Index = () => {
         {/* Wave: gray -> white */}
         <WaveDivider color="#ffffff" flip />
 
-        {/* Decorative dots between sections */}
-        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
-          <span className="w-4 h-4 rounded-full bg-[#e76f51]" />
-          <span className="w-6 h-6 rounded-full bg-[#5ec6c6]" />
-          <span className="w-4 h-4 rounded-full bg-[#f4a261]" />
-        </div>
 
         {/* 8. PARTNERS - Logo marquee */}
         <ScrollReveal>
           <CompanyLogos
             variant="marquee"
-            title="לא עובדים בשביל חברה. עובדים בשבילכם."
-            subtitle="12 חברות ביטוח, 6 בתי השקעות. משווים, ממליצים, ואתם מחליטים."
+            title="כל החברות על שולחן אחד"
+            subtitle="12 חברות ביטוח ו-6 בתי השקעות — גישה שווה, ראייה אחת, והחלטה שלך."
           />
         </ScrollReveal>
 
@@ -767,30 +719,44 @@ const Index = () => {
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
               {/* Right side - About */}
               <ScrollReveal>
-                <div className="space-y-7">
+                <div className="space-y-8">
                   <div>
-                    <SectionLabel>ABOUT</SectionLabel>
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-3">
+                    <SectionLabel>הבן אדם מאחורי SEELD</SectionLabel>
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-3 leading-[1.1]">
                       שמוליק מרציאנו
                     </h2>
-                    <p className="text-[#5ec6c6] font-semibold text-xl">סוכן ביטוח פנסיוני מורשה</p>
+                    <p className="text-[#6dd9d5] font-semibold text-lg">סוכן ביטוח פנסיוני · מ.ר 138666</p>
                   </div>
-                  <p className="text-white/45 text-base sm:text-lg leading-relaxed">
-                    סוכן ביטוח מורשה, מייסד SEELD. עובד מול כל חברות הביטוח ובתי ההשקעות בשוק הישראלי. הגישה פשוטה: להיות הסוכן שהיית רוצה שיהיה לך — כזה שעונה כשמתקשרים, מסביר במילים פשוטות, ומטפל בכל הניירת בלי שצריך לרדוף. מבית עמיתים הון, מאות לקוחות, אפס פשרות על שירות.
-                  </p>
-                  <div className="flex flex-wrap gap-4 pt-2">
+                  <div className="space-y-5 text-white/70 text-base sm:text-lg leading-[1.8]">
+                    <p>
+                      נכנסתי לעולם הביטוח מתוך תסכול אישי — הבנתי שרוב האנשים משלמים לדברים שהם לא מבינים, לחברות שהם לא בחרו, תחת תנאים שאף אחד מעולם לא הסביר להם.
+                    </p>
+                    <p>
+                      <span className="text-white font-semibold">SEELD היא התשובה שלי לזה.</span> סוכנות קטנה, אישית, שעובדת כמו שהייתי רוצה שיעבדו איתי: ללא לחץ מכירה, ללא פחד ממספרים גדולים, וללא שום חברה אחת שאני ״חייב״ לה משהו.
+                    </p>
+                    <p>
+                      אני עונה לטלפון. אני מסביר. אני בודק את התיק שלך כמו שהייתי בודק את של אחי. זה הכל.
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-4 pt-4">
                     <Link
                       to="/contact"
-                      className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-[#0a3d3d] font-bold text-base hover:bg-white/90 transition-all shadow-xl shadow-black/20"
+                      className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#f4a261] text-[#0a3d3d] font-bold text-base hover:bg-[#f5b17e] hover:scale-[1.02] transition-all shadow-xl shadow-[#f4a261]/25"
                     >
-                      קבעו פגישת ייעוץ
+                      קבעו שיחה עם שמוליק
                     </Link>
-                    <Link
-                      to="/about"
-                      className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/15 text-white font-semibold text-base hover:bg-white/[0.06] transition-all"
+                    <a
+                      href="https://wa.me/972523097444"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/20 text-white font-semibold text-base hover:bg-white/[0.06] transition-all"
                     >
-                      עוד עלינו
-                    </Link>
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-[#25D366]"></span>
+                      </span>
+                      וואטסאפ ישיר
+                    </a>
                   </div>
                 </div>
               </ScrollReveal>
@@ -828,12 +794,6 @@ const Index = () => {
         {/* Wave: dark -> white */}
         <WaveDivider color="#ffffff" flip />
 
-        {/* Decorative dots between sections */}
-        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
-          <span className="w-4 h-4 rounded-full bg-[#90be6d]" />
-          <span className="w-6 h-6 rounded-full bg-[#e76f51]" />
-          <span className="w-4 h-4 rounded-full bg-[#5ec6c6]" />
-        </div>
 
         {/* PROCESS PIPELINE — Tech System Flow */}
         <section className="py-10 sm:py-16 lg:py-24 overflow-hidden">
