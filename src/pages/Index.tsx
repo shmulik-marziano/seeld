@@ -175,43 +175,43 @@ const SectionLabel = ({ children }: { children: string }) => (
 const processSteps = [
   {
     number: 1,
-    title: "השארת פרטים",
-    description: "וואטסאפ, טלפון, או טופס באתר. שמוליק חוזר היום.",
+    title: "שיחה ראשונה",
+    description: "טלפון או וואטסאפ — 15 דקות להבין מה יש לך ומה חשוב לך.",
     icon: PhoneCall,
     color: "#5ec6c6",
   },
   {
     number: 2,
-    title: "סריקת התיק",
-    description: "סורקים את כל הפוליסות, הפנסיה והחיסכון",
+    title: "איסוף הנתונים",
+    description: "אנחנו שולפים את כל הפוליסות והקופות ממקורות רשמיים. בלי לחפור במגירות.",
     icon: Search,
     color: "#f4a261",
   },
   {
     number: 3,
-    title: "זיהוי הזדמנויות",
-    description: "מוצאים כפלים, דמי ניהול גבוהים, כיסויים חסרים",
+    title: "דוח מקצועי",
+    description: "תוך 48 שעות — מסמך שמראה בדיוק איפה יש בעיות, כמה עולה לך כל אחת, ומה ההזדמנויות.",
     icon: Target,
     color: "#90be6d",
   },
   {
     number: 4,
-    title: "הצעה מותאמת",
-    description: "מגישים הצעה ברורה עם השוואה בין כל החברות",
+    title: "פגישת הסבר",
+    description: "יושבים (פיזית או בזום) ועוברים על הכל. אתה שואל, אני עונה. אין לחץ להחליט.",
     icon: BarChart3,
     color: "#e76f51",
   },
   {
     number: 5,
-    title: "ביצוע ומעבר",
-    description: "אנחנו מטפלים בטפסים, בניוד, בחתימות. אתם רק מאשרים.",
+    title: "הביצוע",
+    description: "כל הניירת, כל הניודים, כל החתימות — אנחנו מטפלים. אתה מאשר בלחיצה.",
     icon: Handshake,
     color: "#5ec6c6",
   },
   {
     number: 6,
-    title: "מעקב שוטף",
-    description: "כל שנה סריקה מחדש. שהכסף שלכם תמיד במקום הנכון.",
+    title: "ליווי לכל החיים",
+    description: "סריקה שנתית. שינויים? אירועי חיים? שיחה אחת ומסדרים. בלי להחליף סוכן.",
     icon: CalendarCheck,
     color: "#f4a261",
   },
@@ -716,6 +716,41 @@ const Index = () => {
             </svg>
           </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24 relative">
+            {/* Stats row — concrete proof */}
+            <motion.div
+              className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-20 pb-10 sm:pb-14 border-b border-white/[0.08]"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7 }}
+            >
+              {[
+                { number: "600+", label: "משפחות מלוות", color: "#6dd9d5" },
+                { number: "6", label: "שנים של ניסיון", color: "#f4a261" },
+                { number: "12", label: "חברות ביטוח", color: "#90be6d" },
+                { number: "₪0", label: "פגישת ייעוץ ראשונה", color: "#e76f51" },
+              ].map((stat, i) => (
+                <motion.div
+                  key={i}
+                  className="text-center sm:text-start"
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.6 }}
+                >
+                  <div
+                    className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-1.5 tabular-nums"
+                    style={{ color: stat.color }}
+                  >
+                    {stat.number}
+                  </div>
+                  <div className="text-xs sm:text-sm text-white/55 font-medium">
+                    {stat.label}
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
               {/* Right side - About */}
               <ScrollReveal>
@@ -801,11 +836,11 @@ const Index = () => {
             <ScrollReveal>
               <div className="text-center mb-8 sm:mb-14">
                 <SectionLabel>PROCESS</SectionLabel>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                  איך <span className="text-[#5ec6c6]">SEELD</span> עובד בשבילך
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
+                  מהשיחה הראשונה ועד <span className="text-[#1a8f7d]">הליווי השנתי</span>
                 </h2>
-                <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                  שישה שלבים מהפנייה הראשונה ועד מעקב שנתי — הכל מנוהל
+                <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                  ששה שלבים ברורים. בלי הפתעות, בלי ניירת מיותרת, בלי לדרוש ממך זמן שאין לך.
                 </p>
               </div>
             </ScrollReveal>
@@ -915,20 +950,19 @@ const Index = () => {
             <ScrollReveal>
               <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
                 <div className="space-y-6 text-center lg:text-right">
-                  <div className="flex items-center gap-2 justify-center lg:justify-start">
-                    <span className="w-3 h-3 rounded-full bg-[#5ec6c6]" />
-                    <span className="w-3 h-3 rounded-full bg-[#f4a261]" />
-                    <span className="w-3 h-3 rounded-full bg-[#90be6d]" />
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1a8f7d]/[0.08] border border-[#1a8f7d]/15">
+                    <span className="w-2 h-2 rounded-full bg-[#1a8f7d] animate-pulse" />
+                    <span className="text-xs font-bold text-[#1a8f7d] tracking-wide">סריקה חינמית · 48 שעות</span>
                   </div>
-                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] tracking-tight">
-                    הסורק של <span className="text-[#5ec6c6]">SEELD</span>
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] tracking-tight leading-[1.1]">
+                    רואים הכל. <span className="text-[#1a8f7d]">בלי הפתעות.</span>
                   </h2>
-                  <p className="text-[#0a3d3d]/50 text-base sm:text-lg max-w-md mx-auto lg:mx-0">
-                    רוצים לדעת אם אתם משלמים יותר מדי? סריקה חינמית של כל התיק — ביטוח, פנסיה וחיסכון. תוצאות תוך 48 שעות.
+                  <p className="text-[#0a3d3d]/60 text-base sm:text-lg max-w-md mx-auto lg:mx-0 leading-relaxed">
+                    הסורק של SEELD בודק את תיק הביטוח והחיסכון שלכם — מזהה כפלים, דמי ניהול גבוהים, כיסויים חסרים וקרנות עם ביצועים חלשים. דוח מפורט מגיע למייל.
                   </p>
                   <Link to="/contact">
-                    <Button className="bg-[#0a3d3d] text-white hover:bg-[#0d4a4a] rounded-full px-8 py-5 text-base font-bold shadow-lg mt-4 min-h-[48px]">
-                      סרקו את התיק שלכם — חינם
+                    <Button className="bg-[#0a3d3d] text-white hover:bg-[#0d4a4a] rounded-full px-8 py-5 text-base font-bold shadow-xl shadow-[#0a3d3d]/20 hover:shadow-2xl hover:-translate-y-0.5 transition-all mt-4 min-h-[52px]">
+                      התחל סריקה עכשיו
                       <ArrowDownLeft className="w-5 h-5 mr-2" />
                     </Button>
                   </Link>
@@ -976,12 +1010,6 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Decorative dots between sections */}
-        <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
-          <span className="w-4 h-4 rounded-full bg-[#f4a261]" />
-          <span className="w-6 h-6 rounded-full bg-[#5ec6c6]" />
-          <span className="w-4 h-4 rounded-full bg-[#e76f51]" />
-        </div>
 
         {/* Wave: white -> gray */}
         <WaveDivider color="#f8f9fc" />
@@ -990,15 +1018,13 @@ const Index = () => {
         <section className="bg-[#f8f9fc]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
             <ScrollReveal>
-              <div className="text-center mb-8 sm:mb-14 relative">
-                <div className="absolute top-1 right-[10%] w-4 h-4 rounded-full bg-[#ff6b9d] opacity-25 hidden sm:block" />
-                <div className="absolute top-8 left-[8%] w-5 h-5 rounded-full bg-[#5ec6c6] opacity-20 hidden sm:block" />
+              <div className="text-center mb-8 sm:mb-14">
                 <SectionLabel>FAQ</SectionLabel>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4">
-                  שאלות <span className="text-[#ff6b9d]">נפוצות</span>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
+                  הכל מה שרצית לשאול <span className="text-[#1a8f7d]">ולא ידעת ממי</span>
                 </h2>
-                <p className="text-[#0a3d3d]/40 text-base sm:text-lg max-w-xl mx-auto">
-                  תשובות קצרות וברורות לשאלות שעולות שוב ושוב
+                <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                  השאלות שכל לקוח מתחיל ממנה — והתשובות הכנות שאף אחד לא יגיד לך במוקד שירות.
                 </p>
               </div>
             </ScrollReveal>
@@ -1117,11 +1143,11 @@ const Index = () => {
             <ScrollReveal>
               <div className="text-center mb-10">
                 <SectionLabel>CONTACT</SectionLabel>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-3">
-                  השאירו פרטים
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-3 leading-[1.15]">
+                  הצעד הראשון — <span className="text-[#1a8f7d]">3 שדות</span>
                 </h2>
-                <p className="text-[#0a3d3d]/40 text-base sm:text-lg">
-                  ונחזור אליכם תוך שעות עבודה ספורות
+                <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-md mx-auto leading-relaxed">
+                  השאירו שם, טלפון ואת מה שמעניין אתכם. שמוליק יחזור היום.
                 </p>
               </div>
             </ScrollReveal>
