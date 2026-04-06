@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, X } from "lucide-react";
+import { Send, Loader2, X, Sparkles, MessageSquare, ArrowDownLeft, FileText, Calculator, Shield, PiggyBank } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -12,11 +13,42 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/finance-chat
 const getSessionId = () => {
   let sessionId = localStorage.getItem("seeld_chat_session");
   if (!sessionId) {
-    sessionId = crypto.randomUUID();
+    sessionId = crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
     localStorage.setItem("seeld_chat_session", sessionId);
   }
   return sessionId;
 };
+
+/* ── Suggestion chips based on page context ── */
+const pageSuggestions: Record<string, { icon: typeof Shield; text: string }[]> = {
+  "/": [
+    { icon: FileText, text: "בדיקת תיק חינם" },
+    { icon: Calculator, text: "כמה אני משלם יותר מדי?" },
+    { icon: Shield, text: "מה כולל ביטוח בריאות?" },
+    { icon: PiggyBank, text: "איך בוחרים קרן פנסיה?" },
+  ],
+  "/insurances": [
+    { icon: Shield, text: "איזה ביטוח מתאים לי?" },
+    { icon: FileText, text: "מה ההבדל בין תוכניות?" },
+    { icon: Calculator, text: "כמה עולה ביטוח בריאות?" },
+  ],
+  "/savings": [
+    { icon: PiggyBank, text: "גמל או השתלמות?" },
+    { icon: Calculator, text: "כמה לחסוך לפנסיה?" },
+    { icon: FileText, text: "מה זה דמי ניהול?" },
+  ],
+  "/calculators": [
+    { icon: Calculator, text: "עזרה עם המחשבון" },
+    { icon: PiggyBank, text: "כמה כדאי להפקיד?" },
+  ],
+};
+
+const defaultSuggestions = [
+  { icon: FileText, text: "איך מתחילים?" },
+  { icon: Shield, text: "מה כולל הייעוץ?" },
+  { icon: Calculator, text: "כמה זה עולה?" },
+  { icon: PiggyBank, text: "רוצה לקבוע פגישה" },
+];
 
 const AIChatBot = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -24,17 +56,19 @@ const AIChatBot = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const [showResponse, setShowResponse] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+
+  const suggestions = pageSuggestions[location.pathname] || defaultSuggestions;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
-    if (showResponse) scrollToBottom();
-  }, [messages, showResponse]);
+    if (messages.length > 0) scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     if (isExpanded && inputRef.current) {
@@ -45,31 +79,32 @@ const AIChatBot = () => {
   // Load previous conversation
   useEffect(() => {
     const loadConversation = async () => {
-      const sessionId = getSessionId();
-      const { data: conversations } = await supabase
-        .rpc("get_conversation_by_session", { p_session_id: sessionId });
-
-      if (conversations && conversations.length > 0) {
-        const convId = conversations[0].id;
-        setConversationId(convId);
-        const { data: savedMessages } = await supabase
-          .rpc("get_chat_messages", { p_conversation_id: convId, p_session_id: sessionId });
-
-        if (savedMessages && savedMessages.length > 0) {
-          setMessages(savedMessages as Message[]);
-          setShowResponse(true);
+      try {
+        const sessionId = getSessionId();
+        const { data: conversations } = await supabase
+          .rpc("get_conversation_by_session", { p_session_id: sessionId });
+        if (conversations && conversations.length > 0) {
+          const convId = conversations[0].id;
+          setConversationId(convId);
+          const { data: savedMessages } = await supabase
+            .rpc("get_chat_messages", { p_conversation_id: convId, p_session_id: sessionId });
+          if (savedMessages && savedMessages.length > 0) {
+            setMessages(savedMessages as Message[]);
+          }
         }
-      }
+      } catch { /* silently fail on load */ }
     };
     loadConversation();
   }, []);
 
   const saveMessage = async (message: Message, convId: string) => {
-    await supabase.from("chat_messages").insert({
-      conversation_id: convId,
-      role: message.role,
-      content: message.content,
-    });
+    try {
+      await supabase.from("chat_messages").insert({
+        conversation_id: convId,
+        role: message.role,
+        content: message.content,
+      });
+    } catch { /* non-blocking */ }
   };
 
   const getOrCreateConversation = async (): Promise<string> => {
@@ -80,7 +115,6 @@ const AIChatBot = () => {
       .insert({ session_id: sessionId })
       .select("id")
       .single();
-
     if (error || !data) throw new Error("Failed to create conversation");
     setConversationId(data.id);
     return data.id;
@@ -91,52 +125,43 @@ const AIChatBot = () => {
     setMessages((prev) => [...prev, userMsg]);
     setIsLoading(true);
     setInput("");
-    setShowResponse(true);
 
     let assistantContent = "";
+    setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
 
     try {
       const convId = await getOrCreateConversation();
       await saveMessage(userMsg, convId);
 
+      const sessionId = getSessionId();
       const response = await fetch(CHAT_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({ messages: [...messages, userMsg] }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: userMessage,
+          conversationId: convId,
+          sessionId,
+          history: messages.slice(-10),
+        }),
       });
 
-      if (!response.ok || !response.body) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || "שגיאה בחיבור");
-      }
-
-      const reader = response.body.getReader();
+      if (!response.ok) throw new Error("שגיאה בשרת. נסה שוב.");
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error("No reader");
       const decoder = new TextDecoder();
       let buffer = "";
-
-      setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
         buffer += decoder.decode(value, { stream: true });
-
-        let newlineIndex: number;
-        while ((newlineIndex = buffer.indexOf("\n")) !== -1) {
-          let line = buffer.slice(0, newlineIndex);
-          buffer = buffer.slice(newlineIndex + 1);
-          if (line.endsWith("\r")) line = line.slice(0, -1);
-          if (line.startsWith(":") || line.trim() === "") continue;
-          if (!line.startsWith("data: ")) continue;
-          const jsonStr = line.slice(6).trim();
-          if (jsonStr === "[DONE]") break;
-
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+        for (const line of lines) {
+          if (!line.startsWith("data: ") || line === "data: [DONE]") continue;
           try {
-            const parsed = JSON.parse(jsonStr);
-            const content = parsed.choices?.[0]?.delta?.content;
+            const parsed = JSON.parse(line.slice(6));
+            const content = parsed.choices?.[0]?.delta?.content || parsed.content || "";
             if (content) {
               assistantContent += content;
               setMessages((prev) => {
@@ -156,7 +181,6 @@ const AIChatBot = () => {
         await saveMessage({ role: "assistant", content: assistantContent }, convId);
       }
     } catch (error) {
-      console.error("Chat error:", error);
       setMessages((prev) => [
         ...prev.filter((m) => m.content !== ""),
         { role: "assistant", content: error instanceof Error ? error.message : "שגיאה, נסה שוב." },
@@ -172,118 +196,212 @@ const AIChatBot = () => {
     streamChat(input.trim());
   };
 
-  const lastAssistantMessage = messages.filter(m => m.role === "assistant").slice(-1)[0];
+  const handleSuggestion = (text: string) => {
+    streamChat(text);
+  };
 
   return (
     <>
-      {/* Floating Orb Button - Fixed bottom left */}
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <button
+      {/* ═══ Floating Button ═══ */}
+      <AnimatePresence>
+        {!isExpanded && (
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
             onClick={() => setIsExpanded(true)}
-            className={cn(
-              "fixed bottom-6 left-4 sm:left-6 z-50 transition-all duration-300",
-              isExpanded && "opacity-0 pointer-events-none scale-0"
-            )}
-            aria-label="פתח צ'אט עם אריק"
+            className="fixed bottom-6 left-4 sm:left-6 z-50 group"
+            aria-label="פתחו צ'אט עם צוות SEELD"
           >
-            {/* Glowing Orb Dot */}
-            <div className="relative w-12 h-12 group">
-              {/* Outer pulsating glow */}
-              <div className="absolute inset-[-6px] rounded-full bg-gradient-to-r from-[hsl(195,70%,70%)] via-[hsl(280,50%,70%)] to-[hsl(195,70%,60%)] animate-orb-pulse blur-lg opacity-70 group-hover:opacity-100 transition-opacity" />
-              {/* Inner glow ring */}
-              <div className="absolute inset-[-1px] rounded-full animate-orb-glow" />
-              {/* Middle rotating ring */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[hsl(195,80%,75%)] via-[hsl(280,60%,70%)] to-[hsl(195,70%,65%)] animate-spin-slow opacity-80" />
-              {/* Inner orb with shimmer */}
-              <div className="absolute inset-1 rounded-full bg-gradient-to-br from-[hsl(195,90%,85%)] via-[hsl(280,50%,80%)] to-[hsl(195,80%,75%)] animate-orb-shimmer shadow-lg" />
-              {/* Center highlight */}
-              <div className="absolute top-1.5 left-1.5 w-2.5 h-2.5 rounded-full bg-white/60 blur-[1px]" />
-              {/* Secondary highlight */}
-              <div className="absolute bottom-2 right-1.5 w-1.5 h-1.5 rounded-full bg-white/30 blur-[1px]" />
-            </div>
-          </button>
-        </TooltipTrigger>
-        <TooltipContent side="right" className="bg-card border-border">
-          <p>שוחחו עם אריק - היועץ הפיננסי שלכם 💬</p>
-        </TooltipContent>
-      </Tooltip>
-
-      {/* Expanded Chat Panel - Fixed bottom left */}
-      <div
-        className={cn(
-          "fixed bottom-6 left-4 sm:left-6 z-50 w-[calc(100vw-2rem)] sm:w-[400px] sm:max-w-[calc(100vw-3rem)] transition-all duration-300 origin-bottom-left",
-          isExpanded ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
-        )}
-      >
-        {/* Response Bubble - shows above input when there's a response */}
-        {showResponse && lastAssistantMessage && (
-          <div className="mb-3 bg-card/95 backdrop-blur-lg rounded-2xl border border-border shadow-xl p-4 max-h-60 overflow-y-auto animate-scale-in">
-            <div className="flex items-start gap-3">
-              {/* Mini orb */}
-              <div className="w-8 h-8 rounded-full shrink-0 relative">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[hsl(195,70%,60%)] via-[hsl(280,60%,65%)] to-[hsl(195,70%,50%)] animate-spin-slow opacity-60 blur-[2px]" />
-                <div className="absolute inset-0.5 rounded-full bg-gradient-to-br from-[hsl(195,80%,70%)] via-[hsl(280,50%,75%)] to-[hsl(195,60%,60%)]" />
+            <div className="relative">
+              {/* Glow ring */}
+              <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#1a8f7d] via-[#5ec6c6] to-[#1a8f7d] opacity-40 blur-lg group-hover:opacity-70 transition-opacity animate-pulse" />
+              {/* Main button */}
+              <div className="relative w-14 h-14 rounded-full bg-[#0a3d3d] shadow-2xl shadow-[#0a3d3d]/40 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <MessageSquare className="w-6 h-6 text-white" />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs text-muted-foreground mb-1">אריק • יועץ AI</p>
-                <div className="prose prose-sm dark:prose-invert max-w-none text-sm">
-                  <ReactMarkdown>{lastAssistantMessage.content || "..."}</ReactMarkdown>
+              {/* Online indicator */}
+              <div className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#1a8f7d] border-2 border-white shadow-sm">
+                <span className="absolute inset-0 rounded-full bg-[#1a8f7d] animate-ping opacity-40" />
+              </div>
+            </div>
+            {/* Label on hover */}
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 rounded-lg bg-[#0a3d3d] text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl">
+              שוחחו עם הצוות שלנו
+              <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#0a3d3d]" />
+            </div>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* ═══ Chat Panel ═══ */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed bottom-4 left-4 sm:left-6 z-50 w-[calc(100vw-2rem)] sm:w-[420px] max-h-[85vh] flex flex-col"
+          >
+            <div className="bg-white/95 backdrop-blur-2xl rounded-2xl shadow-2xl shadow-[#0a3d3d]/15 border border-[#0a3d3d]/[0.08] overflow-hidden flex flex-col max-h-[85vh]">
+              {/* Header */}
+              <div className="bg-[#0a3d3d] px-5 py-4 flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#5ec6c6] to-[#1a8f7d] flex items-center justify-center shadow-lg">
+                      <Sparkles className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#1a8f7d] border-2 border-[#0a3d3d]" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-bold text-sm">SEELD</h3>
+                    <p className="text-white/50 text-xs">צוות הייעוץ הפיננסי</p>
+                  </div>
                 </div>
+                <button
+                  onClick={() => setIsExpanded(false)}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
+
+              {/* Messages */}
+              <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 min-h-[200px] max-h-[50vh]">
+                {messages.length === 0 ? (
+                  /* Welcome state */
+                  <div className="text-center py-6 space-y-5">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#5ec6c6]/20 to-[#1a8f7d]/20 flex items-center justify-center mx-auto">
+                      <Sparkles className="w-8 h-8 text-[#1a8f7d]" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-[#0a3d3d] text-base mb-1">שלום! הצוות של SEELD כאן.</h4>
+                      <p className="text-sm text-[#0a3d3d]/50 leading-relaxed max-w-xs mx-auto">
+                        נשמח לעזור לך בכל שאלה על ביטוח, פנסיה או חיסכון. על מה תרצה לשוחח?
+                      </p>
+                    </div>
+                    {/* Suggestion chips */}
+                    <div className="flex flex-wrap gap-2 justify-center pt-2">
+                      {suggestions.map((s, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleSuggestion(s.text)}
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-[#0a3d3d]/10 text-xs font-medium text-[#0a3d3d]/70 hover:text-[#0a3d3d] hover:border-[#1a8f7d]/30 hover:bg-[#1a8f7d]/5 transition-all"
+                        >
+                          <s.icon className="w-3 h-3" />
+                          {s.text}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  /* Chat messages */
+                  <>
+                    {messages.map((msg, i) => (
+                      <div
+                        key={i}
+                        className={cn(
+                          "flex gap-2.5",
+                          msg.role === "user" ? "justify-start" : "justify-end"
+                        )}
+                      >
+                        {msg.role === "assistant" && (
+                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#5ec6c6] to-[#1a8f7d] flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                            <Sparkles className="w-3.5 h-3.5 text-white" />
+                          </div>
+                        )}
+                        <div
+                          className={cn(
+                            "rounded-2xl px-4 py-2.5 text-sm max-w-[85%] leading-relaxed",
+                            msg.role === "user"
+                              ? "bg-[#0a3d3d] text-white rounded-br-sm"
+                              : "bg-[#f4f6f8] text-[#0a3d3d] rounded-bl-sm"
+                          )}
+                        >
+                          {msg.role === "assistant" ? (
+                            <div className="prose prose-sm max-w-none [&_p]:mb-1.5 [&_p:last-child]:mb-0 [&_ul]:mt-1 [&_li]:text-sm">
+                              <ReactMarkdown>{msg.content || "..."}</ReactMarkdown>
+                            </div>
+                          ) : (
+                            msg.content
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                    {isLoading && messages[messages.length - 1]?.content === "" && (
+                      <div className="flex gap-2.5 justify-end">
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#5ec6c6] to-[#1a8f7d] flex items-center justify-center shrink-0 shadow-sm">
+                          <Sparkles className="w-3.5 h-3.5 text-white" />
+                        </div>
+                        <div className="bg-[#f4f6f8] rounded-2xl rounded-bl-sm px-4 py-3 flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-[#0a3d3d]/30 animate-bounce" style={{ animationDelay: "0ms" }} />
+                          <span className="w-2 h-2 rounded-full bg-[#0a3d3d]/30 animate-bounce" style={{ animationDelay: "150ms" }} />
+                          <span className="w-2 h-2 rounded-full bg-[#0a3d3d]/30 animate-bounce" style={{ animationDelay: "300ms" }} />
+                        </div>
+                      </div>
+                    )}
+                    {/* Quick suggestions after messages */}
+                    {!isLoading && messages.length > 0 && messages.length < 6 && (
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {suggestions.slice(0, 2).map((s, i) => (
+                          <button
+                            key={i}
+                            onClick={() => handleSuggestion(s.text)}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-[#0a3d3d]/8 text-[11px] font-medium text-[#0a3d3d]/50 hover:text-[#0a3d3d] hover:border-[#1a8f7d]/20 transition-all"
+                          >
+                            <s.icon className="w-3 h-3" />
+                            {s.text}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    <div ref={messagesEndRef} />
+                  </>
+                )}
+              </div>
+
+              {/* Input */}
+              <form
+                onSubmit={handleSubmit}
+                className="px-4 pb-4 pt-2 shrink-0 border-t border-[#0a3d3d]/[0.06]"
+              >
+                <div className="flex items-center gap-2 bg-[#f4f6f8] rounded-full px-4 py-2">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="שאלו אותנו כל דבר..."
+                    className="flex-1 bg-transparent border-none focus:outline-none text-right text-sm py-1.5 placeholder:text-[#0a3d3d]/30"
+                    disabled={isLoading}
+                  />
+                  <button
+                    type="submit"
+                    disabled={isLoading || !input.trim()}
+                    className={cn(
+                      "w-9 h-9 rounded-full flex items-center justify-center transition-all shrink-0",
+                      input.trim()
+                        ? "bg-[#0a3d3d] text-white hover:bg-[#0d4a4a] hover:scale-105 shadow-md"
+                        : "bg-transparent text-[#0a3d3d]/25"
+                    )}
+                  >
+                    {isLoading ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Send className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
+                <p className="text-center text-[10px] text-[#0a3d3d]/25 mt-2">
+                  SEELD AI · יועץ פיננסי דיגיטלי
+                </p>
+              </form>
             </div>
-            <div ref={messagesEndRef} />
-          </div>
+          </motion.div>
         )}
-
-        {/* Input Bar */}
-        <div className="flex items-center gap-3">
-          {/* Small Orb */}
-          <div className="relative w-10 h-10 shrink-0">
-            <div className="absolute inset-[-4px] rounded-full bg-gradient-to-r from-[hsl(195,70%,70%)] via-[hsl(280,50%,70%)] to-[hsl(195,70%,60%)] animate-orb-pulse blur-md opacity-70" />
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[hsl(195,80%,75%)] via-[hsl(280,60%,70%)] to-[hsl(195,70%,65%)] animate-spin-slow opacity-80" />
-            <div className="absolute inset-0.5 rounded-full bg-gradient-to-br from-[hsl(195,90%,85%)] via-[hsl(280,50%,80%)] to-[hsl(195,80%,75%)] animate-orb-shimmer" />
-            <div className="absolute top-1 left-1 w-2 h-2 rounded-full bg-white/60 blur-[1px]" />
-          </div>
-
-          {/* Input Form */}
-          <form
-            onSubmit={handleSubmit}
-            className="flex-1 bg-card/95 backdrop-blur-lg rounded-full border border-border shadow-xl flex items-center gap-2 px-3 py-2"
-          >
-            <button
-              type="button"
-              onClick={() => setIsExpanded(false)}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
-            >
-              <X className="w-4 h-4" />
-            </button>
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="שאלו את אריק..."
-              className="flex-1 bg-transparent border-none focus:outline-none text-right text-base sm:text-sm py-2"
-              disabled={isLoading}
-            />
-            <button
-              type="submit"
-              disabled={isLoading || !input.trim()}
-              className={cn(
-                "w-9 h-9 rounded-full flex items-center justify-center transition-all shrink-0",
-                input.trim() ? "bg-primary text-primary-foreground hover:scale-105" : "bg-muted text-muted-foreground"
-              )}
-            >
-              {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Send className="w-4 h-4" />
-              )}
-            </button>
-          </form>
-        </div>
-      </div>
+      </AnimatePresence>
     </>
   );
 };
