@@ -77,7 +77,7 @@ src/
   pages/               # One component per route
     insurance/         # 15 insurance product pages
     savings/           # 11 savings/pension product pages
-    tools/             # 22 agent platform tool pages (Catch, Lens, X-Ray, Wise…)
+    tools/             # 21 agent platform tool pages (Catch, Lens, X-Ray, Wise…) + shared ToolPage template
     pdage/             # PDage module pages
   contexts/AppContext.tsx   # Agent-app global state (customers, products, recommendations…)
   hooks/               # useAuth, use-toast, use-mobile, data hooks (useCmaFunds, useFundSearch…)
@@ -128,7 +128,7 @@ All routes live in one `<Routes>` block. Provider order:
 - **PDage routes** are wrapped by `<PDageAuthGuard />` + `PDageLayout`.
 - Global components mounted once in `App`: `ScrollToTop`, `PageTransition`,
   `AIChatBot`, `AccessibilityButton`, `CookieConsent`, `ScrollProgress`,
-  `FloatingShapes`, `PwaInstallBanner`, plus a `PageViewTracker` that logs
+  `PwaInstallBanner`, plus a `PageViewTracker` that logs
   page views to `page_views` (skips `/admin` and `/site-admin`).
 
 When adding a page: create it under `src/pages/...`, import it in `App.tsx`, and
@@ -147,7 +147,7 @@ add a `<Route>` in the correct group (public vs. `/app` guard vs. PDage guard).
   (throws if used outside `AppProvider`).
 
 ### The "tools" model — `src/config/tools.ts`
-`TOOLS[]` is the single source of truth for the agent platform's 22 tools, each
+`TOOLS[]` is the single source of truth for the agent platform's 21 tools, each
 with `slug`, English `name`, `hebrewName`, `icon` (lucide), colors/gradient,
 `phase` (1–5), `phaseLabel`, descriptions, and a `status`
 (`exists | partial | new | planned`). `PHASES` and `DECK` accompany it.
