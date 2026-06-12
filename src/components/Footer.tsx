@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, FileText, ShieldCheck, Handshake, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { isValidIsraeliPhone } from "@/lib/utils";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
 const Footer = () => {
@@ -10,6 +11,10 @@ const Footer = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isValidIsraeliPhone(formData.phone)) {
+      toast.error("מספר הטלפון אינו תקין");
+      return;
+    }
     setSubmitting(true);
     try {
       const { error } = await supabase.from("contact_submissions").insert([{

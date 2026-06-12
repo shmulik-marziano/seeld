@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Calendar as CalendarComp } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import Header from "@/components/Header";
 
@@ -753,7 +754,7 @@ export default function Onboarding() {
     setSubmitting(true);
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabase as any).from("onboarding_submissions").insert({
+      const { error: insertError } = await (supabase as any).from("onboarding_submissions").insert({
         first_name: form.firstName,
         last_name: form.lastName,
         id_number: form.idNumber,
@@ -770,14 +771,20 @@ export default function Onboarding() {
         form_data: form as unknown as Record<string, unknown>,
         status: "new",
       });
-      await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-onboarding-summary`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({ formData: form }),
-      });
+      if (insertError) throw insertError;
+      // Email notification is non-blocking — the submission is already saved
+      try {
+        await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-onboarding-summary`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ formData: form }),
+        });
+      } catch (emailErr) {
+        console.error("Failed to send onboarding summary email:", emailErr);
+      }
       setTransitioning(true);
       setTimeout(() => {
         setSubmitted(true);
@@ -786,6 +793,7 @@ export default function Onboarding() {
       }, 200);
     } catch (err) {
       console.error(err);
+      toast.error("אירעה שגיאה בשליחת הטופס. אנא נסו שוב או צרו קשר טלפוני.");
     } finally {
       setSubmitting(false);
     }

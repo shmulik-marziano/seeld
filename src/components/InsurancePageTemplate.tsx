@@ -183,7 +183,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
         <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-400">
           <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
-          <Link to="/insurance" className="hover:text-[#0a3d3d] transition-colors">ביטוח</Link>
+          <Link to="/insurances" className="hover:text-[#0a3d3d] transition-colors">ביטוח</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
           <span className="text-[#0a3d3d] font-medium">{breadcrumbLabel}</span>
         </nav>

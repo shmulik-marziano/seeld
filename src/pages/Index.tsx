@@ -17,6 +17,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { motion } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { toast } from "sonner";
+import { isValidIsraeliPhone } from "@/lib/utils";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
 // ── Data ──
@@ -24,7 +25,7 @@ import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 const quickActions = [
   { icon: Landmark, doodle: "pension", label: "תכנון פנסיוני", href: "/savings/pension-funds", color: "#5ec6c6" },
   { icon: HeartPulse, doodle: "family", label: "ביטוח חיים ובריאות", href: "/insurance/health", color: "#e76f51" },
-  { icon: Home, doodle: "umbrella", label: "ביטוח רכוש", href: "/insurance/apartment", color: "#f4a261" },
+  { icon: Home, doodle: "umbrella", label: "ביטוח רכוש", href: "/insurance/home", color: "#f4a261" },
   { icon: PiggyBank, doodle: "savings", label: "חיסכון והשקעות", href: "/savings/gemel-investment", color: "#90be6d" },
   { icon: Calculator, doodle: "calculator", label: "מחשבונים", href: "/calculators", color: "#6c63ff" },
   { icon: PhoneCall, doodle: "handshake", label: "צור קשר", href: "/contact", color: "#e07cc6" },
@@ -67,7 +68,7 @@ const insuranceTypes = [
   { icon: Car, doodle: "shield", title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳ — השוואה בין כל החברות בדקות", href: "/insurance/vehicle" },
   { icon: HeartPulse, doodle: "family", title: "ביטוח בריאות", description: "ניתוחים, תרופות וטיפולים — כיסוי שמשלים את הסל ולא כופל אותו", href: "/insurance/health" },
   { icon: Heart, doodle: "family", title: "ביטוח חיים", description: "הגנה כלכלית למשפחה. לא מה שמנסים למכור לך — מה שאתה באמת צריך", href: "/insurance/life" },
-  { icon: Home, doodle: "umbrella", title: "ביטוח דירה", description: "מבנה ותכולה — שלא תגלו שמשהו חסר אחרי שכבר מאוחר", href: "/insurance/apartment" },
+  { icon: Home, doodle: "umbrella", title: "ביטוח דירה", description: "מבנה ותכולה — שלא תגלו שמשהו חסר אחרי שכבר מאוחר", href: "/insurance/home" },
   { icon: Key, doodle: "key", title: "ביטוח שוכרים", description: "כיסוי תכולה ואחריות צד ג׳ לשוכרים", href: "/insurance/renters" },
   { icon: Building2, doodle: "handshake", title: "ביטוח עסקי", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק", href: "/insurance/business" },
   { icon: Plane, doodle: "target", title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", href: "/insurance/travel" },
@@ -76,7 +77,7 @@ const insuranceTypes = [
   { icon: UserCheck, doodle: "family", title: "ביטוח סיעודי", description: "מימון טיפול סיעודי בבית או במוסד", href: "/insurance/nursing" },
   { icon: Landmark, doodle: "pension", title: "ביטוח משכנתא", description: "שמירה על הדירה גם במקרה בלתי צפוי", href: "/insurance/mortgage" },
   { icon: Shield, doodle: "shield", title: "מחלות קשות", description: "פיצוי כספי חד-פעמי עם אבחון מחלה", href: "/insurance/critical-illness" },
-  { icon: Umbrella, doodle: "umbrella", title: "תאונות אישיות", description: "פיצוי על ימי אשפוז, שבר או נכות מתאונה", href: "/insurance/personal-accidents" },
+  { icon: Umbrella, doodle: "umbrella", title: "תאונות אישיות", description: "פיצוי על ימי אשפוז, שבר או נכות מתאונה", href: "/insurance/accidents" },
   { icon: Briefcase, doodle: "handshake", title: "ביטוח שותפים", description: "רציפות עסקית במקרה של אובדן שותף", href: "/insurance/partners" },
   { icon: Globe, doodle: "target", title: "עובדים זרים", description: "ביטוח חובה בהתאם לחוק", href: "/insurance/foreign-workers" },
   { icon: Heart, doodle: "family", title: "סיעודי כללית", description: "כיסוי סיעודי משלים לחברי כללית", href: "/insurance/nursing-clalit" },
@@ -259,6 +260,10 @@ const Index = () => {
       toast.error("נא למלא שם וטלפון");
       return;
     }
+    if (!isValidIsraeliPhone(leadForm.phone)) {
+      toast.error("מספר הטלפון אינו תקין");
+      return;
+    }
     setLeadSubmitting(true);
     try {
       const { error } = await supabase.from("contact_submissions").insert([{
@@ -294,6 +299,10 @@ const Index = () => {
     e.preventDefault();
     if (!contactForm.name.trim() || !contactForm.phone.trim()) {
       toast.error("נא למלא שם וטלפון");
+      return;
+    }
+    if (!isValidIsraeliPhone(contactForm.phone)) {
+      toast.error("מספר הטלפון אינו תקין");
       return;
     }
     setContactSubmitting(true);

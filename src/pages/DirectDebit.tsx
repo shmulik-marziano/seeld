@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Building2, CreditCard, CalendarDays, User, CheckCircle2, AlertCircle, Loader2, Sparkles, Shield, Hash, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 import Header from "@/components/Header";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
@@ -263,7 +264,7 @@ export default function DirectDebit() {
     setSubmitting(true);
     try {
       // Save to DB
-      await (supabase as any).from("onboarding_submissions").insert({
+      const { error: insertError } = await (supabase as any).from("onboarding_submissions").insert({
         bank_name: bankData?.name ?? "",
         bank_branch: form.branchNumber,
         bank_account: form.accountNumber,
@@ -272,6 +273,7 @@ export default function DirectDebit() {
         status: "new",
         form_data: { ...form, bankName: bankData?.name, branchName: form.branchName, type: "direct_debit" },
       });
+      if (insertError) throw insertError;
 
       // Send email notification
       try {
@@ -296,6 +298,7 @@ export default function DirectDebit() {
       setSubmitted(true);
     } catch (err) {
       console.error(err);
+      toast.error("אירעה שגיאה בשליחת הטופס. אנא נסו שוב או צרו קשר טלפוני.");
     } finally {
       setSubmitting(false);
     }

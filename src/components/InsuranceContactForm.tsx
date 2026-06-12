@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { isValidIsraeliPhone } from "@/lib/utils";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { Send } from "lucide-react";
 
@@ -34,6 +35,15 @@ const InsuranceContactForm = ({
       toast({
         title: "שגיאה",
         description: "נא למלא שם וטלפון",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!isValidIsraeliPhone(formData.phone)) {
+      toast({
+        title: "שגיאה",
+        description: "מספר הטלפון אינו תקין",
         variant: "destructive",
       });
       return;

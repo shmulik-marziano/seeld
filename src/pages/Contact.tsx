@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
+import { isValidIsraeliPhone } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 
 const Contact = () => {
@@ -20,6 +21,10 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isValidIsraeliPhone(formData.phone)) {
+      toast.error("מספר הטלפון אינו תקין");
+      return;
+    }
     setSubmitting(true);
 
     try {
