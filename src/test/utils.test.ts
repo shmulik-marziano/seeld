@@ -24,3 +24,10 @@ describe("isValidIsraeliPhone", () => {
     expect(isValidIsraeliPhone("0623097444")).toBe(false); // 06 is not a valid prefix
   });
 });
+
+describe("isValidIsraeliPhone edge inputs", () => {
+  it("handles null/undefined gracefully", () => {
+    expect(isValidIsraeliPhone(undefined)).toBe(false);
+    expect(isValidIsraeliPhone(null)).toBe(false);
+  });
+});

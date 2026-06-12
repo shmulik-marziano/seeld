@@ -6,7 +6,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /** Israeli phone: 05X-XXXXXXX mobile (10 digits) or 0X-XXXXXXX landline (9 digits). Ignores spaces/dashes. */
-export function isValidIsraeliPhone(value: string): boolean {
+export function isValidIsraeliPhone(value?: string | null): boolean {
+  if (!value) return false;
   const digits = value.replace(/\D/g, "");
   return /^0(5\d{8}|[2-4789]\d{7})$/.test(digits);
 }

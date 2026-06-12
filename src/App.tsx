@@ -237,7 +237,10 @@ function AgentAuthGuard() {
   if (needsOnboarding) return <Navigate to="/app/auth?onboarding=true" replace />;
   return (
     <AppLayout>
-      <Outlet />
+      {/* Inner boundary: keep the layout shell visible while a lazy page chunk loads */}
+      <Suspense fallback={<RouteLoader />}>
+        <Outlet />
+      </Suspense>
     </AppLayout>
   );
 }
@@ -252,7 +255,9 @@ function PDageAuthGuard() {
   if (!session) return <Navigate to="/app/auth" replace />;
   return (
     <PDageLayout>
-      <Outlet />
+      <Suspense fallback={<RouteLoader />}>
+        <Outlet />
+      </Suspense>
     </PDageLayout>
   );
 }

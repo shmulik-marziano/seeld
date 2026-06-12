@@ -10,7 +10,8 @@ const DEFAULT_TITLE = "SEELD | בית פיננסים וביטוח עצמאי | �
  */
 export function usePageMeta(title: string, description?: string) {
   useEffect(() => {
-    document.title = title ? `${title} | ${SITE_NAME}` : DEFAULT_TITLE;
+    const ownTitle = title ? `${title} | ${SITE_NAME}` : DEFAULT_TITLE;
+    document.title = ownTitle;
 
     let meta: HTMLMetaElement | null = null;
     let previousDescription: string | null = null;
@@ -23,8 +24,12 @@ export function usePageMeta(title: string, description?: string) {
     }
 
     return () => {
-      document.title = DEFAULT_TITLE;
-      if (meta && previousDescription !== null) {
+      // During animated page transitions the entering page may mount before
+      // this page unmounts — only reset values this instance still owns.
+      if (document.title === ownTitle) {
+        document.title = DEFAULT_TITLE;
+      }
+      if (meta && previousDescription !== null && meta.getAttribute("content") === description) {
         meta.setAttribute("content", previousDescription);
       }
     };

@@ -776,13 +776,8 @@ export default function Onboarding() {
       if (insertError) throw insertError;
       // Email notification is non-blocking — the submission is already saved
       try {
-        await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-onboarding-summary`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({ formData: form }),
+        await supabase.functions.invoke("send-onboarding-summary", {
+          body: { formData: form },
         });
       } catch (emailErr) {
         console.error("Failed to send onboarding summary email:", emailErr);
