@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const categoryColors = ["#5ec6c6", "#f4a261", "#e76f51", "#90be6d"];
 
@@ -55,6 +56,7 @@ const faqCategories = [
 ];
 
 const FAQ = () => {
+  usePageMeta("שאלות נפוצות", "תשובות לשאלות הנפוצות על ביטוח, פנסיה, חיסכון והשירות של SEELD.");
   return (
     <div className="min-h-screen bg-white" dir="rtl">
       <Header />

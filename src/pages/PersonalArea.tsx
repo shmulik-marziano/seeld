@@ -5,8 +5,10 @@ import { Loader2 } from "lucide-react";
 import PersonalAreaLogin from "@/components/personal-area/PersonalAreaLogin";
 import PersonalAreaDashboard from "@/components/personal-area/PersonalAreaDashboard";
 import { motion } from "framer-motion";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const PersonalArea = () => {
+  usePageMeta("אזור אישי");
   const { user, loading } = useAuth();
 
   if (loading) {

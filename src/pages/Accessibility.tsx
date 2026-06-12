@@ -1,8 +1,10 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Accessibility as AccessibilityIcon } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const Accessibility = () => {
+  usePageMeta("הצהרת נגישות");
   return (
     <div className="min-h-screen bg-white" dir="rtl">
       <Header />

@@ -7,8 +7,10 @@ import { Link } from "react-router-dom";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { isValidIsraeliPhone } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const Contact = () => {
+  usePageMeta("צור קשר", "דברו איתנו — טלפון, אימייל או טופס. פגישת ייעוץ ראשונה ללא עלות וללא התחייבות.");
   const [formData, setFormData] = useState({
     name: "",
     email: "",

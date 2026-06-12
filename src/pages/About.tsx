@@ -2,8 +2,10 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ChevronLeft, Eye, Award, ShieldCheck, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const About = () => {
+  usePageMeta("אודות", "הכירו את SEELD — בית פיננסים וביטוח עצמאי מבית עמיתים הון. צוות יועצים מוסמכים שמלווה מאות משפחות בישראל.");
   return (
     <div className="min-h-screen bg-white" dir="rtl">
       <Header />

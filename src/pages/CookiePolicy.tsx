@@ -1,8 +1,10 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Cookie } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const CookiePolicy = () => {
+  usePageMeta("מדיניות עוגיות");
   return (
     <div className="min-h-screen bg-white" dir="rtl">
       <Header />

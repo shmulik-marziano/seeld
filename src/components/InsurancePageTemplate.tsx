@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Link } from 'react-router-dom';
+import { usePageMeta } from '@/hooks/usePageMeta';
 import type { LucideIcon } from 'lucide-react';
 
 /* ─── Types ─── */
@@ -120,6 +121,8 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
     enrollmentFormId = 'contact-form',
     extraContentAfterKeyPoints,
   } = props;
+
+  usePageMeta(breadcrumbLabel, heroDescription);
 
   return (
     <div className="min-h-screen bg-white" dir="rtl">

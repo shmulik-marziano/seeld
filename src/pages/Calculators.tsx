@@ -8,8 +8,10 @@ import SavingsCalculator from "@/components/SavingsCalculator";
 import GoalCalculator from "@/components/GoalCalculator";
 import CompareCalculator from "@/components/CompareCalculator";
 import { Link } from "react-router-dom";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const Calculators = () => {
+  usePageMeta("מחשבונים פיננסיים", "כלים חכמים לתכנון פיננסי: מחשבון משכנתא, פנסיה, חיסכון, יעדים והשוואה.");
   const comingSoon = [
     {
       title: "מחשבון ביטוח חיים",

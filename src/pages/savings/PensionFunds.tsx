@@ -11,8 +11,10 @@ import {
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
 import DoodleIcon from "@/components/DoodleIcon";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const PensionFunds = () => {
+  usePageMeta("קרנות פנסיה");
   const pensionTypes = [
     {
       title: "פנסיה מקיפה חדשה",

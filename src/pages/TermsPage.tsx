@@ -2,8 +2,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Shield, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function TermsPage() {
+  usePageMeta("תנאי שימוש");
   const navigate = useNavigate();
   const location = useLocation();
   const isPublic = location.pathname === '/terms';

@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 /* ─── Helpers ───────────────────────────────────────────────────── */
 
@@ -73,6 +74,7 @@ const fadeUp = {
    ═══════════════════════════════════════════════════════════════════ */
 
 export default function AgentLandingPage() {
+  usePageMeta("לסוכנים");
   const isDesktop = useIsDesktop();
   const n89 = useCountUp(89);
 

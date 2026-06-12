@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { allFunds as staticFunds, cmaLastUpdate } from "@/data/cmaFundsData";
 import { useCmaFunds, useCmaSyncStatus, formatPeriod } from "@/hooks/useCmaFunds";
 import type { FundReturn } from "@/data/fundReturns";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 // Convert CMA Fund format to the existing FundReturn format used by FundReturnTable
 const toFundReturn = (f: typeof allFunds[0]): FundReturn => ({
@@ -22,6 +23,7 @@ const toFundReturn = (f: typeof allFunds[0]): FundReturn => ({
 });
 
 const ReturnTables = () => {
+  usePageMeta("טבלאות תשואה", "טבלאות תשואה עדכניות של קרנות פנסיה, קופות גמל וקרנות השתלמות.");
   const { data: liveFunds, isError } = useCmaFunds();
   const { data: syncStatus } = useCmaSyncStatus();
   const allFunds = (!isError && liveFunds && liveFunds.length > 0) ? liveFunds : staticFunds;

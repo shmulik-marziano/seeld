@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import Header from "@/components/Header";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface FormData {
@@ -678,6 +679,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function Onboarding() {
+  usePageMeta("שאלון הצטרפות", "הצטרפו ל-SEELD — מילוי שאלון מקוון קצר וחתימה דיגיטלית, והיועץ שלכם יתחיל לעבוד.");
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormData>(initialForm);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});

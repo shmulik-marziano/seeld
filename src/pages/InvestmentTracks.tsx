@@ -11,6 +11,7 @@ import { trackData as staticFunds } from "@/data/cmaFundsData";
 import { useInvestmentTracks } from "@/hooks/useInvestmentTracks";
 import { productTypeLabels, specializationLabels, companyLabels } from "@/types/fund";
 import type { Fund, ProductType, Specialization, ManagingCompany } from "@/types/fund";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 // ── Helpers ──
 const fmt = (n: number) => n.toFixed(2) + "%";
@@ -199,6 +200,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
 }
 
 const InvestmentTracks = () => {
+  usePageMeta("מסלולי השקעה");
   const { funds: trackData, isLive, loading: tracksLoading } = useInvestmentTracks();
   const [search, setSearch] = useState("");
   const [productFilter, setProductFilter] = useState<ProductType | "all">("all");

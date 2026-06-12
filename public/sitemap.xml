@@ -12,6 +12,9 @@
   <url><loc>https://seeld.co.il/onboarding</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://seeld.co.il/personal-area</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://seeld.co.il/rights-extraction</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://seeld.co.il/authors</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://seeld.co.il/agents</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://seeld.co.il/investment-tracks</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
   <!-- Insurance Pages -->
   <url><loc>https://seeld.co.il/insurances</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
@@ -30,8 +33,10 @@
   <url><loc>https://seeld.co.il/insurance/nursing</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://seeld.co.il/insurance/partners</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://seeld.co.il/insurance/foreign-workers</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://seeld.co.il/insurance/nursing-clalit</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
   <!-- Savings & Pension Pages -->
+  <url><loc>https://seeld.co.il/savings</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://seeld.co.il/savings/pension-funds</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://seeld.co.il/savings/gemel-funds</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://seeld.co.il/savings/gemel-investment</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -42,6 +47,7 @@
   <url><loc>https://seeld.co.il/savings/pre-retirement</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://seeld.co.il/savings/post-retirement</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://seeld.co.il/savings/financial-planning</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://seeld.co.il/savings/pension-life-insurance</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
   <!-- Legal -->
   <url><loc>https://seeld.co.il/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>

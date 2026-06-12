@@ -14,8 +14,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const FundFinder = () => {
+  usePageMeta("איתור קופות", "אתרו את הקופות והקרנות שלכם והשוו דמי ניהול ותשואות.");
   // Live data from Supabase (falls back to static data automatically)
   const { data: liveFunds, isLoading: fundsLoading, isError: fundsError } = useCmaFunds();
   const { data: syncStatus } = useCmaSyncStatus();

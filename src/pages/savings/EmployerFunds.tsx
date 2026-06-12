@@ -11,8 +11,10 @@ import {
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
 import DoodleIcon from "@/components/DoodleIcon";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const EmployerFunds = () => {
+  usePageMeta("קופות מרכזיות למעסיק");
   const productTypes = [
     {
       title: "ניהול קולקטיבי",

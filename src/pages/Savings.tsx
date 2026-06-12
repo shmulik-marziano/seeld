@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import DoodleIcon from "@/components/DoodleIcon";
 import { ArrowLeft, ChevronLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 interface SavingsCategory {
   id: string;
@@ -117,6 +118,7 @@ const savingsCategories: SavingsCategory[] = [
 ];
 
 const Savings = () => {
+  usePageMeta("חיסכון ופנסיה", "פתרונות חיסכון ופנסיה: קרנות פנסיה, קופות גמל, קרנות השתלמות ותכנון פיננסי מקיף.");
   return (
     <div className="min-h-screen bg-white" dir="rtl">
       <Header />

@@ -11,8 +11,10 @@ import {
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
 import DoodleIcon from "@/components/DoodleIcon";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const FinancialPlanning = () => {
+  usePageMeta("תכנון כלכלי מתקדם");
   const productTypes = [
     {
       title: "ניתוח מקיף",

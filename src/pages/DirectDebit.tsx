@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import Header from "@/components/Header";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 // ─── Fallback Israeli Banks Data — מקור: בנק ישראל ──────────────────
 const FALLBACK_BANKS: Record<string, { name: string; branches: Record<string, string> }> = {
@@ -173,6 +174,7 @@ function useBankData() {
 
 // ─── Main Component ────────────────────────────────────────────────────────────
 export default function DirectDebit() {
+  usePageMeta("הוראת קבע");
   const { banks, loading: banksLoading, lastUpdated, isLive, refresh: refreshBanks } = useBankData();
   const [form, setForm] = useState<DDForm>(initialDD);
   const [errors, setErrors] = useState<Partial<Record<keyof DDForm, string>>>({});

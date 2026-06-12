@@ -4,6 +4,7 @@ import { CalendarDays, ArrowLeft, Loader2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteSupabase } from "@/integrations/supabase/site-client";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 interface BlogPost {
   id: string;
@@ -25,6 +26,7 @@ const categoryColors: Record<string, string> = {
 };
 
 const Blog = () => {
+  usePageMeta("בלוג", "מדריכים, טיפים ותוכן מקצועי בנושאי ביטוח, פנסיה וחיסכון — בגובה העיניים.");
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
