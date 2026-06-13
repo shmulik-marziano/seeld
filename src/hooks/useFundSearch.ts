@@ -1,13 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import type { Fund, ProductType, ManagingCompany, Specialization } from '@/types/fund';
-import {
-  allFunds as staticFunds,
-  getTopFunds as staticGetTopFunds,
-  searchFunds as staticSearchFunds,
-  getCompaniesForProduct as staticGetCompaniesForProduct,
-  getSpecializationsForProduct as staticGetSpecializationsForProduct,
-  getFundsByProduct as staticGetFundsByProduct,
-} from '@/data/cmaFundsData';
+import { allFunds as staticFunds } from '@/data/cmaFundsData';
 
 export type SearchMode = 'top' | 'browse' | 'direct';
 export type ReturnPeriod = 'year1' | 'year2' | 'year3' | 'year5';

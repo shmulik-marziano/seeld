@@ -13,7 +13,7 @@ import type { FundReturn } from "@/data/fundReturns";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 // Convert CMA Fund format to the existing FundReturn format used by FundReturnTable
-const toFundReturn = (f: typeof allFunds[0]): FundReturn => ({
+const toFundReturn = (f: typeof staticFunds[0]): FundReturn => ({
   name: f.name,
   company: f.name.split(" ")[0], // first word as company display
   monthReturn: f.returns.month,

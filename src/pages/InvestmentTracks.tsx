@@ -7,7 +7,6 @@ import DoodleIcon from "@/components/DoodleIcon";
 import { ChevronLeft, Search, ArrowUpDown, TrendingUp, TrendingDown, Filter, BarChart3, X, ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { trackData as staticFunds } from "@/data/cmaFundsData";
 import { useInvestmentTracks } from "@/hooks/useInvestmentTracks";
 import { productTypeLabels, specializationLabels, companyLabels } from "@/types/fund";
 import type { Fund, ProductType, Specialization, ManagingCompany } from "@/types/fund";
