@@ -133,7 +133,7 @@ export function FileUploadSection({ customerId }: FileUploadSectionProps) {
         setUploads(prev => prev.map((u, j) => j === idx ? { ...u, state: 'parsing' } : u));
 
         // Read file content - binary files as base64, text files as text
-        const bodyPayload: Record<string, any> = {
+        const bodyPayload: Record<string, unknown> = {
           fileName: upload.file.name,
           fileType: upload.type,
           customerId,

@@ -217,7 +217,7 @@ export default function NewRecommendationPage() {
         setFileUploadStatus(`מנתח ${i + 1}/${expandedFiles.length}: ${file.name}...`);
 
         const isBinary = file.name.toLowerCase().endsWith('.xlsx') || file.name.toLowerCase().endsWith('.xls');
-        const bodyPayload: Record<string, any> = {
+        const bodyPayload: Record<string, unknown> = {
           fileName: file.name,
           fileType: file.name.toLowerCase().includes('hb') || isBinary ? 'הר ביטוח' : 'מסלקה',
           customerId: selectedCustomerId,
