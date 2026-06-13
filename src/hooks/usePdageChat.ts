@@ -220,7 +220,7 @@ export function usePdageChat({ conversationId: initialConvId, jobId, autoCreate 
       if (assistantSoFar) {
         newMsgsToSave.push({ role: 'assistant', content: assistantSoFar });
       }
-    } catch (e: any) {
+    } catch (e) {
       const errorMsg: ChatMessage = { role: 'assistant', content: `❌ ${e.message || 'שגיאה בתקשורת עם ה-AI'}` };
       setMessages(prev => [...prev, errorMsg]);
       newMsgsToSave.push(errorMsg);

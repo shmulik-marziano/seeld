@@ -118,7 +118,7 @@ export default function NewCustomerPage() {
         toast.success('פרטי לקוח חולצו מהקבצים בהצלחה');
       } else { toast.info('לא נמצאו פרטי לקוח בקבצים, יש למלא ידנית'); }
       setStep(2);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Analysis error:', err);
       toast.error('שגיאה בניתוח הקובץ');
       setStep(2);
@@ -174,7 +174,7 @@ export default function NewCustomerPage() {
       }
       toast.success('הלקוח נוצר בהצלחה');
       navigate(`/app/customers/${customer.id}`);
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה ביצירת לקוח');
     } finally { setCreating(false); }
   };

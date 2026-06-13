@@ -235,7 +235,7 @@ export default function FileImportPage() {
             for (const c of parsed.customers) {
               allPreview.push({ ...c, sourceFile: file.name });
             }
-          } catch (err: any) {
+          } catch (err) {
             errorItems.push({
               id: crypto.randomUUID(),
               action: 'error',
@@ -268,7 +268,7 @@ export default function FileImportPage() {
           for (const c of parsed.customers) {
             allPreview.push({ ...c, sourceFile: file.name });
           }
-        } catch (err: any) {
+        } catch (err) {
           errorItems.push({
             id: crypto.randomUUID(),
             action: 'error',
@@ -289,7 +289,7 @@ export default function FileImportPage() {
         // Only errors, no data to preview
         updateEntry({ state: 'error', items: errorItems, error: 'לא נמצאו נתונים לייבוא' });
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('Parse error:', err);
       updateEntry({ state: 'error', error: err.message || 'שגיאה כללית בפיענוח' });
       toast.error(`שגיאה בפיענוח ${entry.file.name}`);
@@ -376,7 +376,7 @@ export default function FileImportPage() {
           };
           allItems.push(item);
           await createImportBatchItem(batchId, item);
-        } catch (err: any) {
+        } catch (err) {
           const item: ImportItem = {
             id: itemId, rowNumber: rowNum,
             customerIdNumber: parsed.idNumber, customerName,
@@ -412,7 +412,7 @@ export default function FileImportPage() {
       await loadHistory();
 
       toast.success(`ייבוא ${entry.file.name} הושלם: ${succeeded} הצליחו`);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Import error:', err);
       updateEntry({ state: 'error', error: err.message || 'שגיאה כללית בייבוא' });
       toast.error(`שגיאה בייבוא ${entry.file.name}`);
@@ -541,7 +541,7 @@ export default function FileImportPage() {
       await refreshData();
       toast.success(`קובץ שויך בהצלחה ל-${customerName}`);
       setManualAssignItem(null);
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה בשיוך');
     }
     setManualAssigning(false);

@@ -169,7 +169,7 @@ export function FileUploadSection({ customerId }: FileUploadSectionProps) {
 
         // Refresh data to show new products
         await refreshData();
-      } catch (err: any) {
+      } catch (err) {
         console.error('Upload error:', err);
         setUploads(prev => prev.map((u, j) => j === idx ? { ...u, state: 'error', error: err.message } : u));
         toast.error(`שגיאה בעיבוד ${upload.file.name}`);

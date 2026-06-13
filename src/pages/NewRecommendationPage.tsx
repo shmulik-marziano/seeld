@@ -173,7 +173,7 @@ export default function NewRecommendationPage() {
       setSelectedCustomerId(customer.id);
       toast.success('הלקוח נוצר');
       setStep('manage-products');
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה');
     } finally {
       setSaving(false);
@@ -254,7 +254,7 @@ export default function NewRecommendationPage() {
       await refreshData();
       setFileUploadStatus('');
       toast.success(`נמצאו ${totalProducts} מוצרים (ללא ביטוח רכב/דירה)`);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Upload error:', err);
       toast.error(err.message || 'שגיאה בהעלאת הקובץ');
     } finally {
@@ -280,7 +280,7 @@ export default function NewRecommendationPage() {
       setRecDrafts(prev => prev.filter(d => d.productId !== productId));
       await deleteProduct(productId);
       toast.success('מוצר נמחק');
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה במחיקת מוצר');
     }
   };
@@ -382,7 +382,7 @@ export default function NewRecommendationPage() {
         nextStep: rec.nextStep || '',
       });
       toast.success('המלצה נוצרה בעזרת AI');
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה ביצירת המלצה');
     } finally {
       setAiLoading(prev => ({ ...prev, [productId]: false }));
@@ -496,7 +496,7 @@ export default function NewRecommendationPage() {
       setSummaryLinkToken(summary.link_token);
       toast.success(`גרסה ${nextVersion} — ${activeDrafts.length} המלצות נוצרו בהצלחה`);
       setStep('summary');
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה');
     } finally {
       setSaving(false);

@@ -1355,7 +1355,7 @@ function TrackSyncCard() {
 
       if (error) throw error;
       setResult(`סונכרנו ${data?.tracks_synced || 0} מסלולים מ-${data?.companies?.length || 0} חברות`);
-    } catch (err: any) {
+    } catch (err) {
       setResult("שגיאה: " + (err.message || "לא ידוע"));
     }
     setSyncing(false);
@@ -1823,7 +1823,7 @@ function AgentManagementModule() {
       setEmail("");
       setAgentPhone("");
       fetchData();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || "שגיאה בשליחת ההזמנה");
     } finally {
       setSending(false);
@@ -1856,7 +1856,7 @@ function AgentManagementModule() {
       if (res.data?.error) throw new Error(res.data.error);
       toast.success(`הזמנה נשלחה מחדש ל-${inv.email}`);
       fetchData();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || "שגיאה בשליחה מחדש");
     } finally {
       setSending(false);

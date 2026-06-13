@@ -91,7 +91,7 @@ export default function AuthPage() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       toast.success('התחברת בהצלחה');
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה בהתחברות');
     } finally {
       setLoading(false);
@@ -157,7 +157,7 @@ export default function AuthPage() {
 
       toast.success(pendingInvitation ? 'הצטרפת לסוכנות בהצלחה!' : 'נרשמת בהצלחה! מועבר למערכת...');
       window.location.href = '/app/dashboard';
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה בהרשמה');
     } finally {
       setLoading(false);
@@ -221,7 +221,7 @@ export default function AuthPage() {
 
       toast.success(invitation ? 'הצטרפת לסוכנות בהצלחה!' : 'הפרופיל נוצר בהצלחה!');
       window.location.href = '/app/dashboard';
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה ביצירת פרופיל');
     } finally {
       setLoading(false);
@@ -238,7 +238,7 @@ export default function AuthPage() {
         },
       });
       if (error) throw error;
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה בהתחברות עם Google');
       setGoogleLoading(false);
     }

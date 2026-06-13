@@ -75,7 +75,7 @@ export default function PDageJobView() {
       toast.success('ניתוח AI הושלם בהצלחה');
       queryClient.invalidateQueries({ queryKey: ['pdage-job', jobId] });
       queryClient.invalidateQueries({ queryKey: ['pdage-job-activities', jobId] });
-    } catch (err: any) {
+    } catch (err) {
       console.error('Processing error:', err);
       // Update job to failed
       await supabase.from('correction_jobs').update({

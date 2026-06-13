@@ -91,7 +91,7 @@ export default function AgencySettingsPage() {
 
       setField('logoUrl', publicUrl);
       toast.success('הלוגו הועלה בהצלחה');
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה בהעלאת הלוגו');
     } finally {
       setUploadingLogo(false);
@@ -127,7 +127,7 @@ export default function AgencySettingsPage() {
       toast.success('ההגדרות נשמרו בהצלחה');
       // Refresh the page to pick up changes
       window.location.reload();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה בשמירת ההגדרות');
     } finally {
       setSaving(false);

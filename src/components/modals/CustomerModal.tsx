@@ -76,7 +76,7 @@ export function CustomerModal({ open, onClose, customer }: Props) {
         toast.success('לקוח נוצר');
       }
       onClose();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה');
     }
   };

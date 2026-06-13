@@ -62,7 +62,7 @@ export default function ExecutionSummaryPage() {
       setActiveSummaryId(newSummary.id);
       setGeneralNotes('');
       toast.success('סיכום ביצועים חדש נוצר');
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה ביצירת הסיכום');
     }
   };
@@ -73,7 +73,7 @@ export default function ExecutionSummaryPage() {
     try {
       await updateSummary(activeSummaryId, { generalNotes, status: 'in_progress' });
       toast.success('הסיכום נשמר בהצלחה');
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה בשמירה');
     }
     setSaving(false);
@@ -86,7 +86,7 @@ export default function ExecutionSummaryPage() {
       await updateSummary(activeSummaryId, { generalNotes });
       await completeSummary(activeSummaryId, customerId);
       toast.success('סיכום הביצועים הושלם');
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה');
     }
     setSaving(false);

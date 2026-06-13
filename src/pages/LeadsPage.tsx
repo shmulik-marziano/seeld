@@ -97,7 +97,7 @@ export default function LeadsPage() {
 
         unified.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         setLeads(unified);
-      } catch (err: any) {
+      } catch (err) {
         setError(err?.message || 'שגיאה בטעינת הלידים');
       } finally {
         setLoading(false);

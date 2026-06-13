@@ -103,7 +103,7 @@ export default function PDageCorrectionRoom() {
       if (error) throw error;
       toast.success('השדות נשמרו בהצלחה');
       queryClient.invalidateQueries({ queryKey: ['pdage-job', jobId] });
-    } catch (err: any) {
+    } catch (err) {
       toast.error('שגיאה בשמירה: ' + (err.message || ''));
     } finally {
       setSaving(false);
@@ -143,7 +143,7 @@ export default function PDageCorrectionRoom() {
       } else {
         toast.warning(`ציון תקינות: ${result.score}/100 — נדרשים תיקונים נוספים`);
       }
-    } catch (err: any) {
+    } catch (err) {
       toast.error('שגיאה בסריקה: ' + (err.message || ''));
     } finally {
       setValidating(false);
@@ -300,7 +300,7 @@ export default function PDageCorrectionRoom() {
 
       toast.success('PDF מתוקן הופק בהצלחה!');
       queryClient.invalidateQueries({ queryKey: ['pdage-job', jobId] });
-    } catch (err: any) {
+    } catch (err) {
       toast.error('שגיאה ביצירת PDF: ' + (err.message || ''));
     } finally {
       setGenerating(false);
