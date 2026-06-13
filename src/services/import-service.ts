@@ -214,7 +214,7 @@ export async function upsertCustomer(
     throw new Error('לקוח לא נמצא במערכת ומצב העבודה הוא עדכון בלבד');
   }
 
-  const dbData: Record<string, any> = {};
+  const dbData: Record<string, unknown> = {};
   if (parsed.firstName) dbData.first_name = parsed.firstName;
   if (parsed.lastName) dbData.last_name = parsed.lastName;
   if (parsed.fullName) dbData.full_name = parsed.fullName;
@@ -246,7 +246,7 @@ export async function upsertCustomer(
     // Update - only fill missing fields
     const { data: existing } = await supabase.from('customers').select('*').eq('id', existingId).single();
     if (existing) {
-      const updates: Record<string, any> = {};
+      const updates: Record<string, unknown> = {};
       for (const [key, val] of Object.entries(dbData)) {
         if (val !== null && val !== undefined && val !== '' && (!existing[key] || existing[key] === '')) {
           updates[key] = val;
@@ -283,7 +283,7 @@ export async function upsertProducts(
   for (const p of products) {
     const existingId = await findExistingProduct(customerId, p.policyNumber, p.company, p.productType);
     
-    const dbData: Record<string, any> = {
+    const dbData: Record<string, unknown> = {
       customer_id: customerId,
       category: p.category,
       company: p.company || null,
@@ -303,7 +303,7 @@ export async function upsertProducts(
 
     if (existingId) {
       // Update non-null fields
-      const updates: Record<string, any> = {};
+      const updates: Record<string, unknown> = {};
       for (const [key, val] of Object.entries(dbData)) {
         if (key === 'customer_id' || key === 'agent_id') continue;
         if (val !== null && val !== undefined) updates[key] = val;
@@ -362,7 +362,7 @@ export async function createImportBatch(agentId: string, fileName: string, fileT
 }
 
 // Update import batch
-export async function updateImportBatch(batchId: string, updates: Record<string, any>): Promise<void> {
+export async function updateImportBatch(batchId: string, updates: Record<string, unknown>): Promise<void> {
   await (supabase.from('import_batches') as any).update(updates).eq('id', batchId);
 }
 
@@ -387,7 +387,7 @@ export async function createImportBatchItem(batchId: string, item: Partial<Impor
 }
 
 // Update import batch item
-export async function updateImportBatchItem(itemId: string, updates: Record<string, any>): Promise<void> {
+export async function updateImportBatchItem(itemId: string, updates: Record<string, unknown>): Promise<void> {
   await (supabase.from('import_batch_items') as any).update(updates).eq('id', itemId);
 }
 

@@ -162,8 +162,8 @@ function mapActivity(row: any): ActivityEntry {
 }
 
 // Map frontend Customer to DB insert/update
-function customerToDb(input: Partial<Customer>, agentId?: string): Record<string, any> {
-  const m: Record<string, any> = {};
+function customerToDb(input: Partial<Customer>, agentId?: string): Record<string, unknown> {
+  const m: Record<string, unknown> = {};
   if (agentId) m.agent_id = agentId;
   if (input.firstName !== undefined) m.first_name = input.firstName;
   if (input.lastName !== undefined) m.last_name = input.lastName;
@@ -433,7 +433,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [data.customers, logActivity]);
 
   const addProduct = useCallback(async (input: Partial<Product> & { customerId: string }): Promise<Product> => {
-    const dbData: Record<string, any> = {
+    const dbData: Record<string, unknown> = {
       agent_id: agentId,
       customer_id: input.customerId,
       category: input.category || 'כסף',
@@ -467,7 +467,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [agentId, logActivity]);
 
   const updateProduct = useCallback(async (id: string, updates: Partial<Product>) => {
-    const dbData: Record<string, any> = {};
+    const dbData: Record<string, unknown> = {};
     if (updates.category !== undefined) dbData.category = updates.category;
     if (updates.company !== undefined) dbData.company = updates.company || null;
     if (updates.productType !== undefined) dbData.product_type = updates.productType || null;
@@ -505,7 +505,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logActivity]);
 
   const addRecommendation = useCallback(async (input: Partial<Recommendation> & { customerId: string }): Promise<Recommendation> => {
-    const dbData: Record<string, any> = {
+    const dbData: Record<string, unknown> = {
       agent_id: agentId,
       customer_id: input.customerId,
       linked_product_id: input.linkedProductId || null,
@@ -535,7 +535,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [agentId, logActivity]);
 
   const updateRecommendation = useCallback(async (id: string, updates: Partial<Recommendation>) => {
-    const dbData: Record<string, any> = {};
+    const dbData: Record<string, unknown> = {};
     if (updates.linkedProductId !== undefined) dbData.linked_product_id = updates.linkedProductId || null;
     if (updates.title !== undefined) dbData.title = updates.title;
     if (updates.rationale !== undefined) dbData.rationale = updates.rationale;
