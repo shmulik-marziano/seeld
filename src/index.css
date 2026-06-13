@@ -113,6 +113,19 @@
     @apply bg-background text-foreground;
     font-family: 'Heebo', sans-serif;
   }
+  /* Tighter, more confident headings + balanced wrapping for a modern editorial feel */
+  h1, h2, h3 {
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  /* Branded text selection */
+  ::selection {
+    background: hsl(168 60% 42% / 0.22);
+    color: hsl(168 60% 14%);
+  }
 }
 
 /* Subtle pencil texture overlay for cards */
@@ -130,6 +143,87 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid hsl(var(--border) / 0.3);
+  }
+
+  /* ─── Modern design-system utilities (hi-tech refresh) ─── */
+
+  /* Frosted glass surfaces */
+  .glass {
+    background: hsl(0 0% 100% / 0.65);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid hsl(0 0% 100% / 0.4);
+  }
+  .dark .glass {
+    background: hsl(30 18% 12% / 0.6);
+    border: 1px solid hsl(0 0% 100% / 0.08);
+  }
+  .glass-strong {
+    background: hsl(0 0% 100% / 0.82);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid hsl(0 0% 100% / 0.5);
+  }
+
+  /* Brand gradient text */
+  .gradient-text {
+    background: linear-gradient(120deg, #0a3d3d 0%, #2a8f8f 55%, #5ec6c6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Subtle multi-stop mesh background for hero / section surfaces */
+  .mesh-bg {
+    @apply bg-background bg-mesh-light;
+  }
+
+  /* Premium card surface — soft border, layered shadow, smooth */
+  .card-modern {
+    @apply rounded-2xl border border-black/[0.06] bg-card shadow-md transition-all duration-300 ease-smooth;
+  }
+
+  /* Micro-interaction: lift + intensify shadow on hover */
+  .hover-lift {
+    @apply transition-all duration-300 ease-smooth;
+  }
+  .hover-lift:hover {
+    @apply -translate-y-1 shadow-xl;
+  }
+
+  /* Animated gradient border wrapper */
+  .gradient-ring {
+    position: relative;
+    background-clip: padding-box;
+  }
+  .gradient-ring::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, #5ec6c6, #90be6d, #f4a261);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Soft brand glow accent */
+  .glow-mint {
+    box-shadow: 0 0 0 1px rgb(94 198 198 / 0.12), 0 8px 32px -8px rgb(94 198 198 / 0.45);
+  }
+
+  /* Respect reduced-motion preferences across the new animation utilities */
+  @media (prefers-reduced-motion: reduce) {
+    .hover-lift,
+    .card-modern {
+      transition: none;
+    }
+    .hover-lift:hover {
+      transform: none;
+    }
   }
 }
 

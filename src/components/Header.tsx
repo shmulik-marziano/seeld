@@ -75,9 +75,9 @@ const Header = () => {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 transition-all duration-300",
+        "sticky top-0 z-50 transition-all duration-300 ease-smooth",
         isScrolled
-          ? "bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl border-b border-[#0a3d3d]/10 shadow-sm"
+          ? "bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl backdrop-saturate-150 border-b border-[#0a3d3d]/10 shadow-md"
           : "bg-white dark:bg-gray-950 border-b border-transparent"
       )}
     >
@@ -94,7 +94,7 @@ const Header = () => {
               <Link
                 key={link.href}
                 to={link.href}
-                className="text-sm font-semibold text-[#0a3d3d] dark:text-white/80 hover:text-[#5ec6c6] px-4 py-2 rounded-full transition-colors"
+                className="text-sm font-semibold text-[#0a3d3d] dark:text-white/80 hover:text-[#0a3d3d] dark:hover:text-white px-4 py-2 rounded-full transition-all duration-200 ease-smooth hover:bg-[#0a3d3d]/[0.06] dark:hover:bg-white/10"
               >
                 {link.label}
               </Link>
