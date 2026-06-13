@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Upload, FileText, ArrowRight, CheckCircle2, Loader2, User, Phone, MapPin, Briefcase, Heart } from 'lucide-react';
 import { toast } from 'sonner';
 import { customerBasicSchema } from '@/services/validations';
+import type { Gender, MaritalStatus } from '@/types';
 import { motion } from 'framer-motion';
 import JSZip from 'jszip';
 
@@ -142,9 +143,9 @@ export default function NewCustomerPage() {
         idNumber: form.idNumber,
         mobilePhone: form.mobilePhone,
         email: form.email || undefined,
-        gender: (form.gender as any) || undefined,
+        gender: (form.gender as Gender) || undefined,
         birthDate: form.birthDate || undefined,
-        maritalStatus: (form.maritalStatus as any) || undefined,
+        maritalStatus: (form.maritalStatus as MaritalStatus) || undefined,
         numberOfChildren: form.numberOfChildren ? parseInt(form.numberOfChildren) : undefined,
         city: form.city || undefined,
         street: form.street || undefined,

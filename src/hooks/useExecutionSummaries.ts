@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import type { CustomerStatus } from '@/types';
 import { supabase } from '@/integrations/supabase/client';
 import { useApp } from '@/contexts/AppContext';
 import { ExecutionSummary, ExecutionSummaryItem, ExecutionSummaryStatus, ItemExecutionStatus } from '@/types/execution-summary';
@@ -123,7 +124,7 @@ export function useExecutionSummaries(customerId?: string) {
     setSummaries(prev => [summary, ...prev]);
 
     // Update customer status
-    await updateCustomer(custId, { status: 'בביצוע' as any });
+    await updateCustomer(custId, { status: 'בביצוע' });
     await logActivity('סיכום ביצועים נוצר', `סיכום #${summaryNumber}`, 'הצלחה', { customerId: custId });
 
     return summary;
@@ -186,7 +187,7 @@ export function useExecutionSummaries(customerId?: string) {
     }
 
     let summaryStatus: ExecutionSummaryStatus;
-    let customerStatus: string;
+    let customerStatus: CustomerStatus;
 
     if (allFullyExecuted) {
       summaryStatus = 'completed';
@@ -200,7 +201,7 @@ export function useExecutionSummaries(customerId?: string) {
     }
 
     await updateSummary(summaryId, { status: summaryStatus });
-    await updateCustomer(custId, { status: customerStatus as any });
+    await updateCustomer(custId, { status: customerStatus });
     await logActivity(
       allFullyExecuted ? 'סיכום ביצועים הושלם' : 'סיכום ביצועים נשמר',
       `סטטוס: ${summaryStatus}`,

@@ -46,7 +46,7 @@ const NotFound = () => {
             חזרה לדף הבית
           </button>
           <button
-            onClick={() => navigate(-1 as any)}
+            onClick={() => navigate(-1)}
             className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#0a3d3d] text-[#0a3d3d] rounded-full font-semibold hover:bg-[#0a3d3d] hover:text-white transition-colors"
           >
             <ArrowRight className="h-4 w-4" />

@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import type { DecisionStatus } from '@/types';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { Card, CardContent } from '@/components/ui/card';
@@ -132,7 +133,7 @@ export default function RecommendationBankPage() {
 
   const handleStatusChange = async (recId: string, newStatus: string) => {
     try {
-      await updateRecommendation(recId, { decisionStatus: newStatus as any });
+      await updateRecommendation(recId, { decisionStatus: newStatus as DecisionStatus });
       toast.success('סטטוס עודכן');
     } catch { toast.error('שגיאה'); }
   };
@@ -189,7 +190,7 @@ export default function RecommendationBankPage() {
           <Search className="h-4 w-4 absolute right-3 top-3 text-muted-foreground group-focus-within:text-[#0a3d3d]" />
           <Input placeholder="חיפוש לפי שם לקוח, ת.ז, כותרת, חברה..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pr-10 rounded-xl border-border/60 focus:border-[#5ec6c6]" />
         </div>
-        <Select value={sortBy} onValueChange={v => setSortBy(v as any)}>
+        <Select value={sortBy} onValueChange={v => setSortBy(v as 'date' | 'customer')}>
           <SelectTrigger className="w-40 rounded-xl"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="date">לפי תאריך</SelectItem>
