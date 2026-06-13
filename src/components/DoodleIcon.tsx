@@ -115,5 +115,3 @@ export default function DoodleIcon({ name, size = 48, className = "" }: DoodleIc
     />
   );
 }
-
-export { DOODLE_MAP, LUCIDE_TO_DOODLE };

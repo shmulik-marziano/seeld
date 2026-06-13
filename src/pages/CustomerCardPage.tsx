@@ -94,7 +94,7 @@ export default function CustomerCardPage() {
   };
 
   const toggleRecExpand = (id: string) => {
-    setExpandedRecs(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+    setExpandedRecs(prev => { const n = new Set(prev); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   };
 
   const getExecStepIndex = (status?: ExecutionStatus) => {

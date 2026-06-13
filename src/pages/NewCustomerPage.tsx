@@ -95,7 +95,7 @@ export default function NewCustomerPage() {
       ];
       const mergedInfo: Record<string, string> = {};
       for (const entry of orderedFiles) {
-        let bodyPayload: Record<string, any> = { fileName: entry.file.name, fileType: entry.type, extractCustomerInfo: true };
+        const bodyPayload: Record<string, any> = { fileName: entry.file.name, fileType: entry.type, extractCustomerInfo: true };
         if (isBinaryFile(entry.file)) { bodyPayload.fileBase64 = await readFileAsBase64(entry.file); }
         else { const text = await entry.file.text(); bodyPayload.fileContent = text.substring(0, 80000); }
         try {
@@ -166,7 +166,7 @@ export default function NewCustomerPage() {
         await addSourceFile({ customerId: customer.id, type: entry.type, fileName: entry.file.name, analysisStatus: 'בניתוח' });
         const filePath = `${customer.id}/${Date.now()}_${entry.file.name}`;
         await supabase.storage.from('source-files').upload(filePath, entry.file);
-        let bodyPayload: Record<string, any> = { fileName: entry.file.name, fileType: entry.type, customerId: customer.id };
+        const bodyPayload: Record<string, any> = { fileName: entry.file.name, fileType: entry.type, customerId: customer.id };
         if (isBinaryFile(entry.file)) { bodyPayload.fileBase64 = await readFileAsBase64(entry.file); }
         else { const text = await entry.file.text(); bodyPayload.fileContent = text.substring(0, 80000); }
         const response = await supabase.functions.invoke('parse-insurance-file', { body: bodyPayload });
@@ -181,7 +181,7 @@ export default function NewCustomerPage() {
 
   const handleDrop = (type: 'maslaqa' | 'harBituah', e: React.DragEvent) => {
     e.preventDefault();
-    type === 'maslaqa' ? setDraggingMaslaqa(false) : setDraggingHar(false);
+    if (type === 'maslaqa') setDraggingMaslaqa(false); else setDraggingHar(false);
     handleFileSelect(type, e.dataTransfer.files);
   };
 

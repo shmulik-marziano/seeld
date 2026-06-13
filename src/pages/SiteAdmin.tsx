@@ -842,7 +842,7 @@ function AnalyticsModule() {
     // Fetch previous period for comparison
     const prev = getPrevRangeDates(range);
     if (prev) {
-      let pq = siteSupabase
+      const pq = siteSupabase
         .from("page_views" as any)
         .select("slug, viewed_at, country, city, device, referrer, browser, session_id")
         .gte("viewed_at", prev.start.toISOString())

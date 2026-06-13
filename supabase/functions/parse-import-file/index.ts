@@ -133,7 +133,7 @@ function getElementNum(parent: any, tagName: string): number | undefined {
 function formatXmlDate(dateStr: string | undefined): string | undefined {
   if (!dateStr) return undefined;
   // Handle formats: YYYY-MM-DD, YYYYMMDD, DD/MM/YYYY
-  const clean = dateStr.replace(/[\/\-\.]/g, '');
+  const clean = dateStr.replace(/[/.-]/g, '');
   if (clean.length === 8) {
     if (dateStr.includes('/')) {
       // DD/MM/YYYY
@@ -625,8 +625,9 @@ function parseAgentReport(wb: XLSX.WorkBook): ParseResult {
       if (key.includes('שם פרטי')) customer.firstName = val;
       else if (key.includes('שם משפחה')) customer.lastName = val;
       else if (key.includes('שם מלא')) customer.fullName = val;
-      else if (key.includes('מזהה') || key.includes('ת.ז') || key.includes('תעודת זהות')) customer.idNumber = val;
+      // Specific "ID type" must be checked before the general "מזהה" (ID number) branch below
       else if (key.includes('סוג') && key.includes('מזהה')) customer.idType = val;
+      else if (key.includes('מזהה') || key.includes('ת.ז') || key.includes('תעודת זהות')) customer.idNumber = val;
       else if (key.includes('נייד') || key.includes('פלאפון') || key.includes('טלפון')) customer.mobilePhone = val;
       else if (key.includes('מייל') || key.includes('דוא')) customer.email = val;
       else if (key.includes('כתובת') || key.includes('רחוב')) customer.street = val;
