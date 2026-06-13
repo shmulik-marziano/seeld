@@ -39,7 +39,7 @@ const RecommendationsTab = ({ customerId }: { customerId: string }) => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setRecommendations((data || []) as Recommendation[]);
+      setRecommendations((data || []) as unknown as Recommendation[]);
     } catch {
       toast.error("שגיאה בטעינת ההמלצות");
     } finally {

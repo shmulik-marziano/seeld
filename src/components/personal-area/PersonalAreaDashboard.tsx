@@ -51,7 +51,7 @@ const PersonalAreaDashboard = () => {
       if (error || !data) {
         setNotFound(true);
       } else {
-        setCustomer(data as Customer);
+        setCustomer(data as unknown as Customer);
       }
     } catch {
       setNotFound(true);

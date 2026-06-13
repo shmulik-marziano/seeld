@@ -14,6 +14,417 @@ export type Database = {
   }
   public: {
     Tables: {
+      customers: {
+        Row: {
+          account_number: string | null
+          account_type: string | null
+          agency_id: string | null
+          agent_id: string | null
+          annual_income: number | null
+          apartment_number: string | null
+          bank: string | null
+          beneficiaries: string | null
+          birth_country: string | null
+          birth_date: string | null
+          bmi: number | null
+          branch: string | null
+          cigarettes_per_day: number | null
+          city: string | null
+          country: string | null
+          created_at: string
+          dangerous_hobbies: string | null
+          email: string | null
+          employment_status: string | null
+          extended_data: Json | null
+          first_name: string
+          full_name: string | null
+          gender: string | null
+          health_fund: string | null
+          height: number | null
+          hospitalizations: string | null
+          house_number: string | null
+          id: string
+          id_issue_date: string | null
+          id_number: string
+          id_type: string
+          internal_notes: string | null
+          is_confidential: boolean | null
+          is_smoker: boolean | null
+          last_name: string
+          marital_status: string | null
+          medical_advice_to_quit: boolean | null
+          medical_details: string | null
+          medications: string | null
+          mobile_phone: string
+          monthly_income: number | null
+          next_follow_up: string | null
+          number_of_children: number | null
+          occupation: string | null
+          other_phone: string | null
+          po_box: string | null
+          position: string | null
+          pre_existing_conditions: string | null
+          profession: string | null
+          quit_year: number | null
+          source: string | null
+          spouse_name: string | null
+          status: string
+          street: string | null
+          supplementary_insurance: string | null
+          surgeries: string | null
+          tax_resident: boolean | null
+          updated_at: string
+          us_citizen: boolean | null
+          was_smoker: boolean | null
+          weight: number | null
+          zip_code: string | null
+        }
+        Insert: {
+          account_number?: string | null
+          account_type?: string | null
+          agency_id?: string | null
+          agent_id?: string | null
+          annual_income?: number | null
+          apartment_number?: string | null
+          bank?: string | null
+          beneficiaries?: string | null
+          birth_country?: string | null
+          birth_date?: string | null
+          bmi?: number | null
+          branch?: string | null
+          cigarettes_per_day?: number | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          dangerous_hobbies?: string | null
+          email?: string | null
+          employment_status?: string | null
+          extended_data?: Json | null
+          first_name: string
+          full_name?: string | null
+          gender?: string | null
+          health_fund?: string | null
+          height?: number | null
+          hospitalizations?: string | null
+          house_number?: string | null
+          id?: string
+          id_issue_date?: string | null
+          id_number: string
+          id_type?: string
+          internal_notes?: string | null
+          is_confidential?: boolean | null
+          is_smoker?: boolean | null
+          last_name: string
+          marital_status?: string | null
+          medical_advice_to_quit?: boolean | null
+          medical_details?: string | null
+          medications?: string | null
+          mobile_phone: string
+          monthly_income?: number | null
+          next_follow_up?: string | null
+          number_of_children?: number | null
+          occupation?: string | null
+          other_phone?: string | null
+          po_box?: string | null
+          position?: string | null
+          pre_existing_conditions?: string | null
+          profession?: string | null
+          quit_year?: number | null
+          source?: string | null
+          spouse_name?: string | null
+          status?: string
+          street?: string | null
+          supplementary_insurance?: string | null
+          surgeries?: string | null
+          tax_resident?: boolean | null
+          updated_at?: string
+          us_citizen?: boolean | null
+          was_smoker?: boolean | null
+          weight?: number | null
+          zip_code?: string | null
+        }
+        Update: {
+          account_number?: string | null
+          account_type?: string | null
+          agency_id?: string | null
+          agent_id?: string | null
+          annual_income?: number | null
+          apartment_number?: string | null
+          bank?: string | null
+          beneficiaries?: string | null
+          birth_country?: string | null
+          birth_date?: string | null
+          bmi?: number | null
+          branch?: string | null
+          cigarettes_per_day?: number | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          dangerous_hobbies?: string | null
+          email?: string | null
+          employment_status?: string | null
+          extended_data?: Json | null
+          first_name?: string
+          full_name?: string | null
+          gender?: string | null
+          health_fund?: string | null
+          height?: number | null
+          hospitalizations?: string | null
+          house_number?: string | null
+          id?: string
+          id_issue_date?: string | null
+          id_number?: string
+          id_type?: string
+          internal_notes?: string | null
+          is_confidential?: boolean | null
+          is_smoker?: boolean | null
+          last_name?: string
+          marital_status?: string | null
+          medical_advice_to_quit?: boolean | null
+          medical_details?: string | null
+          medications?: string | null
+          mobile_phone?: string
+          monthly_income?: number | null
+          next_follow_up?: string | null
+          number_of_children?: number | null
+          occupation?: string | null
+          other_phone?: string | null
+          po_box?: string | null
+          position?: string | null
+          pre_existing_conditions?: string | null
+          profession?: string | null
+          quit_year?: number | null
+          source?: string | null
+          spouse_name?: string | null
+          status?: string
+          street?: string | null
+          supplementary_insurance?: string | null
+          surgeries?: string | null
+          tax_resident?: boolean | null
+          updated_at?: string
+          us_citizen?: boolean | null
+          was_smoker?: boolean | null
+          weight?: number | null
+          zip_code?: string | null
+        }
+        Relationships: []
+      }
+      recommendations: {
+        Row: {
+          action_type: string
+          advantages: string | null
+          agency_id: string | null
+          agent_id: string | null
+          based_on: string | null
+          cost_after: number | null
+          cost_before: number | null
+          created_at: string
+          current_state: string | null
+          customer_id: string
+          customer_note: string | null
+          decision_status: string
+          disadvantages: string | null
+          execution_note: string | null
+          execution_status: string | null
+          id: string
+          improvement: string | null
+          linked_product_id: string | null
+          missing_for_execution: string | null
+          next_step: string | null
+          problem_gap: string | null
+          product_snapshot: Json | null
+          rationale: string
+          recommendation_type: string | null
+          recommended_company: string | null
+          recommended_investment_track: string | null
+          recommended_investment_track_custom: string | null
+          recommended_risk_level: string | null
+          recommended_track: string | null
+          requires_quote: boolean | null
+          sort_order: number
+          summary_id: string | null
+          title: string
+          updated_at: string
+          urgency: string | null
+        }
+        Insert: {
+          action_type?: string
+          advantages?: string | null
+          agency_id?: string | null
+          agent_id?: string | null
+          based_on?: string | null
+          cost_after?: number | null
+          cost_before?: number | null
+          created_at?: string
+          current_state?: string | null
+          customer_id: string
+          customer_note?: string | null
+          decision_status?: string
+          disadvantages?: string | null
+          execution_note?: string | null
+          execution_status?: string | null
+          id?: string
+          improvement?: string | null
+          linked_product_id?: string | null
+          missing_for_execution?: string | null
+          next_step?: string | null
+          problem_gap?: string | null
+          product_snapshot?: Json | null
+          rationale: string
+          recommendation_type?: string | null
+          recommended_company?: string | null
+          recommended_investment_track?: string | null
+          recommended_investment_track_custom?: string | null
+          recommended_risk_level?: string | null
+          recommended_track?: string | null
+          requires_quote?: boolean | null
+          sort_order?: number
+          summary_id?: string | null
+          title: string
+          updated_at?: string
+          urgency?: string | null
+        }
+        Update: {
+          action_type?: string
+          advantages?: string | null
+          agency_id?: string | null
+          agent_id?: string | null
+          based_on?: string | null
+          cost_after?: number | null
+          cost_before?: number | null
+          created_at?: string
+          current_state?: string | null
+          customer_id?: string
+          customer_note?: string | null
+          decision_status?: string
+          disadvantages?: string | null
+          execution_note?: string | null
+          execution_status?: string | null
+          id?: string
+          improvement?: string | null
+          linked_product_id?: string | null
+          missing_for_execution?: string | null
+          next_step?: string | null
+          problem_gap?: string | null
+          product_snapshot?: Json | null
+          rationale?: string
+          recommendation_type?: string | null
+          recommended_company?: string | null
+          recommended_investment_track?: string | null
+          recommended_investment_track_custom?: string | null
+          recommended_risk_level?: string | null
+          recommended_track?: string | null
+          requires_quote?: boolean | null
+          sort_order?: number
+          summary_id?: string | null
+          title?: string
+          updated_at?: string
+          urgency?: string | null
+        }
+        Relationships: []
+      }
+      source_files: {
+        Row: {
+          agency_id: string | null
+          agent_id: string | null
+          analysis_status: string
+          customer_id: string
+          file_name: string
+          file_path: string | null
+          id: string
+          type: string
+          uploaded_at: string
+        }
+        Insert: {
+          agency_id?: string | null
+          agent_id?: string | null
+          analysis_status?: string
+          customer_id: string
+          file_name: string
+          file_path?: string | null
+          id?: string
+          type?: string
+          uploaded_at?: string
+        }
+        Update: {
+          agency_id?: string | null
+          agent_id?: string | null
+          analysis_status?: string
+          customer_id?: string
+          file_name?: string
+          file_path?: string | null
+          id?: string
+          type?: string
+          uploaded_at?: string
+        }
+        Relationships: []
+      }
+      customer_messages: {
+        Row: {
+          id: string
+          customer_id: string
+          agent_id: string
+          sender: string
+          content: string
+          read_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          customer_id: string
+          agent_id: string
+          sender: string
+          content: string
+          read_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          customer_id?: string
+          agent_id?: string
+          sender?: string
+          content?: string
+          read_at?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      page_views: {
+        Row: {
+          id: number
+          slug: string
+          viewed_at: string
+          country: string | null
+          city: string | null
+          device: string | null
+          referrer: string | null
+          browser: string | null
+          session_id: string | null
+        }
+        Insert: {
+          id: number
+          slug: string
+          viewed_at?: string
+          country?: string | null
+          city?: string | null
+          device?: string | null
+          referrer?: string | null
+          browser?: string | null
+          session_id?: string | null
+        }
+        Update: {
+          id?: number
+          slug?: string
+          viewed_at?: string
+          country?: string | null
+          city?: string | null
+          device?: string | null
+          referrer?: string | null
+          browser?: string | null
+          session_id?: string | null
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           id: string
@@ -22,6 +433,7 @@ export type Database = {
           excerpt: string | null
           content: string
           category: string | null
+          cover_image_url: string | null
           author: string | null
           status: string | null
           published_at: string | null
@@ -35,6 +447,7 @@ export type Database = {
           excerpt?: string | null
           content: string
           category?: string | null
+          cover_image_url?: string | null
           author?: string | null
           status?: string | null
           published_at?: string | null
@@ -48,6 +461,7 @@ export type Database = {
           excerpt?: string | null
           content?: string
           category?: string | null
+          cover_image_url?: string | null
           author?: string | null
           status?: string | null
           published_at?: string | null

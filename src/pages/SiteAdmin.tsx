@@ -829,7 +829,7 @@ function AnalyticsModule() {
     const from = getRangeDates(range);
 
     let query = siteSupabase
-      .from("page_views" as any)
+      .from("page_views")
       .select("slug, viewed_at, country, city, device, referrer, browser, session_id")
       .order("viewed_at", { ascending: false })
       .limit(5000);
@@ -843,7 +843,7 @@ function AnalyticsModule() {
     const prev = getPrevRangeDates(range);
     if (prev) {
       const pq = siteSupabase
-        .from("page_views" as any)
+        .from("page_views")
         .select("slug, viewed_at, country, city, device, referrer, browser, session_id")
         .gte("viewed_at", prev.start.toISOString())
         .lt("viewed_at", prev.end.toISOString())

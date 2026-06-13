@@ -62,7 +62,7 @@ const BlogPost = () => {
             .order("published_at", { ascending: false })
             .limit(3);
 
-          if (relatedData) setRelated(relatedData);
+          if (relatedData) setRelated(relatedData as BlogPostData[]);
         }
       }
       setLoading(false);

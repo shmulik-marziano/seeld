@@ -80,10 +80,20 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
 
     setSending(true);
     try {
+      const { data: cust } = await siteSupabase
+        .from("customers")
+        .select("agent_id")
+        .eq("id", customerId)
+        .single();
+      if (!cust?.agent_id) {
+        throw new Error("Customer has no assigned agent");
+      }
+
       const { error } = await siteSupabase
         .from("customer_messages")
         .insert({
           customer_id: customerId,
+          agent_id: cust.agent_id,
           content: trimmed,
           sender: "customer",
         });

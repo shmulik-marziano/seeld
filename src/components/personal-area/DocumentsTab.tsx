@@ -45,7 +45,7 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setFiles((data || []) as SourceFile[]);
+      setFiles((data || []) as unknown as SourceFile[]);
     } catch {
       toast.error("שגיאה בטעינת המסמכים");
     } finally {
