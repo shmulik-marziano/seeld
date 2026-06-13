@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import InsuranceEnrollmentForm from '@/components/InsuranceEnrollmentForm';
+import type { InsuranceType } from '@/components/InsuranceEnrollmentForm';
 import CompanyLogos from '@/components/CompanyLogos';
 import { ChevronLeft, CheckCircle2 } from 'lucide-react';
 import {
@@ -80,7 +81,7 @@ export interface InsurancePageProps {
   companies?: string[];
 
   /* Enrollment */
-  insuranceType: string;
+  insuranceType: InsuranceType;
   enrollmentTitle: string;
   enrollmentDescription: string;
   enrollmentFormId?: string;
