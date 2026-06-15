@@ -4,14 +4,14 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, UserPlus, X } from 'lucide-react';
 
-const COLORS = ['#5ec6c6', '#f4a261', '#e76f51', '#90be6d', '#ffc929', '#6c63ff'];
+const COLORS = ['#d6157e', '#6b6fc4', '#3b3f99', '#f06ba8', '#ffc929', '#6c63ff'];
 
 const STATUS_COLOR: Record<string, string> = {
-  'חדש': '#5ec6c6',
-  'בקליטה': '#f4a261',
-  'מוכן להמלצה': '#90be6d',
+  'חדש': '#d6157e',
+  'בקליטה': '#6b6fc4',
+  'מוכן להמלצה': '#f06ba8',
   'ממתין לפולו-אפ': '#ffc929',
-  'בביצוע': '#e76f51',
+  'בביצוע': '#3b3f99',
   'הושלם': '#6c63ff',
 };
 
@@ -53,11 +53,11 @@ export default function CustomerListPage() {
     >
       {/* Background decorative orbs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-[0.07] blur-3xl" style={{ backgroundColor: '#5ec6c6' }} />
-        <div className="absolute top-1/3 -left-32 w-80 h-80 rounded-full opacity-[0.06] blur-3xl" style={{ backgroundColor: '#f4a261' }} />
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-[0.07] blur-3xl" style={{ backgroundColor: '#d6157e' }} />
+        <div className="absolute top-1/3 -left-32 w-80 h-80 rounded-full opacity-[0.06] blur-3xl" style={{ backgroundColor: '#6b6fc4' }} />
         <div className="absolute bottom-0 right-1/3 w-72 h-72 rounded-full opacity-[0.05] blur-3xl" style={{ backgroundColor: '#6c63ff' }} />
         {/* Watermark */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-[120px] font-black tracking-widest select-none opacity-[0.025] text-[#0a3d3d] whitespace-nowrap">
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-[120px] font-black tracking-widest select-none opacity-[0.025] text-[#1a1a4b] whitespace-nowrap">
           SEELD
         </div>
       </div>
@@ -69,7 +69,7 @@ export default function CustomerListPage() {
       >
         <div>
           <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-400">SEELD פלטפורמה</p>
-          <h1 className="text-2xl font-extrabold leading-tight" style={{ color: '#0a3d3d' }}>
+          <h1 className="text-2xl font-extrabold leading-tight" style={{ color: '#1a1a4b' }}>
             לקוחות
             <span className="mr-2 text-sm font-medium text-gray-400">({data.customers.length})</span>
           </h1>
@@ -80,7 +80,7 @@ export default function CustomerListPage() {
             whileTap={{ scale: 0.93 }}
             onClick={() => { setSearchOpen(v => !v); }}
             className="w-11 h-11 rounded-full flex items-center justify-center shadow-md"
-            style={{ backgroundColor: searchOpen ? '#0a3d3d' : '#5ec6c6', color: 'white' }}
+            style={{ backgroundColor: searchOpen ? '#1a1a4b' : '#d6157e', color: 'white' }}
           >
             {searchOpen ? <X className="w-4 h-4" /> : <Search className="w-4 h-4" />}
           </motion.button>
@@ -89,7 +89,7 @@ export default function CustomerListPage() {
             whileTap={{ scale: 0.93 }}
             onClick={() => navigate('/app/customers/new')}
             className="w-11 h-11 rounded-full flex items-center justify-center shadow-lg"
-            style={{ backgroundColor: '#0a3d3d', color: 'white' }}
+            style={{ backgroundColor: '#1a1a4b', color: 'white' }}
           >
             <UserPlus className="w-4 h-4" />
           </motion.button>
@@ -115,7 +115,7 @@ export default function CustomerListPage() {
                   onChange={e => setSearch(e.target.value)}
                   placeholder="חיפוש לפי שם, ת.ז או טלפון..."
                   className="w-full pr-11 pl-4 py-3 rounded-2xl border bg-white text-sm focus:outline-none transition-all"
-                  style={{ borderColor: '#5ec6c6', boxShadow: '0 2px 12px rgba(94,198,198,0.15)' }}
+                  style={{ borderColor: '#d6157e', boxShadow: '0 2px 12px rgba(94,198,198,0.15)' }}
                 />
                 {search && (
                   <button
@@ -145,9 +145,9 @@ export default function CustomerListPage() {
               onClick={() => setActiveFilter(f.value)}
               className="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200"
               style={{
-                backgroundColor: active ? '#0a3d3d' : 'white',
+                backgroundColor: active ? '#1a1a4b' : 'white',
                 color: active ? 'white' : '#6b7280',
-                border: `2px solid ${active ? '#0a3d3d' : '#e5e7eb'}`,
+                border: `2px solid ${active ? '#1a1a4b' : '#e5e7eb'}`,
                 boxShadow: active ? '0 4px 12px rgba(10,61,61,0.2)' : 'none',
               }}
             >
@@ -172,7 +172,7 @@ export default function CustomerListPage() {
               animate={{ y: [0, -8, 0] }}
               transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
               className="w-24 h-24 rounded-full flex items-center justify-center mb-5 shadow-xl"
-              style={{ backgroundColor: '#5ec6c6', boxShadow: '0 12px 32px rgba(94,198,198,0.35)' }}
+              style={{ backgroundColor: '#d6157e', boxShadow: '0 12px 32px rgba(94,198,198,0.35)' }}
             >
               <UserPlus className="w-10 h-10 text-white" />
             </motion.div>
@@ -181,7 +181,7 @@ export default function CustomerListPage() {
             <button
               onClick={() => { setSearch(''); setActiveFilter('all'); }}
               className="px-5 py-2 rounded-full text-xs font-bold text-white"
-              style={{ backgroundColor: '#0a3d3d' }}
+              style={{ backgroundColor: '#1a1a4b' }}
             >
               נקה סינון
             </button>
@@ -194,7 +194,7 @@ export default function CustomerListPage() {
             <AnimatePresence mode="popLayout">
               {filtered.map((c, i) => {
                 const color = COLORS[i % COLORS.length];
-                const statusColor = STATUS_COLOR[c.status] || '#5ec6c6';
+                const statusColor = STATUS_COLOR[c.status] || '#d6157e';
                 const size = SIZES[i % SIZES.length];
                 const floatDelay = (i % 6) * 0.5;
 
@@ -257,7 +257,7 @@ export default function CustomerListPage() {
                     <span
                       className="text-xs font-bold text-center leading-tight"
                       style={{
-                        color: '#0a3d3d',
+                        color: '#1a1a4b',
                         maxWidth: size + 12,
                         display: '-webkit-box',
                         WebkitLineClamp: 2,

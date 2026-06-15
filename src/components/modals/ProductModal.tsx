@@ -31,7 +31,7 @@ export function ProductModal({ open, onClose, customerId, product }: Props) {
     }
   }, [open, product]);
 
-  const set = (key: keyof Product, value: any) => setForm(prev => ({ ...prev, [key]: value }));
+  const set = <K extends keyof Product>(key: K, value: Product[K]) => setForm(prev => ({ ...prev, [key]: value }));
 
   const isInsurance = form.category === 'ביטוח';
   const productTypes = isInsurance ? insuranceProductTypes : moneyProductTypes;
@@ -40,7 +40,7 @@ export function ProductModal({ open, onClose, customerId, product }: Props) {
   const handleSave = async () => {
     if (!form.company) { toast.error('יש לבחור חברה'); return; }
     if (!form.productType) { toast.error('יש לבחור סוג מוצר'); return; }
-    if ((form as any).investmentTrack === 'אחר' && !(form as any).investmentTrackCustom?.trim()) {
+    if (form.investmentTrack === 'אחר' && !form.investmentTrackCustom?.trim()) {
       toast.error('יש למלא שם מסלול חופשי'); return;
     }
 
@@ -51,8 +51,8 @@ export function ProductModal({ open, onClose, customerId, product }: Props) {
       saveForm.monthlyPremium = undefined;
     }
     // Clear custom track if not "אחר"
-    if ((saveForm as any).investmentTrack !== 'אחר') {
-      (saveForm as any).investmentTrackCustom = undefined;
+    if (saveForm.investmentTrack !== 'אחר') {
+      saveForm.investmentTrackCustom = undefined;
     }
 
     try {
@@ -60,12 +60,12 @@ export function ProductModal({ open, onClose, customerId, product }: Props) {
         await updateProduct(product!.id, { ...saveForm, manuallyCompleted: true });
         toast.success('מוצר עודכן');
       } else {
-        await addProduct({ ...saveForm, customerId, manuallyCompleted: true } as any);
+        await addProduct({ ...saveForm, customerId, manuallyCompleted: true });
         toast.success('מוצר נוצר');
       }
       onClose();
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'שגיאה');
     }
   };
 
@@ -149,7 +149,7 @@ export function ProductModal({ open, onClose, customerId, product }: Props) {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label className="text-xs mb-1 block">מסלול השקעה</Label>
-              <Select value={(form as any).investmentTrack || 'none'} onValueChange={v => set('investmentTrack' as any, v === 'none' ? undefined : v)}>
+              <Select value={form.investmentTrack || 'none'} onValueChange={v => set('investmentTrack', v === 'none' ? undefined : v)}>
                 <SelectTrigger><SelectValue placeholder="בחר מסלול" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">ללא</SelectItem>
@@ -159,7 +159,7 @@ export function ProductModal({ open, onClose, customerId, product }: Props) {
             </div>
             <div>
               <Label className="text-xs mb-1 block">סיכון מועדף</Label>
-              <Select value={(form as any).preferredRiskLevel || 'none'} onValueChange={v => set('preferredRiskLevel' as any, v === 'none' ? undefined : v)}>
+              <Select value={form.preferredRiskLevel || 'none'} onValueChange={v => set('preferredRiskLevel', v === 'none' ? undefined : v)}>
                 <SelectTrigger><SelectValue placeholder="בחר רמת סיכון" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">ללא</SelectItem>
@@ -169,10 +169,10 @@ export function ProductModal({ open, onClose, customerId, product }: Props) {
             </div>
           </div>
 
-          {(form as any).investmentTrack === 'אחר' && (
+          {form.investmentTrack === 'אחר' && (
             <div>
               <Label className="text-xs mb-1 block">שם מסלול חופשי *</Label>
-              <Input value={(form as any).investmentTrackCustom || ''} onChange={e => set('investmentTrackCustom' as any, e.target.value)} placeholder="הזן שם מסלול" />
+              <Input value={form.investmentTrackCustom || ''} onChange={e => set('investmentTrackCustom', e.target.value)} placeholder="הזן שם מסלול" />
             </div>
           )}
 

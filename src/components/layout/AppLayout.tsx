@@ -63,24 +63,24 @@ export function AppLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen" dir="rtl" style={{ backgroundColor: '#f8f9fc' }}>
       {/* ── Sidebar (desktop only) ── */}
       <aside
-        className={`hidden md:flex flex-col flex-shrink-0 bg-white border-l border-[#0a3d3d]/[0.06] transition-all duration-200 ease-in-out ${
+        className={`hidden md:flex flex-col flex-shrink-0 bg-white border-l border-[#1a1a4b]/[0.06] transition-all duration-200 ease-in-out ${
           sidebarCollapsed ? 'w-16' : 'w-60'
         }`}
         style={{ height: '100vh', position: 'sticky', top: 0 }}
       >
         {/* Brand */}
-        <div className="flex items-center justify-between h-14 px-3 border-b border-[#0a3d3d]/[0.06]">
+        <div className="flex items-center justify-between h-14 px-3 border-b border-[#1a1a4b]/[0.06]">
           {!sidebarCollapsed && (
             <Link to="/app/dashboard" className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-[#0a3d3d] flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-[#1a1a4b] flex items-center justify-center">
                 <span className="text-white text-xs font-black">S</span>
               </div>
-              <span className="text-sm font-bold text-[#0a3d3d] tracking-tight">SEELD</span>
+              <span className="text-sm font-bold text-[#1a1a4b] tracking-tight">SEELD</span>
             </Link>
           )}
           {sidebarCollapsed && (
             <Link to="/app/dashboard" className="mx-auto">
-              <div className="w-7 h-7 rounded-lg bg-[#0a3d3d] flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-[#1a1a4b] flex items-center justify-center">
                 <span className="text-white text-xs font-black">S</span>
               </div>
             </Link>
@@ -102,7 +102,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
             to="/app/dashboard"
             className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 mb-1 transition-colors ${
               isActive('/app/dashboard')
-                ? 'bg-[#0a3d3d]/5 text-[#0a3d3d] font-bold'
+                ? 'bg-[#1a1a4b]/5 text-[#1a1a4b] font-bold'
                 : 'text-gray-600 hover:bg-gray-50'
             }`}
           >
@@ -160,7 +160,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
                           title={sidebarCollapsed ? tool.hebrewName : undefined}
                           className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors ${
                             active
-                              ? 'bg-[#0a3d3d]/5 text-[#0a3d3d] font-bold'
+                              ? 'bg-[#1a1a4b]/5 text-[#1a1a4b] font-bold'
                               : 'text-gray-600 hover:bg-gray-50'
                           } ${sidebarCollapsed ? 'justify-center w-10 mx-auto' : ''}`}
                         >
@@ -185,13 +185,13 @@ export function AppLayout({ children }: { children: ReactNode }) {
         </nav>
 
         {/* Bottom section */}
-        <div className="border-t border-[#0a3d3d]/[0.06] px-2 py-2">
+        <div className="border-t border-[#1a1a4b]/[0.06] px-2 py-2">
           {/* Settings */}
           <Link
             to="/app/settings"
             className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors ${
               isActive('/app/settings')
-                ? 'bg-[#0a3d3d]/5 text-[#0a3d3d] font-bold'
+                ? 'bg-[#1a1a4b]/5 text-[#1a1a4b] font-bold'
                 : 'text-gray-600 hover:bg-gray-50'
             } ${sidebarCollapsed ? 'justify-center' : ''}`}
           >
@@ -221,7 +221,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           >
             <button
               onClick={() => navigate('/app/dashboard')}
-              className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-[#0a3d3d] transition-colors"
+              className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-[#1a1a4b] transition-colors"
             >
               <ChevronRight className="w-3.5 h-3.5 rotate-180" />
               SEELD פלטפורמה
@@ -253,7 +253,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
               key={tab.path}
               to={tab.path}
               className={`flex flex-col items-center justify-center gap-0.5 flex-1 py-1 transition-colors ${
-                active ? 'text-[#0a3d3d]' : 'text-gray-400'
+                active ? 'text-[#1a1a4b]' : 'text-gray-400'
               }`}
             >
               <Icon className="w-5 h-5" />

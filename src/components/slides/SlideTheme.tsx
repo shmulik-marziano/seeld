@@ -13,7 +13,7 @@ export interface SlideTheme {
 }
 
 export const DEFAULT_THEME: SlideTheme = {
-  primaryColor: '#3d6b4f',
+  primaryColor: '#2a2a66',
   primaryColorLight: '#e8f5ec',
   accentColor: '#c8892e',
   agencyName: 'SEELD',

@@ -5,7 +5,7 @@ const BusinessInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Building2}
-      heroIconColor="#e76f51"
+      heroIconColor="#3b3f99"
       heroCategory="ביטוח עסקים"
       heroTitle="ביטוח עסקי מקיף"
       heroDescription="ביטוח עסקי מקיף שמגן על המבנה, התכולה, העובדים והפעילות העסקית שלכם — הגנה מלאה על העסק שלכם."

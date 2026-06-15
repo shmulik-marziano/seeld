@@ -5,8 +5,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ScrollReveal";
 import DoodleDecoration from "@/components/DoodleDecoration";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const Authors = () => {
+  usePageMeta("הכותבים שלנו");
   const specialties = [
     { icon: Shield, title: "ביטוח כללי", description: "ביטוחי בריאות, חיים, רכב, דירה, עסקי ונסיעות" },
     { icon: TrendingUp, title: "חיסכון ופנסיה", description: "קרנות פנסיה, קופות גמל, קרנות השתלמות והשקעות" },

@@ -71,7 +71,7 @@ export default function PDageDeficiency() {
       });
 
       navigate(`/app/pdage/job/${jobId}/room`);
-    } catch (err: any) {
+    } catch (err) {
       toast.error('שגיאה בשמירה');
       console.error(err);
     } finally {

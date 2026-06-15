@@ -36,6 +36,7 @@ interface CmaFundRow {
   foreign_currency_exposure: number | null;
   actuarial_adjustment: number | null;
   fetched_at: string;
+  liquid_assets_percent?: number;
 }
 
 // ─── Map Hebrew company name to ManagingCompany key ─────────────────
@@ -167,7 +168,7 @@ function dbRowToFund(row: CmaFundRow): Fund {
 async function fetchLiveFunds(): Promise<Fund[]> {
   // Use the cma_funds_latest view for latest data per fund
   const { data, error } = await supabase
-    .from('cma_funds_latest' as any)
+    .from('cma_funds_latest')
     .select('*')
     .order('total_assets', { ascending: false });
 
@@ -185,14 +186,14 @@ async function fetchSyncStatus(): Promise<{
   totalFunds: number;
 }> {
   const { data: syncLog } = await supabase
-    .from('cma_sync_log' as any)
+    .from('cma_sync_log')
     .select('completed_at, latest_period, records_upserted')
     .eq('status', 'success')
     .order('completed_at', { ascending: false })
     .limit(1);
 
   const { count } = await supabase
-    .from('cma_funds_latest' as any)
+    .from('cma_funds_latest')
     .select('*', { count: 'exact', head: true });
 
   return {

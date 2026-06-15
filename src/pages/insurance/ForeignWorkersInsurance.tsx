@@ -5,7 +5,7 @@ const ForeignWorkersInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Globe}
-      heroIconColor="#e76f51"
+      heroIconColor="#3b3f99"
       heroCategory="ביטוח עובדים זרים ותיירים"
       heroTitle="ביטוח עובדים זרים ותיירים"
       heroDescription="ביטוח בריאות לעובדים זרים ותיירים בישראל כנדרש בחוק — עמידה בדרישות החוק והגנה על העובדים."
@@ -65,7 +65,7 @@ const ForeignWorkersInsurance = () => {
         },
       ]}
       companies={["הראל", "מנורה מבטחים", "מגדל", "כלל", "איילון", "הפניקס", "מיטב", "מור", "ילין לפידות", "אנליסט", "אינפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה"]}
-      insuranceType="foreign-workers"
+      insuranceType="foreign_workers"
       enrollmentTitle="הצטרפות לביטוח עובדים זרים"
       enrollmentDescription="מלאו את הפרטים וקבלו הצעה מותאמת אישית"
     />

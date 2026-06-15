@@ -1,0 +1,102 @@
+/* Seeld v2 — editorial monochrome theme, preserving & expanding QUWEB's
+   existing design language: near-black on warm white, generous whitespace,
+   bilingual Hebrew/English display type, numbered sections, hairline borders.
+   Scoped under .v2-root so the existing SeelD site is untouched.
+   Fonts (Plus Jakarta Sans, Heebo) load globally — no @import here. */
+
+.v2-root {
+  --paper: #fbfbf9;       /* warm white canvas */
+  --paper-2: #f4f3ef;     /* soft off-white block */
+  --surface: #ffffff;
+  --ink: #18181a;         /* headings, near-black */
+  --ink-soft: #3a3a3c;    /* body */
+  --muted: #76746e;       /* secondary */
+  --faint: #a8a6a0;       /* tertiary */
+  --line: rgba(24, 24, 26, 0.12);
+  --line-soft: rgba(24, 24, 26, 0.07);
+  --gain: #2f7d5b;        /* semantic green (editorial, muted) */
+  --loss: #b4453a;        /* semantic red */
+  --warn: #b07a16;        /* semantic amber */
+
+  position: relative;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-family: "Heebo", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.v2-root .v2-display {
+  font-family: "Plus Jakarta Sans", "Heebo", sans-serif;
+  letter-spacing: -0.025em;
+  font-feature-settings: "tnum" 1;
+}
+.v2-root .tnum { font-variant-numeric: tabular-nums; }
+
+/* English fragments inside bilingual headlines get the latin display face */
+.v2-root .v2-en {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: -0.02em;
+}
+
+/* Editorial accent — a hand-drawn-feeling underline that draws in */
+@keyframes v2-underline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.v2-accent { position: relative; display: inline-block; color: var(--ink); white-space: nowrap; }
+.v2-accent::after {
+  content: ""; position: absolute; right: 0; left: 0; bottom: -0.12em; height: 0.09em;
+  background: var(--ink); transform-origin: right; transform: scaleX(0);
+  animation: v2-underline 0.8s cubic-bezier(.16,1,.3,1) 0.5s forwards;
+}
+
+/* Section index marker, e.g. 01· */
+.v2-index { font-family: "Plus Jakarta Sans", sans-serif; font-weight: 700; letter-spacing: 0.02em; color: var(--faint); }
+
+/* Card surface — hairline, minimal shadow */
+.v2-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 2px rgba(24,24,26,0.03);
+}
+.v2-card-hover { transition: transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s ease, border-color .3s ease; }
+.v2-card-hover:hover { transform: translateY(-3px); border-color: rgba(24,24,26,0.28); box-shadow: 0 16px 40px -22px rgba(24,24,26,0.4); }
+
+/* Buttons */
+.v2-btn-primary {
+  background: var(--ink); color: #fff; border-radius: 999px;
+  transition: transform .2s ease, opacity .2s ease;
+}
+.v2-btn-primary:hover { transform: translateY(-1px); opacity: 0.9; }
+.v2-btn-secondary {
+  background: transparent; color: var(--ink); border: 1px solid var(--line); border-radius: 999px;
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.v2-btn-secondary:hover { border-color: rgba(24,24,26,0.4); background: rgba(24,24,26,0.03); transform: translateY(-1px); }
+
+/* Hairline divider */
+.v2-rule { height: 1px; background: var(--line-soft); }
+
+/* Scrollbar */
+.v2-root ::-webkit-scrollbar { width: 10px; height: 10px; }
+.v2-root ::-webkit-scrollbar-thumb { background: rgba(24,24,26,0.18); border-radius: 999px; }
+.v2-root ::-webkit-scrollbar-thumb:hover { background: rgba(24,24,26,0.35); }
+
+/* Range sliders — monochrome */
+.v2-root input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  height: 4px; border-radius: 999px; background: rgba(24,24,26,0.18); outline: none;
+}
+.v2-root input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--ink); cursor: pointer; border: 3px solid #fff;
+  box-shadow: 0 0 0 1px rgba(24,24,26,0.2), 0 3px 8px rgba(24,24,26,0.25);
+  transition: transform .2s ease;
+}
+.v2-root input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.12); }
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-accent::after { animation: none !important; transform: scaleX(1) !important; }
+}

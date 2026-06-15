@@ -5,7 +5,7 @@ const PersonalAccidents = () => {
   return (
     <InsurancePageTemplate
       heroIcon={AlertTriangle}
-      heroIconColor="#e76f51"
+      heroIconColor="#3b3f99"
       heroCategory="תאונות אישיות"
       heroTitle="ביטוח תאונות אישיות"
       heroDescription="הגנה מפני הבלתי צפוי — ביטוח תאונות אישיות מעניק לכם פיצוי כספי 24/7 בכל מקום בעולם."
@@ -105,7 +105,7 @@ const PersonalAccidents = () => {
           a: "כן, ביטוח תאונות אישיות זמין גם לילדים ומומלץ מאוד. ילדים חשופים לתאונות במיוחד — במגרשי משחקים, בספורט, באופניים ובפעילויות יומיומיות. הפרמיה לילדים נמוכה במיוחד.",
         },
       ]}
-      insuranceType="personal-accidents"
+      insuranceType="personal_accidents"
       enrollmentTitle="הצטרפות לביטוח תאונות אישיות"
       enrollmentDescription="מלאו את הפרטים וקבלו הצעה מותאמת אישית"
     />

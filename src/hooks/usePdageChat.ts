@@ -163,7 +163,7 @@ export function usePdageChat({ conversationId: initialConvId, jobId, autoCreate 
 
           if (parsed.field_updates && onFieldUpdate) {
             const updates = parsed.field_updates as { field: string; value: string }[];
-            updates.forEach((u: any) => onFieldUpdate(u.field, u.value));
+            updates.forEach((u) => onFieldUpdate(u.field, u.value));
 
             const fieldLabels: Record<string, string> = {
               customerName: 'שם לקוח', idNumber: 'תעודת זהות', policyNumber: 'מספר פוליסה',
@@ -171,7 +171,7 @@ export function usePdageChat({ conversationId: initialConvId, jobId, autoCreate 
               endDate: 'תאריך סיום', coverageAmount: 'סכום כיסוי', monthlyPremium: 'פרמיה חודשית',
               beneficiaries: 'מוטבים', additionalNotes: 'הערות נוספות',
             };
-            const summary = updates.map((u: any) => `**${fieldLabels[u.field] || u.field}** → ${u.value}`).join('\n');
+            const summary = updates.map((u) => `**${fieldLabels[u.field] || u.field}** → ${u.value}`).join('\n');
             setMessages(prev => [...prev, { role: 'system_update', content: summary }]);
             return false;
           }
@@ -220,7 +220,7 @@ export function usePdageChat({ conversationId: initialConvId, jobId, autoCreate 
       if (assistantSoFar) {
         newMsgsToSave.push({ role: 'assistant', content: assistantSoFar });
       }
-    } catch (e: any) {
+    } catch (e) {
       const errorMsg: ChatMessage = { role: 'assistant', content: `❌ ${e.message || 'שגיאה בתקשורת עם ה-AI'}` };
       setMessages(prev => [...prev, errorMsg]);
       newMsgsToSave.push(errorMsg);

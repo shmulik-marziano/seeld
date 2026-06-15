@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -103,6 +104,29 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      /* Modern soft, layered shadows — brand-tinted (deep teal) for a premium, cohesive depth */
+      boxShadow: {
+        sm: "0 1px 2px 0 rgb(10 61 61 / 0.04), 0 1px 3px 0 rgb(10 61 61 / 0.06)",
+        DEFAULT: "0 2px 4px -1px rgb(10 61 61 / 0.05), 0 4px 12px -2px rgb(10 61 61 / 0.08)",
+        md: "0 4px 8px -2px rgb(10 61 61 / 0.06), 0 8px 20px -4px rgb(10 61 61 / 0.10)",
+        lg: "0 8px 16px -4px rgb(10 61 61 / 0.07), 0 16px 32px -8px rgb(10 61 61 / 0.12)",
+        xl: "0 12px 24px -6px rgb(10 61 61 / 0.08), 0 24px 48px -12px rgb(10 61 61 / 0.16)",
+        "2xl": "0 24px 48px -12px rgb(10 61 61 / 0.18), 0 40px 80px -20px rgb(10 61 61 / 0.22)",
+        glow: "0 0 0 1px rgb(94 198 198 / 0.12), 0 8px 32px -8px rgb(94 198 198 / 0.45)",
+        "glow-gold": "0 0 0 1px rgb(214 158 46 / 0.12), 0 8px 32px -8px rgb(214 158 46 / 0.40)",
+        inner: "inset 0 2px 4px 0 rgb(10 61 61 / 0.05)",
+        none: "none",
+      },
+      transitionTimingFunction: {
+        smooth: "cubic-bezier(0.16, 1, 0.3, 1)",
+        "smooth-in-out": "cubic-bezier(0.65, 0, 0.35, 1)",
+      },
+      backgroundImage: {
+        "brand-gradient": "linear-gradient(135deg, #0a3d3d 0%, #155e5e 50%, #1d7a7a 100%)",
+        "mint-gradient": "linear-gradient(135deg, #5ec6c6 0%, #3da3a3 100%)",
+        "mesh-light":
+          "radial-gradient(at 0% 0%, rgb(94 198 198 / 0.10) 0px, transparent 50%), radial-gradient(at 100% 0%, rgb(244 162 97 / 0.08) 0px, transparent 50%), radial-gradient(at 100% 100%, rgb(144 190 109 / 0.08) 0px, transparent 50%), radial-gradient(at 0% 100%, rgb(231 111 81 / 0.06) 0px, transparent 50%)",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -170,5 +194,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 } satisfies Config;

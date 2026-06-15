@@ -5,19 +5,19 @@ const coverageTypes = [
   {
     title: "ביטוח מבנה",
     icon: Shield,
-    color: "#5ec6c6",
+    color: "#d6157e",
     items: ["נזקי שריפה", "נזקי רעידת אדמה", "נזקי סערה"],
   },
   {
     title: "ביטוח תכולה",
     icon: Home,
-    color: "#f4a261",
+    color: "#6b6fc4",
     items: ["ריהוט וציוד", "מכשירי חשמל", "תכשיטים ויקרי ערך"],
   },
   {
     title: "כיסויים מורחבים",
     icon: Flame,
-    color: "#e76f51",
+    color: "#3b3f99",
     items: ["שריפה ופיצוץ", "נזקי מים", "פריצה וגניבה"],
   },
 ];
@@ -65,9 +65,9 @@ const HomeInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Home}
-      heroIconColor="#f4a261"
+      heroIconColor="#6b6fc4"
       heroCategory="ביטוח דירה"
-      heroTitle={<>הגנה מקיפה על <span className="text-[#f4a261]">הבית שלכם</span></>}
+      heroTitle={<>הגנה מקיפה על <span className="text-[#6b6fc4]">הבית שלכם</span></>}
       heroDescription="ביטוח דירה מגן עליכם ועל הרכוש היקר שלכם מפני נזקים בלתי צפויים - שריפה, פריצה, נזקי מים ועוד."
       heroCTAText="להצטרפות ל-SEELD"
       heroSecondaryCTA={{ text: "סוגי כיסויים", href: "#coverage" }}

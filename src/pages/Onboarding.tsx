@@ -9,8 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Calendar as CalendarComp } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import Header from "@/components/Header";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface FormData {
@@ -677,6 +679,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function Onboarding() {
+  usePageMeta("שאלון הצטרפות", "הצטרפו ל-SEELD — מילוי שאלון מקוון קצר וחתימה דיגיטלית, והיועץ שלכם יתחיל לעבוד.");
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormData>(initialForm);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
@@ -753,7 +756,7 @@ export default function Onboarding() {
     setSubmitting(true);
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabase as any).from("onboarding_submissions").insert({
+      const { error: insertError } = await (supabase as any).from("onboarding_submissions").insert({
         first_name: form.firstName,
         last_name: form.lastName,
         id_number: form.idNumber,
@@ -770,14 +773,15 @@ export default function Onboarding() {
         form_data: form as unknown as Record<string, unknown>,
         status: "new",
       });
-      await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-onboarding-summary`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({ formData: form }),
-      });
+      if (insertError) throw insertError;
+      // Email notification is non-blocking — the submission is already saved
+      try {
+        await supabase.functions.invoke("send-onboarding-summary", {
+          body: { formData: form },
+        });
+      } catch (emailErr) {
+        console.error("Failed to send onboarding summary email:", emailErr);
+      }
       setTransitioning(true);
       setTimeout(() => {
         setSubmitted(true);
@@ -786,6 +790,7 @@ export default function Onboarding() {
       }, 200);
     } catch (err) {
       console.error(err);
+      toast.error("אירעה שגיאה בשליחת הטופס. אנא נסו שוב או צרו קשר טלפוני.");
     } finally {
       setSubmitting(false);
     }
@@ -839,15 +844,15 @@ export default function Onboarding() {
           {/* ── Hero Header ── */}
           <div className="text-center mb-10 space-y-4">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#5ec6c6]/30 bg-[#5ec6c6]/5 text-xs font-semibold tracking-widest uppercase text-[#0a3d3d]">
-              <div className="w-2 h-2 rounded-full bg-[#5ec6c6]" />
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#d6157e]/30 bg-[#d6157e]/5 text-xs font-semibold tracking-widest uppercase text-[#1a1a4b]">
+              <div className="w-2 h-2 rounded-full bg-[#d6157e]" />
               SEELD — פתיחת תיק לקוח
-              <Sparkles className="w-3.5 h-3.5 text-[#5ec6c6]" />
+              <Sparkles className="w-3.5 h-3.5 text-[#d6157e]" />
             </div>
 
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-none">
-              <span className="block text-[#0a3d3d]">שאלון</span>
-              <span className="block text-[#5ec6c6]">
+              <span className="block text-[#1a1a4b]">שאלון</span>
+              <span className="block text-[#d6157e]">
                 הצטרפות
               </span>
             </h1>
@@ -889,7 +894,7 @@ export default function Onboarding() {
 
               {/* Text */}
               <div className="space-y-3">
-                <h2 className="text-4xl font-extrabold tracking-tight text-[#0a3d3d]">
+                <h2 className="text-4xl font-extrabold tracking-tight text-[#1a1a4b]">
                     תודה רבה!
                 </h2>
                 <p className="text-lg font-semibold text-foreground">

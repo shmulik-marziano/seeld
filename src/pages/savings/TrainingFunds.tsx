@@ -11,14 +11,16 @@ import {
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
 import DoodleIcon from "@/components/DoodleIcon";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const TrainingFunds = () => {
+  usePageMeta("קרנות השתלמות");
   const productTypes = [
     {
       title: "פטור ממס",
       icon: TrendingUp,
       doodle: "growth",
-      color: "#5ec6c6",
+      color: "#d6157e",
       description: "פטור מלא ממס רווחי הון — כל הרווחים שלכם",
       features: ["0% מס על רווחים", "ניכוי מס על הפקדות", "חיסכון של אלפי שקלים"],
     },
@@ -26,7 +28,7 @@ const TrainingFunds = () => {
       title: "נזילות מהירה",
       icon: Clock,
       doodle: "target",
-      color: "#f4a261",
+      color: "#6b6fc4",
       description: "משיכה פטורה לאחר 6 שנים בלבד",
       features: ["ללא קנסות", "שימוש חופשי בכספים", "לכל מטרה"],
     },
@@ -34,7 +36,7 @@ const TrainingFunds = () => {
       title: "מטרות מגוונות",
       icon: GraduationCap,
       doodle: "lightbulb",
-      color: "#90be6d",
+      color: "#f06ba8",
       description: "לא רק להשתלמויות — לכל מטרה שתרצו",
       features: ["דירה לילדים", "חופשה גדולה", "כל יעד שתבחרו"],
     },
@@ -61,28 +63,28 @@ const TrainingFunds = () => {
 
       {/* Hero Banner */}
       <section className="bg-[#f8f9fc] relative overflow-hidden">
-        <div className="absolute top-[10%] left-[4%] w-[90px] h-[90px] rounded-full bg-[#90be6d]" />
-        <div className="absolute bottom-[15%] right-[6%] w-[65px] h-[65px] rounded-full bg-[#5ec6c6]" />
-        <div className="absolute top-[45%] left-[18%] w-[35px] h-[35px] rounded-full bg-[#f4a261]" />
+        <div className="absolute top-[10%] left-[4%] w-[90px] h-[90px] rounded-full bg-[#f06ba8]" />
+        <div className="absolute bottom-[15%] right-[6%] w-[65px] h-[65px] rounded-full bg-[#d6157e]" />
+        <div className="absolute top-[45%] left-[18%] w-[35px] h-[35px] rounded-full bg-[#6b6fc4]" />
         <div className="absolute top-[20%] right-[12%] w-[28px] h-[28px] rounded-full bg-[#6c63ff]" />
         <div className="absolute top-16 right-[15%] hidden lg:block">
           <svg width="160" height="100" viewBox="0 0 160 100" fill="none">
-            <path d="M10 80 C 50 10, 110 10, 150 60" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
-            <polygon points="150,60 142,54 146,66" fill="#0a3d3d" opacity="0.12" />
+            <path d="M10 80 C 50 10, 110 10, 150 60" stroke="#1a1a4b" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
+            <polygon points="150,60 142,54 146,66" fill="#1a1a4b" opacity="0.12" />
           </svg>
         </div>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20 sm:py-28 relative">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
-            החיסכון <span className="text-[#90be6d]">הכי משתלם</span> בישראל
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#1a1a4b] mb-4 leading-tight">
+            החיסכון <span className="text-[#f06ba8]">הכי משתלם</span> בישראל
           </h1>
           <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
             קרן השתלמות היא אפיק החיסכון המועדף בישראל — פטור מלא ממס רווחי הון ונזילות לאחר 6 שנים בלבד.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 mt-8">
-            <a href="#analysis-form" className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-all min-h-[48px]">
+            <a href="#analysis-form" className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-[#1a1a4b] text-white font-bold text-base hover:bg-[#222159] transition-all min-h-[48px]">
               ניתוח קרנות חינם
             </a>
-            <a href="#product-types" className="inline-flex items-center justify-center px-8 py-3.5 rounded-full border border-[#0a3d3d]/15 text-[#0a3d3d] font-semibold text-base hover:bg-[#0a3d3d]/5 transition-all min-h-[48px]">
+            <a href="#product-types" className="inline-flex items-center justify-center px-8 py-3.5 rounded-full border border-[#1a1a4b]/15 text-[#1a1a4b] font-semibold text-base hover:bg-[#1a1a4b]/5 transition-all min-h-[48px]">
               יתרונות הקרן
             </a>
           </div>
@@ -92,11 +94,11 @@ const TrainingFunds = () => {
       {/* Breadcrumb */}
       <div className="border-b border-gray-100">
         <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
+          <Link to="/" className="hover:text-[#1a1a4b] transition-colors">דף הבית</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
-          <Link to="/savings" className="hover:text-[#0a3d3d] transition-colors">חיסכון ופנסיה</Link>
+          <Link to="/savings" className="hover:text-[#1a1a4b] transition-colors">חיסכון ופנסיה</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
-          <span className="text-[#0a3d3d] font-medium">קרנות השתלמות</span>
+          <span className="text-[#1a1a4b] font-medium">קרנות השתלמות</span>
         </nav>
       </div>
 
@@ -104,19 +106,19 @@ const TrainingFunds = () => {
         {/* Benefits */}
         <section className="py-10 sm:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">למה קרן השתלמות?</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1a4b] mb-8">למה קרן השתלמות?</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Banknote, doodle: "savings", title: "פטור מלא ממס", desc: "0% מס על כל הרווחים שצברתם", color: "#5ec6c6" },
-                { icon: Clock, doodle: "target", title: "נזילות ב-6 שנים", desc: "כספים נזילים לאחר 6 שנים", color: "#f4a261" },
-                { icon: TrendingUp, doodle: "growth", title: "תשואות גבוהות", desc: "ביצועים מעולים לאורך זמן", color: "#90be6d" },
-                { icon: GraduationCap, doodle: "lightbulb", title: "לכל מטרה", desc: "שימוש חופשי בכספים לאחר נזילות", color: "#e76f51" },
+                { icon: Banknote, doodle: "savings", title: "פטור מלא ממס", desc: "0% מס על כל הרווחים שצברתם", color: "#d6157e" },
+                { icon: Clock, doodle: "target", title: "נזילות ב-6 שנים", desc: "כספים נזילים לאחר 6 שנים", color: "#6b6fc4" },
+                { icon: TrendingUp, doodle: "growth", title: "תשואות גבוהות", desc: "ביצועים מעולים לאורך זמן", color: "#f06ba8" },
+                { icon: GraduationCap, doodle: "lightbulb", title: "לכל מטרה", desc: "שימוש חופשי בכספים לאחר נזילות", color: "#3b3f99" },
               ].map((item, idx) => (
                 <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group text-center">
                   <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
                     <DoodleIcon name={item.doodle} size={48} />
                   </div>
-                  <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{item.title}</h3>
+                  <h3 className="text-lg font-bold text-[#1a1a4b] mb-2">{item.title}</h3>
                   <p className="text-gray-600 text-sm">{item.desc}</p>
                 </div>
               ))}
@@ -127,7 +129,7 @@ const TrainingFunds = () => {
         {/* Product Types */}
         <section id="product-types" className="py-10 sm:py-16 bg-gray-50">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-2">יתרונות קרן השתלמות</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1a4b] mb-2">יתרונות קרן השתלמות</h2>
             <p className="text-gray-500 mb-10 text-base sm:text-lg">האפיק היחיד בישראל עם פטור מלא ממס רווחי הון</p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {productTypes.map((type, idx) => (
@@ -136,7 +138,7 @@ const TrainingFunds = () => {
                     <div className="w-14 h-14 flex items-center justify-center">
                       <DoodleIcon name={type.doodle} size={48} />
                     </div>
-                    <h3 className="text-lg font-bold text-[#0a3d3d]">{type.title}</h3>
+                    <h3 className="text-lg font-bold text-[#1a1a4b]">{type.title}</h3>
                   </div>
                   <p className="text-gray-600 text-sm mb-4">{type.description}</p>
                   <ul className="space-y-2">
@@ -157,7 +159,7 @@ const TrainingFunds = () => {
         <section className="py-10 sm:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="max-w-3xl">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-6">למה זה חשוב?</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1a4b] mb-6">למה זה חשוב?</h2>
               <div className="space-y-4 text-gray-600 leading-relaxed text-base sm:text-lg">
                 <p>
                   קרן השתלמות היא אפיק החיסכון היחיד בישראל שנהנה מפטור מלא ממס רווחי הון. המשמעות היא שכל הרווחים שהכסף שלכם מניב — 100% שלכם, ללא ניכוי מס. אין שום מוצר פיננסי אחר שמציע יתרון כזה.
@@ -167,7 +169,7 @@ const TrainingFunds = () => {
                 </p>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mt-14 mb-6">מתי כדאי לפעול?</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1a4b] mt-14 mb-6">מתי כדאי לפעול?</h2>
               <div className="space-y-4 text-gray-600 leading-relaxed text-base sm:text-lg">
                 <p>
                   לשכירים — מומלץ לוודא שהמעסיק מפקיד לקרן השתלמות כבר מהיום הראשון בעבודה. אם המעסיק לא מציע קרן השתלמות, שקלו לבקש זאת כחלק מתנאי ההעסקה. לעצמאים — כדאי לפתוח קרן השתלמות מיד עם תחילת הפעילות העצמאית.
@@ -177,7 +179,7 @@ const TrainingFunds = () => {
                 </p>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mt-14 mb-6">מה חשוב לדעת?</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1a4b] mt-14 mb-6">מה חשוב לדעת?</h2>
               <div className="space-y-4 text-gray-600 leading-relaxed text-base sm:text-lg">
                 <p>
                   בבחירת קרן השתלמות, יש לבחון שלושה פרמטרים מרכזיים: דמי ניהול (ככל שנמוכים יותר — טוב יותר), ביצועי הקרן לאורך זמן (לפחות 5-10 שנים), ומסלול ההשקעה (מניות, אג״ח, מסלול כללי וכו׳). לא תמיד הקרן הזולה ביותר היא הטובה ביותר — חשוב לראות את התמונה הכוללת.
@@ -194,7 +196,7 @@ const TrainingFunds = () => {
         <section className="py-10 sm:py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="max-w-3xl">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">שאלות נפוצות</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1a4b] mb-8">שאלות נפוצות</h2>
               <Accordion type="multiple" className="space-y-3">
                 {faqItems.map((item, idx) => (
                   <AccordionItem
@@ -202,7 +204,7 @@ const TrainingFunds = () => {
                     value={`faq-${idx}`}
                     className="bg-white border border-gray-200 rounded-2xl px-6 overflow-hidden data-[state=open]:shadow-sm"
                   >
-                    <AccordionTrigger className="text-right text-base font-semibold text-[#0a3d3d] hover:no-underline py-5">
+                    <AccordionTrigger className="text-right text-base font-semibold text-[#1a1a4b] hover:no-underline py-5">
                       {item.q}
                     </AccordionTrigger>
                     <AccordionContent className="text-gray-600 leading-relaxed pb-5 text-sm sm:text-base">
@@ -221,11 +223,11 @@ const TrainingFunds = () => {
         {/* Analysis Form */}
         <section id="analysis-form" className="py-10 sm:py-16 scroll-mt-24">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="bg-[#f8f9fc] border border-[#0a3d3d]/[0.06] rounded-2xl p-8 sm:p-12 text-center mb-10 relative overflow-hidden">
-              <div className="absolute top-4 left-6 w-10 h-10 rounded-full bg-[#90be6d] opacity-15" />
-              <div className="absolute bottom-4 right-8 w-8 h-8 rounded-full bg-[#5ec6c6] opacity-15" />
-              <h2 className="text-2xl sm:text-3xl font-extrabold mb-3 text-[#0a3d3d]">רוצים ניתוח קרנות השתלמות חינם?</h2>
-              <p className="text-[#0a3d3d]/50 text-base sm:text-lg max-w-xl mx-auto">
+            <div className="bg-[#f8f9fc] border border-[#1a1a4b]/[0.06] rounded-2xl p-8 sm:p-12 text-center mb-10 relative overflow-hidden">
+              <div className="absolute top-4 left-6 w-10 h-10 rounded-full bg-[#f06ba8] opacity-15" />
+              <div className="absolute bottom-4 right-8 w-8 h-8 rounded-full bg-[#d6157e] opacity-15" />
+              <h2 className="text-2xl sm:text-3xl font-extrabold mb-3 text-[#1a1a4b]">רוצים ניתוח קרנות השתלמות חינם?</h2>
+              <p className="text-[#1a1a4b]/50 text-base sm:text-lg max-w-xl mx-auto">
                 בדקו אם הקרנות שלכם מניבות את התשואה המיטבית
               </p>
             </div>

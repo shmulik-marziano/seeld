@@ -26,13 +26,13 @@ import doodleLightbulb from '@/assets/doodle-lightbulb.png';
 
 // ─── Palette ──────────────────────────────────────────────────────────────────
 const C = {
-  teal:   '#5ec6c6',
-  orange: '#f4a261',
-  coral:  '#e76f51',
-  green:  '#90be6d',
+  teal:   '#d6157e',
+  orange: '#6b6fc4',
+  coral:  '#3b3f99',
+  green:  '#f06ba8',
   yellow: '#ffc929',
   purple: '#6c63ff',
-  dark:   '#0a3d3d',
+  dark:   '#1a1a4b',
   gray:   '#94a3b8',
 };
 
@@ -342,7 +342,7 @@ function loadLayout(): LayoutData | null {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch { return null; }
 }
 function saveLayout(d: LayoutData) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch {}
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch { /* storage unavailable (private mode / quota) — non-critical */ }
 }
 
 // ─── HoneycombCanvas ─────────────────────────────────────────────────────────
@@ -637,16 +637,16 @@ export default function DashboardPage() {
 
       {/* ── Background ── */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden select-none z-0">
-        <div className="absolute -top-48 -right-48 w-[560px] h-[560px] rounded-full blur-[100px] opacity-[0.08]" style={{ backgroundColor: '#5ec6c6' }} />
-        <div className="absolute top-[40%] -left-52 w-[420px] h-[420px] rounded-full blur-[100px] opacity-[0.06]" style={{ backgroundColor: '#f4a261' }} />
+        <div className="absolute -top-48 -right-48 w-[560px] h-[560px] rounded-full blur-[100px] opacity-[0.08]" style={{ backgroundColor: '#d6157e' }} />
+        <div className="absolute top-[40%] -left-52 w-[420px] h-[420px] rounded-full blur-[100px] opacity-[0.06]" style={{ backgroundColor: '#6b6fc4' }} />
         <div className="absolute bottom-0 right-[35%] w-[360px] h-[360px] rounded-full blur-[100px] opacity-[0.05]" style={{ backgroundColor: '#6c63ff' }} />
         <svg className="absolute top-0 right-[2%] w-[500px] h-[650px] opacity-[0.1]" viewBox="0 0 500 600" fill="none">
           <motion.path d="M450,30 C380,50 300,130 320,230 C340,330 220,380 160,450 C130,490 140,540 200,560"
-            stroke="#0a3d3d" strokeWidth="2.5" strokeDasharray="10 8" strokeLinecap="round" fill="none"
+            stroke="#1a1a4b" strokeWidth="2.5" strokeDasharray="10 8" strokeLinecap="round" fill="none"
             initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 3.5, delay: 0.3, ease: 'easeInOut' }} />
         </svg>
         <div className="absolute inset-0 opacity-[0.016]"
-          style={{ backgroundImage: 'radial-gradient(circle, #0a3d3d 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+          style={{ backgroundImage: 'radial-gradient(circle, #1a1a4b 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
         <img src={doodleShield}    alt="" className="absolute top-[4%]  left-[1%]   w-20 opacity-[0.06] rotate-[-14deg]" />
         <img src={doodleTarget}    alt="" className="absolute top-[35%] left-[0.5%] w-16 opacity-[0.05] rotate-[10deg]"  />
         <img src={doodleCharts}    alt="" className="absolute top-[65%] right-[1%]  w-20 opacity-[0.06] rotate-[7deg]"   />
@@ -654,7 +654,7 @@ export default function DashboardPage() {
         <img src={doodleLightbulb} alt="" className="absolute top-[50%] right-[1%]  w-14 opacity-[0.05] rotate-[5deg]"   />
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap"
           style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 160, fontWeight: 900,
-            color: '#0a3d3d', opacity: 0.018, letterSpacing: '0.3em' }}>SEELD</div>
+            color: '#1a1a4b', opacity: 0.018, letterSpacing: '0.3em' }}>SEELD</div>
       </div>
 
       {/* ── Page layout: legend left | main right ── */}
@@ -714,7 +714,7 @@ export default function DashboardPage() {
             <button onClick={() => navigate('/app/dashboard')} className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
               <SeeIDLogo size={30} />
               <div>
-                <div className="text-sm font-black text-[#0a3d3d] leading-none"
+                <div className="text-sm font-black text-[#1a1a4b] leading-none"
                   style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>SEELD</div>
                 <div className="text-[8px] font-bold tracking-[0.2em] text-gray-400 uppercase">פלטפורמה</div>
               </div>
@@ -726,9 +726,9 @@ export default function DashboardPage() {
                 <motion.button whileTap={{ scale: 0.9 }} onClick={() => setMenuOpen(v => !v)}
                   className="w-9 h-9 rounded-full flex items-center justify-center shadow-sm transition-all"
                   style={{
-                    backgroundColor: editMode || menuOpen ? '#0a3d3d' : 'white',
-                    color: editMode || menuOpen ? '#5ec6c6' : '#94a3b8',
-                    border: editMode ? '2px solid #5ec6c6' : '2px solid #e2e8f0',
+                    backgroundColor: editMode || menuOpen ? '#1a1a4b' : 'white',
+                    color: editMode || menuOpen ? '#d6157e' : '#94a3b8',
+                    border: editMode ? '2px solid #d6157e' : '2px solid #e2e8f0',
                   }}>
                   <PenTool className="w-3.5 h-3.5" />
                 </motion.button>
@@ -752,8 +752,8 @@ export default function DashboardPage() {
                         <button onClick={() => { setEditMode(v => !v); setMenuOpen(false); }}
                           className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-right">
                           <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-                            style={{ backgroundColor: editMode ? '#0a3d3d' : '#f1f5f9' }}>
-                            <PenTool className="w-4 h-4" style={{ color: editMode ? '#5ec6c6' : '#64748b' }} />
+                            style={{ backgroundColor: editMode ? '#1a1a4b' : '#f1f5f9' }}>
+                            <PenTool className="w-4 h-4" style={{ color: editMode ? '#d6157e' : '#64748b' }} />
                           </div>
                           <div>
                             <p className="text-sm font-bold text-gray-800 leading-none mb-0.5">
@@ -806,7 +806,7 @@ export default function DashboardPage() {
               <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }} className="overflow-hidden mb-5">
                 <div className="flex items-center justify-between px-5 py-3 rounded-2xl"
-                  style={{ backgroundColor: '#0a3d3d', boxShadow: '0 4px 20px rgba(10,61,61,0.25)' }}>
+                  style={{ backgroundColor: '#1a1a4b', boxShadow: '0 4px 20px rgba(10,61,61,0.25)' }}>
                   <div className="flex items-center gap-2.5">
                     <div className="w-7 h-7 rounded-full bg-teal-400/20 flex items-center justify-center">
                       <PenTool className="w-3.5 h-3.5 text-teal-300" />
@@ -818,7 +818,7 @@ export default function DashboardPage() {
                   </div>
                   <button onClick={() => setEditMode(false)}
                     className="flex items-center gap-1.5 px-3.5 py-2 rounded-full font-bold text-xs"
-                    style={{ backgroundColor: '#5ec6c6', color: '#0a3d3d' }}>
+                    style={{ backgroundColor: '#d6157e', color: '#1a1a4b' }}>
                     <Check className="w-3.5 h-3.5" /> סיום
                   </button>
                 </div>
@@ -830,11 +830,11 @@ export default function DashboardPage() {
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
             <p className="text-[9px] font-black tracking-[0.26em] uppercase text-gray-400 mb-0.5"
               style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>SEELD • פלטפורמה</p>
-            <h1 className="text-3xl font-black text-[#0a3d3d] leading-none"
+            <h1 className="text-3xl font-black text-[#1a1a4b] leading-none"
               style={{ fontFamily: "'Plus Jakarta Sans','Heebo',sans-serif" }}>{getGreeting()}</h1>
             <p className="text-xs text-gray-400 mt-1">
               {activeSection
-                ? <><span className="text-[#0a3d3d] font-bold">{activeSection}</span>{' · '}{displayBubbles.length} בועות</>
+                ? <><span className="text-[#1a1a4b] font-bold">{activeSection}</span>{' · '}{displayBubbles.length} בועות</>
                 : <>{totalBubbles - totalHidden} בועות פעילות
                     {totalHidden > 0 && <span className="text-orange-400"> · {totalHidden} מוסתרות</span>}
                   </>

@@ -9,7 +9,7 @@ interface FundCompareChartProps {
 }
 
 const COLORS = [
-  '#90be6d', '#5ec6c6', '#6c63ff', '#f4a261', '#e76f51',
+  '#f06ba8', '#d6157e', '#6c63ff', '#6b6fc4', '#3b3f99',
   '#2a9d8f', '#264653', '#e9c46a',
 ];
 

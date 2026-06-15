@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import InsuranceEnrollmentForm from '@/components/InsuranceEnrollmentForm';
+import type { InsuranceType } from '@/components/InsuranceEnrollmentForm';
 import CompanyLogos from '@/components/CompanyLogos';
 import { ChevronLeft, CheckCircle2 } from 'lucide-react';
 import {
@@ -11,6 +12,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Link } from 'react-router-dom';
+import { usePageMeta } from '@/hooks/usePageMeta';
 import type { LucideIcon } from 'lucide-react';
 
 /* ─── Types ─── */
@@ -79,7 +81,7 @@ export interface InsurancePageProps {
   companies?: string[];
 
   /* Enrollment */
-  insuranceType: string;
+  insuranceType: InsuranceType;
   enrollmentTitle: string;
   enrollmentDescription: string;
   enrollmentFormId?: string;
@@ -120,6 +122,8 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
     enrollmentFormId = 'contact-form',
     extraContentAfterKeyPoints,
   } = props;
+
+  usePageMeta(breadcrumbLabel, heroDescription);
 
   return (
     <div className="min-h-screen bg-white" dir="rtl">
@@ -165,7 +169,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 mt-8">
             <a href={heroCTAHref}
-              className="inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-white text-[#0a3d3d] font-bold text-base hover:bg-white/90 transition-all min-h-[48px] shadow-lg shadow-black/10">
+              className="inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-white text-[#1a1a4b] font-bold text-base hover:bg-white/90 transition-all min-h-[48px] shadow-lg shadow-black/10">
               {heroCTAText}
             </a>
             {heroSecondaryCTA && (
@@ -181,11 +185,11 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
       {/* ══════ BREADCRUMB ══════ */}
       <div className="border-b border-gray-100 bg-gray-50/50">
         <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-400">
-          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
+          <Link to="/" className="hover:text-[#1a1a4b] transition-colors">דף הבית</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
-          <Link to="/insurance" className="hover:text-[#0a3d3d] transition-colors">ביטוח</Link>
+          <Link to="/insurances" className="hover:text-[#1a1a4b] transition-colors">ביטוח</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
-          <span className="text-[#0a3d3d] font-medium">{breadcrumbLabel}</span>
+          <span className="text-[#1a1a4b] font-medium">{breadcrumbLabel}</span>
         </nav>
       </div>
 
@@ -205,7 +209,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                       style={{ backgroundColor: (kp.color || heroIconColor) + '18' }}>
                       <kp.icon className="w-6 h-6" style={{ color: kp.color || heroIconColor }} />
                     </div>
-                    <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{kp.title}</h3>
+                    <h3 className="text-lg font-bold text-[#1a1a4b] mb-2">{kp.title}</h3>
                     <p className="text-gray-500 leading-relaxed text-sm">{kp.description}</p>
                   </div>
                 ))}
@@ -224,7 +228,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
               <div className="max-w-3xl">
                 {articles.map((article, idx) => (
                   <div key={idx} className={idx > 0 ? 'mt-14' : ''}>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-6">{article.title}</h2>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1a4b] mb-6">{article.title}</h2>
                     <div className="space-y-4 text-gray-500 leading-relaxed text-base sm:text-lg">
                       {article.paragraphs.map((p, pIdx) => (
                         <p key={pIdx}>{p}</p>
@@ -241,17 +245,17 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
         {coverageTypes && coverageTypes.length > 0 && (
           <section id="coverage" className="py-12 sm:py-16 bg-[#fafbfd]">
             <div className="max-w-5xl mx-auto px-4 sm:px-6">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-2">{coverageTitle}</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1a4b] mb-2">{coverageTitle}</h2>
               {coverageSubtitle && <p className="text-gray-400 mb-10 text-base sm:text-lg">{coverageSubtitle}</p>}
               <div className={`grid ${coverageGridCols || 'sm:grid-cols-2 lg:grid-cols-3'} gap-5 mt-8`}>
                 {coverageTypes.map((coverage, idx) => (
                   <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm transition-transform group-hover:scale-105"
-                        style={{ backgroundColor: (coverage.color || '#5ec6c6') + '18' }}>
-                        <coverage.icon className="w-5 h-5" style={{ color: coverage.color || '#0a3d3d' }} />
+                        style={{ backgroundColor: (coverage.color || '#d6157e') + '18' }}>
+                        <coverage.icon className="w-5 h-5" style={{ color: coverage.color || '#1a1a4b' }} />
                       </div>
-                      <h3 className="text-lg font-bold text-[#0a3d3d]">{coverage.title}</h3>
+                      <h3 className="text-lg font-bold text-[#1a1a4b]">{coverage.title}</h3>
                     </div>
                     <ul className="space-y-2.5">
                       {coverage.items.map((item, itemIdx) => {
@@ -267,7 +271,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                           <li key={itemIdx} className="text-gray-500 text-sm flex items-start gap-2.5">
                             <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0 text-emerald-400" />
                             <div>
-                              <span className="font-medium text-[#0a3d3d]">{item.title}</span>
+                              <span className="font-medium text-[#1a1a4b]">{item.title}</span>
                               {item.description && <span className="text-gray-400"> — {item.description}</span>}
                             </div>
                           </li>
@@ -285,14 +289,14 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
         {coverageCategories && coverageCategories.length > 0 && (
           <section id="coverage" className="py-12 sm:py-16 bg-[#fafbfd]">
             <div className="max-w-5xl mx-auto px-4 sm:px-6">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-2">{coverageTitle}</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1a4b] mb-2">{coverageTitle}</h2>
               {coverageSubtitle && <p className="text-gray-400 mb-10 text-base sm:text-lg">{coverageSubtitle}</p>}
               <div className="space-y-10 mt-8">
                 {coverageCategories.map((cat, catIdx) => (
                   <div key={catIdx}>
                     <div className="flex items-center gap-2 mb-4">
                       <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: cat.color }} />
-                      <h3 className="text-xl font-bold text-[#0a3d3d]">{cat.category}</h3>
+                      <h3 className="text-xl font-bold text-[#1a1a4b]">{cat.category}</h3>
                     </div>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                       {cat.items.map((item, idx) => (
@@ -302,7 +306,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                               style={{ backgroundColor: cat.color + '18' }}>
                               <item.icon className="w-5 h-5" style={{ color: cat.color }} />
                             </div>
-                            <h4 className="text-base font-bold text-[#0a3d3d]">{item.title}</h4>
+                            <h4 className="text-base font-bold text-[#1a1a4b]">{item.title}</h4>
                           </div>
                           <p className="text-gray-500 text-sm">{item.description}</p>
                         </div>
@@ -320,7 +324,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
           <section className="py-12 sm:py-16">
             <div className="max-w-5xl mx-auto px-4 sm:px-6">
               <div className="max-w-3xl">
-                <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">שאלות נפוצות</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1a4b] mb-8">שאלות נפוצות</h2>
                 <Accordion type="multiple" className="space-y-3">
                   {faqItems.map((item, idx) => (
                     <AccordionItem
@@ -328,7 +332,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                       value={`faq-${idx}`}
                       className="bg-white border border-gray-100 rounded-2xl px-4 sm:px-6 overflow-hidden data-[state=open]:shadow-md data-[state=open]:border-gray-200 transition-all"
                     >
-                      <AccordionTrigger className="text-right text-base font-semibold text-[#0a3d3d] hover:no-underline py-5">
+                      <AccordionTrigger className="text-right text-base font-semibold text-[#1a1a4b] hover:no-underline py-5">
                         {item.q}
                       </AccordionTrigger>
                       <AccordionContent className="text-gray-500 leading-relaxed pb-5 text-sm sm:text-base">

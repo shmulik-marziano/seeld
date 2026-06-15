@@ -11,7 +11,7 @@ export const COMPANIES: Company[] = [
   { name: "מגדל", slug: "migdal", color: "#1B3A5C", initial: "מ" },
   { name: "כלל", slug: "clal", color: "#2A9D8F", initial: "כ" },
   { name: "איילון", slug: "ayalon", color: "#E07A00", initial: "א" },
-  { name: "הפניקס", slug: "phoenix", color: "#E76F51", initial: "ה" },
+  { name: "הפניקס", slug: "phoenix", color: "#3b3f99", initial: "ה" },
   { name: "מיטב", slug: "meitav", color: "#B8860B", initial: "מ" },
   { name: "מור", slug: "mor", color: "#5B8C5A", initial: "מ" },
   { name: "ילין לפידות", slug: "yelin", color: "#4A6FA5", initial: "י" },

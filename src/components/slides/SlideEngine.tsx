@@ -147,11 +147,11 @@ function ThemeSettingsPanel({
             <Label className="text-white/60 text-xs">פלטות מוכנות</Label>
             <div className="flex gap-2 flex-wrap">
               {[
-                { primary: '#3d6b4f', accent: '#c8892e', label: 'ברירת מחדל' },
+                { primary: '#2a2a66', accent: '#c8892e', label: 'ברירת מחדל' },
                 { primary: '#1e40af', accent: '#f59e0b', label: 'כחול-זהב' },
                 { primary: '#7c3aed', accent: '#06b6d4', label: 'סגול-טורקיז' },
                 { primary: '#dc2626', accent: '#111827', label: 'אדום-שחור' },
-                { primary: '#0f766e', accent: '#ea580c', label: 'טיל-כתום' },
+                { primary: '#9e1160', accent: '#ea580c', label: 'טיל-כתום' },
                 { primary: '#111827', accent: '#3b82f6', label: 'כהה-כחול' },
               ].map(p => (
                 <button

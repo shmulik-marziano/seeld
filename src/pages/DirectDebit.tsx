@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { Building2, CreditCard, CalendarDays, User, CheckCircle2, AlertCircle, Loader2, Sparkles, Shield, Hash, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 import Header from "@/components/Header";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 // ─── Fallback Israeli Banks Data — מקור: בנק ישראל ──────────────────
 const FALLBACK_BANKS: Record<string, { name: string; branches: Record<string, string> }> = {
@@ -172,6 +174,7 @@ function useBankData() {
 
 // ─── Main Component ────────────────────────────────────────────────────────────
 export default function DirectDebit() {
+  usePageMeta("הוראת קבע");
   const { banks, loading: banksLoading, lastUpdated, isLive, refresh: refreshBanks } = useBankData();
   const [form, setForm] = useState<DDForm>(initialDD);
   const [errors, setErrors] = useState<Partial<Record<keyof DDForm, string>>>({});
@@ -263,7 +266,7 @@ export default function DirectDebit() {
     setSubmitting(true);
     try {
       // Save to DB
-      await (supabase as any).from("onboarding_submissions").insert({
+      const { error: insertError } = await (supabase as any).from("onboarding_submissions").insert({
         bank_name: bankData?.name ?? "",
         bank_branch: form.branchNumber,
         bank_account: form.accountNumber,
@@ -272,6 +275,7 @@ export default function DirectDebit() {
         status: "new",
         form_data: { ...form, bankName: bankData?.name, branchName: form.branchName, type: "direct_debit" },
       });
+      if (insertError) throw insertError;
 
       // Send email notification
       try {
@@ -296,6 +300,7 @@ export default function DirectDebit() {
       setSubmitted(true);
     } catch (err) {
       console.error(err);
+      toast.error("אירעה שגיאה בשליחת הטופס. אנא נסו שוב או צרו קשר טלפוני.");
     } finally {
       setSubmitting(false);
     }
@@ -310,10 +315,10 @@ export default function DirectDebit() {
       <div className="min-h-screen bg-white" dir="rtl">
         <Header />
         <main className="relative z-10 max-w-xl mx-auto px-4 pt-20 pb-20 text-center">
-          <div className="w-24 h-24 rounded-full bg-[#5ec6c6]/10 border-2 border-[#5ec6c6]/30 flex items-center justify-center mx-auto mb-6 animate-in zoom-in duration-500">
-            <CheckCircle2 className="w-12 h-12 text-[#5ec6c6]" />
+          <div className="w-24 h-24 rounded-full bg-[#d6157e]/10 border-2 border-[#d6157e]/30 flex items-center justify-center mx-auto mb-6 animate-in zoom-in duration-500">
+            <CheckCircle2 className="w-12 h-12 text-[#d6157e]" />
           </div>
-          <h1 className="text-3xl font-extrabold text-[#0a3d3d] mb-3">הטופס נשלח בהצלחה!</h1>
+          <h1 className="text-3xl font-extrabold text-[#1a1a4b] mb-3">הטופס נשלח בהצלחה!</h1>
           <p className="text-gray-500">פרטי הו"ק התקבלו ויועברו לטיפול בהקדם.</p>
           <div className="mt-8 rounded-2xl border border-gray-100 bg-[#f8f9fc] p-6 text-right space-y-4">
             {[
@@ -339,7 +344,7 @@ export default function DirectDebit() {
     <div className="min-h-screen bg-white" dir="rtl">
       {/* Decorative circles */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-[10%] right-[5%] w-40 h-40 rounded-full bg-[#5ec6c6] opacity-[0.06]" />
+        <div className="absolute top-[10%] right-[5%] w-40 h-40 rounded-full bg-[#d6157e] opacity-[0.06]" />
         <div className="absolute bottom-[10%] left-[5%] w-32 h-32 rounded-full bg-[#6c63ff] opacity-[0.06]" />
       </div>
 
@@ -348,14 +353,14 @@ export default function DirectDebit() {
       <main className="relative z-10 max-w-2xl mx-auto px-4 pt-10 pb-20">
         {/* Hero */}
         <div className="text-center mb-12 space-y-5">
-          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#5ec6c6]/20 bg-[#5ec6c6]/5 text-xs font-bold tracking-widest uppercase text-[#0a3d3d]">
-            <Shield className="w-3.5 h-3.5 text-[#5ec6c6]" />
+          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#d6157e]/20 bg-[#d6157e]/5 text-xs font-bold tracking-widest uppercase text-[#1a1a4b]">
+            <Shield className="w-3.5 h-3.5 text-[#d6157e]" />
             הוראת קבע מאובטחת
-            <div className="w-2 h-2 rounded-full bg-[#5ec6c6]" />
+            <div className="w-2 h-2 rounded-full bg-[#d6157e]" />
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.1]">
-            <span className="block text-[#0a3d3d]">מילוי טופס</span>
-            <span className="block text-[#5ec6c6]">הוראת קבע</span>
+            <span className="block text-[#1a1a4b]">מילוי טופס</span>
+            <span className="block text-[#d6157e]">הוראת קבע</span>
           </h1>
           <p className="text-sm text-gray-400 max-w-sm mx-auto leading-relaxed">
             שמוליק מרציאנו · סוכן ביטוח ופנסיה מוסמך

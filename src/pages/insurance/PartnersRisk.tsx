@@ -5,7 +5,7 @@ const PartnersRisk = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Users}
-      heroIconColor="#e76f51"
+      heroIconColor="#3b3f99"
       heroCategory="ריסק שותפים"
       heroTitle="ביטוח ריסק שותפים"
       heroDescription="הגנה על העסק שלכם — ביטוח חיים לשותפים מבטיח את המשכיות העסק במקרה של פטירת אחד השותפים."
@@ -66,7 +66,7 @@ const PartnersRisk = () => {
         },
       ]}
       companies={["הראל", "מנורה מבטחים", "מגדל", "כלל", "איילון", "הפניקס", "מיטב", "מור", "ילין לפידות", "אנליסט", "אינפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה"]}
-      insuranceType="partners-risk"
+      insuranceType="partners_risk"
       enrollmentTitle="הצטרפות לביטוח ריסק שותפים"
       enrollmentDescription="מלאו את הפרטים וקבלו ייעוץ מקצועי"
     />

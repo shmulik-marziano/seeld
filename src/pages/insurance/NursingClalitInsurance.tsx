@@ -5,7 +5,7 @@ const NursingClalitInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Heart}
-      heroIconColor="#e76f51"
+      heroIconColor="#3b3f99"
       heroCategory="ביטוח סיעודי לחברי כללית"
       heroTitle="ביטוח סיעודי לחברי כללית"
       heroDescription="כיסוי סיעודי משופר לחברי קופת חולים כללית — השלמה חיונית לביטוח הקולקטיבי הבסיסי."
@@ -65,7 +65,7 @@ const NursingClalitInsurance = () => {
         },
       ]}
       companies={["הראל", "מנורה מבטחים", "מגדל", "כלל", "איילון", "הפניקס", "מיטב", "מור", "ילין לפידות", "אנליסט", "אינפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה"]}
-      insuranceType="nursing-clalit"
+      insuranceType="nursing"
       enrollmentTitle="הצטרפות לביטוח סיעודי לחברי כללית"
       enrollmentDescription="מלאו את הפרטים וקבלו הצעה מותאמת אישית לביטוח סיעודי"
     />

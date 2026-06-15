@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Upload, FileText, ArrowRight, CheckCircle2, Loader2, User, Phone, MapPin, Briefcase, Heart } from 'lucide-react';
 import { toast } from 'sonner';
 import { customerBasicSchema } from '@/services/validations';
+import type { Gender, MaritalStatus } from '@/types';
 import { motion } from 'framer-motion';
 import JSZip from 'jszip';
 
@@ -95,7 +96,7 @@ export default function NewCustomerPage() {
       ];
       const mergedInfo: Record<string, string> = {};
       for (const entry of orderedFiles) {
-        let bodyPayload: Record<string, any> = { fileName: entry.file.name, fileType: entry.type, extractCustomerInfo: true };
+        const bodyPayload: Record<string, unknown> = { fileName: entry.file.name, fileType: entry.type, extractCustomerInfo: true };
         if (isBinaryFile(entry.file)) { bodyPayload.fileBase64 = await readFileAsBase64(entry.file); }
         else { const text = await entry.file.text(); bodyPayload.fileContent = text.substring(0, 80000); }
         try {
@@ -118,7 +119,7 @@ export default function NewCustomerPage() {
         toast.success('פרטי לקוח חולצו מהקבצים בהצלחה');
       } else { toast.info('לא נמצאו פרטי לקוח בקבצים, יש למלא ידנית'); }
       setStep(2);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Analysis error:', err);
       toast.error('שגיאה בניתוח הקובץ');
       setStep(2);
@@ -142,9 +143,9 @@ export default function NewCustomerPage() {
         idNumber: form.idNumber,
         mobilePhone: form.mobilePhone,
         email: form.email || undefined,
-        gender: (form.gender as any) || undefined,
+        gender: (form.gender as Gender) || undefined,
         birthDate: form.birthDate || undefined,
-        maritalStatus: (form.maritalStatus as any) || undefined,
+        maritalStatus: (form.maritalStatus as MaritalStatus) || undefined,
         numberOfChildren: form.numberOfChildren ? parseInt(form.numberOfChildren) : undefined,
         city: form.city || undefined,
         street: form.street || undefined,
@@ -166,7 +167,7 @@ export default function NewCustomerPage() {
         await addSourceFile({ customerId: customer.id, type: entry.type, fileName: entry.file.name, analysisStatus: 'בניתוח' });
         const filePath = `${customer.id}/${Date.now()}_${entry.file.name}`;
         await supabase.storage.from('source-files').upload(filePath, entry.file);
-        let bodyPayload: Record<string, any> = { fileName: entry.file.name, fileType: entry.type, customerId: customer.id };
+        const bodyPayload: Record<string, unknown> = { fileName: entry.file.name, fileType: entry.type, customerId: customer.id };
         if (isBinaryFile(entry.file)) { bodyPayload.fileBase64 = await readFileAsBase64(entry.file); }
         else { const text = await entry.file.text(); bodyPayload.fileContent = text.substring(0, 80000); }
         const response = await supabase.functions.invoke('parse-insurance-file', { body: bodyPayload });
@@ -174,14 +175,14 @@ export default function NewCustomerPage() {
       }
       toast.success('הלקוח נוצר בהצלחה');
       navigate(`/app/customers/${customer.id}`);
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה ביצירת לקוח');
     } finally { setCreating(false); }
   };
 
   const handleDrop = (type: 'maslaqa' | 'harBituah', e: React.DragEvent) => {
     e.preventDefault();
-    type === 'maslaqa' ? setDraggingMaslaqa(false) : setDraggingHar(false);
+    if (type === 'maslaqa') setDraggingMaslaqa(false); else setDraggingHar(false);
     handleFileSelect(type, e.dataTransfer.files);
   };
 
@@ -192,8 +193,8 @@ export default function NewCustomerPage() {
   }) => (
     <div
       className={`border-2 border-dashed rounded-2xl p-6 md:p-8 text-center cursor-pointer transition-all duration-300 ${
-        dragging ? 'border-[#5ec6c6] bg-[#5ec6c6]/10 scale-[1.02]' :
-        fileList.length > 0 ? 'border-emerald-400/50 bg-emerald-50/30 dark:bg-emerald-900/10' : 'border-border/60 hover:border-[#5ec6c6]/50 hover:bg-[#5ec6c6]/5'
+        dragging ? 'border-[#d6157e] bg-[#d6157e]/10 scale-[1.02]' :
+        fileList.length > 0 ? 'border-emerald-400/50 bg-emerald-50/30 dark:bg-emerald-900/10' : 'border-border/60 hover:border-[#d6157e]/50 hover:bg-[#d6157e]/5'
       }`}
       onClick={() => inputRef.current?.click()}
       onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
@@ -213,8 +214,8 @@ export default function NewCustomerPage() {
         </div>
       ) : (
         <>
-          <div className="w-14 h-14 rounded-2xl bg-[#0a3d3d]/8 flex items-center justify-center mx-auto mb-3">
-            <Upload className="h-7 w-7 text-[#0a3d3d]/60" />
+          <div className="w-14 h-14 rounded-2xl bg-[#1a1a4b]/8 flex items-center justify-center mx-auto mb-3">
+            <Upload className="h-7 w-7 text-[#1a1a4b]/60" />
           </div>
           <p className="font-semibold text-foreground text-sm">{dragging ? 'שחרר כאן' : label}</p>
           <p className="text-xs text-muted-foreground mt-1.5">גרור קובץ לכאן או לחץ לבחירה</p>
@@ -238,7 +239,7 @@ export default function NewCustomerPage() {
             variant="ghost"
             size="sm"
             onClick={() => navigate('/app/customers')}
-            className="hover:bg-[#5ec6c6]/10 rounded-xl h-10 w-10 p-0"
+            className="hover:bg-[#d6157e]/10 rounded-xl h-10 w-10 p-0"
           >
             <ArrowRight className="h-4 w-4" />
           </Button>
@@ -252,15 +253,15 @@ export default function NewCustomerPage() {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 flex-1">
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-              step >= 1 ? 'bg-[#0a3d3d] text-white shadow-md shadow-[#0a3d3d]/20' : 'bg-muted text-muted-foreground'
+              step >= 1 ? 'bg-[#1a1a4b] text-white shadow-md shadow-[#1a1a4b]/20' : 'bg-muted text-muted-foreground'
             }`}>1</div>
-            <span className={`text-xs font-medium hidden sm:inline ${step >= 1 ? 'text-[#0a3d3d]' : 'text-muted-foreground'}`}>העלאת קבצים</span>
+            <span className={`text-xs font-medium hidden sm:inline ${step >= 1 ? 'text-[#1a1a4b]' : 'text-muted-foreground'}`}>העלאת קבצים</span>
           </div>
-          <div className={`h-[2px] flex-1 rounded-full transition-all duration-500 ${step >= 2 ? 'bg-[#0a3d3d]' : 'bg-border'}`} />
+          <div className={`h-[2px] flex-1 rounded-full transition-all duration-500 ${step >= 2 ? 'bg-[#1a1a4b]' : 'bg-border'}`} />
           <div className="flex items-center gap-2 flex-1 justify-end">
-            <span className={`text-xs font-medium hidden sm:inline ${step >= 2 ? 'text-[#0a3d3d]' : 'text-muted-foreground'}`}>פרטי לקוח</span>
+            <span className={`text-xs font-medium hidden sm:inline ${step >= 2 ? 'text-[#1a1a4b]' : 'text-muted-foreground'}`}>פרטי לקוח</span>
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-              step >= 2 ? 'bg-[#0a3d3d] text-white shadow-md shadow-[#0a3d3d]/20' : 'bg-muted text-muted-foreground'
+              step >= 2 ? 'bg-[#1a1a4b] text-white shadow-md shadow-[#1a1a4b]/20' : 'bg-muted text-muted-foreground'
             }`}>2</div>
           </div>
         </div>
@@ -274,10 +275,10 @@ export default function NewCustomerPage() {
           className="space-y-6"
         >
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
-            <CardHeader className="bg-gradient-to-b from-[#0a3d3d]/3 to-transparent pb-4">
+            <CardHeader className="bg-gradient-to-b from-[#1a1a4b]/3 to-transparent pb-4">
               <CardTitle className="flex items-center gap-2.5 text-lg">
-                <div className="w-8 h-8 rounded-xl bg-[#0a3d3d]/10 flex items-center justify-center">
-                  <FileText className="h-4 w-4 text-[#0a3d3d]" />
+                <div className="w-8 h-8 rounded-xl bg-[#1a1a4b]/10 flex items-center justify-center">
+                  <FileText className="h-4 w-4 text-[#1a1a4b]" />
                 </div>
                 העלאת קבצי מקור
               </CardTitle>
@@ -296,7 +297,7 @@ export default function NewCustomerPage() {
               onClick={handleAnalyze}
               disabled={analyzing || (files.maslaqa.length === 0 && files.harBituah.length === 0)}
               size="lg"
-              className="gap-2 rounded-2xl bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
+              className="gap-2 rounded-2xl bg-[#1a1a4b] hover:bg-[#1a1a4b]/90 shadow-lg shadow-[#1a1a4b]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
             >
               {analyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {analyzing ? 'מנתח קבצים...' : 'נתח והמשך'}
@@ -313,10 +314,10 @@ export default function NewCustomerPage() {
         >
           {/* Personal info */}
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
-            <CardHeader className="pb-3 bg-gradient-to-b from-[#0a3d3d]/3 to-transparent">
+            <CardHeader className="pb-3 bg-gradient-to-b from-[#1a1a4b]/3 to-transparent">
               <CardTitle className="flex items-center gap-2.5 text-base">
-                <div className="w-7 h-7 rounded-lg bg-[#0a3d3d]/10 flex items-center justify-center">
-                  <User className="h-3.5 w-3.5 text-[#0a3d3d]" />
+                <div className="w-7 h-7 rounded-lg bg-[#1a1a4b]/10 flex items-center justify-center">
+                  <User className="h-3.5 w-3.5 text-[#1a1a4b]" />
                 </div>
                 פרטים אישיים
               </CardTitle>
@@ -325,17 +326,17 @@ export default function NewCustomerPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">שם פרטי *</Label>
-                  <Input value={form.firstName} onChange={e => updateField('firstName', e.target.value)} placeholder="שם פרטי" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                  <Input value={form.firstName} onChange={e => updateField('firstName', e.target.value)} placeholder="שם פרטי" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                   {errors.firstName && <p className="text-xs text-destructive mt-1">{errors.firstName}</p>}
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">שם משפחה *</Label>
-                  <Input value={form.lastName} onChange={e => updateField('lastName', e.target.value)} placeholder="שם משפחה" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                  <Input value={form.lastName} onChange={e => updateField('lastName', e.target.value)} placeholder="שם משפחה" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                   {errors.lastName && <p className="text-xs text-destructive mt-1">{errors.lastName}</p>}
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">תעודת זהות *</Label>
-                  <Input value={form.idNumber} onChange={e => updateField('idNumber', e.target.value)} placeholder="מספר ת.ז" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                  <Input value={form.idNumber} onChange={e => updateField('idNumber', e.target.value)} placeholder="מספר ת.ז" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                   {errors.idNumber && <p className="text-xs text-destructive mt-1">{errors.idNumber}</p>}
                 </div>
               </div>
@@ -352,7 +353,7 @@ export default function NewCustomerPage() {
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">תאריך לידה</Label>
-                  <Input type="date" value={form.birthDate} onChange={e => updateField('birthDate', e.target.value)} className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                  <Input type="date" value={form.birthDate} onChange={e => updateField('birthDate', e.target.value)} className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">מצב משפחתי</Label>
@@ -368,7 +369,7 @@ export default function NewCustomerPage() {
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">מספר ילדים</Label>
-                  <Input type="number" inputMode="numeric" min="0" value={form.numberOfChildren} onChange={e => updateField('numberOfChildren', e.target.value)} placeholder="0" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                  <Input type="number" inputMode="numeric" min="0" value={form.numberOfChildren} onChange={e => updateField('numberOfChildren', e.target.value)} placeholder="0" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                 </div>
               </div>
               {form.maritalStatus === 'נשוי/אה' && (
@@ -380,7 +381,7 @@ export default function NewCustomerPage() {
                 >
                   <div className="space-y-1.5">
                     <Label className="text-xs font-medium text-muted-foreground">שם בן/בת זוג</Label>
-                    <Input value={form.spouseName} onChange={e => updateField('spouseName', e.target.value)} placeholder="שם מלא" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                    <Input value={form.spouseName} onChange={e => updateField('spouseName', e.target.value)} placeholder="שם מלא" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                   </div>
                 </motion.div>
               )}
@@ -389,10 +390,10 @@ export default function NewCustomerPage() {
 
           {/* Contact info */}
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
-            <CardHeader className="pb-3 bg-gradient-to-b from-[#5ec6c6]/5 to-transparent">
+            <CardHeader className="pb-3 bg-gradient-to-b from-[#d6157e]/5 to-transparent">
               <CardTitle className="flex items-center gap-2.5 text-base">
-                <div className="w-7 h-7 rounded-lg bg-[#5ec6c6]/15 flex items-center justify-center">
-                  <Phone className="h-3.5 w-3.5 text-[#0a3d3d]" />
+                <div className="w-7 h-7 rounded-lg bg-[#d6157e]/15 flex items-center justify-center">
+                  <Phone className="h-3.5 w-3.5 text-[#1a1a4b]" />
                 </div>
                 פרטי קשר
               </CardTitle>
@@ -401,12 +402,12 @@ export default function NewCustomerPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">טלפון נייד *</Label>
-                  <Input value={form.mobilePhone} onChange={e => updateField('mobilePhone', e.target.value)} placeholder="05XXXXXXXX" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                  <Input value={form.mobilePhone} onChange={e => updateField('mobilePhone', e.target.value)} placeholder="05XXXXXXXX" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                   {errors.mobilePhone && <p className="text-xs text-destructive mt-1">{errors.mobilePhone}</p>}
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">אימייל</Label>
-                  <Input value={form.email} onChange={e => updateField('email', e.target.value)} placeholder="email@example.com" type="email" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                  <Input value={form.email} onChange={e => updateField('email', e.target.value)} placeholder="email@example.com" type="email" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                 </div>
               </div>
             </CardContent>
@@ -426,19 +427,19 @@ export default function NewCustomerPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">עיר</Label>
-                  <Input value={form.city} onChange={e => updateField('city', e.target.value)} placeholder="עיר" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                  <Input value={form.city} onChange={e => updateField('city', e.target.value)} placeholder="עיר" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">רחוב</Label>
-                  <Input value={form.street} onChange={e => updateField('street', e.target.value)} placeholder="שם רחוב" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                  <Input value={form.street} onChange={e => updateField('street', e.target.value)} placeholder="שם רחוב" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">מספר בית</Label>
-                  <Input value={form.houseNumber} onChange={e => updateField('houseNumber', e.target.value)} placeholder="מספר" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                  <Input value={form.houseNumber} onChange={e => updateField('houseNumber', e.target.value)} placeholder="מספר" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">דירה</Label>
-                  <Input value={form.apartmentNumber} onChange={e => updateField('apartmentNumber', e.target.value)} placeholder="מספר" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                  <Input value={form.apartmentNumber} onChange={e => updateField('apartmentNumber', e.target.value)} placeholder="מספר" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                 </div>
               </div>
             </CardContent>
@@ -458,7 +459,7 @@ export default function NewCustomerPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">עיסוק</Label>
-                  <Input value={form.occupation} onChange={e => updateField('occupation', e.target.value)} placeholder="עיסוק" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                  <Input value={form.occupation} onChange={e => updateField('occupation', e.target.value)} placeholder="עיסוק" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">סטטוס תעסוקה</Label>
@@ -475,7 +476,7 @@ export default function NewCustomerPage() {
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">הכנסה חודשית</Label>
-                  <Input type="number" inputMode="decimal" value={form.monthlyIncome} onChange={e => updateField('monthlyIncome', e.target.value)} placeholder="₪" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6] transition-colors" />
+                  <Input type="number" inputMode="decimal" value={form.monthlyIncome} onChange={e => updateField('monthlyIncome', e.target.value)} placeholder="₪" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e] transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">קופת חולים</Label>
@@ -505,7 +506,7 @@ export default function NewCustomerPage() {
             </CardHeader>
             <CardContent className="p-4 md:p-6">
               <Textarea value={form.internalNotes} onChange={e => updateField('internalNotes', e.target.value)}
-                placeholder="הערות פנימיות על הלקוח..." rows={3} className="rounded-xl border-border/60 focus:border-[#5ec6c6] transition-colors resize-none" />
+                placeholder="הערות פנימיות על הלקוח..." rows={3} className="rounded-xl border-border/60 focus:border-[#d6157e] transition-colors resize-none" />
             </CardContent>
           </Card>
 
@@ -513,7 +514,7 @@ export default function NewCustomerPage() {
             <Button
               onClick={handleCreate}
               size="lg"
-              className="gap-2 rounded-2xl bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
+              className="gap-2 rounded-2xl bg-[#1a1a4b] hover:bg-[#1a1a4b]/90 shadow-lg shadow-[#1a1a4b]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
               disabled={creating}
             >
               {creating && <Loader2 className="h-4 w-4 animate-spin" />}

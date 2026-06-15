@@ -74,7 +74,7 @@ export function FileUploadSection({ customerId }: FileUploadSectionProps) {
   };
 
   const handleFilesSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    let files = Array.from(e.target.files || []);
+    const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
     // Extract ZIPs
@@ -133,7 +133,7 @@ export function FileUploadSection({ customerId }: FileUploadSectionProps) {
         setUploads(prev => prev.map((u, j) => j === idx ? { ...u, state: 'parsing' } : u));
 
         // Read file content - binary files as base64, text files as text
-        let bodyPayload: Record<string, any> = {
+        const bodyPayload: Record<string, unknown> = {
           fileName: upload.file.name,
           fileType: upload.type,
           customerId,
@@ -169,7 +169,7 @@ export function FileUploadSection({ customerId }: FileUploadSectionProps) {
 
         // Refresh data to show new products
         await refreshData();
-      } catch (err: any) {
+      } catch (err) {
         console.error('Upload error:', err);
         setUploads(prev => prev.map((u, j) => j === idx ? { ...u, state: 'error', error: err.message } : u));
         toast.error(`שגיאה בעיבוד ${upload.file.name}`);

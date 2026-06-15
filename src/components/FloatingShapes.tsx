@@ -20,8 +20,8 @@ interface Shape {
 }
 
 const COLORS = [
-  "#5ec6c6", "#f4a261", "#e76f51", "#90be6d", "#6c63ff",
-  "#5ec6c6", "#f4a261", "#90be6d",
+  "#d6157e", "#6b6fc4", "#3b3f99", "#f06ba8", "#6c63ff",
+  "#d6157e", "#6b6fc4", "#f06ba8",
 ];
 
 const DRIFTS: Shape["drift"][] = ["float-a", "float-b", "float-c", "float-d"];

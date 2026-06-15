@@ -14,6 +14,885 @@ export type Database = {
   }
   public: {
     Tables: {
+      blog_posts: {
+        Row: {
+          id: string
+          title: string
+          slug: string
+          excerpt: string | null
+          content: string
+          category: string | null
+          cover_image_url: string | null
+          author: string | null
+          status: string
+          published_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          slug: string
+          excerpt?: string | null
+          content: string
+          category?: string | null
+          cover_image_url?: string | null
+          author?: string | null
+          status?: string
+          published_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          slug?: string
+          excerpt?: string | null
+          content?: string
+          category?: string | null
+          cover_image_url?: string | null
+          author?: string | null
+          status?: string
+          published_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      chat_conversations: {
+        Row: {
+          id: string
+          session_id: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          session_id: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          session_id?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      chat_messages: {
+        Row: {
+          id: string
+          conversation_id: string
+          role: string
+          content: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          conversation_id: string
+          role: string
+          content: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          conversation_id?: string
+          role?: string
+          content?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      cma_funds_latest: {
+        Row: {
+          id: string | null
+          fund_id: string | null
+          fund_name: string | null
+          fund_classification: string | null
+          managing_company: string | null
+          source: string | null
+          product_type: string | null
+          specialization: string | null
+          sub_specialization: string | null
+          report_period: number | null
+          total_assets: number | null
+          monthly_yield: number | null
+          ytd_yield: number | null
+          yield_trailing_3yrs: number | null
+          yield_trailing_5yrs: number | null
+          avg_annual_yield_3yrs: number | null
+          avg_annual_yield_5yrs: number | null
+          avg_annual_management_fee: number | null
+          avg_deposit_fee: number | null
+          standard_deviation: number | null
+          sharpe_ratio: number | null
+          stock_market_exposure: number | null
+          foreign_exposure: number | null
+          foreign_currency_exposure: number | null
+          actuarial_adjustment: number | null
+          fetched_at: string | null
+        }
+        Insert: {
+          id?: string | null
+          fund_id?: string | null
+          fund_name?: string | null
+          fund_classification?: string | null
+          managing_company?: string | null
+          source?: string | null
+          product_type?: string | null
+          specialization?: string | null
+          sub_specialization?: string | null
+          report_period?: number | null
+          total_assets?: number | null
+          monthly_yield?: number | null
+          ytd_yield?: number | null
+          yield_trailing_3yrs?: number | null
+          yield_trailing_5yrs?: number | null
+          avg_annual_yield_3yrs?: number | null
+          avg_annual_yield_5yrs?: number | null
+          avg_annual_management_fee?: number | null
+          avg_deposit_fee?: number | null
+          standard_deviation?: number | null
+          sharpe_ratio?: number | null
+          stock_market_exposure?: number | null
+          foreign_exposure?: number | null
+          foreign_currency_exposure?: number | null
+          actuarial_adjustment?: number | null
+          fetched_at?: string | null
+        }
+        Update: {
+          id?: string | null
+          fund_id?: string | null
+          fund_name?: string | null
+          fund_classification?: string | null
+          managing_company?: string | null
+          source?: string | null
+          product_type?: string | null
+          specialization?: string | null
+          sub_specialization?: string | null
+          report_period?: number | null
+          total_assets?: number | null
+          monthly_yield?: number | null
+          ytd_yield?: number | null
+          yield_trailing_3yrs?: number | null
+          yield_trailing_5yrs?: number | null
+          avg_annual_yield_3yrs?: number | null
+          avg_annual_yield_5yrs?: number | null
+          avg_annual_management_fee?: number | null
+          avg_deposit_fee?: number | null
+          standard_deviation?: number | null
+          sharpe_ratio?: number | null
+          stock_market_exposure?: number | null
+          foreign_exposure?: number | null
+          foreign_currency_exposure?: number | null
+          actuarial_adjustment?: number | null
+          fetched_at?: string | null
+        }
+        Relationships: []
+      }
+      cma_sync_log: {
+        Row: {
+          id: string
+          source: string
+          status: string
+          records_fetched: number | null
+          records_upserted: number | null
+          latest_period: number | null
+          error_message: string | null
+          duration_ms: number | null
+          started_at: string | null
+          completed_at: string | null
+        }
+        Insert: {
+          id?: string
+          source: string
+          status: string
+          records_fetched?: number | null
+          records_upserted?: number | null
+          latest_period?: number | null
+          error_message?: string | null
+          duration_ms?: number | null
+          started_at?: string | null
+          completed_at?: string | null
+        }
+        Update: {
+          id?: string
+          source?: string
+          status?: string
+          records_fetched?: number | null
+          records_upserted?: number | null
+          latest_period?: number | null
+          error_message?: string | null
+          duration_ms?: number | null
+          started_at?: string | null
+          completed_at?: string | null
+        }
+        Relationships: []
+      }
+      contact_submissions: {
+        Row: {
+          id: string
+          user_id: string | null
+          name: string
+          email: string
+          subject: string | null
+          message: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          name: string
+          email: string
+          subject?: string | null
+          message: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          name?: string
+          email?: string
+          subject?: string | null
+          message?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      customer_messages: {
+        Row: {
+          id: string
+          customer_id: string
+          agent_id: string
+          sender: string
+          content: string
+          read_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          customer_id: string
+          agent_id: string
+          sender: string
+          content: string
+          read_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          customer_id?: string
+          agent_id?: string
+          sender?: string
+          content?: string
+          read_at?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      insurance_leads: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          full_name: string
+          phone: string
+          email: string
+          id_number: string | null
+          insurance_type: string
+          vehicle_type: string | null
+          vehicle_year: number | null
+          vehicle_manufacturer: string | null
+          vehicle_model: string | null
+          license_plate: string | null
+          property_type: string | null
+          property_size_sqm: number | null
+          property_value: number | null
+          property_address: string | null
+          business_type: string | null
+          business_employees: number | null
+          annual_revenue: number | null
+          birth_date: string | null
+          smoker: boolean | null
+          pre_existing_conditions: string | null
+          destination: string | null
+          travel_start_date: string | null
+          travel_end_date: string | null
+          travelers_count: number | null
+          current_insurer: string | null
+          additional_notes: string | null
+          preferred_contact_time: string | null
+          status: string
+          assigned_to: string | null
+          notes: string | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          full_name: string
+          phone: string
+          email: string
+          id_number?: string | null
+          insurance_type: string
+          vehicle_type?: string | null
+          vehicle_year?: number | null
+          vehicle_manufacturer?: string | null
+          vehicle_model?: string | null
+          license_plate?: string | null
+          property_type?: string | null
+          property_size_sqm?: number | null
+          property_value?: number | null
+          property_address?: string | null
+          business_type?: string | null
+          business_employees?: number | null
+          annual_revenue?: number | null
+          birth_date?: string | null
+          smoker?: boolean | null
+          pre_existing_conditions?: string | null
+          destination?: string | null
+          travel_start_date?: string | null
+          travel_end_date?: string | null
+          travelers_count?: number | null
+          current_insurer?: string | null
+          additional_notes?: string | null
+          preferred_contact_time?: string | null
+          status?: string
+          assigned_to?: string | null
+          notes?: string | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          full_name?: string
+          phone?: string
+          email?: string
+          id_number?: string | null
+          insurance_type?: string
+          vehicle_type?: string | null
+          vehicle_year?: number | null
+          vehicle_manufacturer?: string | null
+          vehicle_model?: string | null
+          license_plate?: string | null
+          property_type?: string | null
+          property_size_sqm?: number | null
+          property_value?: number | null
+          property_address?: string | null
+          business_type?: string | null
+          business_employees?: number | null
+          annual_revenue?: number | null
+          birth_date?: string | null
+          smoker?: boolean | null
+          pre_existing_conditions?: string | null
+          destination?: string | null
+          travel_start_date?: string | null
+          travel_end_date?: string | null
+          travelers_count?: number | null
+          current_insurer?: string | null
+          additional_notes?: string | null
+          preferred_contact_time?: string | null
+          status?: string
+          assigned_to?: string | null
+          notes?: string | null
+        }
+        Relationships: []
+      }
+      page_views: {
+        Row: {
+          id: number
+          slug: string
+          viewed_at: string
+          country: string | null
+          city: string | null
+          device: string | null
+          referrer: string | null
+          browser: string | null
+          session_id: string | null
+        }
+        Insert: {
+          id: number
+          slug: string
+          viewed_at?: string
+          country?: string | null
+          city?: string | null
+          device?: string | null
+          referrer?: string | null
+          browser?: string | null
+          session_id?: string | null
+        }
+        Update: {
+          id?: number
+          slug?: string
+          viewed_at?: string
+          country?: string | null
+          city?: string | null
+          device?: string | null
+          referrer?: string | null
+          browser?: string | null
+          session_id?: string | null
+        }
+        Relationships: []
+      }
+      saved_calculations: {
+        Row: {
+          id: string
+          user_id: string
+          calculator_type: string
+          title: string | null
+          input_data: Json
+          result_data: Json
+          tips: string[] | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          calculator_type: string
+          title?: string | null
+          input_data: Json
+          result_data: Json
+          tips?: string[] | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          calculator_type?: string
+          title?: string | null
+          input_data?: Json
+          result_data?: Json
+          tips?: string[] | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      user_policies: {
+        Row: {
+          id: string
+          user_id: string
+          policy_type: string
+          policy_name: string
+          policy_number: string | null
+          provider: string | null
+          start_date: string | null
+          end_date: string | null
+          monthly_premium: number | null
+          coverage_amount: number | null
+          status: string
+          details: Json | null
+          notes: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          policy_type: string
+          policy_name: string
+          policy_number?: string | null
+          provider?: string | null
+          start_date?: string | null
+          end_date?: string | null
+          monthly_premium?: number | null
+          coverage_amount?: number | null
+          status?: string
+          details?: Json | null
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          policy_type?: string
+          policy_name?: string
+          policy_number?: string | null
+          provider?: string | null
+          start_date?: string | null
+          end_date?: string | null
+          monthly_premium?: number | null
+          coverage_amount?: number | null
+          status?: string
+          details?: Json | null
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      investment_tracks: {
+        Row: {
+          id: number
+          fund_number: string
+          name: string
+          company: string
+          product_type: string
+          specialization: string
+          stock_exposure: number | null
+          return_year1: number | null
+          return_year3: number | null
+          return_year5: number | null
+          return_month: number | null
+          fee_assets: number | null
+          fee_deposits: number | null
+          sharpe_ratio: number | null
+          total_assets: number | null
+          liquidity: number | null
+          report_period: string | null
+          foreign_exposure: number | null
+          currency_exposure: number | null
+          stocks_pct: number | null
+          gov_bonds_pct: number | null
+          corp_bonds_pct: number | null
+          cash_pct: number | null
+          other_pct: number | null
+          is_active: boolean | null
+          last_sync: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id: number
+          fund_number: string
+          name: string
+          company: string
+          product_type?: string
+          specialization?: string
+          stock_exposure?: number | null
+          return_year1?: number | null
+          return_year3?: number | null
+          return_year5?: number | null
+          return_month?: number | null
+          fee_assets?: number | null
+          fee_deposits?: number | null
+          sharpe_ratio?: number | null
+          total_assets?: number | null
+          liquidity?: number | null
+          report_period?: string | null
+          foreign_exposure?: number | null
+          currency_exposure?: number | null
+          stocks_pct?: number | null
+          gov_bonds_pct?: number | null
+          corp_bonds_pct?: number | null
+          cash_pct?: number | null
+          other_pct?: number | null
+          is_active?: boolean | null
+          last_sync?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: number
+          fund_number?: string
+          name?: string
+          company?: string
+          product_type?: string
+          specialization?: string
+          stock_exposure?: number | null
+          return_year1?: number | null
+          return_year3?: number | null
+          return_year5?: number | null
+          return_month?: number | null
+          fee_assets?: number | null
+          fee_deposits?: number | null
+          sharpe_ratio?: number | null
+          total_assets?: number | null
+          liquidity?: number | null
+          report_period?: string | null
+          foreign_exposure?: number | null
+          currency_exposure?: number | null
+          stocks_pct?: number | null
+          gov_bonds_pct?: number | null
+          corp_bonds_pct?: number | null
+          cash_pct?: number | null
+          other_pct?: number | null
+          is_active?: boolean | null
+          last_sync?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      pension_analysis_leads: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          full_name: string
+          phone: string
+          email: string
+          id_number: string | null
+          birth_date: string | null
+          employment_status: string | null
+          monthly_salary: number | null
+          employer_name: string | null
+          employment_start_date: string | null
+          existing_products: Json | null
+          retirement_age: number | null
+          desired_monthly_pension: number | null
+          risk_tolerance: string | null
+          primary_goals: string[] | null
+          spouse_employed: boolean | null
+          children_count: number | null
+          additional_notes: string | null
+          preferred_contact_time: string | null
+          status: string
+          assigned_to: string | null
+          notes: string | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          full_name: string
+          phone: string
+          email: string
+          id_number?: string | null
+          birth_date?: string | null
+          employment_status?: string | null
+          monthly_salary?: number | null
+          employer_name?: string | null
+          employment_start_date?: string | null
+          existing_products?: Json | null
+          retirement_age?: number | null
+          desired_monthly_pension?: number | null
+          risk_tolerance?: string | null
+          primary_goals?: string[] | null
+          spouse_employed?: boolean | null
+          children_count?: number | null
+          additional_notes?: string | null
+          preferred_contact_time?: string | null
+          status?: string
+          assigned_to?: string | null
+          notes?: string | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          full_name?: string
+          phone?: string
+          email?: string
+          id_number?: string | null
+          birth_date?: string | null
+          employment_status?: string | null
+          monthly_salary?: number | null
+          employer_name?: string | null
+          employment_start_date?: string | null
+          existing_products?: Json | null
+          retirement_age?: number | null
+          desired_monthly_pension?: number | null
+          risk_tolerance?: string | null
+          primary_goals?: string[] | null
+          spouse_employed?: boolean | null
+          children_count?: number | null
+          additional_notes?: string | null
+          preferred_contact_time?: string | null
+          status?: string
+          assigned_to?: string | null
+          notes?: string | null
+        }
+        Relationships: []
+      }
+      onboarding_submissions: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          status: string
+          first_name: string | null
+          last_name: string | null
+          phone: string | null
+          birth_date: string | null
+          calculated_age: number | null
+          email: string | null
+          id_number: string | null
+          id_issue_date: string | null
+          city: string | null
+          street: string | null
+          house_number: string | null
+          postal_code: string | null
+          gender: string | null
+          marital_status: string | null
+          children_count: number | null
+          employment_status: string | null
+          profession: string | null
+          employer_name: string | null
+          work_seniority: string | null
+          annual_income: number | null
+          additional_income: string | null
+          smoker: boolean | null
+          cigarettes_per_day: number | null
+          health_fund: string | null
+          supplemental_insurance: string | null
+          height_cm: number | null
+          weight_kg: number | null
+          bmi: number | null
+          phone_secondary: string | null
+          preferred_contact: string[] | null
+          children_ages: string | null
+          birth_country: string | null
+          immigration_year: number | null
+          additional_citizenship: string | null
+          has_spouse: boolean | null
+          spouse_name: string | null
+          spouse_birth_date: string | null
+          spouse_phone: string | null
+          spouse_email: string | null
+          spouse_health_fund: string | null
+          spouse_supplemental: string | null
+          spouse_employment: string | null
+          spouse_profession: string | null
+          referral_reason: string | null
+          interests: string[] | null
+          priority_preference: string | null
+          monthly_budget: number | null
+          data_consent: boolean | null
+          insurance_report_consent: boolean | null
+          summary_delivery: string[] | null
+          bank_name: string | null
+          bank_branch: string | null
+          bank_account: string | null
+          account_type: string | null
+          account_owner: string | null
+          co_owner_name: string | null
+          bank_notes: string | null
+          conversation_data: Json | null
+          form_data: Json | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          status?: string
+          first_name?: string | null
+          last_name?: string | null
+          phone?: string | null
+          birth_date?: string | null
+          calculated_age?: number | null
+          email?: string | null
+          id_number?: string | null
+          id_issue_date?: string | null
+          city?: string | null
+          street?: string | null
+          house_number?: string | null
+          postal_code?: string | null
+          gender?: string | null
+          marital_status?: string | null
+          children_count?: number | null
+          employment_status?: string | null
+          profession?: string | null
+          employer_name?: string | null
+          work_seniority?: string | null
+          annual_income?: number | null
+          additional_income?: string | null
+          smoker?: boolean | null
+          cigarettes_per_day?: number | null
+          health_fund?: string | null
+          supplemental_insurance?: string | null
+          height_cm?: number | null
+          weight_kg?: number | null
+          bmi?: number | null
+          phone_secondary?: string | null
+          preferred_contact?: string[] | null
+          children_ages?: string | null
+          birth_country?: string | null
+          immigration_year?: number | null
+          additional_citizenship?: string | null
+          has_spouse?: boolean | null
+          spouse_name?: string | null
+          spouse_birth_date?: string | null
+          spouse_phone?: string | null
+          spouse_email?: string | null
+          spouse_health_fund?: string | null
+          spouse_supplemental?: string | null
+          spouse_employment?: string | null
+          spouse_profession?: string | null
+          referral_reason?: string | null
+          interests?: string[] | null
+          priority_preference?: string | null
+          monthly_budget?: number | null
+          data_consent?: boolean | null
+          insurance_report_consent?: boolean | null
+          summary_delivery?: string[] | null
+          bank_name?: string | null
+          bank_branch?: string | null
+          bank_account?: string | null
+          account_type?: string | null
+          account_owner?: string | null
+          co_owner_name?: string | null
+          bank_notes?: string | null
+          conversation_data?: Json | null
+          form_data?: Json | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          status?: string
+          first_name?: string | null
+          last_name?: string | null
+          phone?: string | null
+          birth_date?: string | null
+          calculated_age?: number | null
+          email?: string | null
+          id_number?: string | null
+          id_issue_date?: string | null
+          city?: string | null
+          street?: string | null
+          house_number?: string | null
+          postal_code?: string | null
+          gender?: string | null
+          marital_status?: string | null
+          children_count?: number | null
+          employment_status?: string | null
+          profession?: string | null
+          employer_name?: string | null
+          work_seniority?: string | null
+          annual_income?: number | null
+          additional_income?: string | null
+          smoker?: boolean | null
+          cigarettes_per_day?: number | null
+          health_fund?: string | null
+          supplemental_insurance?: string | null
+          height_cm?: number | null
+          weight_kg?: number | null
+          bmi?: number | null
+          phone_secondary?: string | null
+          preferred_contact?: string[] | null
+          children_ages?: string | null
+          birth_country?: string | null
+          immigration_year?: number | null
+          additional_citizenship?: string | null
+          has_spouse?: boolean | null
+          spouse_name?: string | null
+          spouse_birth_date?: string | null
+          spouse_phone?: string | null
+          spouse_email?: string | null
+          spouse_health_fund?: string | null
+          spouse_supplemental?: string | null
+          spouse_employment?: string | null
+          spouse_profession?: string | null
+          referral_reason?: string | null
+          interests?: string[] | null
+          priority_preference?: string | null
+          monthly_budget?: number | null
+          data_consent?: boolean | null
+          insurance_report_consent?: boolean | null
+          summary_delivery?: string[] | null
+          bank_name?: string | null
+          bank_branch?: string | null
+          bank_account?: string | null
+          account_type?: string | null
+          account_owner?: string | null
+          co_owner_name?: string | null
+          bank_notes?: string | null
+          conversation_data?: Json | null
+          form_data?: Json | null
+        }
+        Relationships: []
+      }
       activity_log: {
         Row: {
           agency_id: string | null

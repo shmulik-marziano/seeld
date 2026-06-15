@@ -45,7 +45,7 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setFiles((data || []) as SourceFile[]);
+      setFiles((data || []) as unknown as SourceFile[]);
     } catch {
       toast.error("שגיאה בטעינת המסמכים");
     } finally {
@@ -56,7 +56,7 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
   if (loading) {
     return (
       <div className="flex justify-center py-16">
-        <Loader2 className="w-7 h-7 animate-spin" style={{ color: "#0a3d3d" }} />
+        <Loader2 className="w-7 h-7 animate-spin" style={{ color: "#1a1a4b" }} />
       </div>
     );
   }
@@ -67,7 +67,7 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
         <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: "#ede9fe" }}>
           <FolderOpen className="w-8 h-8" style={{ color: "#6366f1" }} />
         </div>
-        <h3 className="text-lg font-bold mb-2" style={{ color: "#0a3d3d" }}>אין מסמכים עדיין</h3>
+        <h3 className="text-lg font-bold mb-2" style={{ color: "#1a1a4b" }}>אין מסמכים עדיין</h3>
         <p className="text-gray-500">כשהסוכן שלך יעלה מסמכים לתיק, הם יופיעו כאן.</p>
       </div>
     );
@@ -75,7 +75,7 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold" style={{ color: "#0a3d3d" }}>המסמכים שלי</h2>
+      <h2 className="text-xl font-bold" style={{ color: "#1a1a4b" }}>המסמכים שלי</h2>
       <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
         {files.map((file, index) => {
           const status = statusConfig[file.status || "pending"] || statusConfig.pending;
@@ -92,14 +92,14 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
               {/* File type icon */}
               <div
                 className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 text-xs font-bold text-white"
-                style={{ background: "#0a3d3d" }}
+                style={{ background: "#1a1a4b" }}
               >
                 {typeLabel.slice(0, 3)}
               </div>
 
               {/* File info */}
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-sm truncate" style={{ color: "#0a3d3d" }}>
+                <p className="font-medium text-sm truncate" style={{ color: "#1a1a4b" }}>
                   {displayName}
                 </p>
                 <div className="flex items-center gap-3 mt-0.5">
@@ -116,7 +116,7 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
                   href={file.file_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 p-2 rounded-full hover:bg-gray-100 transition-colors text-[#5ec6c6] hover:text-[#0a3d3d]"
+                  className="shrink-0 p-2 rounded-full hover:bg-gray-100 transition-colors text-[#d6157e] hover:text-[#1a1a4b]"
                   title="הורד / צפה"
                 >
                   <Download className="w-4 h-4" />

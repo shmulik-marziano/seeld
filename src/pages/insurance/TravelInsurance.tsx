@@ -6,7 +6,7 @@ const TravelInsurance = () => {
   const quickPurchaseBanner = (
     <section className="py-10 sm:py-16">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="rounded-2xl bg-[#0a3d3d] p-8 sm:p-12 text-center space-y-6">
+        <div className="rounded-2xl bg-[#1a1a4b] p-8 sm:p-12 text-center space-y-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-white">רכשו ביטוח נסיעות לחו״ל עכשיו</h2>
           <p className="text-white/70 text-base sm:text-lg">רכישה מהירה ומאובטחת דרך הראל ביטוח — הסוכן שלכם ב-SEELD</p>
           <div className="relative inline-block">
@@ -41,7 +41,7 @@ const TravelInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Plane}
-      heroIconColor="#e76f51"
+      heroIconColor="#3b3f99"
       heroCategory="ביטוח נסיעות"
       heroTitle="ביטוח נסיעות לחו״ל"
       heroDescription="טסים בראש שקט לכל מקום בעולם — כיסוי רפואי, אובדן מזוודות, ביטול טיסה ועוד."

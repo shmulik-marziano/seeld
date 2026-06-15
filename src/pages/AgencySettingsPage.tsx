@@ -34,7 +34,7 @@ export default function AgencySettingsPage() {
     entityType: 'סוכנות ביטוח',
     phone: '',
     email: '',
-    primaryColor: '#3d6b4f',
+    primaryColor: '#2a2a66',
     secondaryColor: '#c4a265',
     accentColor: '#d4856a',
     logoUrl: '',
@@ -54,7 +54,7 @@ export default function AgencySettingsPage() {
         entityType: agency.entityType || 'סוכנות ביטוח',
         phone: agency.phone || '',
         email: agency.email || '',
-        primaryColor: agency.primaryColor || '#3d6b4f',
+        primaryColor: agency.primaryColor || '#2a2a66',
         secondaryColor: agency.secondaryColor || '#c4a265',
         accentColor: agency.accentColor || '#d4856a',
         logoUrl: agency.logoUrl || '',
@@ -91,7 +91,7 @@ export default function AgencySettingsPage() {
 
       setField('logoUrl', publicUrl);
       toast.success('הלוגו הועלה בהצלחה');
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה בהעלאת הלוגו');
     } finally {
       setUploadingLogo(false);
@@ -127,7 +127,7 @@ export default function AgencySettingsPage() {
       toast.success('ההגדרות נשמרו בהצלחה');
       // Refresh the page to pick up changes
       window.location.reload();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || 'שגיאה בשמירת ההגדרות');
     } finally {
       setSaving(false);
@@ -146,11 +146,11 @@ export default function AgencySettingsPage() {
     <div className="max-w-3xl mx-auto space-y-6 px-4 sm:px-0" dir="rtl">
       {/* Header */}
       <div className="flex items-center gap-3 sm:gap-4 mb-2">
-        <div className="w-12 h-12 rounded-full bg-[#5ec6c6] flex items-center justify-center">
+        <div className="w-12 h-12 rounded-full bg-[#d6157e] flex items-center justify-center">
           <Building2 className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-extrabold text-[#0a3d3d]">הגדרות סוכנות</h1>
+          <h1 className="text-2xl font-extrabold text-[#1a1a4b]">הגדרות סוכנות</h1>
           <p className="text-sm text-gray-400">ניהול פרטי הסוכנות, מיתוג, צבעים ומסלולי השקעה</p>
         </div>
       </div>

@@ -41,18 +41,18 @@ export function RecommendationModal({ open, onClose, customerId, recommendation,
     }
   }, [open, recommendation, linkedProductId]);
 
-  const set = (key: keyof Recommendation, value: any) => setForm(prev => ({ ...prev, [key]: value }));
+  const set = <K extends keyof Recommendation>(key: K, value: Recommendation[K]) => setForm(prev => ({ ...prev, [key]: value }));
 
   const handleSave = async () => {
     if (!form.title?.trim()) { toast.error('כותרת חובה'); return; }
     if (!form.rationale?.trim()) { toast.error('נימוק חובה'); return; }
-    if ((form as any).recommendedInvestmentTrack === 'אחר' && !(form as any).recommendedInvestmentTrackCustom?.trim()) {
+    if (form.recommendedInvestmentTrack === 'אחר' && !form.recommendedInvestmentTrackCustom?.trim()) {
       toast.error('יש למלא שם מסלול חופשי'); return;
     }
 
     const saveForm = { ...form };
-    if ((saveForm as any).recommendedInvestmentTrack !== 'אחר') {
-      (saveForm as any).recommendedInvestmentTrackCustom = undefined;
+    if (saveForm.recommendedInvestmentTrack !== 'אחר') {
+      saveForm.recommendedInvestmentTrackCustom = undefined;
     }
 
     try {
@@ -60,12 +60,12 @@ export function RecommendationModal({ open, onClose, customerId, recommendation,
         await updateRecommendation(recommendation!.id, saveForm);
         toast.success('המלצה עודכנה');
       } else {
-        await addRecommendation({ ...saveForm, customerId } as any);
+        await addRecommendation({ ...saveForm, customerId });
         toast.success('המלצה נוצרה');
       }
       onClose();
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'שגיאה');
     }
   };
 
@@ -102,7 +102,7 @@ export function RecommendationModal({ open, onClose, customerId, recommendation,
 
           <div>
             <Label className="text-xs mb-1 block">סוג פעולה *</Label>
-            <Select value={form.actionType || 'הצטרפות בלבד'} onValueChange={v => set('actionType', v)}>
+            <Select value={form.actionType || 'הצטרפות בלבד'} onValueChange={v => set('actionType', v as Recommendation['actionType'])}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 {actionTypesNew.map(a => <SelectItem key={a} value={a}>{a}</SelectItem>)}
@@ -129,7 +129,7 @@ export function RecommendationModal({ open, onClose, customerId, recommendation,
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label className="text-xs mb-1 block">מסלול השקעה מומלץ</Label>
-              <Select value={(form as any).recommendedInvestmentTrack || 'none'} onValueChange={v => set('recommendedInvestmentTrack' as any, v === 'none' ? undefined : v)}>
+              <Select value={form.recommendedInvestmentTrack || 'none'} onValueChange={v => set('recommendedInvestmentTrack', v === 'none' ? undefined : v)}>
                 <SelectTrigger><SelectValue placeholder="בחר מסלול" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">ללא</SelectItem>
@@ -139,7 +139,7 @@ export function RecommendationModal({ open, onClose, customerId, recommendation,
             </div>
             <div>
               <Label className="text-xs mb-1 block">סיכון מועדף מומלץ</Label>
-              <Select value={(form as any).recommendedRiskLevel || 'none'} onValueChange={v => set('recommendedRiskLevel' as any, v === 'none' ? undefined : v)}>
+              <Select value={form.recommendedRiskLevel || 'none'} onValueChange={v => set('recommendedRiskLevel', v === 'none' ? undefined : v)}>
                 <SelectTrigger><SelectValue placeholder="בחר רמת סיכון" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">ללא</SelectItem>
@@ -149,10 +149,10 @@ export function RecommendationModal({ open, onClose, customerId, recommendation,
             </div>
           </div>
 
-          {(form as any).recommendedInvestmentTrack === 'אחר' && (
+          {form.recommendedInvestmentTrack === 'אחר' && (
             <div>
               <Label className="text-xs mb-1 block">שם מסלול חופשי *</Label>
-              <Input value={(form as any).recommendedInvestmentTrackCustom || ''} onChange={e => set('recommendedInvestmentTrackCustom' as any, e.target.value)} placeholder="הזן שם מסלול" />
+              <Input value={form.recommendedInvestmentTrackCustom || ''} onChange={e => set('recommendedInvestmentTrackCustom', e.target.value)} placeholder="הזן שם מסלול" />
             </div>
           )}
 
