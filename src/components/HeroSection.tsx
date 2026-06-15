@@ -1,4 +1,4 @@
-import { ArrowDownLeft, Sparkles } from "lucide-react";
+import { ArrowDownLeft, Sparkles, ShieldCheck, TrendingUp, Wallet, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -25,11 +25,11 @@ const HeroSection = () => {
   });
 
   // Parallax values
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const y4 = useTransform(scrollYProgress, [0, 1], [0, 140]);
-  const yCard = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, 70]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, 110]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [0, 90]);
+  const y4 = useTransform(scrollYProgress, [0, 1], [0, 130]);
+  const yCard = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   return (
     <section
@@ -38,7 +38,7 @@ const HeroSection = () => {
       dir="rtl"
       style={{
         background:
-          "radial-gradient(ellipse 80% 50% at 50% 0%, hsl(168 38% 96%) 0%, #ffffff 60%)",
+          "radial-gradient(ellipse 80% 50% at 50% 0%, hsl(330 60% 97%) 0%, #ffffff 60%)",
       }}
     >
       {/* Subtle noise texture layer */}
@@ -52,10 +52,10 @@ const HeroSection = () => {
 
       {/* Ambient glow */}
       <motion.div
-        className="hidden lg:block absolute top-[20%] left-[10%] w-[500px] h-[500px] rounded-full opacity-[0.25] blur-3xl pointer-events-none"
+        className="hidden lg:block absolute top-[20%] left-[10%] w-[500px] h-[500px] rounded-full opacity-[0.22] blur-3xl pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, hsl(168 42% 62%) 0%, transparent 70%)",
+            "radial-gradient(circle, #f06ba8 0%, transparent 70%)",
         }}
         animate={{ scale: [1, 1.1, 1] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
@@ -72,7 +72,7 @@ const HeroSection = () => {
               transition={{ duration: 0.5 }}
             >
               <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/80 backdrop-blur-sm border border-[#1a1a4b]/10 text-[13px] text-[#1a1a4b] font-medium shadow-sm">
-                <Sparkles className="w-3.5 h-3.5 text-[#6b6fc4]" />
+                <Sparkles className="w-3.5 h-3.5 text-[#d6157e]" />
                 בית פיננסים וביטוח · מבית עמיתים הון
               </span>
             </motion.div>
@@ -129,7 +129,7 @@ const HeroSection = () => {
             >
               <Link to="/contact" className="w-full sm:w-auto group">
                 <Button
-                  className="bg-[#1a1a4b] text-white hover:bg-[#232159] rounded-full px-10 py-6 text-base font-bold shadow-xl shadow-[#1a1a4b]/20 hover:shadow-2xl hover:shadow-[#1a1a4b]/30 hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto min-h-[60px] group-hover:scale-[1.02]"
+                  className="bg-[#d6157e] text-white hover:bg-[#b31368] rounded-full px-10 py-6 text-base font-bold shadow-xl shadow-[#d6157e]/25 hover:shadow-2xl hover:shadow-[#d6157e]/35 hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto min-h-[60px] group-hover:scale-[1.02]"
                 >
                   קביעת פגישת ייעוץ
                   <ArrowDownLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
@@ -186,169 +186,295 @@ const HeroSection = () => {
             </motion.div>
           </div>
 
-          {/* Left side — Visual composition */}
+          {/* Left side — Lively animated finance composition */}
           <motion.div
             className="hidden sm:flex relative items-center justify-center lg:justify-start"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <div className="relative w-[320px] h-[340px] sm:w-[420px] sm:h-[440px] lg:w-[520px] lg:h-[540px]">
-              {/* Big circle — main */}
+            <div className="relative w-[340px] h-[400px] sm:w-[440px] sm:h-[480px] lg:w-[540px] lg:h-[560px]">
+              {/* Soft gradient backdrop blob */}
               <motion.div
-                className="absolute top-[25%] right-[8%] w-[140px] h-[140px] sm:w-[170px] sm:h-[170px] rounded-full flex items-center justify-center shadow-2xl"
+                className="absolute inset-x-[6%] inset-y-[8%] rounded-[42%] blur-2xl opacity-70 pointer-events-none"
                 style={{
                   background:
-                    "linear-gradient(135deg, #f7a3c8 0%, #d6157e 100%)",
-                  boxShadow:
-                    "0 20px 40px -10px rgba(26, 143, 125, 0.45), inset 0 -8px 16px rgba(0,0,0,0.08)",
-                  ...(isDesktop ? { y: y1 } : {}),
+                    "radial-gradient(58% 58% at 55% 40%, #f7a3c8 0%, #f0f2f5 55%, transparent 75%)",
                 }}
-                initial={{ scale: 0, rotate: -30 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: 0.5, type: "spring", stiffness: 180, damping: 15 }}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                  className="w-14 h-14 sm:w-16 sm:h-16 drop-shadow-md"
-                >
-                  <path
-                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </motion.div>
-
-              {/* Coral circle */}
-              <motion.div
-                className="absolute top-[22%] right-[36%] w-[95px] h-[95px] sm:w-[120px] sm:h-[120px] rounded-full shadow-xl"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #f28e6f 0%, #3b3f99 100%)",
-                  boxShadow:
-                    "0 15px 30px -8px rgba(231, 111, 81, 0.4), inset 0 -6px 12px rgba(0,0,0,0.08)",
-                  ...(isDesktop ? { y: y2 } : {}),
-                }}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.65, type: "spring", stiffness: 180, damping: 15 }}
+                animate={{ scale: [1, 1.06, 1], rotate: [0, 8, 0] }}
+                transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
               />
 
-              {/* Orange circle */}
-              <motion.div
-                className="absolute top-[10%] right-[56%] w-[110px] h-[110px] sm:w-[140px] sm:h-[140px] rounded-full flex items-center justify-center shadow-xl"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #f6b581 0%, #6b6fc4 100%)",
-                  boxShadow:
-                    "0 15px 30px -8px rgba(244, 162, 97, 0.4), inset 0 -6px 12px rgba(0,0,0,0.08)",
-                  ...(isDesktop ? { y: y3 } : {}),
-                }}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.8, type: "spring", stiffness: 180, damping: 15 }}
+              {/* Decorative dotted grid */}
+              <svg
+                className="absolute top-[2%] right-[2%] w-24 h-24 text-[#6b6fc4]/40 pointer-events-none"
+                viewBox="0 0 60 60"
+                fill="currentColor"
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2.2"
-                  className="w-11 h-11 sm:w-14 sm:h-14 drop-shadow-md"
-                >
-                  <path
-                    d="M12 19V5M5 12l7-7 7 7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                {Array.from({ length: 25 }).map((_, i) => (
+                  <circle
+                    key={i}
+                    cx={6 + (i % 5) * 12}
+                    cy={6 + Math.floor(i / 5) * 12}
+                    r="1.6"
                   />
-                </svg>
-              </motion.div>
+                ))}
+              </svg>
 
-              {/* Green circle */}
+              {/* Main dashboard glass card */}
               <motion.div
-                className="absolute top-[18%] right-[78%] w-[90px] h-[90px] sm:w-[115px] sm:h-[115px] rounded-full flex items-center justify-center shadow-xl"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #a8d57e 0%, #7fb05e 100%)",
-                  boxShadow:
-                    "0 15px 30px -8px rgba(144, 190, 109, 0.4), inset 0 -6px 12px rgba(0,0,0,0.08)",
-                  ...(isDesktop ? { y: y4 } : {}),
-                }}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.95, type: "spring", stiffness: 180, damping: 15 }}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2.8"
-                  className="w-9 h-9 sm:w-12 sm:h-12 drop-shadow-md"
-                >
-                  <polyline
-                    points="20 6 9 17 4 12"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </motion.div>
-
-              {/* Floating savings card — NEW sophisticated element */}
-              <motion.div
-                className="absolute bottom-[4%] right-[8%] bg-white rounded-2xl p-5 shadow-2xl border border-[#1a1a4b]/[0.06] min-w-[240px]"
+                className="absolute top-[15%] right-[11%] w-[290px] sm:w-[310px] rounded-[26px] bg-white/85 backdrop-blur-xl p-5 border border-white"
                 style={{
                   boxShadow:
-                    "0 25px 50px -12px rgba(10, 61, 61, 0.18), 0 0 0 1px rgba(10, 61, 61, 0.03)",
+                    "0 30px 60px -18px rgba(26,26,75,0.28), 0 0 0 1px rgba(26,26,75,0.04)",
                   ...(isDesktop ? { y: yCard } : {}),
                 }}
-                initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: 1.3, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, y: 36, rotate: -2.5 }}
+                animate={{ opacity: 1, y: 0, rotate: 0 }}
+                transition={{ delay: 0.5, type: "spring", stiffness: 120, damping: 16 }}
               >
-                <div className="flex items-center gap-2.5 mb-2">
-                  <div className="w-2 h-2 rounded-full bg-[#d6157e] animate-pulse" />
-                  <span className="text-[11px] uppercase tracking-wider text-[#1a1a4b]/50 font-semibold">
-                    חיסכון שזוהה השבוע
+                {/* Header */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#d6157e] to-[#f06ba8] flex items-center justify-center shadow-lg shadow-[#d6157e]/30">
+                      <Wallet className="w-[18px] h-[18px] text-white" />
+                    </div>
+                    <div className="leading-tight">
+                      <p className="text-[10px] text-[#1a1a4b]/45 font-semibold uppercase tracking-wider">
+                        סך התיק שלך
+                      </p>
+                      <p className="text-[13px] font-bold text-[#1a1a4b]">
+                        מנוהל ומסונכרן
+                      </p>
+                    </div>
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-[#16a34a]/10">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#16a34a] opacity-75" />
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#16a34a]" />
+                    </span>
+                    <span className="text-[9px] font-bold text-[#16a34a] tracking-wide">
+                      LIVE
+                    </span>
                   </span>
                 </div>
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-3xl font-extrabold text-[#1a1a4b] tabular-nums">
-                    ₪4,280
+
+                {/* Big number */}
+                <div className="flex items-baseline gap-2 mb-1">
+                  <span className="text-[28px] font-extrabold text-[#1a1a4b] tabular-nums tracking-tight">
+                    ₪1.24M
                   </span>
-                  <span className="text-sm text-[#1a1a4b]/60">בשנה</span>
+                  <span className="inline-flex items-center gap-0.5 text-[12px] font-bold text-[#16a34a]">
+                    <TrendingUp className="w-3.5 h-3.5" />
+                    12.4%
+                  </span>
                 </div>
-                <div className="text-xs text-[#1a1a4b]/55">
-                  תיק לקוח קיים · ללא שינוי בכיסוי
-                </div>
-                {/* Animated bar */}
-                <div className="mt-3 h-1 bg-[#1a1a4b]/[0.06] rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full bg-gradient-to-l from-[#d6157e] to-[#f7a3c8] rounded-full"
-                    initial={{ width: 0 }}
-                    animate={{ width: "72%" }}
-                    transition={{ delay: 1.8, duration: 1.4, ease: "easeOut" }}
+                <p className="text-[11px] text-[#1a1a4b]/50 mb-3">
+                  צמיחה שנתית · נכון להיום
+                </p>
+
+                {/* Animated area chart */}
+                <svg viewBox="0 0 260 92" className="w-full h-[88px]" fill="none">
+                  <defs>
+                    <linearGradient id="heroFill" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#d6157e" stopOpacity="0.28" />
+                      <stop offset="100%" stopColor="#d6157e" stopOpacity="0" />
+                    </linearGradient>
+                    <linearGradient id="heroLine" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor="#6b6fc4" />
+                      <stop offset="55%" stopColor="#d6157e" />
+                      <stop offset="100%" stopColor="#f06ba8" />
+                    </linearGradient>
+                  </defs>
+                  {/* gridlines */}
+                  {[20, 46, 72].map((gy) => (
+                    <line
+                      key={gy}
+                      x1="0"
+                      y1={gy}
+                      x2="260"
+                      y2={gy}
+                      stroke="#1a1a4b"
+                      strokeOpacity="0.05"
+                      strokeWidth="1"
+                    />
+                  ))}
+                  <motion.path
+                    d="M0,66 C26,60 46,70 72,52 C98,34 122,46 150,30 C178,15 210,26 236,13 L258,7 L258,92 L0,92 Z"
+                    fill="url(#heroFill)"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.5, duration: 0.8 }}
                   />
+                  <motion.path
+                    d="M0,66 C26,60 46,70 72,52 C98,34 122,46 150,30 C178,15 210,26 236,13 L258,7"
+                    stroke="url(#heroLine)"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ delay: 0.9, duration: 1.7, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                  <motion.circle
+                    cx="258"
+                    cy="7"
+                    r="4.5"
+                    fill="#d6157e"
+                    stroke="#fff"
+                    strokeWidth="2.5"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 2.5, type: "spring", stiffness: 300 }}
+                  />
+                </svg>
+
+                {/* Mini stat chips */}
+                <div className="grid grid-cols-3 gap-2 mt-3">
+                  {[
+                    { label: "פנסיה", val: "₪720K", c: "#d6157e" },
+                    { label: "חיסכון", val: "₪380K", c: "#6b6fc4" },
+                    { label: "ביטוח", val: "פעיל", c: "#16a34a" },
+                  ].map((s, i) => (
+                    <motion.div
+                      key={s.label}
+                      className="rounded-xl bg-[#f8f9fc] px-2.5 py-2"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.6 + i * 0.12 }}
+                    >
+                      <div className="flex items-center gap-1 mb-0.5">
+                        <span
+                          className="w-1.5 h-1.5 rounded-full"
+                          style={{ backgroundColor: s.c }}
+                        />
+                        <span className="text-[9px] text-[#1a1a4b]/50 font-medium">
+                          {s.label}
+                        </span>
+                      </div>
+                      <span className="text-[13px] font-bold text-[#1a1a4b] tabular-nums">
+                        {s.val}
+                      </span>
+                    </motion.div>
+                  ))}
                 </div>
               </motion.div>
 
-              {/* Subtle sparkle dots */}
+              {/* Floating chip — Insurance shield (top) */}
               <motion.div
-                className="absolute top-[8%] right-[45%] w-2.5 h-2.5 rounded-full bg-[#6b6fc4]"
-                animate={{ scale: [1, 1.4, 1], opacity: [0.6, 1, 0.6] }}
-                transition={{ duration: 2.5, repeat: Infinity }}
-              />
+                className="absolute top-[4%] right-[6%]"
+                style={isDesktop ? { y: y1 } : undefined}
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1, type: "spring", stiffness: 200, damping: 14 }}
+              >
+                <motion.div
+                  className="flex items-center gap-2.5 rounded-2xl bg-white/90 backdrop-blur-md px-3.5 py-2.5 border border-white shadow-xl"
+                  style={{ boxShadow: "0 18px 36px -12px rgba(26,26,75,0.25)" }}
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#3b3f99] to-[#6b6fc4] flex items-center justify-center">
+                    <ShieldCheck className="w-[18px] h-[18px] text-white" />
+                  </div>
+                  <div className="leading-tight">
+                    <p className="text-[10px] text-[#1a1a4b]/50 font-medium">כיסוי ביטוחי</p>
+                    <p className="text-[13px] font-extrabold text-[#1a1a4b]">מלא ומעודכן</p>
+                  </div>
+                </motion.div>
+              </motion.div>
+
+              {/* Floating chip — Coins (left) */}
               <motion.div
-                className="absolute top-[48%] right-[88%] w-2 h-2 rounded-full bg-[#f7a3c8]"
+                className="absolute top-[40%] right-[80%] sm:right-[83%]"
+                style={isDesktop ? { y: y2 } : undefined}
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.2, type: "spring", stiffness: 200, damping: 14 }}
+              >
+                <motion.div
+                  className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-[#d6157e] to-[#f06ba8] flex items-center justify-center shadow-xl"
+                  style={{ boxShadow: "0 18px 36px -10px rgba(214,21,126,0.5)" }}
+                  animate={{ y: [0, 12, 0], rotate: [0, -6, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                >
+                  <Coins className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
+                </motion.div>
+              </motion.div>
+
+              {/* Floating pill — Returns (bottom) */}
+              <motion.div
+                className="absolute bottom-[7%] right-[14%]"
+                style={isDesktop ? { y: y3 } : undefined}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.5, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <motion.div
+                  className="flex items-center gap-2.5 rounded-2xl bg-[#1a1a4b] px-4 py-3 shadow-2xl"
+                  style={{ boxShadow: "0 22px 44px -12px rgba(26,26,75,0.45)" }}
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                >
+                  <div className="w-8 h-8 rounded-lg bg-[#16a34a]/20 flex items-center justify-center">
+                    <TrendingUp className="w-4 h-4 text-[#4ade80]" />
+                  </div>
+                  <div className="leading-tight">
+                    <p className="text-[10px] text-white/55 font-medium">חיסכון שזוהה</p>
+                    <p className="text-[15px] font-extrabold text-white tabular-nums">
+                      ₪4,280<span className="text-[10px] font-medium text-white/50"> / שנה</span>
+                    </p>
+                  </div>
+                </motion.div>
+              </motion.div>
+
+              {/* Progress ring donut (lower-left) */}
+              <motion.div
+                className="absolute bottom-[20%] right-[72%] sm:right-[76%]"
+                style={isDesktop ? { y: y4 } : undefined}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.7, type: "spring", stiffness: 180, damping: 15 }}
+              >
+                <div className="relative w-[78px] h-[78px] rounded-full bg-white/90 backdrop-blur-md shadow-xl flex items-center justify-center"
+                  style={{ boxShadow: "0 16px 32px -10px rgba(26,26,75,0.25)" }}>
+                  <svg viewBox="0 0 56 56" className="w-[60px] h-[60px] -rotate-90">
+                    <circle cx="28" cy="28" r="22" stroke="#f0f2f5" strokeWidth="7" fill="none" />
+                    <motion.circle
+                      cx="28"
+                      cy="28"
+                      r="22"
+                      stroke="#d6157e"
+                      strokeWidth="7"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeDasharray="138"
+                      initial={{ strokeDashoffset: 138 }}
+                      animate={{ strokeDashoffset: 35 }}
+                      transition={{ delay: 2, duration: 1.5, ease: "easeOut" }}
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-[15px] font-extrabold text-[#1a1a4b] leading-none">74%</span>
+                    <span className="text-[8px] text-[#1a1a4b]/50 font-medium mt-0.5">יעד</span>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Drifting sparkle dots */}
+              <motion.div
+                className="absolute top-[12%] right-[52%] w-2.5 h-2.5 rounded-full bg-[#6b6fc4]"
                 animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 3, repeat: Infinity, delay: 0.8 }}
+                transition={{ duration: 2.6, repeat: Infinity }}
               />
               <motion.div
-                className="absolute top-[70%] right-[70%] w-1.5 h-1.5 rounded-full bg-[#3b3f99]"
-                animate={{ scale: [1, 1.6, 1], opacity: [0.4, 0.9, 0.4] }}
-                transition={{ duration: 2.8, repeat: Infinity, delay: 1.5 }}
+                className="absolute top-[58%] right-[6%] w-2 h-2 rounded-full bg-[#f7a3c8]"
+                animate={{ scale: [1, 1.6, 1], opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 3.1, repeat: Infinity, delay: 0.8 }}
+              />
+              <motion.div
+                className="absolute bottom-[44%] right-[90%] w-1.5 h-1.5 rounded-full bg-[#d6157e]"
+                animate={{ scale: [1, 1.7, 1], opacity: [0.4, 0.9, 0.4] }}
+                transition={{ duration: 2.9, repeat: Infinity, delay: 1.4 }}
               />
             </div>
           </motion.div>
