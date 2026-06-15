@@ -214,6 +214,9 @@ const TermsPage = lazy(() => import("@/pages/TermsPage"));
 const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
 import NotFound from "@/pages/NotFound";
 
+// ── v2 — new AI-native product surface (self-contained, mounted at /v2/*) ──
+const V2App = lazy(() => import("@/v2/V2App"));
+
 const queryClient = new QueryClient();
 
 // Suspense fallback shown while a lazy route chunk loads
@@ -356,6 +359,9 @@ const App = () => (
 
                 {/* Agent Landing Page */}
                 <Route path="/agents" element={<AgentLandingPage />} />
+
+                {/* ═══ V2 — NEW AI-NATIVE PRODUCT (parallel, swap-ready) ═══ */}
+                <Route path="/v2/*" element={<V2App />} />
 
                 {/* ═══ AGENT APP ROUTES (/app/*) ═══ */}
                 <Route path="/portal/:token" element={<ClientPortalPage />} />
