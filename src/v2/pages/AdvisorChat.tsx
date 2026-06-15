@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
-import { Send, Sparkles, Loader2 } from "lucide-react";
+import { Send, Loader2 } from "lucide-react";
 import { V2Shell } from "../components/V2Shell";
 import { GradientText, Eyebrow } from "../components/primitives";
 
@@ -101,35 +101,27 @@ export default function AdvisorChat() {
 
   return (
     <V2Shell bare>
-      <div className="mx-auto flex h-[calc(100vh-120px)] max-w-3xl flex-col px-5 sm:px-8 pt-8">
-        <div className="mb-4">
-          <Eyebrow>
-            <Sparkles className="h-3.5 w-3.5 text-[#1d6bf3]" />
-            יועץ AI · מבוסס Gemini
-          </Eyebrow>
-          <h1 className="v2-display mt-3 text-3xl font-extrabold text-[#18181b]">
-            שיחה עם <GradientText>אריק</GradientText>
+      <div className="mx-auto flex h-[calc(100vh-120px)] max-w-3xl flex-col px-5 sm:px-8 pt-10">
+        <div className="mb-5">
+          <Eyebrow>יועץ AI · מבוסס Gemini</Eyebrow>
+          <h1 className="v2-display mt-3 text-3xl sm:text-4xl font-extrabold text-[#18181a]">
+            שיחה עם <GradientText>אריק.</GradientText>
           </h1>
         </div>
 
         {/* Messages */}
-        <div ref={scrollRef} className="v2-card flex-1 space-y-4 overflow-y-auto rounded-[28px] p-4 sm:p-6">
+        <div ref={scrollRef} className="v2-card flex-1 space-y-4 overflow-y-auto rounded-3xl p-4 sm:p-6">
           {messages.map((m, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`flex ${m.role === "user" ? "justify-start" : "justify-end"}`}
-            >
+            <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className={`flex ${m.role === "user" ? "justify-start" : "justify-end"}`}>
               <div
                 className={`max-w-[85%] rounded-2xl px-4 py-3 text-[14px] leading-[1.7] ${
                   m.role === "user"
-                    ? "bg-[#1d6bf3] text-white"
-                    : "bg-[#f4f4f6] text-[#3f3f46] [&_strong]:text-[#1d6bf3] [&_ul]:mt-1 [&_ul]:pr-4 [&_ul]:list-disc"
+                    ? "bg-[#18181a] text-white"
+                    : "bg-[#f4f3ef] text-[#3a3a3c] [&_strong]:text-[#18181a] [&_ul]:mt-1 [&_ul]:pr-4 [&_ul]:list-disc"
                 }`}
               >
                 {m.role === "assistant" && m.content === "" && loading ? (
-                  <Loader2 className="h-4 w-4 animate-spin text-[#1d6bf3]" />
+                  <Loader2 className="h-4 w-4 animate-spin text-[#18181a]" />
                 ) : m.role === "assistant" ? (
                   <ReactMarkdown>{m.content}</ReactMarkdown>
                 ) : (
@@ -147,7 +139,7 @@ export default function AdvisorChat() {
               <button
                 key={s}
                 onClick={() => send(s)}
-                className="rounded-full border border-[#18182814] bg-white px-3.5 py-2 text-[12.5px] text-[#3f3f46] transition-colors hover:border-[#1d6bf3]/40 hover:text-[#18181b]"
+                className="rounded-full border border-[#18181a1f] bg-white px-3.5 py-2 text-[12.5px] text-[#3a3a3c] transition-colors hover:border-[#18181a40] hover:text-[#18181a]"
               >
                 {s}
               </button>
@@ -161,18 +153,18 @@ export default function AdvisorChat() {
             e.preventDefault();
             send(input);
           }}
-          className="mt-3 mb-4 flex items-center gap-2 rounded-full border border-[#18182814] bg-white p-2 shadow-[0_8px_30px_-18px_rgba(24,24,60,0.3)]"
+          className="mt-3 mb-4 flex items-center gap-2 rounded-full border border-[#18181a1f] bg-white p-2"
         >
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="כתוב שאלה לאריק…"
-            className="flex-1 bg-transparent px-3 py-2 text-[14px] text-[#18181b] placeholder:text-[#a1a1aa] focus:outline-none"
+            className="flex-1 bg-transparent px-3 py-2 text-[14px] text-[#18181a] placeholder:text-[#a8a6a0] focus:outline-none"
           />
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1d6bf3] text-white transition-transform hover:scale-105 disabled:opacity-50"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-[#18181a] text-white transition-transform hover:scale-105 disabled:opacity-40"
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </button>

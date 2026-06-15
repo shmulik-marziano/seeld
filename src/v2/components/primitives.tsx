@@ -1,15 +1,9 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { animate, motion, useInView } from "framer-motion";
 
-/* Soft pastel blob field — subtle, premium, light */
+/* QUWEB's canvas is clean white — no decorative field. Kept for API parity. */
 export function Aurora() {
-  return (
-    <div className="v2-blobs" aria-hidden>
-      <span className="b1" />
-      <span className="b2" />
-      <span className="b3" />
-    </div>
-  );
+  return null;
 }
 
 /* Eased count-up that runs when scrolled into view */
@@ -60,32 +54,38 @@ export function GlassCard({
   hover?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={`v2-card ${hover ? "v2-card-hover" : ""} rounded-[28px] ${className}`} {...rest}>
+    <div className={`v2-card ${hover ? "v2-card-hover" : ""} rounded-3xl ${className}`} {...rest}>
       {children}
     </div>
   );
 }
 
+/* Editorial accent (hand-drawn underline), preserving QUWEB's monochrome voice */
 export function GradientText({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <span className={`v2-gradient-text ${className}`}>{children}</span>;
+  return <span className={`v2-accent ${className}`}>{children}</span>;
+}
+
+/* Bilingual English fragment styling, e.g. "one platform." */
+export function En({ children }: { children: ReactNode }) {
+  return <span className="v2-en">{children}</span>;
 }
 
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-[#18182814] bg-white px-3.5 py-1.5 text-[12.5px] font-medium text-[#3f3f46] shadow-[0_1px_2px_rgba(24,24,50,0.05)]">
+    <span className="inline-flex items-center gap-2 rounded-full border border-[#18181a1f] bg-white px-3.5 py-1.5 text-[12px] font-medium uppercase tracking-wider text-[#76746e]">
       {children}
     </span>
   );
 }
 
-/* Animated SVG progress ring */
+/* Animated SVG progress ring — monochrome ink */
 export function Ring({
   value,
   size = 120,
-  stroke = 10,
+  stroke = 8,
   children,
-  color = "#1d6bf3",
-  track = "#e7e7ec",
+  color = "#18181a",
+  track = "#e9e8e3",
   delay = 0.2,
 }: {
   value: number;
@@ -100,23 +100,16 @@ export function Ring({
   const c = 2 * Math.PI * r;
   const ref = useRef<SVGSVGElement>(null);
   const inView = useInView(ref, { once: true });
-  const gid = `ring-${size}-${Math.round(value)}`;
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
       <svg ref={ref} width={size} height={size} className="-rotate-90">
-        <defs>
-          <linearGradient id={gid} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor={color} />
-            <stop offset="100%" stopColor="#6b8ff7" />
-          </linearGradient>
-        </defs>
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={track} strokeWidth={stroke} />
         <motion.circle
           cx={size / 2}
           cy={size / 2}
           r={r}
           fill="none"
-          stroke={`url(#${gid})`}
+          stroke={color}
           strokeWidth={stroke}
           strokeLinecap="round"
           strokeDasharray={c}
