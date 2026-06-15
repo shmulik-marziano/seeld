@@ -41,15 +41,15 @@ const FundFinder = () => {
 
       {/* Hero Section — same style as ReturnTables */}
       <section className="relative bg-[#f8f9fc] overflow-hidden">
-        <div className="absolute top-8 right-10 w-20 h-20 rounded-full bg-[#90be6d] opacity-15" />
-        <div className="absolute bottom-6 left-16 w-16 h-16 rounded-full bg-[#5ec6c6] opacity-10" />
-        <div className="absolute top-1/2 right-1/3 w-10 h-10 rounded-full bg-[#f4a261] opacity-10" />
+        <div className="absolute top-8 right-10 w-20 h-20 rounded-full bg-[#f06ba8] opacity-15" />
+        <div className="absolute bottom-6 left-16 w-16 h-16 rounded-full bg-[#d6157e] opacity-10" />
+        <div className="absolute top-1/2 right-1/3 w-10 h-10 rounded-full bg-[#6b6fc4] opacity-10" />
         <svg className="absolute bottom-0 left-0 w-full h-20 opacity-10 pointer-events-none" viewBox="0 0 800 80" fill="none">
-          <path d="M0 60 Q200 15 400 45 T800 25" stroke="#90be6d" strokeWidth="2" strokeDasharray="8 6" />
-          <polygon points="795,23 800,25 795,27" fill="#90be6d" />
+          <path d="M0 60 Q200 15 400 45 T800 25" stroke="#f06ba8" strokeWidth="2" strokeDasharray="8 6" />
+          <polygon points="795,23 800,25 795,27" fill="#f06ba8" />
         </svg>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-18 relative z-10 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#1a1a4b] mb-4 leading-tight">
             איתור והשוואת קופות
           </h1>
           <p className="text-lg text-gray-500 max-w-3xl mx-auto leading-relaxed">
@@ -81,7 +81,7 @@ const FundFinder = () => {
           {/* ===== פאנל חיפוש — צד ימין ===== */}
           <aside className="lg:w-80 flex-shrink-0">
             <div className="sticky top-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-              <h2 className="text-lg font-bold text-[#0a3d3d] mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-bold text-[#1a1a4b] mb-4 flex items-center gap-2">
                 <SearchIcon className="w-5 h-5" />
                 חיפוש קופות
               </h2>
@@ -123,10 +123,10 @@ const FundFinder = () => {
             {/* מסך ברוכים הבאים — אם אין תוצאות */}
             {search.selectedFunds.length === 0 && (
               <div className="rounded-2xl bg-gradient-to-br from-[#f8f9fc] to-white border border-gray-100 p-12 text-center">
-                <div className="w-20 h-20 rounded-full bg-[#90be6d]/10 flex items-center justify-center mx-auto mb-4">
-                  <SearchIcon className="w-10 h-10 text-[#90be6d]" />
+                <div className="w-20 h-20 rounded-full bg-[#f06ba8]/10 flex items-center justify-center mx-auto mb-4">
+                  <SearchIcon className="w-10 h-10 text-[#f06ba8]" />
                 </div>
-                <h3 className="text-xl font-bold text-[#0a3d3d] mb-2">
+                <h3 className="text-xl font-bold text-[#1a1a4b] mb-2">
                   ברוכים הבאים לכלי איתור הקופות
                 </h3>
                 <p className="text-gray-500 max-w-md mx-auto">
@@ -139,7 +139,7 @@ const FundFinder = () => {
             {/* סרגל כלים */}
             {search.selectedFunds.length > 0 && (
               <div className="flex flex-wrap items-center gap-3 rounded-xl bg-muted/50 p-3">
-                <span className="text-sm font-medium text-[#0a3d3d]">
+                <span className="text-sm font-medium text-[#1a1a4b]">
                   {search.selectedFunds.length} קופות נבחרו
                 </span>
                 <Separator orientation="vertical" className="h-5" />
@@ -205,7 +205,7 @@ const FundFinder = () => {
             {/* תוצאות חיפוש (מצב browse ו-direct) — קופות שעדיין לא נוספו */}
             {search.results.length > 0 && search.mode !== 'top' && (
               <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-[#0a3d3d]">תוצאות חיפוש</h3>
+                <h3 className="text-sm font-semibold text-[#1a1a4b]">תוצאות חיפוש</h3>
                 <div className="rounded-xl border overflow-hidden">
                   {search.results
                     .filter((f) => !search.selectedFunds.some((sf) => sf.id === f.id))
@@ -239,13 +239,13 @@ const FundFinder = () => {
 
         {/* Disclaimer — same style as ReturnTables */}
         <section className="mt-12 rounded-2xl bg-[#f8f9fc] p-8 md:p-12">
-          <h2 className="text-2xl font-extrabold text-[#0a3d3d] mb-4">הבהרה חשובה</h2>
+          <h2 className="text-2xl font-extrabold text-[#1a1a4b] mb-4">הבהרה חשובה</h2>
           <p className="text-gray-500 leading-relaxed">
             הנתונים המוצגים מבוססים על מידע ממקורות ציבוריים של רשות שוק ההון, ביטוח וחיסכון (גמלנט, ביטוחנט, פנסיהנט) ומיועדים להשוואה כללית בלבד.
             תשואות עבר אינן מעידות על תשואות עתידיות. שיעור העלויות מחושב על פי דמי הניהול שהוזנו ואינו כולל מרכיבים נוספים.
             לפני קבלת החלטות פיננסיות, מומלץ להתייעץ עם יועץ פנסיוני או פיננסי מוסמך.
             <br /><br />
-            <strong className="text-[#0a3d3d]">מקור הנתונים:</strong> רשות שוק ההון, ביטוח וחיסכון — משרד האוצר.
+            <strong className="text-[#1a1a4b]">מקור הנתונים:</strong> רשות שוק ההון, ביטוח וחיסכון — משרד האוצר.
             הנתונים מתעדכנים באופן שוטף בהתאם לפרסום הנתונים הרשמיים.
           </p>
         </section>

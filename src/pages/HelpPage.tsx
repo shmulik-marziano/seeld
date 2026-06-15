@@ -11,7 +11,7 @@ type FAQItem = { q: string; a: string; icon: React.ElementType };
 const FAQ_SECTIONS: { title: string; color: string; items: FAQItem[] }[] = [
   {
     title: 'תחילת עבודה',
-    color: '#5ec6c6',
+    color: '#d6157e',
     items: [
       {
         q: 'איך מוסיפים לקוח חדש?',
@@ -32,7 +32,7 @@ const FAQ_SECTIONS: { title: string; color: string; items: FAQItem[] }[] = [
   },
   {
     title: 'ניהול לקוחות',
-    color: '#f4a261',
+    color: '#6b6fc4',
     items: [
       {
         q: 'איך יוצרים המלצה ללקוח?',
@@ -80,10 +80,10 @@ function FAQAccordion({ item, isOpen, onToggle }: { item: FAQItem; isOpen: boole
     <div className="border border-gray-100 rounded-2xl overflow-hidden bg-white hover:shadow-sm transition-shadow">
       <button onClick={onToggle}
         className="w-full flex items-center gap-3 p-4 text-right transition-colors hover:bg-gray-50/50">
-        <div className="w-9 h-9 rounded-full bg-[#0a3d3d]/5 flex items-center justify-center flex-shrink-0">
-          <Icon className="w-4 h-4 text-[#0a3d3d]" />
+        <div className="w-9 h-9 rounded-full bg-[#1a1a4b]/5 flex items-center justify-center flex-shrink-0">
+          <Icon className="w-4 h-4 text-[#1a1a4b]" />
         </div>
-        <span className="flex-1 text-sm font-extrabold text-[#0a3d3d]">{item.q}</span>
+        <span className="flex-1 text-sm font-extrabold text-[#1a1a4b]">{item.q}</span>
         <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
           <ChevronDown className="w-4 h-4 text-gray-400" />
         </motion.div>
@@ -113,14 +113,14 @@ export default function HelpPage() {
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <button onClick={() => navigate('/app/dashboard')}
-          className="w-10 h-10 rounded-full bg-[#0a3d3d] flex items-center justify-center hover:bg-[#0a3d3d]/80 transition-colors">
+          className="w-10 h-10 rounded-full bg-[#1a1a4b] flex items-center justify-center hover:bg-[#1a1a4b]/80 transition-colors">
           <ArrowRight className="w-5 h-5 text-white" />
         </button>
-        <div className="w-12 h-12 rounded-full bg-[#5ec6c6] flex items-center justify-center shadow-lg">
+        <div className="w-12 h-12 rounded-full bg-[#d6157e] flex items-center justify-center shadow-lg">
           <HelpCircle className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-extrabold text-[#0a3d3d]">מרכז עזרה</h1>
+          <h1 className="text-2xl font-extrabold text-[#1a1a4b]">מרכז עזרה</h1>
           <p className="text-sm text-gray-400">שאלות נפוצות ותמיכה</p>
         </div>
       </div>
@@ -128,12 +128,12 @@ export default function HelpPage() {
       {/* Hero */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
         className="rounded-2xl p-6 sm:p-8 mb-8 relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #0a3d3d 0%, #145454 100%)' }}>
-        <div className="absolute top-0 left-0 w-40 h-40 rounded-full bg-[#5ec6c6]/10 -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-32 h-32 rounded-full bg-[#f4a261]/10 translate-x-1/3 translate-y-1/3" />
+        style={{ background: 'linear-gradient(135deg, #1a1a4b 0%, #145454 100%)' }}>
+        <div className="absolute top-0 left-0 w-40 h-40 rounded-full bg-[#d6157e]/10 -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-32 h-32 rounded-full bg-[#6b6fc4]/10 translate-x-1/3 translate-y-1/3" />
         <div className="relative">
           <h2 className="text-xl sm:text-2xl font-black text-white mb-2">איך נוכל לעזור?</h2>
-          <p className="text-sm text-[#5ec6c6]/80 max-w-lg">
+          <p className="text-sm text-[#d6157e]/80 max-w-lg">
             כאן תמצאו תשובות לשאלות נפוצות על השימוש בפלטפורמת SEELD.
             לא מצאתם תשובה? צרו קשר ונשמח לסייע.
           </p>
@@ -146,7 +146,7 @@ export default function HelpPage() {
           transition={{ delay: si * 0.1 }} className="mb-8">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: section.color }} />
-            <h3 className="text-lg font-extrabold text-[#0a3d3d]">{section.title}</h3>
+            <h3 className="text-lg font-extrabold text-[#1a1a4b]">{section.title}</h3>
           </div>
           <div className="space-y-2">
             {section.items.map((item, ii) => {
@@ -162,35 +162,35 @@ export default function HelpPage() {
       {/* Contact Section */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
         className="rounded-2xl bg-white border border-gray-100 shadow-sm p-6 sm:p-8">
-        <h3 className="text-lg font-extrabold text-[#0a3d3d] mb-5">צריכים עזרה נוספת?</h3>
+        <h3 className="text-lg font-extrabold text-[#1a1a4b] mb-5">צריכים עזרה נוספת?</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <a href="mailto:support@seeld.ai"
-            className="flex items-center gap-3 p-4 rounded-2xl border border-gray-100 hover:border-[#5ec6c6] hover:shadow-md transition-all group">
-            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-[#5ec6c6]/10 transition-colors">
-              <Mail className="w-5 h-5 text-blue-500 group-hover:text-[#5ec6c6] transition-colors" />
+            className="flex items-center gap-3 p-4 rounded-2xl border border-gray-100 hover:border-[#d6157e] hover:shadow-md transition-all group">
+            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-[#d6157e]/10 transition-colors">
+              <Mail className="w-5 h-5 text-blue-500 group-hover:text-[#d6157e] transition-colors" />
             </div>
             <div>
-              <p className="text-sm font-extrabold text-[#0a3d3d]">מייל</p>
+              <p className="text-sm font-extrabold text-[#1a1a4b]">מייל</p>
               <p className="text-xs text-gray-400">support@seeld.ai</p>
             </div>
           </a>
           <a href="tel:052-3097444"
-            className="flex items-center gap-3 p-4 rounded-2xl border border-gray-100 hover:border-[#5ec6c6] hover:shadow-md transition-all group">
-            <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center group-hover:bg-[#5ec6c6]/10 transition-colors">
-              <Phone className="w-5 h-5 text-green-500 group-hover:text-[#5ec6c6] transition-colors" />
+            className="flex items-center gap-3 p-4 rounded-2xl border border-gray-100 hover:border-[#d6157e] hover:shadow-md transition-all group">
+            <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center group-hover:bg-[#d6157e]/10 transition-colors">
+              <Phone className="w-5 h-5 text-green-500 group-hover:text-[#d6157e] transition-colors" />
             </div>
             <div>
-              <p className="text-sm font-extrabold text-[#0a3d3d]">טלפון</p>
+              <p className="text-sm font-extrabold text-[#1a1a4b]">טלפון</p>
               <p className="text-xs text-gray-400" dir="ltr">052-309-7444</p>
             </div>
           </a>
           <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-3 p-4 rounded-2xl border border-gray-100 hover:border-[#5ec6c6] hover:shadow-md transition-all group">
-            <div className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center group-hover:bg-[#5ec6c6]/10 transition-colors">
-              <MessageCircle className="w-5 h-5 text-[#25D366] group-hover:text-[#5ec6c6] transition-colors" />
+            className="flex items-center gap-3 p-4 rounded-2xl border border-gray-100 hover:border-[#d6157e] hover:shadow-md transition-all group">
+            <div className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center group-hover:bg-[#d6157e]/10 transition-colors">
+              <MessageCircle className="w-5 h-5 text-[#25D366] group-hover:text-[#d6157e] transition-colors" />
             </div>
             <div>
-              <p className="text-sm font-extrabold text-[#0a3d3d]">WhatsApp</p>
+              <p className="text-sm font-extrabold text-[#1a1a4b]">WhatsApp</p>
               <p className="text-xs text-gray-400">הודעה מהירה</p>
             </div>
           </a>
@@ -200,7 +200,7 @@ export default function HelpPage() {
       {/* Platform Info */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
         className="mt-6 rounded-2xl p-6 text-center border-2 border-dashed"
-        style={{ borderColor: '#0a3d3d20', backgroundColor: '#0a3d3d05' }}>
+        style={{ borderColor: '#1a1a4b20', backgroundColor: '#1a1a4b05' }}>
         <p className="text-[10px] font-black tracking-[0.2em] uppercase text-gray-400 mb-1"
           style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>SEELD פלטפורמה</p>
         <p className="text-xs text-gray-400">

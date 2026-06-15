@@ -35,13 +35,13 @@ const queueFilters: { key: QueueFilter; label: string; }[] = [
 function getDecisionBadge(status: string) {
   switch (status) {
     case 'טיוטה': return <Badge variant="outline" className="text-xs rounded-full">טיוטה</Badge>;
-    case 'נשלח': return <Badge className="text-xs bg-[#5ec6c6]/10 text-[#5ec6c6] border-[#5ec6c6]/20 rounded-full">נשלח</Badge>;
-    case 'נצפה': return <Badge className="text-xs bg-[#5ec6c6]/10 text-[#5ec6c6] border-[#5ec6c6]/20 rounded-full">נצפה</Badge>;
-    case 'מאשר': return <Badge className="text-xs bg-[#90be6d]/10 text-[#90be6d] border-[#90be6d]/20 rounded-full">מאשר</Badge>;
-    case 'רוצה לחשוב': return <Badge className="text-xs bg-[#f4a261]/10 text-[#f4a261] border-[#f4a261]/20 rounded-full">לחשוב</Badge>;
-    case 'לא מעוניין': return <Badge className="text-xs bg-[#e76f51]/10 text-[#e76f51] border-[#e76f51]/20 rounded-full">לא מעוניין</Badge>;
-    case 'עבר לביצוע': return <Badge className="text-xs bg-[#0a3d3d]/10 text-[#0a3d3d] border-[#0a3d3d]/20 rounded-full">בביצוע</Badge>;
-    case 'בוצע': return <Badge className="text-xs bg-[#90be6d]/10 text-[#90be6d] border-[#90be6d]/20 rounded-full">בוצע</Badge>;
+    case 'נשלח': return <Badge className="text-xs bg-[#d6157e]/10 text-[#d6157e] border-[#d6157e]/20 rounded-full">נשלח</Badge>;
+    case 'נצפה': return <Badge className="text-xs bg-[#d6157e]/10 text-[#d6157e] border-[#d6157e]/20 rounded-full">נצפה</Badge>;
+    case 'מאשר': return <Badge className="text-xs bg-[#f06ba8]/10 text-[#f06ba8] border-[#f06ba8]/20 rounded-full">מאשר</Badge>;
+    case 'רוצה לחשוב': return <Badge className="text-xs bg-[#6b6fc4]/10 text-[#6b6fc4] border-[#6b6fc4]/20 rounded-full">לחשוב</Badge>;
+    case 'לא מעוניין': return <Badge className="text-xs bg-[#3b3f99]/10 text-[#3b3f99] border-[#3b3f99]/20 rounded-full">לא מעוניין</Badge>;
+    case 'עבר לביצוע': return <Badge className="text-xs bg-[#1a1a4b]/10 text-[#1a1a4b] border-[#1a1a4b]/20 rounded-full">בביצוע</Badge>;
+    case 'בוצע': return <Badge className="text-xs bg-[#f06ba8]/10 text-[#f06ba8] border-[#f06ba8]/20 rounded-full">בוצע</Badge>;
     default: return <Badge variant="outline" className="text-xs rounded-full">{status}</Badge>;
   }
 }
@@ -148,11 +148,11 @@ export default function RecommendationBankPage() {
         actions={
           <div className="flex gap-2">
             {filtered.length > 0 && (
-              <Button variant="outline" onClick={() => setShowPresentation(true)} className="gap-2 rounded-full border-[#f4a261]/30 hover:bg-[#f4a261]/10">
-                <Presentation className="h-4 w-4 text-[#f4a261]" />מצגת
+              <Button variant="outline" onClick={() => setShowPresentation(true)} className="gap-2 rounded-full border-[#6b6fc4]/30 hover:bg-[#6b6fc4]/10">
+                <Presentation className="h-4 w-4 text-[#6b6fc4]" />מצגת
               </Button>
             )}
-            <Button onClick={() => navigate('/app/recommendations/new')} className="gap-2 rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15">
+            <Button onClick={() => navigate('/app/recommendations/new')} className="gap-2 rounded-full bg-[#1a1a4b] hover:bg-[#1a1a4b]/90 shadow-md shadow-[#1a1a4b]/15">
               <FileText className="h-4 w-4" />המלצה חדשה
             </Button>
           </div>
@@ -167,13 +167,13 @@ export default function RecommendationBankPage() {
         className="grid grid-cols-3 md:grid-cols-7 gap-2"
       >
         {[
-          { label: 'סה"כ', value: stats.total, color: 'text-[#0a3d3d]' },
+          { label: 'סה"כ', value: stats.total, color: 'text-[#1a1a4b]' },
           { label: 'טיוטות', value: stats.drafts, color: 'text-muted-foreground' },
-          { label: 'נשלחו', value: stats.sent, color: 'text-[#5ec6c6]' },
-          { label: 'ממתינות', value: stats.thinking, color: 'text-[#f4a261]' },
-          { label: 'מאושרות', value: stats.approved, color: 'text-[#90be6d]' },
-          { label: 'בוצעו', value: stats.executed, color: 'text-[#0a3d3d]' },
-          { label: 'נדחו', value: stats.rejected, color: 'text-[#e76f51]' },
+          { label: 'נשלחו', value: stats.sent, color: 'text-[#d6157e]' },
+          { label: 'ממתינות', value: stats.thinking, color: 'text-[#6b6fc4]' },
+          { label: 'מאושרות', value: stats.approved, color: 'text-[#f06ba8]' },
+          { label: 'בוצעו', value: stats.executed, color: 'text-[#1a1a4b]' },
+          { label: 'נדחו', value: stats.rejected, color: 'text-[#3b3f99]' },
         ].map(s => (
           <Card key={s.label} className="rounded-2xl border-border/50 shadow-sm">
             <CardContent className="p-3 text-center">
@@ -187,8 +187,8 @@ export default function RecommendationBankPage() {
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-3">
         <div className="flex-1 relative group">
-          <Search className="h-4 w-4 absolute right-3 top-3 text-muted-foreground group-focus-within:text-[#0a3d3d]" />
-          <Input placeholder="חיפוש לפי שם לקוח, ת.ז, כותרת, חברה..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pr-10 rounded-xl border-border/60 focus:border-[#5ec6c6]" />
+          <Search className="h-4 w-4 absolute right-3 top-3 text-muted-foreground group-focus-within:text-[#1a1a4b]" />
+          <Input placeholder="חיפוש לפי שם לקוח, ת.ז, כותרת, חברה..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pr-10 rounded-xl border-border/60 focus:border-[#d6157e]" />
         </div>
         <Select value={sortBy} onValueChange={v => setSortBy(v as 'date' | 'customer')}>
           <SelectTrigger className="w-40 rounded-xl"><SelectValue /></SelectTrigger>
@@ -201,9 +201,9 @@ export default function RecommendationBankPage() {
 
       {/* Queue tabs */}
       <Tabs value={queue} onValueChange={v => setQueue(v as QueueFilter)}>
-        <TabsList className="flex-wrap h-auto gap-1 bg-[#0a3d3d]/5 p-1 rounded-full">
+        <TabsList className="flex-wrap h-auto gap-1 bg-[#1a1a4b]/5 p-1 rounded-full">
           {queueFilters.map(f => (
-            <TabsTrigger key={f.key} value={f.key} className="text-xs px-3 py-1.5 rounded-full data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white">
+            <TabsTrigger key={f.key} value={f.key} className="text-xs px-3 py-1.5 rounded-full data-[state=active]:bg-[#1a1a4b] data-[state=active]:text-white">
               {f.label}
             </TabsTrigger>
           ))}

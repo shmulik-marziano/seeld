@@ -36,19 +36,19 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
   const selectedFund = trackData.find(f => f.id === selectedFundId) || null;
 
   const getPieData = (fund: Fund) => [
-    { name: "מניות", value: fund.deepDrill.stocksAndOptions, color: "#5ec6c6" },
-    { name: 'אג"ח ממשלתי', value: fund.deepDrill.govBondsTradable + fund.deepDrill.designatedBonds, color: "#90be6d" },
-    { name: 'אג"ח קונצרני', value: fund.deepDrill.corpBondsTradable + fund.deepDrill.corpBondsNonTradable, color: "#f4a261" },
+    { name: "מניות", value: fund.deepDrill.stocksAndOptions, color: "#d6157e" },
+    { name: 'אג"ח ממשלתי', value: fund.deepDrill.govBondsTradable + fund.deepDrill.designatedBonds, color: "#f06ba8" },
+    { name: 'אג"ח קונצרני', value: fund.deepDrill.corpBondsTradable + fund.deepDrill.corpBondsNonTradable, color: "#6b6fc4" },
     { name: "מזומן", value: fund.deepDrill.cashEquivalents + fund.deepDrill.deposits, color: "#94a3b8" },
     { name: "אחר", value: fund.deepDrill.mutualFunds + fund.deepDrill.otherAssets, color: "#6c63ff" },
   ].filter(d => d.value > 0);
 
   const getRiskLevel = (fund: Fund) => {
     const stock = fund.stockExposure;
-    if (stock >= 80) return { level: "גבוהה", color: "#e76f51", tip: "המסלול מתאים למשקיעים אגרסיביים עם אופק של 10+ שנים. כדאי לוודא שרמת הסיכון מתאימה לגיל ולתוכניות שלכם." };
-    if (stock >= 40) return { level: "בינונית", color: "#f4a261", tip: "מסלול מאוזן שמתאים לרוב האנשים. פיזור טוב בין מניות לאג\"ח. מומלץ לבדוק את דמי הניהול מול חברות מתחרות." };
-    if (stock >= 10) return { level: "נמוכה-בינונית", color: "#90be6d", tip: "מסלול סולידי יחסית. מתאים למי שקרוב לפרישה או רוצה יציבות. כדאי לבדוק שהתשואה מספיקה לצרכים שלכם." };
-    return { level: "נמוכה", color: "#5ec6c6", tip: "מסלול שמרני מאוד. מתאים לטווח קצר או לפרישה קרובה. שווה לבדוק אם יש מסלולים עם תשואה טובה יותר באותה רמת סיכון." };
+    if (stock >= 80) return { level: "גבוהה", color: "#3b3f99", tip: "המסלול מתאים למשקיעים אגרסיביים עם אופק של 10+ שנים. כדאי לוודא שרמת הסיכון מתאימה לגיל ולתוכניות שלכם." };
+    if (stock >= 40) return { level: "בינונית", color: "#6b6fc4", tip: "מסלול מאוזן שמתאים לרוב האנשים. פיזור טוב בין מניות לאג\"ח. מומלץ לבדוק את דמי הניהול מול חברות מתחרות." };
+    if (stock >= 10) return { level: "נמוכה-בינונית", color: "#f06ba8", tip: "מסלול סולידי יחסית. מתאים למי שקרוב לפרישה או רוצה יציבות. כדאי לבדוק שהתשואה מספיקה לצרכים שלכם." };
+    return { level: "נמוכה", color: "#d6157e", tip: "מסלול שמרני מאוד. מתאים לטווח קצר או לפרישה קרובה. שווה לבדוק אם יש מסלולים עם תשואה טובה יותר באותה רמת סיכון." };
   };
 
   return (
@@ -57,7 +57,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
         <div className="flex items-center gap-3 mb-6">
           <DoodleIcon name="charts" size={40} />
           <div>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-[#0a3d3d]">בדקו את המסלול שלכם</h2>
+            <h2 className="text-xl sm:text-2xl font-extrabold text-[#1a1a4b]">בדקו את המסלול שלכם</h2>
             <p className="text-sm text-gray-400">בחרו חברה, סוג מוצר ומסלול — ותראו לאן הכסף שלכם הולך</p>
           </div>
         </div>
@@ -69,7 +69,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
             <select
               value={selectedCompany}
               onChange={e => { setSelectedCompany(e.target.value as ManagingCompany); setSelectedProduct(""); setSelectedFundId(""); }}
-              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
+              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#1a1a4b]"
             >
               <option value="">בחרו חברה</option>
               {[...new Set(trackData.map(f => f.company))].map(c => (
@@ -83,7 +83,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
             <select
               value={selectedProduct}
               onChange={e => { setSelectedProduct(e.target.value as ProductType); setSelectedFundId(""); }}
-              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
+              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#1a1a4b]"
               disabled={!selectedCompany}
             >
               <option value="">בחרו מוצר</option>
@@ -98,7 +98,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
             <select
               value={selectedFundId}
               onChange={e => setSelectedFundId(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
+              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#1a1a4b]"
               disabled={!selectedProduct}
             >
               <option value="">בחרו מסלול</option>
@@ -118,13 +118,13 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
               {/* Fund header */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
-                  <h3 className="text-lg font-bold text-[#0a3d3d]">{selectedFund.name}</h3>
+                  <h3 className="text-lg font-bold text-[#1a1a4b]">{selectedFund.name}</h3>
                   <p className="text-xs text-gray-400">קופה {selectedFund.fundNumber} | {companyLabels[selectedFund.company]}</p>
                 </div>
                 <div className="flex gap-3">
                   <div className="bg-white rounded-xl px-4 py-2 border border-gray-100 text-center">
                     <p className="text-xs text-gray-400">תשואה 12 חודשים</p>
-                    <p className="text-xl font-extrabold text-[#0a3d3d]">{fmt(selectedFund.returns.year1)}</p>
+                    <p className="text-xl font-extrabold text-[#1a1a4b]">{fmt(selectedFund.returns.year1)}</p>
                   </div>
                   <div className="bg-white rounded-xl px-4 py-2 border border-gray-100 text-center">
                     <p className="text-xs text-gray-400">רמת סיכון</p>
@@ -152,23 +152,23 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
                         <span className="w-3.5 h-3.5 rounded" style={{ background: d.color }} />
                         <span className="text-gray-600">{d.name}</span>
                       </div>
-                      <span className="font-bold text-[#0a3d3d]">{d.value.toFixed(1)}%</span>
+                      <span className="font-bold text-[#1a1a4b]">{d.value.toFixed(1)}%</span>
                     </div>
                   ))}
                   <div className="border-t border-gray-100 pt-2 mt-2 space-y-1">
                     {selectedFund.deepDrill.foreignExposure > 0 && (
                       <div className="flex justify-between text-xs text-gray-400">
                         <span>חשיפה לחו"ל</span>
-                        <span className="font-semibold text-[#5ec6c6]">{selectedFund.deepDrill.foreignExposure}%</span>
+                        <span className="font-semibold text-[#d6157e]">{selectedFund.deepDrill.foreignExposure}%</span>
                       </div>
                     )}
                     <div className="flex justify-between text-xs text-gray-400">
                       <span>דמ"נ מצבירה</span>
-                      <span className="font-semibold text-[#0a3d3d]">{selectedFund.fees.savingsFeePercent}%</span>
+                      <span className="font-semibold text-[#1a1a4b]">{selectedFund.fees.savingsFeePercent}%</span>
                     </div>
                     <div className="flex justify-between text-xs text-gray-400">
                       <span>היקף נכסים</span>
-                      <span className="font-semibold text-[#0a3d3d]">{fmtAssets(selectedFund.totalAssets)}</span>
+                      <span className="font-semibold text-[#1a1a4b]">{fmtAssets(selectedFund.totalAssets)}</span>
                     </div>
                   </div>
                 </div>
@@ -176,10 +176,10 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
 
               {/* Recommendation */}
               <div className="rounded-xl p-4 border-r-4" style={{ borderColor: risk.color, background: risk.color + "08" }}>
-                <p className="text-sm text-[#0a3d3d] leading-relaxed">
+                <p className="text-sm text-[#1a1a4b] leading-relaxed">
                   <strong>המלצה:</strong> {risk.tip}
                 </p>
-                <Link to="/contact" className="inline-flex items-center gap-1 mt-2 text-sm font-bold text-[#5ec6c6] hover:underline">
+                <Link to="/contact" className="inline-flex items-center gap-1 mt-2 text-sm font-bold text-[#d6157e] hover:underline">
                   רוצים בדיקה מקצועית? דברו עם סוכן →
                 </Link>
               </div>
@@ -257,19 +257,19 @@ const InvestmentTracks = () => {
 
       {/* Hero */}
       <section className="bg-[#f8f9fc] relative overflow-hidden">
-        <div className="absolute top-[10%] left-[4%] w-[90px] h-[90px] rounded-full bg-[#5ec6c6]" />
-        <div className="absolute bottom-[15%] right-[6%] w-[65px] h-[65px] rounded-full bg-[#f4a261]" />
-        <div className="absolute top-[45%] left-[18%] w-[35px] h-[35px] rounded-full bg-[#90be6d]" />
+        <div className="absolute top-[10%] left-[4%] w-[90px] h-[90px] rounded-full bg-[#d6157e]" />
+        <div className="absolute bottom-[15%] right-[6%] w-[65px] h-[65px] rounded-full bg-[#6b6fc4]" />
+        <div className="absolute top-[45%] left-[18%] w-[35px] h-[35px] rounded-full bg-[#f06ba8]" />
         <div className="absolute top-[20%] right-[12%] w-[28px] h-[28px] rounded-full bg-[#6c63ff]" />
         <div className="absolute top-16 right-[15%] hidden lg:block">
           <svg width="160" height="100" viewBox="0 0 160 100" fill="none">
-            <path d="M10 80 C 50 10, 110 10, 150 60" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
-            <polygon points="150,60 142,54 146,66" fill="#0a3d3d" opacity="0.12" />
+            <path d="M10 80 C 50 10, 110 10, 150 60" stroke="#1a1a4b" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
+            <polygon points="150,60 142,54 146,66" fill="#1a1a4b" opacity="0.12" />
           </svg>
         </div>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24 relative">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
-            מסלולי <span className="text-[#5ec6c6]">השקעה</span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#1a1a4b] mb-4 leading-tight">
+            מסלולי <span className="text-[#d6157e]">השקעה</span>
           </h1>
           <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed mb-8">
             השוואת תשואות, דמי ניהול וחשיפות של כל מסלולי ההשקעה בישראל — קרנות השתלמות, קופות גמל, פנסיה ופוליסות חיסכון.
@@ -278,19 +278,19 @@ const InvestmentTracks = () => {
           {/* Stat cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-white rounded-2xl p-4 border border-gray-100 text-center">
-              <p className="text-3xl font-extrabold text-[#0a3d3d]">{trackData.length}</p>
+              <p className="text-3xl font-extrabold text-[#1a1a4b]">{trackData.length}</p>
               <p className="text-xs text-gray-400 mt-1">מסלולים במאגר</p>
             </div>
             <div className="bg-white rounded-2xl p-4 border border-gray-100 text-center">
-              <p className="text-3xl font-extrabold text-[#5ec6c6]">{new Set(trackData.map(f => f.company)).size}</p>
+              <p className="text-3xl font-extrabold text-[#d6157e]">{new Set(trackData.map(f => f.company)).size}</p>
               <p className="text-xs text-gray-400 mt-1">חברות</p>
             </div>
             <div className="bg-white rounded-2xl p-4 border border-gray-100 text-center">
-              <p className="text-3xl font-extrabold text-[#90be6d]">{productTypes.length}</p>
+              <p className="text-3xl font-extrabold text-[#f06ba8]">{productTypes.length}</p>
               <p className="text-xs text-gray-400 mt-1">סוגי מוצרים</p>
             </div>
             <div className="bg-white rounded-2xl p-4 border border-gray-100 text-center">
-              <p className="text-3xl font-extrabold text-[#f4a261]">2026</p>
+              <p className="text-3xl font-extrabold text-[#6b6fc4]">2026</p>
               <p className="text-xs text-gray-400 mt-1">{isLive ? "נתונים חיים" : "נתונים מקומיים"}</p>
             </div>
           </div>
@@ -300,9 +300,9 @@ const InvestmentTracks = () => {
       {/* Breadcrumb */}
       <div className="border-b border-gray-100">
         <nav className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
+          <Link to="/" className="hover:text-[#1a1a4b] transition-colors">דף הבית</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
-          <span className="text-[#0a3d3d] font-medium">מסלולי השקעה</span>
+          <span className="text-[#1a1a4b] font-medium">מסלולי השקעה</span>
         </nav>
       </div>
 
@@ -331,7 +331,7 @@ const InvestmentTracks = () => {
               <Filter className="w-4 h-4" />
               סינון
               {(productFilter !== "all" || specFilter !== "all" || companyFilter !== "all") && (
-                <span className="w-5 h-5 rounded-full bg-[#5ec6c6] text-white text-[10px] flex items-center justify-center">
+                <span className="w-5 h-5 rounded-full bg-[#d6157e] text-white text-[10px] flex items-center justify-center">
                   {[productFilter, specFilter, companyFilter].filter(v => v !== "all").length}
                 </span>
               )}
@@ -342,7 +342,7 @@ const InvestmentTracks = () => {
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
             <button
               onClick={() => { setProductFilter("all"); setSpecFilter("all"); }}
-              className={`px-4 py-2 rounded-full text-sm font-semibold shrink-0 transition-all ${productFilter === "all" ? "bg-[#0a3d3d] text-white" : "bg-[#f8f9fc] text-gray-500 hover:bg-gray-100"}`}
+              className={`px-4 py-2 rounded-full text-sm font-semibold shrink-0 transition-all ${productFilter === "all" ? "bg-[#1a1a4b] text-white" : "bg-[#f8f9fc] text-gray-500 hover:bg-gray-100"}`}
             >
               הכל ({trackData.length})
             </button>
@@ -350,7 +350,7 @@ const InvestmentTracks = () => {
               <button
                 key={pt}
                 onClick={() => { setProductFilter(pt); setSpecFilter("all"); }}
-                className={`px-4 py-2 rounded-full text-sm font-semibold shrink-0 transition-all ${productFilter === pt ? "bg-[#0a3d3d] text-white" : "bg-[#f8f9fc] text-gray-500 hover:bg-gray-100"}`}
+                className={`px-4 py-2 rounded-full text-sm font-semibold shrink-0 transition-all ${productFilter === pt ? "bg-[#1a1a4b] text-white" : "bg-[#f8f9fc] text-gray-500 hover:bg-gray-100"}`}
               >
                 {productTypeLabels[pt]} ({trackData.filter(f => f.productType === pt).length})
               </button>
@@ -361,8 +361,8 @@ const InvestmentTracks = () => {
           {showFilters && (
             <div className="bg-[#f8f9fc] rounded-2xl p-5 space-y-4 border border-gray-100">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-[#0a3d3d]">סינון מתקדם</h3>
-                <button onClick={() => { setProductFilter("all"); setSpecFilter("all"); setCompanyFilter("all"); setSearch(""); }} className="text-xs text-[#5ec6c6] font-semibold">
+                <h3 className="text-sm font-bold text-[#1a1a4b]">סינון מתקדם</h3>
+                <button onClick={() => { setProductFilter("all"); setSpecFilter("all"); setCompanyFilter("all"); setSearch(""); }} className="text-xs text-[#d6157e] font-semibold">
                   נקה הכל
                 </button>
               </div>
@@ -372,7 +372,7 @@ const InvestmentTracks = () => {
                   <select
                     value={specFilter}
                     onChange={e => setSpecFilter(e.target.value as Specialization | "all")}
-                    className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
+                    className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#1a1a4b]"
                   >
                     <option value="all">כל הקטגוריות</option>
                     {specializations.map(s => (
@@ -385,7 +385,7 @@ const InvestmentTracks = () => {
                   <select
                     value={companyFilter}
                     onChange={e => setCompanyFilter(e.target.value as ManagingCompany | "all")}
-                    className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
+                    className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#1a1a4b]"
                   >
                     <option value="all">כל החברות</option>
                     {companies.map(c => (
@@ -400,7 +400,7 @@ const InvestmentTracks = () => {
 
         {/* Results summary */}
         <div className="flex items-center justify-between mb-4 text-sm">
-          <span className="text-gray-500">{filtered.length} מסלולים | {uniqueCompanies} חברות | ממוצע תשואה 12 חודשים: <strong className="text-[#0a3d3d]">{fmt(avgReturn)}</strong></span>
+          <span className="text-gray-500">{filtered.length} מסלולים | {uniqueCompanies} חברות | ממוצע תשואה 12 חודשים: <strong className="text-[#1a1a4b]">{fmt(avgReturn)}</strong></span>
           {bestFund && (
             <span className="text-xs text-gray-400 hidden sm:inline">מוביל: {bestFund.name} ({fmt(bestFund.returns.year1)})</span>
           )}
@@ -412,33 +412,33 @@ const InvestmentTracks = () => {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-[#f8f9fc] border-b border-gray-100">
-                  <th className="text-right px-4 py-3 font-bold text-[#0a3d3d] min-w-[200px]">
+                  <th className="text-right px-4 py-3 font-bold text-[#1a1a4b] min-w-[200px]">
                     <button onClick={() => toggleSort("name")} className="flex items-center gap-1">
                       שם מסלול
                       <ArrowUpDown className="w-3 h-3 text-gray-400" />
                     </button>
                   </th>
-                  <th className="text-center px-3 py-3 font-bold text-[#0a3d3d]">חברה</th>
-                  <th className="text-center px-3 py-3 font-bold text-[#0a3d3d]">קטגוריה</th>
-                  <th className="text-center px-3 py-3 font-bold text-[#0a3d3d]">
+                  <th className="text-center px-3 py-3 font-bold text-[#1a1a4b]">חברה</th>
+                  <th className="text-center px-3 py-3 font-bold text-[#1a1a4b]">קטגוריה</th>
+                  <th className="text-center px-3 py-3 font-bold text-[#1a1a4b]">
                     <button onClick={() => toggleSort("year1")} className="flex items-center gap-1 mx-auto">
                       12 חודשים
                       <ArrowUpDown className="w-3 h-3 text-gray-400" />
                     </button>
                   </th>
-                  <th className="text-center px-3 py-3 font-bold text-[#0a3d3d] hidden sm:table-cell">
+                  <th className="text-center px-3 py-3 font-bold text-[#1a1a4b] hidden sm:table-cell">
                     <button onClick={() => toggleSort("year3")} className="flex items-center gap-1 mx-auto">
                       3 שנים
                       <ArrowUpDown className="w-3 h-3 text-gray-400" />
                     </button>
                   </th>
-                  <th className="text-center px-3 py-3 font-bold text-[#0a3d3d] hidden md:table-cell">
+                  <th className="text-center px-3 py-3 font-bold text-[#1a1a4b] hidden md:table-cell">
                     <button onClick={() => toggleSort("year5")} className="flex items-center gap-1 mx-auto">
                       5 שנים
                       <ArrowUpDown className="w-3 h-3 text-gray-400" />
                     </button>
                   </th>
-                  <th className="text-center px-3 py-3 font-bold text-[#0a3d3d] hidden lg:table-cell">
+                  <th className="text-center px-3 py-3 font-bold text-[#1a1a4b] hidden lg:table-cell">
                     <button onClick={() => toggleSort("fees")} className="flex items-center gap-1 mx-auto">
                       דמ"נ צבירה
                       <ArrowUpDown className="w-3 h-3 text-gray-400" />
@@ -450,21 +450,21 @@ const InvestmentTracks = () => {
               <tbody>
                 {filtered.map((fund, i) => {
                   const isExpanded = expandedId === fund.id;
-                  const returnColor = (v: number) => v > avgReturn ? "text-[#90be6d]" : v < 0 ? "text-[#e76f51]" : "text-[#0a3d3d]";
+                  const returnColor = (v: number) => v > avgReturn ? "text-[#f06ba8]" : v < 0 ? "text-[#3b3f99]" : "text-[#1a1a4b]";
                   return (
                     <>
                       <tr
                         key={fund.id}
                         onClick={() => setExpandedId(isExpanded ? null : fund.id)}
-                        className={`border-b border-gray-50 cursor-pointer transition-colors ${isExpanded ? "bg-[#f8f9fc]" : "hover:bg-[#fafbfd]"} ${i === 0 && sortKey === "year1" ? "bg-[#90be6d]/5" : ""}`}
+                        className={`border-b border-gray-50 cursor-pointer transition-colors ${isExpanded ? "bg-[#f8f9fc]" : "hover:bg-[#fafbfd]"} ${i === 0 && sortKey === "year1" ? "bg-[#f06ba8]/5" : ""}`}
                       >
                         <td className="px-4 py-3">
-                          <div className="font-semibold text-[#0a3d3d] text-sm">{fund.name}</div>
+                          <div className="font-semibold text-[#1a1a4b] text-sm">{fund.name}</div>
                           <div className="text-xs text-gray-400">קופה {fund.fundNumber}</div>
                         </td>
                         <td className="text-center px-3 py-3 text-xs text-gray-600">{companyLabels[fund.company]}</td>
                         <td className="text-center px-3 py-3">
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-[#f8f9fc] border border-gray-100 text-[#0a3d3d]">
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-[#f8f9fc] border border-gray-100 text-[#1a1a4b]">
                             {specializationLabels[fund.specialization]}
                           </span>
                         </td>
@@ -490,24 +490,24 @@ const InvestmentTracks = () => {
                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                               <div className="bg-white rounded-xl p-3 border border-gray-100 text-center">
                                 <p className="text-xs text-gray-400 mb-1">תשואת חודש</p>
-                                <p className="text-lg font-bold text-[#0a3d3d]">{fmt(fund.returns.month)}</p>
+                                <p className="text-lg font-bold text-[#1a1a4b]">{fmt(fund.returns.month)}</p>
                               </div>
                               <div className="bg-white rounded-xl p-3 border border-gray-100 text-center">
                                 <p className="text-xs text-gray-400 mb-1">חשיפת מניות</p>
-                                <p className="text-lg font-bold text-[#0a3d3d]">{fund.stockExposure}%</p>
+                                <p className="text-lg font-bold text-[#1a1a4b]">{fund.stockExposure}%</p>
                               </div>
                               <div className="bg-white rounded-xl p-3 border border-gray-100 text-center">
                                 <p className="text-xs text-gray-400 mb-1">דמ"נ מהפקדה</p>
-                                <p className="text-lg font-bold text-[#0a3d3d]">{fund.fees.depositFeePercent}%</p>
+                                <p className="text-lg font-bold text-[#1a1a4b]">{fund.fees.depositFeePercent}%</p>
                               </div>
                               <div className="bg-white rounded-xl p-3 border border-gray-100 text-center">
                                 <p className="text-xs text-gray-400 mb-1">היקף נכסים</p>
-                                <p className="text-lg font-bold text-[#0a3d3d]">{fmtAssets(fund.totalAssets)}</p>
+                                <p className="text-lg font-bold text-[#1a1a4b]">{fmtAssets(fund.totalAssets)}</p>
                               </div>
                               {fund.deepDrill.sharpeRatio && (
                                 <div className="bg-white rounded-xl p-3 border border-gray-100 text-center">
                                   <p className="text-xs text-gray-400 mb-1">מדד שארפ</p>
-                                  <p className="text-lg font-bold text-[#5ec6c6]">{fund.deepDrill.sharpeRatio.toFixed(2)}</p>
+                                  <p className="text-lg font-bold text-[#d6157e]">{fund.deepDrill.sharpeRatio.toFixed(2)}</p>
                                 </div>
                               )}
                             </div>
@@ -516,16 +516,16 @@ const InvestmentTracks = () => {
                             {(() => {
                               const dd = fund.deepDrill;
                               const pieData = [
-                                { name: "מניות", value: dd.stocksAndOptions, color: "#5ec6c6" },
-                                { name: 'אג"ח ממשלתי', value: dd.govBondsTradable + dd.designatedBonds, color: "#90be6d" },
-                                { name: 'אג"ח קונצרני', value: dd.corpBondsTradable + dd.corpBondsNonTradable, color: "#f4a261" },
+                                { name: "מניות", value: dd.stocksAndOptions, color: "#d6157e" },
+                                { name: 'אג"ח ממשלתי', value: dd.govBondsTradable + dd.designatedBonds, color: "#f06ba8" },
+                                { name: 'אג"ח קונצרני', value: dd.corpBondsTradable + dd.corpBondsNonTradable, color: "#6b6fc4" },
                                 { name: "מזומן", value: dd.cashEquivalents + dd.deposits, color: "#94a3b8" },
                                 { name: "קרנות נאמנות", value: dd.mutualFunds, color: "#6c63ff" },
-                                { name: "אחר", value: dd.otherAssets, color: "#e76f51" },
+                                { name: "אחר", value: dd.otherAssets, color: "#3b3f99" },
                               ].filter(d => d.value > 0);
                               return (
                                 <div className="mt-4 bg-white rounded-xl p-4 border border-gray-100">
-                                  <h4 className="text-sm font-bold text-[#0a3d3d] mb-3">הרכב נכסים — חשיפות</h4>
+                                  <h4 className="text-sm font-bold text-[#1a1a4b] mb-3">הרכב נכסים — חשיפות</h4>
                                   <div className="flex flex-col sm:flex-row items-center gap-6">
                                     {/* Pie Chart */}
                                     <div className="w-[180px] h-[180px] shrink-0">
@@ -558,19 +558,19 @@ const InvestmentTracks = () => {
                                             <span className="w-3 h-3 rounded" style={{ background: d.color }} />
                                             <span className="text-gray-600">{d.name}</span>
                                           </div>
-                                          <span className="font-bold text-[#0a3d3d]">{d.value.toFixed(1)}%</span>
+                                          <span className="font-bold text-[#1a1a4b]">{d.value.toFixed(1)}%</span>
                                         </div>
                                       ))}
                                       {dd.foreignExposure > 0 && (
                                         <div className="flex items-center justify-between text-sm pt-1">
                                           <span className="text-gray-400">חשיפה לחו"ל</span>
-                                          <span className="font-semibold text-[#5ec6c6]">{dd.foreignExposure}%</span>
+                                          <span className="font-semibold text-[#d6157e]">{dd.foreignExposure}%</span>
                                         </div>
                                       )}
                                       {dd.currencyExposure > 0 && (
                                         <div className="flex items-center justify-between text-sm">
                                           <span className="text-gray-400">חשיפת מט"ח</span>
-                                          <span className="font-semibold text-[#f4a261]">{dd.currencyExposure}%</span>
+                                          <span className="font-semibold text-[#6b6fc4]">{dd.currencyExposure}%</span>
                                         </div>
                                       )}
                                     </div>
@@ -580,7 +580,7 @@ const InvestmentTracks = () => {
                             })()}
 
                             <div className="mt-3 text-center">
-                              <Link to="/contact" className="text-sm text-[#5ec6c6] font-semibold hover:underline">
+                              <Link to="/contact" className="text-sm text-[#d6157e] font-semibold hover:underline">
                                 רוצה לדעת איך המסלול הזה משתלב בתיק שלך? → ניתוח חינם
                               </Link>
                             </div>
@@ -604,7 +604,7 @@ const InvestmentTracks = () => {
         {/* Educational content (SEO) */}
         <section className="mt-16 space-y-10">
           <div className="max-w-3xl">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-6">מה זה מסלול השקעה?</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1a4b] mb-6">מה זה מסלול השקעה?</h2>
             <div className="space-y-4 text-gray-600 leading-relaxed text-base">
               <p>
                 מסלול השקעה קובע איך הכסף שלכם מושקע — כמה הולך למניות, כמה לאגרות חוב, וכמה למזומן. כל קרן פנסיה, קרן השתלמות וקופת גמל מציעה מגוון מסלולים שנבדלים ברמת הסיכון ובפוטנציאל התשואה.
@@ -616,7 +616,7 @@ const InvestmentTracks = () => {
           </div>
 
           <div className="max-w-3xl">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-6">איך לבחור מסלול השקעה?</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1a4b] mb-6">איך לבחור מסלול השקעה?</h2>
             <div className="space-y-4 text-gray-600 leading-relaxed text-base">
               <p>
                 הבחירה תלויה בשלושה דברים: גיל, אופק זמן, ורמת סיבולת לסיכון. ככלל אצבע — ככל שאתם צעירים יותר, כדאי לבחור מסלול אגרסיבי יותר כי יש לכם זמן להתאושש מירידות. ככל שמתקרבים לפרישה, עדיף מסלול שמרני יותר.
@@ -638,9 +638,9 @@ const InvestmentTracks = () => {
         {/* CTA */}
         <section className="mt-12">
           <div className="bg-[#f8f9fc] rounded-2xl p-8 sm:p-12 text-center relative overflow-hidden">
-            <div className="absolute top-4 right-6 w-20 h-20 rounded-full bg-[#5ec6c6] opacity-10" />
-            <div className="absolute bottom-4 left-10 w-14 h-14 rounded-full bg-[#f4a261] opacity-10" />
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d] mb-3 relative z-10">
+            <div className="absolute top-4 right-6 w-20 h-20 rounded-full bg-[#d6157e] opacity-10" />
+            <div className="absolute bottom-4 left-10 w-14 h-14 rounded-full bg-[#6b6fc4] opacity-10" />
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1a1a4b] mb-3 relative z-10">
               רוצים לדעת איך המסלול שלכם מתנהג?
             </h2>
             <p className="text-gray-500 text-base sm:text-lg mb-8 max-w-xl mx-auto relative z-10">
@@ -648,7 +648,7 @@ const InvestmentTracks = () => {
             </p>
             <Link
               to="/contact"
-              className="inline-block px-8 py-3.5 bg-[#5ec6c6] text-white font-semibold rounded-full hover:bg-[#4db5b5] transition-colors relative z-10"
+              className="inline-block px-8 py-3.5 bg-[#d6157e] text-white font-semibold rounded-full hover:bg-[#cc1672] transition-colors relative z-10"
             >
               קבלו ניתוח תיק חינם
             </Link>

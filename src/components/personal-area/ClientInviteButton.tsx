@@ -58,7 +58,7 @@ const ClientInviteButton = ({ customerEmail, customerName, variant = "button" }:
         onClick={handleSendInvite}
         disabled={loading || sent}
         title={`שלח לינק כניסה ל-${customerName}`}
-        className="text-[#0a3d3d] hover:bg-[#0a3d3d]/10"
+        className="text-[#1a1a4b] hover:bg-[#1a1a4b]/10"
       >
         {loading ? (
           <Loader2 className="w-4 h-4 animate-spin" />
@@ -76,7 +76,7 @@ const ClientInviteButton = ({ customerEmail, customerName, variant = "button" }:
       <Button
         onClick={handleSendInvite}
         disabled={loading || sent}
-        className="gap-2 rounded-full bg-[#0a3d3d] hover:bg-[#0d4a4a] shadow-lg shadow-[#0a3d3d]/20"
+        className="gap-2 rounded-full bg-[#1a1a4b] hover:bg-[#222159] shadow-lg shadow-[#1a1a4b]/20"
       >
         {loading ? (
           <Loader2 className="w-4 h-4 animate-spin" />

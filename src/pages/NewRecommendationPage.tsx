@@ -552,7 +552,7 @@ export default function NewRecommendationPage() {
     <div className="max-w-3xl mx-auto animate-fade-in px-0">
       {/* Header */}
       <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
-        <Button variant="ghost" size="sm" onClick={goBack} className="hover:bg-[#5ec6c6]/10 shrink-0 h-9 w-9 p-0 md:h-10 md:w-10 rounded-xl min-h-[44px]">
+        <Button variant="ghost" size="sm" onClick={goBack} className="hover:bg-[#d6157e]/10 shrink-0 h-9 w-9 p-0 md:h-10 md:w-10 rounded-xl min-h-[44px]">
           <ArrowRight className="h-4 w-4" />
         </Button>
         <div className="flex-1 min-w-0">
@@ -567,9 +567,9 @@ export default function NewRecommendationPage() {
           <div key={s} className="flex-1 relative">
             <div className={`h-1.5 md:h-2 rounded-full transition-all duration-500 ease-out ${
               i < stepNumber
-                ? 'bg-gradient-to-l from-[#0a3d3d] to-[#5ec6c6] shadow-sm shadow-[#5ec6c6]/20'
+                ? 'bg-gradient-to-l from-[#1a1a4b] to-[#d6157e] shadow-sm shadow-[#d6157e]/20'
                 : i === stepNumber - 1
-                  ? 'bg-[#0a3d3d]'
+                  ? 'bg-[#1a1a4b]'
                   : 'bg-border/50'
             }`} />
           </div>
@@ -579,19 +579,19 @@ export default function NewRecommendationPage() {
       {/* Step 1: Choose customer type */}
       {step === 'choose-customer' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-          <Card className="cursor-pointer hover:border-[#5ec6c6]/50 hover:shadow-xl hover:shadow-[#0a3d3d]/5 transition-all duration-300 group rounded-2xl hover:-translate-y-1" onClick={() => handleChooseMode('existing')}>
+          <Card className="cursor-pointer hover:border-[#d6157e]/50 hover:shadow-xl hover:shadow-[#1a1a4b]/5 transition-all duration-300 group rounded-2xl hover:-translate-y-1" onClick={() => handleChooseMode('existing')}>
             <CardContent className="flex flex-col items-center gap-2 md:gap-3 p-6 md:p-10">
-              <div className="w-14 h-14 md:w-18 md:h-18 rounded-2xl bg-[#0a3d3d]/8 flex items-center justify-center group-hover:bg-[#0a3d3d]/15 group-hover:shadow-lg group-hover:shadow-[#0a3d3d]/10 transition-all duration-300">
-                <Users className="h-7 w-7 md:h-8 md:w-8 text-[#0a3d3d]" />
+              <div className="w-14 h-14 md:w-18 md:h-18 rounded-2xl bg-[#1a1a4b]/8 flex items-center justify-center group-hover:bg-[#1a1a4b]/15 group-hover:shadow-lg group-hover:shadow-[#1a1a4b]/10 transition-all duration-300">
+                <Users className="h-7 w-7 md:h-8 md:w-8 text-[#1a1a4b]" />
               </div>
               <h3 className="text-base md:text-lg font-bold text-foreground">לקוח קיים</h3>
               <p className="text-xs md:text-sm text-muted-foreground text-center">בחר מרשימת הלקוחות הקיימים</p>
             </CardContent>
           </Card>
-          <Card className="cursor-pointer hover:border-[#5ec6c6]/50 hover:shadow-xl hover:shadow-[#0a3d3d]/5 transition-all duration-300 group rounded-2xl hover:-translate-y-1" onClick={() => handleChooseMode('new')}>
+          <Card className="cursor-pointer hover:border-[#d6157e]/50 hover:shadow-xl hover:shadow-[#1a1a4b]/5 transition-all duration-300 group rounded-2xl hover:-translate-y-1" onClick={() => handleChooseMode('new')}>
             <CardContent className="flex flex-col items-center gap-2 md:gap-3 p-6 md:p-10">
-              <div className="w-14 h-14 md:w-18 md:h-18 rounded-2xl bg-[#5ec6c6]/10 flex items-center justify-center group-hover:bg-[#5ec6c6]/20 group-hover:shadow-lg group-hover:shadow-[#5ec6c6]/10 transition-all duration-300">
-                <UserPlus className="h-7 w-7 md:h-8 md:w-8 text-[#0a3d3d]" />
+              <div className="w-14 h-14 md:w-18 md:h-18 rounded-2xl bg-[#d6157e]/10 flex items-center justify-center group-hover:bg-[#d6157e]/20 group-hover:shadow-lg group-hover:shadow-[#d6157e]/10 transition-all duration-300">
+                <UserPlus className="h-7 w-7 md:h-8 md:w-8 text-[#1a1a4b]" />
               </div>
               <h3 className="text-base md:text-lg font-bold text-foreground">לקוח חדש</h3>
               <p className="text-xs md:text-sm text-muted-foreground text-center">צור לקוח חדש והוסף המלצה</p>
@@ -603,17 +603,17 @@ export default function NewRecommendationPage() {
       {/* Step 2a: Select existing customer */}
       {step === 'customer-details' && customerMode === 'existing' && (
         <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
-          <CardHeader className="bg-gradient-to-b from-[#0a3d3d]/3 to-transparent">
+          <CardHeader className="bg-gradient-to-b from-[#1a1a4b]/3 to-transparent">
             <CardTitle className="text-lg flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-[#0a3d3d]/10 flex items-center justify-center">
-                <Search className="h-4 w-4 text-[#0a3d3d]" />
+              <div className="w-8 h-8 rounded-xl bg-[#1a1a4b]/10 flex items-center justify-center">
+                <Search className="h-4 w-4 text-[#1a1a4b]" />
               </div>
               חיפוש לקוח
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 p-4 md:p-6">
             <Input placeholder="חפש לפי שם, ת.ז או טלפון..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} autoFocus
-              className="rounded-xl h-12 border-border/60 focus:border-[#5ec6c6] transition-colors text-sm" />
+              className="rounded-xl h-12 border-border/60 focus:border-[#d6157e] transition-colors text-sm" />
             <div className="space-y-1 max-h-80 overflow-y-auto">
               {filteredCustomers.length === 0 && (
                 <div className="text-center py-8">
@@ -623,15 +623,15 @@ export default function NewRecommendationPage() {
               )}
               {filteredCustomers.map(c => (
                 <button key={c.id} onClick={() => handleSelectExistingCustomer(c.id)}
-                  className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#5ec6c6]/5 transition-all duration-200 text-right group min-h-[52px]">
-                  <div className="w-10 h-10 rounded-xl bg-[#0a3d3d]/8 flex items-center justify-center text-[#0a3d3d] font-bold text-sm group-hover:bg-[#0a3d3d]/12 group-hover:shadow-md transition-all duration-200">
+                  className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#d6157e]/5 transition-all duration-200 text-right group min-h-[52px]">
+                  <div className="w-10 h-10 rounded-xl bg-[#1a1a4b]/8 flex items-center justify-center text-[#1a1a4b] font-bold text-sm group-hover:bg-[#1a1a4b]/12 group-hover:shadow-md transition-all duration-200">
                     {c.firstName[0]}{c.lastName[0]}
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium group-hover:text-[#0a3d3d] transition-colors">{c.fullName}</p>
+                    <p className="text-sm font-medium group-hover:text-[#1a1a4b] transition-colors">{c.fullName}</p>
                     <p className="text-xs text-muted-foreground">{c.idNumber} · {c.mobilePhone}</p>
                   </div>
-                  <ArrowLeft className="h-4 w-4 text-muted-foreground/40 group-hover:text-[#0a3d3d] group-hover:translate-x-[-2px] transition-all duration-200" />
+                  <ArrowLeft className="h-4 w-4 text-muted-foreground/40 group-hover:text-[#1a1a4b] group-hover:translate-x-[-2px] transition-all duration-200" />
                 </button>
               ))}
             </div>
@@ -643,10 +643,10 @@ export default function NewRecommendationPage() {
       {step === 'customer-details' && customerMode === 'new' && (
         <div className="space-y-6">
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
-            <CardHeader className="bg-gradient-to-b from-[#0a3d3d]/3 to-transparent">
+            <CardHeader className="bg-gradient-to-b from-[#1a1a4b]/3 to-transparent">
               <CardTitle className="text-lg flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-[#0a3d3d]/10 flex items-center justify-center">
-                  <UserPlus className="h-4 w-4 text-[#0a3d3d]" />
+                <div className="w-8 h-8 rounded-xl bg-[#1a1a4b]/10 flex items-center justify-center">
+                  <UserPlus className="h-4 w-4 text-[#1a1a4b]" />
                 </div>
                 פרטי לקוח חדש
               </CardTitle>
@@ -655,34 +655,34 @@ export default function NewRecommendationPage() {
               <div className="grid grid-cols-2 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">שם פרטי *</Label>
-                  <Input value={form.firstName} onChange={e => setForm(p => ({ ...p, firstName: e.target.value }))} className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6]" />
+                  <Input value={form.firstName} onChange={e => setForm(p => ({ ...p, firstName: e.target.value }))} className="rounded-xl h-11 border-border/60 focus:border-[#d6157e]" />
                   {errors.firstName && <p className="text-xs text-destructive mt-1">{errors.firstName}</p>}
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">שם משפחה *</Label>
-                  <Input value={form.lastName} onChange={e => setForm(p => ({ ...p, lastName: e.target.value }))} className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6]" />
+                  <Input value={form.lastName} onChange={e => setForm(p => ({ ...p, lastName: e.target.value }))} className="rounded-xl h-11 border-border/60 focus:border-[#d6157e]" />
                   {errors.lastName && <p className="text-xs text-destructive mt-1">{errors.lastName}</p>}
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">תעודת זהות *</Label>
-                  <Input value={form.idNumber} onChange={e => setForm(p => ({ ...p, idNumber: e.target.value }))} className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6]" />
+                  <Input value={form.idNumber} onChange={e => setForm(p => ({ ...p, idNumber: e.target.value }))} className="rounded-xl h-11 border-border/60 focus:border-[#d6157e]" />
                   {errors.idNumber && <p className="text-xs text-destructive mt-1">{errors.idNumber}</p>}
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">טלפון נייד *</Label>
-                  <Input value={form.mobilePhone} onChange={e => setForm(p => ({ ...p, mobilePhone: e.target.value }))} className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6]" />
+                  <Input value={form.mobilePhone} onChange={e => setForm(p => ({ ...p, mobilePhone: e.target.value }))} className="rounded-xl h-11 border-border/60 focus:border-[#d6157e]" />
                   {errors.mobilePhone && <p className="text-xs text-destructive mt-1">{errors.mobilePhone}</p>}
                 </div>
               </div>
               <div className="space-y-1.5">
                 <Label className="text-xs font-medium text-muted-foreground">אימייל</Label>
-                <Input value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} type="email" className="rounded-xl h-11 border-border/60 focus:border-[#5ec6c6]" />
+                <Input value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} type="email" className="rounded-xl h-11 border-border/60 focus:border-[#d6157e]" />
               </div>
             </CardContent>
           </Card>
-          <Button onClick={handleCreateAndContinue} size="lg" className="gap-2 rounded-2xl bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5" disabled={saving}>
+          <Button onClick={handleCreateAndContinue} size="lg" className="gap-2 rounded-2xl bg-[#1a1a4b] hover:bg-[#1a1a4b]/90 shadow-lg shadow-[#1a1a4b]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5" disabled={saving}>
             {saving && <Loader2 className="h-4 w-4 animate-spin" />}
             צור לקוח והמשך
           </Button>
@@ -693,8 +693,8 @@ export default function NewRecommendationPage() {
       {step === 'manage-products' && (
         <div className="space-y-4">
           {selectedCustomer && (
-            <div className="flex items-center gap-3 p-3.5 bg-gradient-to-l from-[#0a3d3d]/5 to-[#5ec6c6]/5 rounded-2xl mb-4 border border-[#5ec6c6]/10">
-              <div className="w-10 h-10 rounded-xl bg-[#0a3d3d]/10 flex items-center justify-center text-[#0a3d3d] font-bold text-sm shadow-sm">
+            <div className="flex items-center gap-3 p-3.5 bg-gradient-to-l from-[#1a1a4b]/5 to-[#d6157e]/5 rounded-2xl mb-4 border border-[#d6157e]/10">
+              <div className="w-10 h-10 rounded-xl bg-[#1a1a4b]/10 flex items-center justify-center text-[#1a1a4b] font-bold text-sm shadow-sm">
                 {selectedCustomer.firstName[0]}{selectedCustomer.lastName[0]}
               </div>
               <div>
@@ -706,10 +706,10 @@ export default function NewRecommendationPage() {
 
           {/* Pre-treatment file upload */}
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
-            <CardHeader className="pb-3 bg-gradient-to-b from-[#0a3d3d]/3 to-transparent">
+            <CardHeader className="pb-3 bg-gradient-to-b from-[#1a1a4b]/3 to-transparent">
               <CardTitle className="text-base flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-lg bg-[#0a3d3d]/10 flex items-center justify-center">
-                  <Upload className="h-3.5 w-3.5 text-[#0a3d3d]" />
+                <div className="w-7 h-7 rounded-lg bg-[#1a1a4b]/10 flex items-center justify-center">
+                  <Upload className="h-3.5 w-3.5 text-[#1a1a4b]" />
                 </div>
                 העלאת קובץ טרום טיפול
               </CardTitle>
@@ -717,8 +717,8 @@ export default function NewRecommendationPage() {
             <CardContent className="p-4 md:p-6">
               <div
                 className={`border-2 border-dashed rounded-2xl p-5 text-center cursor-pointer transition-all duration-300 ${
-                  fileDragging ? 'border-[#5ec6c6] bg-[#5ec6c6]/10 scale-[1.01]' :
-                  fileUploading ? 'border-[#5ec6c6] bg-[#5ec6c6]/5' : 'border-border/60 hover:border-[#5ec6c6]/50 hover:bg-[#5ec6c6]/5'
+                  fileDragging ? 'border-[#d6157e] bg-[#d6157e]/10 scale-[1.01]' :
+                  fileUploading ? 'border-[#d6157e] bg-[#d6157e]/5' : 'border-border/60 hover:border-[#d6157e]/50 hover:bg-[#d6157e]/5'
                 }`}
                 onClick={() => !fileUploading && pretreatmentFileRef.current?.click()}
                 onDragOver={(e) => { e.preventDefault(); setFileDragging(true); }}
@@ -729,18 +729,18 @@ export default function NewRecommendationPage() {
                 {fileUploading ? (
                   <div className="flex flex-col items-center gap-3 py-2">
                     <div className="relative">
-                      <div className="w-12 h-12 rounded-full border-2 border-[#5ec6c6]/20 flex items-center justify-center">
-                        <Loader2 className="h-6 w-6 animate-spin text-[#0a3d3d]" />
+                      <div className="w-12 h-12 rounded-full border-2 border-[#d6157e]/20 flex items-center justify-center">
+                        <Loader2 className="h-6 w-6 animate-spin text-[#1a1a4b]" />
                       </div>
-                      <div className="absolute inset-0 w-12 h-12 rounded-full border-2 border-transparent border-t-[#5ec6c6] animate-spin" style={{ animationDuration: '1.5s' }} />
+                      <div className="absolute inset-0 w-12 h-12 rounded-full border-2 border-transparent border-t-[#d6157e] animate-spin" style={{ animationDuration: '1.5s' }} />
                     </div>
-                    <p className="text-sm font-semibold text-[#0a3d3d]">{fileUploadStatus}</p>
+                    <p className="text-sm font-semibold text-[#1a1a4b]">{fileUploadStatus}</p>
                     <p className="text-xs text-muted-foreground">מוצרי רכב ודירה מסוננים אוטומטית</p>
                   </div>
                 ) : (
                   <>
-                    <div className="w-12 h-12 rounded-2xl bg-[#0a3d3d]/8 flex items-center justify-center mx-auto mb-2">
-                      <Upload className="h-5 w-5 text-[#0a3d3d]/60" />
+                    <div className="w-12 h-12 rounded-2xl bg-[#1a1a4b]/8 flex items-center justify-center mx-auto mb-2">
+                      <Upload className="h-5 w-5 text-[#1a1a4b]/60" />
                     </div>
                     <p className="text-sm font-medium">{fileDragging ? 'שחרר כאן' : 'לחץ או גרור קובץ טרום טיפול'}</p>
                     <p className="text-xs text-muted-foreground mt-1">ZIP, CSV, XLSX, XML · ביטוחי רכב ודירה מסוננים אוטומטית</p>
@@ -759,15 +759,15 @@ export default function NewRecommendationPage() {
           </Card>
 
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
-            <CardHeader className="bg-gradient-to-b from-[#5ec6c6]/3 to-transparent">
+            <CardHeader className="bg-gradient-to-b from-[#d6157e]/3 to-transparent">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-[#5ec6c6]/15 flex items-center justify-center">
-                    <Package className="h-4 w-4 text-[#0a3d3d]" />
+                  <div className="w-8 h-8 rounded-xl bg-[#d6157e]/15 flex items-center justify-center">
+                    <Package className="h-4 w-4 text-[#1a1a4b]" />
                   </div>
                   מוצרים ({customerProducts.length})
                 </CardTitle>
-                <Button size="sm" variant="outline" className="gap-1.5 rounded-xl min-h-[36px] border-[#0a3d3d]/20 text-[#0a3d3d] hover:bg-[#0a3d3d]/5" onClick={() => { setEditingProduct(undefined); setProductModalOpen(true); }}>
+                <Button size="sm" variant="outline" className="gap-1.5 rounded-xl min-h-[36px] border-[#1a1a4b]/20 text-[#1a1a4b] hover:bg-[#1a1a4b]/5" onClick={() => { setEditingProduct(undefined); setProductModalOpen(true); }}>
                   <Plus className="h-3.5 w-3.5" />הוסף מוצר
                 </Button>
               </div>
@@ -825,15 +825,15 @@ export default function NewRecommendationPage() {
                   )}
 
                   {/* Progress indicator */}
-                  <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-gradient-to-l from-[#0a3d3d]/5 to-[#5ec6c6]/5 border border-[#5ec6c6]/10">
+                  <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-gradient-to-l from-[#1a1a4b]/5 to-[#d6157e]/5 border border-[#d6157e]/10">
                     <div className="flex-1">
                       <div className="flex justify-between text-xs mb-1.5">
                         <span className="text-muted-foreground font-medium">המלצות נוצרו</span>
-                        <span className="font-bold text-[#0a3d3d]">{recDrafts.length} / {customerProducts.length}</span>
+                        <span className="font-bold text-[#1a1a4b]">{recDrafts.length} / {customerProducts.length}</span>
                       </div>
-                      <div className="h-2 bg-[#0a3d3d]/10 rounded-full overflow-hidden">
+                      <div className="h-2 bg-[#1a1a4b]/10 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-l from-[#0a3d3d] to-[#5ec6c6] rounded-full transition-all duration-500 ease-out shadow-sm shadow-[#5ec6c6]/30"
+                          className="h-full bg-gradient-to-l from-[#1a1a4b] to-[#d6157e] rounded-full transition-all duration-500 ease-out shadow-sm shadow-[#d6157e]/30"
                           style={{ width: `${customerProducts.length > 0 ? (recDrafts.length / customerProducts.length) * 100 : 0}%` }}
                         />
                       </div>
@@ -845,7 +845,7 @@ export default function NewRecommendationPage() {
           </Card>
 
           <div className="flex gap-3">
-            <Button onClick={handleContinueToRecs} size="lg" className="gap-2 rounded-2xl bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5" disabled={customerProducts.length === 0}>
+            <Button onClick={handleContinueToRecs} size="lg" className="gap-2 rounded-2xl bg-[#1a1a4b] hover:bg-[#1a1a4b]/90 shadow-lg shadow-[#1a1a4b]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5" disabled={customerProducts.length === 0}>
               המשך לכתיבת המלצות ({recDrafts.length}) <ArrowLeft className="h-4 w-4" />
             </Button>
           </div>
@@ -864,10 +864,10 @@ export default function NewRecommendationPage() {
       {/* Step 4: Write recommendations */}
       {step === 'write-recommendations' && (
         <div className="space-y-6">
-          <div className="flex items-center gap-3 p-3.5 bg-gradient-to-l from-[#0a3d3d]/5 to-[#5ec6c6]/5 rounded-2xl border border-[#5ec6c6]/10">
+          <div className="flex items-center gap-3 p-3.5 bg-gradient-to-l from-[#1a1a4b]/5 to-[#d6157e]/5 rounded-2xl border border-[#d6157e]/10">
             {selectedCustomer && (
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-[#0a3d3d]/10 flex items-center justify-center text-[#0a3d3d] font-bold text-[10px]">
+                <div className="w-7 h-7 rounded-lg bg-[#1a1a4b]/10 flex items-center justify-center text-[#1a1a4b] font-bold text-[10px]">
                   {selectedCustomer.firstName[0]}{selectedCustomer.lastName[0]}
                 </div>
                 <span className="font-semibold text-sm">{selectedCustomer.fullName}</span>
@@ -884,20 +884,20 @@ export default function NewRecommendationPage() {
                 <CardHeader className="pb-3 px-3 md:px-6 bg-gradient-to-b from-muted/30 to-transparent">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <CardTitle className="text-sm md:text-base flex items-center gap-2">
-                      <span className="w-6 h-6 md:w-7 md:h-7 rounded-xl bg-[#0a3d3d] text-white text-[10px] md:text-xs flex items-center justify-center font-bold shrink-0 shadow-sm shadow-[#0a3d3d]/20">
+                      <span className="w-6 h-6 md:w-7 md:h-7 rounded-xl bg-[#1a1a4b] text-white text-[10px] md:text-xs flex items-center justify-center font-bold shrink-0 shadow-sm shadow-[#1a1a4b]/20">
                         {idx + 1}
                       </span>
                       <span className="truncate">{product.company} — {product.productType}</span>
                     </CardTitle>
                     <div className="flex gap-1.5 shrink-0">
                       <Button variant="outline" size="sm"
-                        className="gap-1 text-[10px] md:text-xs h-8 px-2.5 rounded-xl border-[#5ec6c6]/30 text-[#0a3d3d] hover:bg-[#5ec6c6]/10 min-h-[32px] transition-all duration-200"
+                        className="gap-1 text-[10px] md:text-xs h-8 px-2.5 rounded-xl border-[#d6157e]/30 text-[#1a1a4b] hover:bg-[#d6157e]/10 min-h-[32px] transition-all duration-200"
                         onClick={() => generateAiRecommendation(draft.productId)}
                         disabled={aiLoading[draft.productId]}>
                         {aiLoading[draft.productId] ? (
                           <div className="relative">
                             <Sparkles className="h-3 w-3 animate-pulse" />
-                            <div className="absolute inset-0 w-3 h-3 rounded-full border border-transparent border-t-[#5ec6c6] animate-spin" />
+                            <div className="absolute inset-0 w-3 h-3 rounded-full border border-transparent border-t-[#d6157e] animate-spin" />
                           </div>
                         ) : <Sparkles className="h-3 w-3" />}
                         AI
@@ -1033,7 +1033,7 @@ export default function NewRecommendationPage() {
           })}
 
           <div className="flex gap-3">
-            <Button onClick={() => setStep('preview')} size="lg" className="gap-2 rounded-2xl bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5">
+            <Button onClick={() => setStep('preview')} size="lg" className="gap-2 rounded-2xl bg-[#1a1a4b] hover:bg-[#1a1a4b]/90 shadow-lg shadow-[#1a1a4b]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5">
               תצוגה מקדימה <Eye className="h-4 w-4" />
             </Button>
             <Button variant="outline" size="lg" onClick={() => setStep('manage-products')} className="rounded-2xl min-h-[48px]">חזור</Button>
@@ -1044,10 +1044,10 @@ export default function NewRecommendationPage() {
       {/* Step 5: Preview */}
       {step === 'preview' && (
         <div className="space-y-6">
-          <Card className="border-[#5ec6c6]/20 bg-gradient-to-l from-[#0a3d3d]/5 to-[#5ec6c6]/5 rounded-2xl">
+          <Card className="border-[#d6157e]/20 bg-gradient-to-l from-[#1a1a4b]/5 to-[#d6157e]/5 rounded-2xl">
             <CardContent className="p-4 flex items-center justify-center gap-2">
-              <Eye className="h-4 w-4 text-[#0a3d3d]" />
-              <p className="text-sm text-center text-[#0a3d3d] font-medium">תצוגה מקדימה — כך הלקוח יראה את ההמלצות</p>
+              <Eye className="h-4 w-4 text-[#1a1a4b]" />
+              <p className="text-sm text-center text-[#1a1a4b] font-medium">תצוגה מקדימה — כך הלקוח יראה את ההמלצות</p>
             </CardContent>
           </Card>
 
@@ -1124,7 +1124,7 @@ export default function NewRecommendationPage() {
           })}
 
           <div className="flex gap-3">
-            <Button onClick={handleSubmitAll} size="lg" className="gap-2 rounded-2xl bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5" disabled={saving}>
+            <Button onClick={handleSubmitAll} size="lg" className="gap-2 rounded-2xl bg-[#1a1a4b] hover:bg-[#1a1a4b]/90 shadow-lg shadow-[#1a1a4b]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5" disabled={saving}>
               {saving && <Loader2 className="h-4 w-4 animate-spin" />}
               צור {recDrafts.filter(d => d.title.trim() && d.rationale.trim()).length} המלצות
             </Button>
@@ -1136,7 +1136,7 @@ export default function NewRecommendationPage() {
       {/* Step 6: Summary + generate link */}
       {step === 'summary' && (
         <div className="space-y-6">
-          <Card className="border-[#5ec6c6]/20 rounded-2xl overflow-hidden">
+          <Card className="border-[#d6157e]/20 rounded-2xl overflow-hidden">
             <CardContent className="p-8 md:p-10 text-center space-y-4 bg-gradient-to-b from-emerald-50/30 dark:from-emerald-900/5 to-transparent">
               <div className="w-18 h-18 rounded-full bg-emerald-100/60 dark:bg-emerald-900/20 flex items-center justify-center mx-auto shadow-lg shadow-emerald-200/20">
                 <CheckCircle2 className="h-9 w-9 text-emerald-500" />
@@ -1152,15 +1152,15 @@ export default function NewRecommendationPage() {
           </Card>
 
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
-            <CardHeader className="bg-gradient-to-b from-[#0a3d3d]/3 to-transparent">
+            <CardHeader className="bg-gradient-to-b from-[#1a1a4b]/3 to-transparent">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-[#0a3d3d]/10 flex items-center justify-center">
-                    <Link2 className="h-4 w-4 text-[#0a3d3d]" />
+                  <div className="w-8 h-8 rounded-xl bg-[#1a1a4b]/10 flex items-center justify-center">
+                    <Link2 className="h-4 w-4 text-[#1a1a4b]" />
                   </div>
                   שליחה ונעילה
                 </CardTitle>
-                <Button size="sm" className="gap-1.5 rounded-xl bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 min-h-[36px]" onClick={handleSendSummary}>
+                <Button size="sm" className="gap-1.5 rounded-xl bg-[#1a1a4b] hover:bg-[#1a1a4b]/90 min-h-[36px]" onClick={handleSendSummary}>
                   <LockIcon className="h-3.5 w-3.5" />שלח ונעל
                 </Button>
               </div>
@@ -1237,7 +1237,7 @@ export default function NewRecommendationPage() {
             }}>
               <FileText className="h-4 w-4" />הורד PDF
             </Button>
-            <Button onClick={() => navigate('/app/recommendation-bank')} size="lg" className="rounded-2xl min-h-[48px] bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-lg shadow-[#0a3d3d]/20">
+            <Button onClick={() => navigate('/app/recommendation-bank')} size="lg" className="rounded-2xl min-h-[48px] bg-[#1a1a4b] hover:bg-[#1a1a4b]/90 shadow-lg shadow-[#1a1a4b]/20">
               עבור לבנק המלצות
             </Button>
             <Button onClick={() => navigate(`/app/customers/${selectedCustomerId}`)} variant="outline" size="lg" className="rounded-2xl min-h-[48px]">
@@ -1293,7 +1293,7 @@ function WizardProductRow({ product, hasDraft, onAddDraft, onEdit, onDelete }: {
   onAddDraft: () => void; onEdit: () => void; onDelete: () => void;
 }) {
   return (
-    <div className={`flex items-center gap-3 px-3 py-3 transition-all duration-200 ${hasDraft ? 'bg-[#5ec6c6]/5' : 'hover:bg-muted/30'}`}>
+    <div className={`flex items-center gap-3 px-3 py-3 transition-all duration-200 ${hasDraft ? 'bg-[#d6157e]/5' : 'hover:bg-muted/30'}`}>
       <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${product.isActive ? 'bg-emerald-400 shadow-sm shadow-emerald-300/50' : 'bg-muted-foreground/40'}`} />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium truncate">{product.company} — {product.productType}</p>
@@ -1306,11 +1306,11 @@ function WizardProductRow({ product, hasDraft, onAddDraft, onEdit, onDelete }: {
       </div>
       <div className="flex items-center gap-1.5 shrink-0">
         {hasDraft ? (
-          <Badge variant="secondary" className="text-[10px] gap-1 bg-[#0a3d3d]/10 text-[#0a3d3d] border-[#0a3d3d]/15 rounded-lg">
+          <Badge variant="secondary" className="text-[10px] gap-1 bg-[#1a1a4b]/10 text-[#1a1a4b] border-[#1a1a4b]/15 rounded-lg">
             <CheckCircle2 className="h-3 w-3" />יש המלצה
           </Badge>
         ) : (
-          <Button variant="outline" size="sm" className="text-[10px] gap-1 h-8 px-2.5 border-[#0a3d3d]/20 text-[#0a3d3d] hover:bg-[#0a3d3d]/5 rounded-xl min-h-[32px]" onClick={onAddDraft}>
+          <Button variant="outline" size="sm" className="text-[10px] gap-1 h-8 px-2.5 border-[#1a1a4b]/20 text-[#1a1a4b] hover:bg-[#1a1a4b]/5 rounded-xl min-h-[32px]" onClick={onAddDraft}>
             <Plus className="h-3 w-3" />צור המלצה
           </Button>
         )}

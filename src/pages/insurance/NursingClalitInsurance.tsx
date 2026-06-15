@@ -5,7 +5,7 @@ const NursingClalitInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Heart}
-      heroIconColor="#e76f51"
+      heroIconColor="#3b3f99"
       heroCategory="ביטוח סיעודי לחברי כללית"
       heroTitle="ביטוח סיעודי לחברי כללית"
       heroDescription="כיסוי סיעודי משופר לחברי קופת חולים כללית — השלמה חיונית לביטוח הקולקטיבי הבסיסי."

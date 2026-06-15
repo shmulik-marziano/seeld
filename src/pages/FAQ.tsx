@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
-const categoryColors = ["#5ec6c6", "#f4a261", "#e76f51", "#90be6d"];
+const categoryColors = ["#d6157e", "#6b6fc4", "#3b3f99", "#f06ba8"];
 
 const faqCategories = [
   {
@@ -64,22 +64,22 @@ const FAQ = () => {
       {/* Hero Banner - Bold design */}
       <section className="bg-[#f8f9fc] relative overflow-hidden">
         {/* Solid colored circles */}
-        <div className="absolute top-[12%] left-[6%] w-[90px] h-[90px] rounded-full bg-[#5ec6c6]" />
-        <div className="absolute bottom-[18%] right-[7%] w-[60px] h-[60px] rounded-full bg-[#e76f51]" />
-        <div className="absolute top-[55%] left-[25%] w-[30px] h-[30px] rounded-full bg-[#f4a261]" />
-        <div className="absolute top-[25%] right-[18%] w-[25px] h-[25px] rounded-full bg-[#90be6d]" />
+        <div className="absolute top-[12%] left-[6%] w-[90px] h-[90px] rounded-full bg-[#d6157e]" />
+        <div className="absolute bottom-[18%] right-[7%] w-[60px] h-[60px] rounded-full bg-[#3b3f99]" />
+        <div className="absolute top-[55%] left-[25%] w-[30px] h-[30px] rounded-full bg-[#6b6fc4]" />
+        <div className="absolute top-[25%] right-[18%] w-[25px] h-[25px] rounded-full bg-[#f06ba8]" />
 
         {/* Dashed curved line */}
         <div className="absolute bottom-12 left-[12%] hidden lg:block">
           <svg width="140" height="90" viewBox="0 0 140 90" fill="none">
-            <path d="M10 10 C 40 80, 100 80, 130 30" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
-            <polygon points="130,30 122,26 128,38" fill="#0a3d3d" opacity="0.12" />
+            <path d="M10 10 C 40 80, 100 80, 130 30" stroke="#1a1a4b" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
+            <polygon points="130,30 122,26 128,38" fill="#1a1a4b" opacity="0.12" />
           </svg>
         </div>
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20 sm:py-28 relative">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
-            שאלות <span className="text-[#5ec6c6]">נפוצות</span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#1a1a4b] mb-4 leading-tight">
+            שאלות <span className="text-[#d6157e]">נפוצות</span>
           </h1>
           <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
             ריכזנו עבורכם תשובות לשאלות הנפוצות ביותר בתחומי ביטוח, פנסיה וחיסכון.
@@ -90,9 +90,9 @@ const FAQ = () => {
       {/* Breadcrumb */}
       <div className="border-b border-gray-100">
         <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
+          <Link to="/" className="hover:text-[#1a1a4b] transition-colors">דף הבית</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
-          <span className="text-[#0a3d3d] font-medium">שאלות נפוצות</span>
+          <span className="text-[#1a1a4b] font-medium">שאלות נפוצות</span>
         </nav>
       </div>
 
@@ -105,7 +105,7 @@ const FAQ = () => {
                 <div key={category.title}>
                   <div className="flex items-center gap-3 mb-5 pb-3 border-b border-gray-100">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: categoryColors[catIdx % categoryColors.length] }} />
-                    <h2 className="text-xl sm:text-2xl font-extrabold text-[#0a3d3d]">
+                    <h2 className="text-xl sm:text-2xl font-extrabold text-[#1a1a4b]">
                       {category.title}
                     </h2>
                   </div>
@@ -114,9 +114,9 @@ const FAQ = () => {
                       <AccordionItem
                         key={idx}
                         value={`${catIdx}-${idx}`}
-                        className="bg-[#f8f9fc] border border-[#0a3d3d]/[0.06] rounded-2xl px-6 overflow-hidden data-[state=open]:shadow-md data-[state=open]:shadow-[#0a3d3d]/[0.04] transition-all"
+                        className="bg-[#f8f9fc] border border-[#1a1a4b]/[0.06] rounded-2xl px-6 overflow-hidden data-[state=open]:shadow-md data-[state=open]:shadow-[#1a1a4b]/[0.04] transition-all"
                       >
-                        <AccordionTrigger className="text-right text-base font-bold text-[#0a3d3d] hover:no-underline py-5">
+                        <AccordionTrigger className="text-right text-base font-bold text-[#1a1a4b] hover:no-underline py-5">
                           {item.q}
                         </AccordionTrigger>
                         <AccordionContent className="text-gray-500 leading-relaxed pb-5 text-sm sm:text-base">
@@ -133,19 +133,19 @@ const FAQ = () => {
 
         {/* CTA Section */}
         <section className="py-10 sm:py-16 bg-[#f8f9fc] relative overflow-hidden">
-          <div className="absolute top-6 right-[8%] w-4 h-4 rounded-full bg-[#f4a261] hidden sm:block" />
-          <div className="absolute bottom-10 left-[10%] w-3 h-3 rounded-full bg-[#90be6d] hidden sm:block" />
+          <div className="absolute top-6 right-[8%] w-4 h-4 rounded-full bg-[#6b6fc4] hidden sm:block" />
+          <div className="absolute bottom-10 left-[10%] w-3 h-3 rounded-full bg-[#f06ba8] hidden sm:block" />
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="bg-[#0a3d3d] rounded-3xl p-8 sm:p-12 text-center text-white relative overflow-hidden">
-              <div className="absolute top-[-30px] right-[-30px] w-[90px] h-[90px] rounded-full bg-[#5ec6c6] opacity-20" />
-              <div className="absolute bottom-[-20px] left-[-20px] w-[70px] h-[70px] rounded-full bg-[#e76f51] opacity-15" />
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-3 relative">לא מצאתם <span className="text-[#5ec6c6]">תשובה?</span></h2>
+            <div className="bg-[#1a1a4b] rounded-3xl p-8 sm:p-12 text-center text-white relative overflow-hidden">
+              <div className="absolute top-[-30px] right-[-30px] w-[90px] h-[90px] rounded-full bg-[#d6157e] opacity-20" />
+              <div className="absolute bottom-[-20px] left-[-20px] w-[70px] h-[70px] rounded-full bg-[#3b3f99] opacity-15" />
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-3 relative">לא מצאתם <span className="text-[#d6157e]">תשובה?</span></h2>
               <p className="text-white/60 text-base sm:text-lg mb-8 max-w-xl mx-auto relative">
                 צרו איתנו קשר — נשמח לענות על כל שאלה ולתת ייעוץ מותאם אישית, ללא עלות.
               </p>
               <Link
                 to="/contact"
-                className="relative inline-block px-10 py-4 bg-[#5ec6c6] text-[#0a3d3d] font-bold rounded-full hover:bg-[#4db5b5] transition-colors shadow-xl shadow-[#5ec6c6]/20 text-base"
+                className="relative inline-block px-10 py-4 bg-[#d6157e] text-[#1a1a4b] font-bold rounded-full hover:bg-[#cc1672] transition-colors shadow-xl shadow-[#d6157e]/20 text-base"
               >
                 צרו קשר
               </Link>

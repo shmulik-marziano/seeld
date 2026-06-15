@@ -38,7 +38,7 @@ const HeroSection = () => {
       dir="rtl"
       style={{
         background:
-          "radial-gradient(ellipse 80% 50% at 50% 0%, hsl(168 38% 96%) 0%, #f8f9fc 60%)",
+          "radial-gradient(ellipse 80% 50% at 50% 0%, hsl(168 38% 96%) 0%, #ffffff 60%)",
       }}
     >
       {/* Subtle noise texture layer */}
@@ -71,8 +71,8 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/80 backdrop-blur-sm border border-[#0a3d3d]/10 text-[13px] text-[#0a3d3d] font-medium shadow-sm">
-                <Sparkles className="w-3.5 h-3.5 text-[#f4a261]" />
+              <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/80 backdrop-blur-sm border border-[#1a1a4b]/10 text-[13px] text-[#1a1a4b] font-medium shadow-sm">
+                <Sparkles className="w-3.5 h-3.5 text-[#6b6fc4]" />
                 בית פיננסים וביטוח · מבית עמיתים הון
               </span>
             </motion.div>
@@ -84,21 +84,21 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
             >
-              <span className="block text-[2rem] sm:text-5xl md:text-6xl lg:text-[5rem] text-[#0a3d3d]">
+              <span className="block text-[2rem] sm:text-5xl md:text-6xl lg:text-[5rem] text-[#1a1a4b]">
                 הדרך הנכונה
               </span>
-              <span className="block text-[2rem] sm:text-5xl md:text-6xl lg:text-[5rem] text-[#0a3d3d]">
+              <span className="block text-[2rem] sm:text-5xl md:text-6xl lg:text-[5rem] text-[#1a1a4b]">
                 לנהל את
               </span>
               <span className="block text-[2rem] sm:text-5xl md:text-6xl lg:text-[5rem] mt-2">
                 <span className="relative inline-block">
                   <span
-                    className="bg-gradient-to-l from-[#1a8f7d] via-[#5ec6c6] to-[#1a8f7d] bg-clip-text text-transparent bg-[length:200%_100%] animate-gradient-shift"
+                    className="bg-gradient-to-l from-[#d6157e] via-[#f06ba8] to-[#d6157e] bg-clip-text text-transparent bg-[length:200%_100%] animate-gradient-shift"
                   >
                     הכסף שלך.
                   </span>
                   <motion.span
-                    className="absolute -bottom-2 left-0 right-0 h-[6px] bg-[#f4a261] rounded-full"
+                    className="absolute -bottom-2 left-0 right-0 h-[6px] bg-[#6b6fc4] rounded-full"
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ delay: 1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -110,14 +110,14 @@ const HeroSection = () => {
 
             {/* Subtitle — House voice, institutional premium */}
             <motion.p
-              className="text-base sm:text-lg md:text-xl text-[#0a3d3d]/70 leading-[1.75] max-w-xl font-normal"
+              className="text-base sm:text-lg md:text-xl text-[#1a1a4b]/70 leading-[1.75] max-w-xl font-normal"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.25 }}
             >
               בית פיננסים וביטוח עצמאי. צוות של סוכני ביטוח ויועצי פנסיה שסוקרים את התיק שלך, משווים מול 12 חברות מובילות, וממליצים על הצעד הבא.
               <br />
-              <span className="text-[#0a3d3d] font-semibold">פגישת הייעוץ הראשונה על חשבוננו.</span>
+              <span className="text-[#1a1a4b] font-semibold">פגישת הייעוץ הראשונה על חשבוננו.</span>
             </motion.p>
 
             {/* CTAs */}
@@ -129,7 +129,7 @@ const HeroSection = () => {
             >
               <Link to="/contact" className="w-full sm:w-auto group">
                 <Button
-                  className="bg-[#0a3d3d] text-white hover:bg-[#0d4a4a] rounded-full px-10 py-6 text-base font-bold shadow-xl shadow-[#0a3d3d]/20 hover:shadow-2xl hover:shadow-[#0a3d3d]/30 hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto min-h-[60px] group-hover:scale-[1.02]"
+                  className="bg-[#1a1a4b] text-white hover:bg-[#232159] rounded-full px-10 py-6 text-base font-bold shadow-xl shadow-[#1a1a4b]/20 hover:shadow-2xl hover:shadow-[#1a1a4b]/30 hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto min-h-[60px] group-hover:scale-[1.02]"
                 >
                   קביעת פגישת ייעוץ
                   <ArrowDownLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
@@ -143,7 +143,7 @@ const HeroSection = () => {
               >
                 <Button
                   variant="ghost"
-                  className="text-[#0a3d3d] hover:bg-[#0a3d3d]/5 hover:text-[#0a3d3d] rounded-full px-8 py-6 text-base font-semibold w-full sm:w-auto min-h-[60px] flex items-center gap-2.5 border border-[#0a3d3d]/15 hover:border-[#0a3d3d]/25 transition-all duration-300"
+                  className="text-[#1a1a4b] hover:bg-[#1a1a4b]/5 hover:text-[#1a1a4b] rounded-full px-8 py-6 text-base font-semibold w-full sm:w-auto min-h-[60px] flex items-center gap-2.5 border border-[#1a1a4b]/15 hover:border-[#1a1a4b]/25 transition-all duration-300"
                 >
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-75"></span>
@@ -168,7 +168,7 @@ const HeroSection = () => {
               ].map((text, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <svg
-                    className="w-4 h-4 text-[#1a8f7d]"
+                    className="w-4 h-4 text-[#d6157e]"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -178,7 +178,7 @@ const HeroSection = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span className="text-sm text-[#0a3d3d]/60 font-medium">
+                  <span className="text-sm text-[#1a1a4b]/60 font-medium">
                     {text}
                   </span>
                 </div>
@@ -199,7 +199,7 @@ const HeroSection = () => {
                 className="absolute top-[25%] right-[8%] w-[140px] h-[140px] sm:w-[170px] sm:h-[170px] rounded-full flex items-center justify-center shadow-2xl"
                 style={{
                   background:
-                    "linear-gradient(135deg, #6dd9d5 0%, #1a8f7d 100%)",
+                    "linear-gradient(135deg, #f7a3c8 0%, #d6157e 100%)",
                   boxShadow:
                     "0 20px 40px -10px rgba(26, 143, 125, 0.45), inset 0 -8px 16px rgba(0,0,0,0.08)",
                   ...(isDesktop ? { y: y1 } : {}),
@@ -228,7 +228,7 @@ const HeroSection = () => {
                 className="absolute top-[22%] right-[36%] w-[95px] h-[95px] sm:w-[120px] sm:h-[120px] rounded-full shadow-xl"
                 style={{
                   background:
-                    "linear-gradient(135deg, #f28e6f 0%, #e76f51 100%)",
+                    "linear-gradient(135deg, #f28e6f 0%, #3b3f99 100%)",
                   boxShadow:
                     "0 15px 30px -8px rgba(231, 111, 81, 0.4), inset 0 -6px 12px rgba(0,0,0,0.08)",
                   ...(isDesktop ? { y: y2 } : {}),
@@ -243,7 +243,7 @@ const HeroSection = () => {
                 className="absolute top-[10%] right-[56%] w-[110px] h-[110px] sm:w-[140px] sm:h-[140px] rounded-full flex items-center justify-center shadow-xl"
                 style={{
                   background:
-                    "linear-gradient(135deg, #f6b581 0%, #f4a261 100%)",
+                    "linear-gradient(135deg, #f6b581 0%, #6b6fc4 100%)",
                   boxShadow:
                     "0 15px 30px -8px rgba(244, 162, 97, 0.4), inset 0 -6px 12px rgba(0,0,0,0.08)",
                   ...(isDesktop ? { y: y3 } : {}),
@@ -298,7 +298,7 @@ const HeroSection = () => {
 
               {/* Floating savings card — NEW sophisticated element */}
               <motion.div
-                className="absolute bottom-[4%] right-[8%] bg-white rounded-2xl p-5 shadow-2xl border border-[#0a3d3d]/[0.06] min-w-[240px]"
+                className="absolute bottom-[4%] right-[8%] bg-white rounded-2xl p-5 shadow-2xl border border-[#1a1a4b]/[0.06] min-w-[240px]"
                 style={{
                   boxShadow:
                     "0 25px 50px -12px rgba(10, 61, 61, 0.18), 0 0 0 1px rgba(10, 61, 61, 0.03)",
@@ -309,24 +309,24 @@ const HeroSection = () => {
                 transition={{ delay: 1.3, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div className="flex items-center gap-2.5 mb-2">
-                  <div className="w-2 h-2 rounded-full bg-[#1a8f7d] animate-pulse" />
-                  <span className="text-[11px] uppercase tracking-wider text-[#0a3d3d]/50 font-semibold">
+                  <div className="w-2 h-2 rounded-full bg-[#d6157e] animate-pulse" />
+                  <span className="text-[11px] uppercase tracking-wider text-[#1a1a4b]/50 font-semibold">
                     חיסכון שזוהה השבוע
                   </span>
                 </div>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-3xl font-extrabold text-[#0a3d3d] tabular-nums">
+                  <span className="text-3xl font-extrabold text-[#1a1a4b] tabular-nums">
                     ₪4,280
                   </span>
-                  <span className="text-sm text-[#0a3d3d]/60">בשנה</span>
+                  <span className="text-sm text-[#1a1a4b]/60">בשנה</span>
                 </div>
-                <div className="text-xs text-[#0a3d3d]/55">
+                <div className="text-xs text-[#1a1a4b]/55">
                   תיק לקוח קיים · ללא שינוי בכיסוי
                 </div>
                 {/* Animated bar */}
-                <div className="mt-3 h-1 bg-[#0a3d3d]/[0.06] rounded-full overflow-hidden">
+                <div className="mt-3 h-1 bg-[#1a1a4b]/[0.06] rounded-full overflow-hidden">
                   <motion.div
-                    className="h-full bg-gradient-to-l from-[#1a8f7d] to-[#6dd9d5] rounded-full"
+                    className="h-full bg-gradient-to-l from-[#d6157e] to-[#f7a3c8] rounded-full"
                     initial={{ width: 0 }}
                     animate={{ width: "72%" }}
                     transition={{ delay: 1.8, duration: 1.4, ease: "easeOut" }}
@@ -336,17 +336,17 @@ const HeroSection = () => {
 
               {/* Subtle sparkle dots */}
               <motion.div
-                className="absolute top-[8%] right-[45%] w-2.5 h-2.5 rounded-full bg-[#f4a261]"
+                className="absolute top-[8%] right-[45%] w-2.5 h-2.5 rounded-full bg-[#6b6fc4]"
                 animate={{ scale: [1, 1.4, 1], opacity: [0.6, 1, 0.6] }}
                 transition={{ duration: 2.5, repeat: Infinity }}
               />
               <motion.div
-                className="absolute top-[48%] right-[88%] w-2 h-2 rounded-full bg-[#6dd9d5]"
+                className="absolute top-[48%] right-[88%] w-2 h-2 rounded-full bg-[#f7a3c8]"
                 animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 3, repeat: Infinity, delay: 0.8 }}
               />
               <motion.div
-                className="absolute top-[70%] right-[70%] w-1.5 h-1.5 rounded-full bg-[#e76f51]"
+                className="absolute top-[70%] right-[70%] w-1.5 h-1.5 rounded-full bg-[#3b3f99]"
                 animate={{ scale: [1, 1.6, 1], opacity: [0.4, 0.9, 0.4] }}
                 transition={{ duration: 2.8, repeat: Infinity, delay: 1.5 }}
               />
@@ -356,16 +356,16 @@ const HeroSection = () => {
 
         {/* Trust bar */}
         <motion.div
-          className="mt-16 sm:mt-24 pt-8 border-t border-[#0a3d3d]/[0.08]"
+          className="mt-16 sm:mt-24 pt-8 border-t border-[#1a1a4b]/[0.08]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.4, duration: 0.8 }}
         >
           <div className="flex flex-wrap items-center justify-center gap-x-8 sm:gap-x-12 gap-y-4">
             {[
-              { text: "רישיון מטעם", highlight: "רשות שוק ההון", dotColor: "#1a8f7d" },
-              { text: "חברים ב", highlight: "לשכת סוכני הביטוח", dotColor: "#f4a261" },
-              { text: "מבית", highlight: "עמיתים הון", dotColor: "#e76f51" },
+              { text: "רישיון מטעם", highlight: "רשות שוק ההון", dotColor: "#d6157e" },
+              { text: "חברים ב", highlight: "לשכת סוכני הביטוח", dotColor: "#6b6fc4" },
+              { text: "מבית", highlight: "עמיתים הון", dotColor: "#3b3f99" },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -378,10 +378,10 @@ const HeroSection = () => {
                   className="w-2.5 h-2.5 rounded-full"
                   style={{ backgroundColor: item.dotColor }}
                 />
-                <span className="text-sm text-[#0a3d3d]/55 font-medium">
+                <span className="text-sm text-[#1a1a4b]/55 font-medium">
                   {item.text}{" "}
                   {item.highlight && (
-                    <span className="text-[#0a3d3d] font-bold">
+                    <span className="text-[#1a1a4b] font-bold">
                       {item.highlight}
                     </span>
                   )}

@@ -3,11 +3,11 @@ import { motion } from "framer-motion";
 
 // Brand colors extracted from the official logo
 export const brandDots = [
-  { cx: 17, cy: 8,  r: 3.2, fill: "#5ec6c6" }, // teal
-  { cx: 26, cy: 4,  r: 4.0, fill: "#e76f51" }, // coral
-  { cx: 35, cy: 8,  r: 3.2, fill: "#f4a261" }, // amber
-  { cx: 12, cy: 17, r: 2.8, fill: "#90be6d" }, // green
-  { cx: 40, cy: 17, r: 2.8, fill: "#5ec6c6" }, // teal
+  { cx: 17, cy: 8,  r: 3.2, fill: "#d6157e" }, // teal
+  { cx: 26, cy: 4,  r: 4.0, fill: "#3b3f99" }, // coral
+  { cx: 35, cy: 8,  r: 3.2, fill: "#6b6fc4" }, // amber
+  { cx: 12, cy: 17, r: 2.8, fill: "#f06ba8" }, // green
+  { cx: 40, cy: 17, r: 2.8, fill: "#d6157e" }, // teal
 ] as const;
 
 const SeeIDLogo = ({ className = "", size = "md" }: { className?: string; size?: "sm" | "md" | "lg" }) => {
@@ -43,8 +43,8 @@ const SeeIDLogo = ({ className = "", size = "md" }: { className?: string; size?:
         >
           <defs>
             <linearGradient id="seeldDropGrad" x1="26" y1="14" x2="26" y2="44" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#5ec6c6" />
-              <stop offset="100%" stopColor="#0a3d3d" />
+              <stop offset="0%" stopColor="#d6157e" />
+              <stop offset="100%" stopColor="#1a1a4b" />
             </linearGradient>
           </defs>
 

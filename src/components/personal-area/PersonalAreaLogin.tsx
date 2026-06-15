@@ -15,10 +15,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import SeeIDLogo from "@/components/SeeIDLogo";
 
 const benefits = [
-  { icon: FileText, text: "צפייה בפוליסות", desc: "כל הביטוחים שלך במקום אחד", color: "#5ec6c6" },
-  { icon: Heart, text: "המלצות מותאמות", desc: "ניתוח אישי של הכיסוי הביטוחי שלך", color: "#e76f51" },
-  { icon: Wallet, text: "מעקב חיסכון ופנסיה", desc: "נתונים עדכניים על החסכונות שלך", color: "#f4a261" },
-  { icon: Phone, text: "תקשורת עם הסוכן", desc: "צ'אט ישיר ועדכונים בזמן אמת", color: "#90be6d" },
+  { icon: FileText, text: "צפייה בפוליסות", desc: "כל הביטוחים שלך במקום אחד", color: "#d6157e" },
+  { icon: Heart, text: "המלצות מותאמות", desc: "ניתוח אישי של הכיסוי הביטוחי שלך", color: "#3b3f99" },
+  { icon: Wallet, text: "מעקב חיסכון ופנסיה", desc: "נתונים עדכניים על החסכונות שלך", color: "#6b6fc4" },
+  { icon: Phone, text: "תקשורת עם הסוכן", desc: "צ'אט ישיר ועדכונים בזמן אמת", color: "#f06ba8" },
 ];
 
 const PersonalAreaLogin = () => {
@@ -77,7 +77,7 @@ const PersonalAreaLogin = () => {
       <div
         className="hidden lg:flex lg:w-[48%] relative items-center justify-center overflow-hidden"
         style={{
-          background: "linear-gradient(165deg, #072e2e 0%, #0a3d3d 40%, #0d4a4a 70%, #0a3d3d 100%)",
+          background: "linear-gradient(165deg, #072e2e 0%, #1a1a4b 40%, #222159 70%, #1a1a4b 100%)",
         }}
       >
         {/* Soft bubble background elements — conservative style */}
@@ -87,41 +87,41 @@ const PersonalAreaLogin = () => {
             animate={{ y: [0, -15, 0], scale: [1, 1.05, 1] }}
             transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
             className="absolute top-[8%] right-[12%] w-[180px] h-[180px] rounded-full opacity-[0.04]"
-            style={{ background: "radial-gradient(circle, #5ec6c6, transparent 70%)" }}
+            style={{ background: "radial-gradient(circle, #d6157e, transparent 70%)" }}
           />
           <motion.div
             animate={{ y: [0, 12, 0], scale: [1, 1.03, 1] }}
             transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 3 }}
             className="absolute bottom-[12%] left-[8%] w-[220px] h-[220px] rounded-full opacity-[0.03]"
-            style={{ background: "radial-gradient(circle, #f4a261, transparent 70%)" }}
+            style={{ background: "radial-gradient(circle, #6b6fc4, transparent 70%)" }}
           />
           <motion.div
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 5 }}
             className="absolute top-[45%] right-[55%] w-[120px] h-[120px] rounded-full opacity-[0.05]"
-            style={{ background: "radial-gradient(circle, #e76f51, transparent 70%)" }}
+            style={{ background: "radial-gradient(circle, #3b3f99, transparent 70%)" }}
           />
 
           {/* Small floating dots */}
           <motion.div
             animate={{ y: [0, -8, 0], opacity: [0.2, 0.35, 0.2] }}
             transition={{ duration: 6, repeat: Infinity }}
-            className="absolute top-[20%] left-[25%] w-3 h-3 rounded-full bg-[#5ec6c6]"
+            className="absolute top-[20%] left-[25%] w-3 h-3 rounded-full bg-[#d6157e]"
           />
           <motion.div
             animate={{ y: [0, 6, 0], opacity: [0.15, 0.3, 0.15] }}
             transition={{ duration: 8, repeat: Infinity, delay: 2 }}
-            className="absolute bottom-[30%] right-[20%] w-2 h-2 rounded-full bg-[#f4a261]"
+            className="absolute bottom-[30%] right-[20%] w-2 h-2 rounded-full bg-[#6b6fc4]"
           />
           <motion.div
             animate={{ y: [0, -5, 0], opacity: [0.1, 0.25, 0.1] }}
             transition={{ duration: 7, repeat: Infinity, delay: 4 }}
-            className="absolute top-[65%] left-[15%] w-2.5 h-2.5 rounded-full bg-[#90be6d]"
+            className="absolute top-[65%] left-[15%] w-2.5 h-2.5 rounded-full bg-[#f06ba8]"
           />
 
           {/* Subtle curved dashed lines */}
           <svg className="absolute bottom-20 left-0 w-full h-16 opacity-[0.06] pointer-events-none" viewBox="0 0 400 50" fill="none">
-            <path d="M0 35 Q100 10 200 30 T400 15" stroke="#5ec6c6" strokeWidth="1" strokeDasharray="8 6" />
+            <path d="M0 35 Q100 10 200 30 T400 15" stroke="#d6157e" strokeWidth="1" strokeDasharray="8 6" />
           </svg>
         </div>
 
@@ -196,13 +196,13 @@ const PersonalAreaLogin = () => {
           >
             <div
               className="rounded-2xl p-6 text-center relative overflow-hidden"
-              style={{ background: "linear-gradient(165deg, #072e2e 0%, #0a3d3d 50%, #0d4a4a 100%)" }}
+              style={{ background: "linear-gradient(165deg, #072e2e 0%, #1a1a4b 50%, #222159 100%)" }}
             >
               {/* Mobile bubbles */}
               <div className="absolute top-[-20%] right-[-15%] w-[140px] h-[140px] rounded-full opacity-[0.06]"
-                style={{ background: "radial-gradient(circle, #5ec6c6, transparent 70%)" }} />
+                style={{ background: "radial-gradient(circle, #d6157e, transparent 70%)" }} />
               <div className="absolute bottom-[-10%] left-[-10%] w-[100px] h-[100px] rounded-full opacity-[0.04]"
-                style={{ background: "radial-gradient(circle, #f4a261, transparent 70%)" }} />
+                style={{ background: "radial-gradient(circle, #6b6fc4, transparent 70%)" }} />
               <div className="flex flex-col items-center gap-3 relative z-10">
                 <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white/[0.08] backdrop-blur-sm border border-white/[0.06]">
                   <SeeIDLogo size="md" />
@@ -231,10 +231,10 @@ const PersonalAreaLogin = () => {
           {/* Form card — clean bubble style */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-lg shadow-gray-200/50 p-6 sm:p-8 space-y-5 sm:space-y-6">
             <div className="space-y-1.5 text-center">
-              <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-[#e0f2f1] flex items-center justify-center">
-                <ShieldCheck className="w-7 h-7 text-[#0a3d3d]" />
+              <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-[#fce7f3] flex items-center justify-center">
+                <ShieldCheck className="w-7 h-7 text-[#1a1a4b]" />
               </div>
-              <h1 className="text-xl sm:text-2xl font-bold text-[#0a3d3d]">
+              <h1 className="text-xl sm:text-2xl font-bold text-[#1a1a4b]">
                 {step === "choose" && "כניסה לאזור האישי"}
                 {step === "email" && "התחברות עם אימייל"}
                 {step === "otp" && "אימות קוד"}
@@ -306,7 +306,7 @@ const PersonalAreaLogin = () => {
                     className="w-full gap-2 h-12 rounded-full text-sm font-medium border-gray-200 hover:bg-gray-50 transition-all min-h-[48px] shadow-sm"
                     onClick={() => setStep("email")}
                   >
-                    <Mail className="h-4 w-4 text-[#0a3d3d]" />
+                    <Mail className="h-4 w-4 text-[#1a1a4b]" />
                     התחברות עם קוד חד-פעמי באימייל
                   </Button>
                 </motion.div>
@@ -324,7 +324,7 @@ const PersonalAreaLogin = () => {
                   className="space-y-4"
                 >
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-medium text-[#0a3d3d]">כתובת אימייל</Label>
+                    <Label className="text-xs font-medium text-[#1a1a4b]">כתובת אימייל</Label>
                     <div className="relative">
                       <Mail className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                       <Input
@@ -334,13 +334,13 @@ const PersonalAreaLogin = () => {
                         placeholder="your@email.com"
                         required
                         dir="ltr"
-                        className="h-12 sm:h-11 pr-10 rounded-full text-base sm:text-sm border-gray-200 focus-visible:ring-[#0a3d3d]/30 text-left"
+                        className="h-12 sm:h-11 pr-10 rounded-full text-base sm:text-sm border-gray-200 focus-visible:ring-[#1a1a4b]/30 text-left"
                       />
                     </div>
                   </div>
                   <Button
                     type="submit"
-                    className="w-full h-12 sm:h-11 rounded-full gap-2 font-semibold text-base sm:text-sm min-h-[48px] shadow-lg shadow-[#0a3d3d]/20 bg-[#0a3d3d] hover:bg-[#0d4a4a]"
+                    className="w-full h-12 sm:h-11 rounded-full gap-2 font-semibold text-base sm:text-sm min-h-[48px] shadow-lg shadow-[#1a1a4b]/20 bg-[#1a1a4b] hover:bg-[#222159]"
                     disabled={loading}
                   >
                     {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowLeft className="h-4 w-4" />}
@@ -349,7 +349,7 @@ const PersonalAreaLogin = () => {
                   <button
                     type="button"
                     onClick={() => setStep("choose")}
-                    className="w-full text-sm text-gray-500 hover:text-[#0a3d3d] min-h-[44px] transition-colors"
+                    className="w-full text-sm text-gray-500 hover:text-[#1a1a4b] min-h-[44px] transition-colors"
                   >
                     חזרה לאפשרויות התחברות
                   </button>
@@ -366,15 +366,15 @@ const PersonalAreaLogin = () => {
                   transition={{ duration: 0.3 }}
                   className="space-y-5"
                 >
-                  <div className="flex items-center gap-3 bg-[#e0f2f1] border border-[#0a3d3d]/10 rounded-xl p-3.5">
-                    <CheckCircle2 className="w-5 h-5 text-[#0a3d3d] shrink-0" />
-                    <p className="text-xs sm:text-sm text-[#0a3d3d]/80">
-                      שלחנו קוד חד-פעמי ל-<span className="font-semibold text-[#0a3d3d]" dir="ltr">{email}</span>
+                  <div className="flex items-center gap-3 bg-[#fce7f3] border border-[#1a1a4b]/10 rounded-xl p-3.5">
+                    <CheckCircle2 className="w-5 h-5 text-[#1a1a4b] shrink-0" />
+                    <p className="text-xs sm:text-sm text-[#1a1a4b]/80">
+                      שלחנו קוד חד-פעמי ל-<span className="font-semibold text-[#1a1a4b]" dir="ltr">{email}</span>
                     </p>
                   </div>
 
                   <div className="flex flex-col items-center gap-4">
-                    <Label className="text-xs font-medium text-[#0a3d3d]">קוד חד-פעמי (6 ספרות)</Label>
+                    <Label className="text-xs font-medium text-[#1a1a4b]">קוד חד-פעמי (6 ספרות)</Label>
                     <InputOTP maxLength={6} value={otp} onChange={setOtp} dir="ltr">
                       <InputOTPGroup>
                         <InputOTPSlot index={0} />
@@ -389,7 +389,7 @@ const PersonalAreaLogin = () => {
 
                   <Button
                     onClick={handleVerifyOtp}
-                    className="w-full h-12 sm:h-11 rounded-full gap-2 font-semibold text-base sm:text-sm min-h-[48px] shadow-lg shadow-[#0a3d3d]/20 bg-[#0a3d3d] hover:bg-[#0d4a4a]"
+                    className="w-full h-12 sm:h-11 rounded-full gap-2 font-semibold text-base sm:text-sm min-h-[48px] shadow-lg shadow-[#1a1a4b]/20 bg-[#1a1a4b] hover:bg-[#222159]"
                     disabled={loading || otp.length !== 6}
                   >
                     {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "אמת והתחבר"}
@@ -399,14 +399,14 @@ const PersonalAreaLogin = () => {
                     <button
                       type="button"
                       onClick={() => { setStep("email"); setOtp(""); }}
-                      className="text-[#0a3d3d] hover:underline min-h-[44px] px-2 font-medium"
+                      className="text-[#1a1a4b] hover:underline min-h-[44px] px-2 font-medium"
                     >
                       שנה כתובת מייל
                     </button>
                     <button
                       type="button"
                       onClick={(e) => handleSendOtp(e as any)}
-                      className="text-gray-400 hover:text-[#0a3d3d] hover:underline min-h-[44px] px-2 transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                      className="text-gray-400 hover:text-[#1a1a4b] hover:underline min-h-[44px] px-2 transition-colors disabled:opacity-40 disabled:pointer-events-none"
                       disabled={loading}
                     >
                       שלח קוד מחדש
@@ -427,7 +427,7 @@ const PersonalAreaLogin = () => {
             <div className="text-center">
               <Link
                 to="/"
-                className="text-sm text-[#0a3d3d] hover:underline font-medium min-h-[44px] px-4 inline-flex items-center"
+                className="text-sm text-[#1a1a4b] hover:underline font-medium min-h-[44px] px-4 inline-flex items-center"
               >
                 חזרה לאתר הראשי
               </Link>

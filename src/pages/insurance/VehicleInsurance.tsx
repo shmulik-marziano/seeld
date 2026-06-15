@@ -5,7 +5,7 @@ const coverageTypes = [
   {
     title: "ביטוח מקיף",
     icon: Shield,
-    color: "#5ec6c6",
+    color: "#d6157e",
     items: [
       "גניבה מלאה וחלקית",
       "נזקי תאונה",
@@ -16,7 +16,7 @@ const coverageTypes = [
   {
     title: "ביטוח חובה",
     icon: FileText,
-    color: "#f4a261",
+    color: "#6b6fc4",
     items: [
       "כיסוי נזקי גוף",
       "חובה על פי חוק",
@@ -26,7 +26,7 @@ const coverageTypes = [
   {
     title: "ביטוח צד ג׳",
     icon: Car,
-    color: "#90be6d",
+    color: "#f06ba8",
     items: [
       "נזק לרכב אחר",
       "נזק לרכוש",
@@ -78,9 +78,9 @@ const VehicleInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Car}
-      heroIconColor="#5ec6c6"
+      heroIconColor="#d6157e"
       heroCategory="ביטוח רכב"
-      heroTitle={<>הגנה מקיפה על <span className="text-[#5ec6c6]">הרכב שלכם</span></>}
+      heroTitle={<>הגנה מקיפה על <span className="text-[#d6157e]">הרכב שלכם</span></>}
       heroDescription="ביטוח רכב מותאם אישית לצרכים שלכם - מביטוח חובה ועד כיסוי מקיף הכולל גניבה, תאונות ונזקי טבע."
       heroCTAText="להצטרפות ל-SEELD"
       heroSecondaryCTA={{ text: "סוגי כיסויים", href: "#coverage" }}

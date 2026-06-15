@@ -31,7 +31,7 @@ function CompanyPill({ company, size = "md" }: { company: Company; size?: "sm" |
       >
         {company.initial}
       </div>
-      <span className={`${text} font-semibold text-[#0a3d3d] whitespace-nowrap`}>
+      <span className={`${text} font-semibold text-[#1a1a4b] whitespace-nowrap`}>
         {company.name}
       </span>
     </div>
@@ -79,7 +79,7 @@ export default function CompanyLogos({
   return (
     <section className="py-12 sm:py-16 bg-[#fafbfd]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-        <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-3">
+        <h2 className="text-2xl sm:text-3xl font-bold text-[#1a1a4b] mb-3">
           {title}
         </h2>
         <p className="text-gray-500 mb-10 text-base sm:text-lg max-w-xl mx-auto">

@@ -5,7 +5,7 @@ const PersonalAccidents = () => {
   return (
     <InsurancePageTemplate
       heroIcon={AlertTriangle}
-      heroIconColor="#e76f51"
+      heroIconColor="#3b3f99"
       heroCategory="תאונות אישיות"
       heroTitle="ביטוח תאונות אישיות"
       heroDescription="הגנה מפני הבלתי צפוי — ביטוח תאונות אישיות מעניק לכם פיצוי כספי 24/7 בכל מקום בעולם."

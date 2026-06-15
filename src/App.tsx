@@ -220,7 +220,7 @@ const queryClient = new QueryClient();
 function RouteLoader() {
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <Loader2 className="h-8 w-8 animate-spin text-[#0a3d3d]" />
+      <Loader2 className="h-8 w-8 animate-spin text-[#1a1a4b]" />
     </div>
   );
 }

@@ -68,7 +68,7 @@ const PersonalAreaDashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-[#0a3d3d]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#1a1a4b]" />
       </div>
     );
   }
@@ -79,11 +79,11 @@ const PersonalAreaDashboard = () => {
         <div className="text-center max-w-md">
           <div
             className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, #0a3d3d 0%, #125555 100%)" }}
+            style={{ background: "linear-gradient(135deg, #1a1a4b 0%, #2a2a66 100%)" }}
           >
             <FileText className="w-10 h-10 text-white" />
           </div>
-          <h2 className="text-2xl font-bold mb-3 text-[#0a3d3d]">
+          <h2 className="text-2xl font-bold mb-3 text-[#1a1a4b]">
             עדיין אין לך תיק פעיל
           </h2>
           <p className="text-gray-500 mb-8 text-lg">
@@ -125,7 +125,7 @@ const PersonalAreaDashboard = () => {
   return (
     <div dir="rtl" className="bg-white/95 backdrop-blur-2xl rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-white/60 p-5 sm:p-8 lg:p-10 relative overflow-hidden min-h-[60vh]">
       {/* Soft inner glow absolute background */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-gradient-to-bl from-[#5ec6c6]/10 to-transparent pointer-events-none -translate-y-1/2 translate-x-1/3" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-gradient-to-bl from-[#d6157e]/10 to-transparent pointer-events-none -translate-y-1/2 translate-x-1/3" />
 
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -136,7 +136,7 @@ const PersonalAreaDashboard = () => {
         <div className="flex items-center gap-4">
           <div
             className="w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg relative"
-            style={{ background: "linear-gradient(135deg, #0a3d3d 0%, #0d4a4a 100%)" }}
+            style={{ background: "linear-gradient(135deg, #1a1a4b 0%, #222159 100%)" }}
           >
             {initials}
             {/* Status dot */}
@@ -146,7 +146,7 @@ const PersonalAreaDashboard = () => {
             />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d]">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1a1a4b]">
               שלום, {displayName}
             </h1>
             <p className="text-gray-400 text-sm sm:text-base mt-0.5">ברוכים הבאים לאזור האישי שלך</p>
@@ -155,7 +155,7 @@ const PersonalAreaDashboard = () => {
         <Button
           variant="outline"
           onClick={handleSignOut}
-          className="gap-2 min-h-[44px] rounded-full border-gray-200 hover:border-gray-300 text-gray-500 hover:text-[#0a3d3d]"
+          className="gap-2 min-h-[44px] rounded-full border-gray-200 hover:border-gray-300 text-gray-500 hover:text-[#1a1a4b]"
         >
           <LogOut className="w-4 h-4" />
           התנתק
@@ -178,7 +178,7 @@ const PersonalAreaDashboard = () => {
       {/* ══════ Main tabs ══════ */}
       <Tabs defaultValue="overview" dir="rtl">
         <div className="overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0 scrollbar-hide mb-8 sm:mb-12 relative z-10">
-          <TabsList className="w-max sm:w-full flex justify-between h-auto bg-[#f8f9fc]/80 backdrop-blur-md rounded-full shadow-inner border border-[#0a3d3d]/5 p-1.5 sm:p-2 min-w-[620px] sm:min-w-0 gap-1 sm:gap-2">
+          <TabsList className="w-max sm:w-full flex justify-between h-auto bg-[#f8f9fc]/80 backdrop-blur-md rounded-full shadow-inner border border-[#1a1a4b]/5 p-1.5 sm:p-2 min-w-[620px] sm:min-w-0 gap-1 sm:gap-2">
             {[
               { value: "overview", icon: LayoutDashboard, label: "סקירה", labelFull: "סקירה כללית" },
               { value: "policies", icon: FileText, label: "פוליסות", labelFull: "הפוליסות שלי" },
@@ -190,7 +190,7 @@ const PersonalAreaDashboard = () => {
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                className="flex-1 gap-2 min-h-[46px] text-[13px] sm:text-sm font-semibold rounded-full data-[state=active]:bg-white data-[state=active]:text-[#0a3d3d] data-[state=inactive]:text-[#0a3d3d]/60 data-[state=active]:shadow-[0_4px_20px_rgba(10,61,61,0.08)] transition-all duration-300"
+                className="flex-1 gap-2 min-h-[46px] text-[13px] sm:text-sm font-semibold rounded-full data-[state=active]:bg-white data-[state=active]:text-[#1a1a4b] data-[state=inactive]:text-[#1a1a4b]/60 data-[state=active]:shadow-[0_4px_20px_rgba(10,61,61,0.08)] transition-all duration-300"
               >
                 <tab.icon className="w-4 h-4" />
                 <span className="hidden sm:inline">{tab.labelFull}</span>
@@ -210,9 +210,9 @@ const PersonalAreaDashboard = () => {
               transition={{ duration: 0.4 }}
               className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4"
             >
-              <BubbleStatCard icon={<Shield className="w-5 h-5" />} color="#0a3d3d" bg="#e0f2f1" label="ביטוחים פעילים" value="—" />
+              <BubbleStatCard icon={<Shield className="w-5 h-5" />} color="#1a1a4b" bg="#fce7f3" label="ביטוחים פעילים" value="—" />
               <BubbleStatCard icon={<Wallet className="w-5 h-5" />} color="#f59e0b" bg="#fef3c7" label="חסכונות" value="—" />
-              <BubbleStatCard icon={<Lightbulb className="w-5 h-5" />} color="#e76f51" bg="#fee2e2" label="המלצות חדשות" value="—" />
+              <BubbleStatCard icon={<Lightbulb className="w-5 h-5" />} color="#3b3f99" bg="#fee2e2" label="המלצות חדשות" value="—" />
               <BubbleStatCard icon={<Activity className="w-5 h-5" />} color="#6366f1" bg="#ede9fe" label="פעולות אחרונות" value="—" />
             </motion.div>
 
@@ -224,24 +224,24 @@ const PersonalAreaDashboard = () => {
               className="bg-white rounded-2xl p-6 shadow-sm border relative overflow-hidden"
             >
               <div className="absolute top-0 left-0 w-40 h-40 opacity-[0.03] pointer-events-none"
-                style={{ background: "radial-gradient(circle at top left, #5ec6c6, transparent 70%)" }} />
+                style={{ background: "radial-gradient(circle at top left, #d6157e, transparent 70%)" }} />
 
-              <h3 className="text-lg font-bold mb-5 text-[#0a3d3d] flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[#e0f2f1] flex items-center justify-center">
-                  <Shield className="w-4 h-4 text-[#0a3d3d]" />
+              <h3 className="text-lg font-bold mb-5 text-[#1a1a4b] flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-[#fce7f3] flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-[#1a1a4b]" />
                 </div>
                 פרטים אישיים
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <BubbleInfoItem
-                  icon={<span className="text-sm font-bold text-[#0a3d3d]">{initials}</span>}
-                  iconBg="#e0f2f1"
+                  icon={<span className="text-sm font-bold text-[#1a1a4b]">{initials}</span>}
+                  iconBg="#fce7f3"
                   label="שם מלא"
                   value={[customer?.first_name, customer?.last_name].filter(Boolean).join(" ") || "---"}
-                  valueColor="#0a3d3d"
+                  valueColor="#1a1a4b"
                 />
                 <BubbleInfoItem
-                  icon={<Mail className="w-4 h-4 text-[#f4a261]" />}
+                  icon={<Mail className="w-4 h-4 text-[#6b6fc4]" />}
                   iconBg="#fef3c7"
                   label="אימייל"
                   value={customer?.email || "---"}
@@ -265,7 +265,7 @@ const PersonalAreaDashboard = () => {
             >
               <BubbleActionCard
                 icon={<FileText className="w-6 h-6 text-white" />}
-                gradient="linear-gradient(135deg, #0a3d3d 0%, #125555 100%)"
+                gradient="linear-gradient(135deg, #1a1a4b 0%, #2a2a66 100%)"
                 shadow="rgba(10,61,61,0.2)"
                 title="הפוליסות שלי"
                 subtitle="צפה בכל הביטוחים, הכיסויים והנתונים שלך"
@@ -281,7 +281,7 @@ const PersonalAreaDashboard = () => {
               />
               <BubbleActionCard
                 icon={<MessageCircle className="w-6 h-6 text-white" />}
-                gradient="linear-gradient(135deg, #5ec6c6 0%, #3ba8a8 100%)"
+                gradient="linear-gradient(135deg, #d6157e 0%, #3ba8a8 100%)"
                 shadow="rgba(94,198,198,0.2)"
                 title="צ'אט עם הסוכן"
                 subtitle="שלח הודעה ישירה לסוכן הביטוח שלך"
@@ -296,7 +296,7 @@ const PersonalAreaDashboard = () => {
               transition={{ duration: 0.4, delay: 0.2 }}
               className="bg-white rounded-2xl p-6 shadow-sm border"
             >
-              <h3 className="text-lg font-bold mb-4 text-[#0a3d3d] flex items-center gap-2">
+              <h3 className="text-lg font-bold mb-4 text-[#1a1a4b] flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-[#ede9fe] flex items-center justify-center">
                   <Clock className="w-4 h-4 text-[#6366f1]" />
                 </div>
@@ -311,8 +311,8 @@ const PersonalAreaDashboard = () => {
                   time="עכשיו"
                 />
                 <TimelineItem
-                  icon={<TrendingUp className="w-4 h-4 text-[#0a3d3d]" />}
-                  color="#e0f2f1"
+                  icon={<TrendingUp className="w-4 h-4 text-[#1a1a4b]" />}
+                  color="#fce7f3"
                   text="תיק הלקוח שלך נפתח בהצלחה"
                   subtext="כל הפוליסות והנתונים שלך מנוהלים כאן"
                   time={customer?.created_at ? new Date(customer.created_at).toLocaleDateString("he-IL") : "—"}
@@ -387,7 +387,7 @@ const BubbleStatCard = ({
     <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-sm" style={{ background: bg, color }}>
       {icon}
     </div>
-    <p className="text-3xl font-extrabold text-[#0a3d3d] mb-1">{value}</p>
+    <p className="text-3xl font-extrabold text-[#1a1a4b] mb-1">{value}</p>
     <p className="text-xs font-medium text-gray-400">{label}</p>
   </div>
 );
@@ -433,7 +433,7 @@ const BubbleActionCard = ({
         </span>
       )}
     </div>
-    <h4 className="font-extrabold text-lg mb-1.5 text-[#0a3d3d]">{title}</h4>
+    <h4 className="font-extrabold text-lg mb-1.5 text-[#1a1a4b]">{title}</h4>
     <p className="text-sm text-gray-500 leading-relaxed font-medium">{subtitle}</p>
   </div>
 );
@@ -448,7 +448,7 @@ const TimelineItem = ({
       {icon}
     </div>
     <div className="flex-1 min-w-0">
-      <p className="text-sm font-medium text-[#0a3d3d]">{text}</p>
+      <p className="text-sm font-medium text-[#1a1a4b]">{text}</p>
       <p className="text-xs text-gray-400 mt-0.5">{subtext}</p>
     </div>
     <span className="text-[11px] text-gray-400 shrink-0 mt-1">{time}</span>

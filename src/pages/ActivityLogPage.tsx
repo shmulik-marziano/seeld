@@ -31,7 +31,7 @@ export default function ActivityLogPage() {
           <FileText className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-extrabold text-[#0a3d3d]">יומן פעולות</h1>
+          <h1 className="text-2xl font-extrabold text-[#1a1a4b]">יומן פעולות</h1>
           <p className="text-sm text-gray-400">{data.activityLog.length} רשומות</p>
         </div>
       </div>
@@ -63,12 +63,12 @@ export default function ActivityLogPage() {
             return (
               <div key={a.id} className="flex items-start gap-3 p-4 hover:bg-[#f8f9fc] transition-colors">
                 <div className={`w-2.5 h-2.5 rounded-full mt-2 shrink-0 ${
-                  a.level === 'הצלחה' ? 'bg-[#90be6d]' : a.level === 'אזהרה' ? 'bg-[#f4a261]' : 'bg-[#5ec6c6]'
+                  a.level === 'הצלחה' ? 'bg-[#f06ba8]' : a.level === 'אזהרה' ? 'bg-[#6b6fc4]' : 'bg-[#d6157e]'
                 }`} />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[#0a3d3d]">{a.title}</p>
+                  <p className="text-sm font-medium text-[#1a1a4b]">{a.title}</p>
                   {a.detail && <p className="text-xs text-gray-400 mt-0.5">{a.detail}</p>}
-                  {customerName && <p className="text-xs text-[#5ec6c6] mt-0.5 font-medium">{customerName}</p>}
+                  {customerName && <p className="text-xs text-[#d6157e] mt-0.5 font-medium">{customerName}</p>}
                 </div>
                 <span className="text-xs text-gray-400 shrink-0">
                   {new Date(a.timestamp).toLocaleDateString('he-IL')} {new Date(a.timestamp).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}

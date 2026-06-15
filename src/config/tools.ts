@@ -42,7 +42,7 @@ export const TOOLS: Tool[] = [
   // ── PHASE 4: MAINTENANCE ──
   { slug: "bond", name: "Bond", hebrewName: "שימור לקוחות", icon: HeartHandshake, color: "#DB2777", gradient: ["#DB2777", "#F9A8D4"], phase: 4, phaseLabel: "תחזוקה", description: "אירועי חיים, חידושים ושימור — לעולם לא לאבד לקוח", shortDescription: "שימור לקוחות ואירועי חיים", status: "new" },
   { slug: "desk", name: "Desk", hebrewName: "פניות שירות", icon: Headphones, color: "#4F46E5", gradient: ["#4F46E5", "#A5B4FC"], phase: 4, phaseLabel: "תחזוקה", description: "ניהול פניות שירות — שינוי מוטבים, הנפקת אישורים ועוד", shortDescription: "ניהול פניות שירות", status: "new" },
-  { slug: "shield", name: "Shield", hebrewName: "תביעות", icon: Shield, color: "#0F766E", gradient: ["#0F766E", "#5EEAD4"], phase: 4, phaseLabel: "תחזוקה", description: "ניהול תביעות ביטוח — פתיחה, מעקב מסמכים וסטטוס מול חברות", shortDescription: "ניהול תביעות ביטוח", status: "new" },
+  { slug: "shield", name: "Shield", hebrewName: "תביעות", icon: Shield, color: "#9e1160", gradient: ["#9e1160", "#5EEAD4"], phase: 4, phaseLabel: "תחזוקה", description: "ניהול תביעות ביטוח — פתיחה, מעקב מסמכים וסטטוס מול חברות", shortDescription: "ניהול תביעות ביטוח", status: "new" },
   { slug: "coin", name: "Coin", hebrewName: "עמלות", icon: Coins, color: "#CA8A04", gradient: ["#CA8A04", "#FDE047"], phase: 4, phaseLabel: "תחזוקה", description: "מעקב עמלות — צפוי vs. התקבל, זיהוי פערים ודוחות הכנסה", shortDescription: "מעקב עמלות והכנסות", status: "new" },
   { slug: "link", name: "Link", hebrewName: "מעסיקים", icon: Building2, color: "#475569", gradient: ["#475569", "#94A3B8"], phase: 4, phaseLabel: "תחזוקה", description: "ניהול מעסיקים, הסכמי שירות ועובדים תחת כל מעסיק", shortDescription: "ניהול מעסיקים והסכמים", status: "new" },
 
@@ -58,8 +58,8 @@ export const DECK = {
   name: "Deck",
   hebrewName: "לוח פיקוד",
   icon: LayoutDashboard,
-  color: "#0a3d3d",
-  gradient: ["#0a3d3d", "#5ec6c6"] as [string, string],
+  color: "#1a1a4b",
+  gradient: ["#1a1a4b", "#d6157e"] as [string, string],
   description: "לוח הפיקוד הראשי — משימות, התראות, KPIs, גישה מהירה",
 };
 

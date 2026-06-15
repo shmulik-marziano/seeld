@@ -5,7 +5,7 @@ const CriticalIllness = () => {
   return (
     <InsurancePageTemplate
       heroIcon={HeartPulse}
-      heroIconColor="#e76f51"
+      heroIconColor="#3b3f99"
       heroCategory="מחלות קשות"
       heroTitle="ביטוח מחלות קשות"
       heroDescription="ביטחון כלכלי ברגעים הקשים — פיצוי כספי מיידי בעת אבחון מחלה קשה, כך שתוכלו להתמקד בהחלמה."

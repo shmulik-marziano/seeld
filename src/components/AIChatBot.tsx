@@ -216,20 +216,20 @@ const AIChatBot = () => {
           >
             <div className="relative">
               {/* Glow ring */}
-              <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#1a8f7d] via-[#5ec6c6] to-[#1a8f7d] opacity-40 blur-lg group-hover:opacity-70 transition-opacity animate-pulse" />
+              <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#b31368] via-[#d6157e] to-[#b31368] opacity-40 blur-lg group-hover:opacity-70 transition-opacity animate-pulse" />
               {/* Main button */}
-              <div className="relative w-14 h-14 rounded-full bg-[#0a3d3d] shadow-2xl shadow-[#0a3d3d]/40 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="relative w-14 h-14 rounded-full bg-[#1a1a4b] shadow-2xl shadow-[#1a1a4b]/40 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <MessageSquare className="w-6 h-6 text-white" />
               </div>
               {/* Online indicator */}
-              <div className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#1a8f7d] border-2 border-white shadow-sm">
-                <span className="absolute inset-0 rounded-full bg-[#1a8f7d] animate-ping opacity-40" />
+              <div className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#b31368] border-2 border-white shadow-sm">
+                <span className="absolute inset-0 rounded-full bg-[#b31368] animate-ping opacity-40" />
               </div>
             </div>
             {/* Label on hover */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 rounded-lg bg-[#0a3d3d] text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 rounded-lg bg-[#1a1a4b] text-white text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl">
               שוחחו עם הצוות שלנו
-              <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#0a3d3d]" />
+              <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#1a1a4b]" />
             </div>
           </motion.button>
         )}
@@ -245,15 +245,15 @@ const AIChatBot = () => {
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="fixed bottom-4 left-4 sm:left-6 z-50 w-[calc(100vw-2rem)] sm:w-[420px] max-h-[85vh] flex flex-col"
           >
-            <div className="bg-white/95 backdrop-blur-2xl rounded-2xl shadow-2xl shadow-[#0a3d3d]/15 border border-[#0a3d3d]/[0.08] overflow-hidden flex flex-col max-h-[85vh]">
+            <div className="bg-white/95 backdrop-blur-2xl rounded-2xl shadow-2xl shadow-[#1a1a4b]/15 border border-[#1a1a4b]/[0.08] overflow-hidden flex flex-col max-h-[85vh]">
               {/* Header */}
-              <div className="bg-[#0a3d3d] px-5 py-4 flex items-center justify-between shrink-0">
+              <div className="bg-[#1a1a4b] px-5 py-4 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-3">
                   <div className="relative">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#5ec6c6] to-[#1a8f7d] flex items-center justify-center shadow-lg">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#d6157e] to-[#b31368] flex items-center justify-center shadow-lg">
                       <Sparkles className="w-5 h-5 text-white" />
                     </div>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#1a8f7d] border-2 border-[#0a3d3d]" />
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#b31368] border-2 border-[#1a1a4b]" />
                   </div>
                   <div>
                     <h3 className="text-white font-bold text-sm">SEELD</h3>
@@ -273,12 +273,12 @@ const AIChatBot = () => {
                 {messages.length === 0 ? (
                   /* Welcome state */
                   <div className="text-center py-6 space-y-5">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#5ec6c6]/20 to-[#1a8f7d]/20 flex items-center justify-center mx-auto">
-                      <Sparkles className="w-8 h-8 text-[#1a8f7d]" />
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#d6157e]/20 to-[#b31368]/20 flex items-center justify-center mx-auto">
+                      <Sparkles className="w-8 h-8 text-[#b31368]" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-[#0a3d3d] text-base mb-1">שלום! הצוות של SEELD כאן.</h4>
-                      <p className="text-sm text-[#0a3d3d]/50 leading-relaxed max-w-xs mx-auto">
+                      <h4 className="font-bold text-[#1a1a4b] text-base mb-1">שלום! הצוות של SEELD כאן.</h4>
+                      <p className="text-sm text-[#1a1a4b]/50 leading-relaxed max-w-xs mx-auto">
                         נשמח לעזור לך בכל שאלה על ביטוח, פנסיה או חיסכון. על מה תרצה לשוחח?
                       </p>
                     </div>
@@ -288,7 +288,7 @@ const AIChatBot = () => {
                         <button
                           key={i}
                           onClick={() => handleSuggestion(s.text)}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-[#0a3d3d]/10 text-xs font-medium text-[#0a3d3d]/70 hover:text-[#0a3d3d] hover:border-[#1a8f7d]/30 hover:bg-[#1a8f7d]/5 transition-all"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-[#1a1a4b]/10 text-xs font-medium text-[#1a1a4b]/70 hover:text-[#1a1a4b] hover:border-[#b31368]/30 hover:bg-[#b31368]/5 transition-all"
                         >
                           <s.icon className="w-3 h-3" />
                           {s.text}
@@ -308,7 +308,7 @@ const AIChatBot = () => {
                         )}
                       >
                         {msg.role === "assistant" && (
-                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#5ec6c6] to-[#1a8f7d] flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#d6157e] to-[#b31368] flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
                             <Sparkles className="w-3.5 h-3.5 text-white" />
                           </div>
                         )}
@@ -316,8 +316,8 @@ const AIChatBot = () => {
                           className={cn(
                             "rounded-2xl px-4 py-2.5 text-sm max-w-[85%] leading-relaxed",
                             msg.role === "user"
-                              ? "bg-[#0a3d3d] text-white rounded-br-sm"
-                              : "bg-[#f4f6f8] text-[#0a3d3d] rounded-bl-sm"
+                              ? "bg-[#1a1a4b] text-white rounded-br-sm"
+                              : "bg-[#f4f6f8] text-[#1a1a4b] rounded-bl-sm"
                           )}
                         >
                           {msg.role === "assistant" ? (
@@ -332,13 +332,13 @@ const AIChatBot = () => {
                     ))}
                     {isLoading && messages[messages.length - 1]?.content === "" && (
                       <div className="flex gap-2.5 justify-end">
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#5ec6c6] to-[#1a8f7d] flex items-center justify-center shrink-0 shadow-sm">
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#d6157e] to-[#b31368] flex items-center justify-center shrink-0 shadow-sm">
                           <Sparkles className="w-3.5 h-3.5 text-white" />
                         </div>
                         <div className="bg-[#f4f6f8] rounded-2xl rounded-bl-sm px-4 py-3 flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-[#0a3d3d]/30 animate-bounce" style={{ animationDelay: "0ms" }} />
-                          <span className="w-2 h-2 rounded-full bg-[#0a3d3d]/30 animate-bounce" style={{ animationDelay: "150ms" }} />
-                          <span className="w-2 h-2 rounded-full bg-[#0a3d3d]/30 animate-bounce" style={{ animationDelay: "300ms" }} />
+                          <span className="w-2 h-2 rounded-full bg-[#1a1a4b]/30 animate-bounce" style={{ animationDelay: "0ms" }} />
+                          <span className="w-2 h-2 rounded-full bg-[#1a1a4b]/30 animate-bounce" style={{ animationDelay: "150ms" }} />
+                          <span className="w-2 h-2 rounded-full bg-[#1a1a4b]/30 animate-bounce" style={{ animationDelay: "300ms" }} />
                         </div>
                       </div>
                     )}
@@ -349,7 +349,7 @@ const AIChatBot = () => {
                           <button
                             key={i}
                             onClick={() => handleSuggestion(s.text)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-[#0a3d3d]/8 text-[11px] font-medium text-[#0a3d3d]/50 hover:text-[#0a3d3d] hover:border-[#1a8f7d]/20 transition-all"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-[#1a1a4b]/8 text-[11px] font-medium text-[#1a1a4b]/50 hover:text-[#1a1a4b] hover:border-[#b31368]/20 transition-all"
                           >
                             <s.icon className="w-3 h-3" />
                             {s.text}
@@ -365,7 +365,7 @@ const AIChatBot = () => {
               {/* Input */}
               <form
                 onSubmit={handleSubmit}
-                className="px-4 pb-4 pt-2 shrink-0 border-t border-[#0a3d3d]/[0.06]"
+                className="px-4 pb-4 pt-2 shrink-0 border-t border-[#1a1a4b]/[0.06]"
               >
                 <div className="flex items-center gap-2 bg-[#f4f6f8] rounded-full px-4 py-2">
                   <input
@@ -374,7 +374,7 @@ const AIChatBot = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="שאלו אותנו כל דבר..."
-                    className="flex-1 bg-transparent border-none focus:outline-none text-right text-sm py-1.5 placeholder:text-[#0a3d3d]/30"
+                    className="flex-1 bg-transparent border-none focus:outline-none text-right text-sm py-1.5 placeholder:text-[#1a1a4b]/30"
                     disabled={isLoading}
                   />
                   <button
@@ -383,8 +383,8 @@ const AIChatBot = () => {
                     className={cn(
                       "w-9 h-9 rounded-full flex items-center justify-center transition-all shrink-0",
                       input.trim()
-                        ? "bg-[#0a3d3d] text-white hover:bg-[#0d4a4a] hover:scale-105 shadow-md"
-                        : "bg-transparent text-[#0a3d3d]/25"
+                        ? "bg-[#1a1a4b] text-white hover:bg-[#222159] hover:scale-105 shadow-md"
+                        : "bg-transparent text-[#1a1a4b]/25"
                     )}
                   >
                     {isLoading ? (
@@ -394,7 +394,7 @@ const AIChatBot = () => {
                     )}
                   </button>
                 </div>
-                <p className="text-center text-[10px] text-[#0a3d3d]/25 mt-2">
+                <p className="text-center text-[10px] text-[#1a1a4b]/25 mt-2">
                   SEELD AI · יועץ פיננסי דיגיטלי
                 </p>
               </form>

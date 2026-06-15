@@ -60,28 +60,28 @@ const Footer = () => {
         {/* Decorative capsule/pill shape on the left */}
         <div className="absolute top-16 left-8 hidden lg:block">
           <svg width="60" height="120" viewBox="0 0 60 120" fill="none">
-            <rect x="5" y="5" width="50" height="110" rx="25" stroke="#5ec6c6" strokeWidth="2" strokeDasharray="6 4" opacity="0.3" />
+            <rect x="5" y="5" width="50" height="110" rx="25" stroke="#f06ba8" strokeWidth="2" strokeDasharray="6 4" opacity="0.3" />
           </svg>
         </div>
 
         {/* Dashed curved line with arrow on the right */}
         <div className="absolute top-20 right-12 hidden lg:block">
           <svg width="150" height="200" viewBox="0 0 150 200" fill="none">
-            <path d="M10 10 C 60 10, 140 40, 120 100 S 40 180, 80 190" stroke="#e76f51" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.25" />
-            <polygon points="80,190 72,182 86,184" fill="#e76f51" opacity="0.25" />
+            <path d="M10 10 C 60 10, 140 40, 120 100 S 40 180, 80 190" stroke="#3b3f99" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.25" />
+            <polygon points="80,190 72,182 86,184" fill="#3b3f99" opacity="0.25" />
           </svg>
         </div>
 
         {/* Small colored dots */}
-        <div className="absolute top-12 right-[30%] w-3 h-3 rounded-full bg-[#f4a261] hidden lg:block" />
-        <div className="absolute bottom-16 left-[25%] w-4 h-4 rounded-full bg-[#90be6d] hidden lg:block" />
-        <div className="absolute top-[40%] left-[15%] w-2.5 h-2.5 rounded-full bg-[#5ec6c6] hidden lg:block" />
+        <div className="absolute top-12 right-[30%] w-3 h-3 rounded-full bg-[#6b6fc4] hidden lg:block" />
+        <div className="absolute bottom-16 left-[25%] w-4 h-4 rounded-full bg-[#e23d92] hidden lg:block" />
+        <div className="absolute top-[40%] left-[15%] w-2.5 h-2.5 rounded-full bg-[#f06ba8] hidden lg:block" />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             {/* Form - Left side */}
             <div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0a3d3d] mb-2">צרו קשר</h2>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1a1a4b] mb-2">צרו קשר</h2>
               <p className="text-gray-500 mb-8 text-base">השאירו פרטים ונחזור אליכם בהקדם</p>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -92,7 +92,7 @@ const Footer = () => {
                     onChange={(e) => setFormData(p => ({ ...p, name: e.target.value }))}
                     required
                     placeholder="שם מלא"
-                    className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] placeholder:text-gray-400 text-base transition-colors min-h-[44px]"
+                    className="w-full bg-transparent border-0 border-b-2 border-[#1a1a4b]/20 focus:border-[#f06ba8] outline-none py-3 text-[#1a1a4b] placeholder:text-gray-400 text-base transition-colors min-h-[44px]"
                   />
                 </div>
                 <div>
@@ -103,7 +103,7 @@ const Footer = () => {
                     required
                     placeholder="טלפון"
                     dir="ltr"
-                    className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] placeholder:text-gray-400 text-base transition-colors text-right min-h-[44px]"
+                    className="w-full bg-transparent border-0 border-b-2 border-[#1a1a4b]/20 focus:border-[#f06ba8] outline-none py-3 text-[#1a1a4b] placeholder:text-gray-400 text-base transition-colors text-right min-h-[44px]"
                   />
                 </div>
                 <div>
@@ -114,13 +114,13 @@ const Footer = () => {
                     required
                     placeholder="אימייל"
                     dir="ltr"
-                    className="w-full bg-transparent border-0 border-b-2 border-[#0a3d3d]/20 focus:border-[#5ec6c6] outline-none py-3 text-[#0a3d3d] placeholder:text-gray-400 text-base transition-colors text-right min-h-[44px]"
+                    className="w-full bg-transparent border-0 border-b-2 border-[#1a1a4b]/20 focus:border-[#f06ba8] outline-none py-3 text-[#1a1a4b] placeholder:text-gray-400 text-base transition-colors text-right min-h-[44px]"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full sm:w-auto bg-[#0a3d3d] text-white rounded-full px-10 py-3.5 font-semibold text-base hover:bg-[#0d4a4a] transition-colors shadow-lg shadow-[#0a3d3d]/20 min-h-[48px] flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto bg-[#1a1a4b] text-white rounded-full px-10 py-3.5 font-semibold text-base hover:bg-[#232159] transition-colors shadow-lg shadow-[#1a1a4b]/20 min-h-[48px] flex items-center justify-center gap-2"
                 >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
                 </button>
@@ -135,7 +135,7 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="w-11 h-11 rounded-full bg-[#0a3d3d] flex items-center justify-center hover:bg-[#0d4a4a] transition-colors min-w-[44px] min-h-[44px]"
+                    className="w-11 h-11 rounded-full bg-[#1a1a4b] flex items-center justify-center hover:bg-[#232159] transition-colors min-w-[44px] min-h-[44px]"
                   >
                     <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">{social.icon}</svg>
                   </a>
@@ -145,31 +145,31 @@ const Footer = () => {
 
             {/* Contact Info - Right side */}
             <div className="lg:pt-4">
-              <h3 className="text-xl font-bold text-[#0a3d3d] mb-6">דרכי התקשרות</h3>
+              <h3 className="text-xl font-bold text-[#1a1a4b] mb-6">דרכי התקשרות</h3>
               <div className="space-y-5">
-                <a href="tel:0523097444" className="flex items-center gap-3 text-gray-600 hover:text-[#0a3d3d] transition-colors group">
-                  <div className="w-11 h-11 rounded-full bg-[#5ec6c6] flex items-center justify-center flex-shrink-0 shadow-md shadow-[#5ec6c6]/20">
+                <a href="tel:0523097444" className="flex items-center gap-3 text-gray-600 hover:text-[#1a1a4b] transition-colors group">
+                  <div className="w-11 h-11 rounded-full bg-[#f06ba8] flex items-center justify-center flex-shrink-0 shadow-md shadow-[#f06ba8]/20">
                     <Phone className="w-5 h-5 text-white" />
                   </div>
                   <span className="text-base font-medium" dir="ltr">052-309-7444</span>
                 </a>
-                <a href="mailto:info@seeld.co.il" className="flex items-center gap-3 text-gray-600 hover:text-[#0a3d3d] transition-colors group">
-                  <div className="w-11 h-11 rounded-full bg-[#e76f51] flex items-center justify-center flex-shrink-0 shadow-md shadow-[#e76f51]/20">
+                <a href="mailto:info@seeld.co.il" className="flex items-center gap-3 text-gray-600 hover:text-[#1a1a4b] transition-colors group">
+                  <div className="w-11 h-11 rounded-full bg-[#3b3f99] flex items-center justify-center flex-shrink-0 shadow-md shadow-[#3b3f99]/20">
                     <Mail className="w-5 h-5 text-white" />
                   </div>
                   <span className="text-base font-medium">info@seeld.co.il</span>
                 </a>
                 <div className="flex items-center gap-3 text-gray-600">
-                  <div className="w-11 h-11 rounded-full bg-[#f4a261] flex items-center justify-center flex-shrink-0 shadow-md shadow-[#f4a261]/20">
+                  <div className="w-11 h-11 rounded-full bg-[#6b6fc4] flex items-center justify-center flex-shrink-0 shadow-md shadow-[#6b6fc4]/20">
                     <MapPin className="w-5 h-5 text-white" />
                   </div>
                   <span className="text-base font-medium">רעננה | ירושלים</span>
                 </div>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-[#0a3d3d]/10">
-                <Link to="/about" className="block text-sm text-gray-500 hover:text-[#0a3d3d] transition-colors mb-2 font-medium">הסיפור שלנו</Link>
-                <Link to="/faq" className="block text-sm text-gray-500 hover:text-[#0a3d3d] transition-colors font-medium">שאלות נפוצות</Link>
+              <div className="mt-8 pt-6 border-t border-[#1a1a4b]/10">
+                <Link to="/about" className="block text-sm text-gray-500 hover:text-[#1a1a4b] transition-colors mb-2 font-medium">הסיפור שלנו</Link>
+                <Link to="/faq" className="block text-sm text-gray-500 hover:text-[#1a1a4b] transition-colors font-medium">שאלות נפוצות</Link>
               </div>
             </div>
           </div>
@@ -177,11 +177,11 @@ const Footer = () => {
       </section>
 
       {/* Regulatory Badges Bar */}
-      <div className="bg-[#0a3d3d] py-8 sm:py-10 border-b border-white/5">
+      <div className="bg-[#1a1a4b] py-8 sm:py-10 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8 items-center text-center">
             <div className="flex flex-col items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-[#5ec6c6] flex items-center justify-center shadow-lg shadow-[#5ec6c6]/20">
+              <div className="w-12 h-12 rounded-full bg-[#f06ba8] flex items-center justify-center shadow-lg shadow-[#f06ba8]/20">
                 <FileText className="w-5 h-5 text-white" />
               </div>
               <p className="text-white/80 text-sm font-medium leading-snug">
@@ -189,7 +189,7 @@ const Footer = () => {
               </p>
             </div>
             <div className="flex flex-col items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-[#f4a261] flex items-center justify-center shadow-lg shadow-[#f4a261]/20">
+              <div className="w-12 h-12 rounded-full bg-[#6b6fc4] flex items-center justify-center shadow-lg shadow-[#6b6fc4]/20">
                 <ShieldCheck className="w-5 h-5 text-white" />
               </div>
               <p className="text-white/80 text-sm font-medium leading-snug">
@@ -197,7 +197,7 @@ const Footer = () => {
               </p>
             </div>
             <div className="flex flex-col items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-[#90be6d] flex items-center justify-center shadow-lg shadow-[#90be6d]/20">
+              <div className="w-12 h-12 rounded-full bg-[#e23d92] flex items-center justify-center shadow-lg shadow-[#e23d92]/20">
                 <Handshake className="w-5 h-5 text-white" />
               </div>
               <p className="text-white/80 text-sm font-medium leading-snug">
@@ -209,7 +209,7 @@ const Footer = () => {
       </div>
 
       {/* Footer Links & Bottom */}
-      <div className="bg-[#0a3d3d] text-white/80">
+      <div className="bg-[#1a1a4b] text-white/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-20">
           {/* Links Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-10 mb-10 sm:mb-14">
