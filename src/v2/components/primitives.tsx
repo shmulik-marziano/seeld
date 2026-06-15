@@ -1,17 +1,14 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { animate, motion, useInView } from "framer-motion";
 
-/* Aurora + grain background field */
-export function Aurora({ withGrid = true }: { withGrid?: boolean }) {
+/* Soft pastel blob field — subtle, premium, light */
+export function Aurora() {
   return (
-    <>
-      <div className="v2-aurora" aria-hidden>
-        <span className="a1" />
-        <span className="a2" />
-        <span className="a3" />
-      </div>
-      {withGrid && <div className="absolute inset-0 v2-grid pointer-events-none" aria-hidden />}
-    </>
+    <div className="v2-blobs" aria-hidden>
+      <span className="b1" />
+      <span className="b2" />
+      <span className="b3" />
+    </div>
   );
 }
 
@@ -63,10 +60,7 @@ export function GlassCard({
   hover?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div
-      className={`v2-glass ${hover ? "v2-glass-hover" : ""} rounded-3xl ${className}`}
-      {...rest}
-    >
+    <div className={`v2-card ${hover ? "v2-card-hover" : ""} rounded-[28px] ${className}`} {...rest}>
       {children}
     </div>
   );
@@ -78,7 +72,7 @@ export function GradientText({ children, className = "" }: { children: ReactNode
 
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-3.5 py-1.5 text-[12.5px] font-medium text-white/75 backdrop-blur-md">
+    <span className="inline-flex items-center gap-2 rounded-full border border-[#18182814] bg-white px-3.5 py-1.5 text-[12.5px] font-medium text-[#3f3f46] shadow-[0_1px_2px_rgba(24,24,50,0.05)]">
       {children}
     </span>
   );
@@ -90,11 +84,11 @@ export function Ring({
   size = 120,
   stroke = 10,
   children,
-  color = "#e0218a",
-  track = "rgba(255,255,255,0.1)",
+  color = "#1d6bf3",
+  track = "#e7e7ec",
   delay = 0.2,
 }: {
-  value: number; // 0..100
+  value: number;
   size?: number;
   stroke?: number;
   children?: ReactNode;
@@ -106,13 +100,14 @@ export function Ring({
   const c = 2 * Math.PI * r;
   const ref = useRef<SVGSVGElement>(null);
   const inView = useInView(ref, { once: true });
+  const gid = `ring-${size}-${Math.round(value)}`;
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
       <svg ref={ref} width={size} height={size} className="-rotate-90">
         <defs>
-          <linearGradient id={`ring-${size}-${Math.round(value)}`} x1="0" y1="0" x2="1" y2="1">
+          <linearGradient id={gid} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor={color} />
-            <stop offset="100%" stopColor="#7c3aed" />
+            <stop offset="100%" stopColor="#6b8ff7" />
           </linearGradient>
         </defs>
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={track} strokeWidth={stroke} />
@@ -121,7 +116,7 @@ export function Ring({
           cy={size / 2}
           r={r}
           fill="none"
-          stroke={`url(#ring-${size}-${Math.round(value)})`}
+          stroke={`url(#${gid})`}
           strokeWidth={stroke}
           strokeLinecap="round"
           strokeDasharray={c}
