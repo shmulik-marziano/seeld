@@ -1,16 +1,20 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ScrollReveal from "@/components/ScrollReveal";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import { BONE, PINE, BRONZE, SERIF } from "@/lib/brand";
+import { StatusPill } from "@/components/brand/Live";
 
 const faqCategories = [
   {
+    id: "insurance",
     title: "ביטוח",
     questions: [
       { q: "למה חשוב לעשות ביטוח בריאות פרטי?", a: "ביטוח בריאות פרטי מאפשר גישה מהירה לרופאים מומחים, בדיקות מתקדמות וניתוחים ללא תורים ארוכים. הוא משלים את סל הבריאות הציבורי ומעניק שקט נפשי במקרה של מחלה." },
@@ -21,6 +25,7 @@ const faqCategories = [
     ],
   },
   {
+    id: "pension",
     title: "פנסיה",
     questions: [
       { q: "מתי כדאי להתחיל לחסוך לפנסיה?", a: "ככל שמתחילים מוקדם יותר, כך ריבית דריבית עובדת לטובתכם. גם הפקדות קטנות בגיל צעיר יכולות להצטבר לסכומים משמעותיים לפרישה." },
@@ -30,6 +35,7 @@ const faqCategories = [
     ],
   },
   {
+    id: "savings",
     title: "חיסכון והשקעות",
     questions: [
       { q: "מה ההבדל בין קרן השתלמות לקופת גמל?", a: "קרן השתלמות ניתנת למשיכה לאחר 6 שנים (3 שנים לצורך השתלמות) עם פטור ממס רווחי הון. קופת גמל מיועדת לטווח ארוך ומשמשת כהשלמה לפנסיה." },
@@ -39,6 +45,7 @@ const faqCategories = [
     ],
   },
   {
+    id: "general",
     title: "כללי",
     questions: [
       { q: "למה לפנות לסוכן ביטוח ולא לקנות ישירות מחברת ביטוח?", a: "סוכן ביטוח עצמאי משווה בין כל חברות הביטוח בשוק ומתאים את הפוליסה לצרכים שלכם. הוא מלווה אתכם גם בעת תביעה ודואג לאינטרס שלכם — ללא עלות נוספת." },
@@ -52,15 +59,17 @@ const faqCategories = [
   },
 ];
 
+const tabTriggerClass =
+  "rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors";
+
 const FAQ = () => {
   return (
     <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
       <Header />
 
-      {/* ══════ HERO ══════ */}
+      {/* HERO — one idea: find your answer */}
       <section style={{ backgroundColor: BONE }}>
-        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
-          {/* Rule + breadcrumb */}
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
             <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
@@ -78,64 +87,73 @@ const FAQ = () => {
           >
             שאלות נפוצות
           </h1>
-          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9]">
-            ריכזנו עבורכם תשובות לשאלות הנפוצות ביותר בתחומי ביטוח, פנסיה וחיסכון.
+          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9] mb-8">
+            שאלות שכולם שואלים. תשובות שפחות שומעים.
           </p>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
+            className="block transition-transform hover:-translate-y-[1px]"
+            aria-label="פתיחת שיחה עם יועץ SEELD"
+          >
+            <StatusPill>היועץ מחובר עכשיו · שאלו במקום לגלול</StatusPill>
+          </button>
         </div>
       </section>
 
       <main>
-        {/* ══════ FAQ CATEGORIES ══════ */}
+        {/* QUESTIONS — categories as underline tabs */}
         <section className="bg-white">
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <div className="max-w-3xl space-y-14">
-              {faqCategories.map((category, catIdx) => (
-                <div key={category.title}>
-                  <div className="border-t border-[#171717]/20 pt-5 mb-8">
-                    <div className="text-[11px] tabular-nums tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
-                      {String(catIdx + 1).padStart(2, "0")}
-                    </div>
-                    <h2
-                      className="text-[#171717] leading-tight"
-                      style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
-                    >
+          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <ScrollReveal>
+              <Tabs defaultValue="insurance" dir="rtl">
+                <TabsList className="flex w-full justify-start gap-8 sm:gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none overflow-x-auto">
+                  {faqCategories.map((category) => (
+                    <TabsTrigger key={category.id} value={category.id} className={tabTriggerClass}>
                       {category.title}
-                    </h2>
-                  </div>
-                  <Accordion type="multiple">
-                    {category.questions.map((item, idx) => (
-                      <AccordionItem
-                        key={idx}
-                        value={`${catIdx}-${idx}`}
-                        className="border-b border-[#171717]/10 rounded-none px-0"
-                      >
-                        <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
-                          {item.q}
-                        </AccordionTrigger>
-                        <AccordionContent className="text-[#171717]/50 leading-[1.85] pb-6 text-[14px]">
-                          {item.a}
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </div>
-              ))}
-            </div>
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+
+                {faqCategories.map((category) => (
+                  <TabsContent key={category.id} value={category.id} className="mt-0">
+                    <div className="max-w-3xl">
+                      <Accordion type="single" collapsible>
+                        {category.questions.map((item, idx) => (
+                          <AccordionItem
+                            key={idx}
+                            value={`${category.id}-${idx}`}
+                            className="border-b border-[#171717]/10 rounded-none px-0"
+                          >
+                            <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
+                              {item.q}
+                            </AccordionTrigger>
+                            <AccordionContent className="text-[#171717]/50 leading-[1.85] pb-6 text-[14px] max-w-2xl">
+                              {item.a}
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </div>
+                  </TabsContent>
+                ))}
+              </Tabs>
+            </ScrollReveal>
           </div>
         </section>
 
-        {/* ══════ CTA ══════ */}
+        {/* CTA — the one next action */}
         <section style={{ backgroundColor: PINE }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <div className="border-t border-white/20 pt-5">
+          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <div className="border-t border-white/20 pt-6">
               <h2
                 className="text-[#fafafa] leading-tight mb-3"
                 style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
               >
                 לא מצאתם תשובה?
               </h2>
-              <p className="text-[#fafafa]/45 text-base leading-[1.85] mb-9 max-w-xl">
-                צרו איתנו קשר — נשמח לענות על כל שאלה ולתת ייעוץ מותאם אישית, ללא עלות.
+              <p className="text-[#fafafa]/45 text-base leading-[1.85] mb-8 max-w-xl">
+                שאלה על התיק שלכם היא לא שאלה נפוצה. בשביל זה יש בן אדם.
               </p>
               <Link
                 to="/contact"
