@@ -1,42 +1,70 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PensionAnalysisForm from "@/components/PensionAnalysisForm";
-import { PiggyBank, TrendingUp, Shield, Users, Calculator } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
-import { BONE, PINE, BRONZE, SERIF } from "@/lib/brand";
+import { BONE, PINE, BRONZE, SERIF, MONO } from "@/lib/brand";
+import { StatusPill } from "@/components/brand/Live";
+
+const tabTriggerClass =
+  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
+
+const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+  <h2
+    className="text-[#171717] leading-tight"
+    style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+  >
+    {children}
+  </h2>
+);
 
 const PensionFunds = () => {
   const pensionTypes = [
     {
       title: "פנסיה מקיפה חדשה",
-      icon: Shield,
-      doodle: "shield",
-      color: "#171717",
       description: "קרן פנסיה המשלבת חיסכון, ביטוח נכות וביטוח שאירים",
       features: ["תשואות מנוהלות", "כיסוי אובדן כושר עבודה", "פנסיית שאירים"],
     },
     {
       title: "פנסיה כללית",
-      icon: TrendingUp,
-      doodle: "growth",
-      color: "#b45309",
       description: "מסלול חיסכון בלבד ללא רכיבים ביטוחיים",
       features: ["תשואות גבוהות יותר", "גמישות מקסימלית", "דמי ניהול נמוכים"],
     },
     {
       title: "פנסיה משלימה",
-      icon: PiggyBank,
-      doodle: "savings",
-      color: "#15803d",
       description: "הפקדות נוספות מעבר לחובה לשיפור הפנסיה",
       features: ["הטבות מס", "הגדלת הקצבה", "חיסכון לטווח ארוך"],
+    },
+  ];
+
+  const articles = [
+    {
+      title: "למה קרן פנסיה חשובה?",
+      paragraphs: [
+        "קרן הפנסיה היא עמוד התווך של הביטחון הפיננסי שלכם בפרישה. היא מבטיחה הכנסה חודשית קבועה לאחר שתפסיקו לעבוד, ומספקת גם כיסויים ביטוחיים חיוניים כמו ביטוח נכות (אובדן כושר עבודה) וביטוח שאירים להגנה על המשפחה.",
+        "בישראל, הפקדה לפנסיה היא חובה על כל עובד שכיר מכוח צו הרחבה לפנסיה חובה. עם זאת, רבים אינם מודעים לכך שבחירה נכונה של קרן פנסיה ומסלול השקעה יכולה לשנות באופן דרמטי את גובה הקצבה החודשית בפרישה - הפרש שיכול להגיע למאות אלפי שקלים לאורך שנות הפנסיה.",
+      ],
+    },
+    {
+      title: "מתי כדאי לבדוק את קרן הפנסיה?",
+      paragraphs: [
+        "מומלץ לבדוק את קרן הפנסיה לפחות אחת לשנה. בדקו את דמי הניהול (שצריכים להיות הנמוכים ביותר האפשריים), את מסלול ההשקעה (שצריך להתאים לגיל ולרמת הסיכון שלכם), ואת ביצועי הקרן בהשוואה לקרנות מתחרות.",
+        "שינויים בחיים כמו מעבר מקום עבודה, נישואים, לידת ילד או עלייה בשכר הם הזדמנויות מצוינות לבצע ניתוח פנסיוני מקיף. גם אם אתם מרוצים מהקרן הנוכחית, ייתכן שתוכלו להוריד את דמי הניהול ולחסוך עשרות אלפי שקלים לאורך השנים.",
+      ],
+    },
+    {
+      title: "מה חשוב לדעת?",
+      paragraphs: [
+        "דמי ניהול הם הגורם המשמעותי ביותר להפרש בחיסכון הפנסיוני לאורך זמן. הפרש של 0.5% בדמי ניהול יכול להסתכם במאות אלפי שקלים לאורך עשרות שנות חיסכון. בנוסף, חשוב לוודא שהכיסויים הביטוחיים (נכות ושאירים) מותאמים לצרכים שלכם ואינם מיותרים.",
+        "ב-SEELD אנו מבצעים ניתוח פנסיוני מקיף וחינמי, בודקים את דמי הניהול, מסלולי ההשקעה והכיסויים הביטוחיים, ומוודאים שהכסף שלכם עובד בצורה הטובה ביותר עבורכם.",
+      ],
     },
   ];
 
@@ -71,6 +99,9 @@ const PensionFunds = () => {
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">קרנות פנסיה</span>
             </nav>
+            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
+              חיסכון ופנסיה
+            </span>
           </div>
 
           <h1
@@ -97,6 +128,14 @@ const PensionFunds = () => {
               <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
             </a>
           </div>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event('seeld:open-chat'))}
+            className="mt-7 block transition-transform hover:-translate-y-[1px]"
+            aria-label="פתיחת שיחה עם יועץ SEELD AI"
+          >
+            <StatusPill>יש שאלה על קרן פנסיה? היועץ מחובר</StatusPill>
+          </button>
         </div>
       </section>
 
@@ -105,22 +144,21 @@ const PensionFunds = () => {
         <section className="bg-white">
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
             <div className="border-t border-[#171717]/20 pt-5 mb-10">
-              <h2
-                className="text-[#171717] leading-tight"
-                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
-              >
-                יתרונות קרן הפנסיה
-              </h2>
+              <SectionTitle>יתרונות קרן הפנסיה</SectionTitle>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
               {[
-                { icon: TrendingUp, doodle: "growth", title: "תשואות מנוהלות", desc: "הכספים מנוהלים על ידי מנהלי השקעות מקצועיים", color: "#171717" },
-                { icon: Shield, doodle: "shield", title: "כיסויים ביטוחיים", desc: "פנסיית נכות ושאירים להגנה על המשפחה", color: "#b45309" },
-                { icon: Calculator, doodle: "calculator", title: "הטבות מס", desc: "זיכוי מס והפחתת הכנסה חייבת במס", color: "#15803d" },
-                { icon: Users, doodle: "handshake", title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לבחירת המסלול המתאים", color: "#b91c1c" },
+                { title: "תשואות מנוהלות", desc: "הכספים מנוהלים על ידי מנהלי השקעות מקצועיים" },
+                { title: "כיסויים ביטוחיים", desc: "פנסיית נכות ושאירים להגנה על המשפחה" },
+                { title: "הטבות מס", desc: "זיכוי מס והפחתת הכנסה חייבת במס" },
+                { title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לבחירת המסלול המתאים" },
               ].map((item, idx) => (
                 <div key={idx} className="border-t border-[#171717]/10 pt-4">
-                  <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>
+                  <span
+                    className="text-[11px] tabular-nums tracking-[0.2em] block mb-4"
+                    dir="ltr"
+                    style={{ color: BRONZE, fontFamily: MONO }}
+                  >
                     {String(idx + 1).padStart(2, '0')}
                   </span>
                   <h3 className="text-lg text-[#171717] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 600 }}>
@@ -133,126 +171,90 @@ const PensionFunds = () => {
           </div>
         </section>
 
-        {/* ══════ PENSION TYPES ══════ */}
-        <section id="pension-types" style={{ backgroundColor: BONE }}>
+        {/* ══════ THE KNOWLEDGE — one tabbed section ══════ */}
+        <section id="pension-types" className="bg-white scroll-mt-24">
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <div className="border-t border-[#171717]/20 pt-5 mb-10">
-              <h2
-                className="text-[#171717] leading-tight"
-                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
-              >
-                סוגי קרנות פנסיה
-              </h2>
-              <p className="text-[#171717]/45 mt-2 text-base leading-relaxed max-w-xl">הכירו את האפשרויות השונות ובחרו את המסלול המתאים לכם</p>
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
-              {pensionTypes.map((type, idx) => (
-                <div key={idx} className="border-t border-[#171717]/10 pt-4">
-                  <h3 className="text-base text-[#171717] mb-2" style={{ fontFamily: SERIF, fontWeight: 600 }}>
-                    {type.title}
-                  </h3>
-                  <p className="text-[#171717]/50 text-[14px] leading-[1.8] mb-4">{type.description}</p>
-                  <ul className="space-y-2">
-                    {type.features.map((feature, fIdx) => (
-                      <li key={fIdx} className="text-[#171717]/55 text-[14px] leading-relaxed flex gap-2.5">
-                        <span style={{ color: BRONZE }}>—</span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ══════ ARTICLE ══════ */}
-        <section className="bg-white">
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <div className="max-w-3xl">
-              <div className="border-t border-[#171717]/15 pt-5 mb-6">
-                <h2
-                  className="text-[#171717] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
-                >
-                  למה קרן פנסיה חשובה?
-                </h2>
-              </div>
-              <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base sm:text-base">
-                <p>
-                  קרן הפנסיה היא עמוד התווך של הביטחון הפיננסי שלכם בפרישה. היא מבטיחה הכנסה חודשית קבועה לאחר שתפסיקו לעבוד, ומספקת גם כיסויים ביטוחיים חיוניים כמו ביטוח נכות (אובדן כושר עבודה) וביטוח שאירים להגנה על המשפחה.
-                </p>
-                <p>
-                  בישראל, הפקדה לפנסיה היא חובה על כל עובד שכיר מכוח צו הרחבה לפנסיה חובה. עם זאת, רבים אינם מודעים לכך שבחירה נכונה של קרן פנסיה ומסלול השקעה יכולה לשנות באופן דרמטי את גובה הקצבה החודשית בפרישה - הפרש שיכול להגיע למאות אלפי שקלים לאורך שנות הפנסיה.
-                </p>
-              </div>
-
-              <div className="border-t border-[#171717]/15 pt-5 mt-14 mb-6">
-                <h2
-                  className="text-[#171717] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
-                >
-                  מתי כדאי לבדוק את קרן הפנסיה?
-                </h2>
-              </div>
-              <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base sm:text-base">
-                <p>
-                  מומלץ לבדוק את קרן הפנסיה לפחות אחת לשנה. בדקו את דמי הניהול (שצריכים להיות הנמוכים ביותר האפשריים), את מסלול ההשקעה (שצריך להתאים לגיל ולרמת הסיכון שלכם), ואת ביצועי הקרן בהשוואה לקרנות מתחרות.
-                </p>
-                <p>
-                  שינויים בחיים כמו מעבר מקום עבודה, נישואים, לידת ילד או עלייה בשכר הם הזדמנויות מצוינות לבצע ניתוח פנסיוני מקיף. גם אם אתם מרוצים מהקרן הנוכחית, ייתכן שתוכלו להוריד את דמי הניהול ולחסוך עשרות אלפי שקלים לאורך השנים.
-                </p>
-              </div>
-
-              <div className="border-t border-[#171717]/15 pt-5 mt-14 mb-6">
-                <h2
-                  className="text-[#171717] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
-                >
-                  מה חשוב לדעת?
-                </h2>
-              </div>
-              <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base sm:text-base">
-                <p>
-                  דמי ניהול הם הגורם המשמעותי ביותר להפרש בחיסכון הפנסיוני לאורך זמן. הפרש של 0.5% בדמי ניהול יכול להסתכם במאות אלפי שקלים לאורך עשרות שנות חיסכון. בנוסף, חשוב לוודא שהכיסויים הביטוחיים (נכות ושאירים) מותאמים לצרכים שלכם ואינם מיותרים.
-                </p>
-                <p>
-                  ב-SEELD אנו מבצעים ניתוח פנסיוני מקיף וחינמי, בודקים את דמי הניהול, מסלולי ההשקעה והכיסויים הביטוחיים, ומוודאים שהכסף שלכם עובד בצורה הטובה ביותר עבורכם.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ══════ FAQ ══════ */}
-        <section style={{ backgroundColor: BONE }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <div className="max-w-3xl">
-              <div className="border-t border-[#171717]/20 pt-5 mb-8">
-                <h2
-                  className="text-[#171717] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
-                >
+            <Tabs defaultValue="guide" dir="rtl">
+              <TabsList className="flex w-full justify-start gap-8 sm:gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none overflow-x-auto scrollbar-hide">
+                <TabsTrigger value="guide" className={tabTriggerClass}>
+                  המדריך
+                </TabsTrigger>
+                <TabsTrigger value="types" className={tabTriggerClass}>
+                  סוגי הקרנות
+                </TabsTrigger>
+                <TabsTrigger value="faq" className={tabTriggerClass}>
                   שאלות נפוצות
-                </h2>
-              </div>
-              <Accordion type="multiple">
-                {faqItems.map((item, idx) => (
-                  <AccordionItem
-                    key={idx}
-                    value={`faq-${idx}`}
-                    className="border-b border-[#171717]/10 rounded-none px-0"
-                  >
-                    <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
-                      {item.q}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-[#171717]/50 leading-[1.85] pb-6 text-[14px]">
-                      {item.a}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
+                </TabsTrigger>
+              </TabsList>
+
+              {/* — Guide — */}
+              <TabsContent value="guide" className="mt-0">
+                <div className="max-w-3xl">
+                  {articles.map((article, idx) => (
+                    <div key={idx} className={idx > 0 ? 'mt-14' : ''}>
+                      <div className="border-t border-[#171717]/15 pt-5 mb-6">
+                        <SectionTitle>{article.title}</SectionTitle>
+                      </div>
+                      <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base">
+                        {article.paragraphs.map((p, pIdx) => (
+                          <p key={pIdx}>{p}</p>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+
+              {/* — Types — */}
+              <TabsContent value="types" className="mt-0">
+                <div className="mb-10">
+                  <SectionTitle>סוגי קרנות פנסיה</SectionTitle>
+                  <p className="text-[#171717]/45 mt-2 text-base leading-relaxed max-w-xl">
+                    הכירו את האפשרויות השונות ובחרו את המסלול המתאים לכם
+                  </p>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
+                  {pensionTypes.map((type, idx) => (
+                    <div key={idx} className="border-t border-[#171717]/10 pt-4">
+                      <h3 className="text-base text-[#171717] mb-2" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                        {type.title}
+                      </h3>
+                      <p className="text-[#171717]/50 text-[14px] leading-[1.8] mb-4">{type.description}</p>
+                      <ul className="space-y-2">
+                        {type.features.map((feature, fIdx) => (
+                          <li key={fIdx} className="text-[#171717]/55 text-[14px] leading-relaxed flex gap-2.5">
+                            <span style={{ color: BRONZE }}>—</span>
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+
+              {/* — FAQ — */}
+              <TabsContent value="faq" className="mt-0">
+                <div className="max-w-3xl">
+                  <Accordion type="multiple">
+                    {faqItems.map((item, idx) => (
+                      <AccordionItem
+                        key={idx}
+                        value={`faq-${idx}`}
+                        className="border-b border-[#171717]/10 rounded-none px-0"
+                      >
+                        <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
+                          {item.q}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-[#171717]/50 leading-[1.85] pb-6 text-[14px]">
+                          {item.a}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
         </section>
 
