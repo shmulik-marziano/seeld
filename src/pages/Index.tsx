@@ -331,6 +331,9 @@ const Index = () => {
                     </a>
                   </span>
                 </div>
+                <div className="mt-6">
+                  <span className="text-[12px] text-[#1a1a18]/35">שתי דקות למלא. אפס אותיות קטנות.</span>
+                </div>
               </form>
             </ScrollReveal>
           </div>
@@ -477,6 +480,9 @@ const Index = () => {
                 );
               })}
             </div>
+            <p className="mt-10 text-[12px] text-[#f6f5f1]/30">
+              היועץ האנושי ישן בלילה. ה‑AI לא.
+            </p>
           </div>
         </section>
 
@@ -502,6 +508,9 @@ const Index = () => {
                   </div>
                 ))}
               </div>
+              <p className="mt-5 text-center text-[12px] text-[#1a1a18]/35">
+                אנחנו לא צועקים. המספרים עושים את זה בשבילנו.
+              </p>
             </ScrollReveal>
           </div>
         </section>
@@ -608,7 +617,11 @@ const Index = () => {
         <section className="bg-white">
           <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
             <ScrollReveal>
-              <SectionHead index="07" title="שאלות שעולות בכל תיק" />
+              <SectionHead
+                index="07"
+                title="שאלות שעולות בכל תיק"
+                lede="שאלות שכולם שואלים. תשובות שפחות שומעים."
+              />
             </ScrollReveal>
 
             <div className="max-w-3xl">
@@ -649,7 +662,7 @@ const Index = () => {
               <SectionHead
                 index="08"
                 title="השיחה הראשונה, על חשבוננו"
-                lede="השאירו פרטים ויועץ מהצוות שלנו יחזור אליכם באותו יום עבודה."
+                lede="השאירו פרטים ויועץ מהצוות שלנו יחזור אליכם באותו יום עבודה. שיחה אחת — בלי מרדף."
               />
             </ScrollReveal>
 
