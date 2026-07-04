@@ -15,6 +15,7 @@ import AIChatBot from "@/components/AIChatBot";
 import AccessibilityButton from "@/components/AccessibilityButton";
 import CookieConsent from "@/components/CookieConsent";
 import ScrollProgress from "@/components/ScrollProgress";
+import GridBackdrop from "@/components/brand/GridBackdrop";
 import FloatingShapes from "@/components/FloatingShapes";
 import { useEffect, useRef } from "react";
 import { siteSupabase } from "@/integrations/supabase/site-client";
@@ -270,6 +271,7 @@ const App = () => (
           <PwaInstallBanner />
           <BrowserRouter>
             <PageViewTracker />
+            <GridBackdrop />
             <ScrollProgress />
             <ScrollToTop />
             <PageTransition>
