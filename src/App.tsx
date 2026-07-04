@@ -420,7 +420,7 @@ const App = () => (
               href="https://wa.me/972523097444"
               target="_blank"
               rel="noopener noreferrer"
-              className="fixed bottom-24 left-4 z-50 group"
+              className="hidden sm:block fixed bottom-24 left-4 z-50 group"
               aria-label="שלח הודעה בוואטסאפ"
             >
               <div className="relative flex items-center justify-center w-14 h-14 rounded-full bg-white transition-colors duration-150 group-hover:bg-[#fafafa]"

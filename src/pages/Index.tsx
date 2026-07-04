@@ -8,7 +8,7 @@ import HeroSection from "@/components/HeroSection";
 import ScrollReveal from "@/components/ScrollReveal";
 import CompanyLogos from "@/components/CompanyLogos";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { LiveTag, StatusPill } from "@/components/brand/Live";
+import { CountUp, LiveTag, StatusPill } from "@/components/brand/Live";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
@@ -165,13 +165,14 @@ const SectionHead = ({ index, title, lede }: { index: string; title: string; led
   </div>
 );
 
+// Mobile shows the six flagship rows; the "see all" link below each tab carries the rest.
 const ProductList = ({ items }: { items: { title: string; description: string; href: string }[] }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16">
-    {items.map((item) => (
+    {items.map((item, i) => (
       <Link
         key={item.title + item.href}
         to={item.href}
-        className="group flex items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10 hover:border-[#171717]/40 transition-colors"
+        className={`group items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10 hover:border-[#171717]/40 transition-colors ${i >= 6 ? "hidden md:flex" : "flex"}`}
       >
         <div className="flex items-baseline gap-4 min-w-0">
           <h3 className="text-base font-medium text-[#171717] whitespace-nowrap">{item.title}</h3>
@@ -355,9 +356,6 @@ const Index = () => {
               {whySeeld.map((item, i) => (
                 <ScrollReveal key={item.title} delay={i * 80}>
                   <div className="border-t border-[#171717]/15 pt-5 h-full">
-                    <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
                     <h3
                       className="text-lg text-[#171717] mb-3"
                       style={{ fontFamily: SERIF, fontWeight: 600 }}
@@ -406,7 +404,7 @@ const Index = () => {
                     to="/insurances"
                     className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
                   >
-                    לכל הביטוחים
+                    לכל 16 הביטוחים
                     <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
                   </Link>
                 </div>
@@ -419,7 +417,7 @@ const Index = () => {
                     to="/savings"
                     className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
                   >
-                    לכל מוצרי החיסכון והפנסיה
+                    לכל 11 מוצרי החיסכון והפנסיה
                     <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
                   </Link>
                 </div>
@@ -496,10 +494,10 @@ const Index = () => {
             <ScrollReveal>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 border-t border-b border-[#171717]/15 py-10 sm:py-14">
                 {[
-                  { number: "600+", label: "משפחות מלוות" },
-                  { number: "12", label: "חברות בהשוואה" },
-                  { number: "48", label: "שעות לדוח מלא" },
-                  { number: "₪0", label: "פגישת ייעוץ ראשונה" },
+                  { to: 600, suffix: "+", label: "משפחות מלוות" },
+                  { to: 12, suffix: "", label: "חברות בהשוואה" },
+                  { to: 48, suffix: "", label: "שעות לדוח מלא" },
+                  { to: 0, prefix: "₪", suffix: "", label: "פגישת ייעוץ ראשונה" },
                 ].map((stat) => (
                   <div key={stat.label} className="text-center">
                     <div
@@ -507,7 +505,7 @@ const Index = () => {
                       dir="ltr"
                       style={{ fontFamily: "'Geist Mono', ui-monospace, monospace", fontWeight: 600, fontSize: "clamp(2.4rem, 4.5vw, 3.6rem)", letterSpacing: "-0.02em" }}
                     >
-                      {stat.number}
+                      <CountUp to={stat.to} format={(v) => `${stat.prefix ?? ""}${v.toLocaleString("en-US")}${stat.suffix}`} />
                     </div>
                     <div className="text-[12px] tracking-[0.12em] text-[#171717]/45">{stat.label}</div>
                   </div>

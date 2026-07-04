@@ -1,6 +1,44 @@
 // Live elements — the only color in SEELD Mono (people & status).
 // Locked in STYLESEED.md: chips mark real people/statuses, never decoration.
+import { useEffect, useRef, useState } from "react";
+import { useInView, useReducedMotion } from "framer-motion";
 import { MONO, CHIP_GREEN, FAINT, INK } from "@/lib/brand";
+
+/** Number that counts up once when scrolled into view (Snap: fast ease-out) */
+export const CountUp = ({
+  to, duration = 900, className = "", style, format,
+}: {
+  to: number;
+  duration?: number;
+  className?: string;
+  style?: React.CSSProperties;
+  format?: (v: number) => string;
+}) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const reduced = useReducedMotion();
+  const [val, setVal] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    if (reduced || to === 0) { setVal(to); return; }
+    let raf: number;
+    const t0 = performance.now();
+    const tick = (t: number) => {
+      const p = Math.min(1, (t - t0) / duration);
+      setVal(Math.round(to * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, to, duration, reduced]);
+
+  return (
+    <span ref={ref} className={className} style={style}>
+      {format ? format(val) : val.toLocaleString("en-US")}
+    </span>
+  );
+};
 
 /** Pulsing status dot (green = available/live) */
 export const LiveDot = ({ color = CHIP_GREEN, size = 7 }: { color?: string; size?: number }) => (

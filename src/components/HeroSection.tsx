@@ -4,6 +4,7 @@ import {
   INK, BODY, FAINT, LINE, MONO, CARD_SHADOW, RING,
   CHIP_ORANGE, CHIP_GREEN, CHIP_YELLOW,
 } from "@/lib/brand";
+import { CountUp, LiveDot } from "@/components/brand/Live";
 
 // Snap motion: instant, decisive (STYLESEED.md)
 const snap = (delay: number) => ({
@@ -16,7 +17,7 @@ const LiveChip = ({
   label, color, className, delay,
 }: { label: string; color: string; className: string; delay: number }) => (
   <motion.span
-    className={`absolute z-10 hidden sm:flex items-center px-3 py-1.5 rounded-full text-white text-[13px] font-medium whitespace-nowrap ${className}`}
+    className={`absolute z-10 flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-white text-[11px] sm:text-[13px] font-medium whitespace-nowrap ${className}`}
     style={{ backgroundColor: color, boxShadow: "0 2px 6px rgba(0,0,0,.12)" }}
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
@@ -24,6 +25,31 @@ const LiveChip = ({
   >
     {label}
   </motion.span>
+);
+
+/** The live statement — one component, two placements (absolute on lg, inline card on mobile) */
+const Statement = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
+  <div className={className} style={style}>
+    <div
+      className="flex justify-between mb-2 text-[10px] tracking-[0.12em]"
+      style={{ fontFamily: MONO, color: FAINT }}
+    >
+      <span>STATEMENT</span>
+      <span className="inline-flex items-center gap-1.5" style={{ color: INK }}>
+        <LiveDot size={5} />
+        LIVE
+      </span>
+    </div>
+    <div
+      className="text-xl font-semibold text-left"
+      style={{ fontFamily: MONO, fontVariantNumeric: "tabular-nums", direction: "ltr", color: INK }}
+    >
+      <CountUp to={1284600} duration={1100} format={(v) => `₪${v.toLocaleString("en-US")}`} />
+    </div>
+    <div className="text-[12px] mt-0.5" style={{ color: BODY }}>
+      שווי תיק · ‎+11.4%‎ השנה
+    </div>
+  </div>
 );
 
 const HeroSection = () => {
@@ -68,8 +94,8 @@ const HeroSection = () => {
       </div>
 
       {/* The signature: colossal wordmark with live chips */}
-      <div className="relative mt-4 sm:mt-2" aria-hidden="true">
-        <motion.div
+      <div className="relative mt-10 sm:mt-2" aria-hidden="true">
+        <div
           className="font-bold text-[#171717] text-center whitespace-nowrap select-none"
           style={{
             fontSize: "clamp(110px, 24.5vw, 360px)",
@@ -78,18 +104,25 @@ const HeroSection = () => {
             transform: "translateY(7%)",
           }}
           dir="ltr"
-          initial={reduced ? undefined : { opacity: 0, y: 24 }}
-          animate={reduced ? undefined : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.12, ease: "easeOut" }}
         >
-          SEELD
-        </motion.div>
+          {"SEELD".split("").map((ch, i) => (
+            <motion.span
+              key={i}
+              className="inline-block"
+              initial={reduced ? undefined : { opacity: 0, y: 26 }}
+              animate={reduced ? undefined : { opacity: 1, y: 0 }}
+              transition={{ duration: 0.26, delay: 0.12 + i * 0.05, ease: "easeOut" }}
+            >
+              {ch}
+            </motion.span>
+          ))}
+        </div>
 
-        <LiveChip label="דנה · יועצת פנסיה" color={CHIP_ORANGE} className="top-[2%] right-[13%]" delay={0.4} />
-        <LiveChip label="אבי · ביטוח" color={CHIP_GREEN} className="bottom-[14%] right-[38%]" delay={0.5} />
-        <LiveChip label="התיק שלך · מנוטר" color={CHIP_YELLOW} className="top-[14%] left-[11%]" delay={0.6} />
+        <LiveChip label="דנה · יועצת פנסיה" color={CHIP_ORANGE} className="-top-[8%] right-[6%] sm:top-[2%] sm:right-[13%]" delay={0.45} />
+        <LiveChip label="אבי · ביטוח" color={CHIP_GREEN} className="bottom-[4%] right-[32%] sm:bottom-[14%] sm:right-[38%]" delay={0.55} />
+        <LiveChip label="התיק שלך · מנוטר" color={CHIP_YELLOW} className="-top-[10%] left-[7%] sm:top-[14%] sm:left-[11%]" delay={0.65} />
 
-        {/* Mini live statement */}
+        {/* Live statement — floats beside the wordmark on desktop */}
         <motion.div
           className="absolute -top-[6%] left-[23%] z-10 hidden lg:block bg-white rounded-lg px-4 py-3 min-w-[215px]"
           style={{ boxShadow: CARD_SHADOW }}
@@ -97,30 +130,42 @@ const HeroSection = () => {
           animate={reduced ? undefined : { opacity: 1, y: 0 }}
           transition={{ duration: 0.2, delay: 0.55, ease: "easeOut" }}
         >
-          <div
-            className="flex justify-between mb-2 text-[10px] tracking-[0.12em]"
-            style={{ fontFamily: MONO, color: FAINT }}
-          >
-            <span>STATEMENT</span>
-            <span style={{ color: INK }}>LIVE</span>
-          </div>
-          <div
-            className="text-xl font-semibold text-left"
-            style={{ fontFamily: MONO, fontVariantNumeric: "tabular-nums", direction: "ltr", color: INK }}
-          >
-            ₪1,284,600
-          </div>
-          <div className="text-[12px] mt-0.5" style={{ color: BODY }}>
-            שווי תיק · ‎+11.4%‎ השנה
-          </div>
+          <Statement />
         </motion.div>
       </div>
 
-      {/* Base line */}
-      <div className="relative bg-white -mt-1" style={{ boxShadow: `0 -1px 0 ${LINE}` }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-4 flex flex-col sm:flex-row justify-between gap-2 text-sm" style={{ color: FAINT }}>
+      {/* Live statement — compact card in the flow on mobile/tablet */}
+      <motion.div
+        className="lg:hidden max-w-7xl mx-auto px-5 sm:px-8 mt-8"
+        initial={reduced ? undefined : { opacity: 0, y: 8 }}
+        animate={reduced ? undefined : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.2, delay: 0.6, ease: "easeOut" }}
+      >
+        <Statement
+          className="bg-white rounded-lg px-4 py-3 max-w-[260px]"
+          style={{ boxShadow: CARD_SHADOW }}
+        />
+      </motion.div>
+
+      {/* Base line + scroll cue */}
+      <div className="relative bg-white mt-8 sm:-mt-1" style={{ boxShadow: `0 -1px 0 ${LINE}` }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-4 flex items-baseline justify-between gap-4 text-sm" style={{ color: FAINT }}>
           <span>הפגישה הראשונה על חשבוננו. בלי התחייבות.</span>
-          <span>מבית עמיתים הון · בפיקוח רשות שוק ההון</span>
+          <span className="hidden md:inline">מבית עמיתים הון · בפיקוח רשות שוק ההון</span>
+          <span
+            className="md:hidden inline-flex items-center gap-1.5 shrink-0 text-[12px] tracking-[0.08em]"
+            style={{ fontFamily: MONO }}
+            aria-hidden="true"
+          >
+            יש עוד
+            <motion.span
+              className="inline-block"
+              animate={reduced ? undefined : { y: [0, 3, 0] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            >
+              ↓
+            </motion.span>
+          </span>
         </div>
       </div>
     </section>

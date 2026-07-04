@@ -236,8 +236,8 @@ const Footer = () => {
                   {col.title}
                 </h3>
                 <ul className="space-y-2.5 text-[14px] text-white/50">
-                  {col.links.map((l) => (
-                    <li key={l.href + l.label}>
+                  {col.links.map((l, i) => (
+                    <li key={l.href + l.label} className={i >= 5 ? "hidden md:list-item" : undefined}>
                       <Link to={l.href} className="hover:text-white transition-colors">
                         {l.label}
                       </Link>
