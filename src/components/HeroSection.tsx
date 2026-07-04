@@ -1,4 +1,4 @@
-import { ArrowDownLeft, Sparkles, Bot, Scale } from "lucide-react";
+import { ArrowDownLeft, Bot, Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -15,6 +15,24 @@ const useIsDesktop = () => {
   return isDesktop;
 };
 
+const INK = "#0b1114";
+const ACCENT = "#14b8a6";
+const ACCENT_BRIGHT = "#2dd4bf";
+
+const heroMetrics = [
+  { value: "600+", label: "משפחות בליווי" },
+  { value: "12", label: "חברות בהשוואה" },
+  { value: "48h", label: "לדוח תיק מלא" },
+  { value: "₪0", label: "פגישה ראשונה" },
+];
+
+const portfolioRows = [
+  { label: "קרן פנסיה · מסלול מניות", value: "+11.4%", ok: true },
+  { label: "דמי ניהול מהצבירה", value: "0.18%", ok: true },
+  { label: "ביטוח בריאות", value: "פער כיסוי", ok: false },
+  { label: "קרן השתלמות · IRA", value: "מנוטר", ok: true },
+];
+
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isDesktop = useIsDesktop();
@@ -24,113 +42,95 @@ const HeroSection = () => {
     offset: ["start start", "end start"],
   });
 
-  // Parallax values
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, 70]);
   const y2 = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const yCard = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [0, 95]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[90vh] sm:min-h-[100vh] flex items-center overflow-hidden"
+      className="relative overflow-hidden bg-white"
       dir="rtl"
-      style={{
-        background:
-          "radial-gradient(ellipse 80% 50% at 50% 0%, hsl(168 38% 96%) 0%, #f8f9fc 60%)",
-      }}
     >
-      {/* Subtle noise texture layer */}
+      {/* Engineering grid background */}
       <div
-        className="absolute inset-0 opacity-[0.015] pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
         style={{
           backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)'/%3E%3C/svg%3E\")",
+            "linear-gradient(to left, rgba(11,17,20,0.035) 1px, transparent 1px), linear-gradient(to bottom, rgba(11,17,20,0.035) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+          maskImage:
+            "radial-gradient(ellipse 90% 80% at 50% 0%, black 30%, transparent 75%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 90% 80% at 50% 0%, black 30%, transparent 75%)",
         }}
       />
-
-      {/* Ambient glow */}
-      <motion.div
-        className="hidden lg:block absolute top-[20%] left-[10%] w-[500px] h-[500px] rounded-full opacity-[0.25] blur-3xl pointer-events-none"
+      {/* Accent glow */}
+      <div
+        className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[380px] pointer-events-none opacity-[0.10] blur-3xl"
+        aria-hidden="true"
         style={{
-          background:
-            "radial-gradient(circle, hsl(168 42% 62%) 0%, transparent 70%)",
+          background: `radial-gradient(ellipse, ${ACCENT_BRIGHT} 0%, transparent 65%)`,
         }}
-        animate={{ scale: [1, 1.1, 1] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      <div className="relative w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 py-16 sm:py-24 lg:py-32">
-        <div className="grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-center">
-          {/* Right side — Content (RTL) */}
-          <div className="space-y-8 lg:space-y-10">
-            {/* Trust badge */}
+      <div className="relative w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-14 sm:pt-20 lg:pt-24 pb-10 sm:pb-14">
+        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-14 lg:gap-12 items-center">
+          {/* Right — content */}
+          <div className="space-y-7 lg:space-y-8">
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/80 backdrop-blur-sm border border-[#0a3d3d]/10 text-[13px] text-[#0a3d3d] font-medium shadow-sm">
-                <Sparkles className="w-3.5 h-3.5 text-[#f4a261]" />
-                בית פיננסים וביטוח · מבית עמיתים הון
+              <span className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[#0b1114]/10 bg-white/70 backdrop-blur text-[12px] font-semibold tracking-wide text-[#0b1114]/70">
+                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: ACCENT }} />
+                SEELD · בית פיננסים טכנולוגי · מבית עמיתים הון
               </span>
             </motion.div>
 
-            {/* Headline — Institutional premium voice */}
             <motion.h1
-              className="font-extrabold leading-[1.02] tracking-tight"
-              initial={{ opacity: 0, y: 28 }}
+              className="font-extrabold leading-[1.02] tracking-[-0.03em] text-[#0b1114]"
+              initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
+              transition={{ duration: 0.7, delay: 0.08 }}
             >
-              <span className="block text-[2rem] sm:text-5xl md:text-6xl lg:text-[5rem] text-[#0a3d3d]">
-                הדרך הנכונה
+              <span className="block text-[2.4rem] sm:text-6xl lg:text-[5.2rem]">
+                ביטוח ופנסיה,
               </span>
-              <span className="block text-[2rem] sm:text-5xl md:text-6xl lg:text-[5rem] text-[#0a3d3d]">
-                לנהל את
-              </span>
-              <span className="block text-[2rem] sm:text-5xl md:text-6xl lg:text-[5rem] mt-2">
-                <span className="relative inline-block">
-                  <span
-                    className="bg-gradient-to-l from-[#1a8f7d] via-[#5ec6c6] to-[#1a8f7d] bg-clip-text text-transparent bg-[length:200%_100%] animate-gradient-shift"
-                  >
-                    הכסף שלך.
-                  </span>
-                  <motion.span
-                    className="absolute -bottom-2 left-0 right-0 h-[6px] bg-[#f4a261] rounded-full"
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ delay: 1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    style={{ transformOrigin: "right" }}
-                  />
-                </span>
+              <span
+                className="block text-[2.4rem] sm:text-6xl lg:text-[5.2rem] bg-clip-text text-transparent"
+                style={{
+                  backgroundImage: `linear-gradient(105deg, ${INK} 0%, ${ACCENT} 55%, ${ACCENT_BRIGHT} 100%)`,
+                }}
+              >
+                מהונדסים מחדש.
               </span>
             </motion.h1>
 
-            {/* Subtitle — House voice, institutional premium */}
             <motion.p
-              className="text-base sm:text-lg md:text-xl text-[#0a3d3d]/70 leading-[1.75] max-w-xl font-normal"
-              initial={{ opacity: 0, y: 16 }}
+              className="text-base sm:text-lg text-[#0b1114]/60 leading-[1.8] max-w-xl"
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.25 }}
+              transition={{ duration: 0.6, delay: 0.22 }}
             >
-              בית פיננסים וביטוח עצמאי. צוות של סוכני ביטוח ויועצי פנסיה שסוקרים את התיק שלך, משווים מול 12 חברות מובילות, וממליצים על הצעד הבא.
-              <br />
-              <span className="text-[#0a3d3d] font-semibold">פגישת הייעוץ הראשונה על חשבוננו.</span>
+              בנינו פלטפורמה טכנולוגית מלאה — השוואה בזמן אמת מול 12 חברות,
+              פורטל לקוחות ויועץ AI — סביב הדבר האחד שלא משתנה:{" "}
+              <span className="text-[#0b1114] font-semibold">
+                יועץ אישי אחד שמכיר אותך ואחראי לתוצאה.
+              </span>
             </motion.p>
 
-            {/* CTAs */}
             <motion.div
-              className="flex flex-col sm:flex-row items-start gap-4 pt-2"
-              initial={{ opacity: 0, y: 16 }}
+              className="flex flex-col sm:flex-row items-start gap-3.5 pt-1"
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ duration: 0.6, delay: 0.34 }}
             >
               <Link to="/contact" className="w-full sm:w-auto group">
-                <Button
-                  className="bg-[#0a3d3d] text-white hover:bg-[#0d4a4a] rounded-full px-10 py-6 text-base font-bold shadow-xl shadow-[#0a3d3d]/20 hover:shadow-2xl hover:shadow-[#0a3d3d]/30 hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto min-h-[60px] group-hover:scale-[1.02]"
-                >
-                  קביעת פגישת ייעוץ
+                <Button className="bg-[#0b1114] text-white hover:bg-[#111a1f] rounded-xl px-9 py-6 text-base font-bold shadow-[0_12px_32px_-12px_rgba(11,17,20,0.45)] hover:shadow-[0_16px_40px_-12px_rgba(20,184,166,0.35)] hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto min-h-[58px]">
+                  בדיקת תיק ללא עלות
                   <ArrowDownLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
                 </Button>
               </Link>
@@ -138,137 +138,153 @@ const HeroSection = () => {
                 href="https://wa.me/972523097444"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto group"
+                className="w-full sm:w-auto"
               >
                 <Button
                   variant="ghost"
-                  className="text-[#0a3d3d] hover:bg-[#0a3d3d]/5 hover:text-[#0a3d3d] rounded-full px-8 py-6 text-base font-semibold w-full sm:w-auto min-h-[60px] flex items-center gap-2.5 border border-[#0a3d3d]/15 hover:border-[#0a3d3d]/25 transition-all duration-300"
+                  className="text-[#0b1114] hover:bg-[#0b1114]/[0.04] hover:text-[#0b1114] rounded-xl px-8 py-6 text-base font-semibold w-full sm:w-auto min-h-[58px] flex items-center gap-2.5 border border-[#0b1114]/15 transition-all duration-300"
                 >
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#25D366]"></span>
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#25D366]" />
                   </span>
                   שיחה עם יועץ
                 </Button>
               </a>
             </motion.div>
 
-            {/* Quick trust indicators */}
+            {/* Metrics strip */}
             <motion.div
-              className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-4"
+              className="grid grid-cols-4 gap-0 pt-6 max-w-xl divide-x divide-[#0b1114]/[0.08]"
+              style={{ direction: "rtl" }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              transition={{ duration: 0.7, delay: 0.5 }}
             >
-              {[
-                "ייעוץ עצמאי ובלתי תלוי",
-                "דוח מקצועי תוך 48 שעות",
-                "פגישה ראשונה ללא עלות",
-              ].map((text, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <svg
-                    className="w-4 h-4 text-[#1a8f7d]"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-sm text-[#0a3d3d]/60 font-medium">
-                    {text}
-                  </span>
+              {heroMetrics.map((m) => (
+                <div key={m.label} className="px-3 first:pr-0 text-right">
+                  <div className="text-xl sm:text-2xl font-extrabold text-[#0b1114] tabular-nums tracking-tight">
+                    {m.value}
+                  </div>
+                  <div className="text-[11px] sm:text-xs text-[#0b1114]/45 font-medium mt-0.5">
+                    {m.label}
+                  </div>
                 </div>
               ))}
             </motion.div>
           </div>
 
-          {/* Left side — Visual composition */}
+          {/* Left — terminal-style product visual */}
           <motion.div
             className="hidden sm:flex relative items-center justify-center lg:justify-start"
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -24 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.8, delay: 0.25 }}
           >
-            <div className="relative w-[320px] h-[400px] sm:w-[440px] sm:h-[500px] lg:w-[540px] lg:h-[560px]">
-              {/* Client portal preview — the real product */}
+            <div className="relative w-[340px] h-[420px] sm:w-[460px] sm:h-[500px] lg:w-[560px] lg:h-[540px]">
+              {/* Main dark dashboard */}
               <motion.div
-                className="absolute top-0 right-0 left-[8%] sm:left-[12%] bg-white rounded-3xl border border-[#0a3d3d]/[0.06] overflow-hidden"
+                className="absolute top-0 right-0 left-[6%] sm:left-[10%] rounded-2xl overflow-hidden border border-white/[0.06]"
                 style={{
+                  backgroundColor: INK,
                   boxShadow:
-                    "0 30px 60px -15px rgba(10, 61, 61, 0.2), 0 0 0 1px rgba(10, 61, 61, 0.02)",
+                    "0 40px 80px -20px rgba(11,17,20,0.5), 0 0 60px -30px rgba(45,212,191,0.25)",
                   y: isDesktop ? y1 : 0,
                 }}
-                initial={{ opacity: 0, y: 40, scale: 0.96 }}
+                initial={{ opacity: 0, y: 36, scale: 0.97 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: 0.45, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               >
-                {/* Window chrome */}
-                <div className="bg-[#0a3d3d] px-5 py-3 flex items-center justify-between">
-                  <span className="text-white/60 text-xs font-medium">SEELD · האזור האישי שלי</span>
-                  <div className="flex gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#e76f51]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#f4a261]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#90be6d]" />
+                {/* Chrome */}
+                <div className="px-5 py-3 flex items-center justify-between border-b border-white/[0.07]">
+                  <span className="text-white/50 text-[11px] font-medium tracking-wide">
+                    SEELD OS · תיק משפחתי
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md tabular-nums" style={{ color: ACCENT_BRIGHT, backgroundColor: "rgba(45,212,191,0.10)" }}>
+                      LIVE
+                    </span>
+                    <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: ACCENT_BRIGHT }} />
                   </div>
                 </div>
-                <div className="p-5 sm:p-6 space-y-2.5">
-                  {[
-                    { label: "קרן פנסיה · מסלול מניות", status: "תקין ✓", color: "#1a8f7d" },
-                    { label: "דמי ניהול מהצבירה", status: "0.18%", color: "#1a8f7d" },
-                    { label: "ביטוח בריאות", status: "נמצא פער", color: "#f4a261" },
-                    { label: "קרן השתלמות", status: "11.4%+ השנה", color: "#1a8f7d" },
-                  ].map((row, i) => (
+
+                {/* Sparkline */}
+                <div className="px-5 pt-5">
+                  <div className="flex items-baseline justify-between mb-1">
+                    <span className="text-white/40 text-[11px] font-medium">שווי תיק כולל</span>
+                    <span className="text-[11px] font-bold tabular-nums" style={{ color: ACCENT_BRIGHT }}>+11.4% השנה</span>
+                  </div>
+                  <div className="flex items-baseline gap-2 mb-2">
+                    <span className="text-white text-2xl sm:text-3xl font-extrabold tabular-nums tracking-tight">₪1,284,600</span>
+                  </div>
+                  <svg viewBox="0 0 320 64" className="w-full h-14" preserveAspectRatio="none" aria-hidden="true">
+                    <defs>
+                      <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={ACCENT_BRIGHT} stopOpacity="0.25" />
+                        <stop offset="100%" stopColor={ACCENT_BRIGHT} stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                    <motion.path
+                      d="M0,52 C30,48 45,40 70,42 C95,44 110,30 140,32 C170,34 185,22 215,24 C245,26 260,14 290,12 L320,8"
+                      fill="none"
+                      stroke={ACCENT_BRIGHT}
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{ delay: 0.8, duration: 1.6, ease: "easeOut" }}
+                    />
+                    <path
+                      d="M0,52 C30,48 45,40 70,42 C95,44 110,30 140,32 C170,34 185,22 215,24 C245,26 260,14 290,12 L320,8 L320,64 L0,64 Z"
+                      fill="url(#sparkFill)"
+                    />
+                  </svg>
+                </div>
+
+                {/* Rows */}
+                <div className="px-5 pb-5 pt-2 space-y-0.5">
+                  {portfolioRows.map((row, i) => (
                     <motion.div
                       key={row.label}
-                      className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0"
-                      initial={{ opacity: 0, x: -12 }}
+                      className="flex items-center justify-between py-2.5 border-b border-white/[0.05] last:border-0"
+                      initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.9 + i * 0.15, duration: 0.4 }}
+                      transition={{ delay: 1 + i * 0.13, duration: 0.4 }}
                     >
-                      <span className="text-xs sm:text-sm text-[#0a3d3d]/70 font-medium">{row.label}</span>
+                      <span className="text-white/60 text-xs sm:text-[13px]">{row.label}</span>
                       <span
-                        className="text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap"
-                        style={{ backgroundColor: `${row.color}14`, color: row.color }}
+                        className="text-[11px] font-bold tabular-nums px-2 py-0.5 rounded-md"
+                        style={{
+                          color: row.ok ? ACCENT_BRIGHT : "#fbbf24",
+                          backgroundColor: row.ok ? "rgba(45,212,191,0.08)" : "rgba(251,191,36,0.08)",
+                        }}
                       >
-                        {row.status}
+                        {row.value}
                       </span>
                     </motion.div>
                   ))}
-                  <motion.div
-                    className="flex items-center gap-2 pt-2"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.6, duration: 0.5 }}
-                  >
-                    <span className="w-2 h-2 rounded-full bg-[#1a8f7d] animate-pulse" />
-                    <span className="text-[11px] text-[#0a3d3d]/45 font-medium">
-                      התיק מנוהל ומעודכן · יועץ ייעודי זמין
-                    </span>
-                  </motion.div>
                 </div>
               </motion.div>
 
-              {/* AI advisor chip */}
+              {/* AI chip */}
               <motion.div
-                className="absolute top-[63%] right-[-2%] sm:right-[-4%] bg-white rounded-2xl px-4 py-3 shadow-xl border border-[#0a3d3d]/[0.06] flex items-center gap-3"
+                className="absolute bottom-[4%] right-[-2%] sm:right-[-4%] rounded-xl px-4 py-3 flex items-center gap-3 border border-white/[0.08] backdrop-blur-xl"
                 style={{
-                  boxShadow: "0 18px 36px -12px rgba(108, 99, 255, 0.25)",
+                  backgroundColor: "rgba(11,17,20,0.92)",
+                  boxShadow: "0 20px 40px -16px rgba(11,17,20,0.55)",
                   y: isDesktop ? y2 : 0,
                 }}
-                initial={{ opacity: 0, scale: 0.8, x: 20 }}
-                animate={{ opacity: 1, scale: 1, x: 0 }}
-                transition={{ delay: 1.1, type: "spring", stiffness: 200, damping: 18 }}
+                initial={{ opacity: 0, scale: 0.85, y: 16 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: 1.15, type: "spring", stiffness: 200, damping: 18 }}
               >
-                <div className="w-10 h-10 rounded-full bg-[#6c63ff]/10 flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-[#6c63ff]" />
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: "rgba(45,212,191,0.12)" }}>
+                  <Bot className="w-4.5 h-4.5" style={{ color: ACCENT_BRIGHT }} />
                 </div>
                 <div>
-                  <div className="text-sm font-extrabold text-[#0a3d3d]">יועץ SEELD AI</div>
-                  <div className="text-[11px] text-[#0a3d3d]/50 flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#25D366]" />
+                  <div className="text-[13px] font-bold text-white">יועץ SEELD AI</div>
+                  <div className="text-[10px] text-white/40 flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-[#25D366]" />
                     זמין 24/7
                   </div>
                 </div>
@@ -276,112 +292,43 @@ const HeroSection = () => {
 
               {/* Comparison chip */}
               <motion.div
-                className="absolute top-[-4%] left-[2%] sm:left-[4%] bg-white rounded-2xl px-4 py-3 shadow-xl border border-[#0a3d3d]/[0.06] flex items-center gap-3"
+                className="absolute top-[-3%] left-[0%] rounded-xl px-4 py-3 flex items-center gap-3 bg-white border border-[#0b1114]/[0.07]"
                 style={{
-                  boxShadow: "0 18px 36px -12px rgba(244, 162, 97, 0.3)",
+                  boxShadow: "0 20px 44px -18px rgba(11,17,20,0.3)",
                   y: isDesktop ? y3 : 0,
                 }}
-                initial={{ opacity: 0, scale: 0.8, x: -20 }}
-                animate={{ opacity: 1, scale: 1, x: 0 }}
-                transition={{ delay: 1.25, type: "spring", stiffness: 200, damping: 18 }}
+                initial={{ opacity: 0, scale: 0.85, y: -12 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: 1.3, type: "spring", stiffness: 200, damping: 18 }}
               >
-                <div className="w-10 h-10 rounded-full bg-[#f4a261]/15 flex items-center justify-center">
-                  <Scale className="w-5 h-5 text-[#e8862e]" />
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-[#0b1114]/[0.04]">
+                  <Scale className="w-4.5 h-4.5 text-[#0b1114]" />
                 </div>
                 <div>
-                  <div className="text-sm font-extrabold text-[#0a3d3d]">השוואה בזמן אמת</div>
-                  <div className="text-[11px] text-[#0a3d3d]/50">מול 12 חברות מובילות</div>
+                  <div className="text-[13px] font-bold text-[#0b1114]">השוואה בזמן אמת</div>
+                  <div className="text-[10px] text-[#0b1114]/45 tabular-nums">12 חברות · עדכון רציף</div>
                 </div>
               </motion.div>
-
-              {/* Floating savings card */}
-              <motion.div
-                className="absolute bottom-[2%] left-[4%] sm:left-[8%] bg-white rounded-2xl p-5 shadow-2xl border border-[#0a3d3d]/[0.06] min-w-[240px]"
-                style={{
-                  boxShadow:
-                    "0 25px 50px -12px rgba(10, 61, 61, 0.18), 0 0 0 1px rgba(10, 61, 61, 0.03)",
-                  y: isDesktop ? yCard : 0,
-                }}
-                initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: 1.3, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <div className="flex items-center gap-2.5 mb-2">
-                  <div className="w-2 h-2 rounded-full bg-[#1a8f7d] animate-pulse" />
-                  <span className="text-[11px] uppercase tracking-wider text-[#0a3d3d]/50 font-semibold">
-                    חיסכון שזוהה השבוע
-                  </span>
-                </div>
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-3xl font-extrabold text-[#0a3d3d] tabular-nums">
-                    ₪4,280
-                  </span>
-                  <span className="text-sm text-[#0a3d3d]/60">בשנה</span>
-                </div>
-                <div className="text-xs text-[#0a3d3d]/55">
-                  תיק לקוח קיים · ללא שינוי בכיסוי
-                </div>
-                {/* Animated bar */}
-                <div className="mt-3 h-1 bg-[#0a3d3d]/[0.06] rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full bg-gradient-to-l from-[#1a8f7d] to-[#6dd9d5] rounded-full"
-                    initial={{ width: 0 }}
-                    animate={{ width: "72%" }}
-                    transition={{ delay: 1.8, duration: 1.4, ease: "easeOut" }}
-                  />
-                </div>
-              </motion.div>
-
-              {/* Subtle sparkle dots */}
-              <motion.div
-                className="absolute top-[42%] right-[92%] w-2 h-2 rounded-full bg-[#6dd9d5]"
-                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 3, repeat: Infinity, delay: 0.8 }}
-              />
-              <motion.div
-                className="absolute top-[68%] right-[2%] w-2.5 h-2.5 rounded-full bg-[#f4a261]"
-                animate={{ scale: [1, 1.4, 1], opacity: [0.6, 1, 0.6] }}
-                transition={{ duration: 2.5, repeat: Infinity }}
-              />
             </div>
           </motion.div>
         </div>
 
-        {/* Trust bar */}
+        {/* Regulatory bar */}
         <motion.div
-          className="mt-16 sm:mt-24 pt-8 border-t border-[#0a3d3d]/[0.08]"
+          className="mt-14 sm:mt-20 pt-6 border-t border-[#0b1114]/[0.07] flex flex-wrap items-center justify-center gap-x-10 gap-y-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 0.8 }}
+          transition={{ delay: 1.2, duration: 0.8 }}
         >
-          <div className="flex flex-wrap items-center justify-center gap-x-8 sm:gap-x-12 gap-y-4">
-            {[
-              { text: "רישיון מטעם", highlight: "רשות שוק ההון", dotColor: "#1a8f7d" },
-              { text: "חברים ב", highlight: "לשכת סוכני הביטוח", dotColor: "#f4a261" },
-              { text: "מבית", highlight: "עמיתים הון", dotColor: "#e76f51" },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                className="flex items-center gap-2.5"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.5 + i * 0.1, duration: 0.5 }}
-              >
-                <span
-                  className="w-2.5 h-2.5 rounded-full"
-                  style={{ backgroundColor: item.dotColor }}
-                />
-                <span className="text-sm text-[#0a3d3d]/55 font-medium">
-                  {item.text}{" "}
-                  {item.highlight && (
-                    <span className="text-[#0a3d3d] font-bold">
-                      {item.highlight}
-                    </span>
-                  )}
-                </span>
-              </motion.div>
-            ))}
-          </div>
+          {[
+            "מורשים ומפוקחים · רשות שוק ההון",
+            "חברים בלשכת סוכני הביטוח",
+            "מבית עמיתים הון",
+          ].map((text) => (
+            <span key={text} className="text-[13px] text-[#0b1114]/40 font-medium">
+              {text}
+            </span>
+          ))}
         </motion.div>
       </div>
     </section>
