@@ -4,14 +4,14 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
-const INK = "#1a1a18";
-const BONE = "#f6f5f1";
-const PINE = "#1d2420";
-const BRONZE = "#9c8a63";
-const SERIF = "'Frank Ruhl Libre', 'Heebo', serif";
+const INK = "#171717";
+const BONE = "#fafafa";
+const PINE = "#171717";
+const BRONZE = "#6e6e6e";
+const SERIF = "'Heebo', sans-serif";
 
 const inputClass =
-  "w-full px-0 py-3.5 bg-transparent border-b border-[#1a1a18]/20 text-[#1a1a18] placeholder:text-[#1a1a18]/35 text-[15px] focus:outline-none focus:border-[#1a1a18] transition-colors min-h-[44px] rounded-none";
+  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
 
 const linkColumns: { title: string; links: { href: string; label: string }[] }[] = [
   {
@@ -97,18 +97,18 @@ const Footer = () => {
   return (
     <footer dir="rtl">
       {/* Contact band */}
-      <section style={{ backgroundColor: BONE }} className="border-t border-[#1a1a18]/10">
+      <section style={{ backgroundColor: BONE }} className="border-t border-[#171717]/10">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-14 lg:gap-24 items-start">
             {/* Form */}
             <div>
               <h2
-                className="text-[#1a1a18] mb-2"
-                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.7rem, 3vw, 2.3rem)" }}
+                className="text-[#171717] mb-2"
+                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.7rem, 3vw, 2.3rem)" }}
               >
                 נדבר?
               </h2>
-              <p className="text-[14px] text-[#1a1a18]/50 mb-9">
+              <p className="text-[14px] text-[#171717]/50 mb-9">
                 בלי ספאם. בלי טלפונים בשמונה בערב. שיחה אחת — ואתם מחליטים.
               </p>
 
@@ -145,7 +145,7 @@ const Footer = () => {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="inline-flex items-center justify-center px-9 py-4 bg-[#1a1a18] text-[#f6f5f1] text-[15px] font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
+                    className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
                   >
                     {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
                   </button>
@@ -155,24 +155,24 @@ const Footer = () => {
 
             {/* Contact details */}
             <div>
-              <div className="border-t border-[#1a1a18]/15">
+              <div className="border-t border-[#171717]/15">
                 {[
                   { label: "טלפון", value: "052-309-7444", href: "tel:0523097444", ltr: true },
                   { label: "אימייל", value: "info@seeld.co.il", href: "mailto:info@seeld.co.il", ltr: true },
                   { label: "משרדים", value: "רעננה · ירושלים" },
                 ].map((row) => (
-                  <div key={row.label} className="flex items-baseline justify-between py-[15px] border-b border-[#1a1a18]/10">
-                    <span className="text-[13px] text-[#1a1a18]/45">{row.label}</span>
+                  <div key={row.label} className="flex items-baseline justify-between py-[15px] border-b border-[#171717]/10">
+                    <span className="text-[13px] text-[#171717]/45">{row.label}</span>
                     {row.href ? (
                       <a
                         href={row.href}
-                        className="text-[15px] text-[#1a1a18] tabular-nums border-b border-transparent hover:border-[#1a1a18]/40 transition-colors"
+                        className="text-base text-[#171717] tabular-nums border-b border-transparent hover:border-[#171717]/40 transition-colors"
                         dir={row.ltr ? "ltr" : undefined}
                       >
                         {row.value}
                       </a>
                     ) : (
-                      <span className="text-[15px] text-[#1a1a18]">{row.value}</span>
+                      <span className="text-base text-[#171717]">{row.value}</span>
                     )}
                   </div>
                 ))}
@@ -185,16 +185,16 @@ const Footer = () => {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[13px] font-medium text-[#1a1a18]/50 hover:text-[#1a1a18] border-b border-transparent hover:border-[#1a1a18]/30 transition-colors"
+                    className="text-[13px] font-medium text-[#171717]/50 hover:text-[#171717] border-b border-transparent hover:border-[#171717]/30 transition-colors"
                   >
                     {social.label}
                   </a>
                 ))}
               </div>
 
-              <div className="mt-9 pt-6 border-t border-[#1a1a18]/10 flex flex-wrap gap-x-6 gap-y-2">
-                <Link to="/about" className="text-[13px] text-[#1a1a18]/50 hover:text-[#1a1a18] transition-colors">הסיפור שלנו</Link>
-                <Link to="/faq" className="text-[13px] text-[#1a1a18]/50 hover:text-[#1a1a18] transition-colors">שאלות נפוצות</Link>
+              <div className="mt-9 pt-6 border-t border-[#171717]/10 flex flex-wrap gap-x-6 gap-y-2">
+                <Link to="/about" className="text-[13px] text-[#171717]/50 hover:text-[#171717] transition-colors">הסיפור שלנו</Link>
+                <Link to="/faq" className="text-[13px] text-[#171717]/50 hover:text-[#171717] transition-colors">שאלות נפוצות</Link>
               </div>
             </div>
           </div>
@@ -202,12 +202,12 @@ const Footer = () => {
       </section>
 
       {/* Main footer */}
-      <div style={{ backgroundColor: PINE }} className="text-[#f6f5f1]">
+      <div style={{ backgroundColor: PINE }} className="text-[#fafafa]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
           {/* Wordmark + regulatory line */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-10 mb-10 border-b border-white/10">
             <div>
-              <div dir="ltr" className="text-right" style={{ fontFamily: SERIF, fontWeight: 500, fontSize: "2rem" }}>
+              <div dir="ltr" className="text-right" style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "2rem" }}>
                 SEELD<span style={{ color: BRONZE }}>.</span>
               </div>
               <div className="text-[11px] tracking-[0.22em] text-white/40 mt-1.5">בית פיננסים פרטי</div>
@@ -226,7 +226,7 @@ const Footer = () => {
                 <h3 className="text-[12px] tracking-[0.18em] font-medium mb-5" style={{ color: BRONZE }}>
                   {col.title}
                 </h3>
-                <ul className="space-y-2.5 text-[13.5px] text-white/50">
+                <ul className="space-y-2.5 text-[14px] text-white/50">
                   {col.links.map((l) => (
                     <li key={l.href + l.label}>
                       <Link to={l.href} className="hover:text-white transition-colors">
@@ -242,7 +242,7 @@ const Footer = () => {
               <h3 className="text-[12px] tracking-[0.18em] font-medium mb-5" style={{ color: BRONZE }}>
                 צור קשר
               </h3>
-              <ul className="space-y-2.5 text-[13.5px] text-white/50">
+              <ul className="space-y-2.5 text-[14px] text-white/50">
                 <li>
                   <a href="tel:0523097444" className="hover:text-white transition-colors tabular-nums" dir="ltr">
                     052-309-7444

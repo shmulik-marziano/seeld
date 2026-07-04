@@ -9,7 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { BONE, BRONZE, SERIF } from "@/lib/brand";
 
 const inputClass =
-  "w-full px-0 py-3.5 bg-transparent border-b border-[#1a1a18]/20 text-[#1a1a18] placeholder:text-[#1a1a18]/35 text-[15px] focus:outline-none focus:border-[#1a1a18] transition-colors min-h-[44px] rounded-none";
+  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -77,11 +77,11 @@ const Contact = () => {
       <section style={{ backgroundColor: BONE }}>
         <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
           {/* Rule + breadcrumb */}
-          <div className="border-t border-[#1a1a18]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#1a1a18]/40">
-              <Link to="/" className="hover:text-[#1a1a18] transition-colors">דף הבית</Link>
+          <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
+            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+              <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
-              <span className="text-[#1a1a18]/70 font-medium">צור קשר</span>
+              <span className="text-[#171717]/70 font-medium">צור קשר</span>
             </nav>
             <span className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
               צור קשר
@@ -89,12 +89,12 @@ const Contact = () => {
           </div>
 
           <h1
-            className="text-[#1a1a18] leading-[1.15] mb-6 max-w-3xl"
-            style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
+            className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
+            style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
           >
             צרו קשר
           </h1>
-          <p className="text-[15px] sm:text-[17px] text-[#1a1a18]/55 max-w-2xl leading-[1.9]">
+          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9]">
             רוצים לקבל הצעת מחיר? יש לכם שאלה בנושא ביטוח או חיסכון? נשמח לעזור.
           </p>
         </div>
@@ -105,13 +105,13 @@ const Contact = () => {
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-14 lg:gap-24">
             {/* Contact Form */}
             <div>
-              <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+              <div className="border-t border-[#171717]/20 pt-5 mb-10">
                 <div className="text-[11px] tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
                   01
                 </div>
                 <h2
-                  className="text-[#1a1a18] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+                  className="text-[#171717] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
                 >
                   השאירו פרטים
                 </h2>
@@ -166,7 +166,7 @@ const Contact = () => {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#1a1a18]/20 text-[#1a1a18] text-[15px] focus:outline-none focus:border-[#1a1a18] transition-colors appearance-none cursor-pointer min-h-[44px] rounded-none"
+                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] text-base focus:outline-none focus:border-[#171717] transition-colors appearance-none cursor-pointer min-h-[44px] rounded-none"
                   >
                     <option value="">בחרו נושא</option>
                     <option value="pension">תכנון פנסיוני</option>
@@ -185,7 +185,7 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleChange}
                     rows={4}
-                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#1a1a18]/20 text-[#1a1a18] placeholder:text-[#1a1a18]/35 text-[15px] focus:outline-none focus:border-[#1a1a18] transition-colors resize-none rounded-none"
+                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors resize-none rounded-none"
                     placeholder="ספרו לנו במה נוכל לעזור..."
                   />
                 </div>
@@ -193,7 +193,7 @@ const Contact = () => {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="inline-flex items-center justify-center px-9 py-4 bg-[#1a1a18] text-[#f6f5f1] text-[15px] font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
+                    className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
                   >
                     {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
                   </button>
@@ -203,84 +203,84 @@ const Contact = () => {
 
             {/* Contact Information */}
             <div>
-              <div className="border-t border-[#1a1a18]/20 pt-5 mb-8">
+              <div className="border-t border-[#171717]/20 pt-5 mb-8">
                 <div className="text-[11px] tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
                   02
                 </div>
                 <h2
-                  className="text-[#1a1a18] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+                  className="text-[#171717] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
                 >
                   דרכי התקשרות
                 </h2>
               </div>
 
               <div>
-                <div className="py-[15px] border-b border-[#1a1a18]/10">
+                <div className="py-[15px] border-b border-[#171717]/10">
                   <div className="flex items-baseline justify-between">
-                    <span className="text-[13px] text-[#1a1a18]/45">טלפון</span>
+                    <span className="text-[13px] text-[#171717]/45">טלפון</span>
                     <a
                       href="tel:0523097444"
-                      className="text-[15px] text-[#1a1a18] tabular-nums border-b border-transparent hover:border-[#1a1a18]/40 transition-colors"
+                      className="text-base text-[#171717] tabular-nums border-b border-transparent hover:border-[#171717]/40 transition-colors"
                       dir="ltr"
                     >
                       052-309-7444
                     </a>
                   </div>
-                  <p className="text-[12px] text-[#1a1a18]/35 mt-1 text-left">א'-ה', 9:00-18:00</p>
+                  <p className="text-[12px] text-[#171717]/35 mt-1 text-left">א'-ה', 9:00-18:00</p>
                 </div>
-                <div className="py-[15px] border-b border-[#1a1a18]/10">
+                <div className="py-[15px] border-b border-[#171717]/10">
                   <div className="flex items-baseline justify-between">
-                    <span className="text-[13px] text-[#1a1a18]/45">אימייל</span>
+                    <span className="text-[13px] text-[#171717]/45">אימייל</span>
                     <a
                       href="mailto:info@seeld-ins.co.il"
-                      className="text-[15px] text-[#1a1a18] border-b border-transparent hover:border-[#1a1a18]/40 transition-colors"
+                      className="text-base text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
                       dir="ltr"
                     >
                       info@seeld-ins.co.il
                     </a>
                   </div>
-                  <p className="text-[12px] text-[#1a1a18]/35 mt-1 text-left">נענה תוך יום עסקים</p>
+                  <p className="text-[12px] text-[#171717]/35 mt-1 text-left">נענה תוך יום עסקים</p>
                 </div>
-                <div className="py-[15px] border-b border-[#1a1a18]/10">
+                <div className="py-[15px] border-b border-[#171717]/10">
                   <div className="flex items-baseline justify-between gap-6">
-                    <span className="text-[13px] text-[#1a1a18]/45 shrink-0">משרדים</span>
+                    <span className="text-[13px] text-[#171717]/45 shrink-0">משרדים</span>
                     <div className="text-left">
-                      <p className="text-[15px] text-[#1a1a18]">המלאכה 10, רעננה</p>
-                      <p className="text-[15px] text-[#1a1a18]">הסדנא 4, ירושלים</p>
+                      <p className="text-base text-[#171717]">המלאכה 10, רעננה</p>
+                      <p className="text-base text-[#171717]">הסדנא 4, ירושלים</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="mt-12">
-                <div className="border-t border-[#1a1a18]/20 pt-5 mb-8">
+                <div className="border-t border-[#171717]/20 pt-5 mb-8">
                   <div className="text-[11px] tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
                     03
                   </div>
                   <h3
-                    className="text-[#1a1a18] leading-tight"
-                    style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+                    className="text-[#171717] leading-tight"
+                    style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
                   >
                     שאלות נפוצות
                   </h3>
                 </div>
                 <div>
-                  <div className="border-t border-[#1a1a18]/10 pt-4 pb-6">
-                    <h4 className="text-[15px] font-medium text-[#1a1a18] mb-1.5">האם הייעוץ כרוך בתשלום?</h4>
-                    <p className="text-[13px] text-[#1a1a18]/50 leading-[1.85]">
+                  <div className="border-t border-[#171717]/10 pt-4 pb-6">
+                    <h4 className="text-base font-medium text-[#171717] mb-1.5">האם הייעוץ כרוך בתשלום?</h4>
+                    <p className="text-[13px] text-[#171717]/50 leading-[1.85]">
                       פגישת הייעוץ הראשונית ללא עלות וללא התחייבות. נשמח להכיר אתכם ולהבין את הצרכים שלכם.
                     </p>
                   </div>
-                  <div className="border-t border-[#1a1a18]/10 pt-4 pb-6">
-                    <h4 className="text-[15px] font-medium text-[#1a1a18] mb-1.5">כמה זמן לוקח לקבל הצעת מחיר?</h4>
-                    <p className="text-[13px] text-[#1a1a18]/50 leading-[1.85]">
+                  <div className="border-t border-[#171717]/10 pt-4 pb-6">
+                    <h4 className="text-base font-medium text-[#171717] mb-1.5">כמה זמן לוקח לקבל הצעת מחיר?</h4>
+                    <p className="text-[13px] text-[#171717]/50 leading-[1.85]">
                       אנחנו מחזירים הצעות מחיר תוך 24-48 שעות לאחר פגישת הייעוץ או שיחה טלפונית.
                     </p>
                   </div>
-                  <div className="border-t border-[#1a1a18]/10 pt-4 pb-6">
-                    <h4 className="text-[15px] font-medium text-[#1a1a18] mb-1.5">עם אילו חברות ביטוח אתם עובדים?</h4>
-                    <p className="text-[13px] text-[#1a1a18]/50 leading-[1.85]">
+                  <div className="border-t border-[#171717]/10 pt-4 pb-6">
+                    <h4 className="text-base font-medium text-[#171717] mb-1.5">עם אילו חברות ביטוח אתם עובדים?</h4>
+                    <p className="text-[13px] text-[#171717]/50 leading-[1.85]">
                       אנחנו עובדים עם כל חברות הביטוח בישראל ומשווים עבורכם את כל האפשרויות בשוק.
                     </p>
                   </div>

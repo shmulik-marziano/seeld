@@ -1,0 +1,49 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "seeld": {
+    "color": {
+      "primitive": {
+        "grey-900": { "$type": "color", "$value": "#171717" },
+        "grey-600": { "$type": "color", "$value": "#4d4d4d" },
+        "grey-500": { "$type": "color", "$value": "#5c5c5c" },
+        "grey-400": { "$type": "color", "$value": "#6e6e6e" },
+        "grey-100": { "$type": "color", "$value": "#ebebeb" },
+        "grey-50": { "$type": "color", "$value": "#fafafa" },
+        "white": { "$type": "color", "$value": "#ffffff" },
+        "chip-orange": { "$type": "color", "$value": "#e8890c" },
+        "chip-green": { "$type": "color", "$value": "#1f9d55" },
+        "chip-yellow": { "$type": "color", "$value": "#d9a400" }
+      },
+      "semantic": {
+        "text-primary": { "$type": "color", "$value": "{seeld.color.primitive.grey-900}" },
+        "text-body": { "$type": "color", "$value": "{seeld.color.primitive.grey-600}" },
+        "text-muted": { "$type": "color", "$value": "{seeld.color.primitive.grey-500}" },
+        "text-caption": { "$type": "color", "$value": "{seeld.color.primitive.grey-400}" },
+        "surface-page": { "$type": "color", "$value": "{seeld.color.primitive.white}" },
+        "surface-tint": { "$type": "color", "$value": "{seeld.color.primitive.grey-50}" },
+        "surface-inverse": { "$type": "color", "$value": "{seeld.color.primitive.grey-900}" },
+        "border-hairline": { "$type": "color", "$value": "{seeld.color.primitive.grey-100}" },
+        "live-person-1": { "$type": "color", "$value": "{seeld.color.primitive.chip-orange}" },
+        "live-person-2": { "$type": "color", "$value": "{seeld.color.primitive.chip-green}" },
+        "live-person-3": { "$type": "color", "$value": "{seeld.color.primitive.chip-yellow}" }
+      }
+    },
+    "font": {
+      "family-ui": { "$type": "fontFamily", "$value": ["Heebo", "sans-serif"] },
+      "family-mono": { "$type": "fontFamily", "$value": ["Geist Mono", "ui-monospace", "monospace"] }
+    },
+    "radius": {
+      "control": { "$type": "dimension", "$value": "6px" },
+      "card": { "$type": "dimension", "$value": "8px" },
+      "chip": { "$type": "dimension", "$value": "9999px" }
+    },
+    "shadow": {
+      "ring": { "$type": "shadow", "$value": { "color": "rgba(0,0,0,0.08)", "offsetX": "0px", "offsetY": "0px", "blur": "0px", "spread": "1px" } }
+    },
+    "motion": {
+      "seed": { "$type": "string", "$value": "snap" },
+      "duration-fast": { "$type": "duration", "$value": "150ms" },
+      "duration-base": { "$type": "duration", "$value": "250ms" }
+    }
+  }
+}

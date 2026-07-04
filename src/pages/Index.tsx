@@ -12,11 +12,11 @@ import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
 // ── Design tokens: architectural monochrome ──
-const INK = "#1a1a18";
-const BONE = "#f6f5f1";
-const PINE = "#1d2420";
-const BRONZE = "#9c8a63";
-const SERIF = "'Frank Ruhl Libre', 'Heebo', serif";
+const INK = "#171717";
+const BONE = "#fafafa";
+const PINE = "#171717";
+const BRONZE = "#6e6e6e";
+const SERIF = "'Heebo', sans-serif";
 
 // ── Data ──
 
@@ -144,20 +144,20 @@ const leadSubjects = [
 // ── Shared UI ──
 
 const SectionHead = ({ index, title, lede }: { index: string; title: string; lede?: string }) => (
-  <div className="border-t border-[#1a1a18]/20 pt-6 mb-12 sm:mb-16">
+  <div className="border-t border-[#171717]/20 pt-6 mb-12 sm:mb-16">
     <div className="flex items-baseline gap-6 sm:gap-10">
       <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: BRONZE }}>
         {index}
       </span>
       <div>
         <h2
-          className="text-[#1a1a18] leading-tight"
-          style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}
+          className="text-[#171717] leading-tight"
+          style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}
         >
           {title}
         </h2>
         {lede && (
-          <p className="mt-3 text-[15px] text-[#1a1a18]/50 leading-[1.85] max-w-xl">{lede}</p>
+          <p className="mt-3 text-base text-[#171717]/50 leading-[1.85] max-w-xl">{lede}</p>
         )}
       </div>
     </div>
@@ -170,13 +170,13 @@ const ProductList = ({ items }: { items: { title: string; description: string; h
       <Link
         key={item.title + item.href}
         to={item.href}
-        className="group flex items-baseline justify-between gap-6 py-[14px] border-b border-[#1a1a18]/10 hover:border-[#1a1a18]/40 transition-colors"
+        className="group flex items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10 hover:border-[#171717]/40 transition-colors"
       >
         <div className="flex items-baseline gap-4 min-w-0">
-          <h3 className="text-[15px] font-medium text-[#1a1a18] whitespace-nowrap">{item.title}</h3>
-          <p className="text-[13px] text-[#1a1a18]/40 truncate hidden sm:block">{item.description}</p>
+          <h3 className="text-base font-medium text-[#171717] whitespace-nowrap">{item.title}</h3>
+          <p className="text-[13px] text-[#171717]/40 truncate hidden sm:block">{item.description}</p>
         </div>
-        <span className="text-[#1a1a18]/30 group-hover:text-[#1a1a18] transition-all group-hover:-translate-x-1 shrink-0">
+        <span className="text-[#171717]/30 group-hover:text-[#171717] transition-all group-hover:-translate-x-1 shrink-0">
           ←
         </span>
       </Link>
@@ -185,7 +185,7 @@ const ProductList = ({ items }: { items: { title: string; description: string; h
 );
 
 const inputClass =
-  "w-full px-0 py-3.5 bg-transparent border-b border-[#1a1a18]/20 text-[#1a1a18] placeholder:text-[#1a1a18]/35 text-[15px] focus:outline-none focus:border-[#1a1a18] transition-colors min-h-[44px] rounded-none";
+  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
 
 const Index = () => {
   const [leadForm, setLeadForm] = useState({ name: "", phone: "", subject: "" });
@@ -308,7 +308,7 @@ const Index = () => {
                   <select
                     value={leadForm.subject}
                     onChange={(e) => setLeadForm(prev => ({ ...prev, subject: e.target.value }))}
-                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#1a1a18]/20 text-[#1a1a18] text-[15px] focus:outline-none focus:border-[#1a1a18] transition-colors appearance-none cursor-pointer min-h-[44px] rounded-none"
+                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] text-base focus:outline-none focus:border-[#171717] transition-colors appearance-none cursor-pointer min-h-[44px] rounded-none"
                   >
                     <option value="">נושא הפנייה</option>
                     {leadSubjects.map((s) => (
@@ -320,19 +320,19 @@ const Index = () => {
                   <button
                     type="submit"
                     disabled={leadSubmitting}
-                    className="inline-flex items-center justify-center px-9 py-4 bg-[#1a1a18] text-[#f6f5f1] text-[15px] font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[180px]"
+                    className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[180px]"
                   >
                     {leadSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו ונתחיל"}
                   </button>
-                  <span className="text-[13px] text-[#1a1a18]/40">
+                  <span className="text-[13px] text-[#171717]/40">
                     או חייגו{" "}
-                    <a href="tel:0523097444" className="text-[#1a1a18] border-b border-[#1a1a18]/25 hover:border-[#1a1a18] transition-colors tabular-nums" dir="ltr">
+                    <a href="tel:0523097444" className="text-[#171717] border-b border-[#171717]/25 hover:border-[#171717] transition-colors tabular-nums" dir="ltr">
                       052-309-7444
                     </a>
                   </span>
                 </div>
                 <div className="mt-6">
-                  <span className="text-[12px] text-[#1a1a18]/35">שתי דקות למלא. אפס אותיות קטנות.</span>
+                  <span className="text-[12px] text-[#171717]/35">שתי דקות למלא. אפס אותיות קטנות.</span>
                 </div>
               </form>
             </ScrollReveal>
@@ -353,17 +353,17 @@ const Index = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
               {whySeeld.map((item, i) => (
                 <ScrollReveal key={item.title} delay={i * 80}>
-                  <div className="border-t border-[#1a1a18]/15 pt-5 h-full">
+                  <div className="border-t border-[#171717]/15 pt-5 h-full">
                     <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <h3
-                      className="text-lg text-[#1a1a18] mb-3"
-                      style={{ fontFamily: SERIF, fontWeight: 500 }}
+                      className="text-lg text-[#171717] mb-3"
+                      style={{ fontFamily: SERIF, fontWeight: 600 }}
                     >
                       {item.title}
                     </h3>
-                    <p className="text-[13.5px] text-[#1a1a18]/50 leading-[1.8]">{item.description}</p>
+                    <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{item.description}</p>
                   </div>
                 </ScrollReveal>
               ))}
@@ -383,16 +383,16 @@ const Index = () => {
             </ScrollReveal>
 
             <Tabs defaultValue="insurance" dir="rtl">
-              <TabsList className="flex w-full justify-start gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#1a1a18]/10 rounded-none">
+              <TabsList className="flex w-full justify-start gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none">
                 <TabsTrigger
                   value="insurance"
-                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#1a1a18]/40 border-b-2 border-transparent data-[state=active]:border-[#1a1a18] data-[state=active]:text-[#1a1a18] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
+                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
                 >
                   ביטוח
                 </TabsTrigger>
                 <TabsTrigger
                   value="savings"
-                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#1a1a18]/40 border-b-2 border-transparent data-[state=active]:border-[#1a1a18] data-[state=active]:text-[#1a1a18] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
+                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
                 >
                   חיסכון ופנסיה
                 </TabsTrigger>
@@ -403,7 +403,7 @@ const Index = () => {
                 <div className="mt-10">
                   <Link
                     to="/insurances"
-                    className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#1a1a18] border-b border-[#1a1a18]/25 pb-0.5 hover:border-[#1a1a18] transition-colors"
+                    className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
                   >
                     לכל הביטוחים
                     <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -416,7 +416,7 @@ const Index = () => {
                 <div className="mt-10">
                   <Link
                     to="/savings"
-                    className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#1a1a18] border-b border-[#1a1a18]/25 pb-0.5 hover:border-[#1a1a18] transition-colors"
+                    className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
                   >
                     לכל מוצרי החיסכון והפנסיה
                     <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -438,12 +438,12 @@ const Index = () => {
                   </span>
                   <div>
                     <h2
-                      className="text-[#f6f5f1] leading-tight"
-                      style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}
+                      className="text-[#fafafa] leading-tight"
+                      style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}
                     >
                       הפלטפורמה
                     </h2>
-                    <p className="mt-3 text-[15px] text-[#f6f5f1]/45 leading-[1.85] max-w-xl">
+                    <p className="mt-3 text-base text-[#fafafa]/45 leading-[1.85] max-w-xl">
                       הכלים שהצוות שלנו עובד איתם, פתוחים גם לכם. נתונים בזמן אמת, שקיפות מלאה, זמינות מסביב לשעון.
                     </p>
                   </div>
@@ -456,12 +456,12 @@ const Index = () => {
                 const inner = (
                   <div className="border-t border-white/10 group-hover:border-white/40 transition-colors pt-5 pb-7 h-full text-start">
                     <div className="flex items-baseline justify-between gap-4 mb-2.5">
-                      <h3 className="text-[17px] text-[#f6f5f1]" style={{ fontFamily: SERIF, fontWeight: 500 }}>
+                      <h3 className="text-[17px] text-[#fafafa]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                         {item.title}
                       </h3>
-                      <span className="text-[#f6f5f1]/25 group-hover:text-[#f6f5f1] transition-all group-hover:-translate-x-1">←</span>
+                      <span className="text-[#fafafa]/25 group-hover:text-[#fafafa] transition-all group-hover:-translate-x-1">←</span>
                     </div>
-                    <p className="text-[13.5px] text-[#f6f5f1]/40 leading-[1.8]">{item.description}</p>
+                    <p className="text-[14px] text-[#fafafa]/40 leading-[1.8]">{item.description}</p>
                   </div>
                 );
                 return item.href ? (
@@ -480,7 +480,7 @@ const Index = () => {
                 );
               })}
             </div>
-            <p className="mt-10 text-[12px] text-[#f6f5f1]/30">
+            <p className="mt-10 text-[12px] text-[#fafafa]/30">
               היועץ האנושי ישן בלילה. ה‑AI לא.
             </p>
           </div>
@@ -490,7 +490,7 @@ const Index = () => {
         <section style={{ backgroundColor: BONE }}>
           <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 border-t border-b border-[#1a1a18]/15 py-10 sm:py-14">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 border-t border-b border-[#171717]/15 py-10 sm:py-14">
                 {[
                   { number: "600+", label: "משפחות מלוות" },
                   { number: "12", label: "חברות בהשוואה" },
@@ -499,16 +499,17 @@ const Index = () => {
                 ].map((stat) => (
                   <div key={stat.label} className="text-center">
                     <div
-                      className="text-[#1a1a18] tabular-nums mb-2"
-                      style={{ fontFamily: SERIF, fontWeight: 300, fontSize: "clamp(2.6rem, 5vw, 4rem)" }}
+                      className="text-[#171717] tabular-nums mb-2"
+                      dir="ltr"
+                      style={{ fontFamily: "'Geist Mono', ui-monospace, monospace", fontWeight: 600, fontSize: "clamp(2.4rem, 4.5vw, 3.6rem)", letterSpacing: "-0.02em" }}
                     >
                       {stat.number}
                     </div>
-                    <div className="text-[12px] tracking-[0.12em] text-[#1a1a18]/45">{stat.label}</div>
+                    <div className="text-[12px] tracking-[0.12em] text-[#171717]/45">{stat.label}</div>
                   </div>
                 ))}
               </div>
-              <p className="mt-5 text-center text-[12px] text-[#1a1a18]/35">
+              <p className="mt-5 text-center text-[12px] text-[#171717]/35">
                 אנחנו לא צועקים. המספרים עושים את זה בשבילנו.
               </p>
             </ScrollReveal>
@@ -524,10 +525,10 @@ const Index = () => {
 
             <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-14 lg:gap-24">
               <ScrollReveal>
-                <div className="space-y-6 text-[#1a1a18]/65 text-base sm:text-[17px] leading-[1.95]">
+                <div className="space-y-6 text-[#171717]/65 text-base sm:text-[17px] leading-[1.95]">
                   <p
-                    className="text-[#1a1a18] text-xl sm:text-2xl leading-[1.6]"
-                    style={{ fontFamily: SERIF, fontWeight: 400 }}
+                    className="text-[#171717] text-xl sm:text-2xl leading-[1.6]"
+                    style={{ fontFamily: SERIF, fontWeight: 600 }}
                   >
                     SEELD נבנתה סביב עקרון אחד פשוט: להעמיד את הלקוח מעל כל שיקול אחר.
                   </p>
@@ -543,13 +544,13 @@ const Index = () => {
                   <div className="pt-4 flex flex-wrap items-center gap-6">
                     <Link
                       to="/contact"
-                      className="inline-flex items-center justify-center px-9 py-4 bg-[#1a1a18] text-[#f6f5f1] text-[15px] font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
+                      className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
                     >
                       קביעת פגישת ייעוץ
                     </Link>
                     <Link
                       to="/about"
-                      className="group inline-flex items-center gap-2 text-[15px] font-medium text-[#1a1a18] border-b border-[#1a1a18]/25 pb-0.5 hover:border-[#1a1a18] transition-colors"
+                      className="group inline-flex items-center gap-2 text-base font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
                     >
                       הכירו את הצוות
                       <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -559,11 +560,11 @@ const Index = () => {
               </ScrollReveal>
 
               <ScrollReveal delay={100}>
-                <div className="border-t border-[#1a1a18]/15">
+                <div className="border-t border-[#171717]/15">
                   {trustList.map((point) => (
-                    <div key={point.title} className="py-5 border-b border-[#1a1a18]/10">
-                      <h3 className="text-[15px] font-medium text-[#1a1a18] mb-1.5">{point.title}</h3>
-                      <p className="text-[13px] text-[#1a1a18]/45 leading-relaxed">{point.description}</p>
+                    <div key={point.title} className="py-5 border-b border-[#171717]/10">
+                      <h3 className="text-base font-medium text-[#171717] mb-1.5">{point.title}</h3>
+                      <p className="text-[13px] text-[#171717]/45 leading-relaxed">{point.description}</p>
                     </div>
                   ))}
                 </div>
@@ -586,17 +587,17 @@ const Index = () => {
             <div className="max-w-3xl">
               {processSteps.map((step, i) => (
                 <ScrollReveal key={step.number} delay={i * 60}>
-                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-10 py-6 border-b border-[#1a1a18]/10">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-10 py-6 border-b border-[#171717]/10">
                     <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0 w-8" style={{ color: BRONZE }}>
                       {step.number}
                     </span>
                     <h3
-                      className="text-lg text-[#1a1a18] shrink-0 sm:w-44"
-                      style={{ fontFamily: SERIF, fontWeight: 500 }}
+                      className="text-lg text-[#171717] shrink-0 sm:w-44"
+                      style={{ fontFamily: SERIF, fontWeight: 600 }}
                     >
                       {step.title}
                     </h3>
-                    <p className="text-[14px] text-[#1a1a18]/50 leading-[1.8]">{step.description}</p>
+                    <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{step.description}</p>
                   </div>
                 </ScrollReveal>
               ))}
@@ -630,12 +631,12 @@ const Index = () => {
                   <AccordionItem
                     key={i}
                     value={`faq-${i}`}
-                    className="border-b border-[#1a1a18]/10 rounded-none px-0"
+                    className="border-b border-[#171717]/10 rounded-none px-0"
                   >
-                    <AccordionTrigger className="text-[15px] sm:text-base font-medium hover:no-underline py-5 text-[#1a1a18] text-start">
+                    <AccordionTrigger className="text-base sm:text-base font-medium hover:no-underline py-5 text-[#171717] text-start">
                       {item.question}
                     </AccordionTrigger>
-                    <AccordionContent className="text-[14px] text-[#1a1a18]/50 leading-[1.85] pb-6 max-w-2xl">
+                    <AccordionContent className="text-[14px] text-[#171717]/50 leading-[1.85] pb-6 max-w-2xl">
                       {item.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -645,7 +646,7 @@ const Index = () => {
               <div className="mt-10">
                 <Link
                   to="/faq"
-                  className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#1a1a18] border-b border-[#1a1a18]/25 pb-0.5 hover:border-[#1a1a18] transition-colors"
+                  className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
                 >
                   לכל השאלות הנפוצות
                   <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -699,12 +700,12 @@ const Index = () => {
                     rows={3}
                     value={contactForm.message}
                     onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}
-                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#1a1a18]/20 text-[#1a1a18] text-[15px] placeholder:text-[#1a1a18]/35 focus:outline-none focus:border-[#1a1a18] transition-colors resize-none rounded-none"
+                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] text-base placeholder:text-[#171717]/35 focus:outline-none focus:border-[#171717] transition-colors resize-none rounded-none"
                   />
                   <button
                     type="submit"
                     disabled={contactSubmitting}
-                    className="inline-flex items-center justify-center px-9 py-4 bg-[#1a1a18] text-[#f6f5f1] text-[15px] font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
+                    className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
                   >
                     {contactSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שליחה"}
                   </button>
@@ -712,35 +713,35 @@ const Index = () => {
               </ScrollReveal>
 
               <ScrollReveal delay={100}>
-                <div className="border-t border-[#1a1a18]/15">
+                <div className="border-t border-[#171717]/15">
                   {[
                     { label: "טלפון", value: "052-309-7444", href: "tel:0523097444", ltr: true },
                     { label: "WhatsApp", value: "שלחו הודעה", href: "https://wa.me/972523097444" },
                     { label: "אימייל", value: "info@seeld.co.il", href: "mailto:info@seeld.co.il", ltr: true },
                     { label: "משרדים", value: "רעננה · ירושלים" },
                   ].map((row) => (
-                    <div key={row.label} className="flex items-baseline justify-between py-[15px] border-b border-[#1a1a18]/10">
-                      <span className="text-[13px] text-[#1a1a18]/45">{row.label}</span>
+                    <div key={row.label} className="flex items-baseline justify-between py-[15px] border-b border-[#171717]/10">
+                      <span className="text-[13px] text-[#171717]/45">{row.label}</span>
                       {row.href ? (
                         <a
                           href={row.href}
                           target={row.href.startsWith("http") ? "_blank" : undefined}
                           rel={row.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                          className="text-[15px] text-[#1a1a18] tabular-nums border-b border-transparent hover:border-[#1a1a18]/40 transition-colors"
+                          className="text-base text-[#171717] tabular-nums border-b border-transparent hover:border-[#171717]/40 transition-colors"
                           dir={row.ltr ? "ltr" : undefined}
                         >
                           {row.value}
                         </a>
                       ) : (
-                        <span className="text-[15px] text-[#1a1a18] tabular-nums">{row.value}</span>
+                        <span className="text-base text-[#171717] tabular-nums">{row.value}</span>
                       )}
                     </div>
                   ))}
                   <div className="flex items-baseline justify-between py-[15px]">
-                    <span className="text-[13px] text-[#1a1a18]/45">סוכן ביטוח?</span>
+                    <span className="text-[13px] text-[#171717]/45">סוכן ביטוח?</span>
                     <Link
                       to="/app/auth"
-                      className="text-[15px] text-[#1a1a18] border-b border-transparent hover:border-[#1a1a18]/40 transition-colors"
+                      className="text-base text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
                     >
                       כניסה לפורטל הסוכנים ←
                     </Link>
