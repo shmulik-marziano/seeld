@@ -1,58 +1,57 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { ChevronLeft, Eye, Award, ShieldCheck, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+import { BONE, PINE, BRONZE, SERIF } from "@/lib/brand";
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
       <Header />
 
-      {/* Hero Banner - Bold design with solid circles */}
-      <section className="bg-[#f8f9fc] relative overflow-hidden">
-        {/* Solid colored circles */}
-        <div className="absolute top-[10%] left-[5%] w-[100px] h-[100px] rounded-full bg-[#5ec6c6]" />
-        <div className="absolute bottom-[15%] right-[8%] w-[70px] h-[70px] rounded-full bg-[#f4a261]" />
-        <div className="absolute top-[60%] left-[20%] w-[40px] h-[40px] rounded-full bg-[#e76f51]" />
-        <div className="absolute top-[20%] right-[15%] w-[30px] h-[30px] rounded-full bg-[#90be6d]" />
+      {/* ══════ HERO ══════ */}
+      <section style={{ backgroundColor: BONE }}>
+        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
+          {/* Rule + breadcrumb */}
+          <div className="border-t border-[#1a1a18]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
+            <nav className="flex items-center gap-2 text-[12px] text-[#1a1a18]/40">
+              <Link to="/" className="hover:text-[#1a1a18] transition-colors">דף הבית</Link>
+              <span>←</span>
+              <span className="text-[#1a1a18]/70 font-medium">אודות</span>
+            </nav>
+            <span className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
+              הבית
+            </span>
+          </div>
 
-        {/* Dashed curved line with arrow */}
-        <div className="absolute top-10 right-[10%] hidden lg:block">
-          <svg width="180" height="120" viewBox="0 0 180 120" fill="none">
-            <path d="M10 100 C 50 20, 130 20, 170 60" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.15" />
-            <polygon points="170,60 162,52 166,64" fill="#0a3d3d" opacity="0.15" />
-          </svg>
-        </div>
-
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20 sm:py-28 relative">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
-            אודות <span className="text-[#5ec6c6]">SEELD</span>
+          <h1
+            className="text-[#1a1a18] leading-[1.15] mb-6 max-w-3xl"
+            style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
+          >
+            אודות SEELD
           </h1>
-          <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
+          <p className="text-[15px] sm:text-[17px] text-[#1a1a18]/55 max-w-2xl leading-[1.9]">
             SEELD — ביטוח, חיסכון ופנסיה. הכל שקוף, הכל מוסבר, הכל בגובה העיניים.
           </p>
         </div>
       </section>
 
-      {/* Breadcrumb */}
-      <div className="border-b border-gray-100">
-        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
-          <ChevronLeft className="w-3.5 h-3.5" />
-          <span className="text-[#0a3d3d] font-medium">אודות</span>
-        </nav>
-      </div>
-
       <main>
-        {/* Story Section */}
-        <section className="py-10 sm:py-16">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="max-w-3xl relative">
-              <div className="absolute top-0 left-0 w-6 h-6 rounded-full bg-[#5ec6c6] hidden sm:block" />
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0a3d3d] mb-6">
-                הסיפור <span className="text-[#5ec6c6]">שלנו</span>
-              </h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed text-base sm:text-lg">
+        {/* ══════ STORY ══════ */}
+        <section className="bg-white">
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+            <div className="max-w-3xl">
+              <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+                <div className="text-[11px] tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
+                  01
+                </div>
+                <h2
+                  className="text-[#1a1a18] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+                >
+                  הסיפור שלנו
+                </h2>
+              </div>
+              <div className="space-y-4 text-[#1a1a18]/55 leading-[1.85] text-[15px] sm:text-base">
                 <p>
                   SEELD היא סוכנות ביטוח, חיסכון ופנסיה. הקמנו אותה מתוך אמונה שייעוץ פיננסי טוב צריך להיות נגיש לכולם — לא רק למי שמבין את השפה המקצועית.
                 </p>
@@ -67,66 +66,72 @@ const About = () => {
           </div>
         </section>
 
-        {/* Numbers Section */}
-        <section className="py-10 sm:py-14">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* ══════ NUMBERS ══════ */}
+        <section style={{ backgroundColor: BONE }}>
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 border-t border-b border-[#1a1a18]/15 py-10 sm:py-14">
               {[
-                { number: "12+", label: "חברות ביטוח ובתי השקעות", color: "#5ec6c6" },
-                { number: "100%", label: "שקיפות מול הלקוח", color: "#f4a261" },
-                { number: "24/7", label: "פורטל אישי זמין", color: "#90be6d" },
-                { number: "0 ₪", label: "עלות ייעוץ ראשוני", color: "#e76f51" },
+                { number: "12+", label: "חברות ביטוח ובתי השקעות" },
+                { number: "100%", label: "שקיפות מול הלקוח" },
+                { number: "24/7", label: "פורטל אישי זמין" },
+                { number: "0 ₪", label: "עלות ייעוץ ראשוני" },
               ].map((stat, i) => (
-                <div key={i} className="bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
-                  <p className="text-3xl sm:text-4xl font-extrabold mb-1" style={{ color: stat.color }}>{stat.number}</p>
-                  <p className="text-sm text-gray-500">{stat.label}</p>
+                <div key={i} className="text-center px-3">
+                  <p
+                    className="text-[#1a1a18] tabular-nums mb-2"
+                    style={{ fontFamily: SERIF, fontWeight: 300, fontSize: "clamp(2.2rem, 4.5vw, 3.4rem)" }}
+                  >
+                    {stat.number}
+                  </p>
+                  <p className="text-[12px] tracking-[0.12em] text-[#1a1a18]/45">{stat.label}</p>
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+            <div className="mt-2">
               {[
                 { label: "ע.מ", value: "305275653" },
                 { label: "רישיון סוכן ביטוח", value: "מורשה רשות שוק ההון 2026" },
                 { label: "מבית", value: "עמיתים הון" },
               ].map((item, i) => (
-                <div key={i} className="bg-[#f8f9fc] rounded-xl px-4 py-3 text-sm">
-                  <span className="text-gray-400">{item.label}: </span>
-                  <span className="font-bold text-[#0a3d3d]">{item.value}</span>
+                <div key={i} className="flex items-baseline justify-between py-[15px] border-b border-[#1a1a18]/10">
+                  <span className="text-[13px] text-[#1a1a18]/45">{item.label}</span>
+                  <span className="text-[15px] text-[#1a1a18] tabular-nums">{item.value}</span>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Mission Section */}
-        <section className="py-10 sm:py-16 bg-[#f8f9fc] relative overflow-hidden">
-          {/* Decorative pill shape */}
-          <div className="absolute bottom-8 right-8 hidden lg:block">
-            <svg width="50" height="100" viewBox="0 0 50 100" fill="none">
-              <rect x="5" y="5" width="40" height="90" rx="20" stroke="#f4a261" strokeWidth="2" strokeDasharray="5 4" opacity="0.2" />
-            </svg>
-          </div>
-          <div className="absolute top-6 left-[10%] w-4 h-4 rounded-full bg-[#e76f51] hidden sm:block" />
-
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="max-w-3xl relative">
-              <div className="absolute top-1 right-[-20px] w-5 h-5 rounded-full bg-[#f4a261] hidden sm:block" />
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0a3d3d] mb-6">
-                המשימה <span className="text-[#f4a261]">שלנו</span>
-              </h2>
-              <p className="text-gray-600 leading-relaxed text-base sm:text-lg mb-6">
+        {/* ══════ MISSION ══════ */}
+        <section className="bg-white">
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+            <div className="max-w-3xl">
+              <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+                <div className="text-[11px] tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
+                  02
+                </div>
+                <h2
+                  className="text-[#1a1a18] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+                >
+                  המשימה שלנו
+                </h2>
+              </div>
+              <p className="text-[#1a1a18]/55 leading-[1.85] text-[15px] sm:text-base mb-8">
                 ניהול פיננסי נכון מתחיל בהבנה של מה שיש לכם. זה מה שאנחנו עושים:
               </p>
-              <ul className="space-y-4">
+              <ul className="border-t border-[#1a1a18]/15">
                 {[
-                  { text: "בדיקת כל הפוליסות והמוצרים הפנסיוניים שלכם — מול כל החברות בשוק", color: "#5ec6c6" },
-                  { text: "השוואת מחירים, כיסויים ודמי ניהול — כדי שתדעו שאתם לא משלמים מיותר", color: "#f4a261" },
-                  { text: "מעקב שוטף: חידושים, שינויים במשפחה, עדכוני רגולציה — אנחנו בתמונה", color: "#90be6d" },
-                  { text: "זיהוי כפל ביטוחי, כיסויים חסרים ודמי ניהול גבוהים — וטיפול מיידי", color: "#e76f51" },
+                  { text: "בדיקת כל הפוליסות והמוצרים הפנסיוניים שלכם — מול כל החברות בשוק" },
+                  { text: "השוואת מחירים, כיסויים ודמי ניהול — כדי שתדעו שאתם לא משלמים מיותר" },
+                  { text: "מעקב שוטף: חידושים, שינויים במשפחה, עדכוני רגולציה — אנחנו בתמונה" },
+                  { text: "זיהוי כפל ביטוחי, כיסויים חסרים ודמי ניהול גבוהים — וטיפול מיידי" },
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-gray-600 text-base sm:text-lg">
-                    <span className="w-4 h-4 rounded-full mt-1.5 flex-shrink-0 shadow-md" style={{ backgroundColor: item.color, boxShadow: `0 4px 12px ${item.color}40` }} />
+                  <li key={idx} className="flex items-baseline gap-5 py-4 border-b border-[#1a1a18]/10 text-[#1a1a18]/55 text-[15px] leading-[1.85]">
+                    <span className="text-[11px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: BRONZE }}>
+                      {String(idx + 1).padStart(2, "0")}
+                    </span>
                     {item.text}
                   </li>
                 ))}
@@ -135,31 +140,35 @@ const About = () => {
           </div>
         </section>
 
-        {/* Values Section */}
-        <section className="py-10 sm:py-16 relative">
-          <div className="absolute top-10 right-[5%] w-3 h-3 rounded-full bg-[#5ec6c6] hidden sm:block" />
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="relative mb-10">
-              <div className="absolute top-0 left-[5%] w-6 h-6 rounded-full bg-[#90be6d] hidden sm:block" />
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0a3d3d]">
-                הערכים <span className="text-[#90be6d]">שלנו</span>
+        {/* ══════ VALUES ══════ */}
+        <section style={{ backgroundColor: BONE }}>
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+            <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+              <div className="text-[11px] tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
+                03
+              </div>
+              <h2
+                className="text-[#1a1a18] leading-tight"
+                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+              >
+                הערכים שלנו
               </h2>
             </div>
-            <div className="grid sm:grid-cols-2 gap-6">
+            <div className="grid sm:grid-cols-2 gap-x-12 gap-y-10">
               {[
-                { icon: Eye, title: "שקיפות", description: "תראו את כל התנאים, העמלות ודמי הניהול — לפני שמחליטים. בלי הפתעות, בלי אותיות קטנות.", color: "#5ec6c6" },
-                { icon: Award, title: "מקצועיות", description: "סוכן ביטוח פנסיוני מורשה, מעודכן ברגולציה ובשינויים בשוק. הידע הזה עובד בשבילכם.", color: "#f4a261" },
-                { icon: ShieldCheck, title: "אמינות", description: "האינטרס שלכם קודם. אם משהו לא מתאים — נגיד את זה ישירות.", color: "#e76f51" },
-                { icon: Users, title: "נגישות", description: "ביטוח ופנסיה לא צריכים להיות מסובכים. מסבירים בשפה ברורה, עונים על כל שאלה.", color: "#90be6d" },
+                { title: "שקיפות", description: "תראו את כל התנאים, העמלות ודמי הניהול — לפני שמחליטים. בלי הפתעות, בלי אותיות קטנות." },
+                { title: "מקצועיות", description: "סוכן ביטוח פנסיוני מורשה, מעודכן ברגולציה ובשינויים בשוק. הידע הזה עובד בשבילכם." },
+                { title: "אמינות", description: "האינטרס שלכם קודם. אם משהו לא מתאים — נגיד את זה ישירות." },
+                { title: "נגישות", description: "ביטוח ופנסיה לא צריכים להיות מסובכים. מסבירים בשפה ברורה, עונים על כל שאלה." },
               ].map((item, idx) => (
-                <div key={idx} className="bg-[#f8f9fc] border border-[#0a3d3d]/[0.06] rounded-2xl p-6 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300 relative overflow-hidden group">
-                  {/* Colored accent line at top */}
-                  <div className="absolute top-0 right-0 w-20 h-1 rounded-b-full" style={{ backgroundColor: item.color }} />
-                  <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4 shadow-lg" style={{ backgroundColor: item.color, boxShadow: `0 6px 18px ${item.color}30` }}>
-                    <item.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-lg font-extrabold text-[#0a3d3d] mb-2">{item.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                <div key={idx} className="border-t border-[#1a1a18]/10 pt-4">
+                  <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="text-lg text-[#1a1a18] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 500 }}>
+                    {item.title}
+                  </h3>
+                  <p className="text-[13.5px] text-[#1a1a18]/50 leading-[1.8]">
                     {item.description}
                   </p>
                 </div>
@@ -168,22 +177,22 @@ const About = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-10 sm:py-16 bg-[#f8f9fc] relative overflow-hidden">
-          <div className="absolute top-4 left-[8%] w-5 h-5 rounded-full bg-[#90be6d] hidden sm:block" />
-          <div className="absolute bottom-8 right-[12%] w-3 h-3 rounded-full bg-[#e76f51] hidden sm:block" />
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="bg-[#0a3d3d] rounded-3xl p-8 sm:p-12 text-center text-white relative overflow-hidden">
-              {/* Solid decorative circles */}
-              <div className="absolute top-[-30px] right-[-30px] w-[100px] h-[100px] rounded-full bg-[#5ec6c6] opacity-20" />
-              <div className="absolute bottom-[-20px] left-[-20px] w-[80px] h-[80px] rounded-full bg-[#f4a261] opacity-15" />
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-3 relative">רוצים לבדוק <span className="text-[#5ec6c6]">את המצב שלכם?</span></h2>
-              <p className="text-white/60 text-base sm:text-lg mb-8 max-w-xl mx-auto relative">
+        {/* ══════ CTA ══════ */}
+        <section style={{ backgroundColor: PINE }}>
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <div className="border-t border-white/20 pt-5">
+              <h2
+                className="text-[#f6f5f1] leading-tight mb-3"
+                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+              >
+                רוצים לבדוק את המצב שלכם?
+              </h2>
+              <p className="text-[#f6f5f1]/45 text-[15px] leading-[1.85] mb-9 max-w-xl">
                 השאירו פרטים ונחזור אליכם לשיחה ראשונית — ללא עלות וללא התחייבות.
               </p>
               <Link
                 to="/contact"
-                className="relative inline-block px-10 py-4 bg-[#5ec6c6] text-[#0a3d3d] font-bold rounded-full hover:bg-[#4db5b5] transition-colors shadow-xl shadow-[#5ec6c6]/20 text-base"
+                className="inline-flex items-center justify-center px-9 py-4 bg-[#f6f5f1] text-[#1a1a18] text-[15px] font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
               >
                 צרו קשר
               </Link>
