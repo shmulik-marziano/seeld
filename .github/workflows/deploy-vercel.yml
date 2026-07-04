@@ -1,12 +1,18 @@
 name: Deploy to Vercel
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       vercel_token:
         description: "Vercel token (optional if the VERCEL_TOKEN repo secret is set)"
         required: false
         type: string
+
+concurrency:
+  group: vercel-production
+  cancel-in-progress: false
 
 jobs:
   deploy:
