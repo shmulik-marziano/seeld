@@ -1,7 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PensionAnalysisForm from "@/components/PensionAnalysisForm";
-import { Target, PieChart, Lightbulb, CheckCircle, TrendingUp, ChevronLeft } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -10,31 +9,22 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
-import DoodleIcon from "@/components/DoodleIcon";
+import { BONE, PINE, BRONZE, SERIF } from "@/lib/brand";
 
 const FinancialPlanning = () => {
   const productTypes = [
     {
       title: "ניתוח מקיף",
-      icon: PieChart,
-      doodle: "charts",
-      color: "#5ec6c6",
       description: "מיפוי מלא של המצב הכלכלי והגדרת יעדים",
       features: ["מיפוי הכנסות והוצאות", "הגדרת יעדים", "זיהוי הזדמנויות"],
     },
     {
       title: "תוכנית פעולה",
-      icon: Target,
-      doodle: "target",
-      color: "#f4a261",
       description: "בניית אסטרטגיה מותאמת אישית להשגת היעדים",
       features: ["אסטרטגיה מותאמת", "לוחות זמנים", "יעדים מדידים"],
     },
     {
       title: "ליווי שוטף",
-      icon: Lightbulb,
-      doodle: "lightbulb",
-      color: "#90be6d",
       description: "מעקב ועדכון התוכנית בהתאם לשינויים בחיים",
       features: ["פגישות תקופתיות", "עדכוני תוכנית", "תמיכה מקצועית"],
     },
@@ -56,68 +46,79 @@ const FinancialPlanning = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
       <Header />
 
-      {/* Hero Banner */}
-      <section className="bg-[#f8f9fc] relative overflow-hidden">
-        <div className="absolute top-[10%] left-[4%] w-[90px] h-[90px] rounded-full bg-[#5ec6c6]" />
-        <div className="absolute bottom-[15%] right-[6%] w-[65px] h-[65px] rounded-full bg-[#5ec6c6]" />
-        <div className="absolute top-[45%] left-[18%] w-[35px] h-[35px] rounded-full bg-[#f4a261]" />
-        <div className="absolute top-[20%] right-[12%] w-[28px] h-[28px] rounded-full bg-[#6c63ff]" />
-        <div className="absolute top-16 right-[15%] hidden lg:block">
-          <svg width="160" height="100" viewBox="0 0 160 100" fill="none">
-            <path d="M10 80 C 50 10, 110 10, 150 60" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
-            <polygon points="150,60 142,54 146,66" fill="#0a3d3d" opacity="0.12" />
-          </svg>
-        </div>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20 sm:py-28 relative">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
-            המרכז <span className="text-[#5ec6c6]">לתכנון כלכלי</span> מתקדם
+      {/* Hero */}
+      <section style={{ backgroundColor: BONE }}>
+        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
+          <div className="border-t border-[#1a1a18]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
+            <nav className="flex items-center gap-2 text-[12px] text-[#1a1a18]/40">
+              <Link to="/" className="hover:text-[#1a1a18] transition-colors">דף הבית</Link>
+              <span>←</span>
+              <Link to="/savings" className="hover:text-[#1a1a18] transition-colors">חיסכון ופנסיה</Link>
+              <span>←</span>
+              <span className="text-[#1a1a18]/70 font-medium">תכנון כלכלי מתקדם</span>
+            </nav>
+            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
+              חיסכון ופנסיה
+            </span>
+          </div>
+
+          <h1
+            className="text-[#1a1a18] leading-[1.15] mb-6 max-w-3xl"
+            style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(2rem, 5vw, 3.4rem)' }}
+          >
+            המרכז לתכנון כלכלי מתקדם
           </h1>
-          <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
+          <p className="text-[15px] sm:text-[17px] text-[#1a1a18]/55 max-w-2xl leading-[1.9] mb-9">
             ליווי מקצועי ומקיף לבניית תוכנית כלכלית אישית ארוכת טווח — מפת דרכים כלכלית שמלווה אתכם לכל החיים.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 mt-8">
-            <a href="#analysis-form" className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-[#0a3d3d] text-white font-bold text-base hover:bg-[#0d4a4a] transition-all min-h-[48px]">
+          <div className="flex flex-wrap items-center gap-6">
+            <a
+              href="#analysis-form"
+              className="inline-flex items-center justify-center px-9 py-4 bg-[#1a1a18] text-[#f6f5f1] text-[15px] font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
+            >
               ייעוץ לתכנון כלכלי
             </a>
-            <a href="#product-types" className="inline-flex items-center justify-center px-8 py-3.5 rounded-full border border-[#0a3d3d]/15 text-[#0a3d3d] font-semibold text-base hover:bg-[#0a3d3d]/5 transition-all min-h-[48px]">
+            <a
+              href="#product-types"
+              className="group inline-flex items-center gap-2 text-[15px] font-medium text-[#1a1a18] border-b border-[#1a1a18]/25 pb-0.5 hover:border-[#1a1a18] transition-colors"
+            >
               מה כולל השירות
+              <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
             </a>
           </div>
         </div>
       </section>
 
-      {/* Breadcrumb */}
-      <div className="border-b border-gray-100">
-        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
-          <ChevronLeft className="w-3.5 h-3.5" />
-          <Link to="/savings" className="hover:text-[#0a3d3d] transition-colors">חיסכון ופנסיה</Link>
-          <ChevronLeft className="w-3.5 h-3.5" />
-          <span className="text-[#0a3d3d] font-medium">תכנון כלכלי מתקדם</span>
-        </nav>
-      </div>
-
       <main>
         {/* Benefits */}
-        <section className="py-10 sm:py-16">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">למה תכנון כלכלי?</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <section className="bg-white">
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+            <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+              <h2
+                className="text-[#1a1a18] leading-tight"
+                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+              >
+                למה תכנון כלכלי?
+              </h2>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
               {[
-                { icon: PieChart, doodle: "charts", title: "ניתוח מקיף", desc: "מיפוי מלא של המצב הכלכלי", color: "#5ec6c6" },
-                { icon: Target, doodle: "target", title: "יעדים ברורים", desc: "הגדרת יעדים מדידים וריאליים", color: "#f4a261" },
-                { icon: TrendingUp, doodle: "growth", title: "מקסום הון", desc: "אסטרטגיה להגדלת ההון שלכם", color: "#90be6d" },
-                { icon: Lightbulb, doodle: "lightbulb", title: "ליווי שוטף", desc: "מעקב ועדכון לאורך כל הדרך", color: "#e76f51" },
+                { title: "ניתוח מקיף", desc: "מיפוי מלא של המצב הכלכלי" },
+                { title: "יעדים ברורים", desc: "הגדרת יעדים מדידים וריאליים" },
+                { title: "מקסום הון", desc: "אסטרטגיה להגדלת ההון שלכם" },
+                { title: "ליווי שוטף", desc: "מעקב ועדכון לאורך כל הדרך" },
               ].map((item, idx) => (
-                <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group text-center">
-                  <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
-                    <DoodleIcon name={item.doodle} size={48} />
-                  </div>
-                  <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{item.title}</h3>
-                  <p className="text-gray-600 text-sm">{item.desc}</p>
+                <div key={idx} className="border-t border-[#1a1a18]/15 pt-5">
+                  <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <h3 className="text-lg text-[#1a1a18] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 500 }}>
+                    {item.title}
+                  </h3>
+                  <p className="text-[13.5px] text-[#1a1a18]/50 leading-[1.8]">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -125,24 +126,33 @@ const FinancialPlanning = () => {
         </section>
 
         {/* Product Types */}
-        <section id="product-types" className="py-10 sm:py-16 bg-gray-50">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-2">שלבי התכנון הכלכלי</h2>
-            <p className="text-gray-500 mb-10 text-base sm:text-lg">תהליך מובנה שמוביל לתוצאות</p>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <section id="product-types" style={{ backgroundColor: BONE }}>
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+            <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+              <div className="text-[11px] tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
+                תכנון כלכלי
+              </div>
+              <h2
+                className="text-[#1a1a18] leading-tight"
+                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+              >
+                שלבי התכנון הכלכלי
+              </h2>
+              <p className="text-[#1a1a18]/45 mt-2 text-[15px] leading-relaxed max-w-xl">
+                תהליך מובנה שמוביל לתוצאות
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
               {productTypes.map((type, idx) => (
-                <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-14 h-14 flex items-center justify-center">
-                      <DoodleIcon name={type.doodle} size={48} />
-                    </div>
-                    <h3 className="text-lg font-bold text-[#0a3d3d]">{type.title}</h3>
-                  </div>
-                  <p className="text-gray-600 text-sm mb-4">{type.description}</p>
+                <div key={idx} className="border-t border-[#1a1a18]/10 pt-4">
+                  <h3 className="text-base text-[#1a1a18] mb-2" style={{ fontFamily: SERIF, fontWeight: 500 }}>
+                    {type.title}
+                  </h3>
+                  <p className="text-[#1a1a18]/50 text-[13.5px] leading-[1.8] mb-3.5">{type.description}</p>
                   <ul className="space-y-2">
                     {type.features.map((feature, fIdx) => (
-                      <li key={fIdx} className="flex items-center gap-2 text-sm text-gray-600">
-                        <CheckCircle className="w-4 h-4 flex-shrink-0" style={{ color: type.color }} />
+                      <li key={fIdx} className="text-[#1a1a18]/55 text-[13.5px] leading-relaxed flex gap-2.5">
+                        <span style={{ color: BRONZE }}>—</span>
                         {feature}
                       </li>
                     ))}
@@ -154,11 +164,18 @@ const FinancialPlanning = () => {
         </section>
 
         {/* Article Content */}
-        <section className="py-10 sm:py-16">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        <section className="bg-white">
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
             <div className="max-w-3xl">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-6">למה זה חשוב?</h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed text-base sm:text-lg">
+              <div className="border-t border-[#1a1a18]/20 pt-5 mb-6">
+                <h2
+                  className="text-[#1a1a18] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                >
+                  למה זה חשוב?
+                </h2>
+              </div>
+              <div className="space-y-4 text-[#1a1a18]/55 leading-[1.85] text-[15px] sm:text-base">
                 <p>
                   תכנון כלכלי הוא לא רק לעשירים. כל אדם ומשפחה צריכים תוכנית שמגדירה לאן הכסף הולך, מה היעדים הכלכליים, ואיך מגיעים אליהם. בלי תוכנית, רוב האנשים מגיעים לנקודות מפתח בחיים — רכישת דירה, חינוך ילדים, פרישה — בלי מספיק משאבים.
                 </p>
@@ -167,8 +184,15 @@ const FinancialPlanning = () => {
                 </p>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mt-14 mb-6">מתי כדאי להתחיל?</h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed text-base sm:text-lg">
+              <div className="border-t border-[#1a1a18]/20 pt-5 mt-14 mb-6">
+                <h2
+                  className="text-[#1a1a18] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                >
+                  מתי כדאי להתחיל?
+                </h2>
+              </div>
+              <div className="space-y-4 text-[#1a1a18]/55 leading-[1.85] text-[15px] sm:text-base">
                 <p>
                   תכנון כלכלי רלוונטי בכל שלב בחיים, אבל ישנם רגעים שבהם הוא קריטי במיוחד: כשמתחילים לעבוד ומרוויחים את המשכורת הראשונה, לפני רכישת דירה, כשנולד ילד, כשמתגרשים, כשיורשים כסף, או כשמתקרבים לפרישה.
                 </p>
@@ -177,8 +201,15 @@ const FinancialPlanning = () => {
                 </p>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mt-14 mb-6">מה חשוב לדעת?</h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed text-base sm:text-lg">
+              <div className="border-t border-[#1a1a18]/20 pt-5 mt-14 mb-6">
+                <h2
+                  className="text-[#1a1a18] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                >
+                  מה חשוב לדעת?
+                </h2>
+              </div>
+              <div className="space-y-4 text-[#1a1a18]/55 leading-[1.85] text-[15px] sm:text-base">
                 <p>
                   תכנון כלכלי מקצועי כולל מספר רבדים: ניתוח תזרים מזומנים, בניית קרן חירום, תכנון ביטוחי (חיים, בריאות, סיעודי), תכנון פנסיוני, אסטרטגיית השקעות, תכנון מס, ותכנון ירושה. כל רובד חשוב ומשלים את האחרים.
                 </p>
@@ -191,21 +222,28 @@ const FinancialPlanning = () => {
         </section>
 
         {/* FAQ Accordion */}
-        <section className="py-10 sm:py-16">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        <section style={{ backgroundColor: BONE }}>
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
             <div className="max-w-3xl">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">שאלות נפוצות</h2>
-              <Accordion type="multiple" className="space-y-3">
+              <div className="border-t border-[#1a1a18]/20 pt-5 mb-8">
+                <h2
+                  className="text-[#1a1a18] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                >
+                  שאלות נפוצות
+                </h2>
+              </div>
+              <Accordion type="multiple">
                 {faqItems.map((item, idx) => (
                   <AccordionItem
                     key={idx}
                     value={`faq-${idx}`}
-                    className="bg-white border border-gray-200 rounded-2xl px-6 overflow-hidden data-[state=open]:shadow-sm"
+                    className="border-b border-[#1a1a18]/10 rounded-none px-0"
                   >
-                    <AccordionTrigger className="text-right text-base font-semibold text-[#0a3d3d] hover:no-underline py-5">
+                    <AccordionTrigger className="text-start text-[15px] font-medium text-[#1a1a18] hover:no-underline py-5">
                       {item.q}
                     </AccordionTrigger>
-                    <AccordionContent className="text-gray-600 leading-relaxed pb-5 text-sm sm:text-base">
+                    <AccordionContent className="text-[#1a1a18]/50 leading-[1.85] pb-6 text-[14px]">
                       {item.a}
                     </AccordionContent>
                   </AccordionItem>
@@ -219,17 +257,20 @@ const FinancialPlanning = () => {
         <CompanyLogos variant="grid" />
 
         {/* Analysis Form */}
-        <section id="analysis-form" className="py-10 sm:py-16 scroll-mt-24">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="bg-[#f8f9fc] border border-[#0a3d3d]/[0.06] rounded-2xl p-8 sm:p-12 text-center mb-10 relative overflow-hidden">
-              <div className="absolute top-4 left-6 w-10 h-10 rounded-full bg-[#5ec6c6] opacity-15" />
-              <div className="absolute bottom-4 right-8 w-8 h-8 rounded-full bg-[#f4a261] opacity-15" />
-              <h2 className="text-2xl sm:text-3xl font-extrabold mb-3 text-[#0a3d3d]">מוכנים לתכנון כלכלי מקצועי?</h2>
-              <p className="text-[#0a3d3d]/50 text-base sm:text-lg max-w-xl mx-auto">
+        <section id="analysis-form" className="scroll-mt-24" style={{ backgroundColor: PINE }}>
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <div className="border-t border-white/20 pt-5 mb-10">
+              <h2
+                className="text-[#f6f5f1] leading-tight mb-3"
+                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.6rem, 3vw, 2.3rem)' }}
+              >
+                מוכנים לתכנון כלכלי מקצועי?
+              </h2>
+              <p className="text-[#f6f5f1]/45 text-[15px] leading-relaxed max-w-xl">
                 הזינו את הפרטים ונבנה עבורכם תוכנית כלכלית מותאמת אישית
               </p>
             </div>
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-2xl">
               <PensionAnalysisForm
                 focusArea="pension"
                 title="ייעוץ לתכנון כלכלי"
