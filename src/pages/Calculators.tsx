@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { PiggyBank, Home, Heart, Briefcase, Wallet, Target, BarChart3, Car } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import PensionCalculator from "@/components/PensionCalculator";
@@ -11,7 +10,7 @@ import { Link } from "react-router-dom";
 import { BONE, PINE, BRONZE, SERIF } from "@/lib/brand";
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-sm sm:text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors inline-flex items-center gap-2";
+  "rounded-none bg-transparent px-0 pb-4 text-sm sm:text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const tabHeadClass = "border-t border-[#171717]/20 pt-5 mb-8 text-right";
 
@@ -20,20 +19,14 @@ const Calculators = () => {
     {
       title: "מחשבון ביטוח חיים",
       description: "כמה כיסוי ביטוחי אתם באמת צריכים?",
-      icon: Heart,
-      color: "#b91c1c",
     },
     {
       title: "מחשבון ביטוח רכב",
       description: "השוו מחירי ביטוח רכב בהתאם לפרופיל שלכם",
-      icon: Car,
-      color: "#b45309",
     },
     {
       title: "מחשבון מס הכנסה",
       description: "חשבו את גובה המס והחזרים אפשריים",
-      icon: Briefcase,
-      color: "#15803d",
     },
   ];
 
@@ -73,25 +66,20 @@ const Calculators = () => {
         <section className="bg-white">
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
             <Tabs defaultValue="mortgage" dir="rtl">
-              <TabsList className="flex w-full flex-wrap justify-start gap-x-8 gap-y-1 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none">
+              <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none overflow-x-auto scrollbar-hide">
                 <TabsTrigger value="mortgage" className={tabTriggerClass}>
-                  <Home className="w-4 h-4 text-[#171717]/50" strokeWidth={1.5} />
                   משכנתא
                 </TabsTrigger>
                 <TabsTrigger value="pension" className={tabTriggerClass}>
-                  <PiggyBank className="w-4 h-4 text-[#171717]/50" strokeWidth={1.5} />
                   פנסיה
                 </TabsTrigger>
                 <TabsTrigger value="savings" className={tabTriggerClass}>
-                  <Wallet className="w-4 h-4 text-[#171717]/50" strokeWidth={1.5} />
                   חיסכון
                 </TabsTrigger>
                 <TabsTrigger value="goal" className={tabTriggerClass}>
-                  <Target className="w-4 h-4 text-[#171717]/50" strokeWidth={1.5} />
                   יעד
                 </TabsTrigger>
                 <TabsTrigger value="compare" className={tabTriggerClass}>
-                  <BarChart3 className="w-4 h-4 text-[#171717]/50" strokeWidth={1.5} />
                   השוואה
                 </TabsTrigger>
               </TabsList>
@@ -195,10 +183,7 @@ const Calculators = () => {
                   className="flex items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10"
                 >
                   <div className="min-w-0">
-                    <div className="flex items-center gap-2.5 mb-1">
-                      <calc.icon className="w-4 h-4 text-[#171717]/50 shrink-0" strokeWidth={1.5} />
-                      <h3 className="text-base font-medium text-[#171717]">{calc.title}</h3>
-                    </div>
+                    <h3 className="text-base font-medium text-[#171717] mb-1">{calc.title}</h3>
                     <p className="text-[13px] text-[#171717]/40 leading-relaxed">{calc.description}</p>
                   </div>
                   <span className="text-[11px] tracking-[0.22em] font-medium shrink-0" style={{ color: BRONZE }}>
