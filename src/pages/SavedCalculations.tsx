@@ -57,7 +57,7 @@ const SavedCalculations = () => {
       setCalculations(data as SavedCalculation[]);
     } catch (error) {
       toast({
-        title: "שגיאה בטעינת החישובים",
+        title: "החישובים לא נטענו. רעננו את העמוד ונסו שוב.",
         variant: "destructive",
       });
     } finally {
@@ -78,7 +78,7 @@ const SavedCalculations = () => {
       toast({ title: "החישוב נמחק" });
     } catch (error) {
       toast({
-        title: "שגיאה במחיקה",
+        title: "המחיקה לא הושלמה. נסו שוב.",
         variant: "destructive",
       });
     }

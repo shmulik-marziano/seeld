@@ -55,10 +55,10 @@ const Contact = () => {
         console.error("Failed to send email notification:", emailErr);
       }
 
-      toast.success("ההודעה נשלחה! נחזור אליכם בהקדם.");
+      toast.success("ההודעה אצלנו. נחזור אליכם באותו יום עבודה.");
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
     } catch {
-      toast.error("שגיאה בשליחת ההודעה, נסו שוב");
+      toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
     } finally {
       setSubmitting(false);
     }

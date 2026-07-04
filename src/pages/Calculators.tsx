@@ -56,7 +56,7 @@ const Calculators = () => {
             מחשבונים פיננסיים
           </h1>
           <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9]">
-            כלים חכמים לתכנון פיננסי. חשבו משכנתא, פנסיה, חיסכון ועוד בקלות.
+            משכנתא, פנסיה, חיסכון והשוואת מסלולים. חופשי, ללא רישום.
           </p>
         </div>
       </section>
@@ -212,7 +212,7 @@ const Calculators = () => {
                 to="/contact"
                 className="inline-flex items-center justify-center px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
               >
-                לשיחת ייעוץ
+                קביעת פגישת ייעוץ
               </Link>
             </div>
           </div>

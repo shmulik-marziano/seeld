@@ -74,7 +74,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                 <Label htmlFor="vehicleType">סוג רכב</Label>
                 <Select value={vehicleType} onValueChange={setVehicleType}>
                   <SelectTrigger>
-                    <SelectValue placeholder="בחר סוג" />
+                    <SelectValue placeholder="בחרו סוג" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="private">פרטי</SelectItem>
@@ -135,7 +135,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
               <Label htmlFor="propertyType">סוג נכס</Label>
               <Select value={propertyType} onValueChange={setPropertyType}>
                 <SelectTrigger>
-                  <SelectValue placeholder="בחר סוג" />
+                  <SelectValue placeholder="בחרו סוג" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="apartment">דירה</SelectItem>
@@ -186,7 +186,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
               <Label htmlFor="businessType">סוג העסק</Label>
               <Select value={businessType} onValueChange={setBusinessType}>
                 <SelectTrigger>
-                  <SelectValue placeholder="בחר סוג" />
+                  <SelectValue placeholder="בחרו סוג" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="retail">קמעונאות</SelectItem>
@@ -297,7 +297,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                 id="preExistingConditions" 
                 value={preExistingConditions} 
                 onChange={(e) => setPreExistingConditions(e.target.value)}
-                placeholder="תאר בקצרה מצבים רפואיים רלוונטיים..."
+                placeholder="תארו בקצרה מצבים רפואיים רלוונטיים"
               />
             </div>
           </div>
@@ -326,7 +326,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
     e.preventDefault();
     
     if (!fullName || !phone || !email) {
-      toast.error("נא למלא את כל השדות החובה");
+      toast.error("חסרים שם, טלפון או אימייל. מלאו את שלושתם ונמשיך.");
       return;
     }
     
@@ -403,11 +403,11 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
       }
       
       setIsSubmitted(true);
-      toast.success("הפרטים נשלחו בהצלחה! ניצור איתך קשר בהקדם");
+      toast.success("הפרטים אצלנו. יועץ יחזור אליכם תוך 24 שעות.");
       
     } catch (error) {
       console.error('Error submitting lead:', error);
-      toast.error("אירעה שגיאה בשליחת הטופס. אנא נסה שוב.");
+      toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
     } finally {
       setIsSubmitting(false);
     }
@@ -418,9 +418,9 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
       <Card className="border-primary/20 bg-primary/5">
         <CardContent className="pt-6 text-center">
           <CheckCircle className="w-16 h-16 text-primary mx-auto mb-4" />
-          <h3 className="text-xl font-bold mb-2">הפרטים נשלחו בהצלחה!</h3>
+          <h3 className="text-xl font-bold mb-2">הפרטים נשלחו.</h3>
           <p className="text-muted-foreground">
-            נציג מומחה מ-SEELD ייצור איתך קשר תוך 24 שעות עם הצעה מותאמת אישית.
+            יועץ מ-SEELD יחזור אליכם תוך 24 שעות עם הצעה מותאמת.
           </p>
         </CardContent>
       </Card>
@@ -495,7 +495,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                 disabled={!fullName || !phone || !email}
                 className="w-full min-h-[48px] text-base"
               >
-                המשך לפרטי הביטוח
+                המשיכו לפרטי הביטוח
               </Button>
             </div>
           )}
@@ -528,7 +528,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                   onClick={() => setStep(3)}
                   className="flex-1 min-h-[48px] text-base"
                 >
-                  המשך
+                  המשיכו
                 </Button>
               </div>
             </div>
@@ -542,7 +542,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                 <Label htmlFor="preferredContactTime">זמן מועדף ליצירת קשר</Label>
                 <Select value={preferredContactTime} onValueChange={setPreferredContactTime}>
                   <SelectTrigger>
-                    <SelectValue placeholder="בחר זמן" />
+                    <SelectValue placeholder="בחרו זמן" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="morning">בוקר (9:00-12:00)</SelectItem>
@@ -576,11 +576,11 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                   className="flex-1 min-h-[48px] text-base"
                 >
                   {isSubmitting ? (
-                    "שולח..."
+                    "שולחים את הפרטים..."
                   ) : (
                     <>
                       <Send className="w-4 h-4 ml-2" />
-                      שלח פרטים
+                      שלחו פרטים
                     </>
                   )}
                 </Button>

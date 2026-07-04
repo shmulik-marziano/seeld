@@ -98,7 +98,7 @@ const LifeInsurance = () => {
       heroCategory="ביטוחי חיים"
       heroTitle={<>להגן על <span className="text-[#b91c1c]">מי שחשוב לכם</span></>}
       heroDescription="ביטוח חיים מבטיח שהמשפחה שלכם תהיה מוגנת כלכלית גם כשאתם לא שם. זו ההשקעה הכי חשובה בשקט הנפשי של כולם."
-      heroCTAText="להצטרפות ל-SEELD"
+      heroCTAText="קבלו הצעה מותאמת"
       heroSecondaryCTA={{ text: "סוגי כיסויים", href: "#coverage" }}
       breadcrumbLabel="ביטוח חיים"
       keyPoints={keyPoints}

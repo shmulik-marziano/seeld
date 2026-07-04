@@ -367,7 +367,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                 רוצים הצעה מותאמת?
               </h2>
               <p className="text-[#fafafa]/45 text-base leading-relaxed max-w-xl">
-                מלאו את הפרטים ונחזור אליכם עם הצעה מותאמת אישית מחברות הביטוח המובילות. בלי לחץ, בלי מרדף.
+                מלאו את הפרטים ונחזור אליכם עם הצעה שמשווה בין כל החברות בשוק. בלי לחץ, בלי מרדף.
               </p>
             </div>
             <div className="max-w-2xl">

@@ -24,7 +24,7 @@ const getSessionId = () => {
 /* ── Suggestion chips based on page context ── */
 const pageSuggestions: Record<string, { icon: typeof Shield; text: string }[]> = {
   "/": [
-    { icon: FileText, text: "בדיקת תיק חינם" },
+    { icon: FileText, text: "בדיקת תיק ללא עלות" },
     { icon: Calculator, text: "כמה אני משלם יותר מדי?" },
     { icon: Shield, text: "מה כולל ביטוח בריאות?" },
     { icon: PiggyBank, text: "איך בוחרים קרן פנסיה?" },
@@ -154,7 +154,7 @@ const AIChatBot = () => {
         }),
       });
 
-      if (!response.ok) throw new Error("שגיאה בשרת. נסה שוב.");
+      if (!response.ok) throw new Error("משהו השתבש אצלנו. נסו לשלוח שוב, או חייגו 052-309-7444.");
       const reader = response.body?.getReader();
       if (!reader) throw new Error("No reader");
       const decoder = new TextDecoder();
@@ -192,7 +192,7 @@ const AIChatBot = () => {
     } catch (error) {
       setMessages((prev) => [
         ...prev.filter((m) => m.content !== ""),
-        { role: "assistant", content: error instanceof Error ? error.message : "שגיאה, נסה שוב." },
+        { role: "assistant", content: error instanceof Error ? error.message : "ההודעה לא נשלחה. נסו שוב." },
       ]);
     } finally {
       setIsLoading(false);

@@ -64,7 +64,7 @@ function validateIsraeliId(id: string): { valid: boolean; message?: string } {
     if (num > 9) num -= 9;
     sum += num;
   }
-  if (sum % 10 !== 0) return { valid: false, message: 'ספרת ביקורת שגויה — יש לבדוק את מספר ת"ז' };
+  if (sum % 10 !== 0) return { valid: false, message: 'ספרת ביקורת שגויה. יש לבדוק את מספר ת"ז' };
   return { valid: true };
 }
 
@@ -477,7 +477,7 @@ export default function DirectDebit() {
                   </button>
                 ))}
                 {filteredBanks.length === 0 && (
-                  <p className="text-center text-[#171717]/40 text-sm py-5">לא נמצאו תוצאות</p>
+                  <p className="text-center text-[#171717]/40 text-sm py-5">לא נמצא בנק בשם הזה. נסו שם קצר יותר או מספר בנק.</p>
                 )}
               </div>
             </div>

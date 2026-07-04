@@ -238,7 +238,7 @@ const ReturnTables = () => {
                 to="/contact"
                 className="inline-flex items-center justify-center px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
               >
-                לבדיקת תיק ללא עלות
+                בדיקת תיק ללא עלות
               </Link>
             </div>
           </div>

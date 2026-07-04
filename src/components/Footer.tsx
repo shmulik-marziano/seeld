@@ -81,10 +81,10 @@ const Footer = () => {
           }
         });
       } catch { /* notification failure is non-blocking */ }
-      toast.success("הפרטים נשלחו! נחזור אליכם בהקדם.");
+      toast.success("הפרטים אצלנו. נחזור אליכם באותו יום עבודה.");
       setFormData({ name: "", phone: "", email: "" });
     } catch {
-      toast.error("שגיאה בשליחה, נסו שוב");
+      toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
     } finally {
       setSubmitting(false);
     }
@@ -105,7 +105,7 @@ const Footer = () => {
                 נדבר?
               </h2>
               <p className="text-[14px] text-[#171717]/50 mb-5">
-                בלי ספאם. בלי טלפונים בשמונה בערב. שיחה אחת — ואתם מחליטים.
+                בלי ספאם. בלי טלפונים בשמונה בערב. שיחה אחת, ואתם מחליטים.
               </p>
               <button
                 type="button"
@@ -281,7 +281,7 @@ const Footer = () => {
           <div className="pt-6 border-t border-white/10">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               <p className="text-xs text-white/30">
-                &copy; {new Date().getFullYear()} SEELD — הכסף שלך, מסודר. כל הזכויות שמורות.
+                &copy; {new Date().getFullYear()} SEELD · הכסף שלך, מסודר. כל הזכויות שמורות.
               </p>
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-2 text-xs text-white/30">
                 <Link to="/privacy" className="hover:text-white/60 transition-colors">מדיניות פרטיות</Link>

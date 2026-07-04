@@ -117,7 +117,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
           >
             <option value="">בחרו מסלול</option>
             {availableFunds.map(f => (
-              <option key={f.id} value={f.id}>{specializationLabels[f.specialization]} — {f.name}</option>
+              <option key={f.id} value={f.id}>{specializationLabels[f.specialization]} · {f.name}</option>
             ))}
           </select>
         </div>

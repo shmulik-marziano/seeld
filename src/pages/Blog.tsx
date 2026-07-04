@@ -87,7 +87,7 @@ const Blog = () => {
               הבלוג של SEELD
             </h1>
             <p className="mt-5 text-lg sm:text-xl text-[#171717]/60 leading-[1.8] max-w-2xl">
-              מדריכים, טיפים ותוכן מקצועי בנושאי ביטוח, פנסיה וחיסכון — בגובה העיניים
+              מדריכים, טיפים ותוכן מקצועי בנושאי ביטוח, פנסיה וחיסכון, בגובה העיניים
             </p>
           </div>
         </div>
@@ -157,7 +157,7 @@ const Blog = () => {
                     </p>
                   )}
                   <span className="mt-4 inline-flex items-center gap-2 text-[14px] font-medium text-[#171717]">
-                    קרא עוד
+                    קראו עוד
                     <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
                   </span>
                 </div>
@@ -190,7 +190,7 @@ const Blog = () => {
               to="/contact"
               className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#262626] transition-colors min-h-[52px]"
             >
-              לשיחה עם יועץ
+              דברו עם יועץ
             </Link>
           </div>
         )}

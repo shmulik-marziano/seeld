@@ -106,7 +106,7 @@ export default function AgentLandingPage() {
               <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                 <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#171717]/[0.06] border border-[#171717]/10 text-sm text-[#171717] font-medium">
                   <span className="w-2 h-2 rounded-full bg-[#171717] animate-pulse" />
-                  SEELD — פורטל סוכני הביטוח
+                  SEELD · פורטל סוכני הביטוח
                   <span className="px-2 py-0.5 rounded-full bg-[#b45309]/20 text-[#b45309] text-xs font-bold">BETA</span>
                 </span>
               </motion.div>
@@ -243,7 +243,7 @@ export default function AgentLandingPage() {
               מוכר לך?
             </span>
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#171717] mb-3">
-              אתה עובד כפול — <span className="text-[#171717]">וזה לא הולך לשום מקום</span>
+              אתה עובד כפול, <span className="text-[#171717]">וזה לא הולך לשום מקום</span>
             </h2>
           </motion.div>
 
@@ -254,17 +254,17 @@ export default function AgentLandingPage() {
               {
                 Icon: Clock, color: "#171717",
                 title: "רוב היום שלך לא הולך על לקוחות",
-                desc: "אתה סוכן ביטוח, לא פקיד. אבל רוב השעות הולכות על מילוי טפסים, רדיפה אחרי חתימות, העתקה בין מערכות, ובדיקת דברים שמישהו שכח. הזמן הזה שייך ללקוחות שלך — לא לניירת.",
+                desc: "אתה סוכן ביטוח, לא פקיד. אבל רוב השעות הולכות על מילוי טפסים, רדיפה אחרי חתימות, העתקה בין מערכות, ובדיקת דברים שמישהו שכח. הזמן הזה שייך ללקוחות שלך, לא לניירת.",
               },
               {
                 Icon: Monitor, color: "#171717",
                 title: "המידע שלך מפוזר בחמש מערכות",
-                desc: "מסלקה במקום אחד. הר הביטוח במקום שני. שורנס, רואטו, אקסל, מיילים, וואטסאפ. כל פעם שאתה צריך תמונה מלאה על לקוח, אתה מרכיב פאזל. וכשחתיכה חסרה — חוזר ליקוי.",
+                desc: "מסלקה במקום אחד. הר הביטוח במקום שני. שורנס, רואטו, אקסל, מיילים, וואטסאפ. כל פעם שאתה צריך תמונה מלאה על לקוח, אתה מרכיב פאזל. וכשחתיכה חסרה, חוזר ליקוי.",
               },
               {
                 Icon: Wallet, color: "#4d4d4d",
                 title: "אתה מפסיד כסף בלי לדעת",
-                desc: "בלי מעקב שיטתי, עמלות נשמטות. מינויים לא עוברים. הפקדות לא מגיעות. אתה לא תמיד יודע מה מגיע לך — וגם אם אתה יודע, אין לך זמן לרדוף.",
+                desc: "בלי מעקב שיטתי, עמלות נשמטות. מינויים לא עוברים. הפקדות לא מגיעות. אתה לא תמיד יודע מה מגיע לך, וגם אם אתה יודע, אין לך זמן לרדוף.",
               },
             ].map(({ Icon, color, title, desc }, i) => (
               <motion.div key={i} variants={fadeUp}
@@ -303,7 +303,7 @@ export default function AgentLandingPage() {
               <p className="text-base sm:text-xl text-[#171717]/65 leading-relaxed font-medium">
                 נכנסים בבוקר. פותחים מסך אחד.
                 <br />
-                הכל שם — המשימות של היום, הלקוחות שצריכים תשומת לב,
+                הכל שם: המשימות של היום, הלקוחות שצריכים תשומת לב,
                 המסמכים שממתינים, העמלות שנכנסו.
                 <br /><br />
                 בלי לקפוץ בין מערכות. בלי לשכוח. בלי להקליד פעמיים.
@@ -341,7 +341,7 @@ export default function AgentLandingPage() {
               מערכת ההפעלה <span className="text-[#171717]">של סוכן הביטוח</span>
             </h2>
             <p className="text-[#171717]/45 text-base sm:text-lg max-w-2xl mx-auto">
-              SEELD מלווה אותך בכל רגע — מהרגע שליד חדש נכנס, דרך ניתוח התיק והמלצה מקצועית, ביצוע מול חברות ביטוח, ועד שימור הלקוח לאורך שנים. שרשרת שלמה. מקום אחד.
+              SEELD מלווה אותך בכל רגע: מהרגע שליד חדש נכנס, דרך ניתוח התיק והמלצה מקצועית, ביצוע מול חברות ביטוח, ועד שימור הלקוח לאורך שנים. שרשרת שלמה. מקום אחד.
             </p>
           </motion.div>
 
@@ -352,12 +352,12 @@ export default function AgentLandingPage() {
               {
                 Icon: DoorOpen, color: "#171717",
                 title: "קליטה חכמה",
-                desc: "הלקוח מקבל לינק, ממלא הכל מהנייד, חותם דיגיטלית — וכל הנתונים כבר בפנים. מה שלקח 45 דקות, לוקח 5.",
+                desc: "הלקוח מקבל לינק, ממלא הכל מהנייד, חותם דיגיטלית, וכל הנתונים כבר בפנים. מה שלקח 45 דקות, לוקח 5.",
               },
               {
                 Icon: Search, color: "#171717",
                 title: "ניתוח והמלצה",
-                desc: "המערכת סורקת את התיק, מזהה פערים, כפילויות ודמי ניהול גבוהים, ומגישה לך המלצות מקצועיות מוכנות. אתה בוחר מה להציג — היא מכינה הכל.",
+                desc: "המערכת סורקת את התיק, מזהה פערים, כפילויות ודמי ניהול גבוהים, ומגישה לך המלצות מקצועיות מוכנות. אתה בוחר מה להציג. היא מכינה הכל.",
               },
               {
                 Icon: Zap, color: "#4d4d4d",
@@ -367,7 +367,7 @@ export default function AgentLandingPage() {
               {
                 Icon: Shield, color: "#6e6e6e",
                 title: "שימור ובקרה",
-                desc: "תזכורות חכמות, מעקב אירועי חיים, ניהול תביעות מא' עד ת', ומעקב עמלות שקל-בשקל. הלקוחות שלך מטופלים — גם כשאתה ישן.",
+                desc: "תזכורות חכמות, מעקב אירועי חיים, ניהול תביעות מא' עד ת', ומעקב עמלות שקל-בשקל. הלקוחות שלך מטופלים, גם כשאתה ישן.",
               },
             ].map(({ Icon, color, title, desc }, i) => (
               <motion.div key={i} variants={fadeUp}
@@ -438,7 +438,7 @@ export default function AgentLandingPage() {
               תהליך מלא
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-[#171717] mb-3">
-              מליד חדש ועד שימור — <span className="text-[#171717]">הכל רץ</span>
+              מליד חדש ועד שימור, <span className="text-[#171717]">הכל רץ</span>
             </h2>
           </motion.div>
 
@@ -501,7 +501,7 @@ export default function AgentLandingPage() {
             </h2>
             <p className="text-[#171717]/45 text-base sm:text-lg max-w-2xl mx-auto">
               רוב המערכות פותרות בעיה אחת. SEELD פותרת את כולן.
-              יותר מ-20 כלים מקצועיים שעובדים יחד כמערכת אחת — מכסים מאות תהליכי עבודה מקצה לקצה.
+              יותר מ-20 כלים מקצועיים שעובדים יחד כמערכת אחת, מכסים מאות תהליכי עבודה מקצה לקצה.
             </p>
           </motion.div>
 
@@ -541,7 +541,7 @@ export default function AgentLandingPage() {
 
           <motion.p className="text-center text-[#171717]/45 text-sm sm:text-base max-w-xl mx-auto"
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-            כל אחד מהם חזק בפני עצמו. ביחד — הם מערכת שלמה שמנהלת סוכנות ביטוח מא' עד ת'.
+            כל אחד מהם חזק בפני עצמו. ביחד, הם מערכת שלמה שמנהלת סוכנות ביטוח מא' עד ת'.
           </motion.p>
         </div>
       </section>
@@ -571,11 +571,11 @@ export default function AgentLandingPage() {
                 },
                 {
                   num: "02", color: "#4d4d4d", title: "מחברים",
-                  desc: "מייבאים את הלקוחות הקיימים, מחברים את הנתונים, ורואים תמונה מלאה של הסוכנות. הכל במקום אחד — סוף סוף.",
+                  desc: "מייבאים את הלקוחות הקיימים, מחברים את הנתונים, ורואים תמונה מלאה של הסוכנות. הכל במקום אחד, סוף סוף.",
                 },
                 {
                   num: "03", color: "#6e6e6e", title: "עובדים חכם",
-                  desc: "מהיום — המערכת מטפלת בניירת ואתה מטפל בלקוחות. כל יום שעובר אתה חוסך שעות. כל שבוע אתה רואה את ההבדל.",
+                  desc: "מהיום, המערכת מטפלת בניירת ואתה מטפל בלקוחות. כל יום שעובר אתה חוסך שעות. כל שבוע אתה רואה את ההבדל.",
                 },
               ].map(({ num, color, title, desc }, i) => (
                 <motion.div key={i} variants={fadeUp} className="text-center">
@@ -611,11 +611,11 @@ export default function AgentLandingPage() {
             {[
               {
                 color: "#171717", title: "סוכן עצמאי",
-                desc: "עובד לבד? SEELD הוא הצוות שלך. המערכת לא הולכת הביתה, לא שוכחת דברים, ולא צריכה חופש. היא פשוט עובדת — כדי שאתה תוכל להתמקד במה שאתה הכי טוב בו.",
+                desc: "עובד לבד? SEELD הוא הצוות שלך. המערכת לא הולכת הביתה, לא שוכחת דברים, ולא צריכה חופש. היא פשוט עובדת, כדי שאתה תוכל להתמקד במה שאתה הכי טוב בו.",
               },
               {
                 color: "#4d4d4d", title: "מנהל סוכנות",
-                desc: "מנהל צוות של 5? של 50? SEELD נותן לך שליטה מלאה. אתה רואה מי עובד על מה, איפה יש עומס, ואיפה הכסף. דוחות, מדדים, ובקרה — בלי לשאול שאלות.",
+                desc: "מנהל צוות של 5? של 50? SEELD נותן לך שליטה מלאה. אתה רואה מי עובד על מה, איפה יש עומס, ואיפה הכסף. דוחות, מדדים, ובקרה, בלי לשאול שאלות.",
               },
             ].map(({ color, title, desc }, i) => (
               <motion.div key={i} variants={fadeUp}
@@ -643,7 +643,7 @@ export default function AgentLandingPage() {
           <motion.div className="text-center mb-10 sm:mb-14"
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-[#171717] mb-3">
-              אבטחת מידע <span className="text-[#171717]">ברמה הגבוהה ביותר</span>
+              אבטחת מידע <span className="text-[#171717]">בשלוש שכבות</span>
             </h2>
             <p className="text-sm text-[#171717]/40 max-w-xl mx-auto">המערכת בנויה על תשתיות מאובטחות. השימוש בפלטפורמה כפוף ל<Link to="/terms" className="underline hover:text-[#171717]">תנאי השימוש</Link> ול<Link to="/privacy" className="underline hover:text-[#171717]">מדיניות הפרטיות</Link> שלנו.</p>
           </motion.div>
@@ -658,7 +658,7 @@ export default function AgentLandingPage() {
                 <CheckCircle2 className="w-6 h-6 flex-shrink-0 mt-0.5" style={{ color }} />
                 <div>
                   <span className="font-extrabold text-[#171717]">{title}</span>
-                  <span className="text-[#171717]/50"> — {desc}</span>
+                  <span className="text-[#171717]/50"> · {desc}</span>
                 </div>
               </motion.div>
             ))}
@@ -689,7 +689,7 @@ export default function AgentLandingPage() {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center relative mb-10">
               <Link to="/app/auth"
                 className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-[#171717] text-white font-bold rounded-full hover:bg-[#262626] transition-colors shadow-xl shadow-[#171717]/20 text-base min-h-[48px]">
-                התחל עכשיו — חינם
+                התחל בחינם
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <Link to="/contact"
@@ -708,7 +708,7 @@ export default function AgentLandingPage() {
       <div className="bg-[#fafafa] border-t border-[#171717]/[0.06] py-6 px-5 sm:px-8" dir="rtl">
         <div className="max-w-5xl mx-auto text-center space-y-2">
           <p className="text-xs text-[#171717]/35 leading-relaxed">
-            <span className="font-bold text-[#b45309]">BETA</span> — הפלטפורמה נמצאת בשלבי השקה ראשוניים. חלק מהכלים עדיין בפיתוח ויופעלו בהדרגה. ייתכנו שינויים בפונקציונליות, בממשק ובתנאי השימוש ללא הודעה מוקדמת.
+            <span className="font-bold text-[#b45309]">BETA</span> · הפלטפורמה נמצאת בשלבי השקה ראשוניים. חלק מהכלים עדיין בפיתוח ויופעלו בהדרגה. ייתכנו שינויים בפונקציונליות, בממשק ובתנאי השימוש ללא הודעה מוקדמת.
           </p>
           <p className="text-xs text-[#171717]/25 leading-relaxed">
             SEELD מספקת פלטפורמת ניהול עזר לסוכני ביטוח. האחריות המקצועית, הרגולטורית והמשפטית על כל פעולה, המלצה ועסקה מוטלת על הסוכן בלבד. השימוש בפלטפורמה אינו מהווה ייעוץ משפטי, פיננסי או ביטוחי מטעם SEELD.

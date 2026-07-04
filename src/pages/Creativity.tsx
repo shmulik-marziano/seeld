@@ -8,10 +8,10 @@ const HEEBO = "'Heebo', sans-serif";
 
 const Creativity = () => {
   const insuranceTypes = [
-    { title: "ביטוח רכב", description: "ביטוח חובה, מקיף וצד ג' - כל מה שהרכב שלך צריך", features: ["ביטוח חובה", "ביטוח מקיף", "צד ג'", "נזקי גוף"], href: "/insurance/vehicle" },
-    { title: "ביטוח דירה", description: "הגנה מלאה על הבית והתכולה מפני כל סיכון", features: ["ביטוח מבנה", "ביטוח תכולה", "צד ג'", "נזקי טבע"], href: "/insurance/home" },
-    { title: "ביטוח עסק", description: "פתרונות ביטוח מקיפים לעסק בכל גודל", features: ["אחריות מקצועית", "רכוש עסקי", "הפסד הכנסות", "חבות מעסיקים"], href: "/insurance/business" },
-    { title: "ביטוח נסיעות", description: "נסיעה לחו\"ל בראש שקט עם כיסוי מלא", features: ["הוצאות רפואיות", "ביטול טיסה", "אובדן מזוודות", "חירום 24/7"], href: "/insurance/travel" },
+    { title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳ · השוואה בין כל החברות", features: ["ביטוח חובה", "ביטוח מקיף", "צד ג'", "נזקי גוף"], href: "/insurance/vehicle" },
+    { title: "ביטוח דירה", description: "מבנה ותכולה, בלי הפתעות מאוחרות", features: ["ביטוח מבנה", "ביטוח תכולה", "צד ג'", "נזקי טבע"], href: "/insurance/home" },
+    { title: "ביטוח עסק", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק בכל גודל", features: ["אחריות מקצועית", "רכוש עסקי", "הפסד הכנסות", "חבות מעסיקים"], href: "/insurance/business" },
+    { title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", features: ["הוצאות רפואיות", "ביטול טיסה", "אובדן מזוודות", "חירום 24/7"], href: "/insurance/travel" },
   ];
 
   const stats = [
@@ -46,15 +46,14 @@ const Creativity = () => {
                 ביטוח רכוש ורכב
               </h1>
               <p className="mt-5 text-lg sm:text-xl text-[#171717]/60 leading-[1.8] max-w-2xl">
-                הגנו על הנכסים החשובים לכם עם פוליסות ביטוח מותאמות אישית.
-                השוו הצעות מחיר מחברות הביטוח המובילות וחסכו אלפי שקלים בשנה.
+                רכב, דירה, עסק ונסיעות: השוואת הצעות מחיר מול כל החברות בשוק, ללא עלות.
               </p>
               <div className="mt-8">
                 <Link
                   to="/contact"
                   className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#262626] transition-colors min-h-[52px]"
                 >
-                  להצטרפות ל-SEELD
+                  הצטרפו ל-SEELD
                 </Link>
               </div>
             </div>
@@ -135,7 +134,7 @@ const Creativity = () => {
                   מוכנים לחסוך על הביטוח?
                 </h2>
                 <p className="mt-3 text-base text-[#fafafa]/50 leading-[1.85] max-w-xl">
-                  מלאו את הפרטים ונציג יחזור אליכם עם הצעות מחיר מותאמות אישית תוך שעות.
+                  השאירו פרטים ויועץ יחזור אליכם עם הצעות מחיר תוך שעות.
                 </p>
                 <div className="mt-8">
                   <Link

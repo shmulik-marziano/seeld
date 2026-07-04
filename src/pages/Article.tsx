@@ -18,7 +18,7 @@ const Article = () => {
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
-    toast.success("הקישור הועתק ללוח!");
+    toast.success("הקישור הועתק.");
   };
 
   const getCategoryClass = (cat: string) => {

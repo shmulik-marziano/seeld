@@ -51,7 +51,7 @@ const CookieConsent = () => {
                   to="/cookie-policy"
                   className="font-medium text-[#171717] underline underline-offset-2 hover:no-underline"
                 >
-                  למידע נוסף
+                  מדיניות העוגיות
                 </Link>
               </p>
             </div>
