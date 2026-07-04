@@ -1,8 +1,8 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import DoodleIcon from "@/components/DoodleIcon";
-import { Heart, Shield, AlertTriangle, Users, Home, Handshake, ArrowLeft, ChevronLeft } from "lucide-react";
+import { Heart, Shield, AlertTriangle, Users, Home, Handshake } from "lucide-react";
 import { Link } from "react-router-dom";
+import { BONE, PINE, BRONZE, SERIF } from "@/lib/brand";
 
 interface InsuranceCategory {
   id: string;
@@ -78,74 +78,90 @@ const insuranceCategories: InsuranceCategory[] = [
   },
 ];
 
+const valueProps = [
+  {
+    title: "ייעוץ מקצועי",
+    description: "צוות מומחים מנוסה שמלווה אתכם בבחירת הביטוח המושלם עם התאמה אישית לצרכים שלכם.",
+  },
+  {
+    title: "הגנה מלאה למשפחה",
+    description: "כיסוי ביטוחי מקיף שמגן עליכם ועל יקיריכם בכל תרחיש, מבריאות ועד רכוש.",
+  },
+  {
+    title: "ליווי בתביעות",
+    description: "תמיכה מלאה בעת הגשת תביעות ומימוש הזכויות שלכם. אנחנו איתכם בכל שלב.",
+  },
+];
+
 const Insurances = () => {
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
       <Header />
 
-      {/* Hero Banner */}
-      <section className="bg-[#f8f9fc] relative overflow-hidden">
-        <div className="absolute top-[10%] left-[4%] w-[90px] h-[90px] rounded-full bg-[#5ec6c6]" />
-        <div className="absolute bottom-[15%] right-[6%] w-[65px] h-[65px] rounded-full bg-[#e76f51]" />
-        <div className="absolute top-[45%] left-[18%] w-[35px] h-[35px] rounded-full bg-[#f4a261]" />
-        <div className="absolute top-[20%] right-[12%] w-[28px] h-[28px] rounded-full bg-[#6c63ff]" />
-        <div className="absolute top-16 right-[15%] hidden lg:block">
-          <svg width="160" height="100" viewBox="0 0 160 100" fill="none">
-            <path d="M10 80 C 50 10, 110 10, 150 60" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
-            <polygon points="150,60 142,54 146,66" fill="#0a3d3d" opacity="0.12" />
-          </svg>
-        </div>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20 sm:py-28 relative">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
-            מוצרי <span className="text-[#5ec6c6]">ביטוח</span>
+      {/* Hero */}
+      <section style={{ backgroundColor: BONE }}>
+        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
+          {/* Rule + breadcrumb */}
+          <div className="border-t border-[#1a1a18]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
+            <nav className="flex items-center gap-2 text-[12px] text-[#1a1a18]/40">
+              <Link to="/" className="hover:text-[#1a1a18] transition-colors">דף הבית</Link>
+              <span>←</span>
+              <span className="text-[#1a1a18]/70 font-medium">ביטוח</span>
+            </nav>
+            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
+              תחומי ביטוח
+            </span>
+          </div>
+
+          <h1
+            className="text-[#1a1a18] leading-[1.15] mb-6 max-w-3xl"
+            style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
+          >
+            מוצרי ביטוח
           </h1>
-          <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
+          <p className="text-[15px] sm:text-[17px] text-[#1a1a18]/55 max-w-2xl leading-[1.9]">
             סקירה מקיפה של כל סוגי הביטוחים והכיסויים הזמינים עבורכם. בחרו את הקטגוריה המתאימה וקבלו מידע מפורט.
           </p>
         </div>
       </section>
 
-      {/* Breadcrumb */}
-      <div className="border-b border-gray-100">
-        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
-          <ChevronLeft className="w-3.5 h-3.5" />
-          <span className="text-[#0a3d3d] font-medium">ביטוח</span>
-        </nav>
-      </div>
-
       <main>
-        {/* Insurance Categories Grid */}
-        <section className="py-10 sm:py-16">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Insurance Categories */}
+        <section className="bg-white">
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+            <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+              <div className="text-[11px] tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
+                הקטגוריות
+              </div>
+              <h2
+                className="text-[#1a1a18] leading-tight"
+                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+              >
+                בחרו תחום
+              </h2>
+            </div>
+            <div className="grid md:grid-cols-2 gap-x-16">
               {insuranceCategories.map((category) => (
                 <Link
                   key={category.id}
                   to={category.href}
-                  className="group bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 block"
+                  className="group flex items-baseline justify-between gap-6 py-[14px] border-b border-[#1a1a18]/10 hover:border-[#1a1a18]/40 transition-colors"
                 >
-                  <div className="w-14 h-14 flex items-center justify-center mb-5">
-                    <DoodleIcon name={category.doodle} size={48} />
+                  <div className="min-w-0">
+                    <h3 className="text-[15px] font-medium text-[#1a1a18] mb-1">{category.title}</h3>
+                    <p className="text-[13px] text-[#1a1a18]/40 leading-relaxed">{category.description}</p>
+                    <p className="text-[12px] text-[#1a1a18]/35 mt-1.5">
+                      {category.highlights.map((highlight, idx) => (
+                        <span key={idx}>
+                          {idx > 0 && <span style={{ color: BRONZE }}> · </span>}
+                          {highlight}
+                        </span>
+                      ))}
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-[#0a3d3d] mb-2">{category.title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed mb-5">
-                    {category.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {category.highlights.map((highlight, idx) => (
-                      <span
-                        key={idx}
-                        className="text-xs px-3 py-1 bg-[#f8f9fc] text-[#0a3d3d] rounded-full border border-gray-100"
-                      >
-                        {highlight}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex items-center text-[#0a3d3d] text-sm font-medium group-hover:gap-2 transition-all">
-                    <span>למידע נוסף</span>
-                    <ArrowLeft className="h-4 w-4 mr-1 transition-transform group-hover:-translate-x-1" />
-                  </div>
+                  <span className="text-[#1a1a18]/30 group-hover:text-[#1a1a18] transition-all group-hover:-translate-x-1 shrink-0">
+                    ←
+                  </span>
                 </Link>
               ))}
             </div>
@@ -153,53 +169,48 @@ const Insurances = () => {
         </section>
 
         {/* Value Props */}
-        <section className="py-10 sm:py-16 bg-gray-50">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="grid sm:grid-cols-3 gap-8 text-center">
-              <div>
-                <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
-                  <DoodleIcon name="shield" size={48} />
+        <section style={{ backgroundColor: BONE }}>
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+            <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+              <h2
+                className="text-[#1a1a18] leading-tight"
+                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+              >
+                למה איתנו
+              </h2>
+            </div>
+            <div className="grid sm:grid-cols-3 gap-x-10 gap-y-10">
+              {valueProps.map((prop, idx) => (
+                <div key={prop.title} className="border-t border-[#1a1a18]/15 pt-5">
+                  <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="text-lg text-[#1a1a18] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 500 }}>
+                    {prop.title}
+                  </h3>
+                  <p className="text-[13.5px] text-[#1a1a18]/50 leading-[1.8]">{prop.description}</p>
                 </div>
-                <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">ייעוץ מקצועי</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">
-                  צוות מומחים מנוסה שמלווה אתכם בבחירת הביטוח המושלם עם התאמה אישית לצרכים שלכם.
-                </p>
-              </div>
-              <div>
-                <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
-                  <DoodleIcon name="family" size={48} />
-                </div>
-                <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">הגנה מלאה למשפחה</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">
-                  כיסוי ביטוחי מקיף שמגן עליכם ועל יקיריכם בכל תרחיש, מבריאות ועד רכוש.
-                </p>
-              </div>
-              <div>
-                <div className="w-14 h-14 flex items-center justify-center mx-auto mb-4">
-                  <DoodleIcon name="handshake" size={48} />
-                </div>
-                <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">ליווי בתביעות</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">
-                  תמיכה מלאה בעת הגשת תביעות ומימוש הזכויות שלכם. אנחנו איתכם בכל שלב.
-                </p>
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* CTA Section */}
-        <section className="py-10 sm:py-16">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="bg-[#f8f9fc] rounded-2xl p-8 sm:p-12 text-center relative overflow-hidden">
-              <div className="absolute top-4 right-6 w-20 h-20 rounded-full bg-[#5ec6c6] opacity-10" />
-              <div className="absolute bottom-4 left-10 w-14 h-14 rounded-full bg-[#e76f51] opacity-10" />
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d] mb-3 relative z-10">רוצים לדעת יותר?</h2>
-              <p className="text-gray-500 text-base sm:text-lg mb-8 max-w-xl mx-auto relative z-10">
+        <section style={{ backgroundColor: PINE }}>
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <div className="border-t border-white/20 pt-5">
+              <h2
+                className="text-[#f6f5f1] leading-tight mb-3"
+                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+              >
+                רוצים לדעת יותר?
+              </h2>
+              <p className="text-[#f6f5f1]/45 text-[15px] leading-[1.85] mb-8 max-w-xl">
                 צרו קשר עם הסוכנים שלנו לקבלת הצעת מחיר מותאמת אישית
               </p>
               <Link
                 to="/contact"
-                className="inline-block px-8 py-3.5 bg-[#5ec6c6] text-white font-semibold rounded-full hover:bg-[#4db5b5] transition-colors relative z-10"
+                className="inline-flex items-center justify-center px-9 py-4 bg-[#f6f5f1] text-[#1a1a18] text-[15px] font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
               >
                 צרו קשר
               </Link>
