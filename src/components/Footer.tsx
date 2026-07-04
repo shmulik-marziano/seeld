@@ -2,14 +2,9 @@ import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { StatusPill } from "@/components/brand/Live";
+import { LiveTag, StatusPill } from "@/components/brand/Live";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
-
-const INK = "#171717";
-const BONE = "#fafafa";
-const PINE = "#171717";
-const BRONZE = "#6e6e6e";
-const SERIF = "'Heebo', sans-serif";
+import { BRONZE, MONO, PINE, SERIF, TINT } from "@/lib/brand";
 
 const inputClass =
   "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
@@ -98,7 +93,7 @@ const Footer = () => {
   return (
     <footer dir="rtl">
       {/* Contact band */}
-      <section style={{ backgroundColor: BONE }} className="border-t border-[#171717]/10">
+      <section style={{ backgroundColor: TINT }} className="border-t border-[#ebebeb]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-14 lg:gap-24 items-start">
             {/* Form */}
@@ -220,6 +215,9 @@ const Footer = () => {
                 SEELD<span style={{ color: BRONZE }}>.</span>
               </div>
               <div className="text-[11px] tracking-[0.22em] text-white/40 mt-1.5">בית פיננסים פרטי</div>
+              <div className="mt-3">
+                <LiveTag dark>SEELD · EST. 2018 · רעננה · ירושלים</LiveTag>
+              </div>
             </div>
             <div className="flex flex-wrap gap-x-8 gap-y-2 text-[12px] text-white/40">
               <span>רישיון סוכנות ביטוח · רשות שוק ההון</span>
@@ -232,10 +230,10 @@ const Footer = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-x-10 gap-y-10 mb-12">
             {linkColumns.map((col) => (
               <div key={col.title}>
-                <h3 className="text-[12px] tracking-[0.18em] font-medium mb-5" style={{ color: BRONZE }}>
+                <h3 className="text-[11px] tracking-[0.18em] font-medium mb-5" style={{ color: BRONZE, fontFamily: MONO }}>
                   {col.title}
                 </h3>
-                <ul className="space-y-2.5 text-[14px] text-white/50">
+                <ul className="space-y-2.5 text-[13.5px] text-white/50">
                   {col.links.map((l, i) => (
                     <li key={l.href + l.label} className={i >= 5 ? "hidden md:list-item" : undefined}>
                       <Link to={l.href} className="hover:text-white transition-colors">
@@ -248,10 +246,10 @@ const Footer = () => {
             ))}
 
             <div>
-              <h3 className="text-[12px] tracking-[0.18em] font-medium mb-5" style={{ color: BRONZE }}>
+              <h3 className="text-[11px] tracking-[0.18em] font-medium mb-5" style={{ color: BRONZE, fontFamily: MONO }}>
                 צור קשר
               </h3>
-              <ul className="space-y-2.5 text-[14px] text-white/50">
+              <ul className="space-y-2.5 text-[13.5px] text-white/50">
                 <li>
                   <a href="tel:0523097444" className="hover:text-white transition-colors tabular-nums" dir="ltr">
                     052-309-7444
