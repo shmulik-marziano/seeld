@@ -69,7 +69,11 @@ export default defineConfig(({ mode }) => ({
             return "react-vendor";
           }
           if (id.includes("node_modules/framer-motion/")) return "motion";
-          if (id.includes("node_modules/recharts/")) return "charts";
+          // NOTE: do NOT force recharts into a manual "charts" chunk.
+          // It creates a react-vendor <-> charts circular chunk import and the app
+          // crashes at startup with "Cannot access '_' before initialization".
+          // recharts is only imported by lazy routes, so Rollup already keeps it
+          // out of the entry chunk on its own.
           if (id.includes("node_modules/@supabase/")) return "supabase";
           return undefined;
         },
