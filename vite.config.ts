@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => ({
         name: "SEELD – סוכנות פיננסים וביטוח",
         short_name: "SEELD",
         description: "סוכנות פיננסים וביטוח – כלים חכמים לסוכנים ושירות ללקוחות",
-        theme_color: "#1a1a2e",
+        theme_color: "#171717",
         background_color: "#ffffff",
         display: "standalone",
         dir: "rtl",
@@ -52,6 +52,28 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (!id.includes("node_modules")) return undefined;
+          if (
+            id.includes("node_modules/react/") ||
+            id.includes("node_modules/react-dom/") ||
+            id.includes("node_modules/react-router-dom/") ||
+            id.includes("node_modules/react-router/") ||
+            id.includes("node_modules/scheduler/")
+          ) {
+            return "react-vendor";
+          }
+          if (id.includes("node_modules/framer-motion/")) return "motion";
+          if (id.includes("node_modules/recharts/")) return "charts";
+          if (id.includes("node_modules/@supabase/")) return "supabase";
+          return undefined;
+        },
+      },
     },
   },
 }));
