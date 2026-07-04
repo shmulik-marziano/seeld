@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import {
   INK, BODY, FAINT, LINE, MONO, CARD_SHADOW, RING,
   CHIP_ORANGE, CHIP_GREEN, CHIP_YELLOW,
@@ -56,6 +56,10 @@ const HeroSection = () => {
   const reduced = useReducedMotion();
   const anim = (delay: number) => (reduced ? {} : snap(delay));
 
+  // Depth on scroll: the wordmark recedes a touch slower than the page
+  const { scrollY } = useScroll();
+  const wordmarkY = useTransform(scrollY, [0, 600], [0, 46]);
+
   return (
     <section className="bg-white overflow-hidden" dir="rtl">
       {/* Kicker + CTAs */}
@@ -95,28 +99,30 @@ const HeroSection = () => {
 
       {/* The signature: colossal wordmark with live chips */}
       <div className="relative mt-10 sm:mt-2" aria-hidden="true">
-        <div
-          className="font-bold text-[#171717] text-center whitespace-nowrap select-none"
-          style={{
-            fontSize: "clamp(110px, 24.5vw, 360px)",
-            lineHeight: 0.78,
-            letterSpacing: "-0.045em",
-            transform: "translateY(7%)",
-          }}
-          dir="ltr"
-        >
-          {"SEELD".split("").map((ch, i) => (
-            <motion.span
-              key={i}
-              className="inline-block"
-              initial={reduced ? undefined : { opacity: 0, y: 26 }}
-              animate={reduced ? undefined : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.26, delay: 0.12 + i * 0.05, ease: "easeOut" }}
-            >
-              {ch}
-            </motion.span>
-          ))}
-        </div>
+        <motion.div style={reduced ? undefined : { y: wordmarkY }}>
+          <div
+            className="font-bold text-[#171717] text-center whitespace-nowrap select-none"
+            style={{
+              fontSize: "clamp(110px, 24.5vw, 360px)",
+              lineHeight: 0.78,
+              letterSpacing: "-0.045em",
+              transform: "translateY(7%)",
+            }}
+            dir="ltr"
+          >
+            {"SEELD".split("").map((ch, i) => (
+              <motion.span
+                key={i}
+                className="inline-block"
+                initial={reduced ? undefined : { opacity: 0, y: 26 }}
+                animate={reduced ? undefined : { opacity: 1, y: 0 }}
+                transition={{ duration: 0.26, delay: 0.12 + i * 0.05, ease: "easeOut" }}
+              >
+                {ch}
+              </motion.span>
+            ))}
+          </div>
+        </motion.div>
 
         <LiveChip label="דנה · יועצת פנסיה" color={CHIP_ORANGE} className="-top-[8%] right-[6%] sm:top-[2%] sm:right-[13%]" delay={0.45} />
         <LiveChip label="אבי · ביטוח" color={CHIP_GREEN} className="bottom-[4%] right-[32%] sm:bottom-[14%] sm:right-[38%]" delay={0.55} />

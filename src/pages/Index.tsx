@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,6 +9,8 @@ import ScrollReveal from "@/components/ScrollReveal";
 import CompanyLogos from "@/components/CompanyLogos";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CountUp, LiveTag, StatusPill } from "@/components/brand/Live";
+import { DrawSpark, DrawUnderline, ProgressRail } from "@/components/brand/Strokes";
+import { CHIP_GREEN, CHIP_ORANGE } from "@/lib/brand";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
@@ -144,7 +146,7 @@ const leadSubjects = [
 
 // ── Shared UI ──
 
-const SectionHead = ({ index, title, lede }: { index: string; title: string; lede?: string }) => (
+const SectionHead = ({ index, title, lede, underline }: { index: string; title: string; lede?: string; underline?: string }) => (
   <div className="border-t border-[#171717]/20 pt-6 mb-12 sm:mb-16">
     <div className="flex items-baseline gap-6 sm:gap-10">
       <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: BRONZE }}>
@@ -157,6 +159,7 @@ const SectionHead = ({ index, title, lede }: { index: string; title: string; led
         >
           {title}
         </h2>
+        {underline && <DrawUnderline color={underline} className="mt-2" />}
         {lede && (
           <p className="mt-3 text-base text-[#171717]/50 leading-[1.85] max-w-xl">{lede}</p>
         )}
@@ -190,6 +193,7 @@ const inputClass =
   "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
 
 const Index = () => {
+  const processRef = useRef<HTMLDivElement>(null);
   const [leadForm, setLeadForm] = useState({ name: "", phone: "", subject: "" });
   const [leadSubmitting, setLeadSubmitting] = useState(false);
 
@@ -284,6 +288,7 @@ const Index = () => {
               <SectionHead
                 index="01"
                 title="בדיקת תיק, ללא עלות"
+                underline={CHIP_ORANGE}
                 lede="השאירו פרטים. הצוות שלנו יבחן את התיק הקיים ויחזור אליכם עם דוח מקצועי הכולל המלצות מעשיות — בתוך 48 שעות."
               />
             </ScrollReveal>
@@ -492,6 +497,12 @@ const Index = () => {
         <section style={{ backgroundColor: BONE }}>
           <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
+              <div className="flex items-end justify-between gap-6 mb-2">
+                <span className="text-[11px] tracking-[0.14em] text-[#171717]/40" style={{ fontFamily: "'Geist Mono', ui-monospace, monospace" }}>
+                  PORTFOLIO · GROWTH
+                </span>
+                <DrawSpark color={CHIP_GREEN} className="w-40 sm:w-64" height={44} />
+              </div>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 border-t border-b border-[#171717]/15 py-10 sm:py-14">
                 {[
                   { to: 600, suffix: "+", label: "משפחות מלוות" },
@@ -586,7 +597,9 @@ const Index = () => {
               />
             </ScrollReveal>
 
-            <div className="max-w-3xl">
+            <div ref={processRef} className="max-w-3xl relative pr-5 sm:pr-7">
+              {/* The rail fills as you read through the steps */}
+              <ProgressRail targetRef={processRef} color={CHIP_GREEN} className="right-0" />
               {processSteps.map((step, i) => (
                 <ScrollReveal key={step.number} delay={i * 60}>
                   <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-10 py-6 border-b border-[#171717]/10">
