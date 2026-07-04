@@ -3,7 +3,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import InsuranceEnrollmentForm from '@/components/InsuranceEnrollmentForm';
 import CompanyLogos from '@/components/CompanyLogos';
-import { ChevronLeft, CheckCircle2 } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -12,8 +11,9 @@ import {
 } from '@/components/ui/accordion';
 import { Link } from 'react-router-dom';
 import type { LucideIcon } from 'lucide-react';
+import { INK, BONE, PINE, BRONZE, SERIF } from '@/lib/brand';
 
-/* ─── Types ─── */
+/* ─── Types (unchanged API — all 16 insurance pages pass these) ─── */
 interface KeyPoint {
   title: string;
   description: string;
@@ -88,16 +88,18 @@ export interface InsurancePageProps {
   extraContentAfterKeyPoints?: ReactNode;
 }
 
-const DEFAULT_COMPANIES = [
-  'הראל', 'מנורה מבטחים', 'מגדל', 'כלל', 'איילון', 'הפניקס',
-  'מיטב', 'מור', 'ילין לפידות', 'אנליסט', 'אינפיניטי',
-  'אלטשולר שחם', 'פאספורטקארד', 'הכשרה',
-];
+const SectionTitle = ({ children }: { children: ReactNode }) => (
+  <h2
+    className="text-[#1a1a18] leading-tight"
+    style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+  >
+    {children}
+  </h2>
+);
 
 export default function InsurancePageTemplate(props: InsurancePageProps) {
   const {
     heroIcon: HeroIcon,
-    heroIconColor,
     heroCategory,
     heroTitle,
     heroDescription,
@@ -110,10 +112,8 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
     coverageCategories,
     coverageTitle = 'סוגי הכיסויים',
     coverageSubtitle,
-    coverageGridCols,
     articles,
     faqItems,
-    companies = DEFAULT_COMPANIES,
     insuranceType,
     enrollmentTitle,
     enrollmentDescription,
@@ -122,91 +122,71 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
   } = props;
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
       <Header />
 
       {/* ══════ HERO ══════ */}
-      <section className="relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(165deg, hsl(168 42% 14%) 0%, hsl(152 42% 18%) 40%, hsl(160 38% 24%) 70%, hsl(145 30% 18%) 100%)',
-        }}
-      >
-        {/* Ambient glows */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[-15%] right-[-5%] w-[400px] h-[400px] rounded-full opacity-[0.06]"
-            style={{ background: `radial-gradient(circle, ${heroIconColor} 0%, transparent 70%)` }} />
-          <div className="absolute bottom-[-10%] left-[-5%] w-[300px] h-[300px] rounded-full opacity-[0.04]"
-            style={{ background: 'radial-gradient(circle, hsl(28 45% 60%) 0%, transparent 70%)' }} />
-          {/* Grid overlay */}
-          <div className="absolute inset-0 opacity-[0.025]"
-            style={{
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-              backgroundSize: '50px 50px',
-            }} />
-          {/* Dashed line */}
-          <svg className="absolute bottom-10 left-0 w-full h-16 opacity-[0.06]" viewBox="0 0 800 50" fill="none">
-            <path d="M0 35 Q200 5 400 28 T800 15" stroke="hsl(160,50%,65%)" strokeWidth="1.5" strokeDasharray="8 6" />
-          </svg>
-        </div>
-
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-20 relative z-10">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
-              style={{ backgroundColor: heroIconColor }}>
-              <HeroIcon className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-sm font-semibold text-white/40">{heroCategory}</span>
+      <section style={{ backgroundColor: BONE }}>
+        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
+          {/* Rule + breadcrumb */}
+          <div className="border-t border-[#1a1a18]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
+            <nav className="flex items-center gap-2 text-[12px] text-[#1a1a18]/40">
+              <Link to="/" className="hover:text-[#1a1a18] transition-colors">דף הבית</Link>
+              <span>←</span>
+              <Link to="/insurances" className="hover:text-[#1a1a18] transition-colors">ביטוח</Link>
+              <span>←</span>
+              <span className="text-[#1a1a18]/70 font-medium">{breadcrumbLabel}</span>
+            </nav>
+            <span className="hidden sm:flex items-center gap-2 text-[11px] tracking-[0.2em] font-medium" style={{ color: BRONZE }}>
+              <HeroIcon className="w-3.5 h-3.5" strokeWidth={1.5} />
+              {heroCategory}
+            </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-4 leading-tight text-white">
+
+          <h1
+            className="text-[#1a1a18] leading-[1.15] mb-6 max-w-3xl"
+            style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(2rem, 5vw, 3.4rem)' }}
+          >
             {heroTitle}
           </h1>
-          <p className="text-base sm:text-lg text-white/50 max-w-2xl leading-relaxed">
+          <p className="text-[15px] sm:text-[17px] text-[#1a1a18]/55 max-w-2xl leading-[1.9] mb-9">
             {heroDescription}
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 mt-8">
-            <a href={heroCTAHref}
-              className="inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-white text-[#0a3d3d] font-bold text-base hover:bg-white/90 transition-all min-h-[48px] shadow-lg shadow-black/10">
+          <div className="flex flex-wrap items-center gap-6">
+            <a
+              href={heroCTAHref}
+              className="inline-flex items-center justify-center px-9 py-4 bg-[#1a1a18] text-[#f6f5f1] text-[15px] font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
+            >
               {heroCTAText}
             </a>
             {heroSecondaryCTA && (
-              <a href={heroSecondaryCTA.href}
-                className="inline-flex items-center justify-center px-8 py-3.5 rounded-xl border border-white/15 text-white/80 font-semibold text-base hover:bg-white/5 hover:border-white/25 transition-all min-h-[48px]">
+              <a
+                href={heroSecondaryCTA.href}
+                className="group inline-flex items-center gap-2 text-[15px] font-medium text-[#1a1a18] border-b border-[#1a1a18]/25 pb-0.5 hover:border-[#1a1a18] transition-colors"
+              >
                 {heroSecondaryCTA.text}
+                <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
               </a>
             )}
           </div>
         </div>
       </section>
 
-      {/* ══════ BREADCRUMB ══════ */}
-      <div className="border-b border-gray-100 bg-gray-50/50">
-        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-400">
-          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
-          <ChevronLeft className="w-3.5 h-3.5" />
-          <Link to="/insurance" className="hover:text-[#0a3d3d] transition-colors">ביטוח</Link>
-          <ChevronLeft className="w-3.5 h-3.5" />
-          <span className="text-[#0a3d3d] font-medium">{breadcrumbLabel}</span>
-        </nav>
-      </div>
-
       <main>
         {/* ══════ KEY POINTS ══════ */}
         {keyPoints && keyPoints.length > 0 && (
-          <section className="py-12 sm:py-16">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6">
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <section className="bg-white">
+            <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10">
                 {keyPoints.map((kp, idx) => (
-                  <div key={idx}
-                    className={`bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group ${
-                      keyPoints.length === 3 && idx === 2 ? 'sm:col-span-2 lg:col-span-1' : ''
-                    }`}
-                  >
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 shadow-sm transition-transform group-hover:scale-105"
-                      style={{ backgroundColor: (kp.color || heroIconColor) + '18' }}>
-                      <kp.icon className="w-6 h-6" style={{ color: kp.color || heroIconColor }} />
-                    </div>
-                    <h3 className="text-lg font-bold text-[#0a3d3d] mb-2">{kp.title}</h3>
-                    <p className="text-gray-500 leading-relaxed text-sm">{kp.description}</p>
+                  <div key={idx} className="border-t border-[#1a1a18]/15 pt-5">
+                    <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
+                    <h3 className="text-lg text-[#1a1a18] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 500 }}>
+                      {kp.title}
+                    </h3>
+                    <p className="text-[13.5px] text-[#1a1a18]/50 leading-[1.8]">{kp.description}</p>
                   </div>
                 ))}
               </div>
@@ -219,13 +199,15 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
 
         {/* ══════ ARTICLES ══════ */}
         {articles && articles.length > 0 && (
-          <section className={`${keyPoints ? 'pb-12 sm:pb-16' : 'py-12 sm:py-16'}`}>
-            <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <section className="bg-white">
+            <div className="max-w-5xl mx-auto px-5 sm:px-8 pb-12 sm:pb-16 pt-2">
               <div className="max-w-3xl">
                 {articles.map((article, idx) => (
                   <div key={idx} className={idx > 0 ? 'mt-14' : ''}>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-6">{article.title}</h2>
-                    <div className="space-y-4 text-gray-500 leading-relaxed text-base sm:text-lg">
+                    <div className="border-t border-[#1a1a18]/15 pt-5 mb-6">
+                      <SectionTitle>{article.title}</SectionTitle>
+                    </div>
+                    <div className="space-y-4 text-[#1a1a18]/60 leading-[1.9] text-[15px] sm:text-base">
                       {article.paragraphs.map((p, pIdx) => (
                         <p key={pIdx}>{p}</p>
                       ))}
@@ -239,37 +221,37 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
 
         {/* ══════ COVERAGE TYPES (flat) ══════ */}
         {coverageTypes && coverageTypes.length > 0 && (
-          <section id="coverage" className="py-12 sm:py-16 bg-[#fafbfd]">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-2">{coverageTitle}</h2>
-              {coverageSubtitle && <p className="text-gray-400 mb-10 text-base sm:text-lg">{coverageSubtitle}</p>}
-              <div className={`grid ${coverageGridCols || 'sm:grid-cols-2 lg:grid-cols-3'} gap-5 mt-8`}>
+          <section id="coverage" style={{ backgroundColor: BONE }}>
+            <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+              <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+                <SectionTitle>{coverageTitle}</SectionTitle>
+                {coverageSubtitle && (
+                  <p className="text-[#1a1a18]/45 mt-2 text-[15px] leading-relaxed max-w-xl">{coverageSubtitle}</p>
+                )}
+              </div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
                 {coverageTypes.map((coverage, idx) => (
-                  <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm transition-transform group-hover:scale-105"
-                        style={{ backgroundColor: (coverage.color || '#5ec6c6') + '18' }}>
-                        <coverage.icon className="w-5 h-5" style={{ color: coverage.color || '#0a3d3d' }} />
-                      </div>
-                      <h3 className="text-lg font-bold text-[#0a3d3d]">{coverage.title}</h3>
-                    </div>
-                    <ul className="space-y-2.5">
+                  <div key={idx} className="border-t border-[#1a1a18]/10 pt-4">
+                    <h3 className="text-base text-[#1a1a18] mb-3.5" style={{ fontFamily: SERIF, fontWeight: 500 }}>
+                      {coverage.title}
+                    </h3>
+                    <ul className="space-y-2">
                       {coverage.items.map((item, itemIdx) => {
                         if (typeof item === 'string') {
                           return (
-                            <li key={itemIdx} className="text-gray-500 text-sm flex items-start gap-2.5">
-                              <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0 text-emerald-400" />
+                            <li key={itemIdx} className="text-[#1a1a18]/55 text-[13.5px] leading-relaxed flex gap-2.5">
+                              <span style={{ color: BRONZE }}>—</span>
                               {item}
                             </li>
                           );
                         }
                         return (
-                          <li key={itemIdx} className="text-gray-500 text-sm flex items-start gap-2.5">
-                            <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0 text-emerald-400" />
-                            <div>
-                              <span className="font-medium text-[#0a3d3d]">{item.title}</span>
-                              {item.description && <span className="text-gray-400"> — {item.description}</span>}
-                            </div>
+                          <li key={itemIdx} className="text-[#1a1a18]/55 text-[13.5px] leading-relaxed flex gap-2.5">
+                            <span style={{ color: BRONZE }}>—</span>
+                            <span>
+                              <span className="font-medium text-[#1a1a18]">{item.title}</span>
+                              {item.description && <span className="text-[#1a1a18]/45"> · {item.description}</span>}
+                            </span>
                           </li>
                         );
                       })}
@@ -283,28 +265,25 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
 
         {/* ══════ COVERAGE CATEGORIES (grouped) ══════ */}
         {coverageCategories && coverageCategories.length > 0 && (
-          <section id="coverage" className="py-12 sm:py-16 bg-[#fafbfd]">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-2">{coverageTitle}</h2>
-              {coverageSubtitle && <p className="text-gray-400 mb-10 text-base sm:text-lg">{coverageSubtitle}</p>}
-              <div className="space-y-10 mt-8">
+          <section id="coverage" style={{ backgroundColor: BONE }}>
+            <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+              <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+                <SectionTitle>{coverageTitle}</SectionTitle>
+                {coverageSubtitle && (
+                  <p className="text-[#1a1a18]/45 mt-2 text-[15px] leading-relaxed max-w-xl">{coverageSubtitle}</p>
+                )}
+              </div>
+              <div className="space-y-12">
                 {coverageCategories.map((cat, catIdx) => (
                   <div key={catIdx}>
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: cat.color }} />
-                      <h3 className="text-xl font-bold text-[#0a3d3d]">{cat.category}</h3>
+                    <div className="text-[11px] tracking-[0.22em] font-medium mb-5" style={{ color: BRONZE }}>
+                      {cat.category}
                     </div>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
                       {cat.items.map((item, idx) => (
-                        <div key={idx} className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-200 group">
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm"
-                              style={{ backgroundColor: cat.color + '18' }}>
-                              <item.icon className="w-5 h-5" style={{ color: cat.color }} />
-                            </div>
-                            <h4 className="text-base font-bold text-[#0a3d3d]">{item.title}</h4>
-                          </div>
-                          <p className="text-gray-500 text-sm">{item.description}</p>
+                        <div key={idx} className="border-t border-[#1a1a18]/10 pt-4">
+                          <h4 className="text-[15px] font-medium text-[#1a1a18] mb-1.5">{item.title}</h4>
+                          <p className="text-[#1a1a18]/50 text-[13px] leading-relaxed">{item.description}</p>
                         </div>
                       ))}
                     </div>
@@ -317,21 +296,23 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
 
         {/* ══════ FAQ ══════ */}
         {faqItems.length > 0 && (
-          <section className="py-12 sm:py-16">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <section className="bg-white">
+            <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
               <div className="max-w-3xl">
-                <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-8">שאלות נפוצות</h2>
-                <Accordion type="multiple" className="space-y-3">
+                <div className="border-t border-[#1a1a18]/20 pt-5 mb-8">
+                  <SectionTitle>שאלות נפוצות</SectionTitle>
+                </div>
+                <Accordion type="multiple">
                   {faqItems.map((item, idx) => (
                     <AccordionItem
                       key={idx}
                       value={`faq-${idx}`}
-                      className="bg-white border border-gray-100 rounded-2xl px-4 sm:px-6 overflow-hidden data-[state=open]:shadow-md data-[state=open]:border-gray-200 transition-all"
+                      className="border-b border-[#1a1a18]/10 rounded-none px-0"
                     >
-                      <AccordionTrigger className="text-right text-base font-semibold text-[#0a3d3d] hover:no-underline py-5">
+                      <AccordionTrigger className="text-start text-[15px] font-medium text-[#1a1a18] hover:no-underline py-5">
                         {item.q}
                       </AccordionTrigger>
-                      <AccordionContent className="text-gray-500 leading-relaxed pb-5 text-sm sm:text-base">
+                      <AccordionContent className="text-[#1a1a18]/50 leading-[1.85] pb-6 text-[14px]">
                         {item.a}
                       </AccordionContent>
                     </AccordionItem>
@@ -346,24 +327,20 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
         <CompanyLogos variant="grid" />
 
         {/* ══════ CTA + FORM ══════ */}
-        <section id={enrollmentFormId} className="py-12 sm:py-16 scroll-mt-24">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="rounded-2xl p-6 sm:p-12 text-center mb-10 relative overflow-hidden"
-              style={{
-                background: 'linear-gradient(165deg, hsl(168 42% 14%) 0%, hsl(152 42% 20%) 50%, hsl(160 38% 26%) 100%)',
-              }}
-            >
-              {/* Ambient glows */}
-              <div className="absolute top-[-20%] right-[-10%] w-[300px] h-[300px] rounded-full opacity-[0.06]"
-                style={{ background: `radial-gradient(circle, ${heroIconColor} 0%, transparent 70%)` }} />
-              <div className="absolute bottom-[-15%] left-[-5%] w-[200px] h-[200px] rounded-full opacity-[0.04]"
-                style={{ background: 'radial-gradient(circle, hsl(28 45% 60%) 0%, transparent 70%)' }} />
-              <h2 className="text-2xl sm:text-3xl font-extrabold mb-3 text-white relative z-10">רוצים הצעת מחיר מותאמת?</h2>
-              <p className="text-white/45 text-base sm:text-lg max-w-xl mx-auto relative z-10">
-                מלאו את הפרטים ונחזור אליכם עם הצעה מותאמת אישית מחברות הביטוח המובילות
+        <section id={enrollmentFormId} className="scroll-mt-24" style={{ backgroundColor: PINE }}>
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <div className="border-t border-white/20 pt-5 mb-10 text-center sm:text-right">
+              <h2
+                className="text-[#f6f5f1] leading-tight mb-3"
+                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.6rem, 3vw, 2.3rem)' }}
+              >
+                רוצים הצעה מותאמת?
+              </h2>
+              <p className="text-[#f6f5f1]/45 text-[15px] leading-relaxed max-w-xl">
+                מלאו את הפרטים ונחזור אליכם עם הצעה מותאמת אישית מחברות הביטוח המובילות. בלי לחץ, בלי מרדף.
               </p>
             </div>
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-2xl">
               <InsuranceEnrollmentForm
                 insuranceType={insuranceType}
                 title={enrollmentTitle}
