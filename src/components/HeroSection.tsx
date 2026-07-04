@@ -199,7 +199,7 @@ const HeroSection = () => {
                 style={{
                   boxShadow:
                     "0 30px 60px -15px rgba(10, 61, 61, 0.2), 0 0 0 1px rgba(10, 61, 61, 0.02)",
-                  ...(isDesktop ? { y: y1 } : {}),
+                  y: isDesktop ? y1 : 0,
                 }}
                 initial={{ opacity: 0, y: 40, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -256,7 +256,7 @@ const HeroSection = () => {
                 className="absolute top-[63%] right-[-2%] sm:right-[-4%] bg-white rounded-2xl px-4 py-3 shadow-xl border border-[#0a3d3d]/[0.06] flex items-center gap-3"
                 style={{
                   boxShadow: "0 18px 36px -12px rgba(108, 99, 255, 0.25)",
-                  ...(isDesktop ? { y: y2 } : {}),
+                  y: isDesktop ? y2 : 0,
                 }}
                 initial={{ opacity: 0, scale: 0.8, x: 20 }}
                 animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -279,7 +279,7 @@ const HeroSection = () => {
                 className="absolute top-[-4%] left-[2%] sm:left-[4%] bg-white rounded-2xl px-4 py-3 shadow-xl border border-[#0a3d3d]/[0.06] flex items-center gap-3"
                 style={{
                   boxShadow: "0 18px 36px -12px rgba(244, 162, 97, 0.3)",
-                  ...(isDesktop ? { y: y3 } : {}),
+                  y: isDesktop ? y3 : 0,
                 }}
                 initial={{ opacity: 0, scale: 0.8, x: -20 }}
                 animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -300,7 +300,7 @@ const HeroSection = () => {
                 style={{
                   boxShadow:
                     "0 25px 50px -12px rgba(10, 61, 61, 0.18), 0 0 0 1px rgba(10, 61, 61, 0.03)",
-                  ...(isDesktop ? { y: yCard } : {}),
+                  y: isDesktop ? yCard : 0,
                 }}
                 initial={{ opacity: 0, y: 30, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}

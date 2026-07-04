@@ -8,7 +8,7 @@ import {
   MessageCircle, ChevronLeft, Stethoscope, Key, Globe,
   Scale, Activity, Target, CalendarCheck, Loader2, Zap, Handshake,
   HeartHandshake, Search, UserPlus, ArrowDownLeft,
-  Bot, LayoutDashboard, LineChart, Compass
+  Bot, LayoutDashboard, LineChart, Compass, type LucideIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -99,7 +99,7 @@ const savingsProducts = [
 ];
 
 const digitalCapabilities: {
-  icon: typeof Bot;
+  icon: LucideIcon;
   title: string;
   description: string;
   cta: string;
@@ -265,7 +265,7 @@ const gridItem = {
   },
 };
 
-const ProductGrid = ({ items }: { items: typeof insuranceTypes }) => (
+const ProductGrid = ({ items }: { items: { icon: LucideIcon; doodle: string; title: string; description: string; href: string }[] }) => (
   <motion.div
     className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5"
     initial="hidden"
@@ -649,7 +649,7 @@ const Index = () => {
                   <button
                     type="button"
                     onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                    className="block w-full h-full text-right group"
+                    className="block w-full h-full text-start group"
                   >
                     <CapabilityCard cap={cap} />
                   </button>
