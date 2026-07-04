@@ -9,9 +9,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
 import type { LucideIcon } from 'lucide-react';
 import { INK, BONE, PINE, BRONZE, SERIF } from '@/lib/brand';
+import { StatusPill } from '@/components/brand/Live';
 
 /* ─── Types (unchanged API — all 16 insurance pages pass these) ─── */
 interface KeyPoint {
@@ -97,6 +99,9 @@ const SectionTitle = ({ children }: { children: ReactNode }) => (
   </h2>
 );
 
+const tabTriggerClass =
+  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
+
 export default function InsurancePageTemplate(props: InsurancePageProps) {
   const {
     heroIcon: HeroIcon,
@@ -120,6 +125,14 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
     enrollmentFormId = 'contact-form',
     extraContentAfterKeyPoints,
   } = props;
+
+  const hasArticles = !!articles && articles.length > 0;
+  const hasCoverage =
+    (!!coverageTypes && coverageTypes.length > 0) ||
+    (!!coverageCategories && coverageCategories.length > 0);
+  const hasFaq = faqItems.length > 0;
+  const defaultTab = hasArticles ? 'guide' : hasCoverage ? 'coverage' : 'faq';
+  const tabCount = [hasArticles, hasCoverage, hasFaq].filter(Boolean).length;
 
   return (
     <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
@@ -169,6 +182,14 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
               </a>
             )}
           </div>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event('seeld:open-chat'))}
+            className="mt-7 block transition-transform hover:-translate-y-[1px]"
+            aria-label="פתיחת שיחה עם יועץ SEELD AI"
+          >
+            <StatusPill>יש שאלה על {breadcrumbLabel}? היועץ מחובר</StatusPill>
+          </button>
         </div>
       </section>
 
@@ -180,9 +201,6 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10">
                 {keyPoints.map((kp, idx) => (
                   <div key={idx} className="border-t border-[#171717]/15 pt-5">
-                    <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>
-                      {String(idx + 1).padStart(2, '0')}
-                    </span>
                     <h3 className="text-lg text-[#171717] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                       {kp.title}
                     </h3>
@@ -197,128 +215,138 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
         {/* ══════ EXTRA CONTENT ══════ */}
         {extraContentAfterKeyPoints}
 
-        {/* ══════ ARTICLES ══════ */}
-        {articles && articles.length > 0 && (
-          <section className="bg-white">
-            <div className="max-w-5xl mx-auto px-5 sm:px-8 pb-12 sm:pb-16 pt-2">
-              <div className="max-w-3xl">
-                {articles.map((article, idx) => (
-                  <div key={idx} className={idx > 0 ? 'mt-14' : ''}>
-                    <div className="border-t border-[#171717]/15 pt-5 mb-6">
-                      <SectionTitle>{article.title}</SectionTitle>
-                    </div>
-                    <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base sm:text-base">
-                      {article.paragraphs.map((p, pIdx) => (
-                        <p key={pIdx}>{p}</p>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ══════ COVERAGE TYPES (flat) ══════ */}
-        {coverageTypes && coverageTypes.length > 0 && (
-          <section id="coverage" style={{ backgroundColor: BONE }}>
+        {/* ══════ THE KNOWLEDGE — one tabbed section instead of three stacked ones ══════ */}
+        {tabCount > 0 && (
+          <section id="coverage" className="bg-white">
             <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-              <div className="border-t border-[#171717]/20 pt-5 mb-10">
-                <SectionTitle>{coverageTitle}</SectionTitle>
-                {coverageSubtitle && (
-                  <p className="text-[#171717]/45 mt-2 text-base leading-relaxed max-w-xl">{coverageSubtitle}</p>
-                )}
-              </div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
-                {coverageTypes.map((coverage, idx) => (
-                  <div key={idx} className="border-t border-[#171717]/10 pt-4">
-                    <h3 className="text-base text-[#171717] mb-3.5" style={{ fontFamily: SERIF, fontWeight: 600 }}>
-                      {coverage.title}
-                    </h3>
-                    <ul className="space-y-2">
-                      {coverage.items.map((item, itemIdx) => {
-                        if (typeof item === 'string') {
-                          return (
-                            <li key={itemIdx} className="text-[#171717]/55 text-[14px] leading-relaxed flex gap-2.5">
-                              <span style={{ color: BRONZE }}>—</span>
-                              {item}
-                            </li>
-                          );
-                        }
-                        return (
-                          <li key={itemIdx} className="text-[#171717]/55 text-[14px] leading-relaxed flex gap-2.5">
-                            <span style={{ color: BRONZE }}>—</span>
-                            <span>
-                              <span className="font-medium text-[#171717]">{item.title}</span>
-                              {item.description && <span className="text-[#171717]/45"> · {item.description}</span>}
-                            </span>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
+              <Tabs defaultValue={defaultTab} dir="rtl">
+                <TabsList className="flex w-full justify-start gap-8 sm:gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none overflow-x-auto scrollbar-hide">
+                  {hasArticles && (
+                    <TabsTrigger value="guide" className={tabTriggerClass}>
+                      המדריך
+                    </TabsTrigger>
+                  )}
+                  {hasCoverage && (
+                    <TabsTrigger value="coverage" className={tabTriggerClass}>
+                      הכיסויים
+                    </TabsTrigger>
+                  )}
+                  {hasFaq && (
+                    <TabsTrigger value="faq" className={tabTriggerClass}>
+                      שאלות נפוצות
+                    </TabsTrigger>
+                  )}
+                </TabsList>
 
-        {/* ══════ COVERAGE CATEGORIES (grouped) ══════ */}
-        {coverageCategories && coverageCategories.length > 0 && (
-          <section id="coverage" style={{ backgroundColor: BONE }}>
-            <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-              <div className="border-t border-[#171717]/20 pt-5 mb-10">
-                <SectionTitle>{coverageTitle}</SectionTitle>
-                {coverageSubtitle && (
-                  <p className="text-[#171717]/45 mt-2 text-base leading-relaxed max-w-xl">{coverageSubtitle}</p>
-                )}
-              </div>
-              <div className="space-y-12">
-                {coverageCategories.map((cat, catIdx) => (
-                  <div key={catIdx}>
-                    <div className="text-[11px] tracking-[0.22em] font-medium mb-5" style={{ color: BRONZE }}>
-                      {cat.category}
-                    </div>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
-                      {cat.items.map((item, idx) => (
-                        <div key={idx} className="border-t border-[#171717]/10 pt-4">
-                          <h4 className="text-base font-medium text-[#171717] mb-1.5">{item.title}</h4>
-                          <p className="text-[#171717]/50 text-[13px] leading-relaxed">{item.description}</p>
+                {/* — Guide — */}
+                {hasArticles && (
+                  <TabsContent value="guide" className="mt-0">
+                    <div className="max-w-3xl">
+                      {articles!.map((article, idx) => (
+                        <div key={idx} className={idx > 0 ? 'mt-14' : ''}>
+                          <div className="border-t border-[#171717]/15 pt-5 mb-6">
+                            <SectionTitle>{article.title}</SectionTitle>
+                          </div>
+                          <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base">
+                            {article.paragraphs.map((p, pIdx) => (
+                              <p key={pIdx}>{p}</p>
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
+                  </TabsContent>
+                )}
 
-        {/* ══════ FAQ ══════ */}
-        {faqItems.length > 0 && (
-          <section className="bg-white">
-            <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-              <div className="max-w-3xl">
-                <div className="border-t border-[#171717]/20 pt-5 mb-8">
-                  <SectionTitle>שאלות נפוצות</SectionTitle>
-                </div>
-                <Accordion type="multiple">
-                  {faqItems.map((item, idx) => (
-                    <AccordionItem
-                      key={idx}
-                      value={`faq-${idx}`}
-                      className="border-b border-[#171717]/10 rounded-none px-0"
-                    >
-                      <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
-                        {item.q}
-                      </AccordionTrigger>
-                      <AccordionContent className="text-[#171717]/50 leading-[1.85] pb-6 text-[14px]">
-                        {item.a}
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              </div>
+                {/* — Coverage — */}
+                {hasCoverage && (
+                  <TabsContent value="coverage" className="mt-0">
+                    <div className="mb-10">
+                      <SectionTitle>{coverageTitle}</SectionTitle>
+                      {coverageSubtitle && (
+                        <p className="text-[#171717]/45 mt-2 text-base leading-relaxed max-w-xl">{coverageSubtitle}</p>
+                      )}
+                    </div>
+
+                    {coverageTypes && coverageTypes.length > 0 && (
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
+                        {coverageTypes.map((coverage, idx) => (
+                          <div key={idx} className="border-t border-[#171717]/10 pt-4">
+                            <h3 className="text-base text-[#171717] mb-3.5" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                              {coverage.title}
+                            </h3>
+                            <ul className="space-y-2">
+                              {coverage.items.map((item, itemIdx) => {
+                                if (typeof item === 'string') {
+                                  return (
+                                    <li key={itemIdx} className="text-[#171717]/55 text-[14px] leading-relaxed flex gap-2.5">
+                                      <span style={{ color: BRONZE }}>—</span>
+                                      {item}
+                                    </li>
+                                  );
+                                }
+                                return (
+                                  <li key={itemIdx} className="text-[#171717]/55 text-[14px] leading-relaxed flex gap-2.5">
+                                    <span style={{ color: BRONZE }}>—</span>
+                                    <span>
+                                      <span className="font-medium text-[#171717]">{item.title}</span>
+                                      {item.description && <span className="text-[#171717]/45"> · {item.description}</span>}
+                                    </span>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {coverageCategories && coverageCategories.length > 0 && (
+                      <div className="space-y-12">
+                        {coverageCategories.map((cat, catIdx) => (
+                          <div key={catIdx}>
+                            <div className="text-[11px] tracking-[0.22em] font-medium mb-5" style={{ color: BRONZE }}>
+                              {cat.category}
+                            </div>
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
+                              {cat.items.map((item, idx) => (
+                                <div key={idx} className="border-t border-[#171717]/10 pt-4">
+                                  <h4 className="text-base font-medium text-[#171717] mb-1.5">{item.title}</h4>
+                                  <p className="text-[#171717]/50 text-[13px] leading-relaxed">{item.description}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </TabsContent>
+                )}
+
+                {/* — FAQ — */}
+                {hasFaq && (
+                  <TabsContent value="faq" className="mt-0">
+                    <div className="max-w-3xl">
+                      <Accordion type="multiple">
+                        {faqItems.map((item, idx) => (
+                          <AccordionItem
+                            key={idx}
+                            value={`faq-${idx}`}
+                            className="border-b border-[#171717]/10 rounded-none px-0"
+                          >
+                            <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
+                              {item.q}
+                            </AccordionTrigger>
+                            <AccordionContent className="text-[#171717]/50 leading-[1.85] pb-6 text-[14px]">
+                              {item.a}
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </div>
+                  </TabsContent>
+                )}
+              </Tabs>
             </div>
           </section>
         )}
