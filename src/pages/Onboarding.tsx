@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { Calendar as CalendarComp } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { BRONZE, SERIF, MONO } from "@/lib/brand";
+import { BRONZE, SERIF, MONO, CHIP_GREEN } from "@/lib/brand";
 import { LiveDot, StatusPill } from "@/components/brand/Live";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import Header from "@/components/Header";
@@ -381,6 +381,13 @@ function StepBar({ current }: { current: number }) {
           const active = i === current;
           return (
             <div key={i} className="flex items-baseline gap-2">
+              {done && (
+                <Check
+                  className="w-3 h-3 shrink-0 self-center"
+                  style={{ color: CHIP_GREEN }}
+                  aria-hidden="true"
+                />
+              )}
               <span
                 className={cn(
                   "text-[12px] tabular-nums tracking-[0.14em] transition-colors",

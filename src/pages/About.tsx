@@ -2,8 +2,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import { BONE, PINE, BRONZE, SERIF, MONO } from "@/lib/brand";
-import { StatusPill } from "@/components/brand/Live";
+import { BONE, PINE, BRONZE, SERIF, MONO, CHIP_GREEN } from "@/lib/brand";
+import { CountUp, StatusPill } from "@/components/brand/Live";
+import { DrawSpark } from "@/components/brand/Strokes";
 
 const SectionHead = ({ index, title, lede }: { index: string; title: string; lede?: string }) => (
   <div className="border-t border-[#171717]/20 pt-6 mb-10 sm:mb-12">
@@ -83,12 +84,18 @@ const About = () => {
         <section style={{ backgroundColor: BONE }}>
           <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
+              <div className="flex items-end justify-between gap-6 mb-2">
+                <span className="text-[11px] tracking-[0.14em] text-[#171717]/40" style={{ fontFamily: MONO }}>
+                  SEELD · IN NUMBERS
+                </span>
+                <DrawSpark color={CHIP_GREEN} className="w-40 sm:w-64" height={44} />
+              </div>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 border-t border-b border-[#171717]/15 py-10 sm:py-14">
                 {[
-                  { number: "12+", label: "חברות ביטוח ובתי השקעות" },
-                  { number: "100%", label: "שקיפות מול הלקוח" },
-                  { number: "24/7", label: "פורטל אישי זמין" },
-                  { number: "0 ₪", label: "עלות ייעוץ ראשוני" },
+                  { to: 12, format: (v: number) => `${v}+`, label: "חברות ביטוח ובתי השקעות" },
+                  { to: 100, format: (v: number) => `${v}%`, label: "שקיפות מול הלקוח" },
+                  { to: 24, format: (v: number) => `${v}/7`, label: "פורטל אישי זמין" },
+                  { to: 0, format: (v: number) => `${v} ₪`, label: "עלות ייעוץ ראשוני" },
                 ].map((stat) => (
                   <div key={stat.label} className="text-center px-3">
                     <p
@@ -96,7 +103,7 @@ const About = () => {
                       dir="ltr"
                       style={{ fontFamily: MONO, fontWeight: 600, fontSize: "clamp(2.2rem, 4.5vw, 3.4rem)", letterSpacing: "-0.02em" }}
                     >
-                      {stat.number}
+                      <CountUp to={stat.to} format={stat.format} />
                     </p>
                     <p className="text-[12px] tracking-[0.12em] text-[#171717]/45">{stat.label}</p>
                   </div>

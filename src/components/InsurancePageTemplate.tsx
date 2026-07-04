@@ -12,8 +12,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
 import type { LucideIcon } from 'lucide-react';
-import { INK, BONE, PINE, BRONZE, SERIF } from '@/lib/brand';
+import { INK, BONE, PINE, BRONZE, SERIF, CHIP_ORANGE } from '@/lib/brand';
 import { StatusPill } from '@/components/brand/Live';
+import { DrawUnderline } from '@/components/brand/Strokes';
 
 /* ─── Types (unchanged API — all 16 insurance pages pass these) ─── */
 interface KeyPoint {
@@ -157,11 +158,12 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
           </div>
 
           <h1
-            className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
+            className="text-[#171717] leading-[1.15] max-w-3xl"
             style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(2rem, 5vw, 3.4rem)' }}
           >
             {heroTitle}
           </h1>
+          <DrawUnderline color={CHIP_ORANGE} className="mt-2 mb-6" />
           <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9] mb-9">
             {heroDescription}
           </p>

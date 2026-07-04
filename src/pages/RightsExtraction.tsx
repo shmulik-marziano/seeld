@@ -1,9 +1,11 @@
+import { useRef } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import { BONE, PINE, BRONZE, SERIF, MONO } from "@/lib/brand";
+import { BONE, PINE, BRONZE, SERIF, MONO, CHIP_GREEN } from "@/lib/brand";
 import { StatusPill } from "@/components/brand/Live";
+import { ProgressRail } from "@/components/brand/Strokes";
 
 const rights = [
   { title: "החזרי מס הכנסה", description: "בדיקת החזרי מס עבור 6 שנים אחורה" },
@@ -19,6 +21,8 @@ const steps = [
 ];
 
 const RightsExtraction = () => {
+  const stepsRef = useRef<HTMLDivElement>(null);
+
   return (
     <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
       <Header />
@@ -109,7 +113,9 @@ const RightsExtraction = () => {
               </div>
             </ScrollReveal>
 
-            <div className="max-w-3xl">
+            <div ref={stepsRef} className="max-w-3xl relative pr-5 sm:pr-7">
+              {/* The rail fills as you read through the steps */}
+              <ProgressRail targetRef={stepsRef} color={CHIP_GREEN} className="right-0" />
               {steps.map((step, i) => (
                 <ScrollReveal key={step.number} delay={i * 60}>
                   <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-10 py-6 border-b border-[#171717]/10">

@@ -10,8 +10,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
-import { BONE, PINE, BRONZE, SERIF, MONO } from "@/lib/brand";
+import { BONE, PINE, BRONZE, SERIF, MONO, CHIP_GREEN } from "@/lib/brand";
 import { StatusPill } from "@/components/brand/Live";
+import { DrawSpark } from "@/components/brand/Strokes";
 
 const tabTriggerClass =
   'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
@@ -98,9 +99,12 @@ const GemelInvestment = () => {
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">קופת גמל להשקעה</span>
             </nav>
-            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
-              חיסכון ופנסיה
-            </span>
+            <div className="hidden sm:flex items-center gap-4">
+              <DrawSpark color={CHIP_GREEN} className="w-40" height={28} />
+              <span className="text-[11px] tracking-[0.22em] font-medium whitespace-nowrap" style={{ color: BRONZE }}>
+                חיסכון ופנסיה
+              </span>
+            </div>
           </div>
 
           <h1
