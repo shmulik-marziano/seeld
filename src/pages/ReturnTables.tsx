@@ -139,7 +139,7 @@ const ReturnTables = () => {
         {/* Tables — underline tabs, one dense view */}
         <section className="bg-white">
           <div className="max-w-6xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <Tabs defaultValue="study-general" dir="rtl">
+            <Tabs defaultValue={(tabDefs.find((t) => t.funds.length > 0) ?? tabDefs[0]).value} dir="rtl">
               <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none overflow-x-auto scrollbar-hide">
                 {tabDefs.map((tab) => (
                   <TabsTrigger key={tab.value} value={tab.value} className={tabTriggerClass}>
