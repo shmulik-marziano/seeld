@@ -5,7 +5,7 @@ const RentersInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Package}
-      heroIconColor="#e76f51"
+      heroIconColor="#b91c1c"
       heroCategory="ביטוח תכולה לשוכרים"
       heroTitle="ביטוח תכולה לשוכרים"
       heroDescription="הגנה על הרכוש האישי שלכם בדירה שכורה — רהיטים, מכשירי חשמל ופריטים אישיים מכוסים מפני נזק, גניבה והצפה."

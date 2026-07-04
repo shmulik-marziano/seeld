@@ -24,7 +24,7 @@ const insuranceCategories: InsuranceCategory[] = [
     icon: Heart,
     doodle: "family",
     highlights: ["ניתוחים בארץ ובחו״ל", "תרופות מחוץ לסל", "ייעוץ ובדיקות"],
-    color: "#e76f51",
+    color: "#b91c1c",
   },
   {
     id: "critical",
@@ -34,7 +34,7 @@ const insuranceCategories: InsuranceCategory[] = [
     icon: Shield,
     doodle: "shield",
     highlights: ["מענק חד פעמי", "כיסוי מגוון מחלות", "ללא תלות בהוצאות"],
-    color: "#6c63ff",
+    color: "#171717",
   },
   {
     id: "accidents",
@@ -44,7 +44,7 @@ const insuranceCategories: InsuranceCategory[] = [
     icon: AlertTriangle,
     doodle: "umbrella",
     highlights: ["כיסוי 24/7", "נכות תעסוקתית", "הרחבות לספורט"],
-    color: "#f4a261",
+    color: "#b45309",
   },
   {
     id: "life",
@@ -54,7 +54,7 @@ const insuranceCategories: InsuranceCategory[] = [
     icon: Users,
     doodle: "family",
     highlights: ["ביטוח חיים זוגי", "שחרור מפרמיה", "כיסוי נכות"],
-    color: "#90be6d",
+    color: "#15803d",
   },
   {
     id: "mortgage",
@@ -64,7 +64,7 @@ const insuranceCategories: InsuranceCategory[] = [
     icon: Home,
     doodle: "pension",
     highlights: ["כיסוי יתרת משכנתא", "פרמיה יורדת", "התאמה אישית"],
-    color: "#5ec6c6",
+    color: "#171717",
   },
   {
     id: "partners",
@@ -74,7 +74,7 @@ const insuranceCategories: InsuranceCategory[] = [
     icon: Handshake,
     doodle: "handshake",
     highlights: ["הגנה על העסק", "רכישת מניות", "המשכיות עסקית"],
-    color: "#e76f51",
+    color: "#b91c1c",
   },
 ];
 

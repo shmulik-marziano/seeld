@@ -72,20 +72,20 @@ const ReturnTables = () => {
       <Header />
 
       {/* Hero Section */}
-      <section className="bg-[#f8f9fc] relative overflow-hidden">
-        <div className="absolute top-[10%] right-[5%] w-[85px] h-[85px] rounded-full bg-[#90be6d]" />
-        <div className="absolute bottom-[12%] left-[7%] w-[60px] h-[60px] rounded-full bg-[#5ec6c6]" />
-        <div className="absolute top-[50%] right-[20%] w-[30px] h-[30px] rounded-full bg-[#f4a261]" />
-        <div className="absolute top-[25%] left-[14%] w-[24px] h-[24px] rounded-full bg-[#6c63ff]" />
+      <section className="bg-[#fafafa] relative overflow-hidden">
+        <div className="absolute top-[10%] right-[5%] w-[85px] h-[85px] rounded-full bg-[#171717] opacity-[0.05]" />
+        <div className="absolute bottom-[12%] left-[7%] w-[60px] h-[60px] rounded-full bg-[#171717] opacity-[0.05]" />
+        <div className="absolute top-[50%] right-[20%] w-[30px] h-[30px] rounded-full bg-[#171717] opacity-[0.05]" />
+        <div className="absolute top-[25%] left-[14%] w-[24px] h-[24px] rounded-full bg-[#171717] opacity-[0.05]" />
         <div className="absolute top-16 left-[18%] hidden lg:block">
           <svg width="160" height="100" viewBox="0 0 160 100" fill="none">
-            <path d="M10 80 C 50 10, 110 10, 150 60" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
-            <polygon points="150,60 142,54 146,66" fill="#0a3d3d" opacity="0.12" />
+            <path d="M10 80 C 50 10, 110 10, 150 60" stroke="#171717" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
+            <polygon points="150,60 142,54 146,66" fill="#171717" opacity="0.12" />
           </svg>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 relative z-10 text-center">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
-            לוחות <span className="text-[#90be6d]">תשואה</span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#171717] mb-4 leading-tight">
+            לוחות <span className="text-[#15803d]">תשואה</span>
           </h1>
           <p className="text-lg sm:text-xl text-gray-500 max-w-3xl mx-auto leading-relaxed">
             נתוני תשואות עדכניים של קרנות השתלמות, קופות גמל, קרנות פנסיה ופוליסות חיסכון בישראל
@@ -102,7 +102,7 @@ const ReturnTables = () => {
           </div>
           <div className="mt-5">
             <Link to="/fund-finder">
-              <Button variant="outline" className="border-[#0a3d3d] text-[#0a3d3d] rounded-full px-6 text-sm font-semibold">
+              <Button variant="outline" className="border-[#171717] text-[#171717] rounded-full px-6 text-sm font-semibold">
                 <Search className="w-4 h-4 ml-1.5" />
                 לכלי איתור והשוואת קופות מתקדם
               </Button>
@@ -114,9 +114,9 @@ const ReturnTables = () => {
       {/* Breadcrumb */}
       <div className="border-b border-gray-100">
         <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
+          <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
           <ChevronLeft className="w-3.5 h-3.5" />
-          <span className="text-[#0a3d3d] font-medium">לוחות תשואה</span>
+          <span className="text-[#171717] font-medium">לוחות תשואה</span>
         </nav>
       </div>
 
@@ -179,40 +179,40 @@ const ReturnTables = () => {
         {/* Summary Stats */}
         <section className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="rounded-2xl bg-white border border-gray-100 p-6 text-center">
-            <div className="w-14 h-14 rounded-full bg-[#90be6d] flex items-center justify-center mx-auto mb-3">
+            <div className="w-14 h-14 rounded-full bg-[#15803d] flex items-center justify-center mx-auto mb-3">
               <TrendingUp className="w-6 h-6 text-white" />
             </div>
-            <p className="text-3xl font-extrabold text-[#0a3d3d]">{maxYear.toFixed(2)}%</p>
+            <p className="text-3xl font-extrabold text-[#171717]">{maxYear.toFixed(2)}%</p>
             <p className="text-sm text-gray-500 mt-1">תשואה שנתית מקסימלית</p>
             <p className="text-xs text-gray-400 mt-1">{topFund?.name}</p>
           </div>
           <div className="rounded-2xl bg-white border border-gray-100 p-6 text-center">
-            <div className="w-14 h-14 rounded-full bg-[#5ec6c6] flex items-center justify-center mx-auto mb-3">
+            <div className="w-14 h-14 rounded-full bg-[#171717] flex items-center justify-center mx-auto mb-3">
               <Calendar className="w-6 h-6 text-white" />
             </div>
-            <p className="text-3xl font-extrabold text-[#0a3d3d]">{maxFiveYear.toFixed(2)}%</p>
+            <p className="text-3xl font-extrabold text-[#171717]">{maxFiveYear.toFixed(2)}%</p>
             <p className="text-sm text-gray-500 mt-1">תשואה ל-5 שנים מקסימלית</p>
             <p className="text-xs text-gray-400 mt-1">{topFiveYearFund?.name}</p>
           </div>
           <div className="rounded-2xl bg-white border border-gray-100 p-6 text-center">
-            <div className="w-14 h-14 rounded-full bg-[#6c63ff] flex items-center justify-center mx-auto mb-3">
+            <div className="w-14 h-14 rounded-full bg-[#171717] flex items-center justify-center mx-auto mb-3">
               <Info className="w-6 h-6 text-white" />
             </div>
-            <p className="text-3xl font-extrabold text-[#0a3d3d]">{totalFunds}</p>
+            <p className="text-3xl font-extrabold text-[#171717]">{totalFunds}</p>
             <p className="text-sm text-gray-500 mt-1">קרנות במעקב</p>
             <p className="text-xs text-gray-400 mt-1">8 קטגוריות שונות</p>
           </div>
         </section>
 
         {/* Disclaimer */}
-        <section className="mt-12 rounded-2xl bg-[#f8f9fc] p-8 md:p-12">
-          <h2 className="text-2xl font-extrabold text-[#0a3d3d] mb-4">הבהרה חשובה</h2>
+        <section className="mt-12 rounded-2xl bg-[#fafafa] p-8 md:p-12">
+          <h2 className="text-2xl font-extrabold text-[#171717] mb-4">הבהרה חשובה</h2>
           <p className="text-gray-500 leading-relaxed">
             הנתונים המוצגים מבוססים על מידע ממקורות ציבוריים של רשות שוק ההון (גמלנט, ביטוחנט, פנסיהנט) ומיועדים להשוואה כללית בלבד.
             תשואות עבר אינן מעידות על תשואות עתידיות. דמי הניהול אינם כלולים בחישוב התשואות.
             לפני קבלת החלטות פיננסיות, מומלץ להתייעץ עם יועץ פנסיוני או פיננסי מוסמך.
             <br /><br />
-            <strong className="text-[#0a3d3d]">מקור הנתונים:</strong> רשות שוק ההון, ביטוח וחיסכון — משרד האוצר.
+            <strong className="text-[#171717]">מקור הנתונים:</strong> רשות שוק ההון, ביטוח וחיסכון — משרד האוצר.
           </p>
         </section>
       </main>

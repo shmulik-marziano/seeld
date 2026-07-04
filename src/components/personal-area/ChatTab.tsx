@@ -132,7 +132,7 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
   if (loading) {
     return (
       <div className="flex justify-center py-16">
-        <Loader2 className="w-7 h-7 animate-spin" style={{ color: "#0a3d3d" }} />
+        <Loader2 className="w-7 h-7 animate-spin" style={{ color: "#171717" }} />
       </div>
     );
   }
@@ -141,7 +141,7 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
     <div className="bg-white rounded-2xl shadow-sm border overflow-hidden flex flex-col relative" style={{ height: "calc(100dvh - 200px)", minHeight: 400 }}>
       {/* On mobile, ensure full height usage */}
       {/* Chat header */}
-      <div className="px-5 py-4 border-b flex items-center gap-3" style={{ background: "#0a3d3d" }}>
+      <div className="px-5 py-4 border-b flex items-center gap-3" style={{ background: "#171717" }}>
         <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
           <MessageCircle className="w-5 h-5 text-white" />
         </div>
@@ -155,12 +155,12 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
       <div
         ref={containerRef}
         className="flex-1 overflow-y-auto p-4 space-y-4"
-        style={{ background: "#f8f9fc" }}
+        style={{ background: "#fafafa" }}
       >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
-            <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: "#e0f2f1" }}>
-              <MessageCircle className="w-8 h-8" style={{ color: "#0a3d3d" }} />
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: "#f5f5f5" }}>
+              <MessageCircle className="w-8 h-8" style={{ color: "#171717" }} />
             </div>
             <p className="text-gray-500 text-sm">אין הודעות עדיין. שלח הודעה ראשונה לסוכן שלך!</p>
           </div>
@@ -187,7 +187,7 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
                           : "rounded-bl-md"
                       }`}
                       style={{
-                        background: isCustomer ? "#0a3d3d" : "white",
+                        background: isCustomer ? "#171717" : "white",
                         color: isCustomer ? "white" : "#1f2937",
                         border: isCustomer ? "none" : "1px solid #e5e7eb",
                       }}
@@ -219,14 +219,14 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="הקלד הודעה..."
-            className="flex-1 rounded-full border border-gray-200 px-4 py-3 text-base sm:text-sm focus:outline-none focus:border-[#0a3d3d] focus:ring-1 focus:ring-[#0a3d3d] transition-colors min-h-[44px]"
+            className="flex-1 rounded-full border border-gray-200 px-4 py-3 text-base sm:text-sm focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors min-h-[44px]"
             disabled={sending}
           />
           <button
             onClick={sendMessage}
             disabled={!newMessage.trim() || sending}
             className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 transition-all disabled:opacity-40 min-w-[44px] min-h-[44px]"
-            style={{ background: "#0a3d3d", color: "white" }}
+            style={{ background: "#171717", color: "white" }}
           >
             {sending ? (
               <Loader2 className="w-4 h-4 animate-spin" />

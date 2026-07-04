@@ -5,7 +5,7 @@ const ForeignWorkersInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Globe}
-      heroIconColor="#e76f51"
+      heroIconColor="#b91c1c"
       heroCategory="ביטוח עובדים זרים ותיירים"
       heroTitle="ביטוח עובדים זרים ותיירים"
       heroDescription="ביטוח בריאות לעובדים זרים ותיירים בישראל כנדרש בחוק — עמידה בדרישות החוק והגנה על העובדים."

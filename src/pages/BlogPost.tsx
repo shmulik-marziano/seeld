@@ -19,11 +19,11 @@ interface BlogPostData {
 }
 
 const categoryColors: Record<string, string> = {
-  "פנסיה": "#5ec6c6",
-  "ביטוח": "#e76f51",
-  "טיפים": "#f4a261",
-  "חיסכון": "#90be6d",
-  "פיננסים": "#6c63ff",
+  "פנסיה": "#171717",
+  "ביטוח": "#171717",
+  "טיפים": "#4d4d4d",
+  "חיסכון": "#6e6e6e",
+  "פיננסים": "#171717",
 };
 
 const BlogPost = () => {
@@ -147,7 +147,7 @@ const BlogPost = () => {
     return () => document.removeEventListener("click", handleContentClick);
   }, []);
 
-  const accentColor = categoryColors[post?.category || ""] || "#0a3d3d";
+  const accentColor = categoryColors[post?.category || ""] || "#171717";
 
   // Dynamic lead form text — tailored per article slug, with category fallback
   const leadFormText = (() => {
@@ -294,7 +294,7 @@ const BlogPost = () => {
       <div className="min-h-screen bg-white dark:bg-gray-950" dir="rtl">
         <Header />
         <div className="flex justify-center py-32">
-          <Loader2 className="h-8 w-8 animate-spin text-[#0a3d3d]" />
+          <Loader2 className="h-8 w-8 animate-spin text-[#171717]" />
         </div>
         <Footer />
       </div>
@@ -306,12 +306,12 @@ const BlogPost = () => {
       <div className="min-h-screen bg-white dark:bg-gray-950" dir="rtl">
         <Header />
         <div className="max-w-3xl mx-auto px-4 py-32 text-center">
-          <h1 className="text-3xl font-bold text-[#0a3d3d] dark:text-white mb-4">
+          <h1 className="text-3xl font-bold text-[#171717] dark:text-white mb-4">
             הפוסט לא נמצא
           </h1>
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#0a3d3d] text-white font-semibold hover:bg-[#0d4a4a] transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#171717] text-white font-semibold hover:bg-[#262626] transition-all"
           >
             <ArrowRight className="w-4 h-4" />
             חזרה לבלוג
@@ -327,20 +327,20 @@ const BlogPost = () => {
       <Header />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-[#f8f9fc] dark:bg-gray-900 py-12 sm:py-24">
+      <section className="relative overflow-hidden bg-[#fafafa] dark:bg-gray-900 py-12 sm:py-24">
         {/* Decorative circles - mobile-aware */}
         <div
           className="absolute top-6 right-4 sm:top-8 sm:right-12 w-16 h-16 sm:w-28 sm:h-28 rounded-full opacity-20"
           style={{ backgroundColor: accentColor }}
         />
-        <div className="absolute bottom-6 left-8 sm:bottom-8 sm:left-20 w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-[#f4a261] opacity-15" />
-        <div className="absolute top-1/3 left-4 sm:left-10 w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-[#90be6d] opacity-15 hidden sm:block" />
+        <div className="absolute bottom-6 left-8 sm:bottom-8 sm:left-20 w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-[#171717] opacity-[0.05]" />
+        <div className="absolute top-1/3 left-4 sm:left-10 w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-[#171717] opacity-[0.05] hidden sm:block" />
 
         <div className="max-w-3xl mx-auto px-4 relative z-10">
           {/* Back link */}
           <Link
             to="/blog"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0a3d3d]/60 dark:text-white/50 hover:text-[#0a3d3d] dark:hover:text-white transition-colors mb-6"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#171717]/60 dark:text-white/50 hover:text-[#171717] dark:hover:text-white transition-colors mb-6"
           >
             <ArrowRight className="w-4 h-4" />
             חזרה לבלוג
@@ -357,12 +357,12 @@ const BlogPost = () => {
           )}
 
           {/* Title */}
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#0a3d3d] dark:text-white leading-tight mb-5 sm:mb-6">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#171717] dark:text-white leading-tight mb-5 sm:mb-6">
             {post.title}
           </h1>
 
           {/* Meta */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-[#0a3d3d]/50 dark:text-white/40">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-[#171717]/50 dark:text-white/40">
             {post.author && (
               <span className="flex items-center gap-1.5">
                 <User className="w-4 h-4" />
@@ -380,7 +380,7 @@ const BlogPost = () => {
       {/* Cover Image */}
       {post.cover_image_url && (
         <div className="max-w-4xl mx-auto px-4 -mt-8 sm:-mt-12 relative z-20">
-          <div className="rounded-2xl overflow-hidden shadow-2xl shadow-[#0a3d3d]/10">
+          <div className="rounded-2xl overflow-hidden shadow-2xl shadow-[#171717]/10">
             <img
               src={post.cover_image_url}
               alt={post.title}
@@ -394,16 +394,16 @@ const BlogPost = () => {
       <article className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
         <div
           className="prose prose-base sm:prose-lg max-w-none dark:prose-invert
-            prose-headings:text-[#0a3d3d] dark:prose-headings:text-white prose-headings:font-bold
-            prose-p:text-[#0a3d3d]/80 dark:prose-p:text-white/70 prose-p:leading-relaxed
-            prose-strong:text-[#0a3d3d] dark:prose-strong:text-white
-            prose-a:text-[#5ec6c6] prose-a:no-underline hover:prose-a:underline"
+            prose-headings:text-[#171717] dark:prose-headings:text-white prose-headings:font-bold
+            prose-p:text-[#171717]/80 dark:prose-p:text-white/70 prose-p:leading-relaxed
+            prose-strong:text-[#171717] dark:prose-strong:text-white
+            prose-a:text-[#171717] prose-a:no-underline hover:prose-a:underline"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
 
         {/* Share buttons */}
-        <div className="mt-12 pt-8 border-t border-[#0a3d3d]/10 dark:border-white/10">
-          <p className="text-sm font-semibold text-[#0a3d3d] dark:text-white mb-3 flex items-center gap-2">
+        <div className="mt-12 pt-8 border-t border-[#171717]/10 dark:border-white/10">
+          <p className="text-sm font-semibold text-[#171717] dark:text-white mb-3 flex items-center gap-2">
             <Share2 className="w-4 h-4" />
             שתפו את המאמר
           </p>
@@ -421,7 +421,7 @@ const BlogPost = () => {
             </button>
             <button
               onClick={copyLink}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold bg-[#f8f9fc] dark:bg-gray-800 text-[#0a3d3d] dark:text-white/70 hover:bg-[#0a3d3d]/10 transition-all min-h-[44px]"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold bg-[#fafafa] dark:bg-gray-800 text-[#171717] dark:text-white/70 hover:bg-[#171717]/10 transition-all min-h-[44px]"
             >
               <Copy className="w-4 h-4" />
               העתק קישור
@@ -435,15 +435,15 @@ const BlogPost = () => {
         <div className="max-w-3xl mx-auto px-4">
           <div
             className="rounded-3xl overflow-hidden shadow-2xl"
-            style={{ background: `linear-gradient(135deg, #0a3d3d 0%, #145555 60%, ${accentColor}90 100%)` }}
+            style={{ background: `linear-gradient(135deg, #171717 0%, #262626 60%, ${accentColor}90 100%)` }}
           >
             {/* Top decorative bar */}
-            <div className="h-1.5 w-full" style={{ background: `linear-gradient(90deg, ${accentColor}, #f4a261, #5ec6c6)` }} />
+            <div className="h-1.5 w-full" style={{ background: `linear-gradient(90deg, #171717, #6e6e6e)` }} />
 
             <div className="px-6 sm:px-12 py-10 sm:py-14">
               {leadSubmitted ? (
                 <div className="text-center py-6">
-                  <CheckCircle2 className="w-16 h-16 text-[#5ec6c6] mx-auto mb-5" />
+                  <CheckCircle2 className="w-16 h-16 text-[#171717] mx-auto mb-5" />
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
                     תודה! קיבלנו את הפרטים
                   </h3>
@@ -470,7 +470,7 @@ const BlogPost = () => {
                         onChange={(e) => setLeadForm(prev => ({ ...prev, name: e.target.value }))}
                         required
                         placeholder="שם מלא *"
-                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-4 text-white placeholder:text-white/50 focus:outline-none focus:border-[#5ec6c6] focus:ring-2 focus:ring-[#5ec6c6]/30 transition-all text-base"
+                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-4 text-white placeholder:text-white/50 focus:outline-none focus:border-[#171717] focus:ring-2 focus:ring-[#171717]/30 transition-all text-base"
                       />
                     </div>
                     <div className="grid sm:grid-cols-2 gap-5">
@@ -481,7 +481,7 @@ const BlogPost = () => {
                         required
                         placeholder="טלפון *"
                         dir="ltr"
-                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-4 text-white placeholder:text-white/50 focus:outline-none focus:border-[#5ec6c6] focus:ring-2 focus:ring-[#5ec6c6]/30 transition-all text-base text-right"
+                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-4 text-white placeholder:text-white/50 focus:outline-none focus:border-[#171717] focus:ring-2 focus:ring-[#171717]/30 transition-all text-base text-right"
                       />
                       <input
                         type="email"
@@ -489,13 +489,13 @@ const BlogPost = () => {
                         onChange={(e) => setLeadForm(prev => ({ ...prev, email: e.target.value }))}
                         placeholder="אימייל (לא חובה)"
                         dir="ltr"
-                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-4 text-white placeholder:text-white/50 focus:outline-none focus:border-[#5ec6c6] focus:ring-2 focus:ring-[#5ec6c6]/30 transition-all text-base text-right"
+                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-4 text-white placeholder:text-white/50 focus:outline-none focus:border-[#171717] focus:ring-2 focus:ring-[#171717]/30 transition-all text-base text-right"
                       />
                     </div>
                     <button
                       type="submit"
                       disabled={leadSubmitting}
-                      className="w-full bg-[#5ec6c6] hover:bg-[#4db8b8] text-white rounded-xl px-8 py-4 font-bold text-lg transition-all hover:shadow-lg hover:shadow-[#5ec6c6]/30 min-h-[56px] flex items-center justify-center gap-3 disabled:opacity-60"
+                      className="w-full bg-[#171717] hover:bg-[#262626] text-white rounded-xl px-8 py-4 font-bold text-lg transition-all hover:shadow-lg hover:shadow-[#171717]/30 min-h-[56px] flex items-center justify-center gap-3 disabled:opacity-60"
                     >
                       {leadSubmitting ? (
                         <Loader2 className="w-5 h-5 animate-spin" />
@@ -519,19 +519,19 @@ const BlogPost = () => {
 
       {/* Related Posts */}
       {related.length > 0 && (
-        <section className="bg-[#f8f9fc] dark:bg-gray-900 py-16">
+        <section className="bg-[#fafafa] dark:bg-gray-900 py-16">
           <div className="max-w-6xl mx-auto px-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d] dark:text-white mb-8 text-center">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#171717] dark:text-white mb-8 text-center">
               מאמרים נוספים
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((r) => {
-                const rColor = categoryColors[r.category || ""] || "#0a3d3d";
+                const rColor = categoryColors[r.category || ""] || "#171717";
                 return (
                   <Link
                     key={r.id}
                     to={`/blog/${r.slug}`}
-                    className="group bg-white dark:bg-gray-900 rounded-2xl border border-[#0a3d3d]/10 dark:border-white/10 overflow-hidden hover:shadow-xl hover:shadow-[#0a3d3d]/5 transition-all duration-300 hover:-translate-y-1"
+                    className="group bg-white dark:bg-gray-900 rounded-2xl border border-[#171717]/10 dark:border-white/10 overflow-hidden hover:shadow-xl hover:shadow-[#171717]/5 transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="h-2 w-full" style={{ backgroundColor: rColor }} />
                     <div className="p-6">
@@ -543,11 +543,11 @@ const BlogPost = () => {
                           {r.category}
                         </span>
                       )}
-                      <h3 className="text-lg font-bold text-[#0a3d3d] dark:text-white mb-2 leading-tight group-hover:text-[#5ec6c6] transition-colors">
+                      <h3 className="text-lg font-bold text-[#171717] dark:text-white mb-2 leading-tight group-hover:text-[#171717] transition-colors">
                         {r.title}
                       </h3>
                       {r.excerpt && (
-                        <p className="text-sm text-[#0a3d3d]/50 dark:text-white/40 line-clamp-2">
+                        <p className="text-sm text-[#171717]/50 dark:text-white/40 line-clamp-2">
                           {r.excerpt}
                         </p>
                       )}

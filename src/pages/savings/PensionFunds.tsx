@@ -18,7 +18,7 @@ const PensionFunds = () => {
       title: "פנסיה מקיפה חדשה",
       icon: Shield,
       doodle: "shield",
-      color: "#5ec6c6",
+      color: "#171717",
       description: "קרן פנסיה המשלבת חיסכון, ביטוח נכות וביטוח שאירים",
       features: ["תשואות מנוהלות", "כיסוי אובדן כושר עבודה", "פנסיית שאירים"],
     },
@@ -26,7 +26,7 @@ const PensionFunds = () => {
       title: "פנסיה כללית",
       icon: TrendingUp,
       doodle: "growth",
-      color: "#f4a261",
+      color: "#b45309",
       description: "מסלול חיסכון בלבד ללא רכיבים ביטוחיים",
       features: ["תשואות גבוהות יותר", "גמישות מקסימלית", "דמי ניהול נמוכים"],
     },
@@ -34,7 +34,7 @@ const PensionFunds = () => {
       title: "פנסיה משלימה",
       icon: PiggyBank,
       doodle: "savings",
-      color: "#90be6d",
+      color: "#15803d",
       description: "הפקדות נוספות מעבר לחובה לשיפור הפנסיה",
       features: ["הטבות מס", "הגדלת הקצבה", "חיסכון לטווח ארוך"],
     },
@@ -114,10 +114,10 @@ const PensionFunds = () => {
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
               {[
-                { icon: TrendingUp, doodle: "growth", title: "תשואות מנוהלות", desc: "הכספים מנוהלים על ידי מנהלי השקעות מקצועיים", color: "#5ec6c6" },
-                { icon: Shield, doodle: "shield", title: "כיסויים ביטוחיים", desc: "פנסיית נכות ושאירים להגנה על המשפחה", color: "#f4a261" },
-                { icon: Calculator, doodle: "calculator", title: "הטבות מס", desc: "זיכוי מס והפחתת הכנסה חייבת במס", color: "#90be6d" },
-                { icon: Users, doodle: "handshake", title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לבחירת המסלול המתאים", color: "#e76f51" },
+                { icon: TrendingUp, doodle: "growth", title: "תשואות מנוהלות", desc: "הכספים מנוהלים על ידי מנהלי השקעות מקצועיים", color: "#171717" },
+                { icon: Shield, doodle: "shield", title: "כיסויים ביטוחיים", desc: "פנסיית נכות ושאירים להגנה על המשפחה", color: "#b45309" },
+                { icon: Calculator, doodle: "calculator", title: "הטבות מס", desc: "זיכוי מס והפחתת הכנסה חייבת במס", color: "#15803d" },
+                { icon: Users, doodle: "handshake", title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לבחירת המסלול המתאים", color: "#b91c1c" },
               ].map((item, idx) => (
                 <div key={idx} className="border-t border-[#171717]/10 pt-4">
                   <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>

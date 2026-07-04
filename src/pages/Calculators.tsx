@@ -21,19 +21,19 @@ const Calculators = () => {
       title: "מחשבון ביטוח חיים",
       description: "כמה כיסוי ביטוחי אתם באמת צריכים?",
       icon: Heart,
-      color: "#e76f51",
+      color: "#b91c1c",
     },
     {
       title: "מחשבון ביטוח רכב",
       description: "השוו מחירי ביטוח רכב בהתאם לפרופיל שלכם",
       icon: Car,
-      color: "#f4a261",
+      color: "#b45309",
     },
     {
       title: "מחשבון מס הכנסה",
       description: "חשבו את גובה המס והחזרים אפשריים",
       icon: Briefcase,
-      color: "#90be6d",
+      color: "#15803d",
     },
   ];
 

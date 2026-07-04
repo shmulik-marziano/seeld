@@ -18,7 +18,7 @@ const PensionLifeInsurance = () => {
       title: "הגנה מלאה",
       icon: Shield,
       doodle: "shield",
-      color: "#e76f51",
+      color: "#b91c1c",
       description: "ביטוח חיים שמגן על המשפחה במקרה של אובדן מפרנס",
       features: ["ביטוח חיים (ריסק)", "אובדן כושר עבודה", "פטור מפרמיות"],
     },
@@ -26,7 +26,7 @@ const PensionLifeInsurance = () => {
       title: "חיסכון מצטבר",
       icon: TrendingUp,
       doodle: "growth",
-      color: "#5ec6c6",
+      color: "#171717",
       description: "צבירת כספים לפנסיה במקביל לכיסוי ביטוחי",
       features: ["מרכיב חיסכון", "תשואה מנוהלת", "הטבות מס"],
     },
@@ -34,7 +34,7 @@ const PensionLifeInsurance = () => {
       title: "גמישות מלאה",
       icon: Heart,
       doodle: "family",
-      color: "#f4a261",
+      color: "#b45309",
       description: "התאמת סכומי הביטוח והחיסכון לצרכים המשתנים",
       features: ["כיסויים מותאמים", "שינוי מסלולים", "עדכון תקופתי"],
     },
@@ -114,10 +114,10 @@ const PensionLifeInsurance = () => {
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
               {[
-                { icon: Shield, doodle: "shield", title: "הגנה מקיפה", desc: "ביטוח חיים, נכות ופטור מפרמיות", color: "#e76f51" },
-                { icon: TrendingUp, doodle: "growth", title: "חיסכון לפנסיה", desc: "צבירת כספים מנוהלת לעתיד", color: "#5ec6c6" },
-                { icon: Heart, doodle: "family", title: "גמישות", desc: "כיסויים מותאמים לצרכים שלכם", color: "#f4a261" },
-                { icon: Users, doodle: "handshake", title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לאורך הדרך", color: "#90be6d" },
+                { icon: Shield, doodle: "shield", title: "הגנה מקיפה", desc: "ביטוח חיים, נכות ופטור מפרמיות", color: "#b91c1c" },
+                { icon: TrendingUp, doodle: "growth", title: "חיסכון לפנסיה", desc: "צבירת כספים מנוהלת לעתיד", color: "#171717" },
+                { icon: Heart, doodle: "family", title: "גמישות", desc: "כיסויים מותאמים לצרכים שלכם", color: "#b45309" },
+                { icon: Users, doodle: "handshake", title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לאורך הדרך", color: "#15803d" },
               ].map((item, idx) => (
                 <div key={idx} className="border-t border-[#171717]/10 pt-4">
                   <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>

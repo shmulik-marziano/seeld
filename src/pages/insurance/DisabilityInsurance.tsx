@@ -5,7 +5,7 @@ const DisabilityInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Briefcase}
-      heroIconColor="#e76f51"
+      heroIconColor="#b91c1c"
       heroCategory="ביטוח אובדן כושר עבודה"
       heroTitle="ביטוח אובדן כושר עבודה"
       heroDescription="הגנה על ההכנסה שלכם במקרה של אובדן יכולת לעבוד — פיצוי חודשי שמאפשר לכם להמשיך לחיות בכבוד."

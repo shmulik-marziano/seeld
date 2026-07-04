@@ -50,7 +50,7 @@ const RecommendationsTab = ({ customerId }: { customerId: string }) => {
   if (loading) {
     return (
       <div className="flex justify-center py-16">
-        <Loader2 className="w-7 h-7 animate-spin" style={{ color: "#0a3d3d" }} />
+        <Loader2 className="w-7 h-7 animate-spin" style={{ color: "#171717" }} />
       </div>
     );
   }
@@ -61,7 +61,7 @@ const RecommendationsTab = ({ customerId }: { customerId: string }) => {
         <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: "#fef3c7" }}>
           <Lightbulb className="w-8 h-8" style={{ color: "#f59e0b" }} />
         </div>
-        <h3 className="text-lg font-bold mb-2" style={{ color: "#0a3d3d" }}>אין המלצות עדיין</h3>
+        <h3 className="text-lg font-bold mb-2" style={{ color: "#171717" }}>אין המלצות עדיין</h3>
         <p className="text-gray-500">הסוכן שלך יכין עבורך המלצות מותאמות אישית בקרוב.</p>
       </div>
     );
@@ -69,7 +69,7 @@ const RecommendationsTab = ({ customerId }: { customerId: string }) => {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold" style={{ color: "#0a3d3d" }}>המלצות הסוכן</h2>
+      <h2 className="text-xl font-bold" style={{ color: "#171717" }}>המלצות הסוכן</h2>
       <div className="grid gap-4">
         {recommendations.map((rec) => {
           const status = statusConfig[rec.status || "pending"] || statusConfig.pending;
@@ -82,7 +82,7 @@ const RecommendationsTab = ({ customerId }: { customerId: string }) => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <h3 className="font-bold text-base" style={{ color: "#0a3d3d" }}>
+                      <h3 className="font-bold text-base" style={{ color: "#171717" }}>
                         {rec.title || "המלצה"}
                       </h3>
                       <span

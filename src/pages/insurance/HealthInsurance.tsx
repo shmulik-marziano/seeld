@@ -114,7 +114,7 @@ const HealthInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Heart}
-      heroIconColor="#e76f51"
+      heroIconColor="#b91c1c"
       heroCategory="ביטוח בריאות"
       heroTitle="ביטוח בריאות פרטי"
       heroDescription="גישה מהירה לרופאים מומחים, ניתוחים וטיפולים מתקדמים — הגנה מקיפה על הבריאות שלכם ושל משפחתכם."

@@ -21,7 +21,7 @@ const savingsCategories: SavingsCategory[] = [
     href: "/savings/pension-funds",
     doodle: "pension",
     highlights: ["מסלולי השקעה", "כיסוי נכות ושאירים", "דמי ניהול"],
-    color: "#5ec6c6",
+    color: "#171717",
   },
   {
     id: "gemel",
@@ -30,7 +30,7 @@ const savingsCategories: SavingsCategory[] = [
     href: "/savings/gemel-funds",
     doodle: "savings",
     highlights: ["הטבות מס", "גמישות במשיכה", "תשואות מנוהלות"],
-    color: "#90be6d",
+    color: "#15803d",
   },
   {
     id: "gemel-invest",
@@ -39,7 +39,7 @@ const savingsCategories: SavingsCategory[] = [
     href: "/savings/gemel-investment",
     doodle: "growth",
     highlights: ["נזילות מלאה", "פטור ממס רווחי הון", "מגוון מסלולים"],
-    color: "#f4a261",
+    color: "#b45309",
   },
   {
     id: "child",
@@ -48,7 +48,7 @@ const savingsCategories: SavingsCategory[] = [
     href: "/savings/child-savings",
     doodle: "family",
     highlights: ["הפקדה ממשלתית", "בחירת מסלול", "פטור ממס"],
-    color: "#e76f51",
+    color: "#b91c1c",
   },
   {
     id: "training",
@@ -57,7 +57,7 @@ const savingsCategories: SavingsCategory[] = [
     href: "/savings/training-funds",
     doodle: "lightbulb",
     highlights: ["פטור ממס", "נזילות אחרי 6 שנים", "תשואות גבוהות"],
-    color: "#6c63ff",
+    color: "#171717",
   },
   {
     id: "investment",
@@ -66,7 +66,7 @@ const savingsCategories: SavingsCategory[] = [
     href: "/savings/investment",
     doodle: "charts",
     highlights: ["מסלולים מותאמים", "מעקב תשואות", "ניהול מקצועי"],
-    color: "#5ec6c6",
+    color: "#171717",
   },
   {
     id: "pension-life",
@@ -75,7 +75,7 @@ const savingsCategories: SavingsCategory[] = [
     href: "/savings/pension-life-insurance",
     doodle: "shield",
     highlights: ["כיסוי ביטוחי", "חיסכון משולב", "גמישות"],
-    color: "#e76f51",
+    color: "#b91c1c",
   },
   {
     id: "employer",
@@ -84,7 +84,7 @@ const savingsCategories: SavingsCategory[] = [
     href: "/savings/employer-funds",
     doodle: "handshake",
     highlights: ["ציות לחוק", "ניהול הפקדות", "בחירת מוצרים"],
-    color: "#f4a261",
+    color: "#b45309",
   },
   {
     id: "pre-retirement",
@@ -93,7 +93,7 @@ const savingsCategories: SavingsCategory[] = [
     href: "/savings/pre-retirement",
     doodle: "target",
     highlights: ["בדיקת צבירה", "תכנון מס", "התאמת מסלול"],
-    color: "#90be6d",
+    color: "#15803d",
   },
   {
     id: "post-retirement",
@@ -102,7 +102,7 @@ const savingsCategories: SavingsCategory[] = [
     href: "/savings/post-retirement",
     doodle: "savings",
     highlights: ["קצבה חודשית", "תכנון מס", "משיכת כספים"],
-    color: "#6c63ff",
+    color: "#171717",
   },
   {
     id: "financial-planning",
@@ -111,7 +111,7 @@ const savingsCategories: SavingsCategory[] = [
     href: "/savings/financial-planning",
     doodle: "calculator",
     highlights: ["מיפוי נכסים", "תוכנית פעולה", "ליווי שוטף"],
-    color: "#5ec6c6",
+    color: "#171717",
   },
 ];
 

@@ -111,10 +111,10 @@ export default function ReasoningBankPage() {
     <div className="space-y-6" dir="rtl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#0a3d3d]">בנק נימוקים</h1>
+          <h1 className="text-2xl font-bold text-[#171717]">בנק נימוקים</h1>
           <p className="text-sm text-muted-foreground">נימוקים מוכנים לשימוש בהמלצות</p>
         </div>
-        <Button onClick={() => handleOpen()} className="gap-2 rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15">
+        <Button onClick={() => handleOpen()} className="gap-2 rounded-full bg-[#171717] hover:bg-[#171717]/90 shadow-md shadow-[#171717]/15">
           <Plus className="h-4 w-4" />נימוק חדש
         </Button>
       </div>
@@ -123,8 +123,8 @@ export default function ReasoningBankPage() {
       <div className="flex flex-wrap gap-3">
         <div className="flex-1 min-w-[200px]">
           <div className="relative group">
-            <Search className="h-4 w-4 absolute right-3 top-3 text-muted-foreground group-focus-within:text-[#0a3d3d]" />
-            <Input placeholder="חיפוש..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pr-10 rounded-xl border-border/60 focus:border-[#5ec6c6]" />
+            <Search className="h-4 w-4 absolute right-3 top-3 text-muted-foreground group-focus-within:text-[#171717]" />
+            <Input placeholder="חיפוש..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pr-10 rounded-xl border-border/60 focus:border-[#171717]" />
           </div>
         </div>
         <Select value={filterCategory} onValueChange={setFilterCategory}>
@@ -160,8 +160,8 @@ export default function ReasoningBankPage() {
               <CardContent className="p-4">
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="flex gap-2 flex-wrap">
-                    <Badge variant="outline" className="text-xs rounded-full border-[#5ec6c6]/30 text-[#0a3d3d] bg-[#5ec6c6]/5">{entry.category}</Badge>
-                    <Badge variant="secondary" className="text-xs rounded-full bg-[#f4a261]/10 text-[#f4a261]">{entry.recommendation_type}</Badge>
+                    <Badge variant="outline" className="text-xs rounded-full border-[#171717]/30 text-[#171717] bg-[#171717]/5">{entry.category}</Badge>
+                    <Badge variant="secondary" className="text-xs rounded-full bg-[#b45309]/10 text-[#b45309]">{entry.recommendation_type}</Badge>
                   </div>
                   <div className="flex gap-1 shrink-0">
                     <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => handleOpen(entry)}>
@@ -176,7 +176,7 @@ export default function ReasoningBankPage() {
                 {entry.tags.length > 0 && (
                   <div className="flex gap-1 flex-wrap mt-2">
                     {entry.tags.map(tag => (
-                      <span key={tag} className="text-xs bg-[#0a3d3d]/5 px-2 py-0.5 rounded-full text-[#0a3d3d]/70">
+                      <span key={tag} className="text-xs bg-[#171717]/5 px-2 py-0.5 rounded-full text-[#171717]/70">
                         <Tag className="h-2.5 w-2.5 inline mr-1" />{tag}
                       </span>
                     ))}
@@ -221,7 +221,7 @@ export default function ReasoningBankPage() {
               <Input value={form.tagsInput} onChange={e => setForm(p => ({ ...p, tagsInput: e.target.value }))} placeholder="דמי ניהול, מסלול השקעה, כפל כיסויים" />
             </div>
             <div className="flex gap-3 pt-2">
-              <Button onClick={handleSave} className="rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90">{editEntry ? 'שמור שינויים' : 'הוסף נימוק'}</Button>
+              <Button onClick={handleSave} className="rounded-full bg-[#171717] hover:bg-[#171717]/90">{editEntry ? 'שמור שינויים' : 'הוסף נימוק'}</Button>
               <Button variant="outline" onClick={() => setModalOpen(false)} className="rounded-full">ביטול</Button>
             </div>
           </div>

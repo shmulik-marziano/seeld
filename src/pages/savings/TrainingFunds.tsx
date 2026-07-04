@@ -18,7 +18,7 @@ const TrainingFunds = () => {
       title: "פטור ממס",
       icon: TrendingUp,
       doodle: "growth",
-      color: "#5ec6c6",
+      color: "#171717",
       description: "פטור מלא ממס רווחי הון — כל הרווחים שלכם",
       features: ["0% מס על רווחים", "ניכוי מס על הפקדות", "חיסכון של אלפי שקלים"],
     },
@@ -26,7 +26,7 @@ const TrainingFunds = () => {
       title: "נזילות מהירה",
       icon: Clock,
       doodle: "target",
-      color: "#f4a261",
+      color: "#b45309",
       description: "משיכה פטורה לאחר 6 שנים בלבד",
       features: ["ללא קנסות", "שימוש חופשי בכספים", "לכל מטרה"],
     },
@@ -34,7 +34,7 @@ const TrainingFunds = () => {
       title: "מטרות מגוונות",
       icon: GraduationCap,
       doodle: "lightbulb",
-      color: "#90be6d",
+      color: "#15803d",
       description: "לא רק להשתלמויות — לכל מטרה שתרצו",
       features: ["דירה לילדים", "חופשה גדולה", "כל יעד שתבחרו"],
     },
@@ -114,10 +114,10 @@ const TrainingFunds = () => {
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
               {[
-                { icon: Banknote, doodle: "savings", title: "פטור מלא ממס", desc: "0% מס על כל הרווחים שצברתם", color: "#5ec6c6" },
-                { icon: Clock, doodle: "target", title: "נזילות ב-6 שנים", desc: "כספים נזילים לאחר 6 שנים", color: "#f4a261" },
-                { icon: TrendingUp, doodle: "growth", title: "תשואות גבוהות", desc: "ביצועים מעולים לאורך זמן", color: "#90be6d" },
-                { icon: GraduationCap, doodle: "lightbulb", title: "לכל מטרה", desc: "שימוש חופשי בכספים לאחר נזילות", color: "#e76f51" },
+                { icon: Banknote, doodle: "savings", title: "פטור מלא ממס", desc: "0% מס על כל הרווחים שצברתם", color: "#171717" },
+                { icon: Clock, doodle: "target", title: "נזילות ב-6 שנים", desc: "כספים נזילים לאחר 6 שנים", color: "#b45309" },
+                { icon: TrendingUp, doodle: "growth", title: "תשואות גבוהות", desc: "ביצועים מעולים לאורך זמן", color: "#15803d" },
+                { icon: GraduationCap, doodle: "lightbulb", title: "לכל מטרה", desc: "שימוש חופשי בכספים לאחר נזילות", color: "#b91c1c" },
               ].map((item, idx) => (
                 <div key={idx} className="border-t border-[#171717]/10 pt-4">
                   <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>

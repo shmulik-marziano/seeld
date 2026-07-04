@@ -18,7 +18,7 @@ const PreRetirement = () => {
       title: "תחשיב פנסיה",
       icon: Calculator,
       doodle: "calculator",
-      color: "#5ec6c6",
+      color: "#171717",
       description: "חישוב מדויק של הקצבה הצפויה והיערכות כלכלית",
       features: ["חישוב קצבה צפויה", "ניתוח פערים", "תוכנית השלמה"],
     },
@@ -26,7 +26,7 @@ const PreRetirement = () => {
       title: "איחוד חסכונות",
       icon: FileText,
       doodle: "calculator",
-      color: "#f4a261",
+      color: "#b45309",
       description: "ריכוז כל החסכונות הפנסיוניים למקסום הזכויות",
       features: ["מיפוי כל החסכונות", "בדיקת זכויות", "אופטימיזציה"],
     },
@@ -34,7 +34,7 @@ const PreRetirement = () => {
       title: "תכנון מס",
       icon: Clock,
       doodle: "target",
-      color: "#90be6d",
+      color: "#15803d",
       description: "אופטימיזציה של תשלומי המס בפרישה",
       features: ["תיאום מס", "פטורים והטבות", "אסטרטגיית משיכה"],
     },
@@ -114,10 +114,10 @@ const PreRetirement = () => {
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
               {[
-                { icon: Calculator, doodle: "calculator", title: "תחשיב קצבה", desc: "חישוב מדויק של הקצבה הצפויה", color: "#5ec6c6" },
-                { icon: FileText, doodle: "calculator", title: "איחוד חסכונות", desc: "ריכוז כל החסכונות למקום אחד", color: "#f4a261" },
-                { icon: Clock, doodle: "target", title: "תכנון מס", desc: "אופטימיזציה של המס בפרישה", color: "#90be6d" },
-                { icon: Shield, doodle: "shield", title: "הגנה מלאה", desc: "ביטוחים וזכויות מותאמים לפרישה", color: "#e76f51" },
+                { icon: Calculator, doodle: "calculator", title: "תחשיב קצבה", desc: "חישוב מדויק של הקצבה הצפויה", color: "#171717" },
+                { icon: FileText, doodle: "calculator", title: "איחוד חסכונות", desc: "ריכוז כל החסכונות למקום אחד", color: "#b45309" },
+                { icon: Clock, doodle: "target", title: "תכנון מס", desc: "אופטימיזציה של המס בפרישה", color: "#15803d" },
+                { icon: Shield, doodle: "shield", title: "הגנה מלאה", desc: "ביטוחים וזכויות מותאמים לפרישה", color: "#b91c1c" },
               ].map((item, idx) => (
                 <div key={idx} className="border-t border-[#171717]/10 pt-4">
                   <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>

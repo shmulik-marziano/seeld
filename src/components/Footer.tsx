@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { StatusPill } from "@/components/brand/Live";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
 const INK = "#171717";
@@ -108,9 +109,17 @@ const Footer = () => {
               >
                 נדבר?
               </h2>
-              <p className="text-[14px] text-[#171717]/50 mb-9">
+              <p className="text-[14px] text-[#171717]/50 mb-5">
                 בלי ספאם. בלי טלפונים בשמונה בערב. שיחה אחת — ואתם מחליטים.
               </p>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
+                className="mb-9 block transition-transform hover:-translate-y-[1px]"
+                aria-label="פתיחת שיחה עם יועץ SEELD AI"
+              >
+                <StatusPill>SEELD AI מחובר עכשיו · לחצו לשיחה</StatusPill>
+              </button>
 
               <form onSubmit={handleSubmit} className="space-y-5 max-w-md">
                 <input

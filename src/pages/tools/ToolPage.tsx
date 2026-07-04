@@ -12,8 +12,8 @@ export default function ToolPage({ slug, children }: ToolPageProps) {
 
   if (!tool) {
     return (
-      <div className="min-h-screen bg-[#f8f9fc] flex items-center justify-center" dir="rtl">
-        <div className="bg-white rounded-2xl shadow-sm border border-[#0a3d3d]/[0.06] p-12 text-center">
+      <div className="min-h-screen bg-[#fafafa] flex items-center justify-center" dir="rtl">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#171717]/[0.06] p-12 text-center">
           <p className="text-gray-500 text-lg">הכלי לא נמצא</p>
         </div>
       </div>
@@ -22,10 +22,10 @@ export default function ToolPage({ slug, children }: ToolPageProps) {
 
   if (tool.status === "planned") {
     return (
-      <div className="min-h-screen bg-[#f8f9fc]" dir="rtl">
+      <div className="min-h-screen bg-[#fafafa]" dir="rtl">
         <ToolHeader tool={tool} />
         <div className="max-w-3xl mx-auto px-6 py-20">
-          <div className="bg-white rounded-2xl shadow-sm border border-[#0a3d3d]/[0.06] p-16 text-center">
+          <div className="bg-white rounded-2xl shadow-sm border border-[#171717]/[0.06] p-16 text-center">
             <div
               className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center"
               style={{ background: `linear-gradient(135deg, ${tool.gradient[0]}20, ${tool.gradient[1]}20)` }}
@@ -49,7 +49,7 @@ export default function ToolPage({ slug, children }: ToolPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f9fc]" dir="rtl">
+    <div className="min-h-screen bg-[#fafafa]" dir="rtl">
       <ToolHeader tool={tool} />
       <div className="max-w-7xl mx-auto px-6 py-6">{children}</div>
     </div>

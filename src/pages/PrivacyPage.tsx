@@ -11,7 +11,7 @@ export default function PrivacyPage() {
   const content = (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-8 text-sm leading-relaxed text-gray-700">
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#0a3d3d]">1. כללי</h2>
+        <h2 className="text-lg font-bold text-[#171717]">1. כללי</h2>
         <p>
           מערכת SEELD (להלן: "המערכת") מופעלת על ידי חברת SEELD בע"מ (להלן: "החברה").
           מדיניות פרטיות זו מתארת כיצד אנו אוספים, משתמשים, מאחסנים ומגנים על מידע אישי
@@ -25,7 +25,7 @@ export default function PrivacyPage() {
       <hr className="border-gray-100" />
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#0a3d3d]">2. המידע שאנו אוספים</h2>
+        <h2 className="text-lg font-bold text-[#171717]">2. המידע שאנו אוספים</h2>
         <p>אנו עשויים לאסוף את סוגי המידע הבאים:</p>
         <div className="space-y-2 pr-4">
           <p><strong>2.1 מידע זיהוי אישי:</strong> שם מלא, מספר תעודת זהות, תאריך לידה, כתובת, מספר טלפון, כתובת דואר אלקטרוני.</p>
@@ -39,7 +39,7 @@ export default function PrivacyPage() {
       <hr className="border-gray-100" />
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#0a3d3d]">3. מטרות השימוש במידע</h2>
+        <h2 className="text-lg font-bold text-[#171717]">3. מטרות השימוש במידע</h2>
         <p>המידע נאסף ומעובד למטרות הבאות:</p>
         <ul className="list-disc pr-6 space-y-1.5">
           <li>ניהול תיקי לקוחות על ידי סוכני ביטוח ויועצים פיננסיים מורשים.</li>
@@ -55,7 +55,7 @@ export default function PrivacyPage() {
       <hr className="border-gray-100" />
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#0a3d3d]">4. שיתוף מידע</h2>
+        <h2 className="text-lg font-bold text-[#171717]">4. שיתוף מידע</h2>
         <p>
           אנו לא מוכרים, משכירים או מסחרים במידע האישי שלך. המידע עשוי להיות משותף אך ורק:
         </p>
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
       <hr className="border-gray-100" />
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#0a3d3d]">5. אבטחת מידע</h2>
+        <h2 className="text-lg font-bold text-[#171717]">5. אבטחת מידע</h2>
         <p>אנו נוקטים באמצעי אבטחה מתקדמים להגנה על המידע שלך, לרבות:</p>
         <ul className="list-disc pr-6 space-y-1.5">
           <li>הצפנת נתונים בתעבורה (TLS/SSL) ובמנוחה.</li>
@@ -88,7 +88,7 @@ export default function PrivacyPage() {
       <hr className="border-gray-100" />
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#0a3d3d]">6. שמירת מידע</h2>
+        <h2 className="text-lg font-bold text-[#171717]">6. שמירת מידע</h2>
         <p>
           המידע נשמר כל עוד חשבון הסוכנות פעיל וכל עוד הדבר נדרש לצורך מתן השירות
           או לעמידה בדרישות רגולטוריות. בהתאם לרגולציה בתחום הביטוח והפנסיה,
@@ -99,7 +99,7 @@ export default function PrivacyPage() {
       <hr className="border-gray-100" />
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#0a3d3d]">7. זכויות הלקוח</h2>
+        <h2 className="text-lg font-bold text-[#171717]">7. זכויות הלקוח</h2>
         <p>בהתאם לחוק הגנת הפרטיות, התשמ"א-1981, עומדות לך הזכויות הבאות:</p>
         <ul className="list-disc pr-6 space-y-1.5">
           <li><strong>זכות עיון:</strong> הזכות לעיין במידע שנאסף עליך.</li>
@@ -115,7 +115,7 @@ export default function PrivacyPage() {
       <hr className="border-gray-100" />
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#0a3d3d]">8. עוגיות (Cookies)</h2>
+        <h2 className="text-lg font-bold text-[#171717]">8. עוגיות (Cookies)</h2>
         <p>
           המערכת משתמשת בעוגיות הכרחיות בלבד לצורך שמירת מצב ההתחברות ואבטחת הגישה.
           אנו לא משתמשים בעוגיות שיווקיות או למעקב צד שלישי.
@@ -125,7 +125,7 @@ export default function PrivacyPage() {
       <hr className="border-gray-100" />
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#0a3d3d]">9. שינויים במדיניות</h2>
+        <h2 className="text-lg font-bold text-[#171717]">9. שינויים במדיניות</h2>
         <p>
           אנו שומרים לעצמנו את הזכות לעדכן מדיניות פרטיות זו מעת לעת.
           שינויים מהותיים יפורסמו במערכת. המשך השימוש לאחר פרסום שינויים
@@ -136,13 +136,13 @@ export default function PrivacyPage() {
       <hr className="border-gray-100" />
 
       <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#0a3d3d]">10. יצירת קשר</h2>
+        <h2 className="text-lg font-bold text-[#171717]">10. יצירת קשר</h2>
         <p>
           לשאלות בנוגע למדיניות פרטיות זו או לבקשות הנוגעות למידע האישי שלך,
           ניתן לפנות אלינו:
         </p>
-        <div className="bg-[#f8f9fc] rounded-xl p-4 space-y-1">
-          <p><strong className="text-[#0a3d3d]">SEELD בע"מ</strong></p>
+        <div className="bg-[#fafafa] rounded-xl p-4 space-y-1">
+          <p><strong className="text-[#171717]">SEELD בע"מ</strong></p>
           <p>דואר אלקטרוני: info@seeld-ins.co.il</p>
           <p>אתר: seeld-ins.co.il</p>
         </div>
@@ -165,23 +165,23 @@ export default function PrivacyPage() {
       <Header />
 
       {/* Hero */}
-      <section className="relative bg-[#f8f9fc] overflow-hidden">
-        <div className="absolute top-6 left-10 w-20 h-20 rounded-full bg-[#6c63ff] opacity-10" />
-        <div className="absolute bottom-4 right-16 w-12 h-12 rounded-full bg-[#5ec6c6] opacity-15" />
+      <section className="relative bg-[#fafafa] overflow-hidden">
+        <div className="absolute top-6 left-10 w-20 h-20 rounded-full bg-[#171717] opacity-[0.05]" />
+        <div className="absolute bottom-4 right-16 w-12 h-12 rounded-full bg-[#171717] opacity-[0.05]" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 relative z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-[#6c63ff] flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-[#171717] flex items-center justify-center">
                 <Lock className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d]">מדיניות פרטיות</h1>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#171717]">מדיניות פרטיות</h1>
                 <p className="text-sm text-gray-400">עדכון אחרון: מרץ 2026</p>
               </div>
             </div>
             <button
               onClick={() => navigate(-1)}
-              className="hidden sm:inline-flex items-center gap-2 px-5 py-2 border-2 border-[#0a3d3d] text-[#0a3d3d] rounded-full text-sm font-semibold hover:bg-[#0a3d3d] hover:text-white transition-colors"
+              className="hidden sm:inline-flex items-center gap-2 px-5 py-2 border-2 border-[#171717] text-[#171717] rounded-full text-sm font-semibold hover:bg-[#171717] hover:text-white transition-colors"
             >
               <ArrowRight className="h-4 w-4" />
               חזרה

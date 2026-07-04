@@ -839,15 +839,15 @@ export default function Onboarding() {
           {/* ── Hero Header ── */}
           <div className="text-center mb-10 space-y-4">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#5ec6c6]/30 bg-[#5ec6c6]/5 text-xs font-semibold tracking-widest uppercase text-[#0a3d3d]">
-              <div className="w-2 h-2 rounded-full bg-[#5ec6c6]" />
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#171717]/30 bg-[#171717]/5 text-xs font-semibold tracking-widest uppercase text-[#171717]">
+              <div className="w-2 h-2 rounded-full bg-[#171717]" />
               SEELD — פתיחת תיק לקוח
-              <Sparkles className="w-3.5 h-3.5 text-[#5ec6c6]" />
+              <Sparkles className="w-3.5 h-3.5 text-[#171717]" />
             </div>
 
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-none">
-              <span className="block text-[#0a3d3d]">שאלון</span>
-              <span className="block text-[#5ec6c6]">
+              <span className="block text-[#171717]">שאלון</span>
+              <span className="block text-[#171717]">
                 הצטרפות
               </span>
             </h1>
@@ -889,7 +889,7 @@ export default function Onboarding() {
 
               {/* Text */}
               <div className="space-y-3">
-                <h2 className="text-4xl font-extrabold tracking-tight text-[#0a3d3d]">
+                <h2 className="text-4xl font-extrabold tracking-tight text-[#171717]">
                     תודה רבה!
                 </h2>
                 <p className="text-lg font-semibold text-foreground">

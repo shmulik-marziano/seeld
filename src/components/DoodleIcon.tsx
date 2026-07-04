@@ -96,10 +96,10 @@ export default function DoodleIcon({ name, size = 48, className = "" }: DoodleIc
     // Fallback: colored circle (should not happen if mapping is complete)
     return (
       <div
-        className={`rounded-full bg-[#5ec6c6]/20 flex items-center justify-center ${className}`}
+        className={`rounded-full bg-[#171717]/20 flex items-center justify-center ${className}`}
         style={{ width: size, height: size }}
       >
-        <span className="text-[#0a3d3d] font-bold text-xs">{name[0]}</span>
+        <span className="text-[#171717] font-bold text-xs">{name[0]}</span>
       </div>
     );
   }

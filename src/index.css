@@ -148,13 +148,13 @@ body {
 /* Dashed decorative connector */
 .dashed-connector {
   border: none;
-  border-top: 2px dashed #0a3d3d;
+  border-top: 2px dashed #171717;
   opacity: 0.15;
 }
 
 .dashed-connector-vertical {
   border: none;
-  border-right: 2px dashed #0a3d3d;
+  border-right: 2px dashed #171717;
   opacity: 0.12;
 }
 
@@ -180,7 +180,7 @@ body {
 .input-minimal {
   background: transparent;
   border: none;
-  border-bottom: 2px solid rgba(10, 61, 61, 0.1);
+  border-bottom: 2px solid rgba(23, 23, 23, 0.1);
   border-radius: 0;
   padding: 0.875rem 0.25rem;
   font-size: 0.875rem;
@@ -189,11 +189,11 @@ body {
 
 .input-minimal:focus {
   outline: none;
-  border-bottom-color: #5ec6c6;
+  border-bottom-color: #171717;
 }
 
 .input-minimal::placeholder {
-  color: rgba(10, 61, 61, 0.25);
+  color: rgba(23, 23, 23, 0.25);
 }
 
 /* Better touch targets on mobile */

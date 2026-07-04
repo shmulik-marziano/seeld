@@ -5,7 +5,7 @@ const MortgageInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Home}
-      heroIconColor="#e76f51"
+      heroIconColor="#b91c1c"
       heroCategory="ביטוח משכנתא"
       heroTitle="ביטוח חיים למשכנתא"
       heroDescription="הגנו על הבית שלכם — ביטוח חיים למשכנתא מבטיח שהמשפחה תישאר בבית גם אם קורה משהו."

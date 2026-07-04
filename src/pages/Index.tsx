@@ -8,6 +8,7 @@ import HeroSection from "@/components/HeroSection";
 import ScrollReveal from "@/components/ScrollReveal";
 import CompanyLogos from "@/components/CompanyLogos";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { LiveTag, StatusPill } from "@/components/brand/Live";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
@@ -72,13 +73,13 @@ const savingsProducts = [
   { title: "תכנון פיננסי", description: "מיפוי מלא של הנכסים ובניית תוכנית", href: "/savings/financial-planning" },
 ];
 
-const platformItems: { title: string; description: string; href?: string }[] = [
-  { title: "אזור אישי ללקוח", description: "כל הפוליסות, החיסכון והמסמכים במקום אחד, מכל מכשיר.", href: "/personal-area" },
-  { title: "יועץ SEELD AI", description: "מענה על שאלות ביטוח ופנסיה בכל שעה, וחיבור ליועץ אנושי כשצריך." },
-  { title: "איתור קרנות", description: "חיפוש והשוואה של קרנות פנסיה, גמל והשתלמות מכל בתי ההשקעות.", href: "/fund-finder" },
-  { title: "טבלאות תשואות", description: "נתוני תשואה ודמי ניהול רשמיים, מעודכנים מדי חודש.", href: "/return-tables" },
-  { title: "מסלולי השקעה", description: "השוואת חשיפות, רמות סיכון ותשואות בין כל המסלולים בשוק.", href: "/investment-tracks" },
-  { title: "מחשבונים", description: "משכנתא, פנסיה, חיסכון והשוואת מסלולים. חופשי, ללא רישום.", href: "/calculators" },
+const platformItems: { title: string; description: string; href?: string; tag: string; live?: boolean }[] = [
+  { title: "אזור אישי ללקוח", description: "כל הפוליסות, החיסכון והמסמכים במקום אחד, מכל מכשיר.", href: "/personal-area", tag: "SECURE" },
+  { title: "יועץ SEELD AI", description: "מענה על שאלות ביטוח ופנסיה בכל שעה, וחיבור ליועץ אנושי כשצריך.", tag: "LIVE · 24/7", live: true },
+  { title: "איתור קרנות", description: "חיפוש והשוואה של קרנות פנסיה, גמל והשתלמות מכל בתי ההשקעות.", href: "/fund-finder", tag: "DATABASE" },
+  { title: "טבלאות תשואות", description: "נתוני תשואה ודמי ניהול רשמיים, מעודכנים מדי חודש.", href: "/return-tables", tag: "MONTHLY" },
+  { title: "מסלולי השקעה", description: "השוואת חשיפות, רמות סיכון ותשואות בין כל המסלולים בשוק.", href: "/investment-tracks", tag: "COMPARE" },
+  { title: "מחשבונים", description: "משכנתא, פנסיה, חיסכון והשוואת מסלולים. חופשי, ללא רישום.", href: "/calculators", tag: "NO SIGNUP" },
 ];
 
 const processSteps = [
@@ -462,6 +463,9 @@ const Index = () => {
                       <span className="text-[#fafafa]/25 group-hover:text-[#fafafa] transition-all group-hover:-translate-x-1">←</span>
                     </div>
                     <p className="text-[14px] text-[#fafafa]/40 leading-[1.8]">{item.description}</p>
+                    <div className="mt-4" dir="ltr">
+                      <LiveTag dark dot={item.live}>{item.tag}</LiveTag>
+                    </div>
                   </div>
                 );
                 return item.href ? (
@@ -665,6 +669,17 @@ const Index = () => {
                 title="השיחה הראשונה, על חשבוננו"
                 lede="השאירו פרטים ויועץ מהצוות שלנו יחזור אליכם באותו יום עבודה. שיחה אחת — בלי מרדף."
               />
+            </ScrollReveal>
+
+            <ScrollReveal>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
+                className="-mt-6 mb-12 block transition-transform hover:-translate-y-[1px]"
+                aria-label="פתיחת שיחה עם יועץ SEELD AI"
+              >
+                <StatusPill>SEELD AI מחובר עכשיו · לחצו לשיחה</StatusPill>
+              </button>
             </ScrollReveal>
 
             <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-14 lg:gap-24">

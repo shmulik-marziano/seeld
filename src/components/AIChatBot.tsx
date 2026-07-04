@@ -216,7 +216,7 @@ const AIChatBot = () => {
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
             onClick={() => setIsExpanded(true)}
             className="fixed bottom-6 left-4 sm:left-6 z-50 group"
             aria-label="פתחו צ'אט עם צוות SEELD"
@@ -227,8 +227,8 @@ const AIChatBot = () => {
                 <MessageSquare className="w-6 h-6 text-white" />
               </div>
               {/* Online indicator */}
-              <div className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#1f9d55] border-2 border-white shadow-sm">
-                <span className="absolute inset-0 rounded-full bg-[#1f9d55] animate-ping opacity-40" />
+              <div className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#15803d] border-2 border-white shadow-sm">
+                <span className="absolute inset-0 rounded-full bg-[#15803d] animate-ping opacity-40" />
               </div>
             </div>
             {/* Label on hover */}
@@ -258,7 +258,7 @@ const AIChatBot = () => {
                     <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shadow-lg">
                       <Sparkles className="w-5 h-5 text-white" />
                     </div>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#1f9d55] border-2 border-[#171717]" />
+                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#15803d] border-2 border-[#171717]" />
                   </div>
                   <div>
                     <h3 className="text-white font-bold text-sm">SEELD</h3>
@@ -278,8 +278,8 @@ const AIChatBot = () => {
                 {messages.length === 0 ? (
                   /* Welcome state */
                   <div className="text-center py-6 space-y-5">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#171717]/20 to-[#1f9d55]/20 flex items-center justify-center mx-auto">
-                      <Sparkles className="w-8 h-8 text-[#1f9d55]" />
+                    <div className="w-16 h-16 rounded-2xl bg-[#fafafa] flex items-center justify-center mx-auto" style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}>
+                      <Sparkles className="w-8 h-8 text-[#15803d]" />
                     </div>
                     <div>
                       <h4 className="font-bold text-[#171717] text-base mb-1">שלום! הצוות של SEELD כאן.</h4>
@@ -293,7 +293,7 @@ const AIChatBot = () => {
                         <button
                           key={i}
                           onClick={() => handleSuggestion(s.text)}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-[#171717]/10 text-xs font-medium text-[#171717]/70 hover:text-[#171717] hover:border-[#1f9d55]/30 hover:bg-[#1f9d55]/5 transition-all"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-[#171717]/10 text-xs font-medium text-[#171717]/70 hover:text-[#171717] hover:border-[#171717]/30 hover:bg-[#171717]/5 transition-all"
                         >
                           <s.icon className="w-3 h-3" />
                           {s.text}
@@ -354,7 +354,7 @@ const AIChatBot = () => {
                           <button
                             key={i}
                             onClick={() => handleSuggestion(s.text)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-[#171717]/8 text-[11px] font-medium text-[#171717]/50 hover:text-[#171717] hover:border-[#1f9d55]/20 transition-all"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-[#171717]/8 text-[11px] font-medium text-[#171717]/50 hover:text-[#171717] hover:border-[#171717]/25 transition-all"
                           >
                             <s.icon className="w-3 h-3" />
                             {s.text}
@@ -388,7 +388,7 @@ const AIChatBot = () => {
                     className={cn(
                       "w-9 h-9 rounded-full flex items-center justify-center transition-all shrink-0",
                       input.trim()
-                        ? "bg-[#171717] text-white hover:bg-[#0d4a4a] hover:scale-105 shadow-md"
+                        ? "bg-[#171717] text-white hover:bg-[#262626] hover:scale-105 shadow-md"
                         : "bg-transparent text-[#171717]/25"
                     )}
                   >

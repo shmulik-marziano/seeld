@@ -310,12 +310,12 @@ export default function DirectDebit() {
       <div className="min-h-screen bg-white" dir="rtl">
         <Header />
         <main className="relative z-10 max-w-xl mx-auto px-4 pt-20 pb-20 text-center">
-          <div className="w-24 h-24 rounded-full bg-[#5ec6c6]/10 border-2 border-[#5ec6c6]/30 flex items-center justify-center mx-auto mb-6 animate-in zoom-in duration-500">
-            <CheckCircle2 className="w-12 h-12 text-[#5ec6c6]" />
+          <div className="w-24 h-24 rounded-full bg-[#171717]/10 border-2 border-[#171717]/30 flex items-center justify-center mx-auto mb-6 animate-in zoom-in duration-500">
+            <CheckCircle2 className="w-12 h-12 text-[#171717]" />
           </div>
-          <h1 className="text-3xl font-extrabold text-[#0a3d3d] mb-3">הטופס נשלח בהצלחה!</h1>
+          <h1 className="text-3xl font-extrabold text-[#171717] mb-3">הטופס נשלח בהצלחה!</h1>
           <p className="text-gray-500">פרטי הו"ק התקבלו ויועברו לטיפול בהקדם.</p>
-          <div className="mt-8 rounded-2xl border border-gray-100 bg-[#f8f9fc] p-6 text-right space-y-4">
+          <div className="mt-8 rounded-2xl border border-gray-100 bg-[#fafafa] p-6 text-right space-y-4">
             {[
               ["בעל החשבון", form.accountOwner],
               ['ת"ז', form.idNumber],
@@ -339,8 +339,8 @@ export default function DirectDebit() {
     <div className="min-h-screen bg-white" dir="rtl">
       {/* Decorative circles */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-[10%] right-[5%] w-40 h-40 rounded-full bg-[#5ec6c6] opacity-[0.06]" />
-        <div className="absolute bottom-[10%] left-[5%] w-32 h-32 rounded-full bg-[#6c63ff] opacity-[0.06]" />
+        <div className="absolute top-[10%] right-[5%] w-40 h-40 rounded-full bg-[#171717] opacity-[0.05]" />
+        <div className="absolute bottom-[10%] left-[5%] w-32 h-32 rounded-full bg-[#171717] opacity-[0.05]" />
       </div>
 
       <Header />
@@ -348,14 +348,14 @@ export default function DirectDebit() {
       <main className="relative z-10 max-w-2xl mx-auto px-4 pt-10 pb-20">
         {/* Hero */}
         <div className="text-center mb-12 space-y-5">
-          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#5ec6c6]/20 bg-[#5ec6c6]/5 text-xs font-bold tracking-widest uppercase text-[#0a3d3d]">
-            <Shield className="w-3.5 h-3.5 text-[#5ec6c6]" />
+          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#171717]/20 bg-[#171717]/5 text-xs font-bold tracking-widest uppercase text-[#171717]">
+            <Shield className="w-3.5 h-3.5 text-[#171717]" />
             הוראת קבע מאובטחת
-            <div className="w-2 h-2 rounded-full bg-[#5ec6c6]" />
+            <div className="w-2 h-2 rounded-full bg-[#171717]" />
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.1]">
-            <span className="block text-[#0a3d3d]">מילוי טופס</span>
-            <span className="block text-[#5ec6c6]">הוראת קבע</span>
+            <span className="block text-[#171717]">מילוי טופס</span>
+            <span className="block text-[#171717]">הוראת קבע</span>
           </h1>
           <p className="text-sm text-gray-400 max-w-sm mx-auto leading-relaxed">
             שמוליק מרציאנו · סוכן ביטוח ופנסיה מוסמך

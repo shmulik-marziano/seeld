@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 
-// Brand colors from the original logo — still used by legacy brand elements
+// Legacy brand-dot geometry — fills neutralized to the SEELD Mono greyscale
 export const brandDots = [
-  { cx: 17, cy: 8,  r: 3.2, fill: "#5ec6c6" }, // teal
-  { cx: 26, cy: 4,  r: 4.0, fill: "#e76f51" }, // coral
-  { cx: 35, cy: 8,  r: 3.2, fill: "#f4a261" }, // amber
-  { cx: 12, cy: 17, r: 2.8, fill: "#90be6d" }, // green
-  { cx: 40, cy: 17, r: 2.8, fill: "#5ec6c6" }, // teal
+  { cx: 17, cy: 8,  r: 3.2, fill: "#171717" },
+  { cx: 26, cy: 4,  r: 4.0, fill: "#4d4d4d" },
+  { cx: 35, cy: 8,  r: 3.2, fill: "#6e6e6e" },
+  { cx: 12, cy: 17, r: 2.8, fill: "#a3a3a3" },
+  { cx: 40, cy: 17, r: 2.8, fill: "#d4d4d4" },
 ] as const;
 
 const SERIF = "'Heebo', sans-serif";

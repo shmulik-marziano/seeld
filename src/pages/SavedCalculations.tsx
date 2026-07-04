@@ -28,11 +28,11 @@ const calculatorTypeLabels: Record<string, string> = {
 };
 
 const calculatorTypeColors: Record<string, string> = {
-  mortgage: "#e76f51",
-  pension: "#5ec6c6",
-  savings: "#90be6d",
-  goal: "#f4a261",
-  compare: "#6c63ff",
+  mortgage: "#171717",
+  pension: "#171717",
+  savings: "#4d4d4d",
+  goal: "#6e6e6e",
+  compare: "#171717",
 };
 
 const SavedCalculations = () => {
@@ -123,7 +123,7 @@ const SavedCalculations = () => {
       <div className="min-h-screen bg-white">
         <Header />
         <div className="flex items-center justify-center h-[60vh]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#5ec6c6]" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#171717]" />
         </div>
       </div>
     );
@@ -134,22 +134,22 @@ const SavedCalculations = () => {
       <Header />
 
       {/* Hero */}
-      <section className="relative bg-[#f8f9fc] overflow-hidden">
-        <div className="absolute top-6 left-10 w-20 h-20 rounded-full bg-[#f4a261] opacity-10" />
-        <div className="absolute bottom-4 right-16 w-14 h-14 rounded-full bg-[#5ec6c6] opacity-15" />
+      <section className="relative bg-[#fafafa] overflow-hidden">
+        <div className="absolute top-6 left-10 w-20 h-20 rounded-full bg-[#171717] opacity-[0.05]" />
+        <div className="absolute bottom-4 right-16 w-14 h-14 rounded-full bg-[#171717] opacity-[0.05]" />
         <svg className="absolute bottom-0 left-0 w-full h-16 opacity-10 pointer-events-none" viewBox="0 0 800 60" fill="none">
-          <path d="M0 50 Q200 10 400 40 T800 20" stroke="#f4a261" strokeWidth="2" strokeDasharray="8 6" />
-          <polygon points="795,18 800,20 795,22" fill="#f4a261" />
+          <path d="M0 50 Q200 10 400 40 T800 20" stroke="#171717" strokeWidth="2" strokeDasharray="8 6" />
+          <polygon points="795,18 800,20 795,22" fill="#171717" />
         </svg>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 relative z-10">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0a3d3d] mb-2">החישובים שלי</h1>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-[#171717] mb-2">החישובים שלי</h1>
               <p className="text-gray-500">כל החישובים השמורים שלך במקום אחד</p>
             </div>
             <button
               onClick={() => navigate("/calculators")}
-              className="hidden sm:inline-flex items-center gap-2 px-6 py-2.5 border-2 border-[#0a3d3d] text-[#0a3d3d] rounded-full text-sm font-semibold hover:bg-[#0a3d3d] hover:text-white transition-colors"
+              className="hidden sm:inline-flex items-center gap-2 px-6 py-2.5 border-2 border-[#171717] text-[#171717] rounded-full text-sm font-semibold hover:bg-[#171717] hover:text-white transition-colors"
             >
               <Calculator className="w-4 h-4" />
               למחשבונים
@@ -163,7 +163,7 @@ const SavedCalculations = () => {
         <div className="sm:hidden mb-6">
           <button
             onClick={() => navigate("/calculators")}
-            className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#5ec6c6] text-white rounded-full font-semibold"
+            className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#171717] text-white rounded-full font-semibold"
           >
             <Calculator className="w-4 h-4" />
             למחשבונים
@@ -171,20 +171,20 @@ const SavedCalculations = () => {
         </div>
 
         {!user ? (
-          <div className="rounded-2xl bg-[#f8f9fc] border border-gray-100 py-16 text-center">
+          <div className="rounded-2xl bg-[#fafafa] border border-gray-100 py-16 text-center">
             <p className="text-gray-500 mb-6">
               התחבר כדי לראות את החישובים השמורים שלך
             </p>
             <button
               onClick={() => setShowAuthModal(true)}
-              className="px-8 py-3 bg-[#5ec6c6] text-white rounded-full font-semibold hover:bg-[#4db5b5] transition-colors"
+              className="px-8 py-3 bg-[#171717] text-white rounded-full font-semibold hover:bg-[#262626] transition-colors"
             >
               התחבר
             </button>
           </div>
         ) : calculations.length === 0 ? (
-          <div className="rounded-2xl bg-[#f8f9fc] border border-gray-100 py-16 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#f4a261] flex items-center justify-center mx-auto mb-4">
+          <div className="rounded-2xl bg-[#fafafa] border border-gray-100 py-16 text-center">
+            <div className="w-16 h-16 rounded-full bg-[#171717] flex items-center justify-center mx-auto mb-4">
               <Calculator className="w-7 h-7 text-white" />
             </div>
             <p className="text-gray-500 mb-6">
@@ -192,7 +192,7 @@ const SavedCalculations = () => {
             </p>
             <button
               onClick={() => navigate("/calculators")}
-              className="px-8 py-3 bg-[#5ec6c6] text-white rounded-full font-semibold hover:bg-[#4db5b5] transition-colors"
+              className="px-8 py-3 bg-[#171717] text-white rounded-full font-semibold hover:bg-[#262626] transition-colors"
             >
               עבור למחשבונים
             </button>
@@ -205,11 +205,11 @@ const SavedCalculations = () => {
                   <div>
                     <span
                       className="text-xs px-3 py-1 rounded-full font-medium text-white"
-                      style={{ backgroundColor: calculatorTypeColors[calc.calculator_type] || "#5ec6c6" }}
+                      style={{ backgroundColor: calculatorTypeColors[calc.calculator_type] || "#171717" }}
                     >
                       {calculatorTypeLabels[calc.calculator_type]}
                     </span>
-                    <h3 className="text-lg font-bold text-[#0a3d3d] mt-2">{calc.title}</h3>
+                    <h3 className="text-lg font-bold text-[#171717] mt-2">{calc.title}</h3>
                   </div>
                   <button
                     onClick={() => deleteCalculation(calc.id)}
@@ -218,12 +218,12 @@ const SavedCalculations = () => {
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
-                <p className="text-lg font-semibold text-[#5ec6c6] mt-3">
+                <p className="text-lg font-semibold text-[#171717] mt-3">
                   {formatResultSummary(calc)}
                 </p>
                 {calc.tips && calc.tips.length > 0 && (
-                  <div className="bg-[#f8f9fc] rounded-xl p-3 mt-3">
-                    <p className="text-sm font-medium text-[#0a3d3d] mb-1">טיפים:</p>
+                  <div className="bg-[#fafafa] rounded-xl p-3 mt-3">
+                    <p className="text-sm font-medium text-[#171717] mb-1">טיפים:</p>
                     <ul className="text-sm text-gray-500 list-disc list-inside">
                       {calc.tips.slice(0, 2).map((tip, i) => (
                         <li key={i}>{tip}</li>

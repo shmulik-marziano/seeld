@@ -5,7 +5,7 @@ const PartnersRisk = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Users}
-      heroIconColor="#e76f51"
+      heroIconColor="#b91c1c"
       heroCategory="ריסק שותפים"
       heroTitle="ביטוח ריסק שותפים"
       heroDescription="הגנה על העסק שלכם — ביטוח חיים לשותפים מבטיח את המשכיות העסק במקרה של פטירת אחד השותפים."

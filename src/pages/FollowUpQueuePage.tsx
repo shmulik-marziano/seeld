@@ -103,12 +103,12 @@ export default function FollowUpQueuePage() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.25, delay: i * 0.04 }}
                 >
-                  <Card className="rounded-2xl border-border/50 hover:shadow-lg hover:shadow-[#0a3d3d]/5 transition-all duration-300 hover:-translate-y-0.5 group overflow-hidden">
+                  <Card className="rounded-2xl border-border/50 hover:shadow-lg hover:shadow-[#171717]/5 transition-all duration-300 hover:-translate-y-0.5 group overflow-hidden">
                     <CardContent className="p-0">
                       <div className="flex items-stretch">
                         {/* Priority indicator bar */}
                         <div className={`w-1 shrink-0 ${
-                          days >= 14 ? 'bg-destructive' : days >= 7 ? 'bg-amber-400' : 'bg-[#5ec6c6]'
+                          days >= 14 ? 'bg-destructive' : days >= 7 ? 'bg-amber-400' : 'bg-[#171717]'
                         }`} />
 
                         <div className="flex items-center justify-between flex-1 p-3 md:p-4 gap-3">
@@ -117,9 +117,9 @@ export default function FollowUpQueuePage() {
                             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                               <button
                                 onClick={() => navigate(`/app/customers/${item.customerId}`)}
-                                className="font-bold text-sm hover:text-[#0a3d3d] transition-colors flex items-center gap-1.5"
+                                className="font-bold text-sm hover:text-[#171717] transition-colors flex items-center gap-1.5"
                               >
-                                <div className="w-6 h-6 rounded-lg bg-[#0a3d3d]/8 flex items-center justify-center text-[10px] font-bold text-[#0a3d3d] shrink-0">
+                                <div className="w-6 h-6 rounded-lg bg-[#171717]/8 flex items-center justify-center text-[10px] font-bold text-[#171717] shrink-0">
                                   {item.customer?.firstName?.[0]}
                                 </div>
                                 {item.customer?.fullName}
@@ -154,7 +154,7 @@ export default function FollowUpQueuePage() {
                                 size="sm"
                                 variant="outline"
                                 onClick={() => updateRecommendation(item.id, { decisionStatus: 'נשלח' })}
-                                className="gap-1.5 rounded-xl text-xs h-9 min-h-[36px] border-[#0a3d3d]/20 text-[#0a3d3d] hover:bg-[#0a3d3d] hover:text-white transition-all duration-200"
+                                className="gap-1.5 rounded-xl text-xs h-9 min-h-[36px] border-[#171717]/20 text-[#171717] hover:bg-[#171717] hover:text-white transition-all duration-200"
                               >
                                 <Send className="h-3 w-3" />
                                 <span className="hidden sm:inline">שלח</span>
@@ -164,7 +164,7 @@ export default function FollowUpQueuePage() {
                               size="sm"
                               variant="ghost"
                               onClick={() => navigate(`/app/customers/${item.customerId}`)}
-                              className="rounded-xl h-9 w-9 p-0 min-h-[36px] hover:bg-[#5ec6c6]/10"
+                              className="rounded-xl h-9 w-9 p-0 min-h-[36px] hover:bg-[#171717]/10"
                             >
                               <ArrowLeft className="h-4 w-4" />
                             </Button>
@@ -186,8 +186,8 @@ export default function FollowUpQueuePage() {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center py-20"
         >
-          <div className="w-20 h-20 rounded-full bg-[#5ec6c6]/10 flex items-center justify-center mx-auto mb-5">
-            <Clock className="h-10 w-10 text-[#5ec6c6]/50" />
+          <div className="w-20 h-20 rounded-full bg-[#171717]/10 flex items-center justify-center mx-auto mb-5">
+            <Clock className="h-10 w-10 text-[#171717]/50" />
           </div>
           <p className="text-foreground/70 font-medium mb-1">אין המלצות בתור פולו־אפ</p>
           <p className="text-sm text-muted-foreground">המלצות שנשלחו ללקוחות יופיעו כאן</p>
