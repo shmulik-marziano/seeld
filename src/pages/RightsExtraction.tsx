@@ -31,7 +31,7 @@ const RightsExtraction = () => {
       <section style={{ backgroundColor: BONE }}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">מיצוי זכויות</span>
@@ -47,7 +47,7 @@ const RightsExtraction = () => {
           >
             כסף שמגיע לכם. באמת.
           </h1>
-          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9]">
+          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9]">
             החזרי מס, קצבאות וקופות שנשכחו. נבדוק מה מגיע לכם מהמדינה, ונדאג שתקבלו את זה.
           </p>
         </div>
@@ -70,7 +70,7 @@ const RightsExtraction = () => {
                     >
                       מה בודקים
                     </h2>
-                    <p className="mt-3 text-base text-[#171717]/50 leading-[1.85] max-w-xl">
+                    <p className="mt-3 text-base text-[#5c5c5c] leading-[1.85] max-w-xl">
                       ארבעה ערוצים שבהם רוב הישראלים משאירים כסף על השולחן.
                     </p>
                   </div>
@@ -86,7 +86,7 @@ const RightsExtraction = () => {
                     className="flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-10 py-5 border-b border-[#171717]/10"
                   >
                     <h3 className="text-base font-medium text-[#171717] shrink-0 sm:w-52">{right.title}</h3>
-                    <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{right.description}</p>
+                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{right.description}</p>
                   </div>
                 ))}
               </div>
@@ -128,7 +128,7 @@ const RightsExtraction = () => {
                     <h3 className="text-lg text-[#171717] shrink-0 sm:w-44" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                       {step.title}
                     </h3>
-                    <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{step.description}</p>
+                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{step.description}</p>
                   </div>
                 </ScrollReveal>
               ))}

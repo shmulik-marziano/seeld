@@ -19,7 +19,7 @@ const SectionHead = ({ index, title, lede }: { index: string; title: string; led
         >
           {title}
         </h2>
-        {lede && <p className="mt-3 text-base text-[#171717]/50 leading-[1.85] max-w-xl">{lede}</p>}
+        {lede && <p className="mt-3 text-base text-[#5c5c5c] leading-[1.85] max-w-xl">{lede}</p>}
       </div>
     </div>
   </div>
@@ -34,7 +34,7 @@ const About = () => {
       <section style={{ backgroundColor: BONE }}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">אודות</span>
@@ -50,7 +50,7 @@ const About = () => {
           >
             הבית שמאחורי התיק שלכם
           </h1>
-          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9]">
+          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9]">
             סוכנות ביטוח, חיסכון ופנסיה מבית עמיתים הון. עצמאית, מפוקחת, ובצד שלכם.
           </p>
         </div>
@@ -64,7 +64,7 @@ const About = () => {
               <SectionHead index="01" title="הסיפור" />
             </ScrollReveal>
             <ScrollReveal delay={80}>
-              <div className="max-w-3xl space-y-5 text-[#171717]/55 leading-[1.9] text-base sm:text-[17px]">
+              <div className="max-w-3xl space-y-5 text-[#5c5c5c] leading-[1.9] text-base sm:text-[17px]">
                 <p>
                   SEELD קמה מתוך אמונה שייעוץ פיננסי טוב צריך להיות נגיש לכולם. לא רק למי שמבין את השפה המקצועית.
                 </p>
@@ -85,7 +85,7 @@ const About = () => {
           <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
               <div className="flex items-end justify-between gap-6 mb-2">
-                <span className="text-[11px] tracking-[0.14em] text-[#171717]/40" style={{ fontFamily: MONO }}>
+                <span className="text-[11px] tracking-[0.14em] text-[#6e6e6e]" style={{ fontFamily: MONO }}>
                   SEELD · IN NUMBERS
                 </span>
                 <DrawSpark color={CHIP_GREEN} className="w-40 sm:w-64" height={44} />
@@ -105,7 +105,7 @@ const About = () => {
                     >
                       <CountUp to={stat.to} format={stat.format} />
                     </p>
-                    <p className="text-[12px] tracking-[0.12em] text-[#171717]/45">{stat.label}</p>
+                    <p className="text-[12px] tracking-[0.12em] text-[#6e6e6e]">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -119,7 +119,7 @@ const About = () => {
                   { label: "מבית", value: "עמיתים הון" },
                 ].map((item) => (
                   <div key={item.label} className="flex items-baseline justify-between py-[15px] border-b border-[#171717]/10">
-                    <span className="text-[13px] text-[#171717]/45">{item.label}</span>
+                    <span className="text-[13px] text-[#6e6e6e]">{item.label}</span>
                     <span className="text-base text-[#171717] tabular-nums">{item.value}</span>
                   </div>
                 ))}
@@ -148,7 +148,7 @@ const About = () => {
                 ].map((text, idx) => (
                   <li
                     key={idx}
-                    className="flex items-baseline gap-5 py-4 border-b border-[#171717]/10 text-[#171717]/55 text-base leading-[1.85]"
+                    className="flex items-baseline gap-5 py-4 border-b border-[#171717]/10 text-[#5c5c5c] text-base leading-[1.85]"
                   >
                     <span className="text-[11px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: BRONZE, fontFamily: MONO }}>
                       {String(idx + 1).padStart(2, "0")}
@@ -179,7 +179,7 @@ const About = () => {
                     <h3 className="text-lg text-[#171717] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                       {item.title}
                     </h3>
-                    <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{item.description}</p>
+                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{item.description}</p>
                   </div>
                 </ScrollReveal>
               ))}

@@ -11,7 +11,7 @@ import { BONE, BRONZE, SERIF } from "@/lib/brand";
 import { StatusPill } from "@/components/brand/Live";
 
 const inputClass =
-  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
+  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#6e6e6e] text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -79,7 +79,7 @@ const Contact = () => {
       <section style={{ backgroundColor: BONE }}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">צור קשר</span>
@@ -95,7 +95,7 @@ const Contact = () => {
           >
             נחזור אליכם באותו יום עבודה
           </h1>
-          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9]">
+          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9]">
             השאירו פרטים ויועץ מהצוות יחזור אליכם. שיחה אחת, בלי מרדף.
           </p>
         </div>
@@ -185,7 +185,7 @@ const Contact = () => {
                       value={formData.message}
                       onChange={handleChange}
                       rows={4}
-                      className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors resize-none rounded-none"
+                      className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#6e6e6e] text-base focus:outline-none focus:border-[#171717] transition-colors resize-none rounded-none"
                       placeholder="במה נוכל לעזור?"
                     />
                   </div>
@@ -198,7 +198,7 @@ const Contact = () => {
                       {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
                     </button>
                     <div className="mt-5">
-                      <span className="text-[12px] text-[#171717]/35">שתי דקות למלא. אפס אותיות קטנות.</span>
+                      <span className="text-[12px] text-[#6e6e6e]">שתי דקות למלא. אפס אותיות קטנות.</span>
                     </div>
                   </div>
                 </form>
@@ -211,7 +211,7 @@ const Contact = () => {
                 <div className="border-t border-[#171717]/15">
                   <div className="py-[15px] border-b border-[#171717]/10">
                     <div className="flex items-baseline justify-between">
-                      <span className="text-[13px] text-[#171717]/45">טלפון</span>
+                      <span className="text-[13px] text-[#6e6e6e]">טלפון</span>
                       <a
                         href="tel:0523097444"
                         className="text-base text-[#171717] tabular-nums border-b border-transparent hover:border-[#171717]/40 transition-colors"
@@ -220,11 +220,11 @@ const Contact = () => {
                         052-309-7444
                       </a>
                     </div>
-                    <p className="text-[12px] text-[#171717]/35 mt-1 text-left">א'-ה', 9:00-18:00</p>
+                    <p className="text-[12px] text-[#6e6e6e] mt-1 text-left">א'-ה', 9:00-18:00</p>
                   </div>
                   <div className="py-[15px] border-b border-[#171717]/10">
                     <div className="flex items-baseline justify-between">
-                      <span className="text-[13px] text-[#171717]/45">אימייל</span>
+                      <span className="text-[13px] text-[#6e6e6e]">אימייל</span>
                       <a
                         href="mailto:info@seeld-ins.co.il"
                         className="text-base text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
@@ -233,11 +233,11 @@ const Contact = () => {
                         info@seeld-ins.co.il
                       </a>
                     </div>
-                    <p className="text-[12px] text-[#171717]/35 mt-1 text-left">נענה תוך יום עסקים</p>
+                    <p className="text-[12px] text-[#6e6e6e] mt-1 text-left">נענה תוך יום עסקים</p>
                   </div>
                   <div className="py-[15px] border-b border-[#171717]/10">
                     <div className="flex items-baseline justify-between gap-6">
-                      <span className="text-[13px] text-[#171717]/45 shrink-0">משרדים</span>
+                      <span className="text-[13px] text-[#6e6e6e] shrink-0">משרדים</span>
                       <div className="text-left">
                         <p className="text-base text-[#171717]">המלאכה 10, רעננה</p>
                         <p className="text-base text-[#171717]">הסדנא 4, ירושלים</p>
@@ -258,19 +258,19 @@ const Contact = () => {
                   <div>
                     <div className="border-b border-[#171717]/10 pb-5 mb-5">
                       <h3 className="text-base font-medium text-[#171717] mb-1.5">האם הייעוץ כרוך בתשלום?</h3>
-                      <p className="text-[13px] text-[#171717]/50 leading-[1.85]">
+                      <p className="text-[13px] text-[#5c5c5c] leading-[1.85]">
                         פגישת הייעוץ הראשונית ללא עלות וללא התחייבות.
                       </p>
                     </div>
                     <div className="border-b border-[#171717]/10 pb-5 mb-5">
                       <h3 className="text-base font-medium text-[#171717] mb-1.5">כמה זמן לוקח לקבל הצעת מחיר?</h3>
-                      <p className="text-[13px] text-[#171717]/50 leading-[1.85]">
+                      <p className="text-[13px] text-[#5c5c5c] leading-[1.85]">
                         הצעות מחיר חוזרות תוך 24-48 שעות מפגישת הייעוץ או שיחה טלפונית.
                       </p>
                     </div>
                     <div className="border-b border-[#171717]/10 pb-5">
                       <h3 className="text-base font-medium text-[#171717] mb-1.5">עם אילו חברות ביטוח אתם עובדים?</h3>
-                      <p className="text-[13px] text-[#171717]/50 leading-[1.85]">
+                      <p className="text-[13px] text-[#5c5c5c] leading-[1.85]">
                         עם כל חברות הביטוח בישראל. משווים עבורכם את כל האפשרויות בשוק.
                       </p>
                     </div>

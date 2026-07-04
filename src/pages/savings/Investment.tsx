@@ -14,7 +14,7 @@ import { BONE, PINE, BRONZE, SERIF, MONO } from "@/lib/brand";
 import { StatusPill } from "@/components/brand/Live";
 
 const tabTriggerClass =
-  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
+  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <h2
@@ -91,7 +91,7 @@ const Investment = () => {
       <section style={{ backgroundColor: BONE }}>
         <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <Link to="/savings" className="hover:text-[#171717] transition-colors">חיסכון ופנסיה</Link>
@@ -109,7 +109,7 @@ const Investment = () => {
           >
             בנו את העתיד הפיננסי שלכם
           </h1>
-          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9] mb-9">
+          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9] mb-9">
             פתרונות השקעה מותאמים אישית לבניית תיק השקעות אופטימלי המתאים לפרופיל הסיכון והיעדים שלכם.
           </p>
           <div className="flex flex-wrap items-center gap-6">
@@ -163,7 +163,7 @@ const Investment = () => {
                   <h3 className="text-lg text-[#171717] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                     {item.title}
                   </h3>
-                  <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{item.desc}</p>
+                  <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -208,7 +208,7 @@ const Investment = () => {
               <TabsContent value="types" className="mt-0">
                 <div className="mb-10">
                   <SectionTitle>סוגי פתרונות השקעה</SectionTitle>
-                  <p className="text-[#171717]/45 mt-2 text-base leading-relaxed max-w-xl">
+                  <p className="text-[#6e6e6e] mt-2 text-base leading-relaxed max-w-xl">
                     בחרו את הפתרון המתאים ליעדים הכלכליים שלכם
                   </p>
                 </div>
@@ -218,10 +218,10 @@ const Investment = () => {
                       <h3 className="text-base text-[#171717] mb-2" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                         {type.title}
                       </h3>
-                      <p className="text-[#171717]/50 text-[14px] leading-[1.8] mb-3.5">{type.description}</p>
+                      <p className="text-[#5c5c5c] text-[14px] leading-[1.8] mb-3.5">{type.description}</p>
                       <ul className="space-y-2">
                         {type.features.map((feature, fIdx) => (
-                          <li key={fIdx} className="text-[#171717]/55 text-[14px] leading-relaxed flex gap-2.5">
+                          <li key={fIdx} className="text-[#5c5c5c] text-[14px] leading-relaxed flex gap-2.5">
                             <span style={{ color: BRONZE }}>—</span>
                             {feature}
                           </li>
@@ -245,7 +245,7 @@ const Investment = () => {
                         <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
                           {item.q}
                         </AccordionTrigger>
-                        <AccordionContent className="text-[#171717]/50 leading-[1.85] pb-6 text-[14px]">
+                        <AccordionContent className="text-[#5c5c5c] leading-[1.85] pb-6 text-[14px]">
                           {item.a}
                         </AccordionContent>
                       </AccordionItem>

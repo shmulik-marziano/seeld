@@ -33,7 +33,7 @@ const Insurances = () => {
       <section style={{ backgroundColor: BONE }}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">ביטוח</span>
@@ -49,7 +49,7 @@ const Insurances = () => {
           >
             ביטוח
           </h1>
-          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9]">
+          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9]">
             16 תחומי ביטוח, מול כל החברות בישראל. בחרו תחום וקבלו את התמונה המלאה.
           </p>
         </div>
@@ -69,7 +69,7 @@ const Insurances = () => {
                   >
                     <div className="flex items-baseline gap-4 min-w-0">
                       <h2 className="text-base font-medium text-[#171717] whitespace-nowrap">{item.title}</h2>
-                      <p className="text-[13px] text-[#171717]/40 truncate hidden sm:block">{item.description}</p>
+                      <p className="text-[13px] text-[#6e6e6e] truncate hidden sm:block">{item.description}</p>
                     </div>
                     <span className="text-[#171717]/30 group-hover:text-[#171717] transition-all group-hover:-translate-x-1 shrink-0">
                       ←

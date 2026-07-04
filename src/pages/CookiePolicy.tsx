@@ -97,7 +97,7 @@ const CookiePolicy = () => {
             <p className="mb-4">לשאלות בנוגע למדיניות העוגיות, ניתן לפנות אלינו:</p>
             <div>
               <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-                <span className="text-[13px] text-[#171717]/45">אימייל</span>
+                <span className="text-[13px] text-[#6e6e6e]">אימייל</span>
                 <a
                   href="mailto:info@seeld-ins.co.il"
                   className="text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
@@ -107,7 +107,7 @@ const CookiePolicy = () => {
                 </a>
               </div>
               <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-                <span className="text-[13px] text-[#171717]/45">טלפון</span>
+                <span className="text-[13px] text-[#6e6e6e]">טלפון</span>
                 <a
                   href="tel:0523097444"
                   className="text-[#171717] tabular-nums border-b border-transparent hover:border-[#171717]/40 transition-colors"

@@ -338,7 +338,7 @@ const BlogPost = () => {
           <div className="border-t border-[#171717]/20 pt-4">
             <Link
               to="/blog"
-              className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#171717]/50 hover:text-[#171717] transition-colors"
+              className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#5c5c5c] hover:text-[#171717] transition-colors"
             >
               <ArrowRight className="w-3.5 h-3.5" />
               חזרה לבלוג
@@ -346,7 +346,7 @@ const BlogPost = () => {
           </div>
 
           <div className="mt-10 sm:mt-12">
-            <div className="flex flex-wrap items-baseline gap-3 text-[12px] text-[#171717]/45 mb-4">
+            <div className="flex flex-wrap items-baseline gap-3 text-[12px] text-[#6e6e6e] mb-4">
               {post.category && (
                 <>
                   <span>{post.category}</span>
@@ -529,7 +529,7 @@ const BlogPost = () => {
                       {r.title}
                     </h3>
                     {r.excerpt && (
-                      <p className="mt-1.5 text-[14px] text-[#171717]/50 leading-[1.7] line-clamp-2">
+                      <p className="mt-1.5 text-[14px] text-[#5c5c5c] leading-[1.7] line-clamp-2">
                         {r.excerpt}
                       </p>
                     )}

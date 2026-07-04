@@ -59,7 +59,7 @@ const Blog = () => {
     `rounded-none bg-transparent px-0 pb-4 text-[15px] font-medium border-b-2 transition-colors shrink-0 min-h-[44px] ${
       active
         ? "border-[#171717] text-[#171717]"
-        : "border-transparent text-[#171717]/40 hover:text-[#171717]"
+        : "border-transparent text-[#6e6e6e] hover:text-[#171717]"
     }`;
 
   return (
@@ -70,7 +70,7 @@ const Blog = () => {
       <section className="bg-white">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-12 sm:pb-16">
           <div className="border-t border-[#171717]/20 pt-4">
-            <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#171717]/45">
+            <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#6e6e6e]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span aria-hidden="true">/</span>
               <span className="text-[#171717]">בלוג</span>
@@ -119,7 +119,7 @@ const Blog = () => {
           </div>
         ) : filtered.length === 0 ? (
           <div className="py-20 text-center">
-            <p className="text-base text-[#171717]/50">
+            <p className="text-base text-[#5c5c5c]">
               אין פוסטים בקטגוריה הזו עדיין.
             </p>
             {activeCategory && (
@@ -140,7 +140,7 @@ const Blog = () => {
                 className="group flex items-start justify-between gap-6 sm:gap-10 py-7 border-b border-[#171717]/10 hover:border-[#171717]/40 transition-colors"
               >
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-baseline gap-3 text-[12px] text-[#171717]/45 mb-2.5">
+                  <div className="flex items-baseline gap-3 text-[12px] text-[#6e6e6e] mb-2.5">
                     {post.category && <span>{post.category}</span>}
                     {post.category && <span aria-hidden="true">·</span>}
                     <span>{formatDate(post.published_at)}</span>
@@ -152,7 +152,7 @@ const Blog = () => {
                     {post.title}
                   </h2>
                   {post.excerpt && (
-                    <p className="mt-2.5 text-[15px] text-[#171717]/50 leading-[1.8] max-w-2xl line-clamp-2">
+                    <p className="mt-2.5 text-[15px] text-[#5c5c5c] leading-[1.8] max-w-2xl line-clamp-2">
                       {post.excerpt}
                     </p>
                   )}
@@ -182,7 +182,7 @@ const Blog = () => {
               <h2 className="text-xl text-[#171717]" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
                 יש שאלה שלא מצאתם לה תשובה?
               </h2>
-              <p className="mt-2 text-[15px] text-[#171717]/50 leading-[1.8]">
+              <p className="mt-2 text-[15px] text-[#5c5c5c] leading-[1.8]">
                 יועץ מהצוות שלנו יחזור אליכם באותו יום עבודה.
               </p>
             </div>

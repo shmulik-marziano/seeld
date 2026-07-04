@@ -50,7 +50,7 @@ const SeeIDLogo = ({ className = "", size = "md" }: { className?: string; size?:
         >
           SEELD<span style={{ color: BRONZE }}>.</span>
         </span>
-        <span className={`${s.sub} mt-1 text-[#171717]/45 dark:text-white/45 font-medium tracking-[0.22em]`}>
+        <span className={`${s.sub} mt-1 text-[#6e6e6e] dark:text-white/60 font-medium tracking-[0.22em]`}>
           בית פיננסים פרטי
         </span>
       </div>

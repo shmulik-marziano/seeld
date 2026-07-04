@@ -60,7 +60,7 @@ const faqCategories = [
 ];
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors";
+  "rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors";
 
 const FAQ = () => {
   return (
@@ -71,7 +71,7 @@ const FAQ = () => {
       <section style={{ backgroundColor: BONE }}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">שאלות נפוצות</span>
@@ -87,7 +87,7 @@ const FAQ = () => {
           >
             שאלות נפוצות
           </h1>
-          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9] mb-8">
+          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9] mb-8">
             שאלות שכולם שואלים. תשובות שפחות שומעים.
           </p>
           <button
@@ -128,7 +128,7 @@ const FAQ = () => {
                             <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
                               {item.q}
                             </AccordionTrigger>
-                            <AccordionContent className="text-[#171717]/50 leading-[1.85] pb-6 text-[14px] max-w-2xl">
+                            <AccordionContent className="text-[#5c5c5c] leading-[1.85] pb-6 text-[14px] max-w-2xl">
                               {item.a}
                             </AccordionContent>
                           </AccordionItem>

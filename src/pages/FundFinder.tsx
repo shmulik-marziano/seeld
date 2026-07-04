@@ -49,7 +49,7 @@ const FundFinder = () => {
       <section style={{ backgroundColor: BONE }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-10 sm:pb-14">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">איתור קופות</span>
@@ -65,19 +65,19 @@ const FundFinder = () => {
           >
             איתור והשוואת קופות
           </h1>
-          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9] mb-8">
+          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9] mb-8">
             חיפוש, סינון והשוואה בין קופות גמל, קרנות השתלמות, קרנות פנסיה ופוליסות חיסכון.
             הנתונים נמשכים ממקורות רשות שוק ההון: גמלנט, ביטוחנט ופנסיהנט.
           </p>
 
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
             <LiveTag dot={isLive}>{isLive ? 'LIVE DATA' : 'LOCAL DATA'}</LiveTag>
-            <span className="text-[13px] text-[#171717]/45">
+            <span className="text-[13px] text-[#6e6e6e]">
               עדכון אחרון:{' '}
               <span className="text-[#171717] tabular-nums" style={{ fontFamily: MONO }}>{lastUpdate}</span>
             </span>
             {syncStatus?.totalFunds ? (
-              <span className="text-[13px] text-[#171717]/45">
+              <span className="text-[13px] text-[#6e6e6e]">
                 <span className="text-[#171717] tabular-nums" dir="ltr" style={{ fontFamily: MONO }}>
                   {syncStatus.totalFunds.toLocaleString('en-US')}
                 </span>{' '}
@@ -98,7 +98,7 @@ const FundFinder = () => {
                   <h2 className="text-lg text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                     חיפוש קופות
                   </h2>
-                  <p className="mt-1 text-[13px] text-[#171717]/45">
+                  <p className="mt-1 text-[13px] text-[#6e6e6e]">
                     {fundsLoading ? 'טוען את מאגר הקופות...' : 'סינון לפי תשואה, חברה או שם קופה'}
                   </p>
                 </div>
@@ -143,7 +143,7 @@ const FundFinder = () => {
                   <h3 className="text-xl text-[#171717] mb-3" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                     עדיין לא נבחרו קופות להשוואה
                   </h3>
-                  <p className="text-base text-[#171717]/55 leading-[1.85] max-w-xl">
+                  <p className="text-base text-[#5c5c5c] leading-[1.85] max-w-xl">
                     התחילו בפאנל החיפוש: שלפו את הקופות המובילות לפי תשואה,
                     עברו על קופות של חברה מסוימת, או הקלידו שם של קופה ספציפית.
                     אפשר להשוות עד 8 קופות זו לצד זו.
@@ -171,7 +171,7 @@ const FundFinder = () => {
                       value={printRecipient}
                       onChange={(e) => setPrintRecipient(e.target.value)}
                       placeholder="נמען להדפסה"
-                      className="w-32 px-0 py-1.5 bg-transparent border-b border-[#171717]/20 text-[13px] text-[#171717] placeholder:text-[#171717]/35 focus:outline-none focus:border-[#171717] transition-colors rounded-none"
+                      className="w-32 px-0 py-1.5 bg-transparent border-b border-[#171717]/20 text-[13px] text-[#171717] placeholder:text-[#6e6e6e] focus:outline-none focus:border-[#171717] transition-colors rounded-none"
                     />
                     <button
                       type="button"
@@ -230,7 +230,7 @@ const FundFinder = () => {
                         >
                           <div className="min-w-0">
                             <p className="text-[14px] font-medium text-[#171717] truncate">{fund.name}</p>
-                            <p className="text-[12px] text-[#171717]/45">
+                            <p className="text-[12px] text-[#6e6e6e]">
                               <span className="tabular-nums" dir="ltr" style={{ fontFamily: MONO }}>{fund.fundNumber}</span>
                               {' · '}
                               תשואה שנתית:{' '}
@@ -261,13 +261,13 @@ const FundFinder = () => {
             <h2 className="text-lg text-[#171717] mb-3" style={{ fontFamily: SERIF, fontWeight: 600 }}>
               הבהרה חשובה
             </h2>
-            <p className="text-[14px] text-[#171717]/50 leading-[1.85]">
+            <p className="text-[14px] text-[#5c5c5c] leading-[1.85]">
               הנתונים המוצגים מבוססים על מידע ממקורות ציבוריים של רשות שוק ההון, ביטוח וחיסכון
               (גמלנט, ביטוחנט, פנסיהנט) ומיועדים להשוואה כללית בלבד. תשואות עבר אינן מעידות על
               תשואות עתידיות. שיעור העלויות מחושב על פי דמי הניהול שהוזנו ואינו כולל מרכיבים נוספים.
               לפני קבלת החלטות פיננסיות, מומלץ להתייעץ עם יועץ פנסיוני או פיננסי מוסמך.
             </p>
-            <p className="mt-3 text-[13px] text-[#171717]/45">
+            <p className="mt-3 text-[13px] text-[#6e6e6e]">
               <span className="font-medium text-[#171717]">מקור הנתונים:</span>{' '}
               רשות שוק ההון, ביטוח וחיסכון, משרד האוצר. הנתונים מתעדכנים בהתאם לפרסום הרשמי.
             </p>

@@ -21,7 +21,7 @@ const SectionHead = ({ index, title, lede }: { index: string; title: string; led
         >
           {title}
         </h2>
-        {lede && <p className="mt-3 text-base text-[#171717]/50 leading-[1.85] max-w-xl">{lede}</p>}
+        {lede && <p className="mt-3 text-base text-[#5c5c5c] leading-[1.85] max-w-xl">{lede}</p>}
       </div>
     </div>
   </div>
@@ -48,7 +48,7 @@ const Wellness = () => {
       <section className="bg-white">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-14 sm:pb-20">
           <div className="border-t border-[#171717]/20 pt-4">
-            <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#171717]/45">
+            <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#6e6e6e]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span aria-hidden="true">/</span>
               <span className="text-[#171717]">שירותים ופעולות</span>
@@ -85,7 +85,7 @@ const Wellness = () => {
                     <h3 className="text-lg text-[#171717] mb-2.5" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
                       {service.title}
                     </h3>
-                    <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{service.description}</p>
+                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{service.description}</p>
                   </div>
                 </ScrollReveal>
               ))}

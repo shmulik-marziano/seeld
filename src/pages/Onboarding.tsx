@@ -191,7 +191,7 @@ function DateMaskInput({
         placeholder={placeholder ?? "DD/MM/YYYY"}
         className={cn(
           "w-full min-h-[44px] px-0 pl-9 py-3 bg-transparent border-b border-[#171717]/20 rounded-none",
-          "text-base text-[#171717] placeholder:text-[#171717]/35",
+          "text-base text-[#171717] placeholder:text-[#6e6e6e]",
           "focus:outline-none focus:border-[#171717]",
           "transition-colors tracking-widest",
           error && "border-[#b91c1c]",
@@ -203,7 +203,7 @@ function DateMaskInput({
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="absolute left-1 p-1.5 text-[#171717]/40 hover:text-[#171717] transition-colors"
+            className="absolute left-1 p-1.5 text-[#6e6e6e] hover:text-[#171717] transition-colors"
           >
             <Calendar className="w-4 h-4" />
           </button>
@@ -271,7 +271,7 @@ function CityInput({
         placeholder="תל אביב"
         className={cn(
           "w-full min-h-[44px] px-0 py-3 bg-transparent border-b border-[#171717]/20 rounded-none",
-          "text-base text-[#171717] placeholder:text-[#171717]/35",
+          "text-base text-[#171717] placeholder:text-[#6e6e6e]",
           "focus:outline-none focus:border-[#171717]",
           "transition-colors",
           error && "border-[#b91c1c]",
@@ -337,7 +337,7 @@ function StreetInput({
         placeholder="שם הרחוב"
         className={cn(
           "w-full min-h-[44px] px-0 py-3 bg-transparent border-b border-[#171717]/20 rounded-none",
-          "text-base text-[#171717] placeholder:text-[#171717]/35",
+          "text-base text-[#171717] placeholder:text-[#6e6e6e]",
           "focus:outline-none focus:border-[#171717]",
           "transition-colors",
           className
@@ -391,7 +391,7 @@ function StepBar({ current }: { current: number }) {
               <span
                 className={cn(
                   "text-[12px] tabular-nums tracking-[0.14em] transition-colors",
-                  active || done ? "text-[#171717]" : "text-[#171717]/35"
+                  active || done ? "text-[#171717]" : "text-[#6e6e6e]"
                 )}
                 style={{ fontFamily: MONO }}
                 dir="ltr"
@@ -401,7 +401,7 @@ function StepBar({ current }: { current: number }) {
               <span
                 className={cn(
                   "text-[13px] font-medium hidden sm:inline transition-colors",
-                  active ? "text-[#171717]" : done ? "text-[#171717]/55" : "text-[#171717]/35"
+                  active ? "text-[#171717]" : done ? "text-[#5c5c5c]" : "text-[#6e6e6e]"
                 )}
               >
                 {step.label}
@@ -426,8 +426,8 @@ function GlassInput({
 }: { label: string; error?: string; required?: boolean; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5 group">
-      <label className="text-[13px] font-medium text-[#171717]/55 group-focus-within:text-[#171717] transition-colors">
-        {label}{required && <span className="text-[#171717]/40 mr-1">*</span>}
+      <label className="text-[13px] font-medium text-[#5c5c5c] group-focus-within:text-[#171717] transition-colors">
+        {label}{required && <span className="text-[#6e6e6e] mr-1">*</span>}
       </label>
       {children}
       {error && (
@@ -445,7 +445,7 @@ function TechInput({ className, ...props }: React.InputHTMLAttributes<HTMLInputE
       {...props}
       className={cn(
         "w-full min-h-[44px] px-0 py-3 bg-transparent border-b border-[#171717]/20 rounded-none",
-        "text-base text-[#171717] placeholder:text-[#171717]/35",
+        "text-base text-[#171717] placeholder:text-[#6e6e6e]",
         "focus:outline-none focus:border-[#171717]",
         "transition-colors",
         className
@@ -486,13 +486,13 @@ function ConsentCard({
         </div>
         <div className="flex-1 space-y-1.5">
           <p className="font-medium text-[15px] text-[#171717]">{title}</p>
-          <p className="text-[13px] text-[#171717]/50 leading-[1.7]">{description}</p>
+          <p className="text-[13px] text-[#5c5c5c] leading-[1.7]">{description}</p>
           <a
             href={pdfPath}
             target="_blank"
             rel="noopener noreferrer"
             onClick={e => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 text-[12px] text-[#171717]/55 hover:text-[#171717] transition-colors mt-1 font-medium border-b border-[#171717]/20 pb-0.5"
+            className="inline-flex items-center gap-1.5 text-[12px] text-[#5c5c5c] hover:text-[#171717] transition-colors mt-1 font-medium border-b border-[#171717]/20 pb-0.5"
           >
             <Download className="w-3 h-3" />
             {pdfLabel}
@@ -594,7 +594,7 @@ function SignatureCanvas({ value, onChange }: { value: string; onChange: (v: str
         {!hasDrawn && (
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none gap-2">
             <Pen className="w-6 h-6 text-[#171717]/25" />
-            <p className="text-[#171717]/35 text-sm tracking-widest" style={{ fontFamily: MONO }}>חתמו כאן</p>
+            <p className="text-[#6e6e6e] text-sm tracking-widest" style={{ fontFamily: MONO }}>חתמו כאן</p>
           </div>
         )}
       </div>
@@ -602,7 +602,7 @@ function SignatureCanvas({ value, onChange }: { value: string; onChange: (v: str
         <button
           type="button"
           onClick={clear}
-          className="flex items-center gap-1.5 text-[12px] text-[#171717]/50 hover:text-[#171717] transition-colors font-medium min-h-[32px]"
+          className="flex items-center gap-1.5 text-[12px] text-[#5c5c5c] hover:text-[#171717] transition-colors font-medium min-h-[32px]"
         >
           <X className="w-3.5 h-3.5" />
           נקו וחתמו שוב
@@ -618,7 +618,7 @@ function CopyBtn({ text }: { text: string }) {
   return (
     <button
       onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
-      className="p-1.5 rounded-[4px] hover:bg-[#f5f5f5] transition-colors text-[#171717]/40 hover:text-[#171717]"
+      className="p-1.5 rounded-[4px] hover:bg-[#f5f5f5] transition-colors text-[#6e6e6e] hover:text-[#171717]"
       aria-label="העתקה"
     >
       {copied
@@ -632,7 +632,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
   if (!value) return null;
   return (
     <div className="flex items-center justify-between py-2.5 border-b border-[#171717]/10 last:border-0 group">
-      <span className="text-[12px] text-[#171717]/45">{label}</span>
+      <span className="text-[12px] text-[#6e6e6e]">{label}</span>
       <div className="flex items-center gap-1">
         <span className="text-sm font-medium text-[#171717] tabular-nums" style={{ fontFamily: MONO }}>{value}</span>
         <CopyBtn text={value} />
@@ -768,7 +768,7 @@ export default function Onboarding() {
           {/* ── Hero — one idea: open your file ── */}
           <div className="mb-10">
             <div className="border-t border-[#171717]/20 pt-5 mb-6 flex items-baseline justify-between gap-4">
-              <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+              <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
                 <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
                 <span>←</span>
                 <span className="text-[#171717]/70 font-medium">פתיחת תיק</span>
@@ -784,10 +784,10 @@ export default function Onboarding() {
             >
               שאלון הצטרפות
             </h1>
-            <p className="text-base text-[#171717]/55 leading-[1.9] mb-2">
+            <p className="text-base text-[#5c5c5c] leading-[1.9] mb-2">
               ארבעה שלבים, בלי אותיות קטנות. בסוף שמוליק מתקשר.
             </p>
-            <p className="text-[13px] text-[#171717]/40">
+            <p className="text-[13px] text-[#6e6e6e]">
               שמוליק מרציאנו · סוכן ביטוח ופנסיה מוסמך
             </p>
             {!submitted && step === 0 && (
@@ -814,7 +814,7 @@ export default function Onboarding() {
               <div className="border-t border-[#171717]/20 pt-6">
                 <div className="flex items-center gap-2.5 mb-4">
                   <LiveDot size={7} />
-                  <span className="text-[12px] tracking-[0.14em] font-medium text-[#171717]/55" style={{ fontFamily: MONO }} dir="ltr">
+                  <span className="text-[12px] tracking-[0.14em] font-medium text-[#5c5c5c]" style={{ fontFamily: MONO }} dir="ltr">
                     RECEIVED
                   </span>
                 </div>
@@ -824,7 +824,7 @@ export default function Onboarding() {
                 >
                   {form.firstName}, התיק נשלח
                 </h2>
-                <p className="text-base text-[#171717]/55 leading-[1.85] max-w-md">
+                <p className="text-base text-[#5c5c5c] leading-[1.85] max-w-md">
                   שמוליק מרציאנו יעבור על הפרטים ויצור קשר בהקדם. הסיכום נשלח גם למייל שלך.
                 </p>
               </div>
@@ -836,7 +836,7 @@ export default function Onboarding() {
                   ["אימייל", form.email],
                 ].map(([label, val]) => (
                   <div key={label} className="flex items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10">
-                    <span className="text-[13px] text-[#171717]/45 shrink-0">{label}</span>
+                    <span className="text-[13px] text-[#6e6e6e] shrink-0">{label}</span>
                     <span className="text-base text-[#171717] tabular-nums text-left" style={{ fontFamily: MONO }}>{val}</span>
                   </div>
                 ))}
@@ -1052,7 +1052,7 @@ export default function Onboarding() {
 
                   {/* Employment Status - multi select */}
                   <GlassInput label="מעמד תעסוקתי">
-                    <p className="text-[12px] text-[#171717]/45 mb-2">ניתן לסמן יותר מאחד</p>
+                    <p className="text-[12px] text-[#6e6e6e] mb-2">ניתן לסמן יותר מאחד</p>
                     <div className="flex flex-wrap gap-2">
                       {["שכיר/ה", "עצמאי/ת", "שכיר/ה בעל/ת שליטה"].map(opt => {
                         const selected = form.employmentStatus.includes(opt);
@@ -1123,7 +1123,7 @@ export default function Onboarding() {
                     </div>
                     {form.smoker === true && (
                       <div className="mt-3 animate-in slide-in-from-top-2 duration-200">
-                        <label className="text-[13px] font-medium text-[#171717]/55 block mb-1.5">
+                        <label className="text-[13px] font-medium text-[#5c5c5c] block mb-1.5">
                           כמות סיגריות ביום
                         </label>
                         <TechInput
@@ -1145,8 +1145,8 @@ export default function Onboarding() {
             {step === 1 && (
               <div className="space-y-4">
                 <div className="border-t border-[#171717]/15 pt-4 mb-4">
-                  <p className="text-sm text-[#171717]/55 leading-[1.8]">
-                    <Lock className="w-3.5 h-3.5 inline ml-1.5 text-[#171717]/40" />
+                  <p className="text-sm text-[#5c5c5c] leading-[1.8]">
+                    <Lock className="w-3.5 h-3.5 inline ml-1.5 text-[#6e6e6e]" />
                     לחץ על כל כרטיסייה לאישור ההרשאה. ניתן לצפות בנספח המלא לפני האישור.
                   </p>
                 </div>
@@ -1198,7 +1198,7 @@ export default function Onboarding() {
             {step === 2 && (
               <div className="space-y-4">
                 <TechSection title="חתימה דיגיטלית" icon={<Pen className="w-4 h-4" />}>
-                  <p className="text-sm text-[#171717]/55 leading-[1.8] mb-4">
+                  <p className="text-sm text-[#5c5c5c] leading-[1.8] mb-4">
                     החתימה תחול על שלושת ההרשאות שאישרת (נספח א׳, ב׳ ו-ה׳).
                   </p>
                   <SignatureCanvas
@@ -1214,7 +1214,7 @@ export default function Onboarding() {
 
                 {/* Confirmation box */}
                 <div className="border-t border-[#171717]/15 pt-5">
-                  <p className="text-[13px] text-[#171717]/50 leading-[1.8]">
+                  <p className="text-[13px] text-[#5c5c5c] leading-[1.8]">
                     בלחיצה על ״שלח ואשר״ אני מאשר/ת שקראתי את תוכן ההרשאות ומסכים/ה לתנאים.<br />
                     <span className="font-medium text-[#171717] mt-1 block tabular-nums" style={{ fontFamily: MONO }}>
                       {form.firstName} {form.lastName} · {form.idNumber}
@@ -1231,14 +1231,14 @@ export default function Onboarding() {
                 <div className="border-t border-[#171717]/20 pt-6">
                   <div className="flex items-center gap-2.5 mb-3">
                     <LiveDot size={7} />
-                    <span className="text-[12px] tracking-[0.14em] font-medium text-[#171717]/55" style={{ fontFamily: MONO }} dir="ltr">
+                    <span className="text-[12px] tracking-[0.14em] font-medium text-[#5c5c5c]" style={{ fontFamily: MONO }} dir="ltr">
                       SENT
                     </span>
                   </div>
                   <h2 className="text-xl text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                     התיק נשלח בהצלחה
                   </h2>
-                  <p className="text-sm text-[#171717]/55 mt-1.5">
+                  <p className="text-sm text-[#5c5c5c] mt-1.5">
                     סיכום נשלח למייל שלך ולשמוליק. הוא יצור קשר בהקדם.
                   </p>
                 </div>
@@ -1271,7 +1271,7 @@ export default function Onboarding() {
                         href={item.pdf}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[12px] text-[#171717]/50 hover:text-[#171717] transition-colors"
+                        className="inline-flex items-center gap-1 text-[12px] text-[#5c5c5c] hover:text-[#171717] transition-colors"
                       >
                         <Download className="w-3.5 h-3.5" />
                         הורד
@@ -1286,7 +1286,7 @@ export default function Onboarding() {
                     <img src={form.signature} alt="חתימה"
                       className="max-h-20 rounded-[6px] bg-white"
                       style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }} />
-                    <p className="text-[12px] text-[#171717]/40 mt-2 tabular-nums" style={{ fontFamily: MONO }}>
+                    <p className="text-[12px] text-[#6e6e6e] mt-2 tabular-nums" style={{ fontFamily: MONO }}>
                       {new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" })}
                     </p>
                   </TechSection>
@@ -1301,7 +1301,7 @@ export default function Onboarding() {
               {step > 0 ? (
                 <button
                   onClick={goPrev}
-                  className="text-sm text-[#171717]/50 hover:text-[#171717] transition-colors font-medium flex items-center gap-1.5 min-h-[44px]"
+                  className="text-sm text-[#5c5c5c] hover:text-[#171717] transition-colors font-medium flex items-center gap-1.5 min-h-[44px]"
                 >
                   <ChevronLeft className="w-4 h-4 rotate-180" />
                   חזרה
@@ -1336,7 +1336,7 @@ function TechSection({
   return (
     <div className="border-t border-[#171717]/15 pt-5 space-y-5">
       <div className="flex items-center gap-2.5 mb-1">
-        <span className="text-[#171717]/40">{icon}</span>
+        <span className="text-[#6e6e6e]">{icon}</span>
         <h2 className="text-[15px] text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>{title}</h2>
       </div>
       {children}

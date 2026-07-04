@@ -40,7 +40,7 @@ const desktopLinkClass = (active: boolean) =>
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[hsl(var(--ring))]",
     active
       ? "text-[#171717] dark:text-white underline decoration-[#171717] dark:decoration-white decoration-2 underline-offset-[10px]"
-      : "text-[#171717]/55 dark:text-white/60 hover:text-[#171717] dark:hover:text-white"
+      : "text-[#5c5c5c] dark:text-white/60 hover:text-[#171717] dark:hover:text-white"
   );
 
 const Header = () => {
@@ -159,7 +159,7 @@ const Header = () => {
           <div className="flex items-center gap-5">
             <button
               onClick={toggleTheme}
-              className="hidden sm:flex p-2 items-center justify-center text-[#171717]/45 dark:text-white/60 hover:text-[#171717] dark:hover:text-white transition-colors min-w-[40px] min-h-[40px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+              className="hidden sm:flex p-2 items-center justify-center text-[#6e6e6e] dark:text-white/60 hover:text-[#171717] dark:hover:text-white transition-colors min-w-[40px] min-h-[40px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
               aria-label="החלף ערכת נושא"
             >
               {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -260,7 +260,7 @@ const Header = () => {
                 {/* Secondary group — mono eyebrow */}
                 <div className="mt-8">
                   <div
-                    className="text-[11px] tracking-[0.18em] font-medium text-[#6e6e6e] dark:text-white/45 mb-3"
+                    className="text-[11px] tracking-[0.18em] font-medium text-[#6e6e6e] dark:text-white/60 mb-3"
                     style={{ fontFamily: MONO }}
                   >
                     חשבון

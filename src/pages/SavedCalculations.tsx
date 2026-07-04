@@ -121,7 +121,7 @@ const SavedCalculations = () => {
         <Header />
         <div className="flex flex-col items-center justify-center gap-4 h-[60vh]" dir="rtl">
           <Loader2 className="w-6 h-6 animate-spin text-[#171717]" />
-          <p className="text-[14px] text-[#171717]/45">טוען את החישובים השמורים...</p>
+          <p className="text-[14px] text-[#6e6e6e]">טוען את החישובים השמורים...</p>
         </div>
       </div>
     );
@@ -135,7 +135,7 @@ const SavedCalculations = () => {
       <section style={{ backgroundColor: BONE }}>
         <div className="max-w-4xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-10 sm:pb-14">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <Link to="/calculators" className="hover:text-[#171717] transition-colors">מחשבונים</Link>
@@ -155,7 +155,7 @@ const SavedCalculations = () => {
               >
                 החישובים שלי
               </h1>
-              <p className="text-base sm:text-[17px] text-[#171717]/55 leading-[1.9]">
+              <p className="text-base sm:text-[17px] text-[#5c5c5c] leading-[1.9]">
                 כל החישובים ששמרתם מהמחשבונים, במקום אחד.
               </p>
             </div>
@@ -178,7 +178,7 @@ const SavedCalculations = () => {
               <h2 className="text-xl text-[#171717] mb-3" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                 נדרשת התחברות
               </h2>
-              <p className="text-base text-[#171717]/55 leading-[1.85] max-w-xl mb-7">
+              <p className="text-base text-[#5c5c5c] leading-[1.85] max-w-xl mb-7">
                 החישובים השמורים מקושרים לחשבון שלכם. התחברו כדי לראות אותם,
                 או פתחו מחשבון וחשבו בלי רישום.
               </p>
@@ -205,7 +205,7 @@ const SavedCalculations = () => {
               <h2 className="text-xl text-[#171717] mb-3" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                 אין חישובים שמורים עדיין
               </h2>
-              <p className="text-base text-[#171717]/55 leading-[1.85] max-w-xl mb-7">
+              <p className="text-base text-[#5c5c5c] leading-[1.85] max-w-xl mb-7">
                 פתחו מחשבון משכנתא, פנסיה או חיסכון, ושמרו את התוצאה.
                 היא תופיע כאן ותוכלו לחזור אליה מכל מכשיר.
               </p>
@@ -235,7 +235,7 @@ const SavedCalculations = () => {
                       type="button"
                       onClick={() => deleteCalculation(calc.id)}
                       aria-label="מחיקת החישוב"
-                      className="shrink-0 p-2 text-[#171717]/30 hover:text-[#b91c1c] transition-colors"
+                      className="shrink-0 p-2 text-[#6e6e6e] hover:text-[#b91c1c] transition-colors"
                     >
                       <Trash2 className="w-4 h-4" strokeWidth={1.5} />
                     </button>
@@ -248,7 +248,7 @@ const SavedCalculations = () => {
                   {calc.tips && calc.tips.length > 0 && (
                     <ul className="mt-3 space-y-1.5">
                       {calc.tips.slice(0, 2).map((tip, i) => (
-                        <li key={i} className="flex gap-2.5 text-[14px] text-[#171717]/50 leading-[1.7]">
+                        <li key={i} className="flex gap-2.5 text-[14px] text-[#5c5c5c] leading-[1.7]">
                           <span style={{ color: BRONZE }}>—</span>
                           {tip}
                         </li>
@@ -256,7 +256,7 @@ const SavedCalculations = () => {
                     </ul>
                   )}
 
-                  <p className="mt-3 text-[12px] text-[#171717]/40 tabular-nums">
+                  <p className="mt-3 text-[12px] text-[#6e6e6e] tabular-nums">
                     {formatDate(calc.created_at)}
                   </p>
                 </div>
@@ -266,7 +266,7 @@ const SavedCalculations = () => {
 
           {/* Next action */}
           <div className="mt-14 border-t border-[#171717]/15 pt-6 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4">
-            <p className="text-[14px] text-[#171717]/50 leading-[1.8] max-w-md">
+            <p className="text-[14px] text-[#5c5c5c] leading-[1.8] max-w-md">
               רוצים לעבור על התוצאות עם יועץ? נבחן את המספרים מול התיק האמיתי שלכם, ללא עלות.
             </p>
             <Link

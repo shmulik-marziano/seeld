@@ -177,7 +177,7 @@ export default function ExecutionQueuePage() {
           className="text-center py-20"
         >
           <div className="w-20 h-20 rounded-full bg-[#171717]/10 flex items-center justify-center mx-auto mb-5">
-            <Zap className="h-10 w-10 text-[#171717]/50" />
+            <Zap className="h-10 w-10 text-[#5c5c5c]" />
           </div>
           <p className="text-foreground/70 font-medium mb-1">אין המלצות בתור ביצוע</p>
           <p className="text-sm text-muted-foreground">המלצות שאושרו על ידי לקוחות יופיעו כאן</p>

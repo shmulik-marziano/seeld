@@ -129,7 +129,7 @@ export default function AgentLandingPage() {
               </motion.h1>
 
               <motion.p
-                className="text-base sm:text-lg md:text-xl text-[#171717]/45 leading-relaxed max-w-lg"
+                className="text-base sm:text-lg md:text-xl text-[#6e6e6e] leading-relaxed max-w-lg"
                 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.25 }}
               >
@@ -220,7 +220,7 @@ export default function AgentLandingPage() {
               ].map((it, i) => (
                 <div key={i} className="flex items-center gap-2.5">
                   <span className="w-3 h-3 rounded-full" style={{ backgroundColor: it.dot }} />
-                  <span className="text-sm text-[#171717]/45 font-medium">{it.text}</span>
+                  <span className="text-sm text-[#6e6e6e] font-medium">{it.text}</span>
                 </div>
               ))}
             </div>
@@ -276,7 +276,7 @@ export default function AgentLandingPage() {
                   <Icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg sm:text-xl font-extrabold text-[#171717] mb-3">{title}</h3>
-                <p className="text-[#171717]/45 text-sm leading-relaxed">{desc}</p>
+                <p className="text-[#6e6e6e] text-sm leading-relaxed">{desc}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -340,7 +340,7 @@ export default function AgentLandingPage() {
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#171717] mb-3">
               מערכת ההפעלה <span className="text-[#171717]">של סוכן הביטוח</span>
             </h2>
-            <p className="text-[#171717]/45 text-base sm:text-lg max-w-2xl mx-auto">
+            <p className="text-[#6e6e6e] text-base sm:text-lg max-w-2xl mx-auto">
               SEELD מלווה אותך בכל רגע: מהרגע שליד חדש נכנס, דרך ניתוח התיק והמלצה מקצועית, ביצוע מול חברות ביטוח, ועד שימור הלקוח לאורך שנים. שרשרת שלמה. מקום אחד.
             </p>
           </motion.div>
@@ -379,7 +379,7 @@ export default function AgentLandingPage() {
                   <Icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-base sm:text-lg font-extrabold text-[#171717] mb-3">{title}</h3>
-                <p className="text-[#171717]/45 text-sm leading-relaxed">{desc}</p>
+                <p className="text-[#6e6e6e] text-sm leading-relaxed">{desc}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -417,7 +417,7 @@ export default function AgentLandingPage() {
                 <div className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-3" style={{ color: item.color }}>
                   {item.isCount ? n89.count : item.display}{item.suffix}
                 </div>
-                <p className="text-sm sm:text-base text-[#171717]/50 font-medium leading-snug">{item.label}</p>
+                <p className="text-sm sm:text-base text-[#5c5c5c] font-medium leading-snug">{item.label}</p>
               </motion.div>
             ))}
           </div>
@@ -447,21 +447,21 @@ export default function AgentLandingPage() {
             <div className="overflow-x-auto pb-4 -mx-4 px-4">
               <div className="flex items-center gap-0 min-w-max justify-center">
                 {[
-                  { label: "ליד",    color: "#7C3AED" },
-                  { label: "קליטה",  color: "#0891B2" },
-                  { label: "נתונים", color: "#6366F1" },
-                  { label: "ניתוח",  color: "#DC2626" },
-                  { label: "המלצה",  color: "#F59E0B" },
-                  { label: "הצגה",   color: "#8B5CF6" },
-                  { label: "חיתום",  color: "#059669" },
-                  { label: "ביצוע",  color: "#2563EB" },
-                  { label: "מעקב",   color: "#EA580C" },
-                  { label: "שימור",  color: "#DB2777" },
+                  { label: "ליד",    color: "#171717" },
+                  { label: "קליטה",  color: "#4d4d4d" },
+                  { label: "נתונים", color: "#5c5c5c" },
+                  { label: "ניתוח",  color: "#171717" },
+                  { label: "המלצה",  color: "#4d4d4d" },
+                  { label: "הצגה",   color: "#5c5c5c" },
+                  { label: "חיתום",  color: "#171717" },
+                  { label: "ביצוע",  color: "#4d4d4d" },
+                  { label: "מעקב",   color: "#5c5c5c" },
+                  { label: "שימור",  color: "#171717" },
                 ].map((step, i, arr) => (
                   <div key={step.label} className="flex items-center">
                     <div className="flex flex-col items-center gap-2">
-                      <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-md"
-                        style={{ backgroundColor: step.color, boxShadow: `0 4px 14px ${step.color}40` }}>
+                      <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xs"
+                        style={{ backgroundColor: step.color, boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}>
                         {step.label.charAt(0)}
                       </div>
                       <span className="text-xs font-semibold text-[#171717]/60">{step.label}</span>
@@ -476,7 +476,7 @@ export default function AgentLandingPage() {
                 ))}
               </div>
             </div>
-            <p className="text-center text-[#171717]/45 text-sm sm:text-base mt-8 max-w-xl mx-auto">
+            <p className="text-center text-[#6e6e6e] text-sm sm:text-base mt-8 max-w-xl mx-auto">
               כל שלב בשרשרת מכוסה. כל תהליך מנוהל. שום דבר לא נופל בין הכיסאות.
             </p>
           </motion.div>
@@ -499,7 +499,7 @@ export default function AgentLandingPage() {
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#171717] mb-3">
               סוויטה שלמה. <span className="text-[#171717]">לא עוד כלי בודד.</span>
             </h2>
-            <p className="text-[#171717]/45 text-base sm:text-lg max-w-2xl mx-auto">
+            <p className="text-[#6e6e6e] text-base sm:text-lg max-w-2xl mx-auto">
               רוב המערכות פותרות בעיה אחת. SEELD פותרת את כולן.
               יותר מ-20 כלים מקצועיים שעובדים יחד כמערכת אחת, מכסים מאות תהליכי עבודה מקצה לקצה.
             </p>
@@ -509,37 +509,37 @@ export default function AgentLandingPage() {
             initial="hidden" whileInView="visible"
             viewport={{ once: true }} variants={stagger}>
             {[
-              { color: "#7C3AED", text: "ניהול לידים ולקוחות" },
-              { color: "#0891B2", text: "סריקת מסמכים אוטומטית" },
-              { color: "#6366F1", text: "שליפה ממסלקה והר הביטוח" },
-              { color: "#DC2626", text: "ניתוח תיק מקצועי" },
-              { color: "#F59E0B", text: "בניית המלצות" },
-              { color: "#8B5CF6", text: "הצגה ללקוח עם מעקב החלטות" },
-              { color: "#059669", text: "חתימות דיגיטליות והרשאות" },
-              { color: "#0D9488", text: "ניהול חיתום רפואי" },
-              { color: "#2563EB", text: "מילוי טפסים אוטומטי" },
-              { color: "#7C3AED", text: "שיגור מסמכים לחברות ביטוח" },
-              { color: "#EA580C", text: "תיקון ליקויים" },
-              { color: "#E11D48", text: "מעקב ביצוע ופולו-אפ" },
-              { color: "#DB2777", text: "שימור לקוחות ואירועי חיים" },
-              { color: "#4F46E5", text: "שירות שוטף ופניות" },
-              { color: "#0F766E", text: "ניהול תביעות" },
-              { color: "#CA8A04", text: "מעקב עמלות" },
-              { color: "#475569", text: "ניהול מעסיקים" },
-              { color: "#16A34A", text: "בקרה רגולטורית" },
-              { color: "#0EA5E9", text: "תקשורת רב-ערוצית" },
-              { color: "#9333EA", text: "ניהול משימות ויומן" },
-              { color: "#6366F1", text: "מאגר ידע מקצועי" },
-            ].map(({ color, text }, i) => (
+              { text: "ניהול לידים ולקוחות" },
+              { text: "סריקת מסמכים אוטומטית" },
+              { text: "שליפה ממסלקה והר הביטוח" },
+              { text: "ניתוח תיק מקצועי" },
+              { text: "בניית המלצות" },
+              { text: "הצגה ללקוח עם מעקב החלטות" },
+              { text: "חתימות דיגיטליות והרשאות" },
+              { text: "ניהול חיתום רפואי" },
+              { text: "מילוי טפסים אוטומטי" },
+              { text: "שיגור מסמכים לחברות ביטוח" },
+              { text: "תיקון ליקויים" },
+              { text: "מעקב ביצוע ופולו-אפ" },
+              { text: "שימור לקוחות ואירועי חיים" },
+              { text: "שירות שוטף ופניות" },
+              { text: "ניהול תביעות" },
+              { text: "מעקב עמלות" },
+              { text: "ניהול מעסיקים" },
+              { text: "בקרה רגולטורית" },
+              { text: "תקשורת רב-ערוצית" },
+              { text: "ניהול משימות ויומן" },
+              { text: "מאגר ידע מקצועי" },
+            ].map(({ text }, i) => (
               <motion.div key={i} variants={fadeUp}
                 className="flex items-center gap-3 bg-white border border-[#171717]/[0.06] rounded-xl px-4 py-3 hover:shadow-sm transition-all">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color }} />
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: "#171717" }} />
                 <span className="text-sm font-medium text-[#171717]/70">{text}</span>
               </motion.div>
             ))}
           </motion.div>
 
-          <motion.p className="text-center text-[#171717]/45 text-sm sm:text-base max-w-xl mx-auto"
+          <motion.p className="text-center text-[#6e6e6e] text-sm sm:text-base max-w-xl mx-auto"
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
             כל אחד מהם חזק בפני עצמו. ביחד, הם מערכת שלמה שמנהלת סוכנות ביטוח מא' עד ת'.
           </motion.p>
@@ -584,7 +584,7 @@ export default function AgentLandingPage() {
                     {num}
                   </div>
                   <h3 className="text-xl font-extrabold text-[#171717] mb-3">{title}</h3>
-                  <p className="text-[#171717]/45 text-sm leading-relaxed">{desc}</p>
+                  <p className="text-[#6e6e6e] text-sm leading-relaxed">{desc}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -623,7 +623,7 @@ export default function AgentLandingPage() {
                 className="bg-white border border-[#171717]/[0.06] rounded-2xl p-8 sm:p-10 hover:shadow-xl hover:shadow-[#171717]/[0.04] transition-all duration-300 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-full h-1.5 rounded-b-full" style={{ backgroundColor: color }} />
                 <h3 className="text-xl font-extrabold text-[#171717] mb-4">{title}</h3>
-                <p className="text-[#171717]/55 text-sm sm:text-base leading-relaxed">{desc}</p>
+                <p className="text-[#5c5c5c] text-sm sm:text-base leading-relaxed">{desc}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -645,7 +645,7 @@ export default function AgentLandingPage() {
             <h2 className="text-2xl sm:text-4xl font-extrabold text-[#171717] mb-3">
               אבטחת מידע <span className="text-[#171717]">בשלוש שכבות</span>
             </h2>
-            <p className="text-sm text-[#171717]/40 max-w-xl mx-auto">המערכת בנויה על תשתיות מאובטחות. השימוש בפלטפורמה כפוף ל<Link to="/terms" className="underline hover:text-[#171717]">תנאי השימוש</Link> ול<Link to="/privacy" className="underline hover:text-[#171717]">מדיניות הפרטיות</Link> שלנו.</p>
+            <p className="text-sm text-[#6e6e6e] max-w-xl mx-auto">המערכת בנויה על תשתיות מאובטחות. השימוש בפלטפורמה כפוף ל<Link to="/terms" className="underline hover:text-[#171717]">תנאי השימוש</Link> ול<Link to="/privacy" className="underline hover:text-[#171717]">מדיניות הפרטיות</Link> שלנו.</p>
           </motion.div>
           <motion.div className="space-y-6"
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
@@ -658,7 +658,7 @@ export default function AgentLandingPage() {
                 <CheckCircle2 className="w-6 h-6 flex-shrink-0 mt-0.5" style={{ color }} />
                 <div>
                   <span className="font-extrabold text-[#171717]">{title}</span>
-                  <span className="text-[#171717]/50"> · {desc}</span>
+                  <span className="text-[#5c5c5c]"> · {desc}</span>
                 </div>
               </motion.div>
             ))}
@@ -680,8 +680,8 @@ export default function AgentLandingPage() {
               className="absolute bottom-[-30px] left-[-30px] w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] rounded-full bg-[#171717] opacity-[0.05]" />
             <div className="absolute top-[50%] left-[10%] w-[20px] h-[20px] sm:w-[30px] sm:h-[30px] rounded-full bg-[#171717] opacity-[0.05]" />
 
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-4 relative">
-              מספיק עם <span className="text-[#171717]">הניירת.</span>
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-4 relative text-white/60">
+              מספיק עם <span className="text-white">הניירת.</span>
             </h2>
             <p className="text-white/50 text-sm sm:text-lg mb-8 max-w-xl mx-auto relative">
               הצטרף לסוכנים שעובדים חכם יותר.
@@ -697,7 +697,7 @@ export default function AgentLandingPage() {
                 יש לך שאלות? דבר איתנו
               </Link>
             </div>
-            <p className="text-white/25 text-sm relative">
+            <p className="text-white/50 text-sm relative">
               הקמה תוך דקות · ללא התקנה · מאובטח · בעברית
             </p>
           </motion.div>
@@ -707,10 +707,10 @@ export default function AgentLandingPage() {
       {/* Disclaimer */}
       <div className="bg-[#fafafa] border-t border-[#171717]/[0.06] py-6 px-5 sm:px-8" dir="rtl">
         <div className="max-w-5xl mx-auto text-center space-y-2">
-          <p className="text-xs text-[#171717]/35 leading-relaxed">
+          <p className="text-xs text-[#6e6e6e] leading-relaxed">
             <span className="font-bold text-[#b45309]">BETA</span> · הפלטפורמה נמצאת בשלבי השקה ראשוניים. חלק מהכלים עדיין בפיתוח ויופעלו בהדרגה. ייתכנו שינויים בפונקציונליות, בממשק ובתנאי השימוש ללא הודעה מוקדמת.
           </p>
-          <p className="text-xs text-[#171717]/25 leading-relaxed">
+          <p className="text-xs text-[#6e6e6e] leading-relaxed">
             SEELD מספקת פלטפורמת ניהול עזר לסוכני ביטוח. האחריות המקצועית, הרגולטורית והמשפטית על כל פעולה, המלצה ועסקה מוטלת על הסוכן בלבד. השימוש בפלטפורמה אינו מהווה ייעוץ משפטי, פיננסי או ביטוחי מטעם SEELD.
           </p>
         </div>

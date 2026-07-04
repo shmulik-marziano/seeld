@@ -29,7 +29,7 @@ const Creativity = () => {
         <section className="bg-white">
           <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-14 sm:pb-20">
             <div className="border-t border-[#171717]/20 pt-4">
-              <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#171717]/45">
+              <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#6e6e6e]">
                 <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
                 <span aria-hidden="true">/</span>
                 <span className="text-[#171717]">ביטוח רכוש ורכב</span>
@@ -86,8 +86,8 @@ const Creativity = () => {
                       </h3>
                       <span className="text-[#171717]/30 group-hover:text-[#171717] transition-all group-hover:-translate-x-1" aria-hidden="true">←</span>
                     </div>
-                    <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{type.description}</p>
-                    <p className="mt-3 text-[13px] text-[#171717]/40">
+                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{type.description}</p>
+                    <p className="mt-3 text-[13px] text-[#6e6e6e]">
                       {type.features.join(" · ")}
                     </p>
                   </Link>
@@ -111,11 +111,11 @@ const Creativity = () => {
                     >
                       {stat.value}
                     </div>
-                    <div className="text-[12px] tracking-[0.12em] text-[#171717]/45">{stat.label}</div>
+                    <div className="text-[12px] tracking-[0.12em] text-[#6e6e6e]">{stat.label}</div>
                   </div>
                 ))}
               </div>
-              <p className="mt-5 text-center text-[12px] text-[#171717]/35">
+              <p className="mt-5 text-center text-[12px] text-[#6e6e6e]">
                 למה לבחור ב-SEELD? המספרים עונים.
               </p>
             </ScrollReveal>

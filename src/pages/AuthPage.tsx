@@ -315,7 +315,7 @@ export default function AuthPage() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-white/90">{feat.text}</p>
-                  <p className="text-xs text-white/40 mt-0.5">{feat.desc}</p>
+                  <p className="text-xs text-white/60 mt-0.5">{feat.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -328,8 +328,8 @@ export default function AuthPage() {
             transition={{ delay: 1 }}
             className="flex items-center justify-center gap-2 pt-2"
           >
-            <Shield className="w-3.5 h-3.5 text-white/30" />
-            <span className="text-xs text-white/30">מאובטח בתקן SSL | נתונים מוצפנים</span>
+            <Shield className="w-3.5 h-3.5 text-white/50" />
+            <span className="text-xs text-white/50">מאובטח בתקן SSL | נתונים מוצפנים</span>
           </motion.div>
         </motion.div>
       </div>

@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { BONE, PINE, BRONZE, SERIF } from "@/lib/brand";
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-sm sm:text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+  "rounded-none bg-transparent px-0 pb-4 text-sm sm:text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const tabHeadClass = "border-t border-[#171717]/20 pt-5 mb-8 text-right";
 
@@ -39,7 +39,7 @@ const Calculators = () => {
         <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
           {/* Rule + breadcrumb */}
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">מחשבונים</span>
@@ -55,7 +55,7 @@ const Calculators = () => {
           >
             מחשבונים פיננסיים
           </h1>
-          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9]">
+          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9]">
             משכנתא, פנסיה, חיסכון והשוואת מסלולים. חופשי, ללא רישום.
           </p>
         </div>
@@ -93,7 +93,7 @@ const Calculators = () => {
                     >
                       מחשבון משכנתא
                     </h2>
-                    <p className="text-[#171717]/55 text-[14px] leading-[1.85]">חשבו החזר חודשי ועלות כוללת של המשכנתא</p>
+                    <p className="text-[#5c5c5c] text-[14px] leading-[1.85]">חשבו החזר חודשי ועלות כוללת של המשכנתא</p>
                   </div>
                   <MortgageCalculator />
                 </div>
@@ -108,7 +108,7 @@ const Calculators = () => {
                     >
                       מחשבון פנסיה
                     </h2>
-                    <p className="text-[#171717]/55 text-[14px] leading-[1.85]">חשבו כמה תקבלו בפנסיה לפי ההפקדות הנוכחיות</p>
+                    <p className="text-[#5c5c5c] text-[14px] leading-[1.85]">חשבו כמה תקבלו בפנסיה לפי ההפקדות הנוכחיות</p>
                   </div>
                   <PensionCalculator />
                 </div>
@@ -123,7 +123,7 @@ const Calculators = () => {
                     >
                       מחשבון חיסכון
                     </h2>
-                    <p className="text-[#171717]/55 text-[14px] leading-[1.85]">חשבו כמה תצברו עם ריבית דריבית</p>
+                    <p className="text-[#5c5c5c] text-[14px] leading-[1.85]">חשבו כמה תצברו עם ריבית דריבית</p>
                   </div>
                   <SavingsCalculator />
                 </div>
@@ -138,7 +138,7 @@ const Calculators = () => {
                     >
                       מחשבון יעד כלכלי
                     </h2>
-                    <p className="text-[#171717]/55 text-[14px] leading-[1.85]">כמה להפקיד כדי להגיע ליעד הפנסיוני שלכם?</p>
+                    <p className="text-[#5c5c5c] text-[14px] leading-[1.85]">כמה להפקיד כדי להגיע ליעד הפנסיוני שלכם?</p>
                   </div>
                   <GoalCalculator />
                 </div>
@@ -153,7 +153,7 @@ const Calculators = () => {
                     >
                       השוואת מסלולי השקעה
                     </h2>
-                    <p className="text-[#171717]/55 text-[14px] leading-[1.85]">ראו איך הכסף שלכם גדל בכל מסלול</p>
+                    <p className="text-[#5c5c5c] text-[14px] leading-[1.85]">ראו איך הכסף שלכם גדל בכל מסלול</p>
                   </div>
                   <CompareCalculator />
                 </div>
@@ -184,7 +184,7 @@ const Calculators = () => {
                 >
                   <div className="min-w-0">
                     <h3 className="text-base font-medium text-[#171717] mb-1">{calc.title}</h3>
-                    <p className="text-[13px] text-[#171717]/40 leading-relaxed">{calc.description}</p>
+                    <p className="text-[13px] text-[#6e6e6e] leading-relaxed">{calc.description}</p>
                   </div>
                   <span className="text-[11px] tracking-[0.22em] font-medium shrink-0" style={{ color: BRONZE }}>
                     בקרוב

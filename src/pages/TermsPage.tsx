@@ -146,7 +146,7 @@ export default function TermsPage() {
         </p>
       </LegalSection>
 
-      <p className="border-t border-[#171717]/15 pt-5 text-[12px] leading-relaxed text-[#171717]/40">
+      <p className="border-t border-[#171717]/15 pt-5 text-[12px] leading-relaxed text-[#6e6e6e]">
         &copy; {new Date().getFullYear()} SEELD — כל הזכויות שמורות. תנאי שימוש אלו מהווים את ההסכם
         המלא בין המשתמש לחברה בנוגע לשימוש במערכת.
       </p>
@@ -170,7 +170,7 @@ export default function TermsPage() {
             </span>
             <button
               onClick={() => navigate('/')}
-              className="text-[13px] font-medium text-[#171717]/50 hover:text-[#171717] transition-colors"
+              className="text-[13px] font-medium text-[#5c5c5c] hover:text-[#171717] transition-colors"
             >
               חזרה לדף הבית
             </button>

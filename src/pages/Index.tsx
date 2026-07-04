@@ -161,7 +161,7 @@ const SectionHead = ({ index, title, lede, underline }: { index: string; title: 
         </h2>
         {underline && <DrawUnderline color={underline} className="mt-2" />}
         {lede && (
-          <p className="mt-3 text-base text-[#171717]/50 leading-[1.85] max-w-xl">{lede}</p>
+          <p className="mt-3 text-base text-[#5c5c5c] leading-[1.85] max-w-xl">{lede}</p>
         )}
       </div>
     </div>
@@ -179,7 +179,7 @@ const ProductList = ({ items }: { items: { title: string; description: string; h
       >
         <div className="flex items-baseline gap-4 min-w-0">
           <h3 className="text-base font-medium text-[#171717] whitespace-nowrap">{item.title}</h3>
-          <p className="text-[13px] text-[#171717]/40 truncate hidden sm:block">{item.description}</p>
+          <p className="text-[13px] text-[#6e6e6e] truncate hidden sm:block">{item.description}</p>
         </div>
         <span className="text-[#171717]/30 group-hover:text-[#171717] transition-all group-hover:-translate-x-1 shrink-0">
           ←
@@ -190,7 +190,7 @@ const ProductList = ({ items }: { items: { title: string; description: string; h
 );
 
 const inputClass =
-  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
+  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#6e6e6e] text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
 
 const Index = () => {
   const processRef = useRef<HTMLDivElement>(null);
@@ -331,7 +331,7 @@ const Index = () => {
                   >
                     {leadSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו ונתחיל"}
                   </button>
-                  <span className="text-[13px] text-[#171717]/40">
+                  <span className="text-[13px] text-[#6e6e6e]">
                     או חייגו{" "}
                     <a href="tel:0523097444" className="text-[#171717] border-b border-[#171717]/25 hover:border-[#171717] transition-colors tabular-nums" dir="ltr">
                       052-309-7444
@@ -339,7 +339,7 @@ const Index = () => {
                   </span>
                 </div>
                 <div className="mt-6">
-                  <span className="text-[12px] text-[#171717]/35">שתי דקות למלא. אפס אותיות קטנות.</span>
+                  <span className="text-[12px] text-[#6e6e6e]">שתי דקות למלא. אפס אותיות קטנות.</span>
                 </div>
               </form>
             </ScrollReveal>
@@ -367,7 +367,7 @@ const Index = () => {
                     >
                       {item.title}
                     </h3>
-                    <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{item.description}</p>
+                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{item.description}</p>
                   </div>
                 </ScrollReveal>
               ))}
@@ -390,13 +390,13 @@ const Index = () => {
               <TabsList className="flex w-full justify-start gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none">
                 <TabsTrigger
                   value="insurance"
-                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
+                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
                 >
                   ביטוח
                 </TabsTrigger>
                 <TabsTrigger
                   value="savings"
-                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
+                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
                 >
                   חיסכון ופנסיה
                 </TabsTrigger>
@@ -498,7 +498,7 @@ const Index = () => {
           <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
               <div className="flex items-end justify-between gap-6 mb-2">
-                <span className="text-[11px] tracking-[0.14em] text-[#171717]/40" style={{ fontFamily: "'Geist Mono', ui-monospace, monospace" }}>
+                <span className="text-[11px] tracking-[0.14em] text-[#6e6e6e]" style={{ fontFamily: "'Geist Mono', ui-monospace, monospace" }}>
                   PORTFOLIO · GROWTH
                 </span>
                 <DrawSpark color={CHIP_GREEN} className="w-40 sm:w-64" height={44} />
@@ -518,11 +518,11 @@ const Index = () => {
                     >
                       <CountUp to={stat.to} format={(v) => `${stat.prefix ?? ""}${v.toLocaleString("en-US")}${stat.suffix}`} />
                     </div>
-                    <div className="text-[12px] tracking-[0.12em] text-[#171717]/45">{stat.label}</div>
+                    <div className="text-[12px] tracking-[0.12em] text-[#6e6e6e]">{stat.label}</div>
                   </div>
                 ))}
               </div>
-              <p className="mt-5 text-center text-[12px] text-[#171717]/35">
+              <p className="mt-5 text-center text-[12px] text-[#6e6e6e]">
                 אנחנו לא צועקים. המספרים עושים את זה בשבילנו.
               </p>
             </ScrollReveal>
@@ -577,7 +577,7 @@ const Index = () => {
                   {trustList.map((point) => (
                     <div key={point.title} className="py-5 border-b border-[#171717]/10">
                       <h3 className="text-base font-medium text-[#171717] mb-1.5">{point.title}</h3>
-                      <p className="text-[13px] text-[#171717]/45 leading-relaxed">{point.description}</p>
+                      <p className="text-[13px] text-[#6e6e6e] leading-relaxed">{point.description}</p>
                     </div>
                   ))}
                 </div>
@@ -612,7 +612,7 @@ const Index = () => {
                     >
                       {step.title}
                     </h3>
-                    <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{step.description}</p>
+                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{step.description}</p>
                   </div>
                 </ScrollReveal>
               ))}
@@ -651,7 +651,7 @@ const Index = () => {
                     <AccordionTrigger className="text-base sm:text-base font-medium hover:no-underline py-5 text-[#171717] text-start">
                       {item.question}
                     </AccordionTrigger>
-                    <AccordionContent className="text-[14px] text-[#171717]/50 leading-[1.85] pb-6 max-w-2xl">
+                    <AccordionContent className="text-[14px] text-[#5c5c5c] leading-[1.85] pb-6 max-w-2xl">
                       {item.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -726,7 +726,7 @@ const Index = () => {
                     rows={3}
                     value={contactForm.message}
                     onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}
-                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] text-base placeholder:text-[#171717]/35 focus:outline-none focus:border-[#171717] transition-colors resize-none rounded-none"
+                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] text-base placeholder:text-[#6e6e6e] focus:outline-none focus:border-[#171717] transition-colors resize-none rounded-none"
                   />
                   <button
                     type="submit"
@@ -747,7 +747,7 @@ const Index = () => {
                     { label: "משרדים", value: "רעננה · ירושלים" },
                   ].map((row) => (
                     <div key={row.label} className="flex items-baseline justify-between py-[15px] border-b border-[#171717]/10">
-                      <span className="text-[13px] text-[#171717]/45">{row.label}</span>
+                      <span className="text-[13px] text-[#6e6e6e]">{row.label}</span>
                       {row.href ? (
                         <a
                           href={row.href}
@@ -764,7 +764,7 @@ const Index = () => {
                     </div>
                   ))}
                   <div className="flex items-baseline justify-between py-[15px]">
-                    <span className="text-[13px] text-[#171717]/45">סוכן ביטוח?</span>
+                    <span className="text-[13px] text-[#6e6e6e]">סוכן ביטוח?</span>
                     <Link
                       to="/app/auth"
                       className="text-base text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"

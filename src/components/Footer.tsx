@@ -7,7 +7,7 @@ import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { BRONZE, MONO, PINE, SERIF, TINT } from "@/lib/brand";
 
 const inputClass =
-  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
+  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#6e6e6e] text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
 
 const linkColumns: { title: string; links: { href: string; label: string }[] }[] = [
   {
@@ -104,7 +104,7 @@ const Footer = () => {
               >
                 נדבר?
               </h2>
-              <p className="text-[14px] text-[#171717]/50 mb-5">
+              <p className="text-[14px] text-[#5c5c5c] mb-5">
                 בלי ספאם. בלי טלפונים בשמונה בערב. שיחה אחת, ואתם מחליטים.
               </p>
               <button
@@ -166,7 +166,7 @@ const Footer = () => {
                   { label: "משרדים", value: "רעננה · ירושלים" },
                 ].map((row) => (
                   <div key={row.label} className="flex items-baseline justify-between py-[15px] border-b border-[#171717]/10">
-                    <span className="text-[13px] text-[#171717]/45">{row.label}</span>
+                    <span className="text-[13px] text-[#6e6e6e]">{row.label}</span>
                     {row.href ? (
                       <a
                         href={row.href}
@@ -189,7 +189,7 @@ const Footer = () => {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[13px] font-medium text-[#171717]/50 hover:text-[#171717] border-b border-transparent hover:border-[#171717]/30 transition-colors"
+                    className="text-[13px] font-medium text-[#5c5c5c] hover:text-[#171717] border-b border-transparent hover:border-[#171717]/30 transition-colors"
                   >
                     {social.label}
                   </a>
@@ -197,8 +197,8 @@ const Footer = () => {
               </div>
 
               <div className="mt-9 pt-6 border-t border-[#171717]/10 flex flex-wrap gap-x-6 gap-y-2">
-                <Link to="/about" className="text-[13px] text-[#171717]/50 hover:text-[#171717] transition-colors">הסיפור שלנו</Link>
-                <Link to="/faq" className="text-[13px] text-[#171717]/50 hover:text-[#171717] transition-colors">שאלות נפוצות</Link>
+                <Link to="/about" className="text-[13px] text-[#5c5c5c] hover:text-[#171717] transition-colors">הסיפור שלנו</Link>
+                <Link to="/faq" className="text-[13px] text-[#5c5c5c] hover:text-[#171717] transition-colors">שאלות נפוצות</Link>
               </div>
             </div>
           </div>
@@ -214,12 +214,12 @@ const Footer = () => {
               <div dir="ltr" className="text-right" style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "2rem" }}>
                 SEELD<span style={{ color: BRONZE }}>.</span>
               </div>
-              <div className="text-[11px] tracking-[0.22em] text-white/40 mt-1.5">בית פיננסים פרטי</div>
+              <div className="text-[11px] tracking-[0.22em] text-white/60 mt-1.5">בית פיננסים פרטי</div>
               <div className="mt-3">
                 <LiveTag dark>SEELD · EST. 2018 · רעננה · ירושלים</LiveTag>
               </div>
             </div>
-            <div className="flex flex-wrap gap-x-8 gap-y-2 text-[12px] text-white/40">
+            <div className="flex flex-wrap gap-x-8 gap-y-2 text-[12px] text-white/60">
               <span>רישיון סוכנות ביטוח · רשות שוק ההון</span>
               <span>לשכת סוכני הביטוח בישראל</span>
               <span>מבית עמיתים הון</span>
@@ -271,7 +271,7 @@ const Footer = () => {
           </div>
 
           {/* Disclaimer */}
-          <div className="text-[11px] text-white/25 leading-relaxed max-w-3xl mb-8">
+          <div className="text-[11px] text-white/50 leading-relaxed max-w-3xl mb-8">
             המידע באתר זה הינו כללי בלבד ואינו מהווה ייעוץ פיננסי, ביטוחי או משפטי.
             אין להסתמך על המידע באתר כתחליף לייעוץ מקצועי אישי. SEELD פועלת בכפוף
             לחוק הפיקוח על שירותים פיננסיים (ביטוח) ובפיקוח רשות שוק ההון, ביטוח וחיסכון.
@@ -280,10 +280,10 @@ const Footer = () => {
           {/* Bottom bar */}
           <div className="pt-6 border-t border-white/10">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-              <p className="text-xs text-white/30">
+              <p className="text-xs text-white/50">
                 &copy; {new Date().getFullYear()} SEELD · הכסף שלך, מסודר. כל הזכויות שמורות.
               </p>
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-2 text-xs text-white/30">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-2 text-xs text-white/50">
                 <Link to="/privacy" className="hover:text-white/60 transition-colors">מדיניות פרטיות</Link>
                 <Link to="/terms" className="hover:text-white/60 transition-colors">תנאי שימוש</Link>
                 <Link to="/accessibility" className="hover:text-white/60 transition-colors">נגישות</Link>

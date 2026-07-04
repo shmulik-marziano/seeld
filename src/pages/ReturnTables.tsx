@@ -22,7 +22,7 @@ const toFundReturn = (f: (typeof staticFunds)[number]): FundReturn => ({
 });
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-sm sm:text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+  "rounded-none bg-transparent px-0 pb-4 text-sm sm:text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const ReturnTables = () => {
   const { data: liveFunds, isError } = useCmaFunds();
@@ -97,7 +97,7 @@ const ReturnTables = () => {
       <section style={{ backgroundColor: BONE }}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-10 sm:pb-14">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">לוחות תשואה</span>
@@ -113,14 +113,14 @@ const ReturnTables = () => {
           >
             לוחות תשואה
           </h1>
-          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9] mb-8">
+          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9] mb-8">
             תשואות רשמיות של קרנות השתלמות, קופות גמל, קרנות פנסיה ופוליסות חיסכון בישראל.
             הנתונים נמשכים מגמלנט, ביטוחנט ופנסיהנט ומתעדכנים מדי חודש.
           </p>
 
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
             <LiveTag dot={isLive}>{isLive ? "LIVE DATA" : "LOCAL DATA"}</LiveTag>
-            <span className="text-[13px] text-[#171717]/45">
+            <span className="text-[13px] text-[#6e6e6e]">
               עדכון אחרון:{" "}
               <span className="text-[#171717] tabular-nums" style={{ fontFamily: MONO }}>{lastUpdate}</span>
             </span>
@@ -154,7 +154,7 @@ const ReturnTables = () => {
                     <FundReturnTable funds={tab.funds} title={tab.title} />
                   ) : (
                     <div className="border-t border-[#171717]/15 pt-6 pb-10">
-                      <p className="text-base text-[#171717]/55 leading-[1.85] max-w-xl">
+                      <p className="text-base text-[#5c5c5c] leading-[1.85] max-w-xl">
                         אין עדיין נתונים בקטגוריה הזו לתקופה הנוכחית. נסו קטגוריה אחרת,
                         או חפשו קופה ספציפית בכלי איתור הקופות.
                       </p>
@@ -188,9 +188,9 @@ const ReturnTables = () => {
                       {stat.value}
                       {stat.unit && <span style={{ fontSize: "0.55em" }}>{stat.unit}</span>}
                     </div>
-                    <div className="text-[12px] tracking-[0.12em] text-[#171717]/45">{stat.label}</div>
+                    <div className="text-[12px] tracking-[0.12em] text-[#6e6e6e]">{stat.label}</div>
                     {stat.detail && (
-                      <div className="mt-1 text-[12px] text-[#171717]/35 truncate max-w-[260px] mx-auto">{stat.detail}</div>
+                      <div className="mt-1 text-[12px] text-[#6e6e6e] truncate max-w-[260px] mx-auto">{stat.detail}</div>
                     )}
                   </div>
                 ))}
@@ -206,13 +206,13 @@ const ReturnTables = () => {
               <h2 className="text-lg text-[#171717] mb-3" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                 הבהרה חשובה
               </h2>
-              <p className="text-[14px] text-[#171717]/50 leading-[1.85]">
+              <p className="text-[14px] text-[#5c5c5c] leading-[1.85]">
                 הנתונים המוצגים מבוססים על מידע ממקורות ציבוריים של רשות שוק ההון (גמלנט, ביטוחנט, פנסיהנט)
                 ומיועדים להשוואה כללית בלבד. תשואות עבר אינן מעידות על תשואות עתידיות.
                 דמי הניהול אינם כלולים בחישוב התשואות. לפני קבלת החלטות פיננסיות,
                 מומלץ להתייעץ עם יועץ פנסיוני או פיננסי מוסמך.
               </p>
-              <p className="mt-3 text-[13px] text-[#171717]/45">
+              <p className="mt-3 text-[13px] text-[#6e6e6e]">
                 <span className="font-medium text-[#171717]">מקור הנתונים:</span>{" "}
                 רשות שוק ההון, ביטוח וחיסכון, משרד האוצר.
               </p>

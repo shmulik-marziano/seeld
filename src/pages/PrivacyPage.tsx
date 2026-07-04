@@ -126,11 +126,11 @@ export default function PrivacyPage() {
         </p>
         <div>
           <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-            <span className="text-[13px] text-[#171717]/45">חברה</span>
+            <span className="text-[13px] text-[#6e6e6e]">חברה</span>
             <span className="text-[#171717]">SEELD בע"מ</span>
           </div>
           <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-            <span className="text-[13px] text-[#171717]/45">דואר אלקטרוני</span>
+            <span className="text-[13px] text-[#6e6e6e]">דואר אלקטרוני</span>
             <a
               href="mailto:info@seeld-ins.co.il"
               className="text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
@@ -140,13 +140,13 @@ export default function PrivacyPage() {
             </a>
           </div>
           <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-            <span className="text-[13px] text-[#171717]/45">אתר</span>
+            <span className="text-[13px] text-[#6e6e6e]">אתר</span>
             <span className="text-[#171717]" dir="ltr">seeld-ins.co.il</span>
           </div>
         </div>
       </LegalSection>
 
-      <p className="border-t border-[#171717]/15 pt-5 text-[12px] leading-relaxed text-[#171717]/40">
+      <p className="border-t border-[#171717]/15 pt-5 text-[12px] leading-relaxed text-[#6e6e6e]">
         &copy; {new Date().getFullYear()} SEELD — כל הזכויות שמורות.
       </p>
     </div>
@@ -169,7 +169,7 @@ export default function PrivacyPage() {
             </span>
             <button
               onClick={() => navigate(-1)}
-              className="text-[13px] font-medium text-[#171717]/50 hover:text-[#171717] transition-colors"
+              className="text-[13px] font-medium text-[#5c5c5c] hover:text-[#171717] transition-colors"
             >
               חזרה
             </button>

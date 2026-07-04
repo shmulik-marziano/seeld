@@ -71,7 +71,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
         >
           בדקו את המסלול שלכם
         </h2>
-        <p className="mt-3 text-base text-[#171717]/50 leading-[1.85] max-w-xl">
+        <p className="mt-3 text-base text-[#5c5c5c] leading-[1.85] max-w-xl">
           בחרו חברה, סוג מוצר ומסלול, ותראו לאן הכסף שלכם הולך: פיזור נכסים, חשיפות ורמת סיכון.
         </p>
       </div>
@@ -79,7 +79,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-10 gap-y-5 mb-8 max-w-4xl">
         {/* Company */}
         <div>
-          <label className="text-[12px] text-[#171717]/45 mb-1 block">חברה</label>
+          <label className="text-[12px] text-[#6e6e6e] mb-1 block">חברה</label>
           <select
             value={selectedCompany}
             onChange={e => { setSelectedCompany(e.target.value as ManagingCompany); setSelectedProduct(""); setSelectedFundId(""); }}
@@ -93,7 +93,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
         </div>
         {/* Product type */}
         <div>
-          <label className="text-[12px] text-[#171717]/45 mb-1 block">סוג מוצר</label>
+          <label className="text-[12px] text-[#6e6e6e] mb-1 block">סוג מוצר</label>
           <select
             value={selectedProduct}
             onChange={e => { setSelectedProduct(e.target.value as ProductType); setSelectedFundId(""); }}
@@ -108,7 +108,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
         </div>
         {/* Fund */}
         <div>
-          <label className="text-[12px] text-[#171717]/45 mb-1 block">מסלול</label>
+          <label className="text-[12px] text-[#6e6e6e] mb-1 block">מסלול</label>
           <select
             value={selectedFundId}
             onChange={e => setSelectedFundId(e.target.value)}
@@ -135,7 +135,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
                 <h3 className="text-lg text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                   {selectedFund.name}
                 </h3>
-                <p className="text-[12px] text-[#171717]/45 mt-1">
+                <p className="text-[12px] text-[#6e6e6e] mt-1">
                   קופה{" "}
                   <span dir="ltr" style={monoNum}>{selectedFund.fundNumber}</span>
                   {" · "}
@@ -144,13 +144,13 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
               </div>
               <div className="flex gap-10 shrink-0">
                 <div>
-                  <p className="text-[12px] text-[#171717]/45 mb-1">תשואה 12 חודשים</p>
+                  <p className="text-[12px] text-[#6e6e6e] mb-1">תשואה 12 חודשים</p>
                   <p className="text-2xl text-[#171717]" dir="ltr" style={{ ...monoNum, fontWeight: 600 }}>
                     {fmt(selectedFund.returns.year1)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-[12px] text-[#171717]/45 mb-1">רמת סיכון</p>
+                  <p className="text-[12px] text-[#6e6e6e] mb-1">רמת סיכון</p>
                   <p className="text-2xl" style={{ fontFamily: SERIF, fontWeight: 600, color: risk.color }}>
                     {risk.level}
                   </p>
@@ -182,16 +182,16 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
                 ))}
                 <div className="pt-2.5 space-y-1.5">
                   {selectedFund.deepDrill.foreignExposure > 0 && (
-                    <div className="flex justify-between text-[12px] text-[#171717]/45">
+                    <div className="flex justify-between text-[12px] text-[#6e6e6e]">
                       <span>חשיפה לחו"ל</span>
                       <span className="text-[#171717]" dir="ltr" style={monoNum}>{selectedFund.deepDrill.foreignExposure}%</span>
                     </div>
                   )}
-                  <div className="flex justify-between text-[12px] text-[#171717]/45">
+                  <div className="flex justify-between text-[12px] text-[#6e6e6e]">
                     <span>דמ"נ מצבירה</span>
                     <span className="text-[#171717]" dir="ltr" style={monoNum}>{selectedFund.fees.savingsFeePercent}%</span>
                   </div>
-                  <div className="flex justify-between text-[12px] text-[#171717]/45">
+                  <div className="flex justify-between text-[12px] text-[#6e6e6e]">
                     <span>היקף נכסים</span>
                     <span className="text-[#171717]">{fmtAssets(selectedFund.totalAssets)}</span>
                   </div>
@@ -219,7 +219,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
 
       {!selectedFund && (
         <div className="border-t border-[#171717]/10 pt-5">
-          <p className="text-[14px] text-[#171717]/45 leading-[1.8]">
+          <p className="text-[14px] text-[#6e6e6e] leading-[1.8]">
             בחרו חברה, מוצר ומסלול כדי לראות את פיזור הנכסים ורמת הסיכון של הכסף שלכם.
           </p>
         </div>
@@ -291,7 +291,7 @@ const InvestmentTracks = () => {
     { value: productTypes.length, label: "סוגי מוצרים" },
   ];
 
-  const thClass = "px-3 py-3 text-[12px] tracking-[0.08em] font-medium text-[#171717]/45 whitespace-nowrap";
+  const thClass = "px-3 py-3 text-[12px] tracking-[0.08em] font-medium text-[#6e6e6e] whitespace-nowrap";
   const sortBtnClass = "inline-flex items-center gap-1 hover:text-[#171717] transition-colors";
 
   return (
@@ -302,7 +302,7 @@ const InvestmentTracks = () => {
       <section style={{ backgroundColor: BONE }}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-10 sm:pb-14">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">מסלולי השקעה</span>
@@ -318,7 +318,7 @@ const InvestmentTracks = () => {
           >
             מסלולי השקעה
           </h1>
-          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9] mb-10">
+          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9] mb-10">
             השוואת תשואות, דמי ניהול וחשיפות של מסלולי ההשקעה בישראל:
             קרנות השתלמות, קופות גמל, קרנות פנסיה ופוליסות חיסכון.
           </p>
@@ -334,7 +334,7 @@ const InvestmentTracks = () => {
                 >
                   {stat.value}
                 </div>
-                <div className="text-[12px] tracking-[0.1em] text-[#171717]/45">{stat.label}</div>
+                <div className="text-[12px] tracking-[0.1em] text-[#6e6e6e]">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -368,19 +368,19 @@ const InvestmentTracks = () => {
             {/* Search + filter toggle */}
             <div className="flex items-end gap-8 mb-8 max-w-3xl">
               <div className="relative flex-1">
-                <Search className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-[#171717]/35 pointer-events-none" strokeWidth={1.5} />
+                <Search className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6e6e6e] pointer-events-none" strokeWidth={1.5} />
                 <input
                   placeholder="חיפוש לפי שם מסלול, חברה או מספר קופה"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
-                  className="w-full pr-7 pl-0 py-3 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none"
+                  className="w-full pr-7 pl-0 py-3 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#6e6e6e] text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none"
                   dir="rtl"
                 />
               </div>
               <button
                 type="button"
                 onClick={() => setShowFilters(!showFilters)}
-                className={`shrink-0 pb-3 text-[14px] font-medium border-b transition-colors min-h-[44px] ${showFilters || hasActiveFilters ? "text-[#171717] border-[#171717]" : "text-[#171717]/45 border-transparent hover:text-[#171717]"}`}
+                className={`shrink-0 pb-3 text-[14px] font-medium border-b transition-colors min-h-[44px] ${showFilters || hasActiveFilters ? "text-[#171717] border-[#171717]" : "text-[#6e6e6e] border-transparent hover:text-[#171717]"}`}
               >
                 סינון מתקדם
                 {hasActiveFilters && (
@@ -396,7 +396,7 @@ const InvestmentTracks = () => {
               <div className="mb-8 max-w-3xl border-t border-[#171717]/10 pt-5">
                 <div className="grid sm:grid-cols-2 gap-x-10 gap-y-5">
                   <div>
-                    <label className="text-[12px] text-[#171717]/45 mb-1 block">קטגוריה</label>
+                    <label className="text-[12px] text-[#6e6e6e] mb-1 block">קטגוריה</label>
                     <select
                       value={specFilter}
                       onChange={e => setSpecFilter(e.target.value as Specialization | "all")}
@@ -409,7 +409,7 @@ const InvestmentTracks = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="text-[12px] text-[#171717]/45 mb-1 block">חברה</label>
+                    <label className="text-[12px] text-[#6e6e6e] mb-1 block">חברה</label>
                     <select
                       value={companyFilter}
                       onChange={e => setCompanyFilter(e.target.value as ManagingCompany | "all")}
@@ -437,7 +437,7 @@ const InvestmentTracks = () => {
               <button
                 type="button"
                 onClick={() => { setProductFilter("all"); setSpecFilter("all"); }}
-                className={`shrink-0 pb-4 text-sm sm:text-base font-medium border-b-2 -mb-px transition-colors whitespace-nowrap ${productFilter === "all" ? "text-[#171717] border-[#171717]" : "text-[#171717]/40 border-transparent hover:text-[#171717]/70"}`}
+                className={`shrink-0 pb-4 text-sm sm:text-base font-medium border-b-2 -mb-px transition-colors whitespace-nowrap ${productFilter === "all" ? "text-[#171717] border-[#171717]" : "text-[#6e6e6e] border-transparent hover:text-[#171717]/70"}`}
               >
                 הכל{" "}
                 <span className="text-[12px] tabular-nums" dir="ltr" style={monoNum}>({trackData.length})</span>
@@ -447,7 +447,7 @@ const InvestmentTracks = () => {
                   key={pt}
                   type="button"
                   onClick={() => { setProductFilter(pt); setSpecFilter("all"); }}
-                  className={`shrink-0 pb-4 text-sm sm:text-base font-medium border-b-2 -mb-px transition-colors whitespace-nowrap ${productFilter === pt ? "text-[#171717] border-[#171717]" : "text-[#171717]/40 border-transparent hover:text-[#171717]/70"}`}
+                  className={`shrink-0 pb-4 text-sm sm:text-base font-medium border-b-2 -mb-px transition-colors whitespace-nowrap ${productFilter === pt ? "text-[#171717] border-[#171717]" : "text-[#6e6e6e] border-transparent hover:text-[#171717]/70"}`}
                 >
                   {productTypeLabels[pt]}{" "}
                   <span className="text-[12px] tabular-nums" dir="ltr" style={monoNum}>
@@ -459,7 +459,7 @@ const InvestmentTracks = () => {
 
             {/* Results summary */}
             <div className="flex items-baseline justify-between gap-4 mb-4">
-              <span className="text-[13px] text-[#171717]/45">
+              <span className="text-[13px] text-[#6e6e6e]">
                 <span className="text-[#171717] tabular-nums" dir="ltr" style={monoNum}>{filtered.length}</span> מסלולים
                 {" · "}
                 <span className="text-[#171717] tabular-nums" dir="ltr" style={monoNum}>{uniqueCompanies}</span> חברות
@@ -468,7 +468,7 @@ const InvestmentTracks = () => {
                 <span className="text-[#171717] tabular-nums" dir="ltr" style={monoNum}>{fmt(avgReturn)}</span>
               </span>
               {bestFund && (
-                <span className="text-[12px] text-[#171717]/40 hidden sm:inline truncate">
+                <span className="text-[12px] text-[#6e6e6e] hidden sm:inline truncate">
                   מוביל: {bestFund.name}{" "}
                   <span className="text-[#15803d] tabular-nums" dir="ltr" style={monoNum}>({fmt(bestFund.returns.year1)})</span>
                 </span>
@@ -526,14 +526,14 @@ const InvestmentTracks = () => {
                         >
                           <td className="pl-3 pr-0 py-3.5">
                             <div className="font-medium text-[#171717] text-[14px]">{fund.name}</div>
-                            <div className="text-[12px] text-[#171717]/40">
+                            <div className="text-[12px] text-[#6e6e6e]">
                               קופה <span dir="ltr" style={monoNum}>{fund.fundNumber}</span>
                             </div>
                           </td>
                           <td className="text-center px-3 py-3.5 text-[13px] text-[#171717]/60 whitespace-nowrap">
                             {companyLabels[fund.company]}
                           </td>
-                          <td className="text-center px-3 py-3.5 text-[12px] text-[#171717]/50 whitespace-nowrap">
+                          <td className="text-center px-3 py-3.5 text-[12px] text-[#5c5c5c] whitespace-nowrap">
                             {specializationLabels[fund.specialization]}
                           </td>
                           <td className={`text-center px-3 py-3.5 font-medium tabular-nums ${returnColor(fund.returns.year1)}`} dir="ltr" style={monoNum}>
@@ -550,8 +550,8 @@ const InvestmentTracks = () => {
                           </td>
                           <td className="px-2 py-3.5">
                             {isExpanded
-                              ? <ChevronUp className="w-4 h-4 text-[#171717]/40" strokeWidth={1.5} />
-                              : <ChevronDown className="w-4 h-4 text-[#171717]/40" strokeWidth={1.5} />}
+                              ? <ChevronUp className="w-4 h-4 text-[#6e6e6e]" strokeWidth={1.5} />
+                              : <ChevronDown className="w-4 h-4 text-[#6e6e6e]" strokeWidth={1.5} />}
                           </td>
                         </tr>
                         {isExpanded && (
@@ -568,7 +568,7 @@ const InvestmentTracks = () => {
                                     : []),
                                 ].map((cell) => (
                                   <div key={cell.label} className="border-t border-[#171717]/15 pt-2.5">
-                                    <p className="text-[12px] text-[#171717]/45 mb-1">{cell.label}</p>
+                                    <p className="text-[12px] text-[#6e6e6e] mb-1">{cell.label}</p>
                                     <p
                                       className="text-lg text-[#171717] tabular-nums"
                                       dir={cell.ltr ? "ltr" : undefined}
@@ -632,13 +632,13 @@ const InvestmentTracks = () => {
                                           </div>
                                         ))}
                                         {dd.foreignExposure > 0 && (
-                                          <div className="flex items-center justify-between pt-2 text-[12px] text-[#171717]/45">
+                                          <div className="flex items-center justify-between pt-2 text-[12px] text-[#6e6e6e]">
                                             <span>חשיפה לחו"ל</span>
                                             <span className="text-[#171717] tabular-nums" dir="ltr" style={monoNum}>{dd.foreignExposure}%</span>
                                           </div>
                                         )}
                                         {dd.currencyExposure > 0 && (
-                                          <div className="flex items-center justify-between pt-1 text-[12px] text-[#171717]/45">
+                                          <div className="flex items-center justify-between pt-1 text-[12px] text-[#6e6e6e]">
                                             <span>חשיפת מט"ח</span>
                                             <span className="text-[#171717] tabular-nums" dir="ltr" style={monoNum}>{dd.currencyExposure}%</span>
                                           </div>
@@ -670,10 +670,10 @@ const InvestmentTracks = () => {
               {filtered.length === 0 && (
                 <div className="border-b border-[#171717]/10 py-12">
                   {tracksLoading ? (
-                    <p className="text-base text-[#171717]/50">טוען את נתוני המסלולים...</p>
+                    <p className="text-base text-[#5c5c5c]">טוען את נתוני המסלולים...</p>
                   ) : (
                     <>
-                      <p className="text-base text-[#171717]/55 leading-[1.85] max-w-xl">
+                      <p className="text-base text-[#5c5c5c] leading-[1.85] max-w-xl">
                         לא נמצאו מסלולים שמתאימים לסינון הנוכחי. נסו לנקות חלק מהסינונים או לחפש בשם אחר.
                       </p>
                       <button
@@ -700,7 +700,7 @@ const InvestmentTracks = () => {
                 >
                   מה זה מסלול השקעה?
                 </h2>
-                <div className="space-y-4 text-[#171717]/55 leading-[1.9] text-base">
+                <div className="space-y-4 text-[#5c5c5c] leading-[1.9] text-base">
                   <p>
                     מסלול השקעה קובע איך הכסף שלכם מושקע: כמה הולך למניות, כמה לאגרות חוב, וכמה למזומן. כל קרן פנסיה, קרן השתלמות וקופת גמל מציעה מגוון מסלולים שנבדלים ברמת הסיכון ובפוטנציאל התשואה.
                   </p>
@@ -719,7 +719,7 @@ const InvestmentTracks = () => {
                 >
                   איך לבחור מסלול השקעה?
                 </h2>
-                <div className="space-y-4 text-[#171717]/55 leading-[1.9] text-base">
+                <div className="space-y-4 text-[#5c5c5c] leading-[1.9] text-base">
                   <p>
                     הבחירה תלויה בשלושה דברים: גיל, אופק זמן, ורמת סיבולת לסיכון. ככלל אצבע, ככל שאתם צעירים יותר, כדאי לבחור מסלול אגרסיבי יותר כי יש לכם זמן להתאושש מירידות. ככל שמתקרבים לפרישה, עדיף מסלול שמרני יותר.
                   </p>
@@ -733,7 +733,7 @@ const InvestmentTracks = () => {
 
           {/* Disclaimer */}
           <section className="border-t border-[#171717]/10 pt-5 max-w-3xl">
-            <p className="text-[13px] text-[#171717]/45 leading-[1.85]">
+            <p className="text-[13px] text-[#6e6e6e] leading-[1.85]">
               <span className="font-medium text-[#171717]/70">הבהרה חשובה: </span>
               הנתונים המוצגים הם למטרות מידע בלבד ואינם מהווים המלצה לרכישה, מכירה או פדיון של מוצר פיננסי.
               תשואות עבר אינן מבטיחות תשואות עתידיות. המקור: גמלנט, רשות שוק ההון, משרד האוצר.
