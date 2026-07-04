@@ -1,10 +1,12 @@
 import { COMPANIES, type Company } from "@/data/companies";
 import { motion } from "framer-motion";
+import { SERIF, BRONZE } from "@/lib/brand";
 
 /*
-  CompanyLogos — shows partner insurance/investment companies.
-  variant="grid"    → static responsive grid   (service pages)
-  variant="marquee" → auto-scrolling marquee    (homepage)
+  CompanyLogos — partner insurance/investment companies as quiet
+  typographic wordmarks (architectural language, no colored pills).
+  variant="grid"    → static ruled block   (service pages)
+  variant="marquee" → slow scrolling strip (homepage)
 */
 
 interface Props {
@@ -14,37 +16,34 @@ interface Props {
   subtitle?: string;
 }
 
-/* Company logo "pill" — initial + name, colored accent */
-function CompanyPill({ company, size = "md" }: { company: Company; size?: "sm" | "md" }) {
-  const h = size === "sm" ? "h-10" : "h-12";
-  const text = size === "sm" ? "text-xs" : "text-sm";
-  const initial = size === "sm" ? "w-7 h-7 text-xs" : "w-9 h-9 text-sm";
-  const px = size === "sm" ? "px-3" : "px-4";
-
+/* Quiet serif wordmark */
+function CompanyName({ company, size = "md" }: { company: Company; size?: "sm" | "md" }) {
   return (
-    <div
-      className={`inline-flex items-center gap-2.5 ${px} py-2 ${h} rounded-xl bg-white border border-gray-100 hover:border-gray-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 shrink-0`}
+    <span
+      className={`${size === "sm" ? "text-[15px]" : "text-base sm:text-lg"} text-[#1a1a18]/45 hover:text-[#1a1a18] transition-colors duration-300 whitespace-nowrap shrink-0`}
+      style={{ fontFamily: SERIF, fontWeight: 500 }}
     >
-      <div
-        className={`${initial} rounded-lg flex items-center justify-center font-black text-white shrink-0`}
-        style={{ backgroundColor: company.color }}
-      >
-        {company.initial}
-      </div>
-      <span className={`${text} font-semibold text-[#0a3d3d] whitespace-nowrap`}>
-        {company.name}
-      </span>
-    </div>
+      {company.name}
+    </span>
   );
 }
 
 /* Grid variant — used on insurance/savings pages */
 function LogoGrid({ companies }: { companies: Company[] }) {
   return (
-    <div className="flex flex-wrap justify-center gap-3">
-      {companies.map((c) => (
-        <CompanyPill key={c.slug} company={c} />
-      ))}
+    <div className="border-t border-b border-[#1a1a18]/10 py-8 sm:py-10">
+      <div className="flex flex-wrap items-baseline gap-x-4 gap-y-4">
+        {companies.map((c, i) => (
+          <span key={c.slug} className="flex items-baseline gap-x-4">
+            <CompanyName company={c} />
+            {i < companies.length - 1 && (
+              <span className="text-[13px] select-none" style={{ color: BRONZE }} aria-hidden="true">
+                ·
+              </span>
+            )}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
@@ -53,17 +52,17 @@ function LogoGrid({ companies }: { companies: Company[] }) {
 function LogoMarquee({ companies }: { companies: Company[] }) {
   const doubled = [...companies, ...companies];
   return (
-    <div className="relative overflow-hidden py-4">
+    <div className="relative overflow-hidden border-t border-b border-[#1a1a18]/10 py-7 sm:py-8">
       {/* Fade edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-transparent to-white z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-transparent to-white z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-transparent to-white z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-transparent to-white z-10 pointer-events-none" />
       <motion.div
-        className="flex gap-4 sm:gap-6 whitespace-nowrap"
+        className="flex items-baseline gap-x-10 sm:gap-x-14 whitespace-nowrap"
         animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
       >
         {doubled.map((c, i) => (
-          <CompanyPill key={`${c.slug}-${i}`} company={c} size="sm" />
+          <CompanyName key={`${c.slug}-${i}`} company={c} size="sm" />
         ))}
       </motion.div>
     </div>
@@ -73,18 +72,24 @@ function LogoMarquee({ companies }: { companies: Company[] }) {
 export default function CompanyLogos({
   variant = "grid",
   companies = COMPANIES,
-  title = "חברות שאנחנו משווקים",
-  subtitle = "עובדים עם כל החברות המובילות בישראל — משווים ובוחרים את מה שמתאים לכם",
+  title = "החברות שאנחנו עובדים מולן",
+  subtitle = "כל השחקניות המובילות בישראל. משווים, ובוחרים את מה שנכון לכם.",
 }: Props) {
   return (
-    <section className="py-12 sm:py-16 bg-[#fafbfd]">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-        <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-3">
-          {title}
-        </h2>
-        <p className="text-gray-500 mb-10 text-base sm:text-lg max-w-xl mx-auto">
-          {subtitle}
-        </p>
+    <section className="bg-white">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+          <span className="text-[11px] tracking-[0.22em] font-medium block mb-3" style={{ color: BRONZE }}>
+            THE MARKET
+          </span>
+          <h2
+            className="text-[#1a1a18] leading-tight"
+            style={{ fontFamily: SERIF, fontWeight: 400, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+          >
+            {title}
+          </h2>
+          <p className="mt-2 text-[15px] text-[#1a1a18]/50 leading-relaxed max-w-xl">{subtitle}</p>
+        </div>
         {variant === "marquee" ? (
           <LogoMarquee companies={companies} />
         ) : (
