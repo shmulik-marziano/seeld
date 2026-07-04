@@ -52,13 +52,13 @@ const ChildSavings = () => {
       {/* Hero */}
       <section style={{ backgroundColor: BONE }}>
         <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
-          <div className="border-t border-[#1a1a18]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#1a1a18]/40">
-              <Link to="/" className="hover:text-[#1a1a18] transition-colors">דף הבית</Link>
+          <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
+            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+              <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
-              <Link to="/savings" className="hover:text-[#1a1a18] transition-colors">חיסכון ופנסיה</Link>
+              <Link to="/savings" className="hover:text-[#171717] transition-colors">חיסכון ופנסיה</Link>
               <span>←</span>
-              <span className="text-[#1a1a18]/70 font-medium">חיסכון לכל ילד</span>
+              <span className="text-[#171717]/70 font-medium">חיסכון לכל ילד</span>
             </nav>
             <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
               חיסכון ופנסיה
@@ -66,24 +66,24 @@ const ChildSavings = () => {
           </div>
 
           <h1
-            className="text-[#1a1a18] leading-[1.15] mb-6 max-w-3xl"
-            style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(2rem, 5vw, 3.4rem)' }}
+            className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
+            style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(2rem, 5vw, 3.4rem)' }}
           >
             הבטיחו עתיד כלכלי לילדיכם
           </h1>
-          <p className="text-[15px] sm:text-[17px] text-[#1a1a18]/55 max-w-2xl leading-[1.9] mb-9">
+          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9] mb-9">
             תוכנית חיסכון ממשלתית המבטיחה קרן פתיחה לכל ילד בישראל בהגיעו לגיל 18. בחרו את המסלול הנכון והגדילו את הסכום.
           </p>
           <div className="flex flex-wrap items-center gap-6">
             <a
               href="#analysis-form"
-              className="inline-flex items-center justify-center px-9 py-4 bg-[#1a1a18] text-[#f6f5f1] text-[15px] font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
+              className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
             >
               ייעוץ לחיסכון לכל ילד
             </a>
             <a
               href="#product-types"
-              className="group inline-flex items-center gap-2 text-[15px] font-medium text-[#1a1a18] border-b border-[#1a1a18]/25 pb-0.5 hover:border-[#1a1a18] transition-colors"
+              className="group inline-flex items-center gap-2 text-base font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
             >
               איך זה עובד
               <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -96,10 +96,10 @@ const ChildSavings = () => {
         {/* Benefits */}
         <section className="bg-white">
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+            <div className="border-t border-[#171717]/20 pt-5 mb-10">
               <h2
-                className="text-[#1a1a18] leading-tight"
-                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                className="text-[#171717] leading-tight"
+                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
               >
                 יתרונות החיסכון לכל ילד
               </h2>
@@ -111,14 +111,14 @@ const ChildSavings = () => {
                 { title: "פטור ממס", desc: "המשיכה בגיל 18 פטורה ממס" },
                 { title: "בחירה חופשית", desc: "בחרו את הגוף והמסלול הטובים ביותר" },
               ].map((item, idx) => (
-                <div key={idx} className="border-t border-[#1a1a18]/15 pt-5">
+                <div key={idx} className="border-t border-[#171717]/15 pt-5">
                   <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>
                     {String(idx + 1).padStart(2, '0')}
                   </span>
-                  <h3 className="text-lg text-[#1a1a18] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 500 }}>
+                  <h3 className="text-lg text-[#171717] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                     {item.title}
                   </h3>
-                  <p className="text-[13.5px] text-[#1a1a18]/50 leading-[1.8]">{item.desc}</p>
+                  <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -128,30 +128,30 @@ const ChildSavings = () => {
         {/* Product Types */}
         <section id="product-types" style={{ backgroundColor: BONE }}>
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+            <div className="border-t border-[#171717]/20 pt-5 mb-10">
               <div className="text-[11px] tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
                 חיסכון לכל ילד
               </div>
               <h2
-                className="text-[#1a1a18] leading-tight"
-                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                className="text-[#171717] leading-tight"
+                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
               >
                 איך התוכנית עובדת
               </h2>
-              <p className="text-[#1a1a18]/45 mt-2 text-[15px] leading-relaxed max-w-xl">
+              <p className="text-[#171717]/45 mt-2 text-base leading-relaxed max-w-xl">
                 כל מה שצריך לדעת על חיסכון לכל ילד
               </p>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
               {productTypes.map((type, idx) => (
-                <div key={idx} className="border-t border-[#1a1a18]/10 pt-4">
-                  <h3 className="text-base text-[#1a1a18] mb-2" style={{ fontFamily: SERIF, fontWeight: 500 }}>
+                <div key={idx} className="border-t border-[#171717]/10 pt-4">
+                  <h3 className="text-base text-[#171717] mb-2" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                     {type.title}
                   </h3>
-                  <p className="text-[#1a1a18]/50 text-[13.5px] leading-[1.8] mb-3.5">{type.description}</p>
+                  <p className="text-[#171717]/50 text-[14px] leading-[1.8] mb-3.5">{type.description}</p>
                   <ul className="space-y-2">
                     {type.features.map((feature, fIdx) => (
-                      <li key={fIdx} className="text-[#1a1a18]/55 text-[13.5px] leading-relaxed flex gap-2.5">
+                      <li key={fIdx} className="text-[#171717]/55 text-[14px] leading-relaxed flex gap-2.5">
                         <span style={{ color: BRONZE }}>—</span>
                         {feature}
                       </li>
@@ -167,15 +167,15 @@ const ChildSavings = () => {
         <section className="bg-white">
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
             <div className="max-w-3xl">
-              <div className="border-t border-[#1a1a18]/20 pt-5 mb-6">
+              <div className="border-t border-[#171717]/20 pt-5 mb-6">
                 <h2
-                  className="text-[#1a1a18] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                  className="text-[#171717] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
                 >
                   למה זה חשוב?
                 </h2>
               </div>
-              <div className="space-y-4 text-[#1a1a18]/55 leading-[1.85] text-[15px] sm:text-base">
+              <div className="space-y-4 text-[#171717]/55 leading-[1.85] text-base sm:text-base">
                 <p>
                   תוכנית חיסכון לכל ילד היא מתנה של המדינה לכל ילד שנולד בישראל. המדינה מפקידה מדי חודש סכום קבוע לטובת כל ילד, והכסף צובר תשואה עד שהילד מגיע לגיל 18. הסכום שמצטבר יכול להגיע לעשרות אלפי שקלים — קרן פתיחה משמעותית לתחילת החיים הבוגרים.
                 </p>
@@ -184,15 +184,15 @@ const ChildSavings = () => {
                 </p>
               </div>
 
-              <div className="border-t border-[#1a1a18]/20 pt-5 mt-14 mb-6">
+              <div className="border-t border-[#171717]/20 pt-5 mt-14 mb-6">
                 <h2
-                  className="text-[#1a1a18] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                  className="text-[#171717] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
                 >
                   מתי כדאי לפעול?
                 </h2>
               </div>
-              <div className="space-y-4 text-[#1a1a18]/55 leading-[1.85] text-[15px] sm:text-base">
+              <div className="space-y-4 text-[#171717]/55 leading-[1.85] text-base sm:text-base">
                 <p>
                   ההחלטה על הגוף המנהל ומסלול ההשקעה צריכה להתקבל מוקדם ככל האפשר — רצוי מיד עם לידת הילד. ככל שהבחירה מוקדמת יותר, כך הכסף נהנה מיותר שנים של צבירה ותשואה. אם טרם בחרתם — המדינה מפקידה את הכסף במסלול ברירת מחדל, שלא בהכרח מיטבי.
                 </p>
@@ -201,15 +201,15 @@ const ChildSavings = () => {
                 </p>
               </div>
 
-              <div className="border-t border-[#1a1a18]/20 pt-5 mt-14 mb-6">
+              <div className="border-t border-[#171717]/20 pt-5 mt-14 mb-6">
                 <h2
-                  className="text-[#1a1a18] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                  className="text-[#171717] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
                 >
                   מה חשוב לדעת?
                 </h2>
               </div>
-              <div className="space-y-4 text-[#1a1a18]/55 leading-[1.85] text-[15px] sm:text-base">
+              <div className="space-y-4 text-[#171717]/55 leading-[1.85] text-base sm:text-base">
                 <p>
                   ההורים צריכים לבחור בין שני אפשרויות: קופת גמל להשקעה (מנוהלת על ידי חברות ביטוח וגופי השקעה) או חשבון חיסכון בבנק. בדרך כלל, קופת גמל מניבה תשואה גבוהה יותר לאורך זמן, אם כי עם תנודתיות גבוהה יותר בטווח הקצר.
                 </p>
@@ -225,10 +225,10 @@ const ChildSavings = () => {
         <section style={{ backgroundColor: BONE }}>
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
             <div className="max-w-3xl">
-              <div className="border-t border-[#1a1a18]/20 pt-5 mb-8">
+              <div className="border-t border-[#171717]/20 pt-5 mb-8">
                 <h2
-                  className="text-[#1a1a18] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                  className="text-[#171717] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
                 >
                   שאלות נפוצות
                 </h2>
@@ -238,12 +238,12 @@ const ChildSavings = () => {
                   <AccordionItem
                     key={idx}
                     value={`faq-${idx}`}
-                    className="border-b border-[#1a1a18]/10 rounded-none px-0"
+                    className="border-b border-[#171717]/10 rounded-none px-0"
                   >
-                    <AccordionTrigger className="text-start text-[15px] font-medium text-[#1a1a18] hover:no-underline py-5">
+                    <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
                       {item.q}
                     </AccordionTrigger>
-                    <AccordionContent className="text-[#1a1a18]/50 leading-[1.85] pb-6 text-[14px]">
+                    <AccordionContent className="text-[#171717]/50 leading-[1.85] pb-6 text-[14px]">
                       {item.a}
                     </AccordionContent>
                   </AccordionItem>
@@ -261,12 +261,12 @@ const ChildSavings = () => {
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <div className="border-t border-white/20 pt-5 mb-10">
               <h2
-                className="text-[#f6f5f1] leading-tight mb-3"
-                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.6rem, 3vw, 2.3rem)' }}
+                className="text-[#fafafa] leading-tight mb-3"
+                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.6rem, 3vw, 2.3rem)' }}
               >
                 רוצים לבחור את המסלול הטוב ביותר?
               </h2>
-              <p className="text-[#f6f5f1]/45 text-[15px] leading-relaxed max-w-xl">
+              <p className="text-[#fafafa]/45 text-base leading-relaxed max-w-xl">
                 הזינו את הפרטים ונעזור לכם לבחור את הגוף והמסלול הטובים ביותר
               </p>
             </div>

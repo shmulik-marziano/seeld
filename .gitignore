@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .vercel
+.claude/
+.mcp.json
+CLAUDE.local.md

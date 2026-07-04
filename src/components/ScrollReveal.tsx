@@ -55,7 +55,7 @@ const ScrollReveal = ({
                 x: 0,
                 y: 0,
                 scale: 1,
-                transition: { duration: 0.6, ease: "easeOut" },
+                transition: { duration: 0.25, ease: "easeOut" },
               },
             }}
           >
@@ -73,7 +73,7 @@ const ScrollReveal = ({
       whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{
-        duration: 0.6,
+        duration: 0.25,
         delay: delay / 1000,
         ease: "easeOut",
       }}

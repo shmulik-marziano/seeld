@@ -63,35 +63,35 @@ const PensionFunds = () => {
       <section style={{ backgroundColor: BONE }}>
         <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
           {/* Rule + breadcrumb */}
-          <div className="border-t border-[#1a1a18]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#1a1a18]/40">
-              <Link to="/" className="hover:text-[#1a1a18] transition-colors">דף הבית</Link>
+          <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
+            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+              <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
-              <Link to="/savings" className="hover:text-[#1a1a18] transition-colors">חיסכון ופנסיה</Link>
+              <Link to="/savings" className="hover:text-[#171717] transition-colors">חיסכון ופנסיה</Link>
               <span>←</span>
-              <span className="text-[#1a1a18]/70 font-medium">קרנות פנסיה</span>
+              <span className="text-[#171717]/70 font-medium">קרנות פנסיה</span>
             </nav>
           </div>
 
           <h1
-            className="text-[#1a1a18] leading-[1.15] mb-6 max-w-3xl"
-            style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(2rem, 5vw, 3.4rem)' }}
+            className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
+            style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(2rem, 5vw, 3.4rem)' }}
           >
             קרנות <span style={{ color: BRONZE }}>פנסיה</span>
           </h1>
-          <p className="text-[15px] sm:text-[17px] text-[#1a1a18]/55 max-w-2xl leading-[1.9] mb-9">
+          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9] mb-9">
             קרן פנסיה היא מכשיר חיסכון ארוך טווח שמבטיח לכם הכנסה חודשית קבועה לאחר הפרישה. עם הייעוץ שלנו, תבחרו את הקרן שמתאימה בדיוק לכם.
           </p>
           <div className="flex flex-wrap items-center gap-6">
             <a
               href="#analysis-form"
-              className="inline-flex items-center justify-center px-9 py-4 bg-[#1a1a18] text-[#f6f5f1] text-[15px] font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
+              className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
             >
               ניתוח תיק פנסיוני חינם
             </a>
             <a
               href="#pension-types"
-              className="group inline-flex items-center gap-2 text-[15px] font-medium text-[#1a1a18] border-b border-[#1a1a18]/25 pb-0.5 hover:border-[#1a1a18] transition-colors"
+              className="group inline-flex items-center gap-2 text-base font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
             >
               סוגי פנסיה
               <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -104,10 +104,10 @@ const PensionFunds = () => {
         {/* ══════ BENEFITS ══════ */}
         <section className="bg-white">
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+            <div className="border-t border-[#171717]/20 pt-5 mb-10">
               <h2
-                className="text-[#1a1a18] leading-tight"
-                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                className="text-[#171717] leading-tight"
+                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
               >
                 יתרונות קרן הפנסיה
               </h2>
@@ -119,14 +119,14 @@ const PensionFunds = () => {
                 { icon: Calculator, doodle: "calculator", title: "הטבות מס", desc: "זיכוי מס והפחתת הכנסה חייבת במס", color: "#90be6d" },
                 { icon: Users, doodle: "handshake", title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לבחירת המסלול המתאים", color: "#e76f51" },
               ].map((item, idx) => (
-                <div key={idx} className="border-t border-[#1a1a18]/10 pt-4">
+                <div key={idx} className="border-t border-[#171717]/10 pt-4">
                   <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>
                     {String(idx + 1).padStart(2, '0')}
                   </span>
-                  <h3 className="text-lg text-[#1a1a18] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 500 }}>
+                  <h3 className="text-lg text-[#171717] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                     {item.title}
                   </h3>
-                  <p className="text-[13.5px] text-[#1a1a18]/50 leading-[1.8]">{item.desc}</p>
+                  <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -136,25 +136,25 @@ const PensionFunds = () => {
         {/* ══════ PENSION TYPES ══════ */}
         <section id="pension-types" style={{ backgroundColor: BONE }}>
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <div className="border-t border-[#1a1a18]/20 pt-5 mb-10">
+            <div className="border-t border-[#171717]/20 pt-5 mb-10">
               <h2
-                className="text-[#1a1a18] leading-tight"
-                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                className="text-[#171717] leading-tight"
+                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
               >
                 סוגי קרנות פנסיה
               </h2>
-              <p className="text-[#1a1a18]/45 mt-2 text-[15px] leading-relaxed max-w-xl">הכירו את האפשרויות השונות ובחרו את המסלול המתאים לכם</p>
+              <p className="text-[#171717]/45 mt-2 text-base leading-relaxed max-w-xl">הכירו את האפשרויות השונות ובחרו את המסלול המתאים לכם</p>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
               {pensionTypes.map((type, idx) => (
-                <div key={idx} className="border-t border-[#1a1a18]/10 pt-4">
-                  <h3 className="text-base text-[#1a1a18] mb-2" style={{ fontFamily: SERIF, fontWeight: 500 }}>
+                <div key={idx} className="border-t border-[#171717]/10 pt-4">
+                  <h3 className="text-base text-[#171717] mb-2" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                     {type.title}
                   </h3>
-                  <p className="text-[#1a1a18]/50 text-[13.5px] leading-[1.8] mb-4">{type.description}</p>
+                  <p className="text-[#171717]/50 text-[14px] leading-[1.8] mb-4">{type.description}</p>
                   <ul className="space-y-2">
                     {type.features.map((feature, fIdx) => (
-                      <li key={fIdx} className="text-[#1a1a18]/55 text-[13.5px] leading-relaxed flex gap-2.5">
+                      <li key={fIdx} className="text-[#171717]/55 text-[14px] leading-relaxed flex gap-2.5">
                         <span style={{ color: BRONZE }}>—</span>
                         {feature}
                       </li>
@@ -170,15 +170,15 @@ const PensionFunds = () => {
         <section className="bg-white">
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
             <div className="max-w-3xl">
-              <div className="border-t border-[#1a1a18]/15 pt-5 mb-6">
+              <div className="border-t border-[#171717]/15 pt-5 mb-6">
                 <h2
-                  className="text-[#1a1a18] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                  className="text-[#171717] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
                 >
                   למה קרן פנסיה חשובה?
                 </h2>
               </div>
-              <div className="space-y-4 text-[#1a1a18]/60 leading-[1.9] text-[15px] sm:text-base">
+              <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base sm:text-base">
                 <p>
                   קרן הפנסיה היא עמוד התווך של הביטחון הפיננסי שלכם בפרישה. היא מבטיחה הכנסה חודשית קבועה לאחר שתפסיקו לעבוד, ומספקת גם כיסויים ביטוחיים חיוניים כמו ביטוח נכות (אובדן כושר עבודה) וביטוח שאירים להגנה על המשפחה.
                 </p>
@@ -187,15 +187,15 @@ const PensionFunds = () => {
                 </p>
               </div>
 
-              <div className="border-t border-[#1a1a18]/15 pt-5 mt-14 mb-6">
+              <div className="border-t border-[#171717]/15 pt-5 mt-14 mb-6">
                 <h2
-                  className="text-[#1a1a18] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                  className="text-[#171717] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
                 >
                   מתי כדאי לבדוק את קרן הפנסיה?
                 </h2>
               </div>
-              <div className="space-y-4 text-[#1a1a18]/60 leading-[1.9] text-[15px] sm:text-base">
+              <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base sm:text-base">
                 <p>
                   מומלץ לבדוק את קרן הפנסיה לפחות אחת לשנה. בדקו את דמי הניהול (שצריכים להיות הנמוכים ביותר האפשריים), את מסלול ההשקעה (שצריך להתאים לגיל ולרמת הסיכון שלכם), ואת ביצועי הקרן בהשוואה לקרנות מתחרות.
                 </p>
@@ -204,15 +204,15 @@ const PensionFunds = () => {
                 </p>
               </div>
 
-              <div className="border-t border-[#1a1a18]/15 pt-5 mt-14 mb-6">
+              <div className="border-t border-[#171717]/15 pt-5 mt-14 mb-6">
                 <h2
-                  className="text-[#1a1a18] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                  className="text-[#171717] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
                 >
                   מה חשוב לדעת?
                 </h2>
               </div>
-              <div className="space-y-4 text-[#1a1a18]/60 leading-[1.9] text-[15px] sm:text-base">
+              <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base sm:text-base">
                 <p>
                   דמי ניהול הם הגורם המשמעותי ביותר להפרש בחיסכון הפנסיוני לאורך זמן. הפרש של 0.5% בדמי ניהול יכול להסתכם במאות אלפי שקלים לאורך עשרות שנות חיסכון. בנוסף, חשוב לוודא שהכיסויים הביטוחיים (נכות ושאירים) מותאמים לצרכים שלכם ואינם מיותרים.
                 </p>
@@ -228,10 +228,10 @@ const PensionFunds = () => {
         <section style={{ backgroundColor: BONE }}>
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
             <div className="max-w-3xl">
-              <div className="border-t border-[#1a1a18]/20 pt-5 mb-8">
+              <div className="border-t border-[#171717]/20 pt-5 mb-8">
                 <h2
-                  className="text-[#1a1a18] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+                  className="text-[#171717] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
                 >
                   שאלות נפוצות
                 </h2>
@@ -241,12 +241,12 @@ const PensionFunds = () => {
                   <AccordionItem
                     key={idx}
                     value={`faq-${idx}`}
-                    className="border-b border-[#1a1a18]/10 rounded-none px-0"
+                    className="border-b border-[#171717]/10 rounded-none px-0"
                   >
-                    <AccordionTrigger className="text-start text-[15px] font-medium text-[#1a1a18] hover:no-underline py-5">
+                    <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
                       {item.q}
                     </AccordionTrigger>
-                    <AccordionContent className="text-[#1a1a18]/50 leading-[1.85] pb-6 text-[14px]">
+                    <AccordionContent className="text-[#171717]/50 leading-[1.85] pb-6 text-[14px]">
                       {item.a}
                     </AccordionContent>
                   </AccordionItem>
@@ -264,12 +264,12 @@ const PensionFunds = () => {
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <div className="border-t border-white/20 pt-5 mb-10 text-center sm:text-right">
               <h2
-                className="text-[#f6f5f1] leading-tight mb-3"
-                style={{ fontFamily: SERIF, fontWeight: 400, fontSize: 'clamp(1.6rem, 3vw, 2.3rem)' }}
+                className="text-[#fafafa] leading-tight mb-3"
+                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.6rem, 3vw, 2.3rem)' }}
               >
                 רוצים ניתוח פנסיוני חינמי?
               </h2>
-              <p className="text-[#f6f5f1]/45 text-[15px] leading-relaxed max-w-xl">
+              <p className="text-[#fafafa]/45 text-base leading-relaxed max-w-xl">
                 הזינו את הפרטים ויועץ מוסמך יחזור אליכם עם המלצות מותאמות
               </p>
             </div>

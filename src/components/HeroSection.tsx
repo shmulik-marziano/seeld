@@ -1,110 +1,126 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  INK, BODY, FAINT, LINE, MONO, CARD_SHADOW, RING,
+  CHIP_ORANGE, CHIP_GREEN, CHIP_YELLOW,
+} from "@/lib/brand";
 
-const INK = "#1a1a18";
-const BRONZE = "#9c8a63";
-const SERIF = "'Frank Ruhl Libre', 'Heebo', serif";
-
-const specSheet = [
-  { label: "משפחות בליווי", value: "600+" },
-  { label: "חברות בהשוואה", value: "12" },
-  { label: "דוח תיק מלא", value: "48 שעות" },
-  { label: "פגישה ראשונה", value: "ללא עלות" },
-  { label: "משרדים", value: "רעננה · ירושלים" },
-  { label: "פיקוח", value: "רשות שוק ההון" },
-];
-
-const rise = (delay: number) => ({
-  initial: { opacity: 0, y: 14 },
+// Snap motion: instant, decisive (STYLESEED.md)
+const snap = (delay: number) => ({
+  initial: { opacity: 0, y: 8 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
+  transition: { duration: 0.22, delay, ease: "easeOut" as const },
 });
 
+const LiveChip = ({
+  label, color, className, delay,
+}: { label: string; color: string; className: string; delay: number }) => (
+  <motion.span
+    className={`absolute z-10 hidden sm:flex items-center px-3 py-1.5 rounded-full text-white text-[13px] font-medium whitespace-nowrap ${className}`}
+    style={{ backgroundColor: color, boxShadow: "0 2px 6px rgba(0,0,0,.12)" }}
+    initial={{ opacity: 0, scale: 0.9 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.18, delay, ease: "easeOut" }}
+  >
+    {label}
+  </motion.span>
+);
+
 const HeroSection = () => {
+  const reduced = useReducedMotion();
+  const anim = (delay: number) => (reduced ? {} : snap(delay));
+
   return (
-    <section className="bg-[#f6f5f1]" dir="rtl">
-      <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-16 sm:pt-24 lg:pt-32 pb-14 sm:pb-20">
-        {/* Top rule + label */}
-        <motion.div {...rise(0)} className="border-t border-[#1a1a18]/20 pt-5 mb-14 sm:mb-20 flex items-baseline justify-between gap-4">
-          <span className="text-[11px] tracking-[0.25em] font-medium text-[#1a1a18]/60">
-            SEELD — בית פיננסים פרטי
-          </span>
-          <span className="text-[11px] tracking-[0.15em] font-medium text-[#1a1a18]/40 hidden sm:block">
-            מבית עמיתים הון
-          </span>
+    <section className="bg-white overflow-hidden" dir="rtl">
+      {/* Kicker + CTAs */}
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-14 sm:pt-16 lg:pt-20">
+        <motion.h1
+          {...anim(0)}
+          className="text-[#171717] font-semibold leading-[1.25] tracking-[-0.02em]"
+          style={{ fontSize: "clamp(26px, 3vw, 40px)" }}
+        >
+          כסף מסודר. ראש שקט.
+        </motion.h1>
+        <motion.p
+          {...anim(0.05)}
+          className="mt-4 text-base sm:text-lg text-[#4d4d4d] leading-[1.75] max-w-xl"
+        >
+          בית פיננסים פרטי לביטוח, פנסיה והשקעות. יועץ אחד שמכיר אותך,
+          השוואה מול 12 חברות, ותמונה מלאה של התיק בתוך 48 שעות.
+        </motion.p>
+        <motion.div {...anim(0.1)} className="mt-6 flex flex-wrap gap-3">
+          <Link
+            to="/contact"
+            className="inline-flex items-center justify-center h-12 px-7 rounded-md bg-[#171717] text-[#fafafa] text-[15px] font-medium hover:bg-[#0a0a0a] transition-colors duration-150"
+          >
+            בדיקת תיק ללא עלות
+          </Link>
+          <a
+            href="https://wa.me/972523097444"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center h-12 px-6 rounded-md bg-white text-[#171717] text-[15px] font-medium hover:bg-[#fafafa] transition-colors duration-150"
+            style={{ boxShadow: RING }}
+          >
+            שיחה עם יועץ
+          </a>
+        </motion.div>
+      </div>
+
+      {/* The signature: colossal wordmark with live chips */}
+      <div className="relative mt-4 sm:mt-2" aria-hidden="true">
+        <motion.div
+          className="font-bold text-[#171717] text-center whitespace-nowrap select-none"
+          style={{
+            fontSize: "clamp(110px, 24.5vw, 360px)",
+            lineHeight: 0.78,
+            letterSpacing: "-0.045em",
+            transform: "translateY(7%)",
+          }}
+          dir="ltr"
+          initial={reduced ? undefined : { opacity: 0, y: 24 }}
+          animate={reduced ? undefined : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.12, ease: "easeOut" }}
+        >
+          SEELD
         </motion.div>
 
-        <div className="grid lg:grid-cols-[1.25fr_0.75fr] gap-14 lg:gap-24 items-start">
-          {/* Statement */}
-          <div>
-            <motion.h1
-              {...rise(0.08)}
-              className="text-[#1a1a18] leading-[1.12] mb-9"
-              style={{
-                fontFamily: SERIF,
-                fontWeight: 300,
-                fontSize: "clamp(2.6rem, 6.5vw, 4.9rem)",
-                letterSpacing: "-0.01em",
-              }}
-            >
-              שקט פיננסי
-              <br />
-              הוא לא מקרה.
-              <br />
-              <span style={{ color: BRONZE }}>הוא מתוכנן.</span>
-            </motion.h1>
+        <LiveChip label="דנה · יועצת פנסיה" color={CHIP_ORANGE} className="top-[2%] right-[13%]" delay={0.4} />
+        <LiveChip label="אבי · ביטוח" color={CHIP_GREEN} className="bottom-[14%] right-[38%]" delay={0.5} />
+        <LiveChip label="התיק שלך · מנוטר" color={CHIP_YELLOW} className="top-[14%] left-[11%]" delay={0.6} />
 
-            <motion.p
-              {...rise(0.2)}
-              className="text-[#1a1a18]/60 text-base sm:text-[17px] leading-[1.9] max-w-md mb-10"
-            >
-              אנחנו מלווים משפחות בביטוח, בפנסיה ובהשקעות — יועץ אישי אחד,
-              השוואה שקופה מול כל החברות בישראל, ותשתית דיגיטלית שמראה לך
-              בכל רגע איפה הכסף עומד.
-            </motion.p>
-
-            <motion.div {...rise(0.3)} className="flex flex-wrap items-center gap-6">
-              <Link
-                to="/contact"
-                className="inline-flex items-center justify-center px-9 py-4 bg-[#1a1a18] text-[#f6f5f1] text-[15px] font-medium tracking-wide hover:bg-[#33332f] transition-colors duration-300 min-h-[52px]"
-              >
-                בדיקת תיק ללא עלות
-              </Link>
-              <a
-                href="https://wa.me/972523097444"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 text-[15px] font-medium text-[#1a1a18] border-b border-[#1a1a18]/25 pb-0.5 hover:border-[#1a1a18] transition-colors"
-              >
-                שיחה עם יועץ
-                <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
-              </a>
-            </motion.div>
+        {/* Mini live statement */}
+        <motion.div
+          className="absolute -top-[6%] left-[23%] z-10 hidden lg:block bg-white rounded-lg px-4 py-3 min-w-[215px]"
+          style={{ boxShadow: CARD_SHADOW }}
+          initial={reduced ? undefined : { opacity: 0, y: 8 }}
+          animate={reduced ? undefined : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.2, delay: 0.55, ease: "easeOut" }}
+        >
+          <div
+            className="flex justify-between mb-2 text-[10px] tracking-[0.12em]"
+            style={{ fontFamily: MONO, color: FAINT }}
+          >
+            <span>STATEMENT</span>
+            <span style={{ color: INK }}>LIVE</span>
           </div>
+          <div
+            className="text-xl font-semibold text-left"
+            style={{ fontFamily: MONO, fontVariantNumeric: "tabular-nums", direction: "ltr", color: INK }}
+          >
+            ₪1,284,600
+          </div>
+          <div className="text-[12px] mt-0.5" style={{ color: BODY }}>
+            שווי תיק · ‎+11.4%‎ השנה
+          </div>
+        </motion.div>
+      </div>
 
-          {/* Spec sheet */}
-          <motion.div {...rise(0.25)}>
-            <div className="border-t border-[#1a1a18]/20">
-              {specSheet.map((row) => (
-                <div
-                  key={row.label}
-                  className="flex items-baseline justify-between py-[15px] border-b border-[#1a1a18]/10"
-                >
-                  <span className="text-[13px] text-[#1a1a18]/45">{row.label}</span>
-                  <span
-                    className="text-[15px] text-[#1a1a18] tabular-nums"
-                    style={{ fontFamily: SERIF, fontWeight: 500 }}
-                  >
-                    {row.value}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <p className="mt-5 text-[11px] leading-relaxed text-[#1a1a18]/35">
-              סוכנות ביטוח פנסיונית מורשית. חברים בלשכת סוכני הביטוח.
-              ההשוואות מבוססות על נתונים רשמיים של רשות שוק ההון.
-            </p>
-          </motion.div>
+      {/* Base line */}
+      <div className="relative bg-white -mt-1" style={{ boxShadow: `0 -1px 0 ${LINE}` }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-4 flex flex-col sm:flex-row justify-between gap-2 text-sm" style={{ color: FAINT }}>
+          <span>הפגישה הראשונה על חשבוננו. בלי התחייבות.</span>
+          <span>מבית עמיתים הון · בפיקוח רשות שוק ההון</span>
         </div>
       </div>
     </section>

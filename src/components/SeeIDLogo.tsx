@@ -9,8 +9,8 @@ export const brandDots = [
   { cx: 40, cy: 17, r: 2.8, fill: "#5ec6c6" }, // teal
 ] as const;
 
-const SERIF = "'Frank Ruhl Libre', 'Heebo', serif";
-const BRONZE = "#9c8a63";
+const SERIF = "'Heebo', sans-serif";
+const BRONZE = "#6e6e6e";
 
 const SeeIDLogo = ({ className = "", size = "md" }: { className?: string; size?: "sm" | "md" | "lg" }) => {
   const sizes = {
@@ -29,7 +29,7 @@ const SeeIDLogo = ({ className = "", size = "md" }: { className?: string; size?:
         viewBox="0 0 32 32"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="flex-shrink-0 text-[#1a1a18] dark:text-white transition-transform duration-500 group-hover:-translate-y-[1px]"
+        className="flex-shrink-0 text-[#171717] dark:text-white transition-transform duration-500 group-hover:-translate-y-[1px]"
         aria-hidden="true"
       >
         <path
@@ -45,12 +45,12 @@ const SeeIDLogo = ({ className = "", size = "md" }: { className?: string; size?:
       <div className="flex flex-col leading-none">
         <span
           dir="ltr"
-          className={`${s.text} text-[#1a1a18] dark:text-white`}
-          style={{ fontFamily: SERIF, fontWeight: 500, letterSpacing: "0.01em" }}
+          className={`${s.text} text-[#171717] dark:text-white`}
+          style={{ fontFamily: SERIF, fontWeight: 600, letterSpacing: "0.01em" }}
         >
           SEELD<span style={{ color: BRONZE }}>.</span>
         </span>
-        <span className={`${s.sub} mt-1 text-[#1a1a18]/45 dark:text-white/45 font-medium tracking-[0.22em]`}>
+        <span className={`${s.sub} mt-1 text-[#171717]/45 dark:text-white/45 font-medium tracking-[0.22em]`}>
           בית פיננסים פרטי
         </span>
       </div>

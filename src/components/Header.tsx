@@ -76,8 +76,8 @@ const Header = () => {
       className={cn(
         "sticky top-0 z-50 transition-all duration-300 border-b",
         isScrolled
-          ? "bg-[#f6f5f1]/95 dark:bg-gray-950/95 backdrop-blur-md border-[#1a1a18]/15 dark:border-white/10"
-          : "bg-[#f6f5f1] dark:bg-gray-950 border-[#1a1a18]/10 dark:border-white/10"
+          ? "bg-[#fafafa]/95 dark:bg-gray-950/95 backdrop-blur-md border-[#171717]/15 dark:border-white/10"
+          : "bg-[#fafafa] dark:bg-gray-950 border-[#171717]/10 dark:border-white/10"
       )}
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
@@ -91,7 +91,7 @@ const Header = () => {
               <Link
                 key={link.href}
                 to={link.href}
-                className="text-[13.5px] font-medium text-[#1a1a18]/55 dark:text-white/60 hover:text-[#1a1a18] dark:hover:text-white transition-colors"
+                className="text-[13.5px] font-medium text-[#171717]/55 dark:text-white/60 hover:text-[#171717] dark:hover:text-white transition-colors"
               >
                 {link.label}
               </Link>
@@ -102,7 +102,7 @@ const Header = () => {
           <div className="flex items-center gap-5">
             <button
               onClick={toggleTheme}
-              className="hidden sm:flex p-2 items-center justify-center text-[#1a1a18]/45 dark:text-white/60 hover:text-[#1a1a18] dark:hover:text-white transition-colors min-w-[40px] min-h-[40px]"
+              className="hidden sm:flex p-2 items-center justify-center text-[#171717]/45 dark:text-white/60 hover:text-[#171717] dark:hover:text-white transition-colors min-w-[40px] min-h-[40px]"
               aria-label="החלף ערכת נושא"
             >
               {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -110,21 +110,21 @@ const Header = () => {
 
             <Link
               to="/agents"
-              className="hidden lg:block text-[13.5px] font-medium text-[#1a1a18]/55 dark:text-white/60 hover:text-[#1a1a18] dark:hover:text-white transition-colors"
+              className="hidden lg:block text-[13.5px] font-medium text-[#171717]/55 dark:text-white/60 hover:text-[#171717] dark:hover:text-white transition-colors"
             >
               לסוכנים
             </Link>
 
             <Link
               to="/personal-area"
-              className="hidden lg:inline-flex items-center justify-center px-6 py-2.5 bg-[#1a1a18] dark:bg-white text-[#f6f5f1] dark:text-[#1a1a18] text-[13.5px] font-medium tracking-wide hover:bg-[#33332f] dark:hover:bg-white/85 transition-colors min-h-[42px]"
+              className="hidden lg:inline-flex items-center justify-center px-6 py-2.5 bg-[#171717] dark:bg-white text-[#fafafa] dark:text-[#171717] text-[13.5px] font-medium tracking-wide hover:bg-[#33332f] dark:hover:bg-white/85 transition-colors min-h-[42px]"
             >
               האזור האישי
             </Link>
 
             {/* Mobile Menu Button */}
             <button
-              className="lg:hidden p-2 flex items-center justify-center text-[#1a1a18] dark:text-white min-w-[44px] min-h-[44px]"
+              className="lg:hidden p-2 flex items-center justify-center text-[#171717] dark:text-white min-w-[44px] min-h-[44px]"
               onClick={() => setIsMenuOpen(true)}
               aria-label="פתח תפריט"
             >
@@ -148,19 +148,19 @@ const Header = () => {
             />
             {/* Panel */}
             <motion.div
-              className="fixed top-0 right-0 bottom-0 w-[85vw] sm:w-[360px] bg-[#f6f5f1] dark:bg-gray-950 z-50 lg:hidden border-l border-[#1a1a18]/10 dark:border-white/10"
+              className="fixed top-0 right-0 bottom-0 w-[85vw] sm:w-[360px] bg-[#fafafa] dark:bg-gray-950 z-50 lg:hidden border-l border-[#171717]/10 dark:border-white/10"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.25 }}
             >
-              <div className="flex items-center justify-between px-6 h-[68px] border-b border-[#1a1a18]/10 dark:border-white/10">
-                <span className="text-[11px] tracking-[0.25em] font-medium text-[#1a1a18]/50 dark:text-white/50">
+              <div className="flex items-center justify-between px-6 h-[68px] border-b border-[#171717]/10 dark:border-white/10">
+                <span className="text-[11px] tracking-[0.25em] font-medium text-[#171717]/50 dark:text-white/50">
                   SEELD
                 </span>
                 <button
                   onClick={() => setIsMenuOpen(false)}
-                  className="p-2 flex items-center justify-center min-w-[44px] min-h-[44px] text-[#1a1a18] dark:text-white"
+                  className="p-2 flex items-center justify-center min-w-[44px] min-h-[44px] text-[#171717] dark:text-white"
                   aria-label="סגור תפריט"
                 >
                   <X className="h-5 w-5" strokeWidth={1.5} />
@@ -171,7 +171,7 @@ const Header = () => {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="py-4 border-b border-[#1a1a18]/10 dark:border-white/10 text-base font-medium text-[#1a1a18] dark:text-white/85 hover:text-[#1a1a18]/60 transition-colors"
+                    className="py-4 border-b border-[#171717]/10 dark:border-white/10 text-base font-medium text-[#171717] dark:text-white/85 hover:text-[#171717]/60 transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {link.label}
@@ -181,14 +181,14 @@ const Header = () => {
                 <div className="mt-8 space-y-4">
                   <Link
                     to="/personal-area"
-                    className="flex items-center justify-center w-full px-6 py-4 bg-[#1a1a18] dark:bg-white text-[#f6f5f1] dark:text-[#1a1a18] text-[15px] font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
+                    className="flex items-center justify-center w-full px-6 py-4 bg-[#171717] dark:bg-white text-[#fafafa] dark:text-[#171717] text-[15px] font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     האזור האישי
                   </Link>
                   <Link
                     to="/agents"
-                    className="flex items-center justify-center w-full px-6 py-4 border border-[#1a1a18]/25 dark:border-white/25 text-[#1a1a18] dark:text-white text-[15px] font-medium tracking-wide hover:border-[#1a1a18] transition-colors min-h-[52px]"
+                    className="flex items-center justify-center w-full px-6 py-4 border border-[#171717]/25 dark:border-white/25 text-[#171717] dark:text-white text-[15px] font-medium tracking-wide hover:border-[#171717] transition-colors min-h-[52px]"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     כניסה לסוכנים
