@@ -1,0 +1,30 @@
+name: Deploy to Vercel
+
+on:
+  workflow_dispatch:
+    inputs:
+      vercel_token:
+        description: "Vercel token (optional if the VERCEL_TOKEN repo secret is set)"
+        required: false
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: team_dZ6Ivl6PBJEmz6Gf19sSjs1J
+      VERCEL_PROJECT_ID: prj_SqYD41WfZ5j71QfZ15bcekKx0zGP
+      VERCEL_TOKEN: ${{ inputs.vercel_token || secrets.VERCEL_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify token is available
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "No Vercel token: pass the vercel_token input or set the VERCEL_TOKEN repo secret."
+            exit 1
+          fi
+          echo "::add-mask::$VERCEL_TOKEN"
+
+      - name: Deploy to Vercel (production)
+        run: npx vercel@latest deploy --prod --yes --token "$VERCEL_TOKEN"
