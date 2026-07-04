@@ -1,4 +1,4 @@
-import { ArrowDownLeft, Sparkles } from "lucide-react";
+import { ArrowDownLeft, Sparkles, Bot, Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -28,7 +28,6 @@ const HeroSection = () => {
   const y1 = useTransform(scrollYProgress, [0, 1], [0, 80]);
   const y2 = useTransform(scrollYProgress, [0, 1], [0, 120]);
   const y3 = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const y4 = useTransform(scrollYProgress, [0, 1], [0, 140]);
   const yCard = useTransform(scrollYProgress, [0, 1], [0, -60]);
 
   return (
@@ -193,112 +192,111 @@ const HeroSection = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <div className="relative w-[320px] h-[340px] sm:w-[420px] sm:h-[440px] lg:w-[520px] lg:h-[540px]">
-              {/* Big circle — main */}
+            <div className="relative w-[320px] h-[400px] sm:w-[440px] sm:h-[500px] lg:w-[540px] lg:h-[560px]">
+              {/* Client portal preview — the real product */}
               <motion.div
-                className="absolute top-[25%] right-[8%] w-[140px] h-[140px] sm:w-[170px] sm:h-[170px] rounded-full flex items-center justify-center shadow-2xl"
+                className="absolute top-0 right-0 left-[8%] sm:left-[12%] bg-white rounded-3xl border border-[#0a3d3d]/[0.06] overflow-hidden"
                 style={{
-                  background:
-                    "linear-gradient(135deg, #6dd9d5 0%, #1a8f7d 100%)",
                   boxShadow:
-                    "0 20px 40px -10px rgba(26, 143, 125, 0.45), inset 0 -8px 16px rgba(0,0,0,0.08)",
+                    "0 30px 60px -15px rgba(10, 61, 61, 0.2), 0 0 0 1px rgba(10, 61, 61, 0.02)",
                   ...(isDesktop ? { y: y1 } : {}),
                 }}
-                initial={{ scale: 0, rotate: -30 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: 0.5, type: "spring", stiffness: 180, damping: 15 }}
+                initial={{ opacity: 0, y: 40, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 0.45, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                  className="w-14 h-14 sm:w-16 sm:h-16 drop-shadow-md"
-                >
-                  <path
-                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                {/* Window chrome */}
+                <div className="bg-[#0a3d3d] px-5 py-3 flex items-center justify-between">
+                  <span className="text-white/60 text-xs font-medium">SEELD · האזור האישי שלי</span>
+                  <div className="flex gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#e76f51]" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#f4a261]" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#90be6d]" />
+                  </div>
+                </div>
+                <div className="p-5 sm:p-6 space-y-2.5">
+                  {[
+                    { label: "קרן פנסיה · מסלול מניות", status: "תקין ✓", color: "#1a8f7d" },
+                    { label: "דמי ניהול מהצבירה", status: "0.18%", color: "#1a8f7d" },
+                    { label: "ביטוח בריאות", status: "נמצא פער", color: "#f4a261" },
+                    { label: "קרן השתלמות", status: "11.4%+ השנה", color: "#1a8f7d" },
+                  ].map((row, i) => (
+                    <motion.div
+                      key={row.label}
+                      className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0"
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.9 + i * 0.15, duration: 0.4 }}
+                    >
+                      <span className="text-xs sm:text-sm text-[#0a3d3d]/70 font-medium">{row.label}</span>
+                      <span
+                        className="text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap"
+                        style={{ backgroundColor: `${row.color}14`, color: row.color }}
+                      >
+                        {row.status}
+                      </span>
+                    </motion.div>
+                  ))}
+                  <motion.div
+                    className="flex items-center gap-2 pt-2"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.6, duration: 0.5 }}
+                  >
+                    <span className="w-2 h-2 rounded-full bg-[#1a8f7d] animate-pulse" />
+                    <span className="text-[11px] text-[#0a3d3d]/45 font-medium">
+                      התיק מנוהל ומעודכן · יועץ ייעודי זמין
+                    </span>
+                  </motion.div>
+                </div>
               </motion.div>
 
-              {/* Coral circle */}
+              {/* AI advisor chip */}
               <motion.div
-                className="absolute top-[22%] right-[36%] w-[95px] h-[95px] sm:w-[120px] sm:h-[120px] rounded-full shadow-xl"
+                className="absolute top-[63%] right-[-2%] sm:right-[-4%] bg-white rounded-2xl px-4 py-3 shadow-xl border border-[#0a3d3d]/[0.06] flex items-center gap-3"
                 style={{
-                  background:
-                    "linear-gradient(135deg, #f28e6f 0%, #e76f51 100%)",
-                  boxShadow:
-                    "0 15px 30px -8px rgba(231, 111, 81, 0.4), inset 0 -6px 12px rgba(0,0,0,0.08)",
+                  boxShadow: "0 18px 36px -12px rgba(108, 99, 255, 0.25)",
                   ...(isDesktop ? { y: y2 } : {}),
                 }}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.65, type: "spring", stiffness: 180, damping: 15 }}
-              />
+                initial={{ opacity: 0, scale: 0.8, x: 20 }}
+                animate={{ opacity: 1, scale: 1, x: 0 }}
+                transition={{ delay: 1.1, type: "spring", stiffness: 200, damping: 18 }}
+              >
+                <div className="w-10 h-10 rounded-full bg-[#6c63ff]/10 flex items-center justify-center">
+                  <Bot className="w-5 h-5 text-[#6c63ff]" />
+                </div>
+                <div>
+                  <div className="text-sm font-extrabold text-[#0a3d3d]">יועץ SEELD AI</div>
+                  <div className="text-[11px] text-[#0a3d3d]/50 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#25D366]" />
+                    זמין 24/7
+                  </div>
+                </div>
+              </motion.div>
 
-              {/* Orange circle */}
+              {/* Comparison chip */}
               <motion.div
-                className="absolute top-[10%] right-[56%] w-[110px] h-[110px] sm:w-[140px] sm:h-[140px] rounded-full flex items-center justify-center shadow-xl"
+                className="absolute top-[-4%] left-[2%] sm:left-[4%] bg-white rounded-2xl px-4 py-3 shadow-xl border border-[#0a3d3d]/[0.06] flex items-center gap-3"
                 style={{
-                  background:
-                    "linear-gradient(135deg, #f6b581 0%, #f4a261 100%)",
-                  boxShadow:
-                    "0 15px 30px -8px rgba(244, 162, 97, 0.4), inset 0 -6px 12px rgba(0,0,0,0.08)",
+                  boxShadow: "0 18px 36px -12px rgba(244, 162, 97, 0.3)",
                   ...(isDesktop ? { y: y3 } : {}),
                 }}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.8, type: "spring", stiffness: 180, damping: 15 }}
+                initial={{ opacity: 0, scale: 0.8, x: -20 }}
+                animate={{ opacity: 1, scale: 1, x: 0 }}
+                transition={{ delay: 1.25, type: "spring", stiffness: 200, damping: 18 }}
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2.2"
-                  className="w-11 h-11 sm:w-14 sm:h-14 drop-shadow-md"
-                >
-                  <path
-                    d="M12 19V5M5 12l7-7 7 7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <div className="w-10 h-10 rounded-full bg-[#f4a261]/15 flex items-center justify-center">
+                  <Scale className="w-5 h-5 text-[#e8862e]" />
+                </div>
+                <div>
+                  <div className="text-sm font-extrabold text-[#0a3d3d]">השוואה בזמן אמת</div>
+                  <div className="text-[11px] text-[#0a3d3d]/50">מול 12 חברות מובילות</div>
+                </div>
               </motion.div>
 
-              {/* Green circle */}
+              {/* Floating savings card */}
               <motion.div
-                className="absolute top-[18%] right-[78%] w-[90px] h-[90px] sm:w-[115px] sm:h-[115px] rounded-full flex items-center justify-center shadow-xl"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #a8d57e 0%, #7fb05e 100%)",
-                  boxShadow:
-                    "0 15px 30px -8px rgba(144, 190, 109, 0.4), inset 0 -6px 12px rgba(0,0,0,0.08)",
-                  ...(isDesktop ? { y: y4 } : {}),
-                }}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.95, type: "spring", stiffness: 180, damping: 15 }}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2.8"
-                  className="w-9 h-9 sm:w-12 sm:h-12 drop-shadow-md"
-                >
-                  <polyline
-                    points="20 6 9 17 4 12"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </motion.div>
-
-              {/* Floating savings card — NEW sophisticated element */}
-              <motion.div
-                className="absolute bottom-[4%] right-[8%] bg-white rounded-2xl p-5 shadow-2xl border border-[#0a3d3d]/[0.06] min-w-[240px]"
+                className="absolute bottom-[2%] left-[4%] sm:left-[8%] bg-white rounded-2xl p-5 shadow-2xl border border-[#0a3d3d]/[0.06] min-w-[240px]"
                 style={{
                   boxShadow:
                     "0 25px 50px -12px rgba(10, 61, 61, 0.18), 0 0 0 1px rgba(10, 61, 61, 0.03)",
@@ -336,19 +334,14 @@ const HeroSection = () => {
 
               {/* Subtle sparkle dots */}
               <motion.div
-                className="absolute top-[8%] right-[45%] w-2.5 h-2.5 rounded-full bg-[#f4a261]"
-                animate={{ scale: [1, 1.4, 1], opacity: [0.6, 1, 0.6] }}
-                transition={{ duration: 2.5, repeat: Infinity }}
-              />
-              <motion.div
-                className="absolute top-[48%] right-[88%] w-2 h-2 rounded-full bg-[#6dd9d5]"
+                className="absolute top-[42%] right-[92%] w-2 h-2 rounded-full bg-[#6dd9d5]"
                 animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 3, repeat: Infinity, delay: 0.8 }}
               />
               <motion.div
-                className="absolute top-[70%] right-[70%] w-1.5 h-1.5 rounded-full bg-[#e76f51]"
-                animate={{ scale: [1, 1.6, 1], opacity: [0.4, 0.9, 0.4] }}
-                transition={{ duration: 2.8, repeat: Infinity, delay: 1.5 }}
+                className="absolute top-[68%] right-[2%] w-2.5 h-2.5 rounded-full bg-[#f4a261]"
+                animate={{ scale: [1, 1.4, 1], opacity: [0.6, 1, 0.6] }}
+                transition={{ duration: 2.5, repeat: Infinity }}
               />
             </div>
           </motion.div>

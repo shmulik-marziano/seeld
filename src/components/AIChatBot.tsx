@@ -76,6 +76,13 @@ const AIChatBot = () => {
     }
   }, [isExpanded]);
 
+  // Allow other parts of the site (e.g. homepage capability cards) to open the chat
+  useEffect(() => {
+    const open = () => setIsExpanded(true);
+    window.addEventListener("seeld:open-chat", open);
+    return () => window.removeEventListener("seeld:open-chat", open);
+  }, []);
+
   // Load previous conversation
   useEffect(() => {
     const loadConversation = async () => {

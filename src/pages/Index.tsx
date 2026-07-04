@@ -7,9 +7,11 @@ import {
   Wallet, BarChart3, HelpCircle, Mail, MapPin, Phone,
   MessageCircle, ChevronLeft, Stethoscope, Key, Globe,
   Scale, Activity, Target, CalendarCheck, Loader2, Zap, Handshake,
-  HeartHandshake, Search, UserPlus, ArrowDownLeft
+  HeartHandshake, Search, UserPlus, ArrowDownLeft,
+  Bot, LayoutDashboard, LineChart, Compass
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
@@ -24,7 +26,7 @@ import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 const quickActions = [
   { icon: Landmark, doodle: "pension", label: "תכנון פנסיוני", href: "/savings/pension-funds", color: "#5ec6c6" },
   { icon: HeartPulse, doodle: "family", label: "ביטוח חיים ובריאות", href: "/insurance/health", color: "#e76f51" },
-  { icon: Home, doodle: "umbrella", label: "ביטוח רכוש", href: "/insurance/apartment", color: "#f4a261" },
+  { icon: Home, doodle: "umbrella", label: "ביטוח רכוש", href: "/insurance/home", color: "#f4a261" },
   { icon: PiggyBank, doodle: "savings", label: "חיסכון והשקעות", href: "/savings/gemel-investment", color: "#90be6d" },
   { icon: Calculator, doodle: "calculator", label: "מחשבונים", href: "/calculators", color: "#6c63ff" },
   { icon: PhoneCall, doodle: "handshake", label: "צור קשר", href: "/contact", color: "#e07cc6" },
@@ -67,7 +69,7 @@ const insuranceTypes = [
   { icon: Car, doodle: "shield", title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳ — השוואה בין כל החברות בדקות", href: "/insurance/vehicle" },
   { icon: HeartPulse, doodle: "family", title: "ביטוח בריאות", description: "ניתוחים, תרופות וטיפולים — כיסוי שמשלים את הסל ולא כופל אותו", href: "/insurance/health" },
   { icon: Heart, doodle: "family", title: "ביטוח חיים", description: "הגנה כלכלית למשפחה. לא מה שמנסים למכור לך — מה שאתה באמת צריך", href: "/insurance/life" },
-  { icon: Home, doodle: "umbrella", title: "ביטוח דירה", description: "מבנה ותכולה — שלא תגלו שמשהו חסר אחרי שכבר מאוחר", href: "/insurance/apartment" },
+  { icon: Home, doodle: "umbrella", title: "ביטוח דירה", description: "מבנה ותכולה — שלא תגלו שמשהו חסר אחרי שכבר מאוחר", href: "/insurance/home" },
   { icon: Key, doodle: "key", title: "ביטוח שוכרים", description: "כיסוי תכולה ואחריות צד ג׳ לשוכרים", href: "/insurance/renters" },
   { icon: Building2, doodle: "handshake", title: "ביטוח עסקי", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק", href: "/insurance/business" },
   { icon: Plane, doodle: "target", title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", href: "/insurance/travel" },
@@ -76,7 +78,7 @@ const insuranceTypes = [
   { icon: UserCheck, doodle: "family", title: "ביטוח סיעודי", description: "מימון טיפול סיעודי בבית או במוסד", href: "/insurance/nursing" },
   { icon: Landmark, doodle: "pension", title: "ביטוח משכנתא", description: "שמירה על הדירה גם במקרה בלתי צפוי", href: "/insurance/mortgage" },
   { icon: Shield, doodle: "shield", title: "מחלות קשות", description: "פיצוי כספי חד-פעמי עם אבחון מחלה", href: "/insurance/critical-illness" },
-  { icon: Umbrella, doodle: "umbrella", title: "תאונות אישיות", description: "פיצוי על ימי אשפוז, שבר או נכות מתאונה", href: "/insurance/personal-accidents" },
+  { icon: Umbrella, doodle: "umbrella", title: "תאונות אישיות", description: "פיצוי על ימי אשפוז, שבר או נכות מתאונה", href: "/insurance/accidents" },
   { icon: Briefcase, doodle: "handshake", title: "ביטוח שותפים", description: "רציפות עסקית במקרה של אובדן שותף", href: "/insurance/partners" },
   { icon: Globe, doodle: "target", title: "עובדים זרים", description: "ביטוח חובה בהתאם לחוק", href: "/insurance/foreign-workers" },
   { icon: Heart, doodle: "family", title: "סיעודי כללית", description: "כיסוי סיעודי משלים לחברי כללית", href: "/insurance/nursing-clalit" },
@@ -96,11 +98,21 @@ const savingsProducts = [
   { icon: Target, doodle: "target", title: "תכנון פיננסי", description: "מיפוי מלא של הנכסים ובניית תוכנית", href: "/savings/financial-planning" },
 ];
 
-const calculators = [
-  { icon: Landmark, doodle: "calculator", title: "מחשבון משכנתא", description: "בדקו החזר חודשי, סך הריביות ולוח סילוקין מלא", color: "#5ec6c6" },
-  { icon: Wallet, doodle: "pension", title: "מחשבון פנסיה", description: "חשבו כמה תקבלו בגיל פרישה ומה כדאי להפקיד היום", color: "#f4a261" },
-  { icon: PiggyBank, doodle: "savings", title: "מחשבון חיסכון", description: "ראו איך הכסף גדל לאורך זמן עם ריבית דריבית", color: "#90be6d" },
-  { icon: BarChart3, doodle: "charts", title: "השוואת מסלולי השקעה", description: "השוו תשואות, דמי ניהול וסיכון בין מסלולים שונים", color: "#e76f51" },
+const digitalCapabilities: {
+  icon: typeof Bot;
+  title: string;
+  description: string;
+  cta: string;
+  color: string;
+  href?: string;
+  badge?: string;
+}[] = [
+  { icon: LayoutDashboard, title: "אזור אישי ללקוח", description: "כל הפוליסות, החיסכון והמסמכים שלכם במקום אחד — מעודכן, מאובטח ונגיש מכל מכשיר.", href: "/personal-area", cta: "כניסה לאזור האישי", color: "#5ec6c6" },
+  { icon: Bot, title: "יועץ SEELD AI", description: "עונה על שאלות ביטוח, פנסיה וחיסכון בכל שעה — ומחבר אתכם ליועץ אנושי כשצריך.", cta: "פתיחת שיחה", color: "#6c63ff", badge: "24/7" },
+  { icon: Search, title: "איתור קרנות חכם", description: "מנוע חיפוש והשוואה לקרנות פנסיה, גמל והשתלמות מכל בתי ההשקעות בישראל.", href: "/fund-finder", cta: "חיפוש קרן", color: "#f4a261" },
+  { icon: LineChart, title: "טבלאות תשואות", description: "נתוני תשואה ודמי ניהול רשמיים, מעודכנים מדי חודש — להשוואה שקופה בין החברות.", href: "/return-tables", cta: "צפייה בנתונים", color: "#90be6d" },
+  { icon: Compass, title: "מדריך מסלולי השקעה", description: "השוואת חשיפות, רמות סיכון ותשואות בין כל מסלולי ההשקעה בשוק.", href: "/investment-tracks", cta: "למדריך המלא", color: "#e76f51" },
+  { icon: Calculator, title: "מחשבונים פיננסיים", description: "משכנתא, פנסיה, חיסכון והשוואת מסלולים — כלים מקצועיים חופשיים, ללא רישום.", href: "/calculators", cta: "לכל המחשבונים", color: "#e07cc6" },
 ];
 
 import { COMPANIES } from "@/data/companies";
@@ -218,15 +230,6 @@ const processSteps = [
 ];
 
 // ── Animation variants ──
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.1, duration: 0.6, ease: "easeOut" },
-  }),
-};
-
 const staggerContainer = {
   hidden: {},
   visible: {
@@ -245,6 +248,70 @@ const staggerItem = {
     transition: { duration: 0.6, ease: "easeOut" },
   },
 };
+
+const gridStagger = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.035 },
+  },
+};
+
+const gridItem = {
+  hidden: { opacity: 0, y: 14 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: "easeOut" },
+  },
+};
+
+const ProductGrid = ({ items }: { items: typeof insuranceTypes }) => (
+  <motion.div
+    className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5"
+    initial="hidden"
+    animate="visible"
+    variants={gridStagger}
+  >
+    {items.map((item, i) => (
+      <motion.div key={item.title} variants={gridItem} className="h-full">
+        <Link to={item.href} className="block h-full group">
+          <div
+            className="h-full bg-white border border-[#0a3d3d]/[0.06] border-r-[3px] border-r-transparent rounded-xl p-5 sm:p-6 transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1 group-hover:border-r-[color:var(--accent)]"
+            style={{ "--accent": accentColors[i % accentColors.length] } as React.CSSProperties}
+          >
+            <div className="w-14 h-14 flex items-center justify-center mb-3">
+              <DoodleIcon name={item.doodle} size={48} />
+            </div>
+            <h3 className="text-sm font-extrabold mb-1 text-[#0a3d3d]">{item.title}</h3>
+            <p className="text-xs text-[#0a3d3d]/40">{item.description}</p>
+          </div>
+        </Link>
+      </motion.div>
+    ))}
+  </motion.div>
+);
+
+const CapabilityCard = ({ cap }: { cap: (typeof digitalCapabilities)[number] }) => (
+  <div className="relative h-full bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-7 overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:shadow-[#0a3d3d]/[0.05] group-hover:-translate-y-1.5">
+    <div className="absolute top-0 right-0 left-0 h-1 transition-all group-hover:h-1.5" style={{ backgroundColor: cap.color }} />
+    <div className="flex items-start justify-between mb-5">
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ backgroundColor: `${cap.color}14` }}>
+        <cap.icon className="w-7 h-7" style={{ color: cap.color }} />
+      </div>
+      {cap.badge && (
+        <span className="text-[11px] font-extrabold px-2.5 py-1 rounded-full" style={{ backgroundColor: `${cap.color}14`, color: cap.color }}>
+          {cap.badge}
+        </span>
+      )}
+    </div>
+    <h3 className="text-lg font-extrabold text-[#0a3d3d] mb-2">{cap.title}</h3>
+    <p className="text-sm text-[#0a3d3d]/45 leading-relaxed mb-5">{cap.description}</p>
+    <span className="inline-flex items-center gap-1.5 text-sm font-bold" style={{ color: cap.color }}>
+      {cap.cta}
+      <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+    </span>
+  </div>
+);
 
 const Index = () => {
   const [leadForm, setLeadForm] = useState({ name: "", phone: "", subject: "" });
@@ -485,210 +552,112 @@ const Index = () => {
         {/* Wave to gray section */}
         <WaveDivider color="#f8f9fc" />
 
-        {/* 5. ALL INSURANCE TYPES GRID */}
+        {/* 5. PRODUCTS — INSURANCE & SAVINGS IN TABS */}
         <section className="bg-[#f8f9fc]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
             <ScrollReveal>
-              <div className="text-center mb-8 sm:mb-14">
-                <SectionLabel>INSURANCE</SectionLabel>
+              <div className="text-center mb-8 sm:mb-12">
+                <SectionLabel>OUR SOLUTIONS</SectionLabel>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
-                  <span className="text-[#e76f51]">ספקטרום מלא</span> של פתרונות ביטוח
+                  כל הפתרונות <span className="text-[#e76f51]">תחת בית אחד</span>
                 </h2>
                 <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                  16 קטגוריות ביטוח תחת קורת גג אחת. בחינה, בחירה וליווי בכל שלב, מול כל חברות הביטוח בישראל.
+                  16 קטגוריות ביטוח ו-11 מוצרי חיסכון ופנסיה, מול כל החברות בישראל. בוחרים תחום ומתחילים.
                 </p>
               </div>
             </ScrollReveal>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
-              {insuranceTypes.map((item, i) => (
-                <motion.div
-                  key={item.title}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-50px" }}
-                  variants={cardVariants}
-                >
-                  <Link to={item.href} className="block h-full">
-                    <motion.div
-                      className="h-full bg-white border border-[#0a3d3d]/[0.06] rounded-xl p-5 sm:p-6 transition-all duration-300 group"
-                      whileHover={{ scale: 1.03, y: -4 }}
-                      transition={{ duration: 0.2 }}
-                      style={{ borderRightWidth: '3px', borderRightColor: 'transparent' }}
-                      onHoverStart={(e) => {
-                        const el = e as unknown as { target: HTMLElement };
-                        if (el.target && el.target.style) {
-                          el.target.style.borderRightColor = accentColors[i % accentColors.length];
-                        }
-                      }}
-                      onHoverEnd={(e) => {
-                        const el = e as unknown as { target: HTMLElement };
-                        if (el.target && el.target.style) {
-                          el.target.style.borderRightColor = 'transparent';
-                        }
-                      }}
-                    >
-                      <div className="w-14 h-14 flex items-center justify-center mb-3">
-                        <DoodleIcon name={item.doodle} size={48} />
-                      </div>
-                      <h3 className="text-sm font-extrabold mb-1 text-[#0a3d3d] group-hover:text-[#0a3d3d] transition-colors">
-                        {item.title}
-                      </h3>
-                      <p className="text-xs text-[#0a3d3d]/40">{item.description}</p>
-                    </motion.div>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
+            <Tabs defaultValue="insurance" dir="rtl">
+              <ScrollReveal>
+                <TabsList className="mx-auto flex w-fit h-auto bg-white border border-[#0a3d3d]/[0.08] rounded-full p-1.5 mb-8 sm:mb-10 shadow-sm">
+                  <TabsTrigger
+                    value="insurance"
+                    className="rounded-full px-6 sm:px-10 py-2.5 text-sm sm:text-base font-bold text-[#0a3d3d]/60 data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+                  >
+                    ביטוח
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="savings"
+                    className="rounded-full px-6 sm:px-10 py-2.5 text-sm sm:text-base font-bold text-[#0a3d3d]/60 data-[state=active]:bg-[#0a3d3d] data-[state=active]:text-white data-[state=active]:shadow-md transition-all"
+                  >
+                    חיסכון ופנסיה
+                  </TabsTrigger>
+                </TabsList>
+              </ScrollReveal>
 
-            <ScrollReveal delay={200}>
-              <div className="text-center mt-10">
-                <Link
-                  to="/insurances"
-                  className="inline-flex items-center gap-2 text-sm font-bold text-[#0a3d3d] hover:text-[#5ec6c6] transition-colors"
-                >
-                  לכל הביטוחים שלנו
-                  <ChevronLeft className="w-4 h-4" />
-                </Link>
-              </div>
-            </ScrollReveal>
+              <TabsContent value="insurance" className="mt-0">
+                <ProductGrid items={insuranceTypes} />
+                <div className="text-center mt-8 sm:mt-10">
+                  <Link
+                    to="/insurances"
+                    className="inline-flex items-center gap-2 text-sm font-bold text-[#0a3d3d] hover:text-[#5ec6c6] transition-colors"
+                  >
+                    לכל הביטוחים שלנו
+                    <ChevronLeft className="w-4 h-4" />
+                  </Link>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="savings" className="mt-0">
+                <ProductGrid items={savingsProducts} />
+                <div className="text-center mt-8 sm:mt-10">
+                  <Link
+                    to="/savings"
+                    className="inline-flex items-center gap-2 text-sm font-bold text-[#0a3d3d] hover:text-[#5ec6c6] transition-colors"
+                  >
+                    לכל מוצרי החיסכון והפנסיה
+                    <ChevronLeft className="w-4 h-4" />
+                  </Link>
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
         </section>
+
 
         {/* Wave: gray -> white */}
         <WaveDivider color="#ffffff" flip />
 
-
-        {/* 6. SAVINGS / PENSION GRID */}
+        {/* 6. DIGITAL PLATFORM — the capabilities behind the service */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
           <ScrollReveal>
             <div className="text-center mb-8 sm:mb-14">
-              <SectionLabel>SAVINGS & PENSION</SectionLabel>
+              <SectionLabel>DIGITAL</SectionLabel>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
-                ניהול חיסכון <span className="text-[#90be6d]">לטווח ארוך</span>
+                הפלטפורמה הדיגיטלית <span className="text-[#6c63ff]">של SEELD</span>
               </h2>
               <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                פנסיה, קופות גמל, קרנות השתלמות, חיסכון לילדים ותכנון פרישה. כל מוצרי החיסכון הפנסיוני בליווי צוות המומחים שלנו.
+                הכלים שהצוות שלנו עובד איתם — פתוחים גם לכם. נתונים בזמן אמת, שקיפות מלאה וזמינות מסביב לשעון.
               </p>
             </div>
           </ScrollReveal>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
-            {savingsProducts.map((item, i) => (
-              <motion.div
-                key={item.title}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-50px" }}
-                variants={cardVariants}
-              >
-                <Link to={item.href} className="block h-full">
-                  <motion.div
-                    className="h-full bg-white border border-[#0a3d3d]/[0.06] rounded-xl p-5 sm:p-6 transition-all duration-300 group hover:shadow-lg"
-                    whileHover={{ scale: 1.03, y: -4 }}
-                    transition={{ duration: 0.2 }}
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+            variants={staggerContainer}
+          >
+            {digitalCapabilities.map((cap) => (
+              <motion.div key={cap.title} variants={staggerItem} className="h-full">
+                {cap.href ? (
+                  <Link to={cap.href} className="block h-full group">
+                    <CapabilityCard cap={cap} />
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
+                    className="block w-full h-full text-right group"
                   >
-                    <div className="w-14 h-14 flex items-center justify-center mb-3">
-                      <DoodleIcon name={item.doodle} size={48} />
-                    </div>
-                    <h3 className="text-sm font-extrabold mb-1 text-[#0a3d3d] transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs text-[#0a3d3d]/40">{item.description}</p>
-                  </motion.div>
-                </Link>
+                    <CapabilityCard cap={cap} />
+                  </button>
+                )}
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </section>
-
-
-        {/* Wave: white -> gray */}
-        <WaveDivider color="#f8f9fc" />
-
-        {/* 7. CALCULATORS */}
-        <section className="bg-[#f8f9fc]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-24">
-            <ScrollReveal>
-              <div className="text-center mb-8 sm:mb-14">
-                <SectionLabel>TOOLS</SectionLabel>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#0a3d3d] mb-4 leading-[1.15]">
-                  כלים <span className="text-[#6c63ff]">מקצועיים</span>
-                </h2>
-                <p className="text-[#0a3d3d]/55 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-                  מחשבונים אנליטיים ברמה שבה הצוות שלנו עובד, זמינים גם לכם. ללא רישום, ללא מגבלות, חופשיים לשימוש.
-                </p>
-              </div>
-            </ScrollReveal>
-
-            <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-              variants={staggerContainer}
-            >
-              {calculators.map((calc) => (
-                <motion.div key={calc.title} variants={staggerItem}>
-                  <Link to="/calculators" className="block h-full">
-                    <motion.div
-                      className="h-full bg-white border border-[#0a3d3d]/[0.06] rounded-2xl p-7 sm:p-8 hover:shadow-xl hover:shadow-[#0a3d3d]/[0.04] transition-all duration-300 group overflow-hidden relative"
-                      whileHover={{ scale: 1.04, y: -5 }}
-                      transition={{ duration: 0.25 }}
-                    >
-                      {/* Colored top bar */}
-                      <div className="absolute top-0 left-0 right-0 h-1.5 transition-all group-hover:h-2" style={{ backgroundColor: calc.color }} />
-                      {/* Decorative small circle accent */}
-                      <div className="absolute top-4 left-4 w-4 h-4 rounded-full opacity-30 group-hover:opacity-50 transition-opacity" style={{ backgroundColor: calc.color }} />
-                      <motion.div
-                        className="w-16 h-16 flex items-center justify-center mb-6 relative"
-                        whileHover={{ rotate: [0, -5, 5, 0] }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        <DoodleIcon name={calc.doodle} size={56} />
-                      </motion.div>
-                      <h3 className="text-lg font-extrabold text-[#0a3d3d] mb-2 relative">{calc.title}</h3>
-                      <p className="text-sm text-[#0a3d3d]/40 leading-relaxed mb-6 flex-1 relative">{calc.description}</p>
-                      <span className="inline-flex items-center gap-2 text-sm font-bold group-hover:text-[#0a3d3d] transition-colors relative" style={{ color: calc.color }}>
-                        חשב עכשיו
-                        <ChevronLeft className="w-4 h-4" />
-                      </span>
-                    </motion.div>
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Investment Tracks CTA */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
-          <ScrollReveal>
-            <Link to="/investment-tracks" className="block group">
-              <div className="bg-[#f8f9fc] rounded-2xl p-8 sm:p-12 relative overflow-hidden hover:shadow-lg transition-all">
-                <div className="absolute top-4 right-6 w-20 h-20 rounded-full bg-[#5ec6c6] opacity-10" />
-                <div className="absolute bottom-4 left-10 w-14 h-14 rounded-full bg-[#f4a261] opacity-10" />
-                <div className="flex flex-col sm:flex-row items-center gap-6 relative z-10">
-                  <DoodleIcon name="charts" size={64} />
-                  <div className="text-center sm:text-right flex-1">
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d] mb-2">
-                      מסלולי השקעה — <span className="text-[#5ec6c6]">המדריך המלא</span>
-                    </h2>
-                    <p className="text-gray-500 text-base sm:text-lg max-w-xl">
-                      השוו תשואות, דמי ניהול וחשיפות של כל המסלולים. בדקו את המסלול שלכם וקבלו המלצה.
-                    </p>
-                  </div>
-                  <ChevronLeft className="w-8 h-8 text-[#5ec6c6] shrink-0 group-hover:-translate-x-2 transition-transform hidden sm:block" />
-                </div>
-              </div>
-            </Link>
-          </ScrollReveal>
-        </section>
-
-        {/* Wave: gray -> white */}
-        <WaveDivider color="#ffffff" flip />
 
 
         {/* 8. PARTNERS - Logo marquee */}
