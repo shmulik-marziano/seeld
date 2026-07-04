@@ -1,7 +1,18 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Lock, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { MONO, FAINT } from '@/lib/brand';
+
+const HEEBO = "'Heebo', sans-serif";
+
+const LegalSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <section className="border-t border-[#171717]/15 pt-5 space-y-3">
+    <h2 className="text-lg text-[#171717]" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+      {title}
+    </h2>
+    {children}
+  </section>
+);
 
 export default function PrivacyPage() {
   const navigate = useNavigate();
@@ -9,9 +20,8 @@ export default function PrivacyPage() {
   const isPublic = location.pathname === '/privacy';
 
   const content = (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-8 text-sm leading-relaxed text-gray-700">
-      <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#171717]">1. כללי</h2>
+    <div className="max-w-3xl mx-auto px-5 sm:px-8 py-10 space-y-10 text-base leading-[1.9] text-[#171717]/60 [&_strong]:text-[#171717] [&_strong]:font-medium">
+      <LegalSection title="1. כללי">
         <p>
           מערכת SEELD (להלן: "המערכת") מופעלת על ידי חברת SEELD בע"מ (להלן: "החברה").
           מדיניות פרטיות זו מתארת כיצד אנו אוספים, משתמשים, מאחסנים ומגנים על מידע אישי
@@ -20,12 +30,9 @@ export default function PrivacyPage() {
         <p>
           שימוש במערכת מהווה הסכמה למדיניות פרטיות זו. אנו ממליצים לקרוא מסמך זה בעיון.
         </p>
-      </section>
+      </LegalSection>
 
-      <hr className="border-gray-100" />
-
-      <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#171717]">2. המידע שאנו אוספים</h2>
+      <LegalSection title="2. המידע שאנו אוספים">
         <p>אנו עשויים לאסוף את סוגי המידע הבאים:</p>
         <div className="space-y-2 pr-4">
           <p><strong>2.1 מידע זיהוי אישי:</strong> שם מלא, מספר תעודת זהות, תאריך לידה, כתובת, מספר טלפון, כתובת דואר אלקטרוני.</p>
@@ -34,12 +41,9 @@ export default function PrivacyPage() {
           <p><strong>2.4 מידע תעסוקתי:</strong> מעמד תעסוקתי, מקצוע, הכנסה חודשית ושנתית.</p>
           <p><strong>2.5 מידע טכני:</strong> כתובת IP, סוג דפדפן, זמני גישה ופעילות במערכת.</p>
         </div>
-      </section>
+      </LegalSection>
 
-      <hr className="border-gray-100" />
-
-      <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#171717]">3. מטרות השימוש במידע</h2>
+      <LegalSection title="3. מטרות השימוש במידע">
         <p>המידע נאסף ומעובד למטרות הבאות:</p>
         <ul className="list-disc pr-6 space-y-1.5">
           <li>ניהול תיקי לקוחות על ידי סוכני ביטוח ויועצים פיננסיים מורשים.</li>
@@ -50,12 +54,9 @@ export default function PrivacyPage() {
           <li>שיפור המערכת וחוויית המשתמש.</li>
           <li>עמידה בדרישות רגולטוריות.</li>
         </ul>
-      </section>
+      </LegalSection>
 
-      <hr className="border-gray-100" />
-
-      <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#171717]">4. שיתוף מידע</h2>
+      <LegalSection title="4. שיתוף מידע">
         <p>
           אנו לא מוכרים, משכירים או מסחרים במידע האישי שלך. המידע עשוי להיות משותף אך ורק:
         </p>
@@ -65,12 +66,9 @@ export default function PrivacyPage() {
           <li><strong>עם ספקי שירות:</strong> ספקי תשתית טכנולוגית (אחסון, אבטחה) שפועלים בשמנו ובכפוף להתחייבויות סודיות.</li>
           <li><strong>על פי דין:</strong> כאשר נדרש על פי צו בית משפט או דרישה רגולטורית.</li>
         </ul>
-      </section>
+      </LegalSection>
 
-      <hr className="border-gray-100" />
-
-      <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#171717]">5. אבטחת מידע</h2>
+      <LegalSection title="5. אבטחת מידע">
         <p>אנו נוקטים באמצעי אבטחה מתקדמים להגנה על המידע שלך, לרבות:</p>
         <ul className="list-disc pr-6 space-y-1.5">
           <li>הצפנת נתונים בתעבורה (TLS/SSL) ובמנוחה.</li>
@@ -83,23 +81,17 @@ export default function PrivacyPage() {
         <p>
           יחד עם זאת, אף מערכת אינה חסינה לחלוטין ואנו לא יכולים להבטיח אבטחה מוחלטת של המידע.
         </p>
-      </section>
+      </LegalSection>
 
-      <hr className="border-gray-100" />
-
-      <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#171717]">6. שמירת מידע</h2>
+      <LegalSection title="6. שמירת מידע">
         <p>
           המידע נשמר כל עוד חשבון הסוכנות פעיל וכל עוד הדבר נדרש לצורך מתן השירות
           או לעמידה בדרישות רגולטוריות. בהתאם לרגולציה בתחום הביטוח והפנסיה,
           חלק מהמידע עשוי להישמר לתקופות ארוכות כנדרש בחוק.
         </p>
-      </section>
+      </LegalSection>
 
-      <hr className="border-gray-100" />
-
-      <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#171717]">7. זכויות הלקוח</h2>
+      <LegalSection title="7. זכויות הלקוח">
         <p>בהתאם לחוק הגנת הפרטיות, התשמ"א-1981, עומדות לך הזכויות הבאות:</p>
         <ul className="list-disc pr-6 space-y-1.5">
           <li><strong>זכות עיון:</strong> הזכות לעיין במידע שנאסף עליך.</li>
@@ -110,49 +102,53 @@ export default function PrivacyPage() {
         <p>
           לבקשות בנושא פרטיות, ניתן לפנות לסוכן הביטוח שלך או ישירות אלינו בכתובת המופיעה בסעיף 10.
         </p>
-      </section>
+      </LegalSection>
 
-      <hr className="border-gray-100" />
-
-      <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#171717]">8. עוגיות (Cookies)</h2>
+      <LegalSection title="8. עוגיות (Cookies)">
         <p>
           המערכת משתמשת בעוגיות הכרחיות בלבד לצורך שמירת מצב ההתחברות ואבטחת הגישה.
           אנו לא משתמשים בעוגיות שיווקיות או למעקב צד שלישי.
         </p>
-      </section>
+      </LegalSection>
 
-      <hr className="border-gray-100" />
-
-      <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#171717]">9. שינויים במדיניות</h2>
+      <LegalSection title="9. שינויים במדיניות">
         <p>
           אנו שומרים לעצמנו את הזכות לעדכן מדיניות פרטיות זו מעת לעת.
           שינויים מהותיים יפורסמו במערכת. המשך השימוש לאחר פרסום שינויים
           מהווה הסכמה למדיניות המעודכנת.
         </p>
-      </section>
+      </LegalSection>
 
-      <hr className="border-gray-100" />
-
-      <section className="space-y-3">
-        <h2 className="text-lg font-bold text-[#171717]">10. יצירת קשר</h2>
+      <LegalSection title="10. יצירת קשר">
         <p>
           לשאלות בנוגע למדיניות פרטיות זו או לבקשות הנוגעות למידע האישי שלך,
           ניתן לפנות אלינו:
         </p>
-        <div className="bg-[#fafafa] rounded-xl p-4 space-y-1">
-          <p><strong className="text-[#171717]">SEELD בע"מ</strong></p>
-          <p>דואר אלקטרוני: info@seeld-ins.co.il</p>
-          <p>אתר: seeld-ins.co.il</p>
+        <div>
+          <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
+            <span className="text-[13px] text-[#171717]/45">חברה</span>
+            <span className="text-[#171717]">SEELD בע"מ</span>
+          </div>
+          <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
+            <span className="text-[13px] text-[#171717]/45">דואר אלקטרוני</span>
+            <a
+              href="mailto:info@seeld-ins.co.il"
+              className="text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
+              dir="ltr"
+            >
+              info@seeld-ins.co.il
+            </a>
+          </div>
+          <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
+            <span className="text-[13px] text-[#171717]/45">אתר</span>
+            <span className="text-[#171717]" dir="ltr">seeld-ins.co.il</span>
+          </div>
         </div>
-      </section>
+      </LegalSection>
 
-      <hr className="border-gray-100" />
-
-      <div className="text-center text-xs text-gray-400 pt-4">
-        <p>&copy; {new Date().getFullYear()} SEELD — כל הזכויות שמורות.</p>
-      </div>
+      <p className="border-t border-[#171717]/15 pt-5 text-[12px] leading-relaxed text-[#171717]/40">
+        &copy; {new Date().getFullYear()} SEELD — כל הזכויות שמורות.
+      </p>
     </div>
   );
 
@@ -165,28 +161,25 @@ export default function PrivacyPage() {
       <Header />
 
       {/* Hero */}
-      <section className="relative bg-[#fafafa] overflow-hidden">
-        <div className="absolute top-6 left-10 w-20 h-20 rounded-full bg-[#171717] opacity-[0.05]" />
-        <div className="absolute bottom-4 right-16 w-12 h-12 rounded-full bg-[#171717] opacity-[0.05]" />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 relative z-10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-[#171717] flex items-center justify-center">
-                <Lock className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#171717]">מדיניות פרטיות</h1>
-                <p className="text-sm text-gray-400">עדכון אחרון: מרץ 2026</p>
-              </div>
-            </div>
+      <section className="bg-white">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-4">
+          <div className="border-t border-[#171717]/20 pt-4 flex items-baseline justify-between gap-4">
+            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: FAINT }}>
+              LEGAL · עודכן מרץ 2026
+            </span>
             <button
               onClick={() => navigate(-1)}
-              className="hidden sm:inline-flex items-center gap-2 px-5 py-2 border-2 border-[#171717] text-[#171717] rounded-full text-sm font-semibold hover:bg-[#171717] hover:text-white transition-colors"
+              className="text-[13px] font-medium text-[#171717]/50 hover:text-[#171717] transition-colors"
             >
-              <ArrowRight className="h-4 w-4" />
               חזרה
             </button>
           </div>
+          <h1
+            className="mt-10 text-[#171717] leading-tight"
+            style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.9rem, 4vw, 2.6rem)", letterSpacing: "-0.025em" }}
+          >
+            מדיניות פרטיות
+          </h1>
         </div>
       </section>
 

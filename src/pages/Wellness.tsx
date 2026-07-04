@@ -1,9 +1,31 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleCard from "@/components/ArticleCard";
+import ScrollReveal from "@/components/ScrollReveal";
 import { articles } from "@/data/articles";
 import { Link } from "react-router-dom";
-import { Heart, Shield, Stethoscope, Users, ChevronLeft } from "lucide-react";
+import { MONO, FAINT } from "@/lib/brand";
+
+const HEEBO = "'Heebo', sans-serif";
+
+const SectionHead = ({ index, title, lede }: { index: string; title: string; lede?: string }) => (
+  <div className="border-t border-[#171717]/20 pt-6 mb-12 sm:mb-14">
+    <div className="flex items-baseline gap-6 sm:gap-10">
+      <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: FAINT, fontFamily: MONO }}>
+        {index}
+      </span>
+      <div>
+        <h2
+          className="text-[#171717] leading-tight"
+          style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.02em" }}
+        >
+          {title}
+        </h2>
+        {lede && <p className="mt-3 text-base text-[#171717]/50 leading-[1.85] max-w-xl">{lede}</p>}
+      </div>
+    </div>
+  </div>
+);
 
 const Wellness = () => {
   const healthInsuranceArticles = articles.filter(article =>
@@ -12,99 +34,76 @@ const Wellness = () => {
   );
 
   const services = [
-    {
-      icon: Heart,
-      title: "ביטוח בריאות פרטי",
-      description: "כיסוי רפואי מקיף לטיפולים, ניתוחים ותרופות",
-      color: "#6e6e6e",
-    },
-    {
-      icon: Shield,
-      title: "ביטוח חיים",
-      description: "הגנה כלכלית למשפחה שלכם בכל מצב",
-      color: "#171717",
-    },
-    {
-      icon: Stethoscope,
-      title: "ביטוח סיעודי",
-      description: "כיסוי מקיף למקרה של צורך בטיפול סיעודי",
-      color: "#4d4d4d",
-    },
-    {
-      icon: Users,
-      title: "ליווי מקצועי",
-      description: "צוות יועצים מנוסה לבחירת הפוליסה המתאימה",
-      color: "#262626",
-    },
+    { title: "ביטוח בריאות פרטי", description: "כיסוי רפואי מקיף לטיפולים, ניתוחים ותרופות" },
+    { title: "ביטוח חיים", description: "הגנה כלכלית למשפחה שלכם בכל מצב" },
+    { title: "ביטוח סיעודי", description: "כיסוי מקיף למקרה של צורך בטיפול סיעודי" },
+    { title: "ליווי מקצועי", description: "צוות יועצים מנוסה לבחירת הפוליסה המתאימה" },
   ];
 
   return (
     <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* Hero Banner */}
-      <section className="bg-[#fafafa] relative overflow-hidden">
-        <div className="absolute top-6 left-8 w-24 h-24 rounded-full bg-[#171717] opacity-[0.05]" />
-        <div className="absolute bottom-8 right-14 w-16 h-16 rounded-full bg-[#171717] opacity-[0.05]" />
-        <div className="absolute top-20 right-1/3 w-10 h-10 rounded-full bg-[#171717] opacity-[0.05]" />
-        <div className="absolute bottom-14 left-1/4 w-6 h-6 rounded-full bg-[#171717] opacity-[0.05]" />
-        <svg className="absolute top-12 left-1/4 w-64 h-32 opacity-10" viewBox="0 0 200 80" fill="none">
-          <path d="M10 70 Q60 10 100 40 T190 20" stroke="#171717" strokeWidth="2" strokeDasharray="6 4" />
-        </svg>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16 relative">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 leading-tight text-[#171717]">
-            שירותים <span className="text-[#b91c1c]">ופעולות</span>
-          </h1>
-          <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
-            גלו את מגוון השירותים הפיננסיים והביטוחיים שלנו.
-            מביטוח בריאות ועד ביטוח חיים — כאן תמצאו את כל המידע והכלים לניהול נכון של הביטחון הפיננסי שלכם.
-          </p>
+      {/* Hero */}
+      <section className="bg-white">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-14 sm:pb-20">
+          <div className="border-t border-[#171717]/20 pt-4">
+            <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#171717]/45">
+              <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
+              <span aria-hidden="true">/</span>
+              <span className="text-[#171717]">שירותים ופעולות</span>
+            </nav>
+          </div>
+          <div className="mt-12 sm:mt-16 max-w-3xl">
+            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: FAINT }}>
+              HEALTH · LIFE
+            </span>
+            <h1
+              className="mt-4 text-[#171717] leading-[1.1]"
+              style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(2.2rem, 5vw, 3.4rem)", letterSpacing: "-0.03em" }}
+            >
+              שירותים ופעולות
+            </h1>
+            <p className="mt-5 text-lg sm:text-xl text-[#171717]/60 leading-[1.8] max-w-2xl">
+              גלו את מגוון השירותים הפיננסיים והביטוחיים שלנו.
+              מביטוח בריאות ועד ביטוח חיים — כאן תמצאו את כל המידע והכלים לניהול נכון של הביטחון הפיננסי שלכם.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Breadcrumb */}
-      <div className="border-b border-gray-100">
-        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-          <ChevronLeft className="w-3.5 h-3.5" />
-          <span className="text-[#171717] font-medium">שירותים ופעולות</span>
-        </nav>
-      </div>
-
       <main>
-        {/* Services Grid */}
-        <section className="py-10 sm:py-16">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#171717] mb-8">השירותים שלנו</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {services.map((service, idx) => (
-                <div key={idx} className="bg-white border border-[#171717]/[0.06] rounded-2xl p-6 hover:shadow-lg transition-all text-center">
-                  <div
-                    className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 shadow"
-                    style={{ backgroundColor: service.color }}
-                  >
-                    <service.icon className="w-7 h-7 text-white" />
+        {/* 01 — Services */}
+        <section style={{ backgroundColor: "#fafafa" }}>
+          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <ScrollReveal>
+              <SectionHead index="01" title="השירותים שלנו" />
+            </ScrollReveal>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
+              {services.map((service, i) => (
+                <ScrollReveal key={service.title} delay={i * 60}>
+                  <div className="border-t border-[#171717]/15 pt-5 h-full">
+                    <h3 className="text-lg text-[#171717] mb-2.5" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+                      {service.title}
+                    </h3>
+                    <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{service.description}</p>
                   </div>
-                  <h3 className="text-lg font-bold text-[#171717] mb-2">{service.title}</h3>
-                  <p className="text-gray-600 text-sm">{service.description}</p>
-                </div>
+                </ScrollReveal>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Decorative dots */}
-        <div className="flex justify-center gap-2 py-2">
-          <span className="w-2 h-2 rounded-full bg-[#171717]" />
-          <span className="w-2 h-2 rounded-full bg-[#6e6e6e]" />
-          <span className="w-2 h-2 rounded-full bg-[#a3a3a3]" />
-        </div>
-
-        {/* Articles Grid */}
-        <section className="py-10 sm:py-16">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#171717] mb-2">מאמרים ומדריכים</h2>
-            <p className="text-gray-500 mb-10 text-base sm:text-lg">כל מה שצריך לדעת על ביטוח בריאות וביטוח חיים</p>
+        {/* 02 — Articles */}
+        <section className="bg-white">
+          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <ScrollReveal>
+              <SectionHead
+                index="02"
+                title="מאמרים ומדריכים"
+                lede="כל מה שצריך לדעת על ביטוח בריאות וביטוח חיים"
+              />
+            </ScrollReveal>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {healthInsuranceArticles.map((article) => (
                 <ArticleCard key={article.id} {...article} />
@@ -113,52 +112,50 @@ const Wellness = () => {
           </div>
         </section>
 
-        {/* Decorative dots */}
-        <div className="flex justify-center gap-2 py-2">
-          <span className="w-2 h-2 rounded-full bg-[#d4d4d4]" />
-          <span className="w-2 h-2 rounded-full bg-[#171717]" />
-          <span className="w-2 h-2 rounded-full bg-[#6e6e6e]" />
-        </div>
-
-        {/* Content Section */}
-        <section className="py-10 sm:py-16">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="max-w-3xl">
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#171717] mb-6">למה SEELD?</h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed text-base sm:text-lg">
-                <p>
-                  ב-SEELD אנחנו מציעים מגוון רחב של שירותים פיננסיים וביטוחיים,
-                  כולם מותאמים אישית לצרכים הייחודיים שלכם. הצוות המקצועי שלנו כאן
-                  כדי ללוות אתכם בכל שלב — מהייעוץ הראשוני ועד הטיפול בתביעות.
-                </p>
-                <p>
-                  בין אם אתם מחפשים ביטוח בריאות פרטי, ביטוח חיים, ביטוח רכב או דירה —
-                  אנחנו נמצא עבורכם את הפוליסה המתאימה ביותר במחיר הטוב ביותר.
-                </p>
-              </div>
+        {/* 03 — Why SEELD */}
+        <section style={{ backgroundColor: "#fafafa" }}>
+          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <ScrollReveal>
+              <SectionHead index="03" title="למה SEELD?" />
+            </ScrollReveal>
+            <div className="max-w-3xl space-y-5 text-base sm:text-[17px] text-[#171717]/65 leading-[1.9]">
+              <p>
+                ב-SEELD אנחנו מציעים מגוון רחב של שירותים פיננסיים וביטוחיים,
+                כולם מותאמים אישית לצרכים הייחודיים שלכם. הצוות המקצועי שלנו כאן
+                כדי ללוות אתכם בכל שלב — מהייעוץ הראשוני ועד הטיפול בתביעות.
+              </p>
+              <p>
+                בין אם אתם מחפשים ביטוח בריאות פרטי, ביטוח חיים, ביטוח רכב או דירה —
+                אנחנו נמצא עבורכם את הפוליסה המתאימה ביותר במחיר הטוב ביותר.
+              </p>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-10 sm:py-16">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <div className="bg-[#171717] rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
-              <div className="absolute top-4 left-6 w-16 h-16 rounded-full bg-[#171717] opacity-[0.05]" />
-              <div className="absolute bottom-4 right-8 w-12 h-12 rounded-full bg-[#171717] opacity-[0.05]" />
-              <div className="absolute top-10 right-1/4 w-8 h-8 rounded-full bg-[#171717] opacity-[0.05]" />
-              <div className="absolute bottom-8 left-1/4 w-6 h-6 rounded-full bg-[#171717] opacity-[0.05]" />
-              <h2 className="text-2xl sm:text-3xl font-extrabold mb-3 text-white relative">רוצים לשמוע עוד?</h2>
-              <p className="text-white/70 text-base sm:text-lg max-w-xl mx-auto mb-6 relative">
-                צרו קשר ונמצא עבורכם את הפתרון הביטוחי המושלם
-              </p>
-              <Link
-                to="/contact"
-                className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-[#171717] text-white font-bold text-base hover:bg-[#262626] transition-all min-h-[48px] relative"
-              >
-                צרו קשר
-              </Link>
-            </div>
+        {/* CTA — the one dark band */}
+        <section style={{ backgroundColor: "#171717" }}>
+          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+            <ScrollReveal>
+              <div className="border-t border-white/20 pt-6 max-w-3xl">
+                <h2
+                  className="text-[#fafafa] leading-tight"
+                  style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.02em" }}
+                >
+                  רוצים לשמוע עוד?
+                </h2>
+                <p className="mt-3 text-base text-[#fafafa]/50 leading-[1.85] max-w-xl">
+                  צרו קשר ונמצא עבורכם את הפתרון הביטוחי המושלם.
+                </p>
+                <div className="mt-8">
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center justify-center px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
+                  >
+                    צרו קשר
+                  </Link>
+                </div>
+              </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>

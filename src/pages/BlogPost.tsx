@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
-import { CalendarDays, User, ArrowRight, Share2, Copy, Loader2, Send, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Copy, Loader2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 import { toast } from "sonner";
+import { MONO, FAINT, CARD_SHADOW } from "@/lib/brand";
+
+const HEEBO = "'Heebo', sans-serif";
 
 interface BlogPostData {
   id: string;
@@ -17,14 +20,6 @@ interface BlogPostData {
   published_at: string | null;
   cover_image_url: string | null;
 }
-
-const categoryColors: Record<string, string> = {
-  "פנסיה": "#171717",
-  "ביטוח": "#171717",
-  "טיפים": "#4d4d4d",
-  "חיסכון": "#6e6e6e",
-  "פיננסים": "#171717",
-};
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -146,8 +141,6 @@ const BlogPost = () => {
     document.addEventListener("click", handleContentClick);
     return () => document.removeEventListener("click", handleContentClick);
   }, []);
-
-  const accentColor = categoryColors[post?.category || ""] || "#171717";
 
   // Dynamic lead form text — tailored per article slug, with category fallback
   const leadFormText = (() => {
@@ -289,12 +282,15 @@ const BlogPost = () => {
     };
   })();
 
+  const darkInputClass =
+    "w-full px-0 py-3.5 bg-transparent border-b border-white/25 text-[#fafafa] placeholder:text-[#fafafa]/40 text-base focus:outline-none focus:border-[#fafafa] transition-colors min-h-[44px] rounded-none";
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-950" dir="rtl">
+      <div className="min-h-screen bg-white" dir="rtl">
         <Header />
         <div className="flex justify-center py-32">
-          <Loader2 className="h-8 w-8 animate-spin text-[#171717]" />
+          <Loader2 className="h-6 w-6 animate-spin text-[#171717]" />
         </div>
         <Footer />
       </div>
@@ -303,17 +299,27 @@ const BlogPost = () => {
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-950" dir="rtl">
+      <div className="min-h-screen bg-white" dir="rtl">
         <Header />
-        <div className="max-w-3xl mx-auto px-4 py-32 text-center">
-          <h1 className="text-3xl font-bold text-[#171717] dark:text-white mb-4">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8 py-32">
+          <div className="border-t border-[#171717]/20 pt-5">
+            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: FAINT }}>
+              404 · POST
+            </span>
+          </div>
+          <h1
+            className="mt-6 text-3xl text-[#171717]"
+            style={{ fontFamily: HEEBO, fontWeight: 600, letterSpacing: "-0.02em" }}
+          >
             הפוסט לא נמצא
           </h1>
+          <p className="mt-3 text-base text-[#171717]/60 leading-[1.8]">
+            ייתכן שהכתובת השתנתה או שהפוסט הוסר.
+          </p>
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#171717] text-white font-semibold hover:bg-[#262626] transition-all"
+            className="mt-8 inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#262626] transition-colors min-h-[52px]"
           >
-            <ArrowRight className="w-4 h-4" />
             חזרה לבלוג
           </Link>
         </div>
@@ -323,64 +329,53 @@ const BlogPost = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-[#fafafa] dark:bg-gray-900 py-12 sm:py-24">
-        {/* Decorative circles - mobile-aware */}
-        <div
-          className="absolute top-6 right-4 sm:top-8 sm:right-12 w-16 h-16 sm:w-28 sm:h-28 rounded-full opacity-20"
-          style={{ backgroundColor: accentColor }}
-        />
-        <div className="absolute bottom-6 left-8 sm:bottom-8 sm:left-20 w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-[#171717] opacity-[0.05]" />
-        <div className="absolute top-1/3 left-4 sm:left-10 w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-[#171717] opacity-[0.05] hidden sm:block" />
-
-        <div className="max-w-3xl mx-auto px-4 relative z-10">
-          {/* Back link */}
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#171717]/60 dark:text-white/50 hover:text-[#171717] dark:hover:text-white transition-colors mb-6"
-          >
-            <ArrowRight className="w-4 h-4" />
-            חזרה לבלוג
-          </Link>
-
-          {/* Category badge */}
-          {post.category && (
-            <span
-              className="inline-block px-4 py-1.5 rounded-full text-xs font-bold text-white mb-5"
-              style={{ backgroundColor: accentColor }}
+      <section className="bg-white">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-10 sm:pb-12">
+          <div className="border-t border-[#171717]/20 pt-4">
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#171717]/50 hover:text-[#171717] transition-colors"
             >
-              {post.category}
-            </span>
-          )}
+              <ArrowRight className="w-3.5 h-3.5" />
+              חזרה לבלוג
+            </Link>
+          </div>
 
-          {/* Title */}
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#171717] dark:text-white leading-tight mb-5 sm:mb-6">
-            {post.title}
-          </h1>
+          <div className="mt-10 sm:mt-12">
+            <div className="flex flex-wrap items-baseline gap-3 text-[12px] text-[#171717]/45 mb-4">
+              {post.category && (
+                <>
+                  <span>{post.category}</span>
+                  <span aria-hidden="true">·</span>
+                </>
+              )}
+              <span>{formatDate(post.published_at)}</span>
+              {post.author && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span>מאת {post.author}</span>
+                </>
+              )}
+            </div>
 
-          {/* Meta */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-[#171717]/50 dark:text-white/40">
-            {post.author && (
-              <span className="flex items-center gap-1.5">
-                <User className="w-4 h-4" />
-                {post.author}
-              </span>
-            )}
-            <span className="flex items-center gap-1.5">
-              <CalendarDays className="w-4 h-4" />
-              {formatDate(post.published_at)}
-            </span>
+            <h1
+              className="text-[#171717] leading-[1.2]"
+              style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.8rem, 4vw, 2.8rem)", letterSpacing: "-0.025em" }}
+            >
+              {post.title}
+            </h1>
           </div>
         </div>
       </section>
 
       {/* Cover Image */}
       {post.cover_image_url && (
-        <div className="max-w-4xl mx-auto px-4 -mt-8 sm:-mt-12 relative z-20">
-          <div className="rounded-2xl overflow-hidden shadow-2xl shadow-[#171717]/10">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8">
+          <div className="rounded-lg overflow-hidden" style={{ boxShadow: CARD_SHADOW }}>
             <img
               src={post.cover_image_url}
               alt={post.title}
@@ -391,29 +386,29 @@ const BlogPost = () => {
       )}
 
       {/* Content */}
-      <article className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
+      <article className="max-w-3xl mx-auto px-5 sm:px-8 py-10 sm:py-16">
         <div
-          className="prose prose-base sm:prose-lg max-w-none dark:prose-invert
-            prose-headings:text-[#171717] dark:prose-headings:text-white prose-headings:font-bold
-            prose-p:text-[#171717]/80 dark:prose-p:text-white/70 prose-p:leading-relaxed
-            prose-strong:text-[#171717] dark:prose-strong:text-white
+          className="prose prose-base sm:prose-lg max-w-none
+            prose-headings:text-[#171717] prose-headings:font-semibold
+            prose-p:text-[#171717]/70 prose-p:leading-[1.9]
+            prose-li:text-[#171717]/70
+            prose-strong:text-[#171717] prose-strong:font-semibold
             prose-a:text-[#171717] prose-a:no-underline hover:prose-a:underline"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
 
-        {/* Share buttons */}
-        <div className="mt-12 pt-8 border-t border-[#171717]/10 dark:border-white/10">
-          <p className="text-sm font-semibold text-[#171717] dark:text-white mb-3 flex items-center gap-2">
-            <Share2 className="w-4 h-4" />
-            שתפו את המאמר
-          </p>
-          <div className="flex flex-wrap gap-3">
+        {/* Share */}
+        <div className="mt-14 border-t border-[#171717]/15 pt-6">
+          <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: FAINT }}>
+            SHARE
+          </span>
+          <div className="mt-4 flex flex-wrap gap-3">
             <button
               onClick={shareWhatsApp}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold text-white transition-all hover:scale-105 min-h-[44px]"
-              style={{ backgroundColor: "#25D366" }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white text-[14px] font-medium text-[#171717] hover:bg-[#fafafa] transition-colors min-h-[44px]"
+              style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
             >
-              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white">
+              <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor" aria-hidden="true">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
                 <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 01-4.243-1.214l-.252-.157-2.625.78.78-2.625-.157-.252A8 8 0 1112 20z" />
               </svg>
@@ -421,7 +416,8 @@ const BlogPost = () => {
             </button>
             <button
               onClick={copyLink}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold bg-[#fafafa] dark:bg-gray-800 text-[#171717] dark:text-white/70 hover:bg-[#171717]/10 transition-all min-h-[44px]"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white text-[14px] font-medium text-[#171717] hover:bg-[#fafafa] transition-colors min-h-[44px]"
+              style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
             >
               <Copy className="w-4 h-4" />
               העתק קישור
@@ -430,131 +426,119 @@ const BlogPost = () => {
         </div>
       </article>
 
-      {/* Lead Capture Form */}
-      <section id="lead-form" ref={leadFormRef} className="py-12 sm:py-20">
-        <div className="max-w-3xl mx-auto px-4">
-          <div
-            className="rounded-3xl overflow-hidden shadow-2xl"
-            style={{ background: `linear-gradient(135deg, #171717 0%, #262626 60%, ${accentColor}90 100%)` }}
-          >
-            {/* Top decorative bar */}
-            <div className="h-1.5 w-full" style={{ background: `linear-gradient(90deg, #171717, #6e6e6e)` }} />
-
-            <div className="px-6 sm:px-12 py-10 sm:py-14">
-              {leadSubmitted ? (
-                <div className="text-center py-6">
-                  <CheckCircle2 className="w-16 h-16 text-[#171717] mx-auto mb-5" />
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
-                    תודה! קיבלנו את הפרטים
-                  </h3>
-                  <p className="text-white/70 text-lg">
-                    {leadFormText.successMsg}
-                  </p>
-                </div>
-              ) : (
-                <>
-                  <div className="text-center mb-8 sm:mb-10">
-                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-3 leading-tight">
-                      {leadFormText.title}
-                    </h3>
-                    <p className="text-white/70 text-base sm:text-lg max-w-xl mx-auto">
-                      {leadFormText.desc}
-                    </p>
-                  </div>
-
-                  <form onSubmit={handleLeadSubmit} className="space-y-5 max-w-lg mx-auto">
-                    <div>
-                      <input
-                        type="text"
-                        value={leadForm.name}
-                        onChange={(e) => setLeadForm(prev => ({ ...prev, name: e.target.value }))}
-                        required
-                        placeholder="שם מלא *"
-                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-4 text-white placeholder:text-white/50 focus:outline-none focus:border-[#171717] focus:ring-2 focus:ring-[#171717]/30 transition-all text-base"
-                      />
-                    </div>
-                    <div className="grid sm:grid-cols-2 gap-5">
-                      <input
-                        type="tel"
-                        value={leadForm.phone}
-                        onChange={(e) => setLeadForm(prev => ({ ...prev, phone: e.target.value }))}
-                        required
-                        placeholder="טלפון *"
-                        dir="ltr"
-                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-4 text-white placeholder:text-white/50 focus:outline-none focus:border-[#171717] focus:ring-2 focus:ring-[#171717]/30 transition-all text-base text-right"
-                      />
-                      <input
-                        type="email"
-                        value={leadForm.email}
-                        onChange={(e) => setLeadForm(prev => ({ ...prev, email: e.target.value }))}
-                        placeholder="אימייל (לא חובה)"
-                        dir="ltr"
-                        className="w-full bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-4 text-white placeholder:text-white/50 focus:outline-none focus:border-[#171717] focus:ring-2 focus:ring-[#171717]/30 transition-all text-base text-right"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={leadSubmitting}
-                      className="w-full bg-[#171717] hover:bg-[#262626] text-white rounded-xl px-8 py-4 font-bold text-lg transition-all hover:shadow-lg hover:shadow-[#171717]/30 min-h-[56px] flex items-center justify-center gap-3 disabled:opacity-60"
-                    >
-                      {leadSubmitting ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : (
-                        <>
-                          <Send className="w-5 h-5" />
-                          {leadFormText.cta}
-                        </>
-                      )}
-                    </button>
-                    <p className="text-center text-white/40 text-xs">
-                      ללא עלות וללא התחייבות. נחזור אליכם בהקדם.
-                    </p>
-                  </form>
-                </>
-              )}
+      {/* Lead Capture — the one dark band */}
+      <section id="lead-form" ref={leadFormRef} style={{ backgroundColor: "#171717" }}>
+        <div className="max-w-3xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
+          {leadSubmitted ? (
+            <div className="border-t border-white/20 pt-6">
+              <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: "rgba(250,250,250,.6)" }}>
+                SENT
+              </span>
+              <h3
+                className="mt-4 text-[#fafafa]"
+                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2rem)", letterSpacing: "-0.02em" }}
+              >
+                תודה! קיבלנו את הפרטים
+              </h3>
+              <p className="mt-3 text-base text-[#fafafa]/55 leading-[1.85]">
+                {leadFormText.successMsg}
+              </p>
             </div>
-          </div>
+          ) : (
+            <div className="border-t border-white/20 pt-6">
+              <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: "rgba(250,250,250,.6)" }}>
+                CONSULT · FREE
+              </span>
+              <h3
+                className="mt-4 text-[#fafafa] leading-tight"
+                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2rem)", letterSpacing: "-0.02em" }}
+              >
+                {leadFormText.title}
+              </h3>
+              <p className="mt-3 text-base text-[#fafafa]/55 leading-[1.85] max-w-xl">
+                {leadFormText.desc}
+              </p>
+
+              <form onSubmit={handleLeadSubmit} className="mt-10 max-w-xl">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
+                  <input
+                    type="text"
+                    value={leadForm.name}
+                    onChange={(e) => setLeadForm(prev => ({ ...prev, name: e.target.value }))}
+                    required
+                    placeholder="שם מלא *"
+                    className={darkInputClass}
+                  />
+                  <input
+                    type="tel"
+                    value={leadForm.phone}
+                    onChange={(e) => setLeadForm(prev => ({ ...prev, phone: e.target.value }))}
+                    required
+                    placeholder="טלפון *"
+                    dir="ltr"
+                    className={darkInputClass}
+                    style={{ textAlign: "right" }}
+                  />
+                </div>
+                <input
+                  type="email"
+                  value={leadForm.email}
+                  onChange={(e) => setLeadForm(prev => ({ ...prev, email: e.target.value }))}
+                  placeholder="אימייל (לא חובה)"
+                  className={`${darkInputClass} mt-5`}
+                />
+                <div className="mt-8 flex flex-wrap items-center gap-6">
+                  <button
+                    type="submit"
+                    disabled={leadSubmitting}
+                    className="inline-flex items-center justify-center px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors disabled:opacity-60 min-h-[52px] min-w-[180px]"
+                  >
+                    {leadSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : leadFormText.cta}
+                  </button>
+                  <span className="text-[12px] text-[#fafafa]/55">
+                    ללא עלות וללא התחייבות. נחזור אליכם בהקדם.
+                  </span>
+                </div>
+              </form>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Related Posts */}
+      {/* Related Posts — hairline rows */}
       {related.length > 0 && (
-        <section className="bg-[#fafafa] dark:bg-gray-900 py-16">
-          <div className="max-w-6xl mx-auto px-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#171717] dark:text-white mb-8 text-center">
-              מאמרים נוספים
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {related.map((r) => {
-                const rColor = categoryColors[r.category || ""] || "#171717";
-                return (
-                  <Link
-                    key={r.id}
-                    to={`/blog/${r.slug}`}
-                    className="group bg-white dark:bg-gray-900 rounded-2xl border border-[#171717]/10 dark:border-white/10 overflow-hidden hover:shadow-xl hover:shadow-[#171717]/5 transition-all duration-300 hover:-translate-y-1"
-                  >
-                    <div className="h-2 w-full" style={{ backgroundColor: rColor }} />
-                    <div className="p-6">
-                      {r.category && (
-                        <span
-                          className="inline-block px-3 py-1 rounded-full text-xs font-bold text-white mb-3"
-                          style={{ backgroundColor: rColor }}
-                        >
-                          {r.category}
-                        </span>
-                      )}
-                      <h3 className="text-lg font-bold text-[#171717] dark:text-white mb-2 leading-tight group-hover:text-[#171717] transition-colors">
-                        {r.title}
-                      </h3>
-                      {r.excerpt && (
-                        <p className="text-sm text-[#171717]/50 dark:text-white/40 line-clamp-2">
-                          {r.excerpt}
-                        </p>
-                      )}
-                    </div>
-                  </Link>
-                );
-              })}
+        <section style={{ backgroundColor: "#fafafa" }}>
+          <div className="max-w-3xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <div className="border-t border-[#171717]/20 pt-6 mb-8">
+              <h2
+                className="text-[#171717] leading-tight"
+                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.4rem, 2.6vw, 1.8rem)", letterSpacing: "-0.02em" }}
+              >
+                מאמרים נוספים
+              </h2>
+            </div>
+            <div>
+              {related.map((r) => (
+                <Link
+                  key={r.id}
+                  to={`/blog/${r.slug}`}
+                  className="group flex items-baseline justify-between gap-6 py-5 border-b border-[#171717]/10 hover:border-[#171717]/40 transition-colors"
+                >
+                  <div className="min-w-0">
+                    <h3 className="text-base sm:text-lg text-[#171717] leading-snug" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+                      {r.title}
+                    </h3>
+                    {r.excerpt && (
+                      <p className="mt-1.5 text-[14px] text-[#171717]/50 leading-[1.7] line-clamp-2">
+                        {r.excerpt}
+                      </p>
+                    )}
+                  </div>
+                  <span className="text-[#171717]/30 group-hover:text-[#171717] transition-all group-hover:-translate-x-1 shrink-0" aria-hidden="true">
+                    ←
+                  </span>
+                </Link>
+              ))}
             </div>
           </div>
         </section>
