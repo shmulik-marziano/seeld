@@ -989,10 +989,10 @@ function AnalyticsModule() {
     return c ? `${c.flag} ${c.name}` : code;
   };
 
-  const DEVICE_COLORS: Record<string, string> = { desktop: "#171717", mobile: "#171717", tablet: "#b45309" };
+  const DEVICE_COLORS: Record<string, string> = { desktop: "#171717", mobile: "#737373", tablet: "#b45309" };
   const DEVICE_LABELS: Record<string, string> = { desktop: "\u05DE\u05D7\u05E9\u05D1", mobile: "\u05E0\u05D9\u05D9\u05D3", tablet: "\u05D8\u05D0\u05D1\u05DC\u05D8" };
-  const BROWSER_COLORS: Record<string, string> = { Chrome: "#171717", Safari: "#171717", Firefox: "#b45309", Edge: "#15803d", Other: "#b91c1c" };
-  const DEVICE_ICONS: Record<string, string> = { desktop: "\u{1F5A5}", mobile: "\u{1F4F1}", tablet: "\u{1F4F1}" };
+  const BROWSER_COLORS: Record<string, string> = { Chrome: "#171717", Safari: "#737373", Firefox: "#b45309", Edge: "#15803d", Other: "#b91c1c" };
+  const DEVICE_ICONS: Record<string, string> = { desktop: "מחשב", mobile: "נייד", tablet: "טאבלט" };
 
   const TrendArrow = ({ value, invertColors = false }: { value: number; invertColors?: boolean }) => {
     const isPositive = invertColors ? value < 0 : value > 0;
@@ -1313,7 +1313,7 @@ function AnalyticsModule() {
                   </span>
                   <span className="font-medium text-[#171717] truncate flex-1">{label(v.slug)}</span>
                   {cInfo && <span className="text-sm shrink-0" title={cInfo.name}>{cInfo.flag}</span>}
-                  {deviceIcon && <span className="text-sm shrink-0" title={v.device}>{deviceIcon}</span>}
+                  {deviceIcon && <span className="text-[10px] text-gray-400 shrink-0 bg-gray-100 px-1.5 py-0.5 rounded" title={v.device}>{deviceIcon}</span>}
                   {v.browser && <span className="text-[10px] text-gray-400 shrink-0 bg-gray-100 px-1.5 py-0.5 rounded">{v.browser}</span>}
                 </div>
               );

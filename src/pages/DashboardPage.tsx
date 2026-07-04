@@ -30,9 +30,9 @@ const C = {
   orange: '#b45309',
   coral:  '#b91c1c',
   green:  '#15803d',
-  yellow: '#ffc929',
-  purple: '#171717',
-  dark:   '#171717',
+  yellow: '#a16207',
+  purple: '#4d4d4d',
+  dark:   '#262626',
   gray:   '#94a3b8',
 };
 
@@ -727,7 +727,7 @@ export default function DashboardPage() {
                   className="w-9 h-9 rounded-full flex items-center justify-center shadow-sm transition-all"
                   style={{
                     backgroundColor: editMode || menuOpen ? '#171717' : 'white',
-                    color: editMode || menuOpen ? '#171717' : '#94a3b8',
+                    color: editMode || menuOpen ? '#ffffff' : '#94a3b8',
                     border: editMode ? '2px solid #171717' : '2px solid #e2e8f0',
                   }}>
                   <PenTool className="w-3.5 h-3.5" />
@@ -753,7 +753,7 @@ export default function DashboardPage() {
                           className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-right">
                           <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
                             style={{ backgroundColor: editMode ? '#171717' : '#f1f5f9' }}>
-                            <PenTool className="w-4 h-4" style={{ color: editMode ? '#171717' : '#64748b' }} />
+                            <PenTool className="w-4 h-4" style={{ color: editMode ? '#ffffff' : '#64748b' }} />
                           </div>
                           <div>
                             <p className="text-sm font-bold text-gray-800 leading-none mb-0.5">
@@ -818,7 +818,7 @@ export default function DashboardPage() {
                   </div>
                   <button onClick={() => setEditMode(false)}
                     className="flex items-center gap-1.5 px-3.5 py-2 rounded-full font-bold text-xs"
-                    style={{ backgroundColor: '#171717', color: '#171717' }}>
+                    style={{ backgroundColor: '#171717', color: '#ffffff' }}>
                     <Check className="w-3.5 h-3.5" /> סיום
                   </button>
                 </div>

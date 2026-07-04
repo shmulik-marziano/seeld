@@ -688,7 +688,7 @@ export default function AgentLandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center relative mb-10">
               <Link to="/app/auth"
-                className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-[#171717] text-[#171717] font-bold rounded-full hover:bg-[#262626] transition-colors shadow-xl shadow-[#171717]/20 text-base min-h-[48px]">
+                className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-[#171717] text-white font-bold rounded-full hover:bg-[#262626] transition-colors shadow-xl shadow-[#171717]/20 text-base min-h-[48px]">
                 התחל עכשיו — חינם
                 <ArrowLeft className="w-5 h-5" />
               </Link>
