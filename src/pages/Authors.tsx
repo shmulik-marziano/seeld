@@ -59,7 +59,7 @@ const Authors = () => {
                     052-309-7444
                   </a>
                   <a 
-                    href="mailto:shmulik@seeld-ins.co.il" 
+                    href="mailto:shmulik@seeld.co.il" 
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-border hover:border-primary hover:bg-muted transition-all text-sm font-medium"
                   >
                     <Mail className="w-4 h-4" />

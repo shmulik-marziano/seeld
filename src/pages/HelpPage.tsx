@@ -202,7 +202,7 @@ export default function HelpPage() {
         className="mt-6 rounded-2xl p-6 text-center border-2 border-dashed"
         style={{ borderColor: '#17171720', backgroundColor: '#17171705' }}>
         <p className="text-[10px] font-black tracking-[0.2em] uppercase text-gray-400 mb-1"
-          style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>SEELD פלטפורמה</p>
+          style={{ fontFamily: "sans-serif" }}>SEELD פלטפורמה</p>
         <p className="text-xs text-gray-400">
           פלטפורמת ניהול סוכנויות ביטוח מתקדמת &middot; גרסה 2.0
         </p>

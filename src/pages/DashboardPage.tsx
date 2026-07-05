@@ -467,7 +467,7 @@ function HoneycombCanvas({ bubbles, hiddenMap, editMode, onToggleBubble, onBubbl
                       textAlign: 'center', fontWeight: 800, lineHeight: 1.25, padding: '0 4px',
                       display: '-webkit-box', WebkitLineClamp: 2,
                       WebkitBoxOrient: 'vertical', overflow: 'hidden',
-                      fontFamily: "'Plus Jakarta Sans','Heebo',sans-serif",
+                      fontFamily: "'Heebo',sans-serif",
                     }}>
                       {b.label}
                     </span>
@@ -488,7 +488,7 @@ function HoneycombCanvas({ bubbles, hiddenMap, editMode, onToggleBubble, onBubbl
                       style={{
                         fontSize: FS,
                         fontWeight: 800,
-                        fontFamily: "'Plus Jakarta Sans','Heebo',sans-serif",
+                        fontFamily: "'Heebo',sans-serif",
                         letterSpacing: '0.01em',
                         lineHeight: 1.22,
                         maxWidth: SZ - 14,
@@ -653,7 +653,7 @@ export default function DashboardPage() {
         <img src={doodleGrowth}    alt="" className="absolute top-[80%] left-[1%]   w-16 opacity-[0.05] rotate-[-8deg]"  />
         <img src={doodleLightbulb} alt="" className="absolute top-[50%] right-[1%]  w-14 opacity-[0.05] rotate-[5deg]"   />
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap"
-          style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 160, fontWeight: 900,
+          style={{ fontFamily: "sans-serif", fontSize: 160, fontWeight: 900,
             color: '#171717', opacity: 0.018, letterSpacing: '0.3em' }}>SEELD</div>
       </div>
 
@@ -715,7 +715,7 @@ export default function DashboardPage() {
               <SeeIDLogo size={30} />
               <div>
                 <div className="text-sm font-black text-[#171717] leading-none"
-                  style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>SEELD</div>
+                  style={{ fontFamily: "sans-serif" }}>SEELD</div>
                 <div className="text-[8px] font-bold tracking-[0.2em] text-gray-400 uppercase">פלטפורמה</div>
               </div>
             </button>
@@ -829,9 +829,9 @@ export default function DashboardPage() {
           {/* Greeting */}
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
             <p className="text-[9px] font-black tracking-[0.26em] uppercase text-gray-400 mb-0.5"
-              style={{ fontFamily: "'Plus Jakarta Sans',sans-serif" }}>SEELD • פלטפורמה</p>
+              style={{ fontFamily: "sans-serif" }}>SEELD • פלטפורמה</p>
             <h1 className="text-3xl font-black text-[#171717] leading-none"
-              style={{ fontFamily: "'Plus Jakarta Sans','Heebo',sans-serif" }}>{getGreeting()}</h1>
+              style={{ fontFamily: "'Heebo',sans-serif" }}>{getGreeting()}</h1>
             <p className="text-xs text-gray-400 mt-1">
               {activeSection
                 ? <><span className="text-[#171717] font-bold">{activeSection}</span>{' · '}{displayBubbles.length} בועות</>

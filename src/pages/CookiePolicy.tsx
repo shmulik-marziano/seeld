@@ -99,11 +99,11 @@ const CookiePolicy = () => {
               <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
                 <span className="text-[13px] text-[#6e6e6e]">אימייל</span>
                 <a
-                  href="mailto:info@seeld-ins.co.il"
+                  href="mailto:info@seeld.co.il"
                   className="text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
                   dir="ltr"
                 >
-                  info@seeld-ins.co.il
+                  info@seeld.co.il
                 </a>
               </div>
               <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">

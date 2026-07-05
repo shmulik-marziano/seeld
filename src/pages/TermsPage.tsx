@@ -137,11 +137,11 @@ export default function TermsPage() {
         <p>
           לכל שאלה או פנייה בנוגע לתנאי שימוש אלו, ניתן לפנות אלינו בדוא"ל:{' '}
           <a
-            href="mailto:info@seeld-ins.co.il"
+            href="mailto:info@seeld.co.il"
             className="text-[#171717] font-medium border-b border-[#171717]/25 hover:border-[#171717] transition-colors"
             dir="ltr"
           >
-            info@seeld-ins.co.il
+            info@seeld.co.il
           </a>
         </p>
       </LegalSection>

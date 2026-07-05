@@ -226,11 +226,11 @@ const Contact = () => {
                     <div className="flex items-baseline justify-between">
                       <span className="text-[13px] text-[#6e6e6e]">אימייל</span>
                       <a
-                        href="mailto:info@seeld-ins.co.il"
+                        href="mailto:info@seeld.co.il"
                         className="text-base text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
                         dir="ltr"
                       >
-                        info@seeld-ins.co.il
+                        info@seeld.co.il
                       </a>
                     </div>
                     <p className="text-[12px] text-[#6e6e6e] mt-1 text-left">נענה תוך יום עסקים</p>

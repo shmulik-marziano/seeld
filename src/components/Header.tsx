@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import SeeIDLogo from "@/components/SeeIDLogo";
-import { Menu, Moon, Sun, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { StatusPill } from "@/components/brand/Live";
@@ -45,7 +45,6 @@ const desktopLinkClass = (active: boolean) =>
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { pathname } = useLocation();
   const reducedMotion = useReducedMotion();
@@ -53,14 +52,11 @@ const Header = () => {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/");
 
+  // Dark mode is parked until it gets a real SEELD Mono dark theme —
+  // the legacy .dark palette is off-system. Force light and clear stale state.
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const shouldBeDark = savedTheme === "dark" || (!savedTheme && prefersDark);
-    setIsDark(shouldBeDark);
-    if (shouldBeDark) {
-      document.documentElement.classList.add("dark");
-    }
+    document.documentElement.classList.remove("dark");
+    localStorage.removeItem("theme");
   }, []);
 
   useEffect(() => {
@@ -85,18 +81,6 @@ const Header = () => {
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname]);
-
-  const toggleTheme = () => {
-    const newTheme = !isDark;
-    setIsDark(newTheme);
-    if (newTheme) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  };
 
   // Skip link: pages render <main> without an id, so focus the first <main> directly.
   const handleSkipToMain = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -157,14 +141,6 @@ const Header = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-5">
-            <button
-              onClick={toggleTheme}
-              className="hidden sm:flex p-2 items-center justify-center text-[#6e6e6e] dark:text-white/60 hover:text-[#171717] dark:hover:text-white transition-colors min-w-[40px] min-h-[40px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
-              aria-label="החלף ערכת נושא"
-            >
-              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </button>
-
             <Link
               to="/agents"
               aria-current={isActive("/agents") ? "page" : undefined}
