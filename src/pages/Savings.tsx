@@ -2,8 +2,12 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import { BONE, PINE, BRONZE, SERIF } from "@/lib/brand";
+import { SERIF } from "@/lib/brand";
 import { StatusPill } from "@/components/brand/Live";
+import { SproutFigure } from "@/components/brand/Figures";
+
+// SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
+const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
 
 const savingsCategories = [
   { title: "קרנות פנסיה", description: "הפקדות, כיסויים ובחירת מסלול נכונה", href: "/savings/pension-funds" },
@@ -21,39 +25,42 @@ const savingsCategories = [
 
 const Savings = () => {
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      {/* HERO — one idea: pick your product */}
-      <section style={{ backgroundColor: BONE }}>
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
-          <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
-              <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-              <span>←</span>
-              <span className="text-[#171717]/70 font-medium">חיסכון ופנסיה</span>
-            </nav>
-            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
-              11 מוצרי חיסכון
-            </span>
-          </div>
+      {/* HERO — one idea: pick your product. The sprout peeks from the tile corner. */}
+      <section className="px-2 pt-2">
+        <div className="bento-panel">
+          <SproutFigure className="absolute -left-5 -bottom-6 w-32 h-32 sm:w-40 sm:h-40 opacity-60 rotate-6" />
+          <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10">
+            <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
+              <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
+                <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
+                <span>←</span>
+                <span className="text-[#171717]/70 font-medium">חיסכון ופנסיה</span>
+              </nav>
+              <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium" style={{ color: PAPER_MUTED }}>
+                11 מוצרי חיסכון
+              </span>
+            </div>
 
-          <h1
-            className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
-            style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
-          >
-            חיסכון ופנסיה
-          </h1>
-          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9]">
-            11 מוצרי חיסכון ופנסיה, מקרן הפנסיה הראשונה ועד תכנון הפרישה. בחרו נושא.
-          </p>
+            <h1
+              className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
+              style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
+            >
+              חיסכון ופנסיה
+            </h1>
+            <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9]">
+              11 מוצרי חיסכון ופנסיה, מקרן הפנסיה הראשונה ועד תכנון הפרישה. בחרו נושא.
+            </p>
+          </div>
         </div>
       </section>
 
       <main>
-        {/* THE INDEX — hairline link list */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        {/* THE INDEX — hairline link list, one paper tile */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16">
                 {savingsCategories.map((item) => (
@@ -64,7 +71,7 @@ const Savings = () => {
                   >
                     <div className="flex items-baseline gap-4 min-w-0">
                       <h2 className="text-base font-medium text-[#171717] whitespace-nowrap">{item.title}</h2>
-                      <p className="text-[13px] text-[#6e6e6e] truncate hidden sm:block">{item.description}</p>
+                      <p className="text-[13px] text-[#5c5c5c] truncate hidden sm:block">{item.description}</p>
                     </div>
                     <span className="text-[#171717]/30 group-hover:text-[#171717] transition-all group-hover:-translate-x-1 shrink-0">
                       ←
@@ -86,12 +93,12 @@ const Savings = () => {
                 </button>
               </div>
             </ScrollReveal>
-          </div>
+          </div></div>
         </section>
 
-        {/* CTA — the one next action */}
-        <section style={{ backgroundColor: PINE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        {/* CTA — the one next action (ink tile) */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <div className="border-t border-white/20 pt-6">
               <h2
                 className="text-[#fafafa] leading-tight mb-3"
@@ -99,7 +106,7 @@ const Savings = () => {
               >
                 רוצים ניתוח פנסיוני?
               </h2>
-              <p className="text-[#fafafa]/45 text-base leading-[1.85] mb-8 max-w-xl">
+              <p className="text-[#fafafa]/55 text-base leading-[1.85] mb-8 max-w-xl">
                 נבדוק את הפנסיה, החיסכון ודמי הניהול שלכם. ללא עלות, בלי התחייבות.
               </p>
               <Link
@@ -109,7 +116,7 @@ const Savings = () => {
                 צרו קשר
               </Link>
             </div>
-          </div>
+          </div></div>
         </section>
       </main>
 

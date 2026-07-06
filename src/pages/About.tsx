@@ -2,14 +2,17 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import { BONE, PINE, BRONZE, SERIF, MONO, CHIP_GREEN } from "@/lib/brand";
+import { SERIF, MONO, CHIP_GREEN } from "@/lib/brand";
 import { CountUp, StatusPill } from "@/components/brand/Live";
 import { DrawSpark } from "@/components/brand/Strokes";
+
+// SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
+const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
 
 const SectionHead = ({ index, title, lede }: { index: string; title: string; lede?: string }) => (
   <div className="border-t border-[#171717]/20 pt-6 mb-10 sm:mb-12">
     <div className="flex items-baseline gap-6 sm:gap-10">
-      <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: BRONZE }}>
+      <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED }}>
         {index}
       </span>
       <div>
@@ -19,7 +22,7 @@ const SectionHead = ({ index, title, lede }: { index: string; title: string; led
         >
           {title}
         </h2>
-        {lede && <p className="mt-3 text-base text-[#5c5c5c] leading-[1.85] max-w-xl">{lede}</p>}
+        {lede && <p className="mt-3 text-base text-[#4d4d4d] leading-[1.85] max-w-xl">{lede}</p>}
       </div>
     </div>
   </div>
@@ -27,44 +30,72 @@ const SectionHead = ({ index, title, lede }: { index: string; title: string; led
 
 const About = () => {
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      {/* HERO — one idea: who we are */}
-      <section style={{ backgroundColor: BONE }}>
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
-          <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
-              <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-              <span>←</span>
-              <span className="text-[#171717]/70 font-medium">אודות</span>
-            </nav>
-            <span className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
-              הבית
-            </span>
+      {/* HERO — bento row: who we are + the counting orange tile */}
+      <section className="px-2 pt-2">
+        <div className="grid gap-2 lg:grid-cols-[1.6fr_1fr]">
+          {/* Main paper tile */}
+          <div className="bento-panel p-6 sm:p-10">
+            <div className="relative z-10">
+              <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
+                <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
+                  <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
+                  <span>←</span>
+                  <span className="text-[#171717]/70 font-medium">אודות</span>
+                </nav>
+                <span className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium" style={{ color: PAPER_MUTED }}>
+                  הבית
+                </span>
+              </div>
+
+              <h1
+                className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
+                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
+              >
+                הבית שמאחורי התיק שלכם
+              </h1>
+              <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9]">
+                סוכנות ביטוח, חיסכון ופנסיה מבית עמיתים הון. עצמאית, מפוקחת, ובצד שלכם.
+              </p>
+            </div>
           </div>
 
-          <h1
-            className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
-            style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
-          >
-            הבית שמאחורי התיק שלכם
-          </h1>
-          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9]">
-            סוכנות ביטוח, חיסכון ופנסיה מבית עמיתים הון. עצמאית, מפוקחת, ובצד שלכם.
-          </p>
+          {/* The counting orange tile — 600+ families */}
+          <div className="bento-panel-orange p-6 sm:p-8 flex flex-col justify-between min-h-[200px]">
+            <span
+              className="text-[10px] tracking-[0.2em] font-semibold text-[#171717]/80"
+              style={{ fontFamily: MONO }}
+              dir="ltr"
+            >
+              SEELD · FAMILIES
+            </span>
+            <div>
+              <div
+                className="text-[#171717] tabular-nums"
+                dir="ltr"
+                style={{ fontFamily: MONO, fontWeight: 600, fontSize: "clamp(3rem, 6vw, 4.6rem)", letterSpacing: "-0.02em", lineHeight: 1 }}
+              >
+                <CountUp to={600} format={(v) => `${v}+`} />
+              </div>
+              <div className="mt-2 text-[13px] font-medium text-[#171717]">
+                משפחות מלוות, ומספר אחד שממשיך לעלות
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       <main>
         {/* 01 — STORY */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
               <SectionHead index="01" title="הסיפור" />
             </ScrollReveal>
             <ScrollReveal delay={80}>
-              <div className="max-w-3xl space-y-5 text-[#5c5c5c] leading-[1.9] text-base sm:text-[17px]">
+              <div className="max-w-3xl space-y-5 text-[#4d4d4d] leading-[1.9] text-base sm:text-[17px]">
                 <p>
                   SEELD קמה מתוך אמונה שייעוץ פיננסי טוב צריך להיות נגיש לכולם. לא רק למי שמבין את השפה המקצועית.
                 </p>
@@ -77,15 +108,15 @@ const About = () => {
                 </p>
               </div>
             </ScrollReveal>
-          </div>
+          </div></div>
         </section>
 
         {/* 02 — NUMBERS + REGISTRY */}
-        <section style={{ backgroundColor: BONE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
               <div className="flex items-end justify-between gap-6 mb-2">
-                <span className="text-[11px] tracking-[0.14em] text-[#6e6e6e]" style={{ fontFamily: MONO }}>
+                <span className="text-[11px] tracking-[0.14em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
                   SEELD · IN NUMBERS
                 </span>
                 <DrawSpark color={CHIP_GREEN} className="w-40 sm:w-64" height={44} />
@@ -105,7 +136,7 @@ const About = () => {
                     >
                       <CountUp to={stat.to} format={stat.format} />
                     </p>
-                    <p className="text-[12px] tracking-[0.12em] text-[#6e6e6e]">{stat.label}</p>
+                    <p className="text-[12px] tracking-[0.12em]" style={{ color: PAPER_MUTED }}>{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -119,18 +150,18 @@ const About = () => {
                   { label: "מבית", value: "עמיתים הון" },
                 ].map((item) => (
                   <div key={item.label} className="flex items-baseline justify-between py-[15px] border-b border-[#171717]/10">
-                    <span className="text-[13px] text-[#6e6e6e]">{item.label}</span>
+                    <span className="text-[13px] text-[#5c5c5c]">{item.label}</span>
                     <span className="text-base text-[#171717] tabular-nums">{item.value}</span>
                   </div>
                 ))}
               </div>
             </ScrollReveal>
-          </div>
+          </div></div>
         </section>
 
         {/* 03 — WHAT WE DO */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="02"
@@ -148,9 +179,9 @@ const About = () => {
                 ].map((text, idx) => (
                   <li
                     key={idx}
-                    className="flex items-baseline gap-5 py-4 border-b border-[#171717]/10 text-[#5c5c5c] text-base leading-[1.85]"
+                    className="flex items-baseline gap-5 py-4 border-b border-[#171717]/10 text-[#4d4d4d] text-base leading-[1.85]"
                   >
-                    <span className="text-[11px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: BRONZE, fontFamily: MONO }}>
+                    <span className="text-[11px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED, fontFamily: MONO }}>
                       {String(idx + 1).padStart(2, "0")}
                     </span>
                     {text}
@@ -158,12 +189,12 @@ const About = () => {
                 ))}
               </ul>
             </ScrollReveal>
-          </div>
+          </div></div>
         </section>
 
         {/* 04 — VALUES */}
-        <section style={{ backgroundColor: BONE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
               <SectionHead index="03" title="הערכים" />
             </ScrollReveal>
@@ -179,17 +210,17 @@ const About = () => {
                     <h3 className="text-lg text-[#171717] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                       {item.title}
                     </h3>
-                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{item.description}</p>
+                    <p className="text-[14px] text-[#4d4d4d] leading-[1.8]">{item.description}</p>
                   </div>
                 </ScrollReveal>
               ))}
             </div>
-          </div>
+          </div></div>
         </section>
 
-        {/* CTA — the one next action */}
-        <section style={{ backgroundColor: PINE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        {/* CTA — the one next action (ink tile) */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <div className="border-t border-white/20 pt-6">
               <h2
                 className="text-[#fafafa] leading-tight mb-3"
@@ -197,7 +228,7 @@ const About = () => {
               >
                 רוצים לבדוק את המצב שלכם?
               </h2>
-              <p className="text-[#fafafa]/45 text-base leading-[1.85] mb-8 max-w-xl">
+              <p className="text-[#fafafa]/55 text-base leading-[1.85] mb-8 max-w-xl">
                 שיחה ראשונה על חשבוננו. בלי עלות, בלי התחייבות, בלי מרדף.
               </p>
               <div className="flex flex-wrap items-center gap-6">
@@ -217,7 +248,7 @@ const About = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </div></div>
         </section>
       </main>
 

@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { Calendar as CalendarComp } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { BRONZE, SERIF, MONO, CHIP_GREEN } from "@/lib/brand";
+import { SERIF, MONO, CHIP_GREEN } from "@/lib/brand";
 import { LiveDot, StatusPill } from "@/components/brand/Live";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import Header from "@/components/Header";
@@ -191,7 +191,7 @@ function DateMaskInput({
         placeholder={placeholder ?? "DD/MM/YYYY"}
         className={cn(
           "w-full min-h-[44px] px-0 pl-9 py-3 bg-transparent border-b border-[#171717]/20 rounded-none",
-          "text-base text-[#171717] placeholder:text-[#6e6e6e]",
+          "text-base text-[#171717] placeholder:text-[#5c5c5c]",
           "focus:outline-none focus:border-[#171717]",
           "transition-colors tracking-widest",
           error && "border-[#b91c1c]",
@@ -203,7 +203,7 @@ function DateMaskInput({
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="absolute left-1 p-1.5 text-[#6e6e6e] hover:text-[#171717] transition-colors"
+            className="absolute left-1 p-1.5 text-[#5c5c5c] hover:text-[#171717] transition-colors"
           >
             <Calendar className="w-4 h-4" />
           </button>
@@ -271,7 +271,7 @@ function CityInput({
         placeholder="תל אביב"
         className={cn(
           "w-full min-h-[44px] px-0 py-3 bg-transparent border-b border-[#171717]/20 rounded-none",
-          "text-base text-[#171717] placeholder:text-[#6e6e6e]",
+          "text-base text-[#171717] placeholder:text-[#5c5c5c]",
           "focus:outline-none focus:border-[#171717]",
           "transition-colors",
           error && "border-[#b91c1c]",
@@ -337,7 +337,7 @@ function StreetInput({
         placeholder="שם הרחוב"
         className={cn(
           "w-full min-h-[44px] px-0 py-3 bg-transparent border-b border-[#171717]/20 rounded-none",
-          "text-base text-[#171717] placeholder:text-[#6e6e6e]",
+          "text-base text-[#171717] placeholder:text-[#5c5c5c]",
           "focus:outline-none focus:border-[#171717]",
           "transition-colors",
           className
@@ -374,7 +374,7 @@ const STEPS = [
 
 function StepBar({ current }: { current: number }) {
   return (
-    <div className="mb-12" aria-label={`שלב ${current + 1} מתוך ${STEPS.length}`}>
+    <div aria-label={`שלב ${current + 1} מתוך ${STEPS.length}`}>
       <div className="flex items-baseline justify-between gap-3">
         {STEPS.map((step, i) => {
           const done = i < current;
@@ -391,7 +391,7 @@ function StepBar({ current }: { current: number }) {
               <span
                 className={cn(
                   "text-[12px] tabular-nums tracking-[0.14em] transition-colors",
-                  active || done ? "text-[#171717]" : "text-[#6e6e6e]"
+                  active || done ? "text-[#171717]" : "text-[#5c5c5c]"
                 )}
                 style={{ fontFamily: MONO }}
                 dir="ltr"
@@ -401,7 +401,7 @@ function StepBar({ current }: { current: number }) {
               <span
                 className={cn(
                   "text-[13px] font-medium hidden sm:inline transition-colors",
-                  active ? "text-[#171717]" : done ? "text-[#5c5c5c]" : "text-[#6e6e6e]"
+                  active ? "text-[#171717]" : done ? "text-[#5c5c5c]" : "text-[#5c5c5c]"
                 )}
               >
                 {step.label}
@@ -427,7 +427,7 @@ function GlassInput({
   return (
     <div className="space-y-1.5 group">
       <label className="text-[13px] font-medium text-[#5c5c5c] group-focus-within:text-[#171717] transition-colors">
-        {label}{required && <span className="text-[#6e6e6e] mr-1">*</span>}
+        {label}{required && <span className="text-[#5c5c5c] mr-1">*</span>}
       </label>
       {children}
       {error && (
@@ -445,7 +445,7 @@ function TechInput({ className, ...props }: React.InputHTMLAttributes<HTMLInputE
       {...props}
       className={cn(
         "w-full min-h-[44px] px-0 py-3 bg-transparent border-b border-[#171717]/20 rounded-none",
-        "text-base text-[#171717] placeholder:text-[#6e6e6e]",
+        "text-base text-[#171717] placeholder:text-[#5c5c5c]",
         "focus:outline-none focus:border-[#171717]",
         "transition-colors",
         className
@@ -594,7 +594,7 @@ function SignatureCanvas({ value, onChange }: { value: string; onChange: (v: str
         {!hasDrawn && (
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none gap-2">
             <Pen className="w-6 h-6 text-[#171717]/25" />
-            <p className="text-[#6e6e6e] text-sm tracking-widest" style={{ fontFamily: MONO }}>חתמו כאן</p>
+            <p className="text-[#5c5c5c] text-sm tracking-widest" style={{ fontFamily: MONO }}>חתמו כאן</p>
           </div>
         )}
       </div>
@@ -618,7 +618,7 @@ function CopyBtn({ text }: { text: string }) {
   return (
     <button
       onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
-      className="p-1.5 rounded-[4px] hover:bg-[#f5f5f5] transition-colors text-[#6e6e6e] hover:text-[#171717]"
+      className="p-1.5 rounded-[4px] hover:bg-[#f5f5f5] transition-colors text-[#5c5c5c] hover:text-[#171717]"
       aria-label="העתקה"
     >
       {copied
@@ -632,7 +632,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
   if (!value) return null;
   return (
     <div className="flex items-center justify-between py-2.5 border-b border-[#171717]/10 last:border-0 group">
-      <span className="text-[12px] text-[#6e6e6e]">{label}</span>
+      <span className="text-[12px] text-[#5c5c5c]">{label}</span>
       <div className="flex items-center gap-1">
         <span className="text-sm font-medium text-[#171717] tabular-nums" style={{ fontFamily: MONO }}>{value}</span>
         <CopyBtn text={value} />
@@ -759,21 +759,22 @@ export default function Onboarding() {
 
   return (
     <>
-      <div className="min-h-screen bg-white" dir="rtl">
+      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
         <Header />
         <div ref={topRef} />
 
-        <main className="max-w-2xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-24">
+        {/* SEELD Bento: warm paper tiles on ink gutters. The form stays in one calm tile. */}
+        <main className="px-2 pt-2 space-y-2">
 
           {/* ── Hero — one idea: open your file ── */}
-          <div className="mb-10">
+          <div className="bento-panel"><div className="max-w-2xl mx-auto px-5 sm:px-8 py-10 sm:py-12 relative z-10">
             <div className="border-t border-[#171717]/20 pt-5 mb-6 flex items-baseline justify-between gap-4">
-              <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
+              <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
                 <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
                 <span>←</span>
                 <span className="text-[#171717]/70 font-medium">פתיחת תיק</span>
               </nav>
-              <span className="text-[11px] tracking-[0.14em] font-medium" style={{ color: BRONZE, fontFamily: MONO }} dir="ltr">
+              <span className="text-[11px] tracking-[0.14em] font-medium" style={{ color: "#5c5c5c", fontFamily: MONO }} dir="ltr">
                 SECURE
               </span>
             </div>
@@ -787,7 +788,7 @@ export default function Onboarding() {
             <p className="text-base text-[#5c5c5c] leading-[1.9] mb-2">
               ארבעה שלבים, בלי אותיות קטנות. בסוף שמוליק מתקשר.
             </p>
-            <p className="text-[13px] text-[#6e6e6e]">
+            <p className="text-[13px] text-[#5c5c5c]">
               שמוליק מרציאנו · סוכן ביטוח ופנסיה מוסמך
             </p>
             {!submitted && step === 0 && (
@@ -800,10 +801,17 @@ export default function Onboarding() {
                 <StatusPill>היועץ מחובר עכשיו · שאלו לפני שממלאים</StatusPill>
               </button>
             )}
-          </div>
+          </div></div>
 
-          {/* ── Step Bar ── */}
-          {step < 4 && !submitted && <StepBar current={step} />}
+          {/* ── Step Bar — its own slim tile above the form ── */}
+          {step < 4 && !submitted && (
+            <div className="bento-panel"><div className="max-w-2xl mx-auto px-5 sm:px-8 py-5 relative z-10">
+              <StepBar current={step} />
+            </div></div>
+          )}
+
+          {/* ── The one calm form tile ── */}
+          <div className="bento-panel"><div className="max-w-2xl mx-auto px-5 sm:px-8 py-10 sm:py-14 relative z-10">
 
           {/* ── Thank You Screen ── */}
           {submitted ? (
@@ -836,7 +844,7 @@ export default function Onboarding() {
                   ["אימייל", form.email],
                 ].map(([label, val]) => (
                   <div key={label} className="flex items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10">
-                    <span className="text-[13px] text-[#6e6e6e] shrink-0">{label}</span>
+                    <span className="text-[13px] text-[#5c5c5c] shrink-0">{label}</span>
                     <span className="text-base text-[#171717] tabular-nums text-left" style={{ fontFamily: MONO }}>{val}</span>
                   </div>
                 ))}
@@ -1052,7 +1060,7 @@ export default function Onboarding() {
 
                   {/* Employment Status - multi select */}
                   <GlassInput label="מעמד תעסוקתי">
-                    <p className="text-[12px] text-[#6e6e6e] mb-2">ניתן לסמן יותר מאחד</p>
+                    <p className="text-[12px] text-[#5c5c5c] mb-2">ניתן לסמן יותר מאחד</p>
                     <div className="flex flex-wrap gap-2">
                       {["שכיר/ה", "עצמאי/ת", "שכיר/ה בעל/ת שליטה"].map(opt => {
                         const selected = form.employmentStatus.includes(opt);
@@ -1146,7 +1154,7 @@ export default function Onboarding() {
               <div className="space-y-4">
                 <div className="border-t border-[#171717]/15 pt-4 mb-4">
                   <p className="text-sm text-[#5c5c5c] leading-[1.8]">
-                    <Lock className="w-3.5 h-3.5 inline ml-1.5 text-[#6e6e6e]" />
+                    <Lock className="w-3.5 h-3.5 inline ml-1.5 text-[#5c5c5c]" />
                     לחץ על כל כרטיסייה לאישור ההרשאה. ניתן לצפות בנספח המלא לפני האישור.
                   </p>
                 </div>
@@ -1286,7 +1294,7 @@ export default function Onboarding() {
                     <img src={form.signature} alt="חתימה"
                       className="max-h-20 rounded-[6px] bg-white"
                       style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }} />
-                    <p className="text-[12px] text-[#6e6e6e] mt-2 tabular-nums" style={{ fontFamily: MONO }}>
+                    <p className="text-[12px] text-[#5c5c5c] mt-2 tabular-nums" style={{ fontFamily: MONO }}>
                       {new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" })}
                     </p>
                   </TechSection>
@@ -1322,6 +1330,7 @@ export default function Onboarding() {
               </button>
             </div>
           )}
+          </div></div>
 
         </main>
       </div>
@@ -1336,7 +1345,7 @@ function TechSection({
   return (
     <div className="border-t border-[#171717]/15 pt-5 space-y-5">
       <div className="flex items-center gap-2.5 mb-1">
-        <span className="text-[#6e6e6e]">{icon}</span>
+        <span className="text-[#5c5c5c]">{icon}</span>
         <h2 className="text-[15px] text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>{title}</h2>
       </div>
       {children}

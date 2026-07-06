@@ -9,8 +9,11 @@ import {
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
-import { BONE, PINE, BRONZE, SERIF } from "@/lib/brand";
+import { SERIF, MONO } from "@/lib/brand";
 import { StatusPill } from "@/components/brand/Live";
+
+// SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
+const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
 
 const faqCategories = [
   {
@@ -60,51 +63,67 @@ const faqCategories = [
 ];
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors";
+  "rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#5c5c5c] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors";
 
 const FAQ = () => {
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      {/* HERO — one idea: find your answer */}
-      <section style={{ backgroundColor: BONE }}>
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
-          <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
-              <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-              <span>←</span>
-              <span className="text-[#171717]/70 font-medium">שאלות נפוצות</span>
-            </nav>
-            <span className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
-              שאלות ותשובות
+      {/* HERO — bento row: find your answer + the tiny orange tag tile */}
+      <section className="px-2 pt-2">
+        <div className="grid gap-2 lg:grid-cols-[1fr_auto] items-stretch">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10 w-full">
+            <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
+              <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
+                <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
+                <span>←</span>
+                <span className="text-[#171717]/70 font-medium">שאלות נפוצות</span>
+              </nav>
+              <span className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium" style={{ color: PAPER_MUTED }}>
+                שאלות ותשובות
+              </span>
+            </div>
+
+            <h1
+              className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
+              style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
+            >
+              שאלות נפוצות
+            </h1>
+            <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9] mb-8">
+              שאלות שכולם שואלים. תשובות שפחות שומעים.
+            </p>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
+              className="block transition-transform hover:-translate-y-[1px]"
+              aria-label="פתיחת שיחה עם יועץ SEELD"
+            >
+              <StatusPill>היועץ מחובר עכשיו · שאלו במקום לגלול</StatusPill>
+            </button>
+          </div></div>
+
+          {/* Tiny orange tag tile beside the title */}
+          <div className="bento-panel-orange flex lg:flex-col items-center justify-center gap-3 px-6 py-4 lg:py-8 lg:w-[120px]">
+            <span
+              className="text-[11px] tracking-[0.24em] font-semibold text-[#171717]/80 lg:[writing-mode:vertical-rl]"
+              style={{ fontFamily: MONO }}
+              dir="ltr"
+            >
+              Q&amp;A
+            </span>
+            <span className="text-[14px] font-semibold text-[#171717] whitespace-nowrap lg:[writing-mode:vertical-rl]">
+              תשובות ישירות
             </span>
           </div>
-
-          <h1
-            className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
-            style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
-          >
-            שאלות נפוצות
-          </h1>
-          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9] mb-8">
-            שאלות שכולם שואלים. תשובות שפחות שומעים.
-          </p>
-          <button
-            type="button"
-            onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-            className="block transition-transform hover:-translate-y-[1px]"
-            aria-label="פתיחת שיחה עם יועץ SEELD"
-          >
-            <StatusPill>היועץ מחובר עכשיו · שאלו במקום לגלול</StatusPill>
-          </button>
         </div>
       </section>
 
       <main>
-        {/* QUESTIONS — categories as underline tabs */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        {/* QUESTIONS — categories as underline tabs, all in one paper tile */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
               <Tabs defaultValue="insurance" dir="rtl">
                 <TabsList className="flex w-full justify-start gap-8 sm:gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none overflow-x-auto">
@@ -128,7 +147,7 @@ const FAQ = () => {
                             <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
                               {item.q}
                             </AccordionTrigger>
-                            <AccordionContent className="text-[#5c5c5c] leading-[1.85] pb-6 text-[14px] max-w-2xl">
+                            <AccordionContent className="text-[#4d4d4d] leading-[1.85] pb-6 text-[14px] max-w-2xl">
                               {item.a}
                             </AccordionContent>
                           </AccordionItem>
@@ -139,12 +158,12 @@ const FAQ = () => {
                 ))}
               </Tabs>
             </ScrollReveal>
-          </div>
+          </div></div>
         </section>
 
-        {/* CTA — the one next action */}
-        <section style={{ backgroundColor: PINE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        {/* CTA — the one next action (ink tile) */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <div className="border-t border-white/20 pt-6">
               <h2
                 className="text-[#fafafa] leading-tight mb-3"
@@ -152,7 +171,7 @@ const FAQ = () => {
               >
                 לא מצאתם תשובה?
               </h2>
-              <p className="text-[#fafafa]/45 text-base leading-[1.85] mb-8 max-w-xl">
+              <p className="text-[#fafafa]/55 text-base leading-[1.85] mb-8 max-w-xl">
                 שאלה על התיק שלכם היא לא שאלה נפוצה. בשביל זה יש בן אדם.
               </p>
               <Link
@@ -162,7 +181,7 @@ const FAQ = () => {
                 צרו קשר
               </Link>
             </div>
-          </div>
+          </div></div>
         </section>
       </main>
 
