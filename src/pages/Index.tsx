@@ -274,7 +274,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
       <main>
@@ -282,8 +282,8 @@ const Index = () => {
         <HeroSection />
 
         {/* 01 — PORTFOLIO REVIEW */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="01"
@@ -343,12 +343,12 @@ const Index = () => {
                 </div>
               </form>
             </ScrollReveal>
-          </div>
+          </div></div>
         </section>
 
         {/* 02 — THE METHOD */}
-        <section style={{ backgroundColor: BONE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="02"
@@ -372,12 +372,12 @@ const Index = () => {
                 </ScrollReveal>
               ))}
             </div>
-          </div>
+          </div></div>
         </section>
 
         {/* 03 — PRACTICE AREAS */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="03"
@@ -428,12 +428,12 @@ const Index = () => {
                 </div>
               </TabsContent>
             </Tabs>
-          </div>
+          </div></div>
         </section>
 
         {/* 04 — THE PLATFORM (quiet dark) */}
-        <section style={{ backgroundColor: PINE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <div className="border-t border-white/20 pt-6 mb-12 sm:mb-16">
                 <div className="flex items-baseline gap-6 sm:gap-10">
@@ -490,12 +490,12 @@ const Index = () => {
             <p className="mt-10 text-[12px] text-[#fafafa]/30">
               היועץ האנושי ישן בלילה. ה‑AI לא.
             </p>
-          </div>
+          </div></div>
         </section>
 
         {/* NUMBERS */}
-        <section style={{ backgroundColor: BONE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
               <div className="flex items-end justify-between gap-6 mb-2">
                 <span className="text-[11px] tracking-[0.14em] text-[#6e6e6e]" style={{ fontFamily: "'Geist Mono', ui-monospace, monospace" }}>
@@ -526,12 +526,12 @@ const Index = () => {
                 אנחנו לא צועקים. המספרים עושים את זה בשבילנו.
               </p>
             </ScrollReveal>
-          </div>
+          </div></div>
         </section>
 
         {/* 05 — THE HOUSE */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead index="05" title="הבית" />
             </ScrollReveal>
@@ -583,12 +583,12 @@ const Index = () => {
                 </div>
               </ScrollReveal>
             </div>
-          </div>
+          </div></div>
         </section>
 
         {/* 06 — PROCESS */}
-        <section style={{ backgroundColor: BONE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="06"
@@ -617,21 +617,21 @@ const Index = () => {
                 </ScrollReveal>
               ))}
             </div>
-          </div>
+          </div></div>
         </section>
 
         {/* PARTNERS */}
-        <ScrollReveal>
+        <section className="px-2 pt-2"><div className="bento-panel"><ScrollReveal>
           <CompanyLogos
             variant="marquee"
             title="עובדים מול כל השחקניות המובילות"
             subtitle="12 חברות ביטוח ו-6 בתי השקעות בישראל. גישה מקצועית בזמן אמת. השוואה שקופה. המלצה מבוססת."
           />
-        </ScrollReveal>
+        </ScrollReveal></div></section>
 
         {/* 07 — FAQ */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="07"
@@ -668,12 +668,12 @@ const Index = () => {
                 </Link>
               </div>
             </div>
-          </div>
+          </div></div>
         </section>
 
         {/* 08 — CONTACT */}
-        <section style={{ backgroundColor: BONE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="08"
@@ -775,7 +775,7 @@ const Index = () => {
                 </div>
               </ScrollReveal>
             </div>
-          </div>
+          </div></div>
         </section>
       </main>
 
