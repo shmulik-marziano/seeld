@@ -5,6 +5,7 @@ import {
   CHIP_ORANGE, CHIP_GREEN, CHIP_YELLOW,
 } from "@/lib/brand";
 import { CountUp, LiveDot } from "@/components/brand/Live";
+import { UmbrellaFigure } from "@/components/brand/Figures";
 
 // SEELD Bento: warm paper panels on ink gutters. Snap motion (STYLESEED.md).
 const PAPER_MUTED = "#5c5c5c"; // AA on the warm paper
@@ -145,9 +146,10 @@ const HeroSection = () => {
             </button>
             <Link
               to="/about"
-              className="bento-panel-orange flex items-center justify-center py-4 px-3 text-[13px] font-semibold text-[#171717] tracking-[0.06em] hover:-translate-y-[1px] transition-transform"
+              className="bento-panel-orange relative flex items-center justify-center py-4 px-3 text-[13px] font-semibold text-[#171717] tracking-[0.06em] hover:-translate-y-[1px] transition-transform"
             >
-              הכירו את הבית ←
+              <UmbrellaFigure className="absolute -left-3 -bottom-4 w-16 h-16 opacity-70 rotate-12" />
+              <span className="relative z-10">הכירו את הבית ←</span>
             </Link>
           </div>
         </div>

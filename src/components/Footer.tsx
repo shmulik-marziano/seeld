@@ -91,9 +91,9 @@ const Footer = () => {
   };
 
   return (
-    <footer dir="rtl">
-      {/* Contact band */}
-      <section style={{ backgroundColor: TINT }} className="border-t border-[#ebebeb]">
+    <footer dir="rtl" className="px-2 pb-2 pt-2 space-y-2" style={{ backgroundColor: "#171717" }}>
+      {/* Contact band — paper tile */}
+      <section className="bento-panel">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-14 lg:gap-24 items-start">
             {/* Form */}
@@ -206,7 +206,7 @@ const Footer = () => {
       </section>
 
       {/* Main footer */}
-      <div style={{ backgroundColor: PINE }} className="text-[#fafafa]">
+      <div className="bento-panel-ink text-[#fafafa]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
           {/* Wordmark + regulatory line */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-10 mb-10 border-b border-white/10">

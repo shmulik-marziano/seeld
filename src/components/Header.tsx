@@ -101,27 +101,28 @@ const Header = () => {
 
   return (
     <header
-      className={cn(
-        "sticky top-0 z-50 transition-colors duration-200 border-b",
-        isScrolled
-          ? "bg-white/85 dark:bg-gray-950/90 backdrop-blur-md border-[#ebebeb] dark:border-white/10"
-          : "bg-[#fafafa] dark:bg-gray-950 border-transparent"
-      )}
+      className="sticky top-0 z-50 px-2 pt-2 pb-2"
+      style={{ backgroundColor: "#171717" }}
     >
       {/* Keep focused elements clear of the sticky header (WCAG 2.4.11) */}
-      <style>{"html{scroll-padding-top:84px}"}</style>
+      <style>{"html{scroll-padding-top:96px}"}</style>
 
       {/* Skip link: first focusable element, visually hidden until focused */}
       <a
         href="#main"
         onClick={handleSkipToMain}
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:right-2 focus:z-[60] focus:bg-[#171717] focus:text-[#fafafa] focus:px-4 focus:py-2.5 focus:text-[13.5px] focus:font-medium focus:rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:right-3 focus:z-[60] focus:bg-[#e9e3d6] focus:text-[#171717] focus:px-4 focus:py-2.5 focus:text-[13.5px] focus:font-medium focus:rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
       >
         דלג לתוכן
       </a>
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-8">
-        <div className="flex items-center justify-between h-[68px]">
+      {/* The toolbar tile — a floating paper panel on the ink gutter */}
+      <div
+        className={cn("bento-panel transition-shadow duration-200", isScrolled && "shadow-[0_6px_20px_-8px_rgba(0,0,0,0.5)]")}
+        style={{ borderRadius: 16 }}
+      >
+        <div className="relative z-10 px-4 sm:px-6">
+        <div className="flex items-center justify-between h-[64px]">
           {/* Logo */}
           <SeeIDLogo size="md" className="flex-shrink-0" />
 
@@ -166,6 +167,7 @@ const Header = () => {
               <Menu className="h-5 w-5" strokeWidth={1.5} />
             </button>
           </div>
+        </div>
         </div>
       </div>
 
