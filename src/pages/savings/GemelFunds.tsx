@@ -10,11 +10,12 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
-import { BONE, PINE, BRONZE, SERIF, MONO } from "@/lib/brand";
+import { SERIF, MONO } from "@/lib/brand";
 import { StatusPill } from "@/components/brand/Live";
+import { SproutFigure } from "@/components/brand/Figures";
 
 const tabTriggerClass =
-  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
+  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#5c5c5c] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <h2
@@ -84,21 +85,22 @@ const GemelFunds = () => {
   ];
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
       {/* ══════ HERO ══════ */}
-      <section style={{ backgroundColor: BONE }}>
-        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
+      <section className="px-2 pt-2">
+        <div className="bento-panel">
+        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
+            <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <Link to="/savings" className="hover:text-[#171717] transition-colors">חיסכון ופנסיה</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">קופות גמל</span>
             </nav>
-            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
+            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium" style={{ color: "#5c5c5c" }}>
               חיסכון ופנסיה
             </span>
           </div>
@@ -129,12 +131,15 @@ const GemelFunds = () => {
             <StatusPill>יש שאלה על קופות גמל? היועץ מחובר</StatusPill>
           </button>
         </div>
+        {/* Bento play: line figure peeking from the tile corner */}
+        <SproutFigure className="absolute -left-3 -bottom-4 w-16 h-16 opacity-70 rotate-6 pointer-events-none" />
+        </div>
       </section>
 
       <main>
         {/* ══════ THE KNOWLEDGE — one tabbed section ══════ */}
-        <section className="bg-white">
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
             <Tabs defaultValue="guide" dir="rtl">
               <TabsList className="flex w-full justify-start gap-8 sm:gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none overflow-x-auto scrollbar-hide">
                 <TabsTrigger value="guide" className={tabTriggerClass}>
@@ -156,7 +161,7 @@ const GemelFunds = () => {
                       <div className="border-t border-[#171717]/15 pt-5 mb-6">
                         <SectionTitle>{article.title}</SectionTitle>
                       </div>
-                      <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base">
+                      <div className="space-y-4 text-[#4d4d4d] leading-[1.9] text-base">
                         {article.paragraphs.map((p, pIdx) => (
                           <p key={pIdx}>{p}</p>
                         ))}
@@ -170,7 +175,7 @@ const GemelFunds = () => {
               <TabsContent value="types" className="mt-0">
                 <div className="mb-10">
                   <SectionTitle>יתרונות קופת גמל</SectionTitle>
-                  <p className="text-[#6e6e6e] mt-2 text-base leading-relaxed max-w-xl">
+                  <p className="text-[#5c5c5c] mt-2 text-base leading-relaxed max-w-xl">
                     חיסכון חכם עם גמישות מקסימלית והטבות מס
                   </p>
                 </div>
@@ -180,7 +185,7 @@ const GemelFunds = () => {
                       <span
                         className="text-[11px] tabular-nums tracking-[0.2em] block mb-4"
                         dir="ltr"
-                        style={{ color: BRONZE, fontFamily: MONO }}
+                        style={{ color: "#5c5c5c", fontFamily: MONO }}
                       >
                         {String(idx + 1).padStart(2, '0')}
                       </span>
@@ -191,7 +196,7 @@ const GemelFunds = () => {
                       <ul className="space-y-2">
                         {benefit.items.map((item, itemIdx) => (
                           <li key={itemIdx} className="text-[#5c5c5c] text-[14px] leading-relaxed flex gap-2.5">
-                            <span style={{ color: BRONZE }}>—</span>
+                            <span style={{ color: "#5c5c5c" }}>—</span>
                             {item}
                           </li>
                         ))}
@@ -223,15 +228,19 @@ const GemelFunds = () => {
                 </div>
               </TabsContent>
             </Tabs>
+          </div></div>
+        </section>
+
+        {/* ══════ COMPANIES — own tile ══════ */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel">
+            <CompanyLogos variant="grid" />
           </div>
         </section>
 
-        {/* ══════ COMPANIES ══════ */}
-        <CompanyLogos variant="grid" />
-
-        {/* ══════ ANALYSIS FORM ══════ */}
-        <section id="analysis-form" className="scroll-mt-24" style={{ backgroundColor: PINE }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        {/* ══════ ANALYSIS FORM — ink tile ══════ */}
+        <section id="analysis-form" className="px-2 pt-2 scroll-mt-24">
+          <div className="bento-panel-ink"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <div className="border-t border-white/20 pt-5 mb-10 text-center sm:text-right">
               <h2
                 className="text-[#fafafa] leading-tight mb-3"
@@ -250,7 +259,7 @@ const GemelFunds = () => {
                 description="הזינו את פרטי הקופות הקיימות וקבלו המלצות לשיפור"
               />
             </div>
-          </div>
+          </div></div>
         </section>
       </main>
 

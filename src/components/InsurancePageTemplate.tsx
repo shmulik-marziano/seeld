@@ -12,9 +12,14 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
 import type { LucideIcon } from 'lucide-react';
-import { INK, BONE, PINE, BRONZE, SERIF, CHIP_ORANGE } from '@/lib/brand';
+import { SERIF, CHIP_ORANGE } from '@/lib/brand';
 import { StatusPill } from '@/components/brand/Live';
 import { DrawUnderline } from '@/components/brand/Strokes';
+import { ShieldFigure, UmbrellaFigure } from '@/components/brand/Figures';
+
+// SEELD Bento: warm paper tiles on ink gutters. Captions on paper stay at
+// #5c5c5c minimum (AA); #6e6e6e is reserved for white surfaces only.
+const PAPER_MUTED = '#5c5c5c';
 
 /* ─── Types (unchanged API — all 16 insurance pages pass these) ─── */
 interface KeyPoint {
@@ -101,7 +106,7 @@ const SectionTitle = ({ children }: { children: ReactNode }) => (
 );
 
 const tabTriggerClass =
-  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
+  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#5c5c5c] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
 
 export default function InsurancePageTemplate(props: InsurancePageProps) {
   const {
@@ -135,23 +140,31 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
   const defaultTab = hasArticles ? 'guide' : hasCoverage ? 'coverage' : 'faq';
   const tabCount = [hasArticles, hasCoverage, hasFaq].filter(Boolean).length;
 
+  // Bento play: the page's line figure peeks from the hero tile corner —
+  // shield for the protection covers, umbrella for everything else.
+  const protectionPage = ['סיעוד', 'אובדן כושר', 'מחלות קשות', 'תאונות', 'נכות'].some(
+    (k) => breadcrumbLabel.includes(k) || insuranceType.includes(k),
+  );
+  const HeroFigure = protectionPage ? ShieldFigure : UmbrellaFigure;
+
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: '#171717' }}>
       <Header />
 
-      {/* ══════ HERO ══════ */}
-      <section style={{ backgroundColor: BONE }}>
-        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
+      {/* ══════ HERO — paper tile ══════ */}
+      <section className="px-2 pt-2">
+        <div className="bento-panel">
+        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10">
           {/* Rule + breadcrumb */}
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
+            <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <Link to="/insurances" className="hover:text-[#171717] transition-colors">ביטוח</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">{breadcrumbLabel}</span>
             </nav>
-            <span className="hidden sm:flex items-center gap-2 text-[11px] tracking-[0.2em] font-medium" style={{ color: BRONZE }}>
+            <span className="hidden sm:flex items-center gap-2 text-[11px] tracking-[0.2em] font-medium" style={{ color: PAPER_MUTED }}>
               <HeroIcon className="w-3.5 h-3.5" strokeWidth={1.5} />
               {heroCategory}
             </span>
@@ -194,13 +207,15 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
             <StatusPill>יש שאלה על {breadcrumbLabel}? היועץ מחובר</StatusPill>
           </button>
         </div>
+        <HeroFigure className="absolute -left-3 -bottom-4 w-16 h-16 opacity-70 rotate-12 pointer-events-none" />
+        </div>
       </section>
 
       <main>
-        {/* ══════ KEY POINTS ══════ */}
+        {/* ══════ KEY POINTS — paper tile ══════ */}
         {keyPoints && keyPoints.length > 0 && (
-          <section className="bg-white">
-            <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+          <section className="px-2 pt-2">
+            <div className="bento-panel"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10">
                 {keyPoints.map((kp, idx) => (
                   <div key={idx} className="border-t border-[#171717]/15 pt-5">
@@ -211,7 +226,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                   </div>
                 ))}
               </div>
-            </div>
+            </div></div>
           </section>
         )}
 
@@ -220,8 +235,8 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
 
         {/* ══════ THE KNOWLEDGE — one tabbed section instead of three stacked ones ══════ */}
         {tabCount > 0 && (
-          <section id="coverage" className="bg-white">
-            <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+          <section id="coverage" className="px-2 pt-2">
+            <div className="bento-panel"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
               <Tabs defaultValue={defaultTab} dir="rtl">
                 <TabsList className="flex w-full justify-start gap-8 sm:gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none overflow-x-auto scrollbar-hide">
                   {hasArticles && (
@@ -250,7 +265,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                           <div className="border-t border-[#171717]/15 pt-5 mb-6">
                             <SectionTitle>{article.title}</SectionTitle>
                           </div>
-                          <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base">
+                          <div className="space-y-4 text-[#4d4d4d] leading-[1.9] text-base">
                             {article.paragraphs.map((p, pIdx) => (
                               <p key={pIdx}>{p}</p>
                             ))}
@@ -267,7 +282,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                     <div className="mb-10">
                       <SectionTitle>{coverageTitle}</SectionTitle>
                       {coverageSubtitle && (
-                        <p className="text-[#6e6e6e] mt-2 text-base leading-relaxed max-w-xl">{coverageSubtitle}</p>
+                        <p className="text-[#5c5c5c] mt-2 text-base leading-relaxed max-w-xl">{coverageSubtitle}</p>
                       )}
                     </div>
 
@@ -283,17 +298,17 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                                 if (typeof item === 'string') {
                                   return (
                                     <li key={itemIdx} className="text-[#5c5c5c] text-[14px] leading-relaxed flex gap-2.5">
-                                      <span style={{ color: BRONZE }}>—</span>
+                                      <span style={{ color: PAPER_MUTED }}>—</span>
                                       {item}
                                     </li>
                                   );
                                 }
                                 return (
                                   <li key={itemIdx} className="text-[#5c5c5c] text-[14px] leading-relaxed flex gap-2.5">
-                                    <span style={{ color: BRONZE }}>—</span>
+                                    <span style={{ color: PAPER_MUTED }}>—</span>
                                     <span>
                                       <span className="font-medium text-[#171717]">{item.title}</span>
-                                      {item.description && <span className="text-[#6e6e6e]"> · {item.description}</span>}
+                                      {item.description && <span className="text-[#5c5c5c]"> · {item.description}</span>}
                                     </span>
                                   </li>
                                 );
@@ -308,7 +323,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                       <div className="space-y-12">
                         {coverageCategories.map((cat, catIdx) => (
                           <div key={catIdx}>
-                            <div className="text-[11px] tracking-[0.22em] font-medium mb-5" style={{ color: BRONZE }}>
+                            <div className="text-[11px] tracking-[0.22em] font-medium mb-5" style={{ color: PAPER_MUTED }}>
                               {cat.category}
                             </div>
                             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
@@ -350,16 +365,20 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                   </TabsContent>
                 )}
               </Tabs>
-            </div>
+            </div></div>
           </section>
         )}
 
-        {/* ══════ COMPANIES ══════ */}
-        <CompanyLogos variant="grid" />
+        {/* ══════ COMPANIES — own tile ══════ */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel">
+            <CompanyLogos variant="grid" />
+          </div>
+        </section>
 
-        {/* ══════ CTA + FORM ══════ */}
-        <section id={enrollmentFormId} className="scroll-mt-24" style={{ backgroundColor: PINE }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        {/* ══════ CTA + FORM — ink tile ══════ */}
+        <section id={enrollmentFormId} className="px-2 pt-2 scroll-mt-24">
+          <div className="bento-panel-ink"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <div className="border-t border-white/20 pt-5 mb-10 text-center sm:text-right">
               <h2
                 className="text-[#fafafa] leading-tight mb-3"
@@ -378,7 +397,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                 description={enrollmentDescription}
               />
             </div>
-          </div>
+          </div></div>
         </section>
       </main>
 
