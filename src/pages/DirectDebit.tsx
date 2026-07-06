@@ -3,7 +3,7 @@ import { Loader2, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
-import { BONE, BRONZE, SERIF, MONO } from "@/lib/brand";
+import { SERIF, MONO } from "@/lib/brand";
 import { LiveDot, StatusPill } from "@/components/brand/Live";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
@@ -70,14 +70,14 @@ function validateIsraeliId(id: string): { valid: boolean; message?: string } {
 
 // ─── Styled pieces (SEELD Mono) ─────────────────────────────────────────────
 const inputClass =
-  "w-full px-0 py-3 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#6e6e6e] text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
+  "w-full px-0 py-3 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#5c5c5c] text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
 
 function FieldLabel({ label, required, error }: { label: string; required?: boolean; error?: string }) {
   return (
     <div className="flex items-baseline justify-between mb-1 gap-4">
       <label className="text-[13px] text-[#5c5c5c] font-medium">
         {label}
-        {required && <span className="text-[#6e6e6e] mr-1">*</span>}
+        {required && <span className="text-[#5c5c5c] mr-1">*</span>}
       </label>
       {error && <span className="text-[#b91c1c] text-[12px] font-medium">{error}</span>}
     </div>
@@ -91,7 +91,7 @@ function StyledInput({ className, ...props }: React.InputHTMLAttributes<HTMLInpu
 function SectionHead({ index, title }: { index: string; title: string }) {
   return (
     <div className="border-t border-[#171717]/20 pt-5 mb-7 flex items-baseline gap-6">
-      <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: BRONZE, fontFamily: MONO }}>
+      <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: "#5c5c5c", fontFamily: MONO }}>
         {index}
       </span>
       <h2 className="text-lg text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
@@ -291,9 +291,10 @@ export default function DirectDebit() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
+      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
         <Header />
-        <main className="max-w-xl mx-auto px-5 sm:px-8 pt-16 pb-24">
+        <main className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
           <div className="border-t border-[#171717]/20 pt-6">
             <div className="flex items-center gap-2.5 mb-4">
               <LiveDot size={7} />
@@ -321,7 +322,7 @@ export default function DirectDebit() {
               ["יום חיוב", `${form.debitDay} בחודש`],
             ].map(([label, val]) => (
               <div key={label} className="flex items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10">
-                <span className="text-[13px] text-[#6e6e6e] shrink-0">{label}</span>
+                <span className="text-[13px] text-[#5c5c5c] shrink-0">{label}</span>
                 <span className="text-base text-[#171717] tabular-nums text-left" style={{ fontFamily: MONO }}>{val}</span>
               </div>
             ))}
@@ -335,24 +336,27 @@ export default function DirectDebit() {
               <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
             </Link>
           </div>
+          </div></div>
         </main>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      <main className="max-w-2xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-24">
+      {/* SEELD Bento: hero tile + the form in one calm paper tile */}
+      <main className="px-2 pt-2 space-y-2">
         {/* HERO — one idea: fill the debit order */}
+        <div className="bento-panel"><div className="max-w-2xl mx-auto px-5 sm:px-8 py-10 sm:py-12 relative z-10">
         <div className="border-t border-[#171717]/20 pt-5 mb-6 flex items-baseline justify-between gap-4">
-          <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
+          <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
             <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
             <span>←</span>
             <span className="text-[#171717]/70 font-medium">הוראת קבע</span>
           </nav>
-          <span className="text-[11px] tracking-[0.14em] font-medium" style={{ color: BRONZE, fontFamily: MONO }} dir="ltr">
+          <span className="text-[11px] tracking-[0.14em] font-medium" style={{ color: "#5c5c5c", fontFamily: MONO }} dir="ltr">
             SECURE · PCI DSS
           </span>
         </div>
@@ -366,19 +370,22 @@ export default function DirectDebit() {
         <p className="text-base text-[#5c5c5c] leading-[1.9] mb-2">
           שתי דקות למלא. אפס אותיות קטנות.
         </p>
-        <p className="text-[13px] text-[#6e6e6e] mb-8">
+        <p className="text-[13px] text-[#5c5c5c] mb-8">
           שמוליק מרציאנו · סוכן ביטוח ופנסיה מוסמך
         </p>
 
         <button
           type="button"
           onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-          className="mb-12 block transition-transform hover:-translate-y-[1px]"
+          className="block transition-transform hover:-translate-y-[1px]"
           aria-label="פתיחת שיחה עם יועץ SEELD"
         >
           <StatusPill>היועץ מחובר עכשיו · שאלו לפני שממלאים</StatusPill>
         </button>
+        </div></div>
 
+        {/* The one calm form tile */}
+        <div className="bento-panel"><div className="max-w-2xl mx-auto px-5 sm:px-8 py-10 sm:py-14 relative z-10">
         <div className="space-y-12">
           {/* 01: Account Owner */}
           <section>
@@ -424,7 +431,7 @@ export default function DirectDebit() {
                 <FieldLabel label="חפשו ובחרו בנק" required error={touched.bankCode ? errors.bankCode : undefined} />
                 <div className="shrink-0">
                   {banksLoading ? (
-                    <span className="text-[11px] text-[#6e6e6e] flex items-center gap-1.5">
+                    <span className="text-[11px] text-[#5c5c5c] flex items-center gap-1.5">
                       <Loader2 className="w-3 h-3 animate-spin" />
                       טוען נתונים מבנק ישראל
                     </span>
@@ -436,7 +443,7 @@ export default function DirectDebit() {
                   ) : (
                     <button
                       onClick={refreshBanks}
-                      className="text-[11px] text-[#6e6e6e] flex items-center gap-1 hover:text-[#171717] transition-colors"
+                      className="text-[11px] text-[#5c5c5c] flex items-center gap-1 hover:text-[#171717] transition-colors"
                     >
                       <RefreshCw className="w-3 h-3" />
                       נתוני גיבוי. לחצו לרענון
@@ -468,7 +475,7 @@ export default function DirectDebit() {
                   >
                     <span className="text-[14px] font-medium">{bank.name}</span>
                     <span
-                      className={cn("text-[11px] tabular-nums shrink-0", form.bankCode === bank.code ? "text-[#fafafa]/60" : "text-[#6e6e6e]")}
+                      className={cn("text-[11px] tabular-nums shrink-0", form.bankCode === bank.code ? "text-[#fafafa]/60" : "text-[#5c5c5c]")}
                       style={{ fontFamily: MONO }}
                       dir="ltr"
                     >
@@ -477,7 +484,7 @@ export default function DirectDebit() {
                   </button>
                 ))}
                 {filteredBanks.length === 0 && (
-                  <p className="text-center text-[#6e6e6e] text-sm py-5">לא נמצא בנק בשם הזה. נסו שם קצר יותר או מספר בנק.</p>
+                  <p className="text-center text-[#5c5c5c] text-sm py-5">לא נמצא בנק בשם הזה. נסו שם קצר יותר או מספר בנק.</p>
                 )}
               </div>
             </div>
@@ -505,7 +512,7 @@ export default function DirectDebit() {
                   {/* Known branches */}
                   {branchOptions.length > 0 && (
                     <div className="mt-4">
-                      <p className="text-[12px] text-[#6e6e6e] mb-2.5">סניפים מוכרים, לבחירה מהירה:</p>
+                      <p className="text-[12px] text-[#5c5c5c] mb-2.5">סניפים מוכרים, לבחירה מהירה:</p>
                       <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
                         {branchOptions.map(([num, name]) => (
                           <button
@@ -521,7 +528,7 @@ export default function DirectDebit() {
                             style={form.branchNumber === num ? undefined : { boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
                           >
                             <span className="tabular-nums" style={{ fontFamily: MONO }} dir="ltr">{num}</span>
-                            <span className={form.branchNumber === num ? "text-[#fafafa]/60" : "text-[#6e6e6e]"}>·</span>
+                            <span className={form.branchNumber === num ? "text-[#fafafa]/60" : "text-[#5c5c5c]"}>·</span>
                             <span>{name}</span>
                           </button>
                         ))}
@@ -550,7 +557,7 @@ export default function DirectDebit() {
                     style={{ fontFamily: MONO, letterSpacing: "0.12em", textAlign: "right" }}
                     className={touched.accountNumber && errors.accountNumber ? "border-[#b91c1c]" : ""}
                   />
-                  <p className="mt-2 text-[11px] text-[#6e6e6e] tabular-nums" style={{ fontFamily: MONO }} dir="ltr">
+                  <p className="mt-2 text-[11px] text-[#5c5c5c] tabular-nums" style={{ fontFamily: MONO }} dir="ltr">
                     {accDigits.length > 0 ? `${accDigits.length}/12` : "5–12"}
                   </p>
                 </div>
@@ -584,7 +591,7 @@ export default function DirectDebit() {
                     >
                       {opt.value}
                     </span>
-                    <span className={cn("text-[11px] mt-1.5", form.debitDay === opt.value ? "text-[#fafafa]/60" : "text-[#6e6e6e]")}>
+                    <span className={cn("text-[11px] mt-1.5", form.debitDay === opt.value ? "text-[#fafafa]/60" : "text-[#5c5c5c]")}>
                       {opt.note}
                     </span>
                   </button>
@@ -603,10 +610,11 @@ export default function DirectDebit() {
           >
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שליחת הוראת קבע"}
           </button>
-          <p className="mt-5 text-[12px] text-[#6e6e6e]">
+          <p className="mt-5 text-[12px] text-[#5c5c5c]">
             מאובטח ומוצפן · תקן PCI DSS
           </p>
         </div>
+        </div></div>
       </main>
     </div>
   );
