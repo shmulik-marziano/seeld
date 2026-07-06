@@ -7,10 +7,11 @@ import SavingsCalculator from "@/components/SavingsCalculator";
 import GoalCalculator from "@/components/GoalCalculator";
 import CompareCalculator from "@/components/CompareCalculator";
 import { Link } from "react-router-dom";
-import { BONE, PINE, BRONZE, SERIF } from "@/lib/brand";
+import { LiveDot } from "@/components/brand/Live";
+import { SERIF, MONO } from "@/lib/brand";
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-sm sm:text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+  "rounded-none bg-transparent px-0 pb-4 text-sm sm:text-base font-medium text-[#5c5c5c] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const tabHeadClass = "border-t border-[#171717]/20 pt-5 mb-8 text-right";
 
@@ -31,20 +32,20 @@ const Calculators = () => {
   ];
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      {/* Hero */}
-      <section style={{ backgroundColor: BONE }}>
-        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
+      {/* Hero tile */}
+      <section className="px-2 pt-2">
+        <div className="bento-panel"><div className="max-w-5xl mx-auto px-5 sm:px-8 pt-10 sm:pt-14 pb-10 sm:pb-14 relative z-10">
           {/* Rule + breadcrumb */}
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
+            <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">מחשבונים</span>
             </nav>
-            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
+            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium text-[#5c5c5c]">
               כלים פיננסיים
             </span>
           </div>
@@ -55,16 +56,29 @@ const Calculators = () => {
           >
             מחשבונים פיננסיים
           </h1>
-          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9]">
+          <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9]">
             משכנתא, פנסיה, חיסכון והשוואת מסלולים. חופשי, ללא רישום.
           </p>
-        </div>
+        </div></div>
       </section>
 
       <main>
-        {/* Calculator Tabs */}
-        <section className="bg-white">
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+        {/* Slim mono ticker tile (the play) */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel flex items-center px-5 py-4" dir="ltr">
+            <span
+              className="relative z-10 text-[13px] sm:text-[15px] font-semibold tracking-[0.28em] text-[#171717] inline-flex items-center gap-3"
+              style={{ fontFamily: MONO }}
+            >
+              <LiveDot size={7} />
+              NO SIGNUP · FREE
+            </span>
+          </div>
+        </section>
+
+        {/* Calculator tabs — one paper tile, each tab panel inside it */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
             <Tabs defaultValue="mortgage" dir="rtl">
               <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none overflow-x-auto scrollbar-hide">
                 <TabsTrigger value="mortgage" className={tabTriggerClass}>
@@ -93,7 +107,7 @@ const Calculators = () => {
                     >
                       מחשבון משכנתא
                     </h2>
-                    <p className="text-[#5c5c5c] text-[14px] leading-[1.85]">חשבו החזר חודשי ועלות כוללת של המשכנתא</p>
+                    <p className="text-[#4d4d4d] text-[14px] leading-[1.85]">חשבו החזר חודשי ועלות כוללת של המשכנתא</p>
                   </div>
                   <MortgageCalculator />
                 </div>
@@ -108,7 +122,7 @@ const Calculators = () => {
                     >
                       מחשבון פנסיה
                     </h2>
-                    <p className="text-[#5c5c5c] text-[14px] leading-[1.85]">חשבו כמה תקבלו בפנסיה לפי ההפקדות הנוכחיות</p>
+                    <p className="text-[#4d4d4d] text-[14px] leading-[1.85]">חשבו כמה תקבלו בפנסיה לפי ההפקדות הנוכחיות</p>
                   </div>
                   <PensionCalculator />
                 </div>
@@ -123,7 +137,7 @@ const Calculators = () => {
                     >
                       מחשבון חיסכון
                     </h2>
-                    <p className="text-[#5c5c5c] text-[14px] leading-[1.85]">חשבו כמה תצברו עם ריבית דריבית</p>
+                    <p className="text-[#4d4d4d] text-[14px] leading-[1.85]">חשבו כמה תצברו עם ריבית דריבית</p>
                   </div>
                   <SavingsCalculator />
                 </div>
@@ -138,7 +152,7 @@ const Calculators = () => {
                     >
                       מחשבון יעד כלכלי
                     </h2>
-                    <p className="text-[#5c5c5c] text-[14px] leading-[1.85]">כמה להפקיד כדי להגיע ליעד הפנסיוני שלכם?</p>
+                    <p className="text-[#4d4d4d] text-[14px] leading-[1.85]">כמה להפקיד כדי להגיע ליעד הפנסיוני שלכם?</p>
                   </div>
                   <GoalCalculator />
                 </div>
@@ -153,20 +167,20 @@ const Calculators = () => {
                     >
                       השוואת מסלולי השקעה
                     </h2>
-                    <p className="text-[#5c5c5c] text-[14px] leading-[1.85]">ראו איך הכסף שלכם גדל בכל מסלול</p>
+                    <p className="text-[#4d4d4d] text-[14px] leading-[1.85]">ראו איך הכסף שלכם גדל בכל מסלול</p>
                   </div>
                   <CompareCalculator />
                 </div>
               </TabsContent>
             </Tabs>
-          </div>
+          </div></div>
         </section>
 
-        {/* Coming Soon */}
-        <section style={{ backgroundColor: BONE }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+        {/* Coming Soon tile */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
             <div className="border-t border-[#171717]/20 pt-5 mb-10">
-              <div className="text-[11px] tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
+              <div className="text-[11px] tracking-[0.22em] font-medium mb-3 text-[#5c5c5c]">
                 בקרוב
               </div>
               <h2
@@ -184,20 +198,20 @@ const Calculators = () => {
                 >
                   <div className="min-w-0">
                     <h3 className="text-base font-medium text-[#171717] mb-1">{calc.title}</h3>
-                    <p className="text-[13px] text-[#6e6e6e] leading-relaxed">{calc.description}</p>
+                    <p className="text-[13px] text-[#5c5c5c] leading-relaxed">{calc.description}</p>
                   </div>
-                  <span className="text-[11px] tracking-[0.22em] font-medium shrink-0" style={{ color: BRONZE }}>
+                  <span className="text-[11px] tracking-[0.22em] font-medium shrink-0 text-[#5c5c5c]">
                     בקרוב
                   </span>
                 </div>
               ))}
             </div>
-          </div>
+          </div></div>
         </section>
 
-        {/* CTA */}
-        <section style={{ backgroundColor: PINE }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        {/* CTA — closing ink tile */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel-ink"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <div className="border-t border-white/20 pt-5">
               <h2
                 className="text-[#fafafa] leading-tight mb-3"
@@ -215,7 +229,7 @@ const Calculators = () => {
                 קביעת פגישת ייעוץ
               </Link>
             </div>
-          </div>
+          </div></div>
         </section>
       </main>
 

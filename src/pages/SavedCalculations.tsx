@@ -7,7 +7,7 @@ import { Trash2, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate } from "react-router-dom";
 import AuthModal from "@/components/AuthModal";
-import { BONE, BRONZE, SERIF, MONO } from "@/lib/brand";
+import { SERIF, MONO } from "@/lib/brand";
 
 type SavedCalculation = {
   id: string;
@@ -117,32 +117,36 @@ const SavedCalculations = () => {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: BONE }}>
+      <div className="min-h-screen pb-2" style={{ backgroundColor: "#171717" }}>
         <Header />
-        <div className="flex flex-col items-center justify-center gap-4 h-[60vh]" dir="rtl">
-          <Loader2 className="w-6 h-6 animate-spin text-[#171717]" />
-          <p className="text-[14px] text-[#6e6e6e]">טוען את החישובים השמורים...</p>
+        <div className="px-2 pt-2">
+          <div className="bento-panel">
+            <div className="relative z-10 flex flex-col items-center justify-center gap-4 h-[60vh]" dir="rtl">
+              <Loader2 className="w-6 h-6 animate-spin text-[#171717]" />
+              <p className="text-[14px] text-[#5c5c5c]">טוען את החישובים השמורים...</p>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      {/* Hero — hairline rule + breadcrumb, compact */}
-      <section style={{ backgroundColor: BONE }}>
-        <div className="max-w-4xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-10 sm:pb-14">
+      {/* Hero tile — hairline rule + breadcrumb, compact */}
+      <section className="px-2 pt-2">
+        <div className="bento-panel"><div className="max-w-4xl mx-auto px-5 sm:px-8 pt-10 sm:pt-14 pb-10 sm:pb-14 relative z-10">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#6e6e6e]">
+            <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <Link to="/calculators" className="hover:text-[#171717] transition-colors">מחשבונים</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">החישובים שלי</span>
             </nav>
-            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
+            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium text-[#5c5c5c]">
               אזור אישי
             </span>
           </div>
@@ -155,7 +159,7 @@ const SavedCalculations = () => {
               >
                 החישובים שלי
               </h1>
-              <p className="text-base sm:text-[17px] text-[#5c5c5c] leading-[1.9]">
+              <p className="text-base sm:text-[17px] text-[#4d4d4d] leading-[1.9]">
                 כל החישובים ששמרתם מהמחשבונים, במקום אחד.
               </p>
             </div>
@@ -167,117 +171,125 @@ const SavedCalculations = () => {
               למחשבונים
             </button>
           </div>
-        </div>
+        </div></div>
       </section>
 
-      <main className="bg-white">
-        <div className="max-w-4xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-          {!user ? (
-            /* Not signed in */
-            <div className="border-t border-[#171717]/15 pt-6">
-              <h2 className="text-xl text-[#171717] mb-3" style={{ fontFamily: SERIF, fontWeight: 600 }}>
-                נדרשת התחברות
-              </h2>
-              <p className="text-base text-[#5c5c5c] leading-[1.85] max-w-xl mb-7">
-                החישובים השמורים מקושרים לחשבון שלכם. התחברו כדי לראות אותם,
-                או פתחו מחשבון וחשבו בלי רישום.
-              </p>
-              <div className="flex flex-wrap items-center gap-6">
-                <button
-                  type="button"
-                  onClick={() => setShowAuthModal(true)}
-                  className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#262626] transition-colors min-h-[52px]"
-                >
-                  התחברות
-                </button>
+      <main>
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-4xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
+            {!user ? (
+              /* Not signed in */
+              <div className="border-t border-[#171717]/15 pt-6">
+                <h2 className="text-xl text-[#171717] mb-3" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                  נדרשת התחברות
+                </h2>
+                <p className="text-base text-[#4d4d4d] leading-[1.85] max-w-xl mb-7">
+                  החישובים השמורים מקושרים לחשבון שלכם. התחברו כדי לראות אותם,
+                  או פתחו מחשבון וחשבו בלי רישום.
+                </p>
+                <div className="flex flex-wrap items-center gap-6">
+                  <button
+                    type="button"
+                    onClick={() => setShowAuthModal(true)}
+                    className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#262626] transition-colors min-h-[52px]"
+                  >
+                    התחברות
+                  </button>
+                  <Link
+                    to="/calculators"
+                    className="group inline-flex items-center gap-2 text-base font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+                  >
+                    למחשבונים בלי רישום
+                    <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
+                  </Link>
+                </div>
+              </div>
+            ) : calculations.length === 0 ? (
+              /* Empty state — small orange tile CTA to /calculators (the play) */
+              <div className="border-t border-[#171717]/15 pt-6">
+                <h2 className="text-xl text-[#171717] mb-3" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                  אין חישובים שמורים עדיין
+                </h2>
+                <p className="text-base text-[#4d4d4d] leading-[1.85] max-w-xl mb-7">
+                  פתחו מחשבון משכנתא, פנסיה או חיסכון, ושמרו את התוצאה.
+                  היא תופיע כאן ותוכלו לחזור אליה מכל מכשיר.
+                </p>
                 <Link
                   to="/calculators"
-                  className="group inline-flex items-center gap-2 text-base font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+                  className="bento-panel-orange inline-flex flex-col items-start gap-1.5 px-7 py-5 hover:-translate-y-[1px] transition-transform"
                 >
-                  למחשבונים בלי רישום
-                  <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
+                  <span className="text-[15px] font-semibold text-[#171717]">פתיחת מחשבון ←</span>
+                  <span
+                    className="text-[10px] tracking-[0.2em] font-semibold text-[#171717]/80"
+                    style={{ fontFamily: MONO }}
+                    dir="ltr"
+                  >
+                    NO SIGNUP · FREE
+                  </span>
                 </Link>
               </div>
-            </div>
-          ) : calculations.length === 0 ? (
-            /* Empty state — directs to the first action */
-            <div className="border-t border-[#171717]/15 pt-6">
-              <h2 className="text-xl text-[#171717] mb-3" style={{ fontFamily: SERIF, fontWeight: 600 }}>
-                אין חישובים שמורים עדיין
-              </h2>
-              <p className="text-base text-[#5c5c5c] leading-[1.85] max-w-xl mb-7">
-                פתחו מחשבון משכנתא, פנסיה או חיסכון, ושמרו את התוצאה.
-                היא תופיע כאן ותוכלו לחזור אליה מכל מכשיר.
-              </p>
-              <button
-                type="button"
-                onClick={() => navigate("/calculators")}
-                className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#262626] transition-colors min-h-[52px]"
-              >
-                פתיחת מחשבון
-              </button>
-            </div>
-          ) : (
-            /* Saved calculations — ruled list */
-            <div className="border-t border-[#171717]/15">
-              {calculations.map((calc) => (
-                <div key={calc.id} className="py-6 border-b border-[#171717]/10 hover:border-[#171717]/40 transition-colors">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <div className="text-[11px] tracking-[0.16em] font-medium mb-1.5" style={{ fontFamily: MONO, color: BRONZE }}>
-                        {calculatorTypeLabels[calc.calculator_type] || calc.calculator_type}
+            ) : (
+              /* Saved calculations — ruled list */
+              <div className="border-t border-[#171717]/15">
+                {calculations.map((calc) => (
+                  <div key={calc.id} className="py-6 border-b border-[#171717]/10 hover:bg-[#171717]/[0.04] hover:border-[#171717]/40 transition-colors">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <div className="text-[11px] tracking-[0.16em] font-medium mb-1.5 text-[#5c5c5c]" style={{ fontFamily: MONO }}>
+                          {calculatorTypeLabels[calc.calculator_type] || calc.calculator_type}
+                        </div>
+                        <h3 className="text-lg text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                          {calc.title}
+                        </h3>
                       </div>
-                      <h3 className="text-lg text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
-                        {calc.title}
-                      </h3>
+                      <button
+                        type="button"
+                        onClick={() => deleteCalculation(calc.id)}
+                        aria-label="מחיקת החישוב"
+                        className="shrink-0 p-2 text-[#5c5c5c] hover:text-[#b91c1c] transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" strokeWidth={1.5} />
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => deleteCalculation(calc.id)}
-                      aria-label="מחיקת החישוב"
-                      className="shrink-0 p-2 text-[#6e6e6e] hover:text-[#b91c1c] transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" strokeWidth={1.5} />
-                    </button>
+
+                    <p className="mt-2 text-base text-[#171717]">
+                      {formatResultSummary(calc)}
+                    </p>
+
+                    {calc.tips && calc.tips.length > 0 && (
+                      <ul className="mt-3 space-y-1.5">
+                        {calc.tips.slice(0, 2).map((tip, i) => (
+                          <li key={i} className="flex gap-2.5 text-[14px] text-[#4d4d4d] leading-[1.7]">
+                            <span className="text-[#5c5c5c]">—</span>
+                            {tip}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    <p className="mt-3 text-[12px] text-[#5c5c5c] tabular-nums">
+                      {formatDate(calc.created_at)}
+                    </p>
                   </div>
+                ))}
+              </div>
+            )}
 
-                  <p className="mt-2 text-base text-[#171717]">
-                    {formatResultSummary(calc)}
-                  </p>
-
-                  {calc.tips && calc.tips.length > 0 && (
-                    <ul className="mt-3 space-y-1.5">
-                      {calc.tips.slice(0, 2).map((tip, i) => (
-                        <li key={i} className="flex gap-2.5 text-[14px] text-[#5c5c5c] leading-[1.7]">
-                          <span style={{ color: BRONZE }}>—</span>
-                          {tip}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-                  <p className="mt-3 text-[12px] text-[#6e6e6e] tabular-nums">
-                    {formatDate(calc.created_at)}
-                  </p>
-                </div>
-              ))}
+            {/* Next action */}
+            <div className="mt-14 border-t border-[#171717]/15 pt-6 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4">
+              <p className="text-[14px] text-[#4d4d4d] leading-[1.8] max-w-md">
+                רוצים לעבור על התוצאות עם יועץ? נבחן את המספרים מול התיק האמיתי שלכם, ללא עלות.
+              </p>
+              <Link
+                to="/contact"
+                className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors shrink-0"
+              >
+                לשיחה עם יועץ
+                <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
+              </Link>
             </div>
-          )}
-
-          {/* Next action */}
-          <div className="mt-14 border-t border-[#171717]/15 pt-6 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4">
-            <p className="text-[14px] text-[#5c5c5c] leading-[1.8] max-w-md">
-              רוצים לעבור על התוצאות עם יועץ? נבחן את המספרים מול התיק האמיתי שלכם, ללא עלות.
-            </p>
-            <Link
-              to="/contact"
-              className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors shrink-0"
-            >
-              לשיחה עם יועץ
-              <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
-            </Link>
-          </div>
-        </div>
+          </div></div>
+        </section>
       </main>
 
       <Footer />
