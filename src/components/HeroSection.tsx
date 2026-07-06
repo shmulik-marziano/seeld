@@ -75,7 +75,7 @@ const HeroSection = () => {
           {...anim(0.05)}
           className="mt-4 text-base sm:text-lg text-[#4d4d4d] leading-[1.75] max-w-xl"
         >
-          בית פיננסים פרטי לביטוח, פנסיה והשקעות. יועץ אחד שמכיר אותך,
+          בית פיננסים וביטוח. יועץ אחד שמכיר אותך,
           השוואה מול 12 חברות, ותמונה מלאה של התיק בתוך 48 שעות.
         </motion.p>
         <motion.div {...anim(0.1)} className="mt-6 flex flex-wrap gap-3">

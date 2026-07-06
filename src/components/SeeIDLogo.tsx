@@ -12,103 +12,95 @@ export const brandDots = [
 ] as const;
 
 const SERIF = "'Heebo', sans-serif";
-const BRONZE = "#6e6e6e";
 
 // The intro plays once per full page load — client-side navigation stays quiet.
 let introPlayed = false;
 
 /**
- * The living period — the brand's full stop doubles as a status node.
- * One green ping on first load ("the house is monitoring"), and a quick
- * double-blink to green when you hover the logo. A literal wink.
+ * App-tile mark: an ink squircle holding the droplet in white line-work,
+ * with the live green node — the one point of color the brand carries.
+ * One quiet ping on first load; a double-blink wink on hover.
  */
-const LivingPeriod = ({ fontSizeClass }: { fontSizeClass: string }) => {
-  const reduced = useReducedMotion();
-  const playIntro = !reduced && !introPlayed;
-
-  return (
-    <span className={`relative inline-block ${fontSizeClass}`} aria-hidden="true">
-      <span className="seeld-wink transition-colors duration-150 group-hover:text-[#15803d]" style={{ color: BRONZE }}>
-        .
-      </span>
-      {/* one quiet ping on load */}
-      {playIntro && (
-        <motion.span
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            backgroundColor: CHIP_GREEN,
-            width: "0.16em",
-            height: "0.16em",
-            left: "50%",
-            bottom: "0.09em",
-            translateX: "-50%",
-          }}
-          initial={{ opacity: 0.55, scale: 1 }}
-          animate={{ opacity: 0, scale: 3.4 }}
-          transition={{ duration: 0.9, delay: 0.7, ease: "easeOut" }}
-          onAnimationComplete={() => { introPlayed = true; }}
-        />
-      )}
-    </span>
-  );
-};
-
 const SeeIDLogo = ({ className = "", size = "md" }: { className?: string; size?: "sm" | "md" | "lg" }) => {
   const reduced = useReducedMotion();
   const sizes = {
-    sm: { icon: 22, text: "text-base", sub: "text-[8px]", gap: "gap-2" },
-    md: { icon: 28, text: "text-xl", sub: "text-[9px]", gap: "gap-2.5" },
-    lg: { icon: 38, text: "text-3xl", sub: "text-[11px]", gap: "gap-3" },
+    sm: { tile: 26, glyph: 17, text: "text-[13px]", track: "0.26em", sub: "text-[7.5px]", gap: "gap-2.5" },
+    md: { tile: 36, glyph: 23, text: "text-[16px]", track: "0.3em", sub: "text-[9px]", gap: "gap-3" },
+    lg: { tile: 48, glyph: 30, text: "text-[22px]", track: "0.34em", sub: "text-[11px]", gap: "gap-3.5" },
   };
   const s = sizes[size];
-  const drawIn = !reduced && !introPlayed;
+  const playIntro = !reduced && !introPlayed;
 
   return (
     <Link to="/" className={`inline-flex items-center ${s.gap} group ${className}`}>
-      {/* The mark: a droplet plotted like an engineering path, ending in its node */}
-      <svg
-        width={s.icon}
-        height={s.icon}
-        viewBox="0 0 32 32"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="flex-shrink-0 text-[#171717] dark:text-white transition-transform duration-500 group-hover:-translate-y-[1px]"
+      {/* The tile — an app icon, not an illustration */}
+      <motion.div
+        className="relative flex-shrink-0 flex items-center justify-center bg-[#171717] transition-transform duration-300 group-hover:-translate-y-[1.5px]"
+        style={{
+          width: s.tile,
+          height: s.tile,
+          borderRadius: s.tile * 0.28,
+          boxShadow: "0 1px 2px rgba(0,0,0,.18), 0 4px 10px -4px rgba(0,0,0,.22)",
+        }}
+        initial={playIntro ? { opacity: 0, scale: 0.85 } : undefined}
+        animate={playIntro ? { opacity: 1, scale: 1 } : undefined}
+        transition={{ duration: 0.25, ease: "easeOut" }}
         aria-hidden="true"
       >
-        <motion.path
-          d="M16 4C16 4 7.5 14.2 7.5 21C7.5 25.7 11.3 29.5 16 29.5C20.7 29.5 24.5 25.7 24.5 21C24.5 14.2 16 4 16 4Z"
-          stroke="currentColor"
-          strokeWidth="1.6"
-          strokeLinejoin="round"
-          initial={drawIn ? { pathLength: 0 } : undefined}
-          animate={drawIn ? { pathLength: 1 } : undefined}
-          transition={{ duration: 0.55, ease: "easeOut" }}
-        />
-        {/* the core node — turns live on hover, with the period */}
-        <motion.circle
-          cx="16"
-          cy="21"
-          r="2.4"
-          fill={BRONZE}
-          className="transition-[fill] duration-150 group-hover:fill-[#15803d]"
-          initial={drawIn ? { opacity: 0 } : undefined}
-          animate={drawIn ? { opacity: 1 } : undefined}
-          transition={{ duration: 0.15, delay: 0.5 }}
-        />
-      </svg>
+        <svg width={s.glyph} height={s.glyph} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <motion.path
+            d="M16 4C16 4 7.5 14.2 7.5 21C7.5 25.7 11.3 29.5 16 29.5C20.7 29.5 24.5 25.7 24.5 21C24.5 14.2 16 4 16 4Z"
+            stroke="#fafafa"
+            strokeWidth="2"
+            strokeLinejoin="round"
+            initial={playIntro ? { pathLength: 0 } : undefined}
+            animate={playIntro ? { pathLength: 1 } : undefined}
+            transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
+          />
+          {/* the live node — the brand's one point of color */}
+          <motion.circle
+            className="seeld-wink"
+            cx="16"
+            cy="21"
+            r="3"
+            fill={CHIP_GREEN}
+            initial={playIntro ? { opacity: 0 } : undefined}
+            animate={playIntro ? { opacity: 1 } : undefined}
+            transition={{ duration: 0.15, delay: 0.6 }}
+            onAnimationComplete={() => { introPlayed = true; }}
+          />
+        </svg>
+        {/* one quiet ping on load */}
+        {playIntro && (
+          <motion.span
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              backgroundColor: CHIP_GREEN,
+              width: s.tile * 0.16,
+              height: s.tile * 0.16,
+              left: "50%",
+              top: "62%",
+              translateX: "-50%",
+              translateY: "-50%",
+            }}
+            initial={{ opacity: 0.5, scale: 1 }}
+            animate={{ opacity: 0, scale: 3 }}
+            transition={{ duration: 0.8, delay: 0.75, ease: "easeOut" }}
+          />
+        )}
+      </motion.div>
 
-      {/* Wordmark with the living full stop — the last word */}
+      {/* Spaced-caps wordmark + tagline */}
       <div className="flex flex-col leading-none">
         <span
           dir="ltr"
           className={`${s.text} text-[#171717] dark:text-white`}
-          style={{ fontFamily: SERIF, fontWeight: 600, letterSpacing: "0.01em" }}
+          style={{ fontFamily: SERIF, fontWeight: 600, letterSpacing: s.track, marginInlineEnd: `-${s.track}` }}
         >
           SEELD
-          <LivingPeriod fontSizeClass={s.text} />
         </span>
-        <span className={`${s.sub} mt-1 text-[#6e6e6e] dark:text-white/60 font-medium tracking-[0.22em]`}>
-          בית פיננסים פרטי
+        <span className={`${s.sub} mt-1.5 text-[#6e6e6e] dark:text-white/60 font-medium tracking-[0.2em]`}>
+          בית פיננסים וביטוח
         </span>
       </div>
     </Link>

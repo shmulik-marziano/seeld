@@ -211,10 +211,10 @@ const Footer = () => {
           {/* Wordmark + regulatory line */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-10 mb-10 border-b border-white/10">
             <div>
-              <div dir="ltr" className="text-right" style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "2rem" }}>
-                SEELD<span style={{ color: BRONZE }}>.</span>
+              <div dir="ltr" className="text-right" style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "1.7rem", letterSpacing: "0.3em", marginInlineEnd: "-0.3em" }}>
+                SEELD
               </div>
-              <div className="text-[11px] tracking-[0.22em] text-white/60 mt-1.5">בית פיננסים פרטי</div>
+              <div className="text-[11px] tracking-[0.22em] text-white/60 mt-1.5">בית פיננסים וביטוח</div>
               <div className="mt-3">
                 <LiveTag dark>SEELD · EST. 2018 · רעננה · ירושלים</LiveTag>
               </div>
