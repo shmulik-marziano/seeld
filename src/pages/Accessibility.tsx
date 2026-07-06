@@ -1,8 +1,11 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { MONO, FAINT } from "@/lib/brand";
+import { MONO } from "@/lib/brand";
 
 const HEEBO = "'Heebo', sans-serif";
+
+// SEELD Bento: one quiet warm paper tile — documents stay serious (STYLESEED.md)
+const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
 
 const LegalSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <section className="border-t border-[#171717]/15 pt-5">
@@ -15,14 +18,17 @@ const LegalSection = ({ title, children }: { title: string; children: React.Reac
 
 const Accessibility = () => {
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
+      {/* One quiet paper tile — the whole document */}
+      <div className="px-2 pt-2">
+        <div className="bento-panel"><div className="relative z-10">
       {/* Hero */}
-      <section className="bg-white">
+      <section>
         <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-4">
           <div className="border-t border-[#171717]/20 pt-4">
-            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: FAINT }}>
+            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
               LEGAL · עודכן מרץ 2026
             </span>
           </div>
@@ -36,7 +42,7 @@ const Accessibility = () => {
       </section>
 
       <main className="max-w-3xl mx-auto px-5 sm:px-8 py-10 pb-16 sm:pb-24">
-        <div className="space-y-10 text-base leading-[1.9] text-[#171717]/60 [&_strong]:text-[#171717] [&_strong]:font-medium">
+        <div className="space-y-10 text-base leading-[1.9] text-[#4d4d4d] [&_strong]:text-[#171717] [&_strong]:font-medium">
           <LegalSection title="מחויבות לנגישות">
             <p>
               SEELD פיננסים וביטוח מחויבת להנגשת האתר והשירותים הדיגיטליים שלה לכלל האוכלוסייה,
@@ -70,11 +76,11 @@ const Accessibility = () => {
             </p>
             <div>
               <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-                <span className="text-[13px] text-[#6e6e6e]">רכז נגישות</span>
+                <span className="text-[13px] text-[#5c5c5c]">רכז נגישות</span>
                 <span className="text-[#171717]">שמוליק מרציאנו</span>
               </div>
               <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-                <span className="text-[13px] text-[#6e6e6e]">טלפון</span>
+                <span className="text-[13px] text-[#5c5c5c]">טלפון</span>
                 <a
                   href="tel:0523097444"
                   className="text-[#171717] tabular-nums border-b border-transparent hover:border-[#171717]/40 transition-colors"
@@ -84,7 +90,7 @@ const Accessibility = () => {
                 </a>
               </div>
               <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-                <span className="text-[13px] text-[#6e6e6e]">אימייל</span>
+                <span className="text-[13px] text-[#5c5c5c]">אימייל</span>
                 <a
                   href="mailto:info@seeld.co.il"
                   className="text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
@@ -111,6 +117,8 @@ const Accessibility = () => {
           </LegalSection>
         </div>
       </main>
+        </div></div>
+      </div>
 
       <Footer />
     </div>

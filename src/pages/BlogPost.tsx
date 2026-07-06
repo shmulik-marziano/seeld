@@ -5,9 +5,12 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 import { toast } from "sonner";
-import { MONO, FAINT, CARD_SHADOW } from "@/lib/brand";
+import { MONO, CARD_SHADOW } from "@/lib/brand";
 
 const HEEBO = "'Heebo', sans-serif";
+
+// SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
+const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
 
 interface BlogPostData {
   id: string;
@@ -283,14 +286,18 @@ const BlogPost = () => {
   })();
 
   const darkInputClass =
-    "w-full px-0 py-3.5 bg-transparent border-b border-white/25 text-[#fafafa] placeholder:text-[#fafafa]/40 text-base focus:outline-none focus:border-[#fafafa] transition-colors min-h-[44px] rounded-none";
+    "w-full px-0 py-3.5 bg-transparent border-b border-white/25 text-[#fafafa] placeholder:text-[#fafafa]/50 text-base focus:outline-none focus:border-[#fafafa] transition-colors min-h-[44px] rounded-none";
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white" dir="rtl">
+      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
         <Header />
-        <div className="flex justify-center py-32">
-          <Loader2 className="h-6 w-6 animate-spin text-[#171717]" />
+        <div className="px-2 pt-2">
+          <div className="bento-panel">
+            <div className="flex justify-center py-32 relative z-10">
+              <Loader2 className="h-6 w-6 animate-spin text-[#171717]" />
+            </div>
+          </div>
         </div>
         <Footer />
       </div>
@@ -299,29 +306,31 @@ const BlogPost = () => {
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-white" dir="rtl">
+      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
         <Header />
-        <div className="max-w-3xl mx-auto px-5 sm:px-8 py-32">
-          <div className="border-t border-[#171717]/20 pt-5">
-            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: FAINT }}>
-              404 · POST
-            </span>
-          </div>
-          <h1
-            className="mt-6 text-3xl text-[#171717]"
-            style={{ fontFamily: HEEBO, fontWeight: 600, letterSpacing: "-0.02em" }}
-          >
-            הפוסט לא נמצא
-          </h1>
-          <p className="mt-3 text-base text-[#171717]/60 leading-[1.8]">
-            ייתכן שהכתובת השתנתה או שהפוסט הוסר.
-          </p>
-          <Link
-            to="/blog"
-            className="mt-8 inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#262626] transition-colors min-h-[52px]"
-          >
-            חזרה לבלוג
-          </Link>
+        <div className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-3xl mx-auto px-5 sm:px-8 py-24 sm:py-32 relative z-10">
+            <div className="border-t border-[#171717]/20 pt-5">
+              <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
+                404 · POST
+              </span>
+            </div>
+            <h1
+              className="mt-6 text-3xl text-[#171717]"
+              style={{ fontFamily: HEEBO, fontWeight: 600, letterSpacing: "-0.02em" }}
+            >
+              הפוסט לא נמצא
+            </h1>
+            <p className="mt-3 text-base text-[#4d4d4d] leading-[1.8]">
+              ייתכן שהכתובת השתנתה או שהפוסט הוסר.
+            </p>
+            <Link
+              to="/blog"
+              className="mt-8 inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-black transition-colors min-h-[52px] rounded-lg"
+            >
+              חזרה לבלוג
+            </Link>
+          </div></div>
         </div>
         <Footer />
       </div>
@@ -329,106 +338,108 @@ const BlogPost = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      {/* Hero */}
-      <section className="bg-white">
-        <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-10 sm:pb-12">
-          <div className="border-t border-[#171717]/20 pt-4">
-            <Link
-              to="/blog"
-              className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#5c5c5c] hover:text-[#171717] transition-colors"
-            >
-              <ArrowRight className="w-3.5 h-3.5" />
-              חזרה לבלוג
-            </Link>
-          </div>
-
-          <div className="mt-10 sm:mt-12">
-            <div className="flex flex-wrap items-baseline gap-3 text-[12px] text-[#6e6e6e] mb-4">
-              {post.category && (
-                <>
-                  <span>{post.category}</span>
-                  <span aria-hidden="true">·</span>
-                </>
-              )}
-              <span>{formatDate(post.published_at)}</span>
-              {post.author && (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <span>מאת {post.author}</span>
-                </>
-              )}
+      {/* The reading tile — hero, cover and article in one paper panel */}
+      <section className="px-2 pt-2">
+        <div className="bento-panel"><div className="relative z-10">
+          <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-10 sm:pb-12">
+            <div className="border-t border-[#171717]/20 pt-4">
+              <Link
+                to="/blog"
+                className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#5c5c5c] hover:text-[#171717] transition-colors"
+              >
+                <ArrowRight className="w-3.5 h-3.5" />
+                חזרה לבלוג
+              </Link>
             </div>
 
-            <h1
-              className="text-[#171717] leading-[1.2]"
-              style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.8rem, 4vw, 2.8rem)", letterSpacing: "-0.025em" }}
-            >
-              {post.title}
-            </h1>
+            <div className="mt-10 sm:mt-12">
+              <div className="flex flex-wrap items-baseline gap-3 text-[12px] text-[#5c5c5c] mb-4">
+                {post.category && (
+                  <>
+                    <span>{post.category}</span>
+                    <span aria-hidden="true">·</span>
+                  </>
+                )}
+                <span>{formatDate(post.published_at)}</span>
+                {post.author && (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <span>מאת {post.author}</span>
+                  </>
+                )}
+              </div>
+
+              <h1
+                className="text-[#171717] leading-[1.2]"
+                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.8rem, 4vw, 2.8rem)", letterSpacing: "-0.025em" }}
+              >
+                {post.title}
+              </h1>
+            </div>
           </div>
-        </div>
+
+          {/* Cover Image */}
+          {post.cover_image_url && (
+            <div className="max-w-3xl mx-auto px-5 sm:px-8">
+              <div className="rounded-lg overflow-hidden" style={{ boxShadow: CARD_SHADOW }}>
+                <img
+                  src={post.cover_image_url}
+                  alt={post.title}
+                  className="w-full h-56 sm:h-72 lg:h-96 object-cover"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Content */}
+          <article className="max-w-3xl mx-auto px-5 sm:px-8 py-10 sm:py-16">
+            <div
+              className="prose prose-base sm:prose-lg max-w-none
+                prose-headings:text-[#171717] prose-headings:font-semibold
+                prose-p:text-[#4d4d4d] prose-p:leading-[1.9]
+                prose-li:text-[#4d4d4d]
+                prose-strong:text-[#171717] prose-strong:font-semibold
+                prose-a:text-[#171717] prose-a:no-underline hover:prose-a:underline"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
+
+            {/* Share */}
+            <div className="mt-14 border-t border-[#171717]/15 pt-6">
+              <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
+                SHARE
+              </span>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <button
+                  onClick={shareWhatsApp}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white text-[14px] font-medium text-[#171717] hover:bg-[#fafafa] transition-colors min-h-[44px]"
+                  style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
+                >
+                  <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor" aria-hidden="true">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                    <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 01-4.243-1.214l-.252-.157-2.625.78.78-2.625-.157-.252A8 8 0 1112 20z" />
+                  </svg>
+                  WhatsApp
+                </button>
+                <button
+                  onClick={copyLink}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white text-[14px] font-medium text-[#171717] hover:bg-[#fafafa] transition-colors min-h-[44px]"
+                  style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
+                >
+                  <Copy className="w-4 h-4" />
+                  העתק קישור
+                </button>
+              </div>
+            </div>
+          </article>
+        </div></div>
       </section>
 
-      {/* Cover Image */}
-      {post.cover_image_url && (
-        <div className="max-w-3xl mx-auto px-5 sm:px-8">
-          <div className="rounded-lg overflow-hidden" style={{ boxShadow: CARD_SHADOW }}>
-            <img
-              src={post.cover_image_url}
-              alt={post.title}
-              className="w-full h-56 sm:h-72 lg:h-96 object-cover"
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Content */}
-      <article className="max-w-3xl mx-auto px-5 sm:px-8 py-10 sm:py-16">
-        <div
-          className="prose prose-base sm:prose-lg max-w-none
-            prose-headings:text-[#171717] prose-headings:font-semibold
-            prose-p:text-[#171717]/70 prose-p:leading-[1.9]
-            prose-li:text-[#171717]/70
-            prose-strong:text-[#171717] prose-strong:font-semibold
-            prose-a:text-[#171717] prose-a:no-underline hover:prose-a:underline"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
-
-        {/* Share */}
-        <div className="mt-14 border-t border-[#171717]/15 pt-6">
-          <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: FAINT }}>
-            SHARE
-          </span>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <button
-              onClick={shareWhatsApp}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white text-[14px] font-medium text-[#171717] hover:bg-[#fafafa] transition-colors min-h-[44px]"
-              style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
-            >
-              <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor" aria-hidden="true">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 01-4.243-1.214l-.252-.157-2.625.78.78-2.625-.157-.252A8 8 0 1112 20z" />
-              </svg>
-              WhatsApp
-            </button>
-            <button
-              onClick={copyLink}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white text-[14px] font-medium text-[#171717] hover:bg-[#fafafa] transition-colors min-h-[44px]"
-              style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
-            >
-              <Copy className="w-4 h-4" />
-              העתק קישור
-            </button>
-          </div>
-        </div>
-      </article>
-
-      {/* Lead Capture — the one dark band */}
-      <section id="lead-form" ref={leadFormRef} style={{ backgroundColor: "#171717" }}>
-        <div className="max-w-3xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
+      {/* Lead Capture — the one ink tile */}
+      <section id="lead-form" ref={leadFormRef} className="px-2 pt-2">
+        <div className="bento-panel-ink"><div className="max-w-3xl mx-auto px-5 sm:px-8 py-16 sm:py-20 relative z-10">
           {leadSubmitted ? (
             <div className="border-t border-white/20 pt-6">
               <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: "rgba(250,250,250,.6)" }}>
@@ -502,13 +513,13 @@ const BlogPost = () => {
               </form>
             </div>
           )}
-        </div>
+        </div></div>
       </section>
 
-      {/* Related Posts — hairline rows */}
+      {/* Related Posts — hairline rows in a paper tile */}
       {related.length > 0 && (
-        <section style={{ backgroundColor: "#fafafa" }}>
-          <div className="max-w-3xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-3xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <div className="border-t border-[#171717]/20 pt-6 mb-8">
               <h2
                 className="text-[#171717] leading-tight"
@@ -529,7 +540,7 @@ const BlogPost = () => {
                       {r.title}
                     </h3>
                     {r.excerpt && (
-                      <p className="mt-1.5 text-[14px] text-[#5c5c5c] leading-[1.7] line-clamp-2">
+                      <p className="mt-1.5 text-[14px] text-[#4d4d4d] leading-[1.7] line-clamp-2">
                         {r.excerpt}
                       </p>
                     )}
@@ -540,7 +551,7 @@ const BlogPost = () => {
                 </Link>
               ))}
             </div>
-          </div>
+          </div></div>
         </section>
       )}
 

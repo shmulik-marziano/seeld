@@ -1,9 +1,12 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { MONO, FAINT } from '@/lib/brand';
+import { MONO } from '@/lib/brand';
 
 const HEEBO = "'Heebo', sans-serif";
+
+// SEELD Bento: one quiet warm paper tile — documents stay serious (STYLESEED.md)
+const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
 
 const LegalSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <section className="border-t border-[#171717]/15 pt-5 space-y-3">
@@ -20,7 +23,7 @@ export default function PrivacyPage() {
   const isPublic = location.pathname === '/privacy';
 
   const content = (
-    <div className="max-w-3xl mx-auto px-5 sm:px-8 py-10 space-y-10 text-base leading-[1.9] text-[#171717]/60 [&_strong]:text-[#171717] [&_strong]:font-medium">
+    <div className="max-w-3xl mx-auto px-5 sm:px-8 py-10 space-y-10 text-base leading-[1.9] text-[#4d4d4d] [&_strong]:text-[#171717] [&_strong]:font-medium">
       <LegalSection title="1. כללי">
         <p>
           מערכת SEELD (להלן: "המערכת") מופעלת על ידי חברת SEELD בע"מ (להלן: "החברה").
@@ -126,11 +129,11 @@ export default function PrivacyPage() {
         </p>
         <div>
           <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-            <span className="text-[13px] text-[#6e6e6e]">חברה</span>
+            <span className="text-[13px] text-[#5c5c5c]">חברה</span>
             <span className="text-[#171717]">SEELD בע"מ</span>
           </div>
           <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-            <span className="text-[13px] text-[#6e6e6e]">דואר אלקטרוני</span>
+            <span className="text-[13px] text-[#5c5c5c]">דואר אלקטרוני</span>
             <a
               href="mailto:info@seeld.co.il"
               className="text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
@@ -140,13 +143,13 @@ export default function PrivacyPage() {
             </a>
           </div>
           <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-            <span className="text-[13px] text-[#6e6e6e]">אתר</span>
+            <span className="text-[13px] text-[#5c5c5c]">אתר</span>
             <span className="text-[#171717]" dir="ltr">seeld.co.il</span>
           </div>
         </div>
       </LegalSection>
 
-      <p className="border-t border-[#171717]/15 pt-5 text-[12px] leading-relaxed text-[#6e6e6e]">
+      <p className="border-t border-[#171717]/15 pt-5 text-[12px] leading-relaxed text-[#5c5c5c]">
         &copy; {new Date().getFullYear()} SEELD — כל הזכויות שמורות.
       </p>
     </div>
@@ -157,14 +160,17 @@ export default function PrivacyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
+      {/* One quiet paper tile — the whole document */}
+      <main className="px-2 pt-2">
+        <div className="bento-panel"><div className="relative z-10 pb-6">
       {/* Hero */}
-      <section className="bg-white">
+      <section>
         <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-4">
           <div className="border-t border-[#171717]/20 pt-4 flex items-baseline justify-between gap-4">
-            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: FAINT }}>
+            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
               LEGAL · עודכן מרץ 2026
             </span>
             <button
@@ -184,6 +190,8 @@ export default function PrivacyPage() {
       </section>
 
       {content}
+        </div></div>
+      </main>
 
       <Footer />
     </div>

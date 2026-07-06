@@ -1,9 +1,12 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { MONO, FAINT } from '@/lib/brand';
+import { MONO } from '@/lib/brand';
 
 const HEEBO = "'Heebo', sans-serif";
+
+// SEELD Bento: one quiet warm paper tile — documents stay serious (STYLESEED.md)
+const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
 
 const LegalSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <section className="border-t border-[#171717]/15 pt-5">
@@ -20,7 +23,7 @@ export default function TermsPage() {
   const isPublic = location.pathname === '/terms';
 
   const content = (
-    <div className="max-w-3xl mx-auto px-5 sm:px-8 py-10 space-y-10 text-base leading-[1.9] text-[#171717]/60 [&_strong]:text-[#171717] [&_strong]:font-medium">
+    <div className="max-w-3xl mx-auto px-5 sm:px-8 py-10 space-y-10 text-base leading-[1.9] text-[#4d4d4d] [&_strong]:text-[#171717] [&_strong]:font-medium">
       <LegalSection title="1. כללי">
         <p>
           ברוכים הבאים למערכת SEELD (להלן: "המערכת"), המופעלת על ידי חברת SEELD (להלן: "החברה").
@@ -146,7 +149,7 @@ export default function TermsPage() {
         </p>
       </LegalSection>
 
-      <p className="border-t border-[#171717]/15 pt-5 text-[12px] leading-relaxed text-[#6e6e6e]">
+      <p className="border-t border-[#171717]/15 pt-5 text-[12px] leading-relaxed text-[#5c5c5c]">
         &copy; {new Date().getFullYear()} SEELD — כל הזכויות שמורות. תנאי שימוש אלו מהווים את ההסכם
         המלא בין המשתמש לחברה בנוגע לשימוש במערכת.
       </p>
@@ -158,14 +161,17 @@ export default function TermsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
+      {/* One quiet paper tile — the whole document */}
+      <main className="px-2 pt-2">
+        <div className="bento-panel"><div className="relative z-10 pb-6">
       {/* Hero */}
-      <section className="bg-white">
+      <section>
         <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-4">
           <div className="border-t border-[#171717]/20 pt-4 flex items-baseline justify-between gap-4">
-            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: FAINT }}>
+            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
               LEGAL · עודכן מרץ 2026
             </span>
             <button
@@ -185,6 +191,8 @@ export default function TermsPage() {
       </section>
 
       {content}
+        </div></div>
+      </main>
 
       <Footer />
     </div>
