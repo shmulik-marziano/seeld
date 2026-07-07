@@ -26,7 +26,7 @@ const ArticleTile = ({ article }: { article: ArticleData }) => (
         {article.title}
       </h3>
       <div
-      className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[11px] tracking-[0.08em]"
+        className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[11px] tracking-[0.08em]"
         style={{ fontFamily: MONO, color: MUTED }}
       >
         <span>{article.category}</span>
