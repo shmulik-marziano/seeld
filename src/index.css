@@ -171,10 +171,12 @@
 
 /* quote / highlight box (default turquoise; .gold / .blue variants) */
 .dna-quote {
-  border-right: 4px solid #4E9D8F;
+  border-inline-start: 4px solid #4E9D8F;
   background: #F4F8F7;
-  border-radius: 0 10px 10px 0;
-  padding: 16px 20px;
+  border-start-end-radius: 10px;
+  border-end-end-radius: 10px;
+  padding-block: 16px;
+  padding-inline: 20px;
 }
 .dna-quote .dna-ql {
   font-family: 'Frank Ruhl Libre', 'Heebo', serif;
@@ -206,18 +208,18 @@ table.dna-data thead th {
   font-weight: 500;
   font-size: 12.5px;
   padding: 10px 14px;
-  text-align: right;
+  text-align: start;
 }
-table.dna-data thead th:first-child { border-radius: 0 8px 0 0; }
-table.dna-data thead th:last-child { border-radius: 8px 0 0 0; }
+table.dna-data thead th:first-child { border-start-start-radius: 8px; }
+table.dna-data thead th:last-child { border-start-end-radius: 8px; }
 table.dna-data tbody td {
   padding: 10px 14px;
-  text-align: right;
+  text-align: start;
   border-bottom: 1px solid #EAEFF3;
   color: #3a4c5a;
 }
 table.dna-data tbody tr:nth-child(even) { background: #F7FAFB; }
-table.dna-data td.num {
+table.dna-data .num {
   direction: ltr;
   text-align: left;
   font-variant-numeric: tabular-nums;

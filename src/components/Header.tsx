@@ -149,7 +149,7 @@ const Header = () => {
 
             <Link
               to="/personal-area"
-              className="hidden lg:inline-flex items-center justify-center rounded-lg px-6 py-2.5 bg-[#1D2D3D] text-white text-[13.5px] font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[42px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+              className="hidden lg:inline-flex items-center justify-center rounded-lg px-6 py-2.5 bg-[#1D2D3D] text-white text-[13.5px] font-medium tracking-wide hover:bg-[#1D2D3D]/90 transition-colors min-h-[42px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
             >
               האזור האישי
             </Link>
@@ -258,7 +258,7 @@ const Header = () => {
                 <div className="mt-auto pt-10 space-y-5">
                   <Link
                     to="/contact"
-                    className="flex items-center justify-center w-full px-6 py-4 rounded-lg bg-[#1D2D3D] text-white text-[15px] font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[52px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+                    className="flex items-center justify-center w-full px-6 py-4 rounded-lg bg-[#1D2D3D] text-white text-[15px] font-medium tracking-wide hover:bg-[#1D2D3D]/90 transition-colors min-h-[52px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     בדיקת תיק ללא עלות
