@@ -146,11 +146,11 @@ export default function AgencySettingsPage() {
     <div className="max-w-3xl mx-auto space-y-6 px-4 sm:px-0" dir="rtl">
       {/* Header */}
       <div className="flex items-center gap-3 sm:gap-4 mb-2">
-        <div className="w-12 h-12 rounded-full bg-[#5ec6c6] flex items-center justify-center">
+        <div className="w-12 h-12 rounded-full bg-[#171717] flex items-center justify-center">
           <Building2 className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-extrabold text-[#0a3d3d]">הגדרות סוכנות</h1>
+          <h1 className="text-2xl font-extrabold text-[#171717]">הגדרות סוכנות</h1>
           <p className="text-sm text-gray-400">ניהול פרטי הסוכנות, מיתוג, צבעים ומסלולי השקעה</p>
         </div>
       </div>

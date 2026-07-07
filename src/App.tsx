@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MotionConfig } from "framer-motion";
 import { BrowserRouter, Route, Routes, Outlet, Navigate, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -14,8 +15,10 @@ import AIChatBot from "@/components/AIChatBot";
 import AccessibilityButton from "@/components/AccessibilityButton";
 import CookieConsent from "@/components/CookieConsent";
 import ScrollProgress from "@/components/ScrollProgress";
+import GridBackdrop from "@/components/brand/GridBackdrop";
 import FloatingShapes from "@/components/FloatingShapes";
-import { useEffect, useRef } from "react";
+import RouteFallback from "@/components/RouteFallback";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 
 // ── Page View Tracker ──
@@ -91,127 +94,131 @@ function PageViewTracker() {
   return null;
 }
 
-// ── Agent App Pages ──
-import DashboardPage from "@/pages/DashboardPage";
-import CustomerListPage from "@/pages/CustomerListPage";
-import NewCustomerPage from "@/pages/NewCustomerPage";
-import CustomerCardPage from "@/pages/CustomerCardPage";
-import FollowUpQueuePage from "@/pages/FollowUpQueuePage";
-import ExecutionQueuePage from "@/pages/ExecutionQueuePage";
-import ActivityLogPage from "@/pages/ActivityLogPage";
-import ClientPortalPage from "@/pages/ClientPortalPage";
-import NewRecommendationPage from "@/pages/NewRecommendationPage";
-import RecommendationBankPage from "@/pages/RecommendationBankPage";
-import ReasoningBankPage from "@/pages/ReasoningBankPage";
-import ExecutionSummaryPage from "@/pages/ExecutionSummaryPage";
-import ExecutionSummaryPortalPage from "@/pages/ExecutionSummaryPortalPage";
-import AgencySettingsPage from "@/pages/AgencySettingsPage";
-import FileImportPage from "@/pages/FileImportPage";
-import LeadsPage from "@/pages/LeadsPage";
-import HelpPage from "@/pages/HelpPage";
-import AuthPage from "@/pages/AuthPage";
-import InstallPage from "@/pages/InstallPage";
-
-// ── Platform Tools ──
-import CatchPage from "@/pages/tools/CatchPage";
-import LensPage from "@/pages/tools/LensPage";
-import RevealPage from "@/pages/tools/RevealPage";
-import XRayPage from "@/pages/tools/XRayPage";
-import WiseToolPage from "@/pages/tools/WisePage";
-import StagePage from "@/pages/tools/StagePage";
-import SignPage from "@/pages/tools/SignPage";
-import GatePage from "@/pages/tools/GatePage";
-import FillPage from "@/pages/tools/FillPage";
-import LaunchPage from "@/pages/tools/LaunchPage";
-import FixPage from "@/pages/tools/FixPage";
-import PulsePage from "@/pages/tools/PulsePage";
-import BondPage from "@/pages/tools/BondPage";
-import DeskPage from "@/pages/tools/DeskPage";
-import ShieldPage from "@/pages/tools/ShieldPage";
-import CoinPage from "@/pages/tools/CoinPage";
-import LinkPage from "@/pages/tools/LinkPage";
-import RadarPage from "@/pages/tools/RadarPage";
-import BridgePage from "@/pages/tools/BridgePage";
-import FlowPage from "@/pages/tools/FlowPage";
-import BrainPage from "@/pages/tools/BrainPage";
-
-// PDage module
-import { PDageLayout } from "@/components/pdage/PDageLayout";
-import PDageDashboard from "@/pages/pdage/PDageDashboard";
-import PDageChatHome from "@/pages/pdage/PDageChatHome";
-import PDageUpload from "@/pages/pdage/PDageUpload";
-import PDageDeficiency from "@/pages/pdage/PDageDeficiency";
-import PDageJobView from "@/pages/pdage/PDageJobView";
-import PDageHistory from "@/pages/pdage/PDageHistory";
-import PDageDeficiencyBank from "@/pages/pdage/PDageDeficiencyBank";
-import PDageCorrectionRoom from "@/pages/pdage/PDageCorrectionRoom";
-
-// ── Public Site Pages ──
+// ── Homepage stays eager: it must render instantly with no fallback flash ──
 import Index from "@/pages/Index";
-import About from "@/pages/About";
-import Authors from "@/pages/Authors";
-import Contact from "@/pages/Contact";
-import Calculators from "@/pages/Calculators";
-import ReturnTables from "@/pages/ReturnTables";
-import FundFinder from "@/pages/FundFinder";
-import SavedCalculations from "@/pages/SavedCalculations";
-import PersonalArea from "@/pages/PersonalArea";
-import Insurances from "@/pages/Insurances";
-import Savings from "@/pages/Savings";
-import InvestmentTracks from "@/pages/InvestmentTracks";
-import Article from "@/pages/Article";
-import Onboarding from "@/pages/Onboarding";
-import Admin from "@/pages/Admin";
-import SiteAdmin from "@/pages/SiteAdmin";
-import DirectDebit from "@/pages/DirectDebit";
-import StyleGuide from "@/pages/StyleGuide";
-import FAQ from "@/pages/FAQ";
-import Accessibility from "@/pages/Accessibility";
-import CookiePolicy from "@/pages/CookiePolicy";
-import RightsExtraction from "@/pages/RightsExtraction";
-import Wellness from "@/pages/Wellness";
-import Travel from "@/pages/Travel";
-import Creativity from "@/pages/Creativity";
-import Growth from "@/pages/Growth";
-import AgentLandingPage from "@/pages/AgentLandingPage";
-import Blog from "@/pages/Blog";
-import BlogPost from "@/pages/BlogPost";
 
-// Insurance pages
-import HealthInsurance from "@/pages/insurance/HealthInsurance";
-import CriticalIllness from "@/pages/insurance/CriticalIllness";
-import PersonalAccidents from "@/pages/insurance/PersonalAccidents";
-import LifeInsurance from "@/pages/insurance/LifeInsurance";
-import MortgageInsurance from "@/pages/insurance/MortgageInsurance";
-import PartnersRisk from "@/pages/insurance/PartnersRisk";
-import VehicleInsurance from "@/pages/insurance/VehicleInsurance";
-import HomeInsurance from "@/pages/insurance/HomeInsurance";
-import RentersInsurance from "@/pages/insurance/RentersInsurance";
-import BusinessInsurance from "@/pages/insurance/BusinessInsurance";
-import TravelInsurance from "@/pages/insurance/TravelInsurance";
-import DentalInsurance from "@/pages/insurance/DentalInsurance";
-import DisabilityInsurance from "@/pages/insurance/DisabilityInsurance";
-import ForeignWorkersInsurance from "@/pages/insurance/ForeignWorkersInsurance";
-import NursingInsurance from "@/pages/insurance/NursingInsurance";
-import NursingClalitInsurance from "@/pages/insurance/NursingClalitInsurance";
+// PDage layout (used directly by the auth guard, named export — stays eager)
+import { PDageLayout } from "@/components/pdage/PDageLayout";
 
-// Savings pages
-import PensionFunds from "@/pages/savings/PensionFunds";
-import GemelFunds from "@/pages/savings/GemelFunds";
-import GemelInvestment from "@/pages/savings/GemelInvestment";
-import ChildSavings from "@/pages/savings/ChildSavings";
-import TrainingFunds from "@/pages/savings/TrainingFunds";
-import Investment from "@/pages/savings/Investment";
-import PensionLifeInsurance from "@/pages/savings/PensionLifeInsurance";
-import EmployerFunds from "@/pages/savings/EmployerFunds";
-import PreRetirement from "@/pages/savings/PreRetirement";
-import PostRetirement from "@/pages/savings/PostRetirement";
-import FinancialPlanning from "@/pages/savings/FinancialPlanning";
+// ── Agent App Pages (lazy) ──
+const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
+const CustomerListPage = lazy(() => import("@/pages/CustomerListPage"));
+const NewCustomerPage = lazy(() => import("@/pages/NewCustomerPage"));
+const CustomerCardPage = lazy(() => import("@/pages/CustomerCardPage"));
+const FollowUpQueuePage = lazy(() => import("@/pages/FollowUpQueuePage"));
+const ExecutionQueuePage = lazy(() => import("@/pages/ExecutionQueuePage"));
+const ActivityLogPage = lazy(() => import("@/pages/ActivityLogPage"));
+const ClientPortalPage = lazy(() => import("@/pages/ClientPortalPage"));
+const NewRecommendationPage = lazy(() => import("@/pages/NewRecommendationPage"));
+const RecommendationBankPage = lazy(() => import("@/pages/RecommendationBankPage"));
+const ReasoningBankPage = lazy(() => import("@/pages/ReasoningBankPage"));
+const ExecutionSummaryPage = lazy(() => import("@/pages/ExecutionSummaryPage"));
+const ExecutionSummaryPortalPage = lazy(() => import("@/pages/ExecutionSummaryPortalPage"));
+const AgencySettingsPage = lazy(() => import("@/pages/AgencySettingsPage"));
+const FileImportPage = lazy(() => import("@/pages/FileImportPage"));
+const LeadsPage = lazy(() => import("@/pages/LeadsPage"));
+const HelpPage = lazy(() => import("@/pages/HelpPage"));
+const AuthPage = lazy(() => import("@/pages/AuthPage"));
+const InstallPage = lazy(() => import("@/pages/InstallPage"));
 
-// Shared pages
-import TermsPage from "@/pages/TermsPage";
-import PrivacyPage from "@/pages/PrivacyPage";
-import NotFound from "@/pages/NotFound";
+// ── Platform Tools (lazy) ──
+const CatchPage = lazy(() => import("@/pages/tools/CatchPage"));
+const LensPage = lazy(() => import("@/pages/tools/LensPage"));
+const RevealPage = lazy(() => import("@/pages/tools/RevealPage"));
+const XRayPage = lazy(() => import("@/pages/tools/XRayPage"));
+const WiseToolPage = lazy(() => import("@/pages/tools/WisePage"));
+const StagePage = lazy(() => import("@/pages/tools/StagePage"));
+const SignPage = lazy(() => import("@/pages/tools/SignPage"));
+const GatePage = lazy(() => import("@/pages/tools/GatePage"));
+const FillPage = lazy(() => import("@/pages/tools/FillPage"));
+const LaunchPage = lazy(() => import("@/pages/tools/LaunchPage"));
+const FixPage = lazy(() => import("@/pages/tools/FixPage"));
+const PulsePage = lazy(() => import("@/pages/tools/PulsePage"));
+const BondPage = lazy(() => import("@/pages/tools/BondPage"));
+const DeskPage = lazy(() => import("@/pages/tools/DeskPage"));
+const ShieldPage = lazy(() => import("@/pages/tools/ShieldPage"));
+const CoinPage = lazy(() => import("@/pages/tools/CoinPage"));
+const LinkPage = lazy(() => import("@/pages/tools/LinkPage"));
+const RadarPage = lazy(() => import("@/pages/tools/RadarPage"));
+const BridgePage = lazy(() => import("@/pages/tools/BridgePage"));
+const FlowPage = lazy(() => import("@/pages/tools/FlowPage"));
+const BrainPage = lazy(() => import("@/pages/tools/BrainPage"));
+
+// PDage pages (lazy)
+const PDageDashboard = lazy(() => import("@/pages/pdage/PDageDashboard"));
+const PDageChatHome = lazy(() => import("@/pages/pdage/PDageChatHome"));
+const PDageUpload = lazy(() => import("@/pages/pdage/PDageUpload"));
+const PDageDeficiency = lazy(() => import("@/pages/pdage/PDageDeficiency"));
+const PDageJobView = lazy(() => import("@/pages/pdage/PDageJobView"));
+const PDageHistory = lazy(() => import("@/pages/pdage/PDageHistory"));
+const PDageDeficiencyBank = lazy(() => import("@/pages/pdage/PDageDeficiencyBank"));
+const PDageCorrectionRoom = lazy(() => import("@/pages/pdage/PDageCorrectionRoom"));
+
+// ── Public Site Pages (lazy) ──
+const About = lazy(() => import("@/pages/About"));
+const Authors = lazy(() => import("@/pages/Authors"));
+const Contact = lazy(() => import("@/pages/Contact"));
+const Calculators = lazy(() => import("@/pages/Calculators"));
+const ReturnTables = lazy(() => import("@/pages/ReturnTables"));
+const FundFinder = lazy(() => import("@/pages/FundFinder"));
+const SavedCalculations = lazy(() => import("@/pages/SavedCalculations"));
+const PersonalArea = lazy(() => import("@/pages/PersonalArea"));
+const Insurances = lazy(() => import("@/pages/Insurances"));
+const Savings = lazy(() => import("@/pages/Savings"));
+const InvestmentTracks = lazy(() => import("@/pages/InvestmentTracks"));
+const Article = lazy(() => import("@/pages/Article"));
+const Onboarding = lazy(() => import("@/pages/Onboarding"));
+const Admin = lazy(() => import("@/pages/Admin"));
+const SiteAdmin = lazy(() => import("@/pages/SiteAdmin"));
+const DirectDebit = lazy(() => import("@/pages/DirectDebit"));
+const StyleGuide = lazy(() => import("@/pages/StyleGuide"));
+const FAQ = lazy(() => import("@/pages/FAQ"));
+const Accessibility = lazy(() => import("@/pages/Accessibility"));
+const CookiePolicy = lazy(() => import("@/pages/CookiePolicy"));
+const RightsExtraction = lazy(() => import("@/pages/RightsExtraction"));
+const Wellness = lazy(() => import("@/pages/Wellness"));
+const Travel = lazy(() => import("@/pages/Travel"));
+const Creativity = lazy(() => import("@/pages/Creativity"));
+const Growth = lazy(() => import("@/pages/Growth"));
+const AgentLandingPage = lazy(() => import("@/pages/AgentLandingPage"));
+const Blog = lazy(() => import("@/pages/Blog"));
+const BlogPost = lazy(() => import("@/pages/BlogPost"));
+
+// Insurance pages (lazy)
+const HealthInsurance = lazy(() => import("@/pages/insurance/HealthInsurance"));
+const CriticalIllness = lazy(() => import("@/pages/insurance/CriticalIllness"));
+const PersonalAccidents = lazy(() => import("@/pages/insurance/PersonalAccidents"));
+const LifeInsurance = lazy(() => import("@/pages/insurance/LifeInsurance"));
+const MortgageInsurance = lazy(() => import("@/pages/insurance/MortgageInsurance"));
+const PartnersRisk = lazy(() => import("@/pages/insurance/PartnersRisk"));
+const VehicleInsurance = lazy(() => import("@/pages/insurance/VehicleInsurance"));
+const HomeInsurance = lazy(() => import("@/pages/insurance/HomeInsurance"));
+const RentersInsurance = lazy(() => import("@/pages/insurance/RentersInsurance"));
+const BusinessInsurance = lazy(() => import("@/pages/insurance/BusinessInsurance"));
+const TravelInsurance = lazy(() => import("@/pages/insurance/TravelInsurance"));
+const DentalInsurance = lazy(() => import("@/pages/insurance/DentalInsurance"));
+const DisabilityInsurance = lazy(() => import("@/pages/insurance/DisabilityInsurance"));
+const ForeignWorkersInsurance = lazy(() => import("@/pages/insurance/ForeignWorkersInsurance"));
+const NursingInsurance = lazy(() => import("@/pages/insurance/NursingInsurance"));
+const NursingClalitInsurance = lazy(() => import("@/pages/insurance/NursingClalitInsurance"));
+
+// Savings pages (lazy)
+const PensionFunds = lazy(() => import("@/pages/savings/PensionFunds"));
+const GemelFunds = lazy(() => import("@/pages/savings/GemelFunds"));
+const GemelInvestment = lazy(() => import("@/pages/savings/GemelInvestment"));
+const ChildSavings = lazy(() => import("@/pages/savings/ChildSavings"));
+const TrainingFunds = lazy(() => import("@/pages/savings/TrainingFunds"));
+const Investment = lazy(() => import("@/pages/savings/Investment"));
+const PensionLifeInsurance = lazy(() => import("@/pages/savings/PensionLifeInsurance"));
+const EmployerFunds = lazy(() => import("@/pages/savings/EmployerFunds"));
+const PreRetirement = lazy(() => import("@/pages/savings/PreRetirement"));
+const PostRetirement = lazy(() => import("@/pages/savings/PostRetirement"));
+const FinancialPlanning = lazy(() => import("@/pages/savings/FinancialPlanning"));
+
+// Shared pages (lazy)
+const TermsPage = lazy(() => import("@/pages/TermsPage"));
+const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
 
 const queryClient = new QueryClient();
 
@@ -260,6 +267,7 @@ function AgentAuthRoute() {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <MotionConfig reducedMotion="user">
     <AppProvider>
       <AuthProvider>
         <TooltipProvider>
@@ -268,9 +276,11 @@ const App = () => (
           <PwaInstallBanner />
           <BrowserRouter>
             <PageViewTracker />
+            <GridBackdrop />
             <ScrollProgress />
             <ScrollToTop />
             <PageTransition>
+              <Suspense fallback={<RouteFallback />}>
               <Routes>
                 {/* ═══ PUBLIC SITE ROUTES ═══ */}
                 <Route path="/" element={<Index />} />
@@ -407,6 +417,7 @@ const App = () => (
 
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              </Suspense>
             </PageTransition>
 
             <AIChatBot />
@@ -418,7 +429,7 @@ const App = () => (
               href="https://wa.me/972523097444"
               target="_blank"
               rel="noopener noreferrer"
-              className="fixed bottom-24 left-4 z-50 group"
+              className="hidden sm:block fixed bottom-24 left-4 z-50 group"
               aria-label="שלח הודעה בוואטסאפ"
             >
               <div className="relative flex items-center justify-center w-14 h-14 rounded-full bg-white transition-colors duration-150 group-hover:bg-[#fafafa]"
@@ -435,6 +446,7 @@ const App = () => (
         </TooltipProvider>
       </AuthProvider>
     </AppProvider>
+    </MotionConfig>
   </QueryClientProvider>
 );
 

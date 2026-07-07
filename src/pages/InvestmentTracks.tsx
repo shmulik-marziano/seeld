@@ -1,20 +1,28 @@
-import { useState, useMemo } from "react";
+import { Fragment, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import DoodleIcon from "@/components/DoodleIcon";
-import { ChevronLeft, Search, ArrowUpDown, TrendingUp, TrendingDown, Filter, BarChart3, X, ChevronDown, ChevronUp } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { trackData as staticFunds } from "@/data/cmaFundsData";
+import ScrollReveal from "@/components/ScrollReveal";
+import { Search, ArrowUpDown, ChevronDown, ChevronUp } from "lucide-react";
 import { useInvestmentTracks } from "@/hooks/useInvestmentTracks";
 import { productTypeLabels, specializationLabels, companyLabels } from "@/types/fund";
 import type { Fund, ProductType, Specialization, ManagingCompany } from "@/types/fund";
+import { LiveTag } from "@/components/brand/Live";
+import { BONE, SERIF, MONO, CARD_SHADOW } from "@/lib/brand";
 
 // ── Helpers ──
 const fmt = (n: number) => n.toFixed(2) + "%";
 const fmtAssets = (m: number) => m >= 1000 ? (m / 1000).toFixed(1) + " מיליארד" : m.toLocaleString("he-IL") + " מ'";
+
+// Greyscale ramp for asset-allocation charts — data is mono, color is reserved for status
+const PIE_GREYS = ["#171717", "#4d4d4d", "#6e6e6e", "#a3a3a3", "#d4d4d4", "#ebebeb"];
+const PIE_STROKE = BONE; // slice separator = white (pies live inside white data cards)
+
+const monoNum: React.CSSProperties = { fontFamily: MONO, fontVariantNumeric: "tabular-nums" };
+
+const selectClass =
+  "w-full px-0 py-3 bg-transparent border-b border-[#171717]/20 text-[#171717] text-base focus:outline-none focus:border-[#171717] transition-colors appearance-none cursor-pointer min-h-[44px] rounded-none disabled:opacity-40 disabled:cursor-not-allowed";
 
 type SortKey = "name" | "year1" | "year3" | "year5" | "fees" | "assets";
 type SortDir = "asc" | "desc";
@@ -36,164 +44,186 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
   const selectedFund = trackData.find(f => f.id === selectedFundId) || null;
 
   const getPieData = (fund: Fund) => [
-    { name: "מניות", value: fund.deepDrill.stocksAndOptions, color: "#5ec6c6" },
-    { name: 'אג"ח ממשלתי', value: fund.deepDrill.govBondsTradable + fund.deepDrill.designatedBonds, color: "#90be6d" },
-    { name: 'אג"ח קונצרני', value: fund.deepDrill.corpBondsTradable + fund.deepDrill.corpBondsNonTradable, color: "#f4a261" },
-    { name: "מזומן", value: fund.deepDrill.cashEquivalents + fund.deepDrill.deposits, color: "#94a3b8" },
-    { name: "אחר", value: fund.deepDrill.mutualFunds + fund.deepDrill.otherAssets, color: "#6c63ff" },
-  ].filter(d => d.value > 0);
+    { name: "מניות", value: fund.deepDrill.stocksAndOptions },
+    { name: 'אג"ח ממשלתי', value: fund.deepDrill.govBondsTradable + fund.deepDrill.designatedBonds },
+    { name: 'אג"ח קונצרני', value: fund.deepDrill.corpBondsTradable + fund.deepDrill.corpBondsNonTradable },
+    { name: "מזומן", value: fund.deepDrill.cashEquivalents + fund.deepDrill.deposits },
+    { name: "אחר", value: fund.deepDrill.mutualFunds + fund.deepDrill.otherAssets },
+  ].filter(d => d.value > 0).map((d, i) => ({ ...d, color: PIE_GREYS[i % PIE_GREYS.length] }));
 
   const getRiskLevel = (fund: Fund) => {
     const stock = fund.stockExposure;
-    if (stock >= 80) return { level: "גבוהה", color: "#e76f51", tip: "המסלול מתאים למשקיעים אגרסיביים עם אופק של 10+ שנים. כדאי לוודא שרמת הסיכון מתאימה לגיל ולתוכניות שלכם." };
-    if (stock >= 40) return { level: "בינונית", color: "#f4a261", tip: "מסלול מאוזן שמתאים לרוב האנשים. פיזור טוב בין מניות לאג\"ח. מומלץ לבדוק את דמי הניהול מול חברות מתחרות." };
-    if (stock >= 10) return { level: "נמוכה-בינונית", color: "#90be6d", tip: "מסלול סולידי יחסית. מתאים למי שקרוב לפרישה או רוצה יציבות. כדאי לבדוק שהתשואה מספיקה לצרכים שלכם." };
-    return { level: "נמוכה", color: "#5ec6c6", tip: "מסלול שמרני מאוד. מתאים לטווח קצר או לפרישה קרובה. שווה לבדוק אם יש מסלולים עם תשואה טובה יותר באותה רמת סיכון." };
+    if (stock >= 80) return { level: "גבוהה", color: "#b91c1c", tip: "המסלול מתאים למשקיעים אגרסיביים עם אופק של 10+ שנים. כדאי לוודא שרמת הסיכון מתאימה לגיל ולתוכניות שלכם." };
+    if (stock >= 40) return { level: "בינונית", color: "#b45309", tip: "מסלול מאוזן שמתאים לרוב האנשים. פיזור טוב בין מניות לאג\"ח. מומלץ לבדוק את דמי הניהול מול חברות מתחרות." };
+    if (stock >= 10) return { level: "נמוכה-בינונית", color: "#15803d", tip: "מסלול סולידי יחסית. מתאים למי שקרוב לפרישה או רוצה יציבות. כדאי לבדוק שהתשואה מספיקה לצרכים שלכם." };
+    return { level: "נמוכה", color: "#171717", tip: "מסלול שמרני מאוד. מתאים לטווח קצר או לפרישה קרובה. שווה לבדוק אם יש מסלולים עם תשואה טובה יותר באותה רמת סיכון." };
   };
 
   return (
-    <section className="mb-12">
-      <div className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
-        <div className="flex items-center gap-3 mb-6">
-          <DoodleIcon name="charts" size={40} />
-          <div>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-[#0a3d3d]">בדקו את המסלול שלכם</h2>
-            <p className="text-sm text-gray-400">בחרו חברה, סוג מוצר ומסלול — ותראו לאן הכסף שלכם הולך</p>
-          </div>
+    <section>
+      <div className="border-t border-[#171717]/20 pt-6 mb-10">
+        <div className="text-[11px] tracking-[0.22em] font-medium mb-3 text-[#5c5c5c]">
+          בדיקה אישית
         </div>
+        <h2
+          className="text-[#171717] leading-tight"
+          style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+        >
+          בדקו את המסלול שלכם
+        </h2>
+        <p className="mt-3 text-base text-[#4d4d4d] leading-[1.85] max-w-xl">
+          בחרו חברה, סוג מוצר ומסלול, ותראו לאן הכסף שלכם הולך: פיזור נכסים, חשיפות ורמת סיכון.
+        </p>
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          {/* Company */}
-          <div>
-            <label className="text-xs font-semibold text-gray-500 mb-1.5 block">חברה</label>
-            <select
-              value={selectedCompany}
-              onChange={e => { setSelectedCompany(e.target.value as ManagingCompany); setSelectedProduct(""); setSelectedFundId(""); }}
-              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
-            >
-              <option value="">בחרו חברה</option>
-              {[...new Set(trackData.map(f => f.company))].map(c => (
-                <option key={c} value={c}>{companyLabels[c]}</option>
-              ))}
-            </select>
-          </div>
-          {/* Product type */}
-          <div>
-            <label className="text-xs font-semibold text-gray-500 mb-1.5 block">סוג מוצר</label>
-            <select
-              value={selectedProduct}
-              onChange={e => { setSelectedProduct(e.target.value as ProductType); setSelectedFundId(""); }}
-              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
-              disabled={!selectedCompany}
-            >
-              <option value="">בחרו מוצר</option>
-              {availableProducts.map(p => (
-                <option key={p} value={p}>{productTypeLabels[p]}</option>
-              ))}
-            </select>
-          </div>
-          {/* Fund */}
-          <div>
-            <label className="text-xs font-semibold text-gray-500 mb-1.5 block">מסלול</label>
-            <select
-              value={selectedFundId}
-              onChange={e => setSelectedFundId(e.target.value)}
-              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
-              disabled={!selectedProduct}
-            >
-              <option value="">בחרו מסלול</option>
-              {availableFunds.map(f => (
-                <option key={f.id} value={f.id}>{specializationLabels[f.specialization]} — {f.name}</option>
-              ))}
-            </select>
-          </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-10 gap-y-5 mb-8 max-w-4xl">
+        {/* Company */}
+        <div>
+          <label className="text-[12px] text-[#5c5c5c] mb-1 block">חברה</label>
+          <select
+            value={selectedCompany}
+            onChange={e => { setSelectedCompany(e.target.value as ManagingCompany); setSelectedProduct(""); setSelectedFundId(""); }}
+            className={selectClass}
+          >
+            <option value="">בחרו חברה</option>
+            {[...new Set(trackData.map(f => f.company))].map(c => (
+              <option key={c} value={c}>{companyLabels[c]}</option>
+            ))}
+          </select>
         </div>
+        {/* Product type */}
+        <div>
+          <label className="text-[12px] text-[#5c5c5c] mb-1 block">סוג מוצר</label>
+          <select
+            value={selectedProduct}
+            onChange={e => { setSelectedProduct(e.target.value as ProductType); setSelectedFundId(""); }}
+            className={selectClass}
+            disabled={!selectedCompany}
+          >
+            <option value="">בחרו מוצר</option>
+            {availableProducts.map(p => (
+              <option key={p} value={p}>{productTypeLabels[p]}</option>
+            ))}
+          </select>
+        </div>
+        {/* Fund */}
+        <div>
+          <label className="text-[12px] text-[#5c5c5c] mb-1 block">מסלול</label>
+          <select
+            value={selectedFundId}
+            onChange={e => setSelectedFundId(e.target.value)}
+            className={selectClass}
+            disabled={!selectedProduct}
+          >
+            <option value="">בחרו מסלול</option>
+            {availableFunds.map(f => (
+              <option key={f.id} value={f.id}>{specializationLabels[f.specialization]} · {f.name}</option>
+            ))}
+          </select>
+        </div>
+      </div>
 
-        {/* Result */}
-        {selectedFund && (() => {
-          const pieData = getPieData(selectedFund);
-          const risk = getRiskLevel(selectedFund);
-          return (
-            <div className="bg-[#f8f9fc] rounded-2xl p-5 sm:p-6 border border-gray-100 space-y-6">
-              {/* Fund header */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div>
-                  <h3 className="text-lg font-bold text-[#0a3d3d]">{selectedFund.name}</h3>
-                  <p className="text-xs text-gray-400">קופה {selectedFund.fundNumber} | {companyLabels[selectedFund.company]}</p>
-                </div>
-                <div className="flex gap-3">
-                  <div className="bg-white rounded-xl px-4 py-2 border border-gray-100 text-center">
-                    <p className="text-xs text-gray-400">תשואה 12 חודשים</p>
-                    <p className="text-xl font-extrabold text-[#0a3d3d]">{fmt(selectedFund.returns.year1)}</p>
-                  </div>
-                  <div className="bg-white rounded-xl px-4 py-2 border border-gray-100 text-center">
-                    <p className="text-xs text-gray-400">רמת סיכון</p>
-                    <p className="text-xl font-extrabold" style={{ color: risk.color }}>{risk.level}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Pie chart + legend */}
-              <div className="flex flex-col sm:flex-row items-center gap-6 bg-white rounded-xl p-5 border border-gray-100">
-                <div className="w-[200px] h-[200px] shrink-0">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={90} strokeWidth={2} stroke="#fff">
-                        {pieData.map((d, idx) => <Cell key={idx} fill={d.color} />)}
-                      </Pie>
-                      <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="flex-1 space-y-2.5 w-full">
-                  {pieData.map((d, idx) => (
-                    <div key={idx} className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2">
-                        <span className="w-3.5 h-3.5 rounded" style={{ background: d.color }} />
-                        <span className="text-gray-600">{d.name}</span>
-                      </div>
-                      <span className="font-bold text-[#0a3d3d]">{d.value.toFixed(1)}%</span>
-                    </div>
-                  ))}
-                  <div className="border-t border-gray-100 pt-2 mt-2 space-y-1">
-                    {selectedFund.deepDrill.foreignExposure > 0 && (
-                      <div className="flex justify-between text-xs text-gray-400">
-                        <span>חשיפה לחו"ל</span>
-                        <span className="font-semibold text-[#5ec6c6]">{selectedFund.deepDrill.foreignExposure}%</span>
-                      </div>
-                    )}
-                    <div className="flex justify-between text-xs text-gray-400">
-                      <span>דמ"נ מצבירה</span>
-                      <span className="font-semibold text-[#0a3d3d]">{selectedFund.fees.savingsFeePercent}%</span>
-                    </div>
-                    <div className="flex justify-between text-xs text-gray-400">
-                      <span>היקף נכסים</span>
-                      <span className="font-semibold text-[#0a3d3d]">{fmtAssets(selectedFund.totalAssets)}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Recommendation */}
-              <div className="rounded-xl p-4 border-r-4" style={{ borderColor: risk.color, background: risk.color + "08" }}>
-                <p className="text-sm text-[#0a3d3d] leading-relaxed">
-                  <strong>המלצה:</strong> {risk.tip}
+      {/* Result — a genuine data card */}
+      {selectedFund && (() => {
+        const pieData = getPieData(selectedFund);
+        const risk = getRiskLevel(selectedFund);
+        return (
+          <div className="rounded-lg bg-white p-6 sm:p-8" style={{ boxShadow: CARD_SHADOW }}>
+            {/* Fund header */}
+            <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4 border-b border-[#171717]/10 pb-5 mb-6">
+              <div className="min-w-0">
+                <h3 className="text-lg text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                  {selectedFund.name}
+                </h3>
+                <p className="text-[12px] text-[#6e6e6e] mt-1">
+                  קופה{" "}
+                  <span dir="ltr" style={monoNum}>{selectedFund.fundNumber}</span>
+                  {" · "}
+                  {companyLabels[selectedFund.company]}
                 </p>
-                <Link to="/contact" className="inline-flex items-center gap-1 mt-2 text-sm font-bold text-[#5ec6c6] hover:underline">
-                  רוצים בדיקה מקצועית? דברו עם סוכן →
-                </Link>
+              </div>
+              <div className="flex gap-10 shrink-0">
+                <div>
+                  <p className="text-[12px] text-[#6e6e6e] mb-1">תשואה 12 חודשים</p>
+                  <p className="text-2xl text-[#171717]" dir="ltr" style={{ ...monoNum, fontWeight: 600 }}>
+                    {fmt(selectedFund.returns.year1)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[12px] text-[#6e6e6e] mb-1">רמת סיכון</p>
+                  <p className="text-2xl" style={{ fontFamily: SERIF, fontWeight: 600, color: risk.color }}>
+                    {risk.level}
+                  </p>
+                </div>
               </div>
             </div>
-          );
-        })()}
 
-        {!selectedFund && selectedCompany === "" && (
-          <div className="text-center py-8 text-gray-300">
-            <DoodleIcon name="charts" size={64} className="mx-auto mb-3 opacity-30" />
-            <p className="text-sm">בחרו חברה, מוצר ומסלול כדי לראות את החשיפות</p>
+            {/* Pie chart + legend */}
+            <div className="flex flex-col sm:flex-row items-center gap-8">
+              <div className="w-[200px] h-[200px] shrink-0">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={90} strokeWidth={2} stroke={PIE_STROKE}>
+                      {pieData.map((d, idx) => <Cell key={idx} fill={d.color} />)}
+                    </Pie>
+                    <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex-1 w-full">
+                {pieData.map((d, idx) => (
+                  <div key={idx} className="flex items-center justify-between py-2 border-b border-[#171717]/10 text-[14px]">
+                    <div className="flex items-center gap-2.5">
+                      <span className="w-3 h-3 rounded-[2px]" style={{ background: d.color, boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }} />
+                      <span className="text-[#171717]/60">{d.name}</span>
+                    </div>
+                    <span className="text-[#171717] font-medium" dir="ltr" style={monoNum}>{d.value.toFixed(1)}%</span>
+                  </div>
+                ))}
+                <div className="pt-2.5 space-y-1.5">
+                  {selectedFund.deepDrill.foreignExposure > 0 && (
+                    <div className="flex justify-between text-[12px] text-[#6e6e6e]">
+                      <span>חשיפה לחו"ל</span>
+                      <span className="text-[#171717]" dir="ltr" style={monoNum}>{selectedFund.deepDrill.foreignExposure}%</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between text-[12px] text-[#6e6e6e]">
+                    <span>דמ"נ מצבירה</span>
+                    <span className="text-[#171717]" dir="ltr" style={monoNum}>{selectedFund.fees.savingsFeePercent}%</span>
+                  </div>
+                  <div className="flex justify-between text-[12px] text-[#6e6e6e]">
+                    <span>היקף נכסים</span>
+                    <span className="text-[#171717]">{fmtAssets(selectedFund.totalAssets)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Recommendation */}
+            <div className="mt-7 border-t border-[#171717]/15 pt-5">
+              <p className="text-[14px] text-[#171717]/60 leading-[1.85] max-w-2xl">
+                <span className="font-medium text-[#171717]">המלצה: </span>
+                {risk.tip}
+              </p>
+              <Link
+                to="/contact"
+                className="group mt-3 inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+              >
+                רוצים בדיקה מקצועית? דברו עם יועץ
+                <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
+              </Link>
+            </div>
           </div>
-        )}
-      </div>
+        );
+      })()}
+
+      {!selectedFund && (
+        <div className="border-t border-[#171717]/10 pt-5">
+          <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">
+            בחרו חברה, מוצר ומסלול כדי לראות את פיזור הנכסים ורמת הסיכון של הכסף שלכם.
+          </p>
+        </div>
+      )}
     </section>
   );
 }
@@ -233,7 +263,7 @@ const InvestmentTracks = () => {
       return sortDir === "asc" ? va - vb : vb - va;
     });
     return list;
-  }, [productFilter, specFilter, companyFilter, search, sortKey, sortDir]);
+  }, [trackData, productFilter, specFilter, companyFilter, search, sortKey, sortDir]);
 
   const toggleSort = (key: SortKey) => {
     if (sortKey === key) setSortDir(d => d === "asc" ? "desc" : "asc");
@@ -250,408 +280,503 @@ const InvestmentTracks = () => {
   const specializations = [...new Set(filtered.map(f => f.specialization))];
   const companies = [...new Set(trackData.map(f => f.company))];
 
+  const hasActiveFilters = productFilter !== "all" || specFilter !== "all" || companyFilter !== "all";
+
+  // Return value colored by data semantics: negative red, above filtered average green
+  const returnColor = (v: number) => v < 0 ? "text-[#b91c1c]" : v > avgReturn ? "text-[#15803d]" : "text-[#171717]";
+
+  const heroStats = [
+    { value: trackData.length, label: "מסלולים במאגר" },
+    { value: new Set(trackData.map(f => f.company)).size, label: "חברות מנהלות" },
+    { value: productTypes.length, label: "סוגי מוצרים" },
+  ];
+
+  const thClass = "px-3 py-3 text-[12px] tracking-[0.08em] font-medium text-[#5c5c5c] whitespace-nowrap";
+  const sortBtnClass = "inline-flex items-center gap-1 hover:text-[#171717] transition-colors";
+
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      {/* Hero */}
-      <section className="bg-[#f8f9fc] relative overflow-hidden">
-        <div className="absolute top-[10%] left-[4%] w-[90px] h-[90px] rounded-full bg-[#5ec6c6]" />
-        <div className="absolute bottom-[15%] right-[6%] w-[65px] h-[65px] rounded-full bg-[#f4a261]" />
-        <div className="absolute top-[45%] left-[18%] w-[35px] h-[35px] rounded-full bg-[#90be6d]" />
-        <div className="absolute top-[20%] right-[12%] w-[28px] h-[28px] rounded-full bg-[#6c63ff]" />
-        <div className="absolute top-16 right-[15%] hidden lg:block">
-          <svg width="160" height="100" viewBox="0 0 160 100" fill="none">
-            <path d="M10 80 C 50 10, 110 10, 150 60" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
-            <polygon points="150,60 142,54 146,66" fill="#0a3d3d" opacity="0.12" />
-          </svg>
-        </div>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24 relative">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
-            מסלולי <span className="text-[#5ec6c6]">השקעה</span>
-          </h1>
-          <p className="text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed mb-8">
-            השוואת תשואות, דמי ניהול וחשיפות של כל מסלולי ההשקעה בישראל — קרנות השתלמות, קופות גמל, פנסיה ופוליסות חיסכון.
-          </p>
-
-          {/* Stat cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white rounded-2xl p-4 border border-gray-100 text-center">
-              <p className="text-3xl font-extrabold text-[#0a3d3d]">{trackData.length}</p>
-              <p className="text-xs text-gray-400 mt-1">מסלולים במאגר</p>
-            </div>
-            <div className="bg-white rounded-2xl p-4 border border-gray-100 text-center">
-              <p className="text-3xl font-extrabold text-[#5ec6c6]">{new Set(trackData.map(f => f.company)).size}</p>
-              <p className="text-xs text-gray-400 mt-1">חברות</p>
-            </div>
-            <div className="bg-white rounded-2xl p-4 border border-gray-100 text-center">
-              <p className="text-3xl font-extrabold text-[#90be6d]">{productTypes.length}</p>
-              <p className="text-xs text-gray-400 mt-1">סוגי מוצרים</p>
-            </div>
-            <div className="bg-white rounded-2xl p-4 border border-gray-100 text-center">
-              <p className="text-3xl font-extrabold text-[#f4a261]">2026</p>
-              <p className="text-xs text-gray-400 mt-1">{isLive ? "נתונים חיים" : "נתונים מקומיים"}</p>
-            </div>
+      {/* Hero tile + stat band as a row of small tiles (the play) */}
+      <section className="px-2 pt-2">
+        <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 pt-10 sm:pt-14 pb-10 sm:pb-12 relative z-10">
+          <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
+            <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
+              <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
+              <span>←</span>
+              <span className="text-[#171717]/70 font-medium">מסלולי השקעה</span>
+            </nav>
+            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium text-[#5c5c5c]">
+              השוואת מסלולים
+            </span>
           </div>
+
+          <h1
+            className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
+            style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
+          >
+            מסלולי השקעה
+          </h1>
+          <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9] mb-6">
+            השוואת תשואות, דמי ניהול וחשיפות של מסלולי ההשקעה בישראל:
+            קרנות השתלמות, קופות גמל, קרנות פנסיה ופוליסות חיסכון.
+          </p>
+          <div dir="ltr">
+            <LiveTag dot={isLive}>{isLive ? "LIVE DATA" : "LOCAL DATA"}</LiveTag>
+          </div>
+        </div></div>
+
+        {/* Stat band — paper / orange / paper tiles */}
+        <div className="mt-2 grid gap-2 grid-cols-1 sm:grid-cols-3">
+          {heroStats.map((stat, i) => (
+            <div
+              key={stat.label}
+              className={`${i === 1 ? "bento-panel-orange" : "bento-panel"} flex items-center justify-center py-7 px-4`}
+            >
+              <div className="relative z-10 text-center">
+                <div
+                  className="text-[#171717] tabular-nums mb-1.5"
+                  dir="ltr"
+                  style={{ fontFamily: MONO, fontWeight: 600, fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", letterSpacing: "-0.02em" }}
+                >
+                  {stat.value}
+                </div>
+                <div className={`text-[12px] tracking-[0.1em] ${i === 1 ? "text-[#171717]/80" : "text-[#5c5c5c]"}`}>
+                  {stat.label}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Breadcrumb */}
-      <div className="border-b border-gray-100">
-        <nav className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
-          <ChevronLeft className="w-3.5 h-3.5" />
-          <span className="text-[#0a3d3d] font-medium">מסלולי השקעה</span>
-        </nav>
-      </div>
+      <main>
+        {/* Tool body tile — checker + full table + educational content */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-12 sm:py-16 space-y-16 sm:space-y-20 relative z-10">
+            {/* Personal track checker */}
+            <ScrollReveal>
+              <PersonalTrackChecker trackData={trackData} />
+            </ScrollReveal>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
-        {/* Personal track checker */}
-        <PersonalTrackChecker trackData={trackData} />
+            {/* All tracks — filters + table */}
+            <section>
+              <div className="border-t border-[#171717]/20 pt-6 mb-10">
+                <div className="text-[11px] tracking-[0.22em] font-medium mb-3 text-[#5c5c5c]">
+                  המאגר המלא
+                </div>
+                <h2
+                  className="text-[#171717] leading-tight"
+                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+                >
+                  כל המסלולים
+                </h2>
+              </div>
 
-        {/* Search + Filters */}
-        <div className="space-y-4 mb-8">
-          <div className="flex gap-3">
-            <div className="relative flex-1">
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input
-                placeholder="חיפוש לפי שם מסלול, חברה או מספר קופה..."
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                className="pr-10 rounded-xl border-gray-200 text-right"
-                dir="rtl"
-              />
-            </div>
-            <Button
-              variant="outline"
-              onClick={() => setShowFilters(!showFilters)}
-              className="rounded-xl gap-2 border-gray-200"
-            >
-              <Filter className="w-4 h-4" />
-              סינון
-              {(productFilter !== "all" || specFilter !== "all" || companyFilter !== "all") && (
-                <span className="w-5 h-5 rounded-full bg-[#5ec6c6] text-white text-[10px] flex items-center justify-center">
-                  {[productFilter, specFilter, companyFilter].filter(v => v !== "all").length}
-                </span>
-              )}
-            </Button>
-          </div>
-
-          {/* Product type tabs */}
-          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-            <button
-              onClick={() => { setProductFilter("all"); setSpecFilter("all"); }}
-              className={`px-4 py-2 rounded-full text-sm font-semibold shrink-0 transition-all ${productFilter === "all" ? "bg-[#0a3d3d] text-white" : "bg-[#f8f9fc] text-gray-500 hover:bg-gray-100"}`}
-            >
-              הכל ({trackData.length})
-            </button>
-            {productTypes.map(pt => (
-              <button
-                key={pt}
-                onClick={() => { setProductFilter(pt); setSpecFilter("all"); }}
-                className={`px-4 py-2 rounded-full text-sm font-semibold shrink-0 transition-all ${productFilter === pt ? "bg-[#0a3d3d] text-white" : "bg-[#f8f9fc] text-gray-500 hover:bg-gray-100"}`}
-              >
-                {productTypeLabels[pt]} ({trackData.filter(f => f.productType === pt).length})
-              </button>
-            ))}
-          </div>
-
-          {/* Expanded filters */}
-          {showFilters && (
-            <div className="bg-[#f8f9fc] rounded-2xl p-5 space-y-4 border border-gray-100">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-[#0a3d3d]">סינון מתקדם</h3>
-                <button onClick={() => { setProductFilter("all"); setSpecFilter("all"); setCompanyFilter("all"); setSearch(""); }} className="text-xs text-[#5ec6c6] font-semibold">
-                  נקה הכל
+              {/* Search + filter toggle */}
+              <div className="flex items-end gap-8 mb-8 max-w-3xl">
+                <div className="relative flex-1">
+                  <Search className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5c5c5c] pointer-events-none" strokeWidth={1.5} />
+                  <input
+                    placeholder="חיפוש לפי שם מסלול, חברה או מספר קופה"
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    className="w-full pr-7 pl-0 py-3 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#5c5c5c] text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none"
+                    dir="rtl"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowFilters(!showFilters)}
+                  className={`shrink-0 pb-3 text-[14px] font-medium border-b transition-colors min-h-[44px] ${showFilters || hasActiveFilters ? "text-[#171717] border-[#171717]" : "text-[#5c5c5c] border-transparent hover:text-[#171717]"}`}
+                >
+                  סינון מתקדם
+                  {hasActiveFilters && (
+                    <span className="mr-1.5 tabular-nums" dir="ltr" style={monoNum}>
+                      ({[productFilter, specFilter, companyFilter].filter(v => v !== "all").length})
+                    </span>
+                  )}
                 </button>
               </div>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-semibold text-gray-500 mb-1.5 block">קטגוריה</label>
-                  <select
-                    value={specFilter}
-                    onChange={e => setSpecFilter(e.target.value as Specialization | "all")}
-                    className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
-                  >
-                    <option value="all">כל הקטגוריות</option>
-                    {specializations.map(s => (
-                      <option key={s} value={s}>{specializationLabels[s]}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-gray-500 mb-1.5 block">חברה</label>
-                  <select
-                    value={companyFilter}
-                    onChange={e => setCompanyFilter(e.target.value as ManagingCompany | "all")}
-                    className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm bg-white text-[#0a3d3d]"
-                  >
-                    <option value="all">כל החברות</option>
-                    {companies.map(c => (
-                      <option key={c} value={c}>{companyLabels[c]}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
 
-        {/* Results summary */}
-        <div className="flex items-center justify-between mb-4 text-sm">
-          <span className="text-gray-500">{filtered.length} מסלולים | {uniqueCompanies} חברות | ממוצע תשואה 12 חודשים: <strong className="text-[#0a3d3d]">{fmt(avgReturn)}</strong></span>
-          {bestFund && (
-            <span className="text-xs text-gray-400 hidden sm:inline">מוביל: {bestFund.name} ({fmt(bestFund.returns.year1)})</span>
-          )}
-        </div>
-
-        {/* Table */}
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-[#f8f9fc] border-b border-gray-100">
-                  <th className="text-right px-4 py-3 font-bold text-[#0a3d3d] min-w-[200px]">
-                    <button onClick={() => toggleSort("name")} className="flex items-center gap-1">
-                      שם מסלול
-                      <ArrowUpDown className="w-3 h-3 text-gray-400" />
-                    </button>
-                  </th>
-                  <th className="text-center px-3 py-3 font-bold text-[#0a3d3d]">חברה</th>
-                  <th className="text-center px-3 py-3 font-bold text-[#0a3d3d]">קטגוריה</th>
-                  <th className="text-center px-3 py-3 font-bold text-[#0a3d3d]">
-                    <button onClick={() => toggleSort("year1")} className="flex items-center gap-1 mx-auto">
-                      12 חודשים
-                      <ArrowUpDown className="w-3 h-3 text-gray-400" />
-                    </button>
-                  </th>
-                  <th className="text-center px-3 py-3 font-bold text-[#0a3d3d] hidden sm:table-cell">
-                    <button onClick={() => toggleSort("year3")} className="flex items-center gap-1 mx-auto">
-                      3 שנים
-                      <ArrowUpDown className="w-3 h-3 text-gray-400" />
-                    </button>
-                  </th>
-                  <th className="text-center px-3 py-3 font-bold text-[#0a3d3d] hidden md:table-cell">
-                    <button onClick={() => toggleSort("year5")} className="flex items-center gap-1 mx-auto">
-                      5 שנים
-                      <ArrowUpDown className="w-3 h-3 text-gray-400" />
-                    </button>
-                  </th>
-                  <th className="text-center px-3 py-3 font-bold text-[#0a3d3d] hidden lg:table-cell">
-                    <button onClick={() => toggleSort("fees")} className="flex items-center gap-1 mx-auto">
-                      דמ"נ צבירה
-                      <ArrowUpDown className="w-3 h-3 text-gray-400" />
-                    </button>
-                  </th>
-                  <th className="w-10"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((fund, i) => {
-                  const isExpanded = expandedId === fund.id;
-                  const returnColor = (v: number) => v > avgReturn ? "text-[#90be6d]" : v < 0 ? "text-[#e76f51]" : "text-[#0a3d3d]";
-                  return (
-                    <>
-                      <tr
-                        key={fund.id}
-                        onClick={() => setExpandedId(isExpanded ? null : fund.id)}
-                        className={`border-b border-gray-50 cursor-pointer transition-colors ${isExpanded ? "bg-[#f8f9fc]" : "hover:bg-[#fafbfd]"} ${i === 0 && sortKey === "year1" ? "bg-[#90be6d]/5" : ""}`}
+              {/* Expanded filters */}
+              {showFilters && (
+                <div className="mb-8 max-w-3xl border-t border-[#171717]/10 pt-5">
+                  <div className="grid sm:grid-cols-2 gap-x-10 gap-y-5">
+                    <div>
+                      <label className="text-[12px] text-[#5c5c5c] mb-1 block">קטגוריה</label>
+                      <select
+                        value={specFilter}
+                        onChange={e => setSpecFilter(e.target.value as Specialization | "all")}
+                        className={selectClass}
                       >
-                        <td className="px-4 py-3">
-                          <div className="font-semibold text-[#0a3d3d] text-sm">{fund.name}</div>
-                          <div className="text-xs text-gray-400">קופה {fund.fundNumber}</div>
-                        </td>
-                        <td className="text-center px-3 py-3 text-xs text-gray-600">{companyLabels[fund.company]}</td>
-                        <td className="text-center px-3 py-3">
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-[#f8f9fc] border border-gray-100 text-[#0a3d3d]">
-                            {specializationLabels[fund.specialization]}
-                          </span>
-                        </td>
-                        <td className={`text-center px-3 py-3 font-bold ${returnColor(fund.returns.year1)}`}>
-                          {fmt(fund.returns.year1)}
-                        </td>
-                        <td className={`text-center px-3 py-3 font-medium hidden sm:table-cell ${returnColor(fund.returns.year3)}`}>
-                          {fmt(fund.returns.year3)}
-                        </td>
-                        <td className={`text-center px-3 py-3 font-medium hidden md:table-cell ${returnColor(fund.returns.year5)}`}>
-                          {fmt(fund.returns.year5)}
-                        </td>
-                        <td className="text-center px-3 py-3 text-xs text-gray-500 hidden lg:table-cell">
-                          {fund.fees.savingsFeePercent}%
-                        </td>
-                        <td className="px-2 py-3">
-                          {isExpanded ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
-                        </td>
-                      </tr>
-                      {isExpanded && (
-                        <tr key={fund.id + "-detail"}>
-                          <td colSpan={8} className="px-4 py-5 bg-[#f8f9fc] border-b border-gray-100">
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                              <div className="bg-white rounded-xl p-3 border border-gray-100 text-center">
-                                <p className="text-xs text-gray-400 mb-1">תשואת חודש</p>
-                                <p className="text-lg font-bold text-[#0a3d3d]">{fmt(fund.returns.month)}</p>
-                              </div>
-                              <div className="bg-white rounded-xl p-3 border border-gray-100 text-center">
-                                <p className="text-xs text-gray-400 mb-1">חשיפת מניות</p>
-                                <p className="text-lg font-bold text-[#0a3d3d]">{fund.stockExposure}%</p>
-                              </div>
-                              <div className="bg-white rounded-xl p-3 border border-gray-100 text-center">
-                                <p className="text-xs text-gray-400 mb-1">דמ"נ מהפקדה</p>
-                                <p className="text-lg font-bold text-[#0a3d3d]">{fund.fees.depositFeePercent}%</p>
-                              </div>
-                              <div className="bg-white rounded-xl p-3 border border-gray-100 text-center">
-                                <p className="text-xs text-gray-400 mb-1">היקף נכסים</p>
-                                <p className="text-lg font-bold text-[#0a3d3d]">{fmtAssets(fund.totalAssets)}</p>
-                              </div>
-                              {fund.deepDrill.sharpeRatio && (
-                                <div className="bg-white rounded-xl p-3 border border-gray-100 text-center">
-                                  <p className="text-xs text-gray-400 mb-1">מדד שארפ</p>
-                                  <p className="text-lg font-bold text-[#5ec6c6]">{fund.deepDrill.sharpeRatio.toFixed(2)}</p>
-                                </div>
-                              )}
-                            </div>
+                        <option value="all">כל הקטגוריות</option>
+                        {specializations.map(s => (
+                          <option key={s} value={s}>{specializationLabels[s]}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[12px] text-[#5c5c5c] mb-1 block">חברה</label>
+                      <select
+                        value={companyFilter}
+                        onChange={e => setCompanyFilter(e.target.value as ManagingCompany | "all")}
+                        className={selectClass}
+                      >
+                        <option value="all">כל החברות</option>
+                        {companies.map(c => (
+                          <option key={c} value={c}>{companyLabels[c]}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { setProductFilter("all"); setSpecFilter("all"); setCompanyFilter("all"); setSearch(""); }}
+                    className="mt-5 text-[13px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+                  >
+                    ניקוי כל הסינונים
+                  </button>
+                </div>
+              )}
 
-                            {/* Asset allocation — pie chart */}
-                            {(() => {
-                              const dd = fund.deepDrill;
-                              const pieData = [
-                                { name: "מניות", value: dd.stocksAndOptions, color: "#5ec6c6" },
-                                { name: 'אג"ח ממשלתי', value: dd.govBondsTradable + dd.designatedBonds, color: "#90be6d" },
-                                { name: 'אג"ח קונצרני', value: dd.corpBondsTradable + dd.corpBondsNonTradable, color: "#f4a261" },
-                                { name: "מזומן", value: dd.cashEquivalents + dd.deposits, color: "#94a3b8" },
-                                { name: "קרנות נאמנות", value: dd.mutualFunds, color: "#6c63ff" },
-                                { name: "אחר", value: dd.otherAssets, color: "#e76f51" },
-                              ].filter(d => d.value > 0);
-                              return (
-                                <div className="mt-4 bg-white rounded-xl p-4 border border-gray-100">
-                                  <h4 className="text-sm font-bold text-[#0a3d3d] mb-3">הרכב נכסים — חשיפות</h4>
-                                  <div className="flex flex-col sm:flex-row items-center gap-6">
-                                    {/* Pie Chart */}
-                                    <div className="w-[180px] h-[180px] shrink-0">
-                                      <ResponsiveContainer width="100%" height="100%">
-                                        <PieChart>
-                                          <Pie
-                                            data={pieData}
-                                            dataKey="value"
-                                            nameKey="name"
-                                            cx="50%"
-                                            cy="50%"
-                                            innerRadius={45}
-                                            outerRadius={80}
-                                            strokeWidth={2}
-                                            stroke="#fff"
-                                          >
-                                            {pieData.map((d, idx) => (
-                                              <Cell key={idx} fill={d.color} />
-                                            ))}
-                                          </Pie>
-                                          <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
-                                        </PieChart>
-                                      </ResponsiveContainer>
+              {/* Product type — underline tabs */}
+              <div className="flex gap-6 sm:gap-8 overflow-x-auto scrollbar-hide border-b border-[#171717]/10 mb-6">
+                <button
+                  type="button"
+                  onClick={() => { setProductFilter("all"); setSpecFilter("all"); }}
+                  className={`shrink-0 pb-4 text-sm sm:text-base font-medium border-b-2 -mb-px transition-colors whitespace-nowrap ${productFilter === "all" ? "text-[#171717] border-[#171717]" : "text-[#5c5c5c] border-transparent hover:text-[#171717]/70"}`}
+                >
+                  הכל{" "}
+                  <span className="text-[12px] tabular-nums" dir="ltr" style={monoNum}>({trackData.length})</span>
+                </button>
+                {productTypes.map(pt => (
+                  <button
+                    key={pt}
+                    type="button"
+                    onClick={() => { setProductFilter(pt); setSpecFilter("all"); }}
+                    className={`shrink-0 pb-4 text-sm sm:text-base font-medium border-b-2 -mb-px transition-colors whitespace-nowrap ${productFilter === pt ? "text-[#171717] border-[#171717]" : "text-[#5c5c5c] border-transparent hover:text-[#171717]/70"}`}
+                  >
+                    {productTypeLabels[pt]}{" "}
+                    <span className="text-[12px] tabular-nums" dir="ltr" style={monoNum}>
+                      ({trackData.filter(f => f.productType === pt).length})
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Results summary */}
+              <div className="flex items-baseline justify-between gap-4 mb-4">
+                <span className="text-[13px] text-[#5c5c5c]">
+                  <span className="text-[#171717] tabular-nums" dir="ltr" style={monoNum}>{filtered.length}</span> מסלולים
+                  {" · "}
+                  <span className="text-[#171717] tabular-nums" dir="ltr" style={monoNum}>{uniqueCompanies}</span> חברות
+                  {" · "}
+                  ממוצע 12 חודשים:{" "}
+                  <span className="text-[#171717] tabular-nums" dir="ltr" style={monoNum}>{fmt(avgReturn)}</span>
+                </span>
+                {bestFund && (
+                  <span className="text-[12px] text-[#5c5c5c] hidden sm:inline truncate">
+                    מוביל: {bestFund.name}{" "}
+                    <span className="text-[#15803d] tabular-nums" dir="ltr" style={monoNum}>({fmt(bestFund.returns.year1)})</span>
+                  </span>
+                )}
+              </div>
+
+              {/* Table — ruled rows on paper, no card chrome */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[#171717]/15">
+                      <th className={`text-right ${thClass} min-w-[200px] pr-0`}>
+                        <button type="button" onClick={() => toggleSort("name")} className={sortBtnClass}>
+                          שם מסלול
+                          <ArrowUpDown className="w-3 h-3" strokeWidth={1.5} />
+                        </button>
+                      </th>
+                      <th className={`text-center ${thClass}`}>חברה</th>
+                      <th className={`text-center ${thClass}`}>קטגוריה</th>
+                      <th className={`text-center ${thClass}`}>
+                        <button type="button" onClick={() => toggleSort("year1")} className={`${sortBtnClass} mx-auto`}>
+                          12 חודשים
+                          <ArrowUpDown className="w-3 h-3" strokeWidth={1.5} />
+                        </button>
+                      </th>
+                      <th className={`text-center ${thClass} hidden sm:table-cell`}>
+                        <button type="button" onClick={() => toggleSort("year3")} className={`${sortBtnClass} mx-auto`}>
+                          3 שנים
+                          <ArrowUpDown className="w-3 h-3" strokeWidth={1.5} />
+                        </button>
+                      </th>
+                      <th className={`text-center ${thClass} hidden md:table-cell`}>
+                        <button type="button" onClick={() => toggleSort("year5")} className={`${sortBtnClass} mx-auto`}>
+                          5 שנים
+                          <ArrowUpDown className="w-3 h-3" strokeWidth={1.5} />
+                        </button>
+                      </th>
+                      <th className={`text-center ${thClass} hidden lg:table-cell`}>
+                        <button type="button" onClick={() => toggleSort("fees")} className={`${sortBtnClass} mx-auto`}>
+                          דמ"נ צבירה
+                          <ArrowUpDown className="w-3 h-3" strokeWidth={1.5} />
+                        </button>
+                      </th>
+                      <th className="w-10"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filtered.map((fund) => {
+                      const isExpanded = expandedId === fund.id;
+                      return (
+                        <Fragment key={fund.id}>
+                          <tr
+                            onClick={() => setExpandedId(isExpanded ? null : fund.id)}
+                            className={`border-b cursor-pointer transition-colors ${isExpanded ? "border-[#171717]/40 bg-[#171717]/[0.04]" : "border-[#171717]/10 hover:bg-[#171717]/[0.04]"}`}
+                          >
+                            <td className="pl-3 pr-0 py-3.5">
+                              <div className="font-medium text-[#171717] text-[14px]">{fund.name}</div>
+                              <div className="text-[12px] text-[#5c5c5c]">
+                                קופה <span dir="ltr" style={monoNum}>{fund.fundNumber}</span>
+                              </div>
+                            </td>
+                            <td className="text-center px-3 py-3.5 text-[13px] text-[#171717]/60 whitespace-nowrap">
+                              {companyLabels[fund.company]}
+                            </td>
+                            <td className="text-center px-3 py-3.5 text-[12px] text-[#5c5c5c] whitespace-nowrap">
+                              {specializationLabels[fund.specialization]}
+                            </td>
+                            <td className={`text-center px-3 py-3.5 font-medium tabular-nums ${returnColor(fund.returns.year1)}`} dir="ltr" style={monoNum}>
+                              {fmt(fund.returns.year1)}
+                            </td>
+                            <td className={`text-center px-3 py-3.5 tabular-nums hidden sm:table-cell ${returnColor(fund.returns.year3)}`} dir="ltr" style={monoNum}>
+                              {fmt(fund.returns.year3)}
+                            </td>
+                            <td className={`text-center px-3 py-3.5 tabular-nums hidden md:table-cell ${returnColor(fund.returns.year5)}`} dir="ltr" style={monoNum}>
+                              {fmt(fund.returns.year5)}
+                            </td>
+                            <td className="text-center px-3 py-3.5 text-[13px] text-[#171717]/60 tabular-nums hidden lg:table-cell" dir="ltr" style={monoNum}>
+                              {fund.fees.savingsFeePercent}%
+                            </td>
+                            <td className="px-2 py-3.5">
+                              {isExpanded
+                                ? <ChevronUp className="w-4 h-4 text-[#5c5c5c]" strokeWidth={1.5} />
+                                : <ChevronDown className="w-4 h-4 text-[#5c5c5c]" strokeWidth={1.5} />}
+                            </td>
+                          </tr>
+                          {isExpanded && (
+                            <tr>
+                              <td colSpan={8} className="px-4 py-6 bg-[#171717]/[0.04] border-b border-[#171717]/15">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-8 gap-y-5">
+                                  {[
+                                    { label: "תשואת חודש", value: fmt(fund.returns.month), ltr: true },
+                                    { label: "חשיפת מניות", value: `${fund.stockExposure}%`, ltr: true },
+                                    { label: 'דמ"נ מהפקדה', value: `${fund.fees.depositFeePercent}%`, ltr: true },
+                                    { label: "היקף נכסים", value: fmtAssets(fund.totalAssets), ltr: false },
+                                    ...(fund.deepDrill.sharpeRatio
+                                      ? [{ label: "מדד שארפ", value: fund.deepDrill.sharpeRatio.toFixed(2), ltr: true }]
+                                      : []),
+                                  ].map((cell) => (
+                                    <div key={cell.label} className="border-t border-[#171717]/15 pt-2.5">
+                                      <p className="text-[12px] text-[#5c5c5c] mb-1">{cell.label}</p>
+                                      <p
+                                        className="text-lg text-[#171717] tabular-nums"
+                                        dir={cell.ltr ? "ltr" : undefined}
+                                        style={cell.ltr ? { ...monoNum, fontWeight: 500 } : { fontWeight: 500 }}
+                                      >
+                                        {cell.value}
+                                      </p>
                                     </div>
-                                    {/* Legend */}
-                                    <div className="flex-1 space-y-2">
-                                      {pieData.map((d, idx) => (
-                                        <div key={idx} className="flex items-center justify-between text-sm border-b border-gray-50 pb-1.5">
-                                          <div className="flex items-center gap-2">
-                                            <span className="w-3 h-3 rounded" style={{ background: d.color }} />
-                                            <span className="text-gray-600">{d.name}</span>
-                                          </div>
-                                          <span className="font-bold text-[#0a3d3d]">{d.value.toFixed(1)}%</span>
-                                        </div>
-                                      ))}
-                                      {dd.foreignExposure > 0 && (
-                                        <div className="flex items-center justify-between text-sm pt-1">
-                                          <span className="text-gray-400">חשיפה לחו"ל</span>
-                                          <span className="font-semibold text-[#5ec6c6]">{dd.foreignExposure}%</span>
-                                        </div>
-                                      )}
-                                      {dd.currencyExposure > 0 && (
-                                        <div className="flex items-center justify-between text-sm">
-                                          <span className="text-gray-400">חשיפת מט"ח</span>
-                                          <span className="font-semibold text-[#f4a261]">{dd.currencyExposure}%</span>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </div>
+                                  ))}
                                 </div>
-                              );
-                            })()}
 
-                            <div className="mt-3 text-center">
-                              <Link to="/contact" className="text-sm text-[#5ec6c6] font-semibold hover:underline">
-                                רוצה לדעת איך המסלול הזה משתלב בתיק שלך? → ניתוח חינם
-                              </Link>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-          {filtered.length === 0 && (
-            <div className="text-center py-16 text-gray-400">
-              <BarChart3 className="w-10 h-10 mx-auto mb-3 opacity-30" />
-              <p>לא נמצאו מסלולים מתאימים. נסו לשנות את הסינון.</p>
-            </div>
-          )}
-        </div>
+                                {/* Asset allocation — pie chart */}
+                                {(() => {
+                                  const dd = fund.deepDrill;
+                                  const pieData = [
+                                    { name: "מניות", value: dd.stocksAndOptions },
+                                    { name: 'אג"ח ממשלתי', value: dd.govBondsTradable + dd.designatedBonds },
+                                    { name: 'אג"ח קונצרני', value: dd.corpBondsTradable + dd.corpBondsNonTradable },
+                                    { name: "מזומן", value: dd.cashEquivalents + dd.deposits },
+                                    { name: "קרנות נאמנות", value: dd.mutualFunds },
+                                    { name: "אחר", value: dd.otherAssets },
+                                  ].filter(d => d.value > 0).map((d, i) => ({ ...d, color: PIE_GREYS[i % PIE_GREYS.length] }));
+                                  return (
+                                    <div className="mt-6 rounded-lg bg-white p-5 sm:p-6" style={{ boxShadow: CARD_SHADOW }}>
+                                      <h4 className="text-base text-[#171717] mb-4" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                                        הרכב נכסים וחשיפות
+                                      </h4>
+                                      <div className="flex flex-col sm:flex-row items-center gap-8">
+                                        <div className="w-[180px] h-[180px] shrink-0">
+                                          <ResponsiveContainer width="100%" height="100%">
+                                            <PieChart>
+                                              <Pie
+                                                data={pieData}
+                                                dataKey="value"
+                                                nameKey="name"
+                                                cx="50%"
+                                                cy="50%"
+                                                innerRadius={45}
+                                                outerRadius={80}
+                                                strokeWidth={2}
+                                                stroke={PIE_STROKE}
+                                              >
+                                                {pieData.map((d, idx) => (
+                                                  <Cell key={idx} fill={d.color} />
+                                                ))}
+                                              </Pie>
+                                              <Tooltip formatter={(v: number) => `${v.toFixed(1)}%`} />
+                                            </PieChart>
+                                          </ResponsiveContainer>
+                                        </div>
+                                        <div className="flex-1 w-full">
+                                          {pieData.map((d, idx) => (
+                                            <div key={idx} className="flex items-center justify-between py-1.5 border-b border-[#171717]/10 text-[14px]">
+                                              <div className="flex items-center gap-2.5">
+                                                <span className="w-3 h-3 rounded-[2px]" style={{ background: d.color, boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }} />
+                                                <span className="text-[#171717]/60">{d.name}</span>
+                                              </div>
+                                              <span className="text-[#171717] font-medium tabular-nums" dir="ltr" style={monoNum}>
+                                                {d.value.toFixed(1)}%
+                                              </span>
+                                            </div>
+                                          ))}
+                                          {dd.foreignExposure > 0 && (
+                                            <div className="flex items-center justify-between pt-2 text-[12px] text-[#6e6e6e]">
+                                              <span>חשיפה לחו"ל</span>
+                                              <span className="text-[#171717] tabular-nums" dir="ltr" style={monoNum}>{dd.foreignExposure}%</span>
+                                            </div>
+                                          )}
+                                          {dd.currencyExposure > 0 && (
+                                            <div className="flex items-center justify-between pt-1 text-[12px] text-[#6e6e6e]">
+                                              <span>חשיפת מט"ח</span>
+                                              <span className="text-[#171717] tabular-nums" dir="ltr" style={monoNum}>{dd.currencyExposure}%</span>
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                })()}
 
-        {/* Educational content (SEO) */}
-        <section className="mt-16 space-y-10">
-          <div className="max-w-3xl">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-6">מה זה מסלול השקעה?</h2>
-            <div className="space-y-4 text-gray-600 leading-relaxed text-base">
-              <p>
-                מסלול השקעה קובע איך הכסף שלכם מושקע — כמה הולך למניות, כמה לאגרות חוב, וכמה למזומן. כל קרן פנסיה, קרן השתלמות וקופת גמל מציעה מגוון מסלולים שנבדלים ברמת הסיכון ובפוטנציאל התשואה.
-              </p>
-              <p>
-                מסלול כללי מפזר את הכסף בין מניות, אגרות חוב ונכסים נוספים — ומתאים לרוב האנשים. מסלול מניות חושף יותר כסף לשוק המניות — פוטנציאל תשואה גבוה אבל גם סיכון גבוה. מסלול אגרות חוב שמרני יותר ומתאים למי שקרוב לפרישה.
-              </p>
-            </div>
-          </div>
+                                <div className="mt-5">
+                                  <Link
+                                    to="/contact"
+                                    className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+                                  >
+                                    איך המסלול הזה משתלב בתיק שלכם? ניתוח ללא עלות
+                                    <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
+                                  </Link>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </Fragment>
+                      );
+                    })}
+                  </tbody>
+                </table>
 
-          <div className="max-w-3xl">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0a3d3d] mb-6">איך לבחור מסלול השקעה?</h2>
-            <div className="space-y-4 text-gray-600 leading-relaxed text-base">
-              <p>
-                הבחירה תלויה בשלושה דברים: גיל, אופק זמן, ורמת סיבולת לסיכון. ככלל אצבע — ככל שאתם צעירים יותר, כדאי לבחור מסלול אגרסיבי יותר כי יש לכם זמן להתאושש מירידות. ככל שמתקרבים לפרישה, עדיף מסלול שמרני יותר.
-              </p>
-              <p>
-                חשוב גם להסתכל על דמי הניהול — הם אוכלים חלק מהתשואה. ותמיד כדאי להשוות בין חברות, כי אותו סוג מסלול יכול לתת תוצאות שונות מחברה לחברה.
-              </p>
-            </div>
-          </div>
+                {filtered.length === 0 && (
+                  <div className="border-b border-[#171717]/10 py-12">
+                    {tracksLoading ? (
+                      <p className="text-base text-[#4d4d4d]">טוען את נתוני המסלולים...</p>
+                    ) : (
+                      <>
+                        <p className="text-base text-[#4d4d4d] leading-[1.85] max-w-xl">
+                          לא נמצאו מסלולים שמתאימים לסינון הנוכחי. נסו לנקות חלק מהסינונים או לחפש בשם אחר.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => { setProductFilter("all"); setSpecFilter("all"); setCompanyFilter("all"); setSearch(""); }}
+                          className="mt-4 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+                        >
+                          ניקוי כל הסינונים
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* Educational content (SEO) */}
+            <section className="grid md:grid-cols-2 gap-x-16 gap-y-12">
+              <ScrollReveal>
+                <div className="border-t border-[#171717]/15 pt-6">
+                  <h2
+                    className="text-[#171717] leading-tight mb-5"
+                    style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.3rem, 2.4vw, 1.7rem)" }}
+                  >
+                    מה זה מסלול השקעה?
+                  </h2>
+                  <div className="space-y-4 text-[#4d4d4d] leading-[1.9] text-base">
+                    <p>
+                      מסלול השקעה קובע איך הכסף שלכם מושקע: כמה הולך למניות, כמה לאגרות חוב, וכמה למזומן. כל קרן פנסיה, קרן השתלמות וקופת גמל מציעה מגוון מסלולים שנבדלים ברמת הסיכון ובפוטנציאל התשואה.
+                    </p>
+                    <p>
+                      מסלול כללי מפזר את הכסף בין מניות, אגרות חוב ונכסים נוספים, ומתאים לרוב האנשים. מסלול מניות חושף יותר כסף לשוק המניות: פוטנציאל תשואה גבוה אבל גם סיכון גבוה. מסלול אגרות חוב שמרני יותר ומתאים למי שקרוב לפרישה.
+                    </p>
+                  </div>
+                </div>
+              </ScrollReveal>
+
+              <ScrollReveal delay={80}>
+                <div className="border-t border-[#171717]/15 pt-6">
+                  <h2
+                    className="text-[#171717] leading-tight mb-5"
+                    style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.3rem, 2.4vw, 1.7rem)" }}
+                  >
+                    איך לבחור מסלול השקעה?
+                  </h2>
+                  <div className="space-y-4 text-[#4d4d4d] leading-[1.9] text-base">
+                    <p>
+                      הבחירה תלויה בשלושה דברים: גיל, אופק זמן, ורמת סיבולת לסיכון. ככלל אצבע, ככל שאתם צעירים יותר, כדאי לבחור מסלול אגרסיבי יותר כי יש לכם זמן להתאושש מירידות. ככל שמתקרבים לפרישה, עדיף מסלול שמרני יותר.
+                    </p>
+                    <p>
+                      חשוב גם להסתכל על דמי הניהול, שאוכלים חלק מהתשואה. ותמיד כדאי להשוות בין חברות, כי אותו סוג מסלול יכול לתת תוצאות שונות מחברה לחברה.
+                    </p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            </section>
+          </div></div>
         </section>
 
-        {/* Disclaimer */}
-        <section className="mt-12 rounded-2xl bg-[#f8f9fc] p-6 sm:p-8 border border-gray-100">
-          <p className="text-xs text-gray-400 leading-relaxed">
-            <strong className="text-gray-500">הבהרה חשובה:</strong> הנתונים המוצגים הם למטרות מידע בלבד ואינם מהווים המלצה לרכישה, מכירה או פדיון של מוצר פיננסי. תשואות עבר אינן מבטיחות תשואות עתידיות. המקור: גמלנט — רשות שוק ההון, משרד האוצר. לקבלת החלטות השקעה יש לפנות לסוכן מורשה.
-          </p>
+        {/* Disclaimer tile */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-10 sm:py-12 relative z-10">
+            <div className="border-t border-[#171717]/10 pt-5 max-w-3xl">
+              <p className="text-[13px] text-[#5c5c5c] leading-[1.85]">
+                <span className="font-medium text-[#171717]/70">הבהרה חשובה: </span>
+                הנתונים המוצגים הם למטרות מידע בלבד ואינם מהווים המלצה לרכישה, מכירה או פדיון של מוצר פיננסי.
+                תשואות עבר אינן מבטיחות תשואות עתידיות. המקור: גמלנט, רשות שוק ההון, משרד האוצר.
+                לקבלת החלטות השקעה יש לפנות לסוכן מורשה.
+              </p>
+            </div>
+          </div></div>
         </section>
 
-        {/* CTA */}
-        <section className="mt-12">
-          <div className="bg-[#f8f9fc] rounded-2xl p-8 sm:p-12 text-center relative overflow-hidden">
-            <div className="absolute top-4 right-6 w-20 h-20 rounded-full bg-[#5ec6c6] opacity-10" />
-            <div className="absolute bottom-4 left-10 w-14 h-14 rounded-full bg-[#f4a261] opacity-10" />
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a3d3d] mb-3 relative z-10">
-              רוצים לדעת איך המסלול שלכם מתנהג?
-            </h2>
-            <p className="text-gray-500 text-base sm:text-lg mb-8 max-w-xl mx-auto relative z-10">
-              ניתוח תיק חינם — נבדוק מסלולים, דמי ניהול וחשיפות ונמליץ מה לשפר
-            </p>
-            <Link
-              to="/contact"
-              className="inline-block px-8 py-3.5 bg-[#5ec6c6] text-white font-semibold rounded-full hover:bg-[#4db5b5] transition-colors relative z-10"
-            >
-              קבלו ניתוח תיק חינם
-            </Link>
-          </div>
+        {/* Next action — closing ink tile */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+            <div className="border-t border-white/20 pt-5">
+              <h2
+                className="text-[#fafafa] leading-tight mb-3"
+                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.3rem)" }}
+              >
+                רוצים לדעת איך המסלול שלכם מתנהג?
+              </h2>
+              <p className="text-[#fafafa]/45 text-base leading-[1.85] mb-8 max-w-xl">
+                ניתוח תיק ללא עלות: נבדוק מסלולים, דמי ניהול וחשיפות, ונמליץ מה לשפר.
+              </p>
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
+              >
+                לניתוח תיק ללא עלות
+              </Link>
+            </div>
+          </div></div>
         </section>
       </main>
 

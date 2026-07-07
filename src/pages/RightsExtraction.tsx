@@ -1,113 +1,201 @@
+import { useRef } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Search, CheckCircle, FileText, Users, ArrowLeft, ChevronLeft } from "lucide-react";
+import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
+import { SERIF, MONO, CHIP_GREEN } from "@/lib/brand";
+import { StatusPill } from "@/components/brand/Live";
+import { FamilyFigure } from "@/components/brand/Figures";
+import { ProgressRail } from "@/components/brand/Strokes";
+
+// SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
+const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
+
+const rights = [
+  { title: "החזרי מס הכנסה", description: "בדיקת החזרי מס עבור 6 שנים אחורה" },
+  { title: "קצבאות ביטוח לאומי", description: "מיצוי זכויות לקצבת נכות, זקנה, ילדים ועוד" },
+  { title: "הטבות מס לעצמאים", description: "ניכויים והקלות מס לבעלי עסקים" },
+  { title: "זכויות פנסיוניות", description: "איתור קופות אבודות וכספים שלא ידעתם עליהם" },
+];
+
+const steps = [
+  { number: "01", title: "מלאו פרטים", description: "כמה שאלות קצרות. שתי דקות, לא יותר." },
+  { number: "02", title: "נבדוק עבורכם", description: "סריקה של כל הזכויות המגיעות לכם מהמדינה, מביטוח לאומי ומרשויות המס." },
+  { number: "03", title: "קבלו דוח", description: "רשימת זכויות מסודרת והמלצות לפעולה. בלי אותיות קטנות." },
+];
 
 const RightsExtraction = () => {
-  const rights = [
-    {
-      title: "החזרי מס הכנסה",
-      description: "בדקו האם מגיעים לכם החזרי מס עבור 6 שנים אחורה",
-      icon: FileText,
-      color: "#5ec6c6",
-    },
-    {
-      title: "קצבאות ביטוח לאומי",
-      description: "מיצוי זכויות לקצבת נכות, זקנה, ילדים ועוד",
-      icon: Users,
-      color: "#6c63ff",
-    },
-    {
-      title: "הטבות מס לעצמאים",
-      description: "ניכויים והקלות מס לבעלי עסקים",
-      icon: CheckCircle,
-      color: "#90be6d",
-    },
-    {
-      title: "זכויות פנסיוניות",
-      description: "איתור קופות אבודות וכספים שלא ידעתם עליהם",
-      icon: Search,
-      color: "#f4a261",
-    },
-  ];
+  const stepsRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      {/* Hero Section */}
-      <section className="relative bg-[#f8f9fc] overflow-hidden">
-        <div className="absolute top-10 left-8 w-24 h-24 rounded-full bg-[#6c63ff] opacity-10" />
-        <div className="absolute bottom-4 right-16 w-14 h-14 rounded-full bg-[#f4a261] opacity-15" />
-        <svg className="absolute bottom-0 left-0 w-full h-20 opacity-10 pointer-events-none" viewBox="0 0 800 80" fill="none">
-          <path d="M0 60 Q250 10 500 50 T800 20" stroke="#6c63ff" strokeWidth="2" strokeDasharray="8 6" />
-          <polygon points="795,18 800,20 795,22" fill="#6c63ff" />
-        </svg>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-18 text-center relative z-10">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
-            מיצוי זכויות
-          </h1>
-          <p className="text-lg text-gray-500 max-w-3xl mx-auto leading-relaxed">
-            גלו את כל הזכויות וההטבות שמגיעות לכם מהמדינה, מביטוח לאומי ומרשויות המס.
-            אנחנו נעזור לכם למצות את מלוא הזכויות שלכם.
-          </p>
+      {/* HERO — bento row: money you didn't know was yours + the family orange tile */}
+      <section className="px-2 pt-2">
+        <div className="grid gap-2 lg:grid-cols-[1.6fr_1fr] items-stretch">
+          <div className="bento-panel"><div className="px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10">
+            <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
+              <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
+                <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
+                <span>←</span>
+                <span className="text-[#171717]/70 font-medium">מיצוי זכויות</span>
+              </nav>
+              <span className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium" style={{ color: PAPER_MUTED }}>
+                מיצוי זכויות
+              </span>
+            </div>
+
+            <h1
+              className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
+              style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
+            >
+              כסף שמגיע לכם. באמת.
+            </h1>
+            <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9]">
+              החזרי מס, קצבאות וקופות שנשכחו. נבדוק מה מגיע לכם מהמדינה, ונדאג שתקבלו את זה.
+            </p>
+          </div></div>
+
+          {/* Orange tile — the family in the corner */}
+          <div className="bento-panel-orange relative p-6 sm:p-8 flex flex-col justify-between min-h-[200px]">
+            <FamilyFigure className="absolute -left-4 -bottom-5 w-32 h-32 sm:w-36 sm:h-36 opacity-70" />
+            <span
+              className="text-[10px] tracking-[0.2em] font-semibold text-[#171717]/80"
+              style={{ fontFamily: MONO }}
+              dir="ltr"
+            >
+              RIGHTS · CHECK
+            </span>
+            <div className="relative z-10">
+              <div className="text-[22px] sm:text-[26px] font-semibold text-[#171717] leading-tight">
+                כסף שמגיע לכם
+              </div>
+              <div className="mt-1.5 text-[13px] font-medium text-[#171717]/80">
+                הבדיקה ללא עלות. אם אין, לפחות תדעו.
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Breadcrumb */}
-      <div className="border-b border-gray-100">
-        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
-          <ChevronLeft className="w-3.5 h-3.5" />
-          <span className="text-[#0a3d3d] font-medium">מיצוי זכויות</span>
-        </nav>
-      </div>
-
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-        {/* Rights Grid */}
-        <section className="mb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {rights.map((right) => (
-              <div key={right.title} className="rounded-2xl bg-white border border-gray-100 p-8 hover:shadow-lg transition-all">
-                <div className="w-14 h-14 rounded-full flex items-center justify-center mb-5"
-                  style={{ backgroundColor: right.color }}>
-                  <right.icon className="w-6 h-6 text-white" />
+      <main>
+        {/* 01 — WHAT WE CHECK */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+            <ScrollReveal>
+              <div className="border-t border-[#171717]/20 pt-6 mb-10 sm:mb-12">
+                <div className="flex items-baseline gap-6 sm:gap-10">
+                  <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED }}>
+                    01
+                  </span>
+                  <div>
+                    <h2
+                      className="text-[#171717] leading-tight"
+                      style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}
+                    >
+                      מה בודקים
+                    </h2>
+                    <p className="mt-3 text-base text-[#4d4d4d] leading-[1.85] max-w-xl">
+                      ארבעה ערוצים שבהם רוב הישראלים משאירים כסף על השולחן.
+                    </p>
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-[#0a3d3d] mb-3">{right.title}</h3>
-                <p className="text-gray-500 mb-6">{right.description}</p>
-                <Link to="/contact">
-                  <button className="inline-flex items-center gap-2 px-6 py-2.5 border-2 border-[#0a3d3d] text-[#0a3d3d] rounded-full text-sm font-semibold hover:bg-[#0a3d3d] hover:text-white transition-colors group">
-                    בדוק זכאות
-                    <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                  </button>
-                </Link>
               </div>
-            ))}
-          </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={80}>
+              <div className="max-w-3xl border-t border-[#171717]/15">
+                {rights.map((right) => (
+                  <div
+                    key={right.title}
+                    className="flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-10 py-5 border-b border-[#171717]/10"
+                  >
+                    <h3 className="text-base font-medium text-[#171717] shrink-0 sm:w-52">{right.title}</h3>
+                    <p className="text-[14px] text-[#4d4d4d] leading-[1.8]">{right.description}</p>
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
+          </div></div>
         </section>
 
-        {/* How It Works */}
-        <section className="rounded-2xl bg-[#f8f9fc] p-8 md:p-12 text-center relative overflow-hidden">
-          <div className="absolute top-4 left-8 w-16 h-16 rounded-full bg-[#5ec6c6] opacity-10" />
-          <div className="absolute bottom-4 right-12 w-12 h-12 rounded-full bg-[#e76f51] opacity-10" />
-          <h2 className="text-3xl font-extrabold text-[#0a3d3d] mb-8 relative z-10">איך זה עובד?</h2>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto relative z-10">
-            <div>
-              <div className="w-16 h-16 rounded-full bg-[#5ec6c6] text-white flex items-center justify-center text-2xl font-extrabold mx-auto mb-4">1</div>
-              <h3 className="font-bold text-[#0a3d3d] mb-2">מלאו פרטים</h3>
-              <p className="text-gray-500 text-sm">ענו על מספר שאלות קצרות</p>
+        {/* 02 — HOW IT WORKS (a real sequence) */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+            <ScrollReveal>
+              <div className="border-t border-[#171717]/20 pt-6 mb-10 sm:mb-12">
+                <div className="flex items-baseline gap-6 sm:gap-10">
+                  <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED }}>
+                    02
+                  </span>
+                  <h2
+                    className="text-[#171717] leading-tight"
+                    style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}
+                  >
+                    איך זה עובד
+                  </h2>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            <div ref={stepsRef} className="max-w-3xl relative pr-5 sm:pr-7">
+              {/* The rail fills as you read through the steps */}
+              <ProgressRail targetRef={stepsRef} color={CHIP_GREEN} className="right-0" />
+              {steps.map((step, i) => (
+                <ScrollReveal key={step.number} delay={i * 60}>
+                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-10 py-6 border-b border-[#171717]/10">
+                    <span
+                      className="text-[12px] tabular-nums tracking-[0.2em] shrink-0 w-8"
+                      style={{ color: PAPER_MUTED, fontFamily: MONO }}
+                    >
+                      {step.number}
+                    </span>
+                    <h3 className="text-lg text-[#171717] shrink-0 sm:w-44" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                      {step.title}
+                    </h3>
+                    <p className="text-[14px] text-[#4d4d4d] leading-[1.8]">{step.description}</p>
+                  </div>
+                </ScrollReveal>
+              ))}
             </div>
-            <div>
-              <div className="w-16 h-16 rounded-full bg-[#6c63ff] text-white flex items-center justify-center text-2xl font-extrabold mx-auto mb-4">2</div>
-              <h3 className="font-bold text-[#0a3d3d] mb-2">נבדוק עבורכם</h3>
-              <p className="text-gray-500 text-sm">המערכת תסרוק את הזכויות המגיעות לכם</p>
+
+            <ScrollReveal delay={80}>
+              <div className="mt-12">
+                <button
+                  type="button"
+                  onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
+                  className="block transition-transform hover:-translate-y-[1px]"
+                  aria-label="פתיחת שיחה עם יועץ SEELD"
+                >
+                  <StatusPill>היועץ מחובר עכשיו · שאלו אם זה רלוונטי אליכם</StatusPill>
+                </button>
+              </div>
+            </ScrollReveal>
+          </div></div>
+        </section>
+
+        {/* CTA — the one next action (ink tile) */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+            <div className="border-t border-white/20 pt-6">
+              <h2
+                className="text-[#fafafa] leading-tight mb-3"
+                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+              >
+                נבדוק מה מגיע לכם
+              </h2>
+              <p className="text-[#fafafa]/55 text-base leading-[1.85] mb-8 max-w-xl">
+                הבדיקה ללא עלות וללא התחייבות. אם אין כלום, לפחות תדעו.
+              </p>
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
+              >
+                בדיקת זכאות
+              </Link>
             </div>
-            <div>
-              <div className="w-16 h-16 rounded-full bg-[#e76f51] text-white flex items-center justify-center text-2xl font-extrabold mx-auto mb-4">3</div>
-              <h3 className="font-bold text-[#0a3d3d] mb-2">קבלו דוח</h3>
-              <p className="text-gray-500 text-sm">תקבלו רשימת זכויות והמלצות לפעולה</p>
-            </div>
-          </div>
+          </div></div>
         </section>
       </main>
 

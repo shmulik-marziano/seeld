@@ -52,7 +52,7 @@ export default function InstallPage() {
             <CardContent className="py-8 text-center space-y-4">
               <CheckCircle2 className="h-12 w-12 text-green-600 mx-auto" />
               <div>
-                <h2 className="text-lg font-semibold text-green-700 dark:text-green-400">האפליקציה מותקנת!</h2>
+                <h2 className="text-lg font-semibold text-green-700 dark:text-green-400">האפליקציה מותקנת.</h2>
                 <p className="text-sm text-muted-foreground mt-1">תוכל לפתוח את SEELD מסרגל המשימות או משולחן העבודה</p>
               </div>
               <Button onClick={() => navigate('/app/dashboard')}>כנס למערכת</Button>

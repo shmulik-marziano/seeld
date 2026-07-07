@@ -1,42 +1,71 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PensionAnalysisForm from "@/components/PensionAnalysisForm";
-import { Heart, Shield, TrendingUp, Users } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
-import { BONE, PINE, BRONZE, SERIF } from "@/lib/brand";
+import { SERIF, MONO } from "@/lib/brand";
+import { StatusPill } from "@/components/brand/Live";
+import { ShieldFigure } from "@/components/brand/Figures";
+
+const tabTriggerClass =
+  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#5c5c5c] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
+
+const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+  <h2
+    className="text-[#171717] leading-tight"
+    style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
+  >
+    {children}
+  </h2>
+);
 
 const PensionLifeInsurance = () => {
   const productTypes = [
     {
       title: "הגנה מלאה",
-      icon: Shield,
-      doodle: "shield",
-      color: "#e76f51",
       description: "ביטוח חיים שמגן על המשפחה במקרה של אובדן מפרנס",
       features: ["ביטוח חיים (ריסק)", "אובדן כושר עבודה", "פטור מפרמיות"],
     },
     {
       title: "חיסכון מצטבר",
-      icon: TrendingUp,
-      doodle: "growth",
-      color: "#5ec6c6",
       description: "צבירת כספים לפנסיה במקביל לכיסוי ביטוחי",
       features: ["מרכיב חיסכון", "תשואה מנוהלת", "הטבות מס"],
     },
     {
       title: "גמישות מלאה",
-      icon: Heart,
-      doodle: "family",
-      color: "#f4a261",
       description: "התאמת סכומי הביטוח והחיסכון לצרכים המשתנים",
       features: ["כיסויים מותאמים", "שינוי מסלולים", "עדכון תקופתי"],
+    },
+  ];
+
+  const articles = [
+    {
+      title: "למה זה חשוב?",
+      paragraphs: [
+        "ביטוח חיים פנסיוני (ביטוח מנהלים) הוא מוצר ייחודי שמשלב חיסכון לפנסיה עם כיסוי ביטוחי מקיף. בניגוד לקרן פנסיה שמנוהלת בצורה אחידה, ביטוח מנהלים מאפשר גמישות רבה יותר בהתאמת הכיסויים הביטוחיים לצרכים הספציפיים שלכם.",
+        "המוצר כולל מרכיב חיסכון שצובר כספים לפנסיה, לצד כיסויים ביטוחיים כמו ביטוח חיים (ריסק), אובדן כושר עבודה, ופטור מתשלום פרמיות. זוהי תכנית שמגנה על המשפחה בהווה ובונה עתיד כלכלי בטוח.",
+      ],
+    },
+    {
+      title: "מתי כדאי לרכוש?",
+      paragraphs: [
+        "ביטוח מנהלים רלוונטי במיוחד למי שרוצה שליטה מלאה על הכיסויים הביטוחיים שלו. הוא מתאים לשכירים שרוצים כיסוי ביטוחי מותאם, לעצמאים שצריכים גמישות, ולבעלי הכנסה גבוהה שרוצים למקסם את החיסכון הפנסיוני.",
+        "אם יש לכם כבר ביטוח מנהלים ותיק, חשוב לבדוק אותו מעת לעת, פוליסות ישנות לרוב כוללות דמי ניהול גבוהים ותנאים פחות טובים. ייתכן שכדאי להעביר את הפוליסה או לעדכן אותה.",
+      ],
+    },
+    {
+      title: "מה חשוב לדעת?",
+      paragraphs: [
+        "בבחירת ביטוח מנהלים, שימו לב לדמי הניהול (מההפקדה ומהצבירה), לביצועי ההשקעה של החברה, לתנאי הכיסוי הביטוחי (במיוחד הגדרת אובדן כושר עבודה), ולגמישות בשינוי מסלולים. פוליסות שונות מציעות תנאים שונים מאוד.",
+        "ב-SEELD אנחנו מבצעים ניתוח מעמיק של ביטוחי המנהלים שלכם, משווים מול כל החברות בשוק, ומוודאים שאתם מקבלים את התנאים הטובים ביותר, הן בחלק החיסכוני והן בחלק הביטוחי.",
+      ],
     },
   ];
 
@@ -47,7 +76,7 @@ const PensionLifeInsurance = () => {
     },
     {
       q: "האם אפשר להעביר ביטוח מנהלים לקרן פנסיה?",
-      a: "כן, ניתן לבצע ניוד בין מוצרים פנסיוניים. עם זאת, חשוב לבדוק את ההשלכות לפני המעבר — למשל, אובדן תנאים ביטוחיים ייחודיים שקיימים בביטוח המנהלים הנוכחי.",
+      a: "כן, ניתן לבצע ניוד בין מוצרים פנסיוניים. עם זאת, חשוב לבדוק את ההשלכות לפני המעבר, למשל, אובדן תנאים ביטוחיים ייחודיים שקיימים בביטוח המנהלים הנוכחי.",
     },
     {
       q: "מה קורה עם הכסף בגיל הפרישה?",
@@ -56,31 +85,35 @@ const PensionLifeInsurance = () => {
   ];
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
       {/* ══════ HERO ══════ */}
-      <section style={{ backgroundColor: BONE }}>
-        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
+      <section className="px-2 pt-2">
+        <div className="bento-panel">
+        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10">
           {/* Rule + breadcrumb */}
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+            <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <Link to="/savings" className="hover:text-[#171717] transition-colors">חיסכון ופנסיה</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">ביטוח חיים פנסיוני</span>
             </nav>
+            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium" style={{ color: "#5c5c5c" }}>
+              חיסכון ופנסיה
+            </span>
           </div>
 
           <h1
             className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
             style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(2rem, 5vw, 3.4rem)' }}
           >
-            חיסכון פנסיוני עם <span style={{ color: BRONZE }}>הגנה מלאה</span>
+            חיסכון פנסיוני עם <span style={{ color: "#5c5c5c" }}>הגנה מלאה</span>
           </h1>
-          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9] mb-9">
-            שילוב בין חיסכון פנסיוני לביטוח חיים המעניק הגנה מקיפה למשפחה — ביטוח מנהלים עם כיסויים מותאמים.
+          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9] mb-9">
+            שילוב בין חיסכון פנסיוני לביטוח חיים המעניק הגנה מקיפה למשפחה: ביטוח מנהלים עם כיסויים מותאמים.
           </p>
           <div className="flex flex-wrap items-center gap-6">
             <a
@@ -97,171 +130,149 @@ const PensionLifeInsurance = () => {
               <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
             </a>
           </div>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event('seeld:open-chat'))}
+            className="mt-7 block transition-transform hover:-translate-y-[1px]"
+            aria-label="פתיחת שיחה עם יועץ SEELD AI"
+          >
+            <StatusPill>יש שאלה על ביטוח מנהלים? היועץ מחובר</StatusPill>
+          </button>
+        </div>
+        {/* Bento play: line figure peeking from the tile corner */}
+        <ShieldFigure className="absolute -left-3 -bottom-4 w-16 h-16 opacity-70 rotate-6 pointer-events-none" />
         </div>
       </section>
 
       <main>
         {/* ══════ BENEFITS ══════ */}
-        <section className="bg-white">
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
             <div className="border-t border-[#171717]/20 pt-5 mb-10">
-              <h2
-                className="text-[#171717] leading-tight"
-                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
-              >
-                יתרונות ביטוח מנהלים
-              </h2>
+              <SectionTitle>יתרונות ביטוח מנהלים</SectionTitle>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
               {[
-                { icon: Shield, doodle: "shield", title: "הגנה מקיפה", desc: "ביטוח חיים, נכות ופטור מפרמיות", color: "#e76f51" },
-                { icon: TrendingUp, doodle: "growth", title: "חיסכון לפנסיה", desc: "צבירת כספים מנוהלת לעתיד", color: "#5ec6c6" },
-                { icon: Heart, doodle: "family", title: "גמישות", desc: "כיסויים מותאמים לצרכים שלכם", color: "#f4a261" },
-                { icon: Users, doodle: "handshake", title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לאורך הדרך", color: "#90be6d" },
+                { title: "הגנה מקיפה", desc: "ביטוח חיים, נכות ופטור מפרמיות" },
+                { title: "חיסכון לפנסיה", desc: "צבירת כספים מנוהלת לעתיד" },
+                { title: "גמישות", desc: "כיסויים מותאמים לצרכים שלכם" },
+                { title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לאורך הדרך" },
               ].map((item, idx) => (
                 <div key={idx} className="border-t border-[#171717]/10 pt-4">
-                  <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>
+                  <span
+                    className="text-[11px] tabular-nums tracking-[0.2em] block mb-4"
+                    dir="ltr"
+                    style={{ color: "#5c5c5c", fontFamily: MONO }}
+                  >
                     {String(idx + 1).padStart(2, '0')}
                   </span>
                   <h3 className="text-lg text-[#171717] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                     {item.title}
                   </h3>
-                  <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{item.desc}</p>
+                  <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{item.desc}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </div></div>
         </section>
 
-        {/* ══════ PRODUCT TYPES ══════ */}
-        <section id="product-types" style={{ backgroundColor: BONE }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <div className="border-t border-[#171717]/20 pt-5 mb-10">
-              <h2
-                className="text-[#171717] leading-tight"
-                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
-              >
-                מרכיבי ביטוח מנהלים
-              </h2>
-              <p className="text-[#171717]/45 mt-2 text-base leading-relaxed max-w-xl">שילוב מושלם של חיסכון וביטוח</p>
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
-              {productTypes.map((type, idx) => (
-                <div key={idx} className="border-t border-[#171717]/10 pt-4">
-                  <h3 className="text-base text-[#171717] mb-2" style={{ fontFamily: SERIF, fontWeight: 600 }}>
-                    {type.title}
-                  </h3>
-                  <p className="text-[#171717]/50 text-[14px] leading-[1.8] mb-4">{type.description}</p>
-                  <ul className="space-y-2">
-                    {type.features.map((feature, fIdx) => (
-                      <li key={fIdx} className="text-[#171717]/55 text-[14px] leading-relaxed flex gap-2.5">
-                        <span style={{ color: BRONZE }}>—</span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ══════ ARTICLE ══════ */}
-        <section className="bg-white">
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <div className="max-w-3xl">
-              <div className="border-t border-[#171717]/15 pt-5 mb-6">
-                <h2
-                  className="text-[#171717] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
-                >
-                  למה זה חשוב?
-                </h2>
-              </div>
-              <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base sm:text-base">
-                <p>
-                  ביטוח חיים פנסיוני (ביטוח מנהלים) הוא מוצר ייחודי שמשלב חיסכון לפנסיה עם כיסוי ביטוחי מקיף. בניגוד לקרן פנסיה שמנוהלת בצורה אחידה, ביטוח מנהלים מאפשר גמישות רבה יותר בהתאמת הכיסויים הביטוחיים לצרכים הספציפיים שלכם.
-                </p>
-                <p>
-                  המוצר כולל מרכיב חיסכון שצובר כספים לפנסיה, לצד כיסויים ביטוחיים כמו ביטוח חיים (ריסק), אובדן כושר עבודה, ופטור מתשלום פרמיות. זוהי תכנית שמגנה על המשפחה בהווה ובונה עתיד כלכלי בטוח.
-                </p>
-              </div>
-
-              <div className="border-t border-[#171717]/15 pt-5 mt-14 mb-6">
-                <h2
-                  className="text-[#171717] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
-                >
-                  מתי כדאי לרכוש?
-                </h2>
-              </div>
-              <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base sm:text-base">
-                <p>
-                  ביטוח מנהלים רלוונטי במיוחד למי שרוצה שליטה מלאה על הכיסויים הביטוחיים שלו. הוא מתאים לשכירים שרוצים כיסוי ביטוחי מותאם, לעצמאים שצריכים גמישות, ולבעלי הכנסה גבוהה שרוצים למקסם את החיסכון הפנסיוני.
-                </p>
-                <p>
-                  אם יש לכם כבר ביטוח מנהלים ותיק, חשוב לבדוק אותו מעת לעת — פוליסות ישנות לרוב כוללות דמי ניהול גבוהים ותנאים פחות טובים. ייתכן שכדאי להעביר את הפוליסה או לעדכן אותה.
-                </p>
-              </div>
-
-              <div className="border-t border-[#171717]/15 pt-5 mt-14 mb-6">
-                <h2
-                  className="text-[#171717] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
-                >
-                  מה חשוב לדעת?
-                </h2>
-              </div>
-              <div className="space-y-4 text-[#171717]/60 leading-[1.9] text-base sm:text-base">
-                <p>
-                  בבחירת ביטוח מנהלים, שימו לב לדמי הניהול (מההפקדה ומהצבירה), לביצועי ההשקעה של החברה, לתנאי הכיסוי הביטוחי (במיוחד הגדרת אובדן כושר עבודה), ולגמישות בשינוי מסלולים. פוליסות שונות מציעות תנאים שונים מאוד.
-                </p>
-                <p>
-                  ב-SEELD אנחנו מבצעים ניתוח מעמיק של ביטוחי המנהלים שלכם, משווים מול כל החברות בשוק, ומוודאים שאתם מקבלים את התנאים הטובים ביותר — הן בחלק החיסכוני והן בחלק הביטוחי.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ══════ FAQ ══════ */}
-        <section style={{ backgroundColor: BONE }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <div className="max-w-3xl">
-              <div className="border-t border-[#171717]/20 pt-5 mb-8">
-                <h2
-                  className="text-[#171717] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
-                >
+        {/* ══════ THE KNOWLEDGE — one tabbed section ══════ */}
+        <section id="product-types" className="px-2 pt-2 scroll-mt-24">
+          <div className="bento-panel"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
+            <Tabs defaultValue="guide" dir="rtl">
+              <TabsList className="flex w-full justify-start gap-8 sm:gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none overflow-x-auto scrollbar-hide">
+                <TabsTrigger value="guide" className={tabTriggerClass}>
+                  המדריך
+                </TabsTrigger>
+                <TabsTrigger value="types" className={tabTriggerClass}>
+                  מרכיבי הפוליסה
+                </TabsTrigger>
+                <TabsTrigger value="faq" className={tabTriggerClass}>
                   שאלות נפוצות
-                </h2>
-              </div>
-              <Accordion type="multiple">
-                {faqItems.map((item, idx) => (
-                  <AccordionItem
-                    key={idx}
-                    value={`faq-${idx}`}
-                    className="border-b border-[#171717]/10 rounded-none px-0"
-                  >
-                    <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
-                      {item.q}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-[#171717]/50 leading-[1.85] pb-6 text-[14px]">
-                      {item.a}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
+                </TabsTrigger>
+              </TabsList>
+
+              {/* — Guide — */}
+              <TabsContent value="guide" className="mt-0">
+                <div className="max-w-3xl">
+                  {articles.map((article, idx) => (
+                    <div key={idx} className={idx > 0 ? 'mt-14' : ''}>
+                      <div className="border-t border-[#171717]/15 pt-5 mb-6">
+                        <SectionTitle>{article.title}</SectionTitle>
+                      </div>
+                      <div className="space-y-4 text-[#4d4d4d] leading-[1.9] text-base">
+                        {article.paragraphs.map((p, pIdx) => (
+                          <p key={pIdx}>{p}</p>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+
+              {/* — Components — */}
+              <TabsContent value="types" className="mt-0">
+                <div className="mb-10">
+                  <SectionTitle>מרכיבי ביטוח מנהלים</SectionTitle>
+                  <p className="text-[#5c5c5c] mt-2 text-base leading-relaxed max-w-xl">
+                    חיסכון וביטוח במוצר אחד
+                  </p>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
+                  {productTypes.map((type, idx) => (
+                    <div key={idx} className="border-t border-[#171717]/10 pt-4">
+                      <h3 className="text-base text-[#171717] mb-2" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                        {type.title}
+                      </h3>
+                      <p className="text-[#5c5c5c] text-[14px] leading-[1.8] mb-4">{type.description}</p>
+                      <ul className="space-y-2">
+                        {type.features.map((feature, fIdx) => (
+                          <li key={fIdx} className="text-[#5c5c5c] text-[14px] leading-relaxed flex gap-2.5">
+                            <span style={{ color: "#5c5c5c" }}>—</span>
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+
+              {/* — FAQ — */}
+              <TabsContent value="faq" className="mt-0">
+                <div className="max-w-3xl">
+                  <Accordion type="multiple">
+                    {faqItems.map((item, idx) => (
+                      <AccordionItem
+                        key={idx}
+                        value={`faq-${idx}`}
+                        className="border-b border-[#171717]/10 rounded-none px-0"
+                      >
+                        <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
+                          {item.q}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-[#5c5c5c] leading-[1.85] pb-6 text-[14px]">
+                          {item.a}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div></div>
+        </section>
+
+        {/* ══════ COMPANIES — own tile ══════ */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel">
+            <CompanyLogos variant="grid" />
           </div>
         </section>
 
-        {/* ══════ COMPANIES ══════ */}
-        <CompanyLogos variant="grid" />
-
-        {/* ══════ ANALYSIS FORM ══════ */}
-        <section id="analysis-form" className="scroll-mt-24" style={{ backgroundColor: PINE }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        {/* ══════ ANALYSIS FORM — ink tile ══════ */}
+        <section id="analysis-form" className="px-2 pt-2 scroll-mt-24">
+          <div className="bento-panel-ink"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <div className="border-t border-white/20 pt-5 mb-10 text-center sm:text-right">
               <h2
                 className="text-[#fafafa] leading-tight mb-3"
@@ -280,7 +291,7 @@ const PensionLifeInsurance = () => {
                 description="מלאו את הפרטים ונבדוק אם הפוליסה שלכם מספקת את המיטב"
               />
             </div>
-          </div>
+          </div></div>
         </section>
       </main>
 

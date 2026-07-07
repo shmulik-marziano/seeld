@@ -1,15 +1,20 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ScrollReveal from "@/components/ScrollReveal";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { useAuth } from "@/hooks/useAuth";
-import { BONE, BRONZE, SERIF } from "@/lib/brand";
+import { SERIF, MONO } from "@/lib/brand";
+import { LiveDot, StatusPill } from "@/components/brand/Live";
+
+// SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
+const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
 
 const inputClass =
-  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
+  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#5c5c5c] text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -53,10 +58,10 @@ const Contact = () => {
         console.error("Failed to send email notification:", emailErr);
       }
 
-      toast.success("ההודעה נשלחה! נחזור אליכם בהקדם.");
+      toast.success("ההודעה אצלנו. נחזור אליכם באותו יום עבודה.");
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
     } catch {
-      toast.error("שגיאה בשליחת ההודעה, נסו שוב");
+      toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
     } finally {
       setSubmitting(false);
     }
@@ -70,20 +75,19 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      {/* ══════ HERO ══════ */}
-      <section style={{ backgroundColor: BONE }}>
-        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16">
-          {/* Rule + breadcrumb */}
+      {/* HERO — one idea: leave details, we call back */}
+      <section className="px-2 pt-2">
+        <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10">
           <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#171717]/40">
+            <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
               <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
               <span>←</span>
               <span className="text-[#171717]/70 font-medium">צור קשר</span>
             </nav>
-            <span className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium" style={{ color: BRONZE }}>
+            <span className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium" style={{ color: PAPER_MUTED }}>
               צור קשר
             </span>
           </div>
@@ -92,203 +96,208 @@ const Contact = () => {
             className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
             style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
           >
-            צרו קשר
+            נחזור אליכם באותו יום עבודה
           </h1>
-          <p className="text-base sm:text-[17px] text-[#171717]/55 max-w-2xl leading-[1.9]">
-            רוצים לקבל הצעת מחיר? יש לכם שאלה בנושא ביטוח או חיסכון? נשמח לעזור.
+          <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9]">
+            השאירו פרטים ויועץ מהצוות יחזור אליכם. שיחה אחת, בלי מרדף.
           </p>
-        </div>
+        </div></div>
       </section>
 
-      <main className="bg-white">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-14 lg:gap-24">
-            {/* Contact Form */}
-            <div>
-              <div className="border-t border-[#171717]/20 pt-5 mb-10">
-                <div className="text-[11px] tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
-                  01
-                </div>
-                <h2
-                  className="text-[#171717] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
-                >
-                  השאירו פרטים
-                </h2>
-              </div>
-              <form onSubmit={handleSubmit} className="space-y-6">
+      <main>
+        <section className="px-2 pt-2">
+          <div className="grid gap-2 lg:grid-cols-[1.15fr_0.85fr] items-stretch">
+            {/* Contact Form — the one action, in one calm paper tile */}
+            <div className="bento-panel"><div className="px-5 sm:px-8 py-12 sm:py-16 relative z-10">
+              <ScrollReveal>
                 <div>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className={inputClass}
-                    placeholder="שם מלא"
-                  />
-                </div>
-                <div className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
-                  <div>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className={inputClass}
-                      placeholder="אימייל"
-                      dir="ltr"
-                      style={{ textAlign: "right" }}
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      required
-                      className={inputClass}
-                      placeholder="טלפון"
-                      dir="ltr"
-                      style={{ textAlign: "right" }}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <select
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] text-base focus:outline-none focus:border-[#171717] transition-colors appearance-none cursor-pointer min-h-[44px] rounded-none"
-                  >
-                    <option value="">בחרו נושא</option>
-                    <option value="pension">תכנון פנסיוני</option>
-                    <option value="health-insurance">ביטוח בריאות</option>
-                    <option value="life-insurance">ביטוח חיים</option>
-                    <option value="car-insurance">ביטוח רכב</option>
-                    <option value="home-insurance">ביטוח דירה</option>
-                    <option value="savings">חיסכון והשקעות</option>
-                    <option value="other">אחר</option>
-                  </select>
-                </div>
-                <div>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows={4}
-                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors resize-none rounded-none"
-                    placeholder="ספרו לנו במה נוכל לעזור..."
-                  />
-                </div>
-                <div className="pt-2">
                   <button
-                    type="submit"
-                    disabled={submitting}
-                    className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
+                    type="button"
+                    onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
+                    className="mb-10 block transition-transform hover:-translate-y-[1px]"
+                    aria-label="פתיחת שיחה עם יועץ SEELD"
                   >
-                    {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
+                    <StatusPill>היועץ מחובר עכשיו · שאלו לפני שממלאים</StatusPill>
                   </button>
-                </div>
-              </form>
-            </div>
 
-            {/* Contact Information */}
-            <div>
-              <div className="border-t border-[#171717]/20 pt-5 mb-8">
-                <div className="text-[11px] tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
-                  02
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        className={inputClass}
+                        placeholder="שם מלא"
+                      />
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
+                      <div>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                          className={inputClass}
+                          placeholder="אימייל"
+                          dir="ltr"
+                          style={{ textAlign: "right" }}
+                        />
+                      </div>
+                      <div>
+                        <input
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          required
+                          className={inputClass}
+                          placeholder="טלפון"
+                          dir="ltr"
+                          style={{ textAlign: "right" }}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <select
+                        id="subject"
+                        name="subject"
+                        value={formData.subject}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] text-base focus:outline-none focus:border-[#171717] transition-colors appearance-none cursor-pointer min-h-[44px] rounded-none"
+                      >
+                        <option value="">בחרו נושא</option>
+                        <option value="pension">תכנון פנסיוני</option>
+                        <option value="health-insurance">ביטוח בריאות</option>
+                        <option value="life-insurance">ביטוח חיים</option>
+                        <option value="car-insurance">ביטוח רכב</option>
+                        <option value="home-insurance">ביטוח דירה</option>
+                        <option value="savings">חיסכון והשקעות</option>
+                        <option value="other">אחר</option>
+                      </select>
+                    </div>
+                    <div>
+                      <textarea
+                        id="message"
+                        name="message"
+                        value={formData.message}
+                        onChange={handleChange}
+                        rows={4}
+                        className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#5c5c5c] text-base focus:outline-none focus:border-[#171717] transition-colors resize-none rounded-none"
+                        placeholder="במה נוכל לעזור?"
+                      />
+                    </div>
+                    <div className="pt-2">
+                      <button
+                        type="submit"
+                        disabled={submitting}
+                        className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-black transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px] rounded-lg"
+                      >
+                        {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
+                      </button>
+                      <div className="mt-5">
+                        <span className="text-[12px] text-[#5c5c5c]">שתי דקות למלא. אפס אותיות קטנות.</span>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-                <h2
-                  className="text-[#171717] leading-tight"
-                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+              </ScrollReveal>
+            </div></div>
+
+            {/* Side column: contact details as their own small ink tile + a quiet paper tile */}
+            <div className="grid gap-2 content-start">
+              <div className="bento-panel-ink px-5 sm:px-7 py-7">
+                <div
+                  className="flex justify-between text-[10px] tracking-[0.16em] mb-6"
+                  style={{ fontFamily: MONO, color: "rgba(233,227,214,.55)" }}
+                  dir="ltr"
                 >
-                  דרכי התקשרות
-                </h2>
-              </div>
-
-              <div>
-                <div className="py-[15px] border-b border-[#171717]/10">
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-[13px] text-[#171717]/45">טלפון</span>
-                    <a
-                      href="tel:0523097444"
-                      className="text-base text-[#171717] tabular-nums border-b border-transparent hover:border-[#171717]/40 transition-colors"
-                      dir="ltr"
-                    >
-                      052-309-7444
-                    </a>
-                  </div>
-                  <p className="text-[12px] text-[#171717]/35 mt-1 text-left">א'-ה', 9:00-18:00</p>
+                  <span>CONTACT</span>
+                  <span className="inline-flex items-center gap-1.5 text-[#e9e3d6]">
+                    <LiveDot size={5} />
+                    LIVE
+                  </span>
                 </div>
-                <div className="py-[15px] border-b border-[#171717]/10">
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-[13px] text-[#171717]/45">אימייל</span>
-                    <a
-                      href="mailto:info@seeld-ins.co.il"
-                      className="text-base text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
-                      dir="ltr"
-                    >
-                      info@seeld-ins.co.il
-                    </a>
+                <div className="border-t border-white/10">
+                  <div className="py-[15px] border-b border-white/10">
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-[13px]" style={{ color: "rgba(233,227,214,.6)" }}>טלפון</span>
+                      <a
+                        href="tel:0523097444"
+                        className="text-base text-[#e9e3d6] tabular-nums border-b border-transparent hover:border-[#e9e3d6]/40 transition-colors"
+                        dir="ltr"
+                      >
+                        052-309-7444
+                      </a>
+                    </div>
+                    <p className="text-[12px] mt-1 text-left" style={{ color: "rgba(233,227,214,.55)" }}>א'-ה', 9:00-18:00</p>
                   </div>
-                  <p className="text-[12px] text-[#171717]/35 mt-1 text-left">נענה תוך יום עסקים</p>
-                </div>
-                <div className="py-[15px] border-b border-[#171717]/10">
-                  <div className="flex items-baseline justify-between gap-6">
-                    <span className="text-[13px] text-[#171717]/45 shrink-0">משרדים</span>
-                    <div className="text-left">
-                      <p className="text-base text-[#171717]">המלאכה 10, רעננה</p>
-                      <p className="text-base text-[#171717]">הסדנא 4, ירושלים</p>
+                  <div className="py-[15px] border-b border-white/10">
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-[13px]" style={{ color: "rgba(233,227,214,.6)" }}>אימייל</span>
+                      <a
+                        href="mailto:info@seeld.co.il"
+                        className="text-base text-[#e9e3d6] border-b border-transparent hover:border-[#e9e3d6]/40 transition-colors"
+                        dir="ltr"
+                      >
+                        info@seeld.co.il
+                      </a>
+                    </div>
+                    <p className="text-[12px] mt-1 text-left" style={{ color: "rgba(233,227,214,.55)" }}>נענה תוך יום עסקים</p>
+                  </div>
+                  <div className="py-[15px]">
+                    <div className="flex items-baseline justify-between gap-6">
+                      <span className="text-[13px] shrink-0" style={{ color: "rgba(233,227,214,.6)" }}>משרדים</span>
+                      <div className="text-left">
+                        <p className="text-base text-[#e9e3d6]">המלאכה 10, רעננה</p>
+                        <p className="text-base text-[#e9e3d6]">הסדנא 4, ירושלים</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-12">
-                <div className="border-t border-[#171717]/20 pt-5 mb-8">
-                  <div className="text-[11px] tracking-[0.22em] font-medium mb-3" style={{ color: BRONZE }}>
-                    03
+              <div className="bento-panel px-5 sm:px-7 py-7">
+                <div className="relative z-10">
+                  <div className="border-t border-[#171717]/20 pt-5 mb-6">
+                    <h2
+                      className="text-[#171717] leading-tight"
+                      style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "1.2rem" }}
+                    >
+                      לפני שאתם כותבים
+                    </h2>
                   </div>
-                  <h3
-                    className="text-[#171717] leading-tight"
-                    style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
-                  >
-                    שאלות נפוצות
-                  </h3>
-                </div>
-                <div>
-                  <div className="border-t border-[#171717]/10 pt-4 pb-6">
-                    <h4 className="text-base font-medium text-[#171717] mb-1.5">האם הייעוץ כרוך בתשלום?</h4>
-                    <p className="text-[13px] text-[#171717]/50 leading-[1.85]">
-                      פגישת הייעוץ הראשונית ללא עלות וללא התחייבות. נשמח להכיר אתכם ולהבין את הצרכים שלכם.
-                    </p>
-                  </div>
-                  <div className="border-t border-[#171717]/10 pt-4 pb-6">
-                    <h4 className="text-base font-medium text-[#171717] mb-1.5">כמה זמן לוקח לקבל הצעת מחיר?</h4>
-                    <p className="text-[13px] text-[#171717]/50 leading-[1.85]">
-                      אנחנו מחזירים הצעות מחיר תוך 24-48 שעות לאחר פגישת הייעוץ או שיחה טלפונית.
-                    </p>
-                  </div>
-                  <div className="border-t border-[#171717]/10 pt-4 pb-6">
-                    <h4 className="text-base font-medium text-[#171717] mb-1.5">עם אילו חברות ביטוח אתם עובדים?</h4>
-                    <p className="text-[13px] text-[#171717]/50 leading-[1.85]">
-                      אנחנו עובדים עם כל חברות הביטוח בישראל ומשווים עבורכם את כל האפשרויות בשוק.
-                    </p>
+                  <div>
+                    <div className="border-b border-[#171717]/10 pb-5 mb-5">
+                      <h3 className="text-base font-medium text-[#171717] mb-1.5">האם הייעוץ כרוך בתשלום?</h3>
+                      <p className="text-[13px] text-[#4d4d4d] leading-[1.85]">
+                        פגישת הייעוץ הראשונית ללא עלות וללא התחייבות.
+                      </p>
+                    </div>
+                    <div className="border-b border-[#171717]/10 pb-5 mb-5">
+                      <h3 className="text-base font-medium text-[#171717] mb-1.5">כמה זמן לוקח לקבל הצעת מחיר?</h3>
+                      <p className="text-[13px] text-[#4d4d4d] leading-[1.85]">
+                        הצעות מחיר חוזרות תוך 24-48 שעות מפגישת הייעוץ או שיחה טלפונית.
+                      </p>
+                    </div>
+                    <div className="pb-1">
+                      <h3 className="text-base font-medium text-[#171717] mb-1.5">עם אילו חברות ביטוח אתם עובדים?</h3>
+                      <p className="text-[13px] text-[#4d4d4d] leading-[1.85]">
+                        עם כל חברות הביטוח בישראל. משווים עבורכם את כל האפשרויות בשוק.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </main>
 
       <Footer />

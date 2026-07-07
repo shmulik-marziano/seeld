@@ -183,11 +183,11 @@ export default function ExecutionSummaryPage() {
     <div className="p-4 md:p-6 max-w-7xl mx-auto space-y-5" dir="rtl">
       {/* Breadcrumbs */}
       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <button onClick={() => navigate('/')} className="hover:text-[#0a3d3d] transition-colors">ראשי</button>
+        <button onClick={() => navigate('/')} className="hover:text-[#171717] transition-colors">ראשי</button>
         <span className="text-muted-foreground/50">‹</span>
-        <button onClick={() => navigate('/app/customers')} className="hover:text-[#0a3d3d] transition-colors">לקוחות</button>
+        <button onClick={() => navigate('/app/customers')} className="hover:text-[#171717] transition-colors">לקוחות</button>
         <span className="text-muted-foreground/50">‹</span>
-        <button onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:text-[#0a3d3d] transition-colors">{customer.fullName}</button>
+        <button onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:text-[#171717] transition-colors">{customer.fullName}</button>
         <span className="text-muted-foreground/50">‹</span>
         <span className="text-foreground font-medium">סיכום ביצועים</span>
       </div>
@@ -195,12 +195,12 @@ export default function ExecutionSummaryPage() {
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:bg-[#5ec6c6]/10">
+          <Button variant="ghost" size="sm" onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:bg-[#171717]/10">
             <ArrowRight className="h-4 w-4" />
           </Button>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-xl md:text-2xl font-bold text-[#0a3d3d]">סיכום ביצועים</h1>
+              <h1 className="text-xl md:text-2xl font-bold text-[#171717]">סיכום ביצועים</h1>
               {activeSummary && (
                 <span className="text-xs px-2 py-1 rounded-full bg-muted font-medium">
                   #{activeSummary.summaryNumber} · {SUMMARY_STATUS_LABELS[activeSummary.status as ExecutionSummaryStatus] || activeSummary.status}
@@ -213,17 +213,17 @@ export default function ExecutionSummaryPage() {
         <div className="flex gap-2">
           {activeSummary && (
             <>
-              <Button variant="outline" size="sm" onClick={handleShareWhatsApp} className="gap-1.5 text-[#90be6d] border-[#90be6d]/30 hover:bg-[#90be6d]/5 rounded-full">
+              <Button variant="outline" size="sm" onClick={handleShareWhatsApp} className="gap-1.5 text-[#15803d] border-[#15803d]/30 hover:bg-[#15803d]/5 rounded-full">
                 <MessageCircle className="h-3.5 w-3.5" />WhatsApp
               </Button>
-              <Button variant="outline" size="sm" onClick={handleShareLink} className="gap-1.5 rounded-full border-[#5ec6c6]/30 hover:bg-[#5ec6c6]/10">
-                <Share2 className="h-3.5 w-3.5 text-[#5ec6c6]" />העתק לינק
+              <Button variant="outline" size="sm" onClick={handleShareLink} className="gap-1.5 rounded-full border-[#171717]/30 hover:bg-[#171717]/10">
+                <Share2 className="h-3.5 w-3.5 text-[#171717]" />העתק לינק
               </Button>
               <Button variant="outline" size="sm" onClick={handleExportPdf} className="gap-1.5 rounded-full">
                 <Download className="h-3.5 w-3.5" />PDF
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setShowPresentation(true)} className="gap-1.5 rounded-full border-[#f4a261]/30 hover:bg-[#f4a261]/10">
-                <Presentation className="h-3.5 w-3.5 text-[#f4a261]" />מצגת
+              <Button variant="outline" size="sm" onClick={() => setShowPresentation(true)} className="gap-1.5 rounded-full border-[#b45309]/30 hover:bg-[#b45309]/10">
+                <Presentation className="h-3.5 w-3.5 text-[#b45309]" />מצגת
               </Button>
               <Button variant="outline" size="sm" onClick={handleSave} disabled={saving} className="gap-1.5 rounded-full">
                 <Save className="h-3.5 w-3.5" />שמירה
@@ -231,7 +231,7 @@ export default function ExecutionSummaryPage() {
             </>
           )}
           {canCreate && (
-            <Button size="sm" onClick={handleCreate} className="gap-1.5 rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15">
+            <Button size="sm" onClick={handleCreate} className="gap-1.5 rounded-full bg-[#171717] hover:bg-[#171717]/90 shadow-md shadow-[#171717]/15">
               <ClipboardCheck className="h-3.5 w-3.5" />סיכום חדש
             </Button>
           )}
@@ -289,19 +289,19 @@ export default function ExecutionSummaryPage() {
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">סטטוס</p>
-                  <p className="font-medium text-[#0a3d3d]">{SUMMARY_STATUS_LABELS[activeSummary.status as ExecutionSummaryStatus]}</p>
+                  <p className="font-medium text-[#171717]">{SUMMARY_STATUS_LABELS[activeSummary.status as ExecutionSummaryStatus]}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">בוצע מלא</p>
-                  <p className="font-semibold text-[#90be6d]">{completedCount}/{totalItems}</p>
+                  <p className="font-semibold text-[#15803d]">{completedCount}/{totalItems}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">בוצע חלקית</p>
-                  <p className="font-medium text-[#f4a261]">{partialCount}</p>
+                  <p className="font-medium text-[#b45309]">{partialCount}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">לא בוצע</p>
-                  <p className="font-medium text-[#e76f51]">{totalItems - completedCount - partialCount}</p>
+                  <p className="font-medium text-[#b91c1c]">{totalItems - completedCount - partialCount}</p>
                 </div>
               </div>
             </CardContent>
@@ -320,7 +320,7 @@ export default function ExecutionSummaryPage() {
 
               return (
                 <motion.div key={si.id} variants={item} initial="hidden" animate="show" transition={{ delay: idx * 0.05 }}>
-                  <Card className={`transition-all rounded-2xl border-border/50 shadow-sm ${si.executionStatus === 'fully_executed' ? 'border-[#90be6d]/30 bg-[#90be6d]/5' : si.executionStatus === 'partially_executed' ? 'border-[#f4a261]/30 bg-[#f4a261]/5' : ''}`}>
+                  <Card className={`transition-all rounded-2xl border-border/50 shadow-sm ${si.executionStatus === 'fully_executed' ? 'border-[#15803d]/30 bg-[#15803d]/5' : si.executionStatus === 'partially_executed' ? 'border-[#b45309]/30 bg-[#b45309]/5' : ''}`}>
                     <CardContent className="p-5 space-y-4">
                       {/* Header */}
                       <div className="flex items-start justify-between">
@@ -329,8 +329,8 @@ export default function ExecutionSummaryPage() {
                             <span className="font-bold text-sm">{rec?.title || 'המלצה'}</span>
                             {rec && <StatusBadge type="action" status={rec.actionType} />}
                             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                              si.executionStatus === 'fully_executed' ? 'bg-[#90be6d]/10 text-[#90be6d]' :
-                              si.executionStatus === 'partially_executed' ? 'bg-[#f4a261]/10 text-[#f4a261]' :
+                              si.executionStatus === 'fully_executed' ? 'bg-[#15803d]/10 text-[#15803d]' :
+                              si.executionStatus === 'partially_executed' ? 'bg-[#b45309]/10 text-[#b45309]' :
                               'bg-muted text-muted-foreground'
                             }`}>
                               {ITEM_STATUS_LABELS[si.executionStatus as ItemExecutionStatus]}
@@ -454,7 +454,7 @@ export default function ExecutionSummaryPage() {
               <Button variant="outline" onClick={handleExportPdf} className="gap-1.5 rounded-full">
                 <Download className="h-4 w-4" />שמירה + PDF
               </Button>
-              <Button onClick={handleComplete} disabled={saving} className="gap-1.5 rounded-full bg-[#0a3d3d] hover:bg-[#0a3d3d]/90 shadow-md shadow-[#0a3d3d]/15">
+              <Button onClick={handleComplete} disabled={saving} className="gap-1.5 rounded-full bg-[#171717] hover:bg-[#171717]/90 shadow-md shadow-[#171717]/15">
                 <CheckCircle2 className="h-4 w-4" />סיום וסימון לקוח
               </Button>
             </div>

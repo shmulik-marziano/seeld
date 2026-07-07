@@ -10,11 +10,11 @@ interface DisclaimerBannerProps {
 
 const variantStyles: Record<DisclaimerVariant, { bg: string; border: string; icon: typeof Info; iconColor: string; textColor: string }> = {
   info: {
-    bg: "bg-[#e0f2f1]",
-    border: "border-[#0a3d3d]/10",
+    bg: "bg-[#f5f5f5]",
+    border: "border-[#171717]/10",
     icon: Info,
-    iconColor: "text-[#0a3d3d]",
-    textColor: "text-[#0a3d3d]/80",
+    iconColor: "text-[#171717]",
+    textColor: "text-[#171717]/80",
   },
   warning: {
     bg: "bg-[#fef3c7]",

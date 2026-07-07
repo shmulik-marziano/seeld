@@ -1,92 +1,158 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Car, Shield, FileCheck, Calculator } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import ScrollReveal from "@/components/ScrollReveal";
+import { Link } from "react-router-dom";
+import { MONO } from "@/lib/brand";
+import { FamilyFigure } from "@/components/brand/Figures";
+
+const HEEBO = "'Heebo', sans-serif";
+// Captions on the warm paper tiles stay at #5c5c5c minimum (AA on paper).
+const PAPER_MUTED = "#5c5c5c";
 
 const Creativity = () => {
   const insuranceTypes = [
-    { icon: Car, title: "ביטוח רכב", description: "ביטוח חובה, מקיף וצד ג' - כל מה שהרכב שלך צריך", features: ["ביטוח חובה", "ביטוח מקיף", "צד ג'", "נזקי גוף"], href: "/insurance/vehicle" },
-    { icon: Shield, title: "ביטוח דירה", description: "הגנה מלאה על הבית והתכולה מפני כל סיכון", features: ["ביטוח מבנה", "ביטוח תכולה", "צד ג'", "נזקי טבע"], href: "/insurance/home" },
-    { icon: FileCheck, title: "ביטוח עסק", description: "פתרונות ביטוח מקיפים לעסק בכל גודל", features: ["אחריות מקצועית", "רכוש עסקי", "הפסד הכנסות", "חבות מעסיקים"], href: "/insurance/business" },
-    { icon: Calculator, title: "ביטוח נסיעות", description: "נסיעה לחו\"ל בראש שקט עם כיסוי מלא", features: ["הוצאות רפואיות", "ביטול טיסה", "אובדן מזוודות", "חירום 24/7"], href: "/insurance/travel" },
+    { title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳ · השוואה בין כל החברות", features: ["ביטוח חובה", "ביטוח מקיף", "צד ג'", "נזקי גוף"], href: "/insurance/vehicle" },
+    { title: "ביטוח דירה", description: "מבנה ותכולה, בלי הפתעות מאוחרות", features: ["ביטוח מבנה", "ביטוח תכולה", "צד ג'", "נזקי טבע"], href: "/insurance/home" },
+    { title: "ביטוח עסק", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק בכל גודל", features: ["אחריות מקצועית", "רכוש עסקי", "הפסד הכנסות", "חבות מעסיקים"], href: "/insurance/business" },
+    { title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", features: ["הוצאות רפואיות", "ביטול טיסה", "אובדן מזוודות", "חירום 24/7"], href: "/insurance/travel" },
+  ];
+
+  const stats = [
+    { value: "מגוון", label: "חברות ביטוח להשוואה", ltr: false },
+    { value: "30%", label: "חיסכון ממוצע ללקוחות", ltr: true },
+    { value: "24/7", label: "שירות ותמיכה", ltr: true },
   ];
 
   return (
-    <div className="min-h-screen bg-background animate-fade-in">
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
-      
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Hero Section */}
-        <div className="mb-16 text-center space-y-6">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-slide-down">
-            ביטוח רכוש ורכב
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-slide-up stagger-1">
-            הגנו על הנכסים החשובים לכם עם פוליסות ביטוח מותאמות אישית. 
-            השוו הצעות מחיר מחברות הביטוח המובילות וחסכו אלפי שקלים בשנה.
-          </p>
-          <Link to="/contact">
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-10 py-6 text-lg hover:scale-105 transition-all animate-slide-up stagger-2">
-              להצטרפות ל-SEELD
-            </Button>
-          </Link>
-        </div>
 
-        {/* Insurance Types Grid */}
-        <section className="mb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {insuranceTypes.map((type, index) => (
-              <Link to={type.href} key={type.title} className="group">
-                <div className={`rounded-2xl bg-card p-6 border border-border hover:shadow-lg transition-all hover:scale-[1.02] h-full animate-slide-up stagger-${Math.min(index + 1, 6)}`}>
-                  <type.icon className="w-12 h-12 text-primary mb-4" />
-                  <h3 className="text-xl font-bold mb-2">{type.title}</h3>
-                  <p className="text-muted-foreground text-sm mb-4">{type.description}</p>
-                  <ul className="space-y-1">
-                    {type.features.map((feature) => (
-                      <li key={feature} className="text-sm text-muted-foreground flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-primary rounded-full"></span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
+      <main>
+        {/* Hero — paper tile; the family peeks from the corner */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel">
+            <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-10 sm:pt-14 pb-14 sm:pb-20 relative z-10">
+              <div className="border-t border-[#171717]/20 pt-4">
+                <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#5c5c5c]">
+                  <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
+                  <span aria-hidden="true">/</span>
+                  <span className="text-[#171717]">ביטוח רכוש ורכב</span>
+                </nav>
+              </div>
+              <div className="mt-12 sm:mt-16 max-w-3xl">
+                <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
+                  PROPERTY · VEHICLE
+                </span>
+                <h1
+                  className="mt-4 text-[#171717] leading-[1.1]"
+                  style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(2.2rem, 5vw, 3.4rem)", letterSpacing: "-0.03em" }}
+                >
+                  ביטוח רכוש ורכב
+                </h1>
+                <p className="mt-5 text-lg sm:text-xl text-[#4d4d4d] leading-[1.8] max-w-2xl">
+                  רכב, דירה, עסק ונסיעות: השוואת הצעות מחיר מול כל החברות בשוק, ללא עלות.
+                </p>
+                <div className="mt-8">
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center justify-center rounded-md px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
+                  >
+                    הצטרפו ל-SEELD
+                  </Link>
                 </div>
-              </Link>
-            ))}
+              </div>
+            </div>
+            <FamilyFigure className="absolute -left-3 -bottom-4 w-16 h-16 opacity-70 rotate-12 pointer-events-none" />
           </div>
         </section>
 
-        {/* Why Choose Us */}
-        <section className="mb-16 rounded-[2.5rem] bg-muted p-8 md:p-12">
-          <h2 className="text-3xl font-bold mb-8 text-center">למה לבחור ב-SEELD?</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">מגוון</div>
-              <p className="text-muted-foreground">חברות ביטוח להשוואה</p>
+        {/* 01 — Insurance types, ruled list */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+            <ScrollReveal>
+              <div className="border-t border-[#171717]/20 pt-6 mb-12 sm:mb-14 flex items-baseline gap-6 sm:gap-10">
+                <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED, fontFamily: MONO }}>
+                  01
+                </span>
+                <h2
+                  className="text-[#171717] leading-tight"
+                  style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.02em" }}
+                >
+                  תחומי הכיסוי
+                </h2>
+              </div>
+            </ScrollReveal>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14">
+              {insuranceTypes.map((type, i) => (
+                <ScrollReveal key={type.title} delay={i * 60}>
+                  <Link to={type.href} className="group block border-t border-[#171717]/15 hover:border-[#171717]/40 transition-colors pt-5 pb-8">
+                    <div className="flex items-baseline justify-between gap-4 mb-2.5">
+                      <h3 className="text-lg text-[#171717]" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+                        {type.title}
+                      </h3>
+                      <span className="text-[#171717]/30 group-hover:text-[#171717] transition-all group-hover:-translate-x-1" aria-hidden="true">←</span>
+                    </div>
+                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{type.description}</p>
+                    <p className="mt-3 text-[13px] text-[#5c5c5c]">
+                      {type.features.join(" · ")}
+                    </p>
+                  </Link>
+                </ScrollReveal>
+              ))}
             </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">30%</div>
-              <p className="text-muted-foreground">חיסכון ממוצע ללקוחות</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">24/7</div>
-              <p className="text-muted-foreground">שירות ותמיכה</p>
-            </div>
-          </div>
+          </div></div>
         </section>
 
-        {/* CTA Section */}
-        <section className="rounded-[2.5rem] bg-primary text-primary-foreground p-8 md:p-12 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">מוכנים לחסוך על הביטוח?</h2>
-          <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-            מלאו את הפרטים ונציג יחזור אליכם עם הצעות מחיר מותאמות אישית תוך שעות
-          </p>
-          <Link to="/contact">
-            <Button variant="secondary" className="rounded-full px-10 py-6 text-lg hover:scale-105 transition-all">
-              התחילו עכשיו
-            </Button>
-          </Link>
+        {/* Numbers */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+            <ScrollReveal>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-10 border-t border-b border-[#171717]/15 py-10 sm:py-14">
+                {stats.map((stat) => (
+                  <div key={stat.label} className="text-center">
+                    <div
+                      className="text-[#171717] tabular-nums mb-2"
+                      dir={stat.ltr ? "ltr" : undefined}
+                      style={{ fontFamily: MONO, fontWeight: 600, fontSize: "clamp(2rem, 4vw, 3rem)", letterSpacing: "-0.02em" }}
+                    >
+                      {stat.value}
+                    </div>
+                    <div className="text-[12px] tracking-[0.12em] text-[#5c5c5c]">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-5 text-center text-[12px] text-[#5c5c5c]">
+                למה לבחור ב-SEELD? המספרים עונים.
+              </p>
+            </ScrollReveal>
+          </div></div>
+        </section>
+
+        {/* CTA — the one ink tile */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
+            <ScrollReveal>
+              <div className="border-t border-white/20 pt-6 max-w-3xl">
+                <h2
+                  className="text-[#fafafa] leading-tight"
+                  style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.02em" }}
+                >
+                  מוכנים לחסוך על הביטוח?
+                </h2>
+                <p className="mt-3 text-base text-[#fafafa]/50 leading-[1.85] max-w-xl">
+                  השאירו פרטים ויועץ יחזור אליכם עם הצעות מחיר תוך שעות.
+                </p>
+                <div className="mt-8">
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center justify-center rounded-md px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
+                  >
+                    התחילו עכשיו
+                  </Link>
+                </div>
+              </div>
+            </ScrollReveal>
+          </div></div>
         </section>
       </main>
 

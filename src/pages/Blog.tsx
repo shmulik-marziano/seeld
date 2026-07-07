@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { CalendarDays, ArrowLeft, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteSupabase } from "@/integrations/supabase/site-client";
+import { MONO, CARD_SHADOW } from "@/lib/brand";
+
+const HEEBO = "'Heebo', sans-serif";
+
+// SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
+const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
 
 interface BlogPost {
   id: string;
@@ -15,14 +21,6 @@ interface BlogPost {
   published_at: string | null;
   cover_image_url: string | null;
 }
-
-const categoryColors: Record<string, string> = {
-  "פנסיה": "#5ec6c6",
-  "ביטוח": "#e76f51",
-  "טיפים": "#f4a261",
-  "חיסכון": "#90be6d",
-  "פיננסים": "#6c63ff",
-};
 
 const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -60,150 +58,146 @@ const Blog = () => {
     });
   };
 
+  const tabClass = (active: boolean) =>
+    `rounded-none bg-transparent px-0 pb-4 text-[15px] font-medium border-b-2 transition-colors shrink-0 min-h-[44px] ${
+      active
+        ? "border-[#171717] text-[#171717]"
+        : "border-transparent text-[#5c5c5c] hover:text-[#171717]"
+    }`;
+
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950" dir="rtl">
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-[#f8f9fc] dark:bg-gray-900 py-14 sm:py-28">
-        {/* Decorative circles - scaled for mobile */}
-        <div className="absolute top-8 right-4 sm:top-10 sm:right-10 w-20 h-20 sm:w-32 sm:h-32 rounded-full bg-[#5ec6c6] opacity-20" />
-        <div className="absolute bottom-6 left-8 sm:bottom-10 sm:left-16 w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-[#f4a261] opacity-20" />
-        <div className="absolute top-1/2 left-1/3 w-10 h-10 sm:w-16 sm:h-16 rounded-full bg-[#90be6d] opacity-15 hidden sm:block" />
-        <div className="absolute bottom-20 right-1/4 w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-[#e76f51] opacity-15 hidden sm:block" />
-
-        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-[#0a3d3d] dark:text-white mb-3 sm:mb-4">
-            הבלוג של SEELD
-          </h1>
-          <p className="text-lg sm:text-xl text-[#0a3d3d]/70 dark:text-white/60 max-w-2xl mx-auto">
-            מדריכים, טיפים ותוכן מקצועי בנושאי ביטוח, פנסיה וחיסכון — בגובה העיניים
-          </p>
-        </div>
+      {/* Hero — one paper tile */}
+      <section className="px-2 pt-2">
+        <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-12 sm:pb-16 relative z-10">
+          <div className="border-t border-[#171717]/20 pt-4">
+            <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#5c5c5c]">
+              <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
+              <span aria-hidden="true">/</span>
+              <span className="text-[#171717]">בלוג</span>
+            </nav>
+          </div>
+          <div className="mt-12 sm:mt-16 max-w-3xl">
+            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
+              BLOG · SEELD
+            </span>
+            <h1
+              className="mt-4 text-[#171717] leading-[1.1]"
+              style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(2.2rem, 5vw, 3.4rem)", letterSpacing: "-0.03em" }}
+            >
+              הבלוג של SEELD
+            </h1>
+            <p className="mt-5 text-lg sm:text-xl text-[#4d4d4d] leading-[1.8] max-w-2xl">
+              מדריכים, טיפים ותוכן מקצועי בנושאי ביטוח, פנסיה וחיסכון, בגובה העיניים
+            </p>
+          </div>
+        </div></div>
       </section>
 
-      {/* Category Filter */}
-      <div className="max-w-6xl mx-auto px-4 pt-8 sm:pt-10 pb-4">
-        <div className="flex gap-2 justify-center overflow-x-auto pb-2 -mx-4 px-4 sm:flex-wrap sm:overflow-visible sm:mx-0 sm:px-0 scrollbar-hide">
-          <button
-            onClick={() => setActiveCategory(null)}
-            className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all shrink-0 min-h-[44px] ${
-              !activeCategory
-                ? "bg-[#0a3d3d] text-white shadow-lg shadow-[#0a3d3d]/20"
-                : "bg-[#f8f9fc] dark:bg-gray-800 text-[#0a3d3d] dark:text-white/70 hover:bg-[#0a3d3d]/10"
-            }`}
-          >
-            הכל
-          </button>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all shrink-0 min-h-[44px] ${
-                activeCategory === cat
-                  ? "text-white shadow-lg"
-                  : "bg-[#f8f9fc] dark:bg-gray-800 text-[#0a3d3d] dark:text-white/70 hover:bg-[#0a3d3d]/10"
-              }`}
-              style={
-                activeCategory === cat
-                  ? { backgroundColor: categoryColors[cat] || "#0a3d3d", boxShadow: `0 4px 14px ${categoryColors[cat] || "#0a3d3d"}40` }
-                  : undefined
-              }
-            >
-              {cat}
+      {/* The archive — filter + article grid, all in one paper tile */}
+      <section className="px-2 pt-2">
+        <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 pt-10 sm:pt-12 pb-16 sm:pb-24 relative z-10">
+          {/* Category filter — quiet underline tabs */}
+          <div className="flex gap-8 border-b border-[#171717]/10 overflow-x-auto scrollbar-hide">
+            <button onClick={() => setActiveCategory(null)} className={tabClass(!activeCategory)}>
+              הכל
             </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Posts Grid */}
-      <section className="max-w-6xl mx-auto px-4 py-10 pb-20">
-        {loading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-[#0a3d3d]" />
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="text-center py-20 text-[#0a3d3d]/50 dark:text-white/40">
-            <p className="text-lg">אין פוסטים עדיין</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filtered.map((post) => (
-              <article
-                key={post.id}
-                className="group bg-white dark:bg-gray-900 rounded-2xl border border-[#0a3d3d]/10 dark:border-white/10 overflow-hidden hover:shadow-xl hover:shadow-[#0a3d3d]/5 transition-all duration-300 hover:-translate-y-1"
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={tabClass(activeCategory === cat)}
               >
-                {/* Cover image */}
-                <div className="w-full h-48 sm:h-56 overflow-hidden"
-                  style={!post.cover_image_url ? { background: `linear-gradient(135deg, ${categoryColors[post.category || ""] || "#0a3d3d"}20, ${categoryColors[post.category || ""] || "#0a3d3d"}08)` } : undefined}>
-                  {post.cover_image_url ? (
-                    <img
-                      src={post.cover_image_url}
-                      alt={post.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-5xl font-black opacity-10" style={{ color: categoryColors[post.category || ""] || "#0a3d3d" }}>
-                        SEELD
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Colored top bar (below image or at top if no image) */}
-                <div
-                  className="h-1.5 w-full"
-                  style={{ backgroundColor: categoryColors[post.category || ""] || "#0a3d3d" }}
-                />
-
-                <div className="p-5 sm:p-8 flex flex-col h-full">
-                  {/* Category badge + Date */}
-                  <div className="flex items-center justify-between mb-4">
-                    {post.category && (
-                      <span
-                        className="px-3 py-1 rounded-full text-xs font-bold text-white"
-                        style={{ backgroundColor: categoryColors[post.category] || "#0a3d3d" }}
-                      >
-                        {post.category}
-                      </span>
-                    )}
-                    <span className="flex items-center gap-1.5 text-xs text-[#0a3d3d]/50 dark:text-white/40">
-                      <CalendarDays className="w-3.5 h-3.5" />
-                      {formatDate(post.published_at)}
-                    </span>
-                  </div>
-
-                  {/* Title */}
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#0a3d3d] dark:text-white mb-3 leading-tight">
-                    {post.title}
-                  </h2>
-
-                  {/* Excerpt */}
-                  {post.excerpt && (
-                    <p className="text-[#0a3d3d]/60 dark:text-white/50 text-sm leading-relaxed mb-6 flex-1">
-                      {post.excerpt}
-                    </p>
-                  )}
-
-                  {/* CTA */}
-                  <Link
-                    to={`/blog/${post.slug}`}
-                    className="inline-flex items-center gap-2 self-start px-6 py-2.5 rounded-full text-sm font-semibold text-white transition-all hover:scale-105 hover:shadow-lg"
-                    style={{
-                      backgroundColor: categoryColors[post.category || ""] || "#0a3d3d",
-                      boxShadow: `0 4px 14px ${categoryColors[post.category || ""] || "#0a3d3d"}30`,
-                    }}
-                  >
-                    קרא עוד
-                    <ArrowLeft className="w-4 h-4" />
-                  </Link>
-                </div>
-              </article>
+                {cat}
+              </button>
             ))}
           </div>
-        )}
+
+          {/* Posts — editorial hairline rows */}
+          {loading ? (
+            <div className="flex justify-center py-20">
+              <Loader2 className="h-6 w-6 animate-spin text-[#171717]" />
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="py-20 text-center">
+              <p className="text-base text-[#4d4d4d]">
+                אין פוסטים בקטגוריה הזו עדיין.
+              </p>
+              {activeCategory && (
+                <button
+                  onClick={() => setActiveCategory(null)}
+                  className="mt-4 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+                >
+                  לכל הפוסטים
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="pt-2">
+              {filtered.map((post) => (
+                <Link
+                  key={post.id}
+                  to={`/blog/${post.slug}`}
+                  className="group flex items-start justify-between gap-6 sm:gap-10 py-7 border-b border-[#171717]/10 hover:border-[#171717]/40 transition-colors"
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-baseline gap-3 text-[12px] text-[#5c5c5c] mb-2.5">
+                      {post.category && <span>{post.category}</span>}
+                      {post.category && <span aria-hidden="true">·</span>}
+                      <span>{formatDate(post.published_at)}</span>
+                    </div>
+                    <h2
+                      className="text-xl sm:text-2xl text-[#171717] leading-snug"
+                      style={{ fontFamily: HEEBO, fontWeight: 600 }}
+                    >
+                      {post.title}
+                    </h2>
+                    {post.excerpt && (
+                      <p className="mt-2.5 text-[15px] text-[#4d4d4d] leading-[1.8] max-w-2xl line-clamp-2">
+                        {post.excerpt}
+                      </p>
+                    )}
+                    <span className="mt-4 inline-flex items-center gap-2 text-[14px] font-medium text-[#171717]">
+                      קראו עוד
+                      <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
+                    </span>
+                  </div>
+                  {post.cover_image_url && (
+                    <img
+                      src={post.cover_image_url}
+                      alt=""
+                      loading="lazy"
+                      className="hidden sm:block w-44 h-28 object-cover rounded-lg shrink-0"
+                      style={{ boxShadow: CARD_SHADOW }}
+                    />
+                  )}
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {/* Next action */}
+          {!loading && (
+            <div className="mt-16 border-t border-[#171717]/20 pt-8 flex flex-wrap items-center gap-x-10 gap-y-5 justify-between">
+              <div>
+                <h2 className="text-xl text-[#171717]" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+                  יש שאלה שלא מצאתם לה תשובה?
+                </h2>
+                <p className="mt-2 text-[15px] text-[#4d4d4d] leading-[1.8]">
+                  יועץ מהצוות שלנו יחזור אליכם באותו יום עבודה.
+                </p>
+              </div>
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-black transition-colors min-h-[52px] rounded-lg"
+              >
+                דברו עם יועץ
+              </Link>
+            </div>
+          )}
+        </div></div>
       </section>
 
       <Footer />

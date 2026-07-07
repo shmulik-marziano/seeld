@@ -19,9 +19,9 @@ interface Shape {
   opacity: number;
 }
 
+// Quiet greyscale drift — decoration never carries color (STYLESEED.md)
 const COLORS = [
-  "#5ec6c6", "#f4a261", "#e76f51", "#90be6d", "#6c63ff",
-  "#5ec6c6", "#f4a261", "#90be6d",
+  "#171717", "#a3a3a3", "#d4d4d4", "#6e6e6e",
 ];
 
 const DRIFTS: Shape["drift"][] = ["float-a", "float-b", "float-c", "float-d"];

@@ -2,17 +2,17 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ScrollReveal from "@/components/ScrollReveal";
 import FundReturnTable from "@/components/FundReturnTable";
-import { TrendingUp, Calendar, Info, Search, Wifi, WifiOff, ChevronLeft } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { LiveTag } from "@/components/brand/Live";
 import { allFunds as staticFunds, cmaLastUpdate } from "@/data/cmaFundsData";
 import { useCmaFunds, useCmaSyncStatus, formatPeriod } from "@/hooks/useCmaFunds";
 import type { FundReturn } from "@/data/fundReturns";
+import { SERIF, MONO } from "@/lib/brand";
 
 // Convert CMA Fund format to the existing FundReturn format used by FundReturnTable
-const toFundReturn = (f: typeof allFunds[0]): FundReturn => ({
+const toFundReturn = (f: (typeof staticFunds)[number]): FundReturn => ({
   name: f.name,
   company: f.name.split(" ")[0], // first word as company display
   monthReturn: f.returns.month,
@@ -20,6 +20,9 @@ const toFundReturn = (f: typeof allFunds[0]): FundReturn => ({
   threeYearReturn: f.returns.year3,
   fiveYearReturn: f.returns.year5,
 });
+
+const tabTriggerClass =
+  "rounded-none bg-transparent px-0 pb-4 text-sm sm:text-base font-medium text-[#5c5c5c] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const ReturnTables = () => {
   const { data: liveFunds, isError } = useCmaFunds();
@@ -61,159 +64,203 @@ const ReturnTables = () => {
     [allFunds]
   );
 
+  const tabDefs = [
+    { value: "study-general", label: "השתלמות כללי", funds: studyFundsGeneral, title: "קרנות השתלמות - מסלול כללי" },
+    { value: "study-stocks", label: "השתלמות מניות", funds: studyFundsStocks, title: "קרנות השתלמות - מסלול מניות" },
+    { value: "gemel", label: "קופות גמל", funds: gemelFunds, title: "קופות גמל - מסלול כללי" },
+    { value: "gemel-invest", label: "גמל להשקעה", funds: gemelInvestFunds, title: "קופות גמל להשקעה - כללי" },
+    { value: "pension", label: "פנסיה כללי", funds: pensionFunds, title: "קרנות פנסיה - מסלול כללי" },
+    { value: "pension-stocks", label: "פנסיה מניות", funds: pensionStocks, title: "קרנות פנסיה - מסלול מניות" },
+    { value: "savings", label: "פוליסות חיסכון", funds: savingsPolicies, title: "פוליסות חיסכון" },
+    { value: "child", label: "חיסכון לכל ילד", funds: childSavings, title: "חיסכון לכל ילד" },
+  ];
+
   const totalFunds = allFunds.length;
   const maxYear = useMemo(() => Math.max(...allFunds.map((f) => f.returns.year1)), [allFunds]);
   const maxFiveYear = useMemo(() => Math.max(...allFunds.map((f) => f.returns.year5)), [allFunds]);
   const topFund = useMemo(() => allFunds.find((f) => f.returns.year1 === maxYear), [allFunds, maxYear]);
   const topFiveYearFund = useMemo(() => allFunds.find((f) => f.returns.year5 === maxFiveYear), [allFunds, maxFiveYear]);
 
+  const lastUpdate = syncStatus?.latestPeriod ? formatPeriod(syncStatus.latestPeriod) : cmaLastUpdate;
+
+  const stats = [
+    { value: maxYear.toFixed(2), unit: "%", label: "תשואה שנתית מובילה", detail: topFund?.name },
+    { value: maxFiveYear.toFixed(2), unit: "%", label: "תשואת 5 שנים מובילה", detail: topFiveYearFund?.name },
+    { value: String(totalFunds), unit: "", label: "קרנות במעקב", detail: "8 קטגוריות מוצר" },
+  ];
+
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      {/* Hero Section */}
-      <section className="bg-[#f8f9fc] relative overflow-hidden">
-        <div className="absolute top-[10%] right-[5%] w-[85px] h-[85px] rounded-full bg-[#90be6d]" />
-        <div className="absolute bottom-[12%] left-[7%] w-[60px] h-[60px] rounded-full bg-[#5ec6c6]" />
-        <div className="absolute top-[50%] right-[20%] w-[30px] h-[30px] rounded-full bg-[#f4a261]" />
-        <div className="absolute top-[25%] left-[14%] w-[24px] h-[24px] rounded-full bg-[#6c63ff]" />
-        <div className="absolute top-16 left-[18%] hidden lg:block">
-          <svg width="160" height="100" viewBox="0 0 160 100" fill="none">
-            <path d="M10 80 C 50 10, 110 10, 150 60" stroke="#0a3d3d" strokeWidth="2" strokeDasharray="8 5" fill="none" opacity="0.12" />
-            <polygon points="150,60 142,54 146,66" fill="#0a3d3d" opacity="0.12" />
-          </svg>
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 relative z-10 text-center">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0a3d3d] mb-4 leading-tight">
-            לוחות <span className="text-[#90be6d]">תשואה</span>
-          </h1>
-          <p className="text-lg sm:text-xl text-gray-500 max-w-3xl mx-auto leading-relaxed">
-            נתוני תשואות עדכניים של קרנות השתלמות, קופות גמל, קרנות פנסיה ופוליסות חיסכון בישראל
-          </p>
-          <div className="flex items-center justify-center gap-4 mt-4 flex-wrap">
-            <div className="flex items-center gap-2 text-sm text-gray-400">
-              <Calendar className="w-4 h-4" />
-              עדכון אחרון: {syncStatus?.latestPeriod ? formatPeriod(syncStatus.latestPeriod) : cmaLastUpdate}
+      {/* Hero tile + live top-return tile (the play) */}
+      <section className="px-2 pt-2">
+        <div className="grid gap-2 lg:grid-cols-[1fr_260px]">
+          <div className="bento-panel">
+            <div className="px-5 sm:px-8 pt-10 sm:pt-12 pb-10 sm:pb-12 relative z-10">
+              <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-12 flex items-baseline justify-between gap-4">
+                <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
+                  <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
+                  <span>←</span>
+                  <span className="text-[#171717]/70 font-medium">לוחות תשואה</span>
+                </nav>
+                <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium text-[#5c5c5c]">
+                  נתוני רשות שוק ההון
+                </span>
+              </div>
+
+              <h1
+                className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
+                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
+              >
+                לוחות תשואה
+              </h1>
+              <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9] mb-8">
+                תשואות רשמיות של קרנות השתלמות, קופות גמל, קרנות פנסיה ופוליסות חיסכון בישראל.
+                הנתונים נמשכים מגמלנט, ביטוחנט ופנסיהנט ומתעדכנים מדי חודש.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+                <LiveTag dot={isLive}>{isLive ? "LIVE DATA" : "LOCAL DATA"}</LiveTag>
+                <span className="text-[13px] text-[#5c5c5c]">
+                  עדכון אחרון:{" "}
+                  <span className="text-[#171717] tabular-nums" style={{ fontFamily: MONO }}>{lastUpdate}</span>
+                </span>
+                <Link
+                  to="/fund-finder"
+                  className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+                >
+                  לכלי איתור והשוואת קופות
+                  <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
+                </Link>
+              </div>
             </div>
-            <Badge variant={isLive ? "default" : "secondary"} className="text-xs gap-1">
-              {isLive ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
-              {isLive ? 'נתונים חיים' : 'נתונים מקומיים'}
-            </Badge>
           </div>
-          <div className="mt-5">
-            <Link to="/fund-finder">
-              <Button variant="outline" className="border-[#0a3d3d] text-[#0a3d3d] rounded-full px-6 text-sm font-semibold">
-                <Search className="w-4 h-4 ml-1.5" />
-                לכלי איתור והשוואת קופות מתקדם
-              </Button>
-            </Link>
+
+          {/* Orange stat tile — live top 12-month return */}
+          <div className="bento-panel-orange flex flex-col items-center justify-center gap-1 p-6 min-h-[150px]" dir="ltr">
+            <span className="text-[30px] sm:text-[36px] font-bold text-[#171717] tabular-nums" style={{ fontFamily: MONO }}>
+              {maxYear >= 0 ? "+" : ""}{maxYear.toFixed(2)}%
+            </span>
+            <span className="text-[10px] tracking-[0.2em] font-semibold text-[#171717]/80" style={{ fontFamily: MONO }}>
+              TOP RETURN · 12M
+            </span>
+            {topFund && (
+              <span className="mt-1.5 max-w-[210px] truncate text-[11px] text-[#171717]/70" dir="rtl">
+                {topFund.name}
+              </span>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Breadcrumb */}
-      <div className="border-b border-gray-100">
-        <nav className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#0a3d3d] transition-colors">דף הבית</Link>
-          <ChevronLeft className="w-3.5 h-3.5" />
-          <span className="text-[#0a3d3d] font-medium">לוחות תשואה</span>
-        </nav>
-      </div>
+      <main>
+        {/* Tables tile — underline tabs, one dense view */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
+            <Tabs defaultValue={(tabDefs.find((t) => t.funds.length > 0) ?? tabDefs[0]).value} dir="rtl">
+              <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none overflow-x-auto scrollbar-hide">
+                {tabDefs.map((tab) => (
+                  <TabsTrigger key={tab.value} value={tab.value} className={tabTriggerClass}>
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Tabs for different fund types */}
-        <Tabs defaultValue="study-general" className="space-y-8">
-          <TabsList className="w-full flex flex-wrap h-auto gap-2 bg-[#f0f0f8] p-2 rounded-full">
-            <TabsTrigger value="study-general" className="flex-1 min-w-[100px] rounded-full text-xs sm:text-sm">
-              השתלמות כללי
-            </TabsTrigger>
-            <TabsTrigger value="study-stocks" className="flex-1 min-w-[100px] rounded-full text-xs sm:text-sm">
-              השתלמות מניות
-            </TabsTrigger>
-            <TabsTrigger value="gemel" className="flex-1 min-w-[100px] rounded-full text-xs sm:text-sm">
-              קופות גמל
-            </TabsTrigger>
-            <TabsTrigger value="gemel-invest" className="flex-1 min-w-[100px] rounded-full text-xs sm:text-sm">
-              גמל להשקעה
-            </TabsTrigger>
-            <TabsTrigger value="pension" className="flex-1 min-w-[100px] rounded-full text-xs sm:text-sm">
-              פנסיה כללי
-            </TabsTrigger>
-            <TabsTrigger value="pension-stocks" className="flex-1 min-w-[100px] rounded-full text-xs sm:text-sm">
-              פנסיה מניות
-            </TabsTrigger>
-            <TabsTrigger value="savings" className="flex-1 min-w-[100px] rounded-full text-xs sm:text-sm">
-              פוליסות חיסכון
-            </TabsTrigger>
-            <TabsTrigger value="child" className="flex-1 min-w-[100px] rounded-full text-xs sm:text-sm">
-              חיסכון לכל ילד
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="study-general">
-            <FundReturnTable funds={studyFundsGeneral} title="קרנות השתלמות - מסלול כללי" />
-          </TabsContent>
-          <TabsContent value="study-stocks">
-            <FundReturnTable funds={studyFundsStocks} title="קרנות השתלמות - מסלול מניות" />
-          </TabsContent>
-          <TabsContent value="gemel">
-            <FundReturnTable funds={gemelFunds} title="קופות גמל - מסלול כללי" />
-          </TabsContent>
-          <TabsContent value="gemel-invest">
-            <FundReturnTable funds={gemelInvestFunds} title="קופות גמל להשקעה - כללי" />
-          </TabsContent>
-          <TabsContent value="pension">
-            <FundReturnTable funds={pensionFunds} title="קרנות פנסיה - מסלול כללי" />
-          </TabsContent>
-          <TabsContent value="pension-stocks">
-            <FundReturnTable funds={pensionStocks} title="קרנות פנסיה - מסלול מניות" />
-          </TabsContent>
-          <TabsContent value="savings">
-            <FundReturnTable funds={savingsPolicies} title="פוליסות חיסכון" />
-          </TabsContent>
-          <TabsContent value="child">
-            <FundReturnTable funds={childSavings} title="חיסכון לכל ילד" />
-          </TabsContent>
-        </Tabs>
-
-        {/* Summary Stats */}
-        <section className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="rounded-2xl bg-white border border-gray-100 p-6 text-center">
-            <div className="w-14 h-14 rounded-full bg-[#90be6d] flex items-center justify-center mx-auto mb-3">
-              <TrendingUp className="w-6 h-6 text-white" />
-            </div>
-            <p className="text-3xl font-extrabold text-[#0a3d3d]">{maxYear.toFixed(2)}%</p>
-            <p className="text-sm text-gray-500 mt-1">תשואה שנתית מקסימלית</p>
-            <p className="text-xs text-gray-400 mt-1">{topFund?.name}</p>
-          </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-6 text-center">
-            <div className="w-14 h-14 rounded-full bg-[#5ec6c6] flex items-center justify-center mx-auto mb-3">
-              <Calendar className="w-6 h-6 text-white" />
-            </div>
-            <p className="text-3xl font-extrabold text-[#0a3d3d]">{maxFiveYear.toFixed(2)}%</p>
-            <p className="text-sm text-gray-500 mt-1">תשואה ל-5 שנים מקסימלית</p>
-            <p className="text-xs text-gray-400 mt-1">{topFiveYearFund?.name}</p>
-          </div>
-          <div className="rounded-2xl bg-white border border-gray-100 p-6 text-center">
-            <div className="w-14 h-14 rounded-full bg-[#6c63ff] flex items-center justify-center mx-auto mb-3">
-              <Info className="w-6 h-6 text-white" />
-            </div>
-            <p className="text-3xl font-extrabold text-[#0a3d3d]">{totalFunds}</p>
-            <p className="text-sm text-gray-500 mt-1">קרנות במעקב</p>
-            <p className="text-xs text-gray-400 mt-1">8 קטגוריות שונות</p>
-          </div>
+              {tabDefs.map((tab) => (
+                <TabsContent key={tab.value} value={tab.value} className="mt-0">
+                  {tab.funds.length > 0 ? (
+                    <FundReturnTable funds={tab.funds} title={tab.title} />
+                  ) : (
+                    <div className="border-t border-[#171717]/15 pt-6 pb-10">
+                      <p className="text-base text-[#4d4d4d] leading-[1.85] max-w-xl">
+                        אין עדיין נתונים בקטגוריה הזו לתקופה הנוכחית. נסו קטגוריה אחרת,
+                        או חפשו קופה ספציפית בכלי איתור הקופות.
+                      </p>
+                      <Link
+                        to="/fund-finder"
+                        className="group mt-4 inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+                      >
+                        לאיתור קופות
+                        <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
+                      </Link>
+                    </div>
+                  )}
+                </TabsContent>
+              ))}
+            </Tabs>
+          </div></div>
         </section>
 
-        {/* Disclaimer */}
-        <section className="mt-12 rounded-2xl bg-[#f8f9fc] p-8 md:p-12">
-          <h2 className="text-2xl font-extrabold text-[#0a3d3d] mb-4">הבהרה חשובה</h2>
-          <p className="text-gray-500 leading-relaxed">
-            הנתונים המוצגים מבוססים על מידע ממקורות ציבוריים של רשות שוק ההון (גמלנט, ביטוחנט, פנסיהנט) ומיועדים להשוואה כללית בלבד.
-            תשואות עבר אינן מעידות על תשואות עתידיות. דמי הניהול אינם כלולים בחישוב התשואות.
-            לפני קבלת החלטות פיננסיות, מומלץ להתייעץ עם יועץ פנסיוני או פיננסי מוסמך.
-            <br /><br />
-            <strong className="text-[#0a3d3d]">מקור הנתונים:</strong> רשות שוק ההון, ביטוח וחיסכון — משרד האוצר.
-          </p>
+        {/* Numbers band tile */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
+            <ScrollReveal>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-10 border-t border-b border-[#171717]/15 py-10 sm:py-12">
+                {stats.map((stat) => (
+                  <div key={stat.label} className="text-center px-4">
+                    <div
+                      className="text-[#171717] tabular-nums mb-2"
+                      dir="ltr"
+                      style={{ fontFamily: MONO, fontWeight: 600, fontSize: "clamp(2.2rem, 4vw, 3.2rem)", letterSpacing: "-0.02em" }}
+                    >
+                      {stat.value}
+                      {stat.unit && <span style={{ fontSize: "0.55em" }}>{stat.unit}</span>}
+                    </div>
+                    <div className="text-[12px] tracking-[0.12em] text-[#5c5c5c]">{stat.label}</div>
+                    {stat.detail && (
+                      <div className="mt-1 text-[12px] text-[#5c5c5c] truncate max-w-[260px] mx-auto">{stat.detail}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
+          </div></div>
+        </section>
+
+        {/* Disclaimer tile */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
+            <div className="border-t border-[#171717]/15 pt-6 max-w-3xl">
+              <h2 className="text-lg text-[#171717] mb-3" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                הבהרה חשובה
+              </h2>
+              <p className="text-[14px] text-[#4d4d4d] leading-[1.85]">
+                הנתונים המוצגים מבוססים על מידע ממקורות ציבוריים של רשות שוק ההון (גמלנט, ביטוחנט, פנסיהנט)
+                ומיועדים להשוואה כללית בלבד. תשואות עבר אינן מעידות על תשואות עתידיות.
+                דמי הניהול אינם כלולים בחישוב התשואות. לפני קבלת החלטות פיננסיות,
+                מומלץ להתייעץ עם יועץ פנסיוני או פיננסי מוסמך.
+              </p>
+              <p className="mt-3 text-[13px] text-[#5c5c5c]">
+                <span className="font-medium text-[#171717]">מקור הנתונים:</span>{" "}
+                רשות שוק ההון, ביטוח וחיסכון, משרד האוצר.
+              </p>
+            </div>
+          </div></div>
+        </section>
+
+        {/* Next action — closing ink tile */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+            <div className="border-t border-white/20 pt-5">
+              <h2
+                className="text-[#fafafa] leading-tight mb-3"
+                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.3rem)" }}
+              >
+                המספרים ברורים. מה עושים איתם?
+              </h2>
+              <p className="text-[#fafafa]/45 text-base leading-[1.85] mb-8 max-w-xl">
+                תשואה היא רק חלק מהתמונה. דמי ניהול, רמת סיכון והתאמה אישית משנים את התוצאה.
+                יועץ מהצוות יעבור איתכם על התיק, ללא עלות.
+              </p>
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
+              >
+                בדיקת תיק ללא עלות
+              </Link>
+            </div>
+          </div></div>
         </section>
       </main>
 

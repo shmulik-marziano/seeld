@@ -10,9 +10,9 @@
         "grey-100": { "$type": "color", "$value": "#ebebeb" },
         "grey-50": { "$type": "color", "$value": "#fafafa" },
         "white": { "$type": "color", "$value": "#ffffff" },
-        "chip-orange": { "$type": "color", "$value": "#e8890c" },
-        "chip-green": { "$type": "color", "$value": "#1f9d55" },
-        "chip-yellow": { "$type": "color", "$value": "#d9a400" }
+        "chip-orange": { "$type": "color", "$value": "#b45309" },
+        "chip-green": { "$type": "color", "$value": "#15803d" },
+        "chip-yellow": { "$type": "color", "$value": "#a16207" }
       },
       "semantic": {
         "text-primary": { "$type": "color", "$value": "{seeld.color.primitive.grey-900}" },

@@ -133,6 +133,50 @@
   }
 }
 
+/* ── SEELD Bento: warm paper panels on ink gutters (owner-approved direction) ── */
+.bento-panel {
+  position: relative;
+  background-color: #e9e3d6;
+  border-radius: 18px;
+  overflow: hidden;
+}
+.bento-panel-ink {
+  position: relative;
+  background-color: #1d1d1d;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.07);
+}
+.bento-panel-orange {
+  position: relative;
+  background-color: #f0a13a;
+  border-radius: 18px;
+  overflow: hidden;
+}
+/* paper grain on the warm panels */
+.bento-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.05'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The logo's living period: a quick double-blink on hover — the wink */
+@keyframes seeld-wink {
+  0%, 100% { opacity: 1; }
+  25% { opacity: 0.15; }
+  50% { opacity: 1; }
+  70% { opacity: 0.25; }
+}
+.group:hover .seeld-wink {
+  animation: seeld-wink 0.5s ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .seeld-wink { animation: none; }
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
@@ -148,13 +192,13 @@ body {
 /* Dashed decorative connector */
 .dashed-connector {
   border: none;
-  border-top: 2px dashed #0a3d3d;
+  border-top: 2px dashed #171717;
   opacity: 0.15;
 }
 
 .dashed-connector-vertical {
   border: none;
-  border-right: 2px dashed #0a3d3d;
+  border-right: 2px dashed #171717;
   opacity: 0.12;
 }
 
@@ -180,7 +224,7 @@ body {
 .input-minimal {
   background: transparent;
   border: none;
-  border-bottom: 2px solid rgba(10, 61, 61, 0.1);
+  border-bottom: 2px solid rgba(23, 23, 23, 0.1);
   border-radius: 0;
   padding: 0.875rem 0.25rem;
   font-size: 0.875rem;
@@ -189,11 +233,11 @@ body {
 
 .input-minimal:focus {
   outline: none;
-  border-bottom-color: #5ec6c6;
+  border-bottom-color: #171717;
 }
 
 .input-minimal::placeholder {
-  color: rgba(10, 61, 61, 0.25);
+  color: rgba(23, 23, 23, 0.25);
 }
 
 /* Better touch targets on mobile */

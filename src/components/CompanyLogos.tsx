@@ -20,7 +20,7 @@ interface Props {
 function CompanyName({ company, size = "md" }: { company: Company; size?: "sm" | "md" }) {
   return (
     <span
-      className={`${size === "sm" ? "text-base" : "text-base sm:text-lg"} text-[#171717]/45 hover:text-[#171717] transition-colors duration-300 whitespace-nowrap shrink-0`}
+      className={`${size === "sm" ? "text-base" : "text-base sm:text-lg"} text-[#6e6e6e] hover:text-[#171717] transition-colors duration-300 whitespace-nowrap shrink-0`}
       style={{ fontFamily: SERIF, fontWeight: 600 }}
     >
       {company.name}
@@ -88,7 +88,7 @@ export default function CompanyLogos({
           >
             {title}
           </h2>
-          <p className="mt-2 text-base text-[#171717]/50 leading-relaxed max-w-xl">{subtitle}</p>
+          <p className="mt-2 text-base text-[#5c5c5c] leading-relaxed max-w-xl">{subtitle}</p>
         </div>
         {variant === "marquee" ? (
           <LogoMarquee companies={companies} />

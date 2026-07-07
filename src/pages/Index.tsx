@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,6 +8,10 @@ import HeroSection from "@/components/HeroSection";
 import ScrollReveal from "@/components/ScrollReveal";
 import CompanyLogos from "@/components/CompanyLogos";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { CountUp, LiveTag, StatusPill } from "@/components/brand/Live";
+import { DrawSpark, DrawUnderline, ProgressRail } from "@/components/brand/Strokes";
+import { CastAvi, CastDana, CastReader } from "@/components/brand/Cast";
+import { CHIP_GREEN, CHIP_ORANGE } from "@/lib/brand";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
@@ -40,7 +44,7 @@ const whySeeld = [
 ];
 
 const insuranceTypes = [
-  { title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳ — השוואה בין כל החברות", href: "/insurance/vehicle" },
+  { title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳ · השוואה בין כל החברות", href: "/insurance/vehicle" },
   { title: "ביטוח בריאות", description: "כיסוי שמשלים את הסל ולא כופל אותו", href: "/insurance/health" },
   { title: "ביטוח חיים", description: "הגנה כלכלית למשפחה, לפי מה שבאמת צריך", href: "/insurance/life" },
   { title: "ביטוח דירה", description: "מבנה ותכולה, בלי הפתעות מאוחרות", href: "/insurance/home" },
@@ -72,19 +76,19 @@ const savingsProducts = [
   { title: "תכנון פיננסי", description: "מיפוי מלא של הנכסים ובניית תוכנית", href: "/savings/financial-planning" },
 ];
 
-const platformItems: { title: string; description: string; href?: string }[] = [
-  { title: "אזור אישי ללקוח", description: "כל הפוליסות, החיסכון והמסמכים במקום אחד, מכל מכשיר.", href: "/personal-area" },
-  { title: "יועץ SEELD AI", description: "מענה על שאלות ביטוח ופנסיה בכל שעה, וחיבור ליועץ אנושי כשצריך." },
-  { title: "איתור קרנות", description: "חיפוש והשוואה של קרנות פנסיה, גמל והשתלמות מכל בתי ההשקעות.", href: "/fund-finder" },
-  { title: "טבלאות תשואות", description: "נתוני תשואה ודמי ניהול רשמיים, מעודכנים מדי חודש.", href: "/return-tables" },
-  { title: "מסלולי השקעה", description: "השוואת חשיפות, רמות סיכון ותשואות בין כל המסלולים בשוק.", href: "/investment-tracks" },
-  { title: "מחשבונים", description: "משכנתא, פנסיה, חיסכון והשוואת מסלולים. חופשי, ללא רישום.", href: "/calculators" },
+const platformItems: { title: string; description: string; href?: string; tag: string; live?: boolean }[] = [
+  { title: "אזור אישי ללקוח", description: "כל הפוליסות, החיסכון והמסמכים במקום אחד, מכל מכשיר.", href: "/personal-area", tag: "SECURE" },
+  { title: "יועץ SEELD AI", description: "מענה על שאלות ביטוח ופנסיה בכל שעה, וחיבור ליועץ אנושי כשצריך.", tag: "LIVE · 24/7", live: true },
+  { title: "איתור קרנות", description: "חיפוש והשוואה של קרנות פנסיה, גמל והשתלמות מכל בתי ההשקעות.", href: "/fund-finder", tag: "DATABASE" },
+  { title: "טבלאות תשואות", description: "נתוני תשואה ודמי ניהול רשמיים, מעודכנים מדי חודש.", href: "/return-tables", tag: "MONTHLY" },
+  { title: "מסלולי השקעה", description: "השוואת חשיפות, רמות סיכון ותשואות בין כל המסלולים בשוק.", href: "/investment-tracks", tag: "COMPARE" },
+  { title: "מחשבונים", description: "משכנתא, פנסיה, חיסכון והשוואת מסלולים. חופשי, ללא רישום.", href: "/calculators", tag: "NO SIGNUP" },
 ];
 
 const processSteps = [
   { number: "01", title: "פנייה ראשונית", description: "שיחה קצרה להיכרות עם הצרכים, היועץ הייעודי והצעדים הבאים." },
   { number: "02", title: "מיפוי התיק", description: "שליפת כל הפוליסות, הקרנות והחיסכון ממקורות רשמיים. מאובטח לחלוטין." },
-  { number: "03", title: "ניתוח ודוח", description: "תוך 48 שעות — דוח מקצועי: המצב הקיים, הזדמנויות והמלצות מנומקות." },
+  { number: "03", title: "ניתוח ודוח", description: "תוך 48 שעות, דוח מקצועי: המצב הקיים, הזדמנויות והמלצות מנומקות." },
   { number: "04", title: "פגישת ייעוץ", description: "פרונטלית או בזום. מעבר מעמיק על כל סעיף והחלטה מושכלת, ללא לחץ." },
   { number: "05", title: "יישום", description: "אנחנו מטפלים בניודים, בטפסים ובחברות. אתה מקבל עדכון בכל שלב." },
   { number: "06", title: "ליווי שוטף", description: "בחינה מחדש אחת לשנה ובכל אירוע חיים. הקשר עם היועץ נמשך." },
@@ -93,31 +97,31 @@ const processSteps = [
 const faqItems = [
   {
     question: "איך בוחרים ביטוח בריאות שמתאים לי?",
-    answer: "בודקים מה יש לכם בקופ״ח, מה חסר, ומשווים בין כל התוכניות בשוק. ההמלצה מותאמת לגיל, מצב בריאותי וצרכים — בלי עלות נוספת.",
+    answer: "בודקים מה יש לכם בקופ״ח, מה חסר, ומשווים בין כל התוכניות בשוק. ההמלצה מותאמת לגיל, מצב בריאותי וצרכים, בלי עלות נוספת.",
   },
   {
     question: "מה ההבדל בין קרן פנסיה לביטוח מנהלים?",
-    answer: "בקרן פנסיה כולם חולקים את הסיכון — זה מוזיל עלויות. בביטוח מנהלים יש פוליסה אישית עם גמישות רבה יותר. מה עדיף? תלוי בגיל, בריאות ומצב תעסוקתי.",
+    answer: "בקרן פנסיה כולם חולקים את הסיכון, זה מוזיל עלויות. בביטוח מנהלים יש פוליסה אישית עם גמישות רבה יותר. מה עדיף? תלוי בגיל, בריאות ומצב תעסוקתי.",
   },
   {
     question: "כמה עולה פגישת ייעוץ פנסיוני?",
-    answer: "הפגישה הראשונה ללא עלות. תקבלו תמונה מלאה של מצב הפנסיה שלכם — הפקדות, כיסויים, דמי ניהול — ותבינו בדיוק איפה אתם עומדים.",
+    answer: "הפגישה הראשונה ללא עלות. תקבלו תמונה מלאה של מצב הפנסיה שלכם: הפקדות, כיסויים, דמי ניהול, ותבינו בדיוק איפה אתם עומדים.",
   },
   {
     question: "אתם עובדים עם חברת ביטוח ספציפית?",
-    answer: "לא. אנחנו עובדים מול כל החברות — הפניקס, מגדל, הראל, כלל, מנורה מבטחים ועוד. ככה אפשר להשוות ולמצוא את מה שמתאים ומשתלם באמת.",
+    answer: "לא. אנחנו עובדים מול כל החברות: הפניקס, מגדל, הראל, כלל, מנורה מבטחים ועוד. ככה אפשר להשוות ולמצוא את מה שמתאים ומשתלם באמת.",
   },
   {
     question: "כמה זמן לוקח לעבור חברה?",
-    answer: "בין שבוע לחודש, תלוי בסוג המוצר. אנחנו מטפלים בהכל — טפסים, ניוד, בדיקה שלא נפגעים כיסויים קיימים.",
+    answer: "בין שבוע לחודש, תלוי בסוג המוצר. אנחנו מטפלים בהכל: טפסים, ניוד, בדיקה שלא נפגעים כיסויים קיימים.",
   },
   {
     question: "מה זה סריקת תיק?",
-    answer: "בדיקה של כל מה שיש לכם — ביטוחים, פנסיה, חיסכון. מוצאים חסרים, כפלים, ודמי ניהול גבוהים. בלי עלות ובלי התחייבות.",
+    answer: "בדיקה של כל מה שיש לכם: ביטוחים, פנסיה, חיסכון. מוצאים חסרים, כפלים, ודמי ניהול גבוהים. בלי עלות ובלי התחייבות.",
   },
   {
     question: "מה קורה אם יש בעיה עם חברת הביטוח?",
-    answer: "הצוות שלנו מטפל. זה בדיוק למה יש סוכן — שלא תצטרכו להתמודד עם החברה לבד. אנחנו הכתובת שלכם.",
+    answer: "הצוות שלנו מטפל. זה בדיוק למה יש סוכן, שלא תצטרכו להתמודד עם החברה לבד. אנחנו הכתובת שלכם.",
   },
 ];
 
@@ -143,7 +147,7 @@ const leadSubjects = [
 
 // ── Shared UI ──
 
-const SectionHead = ({ index, title, lede }: { index: string; title: string; lede?: string }) => (
+const SectionHead = ({ index, title, lede, underline }: { index: string; title: string; lede?: string; underline?: string }) => (
   <div className="border-t border-[#171717]/20 pt-6 mb-12 sm:mb-16">
     <div className="flex items-baseline gap-6 sm:gap-10">
       <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: BRONZE }}>
@@ -156,25 +160,27 @@ const SectionHead = ({ index, title, lede }: { index: string; title: string; led
         >
           {title}
         </h2>
+        {underline && <DrawUnderline color={underline} className="mt-2" />}
         {lede && (
-          <p className="mt-3 text-base text-[#171717]/50 leading-[1.85] max-w-xl">{lede}</p>
+          <p className="mt-3 text-base text-[#5c5c5c] leading-[1.85] max-w-xl">{lede}</p>
         )}
       </div>
     </div>
   </div>
 );
 
+// Mobile shows the six flagship rows; the "see all" link below each tab carries the rest.
 const ProductList = ({ items }: { items: { title: string; description: string; href: string }[] }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16">
-    {items.map((item) => (
+    {items.map((item, i) => (
       <Link
         key={item.title + item.href}
         to={item.href}
-        className="group flex items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10 hover:border-[#171717]/40 transition-colors"
+        className={`group items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10 hover:border-[#171717]/40 transition-colors ${i >= 6 ? "hidden md:flex" : "flex"}`}
       >
         <div className="flex items-baseline gap-4 min-w-0">
           <h3 className="text-base font-medium text-[#171717] whitespace-nowrap">{item.title}</h3>
-          <p className="text-[13px] text-[#171717]/40 truncate hidden sm:block">{item.description}</p>
+          <p className="text-[13px] text-[#6e6e6e] truncate hidden sm:block">{item.description}</p>
         </div>
         <span className="text-[#171717]/30 group-hover:text-[#171717] transition-all group-hover:-translate-x-1 shrink-0">
           ←
@@ -185,9 +191,10 @@ const ProductList = ({ items }: { items: { title: string; description: string; h
 );
 
 const inputClass =
-  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#171717]/35 text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
+  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#6e6e6e] text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
 
 const Index = () => {
+  const processRef = useRef<HTMLDivElement>(null);
   const [leadForm, setLeadForm] = useState({ name: "", phone: "", subject: "" });
   const [leadSubmitting, setLeadSubmitting] = useState(false);
 
@@ -197,7 +204,7 @@ const Index = () => {
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!leadForm.name.trim() || !leadForm.phone.trim()) {
-      toast.error("נא למלא שם וטלפון");
+      toast.error("חסרים שם וטלפון. מלאו את שניהם ונדע לחזור אליכם.");
       return;
     }
     setLeadSubmitting(true);
@@ -222,10 +229,10 @@ const Index = () => {
           },
         });
       } catch { /* notification failure is non-blocking */ }
-      toast.success("הפרטים נשלחו! נחזור אליכם בהקדם.");
+      toast.success("הפרטים אצלנו. נחזור אליכם באותו יום עבודה.");
       setLeadForm({ name: "", phone: "", subject: "" });
     } catch {
-      toast.error("שגיאה בשליחה, נסו שוב");
+      toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
     } finally {
       setLeadSubmitting(false);
     }
@@ -234,7 +241,7 @@ const Index = () => {
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!contactForm.name.trim() || !contactForm.phone.trim()) {
-      toast.error("נא למלא שם וטלפון");
+      toast.error("חסרים שם וטלפון. מלאו את שניהם ונדע לחזור אליכם.");
       return;
     }
     setContactSubmitting(true);
@@ -258,17 +265,17 @@ const Index = () => {
           },
         });
       } catch { /* notification failure is non-blocking */ }
-      toast.success("הפרטים נשלחו! נחזור אליכם בהקדם.");
+      toast.success("הפרטים אצלנו. נחזור אליכם באותו יום עבודה.");
       setContactForm({ name: "", phone: "", email: "", message: "" });
     } catch {
-      toast.error("שגיאה בשליחה, נסו שוב");
+      toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
     } finally {
       setContactSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: BONE }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
       <main>
@@ -276,13 +283,14 @@ const Index = () => {
         <HeroSection />
 
         {/* 01 — PORTFOLIO REVIEW */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="01"
-                title="בדיקת תיק, ללא עלות"
-                lede="השאירו פרטים. הצוות שלנו יבחן את התיק הקיים ויחזור אליכם עם דוח מקצועי הכולל המלצות מעשיות — בתוך 48 שעות."
+                title="בדיקת תיק ללא עלות"
+                underline={CHIP_ORANGE}
+                lede="השאירו פרטים. הצוות שלנו יבחן את התיק הקיים ויחזור אליכם עם דוח מקצועי הכולל המלצות מעשיות, בתוך 48 שעות."
               />
             </ScrollReveal>
 
@@ -324,7 +332,7 @@ const Index = () => {
                   >
                     {leadSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו ונתחיל"}
                   </button>
-                  <span className="text-[13px] text-[#171717]/40">
+                  <span className="text-[13px] text-[#6e6e6e]">
                     או חייגו{" "}
                     <a href="tel:0523097444" className="text-[#171717] border-b border-[#171717]/25 hover:border-[#171717] transition-colors tabular-nums" dir="ltr">
                       052-309-7444
@@ -332,16 +340,16 @@ const Index = () => {
                   </span>
                 </div>
                 <div className="mt-6">
-                  <span className="text-[12px] text-[#171717]/35">שתי דקות למלא. אפס אותיות קטנות.</span>
+                  <span className="text-[12px] text-[#6e6e6e]">שתי דקות למלא. אפס אותיות קטנות.</span>
                 </div>
               </form>
             </ScrollReveal>
-          </div>
+          </div></div>
         </section>
 
         {/* 02 — THE METHOD */}
-        <section style={{ backgroundColor: BONE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="02"
@@ -354,26 +362,23 @@ const Index = () => {
               {whySeeld.map((item, i) => (
                 <ScrollReveal key={item.title} delay={i * 80}>
                   <div className="border-t border-[#171717]/15 pt-5 h-full">
-                    <span className="text-[11px] tabular-nums tracking-[0.2em] block mb-4" style={{ color: BRONZE }}>
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
                     <h3
                       className="text-lg text-[#171717] mb-3"
                       style={{ fontFamily: SERIF, fontWeight: 600 }}
                     >
                       {item.title}
                     </h3>
-                    <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{item.description}</p>
+                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{item.description}</p>
                   </div>
                 </ScrollReveal>
               ))}
             </div>
-          </div>
+          </div></div>
         </section>
 
         {/* 03 — PRACTICE AREAS */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="03"
@@ -386,13 +391,13 @@ const Index = () => {
               <TabsList className="flex w-full justify-start gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none">
                 <TabsTrigger
                   value="insurance"
-                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
+                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
                 >
                   ביטוח
                 </TabsTrigger>
                 <TabsTrigger
                   value="savings"
-                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#171717]/40 border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
+                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
                 >
                   חיסכון ופנסיה
                 </TabsTrigger>
@@ -405,7 +410,7 @@ const Index = () => {
                     to="/insurances"
                     className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
                   >
-                    לכל הביטוחים
+                    לכל 16 הביטוחים
                     <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
                   </Link>
                 </div>
@@ -418,18 +423,18 @@ const Index = () => {
                     to="/savings"
                     className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
                   >
-                    לכל מוצרי החיסכון והפנסיה
+                    לכל 11 מוצרי החיסכון והפנסיה
                     <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
                   </Link>
                 </div>
               </TabsContent>
             </Tabs>
-          </div>
+          </div></div>
         </section>
 
         {/* 04 — THE PLATFORM (quiet dark) */}
-        <section style={{ backgroundColor: PINE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <div className="border-t border-white/20 pt-6 mb-12 sm:mb-16">
                 <div className="flex items-baseline gap-6 sm:gap-10">
@@ -462,6 +467,9 @@ const Index = () => {
                       <span className="text-[#fafafa]/25 group-hover:text-[#fafafa] transition-all group-hover:-translate-x-1">←</span>
                     </div>
                     <p className="text-[14px] text-[#fafafa]/40 leading-[1.8]">{item.description}</p>
+                    <div className="mt-4" dir="ltr">
+                      <LiveTag dark dot={item.live}>{item.tag}</LiveTag>
+                    </div>
                   </div>
                 );
                 return item.href ? (
@@ -483,19 +491,25 @@ const Index = () => {
             <p className="mt-10 text-[12px] text-[#fafafa]/30">
               היועץ האנושי ישן בלילה. ה‑AI לא.
             </p>
-          </div>
+          </div></div>
         </section>
 
         {/* NUMBERS */}
-        <section style={{ backgroundColor: BONE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
+              <div className="flex items-end justify-between gap-6 mb-2">
+                <span className="text-[11px] tracking-[0.14em] text-[#6e6e6e]" style={{ fontFamily: "'Geist Mono', ui-monospace, monospace" }}>
+                  PORTFOLIO · GROWTH
+                </span>
+                <DrawSpark color={CHIP_GREEN} className="w-40 sm:w-64" height={44} />
+              </div>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 border-t border-b border-[#171717]/15 py-10 sm:py-14">
                 {[
-                  { number: "600+", label: "משפחות מלוות" },
-                  { number: "12", label: "חברות בהשוואה" },
-                  { number: "48", label: "שעות לדוח מלא" },
-                  { number: "₪0", label: "פגישת ייעוץ ראשונה" },
+                  { to: 600, suffix: "+", label: "משפחות מלוות" },
+                  { to: 12, suffix: "", label: "חברות בהשוואה" },
+                  { to: 48, suffix: "", label: "שעות לדוח מלא" },
+                  { to: 0, prefix: "₪", suffix: "", label: "פגישת ייעוץ ראשונה" },
                 ].map((stat) => (
                   <div key={stat.label} className="text-center">
                     <div
@@ -503,22 +517,22 @@ const Index = () => {
                       dir="ltr"
                       style={{ fontFamily: "'Geist Mono', ui-monospace, monospace", fontWeight: 600, fontSize: "clamp(2.4rem, 4.5vw, 3.6rem)", letterSpacing: "-0.02em" }}
                     >
-                      {stat.number}
+                      <CountUp to={stat.to} format={(v) => `${stat.prefix ?? ""}${v.toLocaleString("en-US")}${stat.suffix}`} />
                     </div>
-                    <div className="text-[12px] tracking-[0.12em] text-[#171717]/45">{stat.label}</div>
+                    <div className="text-[12px] tracking-[0.12em] text-[#6e6e6e]">{stat.label}</div>
                   </div>
                 ))}
               </div>
-              <p className="mt-5 text-center text-[12px] text-[#171717]/35">
+              <p className="mt-5 text-center text-[12px] text-[#6e6e6e]">
                 אנחנו לא צועקים. המספרים עושים את זה בשבילנו.
               </p>
             </ScrollReveal>
-          </div>
+          </div></div>
         </section>
 
         {/* 05 — THE HOUSE */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead index="05" title="הבית" />
             </ScrollReveal>
@@ -534,7 +548,7 @@ const Index = () => {
                   </p>
                   <p>
                     הצוות שלנו כולל סוכני ביטוח מורשים, יועצי פנסיה ומומחי פיננסים.
-                    כולם עצמאיים, כולם ללא תלות בחברה אחת. זו לא אמירה שיווקית —
+                    כולם עצמאיים, כולם ללא תלות בחברה אחת. זו לא אמירה שיווקית.
                     זו התשתית המשפטית והעסקית שלנו.
                   </p>
                   <p>
@@ -564,18 +578,44 @@ const Index = () => {
                   {trustList.map((point) => (
                     <div key={point.title} className="py-5 border-b border-[#171717]/10">
                       <h3 className="text-base font-medium text-[#171717] mb-1.5">{point.title}</h3>
-                      <p className="text-[13px] text-[#171717]/45 leading-relaxed">{point.description}</p>
+                      <p className="text-[13px] text-[#5c5c5c] leading-relaxed">{point.description}</p>
                     </div>
                   ))}
                 </div>
               </ScrollReveal>
             </div>
-          </div>
+
+            {/* The cast — ink figures in the reference film's spirit */}
+            <ScrollReveal>
+              <div className="mt-16 border-t border-[#171717]/15 pt-12 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-12">
+                {[
+                  { Figure: CastDana, name: "דנה", role: "יועצת פנסיה · מלווה 140 משפחות" },
+                  { Figure: CastAvi, name: "אבי", role: "סוכן ביטוח מורשה · תיקי בריאות וחיים" },
+                  { Figure: CastReader, name: "הלקוחה שלנו", role: "קוראת את הדוח. מבינה אותו." },
+                ].map(({ Figure, name, role }) => (
+                  <div key={name} className="text-center">
+                    <Figure className="w-36 h-52 sm:w-40 sm:h-56 mx-auto" />
+                    <div className="mt-4 text-[15px] text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                      {name}
+                    </div>
+                    <div className="mt-1 text-[12px] text-[#5c5c5c]">{role}</div>
+                    <button
+                      type="button"
+                      onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
+                      className="mt-3 text-[12px] font-medium text-[#171717] border-b border-[#171717]/30 pb-0.5 hover:border-[#171717] transition-colors"
+                    >
+                      דברו איתנו
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
+          </div></div>
         </section>
 
         {/* 06 — PROCESS */}
-        <section style={{ backgroundColor: BONE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="06"
@@ -584,7 +624,9 @@ const Index = () => {
               />
             </ScrollReveal>
 
-            <div className="max-w-3xl">
+            <div ref={processRef} className="max-w-3xl relative pr-5 sm:pr-7">
+              {/* The rail fills as you read through the steps */}
+              <ProgressRail targetRef={processRef} color={CHIP_GREEN} className="right-0" />
               {processSteps.map((step, i) => (
                 <ScrollReveal key={step.number} delay={i * 60}>
                   <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-10 py-6 border-b border-[#171717]/10">
@@ -597,26 +639,26 @@ const Index = () => {
                     >
                       {step.title}
                     </h3>
-                    <p className="text-[14px] text-[#171717]/50 leading-[1.8]">{step.description}</p>
+                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{step.description}</p>
                   </div>
                 </ScrollReveal>
               ))}
             </div>
-          </div>
+          </div></div>
         </section>
 
         {/* PARTNERS */}
-        <ScrollReveal>
+        <section className="px-2 pt-2"><div className="bento-panel"><ScrollReveal>
           <CompanyLogos
             variant="marquee"
             title="עובדים מול כל השחקניות המובילות"
             subtitle="12 חברות ביטוח ו-6 בתי השקעות בישראל. גישה מקצועית בזמן אמת. השוואה שקופה. המלצה מבוססת."
           />
-        </ScrollReveal>
+        </ScrollReveal></div></section>
 
         {/* 07 — FAQ */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="07"
@@ -636,7 +678,7 @@ const Index = () => {
                     <AccordionTrigger className="text-base sm:text-base font-medium hover:no-underline py-5 text-[#171717] text-start">
                       {item.question}
                     </AccordionTrigger>
-                    <AccordionContent className="text-[14px] text-[#171717]/50 leading-[1.85] pb-6 max-w-2xl">
+                    <AccordionContent className="text-[14px] text-[#5c5c5c] leading-[1.85] pb-6 max-w-2xl">
                       {item.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -653,18 +695,29 @@ const Index = () => {
                 </Link>
               </div>
             </div>
-          </div>
+          </div></div>
         </section>
 
         {/* 08 — CONTACT */}
-        <section style={{ backgroundColor: BONE }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="08"
                 title="השיחה הראשונה, על חשבוננו"
-                lede="השאירו פרטים ויועץ מהצוות שלנו יחזור אליכם באותו יום עבודה. שיחה אחת — בלי מרדף."
+                lede="השאירו פרטים ויועץ מהצוות שלנו יחזור אליכם באותו יום עבודה. שיחה אחת, בלי מרדף."
               />
+            </ScrollReveal>
+
+            <ScrollReveal>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
+                className="-mt-6 mb-12 block transition-transform hover:-translate-y-[1px]"
+                aria-label="פתיחת שיחה עם יועץ SEELD AI"
+              >
+                <StatusPill>SEELD AI מחובר עכשיו · לחצו לשיחה</StatusPill>
+              </button>
             </ScrollReveal>
 
             <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-14 lg:gap-24">
@@ -700,7 +753,7 @@ const Index = () => {
                     rows={3}
                     value={contactForm.message}
                     onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}
-                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] text-base placeholder:text-[#171717]/35 focus:outline-none focus:border-[#171717] transition-colors resize-none rounded-none"
+                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] text-base placeholder:text-[#6e6e6e] focus:outline-none focus:border-[#171717] transition-colors resize-none rounded-none"
                   />
                   <button
                     type="submit"
@@ -721,7 +774,7 @@ const Index = () => {
                     { label: "משרדים", value: "רעננה · ירושלים" },
                   ].map((row) => (
                     <div key={row.label} className="flex items-baseline justify-between py-[15px] border-b border-[#171717]/10">
-                      <span className="text-[13px] text-[#171717]/45">{row.label}</span>
+                      <span className="text-[13px] text-[#6e6e6e]">{row.label}</span>
                       {row.href ? (
                         <a
                           href={row.href}
@@ -738,7 +791,7 @@ const Index = () => {
                     </div>
                   ))}
                   <div className="flex items-baseline justify-between py-[15px]">
-                    <span className="text-[13px] text-[#171717]/45">סוכן ביטוח?</span>
+                    <span className="text-[13px] text-[#6e6e6e]">סוכן ביטוח?</span>
                     <Link
                       to="/app/auth"
                       className="text-base text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
@@ -749,7 +802,7 @@ const Index = () => {
                 </div>
               </ScrollReveal>
             </div>
-          </div>
+          </div></div>
         </section>
       </main>
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MONO, CARD_SHADOW, RING, FAINT, LINE } from "@/lib/brand";
 
 const AccessibilityButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,50 +37,67 @@ const AccessibilityButton = () => {
 
   return (
     <>
-      {/* Tiny button */}
+      {/* Quiet launcher — white circle, hairline ring, ink glyph */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          "fixed bottom-6 right-6 z-40 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300",
-          "bg-muted/60 hover:bg-muted text-muted-foreground hover:text-foreground",
-          "opacity-40 hover:opacity-100 border border-border/30"
-        )}
+        className="fixed bottom-6 right-6 z-40 flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#5c5c5c] opacity-60 transition-all duration-200 hover:opacity-100 hover:text-[#171717]"
+        style={{ boxShadow: RING }}
         aria-label="הגדרות נגישות"
+        aria-expanded={isOpen}
         title="נגישות"
       >
-        <Eye className="w-3.5 h-3.5" />
+        <Eye className="h-4 w-4" />
       </button>
 
       {/* Panel */}
       {isOpen && (
-        <div className="fixed bottom-16 right-6 z-40 w-56 bg-card rounded-xl shadow-lg border border-border p-4 animate-scale-in">
-          <h3 className="font-semibold text-sm mb-3 text-right">נגישות</h3>
-          
+        <div
+          className="fixed bottom-[68px] right-6 z-40 w-60 rounded-lg bg-white p-4"
+          style={{ boxShadow: CARD_SHADOW }}
+          role="group"
+          aria-label="הגדרות נגישות"
+        >
+          <div className="mb-3 flex items-baseline justify-between">
+            <h3 className="text-sm font-semibold text-[#171717]">נגישות</h3>
+            <span
+              className="text-[10px] font-medium tracking-[0.12em]"
+              style={{ fontFamily: MONO, color: FAINT }}
+              dir="ltr"
+            >
+              A11Y
+            </span>
+          </div>
+
           {/* Font size */}
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex gap-1">
+          <div className="flex items-center justify-between border-t py-3" style={{ borderColor: LINE }}>
+            <div className="flex gap-1.5">
               <button
                 onClick={() => updateFontSize(-10)}
-                className="w-7 h-7 rounded bg-muted hover:bg-muted/80 text-xs font-bold"
+                aria-label="הקטנת גודל טקסט"
+                className="flex h-8 w-8 items-center justify-center rounded-md border border-[#ebebeb] bg-white text-[13px] font-medium text-[#171717] transition-colors duration-150 hover:border-[#171717]"
               >
                 א-
               </button>
               <button
                 onClick={() => updateFontSize(10)}
-                className="w-7 h-7 rounded bg-muted hover:bg-muted/80 text-xs font-bold"
+                aria-label="הגדלת גודל טקסט"
+                className="flex h-8 w-8 items-center justify-center rounded-md border border-[#ebebeb] bg-white text-[13px] font-medium text-[#171717] transition-colors duration-150 hover:border-[#171717]"
               >
                 א+
               </button>
             </div>
-            <span className="text-xs text-muted-foreground">גודל טקסט</span>
+            <span className="text-[14px] text-[#4d4d4d]">גודל טקסט</span>
           </div>
 
           {/* High contrast */}
           <button
             onClick={toggleHighContrast}
+            aria-pressed={settings.highContrast}
             className={cn(
-              "w-full text-right text-xs py-2 px-3 rounded mb-2 transition-colors",
-              settings.highContrast ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
+              "mb-2 w-full rounded-md border px-3 py-2 text-right text-[14px] font-medium transition-colors duration-150",
+              settings.highContrast
+                ? "border-[#171717] bg-[#171717] text-white"
+                : "border-[#ebebeb] bg-white text-[#171717] hover:border-[#171717]"
             )}
           >
             ניגודיות גבוהה
@@ -88,9 +106,12 @@ const AccessibilityButton = () => {
           {/* Reduced motion */}
           <button
             onClick={toggleReducedMotion}
+            aria-pressed={settings.reducedMotion}
             className={cn(
-              "w-full text-right text-xs py-2 px-3 rounded mb-3 transition-colors",
-              settings.reducedMotion ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
+              "mb-3 w-full rounded-md border px-3 py-2 text-right text-[14px] font-medium transition-colors duration-150",
+              settings.reducedMotion
+                ? "border-[#171717] bg-[#171717] text-white"
+                : "border-[#ebebeb] bg-white text-[#171717] hover:border-[#171717]"
             )}
           >
             הפחתת אנימציות
@@ -99,7 +120,8 @@ const AccessibilityButton = () => {
           {/* Reset */}
           <button
             onClick={resetAll}
-            className="w-full text-center text-xs py-1.5 text-muted-foreground hover:text-foreground transition-colors"
+            className="w-full border-t pt-2.5 text-center text-[13px] text-[#6e6e6e] transition-colors duration-150 hover:text-[#171717]"
+            style={{ borderColor: LINE }}
           >
             איפוס
           </button>

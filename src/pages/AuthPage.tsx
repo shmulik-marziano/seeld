@@ -249,23 +249,23 @@ export default function AuthPage() {
       {/* Right side -- branding hero (hidden on mobile, shown on lg+) */}
       <div className="hidden lg:flex lg:w-[48%] relative items-center justify-center overflow-hidden"
         style={{
-          background: 'linear-gradient(165deg, hsl(168 42% 18%) 0%, hsl(152 42% 22%) 40%, hsl(160 38% 28%) 70%, hsl(145 30% 20%) 100%)',
+          background: 'linear-gradient(165deg, #171717 0%, #262626 60%, #171717 100%)',
         }}
       >
         {/* Ambient glow effects */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-[0.07]"
-            style={{ background: 'radial-gradient(circle, hsl(160 50% 65%) 0%, transparent 70%)' }} />
+            style={{ background: 'radial-gradient(circle, #ffffff 0%, transparent 70%)' }} />
           <div className="absolute bottom-[-15%] left-[-5%] w-[400px] h-[400px] rounded-full opacity-[0.05]"
-            style={{ background: 'radial-gradient(circle, hsl(28 45% 60%) 0%, transparent 70%)' }} />
+            style={{ background: 'radial-gradient(circle, #a3a3a3 0%, transparent 70%)' }} />
 
           {/* Floating orbs */}
           <motion.div animate={{ y: [0, -20, 0], opacity: [0.15, 0.25, 0.15] }} transition={{ duration: 8, repeat: Infinity }}
-            className="absolute top-[12%] right-[18%] w-24 h-24 rounded-full bg-[hsl(160,50%,65%)] opacity-15 blur-sm" />
+            className="absolute top-[12%] right-[18%] w-24 h-24 rounded-full bg-white/20 opacity-15 blur-sm" />
           <motion.div animate={{ y: [0, 15, 0], opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 10, repeat: Infinity, delay: 2 }}
-            className="absolute top-[55%] left-[12%] w-16 h-16 rounded-full bg-[hsl(28,45%,60%)] opacity-10 blur-sm" />
+            className="absolute top-[55%] left-[12%] w-16 h-16 rounded-full bg-white/10 opacity-10 blur-sm" />
           <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 7, repeat: Infinity, delay: 1 }}
-            className="absolute bottom-[20%] right-[25%] w-10 h-10 rounded-full bg-[hsl(0,55%,72%)] opacity-15 blur-sm" />
+            className="absolute bottom-[20%] right-[25%] w-10 h-10 rounded-full bg-white/15 opacity-15 blur-sm" />
 
           {/* Grid pattern overlay */}
           <div className="absolute inset-0 opacity-[0.03]"
@@ -276,10 +276,10 @@ export default function AuthPage() {
 
           {/* Dashed decorative lines */}
           <svg className="absolute bottom-16 left-0 w-full h-20 opacity-[0.08] pointer-events-none" viewBox="0 0 400 60" fill="none">
-            <path d="M0 45 Q100 10 200 35 T400 20" stroke="hsl(160,50%,65%)" strokeWidth="1.5" strokeDasharray="8 6" />
+            <path d="M0 45 Q100 10 200 35 T400 20" stroke="#ffffff" strokeWidth="1.5" strokeDasharray="8 6" />
           </svg>
           <svg className="absolute top-20 right-0 w-full h-16 opacity-[0.06] pointer-events-none" viewBox="0 0 400 50" fill="none">
-            <path d="M400 40 Q300 5 200 25 T0 15" stroke="hsl(28,45%,60%)" strokeWidth="1" strokeDasharray="6 5" />
+            <path d="M400 40 Q300 5 200 25 T0 15" stroke="#ffffff" strokeWidth="1" strokeDasharray="6 5" />
           </svg>
         </div>
 
@@ -311,11 +311,11 @@ export default function AuthPage() {
                 className="flex items-center gap-4 rounded-xl px-5 py-4 bg-white/[0.06] backdrop-blur-sm border border-white/[0.06] hover:bg-white/[0.09] transition-colors"
               >
                 <div className="w-10 h-10 rounded-lg bg-white/[0.1] flex items-center justify-center shrink-0">
-                  <feat.icon className="w-5 h-5 text-[hsl(160,50%,65%)]" />
+                  <feat.icon className="w-5 h-5 text-white/80" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-white/90">{feat.text}</p>
-                  <p className="text-xs text-white/40 mt-0.5">{feat.desc}</p>
+                  <p className="text-xs text-white/60 mt-0.5">{feat.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -328,8 +328,8 @@ export default function AuthPage() {
             transition={{ delay: 1 }}
             className="flex items-center justify-center gap-2 pt-2"
           >
-            <Shield className="w-3.5 h-3.5 text-white/30" />
-            <span className="text-xs text-white/30">מאובטח בתקן SSL | נתונים מוצפנים</span>
+            <Shield className="w-3.5 h-3.5 text-white/50" />
+            <span className="text-xs text-white/50">מאובטח בתקן SSL | נתונים מוצפנים</span>
           </motion.div>
         </motion.div>
       </div>
@@ -351,12 +351,12 @@ export default function AuthPage() {
           >
             <div className="rounded-2xl p-6 text-center relative overflow-hidden"
               style={{
-                background: 'linear-gradient(165deg, hsl(168 42% 18%) 0%, hsl(152 42% 24%) 50%, hsl(160 38% 28%) 100%)',
+                background: 'linear-gradient(165deg, #171717 0%, #262626 100%)',
               }}
             >
               {/* Mobile ambient glow */}
               <div className="absolute top-[-30%] right-[-20%] w-[200px] h-[200px] rounded-full opacity-[0.08]"
-                style={{ background: 'radial-gradient(circle, hsl(160 50% 65%) 0%, transparent 70%)' }} />
+                style={{ background: 'radial-gradient(circle, #ffffff 0%, transparent 70%)' }} />
               <div className="flex flex-col items-center gap-3 relative z-10">
                 <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white/[0.1] backdrop-blur-sm border border-white/[0.08]">
                   <SeeIDLogo size={38} />

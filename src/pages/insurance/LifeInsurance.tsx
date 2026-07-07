@@ -4,7 +4,7 @@ import { Shield, Heart, Users, Baby, FileCheck, AlertTriangle } from "lucide-rea
 const coverageCategories = [
   {
     category: "בסיס",
-    color: "#e76f51",
+    color: "#b91c1c",
     items: [
       { title: "ביטוח חיים", description: "הגנה כלכלית ליקיריכם במקרה של פטירה", icon: Heart },
       { title: "ביטוח חיים זוגי", description: "כיסוי משותף לזוגות עם תנאים משופרים", icon: Users },
@@ -13,14 +13,14 @@ const coverageCategories = [
   },
   {
     category: "מגן משלים לילד",
-    color: "#90be6d",
+    color: "#15803d",
     items: [
       { title: "מגן משלים לילד", description: "השלמת כיסוי לשאירים בפנסיה עבור ילדים", icon: Baby },
     ],
   },
   {
     category: "נספחים",
-    color: "#f4a261",
+    color: "#b45309",
     items: [
       { title: "שחרור בריסק", description: "שחרור מתשלום פרמיות במקרה של נכות", icon: Shield },
       { title: "נכות תמידית", description: "פיצוי במקרה של נכות תמידית מכל סיבה", icon: AlertTriangle },
@@ -50,19 +50,19 @@ const keyPoints = [
     title: "הגנה על המשפחה",
     description: "הבטיחו שהמשפחה שלכם תוכל להמשיך את אורח החיים שלה גם בלעדיכם",
     icon: Users,
-    color: "#5ec6c6",
+    color: "#171717",
   },
   {
     title: "כיסוי משכנתא",
     description: "הבטיחו שהבית ישאר בבעלות המשפחה גם אם קורה משהו",
     icon: Shield,
-    color: "#f4a261",
+    color: "#b45309",
   },
   {
     title: "עתיד הילדים",
     description: "הבטיחו את המימון ללימודים ולעתיד של הילדים שלכם",
     icon: Baby,
-    color: "#90be6d",
+    color: "#15803d",
   },
 ];
 
@@ -94,11 +94,11 @@ const LifeInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Heart}
-      heroIconColor="#e76f51"
+      heroIconColor="#b91c1c"
       heroCategory="ביטוחי חיים"
-      heroTitle={<>להגן על <span className="text-[#e76f51]">מי שחשוב לכם</span></>}
+      heroTitle={<>להגן על <span className="text-[#b91c1c]">מי שחשוב לכם</span></>}
       heroDescription="ביטוח חיים מבטיח שהמשפחה שלכם תהיה מוגנת כלכלית גם כשאתם לא שם. זו ההשקעה הכי חשובה בשקט הנפשי של כולם."
-      heroCTAText="להצטרפות ל-SEELD"
+      heroCTAText="קבלו הצעה מותאמת"
       heroSecondaryCTA={{ text: "סוגי כיסויים", href: "#coverage" }}
       breadcrumbLabel="ביטוח חיים"
       keyPoints={keyPoints}

@@ -4,15 +4,15 @@ import { useApp } from '@/contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, UserPlus, X } from 'lucide-react';
 
-const COLORS = ['#5ec6c6', '#f4a261', '#e76f51', '#90be6d', '#ffc929', '#6c63ff'];
+const COLORS = ['#171717', '#b45309', '#b91c1c', '#15803d', '#ffc929', '#171717'];
 
 const STATUS_COLOR: Record<string, string> = {
-  'חדש': '#5ec6c6',
-  'בקליטה': '#f4a261',
-  'מוכן להמלצה': '#90be6d',
+  'חדש': '#171717',
+  'בקליטה': '#b45309',
+  'מוכן להמלצה': '#15803d',
   'ממתין לפולו-אפ': '#ffc929',
-  'בביצוע': '#e76f51',
-  'הושלם': '#6c63ff',
+  'בביצוע': '#b91c1c',
+  'הושלם': '#171717',
 };
 
 const SIZES = [96, 104, 88, 112, 92, 100, 84, 108, 96, 90];
@@ -48,16 +48,16 @@ export default function CustomerListPage() {
   return (
     <div
       className="-m-3 sm:-m-4 md:-m-6 min-h-screen relative overflow-x-hidden"
-      style={{ backgroundColor: '#f8f9fc' }}
+      style={{ backgroundColor: '#fafafa' }}
       dir="rtl"
     >
       {/* Background decorative orbs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-[0.07] blur-3xl" style={{ backgroundColor: '#5ec6c6' }} />
-        <div className="absolute top-1/3 -left-32 w-80 h-80 rounded-full opacity-[0.06] blur-3xl" style={{ backgroundColor: '#f4a261' }} />
-        <div className="absolute bottom-0 right-1/3 w-72 h-72 rounded-full opacity-[0.05] blur-3xl" style={{ backgroundColor: '#6c63ff' }} />
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-[0.07] blur-3xl" style={{ backgroundColor: '#171717' }} />
+        <div className="absolute top-1/3 -left-32 w-80 h-80 rounded-full opacity-[0.06] blur-3xl" style={{ backgroundColor: '#b45309' }} />
+        <div className="absolute bottom-0 right-1/3 w-72 h-72 rounded-full opacity-[0.05] blur-3xl" style={{ backgroundColor: '#171717' }} />
         {/* Watermark */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-[120px] font-black tracking-widest select-none opacity-[0.025] text-[#0a3d3d] whitespace-nowrap">
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-[120px] font-black tracking-widest select-none opacity-[0.025] text-[#171717] whitespace-nowrap">
           SEELD
         </div>
       </div>
@@ -69,7 +69,7 @@ export default function CustomerListPage() {
       >
         <div>
           <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-400">SEELD פלטפורמה</p>
-          <h1 className="text-2xl font-extrabold leading-tight" style={{ color: '#0a3d3d' }}>
+          <h1 className="text-2xl font-extrabold leading-tight" style={{ color: '#171717' }}>
             לקוחות
             <span className="mr-2 text-sm font-medium text-gray-400">({data.customers.length})</span>
           </h1>
@@ -80,7 +80,7 @@ export default function CustomerListPage() {
             whileTap={{ scale: 0.93 }}
             onClick={() => { setSearchOpen(v => !v); }}
             className="w-11 h-11 rounded-full flex items-center justify-center shadow-md"
-            style={{ backgroundColor: searchOpen ? '#0a3d3d' : '#5ec6c6', color: 'white' }}
+            style={{ backgroundColor: searchOpen ? '#171717' : '#171717', color: 'white' }}
           >
             {searchOpen ? <X className="w-4 h-4" /> : <Search className="w-4 h-4" />}
           </motion.button>
@@ -89,7 +89,7 @@ export default function CustomerListPage() {
             whileTap={{ scale: 0.93 }}
             onClick={() => navigate('/app/customers/new')}
             className="w-11 h-11 rounded-full flex items-center justify-center shadow-lg"
-            style={{ backgroundColor: '#0a3d3d', color: 'white' }}
+            style={{ backgroundColor: '#171717', color: 'white' }}
           >
             <UserPlus className="w-4 h-4" />
           </motion.button>
@@ -115,7 +115,7 @@ export default function CustomerListPage() {
                   onChange={e => setSearch(e.target.value)}
                   placeholder="חיפוש לפי שם, ת.ז או טלפון..."
                   className="w-full pr-11 pl-4 py-3 rounded-2xl border bg-white text-sm focus:outline-none transition-all"
-                  style={{ borderColor: '#5ec6c6', boxShadow: '0 2px 12px rgba(94,198,198,0.15)' }}
+                  style={{ borderColor: '#171717', boxShadow: '0 2px 12px rgba(94,198,198,0.15)' }}
                 />
                 {search && (
                   <button
@@ -145,10 +145,10 @@ export default function CustomerListPage() {
               onClick={() => setActiveFilter(f.value)}
               className="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200"
               style={{
-                backgroundColor: active ? '#0a3d3d' : 'white',
+                backgroundColor: active ? '#171717' : 'white',
                 color: active ? 'white' : '#6b7280',
-                border: `2px solid ${active ? '#0a3d3d' : '#e5e7eb'}`,
-                boxShadow: active ? '0 4px 12px rgba(10,61,61,0.2)' : 'none',
+                border: `2px solid ${active ? '#171717' : '#e5e7eb'}`,
+                boxShadow: active ? '0 4px 12px rgba(23,23,23,0.2)' : 'none',
               }}
             >
               {f.label}
@@ -172,7 +172,7 @@ export default function CustomerListPage() {
               animate={{ y: [0, -8, 0] }}
               transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
               className="w-24 h-24 rounded-full flex items-center justify-center mb-5 shadow-xl"
-              style={{ backgroundColor: '#5ec6c6', boxShadow: '0 12px 32px rgba(94,198,198,0.35)' }}
+              style={{ backgroundColor: '#171717', boxShadow: '0 12px 32px rgba(94,198,198,0.35)' }}
             >
               <UserPlus className="w-10 h-10 text-white" />
             </motion.div>
@@ -181,7 +181,7 @@ export default function CustomerListPage() {
             <button
               onClick={() => { setSearch(''); setActiveFilter('all'); }}
               className="px-5 py-2 rounded-full text-xs font-bold text-white"
-              style={{ backgroundColor: '#0a3d3d' }}
+              style={{ backgroundColor: '#171717' }}
             >
               נקה סינון
             </button>
@@ -194,7 +194,7 @@ export default function CustomerListPage() {
             <AnimatePresence mode="popLayout">
               {filtered.map((c, i) => {
                 const color = COLORS[i % COLORS.length];
-                const statusColor = STATUS_COLOR[c.status] || '#5ec6c6';
+                const statusColor = STATUS_COLOR[c.status] || '#171717';
                 const size = SIZES[i % SIZES.length];
                 const floatDelay = (i % 6) * 0.5;
 
@@ -257,7 +257,7 @@ export default function CustomerListPage() {
                     <span
                       className="text-xs font-bold text-center leading-tight"
                       style={{
-                        color: '#0a3d3d',
+                        color: '#171717',
                         maxWidth: size + 12,
                         display: '-webkit-box',
                         WebkitLineClamp: 2,

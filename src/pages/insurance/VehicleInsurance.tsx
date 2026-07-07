@@ -5,7 +5,7 @@ const coverageTypes = [
   {
     title: "ביטוח מקיף",
     icon: Shield,
-    color: "#5ec6c6",
+    color: "#171717",
     items: [
       "גניבה מלאה וחלקית",
       "נזקי תאונה",
@@ -16,7 +16,7 @@ const coverageTypes = [
   {
     title: "ביטוח חובה",
     icon: FileText,
-    color: "#f4a261",
+    color: "#b45309",
     items: [
       "כיסוי נזקי גוף",
       "חובה על פי חוק",
@@ -26,7 +26,7 @@ const coverageTypes = [
   {
     title: "ביטוח צד ג׳",
     icon: Car,
-    color: "#90be6d",
+    color: "#15803d",
     items: [
       "נזק לרכב אחר",
       "נזק לרכוש",
@@ -46,7 +46,7 @@ const faqItems = [
   },
   {
     q: "איך אפשר להוזיל את ביטוח הרכב?",
-    a: "השוואה בין חברות, העלאת ההשתתפות העצמית, התקנת מערכות מיגון, וותק ללא תביעות - כל אלו יכולים להוזיל משמעותית את הפרמיה. אנחנו נעזור לכם למצוא את השילוב האופטימלי.",
+    a: "השוואה בין חברות, העלאת ההשתתפות העצמית, התקנת מערכות מיגון, וותק ללא תביעות: כל אלו יכולים להוזיל משמעותית את הפרמיה. נעזור לכם למצוא את השילוב הנכון.",
   },
 ];
 
@@ -78,11 +78,11 @@ const VehicleInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Car}
-      heroIconColor="#5ec6c6"
+      heroIconColor="#171717"
       heroCategory="ביטוח רכב"
-      heroTitle={<>הגנה מקיפה על <span className="text-[#5ec6c6]">הרכב שלכם</span></>}
+      heroTitle={<>הגנה מקיפה על <span className="text-[#171717]">הרכב שלכם</span></>}
       heroDescription="ביטוח רכב מותאם אישית לצרכים שלכם - מביטוח חובה ועד כיסוי מקיף הכולל גניבה, תאונות ונזקי טבע."
-      heroCTAText="להצטרפות ל-SEELD"
+      heroCTAText="קבלו הצעה מותאמת"
       heroSecondaryCTA={{ text: "סוגי כיסויים", href: "#coverage" }}
       breadcrumbLabel="ביטוח רכב"
       coverageTypes={coverageTypes}

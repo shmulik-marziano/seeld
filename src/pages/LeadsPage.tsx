@@ -129,14 +129,14 @@ export default function LeadsPage() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('/app/dashboard')}
-            className="w-10 h-10 rounded-full bg-[#0a3d3d] flex items-center justify-center hover:bg-[#0a3d3d]/80 transition-colors">
+            className="w-10 h-10 rounded-full bg-[#171717] flex items-center justify-center hover:bg-[#171717]/80 transition-colors">
             <ArrowRight className="w-5 h-5 text-white" />
           </button>
-          <div className="w-12 h-12 rounded-full bg-[#f4a261] flex items-center justify-center shadow-lg">
+          <div className="w-12 h-12 rounded-full bg-[#b45309] flex items-center justify-center shadow-lg">
             <Target className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold text-[#0a3d3d]">לידים</h1>
+            <h1 className="text-2xl font-extrabold text-[#171717]">לידים</h1>
             <p className="text-sm text-gray-400">{leads.length} לידים מהאתר</p>
           </div>
         </div>
@@ -145,7 +145,7 @@ export default function LeadsPage() {
       {/* Stats Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {[
-          { label: 'סה״כ', value: stats.total, color: '#0a3d3d', bg: '#0a3d3d15' },
+          { label: 'סה״כ', value: stats.total, color: '#171717', bg: '#17171715' },
           { label: 'חדשים', value: stats.new, color: '#0369a1', bg: '#e0f2fe' },
           { label: 'בטיפול', value: stats.inProgress, color: '#1e40af', bg: '#dbeafe' },
           { label: 'נסגרו', value: stats.closed, color: '#166534', bg: '#dcfce7' },
@@ -192,7 +192,7 @@ export default function LeadsPage() {
       {/* Content */}
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-[#5ec6c6]" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#171717]" />
         </div>
       ) : error ? (
         <div className="bg-white rounded-2xl border border-red-100 p-8 text-center">
@@ -201,10 +201,10 @@ export default function LeadsPage() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
-          <div className="w-16 h-16 rounded-full bg-[#f4a261]/10 flex items-center justify-center mx-auto mb-4">
-            <Target className="w-8 h-8 text-[#f4a261]" />
+          <div className="w-16 h-16 rounded-full bg-[#b45309]/10 flex items-center justify-center mx-auto mb-4">
+            <Target className="w-8 h-8 text-[#b45309]" />
           </div>
-          <p className="text-lg font-extrabold text-[#0a3d3d] mb-2">
+          <p className="text-lg font-extrabold text-[#171717] mb-2">
             {leads.length === 0 ? 'אין לידים עדיין' : 'לא נמצאו תוצאות'}
           </p>
           <p className="text-sm text-gray-400">
@@ -225,20 +225,20 @@ export default function LeadsPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm"
-                      style={{ backgroundColor: lead.type === 'insurance' ? '#5ec6c6' : '#6c63ff' }}>
+                      style={{ backgroundColor: lead.type === 'insurance' ? '#171717' : '#171717' }}>
                       {lead.type === 'insurance'
                         ? <Shield className="w-5 h-5 text-white" />
                         : <Wallet className="w-5 h-5 text-white" />}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-extrabold text-[#0a3d3d] truncate">{lead.full_name}</p>
+                      <p className="text-sm font-extrabold text-[#171717] truncate">{lead.full_name}</p>
                       <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                         <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full"
                           style={{ backgroundColor: st.bg, color: st.text }}>{st.label}</span>
                         <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full"
                           style={{
-                            backgroundColor: lead.type === 'insurance' ? '#5ec6c620' : '#6c63ff20',
-                            color: lead.type === 'insurance' ? '#0a3d3d' : '#6c63ff',
+                            backgroundColor: lead.type === 'insurance' ? '#17171720' : '#17171720',
+                            color: lead.type === 'insurance' ? '#171717' : '#171717',
                           }}>
                           {lead.type === 'insurance' ? 'ביטוח' : 'פנסיה'} &middot; {lead.subType}
                         </span>
@@ -280,11 +280,11 @@ export default function LeadsPage() {
       {/* Coming Soon Banner */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
         className="mt-8 rounded-2xl p-6 text-center border-2 border-dashed"
-        style={{ borderColor: '#5ec6c640', backgroundColor: '#5ec6c608' }}>
-        <div className="w-12 h-12 rounded-full bg-[#5ec6c6]/10 flex items-center justify-center mx-auto mb-3">
-          <Filter className="w-6 h-6 text-[#5ec6c6]" />
+        style={{ borderColor: '#17171740', backgroundColor: '#17171708' }}>
+        <div className="w-12 h-12 rounded-full bg-[#171717]/10 flex items-center justify-center mx-auto mb-3">
+          <Filter className="w-6 h-6 text-[#171717]" />
         </div>
-        <p className="text-sm font-extrabold text-[#0a3d3d]">ניהול לידים מלא - בקרוב</p>
+        <p className="text-sm font-extrabold text-[#171717]">ניהול לידים מלא - בקרוב</p>
         <p className="text-xs text-gray-400 mt-1 max-w-md mx-auto">
           יכלול: הקצאת ליד לסוכן, שינוי סטטוס, תיעוד פעולות, מעקב המרות, ועוד
         </p>

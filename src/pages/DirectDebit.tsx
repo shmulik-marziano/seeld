@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
-import { Building2, CreditCard, CalendarDays, User, CheckCircle2, AlertCircle, Loader2, Sparkles, Shield, Hash, RefreshCw } from "lucide-react";
+import { Loader2, RefreshCw } from "lucide-react";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
+import { SERIF, MONO } from "@/lib/brand";
+import { LiveDot, StatusPill } from "@/components/brand/Live";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
 // ─── Fallback Israeli Banks Data — מקור: בנק ישראל ──────────────────
@@ -61,57 +64,39 @@ function validateIsraeliId(id: string): { valid: boolean; message?: string } {
     if (num > 9) num -= 9;
     sum += num;
   }
-  if (sum % 10 !== 0) return { valid: false, message: 'ספרת ביקורת שגויה — יש לבדוק את מספר ת"ז' };
+  if (sum % 10 !== 0) return { valid: false, message: 'ספרת ביקורת שגויה. יש לבדוק את מספר ת"ז' };
   return { valid: true };
 }
 
-// ─── Styled Components ─────────────────────────────────────────────────────────
+// ─── Styled pieces (SEELD Mono) ─────────────────────────────────────────────
+const inputClass =
+  "w-full px-0 py-3 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#5c5c5c] text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
+
 function FieldLabel({ label, required, error }: { label: string; required?: boolean; error?: string }) {
   return (
-    <div className="flex items-center justify-between mb-2">
-      <label className="text-xs font-bold tracking-wider uppercase text-muted-foreground">
-        {label}{required && <span className="text-destructive mr-1">*</span>}
+    <div className="flex items-baseline justify-between mb-1 gap-4">
+      <label className="text-[13px] text-[#5c5c5c] font-medium">
+        {label}
+        {required && <span className="text-[#5c5c5c] mr-1">*</span>}
       </label>
-      {error && (
-        <span className="text-destructive text-[11px] flex items-center gap-1 font-medium animate-in slide-in-from-left-2">
-          <AlertCircle className="w-3 h-3" />{error}
-        </span>
-      )}
+      {error && <span className="text-[#b91c1c] text-[12px] font-medium">{error}</span>}
     </div>
   );
 }
 
 function StyledInput({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
-  return (
-    <input
-      {...props}
-      className={cn(
-        "w-full h-12 px-4 rounded-xl border-2 bg-card/60 backdrop-blur-sm",
-        "text-sm text-foreground placeholder:text-muted-foreground/40",
-        "border-border/40 focus:border-primary focus:bg-card",
-        "focus:outline-none focus:shadow-[0_0_0_4px_hsl(var(--primary)/0.1)]",
-        "transition-all duration-300",
-        className
-      )}
-    />
-  );
+  return <input {...props} className={cn(inputClass, className)} />;
 }
 
-function SectionCard({ title, icon, step, children }: { title: string; icon: React.ReactNode; step: number; children: React.ReactNode }) {
+function SectionHead({ index, title }: { index: string; title: string }) {
   return (
-    <div className="rounded-2xl border border-border/40 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-md p-6 space-y-5 relative overflow-hidden group hover:border-primary/20 transition-all duration-500">
-      <div className="absolute -top-6 -left-6 w-20 h-20 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-all duration-700" />
-      <div className="absolute top-3 left-3 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
-        <span className="text-[10px] font-bold text-primary">{step}</span>
-      </div>
-      <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-          {icon}
-        </div>
-        <h2 className="text-sm font-bold tracking-wide text-foreground">{title}</h2>
-        <div className="flex-1 h-px bg-gradient-to-l from-transparent to-border/40" />
-      </div>
-      {children}
+    <div className="border-t border-[#171717]/20 pt-5 mb-7 flex items-baseline gap-6">
+      <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: "#5c5c5c", fontFamily: MONO }}>
+        {index}
+      </span>
+      <h2 className="text-lg text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+        {title}
+      </h2>
     </div>
   );
 }
@@ -296,26 +281,38 @@ export default function DirectDebit() {
       setSubmitted(true);
     } catch (err) {
       console.error(err);
-    } finally {
+    }
+    finally {
       setSubmitting(false);
     }
   };
 
-  // Account number strength indicator
   const accDigits = form.accountNumber.replace(/\D/g, "");
-  const accStrength = accDigits.length === 0 ? 0 : accDigits.length < 5 ? 1 : accDigits.length <= 9 ? 2 : 3;
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-white" dir="rtl">
+      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
         <Header />
-        <main className="relative z-10 max-w-xl mx-auto px-4 pt-20 pb-20 text-center">
-          <div className="w-24 h-24 rounded-full bg-[#5ec6c6]/10 border-2 border-[#5ec6c6]/30 flex items-center justify-center mx-auto mb-6 animate-in zoom-in duration-500">
-            <CheckCircle2 className="w-12 h-12 text-[#5ec6c6]" />
+        <main className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
+          <div className="border-t border-[#171717]/20 pt-6">
+            <div className="flex items-center gap-2.5 mb-4">
+              <LiveDot size={7} />
+              <span className="text-[12px] tracking-[0.14em] font-medium text-[#5c5c5c]" style={{ fontFamily: MONO }}>
+                RECEIVED
+              </span>
+            </div>
+            <h1
+              className="text-[#171717] leading-tight mb-3"
+              style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}
+            >
+              הטופס נשלח
+            </h1>
+            <p className="text-base text-[#5c5c5c] leading-[1.85]">
+              פרטי הוראת הקבע התקבלו ויועברו לטיפול בהקדם.
+            </p>
           </div>
-          <h1 className="text-3xl font-extrabold text-[#0a3d3d] mb-3">הטופס נשלח בהצלחה!</h1>
-          <p className="text-gray-500">פרטי הו"ק התקבלו ויועברו לטיפול בהקדם.</p>
-          <div className="mt-8 rounded-2xl border border-gray-100 bg-[#f8f9fc] p-6 text-right space-y-4">
+          <div className="mt-10 border-t border-[#171717]/15">
             {[
               ["בעל החשבון", form.accountOwner],
               ['ת"ז', form.idNumber],
@@ -324,144 +321,180 @@ export default function DirectDebit() {
               ["מספר חשבון", form.accountNumber],
               ["יום חיוב", `${form.debitDay} בחודש`],
             ].map(([label, val]) => (
-              <div key={label} className="flex justify-between text-sm border-b border-border/20 pb-2 last:border-0">
-                <span className="text-muted-foreground">{label}</span>
-                <span className="font-bold font-mono">{val}</span>
+              <div key={label} className="flex items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10">
+                <span className="text-[13px] text-[#5c5c5c] shrink-0">{label}</span>
+                <span className="text-base text-[#171717] tabular-nums text-left" style={{ fontFamily: MONO }}>{val}</span>
               </div>
             ))}
           </div>
+          <div className="mt-10">
+            <Link
+              to="/"
+              className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+            >
+              חזרה לדף הבית
+              <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
+            </Link>
+          </div>
+          </div></div>
         </main>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
-      {/* Decorative circles */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-[10%] right-[5%] w-40 h-40 rounded-full bg-[#5ec6c6] opacity-[0.06]" />
-        <div className="absolute bottom-[10%] left-[5%] w-32 h-32 rounded-full bg-[#6c63ff] opacity-[0.06]" />
-      </div>
-
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      <main className="relative z-10 max-w-2xl mx-auto px-4 pt-10 pb-20">
-        {/* Hero */}
-        <div className="text-center mb-12 space-y-5">
-          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#5ec6c6]/20 bg-[#5ec6c6]/5 text-xs font-bold tracking-widest uppercase text-[#0a3d3d]">
-            <Shield className="w-3.5 h-3.5 text-[#5ec6c6]" />
-            הוראת קבע מאובטחת
-            <div className="w-2 h-2 rounded-full bg-[#5ec6c6]" />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.1]">
-            <span className="block text-[#0a3d3d]">מילוי טופס</span>
-            <span className="block text-[#5ec6c6]">הוראת קבע</span>
-          </h1>
-          <p className="text-sm text-gray-400 max-w-sm mx-auto leading-relaxed">
-            שמוליק מרציאנו · סוכן ביטוח ופנסיה מוסמך
-          </p>
+      {/* SEELD Bento: hero tile + the form in one calm paper tile */}
+      <main className="px-2 pt-2 space-y-2">
+        {/* HERO — one idea: fill the debit order */}
+        <div className="bento-panel"><div className="max-w-2xl mx-auto px-5 sm:px-8 py-10 sm:py-12 relative z-10">
+        <div className="border-t border-[#171717]/20 pt-5 mb-6 flex items-baseline justify-between gap-4">
+          <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
+            <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
+            <span>←</span>
+            <span className="text-[#171717]/70 font-medium">הוראת קבע</span>
+          </nav>
+          <span className="text-[11px] tracking-[0.14em] font-medium" style={{ color: "#5c5c5c", fontFamily: MONO }} dir="ltr">
+            SECURE · PCI DSS
+          </span>
         </div>
 
-        <div className="space-y-5">
-          {/* Step 1: Account Owner */}
-          <SectionCard title="בעל החשבון" icon={<User className="w-4 h-4" />} step={1}>
-            <div>
-              <FieldLabel label="שם בעל החשבון" required error={touched.accountOwner ? errors.accountOwner : undefined} />
-              <StyledInput
-                value={form.accountOwner}
-                onChange={e => set("accountOwner", e.target.value)}
-                onBlur={() => handleBlur("accountOwner")}
-                placeholder="ישראל ישראלי"
-                className={touched.accountOwner && errors.accountOwner ? "border-destructive" : touched.accountOwner && !errors.accountOwner && form.accountOwner ? "border-primary/50" : ""}
-              />
-            </div>
-            <div>
-              <FieldLabel label='מספר תעודת זהות' required error={touched.idNumber ? errors.idNumber : undefined} />
-              <StyledInput
-                value={form.idNumber}
-                onChange={e => set("idNumber", e.target.value.replace(/\D/g, ""))}
-                onBlur={() => handleBlur("idNumber")}
-                inputMode="numeric"
-                maxLength={9}
-                placeholder="9 ספרות"
-                className={cn(
-                  "font-mono tracking-[0.2em]",
-                  touched.idNumber && errors.idNumber ? "border-destructive" : "",
-                  touched.idNumber && !errors.idNumber && form.idNumber.length === 9 ? "border-primary/50" : ""
-                )}
-              />
-              {touched.idNumber && !errors.idNumber && form.idNumber.length === 9 && (
-                <div className="mt-2 flex items-center gap-2 text-xs text-primary font-medium animate-in fade-in">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>ת"ז תקינה — ספרת ביקורת אומתה</span>
-                </div>
-              )}
-            </div>
-          </SectionCard>
+        <h1
+          className="text-[#171717] leading-[1.15] mb-4"
+          style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.9rem, 4.5vw, 2.8rem)" }}
+        >
+          הוראת קבע
+        </h1>
+        <p className="text-base text-[#5c5c5c] leading-[1.9] mb-2">
+          שתי דקות למלא. אפס אותיות קטנות.
+        </p>
+        <p className="text-[13px] text-[#5c5c5c] mb-8">
+          שמוליק מרציאנו · סוכן ביטוח ופנסיה מוסמך
+        </p>
 
-          {/* Step 2: Bank Selection */}
-          <SectionCard title="בחירת בנק" icon={<Building2 className="w-4 h-4" />} step={2}>
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
+          className="block transition-transform hover:-translate-y-[1px]"
+          aria-label="פתיחת שיחה עם יועץ SEELD"
+        >
+          <StatusPill>היועץ מחובר עכשיו · שאלו לפני שממלאים</StatusPill>
+        </button>
+        </div></div>
+
+        {/* The one calm form tile */}
+        <div className="bento-panel"><div className="max-w-2xl mx-auto px-5 sm:px-8 py-10 sm:py-14 relative z-10">
+        <div className="space-y-12">
+          {/* 01: Account Owner */}
+          <section>
+            <SectionHead index="01" title="בעל החשבון" />
+            <div className="space-y-6">
+              <div>
+                <FieldLabel label="שם בעל החשבון" required error={touched.accountOwner ? errors.accountOwner : undefined} />
+                <StyledInput
+                  value={form.accountOwner}
+                  onChange={e => set("accountOwner", e.target.value)}
+                  onBlur={() => handleBlur("accountOwner")}
+                  placeholder="ישראל ישראלי"
+                  className={touched.accountOwner && errors.accountOwner ? "border-[#b91c1c]" : ""}
+                />
+              </div>
+              <div>
+                <FieldLabel label="מספר תעודת זהות" required error={touched.idNumber ? errors.idNumber : undefined} />
+                <StyledInput
+                  value={form.idNumber}
+                  onChange={e => set("idNumber", e.target.value.replace(/\D/g, ""))}
+                  onBlur={() => handleBlur("idNumber")}
+                  inputMode="numeric"
+                  maxLength={9}
+                  placeholder="9 ספרות"
+                  dir="ltr"
+                  style={{ fontFamily: MONO, letterSpacing: "0.15em", textAlign: "right" }}
+                  className={touched.idNumber && errors.idNumber ? "border-[#b91c1c]" : ""}
+                />
+                {touched.idNumber && !errors.idNumber && form.idNumber.length === 9 && (
+                  <p className="mt-2 text-[12px] font-medium" style={{ color: "#15803d" }}>
+                    ת"ז תקינה. ספרת ביקורת אומתה.
+                  </p>
+                )}
+              </div>
+            </div>
+          </section>
+
+          {/* 02: Bank Selection */}
+          <section>
+            <SectionHead index="02" title="בחירת בנק" />
             <div>
-              {/* Live data indicator */}
-              <div className="flex items-center justify-between mb-3">
-                <FieldLabel label="חפש ובחר בנק" required error={touched.bankCode ? errors.bankCode : undefined} />
-                <div className="flex items-center gap-2">
+              <div className="flex items-baseline justify-between mb-1 gap-4">
+                <FieldLabel label="חפשו ובחרו בנק" required error={touched.bankCode ? errors.bankCode : undefined} />
+                <div className="shrink-0">
                   {banksLoading ? (
-                    <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                    <span className="text-[11px] text-[#5c5c5c] flex items-center gap-1.5">
                       <Loader2 className="w-3 h-3 animate-spin" />
-                      טוען נתונים מבנק ישראל...
+                      טוען נתונים מבנק ישראל
                     </span>
                   ) : isLive ? (
-                    <span className="text-[10px] text-primary flex items-center gap-1.5 font-medium">
-                      <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                    <span className="text-[11px] text-[#5c5c5c] flex items-center gap-1.5 font-medium">
+                      <LiveDot size={5} />
                       נתונים חיים מבנק ישראל
                     </span>
                   ) : (
-                    <button onClick={refreshBanks} className="text-[10px] text-muted-foreground flex items-center gap-1 hover:text-primary transition-colors">
+                    <button
+                      onClick={refreshBanks}
+                      className="text-[11px] text-[#5c5c5c] flex items-center gap-1 hover:text-[#171717] transition-colors"
+                    >
                       <RefreshCw className="w-3 h-3" />
-                      נתוני גיבוי — לחץ לרענון
+                      נתוני גיבוי. לחצו לרענון
                     </button>
                   )}
                 </div>
               </div>
-              {/* Search */}
               <StyledInput
                 value={bankSearch}
                 onChange={e => setBankSearch(e.target.value)}
-                placeholder="🔍 חפש לפי שם בנק או מספר..."
-                className="mb-3"
+                placeholder="חיפוש לפי שם בנק או מספר"
+                className="mb-4"
               />
-              <div className="grid grid-cols-1 gap-1 max-h-52 overflow-y-auto rounded-xl border border-border/30 bg-card/30 p-2 scrollbar-thin">
+              <div
+                className="max-h-56 overflow-y-auto rounded-[8px] bg-white"
+                style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
+              >
                 {filteredBanks.map(bank => (
                   <button
                     key={bank.code}
                     type="button"
                     onClick={() => { set("bankCode", bank.code); set("branchNumber", ""); set("branchName", ""); touch("bankCode"); setBankSearch(""); }}
                     className={cn(
-                      "flex items-center justify-between px-4 py-2.5 rounded-lg text-sm transition-all duration-200",
+                      "w-full flex items-baseline justify-between gap-4 px-4 py-3 min-h-[44px] text-start border-b border-[#171717]/[0.06] last:border-0 transition-colors",
                       form.bankCode === bank.code
-                        ? "bg-primary/10 text-primary border border-primary/30 shadow-sm"
-                        : "hover:bg-muted/50 text-foreground border border-transparent"
+                        ? "bg-[#171717] text-[#fafafa]"
+                        : "text-[#171717] hover:bg-[#f5f5f5]"
                     )}
                   >
-                    <div className="flex items-center gap-2">
-                      {form.bankCode === bank.code && <CheckCircle2 className="w-4 h-4 text-primary" />}
-                      <span className="font-medium">{bank.name}</span>
-                    </div>
-                    <span className="text-xs text-muted-foreground font-mono bg-muted/50 px-2 py-0.5 rounded">בנק {bank.code}</span>
+                    <span className="text-[14px] font-medium">{bank.name}</span>
+                    <span
+                      className={cn("text-[11px] tabular-nums shrink-0", form.bankCode === bank.code ? "text-[#fafafa]/60" : "text-[#5c5c5c]")}
+                      style={{ fontFamily: MONO }}
+                      dir="ltr"
+                    >
+                      {bank.code.padStart(2, "0")}
+                    </span>
                   </button>
                 ))}
                 {filteredBanks.length === 0 && (
-                  <p className="text-center text-muted-foreground text-sm py-4">לא נמצאו תוצאות</p>
+                  <p className="text-center text-[#5c5c5c] text-sm py-5">לא נמצא בנק בשם הזה. נסו שם קצר יותר או מספר בנק.</p>
                 )}
               </div>
             </div>
-          </SectionCard>
+          </section>
 
-          {/* Step 3: Branch & Account */}
+          {/* 03: Branch & Account */}
           {form.bankCode && (
-            <SectionCard title={`פרטי חשבון — ${bankData?.name}`} icon={<Hash className="w-4 h-4" />} step={3}>
-              <div className="animate-in slide-in-from-top-3 duration-300 space-y-5">
+            <section>
+              <SectionHead index="03" title={`פרטי חשבון · ${bankData?.name}`} />
+              <div className="space-y-6">
                 {/* Branch Number */}
                 <div>
                   <FieldLabel label="מספר סניף" required error={touched.branchNumber ? errors.branchNumber : undefined} />
@@ -471,17 +504,15 @@ export default function DirectDebit() {
                     onBlur={() => handleBlur("branchNumber")}
                     inputMode="numeric"
                     maxLength={4}
-                    placeholder="הזן מספר סניף"
-                    className={cn(
-                      "font-mono",
-                      touched.branchNumber && errors.branchNumber ? "border-destructive" : "",
-                      form.branchName ? "border-primary/50" : ""
-                    )}
+                    placeholder="מספר סניף"
+                    dir="ltr"
+                    style={{ fontFamily: MONO, textAlign: "right" }}
+                    className={touched.branchNumber && errors.branchNumber ? "border-[#b91c1c]" : ""}
                   />
                   {/* Known branches */}
                   {branchOptions.length > 0 && (
-                    <div className="mt-3">
-                      <p className="text-[11px] text-muted-foreground mb-2 font-medium">סניפים מוכרים — לחץ לבחירה מהירה:</p>
+                    <div className="mt-4">
+                      <p className="text-[12px] text-[#5c5c5c] mb-2.5">סניפים מוכרים, לבחירה מהירה:</p>
                       <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
                         {branchOptions.map(([num, name]) => (
                           <button
@@ -489,14 +520,15 @@ export default function DirectDebit() {
                             type="button"
                             onClick={() => handleBranchSelect(num)}
                             className={cn(
-                              "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs border-2 transition-all duration-200 font-medium",
+                              "inline-flex items-baseline gap-1.5 px-3 py-2 min-h-[36px] rounded-[6px] text-[12px] font-medium transition-colors",
                               form.branchNumber === num
-                                ? "border-primary bg-primary/10 text-primary shadow-sm"
-                                : "border-border/40 bg-card/50 text-foreground/70 hover:border-primary/30 hover:bg-primary/5"
+                                ? "bg-[#171717] text-[#fafafa]"
+                                : "bg-white text-[#171717]/70 hover:text-[#171717]"
                             )}
+                            style={form.branchNumber === num ? undefined : { boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
                           >
-                            <span className="font-mono font-bold">{num}</span>
-                            <span className="text-muted-foreground">—</span>
+                            <span className="tabular-nums" style={{ fontFamily: MONO }} dir="ltr">{num}</span>
+                            <span className={form.branchNumber === num ? "text-[#fafafa]/60" : "text-[#5c5c5c]"}>·</span>
                             <span>{name}</span>
                           </button>
                         ))}
@@ -505,11 +537,9 @@ export default function DirectDebit() {
                   )}
                   {/* Auto-filled branch name */}
                   {form.branchName && (
-                    <div className="mt-3 flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-primary/20 bg-primary/5 text-sm animate-in fade-in duration-300">
-                      <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
-                      <span className="text-muted-foreground">שם סניף:</span>
-                      <span className="font-bold text-primary">{form.branchName}</span>
-                    </div>
+                    <p className="mt-3 text-[13px] text-[#5c5c5c]">
+                      שם סניף: <span className="text-[#171717] font-medium">{form.branchName}</span>
+                    </p>
                   )}
                 </div>
 
@@ -523,112 +553,69 @@ export default function DirectDebit() {
                     inputMode="numeric"
                     maxLength={12}
                     placeholder="5–12 ספרות"
-                    className={cn(
-                      "font-mono tracking-[0.15em] text-base",
-                      touched.accountNumber && errors.accountNumber ? "border-destructive" : "",
-                      accStrength >= 2 && !errors.accountNumber ? "border-primary/50" : ""
-                    )}
+                    dir="ltr"
+                    style={{ fontFamily: MONO, letterSpacing: "0.12em", textAlign: "right" }}
+                    className={touched.accountNumber && errors.accountNumber ? "border-[#b91c1c]" : ""}
                   />
-                  {/* Strength bar */}
-                  <div className="flex items-center gap-3 mt-2">
-                    <div className="flex gap-1 flex-1">
-                      {[1, 2, 3].map(level => (
-                        <div
-                          key={level}
-                          className={cn(
-                            "h-1 rounded-full flex-1 transition-all duration-500",
-                            accStrength >= level
-                              ? level === 1 ? "bg-destructive" : level === 2 ? "bg-accent" : "bg-primary"
-                              : "bg-border/30"
-                          )}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-[11px] text-muted-foreground font-mono">
-                      {accDigits.length > 0 ? `${accDigits.length}/12 ספרות` : "5–12 ספרות"}
-                    </span>
-                  </div>
+                  <p className="mt-2 text-[11px] text-[#5c5c5c] tabular-nums" style={{ fontFamily: MONO }} dir="ltr">
+                    {accDigits.length > 0 ? `${accDigits.length}/12` : "5–12"}
+                  </p>
                 </div>
               </div>
-            </SectionCard>
+            </section>
           )}
 
-          {/* Step 4: Debit Date */}
-          <SectionCard title="תאריך חיוב מועדף" icon={<CalendarDays className="w-4 h-4" />} step={form.bankCode ? 4 : 3}>
+          {/* 04: Debit Date */}
+          <section>
+            <SectionHead index={form.bankCode ? "04" : "03"} title="תאריך חיוב מועדף" />
             <div>
-              <FieldLabel label="בחר יום חיוב חודשי" required error={touched.debitDay ? errors.debitDay : undefined} />
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+              <FieldLabel label="יום החיוב החודשי" required error={touched.debitDay ? errors.debitDay : undefined} />
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
                 {DEBIT_DATES.map(opt => (
                   <button
                     key={opt.value}
                     type="button"
                     onClick={() => { set("debitDay", opt.value); touch("debitDay"); }}
                     className={cn(
-                      "relative flex flex-col items-center py-4 px-3 rounded-xl border-2 transition-all duration-300 group/date",
+                      "flex flex-col items-center py-4 px-3 rounded-[6px] transition-colors min-h-[44px]",
                       form.debitDay === opt.value
-                        ? "border-primary bg-primary/10 shadow-lg shadow-primary/10 scale-[1.02]"
-                        : "border-border/40 bg-card/50 hover:border-primary/30 hover:shadow-md"
+                        ? "bg-[#171717] text-[#fafafa]"
+                        : "bg-white text-[#171717] hover:bg-[#f5f5f5]"
                     )}
+                    style={form.debitDay === opt.value ? undefined : { boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
                   >
-                    {form.debitDay === opt.value && (
-                      <div className="absolute -top-1.5 -left-1.5 w-5 h-5 rounded-full bg-primary flex items-center justify-center animate-in zoom-in">
-                        <CheckCircle2 className="w-3 h-3 text-primary-foreground" />
-                      </div>
-                    )}
-                    <span className={cn(
-                      "text-3xl font-black font-mono transition-colors",
-                      form.debitDay === opt.value ? "text-primary" : "text-foreground group-hover/date:text-primary/70"
-                    )}>{opt.value}</span>
-                    <span className="text-[10px] text-muted-foreground mt-1.5 font-medium">{opt.note}</span>
+                    <span
+                      className="text-2xl tabular-nums"
+                      style={{ fontFamily: MONO, fontWeight: 600 }}
+                      dir="ltr"
+                    >
+                      {opt.value}
+                    </span>
+                    <span className={cn("text-[11px] mt-1.5", form.debitDay === opt.value ? "text-[#fafafa]/60" : "text-[#5c5c5c]")}>
+                      {opt.note}
+                    </span>
                   </button>
                 ))}
               </div>
             </div>
-          </SectionCard>
+          </section>
         </div>
 
-        {/* Submit */}
-        <div className="flex justify-center mt-10">
+        {/* Submit — the one action */}
+        <div className="mt-14 border-t border-[#171717]/15 pt-8">
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className={cn(
-              "relative flex items-center gap-3 px-10 py-4 rounded-full font-bold text-sm transition-all duration-400",
-              "bg-primary text-primary-foreground",
-              "hover:shadow-[0_8px_40px_hsl(var(--primary)/0.35)] hover:scale-[1.03]",
-              "active:scale-[0.98]",
-              "disabled:opacity-60 disabled:scale-100 disabled:shadow-none",
-              "overflow-hidden"
-            )}
+            className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[200px]"
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] animate-[shimmer_3s_ease-in-out_infinite]" style={{ animationName: "shimmer" }} />
-            {submitting
-              ? <><Loader2 className="w-5 h-5 animate-spin" />שולח את הטופס...</>
-              : <><CheckCircle2 className="w-5 h-5" />שלח הוראת קבע</>
-            }
+            {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שליחת הוראת קבע"}
           </button>
+          <p className="mt-5 text-[12px] text-[#5c5c5c]">
+            מאובטח ומוצפן · תקן PCI DSS
+          </p>
         </div>
-
-        {/* Trust badges */}
-        <div className="flex items-center justify-center gap-6 mt-8 text-muted-foreground/50">
-          <div className="flex items-center gap-1.5 text-[11px]">
-            <Shield className="w-3.5 h-3.5" />
-            <span>מאובטח ומוצפן</span>
-          </div>
-          <div className="w-1 h-1 rounded-full bg-border/50" />
-          <div className="flex items-center gap-1.5 text-[11px]">
-            <CreditCard className="w-3.5 h-3.5" />
-            <span>תקן PCI DSS</span>
-          </div>
-        </div>
+        </div></div>
       </main>
-
-      <style>{`
-        @keyframes shimmer {
-          0% { transform: translateX(-200%); }
-          100% { transform: translateX(200%); }
-        }
-      `}</style>
     </div>
   );
 }
