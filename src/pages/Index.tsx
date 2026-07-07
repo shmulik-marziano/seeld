@@ -10,6 +10,7 @@ import CompanyLogos from "@/components/CompanyLogos";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CountUp, LiveTag, StatusPill } from "@/components/brand/Live";
 import { DrawSpark, DrawUnderline, ProgressRail } from "@/components/brand/Strokes";
+import { CastAvi, CastDana, CastReader } from "@/components/brand/Cast";
 import { CHIP_GREEN, CHIP_ORANGE } from "@/lib/brand";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
@@ -577,12 +578,38 @@ const Index = () => {
                   {trustList.map((point) => (
                     <div key={point.title} className="py-5 border-b border-[#171717]/10">
                       <h3 className="text-base font-medium text-[#171717] mb-1.5">{point.title}</h3>
-                      <p className="text-[13px] text-[#6e6e6e] leading-relaxed">{point.description}</p>
+                      <p className="text-[13px] text-[#5c5c5c] leading-relaxed">{point.description}</p>
                     </div>
                   ))}
                 </div>
               </ScrollReveal>
             </div>
+
+            {/* The cast — ink figures in the reference film's spirit */}
+            <ScrollReveal>
+              <div className="mt-16 border-t border-[#171717]/15 pt-12 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-12">
+                {[
+                  { Figure: CastDana, name: "דנה", role: "יועצת פנסיה · מלווה 140 משפחות" },
+                  { Figure: CastAvi, name: "אבי", role: "סוכן ביטוח מורשה · תיקי בריאות וחיים" },
+                  { Figure: CastReader, name: "הלקוחה שלנו", role: "קוראת את הדוח. מבינה אותו." },
+                ].map(({ Figure, name, role }) => (
+                  <div key={name} className="text-center">
+                    <Figure className="w-36 h-52 sm:w-40 sm:h-56 mx-auto" />
+                    <div className="mt-4 text-[15px] text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                      {name}
+                    </div>
+                    <div className="mt-1 text-[12px] text-[#5c5c5c]">{role}</div>
+                    <button
+                      type="button"
+                      onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
+                      className="mt-3 text-[12px] font-medium text-[#171717] border-b border-[#171717]/30 pb-0.5 hover:border-[#171717] transition-colors"
+                    >
+                      דברו איתנו
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
           </div></div>
         </section>
 
