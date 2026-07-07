@@ -1,16 +1,18 @@
-import { useState, useRef, useEffect } from "react";
-import { Send, Loader2, X, MessageSquare, FileText, Calculator, Shield, PiggyBank } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Send, Loader2, X, FileText, Calculator, Shield, PiggyBank, Phone, RotateCcw } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { INK, MONO, CARD_SHADOW, RING, LINE } from "@/lib/brand";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { MONO, RING } from "@/lib/brand";
 import { LiveDot, LiveTag } from "@/components/brand/Live";
 
 type Message = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/finance-chat`;
+const PAPER = "#e9dfd2";
+const INK_TILE = "#161616";
 
 const getSessionId = () => {
   let sessionId = localStorage.getItem("seeld_chat_session");
@@ -24,31 +26,31 @@ const getSessionId = () => {
 /* ── Suggestion chips based on page context ── */
 const pageSuggestions: Record<string, { icon: typeof Shield; text: string }[]> = {
   "/": [
-    { icon: FileText, text: "בדיקת תיק ללא עלות" },
-    { icon: Calculator, text: "כמה אני משלם יותר מדי?" },
-    { icon: Shield, text: "מה כולל ביטוח בריאות?" },
+    { icon: FileText, text: "מה כוללת בדיקת תיק ללא עלות?" },
+    { icon: Calculator, text: "איך בודקים אם אני משלם יותר מדי?" },
+    { icon: Shield, text: "מה כולל ביטוח בריאות פרטי?" },
     { icon: PiggyBank, text: "איך בוחרים קרן פנסיה?" },
   ],
   "/insurances": [
     { icon: Shield, text: "איזה ביטוח מתאים לי?" },
-    { icon: FileText, text: "מה ההבדל בין תוכניות?" },
-    { icon: Calculator, text: "כמה עולה ביטוח בריאות?" },
+    { icon: FileText, text: "מה ההבדל בין ביטוח פרטי לקופת חולים?" },
+    { icon: Calculator, text: "ממה מורכב מחיר של ביטוח בריאות?" },
   ],
   "/savings": [
-    { icon: PiggyBank, text: "גמל או השתלמות?" },
-    { icon: Calculator, text: "כמה לחסוך לפנסיה?" },
-    { icon: FileText, text: "מה זה דמי ניהול?" },
+    { icon: PiggyBank, text: "קרן השתלמות או גמל להשקעה?" },
+    { icon: Calculator, text: "כמה כדאי להפקיד לפנסיה?" },
+    { icon: FileText, text: "מה זה דמי ניהול ולמה זה חשוב?" },
   ],
   "/calculators": [
-    { icon: Calculator, text: "עזרה עם המחשבון" },
-    { icon: PiggyBank, text: "כמה כדאי להפקיד?" },
+    { icon: Calculator, text: "איזה מחשבון מתאים לשאלה שלי?" },
+    { icon: PiggyBank, text: "איך קוראים את תוצאות מחשבון הפנסיה?" },
   ],
 };
 
 const defaultSuggestions = [
-  { icon: FileText, text: "איך מתחילים?" },
-  { icon: Shield, text: "מה כולל הייעוץ?" },
-  { icon: Calculator, text: "כמה זה עולה?" },
+  { icon: FileText, text: "איך מתחיל תהליך הייעוץ?" },
+  { icon: Shield, text: "מה כולל הייעוץ ומה זה עולה?" },
+  { icon: Calculator, text: "מה בודקים בבדיקת תיק?" },
   { icon: PiggyBank, text: "רוצה לקבוע פגישה" },
 ];
 
@@ -58,24 +60,21 @@ const AIChatBot = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+  const reduced = useReducedMotion();
 
   const suggestions = pageSuggestions[location.pathname] || defaultSuggestions;
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
   useEffect(() => {
-    if (messages.length > 0) scrollToBottom();
-  }, [messages]);
-
-  useEffect(() => {
-    if (isExpanded && inputRef.current) {
-      inputRef.current.focus();
+    if (messages.length > 0) {
+      messagesEndRef.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
     }
+  }, [messages, reduced]);
+
+  useEffect(() => {
+    if (isExpanded) inputRef.current?.focus();
   }, [isExpanded]);
 
   // Allow other parts of the site (e.g. homepage capability cards) to open the chat
@@ -85,7 +84,17 @@ const AIChatBot = () => {
     return () => window.removeEventListener("seeld:open-chat", open);
   }, []);
 
-  // Load previous conversation
+  // Escape closes the panel
+  useEffect(() => {
+    if (!isExpanded) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsExpanded(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isExpanded]);
+
+  // Load previous conversation (best effort — the chat works without it)
   useEffect(() => {
     const loadConversation = async () => {
       try {
@@ -106,7 +115,8 @@ const AIChatBot = () => {
     loadConversation();
   }, []);
 
-  const saveMessage = async (message: Message, convId: string) => {
+  const saveMessage = async (message: Message, convId: string | null) => {
+    if (!convId) return;
     try {
       await supabase.from("chat_messages").insert({
         conversation_id: convId,
@@ -116,41 +126,46 @@ const AIChatBot = () => {
     } catch { /* non-blocking */ }
   };
 
-  const getOrCreateConversation = async (): Promise<string> => {
+  // Best effort: persistence must never block the conversation itself
+  const getOrCreateConversation = async (): Promise<string | null> => {
     if (conversationId) return conversationId;
-    const sessionId = getSessionId();
-    const { data, error } = await supabase
-      .from("chat_conversations")
-      .insert({ session_id: sessionId })
-      .select("id")
-      .single();
-    if (error || !data) throw new Error("Failed to create conversation");
-    setConversationId(data.id);
-    return data.id;
+    try {
+      const sessionId = getSessionId();
+      const { data, error } = await supabase
+        .from("chat_conversations")
+        .insert({ session_id: sessionId })
+        .select("id")
+        .single();
+      if (error || !data) return null;
+      setConversationId(data.id);
+      return data.id;
+    } catch {
+      return null;
+    }
   };
 
-  const streamChat = async (userMessage: string) => {
+  const streamChat = useCallback(async (userMessage: string) => {
     const userMsg: Message = { role: "user", content: userMessage };
-    setMessages((prev) => [...prev, userMsg]);
+    const outgoing = [...messages, userMsg];
+    setMessages([...outgoing, { role: "assistant", content: "" }]);
     setIsLoading(true);
     setInput("");
 
     let assistantContent = "";
-    setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
+
+    // Persistence in parallel — never blocks the answer
+    const convPromise = getOrCreateConversation().then((convId) => {
+      saveMessage(userMsg, convId);
+      return convId;
+    });
 
     try {
-      const convId = await getOrCreateConversation();
-      await saveMessage(userMsg, convId);
-
-      const sessionId = getSessionId();
       const response = await fetch(CHAT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          message: userMessage,
-          conversationId: convId,
-          sessionId,
-          history: messages.slice(-10),
+          messages: outgoing.slice(-12).map(({ role, content }) => ({ role, content })),
+          page: location.pathname,
         }),
       });
 
@@ -186,32 +201,50 @@ const AIChatBot = () => {
         }
       }
 
-      if (assistantContent) {
-        await saveMessage({ role: "assistant", content: assistantContent }, convId);
+      if (!assistantContent) {
+        throw new Error("לא התקבלה תשובה. נסו שוב, או חייגו 052-309-7444.");
       }
+
+      const convId = await convPromise;
+      await saveMessage({ role: "assistant", content: assistantContent }, convId);
     } catch (error) {
+      // Network-level failures surface English browser strings; keep the visitor in Hebrew
+      const raw = error instanceof Error ? error.message : "";
+      const friendly = /[֐-׿]/.test(raw)
+        ? raw
+        : "ההודעה לא נשלחה. בדקו את החיבור ונסו שוב, או חייגו 052-309-7444.";
       setMessages((prev) => [
         ...prev.filter((m) => m.content !== ""),
-        { role: "assistant", content: error instanceof Error ? error.message : "ההודעה לא נשלחה. נסו שוב." },
+        { role: "assistant", content: friendly },
       ]);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [messages, location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
     if (!input.trim() || isLoading) return;
     streamChat(input.trim());
   };
 
-  const handleSuggestion = (text: string) => {
-    streamChat(text);
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
+  const clearConversation = () => {
+    setMessages([]);
+    setConversationId(null);
+    localStorage.removeItem("seeld_chat_session");
+    inputRef.current?.focus();
   };
 
   return (
     <>
-      {/* ── Launcher ── */}
+      {/* ── Launcher: a live pill, not a shy dot ── */}
       <AnimatePresence>
         {!isExpanded && (
           <motion.button
@@ -220,95 +253,112 @@ const AIChatBot = () => {
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             onClick={() => setIsExpanded(true)}
-            className="fixed bottom-6 left-4 sm:left-6 z-50 group"
-            aria-label="פתחו צ'אט עם צוות SEELD"
+            className="fixed bottom-6 left-4 sm:left-6 z-50 flex min-h-[52px] items-center gap-2.5 rounded-full bg-[#171717] py-3 pr-5 pl-4 text-white transition-colors duration-150 hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+            style={{ boxShadow: "0 10px 28px -10px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.08)" }}
+            aria-label="פתחו שיחה עם היועץ הדיגיטלי של SEELD"
           >
-            <div className="relative">
-              <div
-                className="flex h-14 w-14 items-center justify-center rounded-full bg-[#171717] transition-colors duration-150 group-hover:bg-[#262626]"
-                style={{ boxShadow: CARD_SHADOW }}
-              >
-                <MessageSquare className="h-6 w-6 text-white" />
-              </div>
-              {/* Live status */}
-              <span
-                className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-white"
-                style={{ boxShadow: RING }}
-              >
-                <LiveDot size={8} />
-              </span>
-            </div>
-            {/* Tooltip */}
-            <div className="pointer-events-none absolute bottom-full left-1/2 mb-3 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-md bg-[#171717] px-3 py-1.5 opacity-0 transition-opacity duration-150 group-hover:opacity-100">
-              <span className="text-[12px] font-medium text-white">שוחחו עם הצוות</span>
-              <span
-                className="text-[10px] tracking-[0.12em]"
-                style={{ fontFamily: MONO, color: "rgba(250,250,250,.6)" }}
-                dir="ltr"
-              >
-                LIVE
-              </span>
-            </div>
+            <LiveDot size={8} />
+            <span className="text-[14px] font-semibold tracking-[0.02em]">שיחה עם היועץ</span>
+            <span
+              className="hidden sm:inline text-[10px] tracking-[0.18em] text-white/55"
+              style={{ fontFamily: MONO }}
+              dir="ltr"
+            >
+              AI · LIVE
+            </span>
           </motion.button>
         )}
       </AnimatePresence>
 
-      {/* ── Chat panel ── */}
+      {/* ── Chat panel: a full bento tile ── */}
       <AnimatePresence>
         {isExpanded && (
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
+            exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed bottom-4 left-4 sm:left-6 z-50 flex w-[calc(100vw-2rem)] max-h-[85vh] flex-col sm:w-[420px]"
+            className="fixed z-50 flex flex-col inset-x-2 bottom-2 top-16 sm:inset-auto sm:bottom-4 sm:left-6 sm:h-[min(700px,calc(100dvh-3rem))] sm:w-[440px] lg:w-[500px]"
             role="dialog"
-            aria-label="צ'אט עם צוות SEELD"
+            aria-label="שיחה עם היועץ הדיגיטלי של SEELD"
           >
-            <div className="flex max-h-[85vh] flex-col overflow-hidden rounded-lg bg-white" style={{ boxShadow: CARD_SHADOW }}>
+            <div
+              className="flex h-full flex-col overflow-hidden"
+              style={{ backgroundColor: PAPER, borderRadius: 20, boxShadow: "0 24px 60px -18px rgba(0,0,0,.6)" }}
+            >
               {/* Header — ink band */}
-              <div className="flex shrink-0 items-center justify-between px-5 py-3.5" style={{ backgroundColor: INK }}>
+              <div className="flex shrink-0 items-center justify-between px-5 py-4" style={{ backgroundColor: INK_TILE }}>
                 <div className="flex items-center gap-3">
-                  <span className="text-[15px] font-semibold tracking-tight text-white" dir="ltr">
-                    SEELD
+                  <span className="text-[16px] font-semibold tracking-tight text-white" dir="ltr">
+                    SEELD<span className="text-[#f0a339]">.</span>
                   </span>
                   <span className="h-4 w-px bg-white/15" aria-hidden="true" />
-                  <LiveTag dark dot>LIVE · 24/7</LiveTag>
+                  <LiveTag dark dot>היועץ הדיגיטלי · LIVE</LiveTag>
                 </div>
-                <button
-                  onClick={() => setIsExpanded(false)}
-                  aria-label="סגירת הצ'אט"
-                  className="flex h-8 w-8 items-center justify-center rounded-md text-white/60 transition-colors duration-150 hover:bg-white/10 hover:text-white"
-                >
-                  <X className="h-4 w-4" />
-                </button>
+                <div className="flex items-center gap-1">
+                  {messages.length > 0 && (
+                    <button
+                      onClick={clearConversation}
+                      aria-label="שיחה חדשה"
+                      title="שיחה חדשה"
+                      className="flex h-9 w-9 items-center justify-center rounded-md text-white/60 transition-colors duration-150 hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white/60"
+                    >
+                      <RotateCcw className="h-4 w-4" />
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setIsExpanded(false)}
+                    aria-label="סגירת הצ'אט"
+                    className="flex h-9 w-9 items-center justify-center rounded-md text-white/60 transition-colors duration-150 hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white/60"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
 
               {/* Messages */}
-              <div className="min-h-[200px] max-h-[50vh] flex-1 space-y-3 overflow-y-auto px-4 py-4">
+              <div className="flex-1 space-y-3 overflow-y-auto px-4 py-5 sm:px-5">
                 {messages.length === 0 ? (
                   /* Welcome state */
-                  <div className="space-y-4 px-1 py-3">
-                    <LiveTag dot>SEELD AI</LiveTag>
-                    <div>
-                      <h4 className="text-[15px] font-semibold text-[#171717]">צוות SEELD כאן.</h4>
-                      <p className="mt-1 text-sm leading-relaxed text-[#4d4d4d]">
-                        שאלו על ביטוח, פנסיה או חיסכון. נענה מיד.
-                      </p>
-                    </div>
-                    {/* Suggestion chips */}
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {suggestions.map((s, i) => (
-                        <button
-                          key={i}
-                          onClick={() => handleSuggestion(s.text)}
-                          className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full border border-[#ebebeb] bg-white px-3.5 py-1.5 text-[13px] font-medium text-[#171717] transition-colors duration-150 hover:border-[#171717]"
+                  <div className="flex h-full flex-col justify-between gap-6 px-1 py-2">
+                    <div className="space-y-5">
+                      <div>
+                        <h4
+                          className="text-[22px] leading-snug text-[#171717]"
+                          style={{ fontFamily: "'Heebo', sans-serif", fontWeight: 700 }}
                         >
-                          <s.icon className="h-3.5 w-3.5 text-[#6e6e6e]" />
-                          {s.text}
-                        </button>
-                      ))}
+                          שלום, כאן היועץ הדיגיטלי של SEELD.
+                        </h4>
+                        <p className="mt-2 max-w-sm text-[15px] leading-relaxed text-[#4d4d4d]">
+                          ביטוח, פנסיה, חיסכון או מס: שאלו כל דבר. עונה מיד, ומחבר אתכם ליועץ אנושי כשצריך.
+                        </p>
+                      </div>
+                      {/* Suggestion tiles */}
+                      <div className="grid gap-2">
+                        {suggestions.map((s, i) => (
+                          <button
+                            key={i}
+                            onClick={() => streamChat(s.text)}
+                            className="flex min-h-[48px] items-center gap-3 rounded-lg bg-white px-4 py-3 text-right text-[14px] font-medium text-[#171717] transition-colors duration-150 hover:bg-[#fafafa] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                            style={{ boxShadow: RING }}
+                          >
+                            <s.icon className="h-4 w-4 shrink-0 text-[#5c5c5c]" strokeWidth={1.75} />
+                            {s.text}
+                          </button>
+                        ))}
+                      </div>
                     </div>
+                    {/* Human handoff */}
+                    <a
+                      href="https://wa.me/972523097444"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 rounded-lg py-3 text-[13px] font-medium text-[#171717] transition-colors duration-150 hover:bg-[#171717]/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                      style={{ boxShadow: "inset 0 0 0 1.5px #171717" }}
+                    >
+                      <Phone className="h-3.5 w-3.5" strokeWidth={1.75} />
+                      מעדיפים בן אדם? 052-309-7444
+                    </a>
                   </div>
                 ) : (
                   /* Chat messages */
@@ -320,15 +370,15 @@ const AIChatBot = () => {
                       >
                         <div
                           className={cn(
-                            "max-w-[85%] rounded-lg px-3.5 py-2.5 text-[14px] leading-relaxed",
+                            "max-w-[88%] rounded-xl px-4 py-3 text-[14.5px] leading-relaxed",
                             msg.role === "user"
                               ? "rounded-br-sm bg-[#171717] text-white"
-                              : "rounded-bl-sm bg-[#fafafa] text-[#171717]"
+                              : "rounded-bl-sm bg-white text-[#171717]"
                           )}
                           style={msg.role === "assistant" ? { boxShadow: RING } : undefined}
                         >
                           {msg.role === "assistant" ? (
-                            <div className="prose prose-sm max-w-none [&_p]:mb-1.5 [&_p:last-child]:mb-0 [&_ul]:mt-1 [&_li]:text-[14px] [&_p]:text-[14px]">
+                            <div className="prose prose-sm max-w-none [&_p]:mb-1.5 [&_p:last-child]:mb-0 [&_ul]:mt-1 [&_li]:text-[14.5px] [&_p]:text-[14.5px] [&_a]:text-[#171717] [&_a]:underline">
                               <ReactMarkdown>{msg.content || "..."}</ReactMarkdown>
                             </div>
                           ) : (
@@ -340,7 +390,7 @@ const AIChatBot = () => {
                     {isLoading && messages[messages.length - 1]?.content === "" && (
                       <div className="flex justify-end">
                         <div
-                          className="flex items-center gap-1.5 rounded-lg rounded-bl-sm bg-[#fafafa] px-4 py-3"
+                          className="flex items-center gap-1.5 rounded-xl rounded-bl-sm bg-white px-4 py-3.5"
                           style={{ boxShadow: RING }}
                         >
                           <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#171717]/40" style={{ animationDelay: "0ms" }} />
@@ -355,10 +405,11 @@ const AIChatBot = () => {
                         {suggestions.slice(0, 2).map((s, i) => (
                           <button
                             key={i}
-                            onClick={() => handleSuggestion(s.text)}
-                            className="inline-flex items-center gap-1.5 rounded-full border border-[#ebebeb] bg-white px-3 py-1.5 text-[13px] font-medium text-[#5c5c5c] transition-colors duration-150 hover:border-[#171717] hover:text-[#171717]"
+                            onClick={() => streamChat(s.text)}
+                            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[13px] font-medium text-[#5c5c5c] transition-colors duration-150 hover:text-[#171717] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                            style={{ boxShadow: RING }}
                           >
-                            <s.icon className="h-3 w-3" />
+                            <s.icon className="h-3 w-3" strokeWidth={1.75} />
                             {s.text}
                           </button>
                         ))}
@@ -369,16 +420,23 @@ const AIChatBot = () => {
                 )}
               </div>
 
-              {/* Input — hairline top divider */}
-              <form onSubmit={handleSubmit} className="shrink-0 border-t px-3 py-3" style={{ borderColor: LINE }}>
-                <div className="flex items-center gap-2">
-                  <input
+              {/* Input */}
+              <form onSubmit={handleSubmit} className="shrink-0 border-t border-[#171717]/10 px-3 py-3 sm:px-4">
+                <div className="flex items-end gap-2">
+                  <textarea
                     ref={inputRef}
-                    type="text"
+                    rows={1}
                     value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="שאלו אותנו כל דבר"
-                    className="h-10 min-w-0 flex-1 rounded-md border border-[#ebebeb] bg-white px-3 text-right text-[14px] text-[#171717] transition-colors duration-150 placeholder:text-[#6e6e6e] focus:border-[#171717] focus:outline-none disabled:opacity-50"
+                    onChange={(e) => {
+                      setInput(e.target.value);
+                      e.target.style.height = "auto";
+                      e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`;
+                    }}
+                    onKeyDown={handleInputKeyDown}
+                    placeholder="כתבו שאלה, Enter לשליחה"
+                    aria-label="הודעה ליועץ הדיגיטלי"
+                    className="min-h-[48px] max-h-[120px] min-w-0 flex-1 resize-none rounded-lg bg-white px-4 py-3 text-right text-[14.5px] leading-snug text-[#171717] transition-shadow duration-150 placeholder:text-[#5c5c5c] focus:outline-none"
+                    style={{ boxShadow: RING }}
                     disabled={isLoading}
                   />
                   <button
@@ -386,10 +444,10 @@ const AIChatBot = () => {
                     disabled={isLoading || !input.trim()}
                     aria-label="שליחת הודעה"
                     className={cn(
-                      "flex h-10 w-10 shrink-0 items-center justify-center rounded-md transition-colors duration-150",
+                      "flex h-12 w-12 shrink-0 items-center justify-center rounded-lg transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]",
                       input.trim()
-                        ? "bg-[#171717] text-white hover:bg-[#262626]"
-                        : "bg-[#f5f5f5] text-[#a3a3a3]"
+                        ? "bg-[#171717] text-white hover:bg-black"
+                        : "bg-[#171717]/10 text-[#5c5c5c]"
                     )}
                   >
                     {isLoading ? (
@@ -399,8 +457,12 @@ const AIChatBot = () => {
                     )}
                   </button>
                 </div>
-                <p className="mt-2 text-center text-[11px] text-[#6e6e6e]">
-                  SEELD AI · יועץ פיננסי דיגיטלי
+                <p
+                  className="mt-2 text-center text-[10.5px] tracking-[0.14em] text-[#5c5c5c]"
+                  style={{ fontFamily: MONO }}
+                  dir="ltr"
+                >
+                  SEELD AI · GENERAL INFO · NOT PERSONAL ADVICE
                 </p>
               </form>
             </div>
