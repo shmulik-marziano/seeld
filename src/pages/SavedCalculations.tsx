@@ -25,6 +25,9 @@ const calculatorTypeLabels: Record<string, string> = {
   savings: "חיסכון",
   goal: "יעד פיננסי",
   compare: "השוואת מסלולים",
+  "income-tax": "מס הכנסה",
+  "life-insurance": "ביטוח חיים",
+  "car-insurance": "ביטוח רכב",
 };
 
 const monoNum: React.CSSProperties = { fontFamily: MONO, fontVariantNumeric: "tabular-nums" };
@@ -107,6 +110,19 @@ const SavedCalculations = () => {
         return <>הפקדה נדרשת: {money(result.monthlyRequired)}</>;
       case "compare":
         return <>מסלול מומלץ: {String(result.recommended || "לא נבחר")}</>;
+      case "income-tax":
+        return <>מס חודשי: {money(result.monthlyTax)}</>;
+      case "life-insurance":
+        return <>כיסוי מומלץ: {money(result.recommendedCover)}</>;
+      case "car-insurance":
+        return (
+          <>
+            טווח שנתי משוער:{" "}
+            <span dir="ltr" style={monoNum}>
+              {`₪${(result.annualLow as number)?.toLocaleString()}–₪${(result.annualHigh as number)?.toLocaleString()}`}
+            </span>
+          </>
+        );
       default:
         return null;
     }

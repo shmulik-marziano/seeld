@@ -16,7 +16,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
-type CalculatorType = "mortgage" | "pension" | "savings" | "goal" | "compare";
+type CalculatorType =
+  | "mortgage"
+  | "pension"
+  | "savings"
+  | "goal"
+  | "compare"
+  | "income-tax"
+  | "life-insurance"
+  | "car-insurance";
 
 type SaveCalculationButtonProps = {
   calculatorType: CalculatorType;
@@ -33,6 +41,9 @@ const calculatorTypeLabels: Record<CalculatorType, string> = {
   savings: "חיסכון",
   goal: "יעד פיננסי",
   compare: "השוואת מסלולים",
+  "income-tax": "מס הכנסה",
+  "life-insurance": "ביטוח חיים",
+  "car-insurance": "ביטוח רכב",
 };
 
 const SaveCalculationButton = ({
