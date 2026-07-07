@@ -8,7 +8,7 @@ import HeroSection from "@/components/HeroSection";
 import ScrollReveal from "@/components/ScrollReveal";
 import CompanyLogos from "@/components/CompanyLogos";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { CountUp, LiveTag, StatusPill } from "@/components/brand/Live";
+import { CountUp, LiveDot, LiveTag, StatusPill } from "@/components/brand/Live";
 import { DrawSpark, DrawUnderline, ProgressRail } from "@/components/brand/Strokes";
 import { CastAvi, CastDana, CastReader } from "@/components/brand/Cast";
 import { CHIP_GREEN, CHIP_ORANGE } from "@/lib/brand";
@@ -83,6 +83,15 @@ const platformItems: { title: string; description: string; href?: string; tag: s
   { title: "טבלאות תשואות", description: "נתוני תשואה ודמי ניהול רשמיים, מעודכנים מדי חודש.", href: "/return-tables", tag: "MONTHLY" },
   { title: "מסלולי השקעה", description: "השוואת חשיפות, רמות סיכון ותשואות בין כל המסלולים בשוק.", href: "/investment-tracks", tag: "COMPARE" },
   { title: "מחשבונים", description: "משכנתא, פנסיה, חיסכון והשוואת מסלולים. חופשי, ללא רישום.", href: "/calculators", tag: "NO SIGNUP" },
+];
+
+// Capital-markets strip under the numbers — mono, LTR container, values in their
+// own dir="ltr" span (bidi safety, same pattern as the hero ticker).
+const marketStrip: { label: string; value?: string; dot?: boolean }[] = [
+  { label: "SEELD · MARKET", dot: true },
+  { label: "חברות בהשוואה", value: "12" },
+  { label: "מסלול מנייתי", value: "+11.4%" },
+  { label: "בפיקוח רשות שוק ההון", value: "₪" },
 ];
 
 const processSteps = [
@@ -328,7 +337,7 @@ const Index = () => {
                   <button
                     type="submit"
                     disabled={leadSubmitting}
-                    className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[180px]"
+                    className="bento-hover inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[180px]"
                   >
                     {leadSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו ונתחיל"}
                   </button>
@@ -473,7 +482,7 @@ const Index = () => {
                   </div>
                 );
                 return item.href ? (
-                  <Link key={i} to={item.href} className="block group">
+                  <Link key={i} to={item.href} className="block group bento-hover">
                     {inner}
                   </Link>
                 ) : (
@@ -481,7 +490,7 @@ const Index = () => {
                     key={i}
                     type="button"
                     onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                    className="block w-full group"
+                    className="block w-full group bento-hover"
                   >
                     {inner}
                   </button>
@@ -523,6 +532,23 @@ const Index = () => {
                   </div>
                 ))}
               </div>
+              {/* Market strip — thin mono band in the reference's ticker language */}
+              <div
+                className="mt-6 rounded-lg border border-[#171717]/15 px-5 py-3 flex flex-wrap items-center justify-center gap-x-7 gap-y-1.5"
+                dir="ltr"
+              >
+                {marketStrip.map((item) => (
+                  <span
+                    key={item.label}
+                    className="inline-flex items-center gap-2 text-[11.5px] tracking-[0.12em] font-medium whitespace-nowrap"
+                    style={{ fontFamily: "'Geist Mono', ui-monospace, monospace", fontVariantNumeric: "tabular-nums", color: "#5c5c5c" }}
+                  >
+                    {item.dot && <LiveDot size={6} />}
+                    {item.value && <span dir="ltr" className="text-[#171717]">{item.value}</span>}
+                    <span dir="auto">{item.label}</span>
+                  </span>
+                ))}
+              </div>
               <p className="mt-5 text-center text-[12px] text-[#6e6e6e]">
                 אנחנו לא צועקים. המספרים עושים את זה בשבילנו.
               </p>
@@ -558,7 +584,7 @@ const Index = () => {
                   <div className="pt-4 flex flex-wrap items-center gap-6">
                     <Link
                       to="/contact"
-                      className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
+                      className="bento-hover inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
                     >
                       קביעת פגישת ייעוץ
                     </Link>
@@ -713,7 +739,7 @@ const Index = () => {
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                className="-mt-6 mb-12 block transition-transform hover:-translate-y-[1px]"
+                className="-mt-6 mb-12 block bento-hover"
                 aria-label="פתיחת שיחה עם יועץ SEELD AI"
               >
                 <StatusPill>SEELD AI מחובר עכשיו · לחצו לשיחה</StatusPill>
@@ -758,7 +784,7 @@ const Index = () => {
                   <button
                     type="submit"
                     disabled={contactSubmitting}
-                    className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
+                    className="bento-hover inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
                   >
                     {contactSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שליחה"}
                   </button>
