@@ -256,6 +256,7 @@ export default function DirectDebit() {
     setSubmitting(true);
     try {
       // Save to DB
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (supabase as any).from("onboarding_submissions").insert({
         bank_name: bankData?.name ?? "",
         bank_branch: form.branchNumber,

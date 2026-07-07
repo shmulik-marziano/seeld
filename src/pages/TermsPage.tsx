@@ -31,10 +31,10 @@ export default function TermsPage() {
 
       <LegalSection title="2. הגדרות">
         <ul className="list-disc pr-6 space-y-1.5">
-          <li><strong>"המערכת"</strong> — פלטפורמת SEELD לניהול לקוחות, המלצות ביטוח פנסיוניות וסיכומי ביצועים.</li>
-          <li><strong>"משתמש"</strong> — סוכן ביטוח, יועץ פנסיוני או גורם מורשה אחר המשתמש במערכת.</li>
-          <li><strong>"לקוח קצה"</strong> — אדם שפרטיו מנוהלים במערכת על ידי המשתמש.</li>
-          <li><strong>"תוכן"</strong> — כל מידע, נתון, מסמך, המלצה או דוח המוזן או נוצר במערכת.</li>
+          <li><strong>"המערכת":</strong> פלטפורמת SEELD לניהול לקוחות, המלצות ביטוח פנסיוניות וסיכומי ביצועים.</li>
+          <li><strong>"משתמש":</strong> סוכן ביטוח, יועץ פנסיוני או גורם מורשה אחר המשתמש במערכת.</li>
+          <li><strong>"לקוח קצה":</strong> אדם שפרטיו מנוהלים במערכת על ידי המשתמש.</li>
+          <li><strong>"תוכן":</strong> כל מידע, נתון, מסמך, המלצה או דוח המוזן או נוצר במערכת.</li>
         </ul>
       </LegalSection>
 
@@ -147,7 +147,7 @@ export default function TermsPage() {
       </LegalSection>
 
       <p className="border-t border-[#E7EDF1] pt-5 text-[12px] leading-relaxed" style={{ color: MUTED }}>
-        &copy; {new Date().getFullYear()} SEELD — כל הזכויות שמורות. תנאי שימוש אלו מהווים את ההסכם
+        &copy; {new Date().getFullYear()} SEELD. כל הזכויות שמורות. תנאי שימוש אלו מהווים את ההסכם
         המלא בין המשתמש לחברה בנוגע לשימוש במערכת.
       </p>
     </div>

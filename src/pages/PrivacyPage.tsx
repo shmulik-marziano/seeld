@@ -37,7 +37,7 @@ export default function PrivacyPage() {
         <div className="space-y-2 pr-4">
           <p><strong>2.1 מידע זיהוי אישי:</strong> שם מלא, מספר תעודת זהות, תאריך לידה, כתובת, מספר טלפון, כתובת דואר אלקטרוני.</p>
           <p><strong>2.2 מידע פיננסי:</strong> פרטי מוצרי ביטוח ופנסיה, צבירות, דמי ניהול, הפקדות, מספרי פוליסה.</p>
-          <p><strong>2.3 מידע רפואי:</strong> מצב בריאותי, תרופות, ניתוחים, אשפוזים, מחלות רקע — ככל שנמסר על ידי הלקוח או סוכנו לצורך בחינת כיסוי ביטוחי.</p>
+          <p><strong>2.3 מידע רפואי:</strong> מצב בריאותי, תרופות, ניתוחים, אשפוזים, מחלות רקע, ככל שנמסר על ידי הלקוח או סוכנו לצורך בחינת כיסוי ביטוחי.</p>
           <p><strong>2.4 מידע תעסוקתי:</strong> מעמד תעסוקתי, מקצוע, הכנסה חודשית ושנתית.</p>
           <p><strong>2.5 מידע טכני:</strong> כתובת IP, סוג דפדפן, זמני גישה ופעילות במערכת.</p>
         </div>
@@ -72,7 +72,7 @@ export default function PrivacyPage() {
         <p>אנו נוקטים באמצעי אבטחה מתקדמים להגנה על המידע שלך, לרבות:</p>
         <ul className="list-disc pr-6 space-y-1.5">
           <li>הצפנת נתונים בתעבורה (TLS/SSL) ובמנוחה.</li>
-          <li>בקרת גישה מבוססת תפקידים (RBAC) — כל סוכנות רואה רק את הנתונים שלה.</li>
+          <li>בקרת גישה מבוססת תפקידים (RBAC). כל סוכנות רואה רק את הנתונים שלה.</li>
           <li>מדיניות Row-Level Security (RLS) ברמת בסיס הנתונים.</li>
           <li>אימות דו-שלבי וניהול הרשאות קפדני.</li>
           <li>גיבויים שוטפים ומנגנוני שחזור.</li>
@@ -147,7 +147,7 @@ export default function PrivacyPage() {
       </LegalSection>
 
       <p className="border-t border-[#E7EDF1] pt-5 text-[12px] leading-relaxed" style={{ color: MUTED }}>
-        &copy; {new Date().getFullYear()} SEELD — כל הזכויות שמורות.
+        &copy; {new Date().getFullYear()} SEELD. כל הזכויות שמורות.
       </p>
     </div>
   );
