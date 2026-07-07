@@ -61,6 +61,19 @@ dots/accents turquoise `#4E9D8F`, standout figures turquoise or gold, mono label
 Geist Mono at `muted` (#5a6a78) or stronger. They are functional signals (live data,
 market returns, availability), never decoration. One live gesture per screen region.
 
+## Craft bar (the owner's reference standard — Franky's-level execution)
+
+The owner measures against best-of-web craft. Within the DNA v3 palette, every screen must
+carry real craft, not flat utility:
+- **Texture**: a whisper of paper grain (SVG feTurbulence, opacity ≤0.35) on pastel/tint
+  surfaces and navy bands — surfaces feel printed, not painted.
+- **Brand illustration**: line-art patterns (umbrellas, coins, growth curves) as tile
+  backgrounds; the cast figures redrawn in navy ink with one turquoise/gold accent.
+- **Bold tile CTAs**: full-width label bars inside cards (the reference's "ABOUT" bar):
+  navy bar, white 13-14px letterspaced label, hover lightens.
+- **One playful gesture per key screen** (clock, marquee, count-up, pattern) — witty,
+  never noisy. Wit lives in craft, not copy.
+
 ## HARD BANS (AI tells — the owner's explicit list, enforced in QA)
 
 1. **No eyebrow labels above headings.** A heading starts its block. (A corner
