@@ -1,15 +1,12 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { MONO } from "@/lib/brand";
+import { DISPLAY, MONO, MUTED, NAVY } from "@/lib/brand";
 
-const HEEBO = "'Heebo', sans-serif";
-
-// SEELD Bento: one quiet warm paper tile — documents stay serious (STYLESEED.md)
-const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
+// SEELD DNA v3: one quiet white column, navy headings, hairline rules (STYLESEED.md)
 
 const LegalSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <section className="border-t border-[#171717]/15 pt-5">
-    <h2 className="text-lg text-[#171717] mb-3" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+  <section className="border-t border-[#E7EDF1] pt-5">
+    <h2 className="text-[19px] mb-3" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
       {title}
     </h2>
     {children}
@@ -18,31 +15,25 @@ const LegalSection = ({ title, children }: { title: string; children: React.Reac
 
 const CookiePolicy = () => {
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* One quiet paper tile — the whole document */}
-      <div className="px-2 pt-2">
-        <div className="bento-panel"><div className="relative z-10">
+      {/* One quiet white column — the whole document */}
       {/* Hero */}
       <section>
-        <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-4">
-          <div className="border-t border-[#171717]/20 pt-4">
-            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
-              LEGAL · עודכן מרץ 2026
-            </span>
-          </div>
-          <h1
-            className="mt-10 text-[#171717] leading-tight"
-            style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.9rem, 4vw, 2.6rem)", letterSpacing: "-0.025em" }}
-          >
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-4">
+          <h1 className="dna-display leading-tight" style={{ fontSize: "clamp(1.9rem, 4vw, 2.6rem)" }}>
             מדיניות עוגיות (Cookies)
           </h1>
+          {/* Metadata under the title — mono, muted */}
+          <p className="mt-3 text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: MUTED }}>
+            עודכן מרץ 2026
+          </p>
         </div>
       </section>
 
-      <main className="max-w-3xl mx-auto px-5 sm:px-8 py-10 pb-16 sm:pb-24">
-        <div className="space-y-10 text-base leading-[1.9] text-[#4d4d4d] [&_strong]:text-[#171717] [&_strong]:font-medium">
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 pb-16 sm:pb-24">
+        <div className="space-y-10 text-base leading-[1.9] text-[#3a4c5a] [&_strong]:text-[#1D2D3D] [&_strong]:font-medium">
           <LegalSection title="מה הן עוגיות?">
             <p>
               עוגיות (Cookies) הן קבצי טקסט קטנים שנשמרים במכשיר שלכם בעת ביקור באתר.
@@ -53,7 +44,7 @@ const CookiePolicy = () => {
           <LegalSection title="סוגי העוגיות שאנו משתמשים בהן">
             <div className="space-y-8 mt-2">
               <div>
-                <h3 className="text-base text-[#171717] mb-2" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+                <h3 className="text-base mb-2" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                   עוגיות הכרחיות
                 </h3>
                 <p>
@@ -63,7 +54,7 @@ const CookiePolicy = () => {
               </div>
 
               <div>
-                <h3 className="text-base text-[#171717] mb-2" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+                <h3 className="text-base mb-2" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                   עוגיות פונקציונליות
                 </h3>
                 <p>
@@ -73,7 +64,7 @@ const CookiePolicy = () => {
               </div>
 
               <div>
-                <h3 className="text-base text-[#171717] mb-2" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+                <h3 className="text-base mb-2" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                   עוגיות אנליטיות
                 </h3>
                 <p>
@@ -102,21 +93,21 @@ const CookiePolicy = () => {
           <LegalSection title="יצירת קשר">
             <p className="mb-4">לשאלות בנוגע למדיניות העוגיות, ניתן לפנות אלינו:</p>
             <div>
-              <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-                <span className="text-[13px] text-[#5c5c5c]">אימייל</span>
+              <div className="flex items-baseline justify-between py-3 border-b border-[#E7EDF1]">
+                <span className="text-[13px]" style={{ color: MUTED }}>אימייל</span>
                 <a
                   href="mailto:info@seeld.co.il"
-                  className="text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
+                  className="text-[#1D2D3D] border-b border-transparent hover:border-[#1D2D3D]/40 transition-colors"
                   dir="ltr"
                 >
                   info@seeld.co.il
                 </a>
               </div>
-              <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-                <span className="text-[13px] text-[#5c5c5c]">טלפון</span>
+              <div className="flex items-baseline justify-between py-3 border-b border-[#E7EDF1]">
+                <span className="text-[13px]" style={{ color: MUTED }}>טלפון</span>
                 <a
                   href="tel:0523097444"
-                  className="text-[#171717] tabular-nums border-b border-transparent hover:border-[#171717]/40 transition-colors"
+                  className="text-[#1D2D3D] tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#1D2D3D]/40 transition-colors"
                   dir="ltr"
                 >
                   052-309-7444
@@ -126,8 +117,6 @@ const CookiePolicy = () => {
           </LegalSection>
         </div>
       </main>
-        </div></div>
-      </div>
 
       <Footer />
     </div>

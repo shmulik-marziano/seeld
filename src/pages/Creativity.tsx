@@ -2,12 +2,10 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import { MONO, CARD_SHADOW } from "@/lib/brand";
+import { BODY, DISPLAY, LINE, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, TURQ } from "@/lib/brand";
 import { FamilyFigure } from "@/components/brand/Figures";
 
-const HEEBO = "'Heebo', sans-serif";
-// Captions on the warm paper tiles stay at #5c5c5c minimum (AA on paper).
-const PAPER_MUTED = "#5c5c5c";
+// SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
 
 const Creativity = () => {
   const insuranceTypes = [
@@ -24,147 +22,142 @@ const Creativity = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
       <main>
-        {/* Hero — paper tile; the family peeks from the corner */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel">
-            <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-10 sm:pt-14 pb-14 sm:pb-20 relative z-10">
-              <div className="border-t border-[#171717]/20 pt-4">
-                <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#5c5c5c]">
-                  <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-                  <span aria-hidden="true">/</span>
-                  <span className="text-[#171717]">ביטוח רכוש ורכב</span>
-                </nav>
-              </div>
-              <div className="mt-12 sm:mt-16 max-w-3xl">
-                <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
-                  PROPERTY · VEHICLE
-                </span>
-                <h1
-                  className="mt-4 text-[#171717] leading-[1.1]"
-                  style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(2.2rem, 5vw, 3.4rem)", letterSpacing: "-0.03em" }}
+        {/* Hero — white canvas, pastel circles; the family peeks from the corner */}
+        <section className="dna-page">
+          <div className="dna-circles" aria-hidden="true">
+            <div
+              className="dna-circ"
+              style={{ width: 260, height: 260, top: -110, left: -90, backgroundColor: PASTEL_BLUE, opacity: 0.55 }}
+            />
+            <div
+              className="dna-circ"
+              style={{ width: 200, height: 200, bottom: -100, right: "20%", backgroundColor: PASTEL_MINT, opacity: 0.45 }}
+            />
+          </div>
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-14 sm:pb-20">
+            <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px]" style={{ color: MUTED }}>
+              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <span aria-hidden="true">/</span>
+              <span style={{ color: NAVY }}>ביטוח רכוש ורכב</span>
+            </nav>
+            <div className="mt-10 sm:mt-14 max-w-3xl">
+              <h1 className="dna-display leading-[1.15]" style={{ fontSize: "clamp(34px, 5vw, 50px)" }}>
+                ביטוח רכוש ורכב
+              </h1>
+              <p className="mt-5 text-lg sm:text-xl leading-[1.8] max-w-2xl" style={{ color: MUTED }}>
+                רכב, דירה, עסק ונסיעות: השוואת הצעות מחיר מול כל החברות בשוק, ללא עלות.
+              </p>
+              <div className="mt-8">
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center justify-center rounded-lg px-9 py-4 bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[52px]"
                 >
-                  ביטוח רכוש ורכב
-                </h1>
-                <p className="mt-5 text-lg sm:text-xl text-[#4d4d4d] leading-[1.8] max-w-2xl">
-                  רכב, דירה, עסק ונסיעות: השוואת הצעות מחיר מול כל החברות בשוק, ללא עלות.
-                </p>
-                <div className="mt-8">
-                  <Link
-                    to="/contact"
-                    className="inline-flex items-center justify-center rounded-md px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-black transition-colors min-h-[52px]"
-                  >
-                    הצטרפו ל-SEELD
-                  </Link>
-                </div>
+                  הצטרפו ל-SEELD
+                </Link>
               </div>
             </div>
-            <FamilyFigure className="absolute -left-3 -bottom-4 w-16 h-16 opacity-70 rotate-12 pointer-events-none" />
           </div>
+          <FamilyFigure className="absolute left-2 bottom-2 w-16 h-16 opacity-60 rotate-12 pointer-events-none" />
         </section>
 
-        {/* 01 — Insurance types, ruled list */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+        {/* Insurance types — the unified .dna-concept card tiles */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
             <ScrollReveal>
-              <div className="border-t border-[#171717]/20 pt-6 mb-12 sm:mb-14 flex items-baseline gap-6 sm:gap-10">
-                <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED, fontFamily: MONO }}>
-                  01
-                </span>
-                <h2
-                  className="text-[#171717] leading-tight"
-                  style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.02em" }}
-                >
+              <div className="mb-12 sm:mb-14">
+                <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.6rem, 3vw, 2.2rem)" }}>
                   תחומי הכיסוי
                 </h2>
               </div>
             </ScrollReveal>
-            {/* The homogeneous SEELD card tiles — white tiles, .bento-hover quiet lift */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {insuranceTypes.map((type, i) => (
                 <ScrollReveal key={type.title} delay={i * 60} className="h-full">
                   <Link
                     to={type.href}
-                    className="bento-hover group flex h-full flex-col rounded-lg bg-white p-5 sm:p-6"
-                    style={{ boxShadow: CARD_SHADOW }}
+                    className="dna-concept dna-hover group flex h-full flex-col !p-5 sm:!p-6"
                   >
-                    <div
-                      className="text-[11px] tracking-[0.08em] text-[#5c5c5c] tabular-nums"
-                      style={{ fontFamily: MONO }}
-                    >
-                      {String(i + 1).padStart(2, "0")}
+                    <div className="flex items-baseline justify-between gap-4">
+                      <h3 className="text-[17px] leading-snug" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
+                        {type.title}
+                      </h3>
+                      <span className="text-[#5a6a78] group-hover:text-[#1D2D3D] transition-all group-hover:-translate-x-1 shrink-0">←</span>
                     </div>
-                    <h3 className="mt-3 text-lg text-[#171717] leading-snug" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
-                      {type.title}
-                    </h3>
-                    <p className="mt-2 text-[14px] text-[#4d4d4d] leading-[1.7]">{type.description}</p>
-                    <p className="mt-3 text-[13px] text-[#5c5c5c]">
+                    <p className="mt-2 text-[14px] leading-[1.7]" style={{ color: BODY }}>{type.description}</p>
+                    <p className="mt-3 text-[13px]" style={{ color: MUTED }}>
                       {type.features.join(" · ")}
                     </p>
-                    <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#171717]">
+                    <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#1D2D3D]">
                       לפרטים
-                      <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
                     </span>
                   </Link>
                 </ScrollReveal>
               ))}
             </div>
-          </div></div>
+          </div>
         </section>
 
         {/* Numbers */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
             <ScrollReveal>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-10 border-t border-b border-[#171717]/15 py-10 sm:py-14">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-10 border-t border-b py-10 sm:py-14" style={{ borderColor: LINE }}>
                 {stats.map((stat) => (
                   <div key={stat.label} className="text-center">
                     <div
-                      className="text-[#171717] tabular-nums mb-2"
+                      className="tabular-nums mb-2"
                       dir={stat.ltr ? "ltr" : undefined}
-                      style={{ fontFamily: MONO, fontWeight: 600, fontSize: "clamp(2rem, 4vw, 3rem)", letterSpacing: "-0.02em" }}
+                      style={{
+                        fontFamily: DISPLAY,
+                        fontWeight: 900,
+                        color: TURQ,
+                        fontSize: "clamp(2rem, 4vw, 3rem)",
+                        letterSpacing: "-0.02em",
+                        lineHeight: 1.1,
+                      }}
                     >
                       {stat.value}
                     </div>
-                    <div className="text-[12px] tracking-[0.12em] text-[#5c5c5c]">{stat.label}</div>
+                    <div className="text-[13px] tracking-[0.1em]" style={{ color: MUTED }}>{stat.label}</div>
                   </div>
                 ))}
               </div>
-              <p className="mt-5 text-center text-[12px] text-[#5c5c5c]">
+              <p className="mt-5 text-center text-[13px]" style={{ color: MUTED }}>
                 למה לבחור ב-SEELD? המספרים עונים.
               </p>
             </ScrollReveal>
-          </div></div>
+          </div>
         </section>
 
-        {/* CTA — the one ink tile */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
+        {/* CTA — institutional navy band */}
+        <section style={{ backgroundColor: NAVY }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
-              <div className="border-t border-white/20 pt-6 max-w-3xl">
+              <div className="max-w-3xl">
                 <h2
-                  className="text-[#fafafa] leading-tight"
-                  style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.02em" }}
+                  className="text-white leading-tight"
+                  style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
                 >
                   מוכנים לחסוך על הביטוח?
                 </h2>
-                <p className="mt-3 text-base text-[#fafafa]/50 leading-[1.85] max-w-xl">
+                <p className="mt-3 text-base leading-[1.85] max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
                   השאירו פרטים ויועץ יחזור אליכם עם הצעות מחיר תוך שעות.
                 </p>
                 <div className="mt-8">
                   <Link
                     to="/contact"
-                    className="inline-flex items-center justify-center rounded-md px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
+                    className="inline-flex items-center justify-center rounded-lg px-9 py-4 bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
                   >
                     התחילו עכשיו
                   </Link>
                 </div>
               </div>
             </ScrollReveal>
-          </div></div>
+          </div>
         </section>
       </main>
 

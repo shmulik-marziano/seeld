@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   User, Phone, MapPin, FileText, Shield,
   Download, Copy, Check,
@@ -8,14 +8,25 @@ import { Link } from "react-router-dom";
 import { Calendar as CalendarComp } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { SERIF, MONO, CHIP_GREEN } from "@/lib/brand";
+import {
+  BODY, DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, TURQ, TURQ_TEXT,
+} from "@/lib/brand";
 import { LiveDot, StatusPill } from "@/components/brand/Live";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+
+// SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
 
 // Consistent keyboard focus for buttons and selectable tiles (Snap: no ring animation)
 const FOCUS_RING =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#171717]";
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D2D3D]";
+
+// DNA v3 boxed input: white, hairline border, navy focus
+const inputBoxClass =
+  "w-full min-h-[48px] px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg " +
+  "text-base text-[#1D2D3D] placeholder:text-[#5a6a78] " +
+  "focus:outline-none focus:border-[#1D2D3D] transition-colors";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface FormData {
@@ -194,11 +205,9 @@ function DateMaskInput({
         maxLength={10}
         placeholder={placeholder ?? "DD/MM/YYYY"}
         className={cn(
-          "w-full min-h-[44px] px-0 pl-9 py-3 bg-transparent border-b border-[#171717]/20 rounded-none",
-          "text-base text-[#171717] placeholder:text-[#5c5c5c]",
-          "focus:outline-none focus:border-[#171717]",
-          "transition-colors tracking-widest",
-          error && "border-[#b91c1c]",
+          inputBoxClass,
+          "pl-10 tracking-widest",
+          error && "!border-[#a04a5c]",
           className
         )}
         style={{ fontFamily: MONO }}
@@ -207,7 +216,7 @@ function DateMaskInput({
         <PopoverTrigger asChild>
           <button
             type="button"
-            className={cn("absolute left-1 p-1.5 rounded-[4px] text-[#5c5c5c] hover:text-[#171717] transition-colors", FOCUS_RING)}
+            className={cn("absolute left-2 p-1.5 rounded-md text-[#5a6a78] hover:text-[#1D2D3D] transition-colors", FOCUS_RING)}
             aria-label="בחירת תאריך מלוח שנה"
           >
             <Calendar className="w-4 h-4" />
@@ -275,25 +284,22 @@ function CityInput({
         onFocus={() => setOpen(true)}
         placeholder="תל אביב"
         className={cn(
-          "w-full min-h-[44px] px-0 py-3 bg-transparent border-b border-[#171717]/20 rounded-none",
-          "text-base text-[#171717] placeholder:text-[#5c5c5c]",
-          "focus:outline-none focus:border-[#171717]",
-          "transition-colors",
-          error && "border-[#b91c1c]",
+          inputBoxClass,
+          error && "!border-[#a04a5c]",
           className
         )}
       />
       {open && filtered.length > 0 && (
         <div
-          className="absolute z-[100] top-full mt-1 w-full rounded-[8px] bg-white overflow-hidden max-h-60 overflow-y-auto"
-          style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08), 0 8px 16px -8px rgba(0,0,0,.12)" }}
+          className="absolute z-[100] top-full mt-1 w-full rounded-lg bg-white border border-[#E7EDF1] overflow-hidden max-h-60 overflow-y-auto"
+          style={{ boxShadow: "0 8px 16px -8px rgba(29,45,61,.12)" }}
         >
           {filtered.map(city => (
             <button
               key={city}
               type="button"
               onMouseDown={() => select(city)}
-              className="w-full text-right px-4 py-3 min-h-[44px] text-sm text-[#171717] hover:bg-[#171717]/5 transition-colors border-b border-[#171717]/[0.06] last:border-0"
+              className="w-full text-right px-4 py-3 min-h-[44px] text-sm text-[#1D2D3D] hover:bg-[#E1EAF1]/35 transition-colors border-b border-[#E7EDF1] last:border-0"
             >
               {city}
             </button>
@@ -340,25 +346,19 @@ function StreetInput({
         onChange={e => { setQuery(e.target.value); onChange(e.target.value); setOpen(true); }}
         onFocus={() => setOpen(true)}
         placeholder="שם הרחוב"
-        className={cn(
-          "w-full min-h-[44px] px-0 py-3 bg-transparent border-b border-[#171717]/20 rounded-none",
-          "text-base text-[#171717] placeholder:text-[#5c5c5c]",
-          "focus:outline-none focus:border-[#171717]",
-          "transition-colors",
-          className
-        )}
+        className={cn(inputBoxClass, className)}
       />
       {open && filtered.length > 0 && (
         <div
-          className="absolute z-[100] top-full mt-1 w-full rounded-[8px] bg-white overflow-hidden max-h-60 overflow-y-auto"
-          style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08), 0 8px 16px -8px rgba(0,0,0,.12)" }}
+          className="absolute z-[100] top-full mt-1 w-full rounded-lg bg-white border border-[#E7EDF1] overflow-hidden max-h-60 overflow-y-auto"
+          style={{ boxShadow: "0 8px 16px -8px rgba(29,45,61,.12)" }}
         >
           {filtered.map(street => (
             <button
               key={street}
               type="button"
               onMouseDown={() => { onChange(street); setQuery(street); setOpen(false); }}
-              className="w-full text-right px-4 py-3 min-h-[44px] text-sm text-[#171717] hover:bg-[#171717]/5 transition-colors border-b border-[#171717]/[0.06] last:border-0"
+              className="w-full text-right px-4 py-3 min-h-[44px] text-sm text-[#1D2D3D] hover:bg-[#E1EAF1]/35 transition-colors border-b border-[#E7EDF1] last:border-0"
             >
               {street}
             </button>
@@ -369,86 +369,72 @@ function StreetInput({
   );
 }
 
-// ─── Step indicator — mono numerals over a thin progress rule ─────────────────
+// ─── Step indicator — plain-word progress over a thin rule (no ornamental numerals) ─
 const STEPS = [
-  { label: "פרטים אישיים", short: "01" },
-  { label: "הרשאות", short: "02" },
-  { label: "חתימה", short: "03" },
-  { label: "סיכום", short: "04" },
+  { label: "פרטים אישיים" },
+  { label: "הרשאות" },
+  { label: "חתימה" },
+  { label: "סיכום" },
 ];
 
 function StepBar({ current }: { current: number }) {
   return (
-    <div aria-label={`שלב ${current + 1} מתוך ${STEPS.length}`}>
+    <div aria-label={`שלב ${current + 1} מתוך ${STEPS.length}: ${STEPS[current].label}`}>
       <div className="flex items-baseline justify-between gap-3">
-        {STEPS.map((step, i) => {
-          const done = i < current;
-          const active = i === current;
-          return (
-            <div key={i} className="flex items-baseline gap-2">
-              {done && (
-                <Check
-                  className="w-3 h-3 shrink-0 self-center"
-                  style={{ color: CHIP_GREEN }}
-                  aria-hidden="true"
-                />
-              )}
-              <span
-                className={cn(
-                  "text-[12px] tabular-nums tracking-[0.14em] transition-colors",
-                  active || done ? "text-[#171717]" : "text-[#5c5c5c]"
+        <div className="hidden sm:flex items-baseline gap-6">
+          {STEPS.map((step, i) => {
+            const done = i < current;
+            const active = i === current;
+            return (
+              <span key={step.label} className="inline-flex items-center gap-1.5">
+                {done && (
+                  <Check
+                    className="w-3.5 h-3.5 shrink-0"
+                    style={{ color: TURQ_TEXT }}
+                    aria-hidden="true"
+                  />
                 )}
-                style={{ fontFamily: MONO }}
-                dir="ltr"
-              >
-                {step.short}
+                <span
+                  className={cn(
+                    "text-[13px] transition-colors",
+                    active ? "font-semibold text-[#1D2D3D]" : "font-medium text-[#5a6a78]"
+                  )}
+                >
+                  {step.label}
+                </span>
               </span>
-              <span
-                className={cn(
-                  "text-[13px] font-medium hidden sm:inline transition-colors",
-                  active ? "text-[#171717]" : done ? "text-[#5c5c5c]" : "text-[#5c5c5c]"
-                )}
-              >
-                {step.label}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-      <div className="relative mt-4 h-px bg-[#171717]/10">
-        <div
-          className="absolute inset-y-0 right-0 bg-[#171717] transition-all duration-200 ease-out"
-          style={{ width: `${((current + 1) / STEPS.length) * 100}%` }}
-        />
-      </div>
-      <div className="mt-2.5 flex items-baseline justify-between gap-4">
-        <span className="text-[12px] font-medium text-[#171717] sm:hidden">
+            );
+          })}
+        </div>
+        <span className="text-[13px] font-semibold text-[#1D2D3D] sm:hidden">
           {STEPS[current].label}
         </span>
-        <span
-          className="mr-auto text-[11px] tabular-nums tracking-[0.14em] text-[#5c5c5c]"
-          style={{ fontFamily: MONO }}
-          dir="ltr"
-        >
-          {String(current + 1).padStart(2, "0")} / {String(STEPS.length).padStart(2, "0")}
+        <span className="text-[12.5px] shrink-0" style={{ color: MUTED }}>
+          שלב {current + 1} מתוך {STEPS.length}
         </span>
+      </div>
+      <div className="relative mt-4 h-[3px] rounded-full bg-[#E7EDF1]">
+        <div
+          className="absolute inset-y-0 right-0 rounded-full transition-all duration-200 ease-out"
+          style={{ width: `${((current + 1) / STEPS.length) * 100}%`, backgroundColor: TURQ }}
+        />
       </div>
     </div>
   );
 }
 
-// ─── Glass Input ──────────────────────────────────────────────────────────────
+// ─── Field wrapper ────────────────────────────────────────────────────────────
 function GlassInput({
   label, error, required, children
 }: { label: string; error?: string; required?: boolean; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5 group">
-      <label className="text-[13px] font-medium text-[#5c5c5c] group-focus-within:text-[#171717] transition-colors">
-        {label}{required && <span className="text-[#5c5c5c] mr-1">*</span>}
+      <label className="text-[13px] font-medium text-[#5a6a78] group-focus-within:text-[#1D2D3D] transition-colors">
+        {label}{required && <span className="mr-1" style={{ color: MUTED }}>*</span>}
       </label>
       {children}
       {error && (
-        <p className="text-[#b91c1c] text-[12px] font-medium flex items-center gap-1">
+        <p className="text-[12px] font-medium flex items-center gap-1" style={{ color: "#a04a5c" }}>
           <AlertCircle className="w-3 h-3 shrink-0" />{error}
         </p>
       )}
@@ -460,24 +446,18 @@ function TechInput({ className, ...props }: React.InputHTMLAttributes<HTMLInputE
   return (
     <input
       {...props}
-      className={cn(
-        "w-full min-h-[44px] px-0 py-3 bg-transparent border-b border-[#171717]/20 rounded-none",
-        "text-base text-[#171717] placeholder:text-[#5c5c5c]",
-        "focus:outline-none focus:border-[#171717]",
-        "transition-colors",
-        className
-      )}
+      className={cn(inputBoxClass, className)}
     />
   );
 }
 
 // ─── Consent Card ─────────────────────────────────────────────────────────────
 function ConsentCard({
-  checked, onChange, title, description, pdfPath, pdfLabel, index,
+  checked, onChange, title, description, pdfPath, pdfLabel,
 }: {
   checked: boolean; onChange: (v: boolean) => void;
   title: string; description: string;
-  pdfPath: string; pdfLabel: string; index: number;
+  pdfPath: string; pdfLabel: string;
 }) {
   return (
     <button
@@ -485,32 +465,30 @@ function ConsentCard({
       onClick={() => onChange(!checked)}
       aria-pressed={checked}
       className={cn(
-        "w-full text-right rounded-[8px] bg-white p-5 transition-colors cursor-pointer group",
+        "w-full text-right rounded-xl bg-white p-5 border transition-colors cursor-pointer group",
         FOCUS_RING,
-        checked ? "" : "hover:bg-[#171717]/5"
+        checked ? "border-[#1D2D3D]" : "border-[#E7EDF1] hover:bg-[#E1EAF1]/25"
       )}
-      style={{ boxShadow: checked ? "0 0 0 1px #171717" : "0 0 0 1px rgba(0,0,0,.08)" }}
     >
       <div className="flex items-start gap-4">
         {/* Checkbox */}
         <div
           className={cn(
-            "mt-0.5 w-5 h-5 rounded-[4px] shrink-0 flex items-center justify-center transition-colors",
-            checked ? "bg-[#171717]" : "bg-white"
+            "mt-0.5 w-5 h-5 rounded-[4px] shrink-0 flex items-center justify-center border transition-colors",
+            checked ? "bg-[#1D2D3D] border-[#1D2D3D]" : "bg-white border-[#5a6a78]"
           )}
-          style={checked ? undefined : { boxShadow: "0 0 0 1px rgba(23,23,23,.25)" }}
         >
-          {checked && <Check className="w-3.5 h-3.5 text-[#fafafa]" />}
+          {checked && <Check className="w-3.5 h-3.5 text-white" />}
         </div>
         <div className="flex-1 space-y-1.5">
-          <p className="font-medium text-[15px] text-[#171717]">{title}</p>
-          <p className="text-[13px] text-[#5c5c5c] leading-[1.7]">{description}</p>
+          <p className="font-medium text-[15px]" style={{ color: NAVY }}>{title}</p>
+          <p className="text-[13px] leading-[1.7]" style={{ color: BODY }}>{description}</p>
           <a
             href={pdfPath}
             target="_blank"
             rel="noopener noreferrer"
             onClick={e => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 text-[12px] text-[#5c5c5c] hover:text-[#171717] transition-colors mt-1 font-medium border-b border-[#171717]/20 pb-0.5"
+            className="inline-flex items-center gap-1.5 text-[12.5px] text-[#5a6a78] hover:text-[#1D2D3D] transition-colors mt-1 font-medium border-b border-[#1D2D3D]/20 pb-0.5"
           >
             <Download className="w-3 h-3" />
             {pdfLabel}
@@ -531,7 +509,7 @@ function SignatureCanvas({ value, onChange }: { value: string; onChange: (v: str
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d")!;
-    ctx.strokeStyle = "#171717";
+    ctx.strokeStyle = "#1D2D3D";
     ctx.lineWidth = 2.5;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -591,10 +569,10 @@ function SignatureCanvas({ value, onChange }: { value: string; onChange: (v: str
   return (
     <div className="space-y-3">
       <div className={cn(
-        "relative rounded-[8px] overflow-hidden border transition-colors",
+        "relative rounded-lg overflow-hidden border transition-colors",
         hasDrawn
-          ? "border-[#171717]"
-          : "border-[#171717]/25 border-dashed"
+          ? "border-[#1D2D3D]"
+          : "border-[#5a6a78]/50 border-dashed"
       )}>
         <canvas
           ref={canvasRef}
@@ -611,8 +589,8 @@ function SignatureCanvas({ value, onChange }: { value: string; onChange: (v: str
         />
         {!hasDrawn && (
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none gap-2">
-            <Pen className="w-6 h-6 text-[#171717]/25" />
-            <p className="text-[#5c5c5c] text-sm tracking-widest" style={{ fontFamily: MONO }}>חתמו כאן</p>
+            <Pen className="w-6 h-6 text-[#1D2D3D]/25" />
+            <p className="text-sm tracking-widest" style={{ fontFamily: MONO, color: MUTED }}>חתמו כאן</p>
           </div>
         )}
       </div>
@@ -620,7 +598,7 @@ function SignatureCanvas({ value, onChange }: { value: string; onChange: (v: str
         <button
           type="button"
           onClick={clear}
-          className={cn("flex items-center gap-1.5 text-[12px] text-[#5c5c5c] hover:text-[#171717] transition-colors font-medium min-h-[32px]", FOCUS_RING)}
+          className={cn("flex items-center gap-1.5 text-[12.5px] text-[#5a6a78] hover:text-[#1D2D3D] transition-colors font-medium min-h-[32px]", FOCUS_RING)}
         >
           <X className="w-3.5 h-3.5" />
           נקו וחתמו שוב
@@ -636,11 +614,11 @@ function CopyBtn({ text }: { text: string }) {
   return (
     <button
       onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
-      className="p-1.5 rounded-[4px] hover:bg-[#171717]/5 transition-colors text-[#5c5c5c] hover:text-[#171717]"
+      className="p-1.5 rounded-md hover:bg-[#E1EAF1]/50 transition-colors text-[#5a6a78] hover:text-[#1D2D3D]"
       aria-label="העתקה"
     >
       {copied
-        ? <Check className="w-3 h-3" style={{ color: "#15803d" }} />
+        ? <Check className="w-3 h-3" style={{ color: TURQ_TEXT }} />
         : <Copy className="w-3 h-3" />}
     </button>
   );
@@ -649,10 +627,10 @@ function CopyBtn({ text }: { text: string }) {
 function SummaryRow({ label, value }: { label: string; value: string }) {
   if (!value) return null;
   return (
-    <div className="flex items-center justify-between py-2.5 border-b border-[#171717]/10 last:border-0 group">
-      <span className="text-[12px] text-[#5c5c5c]">{label}</span>
+    <div className="flex items-center justify-between py-2.5 border-b last:border-0 group" style={{ borderColor: LINE }}>
+      <span className="text-[12.5px]" style={{ color: MUTED }}>{label}</span>
       <div className="flex items-center gap-1">
-        <span className="text-sm font-medium text-[#171717] tabular-nums" style={{ fontFamily: MONO }}>{value}</span>
+        <span className="text-sm font-medium tabular-nums" style={{ fontFamily: MONO, color: NAVY }}>{value}</span>
         <CopyBtn text={value} />
       </div>
     </div>
@@ -776,590 +754,597 @@ export default function Onboarding() {
   };
 
   return (
-    <>
-      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
-        <Header />
-        <div ref={topRef} />
+    <div className="min-h-screen bg-white" dir="rtl">
+      <Header />
+      <div ref={topRef} />
 
-        {/* SEELD Bento: warm paper tiles on ink gutters. The form stays in one calm tile. */}
-        <main className="px-2 pt-2 space-y-2">
+      <main>
+        {/* ── Hero — one idea: open your file ── */}
+        <section className="dna-page">
+          {/* Pastel circle backdrop — decorative, kept clear of the form text */}
+          <div className="dna-circles" aria-hidden="true">
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 260, height: 260, top: -110, left: -100, backgroundColor: PASTEL_BLUE, opacity: 0.55 }}
+            />
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 200, height: 200, top: 30, right: -90, backgroundColor: PASTEL_MINT, opacity: 0.45 }}
+            />
+          </div>
 
-          {/* ── Hero — one idea: open your file ── */}
-          <div className="bento-panel"><div className="max-w-2xl mx-auto px-5 sm:px-8 py-10 sm:py-12 relative z-10">
-            <div className="border-t border-[#171717]/20 pt-5 mb-6 flex items-baseline justify-between gap-4">
-              <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
-                <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-                <span>←</span>
-                <span className="text-[#171717]/70 font-medium">פתיחת תיק</span>
+          <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-10 sm:pb-12">
+            <div className="mb-8 flex items-baseline justify-between gap-4">
+              <nav className="flex items-center gap-2 text-[13px]" style={{ color: MUTED }}>
+                <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+                <span aria-hidden="true">←</span>
+                <span className="font-medium" style={{ color: NAVY }}>פתיחת תיק</span>
               </nav>
-              <span className="text-[11px] tracking-[0.14em] font-medium" style={{ color: "#5c5c5c", fontFamily: MONO }} dir="ltr">
+              <span className="text-[11px] tracking-[0.14em] font-medium" style={{ color: MUTED, fontFamily: MONO }} dir="ltr">
                 SECURE
               </span>
             </div>
 
-            <h1
-              className="text-[#171717] leading-[1.15] mb-4"
-              style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.9rem, 4.5vw, 2.8rem)" }}
-            >
+            <h1 className="dna-display leading-[1.12] mb-4" style={{ fontSize: "clamp(1.9rem, 4.5vw, 2.8rem)" }}>
               שאלון הצטרפות
             </h1>
-            <p className="text-base text-[#5c5c5c] leading-[1.9] mb-2">
+            <p className="text-base leading-[1.9] mb-2" style={{ color: MUTED }}>
               ארבעה שלבים, בלי אותיות קטנות. בסוף שמוליק מתקשר.
             </p>
-            <p className="text-[13px] text-[#5c5c5c]">
+            <p className="text-[13px]" style={{ color: MUTED }}>
               שמוליק מרציאנו · סוכן ביטוח ופנסיה מוסמך
             </p>
             {!submitted && step === 0 && (
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                className="mt-7 block bento-hover rounded-full"
+                className="mt-7 block dna-hover rounded-full"
                 aria-label="פתיחת שיחה עם יועץ SEELD"
               >
                 <StatusPill>היועץ מחובר עכשיו · שאלו לפני שממלאים</StatusPill>
               </button>
             )}
-          </div></div>
+          </div>
+        </section>
 
-          {/* ── Step Bar — its own slim tile above the form ── */}
-          {step < 4 && !submitted && (
-            <div className="bento-panel"><div className="max-w-2xl mx-auto px-5 sm:px-8 py-5 relative z-10">
-              <StepBar current={step} />
-            </div></div>
-          )}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+            {/* ── Step Bar — plain-word wizard progress ── */}
+            {step < 4 && !submitted && (
+              <div className="mb-6">
+                <StepBar current={step} />
+              </div>
+            )}
 
-          {/* ── The one calm form tile ── */}
-          <div className="bento-panel"><div className="max-w-2xl mx-auto px-5 sm:px-8 py-10 sm:py-14 relative z-10">
+            {/* ── The one calm form card ── */}
+            <div className="dna-concept !p-6 sm:!p-8">
 
-          {/* ── Thank You Screen ── */}
-          {submitted ? (
-            <div className={cn(
-              "py-6 transition-all duration-200",
-              transitioning ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
-            )}>
-              <div className="border-t border-[#171717]/20 pt-6">
-                <div className="flex items-center gap-2.5 mb-4">
-                  <LiveDot size={7} />
-                  <span className="text-[12px] tracking-[0.14em] font-medium text-[#5c5c5c]" style={{ fontFamily: MONO }} dir="ltr">
-                    RECEIVED
-                  </span>
+              {/* ── Thank You Screen ── */}
+              {submitted ? (
+                <div className={cn(
+                  "py-2 transition-all duration-200",
+                  transitioning ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
+                )}>
+                  <div>
+                    <div className="flex items-center gap-2.5 mb-4">
+                      <LiveDot size={7} />
+                      <span className="text-[12px] tracking-[0.14em] font-medium" style={{ fontFamily: MONO, color: MUTED }} dir="ltr">
+                        RECEIVED
+                      </span>
+                    </div>
+                    <h2 className="dna-display leading-tight mb-3" style={{ fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}>
+                      {form.firstName}, התיק נשלח
+                    </h2>
+                    <p className="text-base leading-[1.85] max-w-md" style={{ color: BODY }}>
+                      שמוליק מרציאנו יעבור על הפרטים ויצור קשר בהקדם. הסיכום נשלח גם למייל שלך.
+                    </p>
+                  </div>
+
+                  <div className="mt-10 border-t max-w-md" style={{ borderColor: LINE }}>
+                    {[
+                      ["שם", `${form.firstName} ${form.lastName}`],
+                      ["טלפון", form.phone],
+                      ["אימייל", form.email],
+                    ].map(([label, val]) => (
+                      <div key={label} className="flex items-baseline justify-between gap-6 py-[14px] border-b" style={{ borderColor: LINE }}>
+                        <span className="text-[13px] shrink-0" style={{ color: MUTED }}>{label}</span>
+                        <span className="text-base tabular-nums text-left" style={{ fontFamily: MONO, color: NAVY }}>{val}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-10">
+                    <Link
+                      to="/"
+                      className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+                    >
+                      חזרה לדף הבית
+                      <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
+                    </Link>
+                  </div>
                 </div>
-                <h2
-                  className="text-[#171717] leading-tight mb-3"
-                  style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}
-                >
-                  {form.firstName}, התיק נשלח
-                </h2>
-                <p className="text-base text-[#5c5c5c] leading-[1.85] max-w-md">
-                  שמוליק מרציאנו יעבור על הפרטים ויצור קשר בהקדם. הסיכום נשלח גם למייל שלך.
-                </p>
-              </div>
+              ) : null}
 
-              <div className="mt-10 border-t border-[#171717]/15 max-w-md">
-                {[
-                  ["שם", `${form.firstName} ${form.lastName}`],
-                  ["טלפון", form.phone],
-                  ["אימייל", form.email],
-                ].map(([label, val]) => (
-                  <div key={label} className="flex items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10">
-                    <span className="text-[13px] text-[#5c5c5c] shrink-0">{label}</span>
-                    <span className="text-base text-[#171717] tabular-nums text-left" style={{ fontFamily: MONO }}>{val}</span>
-                  </div>
-                ))}
-              </div>
+              {/* ── Card wrapper ── */}
+              {!submitted && <div className={cn(
+                "transition-all duration-200",
+                transitioning ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
+              )}>
 
-              <div className="mt-10">
-                <Link
-                  to="/"
-                  className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
-                >
-                  חזרה לדף הבית
-                  <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
-                </Link>
-              </div>
-            </div>
-          ) : null}
+                {/* ═══════ STEP 0: Personal ═══════ */}
+                {step === 0 && (
+                  <div className="space-y-10">
+                    {/* Personal */}
+                    <TechSection title="פרטי זיהוי" icon={<User className="w-4 h-4" />}>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <GlassInput label="שם פרטי" error={errors.firstName} required>
+                          <TechInput value={form.firstName} onChange={e => set("firstName", e.target.value)}
+                            placeholder="ישראל" className={errors.firstName ? "!border-[#a04a5c]" : ""} />
+                        </GlassInput>
+                        <GlassInput label="שם משפחה" error={errors.lastName} required>
+                          <TechInput value={form.lastName} onChange={e => set("lastName", e.target.value)}
+                            placeholder="ישראלי" className={errors.lastName ? "!border-[#a04a5c]" : ""} />
+                        </GlassInput>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <GlassInput label="מספר תעודת זהות" error={errors.idNumber} required>
+                          <TechInput value={form.idNumber}
+                            onChange={e => set("idNumber", e.target.value.replace(/\D/g, ""))}
+                            maxLength={9} inputMode="numeric" placeholder="000000000"
+                            className={cn("tracking-widest", errors.idNumber ? "!border-[#a04a5c]" : "")}
+                            style={{ fontFamily: MONO }} />
+                        </GlassInput>
+                        <GlassInput label={'תאריך הנפקת ת"ז'} error={errors.idIssueDate} required>
+                          <DateMaskInput
+                            value={form.idIssueDate}
+                            onChange={v => set("idIssueDate", v)}
+                            error={!!errors.idIssueDate}
+                          />
+                        </GlassInput>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <GlassInput label="תאריך לידה" error={errors.birthDate} required>
+                          <DateMaskInput
+                            value={form.birthDate}
+                            onChange={v => set("birthDate", v)}
+                            error={!!errors.birthDate}
+                          />
+                        </GlassInput>
+                        <GlassInput label="ארץ לידה">
+                          <TechInput value={form.birthCountry}
+                            onChange={e => set("birthCountry", e.target.value)} placeholder="ישראל" />
+                        </GlassInput>
+                      </div>
+                    </TechSection>
 
-          {/* ── Card wrapper ── */}
-          {!submitted && <div className={cn(
-            "transition-all duration-200",
-            transitioning ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
-          )}>
+                    {/* Contact */}
+                    <TechSection title="פרטי קשר" icon={<Phone className="w-4 h-4" />}>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <GlassInput label="טלפון נייד" error={errors.phone} required>
+                          <TechInput value={form.phone} onChange={e => set("phone", e.target.value)}
+                            inputMode="tel" placeholder="050-0000000"
+                            className={errors.phone ? "!border-[#a04a5c]" : ""}
+                            style={{ fontFamily: MONO }} />
+                        </GlassInput>
+                        <GlassInput label={'דוא"ל'} error={errors.email} required>
+                          <TechInput type="email" value={form.email}
+                            onChange={e => set("email", e.target.value)}
+                            placeholder="email@example.com"
+                            className={errors.email ? "!border-[#a04a5c]" : ""} />
+                        </GlassInput>
+                      </div>
+                    </TechSection>
 
-            {/* ═══════ STEP 0: Personal ═══════ */}
-            {step === 0 && (
-              <div className="space-y-10">
-                {/* Personal */}
-                <TechSection title="פרטי זיהוי" icon={<User className="w-4 h-4" />}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <GlassInput label="שם פרטי" error={errors.firstName} required>
-                      <TechInput value={form.firstName} onChange={e => set("firstName", e.target.value)}
-                        placeholder="ישראל" className={errors.firstName ? "border-[#b91c1c]" : ""} />
-                    </GlassInput>
-                    <GlassInput label="שם משפחה" error={errors.lastName} required>
-                      <TechInput value={form.lastName} onChange={e => set("lastName", e.target.value)}
-                        placeholder="ישראלי" className={errors.lastName ? "border-[#b91c1c]" : ""} />
-                    </GlassInput>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <GlassInput label="מספר תעודת זהות" error={errors.idNumber} required>
-                      <TechInput value={form.idNumber}
-                        onChange={e => set("idNumber", e.target.value.replace(/\D/g, ""))}
-                        maxLength={9} inputMode="numeric" placeholder="000000000"
-                        className={cn("tracking-widest", errors.idNumber ? "border-[#b91c1c]" : "")}
-                        style={{ fontFamily: MONO }} />
-                    </GlassInput>
-                    <GlassInput label={'תאריך הנפקת ת"ז'} error={errors.idIssueDate} required>
-                      <DateMaskInput
-                        value={form.idIssueDate}
-                        onChange={v => set("idIssueDate", v)}
-                        error={!!errors.idIssueDate}
-                      />
-                    </GlassInput>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <GlassInput label="תאריך לידה" error={errors.birthDate} required>
-                      <DateMaskInput
-                        value={form.birthDate}
-                        onChange={v => set("birthDate", v)}
-                        error={!!errors.birthDate}
-                      />
-                    </GlassInput>
-                    <GlassInput label="ארץ לידה">
-                      <TechInput value={form.birthCountry}
-                        onChange={e => set("birthCountry", e.target.value)} placeholder="ישראל" />
-                    </GlassInput>
-                  </div>
-                </TechSection>
+                    {/* Address */}
+                    <TechSection title="כתובת מגורים" icon={<MapPin className="w-4 h-4" />}>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="sm:col-span-2">
+                          <GlassInput label="רחוב">
+                            <StreetInput
+                              value={form.street}
+                              onChange={v => set("street", v)}
+                              city={form.city}
+                            />
+                          </GlassInput>
+                        </div>
+                        <GlassInput label="מספר">
+                          <TechInput value={form.houseNumber} onChange={e => set("houseNumber", e.target.value)} placeholder="1" />
+                        </GlassInput>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <GlassInput label="עיר" error={errors.city} required>
+                          <CityInput
+                            value={form.city}
+                            onChange={v => { set("city", v); set("street", ""); }}
+                            onPostalChange={postal => set("postalCode", postal)}
+                            error={!!errors.city}
+                          />
+                        </GlassInput>
+                        <GlassInput label="מיקוד">
+                          <TechInput
+                            value={form.postalCode}
+                            onChange={e => set("postalCode", e.target.value)}
+                            placeholder="מתמלא אוטומטית"
+                            style={{ fontFamily: MONO }}
+                          />
+                        </GlassInput>
+                      </div>
+                    </TechSection>
 
-                {/* Contact */}
-                <TechSection title="פרטי קשר" icon={<Phone className="w-4 h-4" />}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <GlassInput label="טלפון נייד" error={errors.phone} required>
-                      <TechInput value={form.phone} onChange={e => set("phone", e.target.value)}
-                        inputMode="tel" placeholder="050-0000000"
-                        className={errors.phone ? "border-[#b91c1c]" : ""}
-                        style={{ fontFamily: MONO }} />
-                    </GlassInput>
-                    <GlassInput label={'דוא"ל'} error={errors.email} required>
-                      <TechInput type="email" value={form.email}
-                        onChange={e => set("email", e.target.value)}
-                        placeholder="email@example.com"
-                        className={errors.email ? "border-[#b91c1c]" : ""} />
-                    </GlassInput>
-                  </div>
-                </TechSection>
-
-                {/* Address */}
-                <TechSection title="כתובת מגורים" icon={<MapPin className="w-4 h-4" />}>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="sm:col-span-2">
-                      <GlassInput label="רחוב">
-                        <StreetInput
-                          value={form.street}
-                          onChange={v => set("street", v)}
-                          city={form.city}
-                        />
+                    {/* Profile Questions */}
+                    <TechSection title="פרופיל אישי" icon={<User className="w-4 h-4" />}>
+                      {/* Marital Status */}
+                      <GlassInput label="מצב משפחתי" error={errors.maritalStatus} required>
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          {["נשוי/אה", "רווק/ה", "אלמן/ה", "קטין/ה", "אחר"].map(opt => (
+                            <button
+                              key={opt}
+                              type="button"
+                              onClick={() => { set("maritalStatus", opt); setErrors(e => ({ ...e, maritalStatus: undefined })); }}
+                              className={cn(
+                                "px-4 py-2.5 min-h-[44px] rounded-md border text-sm font-medium transition-colors",
+                                FOCUS_RING,
+                                form.maritalStatus === opt
+                                  ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
+                                  : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 hover:text-[#1D2D3D]"
+                              )}
+                            >
+                              {opt}
+                            </button>
+                          ))}
+                        </div>
                       </GlassInput>
-                    </div>
-                    <GlassInput label="מספר">
-                      <TechInput value={form.houseNumber} onChange={e => set("houseNumber", e.target.value)} placeholder="1" />
-                    </GlassInput>
+
+                      {/* Health Fund */}
+                      <GlassInput label="קופת חולים">
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          {["כללית", "מכבי", "מאוחדת", "לאומית"].map(opt => (
+                            <button
+                              key={opt}
+                              type="button"
+                              onClick={() => set("healthFund", form.healthFund === opt ? "" : opt)}
+                              className={cn(
+                                "px-4 py-2.5 min-h-[44px] rounded-md border text-sm font-medium transition-colors",
+                                FOCUS_RING,
+                                form.healthFund === opt
+                                  ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
+                                  : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 hover:text-[#1D2D3D]"
+                              )}
+                            >
+                              {opt}
+                            </button>
+                          ))}
+                        </div>
+                      </GlassInput>
+
+                      {/* Children */}
+                      <GlassInput label="מספר ילדים">
+                        <div className="flex items-center gap-4 pt-1">
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => set("childrenCount", Math.max(0, form.childrenCount - 1))}
+                              className={cn("w-11 h-11 rounded-md border border-[#E7EDF1] bg-white text-[#1D2D3D] font-medium text-lg flex items-center justify-center hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 transition-colors", FOCUS_RING)}
+                            >−</button>
+                            <span className="w-12 text-center text-2xl tabular-nums" style={{ fontFamily: MONO, fontWeight: 600, color: NAVY }}>
+                              {form.childrenCount}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => set("childrenCount", Math.min(24, form.childrenCount + 1))}
+                              className={cn("w-11 h-11 rounded-md border border-[#E7EDF1] bg-white text-[#1D2D3D] font-medium text-lg flex items-center justify-center hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 transition-colors", FOCUS_RING)}
+                            >+</button>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {[0,1,2,3,4,5,6].map(n => (
+                              <button
+                                key={n}
+                                type="button"
+                                onClick={() => set("childrenCount", n)}
+                                className={cn(
+                                  "w-10 h-10 rounded-md border text-xs font-medium transition-colors tabular-nums",
+                                  FOCUS_RING,
+                                  form.childrenCount === n
+                                    ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
+                                    : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40"
+                                )}
+                              >{n}</button>
+                            ))}
+                            <button
+                              type="button"
+                              onClick={() => set("childrenCount", form.childrenCount > 6 ? form.childrenCount : 7)}
+                              className={cn(
+                                "px-2 h-10 rounded-md border text-xs font-medium transition-colors tabular-nums",
+                                FOCUS_RING,
+                                form.childrenCount > 6
+                                  ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
+                                  : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40"
+                              )}
+                            >7+</button>
+                          </div>
+                        </div>
+                      </GlassInput>
+
+                      {/* Employment Status - multi select */}
+                      <GlassInput label="מעמד תעסוקתי">
+                        <p className="text-[12.5px] mb-2" style={{ color: MUTED }}>ניתן לסמן יותר מאחד</p>
+                        <div className="flex flex-wrap gap-2">
+                          {["שכיר/ה", "עצמאי/ת", "שכיר/ה בעל/ת שליטה"].map(opt => {
+                            const selected = form.employmentStatus.includes(opt);
+                            return (
+                              <button
+                                key={opt}
+                                type="button"
+                                onClick={() => {
+                                  const cur = form.employmentStatus;
+                                  set("employmentStatus", selected ? cur.filter(x => x !== opt) : [...cur, opt]);
+                                }}
+                                className={cn(
+                                  "px-4 py-2.5 min-h-[44px] rounded-md border text-sm font-medium transition-colors",
+                                  FOCUS_RING,
+                                  selected
+                                    ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
+                                    : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 hover:text-[#1D2D3D]"
+                                )}
+                              >
+                                {selected && <Check className="w-3.5 h-3.5 inline ml-1" />}
+                                {opt}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </GlassInput>
+
+                      {/* Annual Income */}
+                      <GlassInput label="גובה הכנסות שנתי">
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          {[
+                            { label: "100–150 אלף ₪", value: "100-150" },
+                            { label: "150–250 אלף ₪", value: "150-250" },
+                            { label: "250–400 אלף ₪", value: "250-400" },
+                            { label: "מעל 400 אלף ₪", value: "400+" },
+                          ].map(opt => (
+                            <button
+                              key={opt.value}
+                              type="button"
+                              onClick={() => set("annualIncome", opt.value)}
+                              className={cn(
+                                "px-4 py-2.5 min-h-[44px] rounded-md border text-sm font-medium transition-colors",
+                                FOCUS_RING,
+                                form.annualIncome === opt.value
+                                  ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
+                                  : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 hover:text-[#1D2D3D]"
+                              )}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                      </GlassInput>
+                      {/* Smoker */}
+                      <GlassInput label="מעשן/ת?">
+                        <div className="flex gap-3 pt-1">
+                          {[{ label: "כן", value: true }, { label: "לא", value: false }].map(opt => (
+                            <button
+                              key={String(opt.value)}
+                              type="button"
+                              onClick={() => { set("smoker", opt.value); if (!opt.value) set("cigarettesPerDay", ""); }}
+                              className={cn(
+                                "px-6 py-2.5 min-h-[44px] rounded-md border text-sm font-medium transition-colors",
+                                FOCUS_RING,
+                                form.smoker === opt.value
+                                  ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
+                                  : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 hover:text-[#1D2D3D]"
+                              )}
+                            >{opt.label}</button>
+                          ))}
+                        </div>
+                        {form.smoker === true && (
+                          <div className="mt-3 animate-in slide-in-from-top-2 duration-200">
+                            <label className="text-[13px] font-medium block mb-1.5" style={{ color: MUTED }}>
+                              כמות סיגריות ביום
+                            </label>
+                            <TechInput
+                              type="number"
+                              min="1"
+                              max="100"
+                              value={form.cigarettesPerDay}
+                              onChange={e => set("cigarettesPerDay", e.target.value)}
+                              placeholder="לדוגמה: 10"
+                              className="w-32"
+                              style={{ fontFamily: MONO }}
+                            />
+                          </div>
+                        )}
+                      </GlassInput>
+                    </TechSection>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <GlassInput label="עיר" error={errors.city} required>
-                      <CityInput
-                        value={form.city}
-                        onChange={v => { set("city", v); set("street", ""); }}
-                        onPostalChange={postal => set("postalCode", postal)}
-                        error={!!errors.city}
-                      />
-                    </GlassInput>
-                    <GlassInput label="מיקוד">
-                      <TechInput
-                        value={form.postalCode}
-                        onChange={e => set("postalCode", e.target.value)}
-                        placeholder="מתמלא אוטומטית"
-                        style={{ fontFamily: MONO }}
-                      />
-                    </GlassInput>
-                  </div>
-                </TechSection>
-
-                {/* Profile Questions */}
-                <TechSection title="פרופיל אישי" icon={<User className="w-4 h-4" />}>
-                  {/* Marital Status */}
-                  <GlassInput label="מצב משפחתי" error={errors.maritalStatus} required>
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {["נשוי/אה", "רווק/ה", "אלמן/ה", "קטין/ה", "אחר"].map(opt => (
-                        <button
-                          key={opt}
-                          type="button"
-                          onClick={() => { set("maritalStatus", opt); setErrors(e => ({ ...e, maritalStatus: undefined })); }}
-                          className={cn(
-                            "px-4 py-2.5 min-h-[44px] rounded-[6px] border text-sm font-medium transition-colors",
-                            FOCUS_RING,
-                            form.maritalStatus === opt
-                              ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50 hover:text-[#171717]"
-                          )}
-                        >
-                          {opt}
-                        </button>
-                      ))}
-                    </div>
-                  </GlassInput>
-
-                  {/* Health Fund */}
-                  <GlassInput label="קופת חולים">
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {["כללית", "מכבי", "מאוחדת", "לאומית"].map(opt => (
-                        <button
-                          key={opt}
-                          type="button"
-                          onClick={() => set("healthFund", form.healthFund === opt ? "" : opt)}
-                          className={cn(
-                            "px-4 py-2.5 min-h-[44px] rounded-[6px] border text-sm font-medium transition-colors",
-                            FOCUS_RING,
-                            form.healthFund === opt
-                              ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50 hover:text-[#171717]"
-                          )}
-                        >
-                          {opt}
-                        </button>
-                      ))}
-                    </div>
-                  </GlassInput>
-
-                  {/* Children */}
-                  <GlassInput label="מספר ילדים">
-                    <div className="flex items-center gap-4 pt-1">
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => set("childrenCount", Math.max(0, form.childrenCount - 1))}
-                          className={cn("w-11 h-11 rounded-[6px] border border-[#171717]/20 bg-white text-[#171717] font-medium text-lg flex items-center justify-center hover:bg-[#171717]/5 hover:border-[#171717]/50 transition-colors", FOCUS_RING)}
-                        >−</button>
-                        <span className="w-12 text-center text-2xl text-[#171717] tabular-nums" style={{ fontFamily: MONO, fontWeight: 600 }}>
-                          {form.childrenCount}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => set("childrenCount", Math.min(24, form.childrenCount + 1))}
-                          className={cn("w-11 h-11 rounded-[6px] border border-[#171717]/20 bg-white text-[#171717] font-medium text-lg flex items-center justify-center hover:bg-[#171717]/5 hover:border-[#171717]/50 transition-colors", FOCUS_RING)}
-                        >+</button>
-                      </div>
-                      <div className="flex flex-wrap gap-1.5">
-                        {[0,1,2,3,4,5,6].map(n => (
-                          <button
-                            key={n}
-                            type="button"
-                            onClick={() => set("childrenCount", n)}
-                            className={cn(
-                              "w-10 h-10 rounded-[6px] border text-xs font-medium transition-colors tabular-nums",
-                              FOCUS_RING,
-                              form.childrenCount === n
-                                ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                                : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50"
-                            )}
-                          >{n}</button>
-                        ))}
-                        <button
-                          type="button"
-                          onClick={() => set("childrenCount", form.childrenCount > 6 ? form.childrenCount : 7)}
-                          className={cn(
-                            "px-2 h-10 rounded-[6px] border text-xs font-medium transition-colors tabular-nums",
-                            FOCUS_RING,
-                            form.childrenCount > 6
-                              ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50"
-                          )}
-                        >7+</button>
-                      </div>
-                    </div>
-                  </GlassInput>
-
-                  {/* Employment Status - multi select */}
-                  <GlassInput label="מעמד תעסוקתי">
-                    <p className="text-[12px] text-[#5c5c5c] mb-2">ניתן לסמן יותר מאחד</p>
-                    <div className="flex flex-wrap gap-2">
-                      {["שכיר/ה", "עצמאי/ת", "שכיר/ה בעל/ת שליטה"].map(opt => {
-                        const selected = form.employmentStatus.includes(opt);
-                        return (
-                          <button
-                            key={opt}
-                            type="button"
-                            onClick={() => {
-                              const cur = form.employmentStatus;
-                              set("employmentStatus", selected ? cur.filter(x => x !== opt) : [...cur, opt]);
-                            }}
-                            className={cn(
-                              "px-4 py-2.5 min-h-[44px] rounded-[6px] border text-sm font-medium transition-colors",
-                              FOCUS_RING,
-                              selected
-                                ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                                : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50 hover:text-[#171717]"
-                            )}
-                          >
-                            {selected && <Check className="w-3.5 h-3.5 inline ml-1" />}
-                            {opt}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </GlassInput>
-
-                  {/* Annual Income */}
-                  <GlassInput label="גובה הכנסות שנתי">
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {[
-                        { label: "100–150 אלף ₪", value: "100-150" },
-                        { label: "150–250 אלף ₪", value: "150-250" },
-                        { label: "250–400 אלף ₪", value: "250-400" },
-                        { label: "מעל 400 אלף ₪", value: "400+" },
-                      ].map(opt => (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          onClick={() => set("annualIncome", opt.value)}
-                          className={cn(
-                            "px-4 py-2.5 min-h-[44px] rounded-[6px] border text-sm font-medium transition-colors",
-                            FOCUS_RING,
-                            form.annualIncome === opt.value
-                              ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50 hover:text-[#171717]"
-                          )}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
-                  </GlassInput>
-                  {/* Smoker */}
-                  <GlassInput label="מעשן/ת?">
-                    <div className="flex gap-3 pt-1">
-                      {[{ label: "כן", value: true }, { label: "לא", value: false }].map(opt => (
-                        <button
-                          key={String(opt.value)}
-                          type="button"
-                          onClick={() => { set("smoker", opt.value); if (!opt.value) set("cigarettesPerDay", ""); }}
-                          className={cn(
-                            "px-6 py-2.5 min-h-[44px] rounded-[6px] border text-sm font-medium transition-colors",
-                            FOCUS_RING,
-                            form.smoker === opt.value
-                              ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50 hover:text-[#171717]"
-                          )}
-                        >{opt.label}</button>
-                      ))}
-                    </div>
-                    {form.smoker === true && (
-                      <div className="mt-3 animate-in slide-in-from-top-2 duration-200">
-                        <label className="text-[13px] font-medium text-[#5c5c5c] block mb-1.5">
-                          כמות סיגריות ביום
-                        </label>
-                        <TechInput
-                          type="number"
-                          min="1"
-                          max="100"
-                          value={form.cigarettesPerDay}
-                          onChange={e => set("cigarettesPerDay", e.target.value)}
-                          placeholder="לדוגמה: 10"
-                          className="w-32"
-                          style={{ fontFamily: MONO }}
-                        />
-                      </div>
-                    )}
-                  </GlassInput>
-                </TechSection>
-              </div>
-            )}
-            {step === 1 && (
-              <div className="space-y-4">
-                <div className="border-t border-[#171717]/15 pt-4 mb-4">
-                  <p className="text-sm text-[#5c5c5c] leading-[1.8]">
-                    <Lock className="w-3.5 h-3.5 inline ml-1.5 text-[#5c5c5c]" />
-                    לחץ על כל כרטיסייה לאישור ההרשאה. ניתן לצפות בנספח המלא לפני האישור.
-                  </p>
-                </div>
-
-                {[
-                  {
-                    key: "consentPensionClearinghouse" as const,
-                    title: "נספח א׳ – סליקה פנסיונית",
-                    description: "הרשאה חד-פעמית לסוכן הפנסיוני לפנות בשמך לגופים מוסדיים לקבלת מידע על מוצרים פנסיוניים. בתוקף 3 חודשים.",
-                    pdf: "/docs/נספח_א.pdf",
-                    label: "פתח נספח א׳",
-                  },
-                  {
-                    key: "consentInsuranceMountain" as const,
-                    title: "נספח ה׳ – הר הביטוח",
-                    description: "הרשאה לסוכן לחפש בשמך ובשם ילדיך הקטינים במאגר הר הביטוח של המפקח על הביטוח. בתוקף 5 ימי עבודה.",
-                    pdf: "/docs/נספח_ה.pdf",
-                    label: "פתח נספח ה׳",
-                  },
-                  {
-                    key: "consentPolicies" as const,
-                    title: "נספח ב׳ – פוליסות ביטוח",
-                    description: "ייפוי כוח לקבלת מידע מחברות הביטוח על פוליסות הביטוח שלך ושל בני משפחתך. בתוקף 30 ימי עבודה.",
-                    pdf: "/docs/נספח_ב.pdf",
-                    label: "פתח נספח ב׳",
-                  },
-                ].map((item, i) => (
-                  <div key={item.key}>
-                    <ConsentCard
-                      index={i}
-                      checked={form[item.key]}
-                      onChange={v => { set(item.key, v); setErrors(e => ({ ...e, [item.key]: undefined })); }}
-                      title={item.title}
-                      description={item.description}
-                      pdfPath={item.pdf}
-                      pdfLabel={item.label}
-                    />
-                    {errors[item.key] && (
-                      <p className="text-[#b91c1c] text-[12px] font-medium flex items-center gap-1 mt-1.5 mr-2">
-                        <AlertCircle className="w-3 h-3" />{errors[item.key]}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* ═══════ STEP 2: Signature ═══════ */}
-            {step === 2 && (
-              <div className="space-y-4">
-                <TechSection title="חתימה דיגיטלית" icon={<Pen className="w-4 h-4" />}>
-                  <p className="text-sm text-[#5c5c5c] leading-[1.8] mb-4">
-                    החתימה תחול על שלושת ההרשאות שאישרת (נספח א׳, ב׳ ו-ה׳).
-                  </p>
-                  <SignatureCanvas
-                    value={form.signature}
-                    onChange={v => { set("signature", v); setErrors(e => ({ ...e, signature: undefined })); }}
-                  />
-                  {errors.signature && (
-                    <p className="text-[#b91c1c] text-[12px] font-medium flex items-center gap-1 mt-2">
-                      <AlertCircle className="w-3 h-3" />{errors.signature}
-                    </p>
-                  )}
-                </TechSection>
-
-                {/* Confirmation box */}
-                <div className="border-t border-[#171717]/15 pt-5">
-                  <p className="text-[13px] text-[#5c5c5c] leading-[1.8]">
-                    בלחיצה על ״שלח ואשר״ אני מאשר/ת שקראתי את תוכן ההרשאות ומסכים/ה לתנאים.<br />
-                    <span className="font-medium text-[#171717] mt-1 block tabular-nums" style={{ fontFamily: MONO }}>
-                      {form.firstName} {form.lastName} · {form.idNumber}
-                    </span>
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* ═══════ STEP 3: Summary ═══════ */}
-            {step === 3 && (
-              <div className="space-y-5">
-                {/* Success banner */}
-                <div className="border-t border-[#171717]/20 pt-6">
-                  <div className="flex items-center gap-2.5 mb-3">
-                    <LiveDot size={7} />
-                    <span className="text-[12px] tracking-[0.14em] font-medium text-[#5c5c5c]" style={{ fontFamily: MONO }} dir="ltr">
-                      SENT
-                    </span>
-                  </div>
-                  <h2 className="text-xl text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
-                    התיק נשלח בהצלחה
-                  </h2>
-                  <p className="text-sm text-[#5c5c5c] mt-1.5">
-                    סיכום נשלח למייל שלך ולשמוליק. הוא יצור קשר בהקדם.
-                  </p>
-                </div>
-
-                {/* Data summary */}
-                <TechSection title="פרטי הלקוח" icon={<FileText className="w-4 h-4" />}>
-                  <SummaryRow label="שם מלא" value={`${form.firstName} ${form.lastName}`} />
-                  <SummaryRow label="מספר זהות" value={form.idNumber} />
-                  <SummaryRow label="תאריך לידה" value={form.birthDate} />
-                  <SummaryRow label={'הנפקת ת"ז'} value={form.idIssueDate} />
-                  <SummaryRow label="ארץ לידה" value={form.birthCountry} />
-                  <SummaryRow label="טלפון" value={form.phone} />
-                  <SummaryRow label={'דוא"ל'} value={form.email} />
-                  <SummaryRow label="כתובת" value={[form.street, form.houseNumber, form.city].filter(Boolean).join(" ")} />
-                </TechSection>
-
-                {/* Authorizations */}
-                <TechSection title="הרשאות שאושרו" icon={<Shield className="w-4 h-4" />}>
-                  {[
-                    { label: "נספח א׳ – סליקה פנסיונית", pdf: "/docs/נספח_א.pdf" },
-                    { label: "נספח ה׳ – הר הביטוח", pdf: "/docs/נספח_ה.pdf" },
-                    { label: "נספח ב׳ – פוליסות ביטוח", pdf: "/docs/נספח_ב.pdf" },
-                  ].map(item => (
-                    <div key={item.label} className="flex items-center justify-between py-2.5 border-b border-[#171717]/10 last:border-0">
-                      <div className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#15803d" }} />
-                        <span className="text-sm font-medium text-[#171717]">{item.label}</span>
-                      </div>
-                      <a
-                        href={item.pdf}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[12px] text-[#5c5c5c] hover:text-[#171717] transition-colors"
-                      >
-                        <Download className="w-3.5 h-3.5" />
-                        הורד
-                      </a>
-                    </div>
-                  ))}
-                </TechSection>
-
-                {/* Signature */}
-                {form.signature && (
-                  <TechSection title="חתימה" icon={<Pen className="w-4 h-4" />}>
-                    <img src={form.signature} alt="חתימה"
-                      className="max-h-20 rounded-[6px] bg-white"
-                      style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }} />
-                    <p className="text-[12px] text-[#5c5c5c] mt-2 tabular-nums" style={{ fontFamily: MONO }}>
-                      {new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" })}
-                    </p>
-                  </TechSection>
                 )}
-               </div>
-            )}
-          </div>}
+                {step === 1 && (
+                  <div className="space-y-4">
+                    <div className="mb-4">
+                      <p className="text-sm leading-[1.8]" style={{ color: BODY }}>
+                        <Lock className="w-3.5 h-3.5 inline ml-1.5 text-[#5a6a78]" />
+                        לחץ על כל כרטיסייה לאישור ההרשאה. ניתן לצפות בנספח המלא לפני האישור.
+                      </p>
+                    </div>
 
-          {/* ── Navigation ── */}
-          {!submitted && step < 3 && (
-            <div className="flex items-center justify-between mt-8 gap-4">
-              {step > 0 ? (
-                <button
-                  onClick={goPrev}
-                  className={cn("text-sm text-[#5c5c5c] hover:text-[#171717] transition-colors font-medium flex items-center gap-1.5 min-h-[44px]", FOCUS_RING)}
-                >
-                  <ChevronLeft className="w-4 h-4 rotate-180" />
-                  חזרה
-                </button>
-              ) : <div />}
+                    {[
+                      {
+                        key: "consentPensionClearinghouse" as const,
+                        title: "נספח א׳ – סליקה פנסיונית",
+                        description: "הרשאה חד-פעמית לסוכן הפנסיוני לפנות בשמך לגופים מוסדיים לקבלת מידע על מוצרים פנסיוניים. בתוקף 3 חודשים.",
+                        pdf: "/docs/נספח_א.pdf",
+                        label: "פתח נספח א׳",
+                      },
+                      {
+                        key: "consentInsuranceMountain" as const,
+                        title: "נספח ה׳ – הר הביטוח",
+                        description: "הרשאה לסוכן לחפש בשמך ובשם ילדיך הקטינים במאגר הר הביטוח של המפקח על הביטוח. בתוקף 5 ימי עבודה.",
+                        pdf: "/docs/נספח_ה.pdf",
+                        label: "פתח נספח ה׳",
+                      },
+                      {
+                        key: "consentPolicies" as const,
+                        title: "נספח ב׳ – פוליסות ביטוח",
+                        description: "ייפוי כוח לקבלת מידע מחברות הביטוח על פוליסות הביטוח שלך ושל בני משפחתך. בתוקף 30 ימי עבודה.",
+                        pdf: "/docs/נספח_ב.pdf",
+                        label: "פתח נספח ב׳",
+                      },
+                    ].map((item) => (
+                      <div key={item.key}>
+                        <ConsentCard
+                          checked={form[item.key]}
+                          onChange={v => { set(item.key, v); setErrors(e => ({ ...e, [item.key]: undefined })); }}
+                          title={item.title}
+                          description={item.description}
+                          pdfPath={item.pdf}
+                          pdfLabel={item.label}
+                        />
+                        {errors[item.key] && (
+                          <p className="text-[12px] font-medium flex items-center gap-1 mt-1.5 mr-2" style={{ color: "#a04a5c" }}>
+                            <AlertCircle className="w-3 h-3" />{errors[item.key]}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
 
-              <button
-                onClick={step === 2 ? handleSubmit : goNext}
-                disabled={submitting}
-                className={cn("inline-flex items-center justify-center gap-2 px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]", FOCUS_RING)}
-              >
-                {submitting
-                  ? <><Loader2 className="w-4 h-4 animate-spin" />שולח...</>
-                  : step === 2
-                    ? "שלח ואשר"
-                    : <>המשך<ChevronLeft className="w-4 h-4" /></>
-                }
-              </button>
+                {/* ═══════ STEP 2: Signature ═══════ */}
+                {step === 2 && (
+                  <div className="space-y-4">
+                    <TechSection title="חתימה דיגיטלית" icon={<Pen className="w-4 h-4" />}>
+                      <p className="text-sm leading-[1.8] mb-4" style={{ color: BODY }}>
+                        החתימה תחול על שלושת ההרשאות שאישרת (נספח א׳, ב׳ ו-ה׳).
+                      </p>
+                      <SignatureCanvas
+                        value={form.signature}
+                        onChange={v => { set("signature", v); setErrors(e => ({ ...e, signature: undefined })); }}
+                      />
+                      {errors.signature && (
+                        <p className="text-[12px] font-medium flex items-center gap-1 mt-2" style={{ color: "#a04a5c" }}>
+                          <AlertCircle className="w-3 h-3" />{errors.signature}
+                        </p>
+                      )}
+                    </TechSection>
+
+                    {/* Confirmation box */}
+                    <div className="border-t pt-5" style={{ borderColor: LINE }}>
+                      <p className="text-[13px] leading-[1.8]" style={{ color: BODY }}>
+                        בלחיצה על ״שלח ואשר״ אני מאשר/ת שקראתי את תוכן ההרשאות ומסכים/ה לתנאים.<br />
+                        <span className="font-medium mt-1 block tabular-nums" style={{ fontFamily: MONO, color: NAVY }}>
+                          {form.firstName} {form.lastName} · {form.idNumber}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* ═══════ STEP 3: Summary ═══════ */}
+                {step === 3 && (
+                  <div className="space-y-5">
+                    {/* Success banner */}
+                    <div>
+                      <div className="flex items-center gap-2.5 mb-3">
+                        <LiveDot size={7} />
+                        <span className="text-[12px] tracking-[0.14em] font-medium" style={{ fontFamily: MONO, color: MUTED }} dir="ltr">
+                          SENT
+                        </span>
+                      </div>
+                      <h2 className="text-xl" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
+                        התיק נשלח בהצלחה
+                      </h2>
+                      <p className="text-sm mt-1.5" style={{ color: BODY }}>
+                        סיכום נשלח למייל שלך ולשמוליק. הוא יצור קשר בהקדם.
+                      </p>
+                    </div>
+
+                    {/* Data summary */}
+                    <TechSection title="פרטי הלקוח" icon={<FileText className="w-4 h-4" />}>
+                      <SummaryRow label="שם מלא" value={`${form.firstName} ${form.lastName}`} />
+                      <SummaryRow label="מספר זהות" value={form.idNumber} />
+                      <SummaryRow label="תאריך לידה" value={form.birthDate} />
+                      <SummaryRow label={'הנפקת ת"ז'} value={form.idIssueDate} />
+                      <SummaryRow label="ארץ לידה" value={form.birthCountry} />
+                      <SummaryRow label="טלפון" value={form.phone} />
+                      <SummaryRow label={'דוא"ל'} value={form.email} />
+                      <SummaryRow label="כתובת" value={[form.street, form.houseNumber, form.city].filter(Boolean).join(" ")} />
+                    </TechSection>
+
+                    {/* Authorizations */}
+                    <TechSection title="הרשאות שאושרו" icon={<Shield className="w-4 h-4" />}>
+                      {[
+                        { label: "נספח א׳ – סליקה פנסיונית", pdf: "/docs/נספח_א.pdf" },
+                        { label: "נספח ה׳ – הר הביטוח", pdf: "/docs/נספח_ה.pdf" },
+                        { label: "נספח ב׳ – פוליסות ביטוח", pdf: "/docs/נספח_ב.pdf" },
+                      ].map(item => (
+                        <div key={item.label} className="flex items-center justify-between py-2.5 border-b last:border-0" style={{ borderColor: LINE }}>
+                          <div className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: TURQ }} />
+                            <span className="text-sm font-medium" style={{ color: NAVY }}>{item.label}</span>
+                          </div>
+                          <a
+                            href={item.pdf}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-[12.5px] text-[#5a6a78] hover:text-[#1D2D3D] transition-colors"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                            הורד
+                          </a>
+                        </div>
+                      ))}
+                    </TechSection>
+
+                    {/* Signature */}
+                    {form.signature && (
+                      <TechSection title="חתימה" icon={<Pen className="w-4 h-4" />}>
+                        <img src={form.signature} alt="חתימה"
+                          className="max-h-20 rounded-md bg-white border border-[#E7EDF1]" />
+                        <p className="text-[12px] mt-2 tabular-nums" style={{ fontFamily: MONO, color: MUTED }}>
+                          {new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" })}
+                        </p>
+                      </TechSection>
+                    )}
+                  </div>
+                )}
+              </div>}
+
+              {/* ── Navigation ── */}
+              {!submitted && step < 3 && (
+                <div className="flex items-center justify-between mt-8 gap-4">
+                  {step > 0 ? (
+                    <button
+                      onClick={goPrev}
+                      className={cn("text-sm text-[#5a6a78] hover:text-[#1D2D3D] transition-colors font-medium flex items-center gap-1.5 min-h-[44px]", FOCUS_RING)}
+                    >
+                      <ChevronLeft className="w-4 h-4 rotate-180" />
+                      חזרה
+                    </button>
+                  ) : <div />}
+
+                  <button
+                    onClick={step === 2 ? handleSubmit : goNext}
+                    disabled={submitting}
+                    className={cn("inline-flex items-center justify-center gap-2 px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]", FOCUS_RING)}
+                  >
+                    {submitting
+                      ? <><Loader2 className="w-4 h-4 animate-spin" />שולח...</>
+                      : step === 2
+                        ? "שלח ואשר"
+                        : <>המשך<ChevronLeft className="w-4 h-4" /></>
+                    }
+                  </button>
+                </div>
+              )}
             </div>
-          )}
-          </div></div>
+          </div>
+        </section>
+      </main>
 
-        </main>
-      </div>
-    </>
+      <Footer />
+    </div>
   );
 }
 
@@ -1368,10 +1353,10 @@ function TechSection({
   title, icon, children
 }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="border-t border-[#171717]/15 pt-5 space-y-5">
+    <div className="border-t pt-5 space-y-5" style={{ borderColor: "#E7EDF1" }}>
       <div className="flex items-center gap-2.5 mb-1">
-        <span className="text-[#5c5c5c]">{icon}</span>
-        <h2 className="text-[15px] text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>{title}</h2>
+        <span className="text-[#5a6a78]">{icon}</span>
+        <h2 className="text-[16px]" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>{title}</h2>
       </div>
       {children}
     </div>

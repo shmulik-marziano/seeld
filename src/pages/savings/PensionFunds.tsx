@@ -10,18 +10,15 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
-import { SERIF, MONO, CHIP_GREEN } from "@/lib/brand";
+import { DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, TURQ } from "@/lib/brand";
 import { StatusPill } from "@/components/brand/Live";
 import { DrawSpark } from "@/components/brand/Strokes";
 
 const tabTriggerClass =
-  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#5c5c5c] hover:text-[#171717] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
+  "rounded-none bg-transparent px-2.5 -mx-2.5 pb-4 text-base font-medium text-[#5a6a78] hover:bg-[#E1EAF1]/35 hover:text-[#1D2D3D] border-b-2 border-transparent data-[state=active]:border-[#4E9D8F] data-[state=active]:text-[#1D2D3D] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h2
-    className="text-[#171717] leading-tight"
-    style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}
-  >
+  <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.7rem, 3vw, 2.2rem)" }}>
     {children}
   </h2>
 );
@@ -64,10 +61,12 @@ const PensionFunds = () => {
       title: "מה חשוב לדעת?",
       paragraphs: [
         "דמי ניהול הם הגורם המשמעותי ביותר להפרש בחיסכון הפנסיוני לאורך זמן. הפרש של 0.5% בדמי ניהול יכול להסתכם במאות אלפי שקלים לאורך עשרות שנות חיסכון. בנוסף, חשוב לוודא שהכיסויים הביטוחיים (נכות ושאירים) מותאמים לצרכים שלכם ואינם מיותרים.",
-        "ב-SEELD אנו מבצעים ניתוח פנסיוני מקיף וחינמי, בודקים את דמי הניהול, מסלולי ההשקעה והכיסויים הביטוחיים, ומוודאים שכל שקל עובד בשבילכם.",
       ],
     },
   ];
+
+  const bottomLine =
+    "ב-SEELD אנו מבצעים ניתוח פנסיוני מקיף וחינמי, בודקים את דמי הניהול, מסלולי ההשקעה והכיסויים הביטוחיים, ומוודאים שכל שקל עובד בשבילכם.";
 
   const faqItems = [
     {
@@ -85,58 +84,55 @@ const PensionFunds = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* ══════ HERO ══════ */}
-      <section className="px-2 pt-2">
-        <div className="bento-panel">
+      {/* HERO — white DNA canvas, the page's single pastel-circle backdrop */}
+      <section className="dna-page">
+        <div className="dna-circles" aria-hidden="true">
+          <div
+            className="dna-circ hidden md:block"
+            style={{ width: 280, height: 280, top: -120, left: -100, backgroundColor: PASTEL_BLUE, opacity: 0.5 }}
+          />
+          <div
+            className="dna-circ hidden md:block"
+            style={{ width: 220, height: 220, bottom: -120, left: "30%", backgroundColor: PASTEL_MINT, opacity: 0.45 }}
+          />
+        </div>
         <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10">
-          {/* Rule + breadcrumb */}
-          <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
-              <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-              <span>←</span>
-              <Link to="/savings" className="hover:text-[#171717] transition-colors">חיסכון ופנסיה</Link>
-              <span>←</span>
-              <span className="text-[#171717]/70 font-medium">קרנות פנסיה</span>
+          {/* Breadcrumb */}
+          <div className="mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
+            <nav className="flex items-center gap-2 text-[13px] text-[#5a6a78]">
+              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <span aria-hidden="true">←</span>
+              <Link to="/savings" className="hover:text-[#1D2D3D] transition-colors">חיסכון ופנסיה</Link>
+              <span aria-hidden="true">←</span>
+              <span className="font-medium text-[#1D2D3D]">קרנות פנסיה</span>
             </nav>
-            <div className="hidden sm:flex items-center gap-4">
-              <DrawSpark color={CHIP_GREEN} className="w-40" height={28} />
-              <span className="text-[11px] tracking-[0.22em] font-medium whitespace-nowrap" style={{ color: "#5c5c5c" }}>
-                חיסכון ופנסיה
-              </span>
-            </div>
+            <span
+              className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium whitespace-nowrap text-[#5a6a78]"
+              style={{ fontFamily: MONO }}
+            >
+              חיסכון ופנסיה
+            </span>
           </div>
 
-          {/* Market-mono eyebrow — the one shared gesture across all savings pages */}
-          <div
-            className="mb-5 flex items-center gap-2.5 text-[11px] sm:text-[12px] font-semibold tracking-[0.18em] text-[#171717] tabular-nums"
-            style={{ fontFamily: MONO }}
-          >
-            <span>פנסיה מקיפה</span>
-            <span className="text-[#171717]/35 select-none" aria-hidden="true">·</span>
-            <span style={{ color: "#5c5c5c" }}>הכנסה חודשית קבועה</span>
-          </div>
-          <h1
-            className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
-            style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(2rem, 5vw, 3.4rem)' }}
-          >
-            קרנות <span style={{ color: "#5c5c5c" }}>פנסיה</span>
+          <h1 className="dna-display leading-[1.12] mb-6 max-w-3xl" style={{ fontSize: "clamp(34px, 5vw, 50px)" }}>
+            קרנות פנסיה
           </h1>
-          <p className="text-base sm:text-[17px] text-[#5c5c5c] max-w-2xl leading-[1.9] mb-9">
+          <p className="text-base sm:text-[17px] text-[#5a6a78] max-w-2xl leading-[1.9] mb-9">
             קרן פנסיה היא מכשיר חיסכון ארוך טווח שמבטיח לכם הכנסה חודשית קבועה לאחר הפרישה. עם הייעוץ שלנו, תבחרו את הקרן שמתאימה בדיוק לכם.
           </p>
           <div className="flex flex-wrap items-center gap-6">
             <a
               href="#analysis-form"
-              className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] bento-hover min-h-[52px]"
+              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[52px]"
             >
               ניתוח תיק פנסיוני חינם
             </a>
             <a
               href="#pension-types"
-              className="group inline-flex items-center gap-2 text-base font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+              className="group inline-flex items-center gap-2 text-base font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
             >
               סוגי פנסיה
               <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -145,32 +141,34 @@ const PensionFunds = () => {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event('seeld:open-chat'))}
-            className="mt-7 inline-flex rounded-full bento-hover"
+            className="mt-7 inline-flex rounded-full dna-hover"
             aria-label="פתיחת שיחה עם יועץ SEELD AI"
           >
             <StatusPill>יש שאלה על קרן פנסיה? היועץ מחובר</StatusPill>
           </button>
-        </div>
-        {/* Bento play: the page's key number on a small orange tile */}
-        <div
-          className="bento-panel-orange absolute top-28 left-8 hidden lg:flex flex-col items-center justify-center px-6 py-4 -rotate-2 pointer-events-none"
-          aria-hidden="true"
-        >
-          <span className="text-[24px] font-bold text-[#171717] tabular-nums leading-none" style={{ fontFamily: MONO }} dir="ltr">
-            0.5%
-          </span>
-          <span className="mt-1.5 text-[11px] font-semibold text-[#171717]/80 whitespace-nowrap">
-            הפרש דמי ניהול
-          </span>
-        </div>
+
+          {/* Turquoise stat + growth curve — the savings-page craft gesture */}
+          <div className="mt-12 border-t pt-6 flex flex-wrap items-end justify-between gap-6" style={{ borderColor: LINE }}>
+            <div>
+              <div
+                className="tabular-nums whitespace-nowrap"
+                dir="ltr"
+                style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ, fontSize: "clamp(2.4rem, 4vw, 3.1rem)", lineHeight: 1.05, letterSpacing: "-0.02em" }}
+              >
+                0.5%
+              </div>
+              <div className="mt-1.5 text-[13px]" style={{ color: MUTED }}>הפרש דמי ניהול</div>
+            </div>
+            <DrawSpark color={TURQ} className="hidden sm:block w-44 md:w-60" height={40} />
+          </div>
         </div>
       </section>
 
       <main>
         {/* ══════ BENEFITS ══════ */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
-            <div className="border-t border-[#171717]/20 pt-5 mb-10">
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+            <div className="mb-10">
               <SectionTitle>יתרונות קרן הפנסיה</SectionTitle>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
@@ -180,29 +178,23 @@ const PensionFunds = () => {
                 { title: "הטבות מס", desc: "זיכוי מס והפחתת הכנסה חייבת במס" },
                 { title: "ליווי מקצועי", desc: "צוות יועצים מנוסה לבחירת המסלול המתאים" },
               ].map((item, idx) => (
-                <div key={idx} className="border-t border-[#171717]/10 pt-4">
-                  <span
-                    className="text-[11px] tabular-nums tracking-[0.2em] block mb-4"
-                    dir="ltr"
-                    style={{ color: "#5c5c5c", fontFamily: MONO }}
-                  >
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
-                  <h3 className="text-lg text-[#171717] mb-2.5" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                <div key={idx}>
+                  <div className="h-[3px] w-9 rounded-full mb-5" style={{ backgroundColor: TURQ }} aria-hidden="true" />
+                  <h3 className="text-[19px] mb-2.5" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                     {item.title}
                   </h3>
-                  <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{item.desc}</p>
+                  <p className="text-[14.5px] text-[#3a4c5a] leading-[1.8]">{item.desc}</p>
                 </div>
               ))}
             </div>
-          </div></div>
+          </div>
         </section>
 
         {/* ══════ THE KNOWLEDGE — one tabbed section ══════ */}
-        <section id="pension-types" className="px-2 pt-2 scroll-mt-24">
-          <div className="bento-panel"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
+        <section id="pension-types" className="border-t scroll-mt-24" style={{ borderColor: LINE }}>
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
             <Tabs defaultValue="guide" dir="rtl">
-              <TabsList className="flex w-full justify-start gap-8 sm:gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none overflow-x-auto scrollbar-hide">
+              <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#E7EDF1] rounded-none overflow-x-auto scrollbar-hide">
                 <TabsTrigger value="guide" className={tabTriggerClass}>
                   המדריך
                 </TabsTrigger>
@@ -219,16 +211,20 @@ const PensionFunds = () => {
                 <div className="max-w-3xl">
                   {articles.map((article, idx) => (
                     <div key={idx} className={idx > 0 ? 'mt-14' : ''}>
-                      <div className="border-t border-[#171717]/15 pt-5 mb-6">
+                      <div className="mb-6">
                         <SectionTitle>{article.title}</SectionTitle>
                       </div>
-                      <div className="space-y-4 text-[#4d4d4d] leading-[1.9] text-base">
+                      <div className="space-y-4 text-[#3a4c5a] leading-[1.9] text-base">
                         {article.paragraphs.map((p, pIdx) => (
                           <p key={pIdx}>{p}</p>
                         ))}
                       </div>
                     </div>
                   ))}
+                  <div className="dna-quote mt-12">
+                    <div className="dna-ql">בשורה התחתונה</div>
+                    <div className="dna-qt">{bottomLine}</div>
+                  </div>
                 </div>
               </TabsContent>
 
@@ -236,27 +232,48 @@ const PensionFunds = () => {
               <TabsContent value="types" className="mt-0">
                 <div className="mb-10">
                   <SectionTitle>סוגי קרנות פנסיה</SectionTitle>
-                  <p className="text-[#5c5c5c] mt-2 text-base leading-relaxed max-w-xl">
+                  <p className="text-[#5a6a78] mt-2 text-base leading-relaxed max-w-xl">
                     הכירו את האפשרויות השונות ובחרו את המסלול המתאים לכם
                   </p>
                 </div>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
                   {pensionTypes.map((type, idx) => (
-                    <div key={idx} className="border-t border-[#171717]/10 pt-4">
-                      <h3 className="text-base text-[#171717] mb-2" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                    <div key={idx} className="dna-concept">
+                      <h3 className="text-[17px] mb-2" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                         {type.title}
                       </h3>
-                      <p className="text-[#5c5c5c] text-[14px] leading-[1.8] mb-4">{type.description}</p>
+                      <p className="text-[#3a4c5a] text-[14px] leading-[1.8] mb-4">{type.description}</p>
                       <ul className="space-y-2">
                         {type.features.map((feature, fIdx) => (
-                          <li key={fIdx} className="text-[#5c5c5c] text-[14px] leading-relaxed flex gap-2.5">
-                            <span style={{ color: "#5c5c5c" }}>—</span>
+                          <li key={fIdx} className="dna-pill-item !py-1.5 text-[14px]">
                             {feature}
                           </li>
                         ))}
                       </ul>
                     </div>
                   ))}
+                </div>
+
+                {/* Average management fees — from the FAQ's own figures */}
+                <div className="mt-10 max-w-md overflow-x-auto">
+                  <table className="dna-data">
+                    <thead>
+                      <tr>
+                        <th>רכיב</th>
+                        <th>דמי ניהול ממוצעים</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>מהצבירה</td>
+                        <td className="num">0.2%–0.5%</td>
+                      </tr>
+                      <tr>
+                        <td>מההפקדה</td>
+                        <td className="num">1.5%–4%</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </TabsContent>
 
@@ -268,12 +285,12 @@ const PensionFunds = () => {
                       <AccordionItem
                         key={idx}
                         value={`faq-${idx}`}
-                        className="border-b border-[#171717]/10 rounded-none px-0"
+                        className="border-b border-[#E7EDF1] rounded-none px-0"
                       >
-                        <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5 px-3 -mx-3 rounded-md hover:bg-[#171717]/5 transition-colors duration-150">
+                        <AccordionTrigger className="text-start text-base font-medium text-[#1D2D3D] hover:no-underline py-5 px-3 -mx-3 rounded-md hover:bg-[#E1EAF1]/35 transition-colors duration-150">
                           {item.q}
                         </AccordionTrigger>
-                        <AccordionContent className="text-[#5c5c5c] leading-[1.85] pb-6 text-[14px]">
+                        <AccordionContent className="text-[#3a4c5a] leading-[1.85] pb-6 text-[14px]">
                           {item.a}
                         </AccordionContent>
                       </AccordionItem>
@@ -282,27 +299,25 @@ const PensionFunds = () => {
                 </div>
               </TabsContent>
             </Tabs>
-          </div></div>
-        </section>
-
-        {/* ══════ COMPANIES — own tile ══════ */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel">
-            <CompanyLogos variant="grid" />
           </div>
         </section>
 
-        {/* ══════ ANALYSIS FORM — ink tile ══════ */}
-        <section id="analysis-form" className="px-2 pt-2 scroll-mt-24">
-          <div className="bento-panel-ink"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
-            <div className="border-t border-white/20 pt-5 mb-10 text-center sm:text-right">
+        {/* ══════ COMPANIES ══════ */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <CompanyLogos variant="grid" />
+        </section>
+
+        {/* ══════ ANALYSIS FORM — navy band ══════ */}
+        <section id="analysis-form" className="scroll-mt-24" style={{ backgroundColor: NAVY }}>
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <div className="mb-10 text-center sm:text-right">
               <h2
-                className="text-[#fafafa] leading-tight mb-3"
-                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(1.6rem, 3vw, 2.3rem)' }}
+                className="text-white leading-tight mb-3"
+                style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: 'clamp(1.7rem, 3vw, 2.3rem)', letterSpacing: '-0.5px' }}
               >
                 רוצים ניתוח פנסיוני חינמי?
               </h2>
-              <p className="text-[#fafafa]/45 text-base leading-relaxed max-w-xl">
+              <p className="text-base leading-relaxed max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
                 הזינו את הפרטים ויועץ מוסמך יחזור אליכם עם המלצות מותאמות
               </p>
             </div>
@@ -313,7 +328,7 @@ const PensionFunds = () => {
                 description="הזינו את הפרטים ויועץ מוסמך יחזור אליכם עם המלצות מותאמות"
               />
             </div>
-          </div></div>
+          </div>
         </section>
       </main>
 

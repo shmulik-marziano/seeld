@@ -7,7 +7,9 @@ import { Trash2, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate } from "react-router-dom";
 import AuthModal from "@/components/AuthModal";
-import { SERIF, MONO } from "@/lib/brand";
+import { DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, TINT_GOLD, TURQ_TEXT } from "@/lib/brand";
+
+// SEELD DNA v3 (STYLESEED.md): white canvas, pastel circles, hairline ruled list.
 
 type SavedCalculation = {
   id: string;
@@ -130,179 +132,195 @@ const SavedCalculations = () => {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen pb-2" style={{ backgroundColor: "#0a0a0a" }}>
+      <div className="min-h-screen bg-white">
         <Header />
-        <div className="px-2 pt-2">
-          <div className="bento-panel">
-            <div className="relative z-10 flex flex-col items-center justify-center gap-4 h-[60vh]" dir="rtl">
-              <Loader2 className="w-6 h-6 animate-spin text-[#171717]" />
-              <p className="text-[14px] text-[#5c5c5c]">טוען את החישובים השמורים...</p>
-            </div>
-          </div>
+        <div className="flex flex-col items-center justify-center gap-4 h-[60vh]" dir="rtl">
+          <Loader2 className="w-6 h-6 animate-spin" style={{ color: NAVY }} />
+          <p className="text-[14px]" style={{ color: MUTED }}>טוען את החישובים השמורים...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* Hero tile — hairline rule + breadcrumb, compact */}
-      <section className="px-2 pt-2">
-        <div className="bento-panel"><div className="max-w-4xl mx-auto px-5 sm:px-8 pt-10 sm:pt-14 pb-10 sm:pb-14 relative z-10">
-          <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
-              <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-              <span>←</span>
-              <Link to="/calculators" className="hover:text-[#171717] transition-colors">מחשבונים</Link>
-              <span>←</span>
-              <span className="text-[#171717]/70 font-medium">החישובים שלי</span>
+      <main className="dna-page">
+        {/* Pastel circle backdrop — decorative, never behind small text */}
+        <div className="dna-circles" aria-hidden="true">
+          <div
+            className="dna-circ"
+            style={{ width: 260, height: 260, top: -110, left: -100, backgroundColor: PASTEL_BLUE, opacity: 0.5 }}
+          />
+          <div
+            className="dna-circ hidden md:block"
+            style={{ width: 220, height: 220, bottom: -120, right: -90, backgroundColor: PASTEL_MINT, opacity: 0.45 }}
+          />
+        </div>
+
+        <div className="relative z-10">
+          {/* Hero */}
+          <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-10 sm:pb-14">
+            <nav className="flex items-center gap-2 text-[13px] mb-8" style={{ color: MUTED }}>
+              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <span aria-hidden="true">←</span>
+              <Link to="/calculators" className="hover:text-[#1D2D3D] transition-colors">מחשבונים</Link>
+              <span aria-hidden="true">←</span>
+              <span className="font-medium text-[#1D2D3D]">החישובים שלי</span>
             </nav>
-            <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium text-[#5c5c5c]">
-              אזור אישי
-            </span>
-          </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
-            <div>
-              <h1
-                className="text-[#171717] leading-[1.15] mb-4"
-                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
-              >
-                החישובים שלי
-              </h1>
-              <p className="text-base sm:text-[17px] text-[#4d4d4d] leading-[1.9]">
-                כל החישובים ששמרתם מהמחשבונים, במקום אחד.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => navigate("/calculators")}
-              className="shrink-0 inline-flex items-center justify-center px-7 py-3.5 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#262626] transition-colors min-h-[48px]"
-            >
-              למחשבונים
-            </button>
-          </div>
-        </div></div>
-      </section>
-
-      <main>
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-4xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
-            {!user ? (
-              /* Not signed in */
-              <div className="border-t border-[#171717]/15 pt-6">
-                <h2 className="text-xl text-[#171717] mb-3" style={{ fontFamily: SERIF, fontWeight: 600 }}>
-                  נדרשת התחברות
-                </h2>
-                <p className="text-base text-[#4d4d4d] leading-[1.85] max-w-xl mb-7">
-                  החישובים השמורים מקושרים לחשבון שלכם. התחברו כדי לראות אותם,
-                  או פתחו מחשבון וחשבו בלי רישום.
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+              <div>
+                <h1
+                  className="dna-display leading-[1.15] mb-4"
+                  style={{ fontSize: "clamp(2rem, 5vw, 3.1rem)" }}
+                >
+                  החישובים שלי
+                </h1>
+                <p className="text-base sm:text-[17px] leading-[1.9]" style={{ color: MUTED }}>
+                  כל החישובים ששמרתם מהמחשבונים, במקום אחד.
                 </p>
-                <div className="flex flex-wrap items-center gap-6">
-                  <button
-                    type="button"
-                    onClick={() => setShowAuthModal(true)}
-                    className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#262626] transition-colors min-h-[52px]"
+              </div>
+              <button
+                type="button"
+                onClick={() => navigate("/calculators")}
+                className="shrink-0 inline-flex items-center justify-center px-7 py-3.5 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[48px]"
+              >
+                למחשבונים
+              </button>
+            </div>
+          </section>
+
+          <section className="border-t" style={{ borderColor: LINE }}>
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+              {!user ? (
+                /* Not signed in */
+                <div>
+                  <h2
+                    className="dna-display leading-tight mb-3"
+                    style={{ fontSize: "clamp(1.4rem, 2.6vw, 1.8rem)" }}
                   >
-                    התחברות
-                  </button>
+                    נדרשת התחברות
+                  </h2>
+                  <p className="text-base leading-[1.85] max-w-xl mb-7" style={{ color: "#3a4c5a" }}>
+                    החישובים השמורים מקושרים לחשבון שלכם. התחברו כדי לראות אותם,
+                    או פתחו מחשבון וחשבו בלי רישום.
+                  </p>
+                  <div className="flex flex-wrap items-center gap-6">
+                    <button
+                      type="button"
+                      onClick={() => setShowAuthModal(true)}
+                      className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[52px]"
+                    >
+                      התחברות
+                    </button>
+                    <Link
+                      to="/calculators"
+                      className="group inline-flex items-center gap-2 text-base font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+                    >
+                      למחשבונים בלי רישום
+                      <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
+                    </Link>
+                  </div>
+                </div>
+              ) : calculations.length === 0 ? (
+                /* Empty state — gold-tint tile CTA to /calculators */
+                <div>
+                  <h2
+                    className="dna-display leading-tight mb-3"
+                    style={{ fontSize: "clamp(1.4rem, 2.6vw, 1.8rem)" }}
+                  >
+                    אין חישובים שמורים עדיין
+                  </h2>
+                  <p className="text-base leading-[1.85] max-w-xl mb-7" style={{ color: "#3a4c5a" }}>
+                    פתחו מחשבון משכנתא, פנסיה או חיסכון, ושמרו את התוצאה.
+                    היא תופיע כאן ותוכלו לחזור אליה מכל מכשיר.
+                  </p>
                   <Link
                     to="/calculators"
-                    className="group inline-flex items-center gap-2 text-base font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+                    className="dna-hover inline-flex flex-col items-start gap-1.5 px-7 py-5 rounded-xl border"
+                    style={{ backgroundColor: TINT_GOLD, borderColor: "#E1EAF1" }}
                   >
-                    למחשבונים בלי רישום
-                    <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
+                    <span className="text-[15px] font-semibold" style={{ color: NAVY }}>פתיחת מחשבון ←</span>
+                    <span
+                      className="text-[10px] tracking-[0.2em] font-semibold"
+                      style={{ fontFamily: MONO, color: "#8a5a1e" }}
+                      dir="ltr"
+                    >
+                      NO SIGNUP · FREE
+                    </span>
                   </Link>
                 </div>
-              </div>
-            ) : calculations.length === 0 ? (
-              /* Empty state — small orange tile CTA to /calculators (the play) */
-              <div className="border-t border-[#171717]/15 pt-6">
-                <h2 className="text-xl text-[#171717] mb-3" style={{ fontFamily: SERIF, fontWeight: 600 }}>
-                  אין חישובים שמורים עדיין
-                </h2>
-                <p className="text-base text-[#4d4d4d] leading-[1.85] max-w-xl mb-7">
-                  פתחו מחשבון משכנתא, פנסיה או חיסכון, ושמרו את התוצאה.
-                  היא תופיע כאן ותוכלו לחזור אליה מכל מכשיר.
+              ) : (
+                /* Saved calculations — hairline ruled list */
+                <div className="border-t" style={{ borderColor: LINE }}>
+                  {calculations.map((calc) => (
+                    <div
+                      key={calc.id}
+                      className="py-6 border-b hover:bg-[#E1EAF1]/25 transition-colors"
+                      style={{ borderColor: LINE }}
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <div
+                            className="text-[11px] tracking-[0.16em] font-medium mb-1.5"
+                            style={{ fontFamily: MONO, color: TURQ_TEXT }}
+                          >
+                            {calculatorTypeLabels[calc.calculator_type] || calc.calculator_type}
+                          </div>
+                          <h3 className="text-lg" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
+                            {calc.title}
+                          </h3>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => deleteCalculation(calc.id)}
+                          aria-label="מחיקת החישוב"
+                          className="shrink-0 p-2 text-[#5a6a78] hover:text-[#a04a5c] transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" strokeWidth={1.5} />
+                        </button>
+                      </div>
+
+                      <p className="mt-2 text-base" style={{ color: NAVY }}>
+                        {formatResultSummary(calc)}
+                      </p>
+
+                      {calc.tips && calc.tips.length > 0 && (
+                        <ul className="mt-3 space-y-0.5">
+                          {calc.tips.slice(0, 2).map((tip, i) => (
+                            <li key={i} className="dna-pill-item !py-1 text-[14px]">
+                              {tip}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      <p className="mt-3 text-[12px]" style={{ color: MUTED }}>
+                        <span dir="ltr" style={monoNum}>{formatDate(calc.created_at)}</span>
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Next action */}
+              <div className="mt-14 border-t pt-6 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4" style={{ borderColor: LINE }}>
+                <p className="text-[14px] leading-[1.8] max-w-md" style={{ color: "#3a4c5a" }}>
+                  רוצים לעבור על התוצאות עם יועץ? נבחן את המספרים מול התיק האמיתי שלכם, ללא עלות.
                 </p>
                 <Link
-                  to="/calculators"
-                  className="bento-panel-orange bento-hover inline-flex flex-col items-start gap-1.5 px-7 py-5"
+                  to="/contact"
+                  className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors shrink-0"
                 >
-                  <span className="text-[15px] font-semibold text-[#171717]">פתיחת מחשבון ←</span>
-                  <span
-                    className="text-[10px] tracking-[0.2em] font-semibold text-[#171717]/80"
-                    style={{ fontFamily: MONO }}
-                    dir="ltr"
-                  >
-                    NO SIGNUP · FREE
-                  </span>
+                  לשיחה עם יועץ
+                  <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
                 </Link>
               </div>
-            ) : (
-              /* Saved calculations — ruled list */
-              <div className="border-t border-[#171717]/15">
-                {calculations.map((calc) => (
-                  <div key={calc.id} className="py-6 border-b border-[#171717]/10 hover:bg-[#171717]/[0.04] hover:border-[#171717]/40 transition-colors">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0">
-                        <div className="text-[11px] tracking-[0.16em] font-medium mb-1.5 text-[#5c5c5c]" style={{ fontFamily: MONO }}>
-                          {calculatorTypeLabels[calc.calculator_type] || calc.calculator_type}
-                        </div>
-                        <h3 className="text-lg text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
-                          {calc.title}
-                        </h3>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => deleteCalculation(calc.id)}
-                        aria-label="מחיקת החישוב"
-                        className="shrink-0 p-2 text-[#5c5c5c] hover:text-[#b91c1c] transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" strokeWidth={1.5} />
-                      </button>
-                    </div>
-
-                    <p className="mt-2 text-base text-[#171717]">
-                      {formatResultSummary(calc)}
-                    </p>
-
-                    {calc.tips && calc.tips.length > 0 && (
-                      <ul className="mt-3 space-y-1.5">
-                        {calc.tips.slice(0, 2).map((tip, i) => (
-                          <li key={i} className="flex gap-2.5 text-[14px] text-[#4d4d4d] leading-[1.7]">
-                            <span className="text-[#5c5c5c]">—</span>
-                            {tip}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-
-                    <p className="mt-3 text-[12px] text-[#5c5c5c]">
-                      <span dir="ltr" style={monoNum}>{formatDate(calc.created_at)}</span>
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Next action */}
-            <div className="mt-14 border-t border-[#171717]/15 pt-6 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4">
-              <p className="text-[14px] text-[#4d4d4d] leading-[1.8] max-w-md">
-                רוצים לעבור על התוצאות עם יועץ? נבחן את המספרים מול התיק האמיתי שלכם, ללא עלות.
-              </p>
-              <Link
-                to="/contact"
-                className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors shrink-0"
-              >
-                לשיחה עם יועץ
-                <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
-              </Link>
             </div>
-          </div></div>
-        </section>
+          </section>
+        </div>
       </main>
 
       <Footer />
