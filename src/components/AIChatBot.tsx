@@ -5,14 +5,15 @@ import { cn } from "@/lib/utils";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { MONO, RING } from "@/lib/brand";
+import { LINE, MONO, MUTED, NAVY, RING } from "@/lib/brand";
 import { LiveDot, LiveTag } from "@/components/brand/Live";
 
 type Message = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/finance-chat`;
-const PAPER = "#e9dfd2";
-const INK_TILE = "#161616";
+// DNA v3 panel: white surface, hairline border, navy header band (STYLESEED.md)
+const PANEL_BG = "#ffffff";
+const HAIRLINE = `0 0 0 1px ${LINE}`;
 
 const getSessionId = () => {
   let sessionId = localStorage.getItem("seeld_chat_session");
@@ -244,7 +245,7 @@ const AIChatBot = () => {
 
   return (
     <>
-      {/* ── Launcher: a live pill, not a shy dot ── */}
+      {/* ── Launcher: a live pill, not a shy dot — institutional navy ── */}
       <AnimatePresence>
         {!isExpanded && (
           <motion.button
@@ -253,8 +254,8 @@ const AIChatBot = () => {
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             onClick={() => setIsExpanded(true)}
-            className="fixed bottom-6 left-4 sm:left-6 z-50 flex min-h-[52px] items-center gap-2.5 rounded-full bg-[#171717] py-3 pr-5 pl-4 text-white transition-colors duration-150 hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
-            style={{ boxShadow: "0 10px 28px -10px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.08)" }}
+            className="fixed bottom-6 left-4 sm:left-6 z-50 flex min-h-[52px] items-center gap-2.5 rounded-full bg-[#1D2D3D] py-3 pr-5 pl-4 text-white transition-colors duration-150 hover:bg-[#16222f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+            style={{ boxShadow: "0 10px 28px -10px rgba(29,45,61,.55), inset 0 0 0 1px rgba(255,255,255,.08)" }}
             aria-label="פתחו שיחה עם היועץ הדיגיטלי של SEELD"
           >
             <LiveDot size={8} />
@@ -270,7 +271,7 @@ const AIChatBot = () => {
         )}
       </AnimatePresence>
 
-      {/* ── Chat panel: a full bento tile ── */}
+      {/* ── Chat panel: white DNA card with a navy header band ── */}
       <AnimatePresence>
         {isExpanded && (
           <motion.div
@@ -284,13 +285,18 @@ const AIChatBot = () => {
           >
             <div
               className="flex h-full flex-col overflow-hidden"
-              style={{ backgroundColor: PAPER, borderRadius: 20, boxShadow: "0 24px 60px -18px rgba(0,0,0,.6)" }}
+              style={{
+                backgroundColor: PANEL_BG,
+                borderRadius: 12,
+                border: `1px solid ${LINE}`,
+                boxShadow: "0 24px 60px -18px rgba(29,45,61,.35)",
+              }}
             >
-              {/* Header — ink band */}
-              <div className="flex shrink-0 items-center justify-between px-5 py-4" style={{ backgroundColor: INK_TILE }}>
+              {/* Header — navy band */}
+              <div className="flex shrink-0 items-center justify-between px-5 py-4" style={{ backgroundColor: NAVY }}>
                 <div className="flex items-center gap-3">
                   <span className="text-[16px] font-semibold tracking-tight text-white" dir="ltr">
-                    SEELD<span className="text-[#f0a339]">.</span>
+                    SEELD<span className="text-[#D8A24A]">.</span>
                   </span>
                   <span className="h-4 w-px bg-white/15" aria-hidden="true" />
                   <LiveTag dark dot>היועץ הדיגיטלי · LIVE</LiveTag>
@@ -324,25 +330,25 @@ const AIChatBot = () => {
                     <div className="space-y-5">
                       <div>
                         <h4
-                          className="text-[22px] leading-snug text-[#171717]"
+                          className="text-[22px] leading-snug text-[#1D2D3D]"
                           style={{ fontFamily: "'Heebo', sans-serif", fontWeight: 700 }}
                         >
                           שלום, כאן היועץ הדיגיטלי של SEELD.
                         </h4>
-                        <p className="mt-2 max-w-sm text-[15px] leading-relaxed text-[#4d4d4d]">
+                        <p className="mt-2 max-w-sm text-[15px] leading-relaxed text-[#3a4c5a]">
                           ביטוח, פנסיה, חיסכון או מס: שאלו כל דבר. עונה מיד, ומחבר אתכם ליועץ אנושי כשצריך.
                         </p>
                       </div>
-                      {/* Suggestion tiles */}
+                      {/* Suggestion tiles — white with the faint navy ring */}
                       <div className="grid gap-2">
                         {suggestions.map((s, i) => (
                           <button
                             key={i}
                             onClick={() => streamChat(s.text)}
-                            className="flex min-h-[48px] items-center gap-3 rounded-lg bg-white px-4 py-3 text-right text-[14px] font-medium text-[#171717] transition-colors duration-150 hover:bg-[#fafafa] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                            className="flex min-h-[48px] items-center gap-3 rounded-lg bg-white px-4 py-3 text-right text-[14px] font-medium text-[#1D2D3D] transition-colors duration-150 hover:bg-[#F4F8F7] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
                             style={{ boxShadow: RING }}
                           >
-                            <s.icon className="h-4 w-4 shrink-0 text-[#5c5c5c]" strokeWidth={1.75} />
+                            <s.icon className="h-4 w-4 shrink-0 text-[#5a6a78]" strokeWidth={1.75} />
                             {s.text}
                           </button>
                         ))}
@@ -353,8 +359,8 @@ const AIChatBot = () => {
                       href="https://wa.me/972523097444"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 rounded-lg py-3 text-[13px] font-medium text-[#171717] transition-colors duration-150 hover:bg-[#171717]/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
-                      style={{ boxShadow: "inset 0 0 0 1.5px #171717" }}
+                      className="flex items-center justify-center gap-2 rounded-lg py-3 text-[13px] font-medium text-[#1D2D3D] transition-colors duration-150 hover:bg-[#1D2D3D]/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                      style={{ boxShadow: "inset 0 0 0 1.5px #1D2D3D" }}
                     >
                       <Phone className="h-3.5 w-3.5" strokeWidth={1.75} />
                       מעדיפים בן אדם? 052-309-7444
@@ -372,13 +378,13 @@ const AIChatBot = () => {
                           className={cn(
                             "max-w-[88%] rounded-xl px-4 py-3 text-[14.5px] leading-relaxed",
                             msg.role === "user"
-                              ? "rounded-br-sm bg-[#171717] text-white"
-                              : "rounded-bl-sm bg-white text-[#171717]"
+                              ? "rounded-br-sm bg-[#1D2D3D] text-white"
+                              : "rounded-bl-sm bg-white text-[#1D2D3D]"
                           )}
-                          style={msg.role === "assistant" ? { boxShadow: RING } : undefined}
+                          style={msg.role === "assistant" ? { boxShadow: HAIRLINE } : undefined}
                         >
                           {msg.role === "assistant" ? (
-                            <div className="prose prose-sm max-w-none [&_p]:mb-1.5 [&_p:last-child]:mb-0 [&_ul]:mt-1 [&_li]:text-[14.5px] [&_p]:text-[14.5px] [&_a]:text-[#171717] [&_a]:underline">
+                            <div className="prose prose-sm max-w-none [&_p]:mb-1.5 [&_p:last-child]:mb-0 [&_ul]:mt-1 [&_li]:text-[14.5px] [&_p]:text-[14.5px] [&_a]:text-[#1D2D3D] [&_a]:underline">
                               <ReactMarkdown>{msg.content || "..."}</ReactMarkdown>
                             </div>
                           ) : (
@@ -391,11 +397,11 @@ const AIChatBot = () => {
                       <div className="flex justify-end">
                         <div
                           className="flex items-center gap-1.5 rounded-xl rounded-bl-sm bg-white px-4 py-3.5"
-                          style={{ boxShadow: RING }}
+                          style={{ boxShadow: HAIRLINE }}
                         >
-                          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#171717]/40" style={{ animationDelay: "0ms" }} />
-                          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#171717]/40" style={{ animationDelay: "150ms" }} />
-                          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#171717]/40" style={{ animationDelay: "300ms" }} />
+                          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#1D2D3D]/40" style={{ animationDelay: "0ms" }} />
+                          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#1D2D3D]/40" style={{ animationDelay: "150ms" }} />
+                          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[#1D2D3D]/40" style={{ animationDelay: "300ms" }} />
                         </div>
                       </div>
                     )}
@@ -406,8 +412,8 @@ const AIChatBot = () => {
                           <button
                             key={i}
                             onClick={() => streamChat(s.text)}
-                            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[13px] font-medium text-[#5c5c5c] transition-colors duration-150 hover:text-[#171717] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
-                            style={{ boxShadow: RING }}
+                            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[13px] font-medium text-[#5a6a78] transition-colors duration-150 hover:text-[#1D2D3D] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                            style={{ boxShadow: HAIRLINE }}
                           >
                             <s.icon className="h-3 w-3" strokeWidth={1.75} />
                             {s.text}
@@ -421,7 +427,7 @@ const AIChatBot = () => {
               </div>
 
               {/* Input */}
-              <form onSubmit={handleSubmit} className="shrink-0 border-t border-[#171717]/10 px-3 py-3 sm:px-4">
+              <form onSubmit={handleSubmit} className="shrink-0 border-t border-[#E7EDF1] px-3 py-3 sm:px-4">
                 <div className="flex items-end gap-2">
                   <textarea
                     ref={inputRef}
@@ -435,8 +441,7 @@ const AIChatBot = () => {
                     onKeyDown={handleInputKeyDown}
                     placeholder="כתבו שאלה, Enter לשליחה"
                     aria-label="הודעה ליועץ הדיגיטלי"
-                    className="min-h-[48px] max-h-[120px] min-w-0 flex-1 resize-none rounded-lg bg-white px-4 py-3 text-right text-[14.5px] leading-snug text-[#171717] transition-shadow duration-150 placeholder:text-[#5c5c5c] focus:outline-none"
-                    style={{ boxShadow: RING }}
+                    className="min-h-[48px] max-h-[120px] min-w-0 flex-1 resize-none rounded-lg bg-white px-4 py-3 text-right text-[14.5px] leading-snug text-[#1D2D3D] transition-shadow duration-150 placeholder:text-[#5a6a78] focus:outline-none shadow-[0_0_0_1px_#E7EDF1] focus:shadow-[0_0_0_1px_#1D2D3D]"
                     disabled={isLoading}
                   />
                   <button
@@ -446,8 +451,8 @@ const AIChatBot = () => {
                     className={cn(
                       "flex h-12 w-12 shrink-0 items-center justify-center rounded-lg transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]",
                       input.trim()
-                        ? "bg-[#171717] text-white hover:bg-black"
-                        : "bg-[#171717]/10 text-[#5c5c5c]"
+                        ? "bg-[#1D2D3D] text-white hover:bg-[#16222f]"
+                        : "bg-[#1D2D3D]/10 text-[#5a6a78]"
                     )}
                   >
                     {isLoading ? (
@@ -458,7 +463,7 @@ const AIChatBot = () => {
                   </button>
                 </div>
                 <p
-                  className="mt-2 text-center text-[10.5px] tracking-[0.14em] text-[#5c5c5c]"
+                  className="mt-2 text-center text-[10.5px] tracking-[0.14em] text-[#5a6a78]"
                   style={{ fontFamily: MONO }}
                   dir="ltr"
                 >

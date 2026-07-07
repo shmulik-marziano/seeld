@@ -7,14 +7,17 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { useAuth } from "@/hooks/useAuth";
-import { SERIF, MONO } from "@/lib/brand";
-import { LiveClock, LiveDot, StatusPill } from "@/components/brand/Live";
+import {
+  BODY, DISPLAY, LINE, MONO, MUTED, NAVY,
+  PASTEL_BLUE, PASTEL_MINT, TURQ_TEXT,
+} from "@/lib/brand";
+import { LiveClock, StatusPill } from "@/components/brand/Live";
 
-// SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
-const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
+// SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
 
+// DNA v3 boxed input: white, hairline border, navy focus
 const inputClass =
-  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#5c5c5c] text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
+  "w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] placeholder:text-[#5a6a78] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors min-h-[48px]";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -75,53 +78,61 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* HERO — one idea: leave details, we call back */}
-      <section className="px-2 pt-2">
-        <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10">
-          <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
-              <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-              <span>←</span>
-              <span className="text-[#171717]/70 font-medium">צור קשר</span>
-            </nav>
-            <span className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium" style={{ color: PAPER_MUTED }}>
-              צור קשר
-            </span>
+      <main>
+        {/* HERO — one idea: leave details, we call back */}
+        <section className="dna-page">
+          {/* Pastel circle backdrop — decorative, never behind small text */}
+          <div className="dna-circles" aria-hidden="true">
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 280, height: 280, top: -120, left: -100, backgroundColor: PASTEL_MINT, opacity: 0.5 }}
+            />
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 220, height: 220, bottom: -120, right: -80, backgroundColor: PASTEL_BLUE, opacity: 0.55 }}
+            />
           </div>
 
-          <h1
-            className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
-            style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
-          >
-            נחזור אליכם באותו יום עבודה
-          </h1>
-          <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9]">
-            השאירו פרטים ויועץ מהצוות יחזור אליכם. שיחה אחת, בלי מרדף.
-          </p>
-        </div></div>
-      </section>
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
+            <nav className="flex items-center gap-2 text-[13px] mb-10 sm:mb-14" style={{ color: MUTED }}>
+              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <span aria-hidden="true">←</span>
+              <span className="font-medium" style={{ color: NAVY }}>צור קשר</span>
+            </nav>
 
-      <main>
-        <section className="px-2 pt-2">
-          <div className="grid gap-2 lg:grid-cols-[1.15fr_0.85fr] items-stretch">
-            {/* Contact Form — the one action, in one calm paper tile */}
-            <div className="bento-panel"><div className="px-5 sm:px-8 py-12 sm:py-16 relative z-10">
+            <h1
+              className="dna-display leading-[1.12] mb-6 max-w-3xl"
+              style={{ fontSize: "clamp(34px, 5vw, 50px)" }}
+            >
+              נחזור אליכם באותו יום עבודה
+            </h1>
+            <p className="text-base sm:text-[17px] max-w-2xl leading-[1.9]" style={{ color: MUTED }}>
+              השאירו פרטים ויועץ מהצוות יחזור אליכם. שיחה אחת, בלי מרדף.
+            </p>
+          </div>
+        </section>
+
+        {/* FORM + DETAILS */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+            <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-14 lg:gap-24 items-start">
+              {/* The one action: the form, in one calm concept card */}
               <ScrollReveal>
                 <div>
                   <button
                     type="button"
                     onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                    className="mb-10 block bento-hover rounded-full"
+                    className="mb-9 block dna-hover rounded-full"
                     aria-label="פתיחת שיחה עם יועץ SEELD"
                   >
                     <StatusPill>היועץ מחובר עכשיו · שאלו לפני שממלאים</StatusPill>
                   </button>
 
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
+                  <div className="dna-concept !p-6 sm:!p-8">
+                    <form onSubmit={handleSubmit} className="space-y-4">
                       <input
                         type="text"
                         id="name"
@@ -132,9 +143,7 @@ const Contact = () => {
                         className={inputClass}
                         placeholder="שם מלא"
                       />
-                    </div>
-                    <div className="grid sm:grid-cols-2 gap-x-10 gap-y-6">
-                      <div>
+                      <div className="grid sm:grid-cols-2 gap-4">
                         <input
                           type="email"
                           id="email"
@@ -147,8 +156,6 @@ const Contact = () => {
                           dir="ltr"
                           style={{ textAlign: "right" }}
                         />
-                      </div>
-                      <div>
                         <input
                           type="tel"
                           id="phone"
@@ -162,15 +169,13 @@ const Contact = () => {
                           style={{ textAlign: "right" }}
                         />
                       </div>
-                    </div>
-                    <div>
                       <select
                         id="subject"
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
                         required
-                        className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] text-base focus:outline-none focus:border-[#171717] transition-colors appearance-none cursor-pointer min-h-[44px] rounded-none"
+                        className="w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors appearance-none cursor-pointer min-h-[48px]"
                       >
                         <option value="">בחרו נושא</option>
                         <option value="pension">תכנון פנסיוני</option>
@@ -181,136 +186,125 @@ const Contact = () => {
                         <option value="savings">חיסכון והשקעות</option>
                         <option value="other">אחר</option>
                       </select>
-                    </div>
-                    <div>
                       <textarea
                         id="message"
                         name="message"
                         value={formData.message}
                         onChange={handleChange}
                         rows={4}
-                        className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#5c5c5c] text-base focus:outline-none focus:border-[#171717] transition-colors resize-none rounded-none"
+                        className="w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] placeholder:text-[#5a6a78] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors resize-none"
                         placeholder="במה נוכל לעזור?"
                       />
-                    </div>
-                    <div className="pt-2">
-                      <button
-                        type="submit"
-                        disabled={submitting}
-                        className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-black transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px] rounded-lg"
-                      >
-                        {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
-                      </button>
-                      <div className="mt-5">
-                        <span className="text-[12px] text-[#5c5c5c]">שתי דקות למלא. אפס אותיות קטנות.</span>
+                      <div className="pt-2">
+                        <button
+                          type="submit"
+                          disabled={submitting}
+                          className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
+                        >
+                          {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
+                        </button>
+                        <div className="mt-5">
+                          <span className="text-[12.5px]" style={{ color: MUTED }}>שתי דקות למלא. אפס אותיות קטנות.</span>
+                        </div>
                       </div>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </div>
               </ScrollReveal>
-            </div></div>
 
-            {/* Side column: contact details as their own small ink tile + a quiet paper tile */}
-            <div className="grid gap-2 content-start">
-              <div className="bento-panel-ink px-5 sm:px-7 py-7">
-                <div
-                  className="flex justify-between text-[10px] tracking-[0.16em] mb-6"
-                  style={{ fontFamily: MONO, color: "rgba(233,223,210,.55)" }}
-                  dir="ltr"
-                >
-                  <span>CONTACT</span>
-                  <span className="inline-flex items-center gap-1.5 text-[#e9dfd2]">
-                    <LiveDot size={5} />
-                    LIVE
-                  </span>
-                </div>
-                <div className="border-t border-white/10">
-                  <div className="py-[15px] border-b border-white/10">
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-[13px]" style={{ color: "rgba(233,223,210,.6)" }}>טלפון</span>
-                      <a
-                        href="tel:0523097444"
-                        className="text-base text-[#e9dfd2] tabular-nums border-b border-transparent hover:border-[#e9dfd2]/40 transition-colors"
-                        dir="ltr"
-                      >
-                        052-309-7444
-                      </a>
+              {/* Side column: details rows + the clock gesture + mini FAQ */}
+              <ScrollReveal delay={100}>
+                <div>
+                  <div className="border-t" style={{ borderColor: LINE }}>
+                    <div className="py-[15px] border-b" style={{ borderColor: LINE }}>
+                      <div className="flex items-baseline justify-between">
+                        <span className="text-[13px]" style={{ color: MUTED }}>טלפון</span>
+                        <a
+                          href="tel:0523097444"
+                          className="text-base tabular-nums whitespace-nowrap text-[#1D2D3D] border-b border-transparent hover:border-[#1D2D3D]/40 transition-colors"
+                          dir="ltr"
+                        >
+                          052-309-7444
+                        </a>
+                      </div>
+                      <p className="text-[12.5px] mt-1 text-left" style={{ color: MUTED }}>א'-ה', 9:00-18:00</p>
                     </div>
-                    <p className="text-[12px] mt-1 text-left" style={{ color: "rgba(233,223,210,.55)" }}>א'-ה', 9:00-18:00</p>
-                  </div>
-                  <div className="py-[15px] border-b border-white/10">
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-[13px]" style={{ color: "rgba(233,223,210,.6)" }}>אימייל</span>
-                      <a
-                        href="mailto:info@seeld.co.il"
-                        className="text-base text-[#e9dfd2] border-b border-transparent hover:border-[#e9dfd2]/40 transition-colors"
-                        dir="ltr"
-                      >
-                        info@seeld.co.il
-                      </a>
+                    <div className="py-[15px] border-b" style={{ borderColor: LINE }}>
+                      <div className="flex items-baseline justify-between">
+                        <span className="text-[13px]" style={{ color: MUTED }}>אימייל</span>
+                        <a
+                          href="mailto:info@seeld.co.il"
+                          className="text-base text-[#1D2D3D] border-b border-transparent hover:border-[#1D2D3D]/40 transition-colors"
+                          dir="ltr"
+                        >
+                          info@seeld.co.il
+                        </a>
+                      </div>
+                      <p className="text-[12.5px] mt-1 text-left" style={{ color: MUTED }}>נענה תוך יום עסקים</p>
                     </div>
-                    <p className="text-[12px] mt-1 text-left" style={{ color: "rgba(233,223,210,.55)" }}>נענה תוך יום עסקים</p>
-                  </div>
-                  <div className="py-[15px]">
-                    <div className="flex items-baseline justify-between gap-6">
-                      <span className="text-[13px] shrink-0" style={{ color: "rgba(233,223,210,.6)" }}>משרדים</span>
-                      <div className="text-left">
-                        <p className="text-base text-[#e9dfd2]">המלאכה 10, רעננה</p>
-                        <p className="text-base text-[#e9dfd2]">הסדנא 4, ירושלים</p>
+                    <div className="py-[15px] border-b" style={{ borderColor: LINE }}>
+                      <div className="flex items-baseline justify-between gap-6">
+                        <span className="text-[13px] shrink-0" style={{ color: MUTED }}>משרדים</span>
+                        <div className="text-left">
+                          <p className="text-base" style={{ color: NAVY }}>המלאכה 10, רעננה</p>
+                          <p className="text-base" style={{ color: NAVY }}>הסדנא 4, ירושלים</p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  {/* The clock gesture — mirrors the hero tile: we watch around the clock */}
-                  <div className="pt-5 border-t border-white/10 flex items-center gap-4">
-                    <LiveClock size={44} color="#e9dfd2" className="shrink-0" />
+
+                  {/* The clock gesture — the page keeps its LiveClock (craft bar) */}
+                  <div
+                    className="mt-6 rounded-xl flex items-center gap-5 p-5"
+                    style={{ backgroundColor: PASTEL_MINT }}
+                  >
+                    <LiveClock size={52} color={NAVY} className="shrink-0" />
                     <div>
                       <span
-                        className="text-[11px] font-semibold tracking-[0.2em] text-[#e9dfd2] tabular-nums"
-                        style={{ fontFamily: MONO }}
+                        className="text-[11px] font-semibold tracking-[0.2em] tabular-nums"
+                        style={{ fontFamily: MONO, color: TURQ_TEXT }}
                         dir="ltr"
                       >
                         24/6 · LIVE
                       </span>
-                      <p className="text-[12px] mt-1" style={{ color: "rgba(233,223,210,.6)" }}>
+                      <p className="text-[13px] mt-1" style={{ color: BODY }}>
                         התיק שלכם מנוטר מסביב לשעון
                       </p>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              <div className="bento-panel px-5 sm:px-7 py-7">
-                <div className="relative z-10">
-                  <div className="border-t border-[#171717]/20 pt-5 mb-6">
+                  {/* Before you write — three short answers */}
+                  <div className="mt-10">
                     <h2
-                      className="text-[#171717] leading-tight"
-                      style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "1.2rem" }}
+                      className="text-[19px] mb-5"
+                      style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}
                     >
                       לפני שאתם כותבים
                     </h2>
-                  </div>
-                  <div>
-                    <div className="border-b border-[#171717]/10 pb-5 mb-5">
-                      <h3 className="text-base font-medium text-[#171717] mb-1.5">האם הייעוץ כרוך בתשלום?</h3>
-                      <p className="text-[13px] text-[#4d4d4d] leading-[1.85]">
-                        פגישת הייעוץ הראשונית ללא עלות וללא התחייבות.
-                      </p>
-                    </div>
-                    <div className="border-b border-[#171717]/10 pb-5 mb-5">
-                      <h3 className="text-base font-medium text-[#171717] mb-1.5">כמה זמן לוקח לקבל הצעת מחיר?</h3>
-                      <p className="text-[13px] text-[#4d4d4d] leading-[1.85]">
-                        הצעות מחיר חוזרות תוך 24-48 שעות מפגישת הייעוץ או שיחה טלפונית.
-                      </p>
-                    </div>
-                    <div className="pb-1">
-                      <h3 className="text-base font-medium text-[#171717] mb-1.5">עם אילו חברות ביטוח אתם עובדים?</h3>
-                      <p className="text-[13px] text-[#4d4d4d] leading-[1.85]">
-                        עם כל חברות הביטוח בישראל. משווים עבורכם את כל האפשרויות בשוק.
-                      </p>
+                    <div className="border-t" style={{ borderColor: LINE }}>
+                      {[
+                        {
+                          q: "האם הייעוץ כרוך בתשלום?",
+                          a: "פגישת הייעוץ הראשונית ללא עלות וללא התחייבות.",
+                        },
+                        {
+                          q: "כמה זמן לוקח לקבל הצעת מחיר?",
+                          a: "הצעות מחיר חוזרות תוך 24-48 שעות מפגישת הייעוץ או שיחה טלפונית.",
+                        },
+                        {
+                          q: "עם אילו חברות ביטוח אתם עובדים?",
+                          a: "עם כל חברות הביטוח בישראל. משווים עבורכם את כל האפשרויות בשוק.",
+                        },
+                      ].map((item) => (
+                        <div key={item.q} className="py-5 border-b" style={{ borderColor: LINE }}>
+                          <h3 className="text-base font-medium mb-1.5" style={{ color: NAVY }}>{item.q}</h3>
+                          <p className="text-[13.5px] leading-[1.85]" style={{ color: BODY }}>{item.a}</p>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
-              </div>
+              </ScrollReveal>
             </div>
           </div>
         </section>
