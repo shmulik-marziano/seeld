@@ -4,14 +4,17 @@ import ArticleCard from "@/components/ArticleCard";
 import ScrollReveal from "@/components/ScrollReveal";
 import { articles } from "@/data/articles";
 import { Link } from "react-router-dom";
-import { MONO, FAINT } from "@/lib/brand";
+import { MONO } from "@/lib/brand";
+import { UmbrellaFigure } from "@/components/brand/Figures";
 
 const HEEBO = "'Heebo', sans-serif";
+// Captions on the warm paper tiles stay at #5c5c5c minimum (AA on paper).
+const PAPER_MUTED = "#5c5c5c";
 
 const SectionHead = ({ index, title, lede }: { index: string; title: string; lede?: string }) => (
   <div className="border-t border-[#171717]/20 pt-6 mb-12 sm:mb-14">
     <div className="flex items-baseline gap-6 sm:gap-10">
-      <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: FAINT, fontFamily: MONO }}>
+      <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED, fontFamily: MONO }}>
         {index}
       </span>
       <div>
@@ -41,40 +44,43 @@ const Travel = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      {/* Hero */}
-      <section className="bg-white">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-14 sm:pb-20">
-          <div className="border-t border-[#171717]/20 pt-4">
-            <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#6e6e6e]">
-              <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-              <span aria-hidden="true">/</span>
-              <span className="text-[#171717]">ביטוח בקליק</span>
-            </nav>
+      {/* Hero — paper tile; the umbrella peeks from the corner */}
+      <section className="px-2 pt-2">
+        <div className="bento-panel">
+          <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-10 sm:pt-14 pb-14 sm:pb-20 relative z-10">
+            <div className="border-t border-[#171717]/20 pt-4">
+              <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#5c5c5c]">
+                <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
+                <span aria-hidden="true">/</span>
+                <span className="text-[#171717]">ביטוח בקליק</span>
+              </nav>
+            </div>
+            <div className="mt-12 sm:mt-16 max-w-3xl">
+              <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
+                INSURANCE · FAST TRACK
+              </span>
+              <h1
+                className="mt-4 text-[#171717] leading-[1.1]"
+                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(2.2rem, 5vw, 3.4rem)", letterSpacing: "-0.03em" }}
+              >
+                ביטוח בקליק
+              </h1>
+              <p className="mt-5 text-lg sm:text-xl text-[#4d4d4d] leading-[1.8] max-w-2xl">
+                ביטוח רכב וביטוח דירה: הצעות מחיר תוך דקות, בהשוואה בין כל החברות.
+              </p>
+            </div>
           </div>
-          <div className="mt-12 sm:mt-16 max-w-3xl">
-            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: FAINT }}>
-              INSURANCE · FAST TRACK
-            </span>
-            <h1
-              className="mt-4 text-[#171717] leading-[1.1]"
-              style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(2.2rem, 5vw, 3.4rem)", letterSpacing: "-0.03em" }}
-            >
-              ביטוח בקליק
-            </h1>
-            <p className="mt-5 text-lg sm:text-xl text-[#171717]/60 leading-[1.8] max-w-2xl">
-              ביטוח רכב וביטוח דירה: הצעות מחיר תוך דקות, בהשוואה בין כל החברות.
-            </p>
-          </div>
+          <UmbrellaFigure className="absolute -left-3 -bottom-4 w-16 h-16 opacity-70 rotate-12 pointer-events-none" />
         </div>
       </section>
 
       <main>
         {/* 01 — Why SEELD */}
-        <section style={{ backgroundColor: "#fafafa" }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
               <SectionHead index="01" title="למה לבחור ב-SEELD?" />
             </ScrollReveal>
@@ -90,12 +96,12 @@ const Travel = () => {
                 </ScrollReveal>
               ))}
             </div>
-          </div>
+          </div></div>
         </section>
 
         {/* 02 — Articles */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
               <SectionHead
                 index="02"
@@ -108,16 +114,16 @@ const Travel = () => {
                 <ArticleCard key={article.id} {...article} />
               ))}
             </div>
-          </div>
+          </div></div>
         </section>
 
         {/* 03 — About the process */}
-        <section style={{ backgroundColor: "#fafafa" }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
               <SectionHead index="03" title="הצטרפו ל-SEELD תוך דקות" />
             </ScrollReveal>
-            <div className="max-w-3xl space-y-5 text-base sm:text-[17px] text-[#171717]/65 leading-[1.9]">
+            <div className="max-w-3xl space-y-5 text-base sm:text-[17px] text-[#4d4d4d] leading-[1.9]">
               <p>
                 ביטוח רכב ודירה לא מחייב פגישה. השאירו פרטים,
                 ותוך דקות תקבלו הצעות מחיר לביטוח רכב ודירה.
@@ -127,12 +133,12 @@ const Travel = () => {
                 נחזור אליכם עם המלצה מנומקת, לא עם רשימת מחירים.
               </p>
             </div>
-          </div>
+          </div></div>
         </section>
 
-        {/* CTA — the one dark band */}
-        <section style={{ backgroundColor: "#171717" }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        {/* CTA — the one ink tile */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <div className="border-t border-white/20 pt-6 max-w-3xl">
                 <h2
@@ -147,14 +153,14 @@ const Travel = () => {
                 <div className="mt-8">
                   <Link
                     to="/contact"
-                    className="inline-flex items-center justify-center px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
+                    className="inline-flex items-center justify-center rounded-md px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
                   >
                     קבלו הצעת מחיר
                   </Link>
                 </div>
               </div>
             </ScrollReveal>
-          </div>
+          </div></div>
         </section>
       </main>
 

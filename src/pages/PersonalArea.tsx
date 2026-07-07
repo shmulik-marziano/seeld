@@ -4,18 +4,24 @@ import Footer from "@/components/Footer";
 import { Loader2 } from "lucide-react";
 import PersonalAreaLogin from "@/components/personal-area/PersonalAreaLogin";
 import PersonalAreaDashboard from "@/components/personal-area/PersonalAreaDashboard";
-import { motion } from "framer-motion";
+import { LiveTag } from "@/components/brand/Live";
+
+const HEEBO = "'Heebo', sans-serif";
 
 const PersonalArea = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#fafafa]">
+      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
         <Header />
-        <div className="flex items-center justify-center h-[60vh]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#171717]" />
-        </div>
+        <section className="px-2 pt-2">
+          <div className="bento-panel">
+            <div className="flex items-center justify-center h-[60vh] relative z-10">
+              <Loader2 className="w-8 h-8 animate-spin text-[#171717]" />
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
@@ -27,47 +33,36 @@ const PersonalArea = () => {
 
   // Logged in — dashboard with site chrome
   return (
-    <div className="min-h-screen bg-[#fafafa]" dir="rtl">
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
-      {/* Hero section with bubble accents */}
-      <section className="relative overflow-hidden" style={{ background: "linear-gradient(165deg, #072e2e 0%, #171717 40%, #262626 100%)" }}>
-        {/* Soft bubble decorations */}
-        <motion.div
-          animate={{ y: [0, -10, 0], scale: [1, 1.03, 1] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[-15%] right-[5%] w-[200px] h-[200px] rounded-full opacity-[0.05]"
-          style={{ background: "radial-gradient(circle, #171717, transparent 70%)" }}
-        />
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-          className="absolute bottom-[-10%] left-[10%] w-[150px] h-[150px] rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, #b45309, transparent 70%)" }}
-        />
-
-        {/* Small floating dots */}
-        <div className="absolute top-6 left-[25%] w-2.5 h-2.5 rounded-full bg-[#171717] opacity-[0.05] hidden sm:block" />
-        <div className="absolute bottom-8 right-[35%] w-2 h-2 rounded-full bg-[#171717] opacity-[0.05] hidden sm:block" />
-        <div className="absolute top-[50%] left-[8%] w-3 h-3 rounded-full bg-[#171717] opacity-[0.05] hidden sm:block" />
-
-        {/* Dashed curves */}
-        <svg className="absolute bottom-0 left-0 w-full h-10 opacity-[0.06] pointer-events-none" viewBox="0 0 800 30" fill="none">
-          <path d="M0 20 Q200 5 400 18 T800 8" stroke="#171717" strokeWidth="1" strokeDasharray="8 6" />
-        </svg>
-
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:pb-32 sm:pt-16 relative z-10">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-2">
-            האזור האישי
-          </h1>
-          <p className="text-white/50 text-base sm:text-lg">
-            צפו בפוליסות, מסמכים, המלצות ומידע מותאם אישית
-          </p>
+      {/* Hero — quiet ink tile */}
+      <section className="px-2 pt-2">
+        <div className="bento-panel-ink">
+          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-14 relative z-10">
+            <div className="border-t border-white/20 pt-5">
+              <LiveTag dark dot>PERSONAL AREA · SECURE</LiveTag>
+              <h1
+                className="mt-4 text-[#fafafa] leading-tight"
+                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.8rem, 4vw, 2.6rem)", letterSpacing: "-0.02em" }}
+              >
+                האזור האישי
+              </h1>
+              <p className="mt-2 text-[#fafafa]/50 text-base sm:text-lg">
+                צפו בפוליסות, מסמכים, המלצות ומידע מותאם אישית
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 pb-8 sm:pb-10 -mt-8 sm:-mt-24 relative z-20">
-        <PersonalAreaDashboard />
+      {/* Dashboard — paper tile */}
+      <main className="px-2 pt-2">
+        <div className="bento-panel">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10 relative z-10">
+            <PersonalAreaDashboard />
+          </div>
+        </div>
       </main>
       <Footer />
     </div>

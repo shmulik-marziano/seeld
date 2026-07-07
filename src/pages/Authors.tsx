@@ -2,9 +2,14 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Mail, Phone, Award, Shield, Heart, Briefcase, TrendingUp, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ScrollReveal";
-import DoodleDecoration from "@/components/DoodleDecoration";
+import { RING } from "@/lib/brand";
+
+const HEEBO = "'Heebo', sans-serif";
+
+// Outline contact buttons — white rectangles on the paper tile
+const contactBtnClass =
+  "inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white text-[#171717] hover:bg-[#fafafa] transition-colors text-sm font-medium min-h-[44px]";
 
 const Authors = () => {
   const specialties = [
@@ -17,100 +22,125 @@ const Authors = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background animate-fade-in" dir="rtl">
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
-      
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Hero */}
-        <div className="mb-16 text-center space-y-6 relative">
-          <div className="absolute top-0 left-8 hidden lg:block">
-            <DoodleDecoration type="handshake" size="lg" className="opacity-25 rotate-6" />
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-slide-down">
-            הסוכן שלכם
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-slide-up stagger-1">
-            ליווי אישי ומקצועי בתחומי הפיננסים והביטוח
-          </p>
-        </div>
 
-        {/* Agent Card */}
-        <ScrollReveal>
-          <div className="rounded-3xl bg-card p-8 md:p-12 mb-16 border border-border">
-            <div className="flex flex-col md:flex-row items-center gap-8">
-              <div className="w-36 h-36 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <span className="text-5xl font-bold text-primary">שמ</span>
-              </div>
-              <div className="flex-1 text-center md:text-right">
-                <h2 className="text-3xl font-bold mb-2">שמוליק מרציאנו</h2>
-                <p className="text-primary font-medium text-lg mb-4">סוכן ביטוח ופנסיה מוסמך</p>
-                <p className="text-muted-foreground leading-relaxed max-w-2xl mb-6">
-                  שמוליק מרציאנו הוא סוכן ביטוח ופנסיה מוסמך עם ניסיון עשיר בתחום הפיננסי. 
-                  מתמחה בבניית תוכניות ביטוח וחיסכון מותאמות אישית, תוך שקיפות מלאה 
-                  ומחויבות לאינטרס הלקוח. מלווה לקוחות רבים בכל שלבי החיים, מתכנון פנסיוני חכם 
-                  ועד הגנה ביטוחית מקיפה.
-                </p>
-                <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start">
-                  <a 
-                    href="tel:0523097444" 
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-border hover:border-primary hover:bg-muted transition-all text-sm font-medium"
-                  >
-                    <Phone className="w-4 h-4" />
-                    052-309-7444
-                  </a>
-                  <a 
-                    href="mailto:shmulik@seeld.co.il" 
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-border hover:border-primary hover:bg-muted transition-all text-sm font-medium"
-                  >
-                    <Mail className="w-4 h-4" />
-                    אימייל
-                  </a>
-                  <a 
-                    href="https://wa.me/972523097444" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all text-sm font-medium"
-                  >
-                    WhatsApp
-                  </a>
-                </div>
-              </div>
+      <main>
+        {/* ══════ THE AGENT — one quiet paper tile, no figures ══════ */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+            <div className="border-t border-[#171717]/20 pt-6 mb-12 sm:mb-16">
+              <h1
+                className="text-[#171717] leading-[1.15]"
+                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(2.2rem, 5vw, 3.4rem)", letterSpacing: "-0.03em" }}
+              >
+                הסוכן שלכם
+              </h1>
+              <p className="mt-4 text-lg text-[#5c5c5c] leading-relaxed max-w-3xl">
+                ליווי אישי ומקצועי בתחומי הפיננסים והביטוח
+              </p>
             </div>
-          </div>
-        </ScrollReveal>
 
-        {/* Specialties */}
-        <section className="mb-16">
-          <ScrollReveal>
-            <h2 className="text-3xl font-bold mb-8 text-center">תחומי התמחות</h2>
-          </ScrollReveal>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {specialties.map((spec, index) => (
-              <ScrollReveal key={spec.title} delay={index * 80}>
-                <div className="rounded-2xl bg-muted p-6 hover:bg-muted/80 transition-colors h-full">
-                  <spec.icon className="w-8 h-8 text-primary mb-3" />
-                  <h3 className="font-bold mb-1">{spec.title}</h3>
-                  <p className="text-muted-foreground text-sm">{spec.description}</p>
+            {/* Agent card */}
+            <ScrollReveal>
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+                <div
+                  className="w-32 h-32 rounded-full bg-white flex items-center justify-center flex-shrink-0"
+                  style={{ boxShadow: RING }}
+                >
+                  <span className="text-4xl text-[#171717]" style={{ fontFamily: HEEBO, fontWeight: 600 }}>שמ</span>
                 </div>
-              </ScrollReveal>
-            ))}
-          </div>
+                <div className="flex-1 text-center md:text-right">
+                  <h2
+                    className="text-[#171717] mb-1.5"
+                    style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.02em" }}
+                  >
+                    שמוליק מרציאנו
+                  </h2>
+                  <p className="text-[#5c5c5c] font-medium text-lg mb-4">סוכן ביטוח ופנסיה מוסמך</p>
+                  <p className="text-[#4d4d4d] leading-[1.9] max-w-2xl mb-6">
+                    שמוליק מרציאנו הוא סוכן ביטוח ופנסיה מוסמך עם ניסיון עשיר בתחום הפיננסי.
+                    מתמחה בבניית תוכניות ביטוח וחיסכון מותאמות אישית, תוך שקיפות מלאה
+                    ומחויבות לאינטרס הלקוח. מלווה לקוחות רבים בכל שלבי החיים, מתכנון פנסיוני חכם
+                    ועד הגנה ביטוחית מקיפה.
+                  </p>
+                  <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start">
+                    <a href="tel:0523097444" className={contactBtnClass} style={{ boxShadow: RING }}>
+                      <Phone className="w-4 h-4" />
+                      <span dir="ltr" className="tabular-nums">052-309-7444</span>
+                    </a>
+                    <a href="mailto:shmulik@seeld.co.il" className={contactBtnClass} style={{ boxShadow: RING }}>
+                      <Mail className="w-4 h-4" />
+                      אימייל
+                    </a>
+                    <a
+                      href="https://wa.me/972523097444"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#171717] text-[#fafafa] hover:bg-[#33332f] transition-colors text-sm font-medium min-h-[44px]"
+                    >
+                      WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </ScrollReveal>
+          </div></div>
         </section>
 
-        {/* CTA */}
-        <ScrollReveal direction="scale">
-          <section className="rounded-3xl bg-primary/5 p-8 md:p-12 text-center border border-border">
-            <h2 className="text-3xl font-bold mb-4">רוצים להתחיל?</h2>
-            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-              פגישת ייעוץ ראשונית ללא עלות וללא התחייבות. בואו נכיר ונבנה יחד תוכנית מותאמת.
-            </p>
-            <Link to="/contact">
-              <Button size="lg" className="rounded-full px-10">
-                קבעו פגישה
-              </Button>
-            </Link>
-          </section>
-        </ScrollReveal>
+        {/* ══════ SPECIALTIES — ruled list on paper ══════ */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-16 relative z-10">
+            <ScrollReveal>
+              <div className="border-t border-[#171717]/20 pt-6 mb-10 sm:mb-12">
+                <h2
+                  className="text-[#171717] leading-tight"
+                  style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)", letterSpacing: "-0.02em" }}
+                >
+                  תחומי התמחות
+                </h2>
+              </div>
+            </ScrollReveal>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-8">
+              {specialties.map((spec, index) => (
+                <ScrollReveal key={spec.title} delay={index * 60}>
+                  <div className="border-t border-[#171717]/15 pt-5 h-full">
+                    <spec.icon className="w-5 h-5 text-[#171717] mb-3" strokeWidth={1.5} />
+                    <h3 className="text-base text-[#171717] mb-1.5" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+                      {spec.title}
+                    </h3>
+                    <p className="text-[#5c5c5c] text-sm leading-[1.8]">{spec.description}</p>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div></div>
+        </section>
+
+        {/* ══════ CTA — ink tile ══════ */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel-ink"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-16 sm:py-20 relative z-10">
+            <ScrollReveal>
+              <div className="border-t border-white/20 pt-6 max-w-3xl">
+                <h2
+                  className="text-[#fafafa] leading-tight mb-3"
+                  style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.02em" }}
+                >
+                  רוצים להתחיל?
+                </h2>
+                <p className="text-[#fafafa]/50 text-base leading-[1.85] max-w-xl mb-8">
+                  פגישת ייעוץ ראשונית ללא עלות וללא התחייבות. בואו נכיר ונבנה יחד תוכנית מותאמת.
+                </p>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center justify-center rounded-md px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
+                >
+                  קבעו פגישה
+                </Link>
+              </div>
+            </ScrollReveal>
+          </div></div>
+        </section>
       </main>
 
       <Footer />

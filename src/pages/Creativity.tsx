@@ -2,9 +2,12 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import { MONO, FAINT } from "@/lib/brand";
+import { MONO } from "@/lib/brand";
+import { FamilyFigure } from "@/components/brand/Figures";
 
 const HEEBO = "'Heebo', sans-serif";
+// Captions on the warm paper tiles stay at #5c5c5c minimum (AA on paper).
+const PAPER_MUTED = "#5c5c5c";
 
 const Creativity = () => {
   const insuranceTypes = [
@@ -21,51 +24,54 @@ const Creativity = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
       <Header />
 
       <main>
-        {/* Hero */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-14 sm:pb-20">
-            <div className="border-t border-[#171717]/20 pt-4">
-              <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#6e6e6e]">
-                <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-                <span aria-hidden="true">/</span>
-                <span className="text-[#171717]">ביטוח רכוש ורכב</span>
-              </nav>
-            </div>
-            <div className="mt-12 sm:mt-16 max-w-3xl">
-              <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: FAINT }}>
-                PROPERTY · VEHICLE
-              </span>
-              <h1
-                className="mt-4 text-[#171717] leading-[1.1]"
-                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(2.2rem, 5vw, 3.4rem)", letterSpacing: "-0.03em" }}
-              >
-                ביטוח רכוש ורכב
-              </h1>
-              <p className="mt-5 text-lg sm:text-xl text-[#171717]/60 leading-[1.8] max-w-2xl">
-                רכב, דירה, עסק ונסיעות: השוואת הצעות מחיר מול כל החברות בשוק, ללא עלות.
-              </p>
-              <div className="mt-8">
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#262626] transition-colors min-h-[52px]"
+        {/* Hero — paper tile; the family peeks from the corner */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel">
+            <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-10 sm:pt-14 pb-14 sm:pb-20 relative z-10">
+              <div className="border-t border-[#171717]/20 pt-4">
+                <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px] text-[#5c5c5c]">
+                  <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
+                  <span aria-hidden="true">/</span>
+                  <span className="text-[#171717]">ביטוח רכוש ורכב</span>
+                </nav>
+              </div>
+              <div className="mt-12 sm:mt-16 max-w-3xl">
+                <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
+                  PROPERTY · VEHICLE
+                </span>
+                <h1
+                  className="mt-4 text-[#171717] leading-[1.1]"
+                  style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(2.2rem, 5vw, 3.4rem)", letterSpacing: "-0.03em" }}
                 >
-                  הצטרפו ל-SEELD
-                </Link>
+                  ביטוח רכוש ורכב
+                </h1>
+                <p className="mt-5 text-lg sm:text-xl text-[#4d4d4d] leading-[1.8] max-w-2xl">
+                  רכב, דירה, עסק ונסיעות: השוואת הצעות מחיר מול כל החברות בשוק, ללא עלות.
+                </p>
+                <div className="mt-8">
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center justify-center rounded-md px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
+                  >
+                    הצטרפו ל-SEELD
+                  </Link>
+                </div>
               </div>
             </div>
+            <FamilyFigure className="absolute -left-3 -bottom-4 w-16 h-16 opacity-70 rotate-12 pointer-events-none" />
           </div>
         </section>
 
         {/* 01 — Insurance types, ruled list */}
-        <section style={{ backgroundColor: "#fafafa" }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
               <div className="border-t border-[#171717]/20 pt-6 mb-12 sm:mb-14 flex items-baseline gap-6 sm:gap-10">
-                <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: FAINT, fontFamily: MONO }}>
+                <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED, fontFamily: MONO }}>
                   01
                 </span>
                 <h2
@@ -87,19 +93,19 @@ const Creativity = () => {
                       <span className="text-[#171717]/30 group-hover:text-[#171717] transition-all group-hover:-translate-x-1" aria-hidden="true">←</span>
                     </div>
                     <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{type.description}</p>
-                    <p className="mt-3 text-[13px] text-[#6e6e6e]">
+                    <p className="mt-3 text-[13px] text-[#5c5c5c]">
                       {type.features.join(" · ")}
                     </p>
                   </Link>
                 </ScrollReveal>
               ))}
             </div>
-          </div>
+          </div></div>
         </section>
 
         {/* Numbers */}
-        <section className="bg-white">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <section className="px-2 pt-2">
+          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-10 border-t border-b border-[#171717]/15 py-10 sm:py-14">
                 {stats.map((stat) => (
@@ -111,20 +117,20 @@ const Creativity = () => {
                     >
                       {stat.value}
                     </div>
-                    <div className="text-[12px] tracking-[0.12em] text-[#6e6e6e]">{stat.label}</div>
+                    <div className="text-[12px] tracking-[0.12em] text-[#5c5c5c]">{stat.label}</div>
                   </div>
                 ))}
               </div>
-              <p className="mt-5 text-center text-[12px] text-[#6e6e6e]">
+              <p className="mt-5 text-center text-[12px] text-[#5c5c5c]">
                 למה לבחור ב-SEELD? המספרים עונים.
               </p>
             </ScrollReveal>
-          </div>
+          </div></div>
         </section>
 
-        {/* CTA — the one dark band */}
-        <section style={{ backgroundColor: "#171717" }}>
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+        {/* CTA — the one ink tile */}
+        <section className="px-2 pt-2">
+          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
             <ScrollReveal>
               <div className="border-t border-white/20 pt-6 max-w-3xl">
                 <h2
@@ -139,14 +145,14 @@ const Creativity = () => {
                 <div className="mt-8">
                   <Link
                     to="/contact"
-                    className="inline-flex items-center justify-center px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
+                    className="inline-flex items-center justify-center rounded-md px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
                   >
                     התחילו עכשיו
                   </Link>
                 </div>
               </div>
             </ScrollReveal>
-          </div>
+          </div></div>
         </section>
       </main>
 
