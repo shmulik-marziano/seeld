@@ -27,3 +27,4 @@ dist-ssr
 .claude/
 .mcp.json
 CLAUDE.local.md
+.agents/
