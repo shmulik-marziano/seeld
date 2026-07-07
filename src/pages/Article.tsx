@@ -3,40 +3,39 @@ import Header from "@/components/Header";
 import { getArticleById, getRelatedArticles, type Article as ArticleData } from "@/data/articles";
 import { Facebook, Twitter, Linkedin, Link2, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
-import { MONO, RING, CARD_SHADOW } from "@/lib/brand";
+import { BODY, DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_PEACH } from "@/lib/brand";
 
-const HEEBO = "'Heebo', sans-serif";
+// SEELD DNA v3: white canvas, navy display headings, hairline rules (STYLESEED.md)
 
-// Share icon buttons — quiet white squares on the paper tile
+// Share icon buttons — quiet white squares with a hairline border
 const shareBtnClass =
-  "w-10 h-10 rounded-md bg-white text-[#171717] hover:bg-[#fafafa] transition-colors flex items-center justify-center";
+  "w-10 h-10 rounded-md bg-white border border-[#E7EDF1] text-[#1D2D3D] hover:bg-[#F4F8F7] transition-colors flex items-center justify-center";
 
-// The homogeneous SEELD article card — white tile on the paper panel.
-// Whole-tile link, so it takes the .bento-hover quiet lift (Snap motion).
+// The unified SEELD article card — .dna-concept tile, whole-tile link,
+// .dna-hover quiet lift (Snap motion). Metadata sits under the title.
 const ArticleTile = ({ article }: { article: ArticleData }) => (
   <Link
     to={`/article/${article.id}`}
-    className="bento-hover group flex h-full flex-col overflow-hidden rounded-lg bg-white"
-    style={{ boxShadow: CARD_SHADOW }}
+    className="dna-concept dna-hover group flex h-full flex-col overflow-hidden !p-0"
   >
     <div className="aspect-[16/10] overflow-hidden">
       <img src={article.image} alt="" loading="lazy" className="w-full h-full object-cover" />
     </div>
     <div className="flex flex-1 flex-col p-5 sm:p-6">
+      <h3 className="text-[17px] leading-snug" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
+        {article.title}
+      </h3>
       <div
-        className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-[11px] tracking-[0.08em] text-[#5c5c5c]"
-        style={{ fontFamily: MONO }}
+      className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[11px] tracking-[0.08em]"
+        style={{ fontFamily: MONO, color: MUTED }}
       >
         <span>{article.category}</span>
         <span className="tabular-nums">
           {article.date} · <span dir="ltr">{article.readTime}</span>
         </span>
       </div>
-      <h3 className="mt-3 text-lg text-[#171717] leading-snug" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
-        {article.title}
-      </h3>
-      <p className="mt-2 text-[14px] text-[#4d4d4d] leading-[1.7] line-clamp-2">{article.subtitle}</p>
-      <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#171717]">
+      <p className="mt-2.5 text-[14px] leading-[1.7] line-clamp-2" style={{ color: BODY }}>{article.subtitle}</p>
+      <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#1D2D3D]">
         קראו עוד
         <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
       </span>
@@ -60,54 +59,59 @@ const Article = () => {
   };
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
       <main>
-        {/* ══════ THE READING TILE — one quiet paper surface, no figures ══════ */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-4xl mx-auto px-5 sm:px-8 py-10 sm:py-14 relative z-10">
+        {/* ══════ THE READING SURFACE — white canvas, pastel circles ══════ */}
+        <section className="dna-page">
+          <div className="dna-circles" aria-hidden="true">
+            <div
+              className="dna-circ"
+              style={{ width: 260, height: 260, top: -110, left: -100, backgroundColor: PASTEL_BLUE, opacity: 0.5 }}
+            />
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 200, height: 200, top: "38%", right: -110, backgroundColor: PASTEL_PEACH, opacity: 0.5 }}
+            />
+          </div>
+          <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
             {/* Back navigation */}
-            <div className="border-t border-[#171717]/20 pt-5 mb-10">
+            <div className="mb-10">
               <a
                 href="/"
-                className="inline-flex items-center gap-2 text-sm text-[#5c5c5c] hover:text-[#171717] transition-colors"
+                className="inline-flex items-center gap-2 text-sm hover:text-[#1D2D3D] transition-colors"
+                style={{ color: MUTED }}
               >
                 <ArrowRight className="w-4 h-4" />
                 חזרה למאמרים
               </a>
             </div>
 
-            {/* Meta row — mono eyebrow: date + read time (numbers stay LTR) */}
-            <div className="flex flex-wrap items-baseline gap-3 mb-6">
-              <span
-                className="px-3.5 py-1.5 rounded-full bg-white text-[12px] font-medium text-[#171717]"
-                style={{ boxShadow: RING }}
-              >
-                {article.category}
-              </span>
-              <span className="text-[12px] tracking-[0.08em] text-[#5c5c5c] tabular-nums" style={{ fontFamily: MONO }}>
-                {article.date}
-              </span>
-              <span className="text-[12px] text-[#5c5c5c]" aria-hidden="true" style={{ fontFamily: MONO }}>·</span>
-              <span className="text-[12px] tracking-[0.08em] text-[#5c5c5c] tabular-nums" style={{ fontFamily: MONO }}>
+            <h1 className="dna-display leading-[1.15] mb-4" style={{ fontSize: "clamp(32px, 5vw, 50px)" }}>
+              {article.title}
+            </h1>
+
+            {/* Metadata under the title — mono, muted (category, date, read time) */}
+            <div
+              className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-6 text-[12px] tracking-[0.08em]"
+              style={{ fontFamily: MONO, color: MUTED }}
+            >
+              <span>{article.category}</span>
+              <span aria-hidden="true">·</span>
+              <span className="tabular-nums">{article.date}</span>
+              <span aria-hidden="true">·</span>
+              <span className="tabular-nums">
                 <span dir="ltr">{article.readTime}</span> קריאה
               </span>
             </div>
 
-            <h1
-              className="text-[#171717] leading-[1.15] mb-4"
-              style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.2rem)", letterSpacing: "-0.02em" }}
-            >
-              {article.title}
-            </h1>
-
-            <p className="text-lg sm:text-xl text-[#4d4d4d] leading-[1.8] mb-10 max-w-2xl">
+            <p className="text-lg sm:text-xl leading-[1.8] mb-10 max-w-2xl" style={{ color: MUTED }}>
               {article.subtitle}
             </p>
 
-            {/* Hero image — framed inside the tile */}
-            <div className="rounded-lg overflow-hidden mb-10" style={{ boxShadow: RING }}>
+            {/* Hero image — framed by a hairline */}
+            <div className="rounded-xl overflow-hidden mb-10 border" style={{ borderColor: LINE }}>
               <img
                 src={article.image}
                 alt={article.title}
@@ -116,19 +120,19 @@ const Article = () => {
             </div>
 
             {/* Author + share */}
-            <div className="flex items-center justify-between border-t border-b border-[#171717]/15 py-6 mb-12">
+            <div className="flex items-center justify-between border-t border-b py-6 mb-12" style={{ borderColor: LINE }}>
               <div className="flex items-center gap-4">
                 <img
                   src={article.author.avatar}
                   alt={article.author.name}
-                  className="w-14 h-14 rounded-full object-cover"
-                  style={{ boxShadow: RING }}
+                  className="w-14 h-14 rounded-full object-cover border"
+                  style={{ borderColor: LINE }}
                 />
                 <div>
-                  <p className="text-[15px] text-[#171717]" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+                  <p className="text-[15px]" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                     {article.author.name}
                   </p>
-                  <p className="text-sm text-[#5c5c5c]">{article.author.bio}</p>
+                  <p className="text-sm" style={{ color: MUTED }}>{article.author.bio}</p>
                 </div>
               </div>
 
@@ -136,7 +140,6 @@ const Article = () => {
                 <button
                   onClick={handleCopyLink}
                   className={shareBtnClass}
-                  style={{ boxShadow: RING }}
                   aria-label="העתק קישור"
                 >
                   <Link2 className="w-4 h-4" />
@@ -146,7 +149,6 @@ const Article = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={shareBtnClass}
-                  style={{ boxShadow: RING }}
                   aria-label="שתף בטוויטר"
                 >
                   <Twitter className="w-4 h-4" />
@@ -156,7 +158,6 @@ const Article = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={shareBtnClass}
-                  style={{ boxShadow: RING }}
                   aria-label="שתף בפייסבוק"
                 >
                   <Facebook className="w-4 h-4" />
@@ -166,7 +167,6 @@ const Article = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={shareBtnClass}
-                  style={{ boxShadow: RING }}
                   aria-label="שתף בלינקדאין"
                 >
                   <Linkedin className="w-4 h-4" />
@@ -176,38 +176,39 @@ const Article = () => {
 
             {/* Article content — reading measure capped at ~65ch */}
             <div className="mb-16" style={{ maxWidth: "65ch" }}>
-              <p className="text-base sm:text-lg leading-[1.9] text-[#4d4d4d] mb-10">
+              <p className="text-base sm:text-lg leading-[1.9] mb-10" style={{ color: BODY }}>
                 {article.content.introduction}
               </p>
 
               {article.content.sections.map((section, index) => (
                 <div key={index} className="mb-10">
-                  <div className="border-t border-[#171717]/15 pt-5 mb-4">
+                  <div className="border-t pt-5 mb-4" style={{ borderColor: LINE }}>
                     <h2
-                      className="text-[#171717] leading-tight"
-                      style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.4rem, 2.6vw, 1.9rem)", letterSpacing: "-0.02em" }}
+                      className="leading-tight"
+                      style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY, fontSize: "clamp(1.35rem, 2.4vw, 1.75rem)" }}
                     >
                       {section.heading}
                     </h2>
                   </div>
-                  <p className="text-base sm:text-lg leading-[1.9] text-[#4d4d4d]">
+                  <p className="text-base sm:text-lg leading-[1.9]" style={{ color: BODY }}>
                     {section.content}
                   </p>
                 </div>
               ))}
 
-              <div className="mt-12 border-r-2 border-[#171717] pr-6">
-                <p className="text-base sm:text-lg leading-[1.9] italic text-[#171717]">
+              {/* Closing thought — the DNA quote box */}
+              <div className="mt-12 dna-quote">
+                <p className="text-base sm:text-lg leading-[1.9]" style={{ color: BODY }}>
                   {article.content.conclusion}
                 </p>
               </div>
             </div>
 
             {/* Tags */}
-            <div className="mb-12 pb-10 border-b border-[#171717]/15">
+            <div className="mb-12 pb-10 border-b" style={{ borderColor: LINE }}>
               <div className="flex flex-wrap gap-x-5 gap-y-2">
                 {article.tags.map((tag) => (
-                  <span key={tag} className="text-[13px] text-[#5c5c5c]" style={{ fontFamily: MONO }}>
+                  <span key={tag} className="text-[13px]" style={{ fontFamily: MONO, color: MUTED }}>
                     #{tag}
                   </span>
                 ))}
@@ -216,12 +217,11 @@ const Article = () => {
 
             {/* Mobile share buttons */}
             <div className="md:hidden">
-              <p className="text-sm text-[#171717] mb-4" style={{ fontFamily: HEEBO, fontWeight: 600 }}>שתפו את המאמר</p>
+              <p className="text-sm mb-4" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>שתפו את המאמר</p>
               <div className="flex items-center gap-3">
                 <button
                   onClick={handleCopyLink}
-                  className="flex-1 py-3 rounded-md bg-white text-[#171717] hover:bg-[#fafafa] transition-colors flex items-center justify-center gap-2 min-h-[48px]"
-                  style={{ boxShadow: RING }}
+                  className="flex-1 py-3 rounded-md bg-white border border-[#E7EDF1] text-[#1D2D3D] hover:bg-[#F4F8F7] transition-colors flex items-center justify-center gap-2 min-h-[48px]"
                 >
                   <Link2 className="w-4 h-4" />
                   <span className="text-sm font-medium">העתק קישור</span>
@@ -230,8 +230,7 @@ const Article = () => {
                   href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(window.location.href)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-md bg-white text-[#171717] hover:bg-[#fafafa] transition-colors flex items-center justify-center"
-                  style={{ boxShadow: RING }}
+                  className="w-12 h-12 rounded-md bg-white border border-[#E7EDF1] text-[#1D2D3D] hover:bg-[#F4F8F7] transition-colors flex items-center justify-center"
                   aria-label="שתף בטוויטר"
                 >
                   <Twitter className="w-4 h-4" />
@@ -240,65 +239,64 @@ const Article = () => {
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-md bg-white text-[#171717] hover:bg-[#fafafa] transition-colors flex items-center justify-center"
-                  style={{ boxShadow: RING }}
+                  className="w-12 h-12 rounded-md bg-white border border-[#E7EDF1] text-[#1D2D3D] hover:bg-[#F4F8F7] transition-colors flex items-center justify-center"
                   aria-label="שתף בפייסבוק"
                 >
                   <Facebook className="w-4 h-4" />
                 </a>
               </div>
             </div>
-          </div></div>
+          </div>
         </section>
 
-        {/* ══════ NEWSLETTER — ink tile ══════ */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel-ink"><div className="max-w-4xl mx-auto px-5 sm:px-8 py-14 sm:py-16 relative z-10 text-center">
+        {/* ══════ NEWSLETTER — institutional navy band ══════ */}
+        <section style={{ backgroundColor: NAVY }}>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 sm:py-16 text-center">
             <h3
-              className="text-[#fafafa] leading-tight mb-3"
-              style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.4rem, 2.8vw, 2rem)", letterSpacing: "-0.02em" }}
+              className="text-white leading-tight mb-3"
+              style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.4rem, 2.8vw, 2rem)", letterSpacing: "-0.5px" }}
             >
               נהניתם מהמאמר?
             </h3>
-            <p className="text-[#fafafa]/50 text-base leading-relaxed mb-8">
+            <p className="text-base leading-relaxed mb-8" style={{ color: "rgba(255,255,255,.65)" }}>
               הירשמו לקבלת עוד תובנות כאלה ישירות לתיבת הדואר שלכם.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <input
                 type="email"
                 placeholder="האימייל שלכם"
-                className="flex-1 px-0 py-3 bg-transparent border-b border-white/25 text-[#fafafa] placeholder:text-[#fafafa]/50 text-base focus:outline-none focus:border-white transition-colors text-right rounded-none min-h-[48px]"
+                className="flex-1 px-0 py-3 bg-transparent border-b border-white/30 text-white placeholder:text-white/55 text-base focus:outline-none focus:border-white transition-colors text-right rounded-none min-h-[48px]"
               />
               <button
                 type="button"
-                className="inline-flex items-center justify-center rounded-md px-8 py-3 bg-[#fafafa] text-[#171717] text-base font-medium hover:bg-white transition-colors min-h-[48px]"
+                className="inline-flex items-center justify-center rounded-lg px-8 py-3 bg-white text-[#1D2D3D] text-base font-medium hover:bg-[#E7EDF1] transition-colors min-h-[48px]"
               >
                 הרשמה
               </button>
             </div>
-          </div></div>
+          </div>
         </section>
 
-        {/* ══════ RELATED ARTICLES — paper tile ══════ */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-16 relative z-10">
-            <div className="border-t border-[#171717]/20 pt-6 mb-10">
-              <h2
-                className="text-[#171717] leading-tight"
-                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)", letterSpacing: "-0.02em" }}
-              >
+        {/* ══════ RELATED ARTICLES ══════ */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-16">
+            <div className="mb-10">
+              <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}>
                 אולי יעניין אתכם גם
               </h2>
             </div>
-            {/* The homogeneous SEELD article cards — white tiles, .bento-hover quiet lift */}
+            {/* The unified SEELD article cards — .dna-concept tiles, .dna-hover quiet lift */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {relatedArticles.map((relatedArticle) => (
                 <ArticleTile key={relatedArticle.id} article={relatedArticle} />
               ))}
             </div>
-          </div></div>
+          </div>
         </section>
       </main>
+
+      {/* The signature gradient bar — this page has no site footer */}
+      <div className="dna-gbar" />
     </div>
   );
 };

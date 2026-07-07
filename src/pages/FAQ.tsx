@@ -9,11 +9,12 @@ import {
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
-import { SERIF, MONO } from "@/lib/brand";
+import {
+  DISPLAY, LINE, MUTED, NAVY, PASTEL_BLUE, PASTEL_PEACH,
+} from "@/lib/brand";
 import { StatusPill } from "@/components/brand/Live";
 
-// SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
-const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
+// SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
 
 const faqCategories = [
   {
@@ -62,71 +63,79 @@ const faqCategories = [
   },
 ];
 
+// Underline tabs — turquoise active marker, navy active text
 const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#5c5c5c] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors";
+  "rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#5a6a78] border-b-2 border-transparent data-[state=active]:border-[#4E9D8F] data-[state=active]:text-[#1D2D3D] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors";
 
 const FAQ = () => {
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* HERO — bento row: find your answer + the tiny orange tag tile */}
-      <section className="px-2 pt-2">
-        <div className="grid gap-2 lg:grid-cols-[1fr_auto] items-stretch">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10 w-full">
-            <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-              <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
-                <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-                <span>←</span>
-                <span className="text-[#171717]/70 font-medium">שאלות נפוצות</span>
-              </nav>
-              <span className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium" style={{ color: PAPER_MUTED }}>
-                שאלות ותשובות
-              </span>
+      <main>
+        {/* HERO — find your answer */}
+        <section className="dna-page">
+          {/* Pastel circle backdrop — decorative, never behind small text */}
+          <div className="dna-circles" aria-hidden="true">
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 280, height: 280, top: -120, left: -100, backgroundColor: PASTEL_BLUE, opacity: 0.55 }}
+            />
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 210, height: 210, bottom: -110, right: -70, backgroundColor: PASTEL_PEACH, opacity: 0.5 }}
+            />
+            {/* The playful gesture: a giant background question mark (Frank Ruhl 900, decorative) */}
+            <div
+              className="hidden lg:block absolute select-none"
+              style={{
+                fontFamily: DISPLAY,
+                fontWeight: 900,
+                color: NAVY,
+                opacity: 0.05,
+                fontSize: "clamp(180px, 22vw, 320px)",
+                lineHeight: 1,
+                left: "6%",
+                top: "-4%",
+              }}
+            >
+              ?
             </div>
+          </div>
+
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
+            <nav className="flex items-center gap-2 text-[13px] mb-10 sm:mb-14" style={{ color: MUTED }}>
+              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <span aria-hidden="true">←</span>
+              <span className="font-medium" style={{ color: NAVY }}>שאלות נפוצות</span>
+            </nav>
 
             <h1
-              className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
-              style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
+              className="dna-display leading-[1.12] mb-6 max-w-3xl"
+              style={{ fontSize: "clamp(34px, 5vw, 50px)" }}
             >
               שאלות נפוצות
             </h1>
-            <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9] mb-8">
+            <p className="text-base sm:text-[17px] max-w-2xl leading-[1.9] mb-8" style={{ color: MUTED }}>
               שאלות שכולם שואלים. תשובות שפחות שומעים.
             </p>
             <button
               type="button"
               onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-              className="block bento-hover rounded-full"
+              className="block dna-hover rounded-full"
               aria-label="פתיחת שיחה עם יועץ SEELD"
             >
               <StatusPill>היועץ מחובר עכשיו · שאלו במקום לגלול</StatusPill>
             </button>
-          </div></div>
-
-          {/* Tiny orange tag tile beside the title */}
-          <div className="bento-panel-orange flex lg:flex-col items-center justify-center gap-3 px-6 py-4 lg:py-8 lg:w-[120px]">
-            <span
-              className="text-[11px] tracking-[0.24em] font-semibold text-[#171717]/80 lg:[writing-mode:vertical-rl]"
-              style={{ fontFamily: MONO }}
-              dir="ltr"
-            >
-              Q&amp;A
-            </span>
-            <span className="text-[14px] font-semibold text-[#171717] whitespace-nowrap lg:[writing-mode:vertical-rl]">
-              תשובות ישירות
-            </span>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <main>
-        {/* QUESTIONS — categories as underline tabs, all in one paper tile */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+        {/* QUESTIONS — categories as underline tabs */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
               <Tabs defaultValue="insurance" dir="rtl">
-                <TabsList className="flex w-full justify-start gap-8 sm:gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none overflow-x-auto">
+                <TabsList className="flex w-full justify-start gap-8 sm:gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#E7EDF1] rounded-none overflow-x-auto">
                   {faqCategories.map((category) => (
                     <TabsTrigger key={category.id} value={category.id} className={tabTriggerClass}>
                       {category.title}
@@ -142,12 +151,12 @@ const FAQ = () => {
                           <AccordionItem
                             key={idx}
                             value={`${category.id}-${idx}`}
-                            className="border-b border-[#171717]/10 rounded-none px-0 transition-colors hover:border-[#171717]/40"
+                            className="border-b border-[#E7EDF1] rounded-none px-0"
                           >
-                            <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#171717]">
+                            <AccordionTrigger className="text-base font-medium hover:no-underline py-5 px-3 -mx-3 rounded-md text-[#1D2D3D] text-start hover:bg-[#E1EAF1]/35 transition-colors">
                               {item.q}
                             </AccordionTrigger>
-                            <AccordionContent className="text-[#4d4d4d] leading-[1.85] pb-6 text-[14px] max-w-2xl">
+                            <AccordionContent className="text-[14.5px] leading-[1.85] pb-6 max-w-2xl text-[#3a4c5a]">
                               {item.a}
                             </AccordionContent>
                           </AccordionItem>
@@ -158,30 +167,33 @@ const FAQ = () => {
                 ))}
               </Tabs>
             </ScrollReveal>
-          </div></div>
+          </div>
         </section>
 
-        {/* CTA — the one next action (ink tile) */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
-            <div className="border-t border-white/20 pt-6">
-              <h2
-                className="text-[#fafafa] leading-tight mb-3"
-                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
-              >
-                לא מצאתם תשובה?
-              </h2>
-              <p className="text-[#fafafa]/55 text-base leading-[1.85] mb-8 max-w-xl">
-                שאלה על התיק שלכם היא לא שאלה נפוצה. בשביל זה יש בן אדם.
-              </p>
-              <Link
-                to="/contact"
-                className="inline-flex items-center justify-center px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
-              >
-                צרו קשר
-              </Link>
-            </div>
-          </div></div>
+        {/* CTA — institutional navy band */}
+        <section style={{ backgroundColor: NAVY }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+            <h2
+              className="text-white leading-tight mb-3"
+              style={{
+                fontFamily: DISPLAY,
+                fontWeight: 900,
+                fontSize: "clamp(1.7rem, 3.2vw, 2.4rem)",
+                letterSpacing: "-0.5px",
+              }}
+            >
+              לא מצאתם תשובה?
+            </h2>
+            <p className="text-base leading-[1.85] mb-9 max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
+              שאלה על התיק שלכם היא לא שאלה נפוצה. בשביל זה יש בן אדם.
+            </p>
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+            >
+              צרו קשר
+            </Link>
+          </div>
         </section>
       </main>
 

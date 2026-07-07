@@ -1,29 +1,29 @@
 import { useState, useMemo, useEffect, useRef } from "react";
-import { BarChart3, Calendar, Banknote, TrendingUp, AlertTriangle, Rocket, Scale, Baby, Star, Shield } from "lucide-react";
+import { Calendar, Banknote, Rocket, Scale, Baby, Star, Shield } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SaveCalculationButton from "@/components/SaveCalculationButton";
+import { DISPLAY, MONO, MUTED, NAVY, TURQ, TURQ_TEXT } from "@/lib/brand";
+
+// SEELD DNA v3 (STYLESEED.md): boxed inputs, .dna-concept result cards,
+// Frank Ruhl 900 turquoise standout stats, kit CSS bar chart with mono LTR values.
+
+const inputClass =
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#E7EDF1] rounded-lg text-[#1D2D3D] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1D2D3D]";
+const sliderClass =
+  "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#4E9D8F] [&_[role=slider]]:border-[#4E9D8F]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#1D2D3D]";
 
 interface Track {
   name: string;
   rate: number;
-  emoji: string;
-  icon: React.ComponentType<{ className?: string }>;
-  color: string;
-  bgColor: string;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
 }
 
-interface TrackResult {
-  name: string;
-  rate: number;
-  emoji: string;
-  icon: React.ComponentType<{ className?: string }>;
+interface TrackResult extends Track {
   finalValue: number;
   profit: number;
-  color: string;
-  bgColor: string;
 }
 
 // Animated number component
@@ -41,11 +41,11 @@ const AnimatedNumber = ({ value, format }: { value: number; format: (n: number) 
     const animate = (currentTime: number) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      
+
       // Ease out cubic
       const easeOut = 1 - Math.pow(1 - progress, 3);
       const currentValue = startValue + (endValue - startValue) * easeOut;
-      
+
       setDisplayValue(currentValue);
 
       if (progress < 1) {
@@ -73,18 +73,18 @@ const CompareCalculator = () => {
 
   // Investment tracks with their average annual returns (based on 5-year averages)
   const tracks: Track[] = [
-    { name: "מניות", rate: 12.25, emoji: "🚀", icon: Rocket, color: "text-secondary", bgColor: "bg-secondary/10" },
-    { name: "כללי", rate: 8.21, emoji: "⚖️", icon: Scale, color: "text-primary", bgColor: "bg-primary/10" },
-    { name: "לבני 50-", rate: 9.03, emoji: "👶", icon: Baby, color: "text-blue-500", bgColor: "bg-blue-500/10" },
-    { name: "הלכתי", rate: 6.96, emoji: "✡️", icon: Star, color: "text-purple-500", bgColor: "bg-purple-500/10" },
-    { name: "אג\"ח", rate: 3.21, emoji: "🛡️", icon: Shield, color: "text-accent", bgColor: "bg-accent/10" },
+    { name: "מניות", rate: 12.25, icon: Rocket },
+    { name: "כללי", rate: 8.21, icon: Scale },
+    { name: "לבני 50-", rate: 9.03, icon: Baby },
+    { name: "הלכתי", rate: 6.96, icon: Star },
+    { name: "אג\"ח", rate: 3.21, icon: Shield },
   ];
 
   const results: TrackResult[] = useMemo(() => {
     return tracks.map((track) => {
       const finalValue = investmentAmount * Math.pow(1 + track.rate / 100, years);
       const profit = finalValue - investmentAmount;
-      
+
       return {
         ...track,
         finalValue,
@@ -115,19 +115,25 @@ const CompareCalculator = () => {
   return (
     <div className="space-y-8" dir="rtl">
       {/* Main Investment Input - Big and Prominent */}
-      <div className="relative">
-        <div className="absolute -top-3 right-4 bg-background px-3 py-1 rounded-full text-sm font-semibold text-secondary z-10 border border-secondary/20">
-          כמה תרצה להשקיע?
-        </div>
-        <div className="relative">
+      <div className="space-y-3">
+        <Label htmlFor="compareAmount" className={labelClass}>
+          <Banknote className="w-4 h-4" style={{ color: TURQ }} />
+          כמה תרצו להשקיע?
+        </Label>
+        <div className="relative max-w-xl">
           <Input
+            id="compareAmount"
             type="text"
             value={investmentAmount.toLocaleString("he-IL")}
             onChange={(e) => handleAmountChange(e.target.value)}
-            className="text-center text-3xl md:text-4xl font-bold h-20 rounded-2xl border-2 border-secondary/30 bg-gradient-to-br from-secondary/5 to-primary/5 focus:border-secondary"
+            className="h-20 text-center text-3xl md:text-4xl font-bold tabular-nums bg-white border-[#E7EDF1] rounded-lg text-[#1D2D3D] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1D2D3D]"
             dir="ltr"
           />
-          <span className="absolute left-6 top-1/2 -translate-y-1/2 text-2xl font-semibold text-secondary">
+          <span
+            className="absolute left-6 top-1/2 -translate-y-1/2 text-2xl font-semibold"
+            style={{ color: TURQ, fontFamily: MONO }}
+            aria-hidden="true"
+          >
             ₪
           </span>
         </div>
@@ -136,11 +142,16 @@ const CompareCalculator = () => {
       {/* Years Slider */}
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <Label className="flex items-center gap-2 text-base font-medium">
-            <Calendar className="w-4 h-4" />
+          <Label className={labelClass}>
+            <Calendar className="w-4 h-4" style={{ color: TURQ }} />
             לכמה שנים?
           </Label>
-          <span className="text-2xl font-bold text-secondary">{years} שנים</span>
+          <span
+            className="text-2xl tabular-nums"
+            style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ }}
+          >
+            {years} שנים
+          </span>
         </div>
         <Slider
           value={[years]}
@@ -148,8 +159,9 @@ const CompareCalculator = () => {
           min={1}
           max={20}
           step={1}
+          className={sliderClass}
         />
-        <div className="flex justify-between text-xs text-muted-foreground" dir="ltr">
+        <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
           <span>שנה</span>
           <span>20 שנים</span>
         </div>
@@ -157,151 +169,161 @@ const CompareCalculator = () => {
 
       {/* Results Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        {results.map((track, index) => {
+        {results.map((track) => {
           const Icon = track.icon;
           const isBest = track.profit === maxProfit;
-          const isWorst = track.profit === minProfit;
-          
+
           return (
-            <Card 
+            <div
               key={track.name}
-              className={`relative overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-lg ${track.bgColor} border-2 ${
-                isBest ? 'border-secondary ring-2 ring-secondary/30' : 'border-transparent'
-              }`}
-              style={{
-                animationDelay: `${index * 50}ms`,
-              }}
+              className="dna-concept dna-hover relative text-center"
+              style={isBest ? { borderColor: TURQ, boxShadow: "0 0 0 1px #4E9D8F" } : undefined}
             >
               {isBest && (
-                <div className="absolute top-2 left-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-medium">
+                <span
+                  className="absolute top-3 left-3 px-2 py-0.5 rounded-full text-white text-[11px] font-medium"
+                  style={{ backgroundColor: TURQ_TEXT }}
+                >
                   הטוב ביותר
-                </div>
+                </span>
               )}
-              <CardContent className="p-6 text-center">
-                <div className="text-4xl mb-3">{track.emoji}</div>
-                <h3 className="text-lg font-bold mb-1">{track.name}</h3>
-                <p className="text-sm text-muted-foreground mb-4">{track.rate}% בשנה</p>
-                
-                <p className={`text-2xl md:text-3xl font-extrabold ${track.color} mb-2`}>
-                  <AnimatedNumber value={track.finalValue} format={formatCurrency} />
-                </p>
-                
-                <p className="text-sm text-accent font-medium">
-                  +<AnimatedNumber value={track.profit} format={formatCurrency} /> רווח
-                </p>
-              </CardContent>
-            </Card>
+              <Icon className="w-6 h-6 mx-auto mt-1 mb-3" style={{ color: isBest ? TURQ : NAVY }} />
+              <h3 className="text-[17px] mb-1" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
+                {track.name}
+              </h3>
+              <p className="text-[13px] mb-4" style={{ color: MUTED }}>
+                <span dir="ltr" className="tabular-nums" style={{ fontFamily: MONO }}>{track.rate}%</span> בשנה
+              </p>
+
+              <p
+                className="tabular-nums mb-1.5"
+                dir="ltr"
+                style={{
+                  fontFamily: DISPLAY,
+                  fontWeight: 900,
+                  color: isBest ? TURQ : NAVY,
+                  fontSize: "clamp(1.4rem, 2vw, 1.7rem)",
+                  lineHeight: 1.15,
+                }}
+              >
+                <AnimatedNumber value={track.finalValue} format={formatCurrency} />
+              </p>
+
+              <p className="text-[13px] font-medium tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: TURQ_TEXT }}>
+                +<AnimatedNumber value={track.profit} format={formatCurrency} />
+              </p>
+            </div>
           );
         })}
       </div>
 
       {/* Comparison Summary */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="w-5 h-5" />
-            סיכום השוואה
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Visual Bar Comparison */}
-          <div className="space-y-3">
-            {results.map((track) => {
-              const barWidth = (track.profit / maxProfit) * 100;
-              
-              return (
-                <div key={track.name} className="flex items-center gap-4">
-                  <span className="w-20 text-sm font-medium flex items-center gap-2">
-                    <span>{track.emoji}</span>
-                    {track.name}
-                  </span>
-                  <div className="flex-1 h-8 bg-muted rounded-lg overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-l from-primary to-secondary transition-all duration-700 flex items-center justify-end px-2"
-                      style={{ width: `${Math.max(10, barWidth)}%` }}
-                    >
-                      <span className="text-xs font-medium text-primary-foreground">
-                        {formatCurrency(track.profit)}
-                      </span>
-                    </div>
-                  </div>
+      <div className="dna-concept !p-6">
+        <h3 className="text-[19px] mb-5" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
+          סיכום השוואה
+        </h3>
+
+        {/* Kit CSS bar chart: track #EEF3F6, fill turquoise, values mono LTR */}
+        <div className="space-y-3">
+          {results.map((track) => {
+            const barWidth = maxProfit > 0 ? Math.max(0, (track.profit / maxProfit) * 100) : 0;
+            const negative = track.profit < 0;
+
+            return (
+              <div key={track.name} className="flex items-center gap-4">
+                <span className="w-20 shrink-0 text-sm font-medium" style={{ color: NAVY }}>
+                  {track.name}
+                </span>
+                <div className="flex-1 h-5 rounded-md overflow-hidden" style={{ backgroundColor: "#EEF3F6" }} dir="rtl">
+                  <div
+                    className="h-full rounded-md transition-all duration-200 ease-out"
+                    style={{
+                      width: `${negative ? Math.min(100, Math.abs(barWidth)) : barWidth}%`,
+                      backgroundColor: negative ? "#d67a8a" : TURQ,
+                    }}
+                  />
                 </div>
-              );
-            })}
-          </div>
+                <span
+                  className="w-28 shrink-0 text-left text-[13px] font-medium tabular-nums"
+                  dir="ltr"
+                  style={{ fontFamily: MONO, color: negative ? "#a04a5c" : NAVY }}
+                >
+                  {formatCurrency(track.profit)}
+                </span>
+              </div>
+            );
+          })}
+        </div>
 
-          {/* Difference Summary */}
-          <div className="mt-6 p-4 bg-muted rounded-xl text-sm">
-            <p className="font-medium mb-2">
-              ההפרש בין מסלול <strong>מניות</strong> ל<strong>אג"ח</strong> לאורך {years} שנים:
-            </p>
-            <p className="text-2xl font-bold text-secondary">
-              <AnimatedNumber value={maxProfit - minProfit} format={formatCurrency} />
-            </p>
-          </div>
+        {/* Difference Summary */}
+        <div className="dna-callout mt-6 text-sm">
+          <p className="font-medium mb-2" style={{ color: NAVY }}>
+            ההפרש בין מסלול מניות למסלול אג"ח לאורך {years} שנים:
+          </p>
+          <p
+            className="tabular-nums"
+            dir="ltr"
+            style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ, fontSize: "clamp(1.6rem, 2.4vw, 2rem)", lineHeight: 1.15 }}
+          >
+            <AnimatedNumber value={maxProfit - minProfit} format={formatCurrency} />
+          </p>
+        </div>
 
-          {/* Personalized Tips */}
-          <div className="mt-4 space-y-3">
-            {years >= 10 && (
-              <div className="p-4 bg-primary/10 rounded-xl text-sm text-muted-foreground">
-                <p>
-                  🚀 <strong>אופק ארוך מצוין!</strong> עם {years} שנות השקעה, מסלול מניות יכול להניב תשואה גבוהה משמעותית 
-                  למרות התנודתיות הקצרת טווח.
-                </p>
-              </div>
-            )}
-            
-            {years <= 3 && (
-              <div className="p-4 bg-secondary/10 rounded-xl text-sm text-muted-foreground">
-                <p>
-                  🛡️ <strong>טווח קצר:</strong> עם {years} שנים בלבד, מסלול אג"ח או כללי עשוי להיות בטוח יותר 
-                  ולהגן על ההשקעה שלכם מתנודות שוק.
-                </p>
-              </div>
-            )}
-            
-            {investmentAmount >= 500000 && (
-              <div className="p-4 bg-accent/10 rounded-xl text-sm text-muted-foreground">
-                <p>
-                  💰 <strong>סכום משמעותי:</strong> עם השקעה של {formatCurrency(investmentAmount)}, 
-                  שקלו לפזר בין מספר מסלולים כדי להקטין סיכון.
-                </p>
-              </div>
-            )}
-            
-            <div className="p-4 bg-accent/10 rounded-xl flex gap-4">
-              <AlertTriangle className="w-8 h-8 text-accent flex-shrink-0 mt-1" />
-              <div>
-                <h4 className="font-bold text-sm mb-1">שים לב!</h4>
-                <p className="text-sm text-muted-foreground">
-                  התשואות מבוססות על ממוצע 5 שנים אחרונות ואינן מבטיחות תשואה עתידית.
-                </p>
-              </div>
+        {/* Personalized Tips */}
+        <div className="mt-4 space-y-3">
+          {years >= 10 && (
+            <div className="dna-callout text-sm">
+              <strong style={{ color: NAVY }}>אופק ארוך מצוין:</strong> עם {years} שנות השקעה, מסלול מניות יכול להניב תשואה גבוהה משמעותית
+              למרות התנודתיות הקצרת טווח.
             </div>
+          )}
 
-            {/* Save Button */}
-            <div className="flex justify-end pt-4">
-              <SaveCalculationButton
-                calculatorType="compare"
-                inputData={{ investmentAmount, years }}
-                resultData={{
-                  results: results.map(r => ({ name: r.name, finalValue: r.finalValue, profit: r.profit })),
-                  maxProfit,
-                  minProfit,
-                }}
-                tips={[
-                  `הפרש בין מניות לאג"ח: ${formatCurrency(maxProfit - minProfit)}`,
-                  years >= 10 ? `אופק ארוך - מסלול מניות מומלץ` : undefined,
-                ].filter(Boolean) as string[]}
-              />
+          {years <= 3 && (
+            <div className="dna-callout text-sm">
+              <strong style={{ color: NAVY }}>טווח קצר:</strong> עם {years} שנים בלבד, מסלול אג"ח או כללי עשוי להיות בטוח יותר
+              ולהגן על ההשקעה שלכם מתנודות שוק.
+            </div>
+          )}
+
+          {investmentAmount >= 500000 && (
+            <div className="dna-callout text-sm">
+              <strong style={{ color: NAVY }}>סכום משמעותי:</strong> עם השקעה של {formatCurrency(investmentAmount)},
+              שקלו לפזר בין מספר מסלולים כדי להקטין סיכון.
+            </div>
+          )}
+
+          <div className="dna-quote gold">
+            <div className="dna-ql">שימו לב</div>
+            <div className="dna-qt">
+              התשואות מבוססות על ממוצע 5 שנים אחרונות ואינן מבטיחות תשואה עתידית.
             </div>
           </div>
-        </CardContent>
-      </Card>
+
+          {/* Save Button */}
+          <div className="flex justify-end pt-4">
+            <SaveCalculationButton
+              calculatorType="compare"
+              inputData={{ investmentAmount, years }}
+              resultData={{
+                results: results.map(r => ({ name: r.name, finalValue: r.finalValue, profit: r.profit })),
+                maxProfit,
+                minProfit,
+              }}
+              tips={[
+                `הפרש בין מניות לאג"ח: ${formatCurrency(maxProfit - minProfit)}`,
+                years >= 10 ? `אופק ארוך - מסלול מניות מומלץ` : undefined,
+              ].filter(Boolean) as string[]}
+            />
+          </div>
+        </div>
+      </div>
 
       {/* Disclaimer */}
-      <div className="p-4 bg-muted/50 rounded-xl text-xs text-muted-foreground text-center">
-        * התשואות מבוססות על נתוני עבר ואינן מבטיחות תשואה עתידית. החישוב לצורכי הדגמה בלבד.
+      <div className="dna-quote gold">
+        <div className="dna-ql">הבהרה</div>
+        <div className="dna-qt">
+          התשואות מבוססות על נתוני עבר ואינן מבטיחות תשואה עתידית. החישוב לצורכי הדגמה בלבד.
+        </div>
       </div>
     </div>
   );

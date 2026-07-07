@@ -2,12 +2,13 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import { SERIF } from "@/lib/brand";
+import { DISPLAY, LINE, MUTED, NAVY, PASTEL_MINT, PASTEL_PEACH, TINT_TURQ } from "@/lib/brand";
 import { StatusPill } from "@/components/brand/Live";
-import { SproutFigure } from "@/components/brand/Figures";
 
-// SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
-const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
+// SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
+
+// Repeating coin-and-growth line-art — navy ink at low opacity on the turquoise tint (craft bar)
+const GROWTH_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%231D2D3D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' opacity='0.14'%3E%3Ccircle cx='16' cy='38' r='7'/%3E%3Cpath d='M16 34.5 v7 M13.5 36 c0 -1 5 -1 5 0.8 c0 1.8 -5 1.5 -5 3 c0 1.5 5 1.5 5 0.5'/%3E%3Cpath d='M30 40 C34 32 38 22 46 16'/%3E%3Cpath d='M41 16 L46 16 L46 21'/%3E%3C/g%3E%3C/svg%3E")`;
 
 const savingsCategories = [
   { title: "קרנות פנסיה", description: "הפקדות, כיסויים ובחירת מסלול נכונה", href: "/savings/pension-funds" },
@@ -25,55 +26,75 @@ const savingsCategories = [
 
 const Savings = () => {
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* HERO — one idea: pick your product. The sprout peeks from the tile corner. */}
-      <section className="px-2 pt-2">
-        <div className="bento-panel">
-          <SproutFigure className="absolute -left-5 -bottom-6 w-32 h-32 sm:w-40 sm:h-40 opacity-60 rotate-6" />
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10">
-            <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-              <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
-                <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-                <span>←</span>
-                <span className="text-[#171717]/70 font-medium">חיסכון ופנסיה</span>
-              </nav>
-              <span className="hidden sm:block text-[11px] tracking-[0.22em] font-medium" style={{ color: PAPER_MUTED }}>
-                11 מוצרי חיסכון
-              </span>
-            </div>
-
-            <h1
-              className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
-              style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
-            >
-              חיסכון ופנסיה
-            </h1>
-            <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9]">
-              11 מוצרי חיסכון ופנסיה, מקרן הפנסיה הראשונה ועד תכנון הפרישה. בחרו נושא.
-            </p>
-          </div>
-        </div>
-      </section>
-
       <main>
-        {/* THE INDEX — hairline link list, one paper tile */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+        {/* HERO — one idea: pick your product */}
+        <section className="dna-page">
+          {/* Pastel circle backdrop — decorative, never behind small text */}
+          <div className="dna-circles" aria-hidden="true">
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 280, height: 280, top: -120, left: -90, backgroundColor: PASTEL_MINT, opacity: 0.5 }}
+            />
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 210, height: 210, bottom: -110, right: -70, backgroundColor: PASTEL_PEACH, opacity: 0.5 }}
+            />
+          </div>
+
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
+            <nav className="flex items-center gap-2 text-[13px] mb-10 sm:mb-14" style={{ color: MUTED }}>
+              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <span aria-hidden="true">←</span>
+              <span className="font-medium" style={{ color: NAVY }}>חיסכון ופנסיה</span>
+            </nav>
+
+            <div className="grid gap-10 lg:grid-cols-[1.6fr_1fr] items-stretch">
+              <div>
+                <h1
+                  className="dna-display leading-[1.12] mb-6 max-w-3xl"
+                  style={{ fontSize: "clamp(34px, 5vw, 50px)" }}
+                >
+                  חיסכון ופנסיה
+                </h1>
+                <p className="text-base sm:text-[17px] max-w-2xl leading-[1.9]" style={{ color: MUTED }}>
+                  11 מוצרי חיסכון ופנסיה, מקרן הפנסיה הראשונה ועד תכנון הפרישה. בחרו נושא.
+                </p>
+              </div>
+
+              {/* The growth tile — brand line-art, the page's craft gesture */}
+              <div
+                className="hidden lg:block relative rounded-xl overflow-hidden min-h-[160px]"
+                style={{ backgroundColor: TINT_TURQ }}
+                aria-hidden="true"
+              >
+                <div
+                  className="absolute inset-0"
+                  style={{ backgroundImage: GROWTH_PATTERN, backgroundSize: "56px 56px" }}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* THE INDEX — hairline link list */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16">
                 {savingsCategories.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}
-                    className="group bento-hover flex items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10 hover:border-[#171717]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#171717]"
+                    className="group flex items-baseline justify-between gap-6 py-[14px] px-3 -mx-3 rounded-md border-b border-[#E7EDF1] hover:bg-[#E1EAF1]/35 transition-colors"
                   >
                     <div className="flex items-baseline gap-4 min-w-0">
-                      <h2 className="text-base font-medium text-[#171717] whitespace-nowrap">{item.title}</h2>
-                      <p className="text-[13px] text-[#5c5c5c] truncate hidden sm:block">{item.description}</p>
+                      <h2 className="text-base font-medium text-[#1D2D3D] whitespace-nowrap">{item.title}</h2>
+                      <p className="text-[13px] text-[#5a6a78] truncate hidden sm:block">{item.description}</p>
                     </div>
-                    <span className="text-[#171717]/30 group-hover:text-[#171717] transition-all group-hover:-translate-x-1 shrink-0">
+                    <span className="text-[#5a6a78] group-hover:text-[#1D2D3D] transition-all group-hover:-translate-x-1 shrink-0">
                       ←
                     </span>
                   </Link>
@@ -86,37 +107,40 @@ const Savings = () => {
                 <button
                   type="button"
                   onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                  className="block bento-hover rounded-full"
+                  className="block dna-hover rounded-full"
                   aria-label="פתיחת שיחה עם יועץ SEELD"
                 >
                   <StatusPill>לא יודעים מה מזה יש לכם? היועץ מחובר עכשיו</StatusPill>
                 </button>
               </div>
             </ScrollReveal>
-          </div></div>
+          </div>
         </section>
 
-        {/* CTA — the one next action (ink tile) */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
-            <div className="border-t border-white/20 pt-6">
-              <h2
-                className="text-[#fafafa] leading-tight mb-3"
-                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
-              >
-                רוצים ניתוח פנסיוני?
-              </h2>
-              <p className="text-[#fafafa]/55 text-base leading-[1.85] mb-8 max-w-xl">
-                נבדוק את הפנסיה, החיסכון ודמי הניהול שלכם. ללא עלות, בלי התחייבות.
-              </p>
-              <Link
-                to="/contact"
-                className="inline-flex items-center justify-center px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
-              >
-                צרו קשר
-              </Link>
-            </div>
-          </div></div>
+        {/* CTA — institutional navy band */}
+        <section style={{ backgroundColor: NAVY }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+            <h2
+              className="text-white leading-tight mb-3"
+              style={{
+                fontFamily: DISPLAY,
+                fontWeight: 900,
+                fontSize: "clamp(1.7rem, 3.2vw, 2.4rem)",
+                letterSpacing: "-0.5px",
+              }}
+            >
+              רוצים ניתוח פנסיוני?
+            </h2>
+            <p className="text-base leading-[1.85] mb-9 max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
+              נבדוק את הפנסיה, החיסכון ודמי הניהול שלכם. ללא עלות, בלי התחייבות.
+            </p>
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+            >
+              צרו קשר
+            </Link>
+          </div>
         </section>
       </main>
 
