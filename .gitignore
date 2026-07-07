@@ -28,3 +28,4 @@ dist-ssr
 .mcp.json
 CLAUDE.local.md
 .agents/
+skills-lock.json
