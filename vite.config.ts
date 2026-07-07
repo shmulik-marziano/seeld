@@ -20,6 +20,11 @@ export default defineConfig(({ mode }) => ({
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         navigateFallbackDenylist: [/^\/~oauth/],
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
+        // Take over stale clients immediately and drop old precaches —
+        // prevents an old shell requesting assets that no longer exist.
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
       },
       manifest: {
         name: "SEELD – סוכנות פיננסים וביטוח",

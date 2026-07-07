@@ -11,6 +11,50 @@
     <link rel="apple-touch-icon" href="/pwa-icon-512.png" />
     <link rel="shortcut icon" href="/favicon.ico" />
 
+    <!-- Self-healing: if a stale service worker or cached shell breaks asset
+         loading (white screen after a deploy), purge SW + caches and reload once. -->
+    <script>
+      (function () {
+        var KEY = "seeld_recovered_at";
+        function recover() {
+          try {
+            var last = +sessionStorage.getItem(KEY) || 0;
+            if (Date.now() - last < 60000) return;
+            sessionStorage.setItem(KEY, String(Date.now()));
+          } catch (e) { /* storage unavailable — still try */ }
+          var done = function () { location.reload(); };
+          try {
+            var jobs = [];
+            if ("serviceWorker" in navigator) {
+              jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) {
+                return Promise.all(rs.map(function (r) { return r.unregister(); }));
+              }));
+            }
+            if (window.caches && caches.keys) {
+              jobs.push(caches.keys().then(function (ks) {
+                return Promise.all(ks.map(function (k) { return caches.delete(k); }));
+              }));
+            }
+            Promise.all(jobs).then(done, done);
+          } catch (e) { done(); }
+        }
+        addEventListener("vite:preloadError", function (e) {
+          if (e && e.preventDefault) e.preventDefault();
+          recover();
+        });
+        addEventListener("error", function (e) {
+          var t = e && e.target;
+          if (t && t.tagName === "SCRIPT" && t.src && t.src.indexOf("/assets/") > -1) recover();
+        }, true);
+        addEventListener("DOMContentLoaded", function () {
+          setTimeout(function () {
+            var r = document.getElementById("root");
+            if (r && !r.firstChild) recover();
+          }, 7000);
+        });
+      })();
+    </script>
+
     <title>SEELD | בית פיננסים וביטוח עצמאי | מבית עמיתים הון</title>
     <meta name="description" content="SEELD הוא בית פיננסים וביטוח עצמאי. צוות של יועצים ומומחים פיננסיים מלווים את תיק הביטוח, הפנסיה והחיסכון של 600 משפחות ברחבי ישראל. פגישת ייעוץ ראשונה ללא עלות." />
 
