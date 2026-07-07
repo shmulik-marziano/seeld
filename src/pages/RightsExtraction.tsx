@@ -28,7 +28,7 @@ const RightsExtraction = () => {
   const stepsRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* HERO — bento row: money you didn't know was yours + the family orange tile */}

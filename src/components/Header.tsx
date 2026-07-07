@@ -102,7 +102,7 @@ const Header = () => {
   return (
     <header
       className="sticky top-0 z-50 px-2 pt-2 pb-2"
-      style={{ backgroundColor: "#171717" }}
+      style={{ backgroundColor: "#0a0a0a" }}
     >
       {/* Keep focused elements clear of the sticky header (WCAG 2.4.11) */}
       <style>{"html{scroll-padding-top:96px}"}</style>
@@ -111,7 +111,7 @@ const Header = () => {
       <a
         href="#main"
         onClick={handleSkipToMain}
-        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:right-3 focus:z-[60] focus:bg-[#e9e3d6] focus:text-[#171717] focus:px-4 focus:py-2.5 focus:text-[13.5px] focus:font-medium focus:rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:right-3 focus:z-[60] focus:bg-[#e9dfd2] focus:text-[#171717] focus:px-4 focus:py-2.5 focus:text-[13.5px] focus:font-medium focus:rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
       >
         דלג לתוכן
       </a>

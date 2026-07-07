@@ -291,7 +291,7 @@ export default function DirectDebit() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
         <Header />
         <main className="px-2 pt-2">
           <div className="bento-panel"><div className="max-w-xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
@@ -343,7 +343,7 @@ export default function DirectDebit() {
   }
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* SEELD Bento: hero tile + the form in one calm paper tile */}

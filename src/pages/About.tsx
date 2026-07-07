@@ -30,7 +30,7 @@ const SectionHead = ({ index, title, lede }: { index: string; title: string; led
 
 const About = () => {
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* HERO — bento row: who we are + the counting orange tile */}

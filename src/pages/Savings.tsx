@@ -25,7 +25,7 @@ const savingsCategories = [
 
 const Savings = () => {
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* HERO — one idea: pick your product. The sprout peeks from the tile corner. */}

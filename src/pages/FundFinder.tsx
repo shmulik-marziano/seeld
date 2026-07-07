@@ -42,7 +42,7 @@ const FundFinder = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: '#171717' }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: '#0a0a0a' }}>
       <Header />
 
       {/* Hero tile — hairline rule + breadcrumb, compact */}
@@ -98,14 +98,14 @@ const FundFinder = () => {
                 <div className="sticky top-4 bento-panel-ink p-5 sm:p-6">
                   <div className="relative z-10">
                     <div className="border-b border-white/10 pb-4 mb-5">
-                      <h2 className="text-lg text-[#e9e3d6]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                      <h2 className="text-lg text-[#e9dfd2]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                         חיפוש קופות
                       </h2>
-                      <p className="mt-1 text-[13px]" style={{ color: 'rgba(233,227,214,.6)' }}>
+                      <p className="mt-1 text-[13px]" style={{ color: 'rgba(233,223,210,.6)' }}>
                         {fundsLoading ? 'טוען את מאגר הקופות...' : 'סינון לפי תשואה, חברה או שם קופה'}
                       </p>
                     </div>
-                    <div className="rounded-lg bg-[#e9e3d6] p-4 sm:p-5">
+                    <div className="rounded-lg bg-[#e9dfd2] p-4 sm:p-5">
                       <FundSearchPanel
                         mode={search.mode}
                         productType={search.productType}

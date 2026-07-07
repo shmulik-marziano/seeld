@@ -637,9 +637,9 @@ export default function DashboardPage() {
 
       {/* ── Background ── */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden select-none z-0">
-        <div className="absolute -top-48 -right-48 w-[560px] h-[560px] rounded-full blur-[100px] opacity-[0.08]" style={{ backgroundColor: '#171717' }} />
+        <div className="absolute -top-48 -right-48 w-[560px] h-[560px] rounded-full blur-[100px] opacity-[0.08]" style={{ backgroundColor: '#0a0a0a' }} />
         <div className="absolute top-[40%] -left-52 w-[420px] h-[420px] rounded-full blur-[100px] opacity-[0.06]" style={{ backgroundColor: '#b45309' }} />
-        <div className="absolute bottom-0 right-[35%] w-[360px] h-[360px] rounded-full blur-[100px] opacity-[0.05]" style={{ backgroundColor: '#171717' }} />
+        <div className="absolute bottom-0 right-[35%] w-[360px] h-[360px] rounded-full blur-[100px] opacity-[0.05]" style={{ backgroundColor: '#0a0a0a' }} />
         <svg className="absolute top-0 right-[2%] w-[500px] h-[650px] opacity-[0.1]" viewBox="0 0 500 600" fill="none">
           <motion.path d="M450,30 C380,50 300,130 320,230 C340,330 220,380 160,450 C130,490 140,540 200,560"
             stroke="#171717" strokeWidth="2.5" strokeDasharray="10 8" strokeLinecap="round" fill="none"
@@ -806,7 +806,7 @@ export default function DashboardPage() {
               <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }} className="overflow-hidden mb-5">
                 <div className="flex items-center justify-between px-5 py-3 rounded-2xl"
-                  style={{ backgroundColor: '#171717', boxShadow: '0 4px 20px rgba(23,23,23,0.25)' }}>
+                  style={{ backgroundColor: '#0a0a0a', boxShadow: '0 4px 20px rgba(23,23,23,0.25)' }}>
                   <div className="flex items-center gap-2.5">
                     <div className="w-7 h-7 rounded-full bg-teal-400/20 flex items-center justify-center">
                       <PenTool className="w-3.5 h-3.5 text-teal-300" />
@@ -818,7 +818,7 @@ export default function DashboardPage() {
                   </div>
                   <button onClick={() => setEditMode(false)}
                     className="flex items-center gap-1.5 px-3.5 py-2 rounded-full font-bold text-xs"
-                    style={{ backgroundColor: '#171717', color: '#ffffff' }}>
+                    style={{ backgroundColor: '#0a0a0a', color: '#ffffff' }}>
                     <Check className="w-3.5 h-3.5" /> סיום
                   </button>
                 </div>

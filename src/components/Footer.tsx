@@ -91,7 +91,7 @@ const Footer = () => {
   };
 
   return (
-    <footer dir="rtl" className="px-2 pb-2 pt-2 space-y-2" style={{ backgroundColor: "#171717" }}>
+    <footer dir="rtl" className="px-2 pb-2 pt-2 space-y-2" style={{ backgroundColor: "#0a0a0a" }}>
       {/* Contact band — paper tile */}
       <section className="bento-panel">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-20">

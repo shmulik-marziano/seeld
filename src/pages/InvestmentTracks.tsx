@@ -295,7 +295,7 @@ const InvestmentTracks = () => {
   const sortBtnClass = "inline-flex items-center gap-1 hover:text-[#171717] transition-colors";
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* Hero tile + stat band as a row of small tiles (the play) */}

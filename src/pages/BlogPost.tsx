@@ -290,7 +290,7 @@ const BlogPost = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
         <Header />
         <div className="px-2 pt-2">
           <div className="bento-panel">
@@ -306,7 +306,7 @@ const BlogPost = () => {
 
   if (!post) {
     return (
-      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
         <Header />
         <div className="px-2 pt-2">
           <div className="bento-panel"><div className="max-w-3xl mx-auto px-5 sm:px-8 py-24 sm:py-32 relative z-10">
@@ -338,7 +338,7 @@ const BlogPost = () => {
   }
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* The reading tile — hero, cover and article in one paper panel */}

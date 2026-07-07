@@ -3,8 +3,8 @@
 // one orange accent per figure. They give bodies to the live chips' names.
 
 const INK = "#171717";
-const PAPER = "#e9e3d6";
-const ORANGE = "#f0a13a";
+const PAPER = "#e9dfd2";
+const ORANGE = "#f0a339";
 
 const line = { stroke: INK, strokeWidth: 2.4, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, fill: "none" };
 

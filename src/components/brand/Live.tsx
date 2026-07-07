@@ -74,6 +74,66 @@ export const LiveTag = ({
   </span>
 );
 
+/** Live analog clock — the reference's clock tile. Ink hands, ticks once a second.
+ *  Reduced motion: no second hand, updates once a minute. */
+export const LiveClock = ({
+  size = 56, color = INK, className = "",
+}: { size?: number; color?: string; className?: string }) => {
+  const reduced = useReducedMotion();
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), reduced ? 60000 : 1000);
+    return () => clearInterval(id);
+  }, [reduced]);
+
+  const h = now.getHours();
+  const m = now.getMinutes();
+  const s = now.getSeconds();
+  const hourAngle = ((h % 12) + m / 60) * 30;
+  const minAngle = (m + s / 60) * 6;
+  const secAngle = s * 6;
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      className={className}
+      role="img"
+      aria-label={`השעה ${h}:${String(m).padStart(2, "0")}`}
+    >
+      <circle cx="50" cy="50" r="45" fill="none" stroke={color} strokeWidth="5" />
+      {Array.from({ length: 12 }, (_, i) => (
+        <line
+          key={i}
+          x1="50" y1="12" x2="50" y2="18"
+          stroke={color} strokeWidth="3" strokeLinecap="round"
+          transform={`rotate(${i * 30} 50 50)`}
+        />
+      ))}
+      <line
+        x1="50" y1="50" x2="50" y2="28"
+        stroke={color} strokeWidth="6" strokeLinecap="round"
+        transform={`rotate(${hourAngle} 50 50)`}
+      />
+      <line
+        x1="50" y1="50" x2="50" y2="20"
+        stroke={color} strokeWidth="4" strokeLinecap="round"
+        transform={`rotate(${minAngle} 50 50)`}
+      />
+      {!reduced && (
+        <line
+          x1="50" y1="56" x2="50" y2="17"
+          stroke={color} strokeWidth="1.8" strokeLinecap="round"
+          transform={`rotate(${secAngle} 50 50)`}
+        />
+      )}
+      <circle cx="50" cy="50" r="4" fill={color} />
+    </svg>
+  );
+};
+
 /** Status pill on white — ink text, hairline ring */
 export const StatusPill = ({ children }: { children: React.ReactNode }) => (
   <span

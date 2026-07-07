@@ -117,7 +117,7 @@ const SavedCalculations = () => {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen pb-2" style={{ backgroundColor: "#171717" }}>
+      <div className="min-h-screen pb-2" style={{ backgroundColor: "#0a0a0a" }}>
         <Header />
         <div className="px-2 pt-2">
           <div className="bento-panel">
@@ -132,7 +132,7 @@ const SavedCalculations = () => {
   }
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* Hero tile — hairline rule + breadcrumb, compact */}
