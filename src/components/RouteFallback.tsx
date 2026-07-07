@@ -36,7 +36,7 @@ export default function RouteFallback() {
       <div className="fixed top-0 inset-x-0 h-0.5 overflow-hidden" aria-hidden="true">
         <div
           className="seeld-route-bar h-full w-1/4"
-          style={{ backgroundColor: "#0a0a0a" }}
+          style={{ backgroundColor: "#ffffff" }}
         />
       </div>
 
