@@ -16,7 +16,7 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col p-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen flex flex-col p-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <main className="flex-1 flex">
         <div className="bento-panel flex-1 flex items-center">
           {/* The rotated umbrella — protection, tipped over */}
@@ -53,7 +53,7 @@ const NotFound = () => {
             <div className="mt-10 flex flex-wrap items-center gap-6">
               <Link
                 to="/"
-                className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#e9e3d6] text-base font-medium tracking-wide hover:bg-black transition-colors min-h-[52px] rounded-lg"
+                className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#e9dfd2] text-base font-medium tracking-wide hover:bg-black transition-colors min-h-[52px] rounded-lg"
               >
                 לדף הבית
               </Link>

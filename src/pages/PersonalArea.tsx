@@ -13,7 +13,7 @@ const PersonalArea = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
         <Header />
         <section className="px-2 pt-2">
           <div className="bento-panel">
@@ -33,7 +33,7 @@ const PersonalArea = () => {
 
   // Logged in — dashboard with site chrome
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* Hero — quiet ink tile */}

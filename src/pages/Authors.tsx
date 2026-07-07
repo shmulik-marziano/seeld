@@ -22,7 +22,7 @@ const Authors = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       <main>
@@ -77,7 +77,7 @@ const Authors = () => {
                       href="https://wa.me/972523097444"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#171717] text-[#fafafa] hover:bg-[#33332f] transition-colors text-sm font-medium min-h-[44px]"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#171717] text-[#fafafa] hover:bg-black transition-colors text-sm font-medium min-h-[44px]"
                     >
                       WhatsApp
                     </a>

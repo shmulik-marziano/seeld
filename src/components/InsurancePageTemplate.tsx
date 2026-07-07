@@ -12,7 +12,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
 import type { LucideIcon } from 'lucide-react';
-import { SERIF, CHIP_ORANGE } from '@/lib/brand';
+import { SERIF, MONO, CHIP_ORANGE } from '@/lib/brand';
 import { StatusPill } from '@/components/brand/Live';
 import { DrawUnderline } from '@/components/brand/Strokes';
 import { ShieldFigure, UmbrellaFigure } from '@/components/brand/Figures';
@@ -20,6 +20,28 @@ import { ShieldFigure, UmbrellaFigure } from '@/components/brand/Figures';
 // SEELD Bento: warm paper tiles on ink gutters. Captions on paper stay at
 // #5c5c5c minimum (AA); #6e6e6e is reserved for white surfaces only.
 const PAPER_MUTED = '#5c5c5c';
+
+// Figures inside coverage copy (sums, percentages, 24/7, ranges) render in
+// Geist Mono with tabular numerals, LTR-safe — the market-mono touch.
+const FIGURE_RE = /(?:₪\s?)?\d(?:[\d,.:/\-–]*\d)?(?:\s?[%₪])?/g;
+
+const FigureText = ({ text }: { text: string }) => {
+  const nodes: ReactNode[] = [];
+  let last = 0;
+  for (const m of text.matchAll(FIGURE_RE)) {
+    const i = m.index ?? 0;
+    if (i > last) nodes.push(text.slice(last, i));
+    nodes.push(
+      <span key={i} dir="ltr" className="tabular-nums whitespace-nowrap" style={{ fontFamily: MONO }}>
+        {m[0]}
+      </span>,
+    );
+    last = i + m[0].length;
+  }
+  if (last === 0) return <>{text}</>;
+  if (last < text.length) nodes.push(text.slice(last));
+  return <>{nodes}</>;
+};
 
 /* ─── Types (unchanged API — all 16 insurance pages pass these) ─── */
 interface KeyPoint {
@@ -106,7 +128,7 @@ const SectionTitle = ({ children }: { children: ReactNode }) => (
 );
 
 const tabTriggerClass =
-  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#5c5c5c] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
+  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#5c5c5c] hover:text-[#171717] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
 
 export default function InsurancePageTemplate(props: InsurancePageProps) {
   const {
@@ -148,7 +170,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
   const HeroFigure = protectionPage ? ShieldFigure : UmbrellaFigure;
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: '#171717' }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: '#0a0a0a' }}>
       <Header />
 
       {/* ══════ HERO — paper tile ══════ */}
@@ -184,7 +206,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
           <div className="flex flex-wrap items-center gap-6">
             <a
               href={heroCTAHref}
-              className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
+              className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] bento-hover min-h-[52px]"
             >
               {heroCTAText}
             </a>
@@ -201,7 +223,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event('seeld:open-chat'))}
-            className="mt-7 block transition-transform hover:-translate-y-[1px]"
+            className="mt-7 inline-flex rounded-full bento-hover"
             aria-label="פתיחת שיחה עם יועץ SEELD AI"
           >
             <StatusPill>יש שאלה על {breadcrumbLabel}? היועץ מחובר</StatusPill>
@@ -291,7 +313,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                         {coverageTypes.map((coverage, idx) => (
                           <div key={idx} className="border-t border-[#171717]/10 pt-4">
                             <h3 className="text-base text-[#171717] mb-3.5" style={{ fontFamily: SERIF, fontWeight: 600 }}>
-                              {coverage.title}
+                              <FigureText text={coverage.title} />
                             </h3>
                             <ul className="space-y-2">
                               {coverage.items.map((item, itemIdx) => {
@@ -299,7 +321,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                                   return (
                                     <li key={itemIdx} className="text-[#5c5c5c] text-[14px] leading-relaxed flex gap-2.5">
                                       <span style={{ color: PAPER_MUTED }}>—</span>
-                                      {item}
+                                      <span><FigureText text={item} /></span>
                                     </li>
                                   );
                                 }
@@ -307,8 +329,8 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                                   <li key={itemIdx} className="text-[#5c5c5c] text-[14px] leading-relaxed flex gap-2.5">
                                     <span style={{ color: PAPER_MUTED }}>—</span>
                                     <span>
-                                      <span className="font-medium text-[#171717]">{item.title}</span>
-                                      {item.description && <span className="text-[#5c5c5c]"> · {item.description}</span>}
+                                      <span className="font-medium text-[#171717]"><FigureText text={item.title} /></span>
+                                      {item.description && <span className="text-[#5c5c5c]"> · <FigureText text={item.description} /></span>}
                                     </span>
                                   </li>
                                 );
@@ -329,8 +351,8 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
                               {cat.items.map((item, idx) => (
                                 <div key={idx} className="border-t border-[#171717]/10 pt-4">
-                                  <h4 className="text-base font-medium text-[#171717] mb-1.5">{item.title}</h4>
-                                  <p className="text-[#5c5c5c] text-[13px] leading-relaxed">{item.description}</p>
+                                  <h4 className="text-base font-medium text-[#171717] mb-1.5"><FigureText text={item.title} /></h4>
+                                  <p className="text-[#5c5c5c] text-[13px] leading-relaxed"><FigureText text={item.description} /></p>
                                 </div>
                               ))}
                             </div>
@@ -352,7 +374,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                             value={`faq-${idx}`}
                             className="border-b border-[#171717]/10 rounded-none px-0"
                           >
-                            <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
+                            <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5 px-3 -mx-3 rounded-md hover:bg-[#171717]/5 transition-colors duration-150">
                               {item.q}
                             </AccordionTrigger>
                             <AccordionContent className="text-[#5c5c5c] leading-[1.85] pb-6 text-[14px]">

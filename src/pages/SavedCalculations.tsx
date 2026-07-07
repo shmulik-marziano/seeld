@@ -25,6 +25,9 @@ const calculatorTypeLabels: Record<string, string> = {
   savings: "חיסכון",
   goal: "יעד פיננסי",
   compare: "השוואת מסלולים",
+  "income-tax": "מס הכנסה",
+  "life-insurance": "ביטוח חיים",
+  "car-insurance": "ביטוח רכב",
 };
 
 const monoNum: React.CSSProperties = { fontFamily: MONO, fontVariantNumeric: "tabular-nums" };
@@ -84,14 +87,11 @@ const SavedCalculations = () => {
     }
   };
 
+  // Ledger-style mono timestamp: 07.07.2026 · 14:32
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString("he-IL", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const d = new Date(dateStr);
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()} · ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   };
 
   const formatResultSummary = (calc: SavedCalculation) => {
@@ -110,6 +110,19 @@ const SavedCalculations = () => {
         return <>הפקדה נדרשת: {money(result.monthlyRequired)}</>;
       case "compare":
         return <>מסלול מומלץ: {String(result.recommended || "לא נבחר")}</>;
+      case "income-tax":
+        return <>מס חודשי: {money(result.monthlyTax)}</>;
+      case "life-insurance":
+        return <>כיסוי מומלץ: {money(result.recommendedCover)}</>;
+      case "car-insurance":
+        return (
+          <>
+            טווח שנתי משוער:{" "}
+            <span dir="ltr" style={monoNum}>
+              {`₪${(result.annualLow as number)?.toLocaleString()}–₪${(result.annualHigh as number)?.toLocaleString()}`}
+            </span>
+          </>
+        );
       default:
         return null;
     }
@@ -117,7 +130,7 @@ const SavedCalculations = () => {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen pb-2" style={{ backgroundColor: "#171717" }}>
+      <div className="min-h-screen pb-2" style={{ backgroundColor: "#0a0a0a" }}>
         <Header />
         <div className="px-2 pt-2">
           <div className="bento-panel">
@@ -132,7 +145,7 @@ const SavedCalculations = () => {
   }
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* Hero tile — hairline rule + breadcrumb, compact */}
@@ -216,7 +229,7 @@ const SavedCalculations = () => {
                 </p>
                 <Link
                   to="/calculators"
-                  className="bento-panel-orange inline-flex flex-col items-start gap-1.5 px-7 py-5 hover:-translate-y-[1px] transition-transform"
+                  className="bento-panel-orange bento-hover inline-flex flex-col items-start gap-1.5 px-7 py-5"
                 >
                   <span className="text-[15px] font-semibold text-[#171717]">פתיחת מחשבון ←</span>
                   <span
@@ -267,8 +280,8 @@ const SavedCalculations = () => {
                       </ul>
                     )}
 
-                    <p className="mt-3 text-[12px] text-[#5c5c5c] tabular-nums">
-                      {formatDate(calc.created_at)}
+                    <p className="mt-3 text-[12px] text-[#5c5c5c]">
+                      <span dir="ltr" style={monoNum}>{formatDate(calc.created_at)}</span>
                     </p>
                   </div>
                 ))}

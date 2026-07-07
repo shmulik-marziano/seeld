@@ -69,6 +69,10 @@ function validateIsraeliId(id: string): { valid: boolean; message?: string } {
 }
 
 // ─── Styled pieces (SEELD Mono) ─────────────────────────────────────────────
+// Consistent keyboard focus for buttons and selectable tiles (Snap: no ring animation)
+const FOCUS_RING =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#171717]";
+
 const inputClass =
   "w-full px-0 py-3 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#5c5c5c] text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
 
@@ -88,11 +92,15 @@ function StyledInput({ className, ...props }: React.InputHTMLAttributes<HTMLInpu
   return <input {...props} className={cn(inputClass, className)} />;
 }
 
-function SectionHead({ index, title }: { index: string; title: string }) {
+function SectionHead({ index, total, title }: { index: string; total: string; title: string }) {
   return (
     <div className="border-t border-[#171717]/20 pt-5 mb-7 flex items-baseline gap-6">
-      <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: "#5c5c5c", fontFamily: MONO }}>
-        {index}
+      <span
+        className="text-[12px] tabular-nums tracking-[0.2em] shrink-0"
+        style={{ color: "#5c5c5c", fontFamily: MONO }}
+        dir="ltr"
+      >
+        {index} / {total}
       </span>
       <h2 className="text-lg text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
         {title}
@@ -288,10 +296,12 @@ export default function DirectDebit() {
   };
 
   const accDigits = form.accountNumber.replace(/\D/g, "");
+  // The branch/account section only exists once a bank is picked — total steps follow
+  const sectionTotal = form.bankCode ? "04" : "03";
 
   if (submitted) {
     return (
-      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
         <Header />
         <main className="px-2 pt-2">
           <div className="bento-panel"><div className="max-w-xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
@@ -343,7 +353,7 @@ export default function DirectDebit() {
   }
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* SEELD Bento: hero tile + the form in one calm paper tile */}
@@ -377,7 +387,7 @@ export default function DirectDebit() {
         <button
           type="button"
           onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-          className="block transition-transform hover:-translate-y-[1px]"
+          className="block bento-hover rounded-full"
           aria-label="פתיחת שיחה עם יועץ SEELD"
         >
           <StatusPill>היועץ מחובר עכשיו · שאלו לפני שממלאים</StatusPill>
@@ -389,7 +399,7 @@ export default function DirectDebit() {
         <div className="space-y-12">
           {/* 01: Account Owner */}
           <section>
-            <SectionHead index="01" title="בעל החשבון" />
+            <SectionHead index="01" total={sectionTotal} title="בעל החשבון" />
             <div className="space-y-6">
               <div>
                 <FieldLabel label="שם בעל החשבון" required error={touched.accountOwner ? errors.accountOwner : undefined} />
@@ -425,7 +435,7 @@ export default function DirectDebit() {
 
           {/* 02: Bank Selection */}
           <section>
-            <SectionHead index="02" title="בחירת בנק" />
+            <SectionHead index="02" total={sectionTotal} title="בחירת בנק" />
             <div>
               <div className="flex items-baseline justify-between mb-1 gap-4">
                 <FieldLabel label="חפשו ובחרו בנק" required error={touched.bankCode ? errors.bankCode : undefined} />
@@ -443,7 +453,7 @@ export default function DirectDebit() {
                   ) : (
                     <button
                       onClick={refreshBanks}
-                      className="text-[11px] text-[#5c5c5c] flex items-center gap-1 hover:text-[#171717] transition-colors"
+                      className={cn("text-[11px] text-[#5c5c5c] flex items-center gap-1 hover:text-[#171717] transition-colors", FOCUS_RING)}
                     >
                       <RefreshCw className="w-3 h-3" />
                       נתוני גיבוי. לחצו לרענון
@@ -468,9 +478,11 @@ export default function DirectDebit() {
                     onClick={() => { set("bankCode", bank.code); set("branchNumber", ""); set("branchName", ""); touch("bankCode"); setBankSearch(""); }}
                     className={cn(
                       "w-full flex items-baseline justify-between gap-4 px-4 py-3 min-h-[44px] text-start border-b border-[#171717]/[0.06] last:border-0 transition-colors",
+                      FOCUS_RING,
+                      "focus-visible:-outline-offset-2",
                       form.bankCode === bank.code
                         ? "bg-[#171717] text-[#fafafa]"
-                        : "text-[#171717] hover:bg-[#f5f5f5]"
+                        : "text-[#171717] hover:bg-[#171717]/5"
                     )}
                   >
                     <span className="text-[14px] font-medium">{bank.name}</span>
@@ -493,7 +505,7 @@ export default function DirectDebit() {
           {/* 03: Branch & Account */}
           {form.bankCode && (
             <section>
-              <SectionHead index="03" title={`פרטי חשבון · ${bankData?.name}`} />
+              <SectionHead index="03" total={sectionTotal} title={`פרטי חשבון · ${bankData?.name}`} />
               <div className="space-y-6">
                 {/* Branch Number */}
                 <div>
@@ -521,9 +533,10 @@ export default function DirectDebit() {
                             onClick={() => handleBranchSelect(num)}
                             className={cn(
                               "inline-flex items-baseline gap-1.5 px-3 py-2 min-h-[36px] rounded-[6px] text-[12px] font-medium transition-colors",
+                              FOCUS_RING,
                               form.branchNumber === num
                                 ? "bg-[#171717] text-[#fafafa]"
-                                : "bg-white text-[#171717]/70 hover:text-[#171717]"
+                                : "bg-white text-[#171717]/70 hover:bg-[#171717]/5 hover:text-[#171717]"
                             )}
                             style={form.branchNumber === num ? undefined : { boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
                           >
@@ -567,7 +580,7 @@ export default function DirectDebit() {
 
           {/* 04: Debit Date */}
           <section>
-            <SectionHead index={form.bankCode ? "04" : "03"} title="תאריך חיוב מועדף" />
+            <SectionHead index={form.bankCode ? "04" : "03"} total={sectionTotal} title="תאריך חיוב מועדף" />
             <div>
               <FieldLabel label="יום החיוב החודשי" required error={touched.debitDay ? errors.debitDay : undefined} />
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
@@ -578,9 +591,10 @@ export default function DirectDebit() {
                     onClick={() => { set("debitDay", opt.value); touch("debitDay"); }}
                     className={cn(
                       "flex flex-col items-center py-4 px-3 rounded-[6px] transition-colors min-h-[44px]",
+                      FOCUS_RING,
                       form.debitDay === opt.value
                         ? "bg-[#171717] text-[#fafafa]"
-                        : "bg-white text-[#171717] hover:bg-[#f5f5f5]"
+                        : "bg-white text-[#171717] hover:bg-[#171717]/5"
                     )}
                     style={form.debitDay === opt.value ? undefined : { boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
                   >
@@ -606,7 +620,7 @@ export default function DirectDebit() {
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[200px]"
+            className={cn("inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[200px]", FOCUS_RING)}
           >
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שליחת הוראת קבע"}
           </button>

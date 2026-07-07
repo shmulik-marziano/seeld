@@ -5,21 +5,27 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const systemPrompt = `אתה אריק - יועץ פיננסי וביטוחי מומחה של חברת SeelD פיננסים וביטוח. 
-אתה ידידותי, מקצועי וממוקד בעזרה ללקוחות בנושאי:
+// Token discipline: the model never needs more than a short, focused answer,
+// and it never needs more than the recent turns to give one.
+const MODEL = "gemini-2.0-flash"; // no thinking tokens — cheapest capable tier
+const MAX_OUTPUT_TOKENS = 500;
+const HISTORY_WINDOW = 12; // last N turns sent to the model
+const MAX_CONTENT_CHARS = 2000;
+
+const systemPrompt = `אתה הסוכן החכם של SEELD — בית פיננסים וביטוח ישראלי (מבית עמיתים הון, בפיקוח רשות שוק ההון).
+אתה עוזר ללקוחות ומתעניינים בנושאי:
 - ביטוח בריאות, חיים, רכב ודירה
-- חיסכון לטווח ארוך וקצר
-- פנסיה וקרנות השתלמות
-- השקעות ותכנון פיננסי
+- פנסיה, קרנות השתלמות וקופות גמל
+- חיסכון, השקעות ותכנון פיננסי
 - מיצוי זכויות והחזרי מס
 
 הנחיות:
-- ענה בעברית תקנית וברורה
-- היה ידידותי וקולח
-- תן תשובות קצרות וממוקדות (2-3 משפטים מקסימום)
-- אם אינך בטוח, המלץ לפנות ליועץ אנושי
-- הימנע מייעוץ ספציפי ללא הבנה מלאה של המצב
-- השתמש באימוג'ים במידה כשרלוונטי`;
+- ענה בעברית תקנית, ידידותית וברורה
+- תשובות קצרות וממוקדות: 2-3 משפטים, בלי הקדמות
+- בלי אימוג'ים ובלי סימנים מקושטים — טקסט נקי בלבד
+- אל תיתן המלצה אישית על מוצר ספציפי; הסבר עקרונות, ולשאלות אישיות הפנה לפגישה עם יועץ: "הפגישה הראשונה על חשבוננו"
+- אם אינך בטוח — אמור זאת במפורש, אל תמציא נתונים או תשואות
+- אפשר להפנות לכלים באתר: מחשבונים (/calculators), השוואת קופות (/fund-finder), טבלאות תשואות (/return-tables), צור קשר (/contact)`;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -29,15 +35,14 @@ serve(async (req) => {
   try {
     const body = await req.json();
     const { messages } = body;
-    
-    // Validate messages input
+
     if (!Array.isArray(messages) || messages.length === 0 || messages.length > 50) {
       return new Response(JSON.stringify({ error: "Invalid messages format" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    
+
     for (const msg of messages) {
       if (!msg || typeof msg.role !== "string" || typeof msg.content !== "string" || msg.content.length > 5000) {
         return new Response(JSON.stringify({ error: "Invalid message format" }), {
@@ -46,7 +51,13 @@ serve(async (req) => {
         });
       }
     }
-    
+
+    // Window + clamp history server-side so long conversations cannot inflate cost
+    const windowed = messages.slice(-HISTORY_WINDOW).map((m: { role: string; content: string }) => ({
+      role: m.role === "assistant" ? "assistant" : "user",
+      content: m.content.length > MAX_CONTENT_CHARS ? m.content.slice(0, MAX_CONTENT_CHARS) : m.content,
+    }));
+
     const GOOGLE_AI_API_KEY = Deno.env.get("GOOGLE_AI_API_KEY");
 
     if (!GOOGLE_AI_API_KEY) {
@@ -54,7 +65,7 @@ serve(async (req) => {
       throw new Error("GOOGLE_AI_API_KEY is not configured");
     }
 
-    console.log("Sending request to Gemini API with", messages.length, "messages");
+    console.log("Gemini request:", windowed.length, "of", messages.length, "messages");
 
     const response = await fetch("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", {
       method: "POST",
@@ -63,11 +74,13 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gemini-2.0-flash",
+        model: MODEL,
         messages: [
           { role: "system", content: systemPrompt },
-          ...messages,
+          ...windowed,
         ],
+        max_tokens: MAX_OUTPUT_TOKENS,
+        temperature: 0.4,
         stream: true,
       }),
     });
@@ -88,8 +101,6 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-
-    console.log("Streaming response from Gemini API");
 
     return new Response(response.body, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },

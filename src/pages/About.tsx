@@ -12,7 +12,7 @@ const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
 const SectionHead = ({ index, title, lede }: { index: string; title: string; lede?: string }) => (
   <div className="border-t border-[#171717]/20 pt-6 mb-10 sm:mb-12">
     <div className="flex items-baseline gap-6 sm:gap-10">
-      <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED }}>
+      <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED, fontFamily: MONO }} dir="ltr">
         {index}
       </span>
       <div>
@@ -30,7 +30,7 @@ const SectionHead = ({ index, title, lede }: { index: string; title: string; led
 
 const About = () => {
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* HERO — bento row: who we are + the counting orange tile */}
@@ -58,6 +58,12 @@ const About = () => {
               </h1>
               <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9]">
                 סוכנות ביטוח, חיסכון ופנסיה מבית עמיתים הון. עצמאית, מפוקחת, ובצד שלכם.
+              </p>
+              <p
+                className="mt-8 text-[11px] tracking-[0.16em] font-medium"
+                style={{ fontFamily: MONO, color: PAPER_MUTED }}
+              >
+                בפיקוח רשות שוק ההון · ע.מ <span dir="ltr" className="tabular-nums">305275653</span>
               </p>
             </div>
           </div>
@@ -145,13 +151,13 @@ const About = () => {
             <ScrollReveal delay={80}>
               <div className="mt-2 max-w-3xl">
                 {[
-                  { label: "ע.מ", value: "305275653" },
-                  { label: "רישיון סוכן ביטוח", value: "מורשה רשות שוק ההון 2026" },
-                  { label: "מבית", value: "עמיתים הון" },
+                  { label: "ע.מ", value: "305275653", ltr: true },
+                  { label: "רישיון סוכן ביטוח", value: "מורשה רשות שוק ההון 2026", ltr: false },
+                  { label: "מבית", value: "עמיתים הון", ltr: false },
                 ].map((item) => (
                   <div key={item.label} className="flex items-baseline justify-between py-[15px] border-b border-[#171717]/10">
                     <span className="text-[13px] text-[#5c5c5c]">{item.label}</span>
-                    <span className="text-base text-[#171717] tabular-nums">{item.value}</span>
+                    <span className="text-base text-[#171717] tabular-nums" dir={item.ltr ? "ltr" : undefined}>{item.value}</span>
                   </div>
                 ))}
               </div>
@@ -241,7 +247,7 @@ const About = () => {
                 <button
                   type="button"
                   onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                  className="transition-transform hover:-translate-y-[1px]"
+                  className="bento-hover rounded-full"
                   aria-label="פתיחת שיחה עם יועץ SEELD"
                 >
                   <StatusPill>היועץ מחובר עכשיו · שאלו לפני שמתקשרים</StatusPill>

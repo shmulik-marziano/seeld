@@ -1,15 +1,47 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ArticleCard from "@/components/ArticleCard";
 import ScrollReveal from "@/components/ScrollReveal";
-import { articles } from "@/data/articles";
+import { articles, type Article } from "@/data/articles";
 import { Link } from "react-router-dom";
-import { MONO } from "@/lib/brand";
+import { MONO, CARD_SHADOW } from "@/lib/brand";
 import { UmbrellaFigure } from "@/components/brand/Figures";
 
 const HEEBO = "'Heebo', sans-serif";
 // Captions on the warm paper tiles stay at #5c5c5c minimum (AA on paper).
 const PAPER_MUTED = "#5c5c5c";
+
+// The homogeneous SEELD article card — white tile on the paper panel.
+// Whole-tile link, so it takes the .bento-hover quiet lift (Snap motion).
+const ArticleTile = ({ article }: { article: Article }) => (
+  <Link
+    to={`/article/${article.id}`}
+    className="bento-hover group flex h-full flex-col overflow-hidden rounded-lg bg-white"
+    style={{ boxShadow: CARD_SHADOW }}
+  >
+    <div className="aspect-[16/10] overflow-hidden">
+      <img src={article.image} alt="" loading="lazy" className="w-full h-full object-cover" />
+    </div>
+    <div className="flex flex-1 flex-col p-5 sm:p-6">
+      <div
+        className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-[11px] tracking-[0.08em] text-[#5c5c5c]"
+        style={{ fontFamily: MONO }}
+      >
+        <span>{article.category}</span>
+        <span className="tabular-nums">
+          {article.date} · <span dir="ltr">{article.readTime}</span>
+        </span>
+      </div>
+      <h3 className="mt-3 text-lg text-[#171717] leading-snug" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+        {article.title}
+      </h3>
+      <p className="mt-2 text-[14px] text-[#4d4d4d] leading-[1.7] line-clamp-2">{article.subtitle}</p>
+      <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#171717]">
+        קראו עוד
+        <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
+      </span>
+    </div>
+  </Link>
+);
 
 const SectionHead = ({ index, title, lede }: { index: string; title: string; lede?: string }) => (
   <div className="border-t border-[#171717]/20 pt-6 mb-12 sm:mb-14">
@@ -44,7 +76,7 @@ const Travel = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* Hero — paper tile; the umbrella peeks from the corner */}
@@ -111,7 +143,7 @@ const Travel = () => {
             </ScrollReveal>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {carHomeInsuranceArticles.map((article) => (
-                <ArticleCard key={article.id} {...article} />
+                <ArticleTile key={article.id} article={article} />
               ))}
             </div>
           </div></div>

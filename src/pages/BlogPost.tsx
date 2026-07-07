@@ -12,6 +12,10 @@ const HEEBO = "'Heebo', sans-serif";
 // SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
 const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
 
+// Reading time from the post's HTML content — roughly 200 Hebrew words a minute
+const readMinutes = (html: string) =>
+  Math.max(1, Math.round(html.replace(/<[^>]+>/g, " ").trim().split(/\s+/).filter(Boolean).length / 200));
+
 interface BlogPostData {
   id: string;
   slug: string;
@@ -290,7 +294,7 @@ const BlogPost = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
         <Header />
         <div className="px-2 pt-2">
           <div className="bento-panel">
@@ -306,7 +310,7 @@ const BlogPost = () => {
 
   if (!post) {
     return (
-      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
         <Header />
         <div className="px-2 pt-2">
           <div className="bento-panel"><div className="max-w-3xl mx-auto px-5 sm:px-8 py-24 sm:py-32 relative z-10">
@@ -338,7 +342,7 @@ const BlogPost = () => {
   }
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* The reading tile — hero, cover and article in one paper panel */}
@@ -356,14 +360,22 @@ const BlogPost = () => {
             </div>
 
             <div className="mt-10 sm:mt-12">
-              <div className="flex flex-wrap items-baseline gap-3 text-[12px] text-[#5c5c5c] mb-4">
+              {/* Mono eyebrow — category, date, read time (numbers stay LTR) */}
+              <div
+                className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[12px] tracking-[0.08em] text-[#5c5c5c] mb-4"
+                style={{ fontFamily: MONO }}
+              >
                 {post.category && (
                   <>
                     <span>{post.category}</span>
                     <span aria-hidden="true">·</span>
                   </>
                 )}
-                <span>{formatDate(post.published_at)}</span>
+                <span className="tabular-nums">{formatDate(post.published_at)}</span>
+                <span aria-hidden="true">·</span>
+                <span className="tabular-nums">
+                  <span dir="ltr">{readMinutes(post.content)}</span> דק׳ קריאה
+                </span>
                 {post.author && (
                   <>
                     <span aria-hidden="true">·</span>
@@ -396,13 +408,15 @@ const BlogPost = () => {
 
           {/* Content */}
           <article className="max-w-3xl mx-auto px-5 sm:px-8 py-10 sm:py-16">
+            {/* Reading measure capped at ~65ch (STYLESEED: 45–75 chars per line) */}
             <div
-              className="prose prose-base sm:prose-lg max-w-none
+              className="prose prose-base sm:prose-lg
                 prose-headings:text-[#171717] prose-headings:font-semibold
                 prose-p:text-[#4d4d4d] prose-p:leading-[1.9]
                 prose-li:text-[#4d4d4d]
                 prose-strong:text-[#171717] prose-strong:font-semibold
                 prose-a:text-[#171717] prose-a:no-underline hover:prose-a:underline"
+              style={{ maxWidth: "65ch" }}
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
 
@@ -528,25 +542,35 @@ const BlogPost = () => {
                 מאמרים נוספים
               </h2>
             </div>
-            <div>
+            {/* The homogeneous SEELD article cards — white tiles, .bento-hover quiet lift */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {related.map((r) => (
                 <Link
                   key={r.id}
                   to={`/blog/${r.slug}`}
-                  className="group flex items-baseline justify-between gap-6 py-5 border-b border-[#171717]/10 hover:border-[#171717]/40 transition-colors"
+                  className="bento-hover group flex h-full flex-col rounded-lg bg-white p-5 sm:p-6"
+                  style={{ boxShadow: CARD_SHADOW }}
                 >
-                  <div className="min-w-0">
-                    <h3 className="text-base sm:text-lg text-[#171717] leading-snug" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
-                      {r.title}
-                    </h3>
-                    {r.excerpt && (
-                      <p className="mt-1.5 text-[14px] text-[#4d4d4d] leading-[1.7] line-clamp-2">
-                        {r.excerpt}
-                      </p>
-                    )}
+                  <div
+                    className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-[11px] tracking-[0.08em] text-[#5c5c5c]"
+                    style={{ fontFamily: MONO }}
+                  >
+                    <span>{r.category ?? "בלוג"}</span>
+                    <span className="tabular-nums">
+                      {formatDate(r.published_at)} · <span dir="ltr">{readMinutes(r.content)}</span> דק׳
+                    </span>
                   </div>
-                  <span className="text-[#171717]/30 group-hover:text-[#171717] transition-all group-hover:-translate-x-1 shrink-0" aria-hidden="true">
-                    ←
+                  <h3 className="mt-3 text-lg text-[#171717] leading-snug" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+                    {r.title}
+                  </h3>
+                  {r.excerpt && (
+                    <p className="mt-2 text-[14px] text-[#4d4d4d] leading-[1.7] line-clamp-2">
+                      {r.excerpt}
+                    </p>
+                  )}
+                  <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#171717]">
+                    קראו עוד
+                    <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
                   </span>
                 </Link>
               ))}

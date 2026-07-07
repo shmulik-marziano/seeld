@@ -67,7 +67,7 @@ const tabTriggerClass =
 
 const FAQ = () => {
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* HERO — bento row: find your answer + the tiny orange tag tile */}
@@ -97,7 +97,7 @@ const FAQ = () => {
             <button
               type="button"
               onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-              className="block transition-transform hover:-translate-y-[1px]"
+              className="block bento-hover rounded-full"
               aria-label="פתיחת שיחה עם יועץ SEELD"
             >
               <StatusPill>היועץ מחובר עכשיו · שאלו במקום לגלול</StatusPill>
@@ -142,9 +142,9 @@ const FAQ = () => {
                           <AccordionItem
                             key={idx}
                             value={`${category.id}-${idx}`}
-                            className="border-b border-[#171717]/10 rounded-none px-0"
+                            className="border-b border-[#171717]/10 rounded-none px-0 transition-colors hover:border-[#171717]/40"
                           >
-                            <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
+                            <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#171717]">
                               {item.q}
                             </AccordionTrigger>
                             <AccordionContent className="text-[#4d4d4d] leading-[1.85] pb-6 text-[14px] max-w-2xl">

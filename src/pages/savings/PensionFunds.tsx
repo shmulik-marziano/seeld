@@ -15,7 +15,7 @@ import { StatusPill } from "@/components/brand/Live";
 import { DrawSpark } from "@/components/brand/Strokes";
 
 const tabTriggerClass =
-  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#5c5c5c] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
+  'rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#5c5c5c] hover:text-[#171717] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <h2
@@ -85,7 +85,7 @@ const PensionFunds = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* ══════ HERO ══════ */}
@@ -109,6 +109,15 @@ const PensionFunds = () => {
             </div>
           </div>
 
+          {/* Market-mono eyebrow — the one shared gesture across all savings pages */}
+          <div
+            className="mb-5 flex items-center gap-2.5 text-[11px] sm:text-[12px] font-semibold tracking-[0.18em] text-[#171717] tabular-nums"
+            style={{ fontFamily: MONO }}
+          >
+            <span>פנסיה מקיפה</span>
+            <span className="text-[#171717]/35 select-none" aria-hidden="true">·</span>
+            <span style={{ color: "#5c5c5c" }}>הכנסה חודשית קבועה</span>
+          </div>
           <h1
             className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
             style={{ fontFamily: SERIF, fontWeight: 600, fontSize: 'clamp(2rem, 5vw, 3.4rem)' }}
@@ -121,7 +130,7 @@ const PensionFunds = () => {
           <div className="flex flex-wrap items-center gap-6">
             <a
               href="#analysis-form"
-              className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
+              className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] bento-hover min-h-[52px]"
             >
               ניתוח תיק פנסיוני חינם
             </a>
@@ -136,7 +145,7 @@ const PensionFunds = () => {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event('seeld:open-chat'))}
-            className="mt-7 block transition-transform hover:-translate-y-[1px]"
+            className="mt-7 inline-flex rounded-full bento-hover"
             aria-label="פתיחת שיחה עם יועץ SEELD AI"
           >
             <StatusPill>יש שאלה על קרן פנסיה? היועץ מחובר</StatusPill>
@@ -261,7 +270,7 @@ const PensionFunds = () => {
                         value={`faq-${idx}`}
                         className="border-b border-[#171717]/10 rounded-none px-0"
                       >
-                        <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5">
+                        <AccordionTrigger className="text-start text-base font-medium text-[#171717] hover:no-underline py-5 px-3 -mx-3 rounded-md hover:bg-[#171717]/5 transition-colors duration-150">
                           {item.q}
                         </AccordionTrigger>
                         <AccordionContent className="text-[#5c5c5c] leading-[1.85] pb-6 text-[14px]">

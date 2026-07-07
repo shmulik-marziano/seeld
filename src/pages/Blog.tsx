@@ -66,7 +66,7 @@ const Blog = () => {
     }`;
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* Hero — one paper tile */}
@@ -135,44 +135,42 @@ const Blog = () => {
               )}
             </div>
           ) : (
-            <div className="pt-2">
+            /* The homogeneous SEELD article cards — white tiles on the paper panel,
+               whole-tile links with the .bento-hover quiet lift (Snap motion) */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-10">
               {filtered.map((post) => (
                 <Link
                   key={post.id}
                   to={`/blog/${post.slug}`}
-                  className="group flex items-start justify-between gap-6 sm:gap-10 py-7 border-b border-[#171717]/10 hover:border-[#171717]/40 transition-colors"
+                  className="bento-hover group flex h-full flex-col overflow-hidden rounded-lg bg-white"
+                  style={{ boxShadow: CARD_SHADOW }}
                 >
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-baseline gap-3 text-[12px] text-[#5c5c5c] mb-2.5">
-                      {post.category && <span>{post.category}</span>}
-                      {post.category && <span aria-hidden="true">·</span>}
-                      <span>{formatDate(post.published_at)}</span>
+                  {post.cover_image_url && (
+                    <div className="aspect-[16/10] overflow-hidden">
+                      <img src={post.cover_image_url} alt="" loading="lazy" className="w-full h-full object-cover" />
                     </div>
-                    <h2
-                      className="text-xl sm:text-2xl text-[#171717] leading-snug"
-                      style={{ fontFamily: HEEBO, fontWeight: 600 }}
+                  )}
+                  <div className="flex flex-1 flex-col p-5 sm:p-6">
+                    <div
+                      className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-[11px] tracking-[0.08em] text-[#5c5c5c]"
+                      style={{ fontFamily: MONO }}
                     >
+                      <span>{post.category ?? "בלוג"}</span>
+                      <span className="tabular-nums">{formatDate(post.published_at)}</span>
+                    </div>
+                    <h2 className="mt-3 text-lg text-[#171717] leading-snug" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
                       {post.title}
                     </h2>
                     {post.excerpt && (
-                      <p className="mt-2.5 text-[15px] text-[#4d4d4d] leading-[1.8] max-w-2xl line-clamp-2">
+                      <p className="mt-2 text-[14px] text-[#4d4d4d] leading-[1.7] line-clamp-2">
                         {post.excerpt}
                       </p>
                     )}
-                    <span className="mt-4 inline-flex items-center gap-2 text-[14px] font-medium text-[#171717]">
+                    <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#171717]">
                       קראו עוד
                       <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
                     </span>
                   </div>
-                  {post.cover_image_url && (
-                    <img
-                      src={post.cover_image_url}
-                      alt=""
-                      loading="lazy"
-                      className="hidden sm:block w-44 h-28 object-cover rounded-lg shrink-0"
-                      style={{ boxShadow: CARD_SHADOW }}
-                    />
-                  )}
                 </Link>
               ))}
             </div>

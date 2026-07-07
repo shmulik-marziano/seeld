@@ -53,9 +53,9 @@ export default function CustomerListPage() {
     >
       {/* Background decorative orbs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-[0.07] blur-3xl" style={{ backgroundColor: '#171717' }} />
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-[0.07] blur-3xl" style={{ backgroundColor: '#0a0a0a' }} />
         <div className="absolute top-1/3 -left-32 w-80 h-80 rounded-full opacity-[0.06] blur-3xl" style={{ backgroundColor: '#b45309' }} />
-        <div className="absolute bottom-0 right-1/3 w-72 h-72 rounded-full opacity-[0.05] blur-3xl" style={{ backgroundColor: '#171717' }} />
+        <div className="absolute bottom-0 right-1/3 w-72 h-72 rounded-full opacity-[0.05] blur-3xl" style={{ backgroundColor: '#0a0a0a' }} />
         {/* Watermark */}
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-[120px] font-black tracking-widest select-none opacity-[0.025] text-[#171717] whitespace-nowrap">
           SEELD
@@ -89,7 +89,7 @@ export default function CustomerListPage() {
             whileTap={{ scale: 0.93 }}
             onClick={() => navigate('/app/customers/new')}
             className="w-11 h-11 rounded-full flex items-center justify-center shadow-lg"
-            style={{ backgroundColor: '#171717', color: 'white' }}
+            style={{ backgroundColor: '#0a0a0a', color: 'white' }}
           >
             <UserPlus className="w-4 h-4" />
           </motion.button>
@@ -172,7 +172,7 @@ export default function CustomerListPage() {
               animate={{ y: [0, -8, 0] }}
               transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
               className="w-24 h-24 rounded-full flex items-center justify-center mb-5 shadow-xl"
-              style={{ backgroundColor: '#171717', boxShadow: '0 12px 32px rgba(94,198,198,0.35)' }}
+              style={{ backgroundColor: '#0a0a0a', boxShadow: '0 12px 32px rgba(94,198,198,0.35)' }}
             >
               <UserPlus className="w-10 h-10 text-white" />
             </motion.div>
@@ -181,7 +181,7 @@ export default function CustomerListPage() {
             <button
               onClick={() => { setSearch(''); setActiveFilter('all'); }}
               className="px-5 py-2 rounded-full text-xs font-bold text-white"
-              style={{ backgroundColor: '#171717' }}
+              style={{ backgroundColor: '#0a0a0a' }}
             >
               נקה סינון
             </button>

@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import { MONO } from "@/lib/brand";
+import { MONO, CARD_SHADOW } from "@/lib/brand";
 import { FamilyFigure } from "@/components/brand/Figures";
 
 const HEEBO = "'Heebo', sans-serif";
@@ -24,7 +24,7 @@ const Creativity = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       <main>
@@ -55,7 +55,7 @@ const Creativity = () => {
                 <div className="mt-8">
                   <Link
                     to="/contact"
-                    className="inline-flex items-center justify-center rounded-md px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
+                    className="inline-flex items-center justify-center rounded-md px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-black transition-colors min-h-[52px]"
                   >
                     הצטרפו ל-SEELD
                   </Link>
@@ -82,20 +82,32 @@ const Creativity = () => {
                 </h2>
               </div>
             </ScrollReveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14">
+            {/* The homogeneous SEELD card tiles — white tiles, .bento-hover quiet lift */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {insuranceTypes.map((type, i) => (
-                <ScrollReveal key={type.title} delay={i * 60}>
-                  <Link to={type.href} className="group block border-t border-[#171717]/15 hover:border-[#171717]/40 transition-colors pt-5 pb-8">
-                    <div className="flex items-baseline justify-between gap-4 mb-2.5">
-                      <h3 className="text-lg text-[#171717]" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
-                        {type.title}
-                      </h3>
-                      <span className="text-[#171717]/30 group-hover:text-[#171717] transition-all group-hover:-translate-x-1" aria-hidden="true">←</span>
+                <ScrollReveal key={type.title} delay={i * 60} className="h-full">
+                  <Link
+                    to={type.href}
+                    className="bento-hover group flex h-full flex-col rounded-lg bg-white p-5 sm:p-6"
+                    style={{ boxShadow: CARD_SHADOW }}
+                  >
+                    <div
+                      className="text-[11px] tracking-[0.08em] text-[#5c5c5c] tabular-nums"
+                      style={{ fontFamily: MONO }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
                     </div>
-                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{type.description}</p>
+                    <h3 className="mt-3 text-lg text-[#171717] leading-snug" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+                      {type.title}
+                    </h3>
+                    <p className="mt-2 text-[14px] text-[#4d4d4d] leading-[1.7]">{type.description}</p>
                     <p className="mt-3 text-[13px] text-[#5c5c5c]">
                       {type.features.join(" · ")}
                     </p>
+                    <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#171717]">
+                      לפרטים
+                      <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
+                    </span>
                   </Link>
                 </ScrollReveal>
               ))}

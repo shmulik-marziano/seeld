@@ -4,7 +4,15 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Json } from "@/integrations/supabase/site-types";
 
-type CalculatorType = "mortgage" | "pension" | "savings" | "goal" | "compare";
+type CalculatorType =
+  | "mortgage"
+  | "pension"
+  | "savings"
+  | "goal"
+  | "compare"
+  | "income-tax"
+  | "life-insurance"
+  | "car-insurance";
 
 type SaveCalculationParams = {
   calculatorType: CalculatorType;
@@ -71,6 +79,9 @@ const getDefaultTitle = (type: CalculatorType): string => {
     savings: "חישוב חיסכון",
     goal: "חישוב יעד פיננסי",
     compare: "השוואת מסלולי השקעה",
+    "income-tax": "חישוב מס הכנסה",
+    "life-insurance": "חישוב ביטוח חיים",
+    "car-insurance": "הערכת ביטוח רכב",
   };
   return `${titles[type]} - ${new Date().toLocaleDateString("he-IL")}`;
 };

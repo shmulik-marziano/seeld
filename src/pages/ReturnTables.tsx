@@ -6,6 +6,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import FundReturnTable from "@/components/FundReturnTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LiveTag } from "@/components/brand/Live";
+import { MarketMarquee } from "@/components/brand/Marquee";
 import { allFunds as staticFunds, cmaLastUpdate } from "@/data/cmaFundsData";
 import { useCmaFunds, useCmaSyncStatus, formatPeriod } from "@/hooks/useCmaFunds";
 import type { FundReturn } from "@/data/fundReturns";
@@ -83,6 +84,17 @@ const ReturnTables = () => {
 
   const lastUpdate = syncStatus?.latestPeriod ? formatPeriod(syncStatus.latestPeriod) : cmaLastUpdate;
 
+  // Marquee feed — top 12-month return per product category, derived from the table data
+  const marqueeItems: { label: string; value?: string; dot?: boolean }[] = [
+    { label: isLive ? "LIVE DATA" : "LOCAL DATA", dot: isLive },
+    ...tabDefs
+      .filter((t) => t.funds.length > 0)
+      .map((t) => {
+        const top = Math.max(...t.funds.map((f) => f.yearReturn));
+        return { label: t.label, value: `${top >= 0 ? "+" : ""}${top.toFixed(1)}%` };
+      }),
+  ];
+
   const stats = [
     { value: maxYear.toFixed(2), unit: "%", label: "תשואה שנתית מובילה", detail: topFund?.name },
     { value: maxFiveYear.toFixed(2), unit: "%", label: "תשואת 5 שנים מובילה", detail: topFiveYearFund?.name },
@@ -90,7 +102,7 @@ const ReturnTables = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* Hero tile + live top-return tile (the play) */}
@@ -137,8 +149,13 @@ const ReturnTables = () => {
             </div>
           </div>
 
-          {/* Orange stat tile — live top 12-month return */}
-          <div className="bento-panel-orange flex flex-col items-center justify-center gap-1 p-6 min-h-[150px]" dir="ltr">
+          {/* Orange stat tile — live top 12-month return, links to the fund finder */}
+          <Link
+            to="/fund-finder"
+            className="bento-panel-orange bento-hover flex flex-col items-center justify-center gap-1 p-6 min-h-[150px]"
+            dir="ltr"
+            aria-label="התשואה השנתית המובילה · לכלי איתור והשוואת קופות"
+          >
             <span className="text-[30px] sm:text-[36px] font-bold text-[#171717] tabular-nums" style={{ fontFamily: MONO }}>
               {maxYear >= 0 ? "+" : ""}{maxYear.toFixed(2)}%
             </span>
@@ -150,8 +167,14 @@ const ReturnTables = () => {
                 {topFund.name}
               </span>
             )}
-          </div>
+            <span className="mt-1.5 text-[9px] tracking-[0.22em] font-semibold text-[#171717]/70" style={{ fontFamily: MONO }}>
+              FUND FINDER →
+            </span>
+          </Link>
         </div>
+
+        {/* Market marquee band — top category returns */}
+        <MarketMarquee items={marqueeItems} ariaLabel="תשואות 12 חודשים מובילות לפי קטגוריה" className="mt-2" />
       </section>
 
       <main>

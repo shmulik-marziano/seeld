@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { useAuth } from "@/hooks/useAuth";
 import { SERIF, MONO } from "@/lib/brand";
-import { LiveDot, StatusPill } from "@/components/brand/Live";
+import { LiveClock, LiveDot, StatusPill } from "@/components/brand/Live";
 
 // SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
 const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
@@ -75,7 +75,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* HERO — one idea: leave details, we call back */}
@@ -114,7 +114,7 @@ const Contact = () => {
                   <button
                     type="button"
                     onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                    className="mb-10 block transition-transform hover:-translate-y-[1px]"
+                    className="mb-10 block bento-hover rounded-full"
                     aria-label="פתיחת שיחה עם יועץ SEELD"
                   >
                     <StatusPill>היועץ מחובר עכשיו · שאלו לפני שממלאים</StatusPill>
@@ -215,11 +215,11 @@ const Contact = () => {
               <div className="bento-panel-ink px-5 sm:px-7 py-7">
                 <div
                   className="flex justify-between text-[10px] tracking-[0.16em] mb-6"
-                  style={{ fontFamily: MONO, color: "rgba(233,227,214,.55)" }}
+                  style={{ fontFamily: MONO, color: "rgba(233,223,210,.55)" }}
                   dir="ltr"
                 >
                   <span>CONTACT</span>
-                  <span className="inline-flex items-center gap-1.5 text-[#e9e3d6]">
+                  <span className="inline-flex items-center gap-1.5 text-[#e9dfd2]">
                     <LiveDot size={5} />
                     LIVE
                   </span>
@@ -227,37 +227,53 @@ const Contact = () => {
                 <div className="border-t border-white/10">
                   <div className="py-[15px] border-b border-white/10">
                     <div className="flex items-baseline justify-between">
-                      <span className="text-[13px]" style={{ color: "rgba(233,227,214,.6)" }}>טלפון</span>
+                      <span className="text-[13px]" style={{ color: "rgba(233,223,210,.6)" }}>טלפון</span>
                       <a
                         href="tel:0523097444"
-                        className="text-base text-[#e9e3d6] tabular-nums border-b border-transparent hover:border-[#e9e3d6]/40 transition-colors"
+                        className="text-base text-[#e9dfd2] tabular-nums border-b border-transparent hover:border-[#e9dfd2]/40 transition-colors"
                         dir="ltr"
                       >
                         052-309-7444
                       </a>
                     </div>
-                    <p className="text-[12px] mt-1 text-left" style={{ color: "rgba(233,227,214,.55)" }}>א'-ה', 9:00-18:00</p>
+                    <p className="text-[12px] mt-1 text-left" style={{ color: "rgba(233,223,210,.55)" }}>א'-ה', 9:00-18:00</p>
                   </div>
                   <div className="py-[15px] border-b border-white/10">
                     <div className="flex items-baseline justify-between">
-                      <span className="text-[13px]" style={{ color: "rgba(233,227,214,.6)" }}>אימייל</span>
+                      <span className="text-[13px]" style={{ color: "rgba(233,223,210,.6)" }}>אימייל</span>
                       <a
                         href="mailto:info@seeld.co.il"
-                        className="text-base text-[#e9e3d6] border-b border-transparent hover:border-[#e9e3d6]/40 transition-colors"
+                        className="text-base text-[#e9dfd2] border-b border-transparent hover:border-[#e9dfd2]/40 transition-colors"
                         dir="ltr"
                       >
                         info@seeld.co.il
                       </a>
                     </div>
-                    <p className="text-[12px] mt-1 text-left" style={{ color: "rgba(233,227,214,.55)" }}>נענה תוך יום עסקים</p>
+                    <p className="text-[12px] mt-1 text-left" style={{ color: "rgba(233,223,210,.55)" }}>נענה תוך יום עסקים</p>
                   </div>
                   <div className="py-[15px]">
                     <div className="flex items-baseline justify-between gap-6">
-                      <span className="text-[13px] shrink-0" style={{ color: "rgba(233,227,214,.6)" }}>משרדים</span>
+                      <span className="text-[13px] shrink-0" style={{ color: "rgba(233,223,210,.6)" }}>משרדים</span>
                       <div className="text-left">
-                        <p className="text-base text-[#e9e3d6]">המלאכה 10, רעננה</p>
-                        <p className="text-base text-[#e9e3d6]">הסדנא 4, ירושלים</p>
+                        <p className="text-base text-[#e9dfd2]">המלאכה 10, רעננה</p>
+                        <p className="text-base text-[#e9dfd2]">הסדנא 4, ירושלים</p>
                       </div>
+                    </div>
+                  </div>
+                  {/* The clock gesture — mirrors the hero tile: we watch around the clock */}
+                  <div className="pt-5 border-t border-white/10 flex items-center gap-4">
+                    <LiveClock size={44} color="#e9dfd2" className="shrink-0" />
+                    <div>
+                      <span
+                        className="text-[11px] font-semibold tracking-[0.2em] text-[#e9dfd2] tabular-nums"
+                        style={{ fontFamily: MONO }}
+                        dir="ltr"
+                      >
+                        24/6 · LIVE
+                      </span>
+                      <p className="text-[12px] mt-1" style={{ color: "rgba(233,223,210,.6)" }}>
+                        התיק שלכם מנוטר מסביב לשעון
+                      </p>
                     </div>
                   </div>
                 </div>

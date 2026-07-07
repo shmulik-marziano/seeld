@@ -80,7 +80,7 @@ const PersonalAreaLogin = () => {
 
   return (
     // The whole login sits on the ink canvas; the form lives on one calm paper tile.
-    <div className="min-h-screen flex flex-col lg:flex-row" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen flex flex-col lg:flex-row" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       {/* ── Right side: ink canvas with the SEELD wordmark + ruled benefit list ── */}
       <div className="hidden lg:flex lg:w-[48%] items-center justify-center">
         <motion.div

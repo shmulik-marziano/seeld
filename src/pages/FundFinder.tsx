@@ -11,7 +11,7 @@ import { useCmaFunds, useCmaSyncStatus, formatPeriod } from '@/hooks/useCmaFunds
 import { cmaLastUpdate } from '@/data/cmaFundsData';
 import { Printer } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
-import { LiveTag } from '@/components/brand/Live';
+import { LiveDot, LiveTag } from '@/components/brand/Live';
 import { SERIF, MONO, RING } from '@/lib/brand';
 
 const FundFinder = () => {
@@ -42,7 +42,7 @@ const FundFinder = () => {
   ];
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: '#171717' }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: '#0a0a0a' }}>
       <Header />
 
       {/* Hero tile — hairline rule + breadcrumb, compact */}
@@ -98,14 +98,25 @@ const FundFinder = () => {
                 <div className="sticky top-4 bento-panel-ink p-5 sm:p-6">
                   <div className="relative z-10">
                     <div className="border-b border-white/10 pb-4 mb-5">
-                      <h2 className="text-lg text-[#e9e3d6]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                      <div
+                        className="flex items-center justify-between text-[10px] tracking-[0.16em] mb-3"
+                        style={{ fontFamily: MONO, color: 'rgba(233,223,210,.55)' }}
+                        dir="ltr"
+                      >
+                        <span>SCREENER</span>
+                        <span className="inline-flex items-center gap-1.5 text-[#e9dfd2]">
+                          {isLive && <LiveDot size={5} />}
+                          {isLive ? 'LIVE' : 'LOCAL'}
+                        </span>
+                      </div>
+                      <h2 className="text-lg text-[#e9dfd2]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                         חיפוש קופות
                       </h2>
-                      <p className="mt-1 text-[13px]" style={{ color: 'rgba(233,227,214,.6)' }}>
+                      <p className="mt-1 text-[13px]" style={{ color: 'rgba(233,223,210,.6)' }}>
                         {fundsLoading ? 'טוען את מאגר הקופות...' : 'סינון לפי תשואה, חברה או שם קופה'}
                       </p>
                     </div>
-                    <div className="rounded-lg bg-[#e9e3d6] p-4 sm:p-5">
+                    <div className="rounded-lg bg-[#e9dfd2] p-4 sm:p-5">
                       <FundSearchPanel
                         mode={search.mode}
                         productType={search.productType}
@@ -232,7 +243,12 @@ const FundFinder = () => {
                         .map((fund) => (
                           <div
                             key={fund.id}
-                            className="flex items-center justify-between gap-4 py-3 border-b border-[#171717]/10 hover:bg-[#171717]/[0.04] hover:border-[#171717]/40 transition-colors"
+                            onClick={() => search.addFund(fund)}
+                            className={`flex items-center justify-between gap-4 py-3 px-3 -mx-3 border-b border-[#171717]/10 ${
+                              search.selectedFunds.length >= 8
+                                ? ""
+                                : "bento-hover rounded-lg cursor-pointer hover:bg-[#171717]/[0.04] hover:border-[#171717]/40"
+                            }`}
                           >
                             <div className="min-w-0">
                               <p className="text-[14px] font-medium text-[#171717] truncate">{fund.name}</p>
@@ -247,7 +263,7 @@ const FundFinder = () => {
                             </div>
                             <button
                               type="button"
-                              onClick={() => search.addFund(fund)}
+                              onClick={(e) => { e.stopPropagation(); search.addFund(fund); }}
                               disabled={search.selectedFunds.length >= 8}
                               className="shrink-0 px-3.5 py-1.5 rounded-md bg-white text-[13px] font-medium text-[#171717] hover:bg-[#fafafa] transition-colors disabled:opacity-50 disabled:pointer-events-none"
                               style={{ boxShadow: RING }}

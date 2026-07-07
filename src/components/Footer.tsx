@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { LiveTag, StatusPill } from "@/components/brand/Live";
+import { LiveDot, LiveTag, StatusPill } from "@/components/brand/Live";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { BRONZE, MONO, PINE, SERIF, TINT } from "@/lib/brand";
 
@@ -91,7 +91,7 @@ const Footer = () => {
   };
 
   return (
-    <footer dir="rtl" className="px-2 pb-2 pt-2 space-y-2" style={{ backgroundColor: "#171717" }}>
+    <footer dir="rtl" className="px-2 pb-2 pt-2 space-y-2" style={{ backgroundColor: "#0a0a0a" }}>
       {/* Contact band — paper tile */}
       <section className="bento-panel">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
@@ -110,7 +110,7 @@ const Footer = () => {
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                className="mb-9 block transition-transform hover:-translate-y-[1px]"
+                className="mb-9 block bento-hover"
                 aria-label="פתיחת שיחה עם יועץ SEELD AI"
               >
                 <StatusPill>SEELD AI מחובר עכשיו · לחצו לשיחה</StatusPill>
@@ -149,7 +149,7 @@ const Footer = () => {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
+                    className="bento-hover inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
                   >
                     {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
                   </button>
@@ -180,6 +180,17 @@ const Footer = () => {
                     )}
                   </div>
                 ))}
+              </div>
+
+              {/* Capital-markets mono line — LTR, tabular (bidi-safe: ASCII only) */}
+              <div className="mt-6 flex items-center gap-2.5" dir="ltr">
+                <LiveDot size={6} />
+                <span
+                  className="text-[11px] tracking-[0.18em] font-medium"
+                  style={{ fontFamily: MONO, fontVariantNumeric: "tabular-nums", color: "#5c5c5c" }}
+                >
+                  SEELD · TLV · 24/6
+                </span>
               </div>
 
               <div className="flex flex-wrap gap-x-6 gap-y-2 mt-7">
@@ -233,7 +244,7 @@ const Footer = () => {
                 <h3 className="text-[11px] tracking-[0.18em] font-medium mb-5" style={{ color: BRONZE, fontFamily: MONO }}>
                   {col.title}
                 </h3>
-                <ul className="space-y-2.5 text-[13.5px] text-white/50">
+                <ul className="space-y-2.5 text-[13.5px] text-white/55">
                   {col.links.map((l, i) => (
                     <li key={l.href + l.label} className={i >= 5 ? "hidden md:list-item" : undefined}>
                       <Link to={l.href} className="hover:text-white transition-colors">
@@ -249,7 +260,7 @@ const Footer = () => {
               <h3 className="text-[11px] tracking-[0.18em] font-medium mb-5" style={{ color: BRONZE, fontFamily: MONO }}>
                 צור קשר
               </h3>
-              <ul className="space-y-2.5 text-[13.5px] text-white/50">
+              <ul className="space-y-2.5 text-[13.5px] text-white/55">
                 <li>
                   <a href="tel:0523097444" className="hover:text-white transition-colors tabular-nums" dir="ltr">
                     052-309-7444
@@ -271,7 +282,7 @@ const Footer = () => {
           </div>
 
           {/* Disclaimer */}
-          <div className="text-[11px] text-white/50 leading-relaxed max-w-3xl mb-8">
+          <div className="text-[11px] text-white/55 leading-relaxed max-w-3xl mb-8">
             המידע באתר זה הינו כללי בלבד ואינו מהווה ייעוץ פיננסי, ביטוחי או משפטי.
             אין להסתמך על המידע באתר כתחליף לייעוץ מקצועי אישי. SEELD פועלת בכפוף
             לחוק הפיקוח על שירותים פיננסיים (ביטוח) ובפיקוח רשות שוק ההון, ביטוח וחיסכון.
@@ -280,14 +291,14 @@ const Footer = () => {
           {/* Bottom bar */}
           <div className="pt-6 border-t border-white/10">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-              <p className="text-xs text-white/50">
+              <p className="text-xs text-white/55">
                 &copy; {new Date().getFullYear()} SEELD · הכסף שלך, מסודר. כל הזכויות שמורות.
               </p>
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-2 text-xs text-white/50">
-                <Link to="/privacy" className="hover:text-white/60 transition-colors">מדיניות פרטיות</Link>
-                <Link to="/terms" className="hover:text-white/60 transition-colors">תנאי שימוש</Link>
-                <Link to="/accessibility" className="hover:text-white/60 transition-colors">נגישות</Link>
-                <Link to="/agents" className="hover:text-white/60 transition-colors">פורטל סוכנים</Link>
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-2 text-xs text-white/55">
+                <Link to="/privacy" className="hover:text-white transition-colors">מדיניות פרטיות</Link>
+                <Link to="/terms" className="hover:text-white transition-colors">תנאי שימוש</Link>
+                <Link to="/accessibility" className="hover:text-white transition-colors">נגישות</Link>
+                <Link to="/agents" className="hover:text-white transition-colors">פורטל סוכנים</Link>
               </div>
             </div>
           </div>

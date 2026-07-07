@@ -6,6 +6,9 @@ import PensionCalculator from "@/components/PensionCalculator";
 import SavingsCalculator from "@/components/SavingsCalculator";
 import GoalCalculator from "@/components/GoalCalculator";
 import CompareCalculator from "@/components/CompareCalculator";
+import IncomeTaxCalculator from "@/components/IncomeTaxCalculator";
+import LifeInsuranceCalculator from "@/components/LifeInsuranceCalculator";
+import CarInsuranceEstimator from "@/components/CarInsuranceEstimator";
 import { Link } from "react-router-dom";
 import { LiveDot } from "@/components/brand/Live";
 import { SERIF, MONO } from "@/lib/brand";
@@ -16,23 +19,8 @@ const tabTriggerClass =
 const tabHeadClass = "border-t border-[#171717]/20 pt-5 mb-8 text-right";
 
 const Calculators = () => {
-  const comingSoon = [
-    {
-      title: "מחשבון ביטוח חיים",
-      description: "כמה כיסוי ביטוחי אתם באמת צריכים?",
-    },
-    {
-      title: "מחשבון ביטוח רכב",
-      description: "השוו מחירי ביטוח רכב בהתאם לפרופיל שלכם",
-    },
-    {
-      title: "מחשבון מס הכנסה",
-      description: "חשבו את גובה המס והחזרים אפשריים",
-    },
-  ];
-
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#171717" }}>
+    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
       <Header />
 
       {/* Hero tile */}
@@ -57,7 +45,7 @@ const Calculators = () => {
             מחשבונים פיננסיים
           </h1>
           <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9]">
-            משכנתא, פנסיה, חיסכון והשוואת מסלולים. חופשי, ללא רישום.
+            משכנתא, פנסיה, חיסכון, מס, ביטוח והשוואת מסלולים. חופשי, ללא רישום.
           </p>
         </div></div>
       </section>
@@ -65,13 +53,19 @@ const Calculators = () => {
       <main>
         {/* Slim mono ticker tile (the play) */}
         <section className="px-2 pt-2">
-          <div className="bento-panel flex items-center px-5 py-4" dir="ltr">
+          <div className="bento-panel flex items-center justify-between gap-4 px-5 py-4" dir="ltr">
             <span
-              className="relative z-10 text-[13px] sm:text-[15px] font-semibold tracking-[0.28em] text-[#171717] inline-flex items-center gap-3"
+              className="relative z-10 text-[13px] sm:text-[15px] font-semibold tracking-[0.28em] text-[#171717] inline-flex items-center gap-3 whitespace-nowrap tabular-nums"
               style={{ fontFamily: MONO }}
             >
               <LiveDot size={7} />
               NO SIGNUP · FREE
+            </span>
+            <span
+              className="relative z-10 hidden sm:inline-flex text-[11px] font-semibold tracking-[0.28em] text-[#171717]/70 whitespace-nowrap tabular-nums"
+              style={{ fontFamily: MONO }}
+            >
+              08 TOOLS · ILS
             </span>
           </div>
         </section>
@@ -95,6 +89,15 @@ const Calculators = () => {
                 </TabsTrigger>
                 <TabsTrigger value="compare" className={tabTriggerClass}>
                   השוואה
+                </TabsTrigger>
+                <TabsTrigger value="income-tax" className={tabTriggerClass}>
+                  מס הכנסה
+                </TabsTrigger>
+                <TabsTrigger value="life-insurance" className={tabTriggerClass}>
+                  ביטוח חיים
+                </TabsTrigger>
+                <TabsTrigger value="car-insurance" className={tabTriggerClass}>
+                  ביטוח רכב
                 </TabsTrigger>
               </TabsList>
 
@@ -172,40 +175,52 @@ const Calculators = () => {
                   <CompareCalculator />
                 </div>
               </TabsContent>
-            </Tabs>
-          </div></div>
-        </section>
 
-        {/* Coming Soon tile */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16 relative z-10">
-            <div className="border-t border-[#171717]/20 pt-5 mb-10">
-              <div className="text-[11px] tracking-[0.22em] font-medium mb-3 text-[#5c5c5c]">
-                בקרוב
-              </div>
-              <h2
-                className="text-[#171717] leading-tight"
-                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
-              >
-                מחשבונים נוספים בקרוב
-              </h2>
-            </div>
-            <div className="grid md:grid-cols-2 gap-x-16">
-              {comingSoon.map((calc) => (
-                <div
-                  key={calc.title}
-                  className="flex items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10"
-                >
-                  <div className="min-w-0">
-                    <h3 className="text-base font-medium text-[#171717] mb-1">{calc.title}</h3>
-                    <p className="text-[13px] text-[#5c5c5c] leading-relaxed">{calc.description}</p>
+              <TabsContent value="income-tax" className="mt-0">
+                <div className="text-right">
+                  <div className={tabHeadClass}>
+                    <h2
+                      className="text-[#171717] leading-tight mb-2"
+                      style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+                    >
+                      מחשבון מס הכנסה
+                    </h2>
+                    <p className="text-[#4d4d4d] text-[14px] leading-[1.85]">חשבו את מס ההכנסה החודשי והשנתי לפי מדרגות 2026</p>
                   </div>
-                  <span className="text-[11px] tracking-[0.22em] font-medium shrink-0 text-[#5c5c5c]">
-                    בקרוב
-                  </span>
+                  <IncomeTaxCalculator />
                 </div>
-              ))}
-            </div>
+              </TabsContent>
+
+              <TabsContent value="life-insurance" className="mt-0">
+                <div className="text-right">
+                  <div className={tabHeadClass}>
+                    <h2
+                      className="text-[#171717] leading-tight mb-2"
+                      style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+                    >
+                      מחשבון ביטוח חיים
+                    </h2>
+                    <p className="text-[#4d4d4d] text-[14px] leading-[1.85]">כמה כיסוי ביטוחי המשפחה שלכם באמת צריכה?</p>
+                  </div>
+                  <LifeInsuranceCalculator />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="car-insurance" className="mt-0">
+                <div className="text-right">
+                  <div className={tabHeadClass}>
+                    <h2
+                      className="text-[#171717] leading-tight mb-2"
+                      style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+                    >
+                      מחשבון ביטוח רכב
+                    </h2>
+                    <p className="text-[#4d4d4d] text-[14px] leading-[1.85]">הערכת טווח פרמיה שנתי לפי הפרופיל שלכם</p>
+                  </div>
+                  <CarInsuranceEstimator />
+                </div>
+              </TabsContent>
+            </Tabs>
           </div></div>
         </section>
 
