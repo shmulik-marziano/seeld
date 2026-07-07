@@ -39,8 +39,8 @@ const desktopLinkClass = (active: boolean) =>
     "text-[13.5px] font-medium transition-colors",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[hsl(var(--ring))]",
     active
-      ? "text-[#171717] dark:text-white underline decoration-[#171717] dark:decoration-white decoration-2 underline-offset-[10px]"
-      : "text-[#5c5c5c] dark:text-white/60 hover:text-[#171717] dark:hover:text-white"
+      ? "text-[#1D2D3D] underline decoration-[#4E9D8F] decoration-2 underline-offset-[10px]"
+      : "text-[#5a6a78] hover:text-[#1D2D3D]"
   );
 
 const Header = () => {
@@ -101,8 +101,8 @@ const Header = () => {
 
   return (
     <header
-      className="sticky top-0 z-50 px-2 pt-2 pb-2"
-      style={{ backgroundColor: "#0a0a0a" }}
+      className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur-sm"
+      style={{ borderColor: "#E7EDF1" }}
     >
       {/* Keep focused elements clear of the sticky header (WCAG 2.4.11) */}
       <style>{"html{scroll-padding-top:96px}"}</style>
@@ -111,17 +111,14 @@ const Header = () => {
       <a
         href="#main"
         onClick={handleSkipToMain}
-        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:right-3 focus:z-[60] focus:bg-[#e9dfd2] focus:text-[#171717] focus:px-4 focus:py-2.5 focus:text-[13.5px] focus:font-medium focus:rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:right-3 focus:z-[60] focus:bg-white focus:text-[#1D2D3D] focus:px-4 focus:py-2.5 focus:text-[13.5px] focus:font-medium focus:rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
       >
         דלג לתוכן
       </a>
 
-      {/* The toolbar tile — a floating paper panel on the ink gutter */}
-      <div
-        className={cn("bento-panel transition-shadow duration-200", isScrolled && "shadow-[0_6px_20px_-8px_rgba(0,0,0,0.5)]")}
-        style={{ borderRadius: 16 }}
-      >
-        <div className="relative z-10 px-4 sm:px-6">
+      {/* The toolbar — institutional white bar */}
+      <div className={cn("transition-shadow duration-200", isScrolled && "shadow-[0_6px_18px_-12px_rgba(29,45,61,0.25)]")}>
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex items-center justify-between h-[64px]">
           {/* Logo */}
           <SeeIDLogo size="md" className="flex-shrink-0" />
@@ -152,14 +149,14 @@ const Header = () => {
 
             <Link
               to="/personal-area"
-              className="hidden lg:inline-flex items-center justify-center px-6 py-2.5 bg-[#171717] dark:bg-white text-[#fafafa] dark:text-[#171717] text-[13.5px] font-medium tracking-wide hover:bg-[#33332f] dark:hover:bg-white/85 transition-colors min-h-[42px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+              className="hidden lg:inline-flex items-center justify-center rounded-lg px-6 py-2.5 bg-[#1D2D3D] text-white text-[13.5px] font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[42px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
             >
               האזור האישי
             </Link>
 
             {/* Mobile Menu Button */}
             <button
-              className="lg:hidden p-2 flex items-center justify-center text-[#171717] dark:text-white min-w-[44px] min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+              className="lg:hidden p-2 flex items-center justify-center text-[#1D2D3D] min-w-[44px] min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
               onClick={() => setIsMenuOpen(true)}
               aria-label="פתח תפריט"
               aria-expanded={isMenuOpen}
@@ -186,7 +183,7 @@ const Header = () => {
             />
             {/* Panel — Snap slide (0.2s, ease-out); warm-paper surface, bento chrome */}
             <motion.div
-              className="fixed top-0 right-0 bottom-0 w-[85vw] sm:w-[360px] bg-[#e9dfd2] z-50 lg:hidden border-l border-[#171717]/15"
+              className="fixed top-0 right-0 bottom-0 w-[85vw] sm:w-[360px] bg-white z-50 lg:hidden border-l border-[#E7EDF1]"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -195,17 +192,17 @@ const Header = () => {
               aria-modal="true"
               aria-label="תפריט ניווט"
             >
-              <div className="flex items-center justify-between px-6 h-[68px] border-b border-[#171717]/15">
+              <div className="flex items-center justify-between px-6 h-[68px] border-b border-[#E7EDF1]">
                 <span
                   dir="ltr"
-                  className="text-[15px] font-semibold tracking-[-0.02em] text-[#171717]"
+                  className="text-[15px] font-semibold tracking-[-0.02em] text-[#1D2D3D]"
                   style={{ fontFamily: "'Heebo', sans-serif" }}
                 >
-                  SEELD<span className="text-[#5c5c5c]">.</span>
+                  SEELD<span className="text-[#4E9D8F]">.</span>
                 </span>
                 <button
                   onClick={() => setIsMenuOpen(false)}
-                  className="p-2 flex items-center justify-center min-w-[44px] min-h-[44px] text-[#171717] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+                  className="p-2 flex items-center justify-center min-w-[44px] min-h-[44px] text-[#1D2D3D] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
                   aria-label="סגור תפריט"
                 >
                   <X className="h-5 w-5" strokeWidth={1.5} />
@@ -223,11 +220,11 @@ const Header = () => {
                     to={link.href}
                     aria-current={isActive(link.href) ? "page" : undefined}
                     className={cn(
-                      "py-[15px] border-b border-[#171717]/15 text-[18px] font-semibold transition-colors",
+                      "py-[15px] border-b border-[#E7EDF1] text-[18px] font-semibold transition-colors",
                       "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]",
                       isActive(link.href)
-                        ? "text-[#171717]"
-                        : "text-[#171717]/75 hover:text-[#171717]"
+                        ? "text-[#1D2D3D]"
+                        : "text-[#3a4c5a] hover:text-[#1D2D3D]"
                     )}
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -248,7 +245,7 @@ const Header = () => {
                       <Link
                         key={link.href}
                         to={link.href}
-                        className="py-2.5 text-[14px] font-medium text-[#5c5c5c] hover:text-[#171717] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+                        className="py-2.5 text-[14px] font-medium text-[#5a6a78] hover:text-[#1D2D3D] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         {link.label}
@@ -261,7 +258,7 @@ const Header = () => {
                 <div className="mt-auto pt-10 space-y-5">
                   <Link
                     to="/contact"
-                    className="flex items-center justify-center w-full px-6 py-4 bg-[#171717] text-[#fafafa] text-[15px] font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+                    className="flex items-center justify-center w-full px-6 py-4 rounded-lg bg-[#1D2D3D] text-white text-[15px] font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[52px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     בדיקת תיק ללא עלות

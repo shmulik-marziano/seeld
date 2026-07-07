@@ -47,7 +47,7 @@ const SeeIDLogo = ({ className = "", size = "md" }: { className?: string; size?:
         <path
           d="M26 11C26 11 17 22.4 17 29.6C17 34.9 21 39 26 39C31 39 35 34.9 35 29.6C35 22.4 26 11 26 11Z"
           fill="url(#seeid-drop)"
-          stroke="#1f2937"
+          stroke="#1D2D3D"
           strokeWidth="2.6"
           strokeLinejoin="round"
         />
@@ -57,7 +57,7 @@ const SeeIDLogo = ({ className = "", size = "md" }: { className?: string; size?:
       <div className="flex flex-col leading-none">
         <span
           dir="ltr"
-          className={`${s.text} text-[#1f2937] dark:text-white`}
+          className={`${s.text} text-[#1D2D3D] dark:text-white`}
           style={{ fontFamily: SERIF, fontWeight: 600, letterSpacing: "0.01em" }}
         >
           SeeID
