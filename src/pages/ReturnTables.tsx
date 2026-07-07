@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import FundReturnTable from "@/components/FundReturnTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LiveTag } from "@/components/brand/Live";
+import { LiveDot, LiveTag } from "@/components/brand/Live";
 import { allFunds as staticFunds, cmaLastUpdate } from "@/data/cmaFundsData";
 import { useCmaFunds, useCmaSyncStatus, formatPeriod } from "@/hooks/useCmaFunds";
 import type { FundReturn } from "@/data/fundReturns";
@@ -83,6 +83,17 @@ const ReturnTables = () => {
 
   const lastUpdate = syncStatus?.latestPeriod ? formatPeriod(syncStatus.latestPeriod) : cmaLastUpdate;
 
+  // Marquee feed — top 12-month return per product category, derived from the table data
+  const marqueeItems: { label: string; value?: string; dot?: boolean }[] = [
+    { label: isLive ? "LIVE DATA" : "LOCAL DATA", dot: isLive },
+    ...tabDefs
+      .filter((t) => t.funds.length > 0)
+      .map((t) => {
+        const top = Math.max(...t.funds.map((f) => f.yearReturn));
+        return { label: t.label, value: `${top >= 0 ? "+" : ""}${top.toFixed(1)}%` };
+      }),
+  ];
+
   const stats = [
     { value: maxYear.toFixed(2), unit: "%", label: "תשואה שנתית מובילה", detail: topFund?.name },
     { value: maxFiveYear.toFixed(2), unit: "%", label: "תשואת 5 שנים מובילה", detail: topFiveYearFund?.name },
@@ -137,8 +148,13 @@ const ReturnTables = () => {
             </div>
           </div>
 
-          {/* Orange stat tile — live top 12-month return */}
-          <div className="bento-panel-orange flex flex-col items-center justify-center gap-1 p-6 min-h-[150px]" dir="ltr">
+          {/* Orange stat tile — live top 12-month return, links to the fund finder */}
+          <Link
+            to="/fund-finder"
+            className="bento-panel-orange bento-hover flex flex-col items-center justify-center gap-1 p-6 min-h-[150px]"
+            dir="ltr"
+            aria-label="התשואה השנתית המובילה · לכלי איתור והשוואת קופות"
+          >
             <span className="text-[30px] sm:text-[36px] font-bold text-[#171717] tabular-nums" style={{ fontFamily: MONO }}>
               {maxYear >= 0 ? "+" : ""}{maxYear.toFixed(2)}%
             </span>
@@ -150,6 +166,43 @@ const ReturnTables = () => {
                 {topFund.name}
               </span>
             )}
+            <span className="mt-1.5 text-[9px] tracking-[0.22em] font-semibold text-[#171717]/70" style={{ fontFamily: MONO }}>
+              FUND FINDER →
+            </span>
+          </Link>
+        </div>
+
+        {/* Market marquee band — top category returns (HeroSection marquee pattern) */}
+        <div
+          className="bento-panel mt-2 flex items-center overflow-hidden"
+          dir="ltr"
+          aria-label="תשואות 12 חודשים מובילות לפי קטגוריה"
+          style={{
+            maskImage: "linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)",
+            WebkitMaskImage: "linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)",
+          }}
+        >
+          <div className="seeld-marquee relative z-10 items-center py-4">
+            {[0, 1].map((copy) => (
+              <div
+                key={copy}
+                className="flex items-center shrink-0"
+                aria-hidden={copy === 1 ? "true" : undefined}
+              >
+                {marqueeItems.map((item, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center gap-2.5 px-4 text-[12.5px] sm:text-[13.5px] font-semibold tracking-[0.12em] text-[#171717] whitespace-nowrap tabular-nums"
+                    style={{ fontFamily: MONO }}
+                  >
+                    {item.dot && <LiveDot size={6} />}
+                    <span dir="auto">{item.label}</span>
+                    {item.value && <span dir="ltr">{item.value}</span>}
+                    <span className="text-[#171717]/30 select-none">—</span>
+                  </span>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </section>

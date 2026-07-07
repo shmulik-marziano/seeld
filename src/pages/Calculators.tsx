@@ -65,13 +65,19 @@ const Calculators = () => {
       <main>
         {/* Slim mono ticker tile (the play) */}
         <section className="px-2 pt-2">
-          <div className="bento-panel flex items-center px-5 py-4" dir="ltr">
+          <div className="bento-panel flex items-center justify-between gap-4 px-5 py-4" dir="ltr">
             <span
-              className="relative z-10 text-[13px] sm:text-[15px] font-semibold tracking-[0.28em] text-[#171717] inline-flex items-center gap-3"
+              className="relative z-10 text-[13px] sm:text-[15px] font-semibold tracking-[0.28em] text-[#171717] inline-flex items-center gap-3 whitespace-nowrap tabular-nums"
               style={{ fontFamily: MONO }}
             >
               <LiveDot size={7} />
               NO SIGNUP · FREE
+            </span>
+            <span
+              className="relative z-10 hidden sm:inline-flex text-[11px] font-semibold tracking-[0.28em] text-[#171717]/70 whitespace-nowrap tabular-nums"
+              style={{ fontFamily: MONO }}
+            >
+              05 TOOLS · ILS
             </span>
           </div>
         </section>

@@ -8,7 +8,7 @@ import { Search, ArrowUpDown, ChevronDown, ChevronUp } from "lucide-react";
 import { useInvestmentTracks } from "@/hooks/useInvestmentTracks";
 import { productTypeLabels, specializationLabels, companyLabels } from "@/types/fund";
 import type { Fund, ProductType, Specialization, ManagingCompany } from "@/types/fund";
-import { LiveTag } from "@/components/brand/Live";
+import { CountUp, LiveTag } from "@/components/brand/Live";
 import { BONE, SERIF, MONO, CARD_SHADOW } from "@/lib/brand";
 
 // ── Helpers ──
@@ -285,9 +285,10 @@ const InvestmentTracks = () => {
   // Return value colored by data semantics: negative red, above filtered average green
   const returnColor = (v: number) => v < 0 ? "text-[#b91c1c]" : v > avgReturn ? "text-[#15803d]" : "text-[#171717]";
 
+  // Standout number (tracks in the database) sits on the orange middle tile
   const heroStats = [
-    { value: trackData.length, label: "מסלולים במאגר" },
     { value: new Set(trackData.map(f => f.company)).size, label: "חברות מנהלות" },
+    { value: trackData.length, label: "מסלולים במאגר" },
     { value: productTypes.length, label: "סוגי מוצרים" },
   ];
 
@@ -338,9 +339,9 @@ const InvestmentTracks = () => {
                 <div
                   className="text-[#171717] tabular-nums mb-1.5"
                   dir="ltr"
-                  style={{ fontFamily: MONO, fontWeight: 600, fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", letterSpacing: "-0.02em" }}
+                  style={{ fontFamily: MONO, fontWeight: 600, fontVariantNumeric: "tabular-nums", fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", letterSpacing: "-0.02em" }}
                 >
-                  {stat.value}
+                  <CountUp to={stat.value} />
                 </div>
                 <div className={`text-[12px] tracking-[0.1em] ${i === 1 ? "text-[#171717]/80" : "text-[#5c5c5c]"}`}>
                   {stat.label}
