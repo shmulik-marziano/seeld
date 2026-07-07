@@ -1,8 +1,8 @@
-// Hand-drawn line figures — the bento panels' illustrated cast,
-// in the spirit of insurance & finance. Ink line-work, no fills,
-// meant to sit on the orange / paper tiles.
+// Hand-drawn line figures — the brand's illustrated cast, in the spirit of
+// insurance & finance. Navy ink line-work, no fills (SEELD DNA v3),
+// meant to sit on white surfaces and pastel circles.
 
-const stroke = { stroke: "#171717", strokeWidth: 2.4, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, fill: "none" };
+const stroke = { stroke: "#1D2D3D", strokeWidth: 2.4, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, fill: "none" };
 
 /** Umbrella in light rain — protection */
 export const UmbrellaFigure = ({ className = "" }: { className?: string }) => (

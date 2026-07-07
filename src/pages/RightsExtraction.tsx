@@ -3,13 +3,13 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import { SERIF, MONO, CHIP_GREEN } from "@/lib/brand";
+import {
+  BODY, DISPLAY, LINE, MUTED, NAVY, PASTEL_BLUE, PASTEL_PEACH, TURQ,
+} from "@/lib/brand";
 import { StatusPill } from "@/components/brand/Live";
-import { FamilyFigure } from "@/components/brand/Figures";
 import { ProgressRail } from "@/components/brand/Strokes";
 
-// SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
-const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
+// SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
 
 const rights = [
   { title: "החזרי מס הכנסה", description: "בדיקת החזרי מס עבור 6 שנים אחורה" },
@@ -18,144 +18,122 @@ const rights = [
   { title: "זכויות פנסיוניות", description: "איתור קופות אבודות וכספים שלא ידעתם עליהם" },
 ];
 
+// Plain-word steps — no ornamental numerals (STYLESEED ban 2)
 const steps = [
-  { number: "01", title: "מלאו פרטים", description: "כמה שאלות קצרות. שתי דקות, לא יותר." },
-  { number: "02", title: "נבדוק עבורכם", description: "סריקה של כל הזכויות המגיעות לכם מהמדינה, מביטוח לאומי ומרשויות המס." },
-  { number: "03", title: "קבלו דוח", description: "רשימת זכויות מסודרת והמלצות לפעולה. בלי אותיות קטנות." },
+  { title: "מלאו פרטים", description: "כמה שאלות קצרות. שתי דקות, לא יותר." },
+  { title: "נבדוק עבורכם", description: "סריקה של כל הזכויות המגיעות לכם מהמדינה, מביטוח לאומי ומרשויות המס." },
+  { title: "קבלו דוח", description: "רשימת זכויות מסודרת והמלצות לפעולה. בלי אותיות קטנות." },
 ];
+
+// The heading starts its block — no eyebrow, no index (STYLESEED bans).
+const SectionHead = ({ title, lede }: { title: string; lede?: string }) => (
+  <div className="mb-12 sm:mb-16">
+    <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.8rem, 3.2vw, 2.4rem)" }}>
+      {title}
+    </h2>
+    {lede && (
+      <p className="mt-4 text-base leading-[1.85] max-w-xl" style={{ color: MUTED }}>{lede}</p>
+    )}
+  </div>
+);
 
 const RightsExtraction = () => {
   const stepsRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* HERO — bento row: money you didn't know was yours + the family orange tile */}
-      <section className="px-2 pt-2">
-        <div className="grid gap-2 lg:grid-cols-[1.6fr_1fr] items-stretch">
-          <div className="bento-panel"><div className="px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10">
-            <div className="border-t border-[#171717]/20 pt-5 mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-              <nav className="flex items-center gap-2 text-[12px] text-[#5c5c5c]">
-                <Link to="/" className="hover:text-[#171717] transition-colors">דף הבית</Link>
-                <span>←</span>
-                <span className="text-[#171717]/70 font-medium">מיצוי זכויות</span>
-              </nav>
-              <span className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium" style={{ color: PAPER_MUTED }}>
-                מיצוי זכויות
-              </span>
-            </div>
+      <main>
+        {/* HERO — money you didn't know was yours */}
+        <section className="dna-page">
+          {/* Pastel circle backdrop — decorative, never behind small text */}
+          <div className="dna-circles" aria-hidden="true">
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 280, height: 280, top: -120, left: -90, backgroundColor: PASTEL_PEACH, opacity: 0.55 }}
+            />
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 210, height: 210, bottom: -110, right: -70, backgroundColor: PASTEL_BLUE, opacity: 0.5 }}
+            />
+          </div>
 
-            <h1
-              className="text-[#171717] leading-[1.15] mb-6 max-w-3xl"
-              style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(2rem, 5vw, 3.4rem)" }}
-            >
-              כסף שמגיע לכם. באמת.
-            </h1>
-            <p className="text-base sm:text-[17px] text-[#4d4d4d] max-w-2xl leading-[1.9]">
-              החזרי מס, קצבאות וקופות שנשכחו. נבדוק מה מגיע לכם מהמדינה, ונדאג שתקבלו את זה.
-            </p>
-          </div></div>
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
+            <nav className="flex items-center gap-2 text-[13px] mb-10 sm:mb-14" style={{ color: MUTED }}>
+              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <span aria-hidden="true">←</span>
+              <span className="font-medium" style={{ color: NAVY }}>מיצוי זכויות</span>
+            </nav>
 
-          {/* Orange tile — the family in the corner */}
-          <div className="bento-panel-orange relative p-6 sm:p-8 flex flex-col justify-between min-h-[200px]">
-            <FamilyFigure className="absolute -left-4 -bottom-5 w-32 h-32 sm:w-36 sm:h-36 opacity-70" />
-            <span
-              className="text-[10px] tracking-[0.2em] font-semibold text-[#171717]/80"
-              style={{ fontFamily: MONO }}
-              dir="ltr"
-            >
-              RIGHTS · CHECK
-            </span>
-            <div className="relative z-10">
-              <div className="text-[22px] sm:text-[26px] font-semibold text-[#171717] leading-tight">
-                כסף שמגיע לכם
+            <div className="grid gap-10 lg:grid-cols-[1.6fr_1fr] items-start">
+              <div>
+                <h1
+                  className="dna-display leading-[1.12] mb-6 max-w-3xl"
+                  style={{ fontSize: "clamp(34px, 5vw, 50px)" }}
+                >
+                  כסף שמגיע לכם. באמת.
+                </h1>
+                <p className="text-base sm:text-[17px] max-w-2xl leading-[1.9]" style={{ color: MUTED }}>
+                  החזרי מס, קצבאות וקופות שנשכחו. נבדוק מה מגיע לכם מהמדינה, ונדאג שתקבלו את זה.
+                </p>
               </div>
-              <div className="mt-1.5 text-[13px] font-medium text-[#171717]/80">
-                הבדיקה ללא עלות. אם אין, לפחות תדעו.
+
+              <div className="dna-quote gold">
+                <div className="dna-ql">בדיקת זכאות</div>
+                <div className="dna-qt">
+                  הבדיקה ללא עלות וללא התחייבות. אם אין כלום, לפחות תדעו.
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <main>
-        {/* 01 — WHAT WE CHECK */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+        {/* WHAT WE CHECK */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
-              <div className="border-t border-[#171717]/20 pt-6 mb-10 sm:mb-12">
-                <div className="flex items-baseline gap-6 sm:gap-10">
-                  <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED, fontFamily: MONO }} dir="ltr">
-                    01
-                  </span>
-                  <div>
-                    <h2
-                      className="text-[#171717] leading-tight"
-                      style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}
-                    >
-                      מה בודקים
-                    </h2>
-                    <p className="mt-3 text-base text-[#4d4d4d] leading-[1.85] max-w-xl">
-                      ארבעה ערוצים שבהם רוב הישראלים משאירים כסף על השולחן.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <SectionHead
+                title="מה בודקים"
+                lede="ארבעה ערוצים שבהם רוב הישראלים משאירים כסף על השולחן."
+              />
             </ScrollReveal>
 
             <ScrollReveal delay={80}>
-              <div className="max-w-3xl border-t border-[#171717]/15">
+              <div className="max-w-3xl border-t" style={{ borderColor: LINE }}>
                 {rights.map((right) => (
-                  <div
-                    key={right.title}
-                    className="flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-10 py-5 border-b border-[#171717]/10"
-                  >
-                    <h3 className="text-base font-medium text-[#171717] shrink-0 sm:w-52">{right.title}</h3>
-                    <p className="text-[14px] text-[#4d4d4d] leading-[1.8]">{right.description}</p>
+                  <div key={right.title} className="dna-pill-item !py-5 border-b" style={{ borderColor: LINE }}>
+                    <div className="flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-10 w-full">
+                      <h3 className="text-base font-medium shrink-0 sm:w-52" style={{ color: NAVY }}>{right.title}</h3>
+                      <p className="text-[14.5px] leading-[1.8]" style={{ color: BODY }}>{right.description}</p>
+                    </div>
                   </div>
                 ))}
               </div>
             </ScrollReveal>
-          </div></div>
+          </div>
         </section>
 
-        {/* 02 — HOW IT WORKS (a real sequence) */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+        {/* HOW IT WORKS — a real sequence, plain-word steps */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
-              <div className="border-t border-[#171717]/20 pt-6 mb-10 sm:mb-12">
-                <div className="flex items-baseline gap-6 sm:gap-10">
-                  <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED, fontFamily: MONO }} dir="ltr">
-                    02
-                  </span>
-                  <h2
-                    className="text-[#171717] leading-tight"
-                    style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}
-                  >
-                    איך זה עובד
-                  </h2>
-                </div>
-              </div>
+              <SectionHead title="איך זה עובד" />
             </ScrollReveal>
 
             <div ref={stepsRef} className="max-w-3xl relative pr-5 sm:pr-7">
               {/* The rail fills as you read through the steps */}
-              <ProgressRail targetRef={stepsRef} color={CHIP_GREEN} className="right-0" />
+              <ProgressRail targetRef={stepsRef} color={TURQ} className="right-0" />
               {steps.map((step, i) => (
-                <ScrollReveal key={step.number} delay={i * 60}>
-                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-10 py-6 border-b border-[#171717]/10">
-                    <span
-                      className="text-[12px] tabular-nums tracking-[0.2em] shrink-0 w-20"
-                      style={{ color: PAPER_MUTED, fontFamily: MONO }}
-                      dir="ltr"
+                <ScrollReveal key={step.title} delay={i * 60}>
+                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-10 py-6 border-b" style={{ borderColor: LINE }}>
+                    <h3
+                      className="text-[19px] shrink-0 sm:w-44"
+                      style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}
                     >
-                      {step.number} / 03
-                    </span>
-                    <h3 className="text-lg text-[#171717] shrink-0 sm:w-44" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                       {step.title}
                     </h3>
-                    <p className="text-[14px] text-[#4d4d4d] leading-[1.8]">{step.description}</p>
+                    <p className="text-[14.5px] leading-[1.8]" style={{ color: BODY }}>{step.description}</p>
                   </div>
                 </ScrollReveal>
               ))}
@@ -166,37 +144,40 @@ const RightsExtraction = () => {
                 <button
                   type="button"
                   onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                  className="block bento-hover rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#171717]"
+                  className="block dna-hover rounded-full"
                   aria-label="פתיחת שיחה עם יועץ SEELD"
                 >
                   <StatusPill>היועץ מחובר עכשיו · שאלו אם זה רלוונטי אליכם</StatusPill>
                 </button>
               </div>
             </ScrollReveal>
-          </div></div>
+          </div>
         </section>
 
-        {/* CTA — the one next action (ink tile) */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
-            <div className="border-t border-white/20 pt-6">
-              <h2
-                className="text-[#fafafa] leading-tight mb-3"
-                style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
-              >
-                נבדוק מה מגיע לכם
-              </h2>
-              <p className="text-[#fafafa]/55 text-base leading-[1.85] mb-8 max-w-xl">
-                הבדיקה ללא עלות וללא התחייבות. אם אין כלום, לפחות תדעו.
-              </p>
-              <Link
-                to="/contact"
-                className="inline-flex items-center justify-center px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors min-h-[52px]"
-              >
-                בדיקת זכאות
-              </Link>
-            </div>
-          </div></div>
+        {/* CTA — institutional navy band */}
+        <section style={{ backgroundColor: NAVY }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+            <h2
+              className="text-white leading-tight mb-3"
+              style={{
+                fontFamily: DISPLAY,
+                fontWeight: 900,
+                fontSize: "clamp(1.7rem, 3.2vw, 2.4rem)",
+                letterSpacing: "-0.5px",
+              }}
+            >
+              נבדוק מה מגיע לכם
+            </h2>
+            <p className="text-base leading-[1.85] mb-9 max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
+              הבדיקה ללא עלות וללא התחייבות. אם אין כלום, לפחות תדעו.
+            </p>
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+            >
+              בדיקת זכאות
+            </Link>
+          </div>
         </section>
       </main>
 

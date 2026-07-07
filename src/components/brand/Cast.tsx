@@ -1,10 +1,11 @@
-// The SEELD cast — editorial ink figures in the spirit of the reference film:
-// full-figure people drawn in ink on the warm paper, solid black garments,
-// one orange accent per figure. They give bodies to the live chips' names.
+// The SEELD cast — editorial line figures redrawn for DNA v3:
+// full-figure people in navy ink on the white canvas, solid navy garments,
+// one turquoise accent per figure (gold #D8A24A stays available where the
+// accent must carry more warmth). They give bodies to the live chips' names.
 
-const INK = "#171717";
-const PAPER = "#e9dfd2";
-const ORANGE = "#f0a339";
+const INK = "#1D2D3D";
+const PAPER = "#ffffff";
+const ORANGE = "#4E9D8F";
 
 const line = { stroke: INK, strokeWidth: 2.4, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, fill: "none" };
 

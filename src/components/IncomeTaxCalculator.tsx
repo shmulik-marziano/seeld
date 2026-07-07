@@ -1,12 +1,22 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Banknote, Percent, Receipt, UserRound, BadgePercent } from "lucide-react";
+import { Banknote, UserRound, BadgePercent } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SaveCalculationButton from "@/components/SaveCalculationButton";
+import { DISPLAY, MONO, MUTED, NAVY, TURQ } from "@/lib/brand";
+
+// SEELD DNA v3 (STYLESEED.md): boxed inputs, .dna-concept result cards,
+// Frank Ruhl 900 turquoise standout stat, coral for the cost figure.
+
+const inputClass =
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#E7EDF1] rounded-lg text-[#1D2D3D] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1D2D3D]";
+const sliderClass =
+  "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#4E9D8F] [&_[role=slider]]:border-[#4E9D8F]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#1D2D3D]";
+const radioItemClass = "border-[#1D2D3D] text-[#1D2D3D]";
 
 // Tax parameters: January 2026 (רשות המסים); update yearly.
 // Monthly brackets after the January 2026 reform: the 20% bracket widened to 19,000
@@ -86,8 +96,8 @@ const IncomeTaxCalculator = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Gross Monthly Salary */}
         <div className="space-y-4">
-          <Label htmlFor="taxGrossSalary" className="flex items-center gap-2 text-base font-medium">
-            <Banknote className="w-4 h-4" />
+          <Label htmlFor="taxGrossSalary" className={labelClass}>
+            <Banknote className="w-4 h-4" style={{ color: TURQ }} />
             שכר חודשי ברוטו
           </Label>
           <Input
@@ -98,7 +108,7 @@ const IncomeTaxCalculator = () => {
               const num = parseInt(e.target.value.replace(/,/g, ""), 10);
               if (!isNaN(num) && num >= 0 && num <= 200000) setGrossMonthly(num);
             }}
-            className="text-lg font-medium text-left tabular-nums"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -108,8 +118,9 @@ const IncomeTaxCalculator = () => {
             max={100000}
             step={500}
             aria-label="שכר חודשי ברוטו"
+            className={sliderClass}
           />
-          <div className="flex justify-between text-xs text-muted-foreground tabular-nums" dir="ltr">
+          <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
             <span>₪5,000</span>
             <span>₪100,000</span>
           </div>
@@ -117,8 +128,8 @@ const IncomeTaxCalculator = () => {
 
         {/* Gender (determines base credit points) */}
         <div className="space-y-4">
-          <Label className="flex items-center gap-2 text-base font-medium">
-            <UserRound className="w-4 h-4" />
+          <Label className={labelClass}>
+            <UserRound className="w-4 h-4" style={{ color: TURQ }} />
             מין (קובע נקודות בסיס)
           </Label>
           <RadioGroup
@@ -128,14 +139,14 @@ const IncomeTaxCalculator = () => {
             dir="rtl"
           >
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="male" id="taxGenderMale" />
-              <Label htmlFor="taxGenderMale" className="font-normal cursor-pointer">
+              <RadioGroupItem value="male" id="taxGenderMale" className={radioItemClass} />
+              <Label htmlFor="taxGenderMale" className="font-normal cursor-pointer text-[#3a4c5a]">
                 גבר תושב ישראל (<span dir="ltr" className="tabular-nums">2.25</span> נקודות)
               </Label>
             </div>
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="female" id="taxGenderFemale" />
-              <Label htmlFor="taxGenderFemale" className="font-normal cursor-pointer">
+              <RadioGroupItem value="female" id="taxGenderFemale" className={radioItemClass} />
+              <Label htmlFor="taxGenderFemale" className="font-normal cursor-pointer text-[#3a4c5a]">
                 אישה תושבת ישראל (<span dir="ltr" className="tabular-nums">2.75</span> נקודות)
               </Label>
             </div>
@@ -144,8 +155,8 @@ const IncomeTaxCalculator = () => {
 
         {/* Additional Credit Points */}
         <div className="space-y-4">
-          <Label htmlFor="taxExtraPoints" className="flex items-center gap-2 text-base font-medium">
-            <BadgePercent className="w-4 h-4" />
+          <Label htmlFor="taxExtraPoints" className={labelClass}>
+            <BadgePercent className="w-4 h-4" style={{ color: TURQ }} />
             נקודות זיכוי נוספות
           </Label>
           <Input
@@ -159,10 +170,10 @@ const IncomeTaxCalculator = () => {
             min={0}
             max={10}
             step={0.25}
-            className="text-lg font-medium text-left tabular-nums"
+            className={inputClass}
             dir="ltr"
           />
-          <p className="text-xs text-muted-foreground leading-relaxed">
+          <p className="text-xs leading-relaxed" style={{ color: MUTED }}>
             ילדים, עולה חדש ותואר אקדמי מוסיפים כל אחד נקודות זיכוי. כל נקודה שווה{" "}
             {money(CREDIT_POINT_VALUE_2026)} בחודש.
           </p>
@@ -171,121 +182,102 @@ const IncomeTaxCalculator = () => {
 
       {/* Results Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        {/* Monthly Tax - Highlighted */}
-        <Card className="col-span-1 md:col-span-2 lg:col-span-1 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <Receipt className="w-4 h-4" />
-              מס חודשי
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-primary">{money(result.monthlyTax)}</p>
-            <p className="text-xs text-muted-foreground mt-1">
-              אחרי זיכוי של {money(result.creditValue)} (
-              <span dir="ltr" className="tabular-nums">{result.creditPoints}</span> נקודות)
-            </p>
-          </CardContent>
-        </Card>
+        {/* Monthly Tax - standout stat */}
+        <div className="dna-concept col-span-1 md:col-span-2 lg:col-span-1">
+          <p className="text-[13px] mb-2" style={{ color: MUTED }}>מס חודשי</p>
+          <p
+            className="tabular-nums"
+            dir="ltr"
+            style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ, fontSize: "clamp(1.9rem, 3vw, 2.3rem)", lineHeight: 1.15 }}
+          >
+            {formatCurrency(result.monthlyTax)}
+          </p>
+          <p className="text-xs mt-1" style={{ color: MUTED }}>
+            אחרי זיכוי של {money(result.creditValue)} (
+            <span dir="ltr" className="tabular-nums">{result.creditPoints}</span> נקודות)
+          </p>
+        </div>
 
         {/* Net after income tax */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              נטו ממס הכנסה
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{money(result.netAfterIncomeTax)}</p>
-          </CardContent>
-        </Card>
+        <div className="dna-concept">
+          <p className="text-[13px] mb-2" style={{ color: MUTED }}>נטו ממס הכנסה</p>
+          <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+            {formatCurrency(result.netAfterIncomeTax)}
+          </p>
+        </div>
 
         {/* Annual Tax */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">מס שנתי</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{money(result.annualTax)}</p>
-          </CardContent>
-        </Card>
+        <div className="dna-concept">
+          <p className="text-[13px] mb-2" style={{ color: MUTED }}>מס שנתי</p>
+          <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: "#a04a5c" }}>
+            {formatCurrency(result.annualTax)}
+          </p>
+        </div>
 
         {/* Marginal Rate */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <Percent className="w-4 h-4" />
-              מס שולי
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              <span dir="ltr" className="tabular-nums">{result.marginalRate.toFixed(0)}%</span>
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">על השקל הבא שתרוויחו</p>
-          </CardContent>
-        </Card>
+        <div className="dna-concept">
+          <p className="text-[13px] mb-2" style={{ color: MUTED }}>מס שולי</p>
+          <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+            {result.marginalRate.toFixed(0)}%
+          </p>
+          <p className="text-xs mt-1" style={{ color: MUTED }}>על השקל הבא שתרוויחו</p>
+        </div>
 
         {/* Effective Rate */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <Percent className="w-4 h-4" />
-              מס אפקטיבי
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              <span dir="ltr" className="tabular-nums">{result.effectiveRate.toFixed(1)}%</span>
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">מתוך הברוטו בפועל</p>
-          </CardContent>
-        </Card>
+        <div className="dna-concept">
+          <p className="text-[13px] mb-2" style={{ color: MUTED }}>מס אפקטיבי</p>
+          <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+            {result.effectiveRate.toFixed(1)}%
+          </p>
+          <p className="text-xs mt-1" style={{ color: MUTED }}>מתוך הברוטו בפועל</p>
+        </div>
       </div>
 
       {/* Scope + refund teaser */}
-      <Card>
-        <CardContent className="pt-6 space-y-4">
-          <p className="text-sm text-muted-foreground">
-            החישוב כולל מס הכנסה בלבד, ללא ביטוח לאומי ודמי בריאות. הנטו בפועל בתלוש יהיה נמוך
-            יותר, כי הניכויים האלה מחושבים בנפרד.
-          </p>
-          <div className="p-4 bg-muted rounded-xl text-sm text-muted-foreground">
-            <p>
-              עבדתם חלק מהשנה או לא ניצלתם נקודות זיכוי? ייתכן שמגיע לכם החזר מס.{" "}
-              <Link to="/rights-extraction" className="font-medium text-primary underline underline-offset-4">
-                בדקו זכאות להחזר
-              </Link>
-            </p>
-          </div>
+      <div className="dna-concept !p-6 space-y-4">
+        <p className="text-sm leading-[1.8]" style={{ color: "#3a4c5a" }}>
+          החישוב כולל מס הכנסה בלבד, ללא ביטוח לאומי ודמי בריאות. הנטו בפועל בתלוש יהיה נמוך
+          יותר, כי הניכויים האלה מחושבים בנפרד.
+        </p>
+        <div className="dna-callout text-sm">
+          עבדתם חלק מהשנה או לא ניצלתם נקודות זיכוי? ייתכן שמגיע לכם החזר מס.{" "}
+          <Link
+            to="/rights-extraction"
+            className="font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/30 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+          >
+            בדקו זכאות להחזר
+          </Link>
+        </div>
 
-          {/* Save Button */}
-          <div className="flex justify-end pt-2">
-            <SaveCalculationButton
-              calculatorType="income-tax"
-              inputData={{ grossMonthly, gender, additionalPoints }}
-              resultData={{
-                monthlyTax: result.monthlyTax,
-                netAfterIncomeTax: result.netAfterIncomeTax,
-                annualTax: result.annualTax,
-                marginalRate: result.marginalRate,
-                effectiveRate: result.effectiveRate,
-              }}
-              tips={[
-                `המס השולי שלכם: ${result.marginalRate.toFixed(0)}%`,
-                additionalPoints === 0
-                  ? "בדקו אם מגיעות לכם נקודות זיכוי נוספות (ילדים, תואר, עולה חדש)"
-                  : undefined,
-              ].filter(Boolean) as string[]}
-            />
-          </div>
-        </CardContent>
-      </Card>
+        {/* Save Button */}
+        <div className="flex justify-end pt-2">
+          <SaveCalculationButton
+            calculatorType="income-tax"
+            inputData={{ grossMonthly, gender, additionalPoints }}
+            resultData={{
+              monthlyTax: result.monthlyTax,
+              netAfterIncomeTax: result.netAfterIncomeTax,
+              annualTax: result.annualTax,
+              marginalRate: result.marginalRate,
+              effectiveRate: result.effectiveRate,
+            }}
+            tips={[
+              `המס השולי שלכם: ${result.marginalRate.toFixed(0)}%`,
+              additionalPoints === 0
+                ? "בדקו אם מגיעות לכם נקודות זיכוי נוספות (ילדים, תואר, עולה חדש)"
+                : undefined,
+            ].filter(Boolean) as string[]}
+          />
+        </div>
+      </div>
 
       {/* Disclaimer */}
-      <div className="p-4 bg-muted/50 rounded-xl text-xs text-muted-foreground text-center">
-        * מדרגות המס ונקודות הזיכוי לפי פרמטרי ינואר 2026 של רשות המסים. החישוב הוא הערכה
-        לתכנון, לא ייעוץ מס. לחבות מס מדויקת פנו לרואה חשבון או יועץ מס.
+      <div className="dna-quote gold">
+        <div className="dna-ql">הבהרה</div>
+        <div className="dna-qt">
+          מדרגות המס ונקודות הזיכוי לפי פרמטרי ינואר 2026 של רשות המסים. החישוב הוא הערכה
+          לתכנון, לא ייעוץ מס. לחבות מס מדויקת פנו לרואה חשבון או יועץ מס.
+        </div>
       </div>
     </div>
   );

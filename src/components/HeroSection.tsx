@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import {
-  INK, MONO,
-  CHIP_ORANGE, CHIP_GREEN, CHIP_YELLOW,
+  BLUE_TEXT, DISPLAY, GOLD_TEXT, LINE, MONO, MUTED, NAVY,
+  PASTEL_BLUE, PASTEL_MINT, PASTEL_PEACH, TINT_GOLD, TURQ_TEXT,
 } from "@/lib/brand";
 import { CountUp, LiveClock, LiveDot } from "@/components/brand/Live";
 import { MarketMarquee, type MarqueeItem } from "@/components/brand/Marquee";
 
-// SEELD Bento: warm paper panels on ink gutters. Snap motion (STYLESEED.md).
-const PAPER_MUTED = "#5c5c5c"; // AA on the warm paper
+// SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold. Snap motion (STYLESEED.md).
 
-// Capital-markets ticker feed — the moving band on the paper tile.
+// Light turquoise for small text on the navy statement panel (6.88:1 on #1D2D3D, measured)
+const TURQ_ON_NAVY = "#7fc2b5";
+
+// Capital-markets ticker feed — the moving band on the white tile.
 // Values render in their own LTR span so "+11.4%" survives bidi.
 const TICKER_ITEMS: MarqueeItem[] = [
   { label: "SEELD · LIVE", dot: true },
@@ -21,8 +23,8 @@ const TICKER_ITEMS: MarqueeItem[] = [
   { label: "השוואה מול 12 חברות" },
 ];
 
-// Repeating umbrella line-art — the reference's pattern tile, in insurance
-const UMBRELLA_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23171717' stroke-width='2' stroke-linecap='round' opacity='0.3'%3E%3Cpath d='M14 26 C14 17 20 13 28 13 C36 13 42 17 42 26'/%3E%3Cpath d='M14 26 q3.5 -3 7 0 q3.5 -3 7 0 q3.5 -3 7 0 q3.5 -3 7 0'/%3E%3Cpath d='M28 13 v-3'/%3E%3Cpath d='M28 26 v12 c0 4 6 4 6 1'/%3E%3C/g%3E%3C/svg%3E")`;
+// Repeating umbrella line-art — recolored to navy at low opacity on the gold tint
+const UMBRELLA_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%231D2D3D' stroke-width='2' stroke-linecap='round' opacity='0.14'%3E%3Cpath d='M14 26 C14 17 20 13 28 13 C36 13 42 17 42 26'/%3E%3Cpath d='M14 26 q3.5 -3 7 0 q3.5 -3 7 0 q3.5 -3 7 0 q3.5 -3 7 0'/%3E%3Cpath d='M28 13 v-3'/%3E%3Cpath d='M28 26 v12 c0 4 6 4 6 1'/%3E%3C/g%3E%3C/svg%3E")`;
 
 const snap = (delay: number) => ({
   initial: { opacity: 0, y: 8 },
@@ -30,12 +32,15 @@ const snap = (delay: number) => ({
   transition: { duration: 0.22, delay, ease: "easeOut" as const },
 });
 
+// Chip text is 11-13px (small) — white on the raw accents fails AA, so the
+// chips use the *_TEXT backgrounds (white on #356d60 5.99:1, #4a6fa5 5.11:1,
+// #8a5a1e 5.90:1 — all measured, AA pass).
 const LiveChip = ({
   label, color, className, delay,
 }: { label: string; color: string; className: string; delay: number }) => (
   <motion.span
     className={`absolute z-10 flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-white text-[11px] sm:text-[13px] font-medium whitespace-nowrap ${className}`}
-    style={{ backgroundColor: color, boxShadow: "0 2px 6px rgba(0,0,0,.18)" }}
+    style={{ backgroundColor: color, boxShadow: "0 2px 6px rgba(29,45,61,.18)" }}
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ duration: 0.18, delay, ease: "easeOut" }}
@@ -53,161 +58,206 @@ const HeroSection = () => {
   const wordmarkY = useTransform(scrollY, [0, 600], [0, 40]);
 
   return (
-    <section dir="rtl" className="px-2 pt-2" style={{ backgroundColor: "#0a0a0a" }}>
-      {/* ── Bento row: statement panel + live column ── */}
-      <div className="grid gap-2 lg:grid-cols-[1.55fr_1fr]">
-        {/* Main paper panel — the argument */}
-        <div className="bento-panel p-6 sm:p-10 lg:p-12 flex flex-col justify-between min-h-[420px] lg:min-h-[520px]">
-          <div className="relative z-10">
-            <motion.h1
-              {...anim(0)}
-              className="text-[#171717] leading-[1.02] tracking-[-0.02em]"
-              style={{ fontFamily: "'Heebo', sans-serif", fontWeight: 700, fontSize: "clamp(44px, 6.2vw, 92px)" }}
-            >
-              כסף מסודר.
-              <br />
-              ראש שקט.
-            </motion.h1>
-            <motion.p
-              {...anim(0.06)}
-              className="mt-6 text-base sm:text-lg leading-[1.8] max-w-md"
-              style={{ color: PAPER_MUTED }}
-            >
-              בית פיננסים וביטוח. יועץ אחד שמכיר אותך, השוואה מול 12 חברות,
-              ותמונה מלאה של התיק בתוך 48 שעות.
-            </motion.p>
-          </div>
+    <section dir="rtl" className="dna-page">
+      {/* Pastel circle backdrop — decorative, never behind small text */}
+      <div className="dna-circles" aria-hidden="true">
+        <div
+          className="dna-circ"
+          style={{ width: 300, height: 300, top: -110, right: -70, backgroundColor: PASTEL_BLUE, opacity: 0.55 }}
+        />
+        <div
+          className="dna-circ"
+          style={{ width: 230, height: 230, top: "42%", left: -110, backgroundColor: PASTEL_PEACH, opacity: 0.6 }}
+        />
+        <div
+          className="dna-circ"
+          style={{ width: 260, height: 260, bottom: -130, right: "34%", backgroundColor: PASTEL_MINT, opacity: 0.45 }}
+        />
+      </div>
 
-          {/* Black CTA bar — the reference gesture */}
-          <motion.div {...anim(0.12)} className="relative z-10 mt-10 flex flex-col sm:flex-row gap-2">
-            <Link
-              to="/contact"
-              className="flex-1 inline-flex items-center justify-center h-14 rounded-lg bg-[#171717] text-[#e9dfd2] text-[14px] font-semibold tracking-[0.14em] hover:bg-black transition-colors duration-150"
-            >
-              בדיקת תיק ללא עלות
-            </Link>
-            <a
-              href="https://wa.me/972523097444"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center h-14 px-8 rounded-lg text-[#171717] text-[14px] font-semibold tracking-[0.1em] transition-colors duration-150 hover:bg-[#171717]/5"
-              style={{ boxShadow: "inset 0 0 0 1.5px #171717" }}
-            >
-              שיחה עם יועץ
-            </a>
-          </motion.div>
-        </div>
-
-        {/* Live column */}
-        <div className="grid gap-2 grid-rows-[auto_1fr_auto]">
-          {/* Live market ticker (marquee) + the clock tile */}
-          <div className="grid gap-2 grid-cols-[1fr_auto]">
-            <MarketMarquee items={TICKER_ITEMS} ariaLabel="נתוני שוק ההון בזמן אמת" />
-            <div className="bento-panel-orange w-[110px] sm:w-[130px] flex flex-col items-center justify-center gap-1.5 py-3">
-              <LiveClock size={52} className="relative z-10" />
-              <span className="text-[9px] tracking-[0.24em] font-semibold text-[#171717]/80" style={{ fontFamily: MONO }} dir="ltr">
-                24/6 · LIVE
-              </span>
-            </div>
-          </div>
-
-          {/* Dark live statement panel */}
-          <div className="bento-panel-ink p-6 sm:p-7 flex flex-col justify-between min-h-[220px]">
-            <div
-              className="flex justify-between text-[10px] tracking-[0.16em]"
-              style={{ fontFamily: MONO, color: "rgba(233,223,210,.55)" }}
-              dir="ltr"
-            >
-              <span>STATEMENT</span>
-              <span className="inline-flex items-center gap-1.5 text-[#e9dfd2]">
-                <LiveDot size={5} />
-                LIVE
-              </span>
-            </div>
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 pt-10 sm:pt-16 pb-6">
+        {/* ── Hero row: the argument + live column ── */}
+        <div className="grid gap-10 lg:gap-14 lg:grid-cols-[1.55fr_1fr] items-start">
+          {/* The argument */}
+          <div className="flex flex-col justify-between min-h-[340px] lg:min-h-[440px]">
             <div>
-              <div
-                className="text-[34px] sm:text-[42px] font-semibold text-left text-[#e9dfd2]"
-                style={{ fontFamily: MONO, fontVariantNumeric: "tabular-nums", direction: "ltr", lineHeight: 1.1 }}
+              <motion.h1
+                {...anim(0)}
+                className="leading-[1.12]"
+                style={{
+                  fontFamily: DISPLAY,
+                  fontWeight: 900,
+                  fontSize: "clamp(40px, 5.5vw, 64px)",
+                  color: NAVY,
+                  letterSpacing: "-0.5px",
+                }}
               >
-                <CountUp to={1284600} duration={1100} format={(v) => `₪${v.toLocaleString("en-US")}`} />
-              </div>
-              <div className="mt-2 flex items-center justify-between gap-3">
-                <span className="text-[13px]" style={{ color: "rgba(233,223,210,.6)" }}>
-                  שווי תיק מנוהל · מנוטר מסביב לשעון
-                </span>
+                כסף מסודר.
+                <br />
+                ראש שקט.
+              </motion.h1>
+              <motion.p
+                {...anim(0.06)}
+                className="mt-6 text-base sm:text-lg leading-[1.8] max-w-md"
+                style={{ color: MUTED }}
+              >
+                בית פיננסים וביטוח. יועץ אחד שמכיר אותך, השוואה מול 12 חברות,
+                ותמונה מלאה של התיק בתוך 48 שעות.
+              </motion.p>
+            </div>
+
+            {/* CTAs — institutional navy */}
+            <motion.div {...anim(0.12)} className="mt-10 flex flex-col sm:flex-row gap-3">
+              <Link
+                to="/contact"
+                className="flex-1 sm:flex-none sm:min-w-[240px] inline-flex items-center justify-center h-14 px-8 rounded-lg bg-[#1D2D3D] text-white text-[15px] font-medium tracking-wide hover:bg-[#16222f] transition-colors duration-150"
+              >
+                בדיקת תיק ללא עלות
+              </Link>
+              <a
+                href="https://wa.me/972523097444"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center h-14 px-8 rounded-lg text-[#1D2D3D] text-[15px] font-medium tracking-wide transition-colors duration-150 hover:bg-[#1D2D3D]/5"
+                style={{ boxShadow: `inset 0 0 0 1.5px ${NAVY}` }}
+              >
+                שיחה עם יועץ
+              </a>
+            </motion.div>
+          </div>
+
+          {/* Live column — the Silicon-Valley layer, recolored to the DNA */}
+          <div className="grid gap-3 grid-rows-[auto_1fr_auto]">
+            {/* Live market ticker (marquee) + the clock tile */}
+            <div className="grid gap-3 grid-cols-[1fr_auto]">
+              <MarketMarquee
+                items={TICKER_ITEMS}
+                ariaLabel="נתוני שוק ההון בזמן אמת"
+                className="!bg-white !rounded-xl border border-[#E1EAF1] after:!content-none"
+              />
+              <div
+                className="w-[110px] sm:w-[130px] rounded-xl flex flex-col items-center justify-center gap-1.5 py-3"
+                style={{ backgroundColor: PASTEL_MINT }}
+              >
+                <LiveClock size={52} color={NAVY} className="relative z-10" />
                 <span
+                  className="text-[10px] tracking-[0.2em] font-semibold"
+                  style={{ fontFamily: MONO, color: TURQ_TEXT }}
                   dir="ltr"
-                  className="text-[12px] font-bold tracking-[0.1em] tabular-nums shrink-0"
-                  style={{ fontFamily: MONO, color: "#f0a339" }}
                 >
-                  +11.4% YTD
+                  24/6 · LIVE
                 </span>
               </div>
             </div>
-          </div>
 
-          {/* Two small action tiles */}
-          <div className="grid gap-2 grid-cols-2">
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-              className="bento-panel bento-hover flex items-center justify-center gap-2 py-4 px-3 text-[13px] font-semibold text-[#171717] tracking-[0.06em]"
-              style={{ boxShadow: "inset 0 0 0 1.5px #171717" }}
+            {/* Navy live statement panel */}
+            <div
+              className="rounded-xl p-6 sm:p-7 flex flex-col justify-between min-h-[220px]"
+              style={{ backgroundColor: NAVY }}
             >
-              <LiveDot size={6} />
-              שיחה עם SEELD AI
-            </button>
-            <Link
-              to="/about"
-              className="bento-panel-orange bento-hover relative flex items-center justify-center py-4 px-3 text-[13px] font-semibold text-[#171717] tracking-[0.06em]"
-            >
-              <span
-                className="absolute inset-0"
-                aria-hidden="true"
-                style={{ backgroundImage: UMBRELLA_PATTERN, backgroundSize: "56px 56px" }}
-              />
-              <span className="relative z-10 rounded-md px-2 py-0.5" style={{ backgroundColor: "#f0a339" }}>
-                הכירו את הבית ←
-              </span>
-            </Link>
+              <div
+                className="flex justify-between text-[10px] tracking-[0.16em]"
+                style={{ fontFamily: MONO, color: "rgba(255,255,255,.65)" }}
+                dir="ltr"
+              >
+                <span>STATEMENT</span>
+                <span className="inline-flex items-center gap-1.5 text-white">
+                  <LiveDot size={5} color={TURQ_ON_NAVY} />
+                  LIVE
+                </span>
+              </div>
+              <div>
+                <div
+                  className="text-[34px] sm:text-[42px] font-semibold text-left text-white"
+                  style={{ fontFamily: MONO, fontVariantNumeric: "tabular-nums", direction: "ltr", lineHeight: 1.1 }}
+                >
+                  <CountUp to={1284600} duration={1100} format={(v) => `₪${v.toLocaleString("en-US")}`} />
+                </div>
+                <div className="mt-2 flex items-center justify-between gap-3">
+                  <span className="text-[13px]" style={{ color: "rgba(255,255,255,.65)" }}>
+                    שווי תיק מנוהל · מנוטר מסביב לשעון
+                  </span>
+                  <span
+                    dir="ltr"
+                    className="text-[12px] font-bold tracking-[0.1em] tabular-nums shrink-0"
+                    style={{ fontFamily: MONO, color: TURQ_ON_NAVY }}
+                  >
+                    +11.4% YTD
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Two small action tiles */}
+            <div className="grid gap-3 grid-cols-2">
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
+                className="dna-concept dna-hover flex items-center justify-center gap-2 !py-4 !px-3 text-[13px] font-semibold"
+                style={{ color: NAVY }}
+              >
+                <LiveDot size={6} />
+                שיחה עם SEELD AI
+              </button>
+              <Link
+                to="/about"
+                className="dna-hover relative rounded-xl flex items-center justify-center py-4 px-3 text-[13px] font-semibold overflow-hidden"
+                style={{ backgroundColor: TINT_GOLD, color: NAVY }}
+              >
+                <span
+                  className="absolute inset-0"
+                  aria-hidden="true"
+                  style={{ backgroundImage: UMBRELLA_PATTERN, backgroundSize: "56px 56px" }}
+                />
+                <span className="relative z-10 rounded-md px-2 py-0.5" style={{ backgroundColor: TINT_GOLD }}>
+                  הכירו את הבית ←
+                </span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ── The signature panel: colossal wordmark with live chips ── */}
-      <div className="bento-panel mt-2 relative" aria-hidden="true">
-        <motion.div style={reduced ? undefined : { y: wordmarkY }}>
-          <div
-            className="font-bold text-[#171717] text-center whitespace-nowrap select-none pt-6 sm:pt-4"
-            style={{
-              fontSize: "clamp(96px, 21vw, 310px)",
-              lineHeight: 0.82,
-              letterSpacing: "-0.045em",
-              transform: "translateY(6%)",
-            }}
-            dir="ltr"
-          >
-            {"SEELD".split("").map((ch, i) => (
-              <motion.span
-                key={i}
-                className="inline-block"
-                initial={reduced ? undefined : { opacity: 0, y: 26 }}
-                animate={reduced ? undefined : { opacity: 1, y: 0 }}
-                transition={{ duration: 0.26, delay: 0.12 + i * 0.05, ease: "easeOut" }}
-              >
-                {ch}
-              </motion.span>
-            ))}
-          </div>
-        </motion.div>
+      {/* ── The signature panel: ghost wordmark with live chips ── */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6" aria-hidden="true">
+        <div className="relative">
+          <motion.div style={reduced ? undefined : { y: wordmarkY }}>
+            <div
+              className="text-center whitespace-nowrap select-none pt-6 sm:pt-4"
+              style={{
+                fontFamily: DISPLAY,
+                fontWeight: 900,
+                color: NAVY,
+                opacity: 0.06,
+                fontSize: "clamp(96px, 21vw, 310px)",
+                lineHeight: 0.82,
+                letterSpacing: "-0.045em",
+                transform: "translateY(6%)",
+              }}
+              dir="ltr"
+            >
+              {"SEELD".split("").map((ch, i) => (
+                <motion.span
+                  key={i}
+                  className="inline-block"
+                  initial={reduced ? undefined : { opacity: 0, y: 26 }}
+                  animate={reduced ? undefined : { opacity: 1, y: 0 }}
+                  transition={{ duration: 0.26, delay: 0.12 + i * 0.05, ease: "easeOut" }}
+                >
+                  {ch}
+                </motion.span>
+              ))}
+            </div>
+          </motion.div>
 
-        <LiveChip label="דנה · יועצת פנסיה" color={CHIP_ORANGE} className="top-[6%] right-[7%] sm:top-[10%] sm:right-[13%]" delay={0.45} />
-        <LiveChip label="אבי · ביטוח" color={CHIP_GREEN} className="bottom-[10%] right-[33%] sm:bottom-[16%] sm:right-[38%]" delay={0.55} />
-        <LiveChip label="התיק שלך · מנוטר" color={CHIP_YELLOW} className="top-[2%] left-[8%] sm:top-[16%] sm:left-[12%]" delay={0.65} />
+          <LiveChip label="דנה · יועצת פנסיה" color={TURQ_TEXT} className="top-[6%] right-[7%] sm:top-[10%] sm:right-[13%]" delay={0.45} />
+          <LiveChip label="אבי · ביטוח" color={BLUE_TEXT} className="bottom-[10%] right-[33%] sm:bottom-[16%] sm:right-[38%]" delay={0.55} />
+          <LiveChip label="התיק שלך · מנוטר" color={GOLD_TEXT} className="top-[2%] left-[8%] sm:top-[16%] sm:left-[12%]" delay={0.65} />
+        </div>
 
-        {/* Base line inside the panel */}
-        <div className="relative border-t border-[#171717]/15 mt-4">
-          <div className="px-5 sm:px-8 py-4 flex items-baseline justify-between gap-4 text-[13px]" style={{ color: PAPER_MUTED }}>
+        {/* Base line under the wordmark */}
+        <div className="relative border-t mt-4" style={{ borderColor: LINE }}>
+          <div className="py-4 flex items-baseline justify-between gap-4 text-[13px]" style={{ color: MUTED }}>
             <span>הפגישה הראשונה על חשבוננו. בלי התחייבות.</span>
             <span className="hidden md:inline">מבית עמיתים הון · בפיקוח רשות שוק ההון</span>
             <span

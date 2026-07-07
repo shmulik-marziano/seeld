@@ -5,12 +5,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 import { toast } from "sonner";
-import { MONO, CARD_SHADOW } from "@/lib/brand";
+import { BODY, DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE } from "@/lib/brand";
 
-const HEEBO = "'Heebo', sans-serif";
-
-// SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
-const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
+// SEELD DNA v3: white canvas, navy display headings, hairline rules (STYLESEED.md)
 
 // Reading time from the post's HTML content — roughly 200 Hebrew words a minute
 const readMinutes = (html: string) =>
@@ -289,19 +286,16 @@ const BlogPost = () => {
     };
   })();
 
+  // Underline inputs on the navy band
   const darkInputClass =
-    "w-full px-0 py-3.5 bg-transparent border-b border-white/25 text-[#fafafa] placeholder:text-[#fafafa]/50 text-base focus:outline-none focus:border-[#fafafa] transition-colors min-h-[44px] rounded-none";
+    "w-full px-0 py-3.5 bg-transparent border-b border-white/30 text-white placeholder:text-white/55 text-base focus:outline-none focus:border-white transition-colors min-h-[44px] rounded-none";
 
   if (loading) {
     return (
-      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+      <div className="min-h-screen bg-white" dir="rtl">
         <Header />
-        <div className="px-2 pt-2">
-          <div className="bento-panel">
-            <div className="flex justify-center py-32 relative z-10">
-              <Loader2 className="h-6 w-6 animate-spin text-[#171717]" />
-            </div>
-          </div>
+        <div className="flex justify-center py-32">
+          <Loader2 className="h-6 w-6 animate-spin text-[#1D2D3D]" />
         </div>
         <Footer />
       </div>
@@ -310,31 +304,28 @@ const BlogPost = () => {
 
   if (!post) {
     return (
-      <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+      <div className="min-h-screen bg-white" dir="rtl">
         <Header />
-        <div className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-3xl mx-auto px-5 sm:px-8 py-24 sm:py-32 relative z-10">
-            <div className="border-t border-[#171717]/20 pt-5">
-              <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
-                404 · POST
-              </span>
-            </div>
-            <h1
-              className="mt-6 text-3xl text-[#171717]"
-              style={{ fontFamily: HEEBO, fontWeight: 600, letterSpacing: "-0.02em" }}
-            >
-              הפוסט לא נמצא
-            </h1>
-            <p className="mt-3 text-base text-[#4d4d4d] leading-[1.8]">
-              ייתכן שהכתובת השתנתה או שהפוסט הוסר.
-            </p>
-            <Link
-              to="/blog"
-              className="mt-8 inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-black transition-colors min-h-[52px] rounded-lg"
-            >
-              חזרה לבלוג
-            </Link>
-          </div></div>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-24 sm:py-32">
+          <h1 className="dna-display" style={{ fontSize: "clamp(30px, 4vw, 38px)" }}>
+            הפוסט לא נמצא
+          </h1>
+          <p
+            className="mt-3 text-[12px] tracking-[0.14em]"
+            style={{ fontFamily: MONO, color: MUTED }}
+            dir="ltr"
+          >
+            404 · POST
+          </p>
+          <p className="mt-4 text-base leading-[1.8]" style={{ color: BODY }}>
+            ייתכן שהכתובת השתנתה או שהפוסט הוסר.
+          </p>
+          <Link
+            to="/blog"
+            className="mt-8 inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[52px]"
+          >
+            חזרה לבלוג
+          </Link>
         </div>
         <Footer />
       </div>
@@ -342,28 +333,37 @@ const BlogPost = () => {
   }
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* The reading tile — hero, cover and article in one paper panel */}
-      <section className="px-2 pt-2">
-        <div className="bento-panel"><div className="relative z-10">
-          <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-10 sm:pb-12">
-            <div className="border-t border-[#171717]/20 pt-4">
-              <Link
-                to="/blog"
-                className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#5c5c5c] hover:text-[#171717] transition-colors"
-              >
-                <ArrowRight className="w-3.5 h-3.5" />
-                חזרה לבלוג
-              </Link>
-            </div>
+      {/* The reading surface — white canvas, one pastel circle behind the title */}
+      <section className="dna-page">
+        <div className="dna-circles" aria-hidden="true">
+          <div
+            className="dna-circ"
+            style={{ width: 240, height: 240, top: -100, left: -90, backgroundColor: PASTEL_BLUE, opacity: 0.5 }}
+          />
+        </div>
+        <div className="relative z-10">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12 pb-10 sm:pb-12">
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-1.5 text-[13px] font-medium hover:text-[#1D2D3D] transition-colors"
+              style={{ color: MUTED }}
+            >
+              <ArrowRight className="w-3.5 h-3.5" />
+              חזרה לבלוג
+            </Link>
 
             <div className="mt-10 sm:mt-12">
-              {/* Mono eyebrow — category, date, read time (numbers stay LTR) */}
+              <h1 className="dna-display leading-[1.2]" style={{ fontSize: "clamp(30px, 4.5vw, 44px)" }}>
+                {post.title}
+              </h1>
+
+              {/* Metadata under the title — mono, muted (category, date, read time) */}
               <div
-                className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[12px] tracking-[0.08em] text-[#5c5c5c] mb-4"
-                style={{ fontFamily: MONO }}
+                className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[12px] tracking-[0.08em]"
+                style={{ fontFamily: MONO, color: MUTED }}
               >
                 {post.category && (
                   <>
@@ -383,20 +383,13 @@ const BlogPost = () => {
                   </>
                 )}
               </div>
-
-              <h1
-                className="text-[#171717] leading-[1.2]"
-                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.8rem, 4vw, 2.8rem)", letterSpacing: "-0.025em" }}
-              >
-                {post.title}
-              </h1>
             </div>
           </div>
 
           {/* Cover Image */}
           {post.cover_image_url && (
-            <div className="max-w-3xl mx-auto px-5 sm:px-8">
-              <div className="rounded-lg overflow-hidden" style={{ boxShadow: CARD_SHADOW }}>
+            <div className="max-w-3xl mx-auto px-4 sm:px-6">
+              <div className="rounded-xl overflow-hidden border" style={{ borderColor: LINE }}>
                 <img
                   src={post.cover_image_url}
                   alt={post.title}
@@ -407,29 +400,29 @@ const BlogPost = () => {
           )}
 
           {/* Content */}
-          <article className="max-w-3xl mx-auto px-5 sm:px-8 py-10 sm:py-16">
+          <article className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
             {/* Reading measure capped at ~65ch (STYLESEED: 45–75 chars per line) */}
             <div
               className="prose prose-base sm:prose-lg
-                prose-headings:text-[#171717] prose-headings:font-semibold
-                prose-p:text-[#4d4d4d] prose-p:leading-[1.9]
-                prose-li:text-[#4d4d4d]
-                prose-strong:text-[#171717] prose-strong:font-semibold
-                prose-a:text-[#171717] prose-a:no-underline hover:prose-a:underline"
+                prose-headings:text-[#1D2D3D] prose-headings:font-bold
+                prose-p:text-[#3a4c5a] prose-p:leading-[1.9]
+                prose-li:text-[#3a4c5a]
+                prose-strong:text-[#1D2D3D] prose-strong:font-semibold
+                prose-a:text-[#1D2D3D] prose-a:no-underline hover:prose-a:underline"
               style={{ maxWidth: "65ch" }}
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
 
             {/* Share */}
-            <div className="mt-14 border-t border-[#171717]/15 pt-6">
-              <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
+            <div className="mt-14 border-t pt-6" style={{ borderColor: LINE }}>
+              <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: MUTED }} dir="ltr">
                 SHARE
               </span>
               <div className="mt-4 flex flex-wrap gap-3">
                 <button
                   onClick={shareWhatsApp}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white text-[14px] font-medium text-[#171717] hover:bg-[#fafafa] transition-colors min-h-[44px]"
-                  style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
+                  className="dna-hover inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white border text-[14px] font-medium text-[#1D2D3D] transition-colors min-h-[44px]"
+                  style={{ borderColor: LINE }}
                 >
                   <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor" aria-hidden="true">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
@@ -439,8 +432,8 @@ const BlogPost = () => {
                 </button>
                 <button
                   onClick={copyLink}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white text-[14px] font-medium text-[#171717] hover:bg-[#fafafa] transition-colors min-h-[44px]"
-                  style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
+                  className="dna-hover inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white border text-[14px] font-medium text-[#1D2D3D] transition-colors min-h-[44px]"
+                  style={{ borderColor: LINE }}
                 >
                   <Copy className="w-4 h-4" />
                   העתק קישור
@@ -448,39 +441,33 @@ const BlogPost = () => {
               </div>
             </div>
           </article>
-        </div></div>
+        </div>
       </section>
 
-      {/* Lead Capture — the one ink tile */}
-      <section id="lead-form" ref={leadFormRef} className="px-2 pt-2">
-        <div className="bento-panel-ink"><div className="max-w-3xl mx-auto px-5 sm:px-8 py-16 sm:py-20 relative z-10">
+      {/* Lead Capture — institutional navy band */}
+      <section id="lead-form" ref={leadFormRef} style={{ backgroundColor: NAVY }}>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
           {leadSubmitted ? (
-            <div className="border-t border-white/20 pt-6">
-              <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: "rgba(250,250,250,.6)" }}>
-                SENT
-              </span>
+            <div>
               <h3
-                className="mt-4 text-[#fafafa]"
-                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2rem)", letterSpacing: "-0.02em" }}
+                className="text-white leading-tight"
+                style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.5rem, 3vw, 2rem)", letterSpacing: "-0.5px" }}
               >
                 קיבלנו את הפרטים.
               </h3>
-              <p className="mt-3 text-base text-[#fafafa]/55 leading-[1.85]">
+              <p className="mt-3 text-base leading-[1.85]" style={{ color: "rgba(255,255,255,.65)" }}>
                 {leadFormText.successMsg}
               </p>
             </div>
           ) : (
-            <div className="border-t border-white/20 pt-6">
-              <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: "rgba(250,250,250,.6)" }}>
-                CONSULT · FREE
-              </span>
+            <div>
               <h3
-                className="mt-4 text-[#fafafa] leading-tight"
-                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2rem)", letterSpacing: "-0.02em" }}
+                className="text-white leading-tight"
+                style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.5rem, 3vw, 2rem)", letterSpacing: "-0.5px" }}
               >
                 {leadFormText.title}
               </h3>
-              <p className="mt-3 text-base text-[#fafafa]/55 leading-[1.85] max-w-xl">
+              <p className="mt-3 text-base leading-[1.85] max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
                 {leadFormText.desc}
               </p>
 
@@ -516,66 +503,63 @@ const BlogPost = () => {
                   <button
                     type="submit"
                     disabled={leadSubmitting}
-                    className="inline-flex items-center justify-center px-9 py-4 bg-[#fafafa] text-[#171717] text-base font-medium tracking-wide hover:bg-white transition-colors disabled:opacity-60 min-h-[52px] min-w-[180px]"
+                    className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors disabled:opacity-60 min-h-[52px] min-w-[180px]"
                   >
                     {leadSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : leadFormText.cta}
                   </button>
-                  <span className="text-[12px] text-[#fafafa]/55">
+                  <span className="text-[12px]" style={{ color: "rgba(255,255,255,.65)" }}>
                     ללא עלות וללא התחייבות. נחזור אליכם באותו יום עבודה.
                   </span>
                 </div>
               </form>
             </div>
           )}
-        </div></div>
+        </div>
       </section>
 
-      {/* Related Posts — hairline rows in a paper tile */}
+      {/* Related Posts */}
       {related.length > 0 && (
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-3xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
-            <div className="border-t border-[#171717]/20 pt-6 mb-8">
-              <h2
-                className="text-[#171717] leading-tight"
-                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.4rem, 2.6vw, 1.8rem)", letterSpacing: "-0.02em" }}
-              >
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+            <div className="mb-8">
+              <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.4rem, 2.6vw, 1.8rem)" }}>
                 מאמרים נוספים
               </h2>
             </div>
-            {/* The homogeneous SEELD article cards — white tiles, .bento-hover quiet lift */}
+            {/* The unified SEELD article cards — .dna-concept tiles, .dna-hover quiet lift */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {related.map((r) => (
                 <Link
                   key={r.id}
                   to={`/blog/${r.slug}`}
-                  className="bento-hover group flex h-full flex-col rounded-lg bg-white p-5 sm:p-6"
-                  style={{ boxShadow: CARD_SHADOW }}
+                  className="dna-concept dna-hover group flex h-full flex-col !p-5 sm:!p-6"
                 >
+                  <h3 className="text-[17px] leading-snug" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
+                    {r.title}
+                  </h3>
+                  {/* Metadata under the title — mono, muted */}
                   <div
-                    className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-[11px] tracking-[0.08em] text-[#5c5c5c]"
-                    style={{ fontFamily: MONO }}
+                    className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[11px] tracking-[0.08em]"
+                    style={{ fontFamily: MONO, color: MUTED }}
                   >
                     <span>{r.category ?? "בלוג"}</span>
                     <span className="tabular-nums">
                       {formatDate(r.published_at)} · <span dir="ltr">{readMinutes(r.content)}</span> דק׳
                     </span>
                   </div>
-                  <h3 className="mt-3 text-lg text-[#171717] leading-snug" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
-                    {r.title}
-                  </h3>
                   {r.excerpt && (
-                    <p className="mt-2 text-[14px] text-[#4d4d4d] leading-[1.7] line-clamp-2">
+                    <p className="mt-2.5 text-[14px] leading-[1.7] line-clamp-2" style={{ color: BODY }}>
                       {r.excerpt}
                     </p>
                   )}
-                  <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#171717]">
+                  <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#1D2D3D]">
                     קראו עוד
                     <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
                   </span>
                 </Link>
               ))}
             </div>
-          </div></div>
+          </div>
         </section>
       )}
 

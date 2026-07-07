@@ -1,10 +1,19 @@
 import { useState, useMemo } from "react";
-import { User, Banknote, Percent, Calendar, TrendingUp, PiggyBank } from "lucide-react";
+import { User, Banknote, Calendar, PiggyBank } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SaveCalculationButton from "@/components/SaveCalculationButton";
+import { DISPLAY, MONO, MUTED, NAVY, TURQ, TURQ_TEXT } from "@/lib/brand";
+
+// SEELD DNA v3 (STYLESEED.md): boxed inputs, .dna-concept result cards,
+// Frank Ruhl 900 turquoise standout stat, CSS bar chart with mono LTR values.
+
+const inputClass =
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#E7EDF1] rounded-lg text-[#1D2D3D] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1D2D3D]";
+const sliderClass =
+  "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#4E9D8F] [&_[role=slider]]:border-[#4E9D8F]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#1D2D3D]";
 
 interface PensionResult {
   totalSavings: number;
@@ -27,17 +36,17 @@ const PensionCalculator = () => {
   const result: PensionResult = useMemo(() => {
     const yearsToRetirement = retirementAge - currentAge;
     const monthsToRetirement = yearsToRetirement * 12;
-    
+
     // Total monthly deposit percentage
     const totalDepositPercent = employeeDeposit + employerDeposit + severanceDeposit;
     const monthlyDeposit = (monthlySalary * totalDepositPercent) / 100;
-    
+
     // Monthly return rate
     const monthlyReturnRate = annualReturn / 100 / 12;
-    
+
     // Future Value of current savings
     const fvCurrentSavings = currentSavings * Math.pow(1 + monthlyReturnRate, monthsToRetirement);
-    
+
     // Future Value of monthly deposits (annuity)
     let fvDeposits = 0;
     if (monthlyReturnRate > 0) {
@@ -45,16 +54,16 @@ const PensionCalculator = () => {
     } else {
       fvDeposits = monthlyDeposit * monthsToRetirement;
     }
-    
+
     const totalSavings = fvCurrentSavings + fvDeposits;
     const totalDeposits = currentSavings + (monthlyDeposit * monthsToRetirement);
     const totalReturns = totalSavings - totalDeposits;
-    
+
     // Estimate monthly pension (assuming 20 years of retirement, 3% annual withdrawal rate adjusted)
     // Using standard pension calculation: total / (expected retirement years * 12)
     const retirementYears = 20;
     const monthlyPension = totalSavings / (retirementYears * 12);
-    
+
     return {
       totalSavings,
       monthlyPension,
@@ -72,14 +81,17 @@ const PensionCalculator = () => {
     }).format(value);
   };
 
+  const depositsPercent = result.totalSavings > 0 ? (result.totalDeposits / result.totalSavings) * 100 : 0;
+  const returnsPercent = result.totalSavings > 0 ? (result.totalReturns / result.totalSavings) * 100 : 0;
+
   return (
     <div className="space-y-8" dir="rtl">
       {/* Input Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Current Age */}
         <div className="space-y-4">
-          <Label className="flex items-center gap-2 text-base font-medium">
-            <User className="w-4 h-4" />
+          <Label className={labelClass}>
+            <User className="w-4 h-4" style={{ color: TURQ }} />
             גיל נוכחי
           </Label>
           <Input
@@ -91,7 +103,7 @@ const PensionCalculator = () => {
             }}
             min={18}
             max={66}
-            className="text-lg font-medium text-left"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -100,13 +112,14 @@ const PensionCalculator = () => {
             min={18}
             max={66}
             step={1}
+            className={sliderClass}
           />
         </div>
 
         {/* Retirement Age */}
         <div className="space-y-4">
-          <Label className="flex items-center gap-2 text-base font-medium">
-            <Calendar className="w-4 h-4" />
+          <Label className={labelClass}>
+            <Calendar className="w-4 h-4" style={{ color: TURQ }} />
             גיל פרישה
           </Label>
           <Input
@@ -118,7 +131,7 @@ const PensionCalculator = () => {
             }}
             min={60}
             max={75}
-            className="text-lg font-medium text-left"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -127,13 +140,14 @@ const PensionCalculator = () => {
             min={60}
             max={75}
             step={1}
+            className={sliderClass}
           />
         </div>
 
         {/* Monthly Salary */}
         <div className="space-y-4">
-          <Label className="flex items-center gap-2 text-base font-medium">
-            <Banknote className="w-4 h-4" />
+          <Label className={labelClass}>
+            <Banknote className="w-4 h-4" style={{ color: TURQ }} />
             משכורת חודשית
           </Label>
           <Input
@@ -143,7 +157,7 @@ const PensionCalculator = () => {
               const num = parseInt(e.target.value.replace(/,/g, ""), 10);
               if (!isNaN(num) && num >= 0 && num <= 200000) setMonthlySalary(num);
             }}
-            className="text-lg font-medium text-left"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -152,13 +166,14 @@ const PensionCalculator = () => {
             min={5000}
             max={80000}
             step={1000}
+            className={sliderClass}
           />
         </div>
 
         {/* Current Savings */}
         <div className="space-y-4">
-          <Label className="flex items-center gap-2 text-base font-medium">
-            <PiggyBank className="w-4 h-4" />
+          <Label className={labelClass}>
+            <PiggyBank className="w-4 h-4" style={{ color: TURQ }} />
             חיסכון קיים
           </Label>
           <Input
@@ -168,7 +183,7 @@ const PensionCalculator = () => {
               const num = parseInt(e.target.value.replace(/,/g, ""), 10);
               if (!isNaN(num) && num >= 0) setCurrentSavings(num);
             }}
-            className="text-lg font-medium text-left"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -177,253 +192,239 @@ const PensionCalculator = () => {
             min={0}
             max={2000000}
             step={10000}
+            className={sliderClass}
           />
         </div>
       </div>
 
       {/* Deposit Rates */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Percent className="w-5 h-5" />
-            אחוזי הפקדה
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="space-y-3">
-              <Label className="text-sm">הפקדת עובד (%)</Label>
-              <div className="flex items-center gap-3">
-                <Slider
-                  value={[employeeDeposit]}
-                  onValueChange={([value]) => setEmployeeDeposit(value)}
-                  min={0}
-                  max={10}
-                  step={0.5}
-                  className="flex-1"
-                />
-                <span className="text-sm font-medium w-12 text-left">{employeeDeposit}%</span>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <Label className="text-sm">הפקדת מעסיק (%)</Label>
-              <div className="flex items-center gap-3">
-                <Slider
-                  value={[employerDeposit]}
-                  onValueChange={([value]) => setEmployerDeposit(value)}
-                  min={0}
-                  max={10}
-                  step={0.5}
-                  className="flex-1"
-                />
-                <span className="text-sm font-medium w-12 text-left">{employerDeposit}%</span>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <Label className="text-sm">פיצויים (%)</Label>
-              <div className="flex items-center gap-3">
-                <Slider
-                  value={[severanceDeposit]}
-                  onValueChange={([value]) => setSeveranceDeposit(value)}
-                  min={0}
-                  max={8.33}
-                  step={0.33}
-                  className="flex-1"
-                />
-                <span className="text-sm font-medium w-12 text-left">{severanceDeposit.toFixed(2)}%</span>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <Label className="text-sm">תשואה שנתית צפויה (%)</Label>
-              <div className="flex items-center gap-3">
-                <Slider
-                  value={[annualReturn]}
-                  onValueChange={([value]) => setAnnualReturn(value)}
-                  min={0}
-                  max={10}
-                  step={0.5}
-                  className="flex-1"
-                />
-                <span className="text-sm font-medium w-12 text-left">{annualReturn}%</span>
-              </div>
+      <div className="dna-concept !p-6">
+        <h3 className="text-[19px] mb-5" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
+          אחוזי הפקדה
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="space-y-3">
+            <Label className="text-sm text-[#1D2D3D]">הפקדת עובד (%)</Label>
+            <div className="flex items-center gap-3">
+              <Slider
+                value={[employeeDeposit]}
+                onValueChange={([value]) => setEmployeeDeposit(value)}
+                min={0}
+                max={10}
+                step={0.5}
+                className={`flex-1 ${sliderClass}`}
+              />
+              <span className="text-sm font-medium w-12 text-left tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+                {employeeDeposit}%
+              </span>
             </div>
           </div>
-          <div className="mt-4 p-3 bg-muted rounded-lg text-sm text-center">
-            סה"כ הפקדה חודשית: <strong>{formatCurrency((monthlySalary * (employeeDeposit + employerDeposit + severanceDeposit)) / 100)}</strong>
-            {" "}({(employeeDeposit + employerDeposit + severanceDeposit).toFixed(2)}% מהשכר)
+          <div className="space-y-3">
+            <Label className="text-sm text-[#1D2D3D]">הפקדת מעסיק (%)</Label>
+            <div className="flex items-center gap-3">
+              <Slider
+                value={[employerDeposit]}
+                onValueChange={([value]) => setEmployerDeposit(value)}
+                min={0}
+                max={10}
+                step={0.5}
+                className={`flex-1 ${sliderClass}`}
+              />
+              <span className="text-sm font-medium w-12 text-left tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+                {employerDeposit}%
+              </span>
+            </div>
           </div>
-        </CardContent>
-      </Card>
+          <div className="space-y-3">
+            <Label className="text-sm text-[#1D2D3D]">פיצויים (%)</Label>
+            <div className="flex items-center gap-3">
+              <Slider
+                value={[severanceDeposit]}
+                onValueChange={([value]) => setSeveranceDeposit(value)}
+                min={0}
+                max={8.33}
+                step={0.33}
+                className={`flex-1 ${sliderClass}`}
+              />
+              <span className="text-sm font-medium w-12 text-left tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+                {severanceDeposit.toFixed(2)}%
+              </span>
+            </div>
+          </div>
+          <div className="space-y-3">
+            <Label className="text-sm text-[#1D2D3D]">תשואה שנתית צפויה (%)</Label>
+            <div className="flex items-center gap-3">
+              <Slider
+                value={[annualReturn]}
+                onValueChange={([value]) => setAnnualReturn(value)}
+                min={0}
+                max={10}
+                step={0.5}
+                className={`flex-1 ${sliderClass}`}
+              />
+              <span className="text-sm font-medium w-12 text-left tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+                {annualReturn}%
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="dna-callout mt-5 text-sm text-center">
+          סה"כ הפקדה חודשית:{" "}
+          <strong style={{ color: NAVY }}>
+            {formatCurrency((monthlySalary * (employeeDeposit + employerDeposit + severanceDeposit)) / 100)}
+          </strong>{" "}
+          ({(employeeDeposit + employerDeposit + severanceDeposit).toFixed(2)}% מהשכר)
+        </div>
+      </div>
 
       {/* Results Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Monthly Pension - Highlighted */}
-        <Card className="col-span-1 md:col-span-2 lg:col-span-1 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <Banknote className="w-4 h-4" />
-              פנסיה חודשית צפויה
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-primary">
-              {formatCurrency(result.monthlyPension)}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              {((result.monthlyPension / monthlySalary) * 100).toFixed(0)}% מהשכר הנוכחי
-            </p>
-          </CardContent>
-        </Card>
+        {/* Monthly Pension - standout stat */}
+        <div className="dna-concept col-span-1 md:col-span-2 lg:col-span-1">
+          <p className="text-[13px] mb-2" style={{ color: MUTED }}>פנסיה חודשית צפויה</p>
+          <p
+            className="tabular-nums"
+            dir="ltr"
+            style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ, fontSize: "clamp(1.9rem, 3vw, 2.3rem)", lineHeight: 1.15 }}
+          >
+            {formatCurrency(result.monthlyPension)}
+          </p>
+          <p className="text-xs mt-1" style={{ color: MUTED }}>
+            {((result.monthlyPension / monthlySalary) * 100).toFixed(0)}% מהשכר הנוכחי
+          </p>
+        </div>
 
         {/* Total Savings */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              סה"כ חיסכון בפרישה
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatCurrency(result.totalSavings)}</p>
-          </CardContent>
-        </Card>
+        <div className="dna-concept">
+          <p className="text-[13px] mb-2" style={{ color: MUTED }}>סה"כ חיסכון בפרישה</p>
+          <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+            {formatCurrency(result.totalSavings)}
+          </p>
+        </div>
 
         {/* Total Returns */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <TrendingUp className="w-4 h-4" />
-              רווחי השקעה
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-accent">
-              {formatCurrency(result.totalReturns)}
-            </p>
-          </CardContent>
-        </Card>
+        <div className="dna-concept">
+          <p className="text-[13px] mb-2" style={{ color: MUTED }}>רווחי השקעה</p>
+          <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: TURQ_TEXT }}>
+            {formatCurrency(result.totalReturns)}
+          </p>
+        </div>
 
         {/* Years to Retirement */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              שנים עד פרישה
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{result.yearsToRetirement}</p>
-          </CardContent>
-        </Card>
+        <div className="dna-concept">
+          <p className="text-[13px] mb-2" style={{ color: MUTED }}>שנים עד פרישה</p>
+          <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+            {result.yearsToRetirement}
+          </p>
+        </div>
       </div>
 
       {/* Visual Breakdown */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <PiggyBank className="w-5 h-5" />
-            פירוט החיסכון
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Progress Bar */}
-          <div className="h-8 rounded-full overflow-hidden flex">
-            <div
-              className="bg-primary transition-all duration-500 flex items-center justify-center text-primary-foreground text-xs font-medium"
-              style={{ width: `${(result.totalDeposits / result.totalSavings) * 100}%` }}
-            >
-              {(result.totalDeposits / result.totalSavings) * 100 > 20 && "הפקדות"}
-            </div>
-            <div
-              className="bg-accent transition-all duration-500 flex items-center justify-center text-accent-foreground text-xs font-medium"
-              style={{ width: `${(result.totalReturns / result.totalSavings) * 100}%` }}
-            >
-              {(result.totalReturns / result.totalSavings) * 100 > 20 && "רווחים"}
-            </div>
+      <div className="dna-concept !p-6">
+        <h3 className="text-[19px] mb-5" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
+          פירוט החיסכון
+        </h3>
+
+        {/* Deposits / returns split — kit CSS bar pattern */}
+        <div
+          className="h-3 rounded-full overflow-hidden flex"
+          style={{ backgroundColor: "#EEF3F6" }}
+          role="img"
+          aria-label={`הפקדות ${depositsPercent.toFixed(0)} אחוז, רווחים ${returnsPercent.toFixed(0)} אחוז`}
+        >
+          <div
+            className="h-full transition-all duration-200 ease-out"
+            style={{ width: `${depositsPercent}%`, backgroundColor: NAVY }}
+          />
+          <div
+            className="h-full transition-all duration-200 ease-out"
+            style={{ width: `${returnsPercent}%`, backgroundColor: TURQ }}
+          />
+        </div>
+
+        {/* Legend */}
+        <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-[13.5px]" style={{ color: NAVY }}>
+          <span className="inline-flex items-center gap-2">
+            <span className="w-3 h-3 rounded-[3px]" style={{ backgroundColor: NAVY }} aria-hidden="true" />
+            הפקדות:{" "}
+            <span dir="ltr" className="tabular-nums font-medium" style={{ fontFamily: MONO }}>{formatCurrency(result.totalDeposits)}</span>
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <span className="w-3 h-3 rounded-[3px]" style={{ backgroundColor: TURQ }} aria-hidden="true" />
+            רווחים:{" "}
+            <span dir="ltr" className="tabular-nums font-medium" style={{ fontFamily: MONO }}>{formatCurrency(result.totalReturns)}</span>
+          </span>
+        </div>
+
+        {/* Personalized Tips */}
+        <div className="mt-6 space-y-3">
+          <div className="dna-callout text-sm">
+            <strong style={{ color: NAVY }}>טיפ:</strong> הגדלת הפקדת העובד ב-1% תוסיף לחיסכון שלכם כ-
+            <strong style={{ color: NAVY }}>
+              {formatCurrency(
+                (() => {
+                  const extraMonthly = monthlySalary * 0.01;
+                  const months = result.yearsToRetirement * 12;
+                  const rate = annualReturn / 100 / 12;
+                  if (rate === 0) return extraMonthly * months;
+                  return extraMonthly * ((Math.pow(1 + rate, months) - 1) / rate);
+                })()
+              )}
+            </strong>{" "}
+            עד גיל הפרישה.
           </div>
 
-          {/* Legend */}
-          <div className="flex flex-wrap gap-6 justify-center text-sm">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-primary" />
-              <span>הפקדות: {formatCurrency(result.totalDeposits)}</span>
+          {result.yearsToRetirement > 25 && (
+            <div className="dna-callout text-sm">
+              <strong style={{ color: NAVY }}>יתרון הזמן:</strong> עוד {result.yearsToRetirement} שנים עד הפרישה.
+              זה הזמן המושלם להגדיל סיכון במסלול ההשקעות ולהניב תשואות גבוהות יותר.
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-accent" />
-              <span>רווחים: {formatCurrency(result.totalReturns)}</span>
-            </div>
-          </div>
+          )}
 
-          {/* Personalized Tips */}
-          <div className="mt-6 space-y-3">
-            <div className="p-4 bg-muted rounded-xl text-sm text-muted-foreground">
-              <p>
-                💡 <strong>טיפ:</strong> הגדלת הפקדת העובד ב-1% תוסיף לחיסכון שלכם כ-
-                <strong>
-                  {formatCurrency(
-                    (() => {
-                      const extraMonthly = monthlySalary * 0.01;
-                      const months = result.yearsToRetirement * 12;
-                      const rate = annualReturn / 100 / 12;
-                      if (rate === 0) return extraMonthly * months;
-                      return extraMonthly * ((Math.pow(1 + rate, months) - 1) / rate);
-                    })()
-                  )}
-                </strong>
-                {" "}עד גיל הפרישה.
-              </p>
+          {result.yearsToRetirement <= 10 && result.yearsToRetirement > 0 && (
+            <div className="dna-callout text-sm">
+              <strong style={{ color: NAVY }}>קרבה לפרישה:</strong> עם {result.yearsToRetirement} שנים בלבד עד הפרישה,
+              כדאי לשקול מעבר למסלול סולידי יותר כדי להגן על החיסכון.
             </div>
-            
-            {result.yearsToRetirement > 25 && (
-              <div className="p-4 bg-secondary/10 rounded-xl text-sm text-muted-foreground">
-                <p>
-                  🎯 <strong>יתרון הזמן:</strong> עוד {result.yearsToRetirement} שנים עד הפרישה! 
-                  זה הזמן המושלם להגדיל סיכון במסלול ההשקעות ולהניב תשואות גבוהות יותר.
-                </p>
-              </div>
-            )}
-            
-            {result.yearsToRetirement <= 10 && result.yearsToRetirement > 0 && (
-              <div className="p-4 bg-accent/10 rounded-xl text-sm text-muted-foreground">
-                <p>
-                  ⏰ <strong>קרבה לפרישה:</strong> עם {result.yearsToRetirement} שנים בלבד עד הפרישה, 
-                  כדאי לשקול מעבר למסלול סולידי יותר כדי להגן על החיסכון.
-                </p>
-              </div>
-            )}
-            
-            {(result.monthlyPension / monthlySalary) < 0.5 && (
-              <div className="p-4 bg-destructive/10 rounded-xl text-sm text-muted-foreground">
-                <p>
-                  ⚠️ <strong>פער פנסיוני:</strong> הפנסיה הצפויה היא רק {((result.monthlyPension / monthlySalary) * 100).toFixed(0)}% מהשכר. 
-                  שקלו להגדיל הפקדות או לבדוק קרן השתלמות נוספת.
-                </p>
-              </div>
-            )}
+          )}
 
-            {/* Save Button */}
-            <div className="flex justify-end pt-4">
-              <SaveCalculationButton
-                calculatorType="pension"
-                inputData={{ currentAge, retirementAge, monthlySalary, employeeDeposit, employerDeposit, severanceDeposit, annualReturn, currentSavings }}
-                resultData={{
-                  totalSavings: result.totalSavings,
-                  monthlyPension: result.monthlyPension,
-                  totalDeposits: result.totalDeposits,
-                  totalReturns: result.totalReturns,
-                  yearsToRetirement: result.yearsToRetirement,
-                }}
-                tips={[
-                  `הגדלת הפקדת העובד ב-1% תוסיף לחיסכון`,
-                  result.yearsToRetirement > 25 ? `יתרון הזמן - עוד ${result.yearsToRetirement} שנים` : undefined,
-                ].filter(Boolean) as string[]}
-              />
+          {(result.monthlyPension / monthlySalary) < 0.5 && (
+            <div className="dna-quote gold">
+              <div className="dna-ql">פער פנסיוני</div>
+              <div className="dna-qt">
+                הפנסיה הצפויה היא רק {((result.monthlyPension / monthlySalary) * 100).toFixed(0)}% מהשכר.
+                שקלו להגדיל הפקדות או לבדוק קרן השתלמות נוספת.
+              </div>
             </div>
+          )}
+
+          {/* Save Button */}
+          <div className="flex justify-end pt-4">
+            <SaveCalculationButton
+              calculatorType="pension"
+              inputData={{ currentAge, retirementAge, monthlySalary, employeeDeposit, employerDeposit, severanceDeposit, annualReturn, currentSavings }}
+              resultData={{
+                totalSavings: result.totalSavings,
+                monthlyPension: result.monthlyPension,
+                totalDeposits: result.totalDeposits,
+                totalReturns: result.totalReturns,
+                yearsToRetirement: result.yearsToRetirement,
+              }}
+              tips={[
+                `הגדלת הפקדת העובד ב-1% תוסיף לחיסכון`,
+                result.yearsToRetirement > 25 ? `יתרון הזמן - עוד ${result.yearsToRetirement} שנים` : undefined,
+              ].filter(Boolean) as string[]}
+            />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Disclaimer */}
-      <div className="p-4 bg-muted/50 rounded-xl text-xs text-muted-foreground text-center">
-        * החישוב מבוסס על הנחות תיאורטיות ואינו מהווה ייעוץ פנסיוני. לקבלת תחזית מדויקת, פנו ליועץ פנסיוני מוסמך.
+      <div className="dna-quote gold">
+        <div className="dna-ql">הבהרה</div>
+        <div className="dna-qt">
+          החישוב מבוסס על הנחות תיאורטיות ואינו מהווה ייעוץ פנסיוני. לקבלת תחזית מדויקת, פנו ליועץ פנסיוני מוסמך.
+        </div>
       </div>
     </div>
   );

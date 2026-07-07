@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Frank+Ruhl+Libre:wght@700;900&family=Geist+Mono:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -131,6 +131,141 @@
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid hsl(var(--border) / 0.3);
   }
+}
+
+/* ══ SEELD DNA v3: institutional navy/turquoise/gold (STYLESEED.md is the lock) ══
+   Source of truth: the owner's template_base.html. Web-adapted, responsive. */
+
+/* page surface: white with pastel circles behind content */
+.dna-page {
+  position: relative;
+  background-color: #ffffff;
+  color: #1D2D3D;
+}
+.dna-circles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.dna-circ {
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* Hebrew display headings */
+.dna-display {
+  font-family: 'Frank Ruhl Libre', 'Heebo', serif;
+  font-weight: 900;
+  color: #1D2D3D;
+  letter-spacing: -0.5px;
+}
+
+/* the signature gradient bar — bottom of every page */
+.dna-gbar {
+  height: 5px;
+  width: 100%;
+  background: linear-gradient(90deg,#4E9D8F 0%,#5b9fd0 24%,#9a8fc0 48%,#e08a9a 70%,#e8a04e 86%,#d65a4e 100%);
+}
+
+/* quote / highlight box (default turquoise; .gold / .blue variants) */
+.dna-quote {
+  border-inline-start: 4px solid #4E9D8F;
+  background: #F4F8F7;
+  border-start-end-radius: 10px;
+  border-end-end-radius: 10px;
+  padding-block: 16px;
+  padding-inline: 20px;
+}
+.dna-quote .dna-ql {
+  font-family: 'Frank Ruhl Libre', 'Heebo', serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #356d60;
+  margin-bottom: 6px;
+}
+.dna-quote .dna-qt { font-size: 14px; line-height: 1.65; color: #3a4c5a; }
+.dna-quote.gold { border-color: #D8A24A; background: #FBF5EA; }
+.dna-quote.gold .dna-ql { color: #8a5a1e; }
+.dna-quote.blue { border-color: #5b9fd0; background: #F0F5FB; }
+.dna-quote.blue .dna-ql { color: #4a6fa5; }
+
+/* concept card */
+.dna-concept {
+  background: #fff;
+  border: 1px solid #E1EAF1;
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 12px rgba(29,45,61,0.03);
+}
+
+/* data table */
+table.dna-data { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+table.dna-data thead th {
+  background: #1D2D3D;
+  color: #fff;
+  font-weight: 500;
+  font-size: 12.5px;
+  padding: 10px 14px;
+  text-align: start;
+}
+table.dna-data thead th:first-child { border-start-start-radius: 8px; }
+table.dna-data thead th:last-child { border-start-end-radius: 8px; }
+table.dna-data tbody td {
+  padding: 10px 14px;
+  text-align: start;
+  border-bottom: 1px solid #EAEFF3;
+  color: #3a4c5a;
+}
+table.dna-data tbody tr:nth-child(even) { background: #F7FAFB; }
+table.dna-data .num {
+  direction: ltr;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+table.dna-data tbody td:first-child { font-weight: 700; color: #1D2D3D; }
+
+/* pill list */
+.dna-pill-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 8px 0;
+  color: #3a4c5a;
+  line-height: 1.6;
+}
+.dna-pill-item::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4E9D8F;
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+
+/* soft callout */
+.dna-callout {
+  background: rgba(225,234,241,0.5);
+  border-radius: 10px;
+  padding: 14px 18px;
+  line-height: 1.6;
+  color: #3a4c5a;
+}
+
+/* interactive card hover — Snap discipline */
+.dna-hover {
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+.dna-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px -12px rgba(29,45,61,0.28);
+}
+.dna-hover:active { transform: translateY(0); box-shadow: none; }
+@media (prefers-reduced-motion: reduce) {
+  .dna-hover, .dna-hover:hover, .dna-hover:active { transition: none; transform: none; }
 }
 
 /* ── SEELD Bento: warm paper panels on ink gutters (owner-approved direction) ── */

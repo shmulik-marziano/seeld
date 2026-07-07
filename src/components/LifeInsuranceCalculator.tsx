@@ -4,8 +4,17 @@ import { Banknote, Calendar, GraduationCap, Landmark, ShieldCheck, Users } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SaveCalculationButton from "@/components/SaveCalculationButton";
+import { DISPLAY, MONO, MUTED, NAVY, TURQ } from "@/lib/brand";
+
+// SEELD DNA v3 (STYLESEED.md): boxed inputs, .dna-concept result cards,
+// Frank Ruhl 900 turquoise standout stat, table.dna-data breakdown.
+
+const inputClass =
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#E7EDF1] rounded-lg text-[#1D2D3D] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1D2D3D]";
+const sliderClass =
+  "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#4E9D8F] [&_[role=slider]]:border-[#4E9D8F]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#1D2D3D]";
 
 // Needs-based (DIME-style) planning assumptions; review yearly.
 const DISCOUNT_RATE = 0.03; // annual real discount rate on the income-replacement annuity
@@ -48,10 +57,6 @@ const LifeInsuranceCalculator = () => {
 
   const formatCurrency = (value: number) => `₪${Math.round(value).toLocaleString("en-US")}`;
 
-  const money = (value: number) => (
-    <span dir="ltr" className="tabular-nums">{formatCurrency(value)}</span>
-  );
-
   const handleAmountChange = (value: string, setter: (v: number) => void, max: number) => {
     const num = parseInt(value.replace(/,/g, ""), 10);
     if (!isNaN(num) && num >= 0 && num <= max) setter(num);
@@ -70,8 +75,8 @@ const LifeInsuranceCalculator = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Monthly need */}
         <div className="space-y-4">
-          <Label htmlFor="lifeMonthlyNeed" className="flex items-center gap-2 text-base font-medium">
-            <Banknote className="w-4 h-4" />
+          <Label htmlFor="lifeMonthlyNeed" className={labelClass}>
+            <Banknote className="w-4 h-4" style={{ color: TURQ }} />
             הכנסה חודשית שהמשפחה תצטרך
           </Label>
           <Input
@@ -79,7 +84,7 @@ const LifeInsuranceCalculator = () => {
             type="text"
             value={monthlyNeed.toLocaleString("en-US")}
             onChange={(e) => handleAmountChange(e.target.value, setMonthlyNeed, 100000)}
-            className="text-lg font-medium text-left tabular-nums"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -89,13 +94,14 @@ const LifeInsuranceCalculator = () => {
             max={50000}
             step={500}
             aria-label="הכנסה חודשית שהמשפחה תצטרך"
+            className={sliderClass}
           />
         </div>
 
         {/* Years of support */}
         <div className="space-y-4">
-          <Label htmlFor="lifeSupportYears" className="flex items-center gap-2 text-base font-medium">
-            <Calendar className="w-4 h-4" />
+          <Label htmlFor="lifeSupportYears" className={labelClass}>
+            <Calendar className="w-4 h-4" style={{ color: TURQ }} />
             שנות תמיכה נדרשות
           </Label>
           <Input
@@ -108,7 +114,7 @@ const LifeInsuranceCalculator = () => {
             }}
             min={5}
             max={30}
-            className="text-lg font-medium text-left tabular-nums"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -118,8 +124,9 @@ const LifeInsuranceCalculator = () => {
             max={30}
             step={1}
             aria-label="שנות תמיכה נדרשות"
+            className={sliderClass}
           />
-          <p className="text-xs text-muted-foreground leading-relaxed">
+          <p className="text-xs leading-relaxed" style={{ color: MUTED }}>
             נקודת ייחוס מקובלת: עד שהילד הצעיר ביותר יגיע לגיל{" "}
             <span dir="ltr" className="tabular-nums">21</span>.
           </p>
@@ -127,8 +134,8 @@ const LifeInsuranceCalculator = () => {
 
         {/* Debts */}
         <div className="space-y-4">
-          <Label htmlFor="lifeDebts" className="flex items-center gap-2 text-base font-medium">
-            <Landmark className="w-4 h-4" />
+          <Label htmlFor="lifeDebts" className={labelClass}>
+            <Landmark className="w-4 h-4" style={{ color: TURQ }} />
             יתרת משכנתא וחובות
           </Label>
           <Input
@@ -136,7 +143,7 @@ const LifeInsuranceCalculator = () => {
             type="text"
             value={debts.toLocaleString("en-US")}
             onChange={(e) => handleAmountChange(e.target.value, setDebts, 5000000)}
-            className="text-lg font-medium text-left tabular-nums"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -146,13 +153,14 @@ const LifeInsuranceCalculator = () => {
             max={3000000}
             step={25000}
             aria-label="יתרת משכנתא וחובות"
+            className={sliderClass}
           />
         </div>
 
         {/* Children */}
         <div className="space-y-4">
-          <Label htmlFor="lifeChildren" className="flex items-center gap-2 text-base font-medium">
-            <Users className="w-4 h-4" />
+          <Label htmlFor="lifeChildren" className={labelClass}>
+            <Users className="w-4 h-4" style={{ color: TURQ }} />
             מספר ילדים
           </Label>
           <Input
@@ -165,7 +173,7 @@ const LifeInsuranceCalculator = () => {
             }}
             min={0}
             max={8}
-            className="text-lg font-medium text-left tabular-nums"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -175,13 +183,14 @@ const LifeInsuranceCalculator = () => {
             max={8}
             step={1}
             aria-label="מספר ילדים"
+            className={sliderClass}
           />
         </div>
 
         {/* Education fund per child */}
         <div className="space-y-4">
-          <Label htmlFor="lifeEducationFund" className="flex items-center gap-2 text-base font-medium">
-            <GraduationCap className="w-4 h-4" />
+          <Label htmlFor="lifeEducationFund" className={labelClass}>
+            <GraduationCap className="w-4 h-4" style={{ color: TURQ }} />
             קרן לימודים לכל ילד
           </Label>
           <Input
@@ -189,7 +198,7 @@ const LifeInsuranceCalculator = () => {
             type="text"
             value={educationFund.toLocaleString("en-US")}
             onChange={(e) => handleAmountChange(e.target.value, setEducationFund, 1000000)}
-            className="text-lg font-medium text-left tabular-nums"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -199,13 +208,14 @@ const LifeInsuranceCalculator = () => {
             max={500000}
             step={10000}
             aria-label="קרן לימודים לכל ילד"
+            className={sliderClass}
           />
         </div>
 
         {/* Existing cover + savings */}
         <div className="space-y-4">
-          <Label htmlFor="lifeExistingCover" className="flex items-center gap-2 text-base font-medium">
-            <ShieldCheck className="w-4 h-4" />
+          <Label htmlFor="lifeExistingCover" className={labelClass}>
+            <ShieldCheck className="w-4 h-4" style={{ color: TURQ }} />
             כיסוי קיים וחיסכון נזיל
           </Label>
           <Input
@@ -213,7 +223,7 @@ const LifeInsuranceCalculator = () => {
             type="text"
             value={existingCover.toLocaleString("en-US")}
             onChange={(e) => handleAmountChange(e.target.value, setExistingCover, 10000000)}
-            className="text-lg font-medium text-left tabular-nums"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -223,82 +233,89 @@ const LifeInsuranceCalculator = () => {
             max={3000000}
             step={25000}
             aria-label="כיסוי קיים וחיסכון נזיל"
+            className={sliderClass}
           />
         </div>
       </div>
 
-      {/* Result: recommended cover */}
-      <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4" />
-            סכום הכיסוי המומלץ
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-4xl font-bold text-primary">{money(result.recommendedCover)}</p>
-          <p className="text-xs text-muted-foreground mt-2">
-            כך שההכנסה, החובות ועתיד הילדים מכוסים גם בלעדיכם.
-          </p>
-        </CardContent>
-      </Card>
+      {/* Result: recommended cover — standout stat */}
+      <div className="dna-concept !p-6">
+        <p className="text-[13px] mb-2" style={{ color: MUTED }}>סכום הכיסוי המומלץ</p>
+        <p
+          className="tabular-nums"
+          dir="ltr"
+          style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ, fontSize: "clamp(2.2rem, 4vw, 2.9rem)", lineHeight: 1.15 }}
+        >
+          {formatCurrency(result.recommendedCover)}
+        </p>
+        <p className="text-xs mt-2" style={{ color: MUTED }}>
+          כך שההכנסה, החובות ועתיד הילדים מכוסים גם בלעדיכם.
+        </p>
+      </div>
 
-      {/* Breakdown */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">איך הגענו לסכום</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            {breakdownRows.map((row) => (
-              <div
-                key={row.label}
-                className="flex items-baseline justify-between gap-4 py-3 border-b border-border text-sm"
-              >
-                <span className="text-muted-foreground">{row.label}</span>
-                <span dir="ltr" className="tabular-nums font-medium">
-                  {row.negative ? `-${formatCurrency(row.value)}` : formatCurrency(row.value)}
-                </span>
-              </div>
-            ))}
-            <div className="flex items-baseline justify-between gap-4 py-3 text-sm">
-              <span className="font-medium">סך הכיסוי המומלץ</span>
-              <span dir="ltr" className="tabular-nums font-bold">
-                {formatCurrency(result.recommendedCover)}
-              </span>
-            </div>
-          </div>
+      {/* Breakdown — the data craft */}
+      <div className="dna-concept !p-6 space-y-5">
+        <h3 className="text-[19px]" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
+          איך הגענו לסכום
+        </h3>
 
-          <div className="p-4 bg-muted rounded-xl text-sm text-muted-foreground">
-            <p>
-              זו הערכת תכנון שממירה את צרכי המשפחה לסכום כיסוי, לא הצעת ביטוח. הסכום הסופי
-              נקבע מול חברת הביטוח לפי גיל, מצב בריאותי ותנאי הפוליסה.{" "}
-              <Link to="/insurance/life" className="font-medium text-primary underline underline-offset-4">
-                לפרטים על ביטוח חיים
-              </Link>
-            </p>
-          </div>
+        <div className="overflow-x-auto">
+          <table className="dna-data">
+            <thead>
+              <tr>
+                <th>רכיב</th>
+                <th>סכום</th>
+              </tr>
+            </thead>
+            <tbody>
+              {breakdownRows.map((row) => (
+                <tr key={row.label}>
+                  <td>{row.label}</td>
+                  <td className="num" style={row.negative ? { color: "#a04a5c" } : undefined}>
+                    {row.negative ? `-${formatCurrency(row.value)}` : formatCurrency(row.value)}
+                  </td>
+                </tr>
+              ))}
+              <tr>
+                <td>סך הכיסוי המומלץ</td>
+                <td className="num font-bold" style={{ color: NAVY }}>
+                  {formatCurrency(result.recommendedCover)}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-          {/* Save Button */}
-          <div className="flex justify-end pt-2">
-            <SaveCalculationButton
-              calculatorType="life-insurance"
-              inputData={{ monthlyNeed, supportYears, debts, children, educationFund, existingCover }}
-              resultData={{
-                recommendedCover: result.recommendedCover,
-                incomeReplacementPV: result.incomeReplacementPV,
-                debtsTotal: result.debtsTotal,
-                educationTotal: result.educationTotal,
-                existingTotal: result.existingTotal,
-              }}
-              tips={[
-                "בדקו אם קיים כיסוי חיים דרך קרן הפנסיה או המעסיק לפני רכישת פוליסה חדשה",
-                children > 0 ? "עדכנו את החישוב כשהילדים מתבגרים; הצורך בכיסוי קטן עם השנים" : undefined,
-              ].filter(Boolean) as string[]}
-            />
-          </div>
-        </CardContent>
-      </Card>
+        <div className="dna-callout text-sm">
+          זו הערכת תכנון שממירה את צרכי המשפחה לסכום כיסוי, לא הצעת ביטוח. הסכום הסופי
+          נקבע מול חברת הביטוח לפי גיל, מצב בריאותי ותנאי הפוליסה.{" "}
+          <Link
+            to="/insurance/life"
+            className="font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/30 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+          >
+            לפרטים על ביטוח חיים
+          </Link>
+        </div>
+
+        {/* Save Button */}
+        <div className="flex justify-end pt-2">
+          <SaveCalculationButton
+            calculatorType="life-insurance"
+            inputData={{ monthlyNeed, supportYears, debts, children, educationFund, existingCover }}
+            resultData={{
+              recommendedCover: result.recommendedCover,
+              incomeReplacementPV: result.incomeReplacementPV,
+              debtsTotal: result.debtsTotal,
+              educationTotal: result.educationTotal,
+              existingTotal: result.existingTotal,
+            }}
+            tips={[
+              "בדקו אם קיים כיסוי חיים דרך קרן הפנסיה או המעסיק לפני רכישת פוליסה חדשה",
+              children > 0 ? "עדכנו את החישוב כשהילדים מתבגרים; הצורך בכיסוי קטן עם השנים" : undefined,
+            ].filter(Boolean) as string[]}
+          />
+        </div>
+      </div>
     </div>
   );
 };

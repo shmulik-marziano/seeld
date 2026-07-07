@@ -1,16 +1,13 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { MONO } from '@/lib/brand';
+import { DISPLAY, MONO, MUTED, NAVY } from '@/lib/brand';
 
-const HEEBO = "'Heebo', sans-serif";
-
-// SEELD Bento: one quiet warm paper tile — documents stay serious (STYLESEED.md)
-const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
+// SEELD DNA v3: one quiet white column, navy headings, hairline rules (STYLESEED.md)
 
 const LegalSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <section className="border-t border-[#171717]/15 pt-5">
-    <h2 className="text-lg text-[#171717] mb-3" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+  <section className="border-t border-[#E7EDF1] pt-5">
+    <h2 className="text-[19px] mb-3" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
       {title}
     </h2>
     {children}
@@ -23,7 +20,7 @@ export default function TermsPage() {
   const isPublic = location.pathname === '/terms';
 
   const content = (
-    <div className="max-w-3xl mx-auto px-5 sm:px-8 py-10 space-y-10 text-base leading-[1.9] text-[#4d4d4d] [&_strong]:text-[#171717] [&_strong]:font-medium">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-10 text-base leading-[1.9] text-[#3a4c5a] [&_strong]:text-[#1D2D3D] [&_strong]:font-medium">
       <LegalSection title="1. כללי">
         <p>
           ברוכים הבאים למערכת SEELD (להלן: "המערכת"), המופעלת על ידי חברת SEELD (להלן: "החברה").
@@ -34,10 +31,10 @@ export default function TermsPage() {
 
       <LegalSection title="2. הגדרות">
         <ul className="list-disc pr-6 space-y-1.5">
-          <li><strong>"המערכת"</strong> — פלטפורמת SEELD לניהול לקוחות, המלצות ביטוח פנסיוניות וסיכומי ביצועים.</li>
-          <li><strong>"משתמש"</strong> — סוכן ביטוח, יועץ פנסיוני או גורם מורשה אחר המשתמש במערכת.</li>
-          <li><strong>"לקוח קצה"</strong> — אדם שפרטיו מנוהלים במערכת על ידי המשתמש.</li>
-          <li><strong>"תוכן"</strong> — כל מידע, נתון, מסמך, המלצה או דוח המוזן או נוצר במערכת.</li>
+          <li><strong>"המערכת":</strong> פלטפורמת SEELD לניהול לקוחות, המלצות ביטוח פנסיוניות וסיכומי ביצועים.</li>
+          <li><strong>"משתמש":</strong> סוכן ביטוח, יועץ פנסיוני או גורם מורשה אחר המשתמש במערכת.</li>
+          <li><strong>"לקוח קצה":</strong> אדם שפרטיו מנוהלים במערכת על ידי המשתמש.</li>
+          <li><strong>"תוכן":</strong> כל מידע, נתון, מסמך, המלצה או דוח המוזן או נוצר במערכת.</li>
         </ul>
       </LegalSection>
 
@@ -141,7 +138,7 @@ export default function TermsPage() {
           לכל שאלה או פנייה בנוגע לתנאי שימוש אלו, ניתן לפנות אלינו בדוא"ל:{' '}
           <a
             href="mailto:info@seeld.co.il"
-            className="text-[#171717] font-medium border-b border-[#171717]/25 hover:border-[#171717] transition-colors"
+            className="text-[#1D2D3D] font-medium border-b border-[#1D2D3D]/25 hover:border-[#1D2D3D] transition-colors"
             dir="ltr"
           >
             info@seeld.co.il
@@ -149,8 +146,8 @@ export default function TermsPage() {
         </p>
       </LegalSection>
 
-      <p className="border-t border-[#171717]/15 pt-5 text-[12px] leading-relaxed text-[#5c5c5c]">
-        &copy; {new Date().getFullYear()} SEELD — כל הזכויות שמורות. תנאי שימוש אלו מהווים את ההסכם
+      <p className="border-t border-[#E7EDF1] pt-5 text-[12px] leading-relaxed" style={{ color: MUTED }}>
+        &copy; {new Date().getFullYear()} SEELD. כל הזכויות שמורות. תנאי שימוש אלו מהווים את ההסכם
         המלא בין המשתמש לחברה בנוגע לשימוש במערכת.
       </p>
     </div>
@@ -161,37 +158,34 @@ export default function TermsPage() {
   }
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* One quiet paper tile — the whole document */}
-      <main className="px-2 pt-2">
-        <div className="bento-panel"><div className="relative z-10 pb-6">
-      {/* Hero */}
-      <section>
-        <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-4">
-          <div className="border-t border-[#171717]/20 pt-4 flex items-baseline justify-between gap-4">
-            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
-              LEGAL · עודכן מרץ 2026
-            </span>
-            <button
-              onClick={() => navigate('/')}
-              className="text-[13px] font-medium text-[#5c5c5c] hover:text-[#171717] transition-colors"
-            >
-              חזרה לדף הבית
-            </button>
+      {/* One quiet white column — the whole document */}
+      <main className="pb-6">
+        {/* Hero */}
+        <section>
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-4">
+            <h1 className="dna-display leading-tight" style={{ fontSize: "clamp(1.9rem, 4vw, 2.6rem)" }}>
+              תנאי שימוש
+            </h1>
+            {/* Metadata under the title — mono, muted */}
+            <div className="mt-3 flex items-baseline justify-between gap-4">
+              <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: MUTED }}>
+                עודכן מרץ 2026
+              </span>
+              <button
+                onClick={() => navigate('/')}
+                className="text-[13px] font-medium hover:text-[#1D2D3D] transition-colors"
+                style={{ color: MUTED }}
+              >
+                חזרה לדף הבית
+              </button>
+            </div>
           </div>
-          <h1
-            className="mt-10 text-[#171717] leading-tight"
-            style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.9rem, 4vw, 2.6rem)", letterSpacing: "-0.025em" }}
-          >
-            תנאי שימוש
-          </h1>
-        </div>
-      </section>
+        </section>
 
-      {content}
-        </div></div>
+        {content}
       </main>
 
       <Footer />

@@ -5,8 +5,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SaveCalculationButton from "@/components/SaveCalculationButton";
+import { DISPLAY, MONO, MUTED, NAVY, TURQ } from "@/lib/brand";
+
+// SEELD DNA v3 (STYLESEED.md): boxed inputs, .dna-concept result cards,
+// Frank Ruhl 900 turquoise standout stat, table.dna-data tier comparison.
+
+const inputClass =
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#E7EDF1] rounded-lg text-[#1D2D3D] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1D2D3D]";
+const sliderClass =
+  "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#4E9D8F] [&_[role=slider]]:border-[#4E9D8F]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#1D2D3D]";
+const radioItemClass = "border-[#1D2D3D] text-[#1D2D3D]";
 
 // הערכה סטטיסטית לפי טווחי שוק מקובלים — לא הצעת מחיר.
 // Typical-market heuristics (annual, ILS); review yearly against market data.
@@ -75,18 +85,14 @@ const CarInsuranceEstimator = () => {
 
   const formatCurrency = (value: number) => `₪${Math.round(value).toLocaleString("en-US")}`;
 
-  const range = (low: number, high: number) => (
-    <span dir="ltr" className="tabular-nums">{`${formatCurrency(low)}–${formatCurrency(high)}`}</span>
-  );
-
   return (
     <div className="space-y-8" dir="rtl">
       {/* Input Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Driver age */}
         <div className="space-y-4">
-          <Label htmlFor="carDriverAge" className="flex items-center gap-2 text-base font-medium">
-            <UserRound className="w-4 h-4" />
+          <Label htmlFor="carDriverAge" className={labelClass}>
+            <UserRound className="w-4 h-4" style={{ color: TURQ }} />
             גיל הנהג הצעיר ברכב
           </Label>
           <Input
@@ -99,7 +105,7 @@ const CarInsuranceEstimator = () => {
             }}
             min={17}
             max={80}
-            className="text-lg font-medium text-left tabular-nums"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -109,13 +115,14 @@ const CarInsuranceEstimator = () => {
             max={80}
             step={1}
             aria-label="גיל הנהג"
+            className={sliderClass}
           />
         </div>
 
         {/* License years */}
         <div className="space-y-4">
-          <Label htmlFor="carLicenseYears" className="flex items-center gap-2 text-base font-medium">
-            <IdCard className="w-4 h-4" />
+          <Label htmlFor="carLicenseYears" className={labelClass}>
+            <IdCard className="w-4 h-4" style={{ color: TURQ }} />
             ותק רישיון (שנים)
           </Label>
           <Input
@@ -128,7 +135,7 @@ const CarInsuranceEstimator = () => {
             }}
             min={0}
             max={Math.min(60, maxLicenseYears)}
-            className="text-lg font-medium text-left tabular-nums"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -138,13 +145,14 @@ const CarInsuranceEstimator = () => {
             max={Math.min(60, maxLicenseYears)}
             step={1}
             aria-label="ותק רישיון"
+            className={sliderClass}
           />
         </div>
 
         {/* Car value */}
         <div className="space-y-4">
-          <Label htmlFor="carValue" className="flex items-center gap-2 text-base font-medium">
-            <Car className="w-4 h-4" />
+          <Label htmlFor="carValue" className={labelClass}>
+            <Car className="w-4 h-4" style={{ color: TURQ }} />
             שווי הרכב
           </Label>
           <Input
@@ -155,7 +163,7 @@ const CarInsuranceEstimator = () => {
               const num = parseInt(e.target.value.replace(/,/g, ""), 10);
               if (!isNaN(num) && num >= 0 && num <= 500000) setCarValue(num);
             }}
-            className="text-lg font-medium text-left tabular-nums"
+            className={inputClass}
             dir="ltr"
           />
           <Slider
@@ -165,8 +173,9 @@ const CarInsuranceEstimator = () => {
             max={500000}
             step={5000}
             aria-label="שווי הרכב"
+            className={sliderClass}
           />
-          <div className="flex justify-between text-xs text-muted-foreground tabular-nums" dir="ltr">
+          <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
             <span>₪20,000</span>
             <span>₪500,000</span>
           </div>
@@ -174,8 +183,8 @@ const CarInsuranceEstimator = () => {
 
         {/* Claims */}
         <div className="space-y-4">
-          <Label className="flex items-center gap-2 text-base font-medium">
-            <FileText className="w-4 h-4" />
+          <Label className={labelClass}>
+            <FileText className="w-4 h-4" style={{ color: TURQ }} />
             תביעות בשלוש השנים האחרונות
           </Label>
           <RadioGroup
@@ -185,24 +194,24 @@ const CarInsuranceEstimator = () => {
             dir="rtl"
           >
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="0" id="carClaims0" />
-              <Label htmlFor="carClaims0" className="font-normal cursor-pointer">ללא תביעות</Label>
+              <RadioGroupItem value="0" id="carClaims0" className={radioItemClass} />
+              <Label htmlFor="carClaims0" className="font-normal cursor-pointer text-[#3a4c5a]">ללא תביעות</Label>
             </div>
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="1" id="carClaims1" />
-              <Label htmlFor="carClaims1" className="font-normal cursor-pointer">תביעה אחת</Label>
+              <RadioGroupItem value="1" id="carClaims1" className={radioItemClass} />
+              <Label htmlFor="carClaims1" className="font-normal cursor-pointer text-[#3a4c5a]">תביעה אחת</Label>
             </div>
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="2+" id="carClaims2" />
-              <Label htmlFor="carClaims2" className="font-normal cursor-pointer">שתי תביעות או יותר</Label>
+              <RadioGroupItem value="2+" id="carClaims2" className={radioItemClass} />
+              <Label htmlFor="carClaims2" className="font-normal cursor-pointer text-[#3a4c5a]">שתי תביעות או יותר</Label>
             </div>
           </RadioGroup>
         </div>
 
         {/* Coverage type */}
         <div className="space-y-4 lg:col-span-2">
-          <Label className="flex items-center gap-2 text-base font-medium">
-            <CircleAlert className="w-4 h-4" />
+          <Label className={labelClass}>
+            <CircleAlert className="w-4 h-4" style={{ color: TURQ }} />
             סוג הכיסוי
           </Label>
           <RadioGroup
@@ -212,16 +221,16 @@ const CarInsuranceEstimator = () => {
             dir="rtl"
           >
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="mandatory" id="carCovMandatory" />
-              <Label htmlFor="carCovMandatory" className="font-normal cursor-pointer">חובה בלבד</Label>
+              <RadioGroupItem value="mandatory" id="carCovMandatory" className={radioItemClass} />
+              <Label htmlFor="carCovMandatory" className="font-normal cursor-pointer text-[#3a4c5a]">חובה בלבד</Label>
             </div>
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="third-party" id="carCovThirdParty" />
-              <Label htmlFor="carCovThirdParty" className="font-normal cursor-pointer">צד ג'</Label>
+              <RadioGroupItem value="third-party" id="carCovThirdParty" className={radioItemClass} />
+              <Label htmlFor="carCovThirdParty" className="font-normal cursor-pointer text-[#3a4c5a]">צד ג'</Label>
             </div>
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="comprehensive" id="carCovComprehensive" />
-              <Label htmlFor="carCovComprehensive" className="font-normal cursor-pointer">מקיף</Label>
+              <RadioGroupItem value="comprehensive" id="carCovComprehensive" className={radioItemClass} />
+              <Label htmlFor="carCovComprehensive" className="font-normal cursor-pointer text-[#3a4c5a]">מקיף</Label>
             </div>
           </RadioGroup>
         </div>
@@ -229,95 +238,107 @@ const CarInsuranceEstimator = () => {
 
       {/* Results Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Annual range - highlighted */}
-        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              <Car className="w-4 h-4" />
-              טווח פרמיה שנתי משוער ({coverageLabels[coverage]})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-primary">
-              {range(result.annualLow, result.annualHigh)}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">לשנה, לפי הפרופיל שהזנתם</p>
-          </CardContent>
-        </Card>
+        {/* Annual range - standout stat */}
+        <div className="dna-concept">
+          <p className="text-[13px] mb-2" style={{ color: MUTED }}>
+            טווח פרמיה שנתי משוער ({coverageLabels[coverage]})
+          </p>
+          <p
+            className="tabular-nums"
+            dir="ltr"
+            style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ, fontSize: "clamp(1.8rem, 3vw, 2.2rem)", lineHeight: 1.15, whiteSpace: "nowrap" }}
+          >
+            {`${formatCurrency(result.annualLow)}–${formatCurrency(result.annualHigh)}`}
+          </p>
+          <p className="text-xs mt-1" style={{ color: MUTED }}>לשנה, לפי הפרופיל שהזנתם</p>
+        </div>
 
         {/* Monthly equivalent */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              שווה ערך חודשי
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{range(result.monthlyLow, result.monthlyHigh)}</p>
-            <p className="text-xs text-muted-foreground mt-1">בחלוקה ל-12 תשלומים שווים</p>
-          </CardContent>
-        </Card>
+        <div className="dna-concept">
+          <p className="text-[13px] mb-2" style={{ color: MUTED }}>שווה ערך חודשי</p>
+          <p
+            className="text-[22px] font-semibold tabular-nums"
+            dir="ltr"
+            style={{ fontFamily: MONO, color: NAVY, whiteSpace: "nowrap" }}
+          >
+            {`${formatCurrency(result.monthlyLow)}–${formatCurrency(result.monthlyHigh)}`}
+          </p>
+          <p className="text-xs mt-1" style={{ color: MUTED }}>בחלוקה ל-12 תשלומים שווים</p>
+        </div>
       </div>
 
-      {/* Coverage tiers comparison */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">השוואת שלוש רמות הכיסוי</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            {result.tiers.map(({ tier, low, high }) => (
-              <div
-                key={tier}
-                className="flex items-baseline justify-between gap-4 py-3 border-b border-border text-sm last:border-b-0"
-              >
-                <span className={tier === coverage ? "font-medium" : "text-muted-foreground"}>
-                  {coverageLabels[tier]}
-                  {tier === coverage && " (נבחר)"}
-                </span>
-                <span dir="ltr" className="tabular-nums font-medium">
-                  {`${formatCurrency(low)}–${formatCurrency(high)}`}
-                </span>
-              </div>
-            ))}
-          </div>
+      {/* Coverage tiers comparison — the data craft */}
+      <div className="dna-concept !p-6 space-y-5">
+        <h3 className="text-[19px]" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
+          השוואת שלוש רמות הכיסוי
+        </h3>
 
-          <div className="p-4 bg-muted rounded-xl text-sm text-muted-foreground">
-            <p>
-              הערכה סטטיסטית בלבד, לפי טווחי שוק מקובלים. המחיר בפועל תלוי בדגם הרכב, בהיסטוריית
-              הביטוח המלאה ובחברת הביטוח. הצעה אמיתית מותאמת אישית, תוך{" "}
-              <span dir="ltr" className="tabular-nums">48</span> שעות:{" "}
-              <Link to="/contact" className="font-medium text-primary underline underline-offset-4">
-                השאירו פרטים
-              </Link>
-              {" "}או קראו עוד על{" "}
-              <Link to="/insurance/vehicle" className="font-medium text-primary underline underline-offset-4">
-                ביטוח רכב
-              </Link>
-              .
-            </p>
-          </div>
+        <div className="overflow-x-auto">
+          <table className="dna-data">
+            <thead>
+              <tr>
+                <th>רמת כיסוי</th>
+                <th>טווח שנתי משוער</th>
+              </tr>
+            </thead>
+            <tbody>
+              {result.tiers.map(({ tier, low, high }) => (
+                <tr key={tier}>
+                  <td>
+                    {coverageLabels[tier]}
+                    {tier === coverage && " (נבחר)"}
+                  </td>
+                  <td className="num" style={tier === coverage ? { color: "#356d60", fontWeight: 700 } : undefined}>
+                    {`${formatCurrency(low)}–${formatCurrency(high)}`}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-          {/* Save Button */}
-          <div className="flex justify-end pt-2">
-            <SaveCalculationButton
-              calculatorType="car-insurance"
-              inputData={{ driverAge, licenseYears: effectiveLicenseYears, claims, carValue, coverage }}
-              resultData={{
-                annualLow: result.annualLow,
-                annualHigh: result.annualHigh,
-                monthlyLow: Math.round(result.monthlyLow),
-                monthlyHigh: Math.round(result.monthlyHigh),
-                coverage,
-              }}
-              tips={[
-                "השוו לפחות שלוש הצעות לפני חידוש; פערי המחיר בין חברות מגיעים לעשרות אחוזים",
-                claims !== "0" ? "אחרי שלוש שנים ללא תביעות הפרמיה יורדת משמעותית" : undefined,
-              ].filter(Boolean) as string[]}
-            />
+        <div className="dna-quote gold">
+          <div className="dna-ql">הבהרה</div>
+          <div className="dna-qt">
+            הערכה סטטיסטית בלבד, לפי טווחי שוק מקובלים. המחיר בפועל תלוי בדגם הרכב, בהיסטוריית
+            הביטוח המלאה ובחברת הביטוח. הצעה אמיתית מותאמת אישית, תוך{" "}
+            <span dir="ltr" className="tabular-nums">48</span> שעות:{" "}
+            <Link
+              to="/contact"
+              className="font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/30 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+            >
+              השאירו פרטים
+            </Link>
+            {" "}או קראו עוד על{" "}
+            <Link
+              to="/insurance/vehicle"
+              className="font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/30 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+            >
+              ביטוח רכב
+            </Link>
+            .
           </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Save Button */}
+        <div className="flex justify-end pt-2">
+          <SaveCalculationButton
+            calculatorType="car-insurance"
+            inputData={{ driverAge, licenseYears: effectiveLicenseYears, claims, carValue, coverage }}
+            resultData={{
+              annualLow: result.annualLow,
+              annualHigh: result.annualHigh,
+              monthlyLow: Math.round(result.monthlyLow),
+              monthlyHigh: Math.round(result.monthlyHigh),
+              coverage,
+            }}
+            tips={[
+              "השוו לפחות שלוש הצעות לפני חידוש; פערי המחיר בין חברות מגיעים לעשרות אחוזים",
+              claims !== "0" ? "אחרי שלוש שנים ללא תביעות הפרמיה יורדת משמעותית" : undefined,
+            ].filter(Boolean) as string[]}
+          />
+        </div>
+      </div>
     </div>
   );
 };

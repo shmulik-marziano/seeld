@@ -1,16 +1,13 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { MONO } from '@/lib/brand';
+import { DISPLAY, MONO, MUTED, NAVY } from '@/lib/brand';
 
-const HEEBO = "'Heebo', sans-serif";
-
-// SEELD Bento: one quiet warm paper tile — documents stay serious (STYLESEED.md)
-const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
+// SEELD DNA v3: one quiet white column, navy headings, hairline rules (STYLESEED.md)
 
 const LegalSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <section className="border-t border-[#171717]/15 pt-5 space-y-3">
-    <h2 className="text-lg text-[#171717]" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+  <section className="border-t border-[#E7EDF1] pt-5 space-y-3">
+    <h2 className="text-[19px]" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
       {title}
     </h2>
     {children}
@@ -23,7 +20,7 @@ export default function PrivacyPage() {
   const isPublic = location.pathname === '/privacy';
 
   const content = (
-    <div className="max-w-3xl mx-auto px-5 sm:px-8 py-10 space-y-10 text-base leading-[1.9] text-[#4d4d4d] [&_strong]:text-[#171717] [&_strong]:font-medium">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-10 text-base leading-[1.9] text-[#3a4c5a] [&_strong]:text-[#1D2D3D] [&_strong]:font-medium">
       <LegalSection title="1. כללי">
         <p>
           מערכת SEELD (להלן: "המערכת") מופעלת על ידי חברת SEELD בע"מ (להלן: "החברה").
@@ -40,7 +37,7 @@ export default function PrivacyPage() {
         <div className="space-y-2 pr-4">
           <p><strong>2.1 מידע זיהוי אישי:</strong> שם מלא, מספר תעודת זהות, תאריך לידה, כתובת, מספר טלפון, כתובת דואר אלקטרוני.</p>
           <p><strong>2.2 מידע פיננסי:</strong> פרטי מוצרי ביטוח ופנסיה, צבירות, דמי ניהול, הפקדות, מספרי פוליסה.</p>
-          <p><strong>2.3 מידע רפואי:</strong> מצב בריאותי, תרופות, ניתוחים, אשפוזים, מחלות רקע — ככל שנמסר על ידי הלקוח או סוכנו לצורך בחינת כיסוי ביטוחי.</p>
+          <p><strong>2.3 מידע רפואי:</strong> מצב בריאותי, תרופות, ניתוחים, אשפוזים, מחלות רקע, ככל שנמסר על ידי הלקוח או סוכנו לצורך בחינת כיסוי ביטוחי.</p>
           <p><strong>2.4 מידע תעסוקתי:</strong> מעמד תעסוקתי, מקצוע, הכנסה חודשית ושנתית.</p>
           <p><strong>2.5 מידע טכני:</strong> כתובת IP, סוג דפדפן, זמני גישה ופעילות במערכת.</p>
         </div>
@@ -75,7 +72,7 @@ export default function PrivacyPage() {
         <p>אנו נוקטים באמצעי אבטחה מתקדמים להגנה על המידע שלך, לרבות:</p>
         <ul className="list-disc pr-6 space-y-1.5">
           <li>הצפנת נתונים בתעבורה (TLS/SSL) ובמנוחה.</li>
-          <li>בקרת גישה מבוססת תפקידים (RBAC) — כל סוכנות רואה רק את הנתונים שלה.</li>
+          <li>בקרת גישה מבוססת תפקידים (RBAC). כל סוכנות רואה רק את הנתונים שלה.</li>
           <li>מדיניות Row-Level Security (RLS) ברמת בסיס הנתונים.</li>
           <li>אימות דו-שלבי וניהול הרשאות קפדני.</li>
           <li>גיבויים שוטפים ומנגנוני שחזור.</li>
@@ -128,29 +125,29 @@ export default function PrivacyPage() {
           ניתן לפנות אלינו:
         </p>
         <div>
-          <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-            <span className="text-[13px] text-[#5c5c5c]">חברה</span>
-            <span className="text-[#171717]">SEELD בע"מ</span>
+          <div className="flex items-baseline justify-between py-3 border-b border-[#E7EDF1]">
+            <span className="text-[13px]" style={{ color: MUTED }}>חברה</span>
+            <span style={{ color: NAVY }}>SEELD בע"מ</span>
           </div>
-          <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-            <span className="text-[13px] text-[#5c5c5c]">דואר אלקטרוני</span>
+          <div className="flex items-baseline justify-between py-3 border-b border-[#E7EDF1]">
+            <span className="text-[13px]" style={{ color: MUTED }}>דואר אלקטרוני</span>
             <a
               href="mailto:info@seeld.co.il"
-              className="text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
+              className="text-[#1D2D3D] border-b border-transparent hover:border-[#1D2D3D]/40 transition-colors"
               dir="ltr"
             >
               info@seeld.co.il
             </a>
           </div>
-          <div className="flex items-baseline justify-between py-3 border-b border-[#171717]/10">
-            <span className="text-[13px] text-[#5c5c5c]">אתר</span>
-            <span className="text-[#171717]" dir="ltr">seeld.co.il</span>
+          <div className="flex items-baseline justify-between py-3 border-b border-[#E7EDF1]">
+            <span className="text-[13px]" style={{ color: MUTED }}>אתר</span>
+            <span style={{ color: NAVY }} dir="ltr">seeld.co.il</span>
           </div>
         </div>
       </LegalSection>
 
-      <p className="border-t border-[#171717]/15 pt-5 text-[12px] leading-relaxed text-[#5c5c5c]">
-        &copy; {new Date().getFullYear()} SEELD — כל הזכויות שמורות.
+      <p className="border-t border-[#E7EDF1] pt-5 text-[12px] leading-relaxed" style={{ color: MUTED }}>
+        &copy; {new Date().getFullYear()} SEELD. כל הזכויות שמורות.
       </p>
     </div>
   );
@@ -160,37 +157,34 @@ export default function PrivacyPage() {
   }
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
-      {/* One quiet paper tile — the whole document */}
-      <main className="px-2 pt-2">
-        <div className="bento-panel"><div className="relative z-10 pb-6">
-      {/* Hero */}
-      <section>
-        <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-4">
-          <div className="border-t border-[#171717]/20 pt-4 flex items-baseline justify-between gap-4">
-            <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: PAPER_MUTED }}>
-              LEGAL · עודכן מרץ 2026
-            </span>
-            <button
-              onClick={() => navigate(-1)}
-              className="text-[13px] font-medium text-[#5c5c5c] hover:text-[#171717] transition-colors"
-            >
-              חזרה
-            </button>
+      {/* One quiet white column — the whole document */}
+      <main className="pb-6">
+        {/* Hero */}
+        <section>
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-4">
+            <h1 className="dna-display leading-tight" style={{ fontSize: "clamp(1.9rem, 4vw, 2.6rem)" }}>
+              מדיניות פרטיות
+            </h1>
+            {/* Metadata under the title — mono, muted */}
+            <div className="mt-3 flex items-baseline justify-between gap-4">
+              <span className="text-[11px] tracking-[0.18em]" style={{ fontFamily: MONO, color: MUTED }}>
+                עודכן מרץ 2026
+              </span>
+              <button
+                onClick={() => navigate(-1)}
+                className="text-[13px] font-medium hover:text-[#1D2D3D] transition-colors"
+                style={{ color: MUTED }}
+              >
+                חזרה
+              </button>
+            </div>
           </div>
-          <h1
-            className="mt-10 text-[#171717] leading-tight"
-            style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.9rem, 4vw, 2.6rem)", letterSpacing: "-0.025em" }}
-          >
-            מדיניות פרטיות
-          </h1>
-        </div>
-      </section>
+        </section>
 
-      {content}
-        </div></div>
+        {content}
       </main>
 
       <Footer />

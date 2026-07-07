@@ -8,19 +8,18 @@ import HeroSection from "@/components/HeroSection";
 import ScrollReveal from "@/components/ScrollReveal";
 import CompanyLogos from "@/components/CompanyLogos";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { CountUp, LiveDot, LiveTag, StatusPill } from "@/components/brand/Live";
-import { DrawSpark, DrawUnderline, ProgressRail } from "@/components/brand/Strokes";
+import { CountUp, LiveDot, StatusPill } from "@/components/brand/Live";
+import { DrawSpark, ProgressRail } from "@/components/brand/Strokes";
 import { CastAvi, CastDana, CastReader } from "@/components/brand/Cast";
-import { CHIP_GREEN, CHIP_ORANGE, MONO } from "@/lib/brand";
+import {
+  BODY, DISPLAY, LINE, MONO, MUTED, NAVY,
+  PASTEL_BLUE, PASTEL_MINT, TURQ, TURQ_TEXT,
+} from "@/lib/brand";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
-// ── Design tokens: architectural monochrome ──
-const INK = "#171717";
-const BONE = "#fafafa";
-const PINE = "#171717";
-const BRONZE = "#6e6e6e";
-const SERIF = "'Heebo', sans-serif";
+// Light turquoise for small text on the navy band (6.88:1 on #1D2D3D, measured)
+const TURQ_ON_NAVY = "#7fc2b5";
 
 // ── Data ──
 
@@ -85,8 +84,8 @@ const platformItems: { title: string; description: string; href?: string; tag: s
   { title: "מחשבונים", description: "משכנתא, פנסיה, חיסכון והשוואת מסלולים. חופשי, ללא רישום.", href: "/calculators", tag: "NO SIGNUP" },
 ];
 
-// Capital-markets strip under the numbers — mono, LTR container, values in their
-// own dir="ltr" span (bidi safety, same pattern as the hero ticker).
+// Capital-markets strip under the numbers — a standalone ticker band: mono,
+// LTR container, values in their own dir="ltr" span (bidi safety).
 const marketStrip: { label: string; value?: string; dot?: boolean }[] = [
   { label: "SEELD · MARKET", dot: true },
   { label: "חברות בהשוואה", value: "12" },
@@ -95,12 +94,12 @@ const marketStrip: { label: string; value?: string; dot?: boolean }[] = [
 ];
 
 const processSteps = [
-  { number: "01", title: "פנייה ראשונית", description: "שיחה קצרה להיכרות עם הצרכים, היועץ הייעודי והצעדים הבאים." },
-  { number: "02", title: "מיפוי התיק", description: "שליפת כל הפוליסות, הקרנות והחיסכון ממקורות רשמיים. מאובטח לחלוטין." },
-  { number: "03", title: "ניתוח ודוח", description: "תוך 48 שעות, דוח מקצועי: המצב הקיים, הזדמנויות והמלצות מנומקות." },
-  { number: "04", title: "פגישת ייעוץ", description: "פרונטלית או בזום. מעבר מעמיק על כל סעיף והחלטה מושכלת, ללא לחץ." },
-  { number: "05", title: "יישום", description: "אנחנו מטפלים בניודים, בטפסים ובחברות. אתה מקבל עדכון בכל שלב." },
-  { number: "06", title: "ליווי שוטף", description: "בחינה מחדש אחת לשנה ובכל אירוע חיים. הקשר עם היועץ נמשך." },
+  { title: "פנייה ראשונית", description: "שיחה קצרה להיכרות עם הצרכים, היועץ הייעודי והצעדים הבאים." },
+  { title: "מיפוי התיק", description: "שליפת כל הפוליסות, הקרנות והחיסכון ממקורות רשמיים. מאובטח לחלוטין." },
+  { title: "ניתוח ודוח", description: "תוך 48 שעות, דוח מקצועי: המצב הקיים, הזדמנויות והמלצות מנומקות." },
+  { title: "פגישת ייעוץ", description: "פרונטלית או בזום. מעבר מעמיק על כל סעיף והחלטה מושכלת, ללא לחץ." },
+  { title: "יישום", description: "אנחנו מטפלים בניודים, בטפסים ובחברות. אתה מקבל עדכון בכל שלב." },
+  { title: "ליווי שוטף", description: "בחינה מחדש אחת לשנה ובכל אירוע חיים. הקשר עם היועץ נמשך." },
 ];
 
 const faqItems = [
@@ -156,25 +155,15 @@ const leadSubjects = [
 
 // ── Shared UI ──
 
-const SectionHead = ({ index, title, lede, underline }: { index: string; title: string; lede?: string; underline?: string }) => (
-  <div className="border-t border-[#171717]/20 pt-6 mb-12 sm:mb-16">
-    <div className="flex items-baseline gap-6 sm:gap-10">
-      <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: BRONZE }}>
-        {index}
-      </span>
-      <div>
-        <h2
-          className="text-[#171717] leading-tight"
-          style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}
-        >
-          {title}
-        </h2>
-        {underline && <DrawUnderline color={underline} className="mt-2" />}
-        {lede && (
-          <p className="mt-3 text-base text-[#5c5c5c] leading-[1.85] max-w-xl">{lede}</p>
-        )}
-      </div>
-    </div>
+// DNA v3: the heading starts its block — no eyebrow, no ornamental index.
+const SectionHead = ({ title, lede }: { title: string; lede?: string }) => (
+  <div className="mb-12 sm:mb-16">
+    <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.8rem, 3.2vw, 2.4rem)" }}>
+      {title}
+    </h2>
+    {lede && (
+      <p className="mt-4 text-base leading-[1.85] max-w-xl" style={{ color: MUTED }}>{lede}</p>
+    )}
   </div>
 );
 
@@ -185,13 +174,13 @@ const ProductList = ({ items }: { items: { title: string; description: string; h
       <Link
         key={item.title + item.href}
         to={item.href}
-        className={`group items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10 hover:border-[#171717]/40 transition-colors ${i >= 6 ? "hidden md:flex" : "flex"}`}
+        className={`group items-baseline justify-between gap-6 py-[14px] px-3 -mx-3 rounded-md border-b border-[#E7EDF1] hover:bg-[#E1EAF1]/35 transition-colors ${i >= 6 ? "hidden md:flex" : "flex"}`}
       >
         <div className="flex items-baseline gap-4 min-w-0">
-          <h3 className="text-base font-medium text-[#171717] whitespace-nowrap">{item.title}</h3>
-          <p className="text-[13px] text-[#6e6e6e] truncate hidden sm:block">{item.description}</p>
+          <h3 className="text-base font-medium text-[#1D2D3D] whitespace-nowrap">{item.title}</h3>
+          <p className="text-[13px] text-[#5a6a78] truncate hidden sm:block">{item.description}</p>
         </div>
-        <span className="text-[#171717]/30 group-hover:text-[#171717] transition-all group-hover:-translate-x-1 shrink-0">
+        <span className="text-[#5a6a78] group-hover:text-[#1D2D3D] transition-all group-hover:-translate-x-1 shrink-0">
           ←
         </span>
       </Link>
@@ -199,8 +188,12 @@ const ProductList = ({ items }: { items: { title: string; description: string; h
   </div>
 );
 
+// DNA v3 boxed input: white, hairline border, navy focus
 const inputClass =
-  "w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] placeholder:text-[#6e6e6e] text-base focus:outline-none focus:border-[#171717] transition-colors min-h-[44px] rounded-none";
+  "w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] placeholder:text-[#5a6a78] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors min-h-[48px]";
+
+const tabTriggerClass =
+  "rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#5a6a78] border-b-2 border-transparent data-[state=active]:border-[#4E9D8F] data-[state=active]:text-[#1D2D3D] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors";
 
 const Index = () => {
   const processRef = useRef<HTMLDivElement>(null);
@@ -284,84 +277,97 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen pb-2" dir="rtl" style={{ backgroundColor: "#0a0a0a" }}>
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header />
 
       <main>
         {/* HERO */}
         <HeroSection />
 
-        {/* 01 — PORTFOLIO REVIEW */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
+        {/* PORTFOLIO REVIEW */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
               <SectionHead
-                index="01"
                 title="בדיקת תיק ללא עלות"
-                underline={CHIP_ORANGE}
                 lede="השאירו פרטים. הצוות שלנו יבחן את התיק הקיים ויחזור אליכם עם דוח מקצועי הכולל המלצות מעשיות, בתוך 48 שעות."
               />
             </ScrollReveal>
 
             <ScrollReveal delay={100}>
-              <form onSubmit={handleLeadSubmit} className="max-w-3xl">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-10 gap-y-5">
-                  <input
-                    type="text"
-                    placeholder="שם מלא"
-                    value={leadForm.name}
-                    onChange={(e) => setLeadForm(prev => ({ ...prev, name: e.target.value }))}
-                    className={inputClass}
-                  />
-                  <input
-                    type="tel"
-                    placeholder="טלפון"
-                    value={leadForm.phone}
-                    onChange={(e) => setLeadForm(prev => ({ ...prev, phone: e.target.value }))}
-                    className={inputClass}
-                    dir="ltr"
-                    style={{ textAlign: "right" }}
-                  />
-                  <select
-                    value={leadForm.subject}
-                    onChange={(e) => setLeadForm(prev => ({ ...prev, subject: e.target.value }))}
-                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] text-base focus:outline-none focus:border-[#171717] transition-colors appearance-none cursor-pointer min-h-[44px] rounded-none"
-                  >
-                    <option value="">נושא הפנייה</option>
-                    {leadSubjects.map((s) => (
-                      <option key={s} value={s}>{s}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="mt-8 flex flex-wrap items-center gap-6">
-                  <button
-                    type="submit"
-                    disabled={leadSubmitting}
-                    className="bento-hover inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[180px]"
-                  >
-                    {leadSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו ונתחיל"}
-                  </button>
-                  <span className="text-[13px] text-[#6e6e6e]">
-                    או חייגו{" "}
-                    <a href="tel:0523097444" className="text-[#171717] border-b border-[#171717]/25 hover:border-[#171717] transition-colors tabular-nums" dir="ltr">
-                      052-309-7444
-                    </a>
-                  </span>
-                </div>
-                <div className="mt-6">
-                  <span className="text-[12px] text-[#6e6e6e]">שתי דקות למלא. אפס אותיות קטנות.</span>
-                </div>
-              </form>
+              <div className="dna-concept !p-6 sm:!p-8 max-w-3xl">
+                <form onSubmit={handleLeadSubmit}>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <input
+                      type="text"
+                      placeholder="שם מלא"
+                      value={leadForm.name}
+                      onChange={(e) => setLeadForm(prev => ({ ...prev, name: e.target.value }))}
+                      className={inputClass}
+                    />
+                    <input
+                      type="tel"
+                      placeholder="טלפון"
+                      value={leadForm.phone}
+                      onChange={(e) => setLeadForm(prev => ({ ...prev, phone: e.target.value }))}
+                      className={inputClass}
+                      dir="ltr"
+                      style={{ textAlign: "right" }}
+                    />
+                    <select
+                      value={leadForm.subject}
+                      onChange={(e) => setLeadForm(prev => ({ ...prev, subject: e.target.value }))}
+                      className="w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors appearance-none cursor-pointer min-h-[48px]"
+                    >
+                      <option value="">נושא הפנייה</option>
+                      {leadSubjects.map((s) => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="mt-7 flex flex-wrap items-center gap-6">
+                    <button
+                      type="submit"
+                      disabled={leadSubmitting}
+                      className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[180px]"
+                    >
+                      {leadSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו ונתחיל"}
+                    </button>
+                    <span className="text-[13px]" style={{ color: MUTED }}>
+                      או חייגו{" "}
+                      <a
+                        href="tel:0523097444"
+                        className="text-[#1D2D3D] border-b border-[#1D2D3D]/25 hover:border-[#1D2D3D] transition-colors tabular-nums whitespace-nowrap"
+                        dir="ltr"
+                      >
+                        052-309-7444
+                      </a>
+                    </span>
+                  </div>
+                  <div className="mt-5">
+                    <span className="text-[12.5px]" style={{ color: MUTED }}>שתי דקות למלא. אפס אותיות קטנות.</span>
+                  </div>
+                </form>
+              </div>
             </ScrollReveal>
-          </div></div>
+          </div>
         </section>
 
-        {/* 02 — THE METHOD */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
+        {/* THE METHOD */}
+        <section className="dna-page border-t" style={{ borderColor: LINE }}>
+          <div className="dna-circles" aria-hidden="true">
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 260, height: 260, top: -100, left: -110, backgroundColor: PASTEL_BLUE, opacity: 0.5 }}
+            />
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 220, height: 220, bottom: -120, right: -90, backgroundColor: PASTEL_MINT, opacity: 0.45 }}
+            />
+          </div>
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
               <SectionHead
-                index="02"
                 title="השיטה"
                 lede="ארבעה עקרונות שמגדירים את הדרך שבה אנחנו עובדים מול כל לקוח בבית."
               />
@@ -370,44 +376,38 @@ const Index = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
               {whySeeld.map((item, i) => (
                 <ScrollReveal key={item.title} delay={i * 80}>
-                  <div className="border-t border-[#171717]/15 pt-5 h-full">
+                  <div className="h-full">
+                    <div className="h-[3px] w-9 rounded-full mb-5" style={{ backgroundColor: TURQ }} aria-hidden="true" />
                     <h3
-                      className="text-lg text-[#171717] mb-3"
-                      style={{ fontFamily: SERIF, fontWeight: 600 }}
+                      className="text-[19px] mb-3"
+                      style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}
                     >
                       {item.title}
                     </h3>
-                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{item.description}</p>
+                    <p className="text-[14.5px] leading-[1.8]" style={{ color: BODY }}>{item.description}</p>
                   </div>
                 </ScrollReveal>
               ))}
             </div>
-          </div></div>
+          </div>
         </section>
 
-        {/* 03 — PRACTICE AREAS */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
+        {/* PRACTICE AREAS */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
               <SectionHead
-                index="03"
                 title="תחומי הליווי"
                 lede="16 קטגוריות ביטוח ו־11 מוצרי חיסכון ופנסיה, מול כל החברות בישראל."
               />
             </ScrollReveal>
 
             <Tabs defaultValue="insurance" dir="rtl">
-              <TabsList className="flex w-full justify-start gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#171717]/10 rounded-none">
-                <TabsTrigger
-                  value="insurance"
-                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
-                >
+              <TabsList className="flex w-full justify-start gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#E7EDF1] rounded-none">
+                <TabsTrigger value="insurance" className={tabTriggerClass}>
                   ביטוח
                 </TabsTrigger>
-                <TabsTrigger
-                  value="savings"
-                  className="rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#6e6e6e] border-b-2 border-transparent data-[state=active]:border-[#171717] data-[state=active]:text-[#171717] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors"
-                >
+                <TabsTrigger value="savings" className={tabTriggerClass}>
                   חיסכון ופנסיה
                 </TabsTrigger>
               </TabsList>
@@ -417,7 +417,7 @@ const Index = () => {
                 <div className="mt-10">
                   <Link
                     to="/insurances"
-                    className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+                    className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
                   >
                     לכל 16 הביטוחים
                     <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -430,7 +430,7 @@ const Index = () => {
                 <div className="mt-10">
                   <Link
                     to="/savings"
-                    className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+                    className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
                   >
                     לכל 11 מוצרי החיסכון והפנסיה
                     <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -438,51 +438,43 @@ const Index = () => {
                 </div>
               </TabsContent>
             </Tabs>
-          </div></div>
+          </div>
         </section>
 
-        {/* 04 — THE PLATFORM (quiet dark) */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel-ink"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
+        {/* THE PLATFORM */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
-              <div className="border-t border-white/20 pt-6 mb-12 sm:mb-16">
-                <div className="flex items-baseline gap-6 sm:gap-10">
-                  <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: BRONZE }}>
-                    04
-                  </span>
-                  <div>
-                    <h2
-                      className="text-[#fafafa] leading-tight"
-                      style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}
-                    >
-                      הפלטפורמה
-                    </h2>
-                    <p className="mt-3 text-base text-[#fafafa]/45 leading-[1.85] max-w-xl">
-                      הכלים שהצוות שלנו עובד איתם, פתוחים גם לכם. נתונים בזמן אמת, שקיפות מלאה, זמינות מסביב לשעון.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <SectionHead
+                title="הפלטפורמה"
+                lede="הכלים שהצוות שלנו עובד איתם, פתוחים גם לכם. נתונים בזמן אמת, שקיפות מלאה, זמינות מסביב לשעון."
+              />
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-14 gap-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {platformItems.map((item, i) => {
                 const inner = (
-                  <div className="border-t border-white/10 group-hover:border-white/40 transition-colors pt-5 pb-7 h-full text-start">
+                  <div className="dna-concept dna-hover h-full text-start">
                     <div className="flex items-baseline justify-between gap-4 mb-2.5">
-                      <h3 className="text-[17px] text-[#fafafa]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                      <h3 className="text-[17px]" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                         {item.title}
                       </h3>
-                      <span className="text-[#fafafa]/25 group-hover:text-[#fafafa] transition-all group-hover:-translate-x-1">←</span>
+                      <span className="text-[#5a6a78] group-hover:text-[#1D2D3D] transition-all group-hover:-translate-x-1">←</span>
                     </div>
-                    <p className="text-[14px] text-[#fafafa]/40 leading-[1.8]">{item.description}</p>
+                    <p className="text-[14px] leading-[1.8]" style={{ color: BODY }}>{item.description}</p>
                     <div className="mt-4" dir="ltr">
-                      <LiveTag dark dot={item.live}>{item.tag}</LiveTag>
+                      <span
+                        className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.12em] font-medium"
+                        style={{ fontFamily: MONO, color: TURQ_TEXT }}
+                      >
+                        {item.live && <LiveDot size={6} />}
+                        {item.tag}
+                      </span>
                     </div>
                   </div>
                 );
                 return item.href ? (
-                  <Link key={i} to={item.href} className="block group bento-hover">
+                  <Link key={i} to={item.href} className="block group">
                     {inner}
                   </Link>
                 ) : (
@@ -490,30 +482,30 @@ const Index = () => {
                     key={i}
                     type="button"
                     onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                    className="block w-full group bento-hover"
+                    className="block w-full group"
                   >
                     {inner}
                   </button>
                 );
               })}
             </div>
-            <p className="mt-10 text-[12px] text-[#fafafa]/30">
-              היועץ האנושי ישן בלילה. ה‑AI לא.
+            <p className="mt-10 text-[13px]" style={{ color: MUTED }}>
+              היועץ האנושי ישן בלילה. היועץ הדיגיטלי ער.
             </p>
-          </div></div>
+          </div>
         </section>
 
         {/* NUMBERS */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
             <ScrollReveal>
               <div className="flex items-end justify-between gap-6 mb-2">
-                <span className="text-[11px] tracking-[0.14em] text-[#5c5c5c]" style={{ fontFamily: MONO }}>
+                <span className="text-[11px] tracking-[0.14em]" style={{ fontFamily: MONO, color: MUTED }}>
                   PORTFOLIO · GROWTH
                 </span>
-                <DrawSpark color={CHIP_GREEN} className="w-40 sm:w-64" height={44} />
+                <DrawSpark color={TURQ} className="w-40 sm:w-64" height={44} />
               </div>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 border-t border-b border-[#171717]/15 py-10 sm:py-14">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 border-t border-b py-10 sm:py-14" style={{ borderColor: LINE }}>
                 {[
                   { to: 600, suffix: "+", label: "משפחות מלוות" },
                   { to: 12, suffix: "", label: "חברות בהשוואה" },
@@ -522,53 +514,61 @@ const Index = () => {
                 ].map((stat) => (
                   <div key={stat.label} className="text-center">
                     <div
-                      className="text-[#171717] tabular-nums mb-2"
+                      className="tabular-nums mb-2"
                       dir="ltr"
-                      style={{ fontFamily: MONO, fontWeight: 600, fontSize: "clamp(2.4rem, 4.5vw, 3.6rem)", letterSpacing: "-0.02em" }}
+                      style={{
+                        fontFamily: DISPLAY,
+                        fontWeight: 900,
+                        color: TURQ,
+                        fontSize: "clamp(2.75rem, 4.5vw, 3.5rem)",
+                        letterSpacing: "-0.02em",
+                        lineHeight: 1.1,
+                      }}
                     >
                       <CountUp to={stat.to} format={(v) => `${stat.prefix ?? ""}${v.toLocaleString("en-US")}${stat.suffix}`} />
                     </div>
-                    <div className="text-[12px] tracking-[0.12em] text-[#6e6e6e]">{stat.label}</div>
+                    <div className="text-[13px] tracking-[0.1em]" style={{ color: MUTED }}>{stat.label}</div>
                   </div>
                 ))}
               </div>
-              {/* Market strip — thin mono band in the reference's ticker language */}
+              {/* Market strip — standalone ticker band, hairlines top and bottom */}
               <div
-                className="mt-6 rounded-lg border border-[#171717]/15 px-5 py-3 flex flex-wrap items-center justify-center gap-x-7 gap-y-1.5"
+                className="mt-8 border-t border-b py-3.5 flex flex-wrap items-center justify-center gap-x-7 gap-y-1.5"
+                style={{ borderColor: LINE }}
                 dir="ltr"
               >
                 {marketStrip.map((item) => (
                   <span
                     key={item.label}
                     className="inline-flex items-center gap-2 text-[11.5px] tracking-[0.12em] font-medium whitespace-nowrap"
-                    style={{ fontFamily: MONO, fontVariantNumeric: "tabular-nums", color: "#5c5c5c" }}
+                    style={{ fontFamily: MONO, fontVariantNumeric: "tabular-nums", color: MUTED }}
                   >
                     {item.dot && <LiveDot size={6} />}
-                    {item.value && <span dir="ltr" className="text-[#171717]">{item.value}</span>}
+                    {item.value && <span dir="ltr" style={{ color: NAVY }}>{item.value}</span>}
                     <span dir="auto">{item.label}</span>
                   </span>
                 ))}
               </div>
-              <p className="mt-5 text-center text-[12px] text-[#6e6e6e]">
+              <p className="mt-5 text-center text-[13px]" style={{ color: MUTED }}>
                 אנחנו לא צועקים. המספרים עושים את זה בשבילנו.
               </p>
             </ScrollReveal>
-          </div></div>
+          </div>
         </section>
 
-        {/* 05 — THE HOUSE */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
+        {/* THE HOUSE */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
-              <SectionHead index="05" title="הבית" />
+              <SectionHead title="הבית" />
             </ScrollReveal>
 
             <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-14 lg:gap-24">
               <ScrollReveal>
-                <div className="space-y-6 text-[#171717]/65 text-base sm:text-[17px] leading-[1.95]">
+                <div className="space-y-6 text-base sm:text-[17px] leading-[1.95]" style={{ color: BODY }}>
                   <p
-                    className="text-[#171717] text-xl sm:text-2xl leading-[1.6]"
-                    style={{ fontFamily: SERIF, fontWeight: 600 }}
+                    className="text-xl sm:text-2xl leading-[1.6]"
+                    style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}
                   >
                     SEELD נבנתה סביב עקרון אחד פשוט: להעמיד את הלקוח מעל כל שיקול אחר.
                   </p>
@@ -584,13 +584,13 @@ const Index = () => {
                   <div className="pt-4 flex flex-wrap items-center gap-6">
                     <Link
                       to="/contact"
-                      className="bento-hover inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors min-h-[52px]"
+                      className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[52px]"
                     >
                       קביעת פגישת ייעוץ
                     </Link>
                     <Link
                       to="/about"
-                      className="group inline-flex items-center gap-2 text-base font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+                      className="group inline-flex items-center gap-2 text-base font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
                     >
                       הכירו את הצוות
                       <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -600,20 +600,22 @@ const Index = () => {
               </ScrollReveal>
 
               <ScrollReveal delay={100}>
-                <div className="border-t border-[#171717]/15">
+                <div className="border-t" style={{ borderColor: LINE }}>
                   {trustList.map((point) => (
-                    <div key={point.title} className="py-5 border-b border-[#171717]/10">
-                      <h3 className="text-base font-medium text-[#171717] mb-1.5">{point.title}</h3>
-                      <p className="text-[13px] text-[#5c5c5c] leading-relaxed">{point.description}</p>
+                    <div key={point.title} className="dna-pill-item !py-5 border-b" style={{ borderColor: LINE }}>
+                      <div>
+                        <h3 className="text-base font-medium mb-1.5" style={{ color: NAVY }}>{point.title}</h3>
+                        <p className="text-[13.5px] leading-relaxed" style={{ color: BODY }}>{point.description}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
               </ScrollReveal>
             </div>
 
-            {/* The cast — ink figures in the reference film's spirit */}
+            {/* The cast — the house's people, line-art figures */}
             <ScrollReveal>
-              <div className="mt-16 border-t border-[#171717]/15 pt-12 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-12">
+              <div className="mt-16 border-t pt-12 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-12" style={{ borderColor: LINE }}>
                 {[
                   { Figure: CastDana, name: "דנה", role: "יועצת פנסיה · מלווה 140 משפחות" },
                   { Figure: CastAvi, name: "אבי", role: "סוכן ביטוח מורשה · תיקי בריאות וחיים" },
@@ -621,14 +623,14 @@ const Index = () => {
                 ].map(({ Figure, name, role }) => (
                   <div key={name} className="text-center">
                     <Figure className="w-36 h-52 sm:w-40 sm:h-56 mx-auto" />
-                    <div className="mt-4 text-[15px] text-[#171717]" style={{ fontFamily: SERIF, fontWeight: 600 }}>
+                    <div className="mt-4 text-[16px]" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                       {name}
                     </div>
-                    <div className="mt-1 text-[12px] text-[#5c5c5c]">{role}</div>
+                    <div className="mt-1 text-[13px]" style={{ color: BODY }}>{role}</div>
                     <button
                       type="button"
                       onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                      className="mt-3 text-[12px] font-medium text-[#171717] border-b border-[#171717]/30 pb-0.5 hover:border-[#171717] transition-colors"
+                      className="mt-3 text-[13px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/30 pb-0.5 hover:border-[#1D2D3D] transition-colors"
                     >
                       דברו איתנו
                     </button>
@@ -636,15 +638,14 @@ const Index = () => {
                 ))}
               </div>
             </ScrollReveal>
-          </div></div>
+          </div>
         </section>
 
-        {/* 06 — PROCESS */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
+        {/* PROCESS */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
               <SectionHead
-                index="06"
                 title="התהליך"
                 lede="ששה שלבים מובנים, מהפנייה הראשונית ועד ליווי שוטף."
               />
@@ -652,42 +653,40 @@ const Index = () => {
 
             <div ref={processRef} className="max-w-3xl relative pr-5 sm:pr-7">
               {/* The rail fills as you read through the steps */}
-              <ProgressRail targetRef={processRef} color={CHIP_GREEN} className="right-0" />
+              <ProgressRail targetRef={processRef} color={TURQ} className="right-0" />
               {processSteps.map((step, i) => (
-                <ScrollReveal key={step.number} delay={i * 60}>
-                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-10 py-6 border-b border-[#171717]/10">
-                    <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0 w-8" style={{ color: BRONZE }}>
-                      {step.number}
-                    </span>
+                <ScrollReveal key={step.title} delay={i * 60}>
+                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-10 py-6 border-b" style={{ borderColor: LINE }}>
                     <h3
-                      className="text-lg text-[#171717] shrink-0 sm:w-44"
-                      style={{ fontFamily: SERIF, fontWeight: 600 }}
+                      className="text-[19px] shrink-0 sm:w-44"
+                      style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}
                     >
                       {step.title}
                     </h3>
-                    <p className="text-[14px] text-[#5c5c5c] leading-[1.8]">{step.description}</p>
+                    <p className="text-[14.5px] leading-[1.8]" style={{ color: BODY }}>{step.description}</p>
                   </div>
                 </ScrollReveal>
               ))}
             </div>
-          </div></div>
+          </div>
         </section>
 
         {/* PARTNERS */}
-        <section className="px-2 pt-2"><div className="bento-panel"><ScrollReveal>
-          <CompanyLogos
-            variant="marquee"
-            title="עובדים מול כל השחקניות המובילות"
-            subtitle="12 חברות ביטוח ו-6 בתי השקעות בישראל. גישה מקצועית בזמן אמת. השוואה שקופה. המלצה מבוססת."
-          />
-        </ScrollReveal></div></section>
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <ScrollReveal>
+            <CompanyLogos
+              variant="marquee"
+              title="עובדים מול כל השחקניות המובילות"
+              subtitle="12 חברות ביטוח ו-6 בתי השקעות בישראל. גישה מקצועית בזמן אמת. השוואה שקופה. המלצה מבוססת."
+            />
+          </ScrollReveal>
+        </section>
 
-        {/* 07 — FAQ */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
+        {/* FAQ */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
               <SectionHead
-                index="07"
                 title="שאלות שעולות בכל תיק"
                 lede="שאלות שכולם שואלים. תשובות שפחות שומעים."
               />
@@ -699,12 +698,12 @@ const Index = () => {
                   <AccordionItem
                     key={i}
                     value={`faq-${i}`}
-                    className="border-b border-[#171717]/10 rounded-none px-0"
+                    className="border-b border-[#E7EDF1] rounded-none px-0"
                   >
-                    <AccordionTrigger className="text-base sm:text-base font-medium hover:no-underline py-5 text-[#171717] text-start">
+                    <AccordionTrigger className="text-base font-medium hover:no-underline py-5 px-3 -mx-3 rounded-md text-[#1D2D3D] text-start hover:bg-[#E1EAF1]/35 transition-colors">
                       {item.question}
                     </AccordionTrigger>
-                    <AccordionContent className="text-[14px] text-[#5c5c5c] leading-[1.85] pb-6 max-w-2xl">
+                    <AccordionContent className="text-[14.5px] leading-[1.85] pb-6 max-w-2xl text-[#3a4c5a]">
                       {item.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -714,22 +713,21 @@ const Index = () => {
               <div className="mt-10">
                 <Link
                   to="/faq"
-                  className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#171717] border-b border-[#171717]/25 pb-0.5 hover:border-[#171717] transition-colors"
+                  className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
                 >
                   לכל השאלות הנפוצות
                   <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
                 </Link>
               </div>
             </div>
-          </div></div>
+          </div>
         </section>
 
-        {/* 08 — CONTACT */}
-        <section className="px-2 pt-2">
-          <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 relative z-10">
+        {/* CONTACT */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
               <SectionHead
-                index="08"
                 title="השיחה הראשונה, על חשבוננו"
                 lede="השאירו פרטים ויועץ מהצוות שלנו יחזור אליכם באותו יום עבודה. שיחה אחת, בלי מרדף."
               />
@@ -739,7 +737,7 @@ const Index = () => {
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                className="-mt-6 mb-12 block bento-hover"
+                className="-mt-6 mb-12 block dna-hover rounded-full"
                 aria-label="פתיחת שיחה עם יועץ SEELD AI"
               >
                 <StatusPill>SEELD AI מחובר עכשיו · לחצו לשיחה</StatusPill>
@@ -748,79 +746,83 @@ const Index = () => {
 
             <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-14 lg:gap-24">
               <ScrollReveal>
-                <form className="space-y-6" onSubmit={handleContactSubmit}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
+                <div className="dna-concept !p-6 sm:!p-8">
+                  <form className="space-y-4" onSubmit={handleContactSubmit}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <input
+                        type="text"
+                        placeholder="שם מלא"
+                        value={contactForm.name}
+                        onChange={(e) => setContactForm(prev => ({ ...prev, name: e.target.value }))}
+                        className={inputClass}
+                      />
+                      <input
+                        type="tel"
+                        placeholder="טלפון"
+                        value={contactForm.phone}
+                        onChange={(e) => setContactForm(prev => ({ ...prev, phone: e.target.value }))}
+                        className={inputClass}
+                        dir="ltr"
+                        style={{ textAlign: "right" }}
+                      />
+                    </div>
                     <input
-                      type="text"
-                      placeholder="שם מלא"
-                      value={contactForm.name}
-                      onChange={(e) => setContactForm(prev => ({ ...prev, name: e.target.value }))}
+                      type="email"
+                      placeholder="אימייל (לא חובה)"
+                      value={contactForm.email}
+                      onChange={(e) => setContactForm(prev => ({ ...prev, email: e.target.value }))}
                       className={inputClass}
                     />
-                    <input
-                      type="tel"
-                      placeholder="טלפון"
-                      value={contactForm.phone}
-                      onChange={(e) => setContactForm(prev => ({ ...prev, phone: e.target.value }))}
-                      className={inputClass}
-                      dir="ltr"
-                      style={{ textAlign: "right" }}
+                    <textarea
+                      placeholder="במה נוכל לעזור?"
+                      rows={3}
+                      value={contactForm.message}
+                      onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}
+                      className="w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] text-base placeholder:text-[#5a6a78] focus:outline-none focus:border-[#1D2D3D] transition-colors resize-none"
                     />
-                  </div>
-                  <input
-                    type="email"
-                    placeholder="אימייל (לא חובה)"
-                    value={contactForm.email}
-                    onChange={(e) => setContactForm(prev => ({ ...prev, email: e.target.value }))}
-                    className={inputClass}
-                  />
-                  <textarea
-                    placeholder="במה נוכל לעזור?"
-                    rows={3}
-                    value={contactForm.message}
-                    onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}
-                    className="w-full px-0 py-3.5 bg-transparent border-b border-[#171717]/20 text-[#171717] text-base placeholder:text-[#6e6e6e] focus:outline-none focus:border-[#171717] transition-colors resize-none rounded-none"
-                  />
-                  <button
-                    type="submit"
-                    disabled={contactSubmitting}
-                    className="bento-hover inline-flex items-center justify-center px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
-                  >
-                    {contactSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שליחה"}
-                  </button>
-                </form>
+                    <div className="pt-2">
+                      <button
+                        type="submit"
+                        disabled={contactSubmitting}
+                        className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
+                      >
+                        {contactSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שליחה"}
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </ScrollReveal>
 
               <ScrollReveal delay={100}>
-                <div className="border-t border-[#171717]/15">
+                <div className="border-t" style={{ borderColor: LINE }}>
                   {[
                     { label: "טלפון", value: "052-309-7444", href: "tel:0523097444", ltr: true },
                     { label: "WhatsApp", value: "שלחו הודעה", href: "https://wa.me/972523097444" },
                     { label: "אימייל", value: "info@seeld.co.il", href: "mailto:info@seeld.co.il", ltr: true },
                     { label: "משרדים", value: "רעננה · ירושלים" },
                   ].map((row) => (
-                    <div key={row.label} className="flex items-baseline justify-between py-[15px] border-b border-[#171717]/10">
-                      <span className="text-[13px] text-[#6e6e6e]">{row.label}</span>
+                    <div key={row.label} className="flex items-baseline justify-between py-[15px] border-b" style={{ borderColor: LINE }}>
+                      <span className="text-[13px]" style={{ color: MUTED }}>{row.label}</span>
                       {row.href ? (
                         <a
                           href={row.href}
                           target={row.href.startsWith("http") ? "_blank" : undefined}
                           rel={row.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                          className="text-base text-[#171717] tabular-nums border-b border-transparent hover:border-[#171717]/40 transition-colors"
+                          className="text-base text-[#1D2D3D] tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#1D2D3D]/40 transition-colors"
                           dir={row.ltr ? "ltr" : undefined}
                         >
                           {row.value}
                         </a>
                       ) : (
-                        <span className="text-base text-[#171717] tabular-nums">{row.value}</span>
+                        <span className="text-base tabular-nums" style={{ color: NAVY }}>{row.value}</span>
                       )}
                     </div>
                   ))}
                   <div className="flex items-baseline justify-between py-[15px]">
-                    <span className="text-[13px] text-[#6e6e6e]">סוכן ביטוח?</span>
+                    <span className="text-[13px]" style={{ color: MUTED }}>סוכן ביטוח?</span>
                     <Link
                       to="/app/auth"
-                      className="text-base text-[#171717] border-b border-transparent hover:border-[#171717]/40 transition-colors"
+                      className="text-base text-[#1D2D3D] border-b border-transparent hover:border-[#1D2D3D]/40 transition-colors"
                     >
                       כניסה לפורטל הסוכנים ←
                     </Link>
@@ -828,7 +830,55 @@ const Index = () => {
                 </div>
               </ScrollReveal>
             </div>
-          </div></div>
+          </div>
+        </section>
+
+        {/* CLOSING CTA — institutional navy band */}
+        <section style={{ backgroundColor: NAVY }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
+            <ScrollReveal>
+              <h2
+                className="text-white leading-tight"
+                style={{
+                  fontFamily: DISPLAY,
+                  fontWeight: 900,
+                  fontSize: "clamp(1.9rem, 3.6vw, 2.75rem)",
+                  letterSpacing: "-0.5px",
+                }}
+              >
+                כסף מסודר מתחיל בשיחה אחת.
+              </h2>
+              <p className="mt-4 text-base sm:text-lg max-w-xl mx-auto" style={{ color: "rgba(255,255,255,.65)" }}>
+                בדיקת תיק מלאה, דוח בתוך 48 שעות, בלי עלות ובלי התחייבות.
+              </p>
+              <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center justify-center h-14 px-9 rounded-lg bg-white text-[#1D2D3D] text-[15px] font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-w-[220px]"
+                >
+                  בדיקת תיק ללא עלות
+                </Link>
+                <a
+                  href="https://wa.me/972523097444"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center h-14 px-9 rounded-lg text-white text-[15px] font-medium tracking-wide hover:bg-white/10 transition-colors min-w-[220px]"
+                  style={{ boxShadow: "inset 0 0 0 1.5px rgba(255,255,255,.85)" }}
+                >
+                  שיחה עם יועץ
+                </a>
+              </div>
+              <div className="mt-8 inline-flex items-center gap-2.5" dir="ltr">
+                <LiveDot size={6} color={TURQ_ON_NAVY} />
+                <span
+                  className="text-[11px] tracking-[0.18em] font-medium"
+                  style={{ fontFamily: MONO, fontVariantNumeric: "tabular-nums", color: TURQ_ON_NAVY }}
+                >
+                  SEELD · LIVE · 24/6
+                </span>
+              </div>
+            </ScrollReveal>
+          </div>
         </section>
       </main>
 
