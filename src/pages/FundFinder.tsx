@@ -244,7 +244,11 @@ const FundFinder = () => {
                           <div
                             key={fund.id}
                             onClick={() => search.addFund(fund)}
-                            className="bento-hover rounded-lg cursor-pointer flex items-center justify-between gap-4 py-3 px-3 -mx-3 border-b border-[#171717]/10 hover:bg-[#171717]/[0.04] hover:border-[#171717]/40"
+                            className={`flex items-center justify-between gap-4 py-3 px-3 -mx-3 border-b border-[#171717]/10 ${
+                              search.selectedFunds.length >= 8
+                                ? ""
+                                : "bento-hover rounded-lg cursor-pointer hover:bg-[#171717]/[0.04] hover:border-[#171717]/40"
+                            }`}
                           >
                             <div className="min-w-0">
                               <p className="text-[14px] font-medium text-[#171717] truncate">{fund.name}</p>

@@ -13,6 +13,10 @@ import { LiveDot, StatusPill } from "@/components/brand/Live";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import Header from "@/components/Header";
 
+// Consistent keyboard focus for buttons and selectable tiles (Snap: no ring animation)
+const FOCUS_RING =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#171717]";
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface FormData {
   firstName: string; lastName: string;
@@ -203,7 +207,8 @@ function DateMaskInput({
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="absolute left-1 p-1.5 text-[#5c5c5c] hover:text-[#171717] transition-colors"
+            className={cn("absolute left-1 p-1.5 rounded-[4px] text-[#5c5c5c] hover:text-[#171717] transition-colors", FOCUS_RING)}
+            aria-label="בחירת תאריך מלוח שנה"
           >
             <Calendar className="w-4 h-4" />
           </button>
@@ -288,7 +293,7 @@ function CityInput({
               key={city}
               type="button"
               onMouseDown={() => select(city)}
-              className="w-full text-right px-4 py-3 min-h-[44px] text-sm text-[#171717] hover:bg-[#f5f5f5] transition-colors border-b border-[#171717]/[0.06] last:border-0"
+              className="w-full text-right px-4 py-3 min-h-[44px] text-sm text-[#171717] hover:bg-[#171717]/5 transition-colors border-b border-[#171717]/[0.06] last:border-0"
             >
               {city}
             </button>
@@ -353,7 +358,7 @@ function StreetInput({
               key={street}
               type="button"
               onMouseDown={() => { onChange(street); setQuery(street); setOpen(false); }}
-              className="w-full text-right px-4 py-3 min-h-[44px] text-sm text-[#171717] hover:bg-[#f5f5f5] transition-colors border-b border-[#171717]/[0.06] last:border-0"
+              className="w-full text-right px-4 py-3 min-h-[44px] text-sm text-[#171717] hover:bg-[#171717]/5 transition-colors border-b border-[#171717]/[0.06] last:border-0"
             >
               {street}
             </button>
@@ -416,6 +421,18 @@ function StepBar({ current }: { current: number }) {
           style={{ width: `${((current + 1) / STEPS.length) * 100}%` }}
         />
       </div>
+      <div className="mt-2.5 flex items-baseline justify-between gap-4">
+        <span className="text-[12px] font-medium text-[#171717] sm:hidden">
+          {STEPS[current].label}
+        </span>
+        <span
+          className="mr-auto text-[11px] tabular-nums tracking-[0.14em] text-[#5c5c5c]"
+          style={{ fontFamily: MONO }}
+          dir="ltr"
+        >
+          {String(current + 1).padStart(2, "0")} / {String(STEPS.length).padStart(2, "0")}
+        </span>
+      </div>
     </div>
   );
 }
@@ -469,7 +486,8 @@ function ConsentCard({
       aria-pressed={checked}
       className={cn(
         "w-full text-right rounded-[8px] bg-white p-5 transition-colors cursor-pointer group",
-        checked ? "" : "hover:bg-[#fafafa]"
+        FOCUS_RING,
+        checked ? "" : "hover:bg-[#171717]/5"
       )}
       style={{ boxShadow: checked ? "0 0 0 1px #171717" : "0 0 0 1px rgba(0,0,0,.08)" }}
     >
@@ -602,7 +620,7 @@ function SignatureCanvas({ value, onChange }: { value: string; onChange: (v: str
         <button
           type="button"
           onClick={clear}
-          className="flex items-center gap-1.5 text-[12px] text-[#5c5c5c] hover:text-[#171717] transition-colors font-medium min-h-[32px]"
+          className={cn("flex items-center gap-1.5 text-[12px] text-[#5c5c5c] hover:text-[#171717] transition-colors font-medium min-h-[32px]", FOCUS_RING)}
         >
           <X className="w-3.5 h-3.5" />
           נקו וחתמו שוב
@@ -618,7 +636,7 @@ function CopyBtn({ text }: { text: string }) {
   return (
     <button
       onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
-      className="p-1.5 rounded-[4px] hover:bg-[#f5f5f5] transition-colors text-[#5c5c5c] hover:text-[#171717]"
+      className="p-1.5 rounded-[4px] hover:bg-[#171717]/5 transition-colors text-[#5c5c5c] hover:text-[#171717]"
       aria-label="העתקה"
     >
       {copied
@@ -795,7 +813,7 @@ export default function Onboarding() {
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                className="mt-7 block transition-transform hover:-translate-y-[1px]"
+                className="mt-7 block bento-hover rounded-full"
                 aria-label="פתיחת שיחה עם יועץ SEELD"
               >
                 <StatusPill>היועץ מחובר עכשיו · שאלו לפני שממלאים</StatusPill>
@@ -980,9 +998,10 @@ export default function Onboarding() {
                           onClick={() => { set("maritalStatus", opt); setErrors(e => ({ ...e, maritalStatus: undefined })); }}
                           className={cn(
                             "px-4 py-2.5 min-h-[44px] rounded-[6px] border text-sm font-medium transition-colors",
+                            FOCUS_RING,
                             form.maritalStatus === opt
                               ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:border-[#171717]/50 hover:text-[#171717]"
+                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50 hover:text-[#171717]"
                           )}
                         >
                           {opt}
@@ -1001,9 +1020,10 @@ export default function Onboarding() {
                           onClick={() => set("healthFund", form.healthFund === opt ? "" : opt)}
                           className={cn(
                             "px-4 py-2.5 min-h-[44px] rounded-[6px] border text-sm font-medium transition-colors",
+                            FOCUS_RING,
                             form.healthFund === opt
                               ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:border-[#171717]/50 hover:text-[#171717]"
+                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50 hover:text-[#171717]"
                           )}
                         >
                           {opt}
@@ -1019,7 +1039,7 @@ export default function Onboarding() {
                         <button
                           type="button"
                           onClick={() => set("childrenCount", Math.max(0, form.childrenCount - 1))}
-                          className="w-11 h-11 rounded-[6px] border border-[#171717]/20 bg-white text-[#171717] font-medium text-lg flex items-center justify-center hover:border-[#171717]/50 transition-colors"
+                          className={cn("w-11 h-11 rounded-[6px] border border-[#171717]/20 bg-white text-[#171717] font-medium text-lg flex items-center justify-center hover:bg-[#171717]/5 hover:border-[#171717]/50 transition-colors", FOCUS_RING)}
                         >−</button>
                         <span className="w-12 text-center text-2xl text-[#171717] tabular-nums" style={{ fontFamily: MONO, fontWeight: 600 }}>
                           {form.childrenCount}
@@ -1027,7 +1047,7 @@ export default function Onboarding() {
                         <button
                           type="button"
                           onClick={() => set("childrenCount", Math.min(24, form.childrenCount + 1))}
-                          className="w-11 h-11 rounded-[6px] border border-[#171717]/20 bg-white text-[#171717] font-medium text-lg flex items-center justify-center hover:border-[#171717]/50 transition-colors"
+                          className={cn("w-11 h-11 rounded-[6px] border border-[#171717]/20 bg-white text-[#171717] font-medium text-lg flex items-center justify-center hover:bg-[#171717]/5 hover:border-[#171717]/50 transition-colors", FOCUS_RING)}
                         >+</button>
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -1038,9 +1058,10 @@ export default function Onboarding() {
                             onClick={() => set("childrenCount", n)}
                             className={cn(
                               "w-10 h-10 rounded-[6px] border text-xs font-medium transition-colors tabular-nums",
+                              FOCUS_RING,
                               form.childrenCount === n
                                 ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                                : "border-[#171717]/20 bg-white text-[#171717]/60 hover:border-[#171717]/50"
+                                : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50"
                             )}
                           >{n}</button>
                         ))}
@@ -1049,9 +1070,10 @@ export default function Onboarding() {
                           onClick={() => set("childrenCount", form.childrenCount > 6 ? form.childrenCount : 7)}
                           className={cn(
                             "px-2 h-10 rounded-[6px] border text-xs font-medium transition-colors tabular-nums",
+                            FOCUS_RING,
                             form.childrenCount > 6
                               ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:border-[#171717]/50"
+                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50"
                           )}
                         >7+</button>
                       </div>
@@ -1074,9 +1096,10 @@ export default function Onboarding() {
                             }}
                             className={cn(
                               "px-4 py-2.5 min-h-[44px] rounded-[6px] border text-sm font-medium transition-colors",
+                              FOCUS_RING,
                               selected
                                 ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                                : "border-[#171717]/20 bg-white text-[#171717]/60 hover:border-[#171717]/50 hover:text-[#171717]"
+                                : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50 hover:text-[#171717]"
                             )}
                           >
                             {selected && <Check className="w-3.5 h-3.5 inline ml-1" />}
@@ -1102,9 +1125,10 @@ export default function Onboarding() {
                           onClick={() => set("annualIncome", opt.value)}
                           className={cn(
                             "px-4 py-2.5 min-h-[44px] rounded-[6px] border text-sm font-medium transition-colors",
+                            FOCUS_RING,
                             form.annualIncome === opt.value
                               ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:border-[#171717]/50 hover:text-[#171717]"
+                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50 hover:text-[#171717]"
                           )}
                         >
                           {opt.label}
@@ -1122,9 +1146,10 @@ export default function Onboarding() {
                           onClick={() => { set("smoker", opt.value); if (!opt.value) set("cigarettesPerDay", ""); }}
                           className={cn(
                             "px-6 py-2.5 min-h-[44px] rounded-[6px] border text-sm font-medium transition-colors",
+                            FOCUS_RING,
                             form.smoker === opt.value
                               ? "border-[#171717] bg-[#171717] text-[#fafafa]"
-                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:border-[#171717]/50 hover:text-[#171717]"
+                              : "border-[#171717]/20 bg-white text-[#171717]/60 hover:bg-[#171717]/5 hover:border-[#171717]/50 hover:text-[#171717]"
                           )}
                         >{opt.label}</button>
                       ))}
@@ -1309,7 +1334,7 @@ export default function Onboarding() {
               {step > 0 ? (
                 <button
                   onClick={goPrev}
-                  className="text-sm text-[#5c5c5c] hover:text-[#171717] transition-colors font-medium flex items-center gap-1.5 min-h-[44px]"
+                  className={cn("text-sm text-[#5c5c5c] hover:text-[#171717] transition-colors font-medium flex items-center gap-1.5 min-h-[44px]", FOCUS_RING)}
                 >
                   <ChevronLeft className="w-4 h-4 rotate-180" />
                   חזרה
@@ -1319,7 +1344,7 @@ export default function Onboarding() {
               <button
                 onClick={step === 2 ? handleSubmit : goNext}
                 disabled={submitting}
-                className="inline-flex items-center justify-center gap-2 px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
+                className={cn("inline-flex items-center justify-center gap-2 px-9 py-4 bg-[#171717] text-[#fafafa] text-base font-medium tracking-wide hover:bg-[#33332f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]", FOCUS_RING)}
               >
                 {submitting
                   ? <><Loader2 className="w-4 h-4 animate-spin" />שולח...</>

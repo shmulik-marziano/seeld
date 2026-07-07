@@ -276,7 +276,7 @@ export default function AgentLandingPage() {
               },
             ].map(({ Icon, color, title, desc }, i) => (
               <motion.div key={i} variants={fadeUp}
-                className="bg-white rounded-lg p-6 sm:p-8 transition-transform duration-200 hover:-translate-y-[1px]"
+                className="bg-white rounded-lg p-6 sm:p-8"
                 style={{ boxShadow: CARD_SHADOW }}>
                 <div className="w-12 h-12 rounded-full flex items-center justify-center mb-5"
                   style={{ backgroundColor: color }}>
@@ -365,7 +365,7 @@ export default function AgentLandingPage() {
               },
             ].map(({ Icon, color, title, desc }, i) => (
               <motion.div key={i} variants={fadeUp}
-                className="bg-white rounded-lg p-6 sm:p-8 transition-transform duration-200 hover:-translate-y-[1px]"
+                className="bg-white rounded-lg p-6 sm:p-8"
                 style={{ boxShadow: CARD_SHADOW }}>
                 <div className="w-12 h-12 rounded-full flex items-center justify-center mb-5"
                   style={{ backgroundColor: color }}>
@@ -596,7 +596,7 @@ export default function AgentLandingPage() {
               },
             ].map(({ title, desc }, i) => (
               <motion.div key={i} variants={fadeUp}
-                className="bg-white rounded-lg p-8 sm:p-10 transition-transform duration-200 hover:-translate-y-[1px]"
+                className="bg-white rounded-lg p-8 sm:p-10"
                 style={{ boxShadow: CARD_SHADOW }}>
                 <h3 className="text-xl font-semibold text-[#171717] mb-4">{title}</h3>
                 <p className="text-[#5c5c5c] text-sm sm:text-base leading-[1.8]">{desc}</p>

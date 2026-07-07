@@ -72,7 +72,7 @@ const Insurances = () => {
                   <Link
                     key={item.href}
                     to={item.href}
-                    className="group flex items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10 hover:border-[#171717]/40 transition-colors"
+                    className="group bento-hover flex items-baseline justify-between gap-6 py-[14px] border-b border-[#171717]/10 hover:border-[#171717]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#171717]"
                   >
                     <div className="flex items-baseline gap-4 min-w-0">
                       <h2 className="text-base font-medium text-[#171717] whitespace-nowrap">{item.title}</h2>
@@ -91,7 +91,7 @@ const Insurances = () => {
                 <button
                   type="button"
                   onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                  className="block transition-transform hover:-translate-y-[1px]"
+                  className="block bento-hover rounded-full"
                   aria-label="פתיחת שיחה עם יועץ SEELD"
                 >
                   <StatusPill>לא בטוחים מה חסר לכם? היועץ מחובר עכשיו</StatusPill>

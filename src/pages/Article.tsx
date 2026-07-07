@@ -1,16 +1,48 @@
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, Navigate, Link } from "react-router-dom";
 import Header from "@/components/Header";
-import ArticleCard from "@/components/ArticleCard";
-import { getArticleById, getRelatedArticles } from "@/data/articles";
+import { getArticleById, getRelatedArticles, type Article as ArticleData } from "@/data/articles";
 import { Facebook, Twitter, Linkedin, Link2, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
-import { MONO, RING } from "@/lib/brand";
+import { MONO, RING, CARD_SHADOW } from "@/lib/brand";
 
 const HEEBO = "'Heebo', sans-serif";
 
 // Share icon buttons — quiet white squares on the paper tile
 const shareBtnClass =
   "w-10 h-10 rounded-md bg-white text-[#171717] hover:bg-[#fafafa] transition-colors flex items-center justify-center";
+
+// The homogeneous SEELD article card — white tile on the paper panel.
+// Whole-tile link, so it takes the .bento-hover quiet lift (Snap motion).
+const ArticleTile = ({ article }: { article: ArticleData }) => (
+  <Link
+    to={`/article/${article.id}`}
+    className="bento-hover group flex h-full flex-col overflow-hidden rounded-lg bg-white"
+    style={{ boxShadow: CARD_SHADOW }}
+  >
+    <div className="aspect-[16/10] overflow-hidden">
+      <img src={article.image} alt="" loading="lazy" className="w-full h-full object-cover" />
+    </div>
+    <div className="flex flex-1 flex-col p-5 sm:p-6">
+      <div
+        className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-[11px] tracking-[0.08em] text-[#5c5c5c]"
+        style={{ fontFamily: MONO }}
+      >
+        <span>{article.category}</span>
+        <span className="tabular-nums">
+          {article.date} · <span dir="ltr">{article.readTime}</span>
+        </span>
+      </div>
+      <h3 className="mt-3 text-lg text-[#171717] leading-snug" style={{ fontFamily: HEEBO, fontWeight: 600 }}>
+        {article.title}
+      </h3>
+      <p className="mt-2 text-[14px] text-[#4d4d4d] leading-[1.7] line-clamp-2">{article.subtitle}</p>
+      <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#171717]">
+        קראו עוד
+        <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
+      </span>
+    </div>
+  </Link>
+);
 
 const Article = () => {
   const { id } = useParams<{ id: string }>();
@@ -46,19 +78,21 @@ const Article = () => {
               </a>
             </div>
 
-            {/* Meta row */}
-            <div className="flex flex-wrap items-center gap-3 mb-6">
+            {/* Meta row — mono eyebrow: date + read time (numbers stay LTR) */}
+            <div className="flex flex-wrap items-baseline gap-3 mb-6">
               <span
                 className="px-3.5 py-1.5 rounded-full bg-white text-[12px] font-medium text-[#171717]"
                 style={{ boxShadow: RING }}
               >
                 {article.category}
               </span>
-              <span className="text-[12px] tracking-[0.08em] text-[#5c5c5c]" style={{ fontFamily: MONO }}>
+              <span className="text-[12px] tracking-[0.08em] text-[#5c5c5c] tabular-nums" style={{ fontFamily: MONO }}>
                 {article.date}
               </span>
-              <span className="text-[12px] text-[#5c5c5c]" aria-hidden="true">·</span>
-              <span className="text-[12px] text-[#5c5c5c]">{article.readTime} קריאה</span>
+              <span className="text-[12px] text-[#5c5c5c]" aria-hidden="true" style={{ fontFamily: MONO }}>·</span>
+              <span className="text-[12px] tracking-[0.08em] text-[#5c5c5c] tabular-nums" style={{ fontFamily: MONO }}>
+                <span dir="ltr">{article.readTime}</span> קריאה
+              </span>
             </div>
 
             <h1
@@ -140,8 +174,8 @@ const Article = () => {
               </div>
             </div>
 
-            {/* Article content */}
-            <div className="max-w-3xl mb-16">
+            {/* Article content — reading measure capped at ~65ch */}
+            <div className="mb-16" style={{ maxWidth: "65ch" }}>
               <p className="text-base sm:text-lg leading-[1.9] text-[#4d4d4d] mb-10">
                 {article.content.introduction}
               </p>
@@ -256,9 +290,10 @@ const Article = () => {
                 אולי יעניין אתכם גם
               </h2>
             </div>
+            {/* The homogeneous SEELD article cards — white tiles, .bento-hover quiet lift */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {relatedArticles.map((relatedArticle) => (
-                <ArticleCard key={relatedArticle.id} {...relatedArticle} size="small" />
+                <ArticleTile key={relatedArticle.id} article={relatedArticle} />
               ))}
             </div>
           </div></div>

@@ -5,13 +5,14 @@ import {
   CHIP_ORANGE, CHIP_GREEN, CHIP_YELLOW,
 } from "@/lib/brand";
 import { CountUp, LiveClock, LiveDot } from "@/components/brand/Live";
+import { MarketMarquee, type MarqueeItem } from "@/components/brand/Marquee";
 
 // SEELD Bento: warm paper panels on ink gutters. Snap motion (STYLESEED.md).
 const PAPER_MUTED = "#5c5c5c"; // AA on the warm paper
 
 // Capital-markets ticker feed — the moving band on the paper tile.
 // Values render in their own LTR span so "+11.4%" survives bidi.
-const TICKER_ITEMS: { label: string; value?: string; dot?: boolean }[] = [
+const TICKER_ITEMS: MarqueeItem[] = [
   { label: "SEELD · LIVE", dot: true },
   { label: "פנסיה מקיפה", value: "+11.4%" },
   { label: "S&P 500 · מסלול עוקב" },
@@ -101,38 +102,7 @@ const HeroSection = () => {
         <div className="grid gap-2 grid-rows-[auto_1fr_auto]">
           {/* Live market ticker (marquee) + the clock tile */}
           <div className="grid gap-2 grid-cols-[1fr_auto]">
-            <div
-              className="bento-panel flex items-center overflow-hidden"
-              dir="ltr"
-              aria-label="נתוני שוק ההון בזמן אמת"
-              style={{
-                maskImage: "linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)",
-                WebkitMaskImage: "linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)",
-              }}
-            >
-              <div className="seeld-marquee relative z-10 items-center py-4">
-                {[0, 1].map((copy) => (
-                  <div
-                    key={copy}
-                    className="flex items-center shrink-0"
-                    aria-hidden={copy === 1 ? "true" : undefined}
-                  >
-                    {TICKER_ITEMS.map((item, i) => (
-                      <span
-                        key={i}
-                        className="inline-flex items-center gap-2.5 px-4 text-[12.5px] sm:text-[13.5px] font-semibold tracking-[0.12em] text-[#171717] whitespace-nowrap tabular-nums"
-                        style={{ fontFamily: MONO }}
-                      >
-                        {item.dot && <LiveDot size={6} />}
-                        <span dir="auto">{item.label}</span>
-                        {item.value && <span dir="ltr">{item.value}</span>}
-                        <span className="text-[#171717]/30 select-none">—</span>
-                      </span>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <MarketMarquee items={TICKER_ITEMS} ariaLabel="נתוני שוק ההון בזמן אמת" />
             <div className="bento-panel-orange w-[110px] sm:w-[130px] flex flex-col items-center justify-center gap-1.5 py-3">
               <LiveClock size={52} className="relative z-10" />
               <span className="text-[9px] tracking-[0.24em] font-semibold text-[#171717]/80" style={{ fontFamily: MONO }} dir="ltr">

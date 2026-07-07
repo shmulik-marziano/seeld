@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { useAuth } from "@/hooks/useAuth";
 import { SERIF, MONO } from "@/lib/brand";
-import { LiveDot, StatusPill } from "@/components/brand/Live";
+import { LiveClock, LiveDot, StatusPill } from "@/components/brand/Live";
 
 // SEELD Bento: warm paper panels on ink gutters (STYLESEED.md + index.css .bento-panel)
 const PAPER_MUTED = "#5c5c5c"; // AA-safe caption grey on the warm paper
@@ -114,7 +114,7 @@ const Contact = () => {
                   <button
                     type="button"
                     onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                    className="mb-10 block transition-transform hover:-translate-y-[1px]"
+                    className="mb-10 block bento-hover rounded-full"
                     aria-label="פתיחת שיחה עם יועץ SEELD"
                   >
                     <StatusPill>היועץ מחובר עכשיו · שאלו לפני שממלאים</StatusPill>
@@ -258,6 +258,22 @@ const Contact = () => {
                         <p className="text-base text-[#e9dfd2]">המלאכה 10, רעננה</p>
                         <p className="text-base text-[#e9dfd2]">הסדנא 4, ירושלים</p>
                       </div>
+                    </div>
+                  </div>
+                  {/* The clock gesture — mirrors the hero tile: we watch around the clock */}
+                  <div className="pt-5 border-t border-white/10 flex items-center gap-4">
+                    <LiveClock size={44} color="#e9dfd2" className="shrink-0" />
+                    <div>
+                      <span
+                        className="text-[11px] font-semibold tracking-[0.2em] text-[#e9dfd2] tabular-nums"
+                        style={{ fontFamily: MONO }}
+                        dir="ltr"
+                      >
+                        24/6 · LIVE
+                      </span>
+                      <p className="text-[12px] mt-1" style={{ color: "rgba(233,223,210,.6)" }}>
+                        התיק שלכם מנוטר מסביב לשעון
+                      </p>
                     </div>
                   </div>
                 </div>

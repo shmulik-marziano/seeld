@@ -86,7 +86,7 @@ const RightsExtraction = () => {
             <ScrollReveal>
               <div className="border-t border-[#171717]/20 pt-6 mb-10 sm:mb-12">
                 <div className="flex items-baseline gap-6 sm:gap-10">
-                  <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED }}>
+                  <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED, fontFamily: MONO }} dir="ltr">
                     01
                   </span>
                   <div>
@@ -126,7 +126,7 @@ const RightsExtraction = () => {
             <ScrollReveal>
               <div className="border-t border-[#171717]/20 pt-6 mb-10 sm:mb-12">
                 <div className="flex items-baseline gap-6 sm:gap-10">
-                  <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED }}>
+                  <span className="text-[12px] tabular-nums tracking-[0.2em] shrink-0" style={{ color: PAPER_MUTED, fontFamily: MONO }} dir="ltr">
                     02
                   </span>
                   <h2
@@ -146,10 +146,11 @@ const RightsExtraction = () => {
                 <ScrollReveal key={step.number} delay={i * 60}>
                   <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-10 py-6 border-b border-[#171717]/10">
                     <span
-                      className="text-[12px] tabular-nums tracking-[0.2em] shrink-0 w-8"
+                      className="text-[12px] tabular-nums tracking-[0.2em] shrink-0 w-20"
                       style={{ color: PAPER_MUTED, fontFamily: MONO }}
+                      dir="ltr"
                     >
-                      {step.number}
+                      {step.number} / 03
                     </span>
                     <h3 className="text-lg text-[#171717] shrink-0 sm:w-44" style={{ fontFamily: SERIF, fontWeight: 600 }}>
                       {step.title}
@@ -165,7 +166,7 @@ const RightsExtraction = () => {
                 <button
                   type="button"
                   onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                  className="block transition-transform hover:-translate-y-[1px]"
+                  className="block bento-hover rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#171717]"
                   aria-label="פתיחת שיחה עם יועץ SEELD"
                 >
                   <StatusPill>היועץ מחובר עכשיו · שאלו אם זה רלוונטי אליכם</StatusPill>

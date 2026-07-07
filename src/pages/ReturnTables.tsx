@@ -5,7 +5,8 @@ import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import FundReturnTable from "@/components/FundReturnTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LiveDot, LiveTag } from "@/components/brand/Live";
+import { LiveTag } from "@/components/brand/Live";
+import { MarketMarquee } from "@/components/brand/Marquee";
 import { allFunds as staticFunds, cmaLastUpdate } from "@/data/cmaFundsData";
 import { useCmaFunds, useCmaSyncStatus, formatPeriod } from "@/hooks/useCmaFunds";
 import type { FundReturn } from "@/data/fundReturns";
@@ -172,39 +173,8 @@ const ReturnTables = () => {
           </Link>
         </div>
 
-        {/* Market marquee band — top category returns (HeroSection marquee pattern) */}
-        <div
-          className="bento-panel mt-2 flex items-center overflow-hidden"
-          dir="ltr"
-          aria-label="תשואות 12 חודשים מובילות לפי קטגוריה"
-          style={{
-            maskImage: "linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)",
-            WebkitMaskImage: "linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)",
-          }}
-        >
-          <div className="seeld-marquee relative z-10 items-center py-4">
-            {[0, 1].map((copy) => (
-              <div
-                key={copy}
-                className="flex items-center shrink-0"
-                aria-hidden={copy === 1 ? "true" : undefined}
-              >
-                {marqueeItems.map((item, i) => (
-                  <span
-                    key={i}
-                    className="inline-flex items-center gap-2.5 px-4 text-[12.5px] sm:text-[13.5px] font-semibold tracking-[0.12em] text-[#171717] whitespace-nowrap tabular-nums"
-                    style={{ fontFamily: MONO }}
-                  >
-                    {item.dot && <LiveDot size={6} />}
-                    <span dir="auto">{item.label}</span>
-                    {item.value && <span dir="ltr">{item.value}</span>}
-                    <span className="text-[#171717]/30 select-none">—</span>
-                  </span>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Market marquee band — top category returns */}
+        <MarketMarquee items={marqueeItems} ariaLabel="תשואות 12 חודשים מובילות לפי קטגוריה" className="mt-2" />
       </section>
 
       <main>

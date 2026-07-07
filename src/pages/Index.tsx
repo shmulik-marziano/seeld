@@ -11,7 +11,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { CountUp, LiveDot, LiveTag, StatusPill } from "@/components/brand/Live";
 import { DrawSpark, DrawUnderline, ProgressRail } from "@/components/brand/Strokes";
 import { CastAvi, CastDana, CastReader } from "@/components/brand/Cast";
-import { CHIP_GREEN, CHIP_ORANGE } from "@/lib/brand";
+import { CHIP_GREEN, CHIP_ORANGE, MONO } from "@/lib/brand";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
@@ -508,7 +508,7 @@ const Index = () => {
           <div className="bento-panel"><div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20 relative z-10">
             <ScrollReveal>
               <div className="flex items-end justify-between gap-6 mb-2">
-                <span className="text-[11px] tracking-[0.14em] text-[#6e6e6e]" style={{ fontFamily: "'Geist Mono', ui-monospace, monospace" }}>
+                <span className="text-[11px] tracking-[0.14em] text-[#5c5c5c]" style={{ fontFamily: MONO }}>
                   PORTFOLIO · GROWTH
                 </span>
                 <DrawSpark color={CHIP_GREEN} className="w-40 sm:w-64" height={44} />
@@ -524,7 +524,7 @@ const Index = () => {
                     <div
                       className="text-[#171717] tabular-nums mb-2"
                       dir="ltr"
-                      style={{ fontFamily: "'Geist Mono', ui-monospace, monospace", fontWeight: 600, fontSize: "clamp(2.4rem, 4.5vw, 3.6rem)", letterSpacing: "-0.02em" }}
+                      style={{ fontFamily: MONO, fontWeight: 600, fontSize: "clamp(2.4rem, 4.5vw, 3.6rem)", letterSpacing: "-0.02em" }}
                     >
                       <CountUp to={stat.to} format={(v) => `${stat.prefix ?? ""}${v.toLocaleString("en-US")}${stat.suffix}`} />
                     </div>
@@ -541,7 +541,7 @@ const Index = () => {
                   <span
                     key={item.label}
                     className="inline-flex items-center gap-2 text-[11.5px] tracking-[0.12em] font-medium whitespace-nowrap"
-                    style={{ fontFamily: "'Geist Mono', ui-monospace, monospace", fontVariantNumeric: "tabular-nums", color: "#5c5c5c" }}
+                    style={{ fontFamily: MONO, fontVariantNumeric: "tabular-nums", color: "#5c5c5c" }}
                   >
                     {item.dot && <LiveDot size={6} />}
                     {item.value && <span dir="ltr" className="text-[#171717]">{item.value}</span>}
