@@ -10,6 +10,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { Loader2 } from "lucide-react";
 import { PwaInstallBanner } from "@/components/pwa/PwaInstallBanner";
 import ScrollToTop from "@/components/ScrollToTop";
+import Seo from "@/components/Seo";
 import PageTransition from "@/components/PageTransition";
 import AIChatBot from "@/components/AIChatBot";
 import AccessibilityButton from "@/components/AccessibilityButton";
@@ -275,6 +276,7 @@ const App = () => (
           <Sonner />
           <PwaInstallBanner />
           <BrowserRouter>
+            <Seo />
             <PageViewTracker />
             <GridBackdrop />
             <ScrollProgress />

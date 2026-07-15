@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import Header from "@/components/Header";
+import { setDocumentMeta } from "@/components/Seo";
 import { getArticleById, getRelatedArticles, type Article as ArticleData } from "@/data/articles";
 import { Facebook, Twitter, Linkedin, Link2, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
@@ -46,6 +48,15 @@ const ArticleTile = ({ article }: { article: ArticleData }) => (
 const Article = () => {
   const { id } = useParams<{ id: string }>();
   const article = id ? getArticleById(id) : undefined;
+
+  useEffect(() => {
+    if (article) {
+      setDocumentMeta({
+        title: `${article.title} | SEELD`,
+        description: article.subtitle || undefined,
+      });
+    }
+  }, [article]);
 
   if (!article) {
     return <Navigate to="/404" replace />;

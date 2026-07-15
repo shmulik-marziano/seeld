@@ -1,6 +1,7 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { DISPLAY, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT } from "@/lib/brand";
+import { setDocumentMeta, setNoIndex } from "@/components/Seo";
 import { UmbrellaFigure } from "@/components/brand/Figures";
 
 // SEELD DNA v3: white canvas, pastel circles, colossal ghost numeral (STYLESEED.md)
@@ -10,6 +11,8 @@ const NotFound = () => {
 
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+    setDocumentMeta({ title: "העמוד לא נמצא | SEELD" });
+    setNoIndex();
   }, [location.pathname]);
 
   return (
