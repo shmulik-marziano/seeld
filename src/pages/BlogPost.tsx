@@ -4,7 +4,7 @@ import { ArrowRight, Copy, Loader2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteSupabase } from "@/integrations/supabase/site-client";
-import { setDocumentMeta } from "@/components/Seo";
+import { setDocumentMeta, setNoIndex } from "@/components/Seo";
 import { toast } from "sonner";
 import { BODY, DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE } from "@/lib/brand";
 
@@ -37,6 +37,7 @@ const BlogPost = () => {
   const leadFormRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    let cancelled = false;
     const fetchPost = async () => {
       if (!slug) return;
       setLoading(true);
@@ -47,6 +48,9 @@ const BlogPost = () => {
         .eq("slug", slug)
         .eq("status", "published")
         .single();
+
+      // A slow response must not update state or meta for a route we already left
+      if (cancelled) return;
 
       if (!error && data) {
         setPost(data);
@@ -66,13 +70,20 @@ const BlogPost = () => {
             .order("published_at", { ascending: false })
             .limit(3);
 
-          if (relatedData) setRelated(relatedData);
+          if (!cancelled && relatedData) setRelated(relatedData);
         }
+      } else {
+        // Soft-404: a missing post must not be indexed
+        setDocumentMeta({ title: "הפוסט לא נמצא | SEELD" });
+        setNoIndex();
       }
-      setLoading(false);
+      if (!cancelled) setLoading(false);
     };
     fetchPost();
     window.scrollTo(0, 0);
+    return () => {
+      cancelled = true;
+    };
   }, [slug]);
 
   const formatDate = (dateStr: string | null) => {
