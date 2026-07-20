@@ -98,20 +98,20 @@ export interface MonthlyReturn {
 
 // נתוני חקירה לעומק (הרכב נכסים + סיכון)
 export interface DeepDrillData {
-  directExpenses: number;          // הוצאות ישירות (%)
-  expectedAnnualCost: number;      // עלות שנתית צפויה (%)
-  foreignExposure: number;         // חשיפה לחו"ל (%)
-  currencyExposure: number;        // חשיפה למט"ח (%)
-  designatedBonds: number;         // אג"ח מיועדות (%)
-  govBondsTradable: number;        // אג"ח ממשלתיות סחירות (%)
-  corpBondsTradable: number;       // אג"ח קונצרני סחיר + תעודות סל (%)
-  corpBondsNonTradable: number;    // אג"ח קונצרניות לא סחיר (%)
-  stocksAndOptions: number;        // מניות/אופציות ותעודות סל (%)
-  deposits: number;                // פיקדונות (%)
-  mutualFunds: number;             // קרנות נאמנות (%)
-  loans: number;                   // הלוואות (%)
-  cashEquivalents: number;         // מזומנים ושווי מזומנים (%)
-  otherAssets: number;             // נכסים אחרים (%)
+  directExpenses: number | null;       // הוצאות ישירות (%)
+  expectedAnnualCost: number;          // עלות שנתית צפויה (%)
+  foreignExposure: number;             // חשיפה לחו"ל (%)
+  currencyExposure: number;            // חשיפה למט"ח (%)
+  designatedBonds: number | null;      // אג"ח מיועדות (%)
+  govBondsTradable: number | null;     // אג"ח ממשלתיות סחירות (%)
+  corpBondsTradable: number | null;    // אג"ח קונצרני סחיר + תעודות סל (%)
+  corpBondsNonTradable: number | null; // אג"ח קונצרניות לא סחיר (%)
+  stocksAndOptions: number | null;     // מניות/אופציות ותעודות סל (%)
+  deposits: number | null;             // פיקדונות (%)
+  mutualFunds: number | null;          // קרנות נאמנות (%)
+  loans: number | null;                // הלוואות (%)
+  cashEquivalents: number | null;      // מזומנים ושווי מזומנים (%)
+  otherAssets: number | null;          // נכסים אחרים (%)
   stdDev36: number | null;         // סטיית תקן 36 חודשים
   stdDev60: number | null;         // סטיית תקן 60 חודשים
   actuarialSurplus: number | null; // עודף/גירעון אקטוארי
@@ -134,16 +134,16 @@ export interface Fund {
   company: ManagingCompany;          // חברה מנהלת
   productType: ProductType;          // סוג מוצר
   specialization: Specialization;    // התמחות
-  stockExposure: number;             // חשיפה למניות (%)
+  stockExposure: number | null;      // חשיפה למניות (%) — null כשאין נתון
 
-  // תשואות מצטברות
+  // תשואות מצטברות (null = הנתון לא פורסם לקופה זו)
   returns: {
     month: number;      // תשואת חודש אחרון (%)
     ytd: number;        // תשואה מתחילת השנה (%)
-    year1: number;      // תשואה 12 חודשים (%)
+    year1: number;      // תשואה מתחילת השנה (%) — בנתונים חיים זהה ל-ytd
     year2: number;      // תשואה ממוצעת שנתית 24 חוד. (%)
-    year3: number;      // תשואה ממוצעת שנתית 36 חוד. (%)
-    year5: number;      // תשואה ממוצעת שנתית 60 חוד. (%)
+    year3: number | null; // תשואה ממוצעת שנתית 36 חוד. (%)
+    year5: number | null; // תשואה ממוצעת שנתית 60 חוד. (%)
   };
 
   // תשואות חודשיות (12 חודשים אחרונים)

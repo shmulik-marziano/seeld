@@ -42,11 +42,11 @@ interface FundSearchPanelProps {
   onReset: () => void;
 }
 
-const returnPeriodLabels: Record<ReturnPeriod, string> = {
-  year1: '12 חודשים',
-  year2: '24 חודשים',
-  year3: '36 חודשים',
-  year5: '60 חודשים',
+// year2 is omitted — the public dataset has no 24-month figure
+const returnPeriodLabels: Partial<Record<ReturnPeriod, string>> = {
+  year1: 'מתחילת השנה',
+  year3: 'ממוצע 3 שנים',
+  year5: 'ממוצע 5 שנים',
 };
 
 export default function FundSearchPanel(props: FundSearchPanelProps) {
@@ -100,7 +100,7 @@ export default function FundSearchPanel(props: FundSearchPanelProps) {
         {/* ===== מצב 1: איתור אטרקטיביות ===== */}
         <TabsContent value="top" className="space-y-4 mt-4">
           <div className="space-y-2">
-            <Label className="text-sm">תשואה מקסימלית</Label>
+            <Label className="text-sm">תשואה לפי תקופה</Label>
             <Select value={returnPeriod} onValueChange={(v) => onSetReturnPeriod(v as ReturnPeriod)}>
               <SelectTrigger>
                 <SelectValue />

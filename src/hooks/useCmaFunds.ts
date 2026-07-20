@@ -113,6 +113,15 @@ function dbRowToFund(row: CmaFundRow): Fund {
   const specialization = resolveSpecialization(row.specialization);
   const productType = (row.product_type || 'gemel') as ProductType;
 
+  // total_assets arrives in millions ILS. stock_market_exposure is a monetary
+  // amount in the same units (verified against source data: equity funds show
+  // exposure ≈ assets) — the percentage is exposure / assets.
+  const assetsMillions = row.total_assets ?? 0;
+  const stockPct =
+    row.stock_market_exposure !== null && assetsMillions > 0
+      ? Math.round((row.stock_market_exposure / assetsMillions) * 1000) / 10
+      : null;
+
   return {
     id: row.id,
     fundNumber: row.fund_id,
@@ -120,14 +129,14 @@ function dbRowToFund(row: CmaFundRow): Fund {
     company,
     productType,
     specialization,
-    stockExposure: row.stock_market_exposure ?? 0,
+    stockExposure: stockPct,
     returns: {
       month: row.monthly_yield ?? 0,
       ytd: row.ytd_yield ?? 0,
-      year1: row.ytd_yield ?? 0, // YTD as proxy; real year1 needs 12-month calc
-      year2: row.avg_annual_yield_3yrs ?? 0, // approximate
-      year3: row.avg_annual_yield_3yrs ?? 0,
-      year5: row.avg_annual_yield_5yrs ?? 0,
+      year1: row.ytd_yield ?? 0, // YTD — labeled as such in the UI
+      year2: row.avg_annual_yield_3yrs ?? 0, // not displayed
+      year3: row.avg_annual_yield_3yrs,
+      year5: row.avg_annual_yield_5yrs,
     },
     monthlyReturns: [], // Not available per-row from CKAN (would need monthly query)
     fees: {
@@ -137,26 +146,27 @@ function dbRowToFund(row: CmaFundRow): Fund {
       maxSavingsFee: 1.05,
     },
     deepDrill: {
-      directExpenses: 0,
+      // null = the public dataset doesn't carry this breakdown per fund
+      directExpenses: null,
       expectedAnnualCost: (row.avg_annual_management_fee ?? 0) + (row.avg_deposit_fee ?? 0) * 0.1,
       foreignExposure: row.foreign_exposure ?? 0,
       currencyExposure: row.foreign_currency_exposure ?? 0,
-      designatedBonds: 0,
-      govBondsTradable: 0,
-      corpBondsTradable: 0,
-      corpBondsNonTradable: 0,
-      stocksAndOptions: row.stock_market_exposure ?? 0,
-      deposits: 0,
-      mutualFunds: 0,
-      loans: 0,
-      cashEquivalents: (row.liquid_assets_percent ?? 0),
-      otherAssets: 0,
+      designatedBonds: null,
+      govBondsTradable: null,
+      corpBondsTradable: null,
+      corpBondsNonTradable: null,
+      stocksAndOptions: stockPct,
+      deposits: null,
+      mutualFunds: null,
+      loans: null,
+      cashEquivalents: null,
+      otherAssets: null,
       stdDev36: row.standard_deviation ?? null,
       stdDev60: null,
       actuarialSurplus: row.actuarial_adjustment ?? null,
       sharpeRatio: row.sharpe_ratio ?? null,
     },
-    totalAssets: row.total_assets ? Math.round(row.total_assets / 1000) : 0, // convert from thousands to millions
+    totalAssets: Math.round(assetsMillions), // already in millions ILS
     lastUpdate: String(row.report_period),
     isActive: true,
   };

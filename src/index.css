@@ -413,6 +413,13 @@ body {
   a, button {
     min-height: 38px;
   }
+  /* Radix toggles (checkbox/radio/switch) are <button>s sized by their own
+     classes — the blanket tap-target rule stretched them into tall pills */
+  button[role="checkbox"],
+  button[role="radio"],
+  button[role="switch"] {
+    min-height: 0;
+  }
 }
 
 /* Hide scrollbar for horizontal scroll containers */

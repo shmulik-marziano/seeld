@@ -272,7 +272,7 @@ const FundFinder = () => {
                                 <p className="text-[12px]" style={{ color: MUTED }}>
                                   <span className="tabular-nums" dir="ltr" style={{ fontFamily: MONO }}>{fund.fundNumber}</span>
                                   {' · '}
-                                  תשואה שנתית:{' '}
+                                  מתחילת השנה:{' '}
                                   <span className="tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: '#356d60' }}>
                                     {fund.returns.year1.toFixed(2)}%
                                   </span>

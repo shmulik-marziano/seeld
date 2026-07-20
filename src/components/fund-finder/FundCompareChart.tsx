@@ -27,7 +27,7 @@ export default function FundCompareChart({ funds }: FundCompareChartProps) {
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
           <BarChart3 className="w-5 h-5" />
-          השוואת תשואות שנתיות
+          השוואת תשואות מתחילת השנה
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -66,10 +66,10 @@ export default function FundCompareChart({ funds }: FundCompareChartProps) {
               <thead>
                 <tr className="border-b">
                   <th className="text-right py-1.5 pr-1 font-medium text-muted-foreground">קופה</th>
-                  <th className="text-center py-1.5 font-medium text-muted-foreground">חודש</th>
-                  <th className="text-center py-1.5 font-medium text-muted-foreground">שנה</th>
-                  <th className="text-center py-1.5 font-medium text-muted-foreground">3 שנים</th>
-                  <th className="text-center py-1.5 font-medium text-muted-foreground">5 שנים</th>
+                  <th className="text-center py-1.5 font-medium text-muted-foreground">חודש אחרון</th>
+                  <th className="text-center py-1.5 font-medium text-muted-foreground">מתחילת השנה</th>
+                  <th className="text-center py-1.5 font-medium text-muted-foreground">ממוצע 3 שנים</th>
+                  <th className="text-center py-1.5 font-medium text-muted-foreground">ממוצע 5 שנים</th>
                 </tr>
               </thead>
               <tbody>
@@ -90,11 +90,11 @@ export default function FundCompareChart({ funds }: FundCompareChartProps) {
                     <td className={`text-center font-medium ${fund.returns.year1 >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                       {fund.returns.year1.toFixed(2)}%
                     </td>
-                    <td className={`text-center font-medium ${fund.returns.year3 >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {fund.returns.year3.toFixed(2)}%
+                    <td className={`text-center font-medium ${fund.returns.year3 === null ? 'text-muted-foreground' : fund.returns.year3 >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {fund.returns.year3 === null ? '—' : `${fund.returns.year3.toFixed(2)}%`}
                     </td>
-                    <td className={`text-center font-medium ${fund.returns.year5 >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {fund.returns.year5.toFixed(2)}%
+                    <td className={`text-center font-medium ${fund.returns.year5 === null ? 'text-muted-foreground' : fund.returns.year5 >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {fund.returns.year5 === null ? '—' : `${fund.returns.year5.toFixed(2)}%`}
                     </td>
                   </tr>
                 ))}

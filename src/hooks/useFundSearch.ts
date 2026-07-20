@@ -80,8 +80,9 @@ const getTopFundsIn = (
   let pool = getFundsByProduct(funds, productType);
   if (companies && companies.length > 0) pool = pool.filter((f) => companies.includes(f.company));
   if (specializations && specializations.length > 0) pool = pool.filter((f) => specializations.includes(f.specialization));
-  if (stockRange) pool = pool.filter((f) => f.stockExposure >= stockRange[0] && f.stockExposure <= stockRange[1]);
-  return pool.sort((a, b) => b.returns[returnPeriod] - a.returns[returnPeriod]).slice(0, count);
+  if (stockRange) pool = pool.filter((f) => f.stockExposure !== null && f.stockExposure >= stockRange[0] && f.stockExposure <= stockRange[1]);
+  // funds missing the chosen period's figure sink to the bottom instead of faking 0%
+  return pool.sort((a, b) => (b.returns[returnPeriod] ?? -Infinity) - (a.returns[returnPeriod] ?? -Infinity)).slice(0, count);
 };
 
 /**

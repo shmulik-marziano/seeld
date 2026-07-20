@@ -17,7 +17,21 @@ interface FundCardProps {
 
 const pct = (v: number | null) => (v === null ? '—' : `${v.toFixed(2)}%`);
 
-const ReturnBadge = ({ value, label }: { value: number; label: string }) => {
+// Assets arrive in millions ILS — show billions past 1,000M
+const formatAssets = (millions: number) =>
+  millions >= 1000
+    ? `${(millions / 1000).toLocaleString('he-IL', { maximumFractionDigits: 1 })} מיליארד ₪`
+    : `${millions.toLocaleString('he-IL')} מיליון ₪`;
+
+const ReturnBadge = ({ value, label }: { value: number | null; label: string }) => {
+  if (value === null) {
+    return (
+      <div className="text-center">
+        <p className="text-xs text-muted-foreground mb-0.5">{label}</p>
+        <p className="text-sm font-medium text-muted-foreground">—</p>
+      </div>
+    );
+  }
   const positive = value >= 0;
   return (
     <div className="text-center">
@@ -72,8 +86,8 @@ export default function FundCard({ fund, rank, onRemove, showMonthly = false, sh
 
         {/* תשואות מצטברות */}
         <div className="grid grid-cols-2 gap-2">
-          <ReturnBadge value={fund.returns.month} label="חודש" />
-          <ReturnBadge value={fund.returns.year1} label="שנה" />
+          <ReturnBadge value={fund.returns.month} label="חודש אחרון" />
+          <ReturnBadge value={fund.returns.year1} label="מתחילת השנה" />
           <ReturnBadge value={fund.returns.year3} label="ממוצע 3 שנים" />
           <ReturnBadge value={fund.returns.year5} label="ממוצע 5 שנים" />
         </div>
@@ -82,7 +96,7 @@ export default function FundCard({ fund, rank, onRemove, showMonthly = false, sh
         <div className="flex items-center justify-center gap-1 text-xs bg-muted rounded-lg py-1.5 px-2">
           <Percent className="w-3 h-3" />
           <span>חשיפה למניות:</span>
-          <span className="font-bold">{fund.stockExposure}%</span>
+          <span className="font-bold">{fund.stockExposure === null ? '—' : `${fund.stockExposure}%`}</span>
         </div>
 
         {/* דמי ניהול */}
@@ -150,9 +164,11 @@ export default function FundCard({ fund, rank, onRemove, showMonthly = false, sh
         )}
 
         {/* נכסים בניהול */}
-        <div className="text-center text-[10px] text-muted-foreground pt-1">
-          נכסים בניהול: {fund.totalAssets.toLocaleString('he-IL')} מיליון ₪
-        </div>
+        {fund.totalAssets > 0 && (
+          <div className="text-center text-[10px] text-muted-foreground pt-1">
+            נכסים בניהול: {formatAssets(fund.totalAssets)}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
