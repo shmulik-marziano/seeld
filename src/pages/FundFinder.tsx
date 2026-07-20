@@ -222,9 +222,6 @@ const FundFinder = () => {
 
                   {/* Selected fund cards */}
                   {search.selectedFunds.length > 0 && (
-                    {/* 3 columns max — the container is capped at max-w-7xl minus the
-                        sidebar; 4 tracks squeezed cards below their content width and
-                        they overlapped */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                       {search.selectedFunds.map((fund, i) => (
                         <FundCard
