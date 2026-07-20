@@ -158,6 +158,7 @@ const leadSubjects = [
 // DNA v3: the heading starts its block — no eyebrow, no ornamental index.
 const SectionHead = ({ title, lede }: { title: string; lede?: string }) => (
   <div className="mb-12 sm:mb-16">
+    <span className="dna-tick" aria-hidden="true" />
     <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.8rem, 3.2vw, 2.4rem)" }}>
       {title}
     </h2>
@@ -672,7 +673,7 @@ const Index = () => {
         </section>
 
         {/* PARTNERS */}
-        <section className="border-t" style={{ borderColor: LINE }}>
+        <section className="border-t dna-warm-band" style={{ borderColor: LINE }}>
           <ScrollReveal>
             {/* Logo strip speaks for itself — no headline (user request 2026-07-20) */}
             <CompanyLogos variant="marquee" title="" />
@@ -831,7 +832,7 @@ const Index = () => {
         </section>
 
         {/* CLOSING CTA — institutional navy band */}
-        <section style={{ backgroundColor: NAVY }}>
+        <section className="dna-navy-band" style={{ backgroundColor: NAVY }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
             <ScrollReveal>
               <h2

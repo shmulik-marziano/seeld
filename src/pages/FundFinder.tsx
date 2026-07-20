@@ -320,7 +320,7 @@ const FundFinder = () => {
       </main>
 
       {/* Closing CTA — institutional navy band */}
-      <section style={{ backgroundColor: NAVY }}>
+      <section className="dna-navy-band" style={{ backgroundColor: NAVY }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
           <h2
             className="text-white leading-tight mb-3"

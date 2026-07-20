@@ -453,3 +453,70 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground) / 0.3);
 }
+
+/* ── Warmth & sophistication pass (2026-07-21) ─────────────────────────
+   Small systemic touches inside the DNA v3 language: warm selection color,
+   quiet scrollbar, navy-tinted hover shadow, cream section bands, and a
+   turquoise glow inside navy CTA bands. */
+
+::selection {
+  background: #1D2D3D;
+  color: #FBF5EA;
+}
+
+@media (pointer: fine) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #c3ccd4 transparent;
+  }
+  *::-webkit-scrollbar { width: 8px; height: 8px; }
+  *::-webkit-scrollbar-thumb { background: #c3ccd4; border-radius: 4px; }
+  *::-webkit-scrollbar-thumb:hover { background: #1D2D3D; }
+  *::-webkit-scrollbar-track { background: transparent; }
+}
+
+/* Warmer, softer lift on hoverable tiles */
+.dna-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -14px rgba(29,45,61,0.22), 0 2px 8px -4px rgba(216,162,74,0.18);
+}
+
+/* Cream band — a breath of warm paper between white sections */
+.dna-warm-band {
+  background: linear-gradient(180deg, #ffffff 0%, #FBF5EA 55%, #ffffff 100%);
+}
+
+/* Navy CTA band — gold hairline on top, quiet turquoise glow inside */
+.dna-navy-band {
+  position: relative;
+  overflow: hidden;
+}
+.dna-navy-band::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(90deg, #4E9D8F, #D8A24A);
+  opacity: 0.85;
+}
+.dna-navy-band::after {
+  content: "";
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  left: -160px;
+  bottom: -300px;
+  background: radial-gradient(circle, rgba(127,194,181,0.14) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* SectionHead tick — short turquoise-to-gold bar above section titles */
+.dna-tick {
+  display: block;
+  width: 34px;
+  height: 3px;
+  border-radius: 2px;
+  margin-bottom: 14px;
+  background: linear-gradient(90deg, #4E9D8F, #D8A24A);
+}
