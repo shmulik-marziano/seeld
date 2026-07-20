@@ -674,11 +674,8 @@ const Index = () => {
         {/* PARTNERS */}
         <section className="border-t" style={{ borderColor: LINE }}>
           <ScrollReveal>
-            <CompanyLogos
-              variant="marquee"
-              title="עובדים מול כל השחקניות המובילות"
-              subtitle="12 חברות ביטוח ו-6 בתי השקעות בישראל. גישה מקצועית בזמן אמת. השוואה שקופה. המלצה מבוססת."
-            />
+            {/* Logo strip speaks for itself — no headline (user request 2026-07-20) */}
+            <CompanyLogos variant="marquee" title="" />
           </ScrollReveal>
         </section>
 
