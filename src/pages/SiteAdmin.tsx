@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, Component, type ReactNode } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { siteSupabase } from "@/integrations/supabase/site-client";
+import { siteSupabase, SITE_SUPABASE_URL } from "@/integrations/supabase/site-client";
 import { supabase as agentSupabase } from "@/integrations/supabase/client";
 
 // Error boundary to catch runtime crashes
@@ -77,8 +77,6 @@ const TABS: { id: AdminTab; label: string; icon: typeof LayoutDashboard }[] = [
 //  MAIN COMPONENT
 // ══════════════════════════════════════════════════════
 
-const ADMIN_PIN = "seeld2024!";
-
 function SiteAdminInner() {
   let user: any = null, authLoading = false, signInWithOtp: any = () => Promise.resolve({ error: null }),
       verifyOtp: any = () => Promise.resolve({ error: null }), signInWithGoogle: any = () => Promise.resolve({ error: null }),
@@ -92,23 +90,18 @@ function SiteAdminInner() {
   const [step, setStep] = useState<"login" | "otp" | "magic-sent" | "denied" | "admin">("login");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
-  const [pin, setPin] = useState("");
-  const [pinError, setPinError] = useState("");
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [resendTimer, setResendTimer] = useState(0);
 
-  // Check if already authenticated via pin (session storage)
+  // Clear any legacy PIN session flag (PIN auth removed — Supabase auth only)
   useEffect(() => {
-    if (sessionStorage.getItem("seeld_admin_auth") === "true") {
-      setStep("admin");
-    }
+    sessionStorage.removeItem("seeld_admin_auth");
   }, []);
 
   // Determine auth state
   useEffect(() => {
-    if (sessionStorage.getItem("seeld_admin_auth") === "true") return;
     if (authLoading) return;
     if (user) {
       if (user.email === ADMIN_EMAIL) {
@@ -120,16 +113,6 @@ function SiteAdminInner() {
       if (step === "admin" || step === "denied") setStep("login");
     }
   }, [user, authLoading]);
-
-  const handlePinLogin = () => {
-    if (pin === ADMIN_PIN) {
-      sessionStorage.setItem("seeld_admin_auth", "true");
-      setStep("admin");
-      setPinError("");
-    } else {
-      setPinError("סיסמה שגויה");
-    }
-  };
 
   // Resend countdown
   useEffect(() => {
@@ -202,15 +185,13 @@ function SiteAdminInner() {
   };
 
   const handleSignOut = async () => {
-    sessionStorage.removeItem("seeld_admin_auth");
     await signOut();
     setStep("login");
     setEmail("");
     setOtp("");
-    setPin("");
   };
 
-  // ── Loading state (skip if already PIN authenticated) ──
+  // ── Loading state ──
   if (authLoading && step !== "admin") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f0f2f5]">
@@ -288,35 +269,6 @@ function SiteAdminInner() {
                   exit={{ opacity: 0, x: 20 }}
                   className="space-y-4"
                 >
-                  {/* Quick PIN login */}
-                  <div className="space-y-3">
-                    <div className="relative">
-                      <Lock className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                      <Input
-                        type="password"
-                        value={pin}
-                        onChange={(e) => { setPin(e.target.value); setPinError(""); }}
-                        onKeyDown={(e) => e.key === "Enter" && handlePinLogin()}
-                        placeholder="סיסמת מנהל"
-                        className="h-12 pr-11 rounded-full text-sm border-gray-200 focus-visible:ring-[#171717]/40 text-right"
-                      />
-                    </div>
-                    {pinError && <p className="text-red-500 text-xs text-center">{pinError}</p>}
-                    <Button
-                      type="button"
-                      onClick={handlePinLogin}
-                      className="w-full h-12 rounded-full gap-2 text-sm font-semibold bg-[#171717] hover:bg-[#2e2e2e] shadow-lg shadow-[#171717]/15"
-                    >
-                      <Shield className="h-4 w-4" />
-                      כניסה למנהל
-                    </Button>
-                  </div>
-
-                  <div className="flex items-center gap-3 py-1">
-                    <div className="flex-1 h-px bg-gray-200" />
-                    <span className="text-[11px] text-gray-400">או עם Google</span>
-                    <div className="flex-1 h-px bg-gray-200" />
-                  </div>
 
                   {/* Google Login */}
                   <Button
@@ -2086,17 +2038,20 @@ function DirectDebitModule() {
 
   useEffect(() => {
     const fetchDD = async () => {
-      // Try fetching via the admin-verify edge function (same as old admin)
+      // admin-verify authenticates the caller's Supabase session (admin email
+      // only) — the old shared-password flow is gone.
       try {
+        const { data: { session } } = await siteSupabase.auth.getSession();
+        if (!session) { setLoading(false); return; }
         const response = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-verify`,
+          `${SITE_SUPABASE_URL}/functions/v1/admin-verify`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+              Authorization: `Bearer ${session.access_token}`,
             },
-            body: JSON.stringify({ password: ADMIN_PIN, action: "fetch" }),
+            body: JSON.stringify({ action: "fetch" }),
           }
         );
         if (response.ok) {

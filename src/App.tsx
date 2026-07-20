@@ -167,7 +167,6 @@ const Savings = lazy(() => import("@/pages/Savings"));
 const InvestmentTracks = lazy(() => import("@/pages/InvestmentTracks"));
 const Article = lazy(() => import("@/pages/Article"));
 const Onboarding = lazy(() => import("@/pages/Onboarding"));
-const Admin = lazy(() => import("@/pages/Admin"));
 const SiteAdmin = lazy(() => import("@/pages/SiteAdmin"));
 const DirectDebit = lazy(() => import("@/pages/DirectDebit"));
 const StyleGuide = lazy(() => import("@/pages/StyleGuide"));
@@ -287,7 +286,8 @@ const App = () => (
                 <Route path="/authors" element={<Authors />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/onboarding" element={<Onboarding />} />
-                <Route path="/admin" element={<Admin />} />
+                {/* Legacy password-based admin removed — SiteAdmin (Supabase auth) replaces it */}
+                <Route path="/admin" element={<Navigate to="/site-admin" replace />} />
                 <Route path="/site-admin" element={<SiteAdmin />} />
                 <Route path="/direct-debit" element={<DirectDebit />} />
                 <Route path="/article/:id" element={<Article />} />
