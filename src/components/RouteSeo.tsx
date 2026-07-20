@@ -96,7 +96,6 @@ const ROUTE_META: Record<string, RouteMeta> = {
     title: "לסוכני ביטוח | פלטפורמת העבודה של SEELD",
     description: "פלטפורמה דיגיטלית לסוכני ביטוח: ניהול לקוחות, המלצות, מעקב ביצוע וכלי עבודה חכמים.",
   },
-  "/install": { title: "התקנת האפליקציה | SEELD" },
   "/onboarding": { title: "הצטרפות ל-SEELD" },
   "/direct-debit": { title: "הסדר תשלום | SEELD" },
 };

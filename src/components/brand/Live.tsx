@@ -34,7 +34,7 @@ export const CountUp = ({
   }, [inView, to, duration, reduced]);
 
   return (
-    <span ref={ref} className={className} style={style}>
+    <span ref={ref} dir="ltr" className={className} style={style}>
       {format ? format(val) : val.toLocaleString("en-US")}
     </span>
   );

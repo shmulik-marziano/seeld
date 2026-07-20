@@ -97,7 +97,7 @@ const Calculators = () => {
             {/* Calculator tabs */}
             <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
               <Tabs defaultValue="mortgage" dir="rtl">
-                <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#E7EDF1] rounded-none overflow-x-auto scrollbar-hide">
+                <TabsList className="flex w-full flex-wrap justify-start gap-x-6 gap-y-1 sm:gap-x-8 h-auto bg-transparent p-0 mb-10 border-b border-[#E7EDF1] rounded-none">
                   {tabDefs.map((tab) => (
                     <TabsTrigger key={tab.value} value={tab.value} className={tabTriggerClass}>
                       {tab.label}

@@ -119,7 +119,6 @@ const FileImportPage = lazy(() => import("@/pages/FileImportPage"));
 const LeadsPage = lazy(() => import("@/pages/LeadsPage"));
 const HelpPage = lazy(() => import("@/pages/HelpPage"));
 const AuthPage = lazy(() => import("@/pages/AuthPage"));
-const InstallPage = lazy(() => import("@/pages/InstallPage"));
 
 // ── Platform Tools (lazy) ──
 const CatchPage = lazy(() => import("@/pages/tools/CatchPage"));
@@ -346,7 +345,8 @@ const App = () => (
                 {/* Shared */}
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
-                <Route path="/install" element={<InstallPage />} />
+                {/* PWA removed — legacy install links land on the homepage */}
+                <Route path="/install" element={<Navigate to="/" replace />} />
 
                 {/* Agent Landing Page */}
                 <Route path="/agents" element={<AgentLandingPage />} />

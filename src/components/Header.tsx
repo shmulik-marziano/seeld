@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Link, useLocation } from "react-router-dom";
 import SeeIDLogo from "@/components/SeeIDLogo";
 import { Menu, X } from "lucide-react";
@@ -168,7 +169,10 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay — portaled to <body>: the header's backdrop-blur
+          creates a containing block that traps position:fixed children inside
+          the 64px bar (drawer rendered clipped and transparent) */}
+      {createPortal(
       <AnimatePresence>
         {isMenuOpen && (
           <>
@@ -256,6 +260,26 @@ const Header = () => {
 
                 {/* Bottom: ink CTA + live chat opener */}
                 <div className="mt-auto pt-10 space-y-5">
+                  {/* Quick contact — phone + WhatsApp, thumb-friendly */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <a
+                      href="tel:0523097444"
+                      className="flex flex-col items-center justify-center px-3 py-2.5 rounded-lg border border-[#E7EDF1] text-[14px] font-medium text-[#1D2D3D] hover:bg-[#F4F8F7] transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      חייגו
+                      <span dir="ltr" className="tabular-nums text-[12px] font-normal text-[#5a6a78] whitespace-nowrap">052-309-7444</span>
+                    </a>
+                    <a
+                      href="https://wa.me/972523097444"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-[#E7EDF1] text-[14px] font-medium text-[#1D2D3D] hover:bg-[#F4F8F7] transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      WhatsApp
+                    </a>
+                  </div>
                   <Link
                     to="/contact"
                     className="flex items-center justify-center w-full px-6 py-4 rounded-lg bg-[#1D2D3D] text-white text-[15px] font-medium tracking-wide hover:bg-[#1D2D3D]/90 transition-colors min-h-[52px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
@@ -276,7 +300,9 @@ const Header = () => {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body
+      )}
     </header>
   );
 };
