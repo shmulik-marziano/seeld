@@ -7,7 +7,7 @@ const corsHeaders = {
 
 // Token discipline: the model never needs more than a short, focused answer,
 // and it never needs more than the recent turns to give one.
-const MODEL = "gemini-2.0-flash"; // no thinking tokens — cheapest capable tier
+const MODEL = "gemini-flash-latest"; // 2.0-flash lost free-tier quota (429s); alias tracks the current flash // no thinking tokens — cheapest capable tier
 const MAX_OUTPUT_TOKENS = 700;
 const HISTORY_WINDOW = 12; // last N turns sent to the model
 const MAX_CONTENT_CHARS = 2000;
