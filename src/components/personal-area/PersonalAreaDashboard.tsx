@@ -28,6 +28,11 @@ type Customer = {
   created_at: string;
 };
 
+// The personal area is not launched yet: design and interface are in place,
+// but live customer data stays disconnected until the flow is production-ready
+// (user decision 2026-07-20). Flip to true to reconnect email-based lookup.
+const PERSONAL_AREA_LIVE = false;
+
 const PersonalAreaDashboard = () => {
   const { user, signOut } = useAuth();
   const [customer, setCustomer] = useState<Customer | null>(null);
@@ -35,6 +40,11 @@ const PersonalAreaDashboard = () => {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
+    if (!PERSONAL_AREA_LIVE) {
+      setNotFound(true);
+      setLoading(false);
+      return;
+    }
     if (user?.email) {
       fetchCustomer(user.email);
     }
