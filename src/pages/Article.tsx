@@ -1,6 +1,7 @@
 import { useParams, Navigate, Link } from "react-router-dom";
 import Header from "@/components/Header";
 import { getArticleById, getRelatedArticles, type Article as ArticleData } from "@/data/articles";
+import { usePageSeo } from "@/hooks/usePageSeo";
 import { Facebook, Twitter, Linkedin, Link2, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { BODY, DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_PEACH } from "@/lib/brand";
@@ -46,6 +47,8 @@ const ArticleTile = ({ article }: { article: ArticleData }) => (
 const Article = () => {
   const { id } = useParams<{ id: string }>();
   const article = id ? getArticleById(id) : undefined;
+
+  usePageSeo(article?.title, article?.subtitle);
 
   if (!article) {
     return <Navigate to="/404" replace />;

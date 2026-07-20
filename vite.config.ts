@@ -13,46 +13,12 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    VitePWA({
-      registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "pwa-icon-512.png", "pwa-icon-192.png"],
-      workbox: {
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-        navigateFallbackDenylist: [/^\/~oauth/],
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
-        // Take over stale clients immediately and drop old precaches —
-        // prevents an old shell requesting assets that no longer exist.
-        cleanupOutdatedCaches: true,
-        clientsClaim: true,
-        skipWaiting: true,
-      },
-      manifest: {
-        name: "SEELD – סוכנות פיננסים וביטוח",
-        short_name: "SEELD",
-        description: "סוכנות פיננסים וביטוח – כלים חכמים לסוכנים ושירות ללקוחות",
-        theme_color: "#171717",
-        background_color: "#ffffff",
-        display: "standalone",
-        dir: "rtl",
-        lang: "he",
-        start_url: "/",
-        scope: "/",
-        icons: [
-          {
-            src: "pwa-icon-192.png",
-            sizes: "192x192",
-            type: "image/png",
-            purpose: "any maskable",
-          },
-          {
-            src: "pwa-icon-512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "any maskable",
-          },
-        ],
-      },
-    }),
+    // PWA removed (2026-07-20). selfDestroying ships a suicide sw.js that
+    // unregisters the previously-installed service worker and clears its
+    // caches on existing visitors' browsers. Keep this until the old SW has
+    // drained from the user base; removing the plugin outright would leave
+    // stale service workers controlling the page forever.
+    VitePWA({ selfDestroying: true, manifest: false }),
   ].filter(Boolean),
   resolve: {
     alias: {

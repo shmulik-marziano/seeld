@@ -4,6 +4,7 @@ import { ArrowRight, Copy, Loader2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteSupabase } from "@/integrations/supabase/site-client";
+import { usePageSeo } from "@/hooks/usePageSeo";
 import { toast } from "sonner";
 import { BODY, DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE } from "@/lib/brand";
 
@@ -34,6 +35,8 @@ const BlogPost = () => {
   const [leadSubmitting, setLeadSubmitting] = useState(false);
   const [leadSubmitted, setLeadSubmitted] = useState(false);
   const leadFormRef = useRef<HTMLDivElement>(null);
+
+  usePageSeo(post?.title, post?.excerpt);
 
   useEffect(() => {
     const fetchPost = async () => {

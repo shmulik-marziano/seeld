@@ -32,3 +32,8 @@ skills-lock.json
 
 # Internal documentation (kept local only — public repo)
 docs-internal/
+
+# Environment files (public repo — never commit env values; see .env.example)
+.env
+.env.*
+!.env.example
