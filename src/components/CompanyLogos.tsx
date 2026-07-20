@@ -18,12 +18,12 @@ interface Props {
 }
 
 /* Official logo at uniform height; name stays available to screen readers */
-function CompanyLogo({ company, size = "md" }: { company: Company; size?: "sm" | "md" }) {
+function CompanyLogo({ company, size = "md", eager = false }: { company: Company; size?: "sm" | "md"; eager?: boolean }) {
   return (
     <img
       src={company.logo}
       alt={company.name}
-      loading="lazy"
+      loading={eager ? "eager" : "lazy"}
       draggable={false}
       className={`${size === "sm" ? "h-7 sm:h-8" : "h-8 sm:h-9"} w-auto max-w-[150px] object-contain shrink-0 select-none`}
     />
@@ -43,21 +43,25 @@ function LogoGrid({ companies }: { companies: Company[] }) {
   );
 }
 
-/* Marquee variant — used on homepage */
+/* Marquee variant — used on homepage. Purely decorative: pointer-events-none
+   on the moving row means the mouse can't drag, select, or grab the strip. */
 function LogoMarquee({ companies }: { companies: Company[] }) {
   const doubled = [...companies, ...companies];
   return (
-    <div className="relative overflow-hidden border-t border-b border-[#171717]/10 py-7 sm:py-8">
+    <div
+      className="relative overflow-hidden border-t border-b border-[#171717]/10 py-7 sm:py-8 select-none"
+      onDragStart={(e) => e.preventDefault()}
+    >
       {/* Fade edges */}
       <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-transparent to-white z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-transparent to-white z-10 pointer-events-none" />
       <motion.div
-        className="flex items-center gap-x-12 sm:gap-x-16 whitespace-nowrap"
+        className="flex items-center gap-x-12 sm:gap-x-16 whitespace-nowrap pointer-events-none"
         animate={{ x: ["0%", "-50%"] }}
         transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
       >
         {doubled.map((c, i) => (
-          <CompanyLogo key={`${c.slug}-${i}`} company={c} size="sm" />
+          <CompanyLogo key={`${c.slug}-${i}`} company={c} size="sm" eager />
         ))}
       </motion.div>
     </div>
