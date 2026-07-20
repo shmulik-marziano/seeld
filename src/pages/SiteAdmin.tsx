@@ -48,7 +48,7 @@ import { cn } from "@/lib/utils";
 //  CONSTANTS
 // ══════════════════════════════════════════════════════
 
-const ADMIN_EMAIL = "shmulik@seeld.co.il";
+const ADMIN_EMAIL = "shmulik@seeld-ins.co.il";
 
 type AdminTab =
   | "overview"
