@@ -81,7 +81,7 @@ const ReturnTables = () => {
 
   const totalFunds = allFunds.length;
   const maxYear = useMemo(() => Math.max(...allFunds.map((f) => f.returns.year1)), [allFunds]);
-  const maxFiveYear = useMemo(() => Math.max(...allFunds.map((f) => f.returns.year5)), [allFunds]);
+  const maxFiveYear = useMemo(() => Math.max(...allFunds.map((f) => f.returns.year5 ?? -Infinity)), [allFunds]);
   const topFund = useMemo(() => allFunds.find((f) => f.returns.year1 === maxYear), [allFunds, maxYear]);
   const topFiveYearFund = useMemo(() => allFunds.find((f) => f.returns.year5 === maxFiveYear), [allFunds, maxFiveYear]);
 

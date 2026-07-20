@@ -8,7 +8,10 @@ interface FundReturnTableProps {
 }
 
 const FundReturnTable = ({ funds, title }: FundReturnTableProps) => {
-  const formatPercent = (value: number) => {
+  const formatPercent = (value: number | null) => {
+    if (value === null) {
+      return <span className="flex justify-center text-muted-foreground">—</span>;
+    }
     const isPositive = value >= 0;
     return (
       <span className={`flex items-center gap-1 justify-center font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>

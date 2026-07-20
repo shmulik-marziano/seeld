@@ -49,7 +49,7 @@ export default function FundCard({ fund, rank, onRemove, showMonthly = false, sh
   const [localShowDeep, setLocalShowDeep] = useState(showDeepDrill);
 
   return (
-    <Card className="relative overflow-hidden transition-all duration-200 hover:shadow-md min-w-[280px]">
+    <Card className="relative overflow-hidden transition-all duration-200 hover:shadow-md min-w-0">
       {rank && (
         <div className="absolute top-2 left-2 w-7 h-7 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
           {rank}

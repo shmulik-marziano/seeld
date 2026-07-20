@@ -4,8 +4,8 @@ export interface FundReturn {
   company: string;
   monthReturn: number; // תשואת החודש
   yearReturn: number; // תשואה שנתית
-  threeYearReturn: number; // תשואה 3 שנים
-  fiveYearReturn: number; // תשואה 5 שנים
+  threeYearReturn: number | null; // תשואה 3 שנים (null = לא פורסם)
+  fiveYearReturn: number | null; // תשואה 5 שנים (null = לא פורסם)
 }
 
 // קרנות השתלמות - מסלול כללי
