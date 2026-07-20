@@ -18,6 +18,7 @@ import ScrollProgress from "@/components/ScrollProgress";
 import GridBackdrop from "@/components/brand/GridBackdrop";
 import FloatingShapes from "@/components/FloatingShapes";
 import RouteFallback from "@/components/RouteFallback";
+import RouteSeo from "@/components/RouteSeo";
 import { lazy, Suspense, useEffect, useRef } from "react";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 
@@ -276,6 +277,7 @@ const App = () => (
           <PwaInstallBanner />
           <BrowserRouter>
             <PageViewTracker />
+            <RouteSeo />
             <GridBackdrop />
             <ScrollProgress />
             <ScrollToTop />

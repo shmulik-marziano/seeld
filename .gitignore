@@ -29,3 +29,6 @@ dist-ssr
 CLAUDE.local.md
 .agents/
 skills-lock.json
+
+# Internal documentation (kept local only — public repo)
+docs-internal/
