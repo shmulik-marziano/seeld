@@ -1,5 +1,6 @@
+import { useRef, useState } from "react";
 import { COMPANIES, type Company } from "@/data/companies";
-import { motion } from "framer-motion";
+import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
 import { SERIF, BRONZE } from "@/lib/brand";
 
 /*
@@ -43,22 +44,44 @@ function LogoGrid({ companies }: { companies: Company[] }) {
   );
 }
 
-/* Marquee variant — used on homepage. Purely decorative: pointer-events-none
-   on the moving row means the mouse can't drag, select, or grab the strip. */
+/* Marquee variant — used on homepage. Auto-scrolls slowly, and the visitor
+   can grab it with the mouse (or a finger) to scrub through all the logos;
+   auto-scroll resumes when they let go. Infinite wrap over a doubled list. */
+const MARQUEE_SPEED = 42; // px per second
+
 function LogoMarquee({ companies }: { companies: Company[] }) {
   const doubled = [...companies, ...companies];
+  const x = useMotionValue(0);
+  const rowRef = useRef<HTMLDivElement>(null);
+  const [dragging, setDragging] = useState(false);
+
+  useAnimationFrame((_, delta) => {
+    const row = rowRef.current;
+    if (!row) return;
+    const half = row.scrollWidth / 2;
+    if (half <= 0) return;
+    let next = x.get();
+    if (!dragging) next -= (MARQUEE_SPEED * delta) / 1000;
+    // wrap into (-half, 0] so the loop is seamless in both drag directions
+    if (next <= -half) next += half;
+    if (next > 0) next -= half;
+    x.set(next);
+  });
+
   return (
-    <div
-      className="relative overflow-hidden border-t border-b border-[#171717]/10 py-7 sm:py-8 select-none"
-      onDragStart={(e) => e.preventDefault()}
-    >
+    <div className="relative overflow-hidden border-t border-b border-[#171717]/10 py-7 sm:py-8 select-none">
       {/* Fade edges */}
       <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-transparent to-white z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-transparent to-white z-10 pointer-events-none" />
       <motion.div
-        className="flex items-center gap-x-12 sm:gap-x-16 whitespace-nowrap pointer-events-none"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+        ref={rowRef}
+        className="flex items-center gap-x-12 sm:gap-x-16 whitespace-nowrap cursor-grab active:cursor-grabbing touch-pan-y"
+        style={{ x }}
+        drag="x"
+        dragMomentum
+        dragElastic={0}
+        onDragStart={() => setDragging(true)}
+        onDragEnd={() => setDragging(false)}
       >
         {doubled.map((c, i) => (
           <CompanyLogo key={`${c.slug}-${i}`} company={c} size="sm" eager />
