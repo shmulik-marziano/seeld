@@ -3,6 +3,7 @@ import { Send, Loader2, X, FileText, Calculator, Shield, PiggyBank, Phone, Rotat
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
 import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { LINE, MONO, MUTED, NAVY, RING } from "@/lib/brand";
@@ -10,7 +11,7 @@ import { LiveDot, LiveTag } from "@/components/brand/Live";
 
 type Message = { role: "user" | "assistant"; content: string };
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/finance-chat`;
+const CHAT_URL = `${SUPABASE_URL}/functions/v1/finance-chat`;
 // DNA v3 panel: white surface, hairline border, navy header band (STYLESEED.md)
 const PANEL_BG = "#ffffff";
 const HAIRLINE = `0 0 0 1px ${LINE}`;

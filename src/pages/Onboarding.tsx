@@ -13,6 +13,7 @@ import {
 } from "@/lib/brand";
 import { LiveDot, StatusPill } from "@/components/brand/Live";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -732,11 +733,11 @@ export default function Onboarding() {
         form_data: form as unknown as Record<string, unknown>,
         status: "new",
       });
-      await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-onboarding-summary`, {
+      await fetch(`${SUPABASE_URL}/functions/v1/send-onboarding-summary`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({ formData: form }),
       });

@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/client';
 import { useApp } from '@/contexts/AppContext';
 
 export type ChatMessage = { role: 'user' | 'assistant' | 'system_update'; content: string };
@@ -121,7 +121,7 @@ export function usePdageChat({ conversationId: initialConvId, jobId, autoCreate 
     // Save user message
     await saveMessages(convId, [userMsg]);
 
-    const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/pdage-chat`;
+    const CHAT_URL = `${SUPABASE_URL}/functions/v1/pdage-chat`;
     let assistantSoFar = '';
     const newMsgsToSave: ChatMessage[] = [];
 
@@ -130,7 +130,7 @@ export function usePdageChat({ conversationId: initialConvId, jobId, autoCreate 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({
           jobId: jobId || undefined,

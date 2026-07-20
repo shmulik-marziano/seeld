@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useSaveCalculation } from "@/hooks/useSaveCalculation";
 import AuthModal from "@/components/AuthModal";
 import { Json } from "@/integrations/supabase/site-types";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
 import {
   Dialog,
   DialogContent,
@@ -93,12 +94,12 @@ const SaveCalculationButton = ({
     setSendingEmail(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-calculation-email`,
+        `${SUPABASE_URL}/functions/v1/send-calculation-email`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify({
             to: email,
