@@ -120,8 +120,11 @@ export interface DeepDrillData {
 
 // דמי ניהול
 export interface ManagementFees {
-  depositFeePercent: number;   // דמי ניהול מהפקדה (%)
-  savingsFeePercent: number;   // דמי ניהול מצבירה (%)
+  // null = the published dataset carries no fee for this fund. Distinct from 0,
+  // which is a real (promotional) fee — collapsing the two made unknown-fee
+  // funds sort as the cheapest on the market.
+  depositFeePercent: number | null;   // דמי ניהול מהפקדה (%)
+  savingsFeePercent: number | null;   // דמי ניהול מצבירה (%)
   maxDepositFee: number;       // מקסימום דמי ניהול מהפקדה (%)
   maxSavingsFee: number;       // מקסימום דמי ניהול מצבירה (%)
 }

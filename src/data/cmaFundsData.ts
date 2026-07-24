@@ -6364,9 +6364,12 @@ export const getFundsByProduct = (product: ProductType) =>
   allFunds.filter(f => f.productType === product);
 
 export const calculateAnnualCost = (fund: Fund, balance: number, annualDeposit: number): number => {
-  const depositCost = annualDeposit * (fund.fees.depositFeePercent / 100);
-  const savingsCost = balance * (fund.fees.savingsFeePercent / 100);
-  const directCost = balance * (fund.deepDrill.directExpenses / 100);
+  // Unpublished fees and expenses are counted as zero here so the calculator
+  // still returns a figure; it is therefore a floor, not a full cost. The
+  // comparison table shows which funds are missing a published fee.
+  const depositCost = annualDeposit * ((fund.fees.depositFeePercent ?? 0) / 100);
+  const savingsCost = balance * ((fund.fees.savingsFeePercent ?? 0) / 100);
+  const directCost = balance * ((fund.deepDrill.directExpenses ?? 0) / 100);
   return depositCost + savingsCost + directCost;
 };
 

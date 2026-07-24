@@ -140,8 +140,9 @@ function dbRowToFund(row: CmaFundRow): Fund {
     },
     monthlyReturns: [], // Not available per-row from CKAN (would need monthly query)
     fees: {
-      depositFeePercent: row.avg_deposit_fee ?? 0,
-      savingsFeePercent: row.avg_annual_management_fee ?? 0,
+      // Kept null when the dataset has no figure — see ManagementFees.
+      depositFeePercent: row.avg_deposit_fee,
+      savingsFeePercent: row.avg_annual_management_fee,
       maxDepositFee: 4,
       maxSavingsFee: 1.05,
     },

@@ -17,6 +17,10 @@ interface FundCardProps {
 
 const pct = (v: number | null) => (v === null ? '—' : `${v.toFixed(2)}%`);
 
+// A fee the dataset never published is not a zero fee — say so.
+const fee = (v: number | null | undefined) =>
+  v === null || v === undefined ? 'לא פורסם' : `${v}%`;
+
 // Assets arrive in millions ILS — show billions past 1,000M
 const formatAssets = (millions: number) =>
   millions >= 1000
@@ -103,8 +107,8 @@ export default function FundCard({ fund, rank, onRemove, showMonthly = false, sh
         <div className="text-center text-xs space-y-0.5">
           <p className="text-muted-foreground">דמי ניהול</p>
           <div className="flex justify-center gap-3">
-            <span>הפקדה: <strong>{fund.fees.depositFeePercent}%</strong></span>
-            <span>צבירה: <strong>{fund.fees.savingsFeePercent}%</strong></span>
+            <span>הפקדה: <strong>{fee(fund.fees.depositFeePercent)}</strong></span>
+            <span>צבירה: <strong>{fee(fund.fees.savingsFeePercent)}</strong></span>
           </div>
         </div>
 

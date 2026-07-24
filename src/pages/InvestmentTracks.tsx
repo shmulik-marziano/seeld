@@ -19,6 +19,8 @@ import {
 
 // ── Helpers ──
 const fmt = (n: number) => n.toFixed(2) + "%";
+// An unpublished fee is not a zero fee — see ManagementFees in types/fund.ts.
+const feeText = (v: number | null | undefined) => (v === null || v === undefined ? "—" : `${v}%`);
 const fmtAssets = (m: number) => m >= 1000 ? (m / 1000).toFixed(1) + " מיליארד" : m.toLocaleString("he-IL") + " מ'";
 
 // DNA palette ramp for asset-allocation charts
@@ -197,7 +199,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
                   )}
                   <div className="flex justify-between text-[12.5px]" style={{ color: MUTED }}>
                     <span>דמ"נ מצבירה</span>
-                    <span dir="ltr" style={{ ...monoNum, color: NAVY }}>{selectedFund.fees.savingsFeePercent}%</span>
+                    <span dir="ltr" style={{ ...monoNum, color: NAVY }}>{feeText(selectedFund.fees.savingsFeePercent)}</span>
                   </div>
                   <div className="flex justify-between text-[12.5px]" style={{ color: MUTED }}>
                     <span>היקף נכסים</span>
@@ -567,7 +569,7 @@ const InvestmentTracks = () => {
                                 {fmt(fund.returns.year5)}
                               </td>
                               <td className="num hidden lg:table-cell">
-                                {fund.fees.savingsFeePercent}%
+                                {feeText(fund.fees.savingsFeePercent)}
                               </td>
                               <td>
                                 {isExpanded
@@ -582,7 +584,7 @@ const InvestmentTracks = () => {
                                     {[
                                       { label: "תשואת חודש", value: fmt(fund.returns.month), ltr: true },
                                       { label: "חשיפת מניות", value: `${fund.stockExposure}%`, ltr: true },
-                                      { label: 'דמ"נ מהפקדה', value: `${fund.fees.depositFeePercent}%`, ltr: true },
+                                      { label: 'דמ"נ מהפקדה', value: feeText(fund.fees.depositFeePercent), ltr: true },
                                       { label: "היקף נכסים", value: fmtAssets(fund.totalAssets), ltr: false },
                                       ...(fund.deepDrill.sharpeRatio
                                         ? [{ label: "מדד שארפ", value: fund.deepDrill.sharpeRatio.toFixed(2), ltr: true }]
