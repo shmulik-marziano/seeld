@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import SaveCalculationButton from "@/components/SaveCalculationButton";
 import { DISPLAY, MONO, MUTED, NAVY, TURQ, TURQ_TEXT } from "@/lib/brand";
+import { monthlyPensionFrom, PENSION_FACTOR_NOTE } from "@/lib/pension";
 
 // SEELD DNA v3 (STYLESEED.md): boxed inputs, .dna-concept result cards,
 // Frank Ruhl 900 turquoise standout stat, CSS bar chart with mono LTR values.
@@ -59,10 +60,9 @@ const PensionCalculator = () => {
     const totalDeposits = currentSavings + (monthlyDeposit * monthsToRetirement);
     const totalReturns = totalSavings - totalDeposits;
 
-    // Estimate monthly pension (assuming 20 years of retirement, 3% annual withdrawal rate adjusted)
-    // Using standard pension calculation: total / (expected retirement years * 12)
-    const retirementYears = 20;
-    const monthlyPension = totalSavings / (retirementYears * 12);
+    // Converted with the same מקדם המרה the goal calculator uses — see
+    // src/lib/pension.ts for why this replaced a plain division by 240 months.
+    const monthlyPension = monthlyPensionFrom(totalSavings);
 
     return {
       totalSavings,
@@ -291,6 +291,9 @@ const PensionCalculator = () => {
           </p>
           <p className="text-xs mt-1" style={{ color: MUTED }}>
             {((result.monthlyPension / monthlySalary) * 100).toFixed(0)}% מהשכר הנוכחי
+          </p>
+          <p className="text-[11.5px] mt-2 leading-[1.7]" style={{ color: MUTED }}>
+            {PENSION_FACTOR_NOTE}
           </p>
         </div>
 

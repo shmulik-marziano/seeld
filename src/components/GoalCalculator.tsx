@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import SaveCalculationButton from "@/components/SaveCalculationButton";
 import { DISPLAY, MONO, MUTED, NAVY, TURQ } from "@/lib/brand";
+import { balanceNeededFor, PENSION_FACTOR_NOTE } from "@/lib/pension";
 
 // SEELD DNA v3 (STYLESEED.md): boxed inputs, .dna-concept result cards,
 // Frank Ruhl 900 turquoise standout stat, kit CSS progress bar.
@@ -74,9 +75,8 @@ const GoalCalculator = () => {
   const result: GoalResult = useMemo(() => {
     const yearsToRetirement = retirementAge - currentAge;
 
-    // Factor for converting total savings to monthly pension (based on ~20 years retirement)
-    const pensionFactor = 200;
-    const totalNeeded = targetMonthlyPension * pensionFactor;
+    // Shared with the pension calculator — see src/lib/pension.ts.
+    const totalNeeded = balanceNeededFor(targetMonthlyPension);
 
     // Calculate future value of current balance
     const rate = annualReturn / 100;
@@ -88,7 +88,9 @@ const GoalCalculator = () => {
     // Calculate monthly deposit needed
     let monthlyNeeded = 0;
     if (gap > 0 && yearsToRetirement > 0) {
-      const annuityFactor = (Math.pow(1 + rate, yearsToRetirement) - 1) / rate;
+      // At 0% the annuity factor divides by zero; with no growth the gap is
+      // simply spread evenly over the months.
+      const annuityFactor = rate === 0 ? yearsToRetirement : (Math.pow(1 + rate, yearsToRetirement) - 1) / rate;
       monthlyNeeded = gap / (12 * annuityFactor);
     }
 
@@ -284,6 +286,9 @@ const GoalCalculator = () => {
           <p className="text-[13px] mb-2" style={{ color: MUTED }}>צבירה נדרשת</p>
           <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             <AnimatedNumber value={result.totalNeeded} format={formatCurrency} />
+          </p>
+          <p className="text-[11.5px] mt-2 leading-[1.7]" style={{ color: MUTED }}>
+            {PENSION_FACTOR_NOTE}
           </p>
         </div>
 
