@@ -160,7 +160,7 @@ serve(async (req) => {
         // only if jobId was extracted earlier
         return { jobId: null };
       })();
-    } catch {}
+    } catch { /* best-effort status update; the error response below is what matters */ }
 
     return new Response(
       JSON.stringify({

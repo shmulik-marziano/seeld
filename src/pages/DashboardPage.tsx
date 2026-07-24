@@ -342,7 +342,7 @@ function loadLayout(): LayoutData | null {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch { return null; }
 }
 function saveLayout(d: LayoutData) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch {}
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch { /* private mode / quota — layout just isn't persisted */ }
 }
 
 // ─── HoneycombCanvas ─────────────────────────────────────────────────────────
