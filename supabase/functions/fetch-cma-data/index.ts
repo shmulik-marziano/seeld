@@ -61,26 +61,51 @@ const DATA_SOURCES: DataSource[] = [
 const CKAN_BASE = "https://data.gov.il/api/3/action/datastore_search";
 const BATCH_SIZE = 5000; // max records per API call
 
+/**
+ * Supabase throws PostgrestError objects, which are not Error instances — a
+ * plain String() on one yields "[object Object]", which is what every failed
+ * sync in cma_sync_log used to say. Keep the message readable instead.
+ */
+function describeError(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  if (err && typeof err === "object") {
+    const e = err as Record<string, unknown>;
+    const parts = [e.message, e.details, e.hint, e.code].filter(Boolean).map(String);
+    if (parts.length) return parts.join(" | ");
+    try {
+      return JSON.stringify(err).slice(0, 500);
+    } catch {
+      return "unserializable error object";
+    }
+  }
+  return String(err);
+}
+
 // ─── Fetch Records from CKAN Datastore ──────────────────────────────
 
 async function fetchAllRecords(
   resourceId: string,
   latestPeriodOnly: boolean = true
 ): Promise<{ records: Record<string, any>[]; total: number; latestPeriod: number | null }> {
-  // First, find the latest report period
+  // Find the latest report period. NOTE: data.gov.il blocks the
+  // datastore_search_sql endpoint with 403, so asking datastore_search for a
+  // single record sorted by period descending is the only way to read it. When
+  // this silently failed the whole sync fell back to "fetch every period",
+  // pulling ~21,500 rows a run instead of the ~700 of the current month.
   let latestPeriod: number | null = null;
 
   if (latestPeriodOnly) {
-    const metaUrl = `${CKAN_BASE}_sql?sql=${encodeURIComponent(
-      `SELECT DISTINCT "REPORT_PERIOD" FROM "${resourceId}" ORDER BY "REPORT_PERIOD" DESC LIMIT 3`
-    )}`;
-    const metaRes = await fetch(metaUrl);
-    if (metaRes.ok) {
-      const metaJson = await metaRes.json();
-      if (metaJson.success && metaJson.result?.records?.length > 0) {
-        latestPeriod = metaJson.result.records[0].REPORT_PERIOD;
-      }
+    const metaUrl = `${CKAN_BASE}?resource_id=${resourceId}&limit=1&sort=${encodeURIComponent("REPORT_PERIOD desc")}`;
+    const metaRes = await fetch(metaUrl, { headers: { "User-Agent": "SEELD-Platform/1.0" } });
+    if (!metaRes.ok) {
+      throw new Error(`CKAN period lookup returned ${metaRes.status}: ${(await metaRes.text()).slice(0, 200)}`);
     }
+    const metaJson = await metaRes.json();
+    const period = Number(metaJson?.result?.records?.[0]?.REPORT_PERIOD);
+    if (!metaJson?.success || !Number.isFinite(period)) {
+      throw new Error(`CKAN period lookup gave no usable REPORT_PERIOD: ${JSON.stringify(metaJson?.error ?? metaJson).slice(0, 200)}`);
+    }
+    latestPeriod = period;
   }
 
   // Fetch records (latest period or all)
@@ -256,7 +281,7 @@ async function syncSource(
     };
   } catch (err) {
     const durationMs = Date.now() - start;
-    const errorMsg = err instanceof Error ? err.message : String(err);
+    const errorMsg = describeError(err);
     console.error(`[${ds.source}] Error:`, errorMsg);
 
     await supabase.from("cma_sync_log").insert({
@@ -332,7 +357,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: false,
-        error: error instanceof Error ? error.message : String(error),
+        error: describeError(error),
       }),
       {
         status: 500,
