@@ -486,6 +486,21 @@ body {
   background: linear-gradient(180deg, #ffffff 0%, #FBF5EA 55%, #ffffff 100%);
 }
 
+/* Logo marquee edges — fades the logos themselves to transparent, so the
+   strip sits on any background (cream band included). Narrow on phones,
+   where a wide fade would swallow most of the two visible logos. */
+.dna-logo-fade {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+}
+
+@media (min-width: 640px) {
+  .dna-logo-fade {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 56px, #000 calc(100% - 56px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 56px, #000 calc(100% - 56px), transparent 100%);
+  }
+}
+
 /* Navy CTA band — gold hairline on top, quiet turquoise glow inside */
 .dna-navy-band {
   position: relative;

@@ -49,6 +49,9 @@ function LogoGrid({ companies }: { companies: Company[] }) {
    auto-scroll resumes when they let go. Infinite wrap over a doubled list. */
 const MARQUEE_SPEED = 42; // px per second
 
+// .dna-logo-fade masks the strip edges instead of painting a white overlay, so
+// the marquee sits correctly on the cream warm band and every logo stays
+// readable as it passes through (narrower fade on phones).
 function LogoMarquee({ companies }: { companies: Company[] }) {
   const doubled = [...companies, ...companies];
   const x = useMotionValue(0);
@@ -69,10 +72,7 @@ function LogoMarquee({ companies }: { companies: Company[] }) {
   });
 
   return (
-    <div className="relative overflow-hidden border-t border-b border-[#171717]/10 py-7 sm:py-8 select-none">
-      {/* Fade edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-transparent to-white z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-transparent to-white z-10 pointer-events-none" />
+    <div className="dna-logo-fade relative overflow-hidden border-t border-b border-[#171717]/10 py-7 sm:py-8 select-none">
       <motion.div
         ref={rowRef}
         className="flex items-center gap-x-12 sm:gap-x-16 whitespace-nowrap cursor-grab active:cursor-grabbing touch-pan-y"
@@ -98,7 +98,10 @@ export default function CompanyLogos({
   subtitle = "כל השחקניות המובילות בישראל. משווים, ובוחרים את מה שנכון לכם.",
 }: Props) {
   return (
-    <section className="bg-white">
+    /* The marquee is dropped into page sections that carry their own band
+       colour (homepage warm band) — stay transparent there. The grid keeps
+       its white plate on service pages. */
+    <section className={variant === "marquee" ? "bg-transparent" : "bg-white"}>
       <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
         {title && (
           <div className="border-t border-[#171717]/20 pt-5 mb-10">
