@@ -14,7 +14,7 @@ const navLinks = [
   { href: "/calculators", label: "מחשבונים" },
   { href: "/fund-finder", label: "השוואת קופות" },
   { href: "/blog", label: "בלוג" },
-  { href: "/about", label: "אודות" },
+  { href: "/learn", label: "מידע ולמידה" },
   { href: "/contact", label: "צור קשר" },
 ];
 
@@ -25,7 +25,7 @@ const mobileNavLinks = [
   { href: "/calculators", label: "מחשבונים" },
   { href: "/fund-finder", label: "השוואת קופות" },
   { href: "/blog", label: "בלוג" },
-  { href: "/about", label: "אודות" },
+  { href: "/learn", label: "מידע ולמידה" },
   { href: "/contact", label: "צור קשר" },
 ];
 

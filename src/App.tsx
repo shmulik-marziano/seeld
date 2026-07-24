@@ -155,6 +155,7 @@ const PDageCorrectionRoom = lazy(() => import("@/pages/pdage/PDageCorrectionRoom
 
 // ── Public Site Pages (lazy) ──
 const About = lazy(() => import("@/pages/About"));
+const Learn = lazy(() => import("@/pages/Learn"));
 const Authors = lazy(() => import("@/pages/Authors"));
 const Contact = lazy(() => import("@/pages/Contact"));
 const Calculators = lazy(() => import("@/pages/Calculators"));
@@ -282,7 +283,10 @@ const App = () => (
               <Routes>
                 {/* ═══ PUBLIC SITE ROUTES ═══ */}
                 <Route path="/" element={<Index />} />
+                {/* /about stays reachable from the footer, but it is no longer
+                    a main-nav destination — מידע ולמידה took that slot. */}
                 <Route path="/about" element={<About />} />
+                <Route path="/learn" element={<Learn />} />
                 <Route path="/authors" element={<Authors />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/onboarding" element={<Onboarding />} />
