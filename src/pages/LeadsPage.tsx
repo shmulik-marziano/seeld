@@ -1,9 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { siteSupabase } from '@/integrations/supabase/site-client';
-import { motion } from 'framer-motion';
-import { Loader2, Target, ArrowRight, Search, Phone, Mail, Calendar, Shield, Wallet, Filter } from 'lucide-react';
+import { useApp } from '@/contexts/AppContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Loader2, Target, ArrowRight, Search, Phone, Mail, Calendar, Shield, Wallet, UserPlus, ChevronDown, User } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
+
+type LeadStatus = 'new' | 'contacted' | 'in_progress' | 'closed' | 'cancelled';
+type LeadTable = 'insurance_leads' | 'pension_analysis_leads';
 
 type InsuranceLead = {
   id: string;
@@ -11,9 +18,12 @@ type InsuranceLead = {
   email: string;
   phone: string;
   insurance_type: string;
-  status: string;
+  status: LeadStatus;
   created_at: string;
   notes: string | null;
+  id_number: string | null;
+  assigned_to: string | null;
+  additional_notes: string | null;
 };
 
 type PensionLead = {
@@ -21,25 +31,32 @@ type PensionLead = {
   full_name: string;
   email: string;
   phone: string;
-  status: string;
+  status: LeadStatus;
   created_at: string;
   employment_status: string | null;
   notes: string | null;
+  id_number: string | null;
+  assigned_to: string | null;
+  additional_notes: string | null;
 };
 
 type UnifiedLead = {
   id: string;
+  table: LeadTable;
   full_name: string;
   email: string;
   phone: string;
   type: 'insurance' | 'pension';
   subType: string;
-  status: string;
+  status: LeadStatus;
   created_at: string;
   notes: string | null;
+  id_number: string | null;
+  assigned_to: string | null;
+  additional_notes: string | null;
 };
 
-const STATUS_MAP: Record<string, { label: string; bg: string; text: string }> = {
+const STATUS_MAP: Record<LeadStatus, { label: string; bg: string; text: string }> = {
   new:         { label: 'חדש',       bg: '#e0f2fe', text: '#0369a1' },
   contacted:   { label: 'נוצר קשר',  bg: '#fef3c7', text: '#92400e' },
   in_progress: { label: 'בטיפול',    bg: '#dbeafe', text: '#1e40af' },
@@ -55,14 +72,24 @@ const INSURANCE_TYPE_MAP: Record<string, string> = {
   partners_risk: 'שותפים', renters: 'שוכרים',
 };
 
+const digitsOf = (s: string | null | undefined) => (s || '').replace(/\D/g, '');
+
+const errMessage = (err: unknown, fallback: string) =>
+  (err instanceof Error && err.message) || (typeof err === 'object' && err && 'message' in err && String((err as { message: unknown }).message)) || fallback;
+
 export default function LeadsPage() {
   const navigate = useNavigate();
+  const { data, addCustomer, profile } = useApp();
   const [leads, setLeads] = useState<UnifiedLead[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [noteDraft, setNoteDraft] = useState('');
+  const [savingNote, setSavingNote] = useState(false);
+  const [convertingId, setConvertingId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchLeads() {
@@ -70,8 +97,8 @@ export default function LeadsPage() {
       setError(null);
       try {
         const [insRes, penRes] = await Promise.all([
-          siteSupabase.from('insurance_leads').select('id,full_name,email,phone,insurance_type,status,created_at,notes').order('created_at', { ascending: false }).limit(200),
-          siteSupabase.from('pension_analysis_leads').select('id,full_name,email,phone,status,created_at,employment_status,notes').order('created_at', { ascending: false }).limit(200),
+          siteSupabase.from('insurance_leads').select('id,full_name,email,phone,insurance_type,status,created_at,notes,id_number,assigned_to,additional_notes').order('created_at', { ascending: false }).limit(200),
+          siteSupabase.from('pension_analysis_leads').select('id,full_name,email,phone,status,created_at,employment_status,notes,id_number,assigned_to,additional_notes').order('created_at', { ascending: false }).limit(200),
         ]);
 
         const unified: UnifiedLead[] = [];
@@ -79,32 +106,117 @@ export default function LeadsPage() {
         if (insRes.data) {
           for (const r of insRes.data as InsuranceLead[]) {
             unified.push({
-              id: r.id, full_name: r.full_name, email: r.email, phone: r.phone,
+              id: r.id, table: 'insurance_leads', full_name: r.full_name, email: r.email, phone: r.phone,
               type: 'insurance', subType: INSURANCE_TYPE_MAP[r.insurance_type] || r.insurance_type,
               status: r.status, created_at: r.created_at, notes: r.notes,
+              id_number: r.id_number, assigned_to: r.assigned_to, additional_notes: r.additional_notes,
             });
           }
         }
         if (penRes.data) {
           for (const r of penRes.data as PensionLead[]) {
             unified.push({
-              id: r.id, full_name: r.full_name, email: r.email, phone: r.phone,
+              id: r.id, table: 'pension_analysis_leads', full_name: r.full_name, email: r.email, phone: r.phone,
               type: 'pension', subType: r.employment_status || 'ניתוח פנסיוני',
               status: r.status, created_at: r.created_at, notes: r.notes,
+              id_number: r.id_number, assigned_to: r.assigned_to, additional_notes: r.additional_notes,
             });
           }
         }
 
         unified.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         setLeads(unified);
-      } catch (err: any) {
-        setError(err?.message || 'שגיאה בטעינת הלידים');
+      } catch (err) {
+        setError(errMessage(err, 'שגיאה בטעינת הלידים'));
       } finally {
         setLoading(false);
       }
     }
     fetchLeads();
   }, []);
+
+  async function updateLead(lead: UnifiedLead, patch: { status?: LeadStatus; notes?: string | null; assigned_to?: string | null }) {
+    const payload = { ...patch, updated_at: new Date().toISOString() };
+    const { error: updateError } = lead.table === 'insurance_leads'
+      ? await siteSupabase.from('insurance_leads').update(payload).eq('id', lead.id)
+      : await siteSupabase.from('pension_analysis_leads').update(payload).eq('id', lead.id);
+    if (updateError) throw updateError;
+    setLeads(prev => prev.map(l => (l.id === lead.id ? { ...l, ...patch } : l)));
+  }
+
+  async function handleStatusChange(lead: UnifiedLead, status: LeadStatus) {
+    if (status === lead.status) return;
+    // First touch claims the lead for the acting agent
+    const patch: Parameters<typeof updateLead>[1] = { status };
+    if (!lead.assigned_to && profile?.fullName) patch.assigned_to = profile.fullName;
+    try {
+      await updateLead(lead, patch);
+      toast.success(`סטטוס עודכן ל"${STATUS_MAP[status].label}"`);
+    } catch (err) {
+      toast.error(errMessage(err, 'עדכון הסטטוס נכשל'));
+    }
+  }
+
+  function toggleExpand(lead: UnifiedLead) {
+    if (expandedId === lead.id) {
+      setExpandedId(null);
+    } else {
+      setExpandedId(lead.id);
+      setNoteDraft(lead.notes || '');
+    }
+  }
+
+  async function handleSaveNote(lead: UnifiedLead) {
+    setSavingNote(true);
+    try {
+      await updateLead(lead, { notes: noteDraft.trim() || null });
+      toast.success('ההערה נשמרה');
+    } catch (err) {
+      toast.error(errMessage(err, 'שמירת ההערה נכשלה'));
+    } finally {
+      setSavingNote(false);
+    }
+  }
+
+  async function handleConvert(lead: UnifiedLead) {
+    const phoneDigits = digitsOf(lead.phone);
+    const existing = data.customers.find(c =>
+      (lead.id_number && c.idNumber && c.idNumber === lead.id_number) ||
+      (phoneDigits && digitsOf(c.mobilePhone) === phoneDigits)
+    );
+    if (existing) {
+      toast.info(`כבר קיים לקוח עם הפרטים האלה: ${existing.fullName}`);
+      navigate(`/app/customers/${existing.id}`);
+      return;
+    }
+
+    const [firstName, ...rest] = lead.full_name.trim().split(/\s+/);
+    setConvertingId(lead.id);
+    try {
+      const customer = await addCustomer({
+        firstName: firstName || lead.full_name,
+        lastName: rest.join(' '),
+        idNumber: lead.id_number || '',
+        mobilePhone: lead.phone || '',
+        email: lead.email || undefined,
+        source: lead.type === 'insurance' ? `ליד מהאתר — ביטוח ${lead.subType}` : 'ליד מהאתר — ניתוח פנסיוני',
+        internalNotes: [lead.additional_notes, lead.notes].filter(Boolean).join('\n') || undefined,
+        status: 'חדש',
+      });
+      const stamp = `הומר ללקוח ב-${new Date().toLocaleDateString('he-IL')}`;
+      await updateLead(lead, {
+        status: 'closed',
+        notes: [lead.notes, stamp].filter(Boolean).join('\n'),
+        ...(lead.assigned_to ? {} : profile?.fullName ? { assigned_to: profile.fullName } : {}),
+      });
+      toast.success('הליד הומר ללקוח');
+      navigate(`/app/customers/${customer.id}`);
+    } catch (err) {
+      toast.error(errMessage(err, 'המרת הליד נכשלה'));
+    } finally {
+      setConvertingId(null);
+    }
+  }
 
   const filtered = leads.filter(l => {
     if (statusFilter !== 'all' && l.status !== statusFilter) return false;
@@ -217,6 +329,7 @@ export default function LeadsPage() {
         <div className="space-y-3">
           {filtered.map((lead, i) => {
             const st = STATUS_MAP[lead.status] || STATUS_MAP.new;
+            const expanded = expandedId === lead.id;
             return (
               <motion.div key={lead.id}
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
@@ -224,8 +337,7 @@ export default function LeadsPage() {
                 className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm"
-                      style={{ backgroundColor: lead.type === 'insurance' ? '#171717' : '#171717' }}>
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm bg-[#171717]">
                       {lead.type === 'insurance'
                         ? <Shield className="w-5 h-5 text-white" />
                         : <Wallet className="w-5 h-5 text-white" />}
@@ -233,15 +345,24 @@ export default function LeadsPage() {
                     <div className="min-w-0">
                       <p className="text-sm font-extrabold text-[#171717] truncate">{lead.full_name}</p>
                       <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full"
-                          style={{ backgroundColor: st.bg, color: st.text }}>{st.label}</span>
-                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full"
-                          style={{
-                            backgroundColor: lead.type === 'insurance' ? '#17171720' : '#17171720',
-                            color: lead.type === 'insurance' ? '#171717' : '#171717',
-                          }}>
+                        <select
+                          value={lead.status}
+                          onChange={e => handleStatusChange(lead, e.target.value as LeadStatus)}
+                          aria-label={`סטטוס הליד של ${lead.full_name}`}
+                          className="text-[11px] font-bold px-2.5 py-0.5 rounded-full border-0 cursor-pointer appearance-none"
+                          style={{ backgroundColor: st.bg, color: st.text }}>
+                          {(Object.keys(STATUS_MAP) as LeadStatus[]).map(s => (
+                            <option key={s} value={s}>{STATUS_MAP[s].label}</option>
+                          ))}
+                        </select>
+                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#17171720] text-[#171717]">
                           {lead.type === 'insurance' ? 'ביטוח' : 'פנסיה'} &middot; {lead.subType}
                         </span>
+                        {lead.assigned_to && (
+                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#b4530920] text-[#b45309] flex items-center gap-1">
+                            <User className="w-3 h-3" />{lead.assigned_to}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -258,6 +379,19 @@ export default function LeadsPage() {
                         <Mail className="w-3.5 h-3.5 text-blue-600" />
                       </a>
                     )}
+                    <button onClick={() => handleConvert(lead)}
+                      disabled={convertingId === lead.id}
+                      title="צור לקוח מהליד"
+                      className="w-8 h-8 rounded-full bg-[#b45309]/10 flex items-center justify-center hover:bg-[#b45309]/20 transition-colors disabled:opacity-50">
+                      {convertingId === lead.id
+                        ? <Loader2 className="w-3.5 h-3.5 text-[#b45309] animate-spin" />
+                        : <UserPlus className="w-3.5 h-3.5 text-[#b45309]" />}
+                    </button>
+                    <button onClick={() => toggleExpand(lead)}
+                      title={expanded ? 'סגור פרטים' : 'פרטים והערות'}
+                      className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-100 transition-colors">
+                      <ChevronDown className={`w-3.5 h-3.5 text-gray-500 transition-transform ${expanded ? 'rotate-180' : ''}`} />
+                    </button>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 mt-3 text-[11px] text-gray-400">
@@ -267,28 +401,48 @@ export default function LeadsPage() {
                   </span>
                   {lead.email && <span className="truncate max-w-[200px]">{lead.email}</span>}
                   {lead.phone && <span dir="ltr">{lead.phone}</span>}
+                  {lead.id_number && <span>ת.ז {lead.id_number}</span>}
                 </div>
-                {lead.notes && (
+                {!expanded && lead.notes && (
                   <p className="text-xs text-gray-400 mt-2 line-clamp-1 border-t border-gray-50 pt-2">{lead.notes}</p>
                 )}
+                <AnimatePresence>
+                  {expanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden">
+                      <div className="mt-3 pt-3 border-t border-gray-100 space-y-3">
+                        {lead.additional_notes && (
+                          <div>
+                            <p className="text-[11px] font-bold text-gray-400 mb-1">מה הלקוח כתב בטופס</p>
+                            <p className="text-xs text-gray-600 whitespace-pre-wrap">{lead.additional_notes}</p>
+                          </div>
+                        )}
+                        <div>
+                          <p className="text-[11px] font-bold text-gray-400 mb-1">הערות פנימיות</p>
+                          <Textarea value={noteDraft} onChange={e => setNoteDraft(e.target.value)}
+                            placeholder="תיעוד שיחה, סיכום, תזכורת..."
+                            className="text-xs rounded-xl border-gray-200 min-h-[70px]" />
+                          <div className="flex justify-end mt-2">
+                            <Button size="sm" onClick={() => handleSaveNote(lead)}
+                              disabled={savingNote || noteDraft === (lead.notes || '')}
+                              className="rounded-full px-5">
+                              {savingNote ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'שמור הערה'}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             );
           })}
         </div>
       )}
-
-      {/* Coming Soon Banner */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-        className="mt-8 rounded-2xl p-6 text-center border-2 border-dashed"
-        style={{ borderColor: '#17171740', backgroundColor: '#17171708' }}>
-        <div className="w-12 h-12 rounded-full bg-[#171717]/10 flex items-center justify-center mx-auto mb-3">
-          <Filter className="w-6 h-6 text-[#171717]" />
-        </div>
-        <p className="text-sm font-extrabold text-[#171717]">ניהול לידים מלא - בקרוב</p>
-        <p className="text-xs text-gray-400 mt-1 max-w-md mx-auto">
-          יכלול: הקצאת ליד לסוכן, שינוי סטטוס, תיעוד פעולות, מעקב המרות, ועוד
-        </p>
-      </motion.div>
     </div>
   );
 }
