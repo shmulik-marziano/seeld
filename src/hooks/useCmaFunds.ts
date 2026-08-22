@@ -222,11 +222,25 @@ async function fetchLiveFunds(): Promise<Fund[]> {
 
 // ─── Query: last sync info ──────────────────────────────────────────
 
-async function fetchSyncStatus(): Promise<{
+interface SyncStatus {
   lastSync: string | null;
   latestPeriod: number | null;
   totalFunds: number;
-}> {
+}
+
+async function fetchSyncStatus(): Promise<SyncStatus> {
+  // Same story as the funds themselves: cached at the Frankfurt edge, with the
+  // direct pair of queries kept as the fallback for dev and preview.
+  try {
+    const res = await fetch('/api/fund-status');
+    if (res.ok) {
+      const status = (await res.json()) as SyncStatus;
+      if (status && typeof status.totalFunds === 'number') return status;
+    }
+  } catch {
+    // fall through to the direct queries
+  }
+
   const { data: syncLog } = await supabase
     .from('cma_sync_log')
     .select('completed_at, latest_period, records_upserted')
