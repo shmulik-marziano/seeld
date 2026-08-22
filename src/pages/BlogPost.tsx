@@ -57,7 +57,7 @@ const BlogPost = () => {
         if (data.category) {
           const { data: relatedData } = await siteSupabase
             .from("blog_posts")
-            .select("id, slug, title, excerpt, category, author, published_at, content")
+            .select("id, slug, title, excerpt, category, author, published_at, content, cover_image_url")
             .eq("status", "published")
             .eq("category", data.category)
             .neq("slug", slug)

@@ -34,7 +34,7 @@ const stagger = {
 };
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.22, ease: "easeOut" } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.22, ease: "easeOut" as const } },
 };
 
 // Shared DNA v3 CTA styles — institutional navy, rounded-lg

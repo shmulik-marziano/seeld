@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { MONO, CARD_SHADOW, FAINT, LINE } from "@/lib/brand";
+import { MONO, CARD_SHADOW, MUTED, LINE } from "@/lib/brand";
 
 const CookieConsent = () => {
   const [visible, setVisible] = useState(false);
@@ -40,7 +40,7 @@ const CookieConsent = () => {
             <div className="px-5 pb-4 pt-4">
               <p
                 className="text-[11px] font-medium tracking-[0.12em]"
-                style={{ fontFamily: MONO, color: FAINT }}
+                style={{ fontFamily: MONO, color: MUTED }}
                 dir="ltr"
               >
                 COOKIES

@@ -201,6 +201,45 @@ export type Database = {
           },
         ]
       }
+      cma_sync_log: {
+        Row: {
+          id: string
+          source: string
+          status: string
+          records_fetched: number | null
+          records_upserted: number | null
+          latest_period: number | null
+          error_message: string | null
+          duration_ms: number | null
+          started_at: string | null
+          completed_at: string | null
+        }
+        Insert: {
+          id?: string
+          source: string
+          status: string
+          records_fetched?: number | null
+          records_upserted?: number | null
+          latest_period?: number | null
+          error_message?: string | null
+          duration_ms?: number | null
+          started_at?: string | null
+          completed_at?: string | null
+        }
+        Update: {
+          id?: string
+          source?: string
+          status?: string
+          records_fetched?: number | null
+          records_upserted?: number | null
+          latest_period?: number | null
+          error_message?: string | null
+          duration_ms?: number | null
+          started_at?: string | null
+          completed_at?: string | null
+        }
+        Relationships: []
+      }
       correction_activity_log: {
         Row: {
           action_type: string

@@ -65,7 +65,7 @@ const ForeignWorkersInsurance = () => {
         },
       ]}
       companies={["הראל", "מנורה מבטחים", "מגדל", "כלל", "איילון", "הפניקס", "מיטב", "מור", "ילין לפידות", "אנליסט", "אינפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה"]}
-      insuranceType="foreign-workers"
+      insuranceType="foreign_workers"
       enrollmentTitle="הצטרפות לביטוח עובדים זרים"
       enrollmentDescription="מלאו את הפרטים וקבלו הצעה מותאמת אישית"
     />

@@ -74,22 +74,71 @@ export const LiveTag = ({
   </span>
 );
 
-/** Live analog clock — the reference's clock tile. Ink hands, ticks once a second.
- *  Reduced motion: no second hand, updates once a minute. */
-export const LiveClock = ({
-  size = 56, color = INK, className = "",
-}: { size?: number; color?: string; className?: string }) => {
-  const reduced = useReducedMotion();
+/** The agency's own timezone. The clock states when SEELD is reachable, so it
+ *  must read Israel time for every visitor — a client abroad checking "are they
+ *  open now" got their own device time before, which answered the wrong question.
+ *  Named zone, not a fixed offset, so IST/IDT switches handle themselves. */
+export const AGENCY_TZ = "Asia/Jerusalem";
+
+/** Wall-clock parts in a named timezone, independent of the viewer's device. */
+function zonedParts(d: Date, timeZone: string) {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone,
+    hourCycle: "h23",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).formatToParts(d);
+  const get = (t: string) => Number(parts.find((p) => p.type === t)?.value ?? 0);
+  return { h: get("hour"), m: get("minute"), s: get("second") };
+}
+
+/** Ticking `Date`, shared by the clock and the date line. */
+function useNow(everyMs: number) {
   const [now, setNow] = useState(() => new Date());
-
   useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), reduced ? 60000 : 1000);
+    const id = setInterval(() => setNow(new Date()), everyMs);
     return () => clearInterval(id);
-  }, [reduced]);
+  }, [everyMs]);
+  return now;
+}
 
-  const h = now.getHours();
-  const m = now.getMinutes();
-  const s = now.getSeconds();
+/** Live date line — real current date in the agency's timezone, in Hebrew. */
+export const LiveDate = ({
+  timeZone = AGENCY_TZ, className = "", style, weekday = true,
+}: {
+  timeZone?: string;
+  className?: string;
+  style?: React.CSSProperties;
+  weekday?: boolean;
+}) => {
+  // Re-reads every minute; that is enough to roll over at midnight.
+  const now = useNow(60000);
+  const text = new Intl.DateTimeFormat("he-IL", {
+    timeZone,
+    ...(weekday ? { weekday: "long" as const } : {}),
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(now);
+
+  return (
+    <time dateTime={now.toISOString()} className={className} style={style}>
+      {text}
+    </time>
+  );
+};
+
+/** Live analog clock — the reference's clock tile. Ink hands, ticks once a second.
+ *  Reduced motion: no second hand, updates once a minute.
+ *  Reads `timeZone` (default: the agency's), never the visitor's device zone. */
+export const LiveClock = ({
+  size = 56, color = INK, className = "", timeZone = AGENCY_TZ,
+}: { size?: number; color?: string; className?: string; timeZone?: string }) => {
+  const reduced = useReducedMotion();
+  const now = useNow(reduced ? 60000 : 1000);
+
+  const { h, m, s } = zonedParts(now, timeZone);
   const hourAngle = ((h % 12) + m / 60) * 30;
   const minAngle = (m + s / 60) * 6;
   const secAngle = s * 6;
@@ -101,7 +150,7 @@ export const LiveClock = ({
       viewBox="0 0 100 100"
       className={className}
       role="img"
-      aria-label={`השעה ${h}:${String(m).padStart(2, "0")}`}
+      aria-label={`השעה בישראל ${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`}
     >
       <circle cx="50" cy="50" r="45" fill="none" stroke={color} strokeWidth="5" />
       {Array.from({ length: 12 }, (_, i) => (

@@ -142,6 +142,8 @@ const Contact = () => {
                         required
                         className={inputClass}
                         placeholder="שם מלא"
+                        aria-label="שם מלא"
+                        autoComplete="name"
                       />
                       <div className="grid sm:grid-cols-2 gap-4">
                         <input
@@ -153,6 +155,8 @@ const Contact = () => {
                           required
                           className={inputClass}
                           placeholder="אימייל"
+                          aria-label="אימייל"
+                          autoComplete="email"
                           dir="ltr"
                           style={{ textAlign: "right" }}
                         />
@@ -165,6 +169,8 @@ const Contact = () => {
                           required
                           className={inputClass}
                           placeholder="טלפון"
+                          aria-label="טלפון"
+                          autoComplete="tel"
                           dir="ltr"
                           style={{ textAlign: "right" }}
                         />
@@ -175,6 +181,7 @@ const Contact = () => {
                         value={formData.subject}
                         onChange={handleChange}
                         required
+                        aria-label="נושא הפנייה"
                         className="w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors appearance-none cursor-pointer min-h-[48px]"
                       >
                         <option value="">בחרו נושא</option>
@@ -194,6 +201,7 @@ const Contact = () => {
                         rows={4}
                         className="w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] placeholder:text-[#5a6a78] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors resize-none"
                         placeholder="במה נוכל לעזור?"
+                        aria-label="במה נוכל לעזור?"
                       />
                       <div className="pt-2">
                         <button

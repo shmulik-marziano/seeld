@@ -105,7 +105,7 @@ const PersonalAccidents = () => {
           a: "כן, ביטוח תאונות אישיות זמין גם לילדים ומומלץ מאוד. ילדים חשופים לתאונות במיוחד: במגרשי משחקים, בספורט, באופניים ובפעילויות יומיומיות. הפרמיה לילדים נמוכה במיוחד.",
         },
       ]}
-      insuranceType="personal-accidents"
+      insuranceType="personal_accidents"
       enrollmentTitle="הצטרפות לביטוח תאונות אישיות"
       enrollmentDescription="מלאו את הפרטים וקבלו הצעה מותאמת אישית"
     />

@@ -126,6 +126,8 @@ const Footer = () => {
                 onChange={(e) => setFormData(p => ({ ...p, name: e.target.value }))}
                 required
                 placeholder="שם מלא"
+                aria-label="שם מלא"
+                autoComplete="name"
                 className={inputClass}
               />
               <input
@@ -134,6 +136,8 @@ const Footer = () => {
                 onChange={(e) => setFormData(p => ({ ...p, phone: e.target.value }))}
                 required
                 placeholder="טלפון"
+                aria-label="טלפון"
+                autoComplete="tel"
                 dir="ltr"
                 style={{ textAlign: "right" }}
                 className={inputClass}
@@ -144,6 +148,8 @@ const Footer = () => {
                 onChange={(e) => setFormData(p => ({ ...p, email: e.target.value }))}
                 required
                 placeholder="אימייל"
+                aria-label="אימייל"
+                autoComplete="email"
                 dir="ltr"
                 style={{ textAlign: "right" }}
                 className={inputClass}

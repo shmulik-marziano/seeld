@@ -66,7 +66,7 @@ const PartnersRisk = () => {
         },
       ]}
       companies={["הראל", "מנורה מבטחים", "מגדל", "כלל", "איילון", "הפניקס", "מיטב", "מור", "ילין לפידות", "אנליסט", "אינפיניטי", "אלטשולר שחם", "פאספורטקארד", "הכשרה"]}
-      insuranceType="partners-risk"
+      insuranceType="partners_risk"
       enrollmentTitle="הצטרפות לביטוח ריסק שותפים"
       enrollmentDescription="מלאו את הפרטים וקבלו ייעוץ מקצועי"
     />

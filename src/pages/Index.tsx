@@ -302,6 +302,8 @@ const Index = () => {
                     <input
                       type="text"
                       placeholder="שם מלא"
+                      aria-label="שם מלא"
+                      autoComplete="name"
                       value={leadForm.name}
                       onChange={(e) => setLeadForm(prev => ({ ...prev, name: e.target.value }))}
                       className={inputClass}
@@ -309,6 +311,8 @@ const Index = () => {
                     <input
                       type="tel"
                       placeholder="טלפון"
+                      aria-label="טלפון"
+                      autoComplete="tel"
                       value={leadForm.phone}
                       onChange={(e) => setLeadForm(prev => ({ ...prev, phone: e.target.value }))}
                       className={inputClass}
@@ -317,6 +321,7 @@ const Index = () => {
                     />
                     <select
                       value={leadForm.subject}
+                      aria-label="נושא הפנייה"
                       onChange={(e) => setLeadForm(prev => ({ ...prev, subject: e.target.value }))}
                       className="w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors appearance-none cursor-pointer min-h-[48px]"
                     >
@@ -750,6 +755,8 @@ const Index = () => {
                       <input
                         type="text"
                         placeholder="שם מלא"
+                        aria-label="שם מלא"
+                        autoComplete="name"
                         value={contactForm.name}
                         onChange={(e) => setContactForm(prev => ({ ...prev, name: e.target.value }))}
                         className={inputClass}
@@ -757,6 +764,8 @@ const Index = () => {
                       <input
                         type="tel"
                         placeholder="טלפון"
+                        aria-label="טלפון"
+                        autoComplete="tel"
                         value={contactForm.phone}
                         onChange={(e) => setContactForm(prev => ({ ...prev, phone: e.target.value }))}
                         className={inputClass}
@@ -767,12 +776,15 @@ const Index = () => {
                     <input
                       type="email"
                       placeholder="אימייל (לא חובה)"
+                      aria-label="אימייל (לא חובה)"
+                      autoComplete="email"
                       value={contactForm.email}
                       onChange={(e) => setContactForm(prev => ({ ...prev, email: e.target.value }))}
                       className={inputClass}
                     />
                     <textarea
                       placeholder="במה נוכל לעזור?"
+                      aria-label="במה נוכל לעזור?"
                       rows={3}
                       value={contactForm.message}
                       onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}

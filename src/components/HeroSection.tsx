@@ -4,7 +4,7 @@ import {
   BLUE_TEXT, DISPLAY, GOLD_TEXT, LINE, MONO, MUTED, NAVY,
   PASTEL_BLUE, PASTEL_MINT, PASTEL_PEACH, TINT_GOLD, TURQ_TEXT,
 } from "@/lib/brand";
-import { CountUp, LiveClock, LiveDot } from "@/components/brand/Live";
+import { CountUp, LiveClock, LiveDate, LiveDot } from "@/components/brand/Live";
 import { MarketMarquee, type MarqueeItem } from "@/components/brand/Marquee";
 
 // SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold. Snap motion (STYLESEED.md).
@@ -12,7 +12,12 @@ import { MarketMarquee, type MarqueeItem } from "@/components/brand/Marquee";
 // Light turquoise for small text on the navy statement panel (6.88:1 on #1D2D3D, measured)
 const TURQ_ON_NAVY = "#7fc2b5";
 
-// Capital-markets ticker feed — the moving band on the white tile.
+// Ticker band on the white tile.
+// ⚠ These figures are STATIC constants, not a feed. They were previously
+// announced as "נתוני שוק ההון בזמן אמת" — a real-time claim the data does not
+// support, which is not something a licensed agency should publish. The label
+// now describes them as illustrative. To make the claim true instead, feed this
+// from useCmaFunds (live CMA yields) and restore the real-time wording.
 // Values render in their own LTR span so "+11.4%" survives bidi.
 const TICKER_ITEMS: MarqueeItem[] = [
   { label: "SEELD · LIVE", dot: true },
@@ -132,7 +137,7 @@ const HeroSection = () => {
             <div className="grid gap-3 grid-cols-[1fr_auto]">
               <MarketMarquee
                 items={TICKER_ITEMS}
-                ariaLabel="נתוני שוק ההון בזמן אמת"
+                ariaLabel="תשואות לדוגמה במסלולי חיסכון"
                 className="!bg-white !rounded-xl border border-[#E1EAF1] after:!content-none"
               />
               <div
@@ -140,6 +145,11 @@ const HeroSection = () => {
                 style={{ backgroundColor: PASTEL_MINT }}
               >
                 <LiveClock size={52} color={NAVY} className="relative z-10" />
+                <LiveDate
+                  weekday={false}
+                  className="text-[10px] font-semibold text-center leading-tight px-1"
+                  style={{ fontFamily: MONO, color: TURQ_TEXT }}
+                />
                 <span
                   className="text-[10px] tracking-[0.2em] font-semibold"
                   style={{ fontFamily: MONO, color: TURQ_TEXT }}

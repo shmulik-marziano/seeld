@@ -22,6 +22,7 @@ export type Database = {
           excerpt: string | null
           content: string
           category: string | null
+          cover_image_url: string | null
           author: string | null
           status: string | null
           published_at: string | null
@@ -35,6 +36,7 @@ export type Database = {
           excerpt?: string | null
           content: string
           category?: string | null
+          cover_image_url?: string | null
           author?: string | null
           status?: string | null
           published_at?: string | null
@@ -48,6 +50,7 @@ export type Database = {
           excerpt?: string | null
           content?: string
           category?: string | null
+          cover_image_url?: string | null
           author?: string | null
           status?: string | null
           published_at?: string | null
@@ -442,6 +445,40 @@ export type Database = {
           updated_at?: string
           weight_kg?: number | null
           work_seniority?: string | null
+        }
+        Relationships: []
+      }
+      page_views: {
+        Row: {
+          browser: string | null
+          city: string | null
+          country: string | null
+          device: string | null
+          id: number
+          referrer: string | null
+          session_id: string | null
+          slug: string
+          viewed_at: string
+        }
+        Insert: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          device?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          slug: string
+          viewed_at?: string
+        }
+        Update: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          device?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          slug?: string
+          viewed_at?: string
         }
         Relationships: []
       }

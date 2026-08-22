@@ -10,7 +10,7 @@ const CriticalIllness = () => {
       heroTitle="ביטוח מחלות קשות"
       heroDescription="ביטחון כלכלי ברגעים הקשים. פיצוי כספי מיידי בעת אבחון מחלה קשה, כך שתוכלו להתמקד בהחלמה."
       breadcrumbLabel="ביטוח מחלות קשות"
-      insuranceType="critical-illness"
+      insuranceType="critical_illness"
       keyPoints={[
         {
           title: "פיצוי מיידי",

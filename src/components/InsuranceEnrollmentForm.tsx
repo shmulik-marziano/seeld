@@ -10,7 +10,7 @@ import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { toast } from "sonner";
 import { CheckCircle, Send, Car, Home, Briefcase, Plane, Heart, Shield } from "lucide-react";
 
-type InsuranceType = 'vehicle' | 'home' | 'business' | 'travel' | 'dental' | 
+export type InsuranceType = 'vehicle' | 'home' | 'business' | 'travel' | 'dental' |
   'disability' | 'foreign_workers' | 'nursing' | 'health' | 
   'life' | 'mortgage' | 'critical_illness' | 'personal_accidents' | 
   'partners_risk' | 'renters';
