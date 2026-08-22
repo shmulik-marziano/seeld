@@ -98,14 +98,32 @@ export function useInvestmentTracks() {
   useEffect(() => {
     const fetchTracks = async () => {
       try {
-        const { data, error } = await (siteSupabase as any)
-          .from("investment_tracks")
-          .select(TRACK_COLUMNS)
-          .eq("is_active", true)
-          .order("return_year1", { ascending: false });
+        // /api/tracks is cached at Vercel's Frankfurt edge; the direct query
+        // below is the fallback for `vite dev` and `vite preview`, which serve
+        // no /api routes.
+        let rows: DBTrack[] | null = null;
 
-        if (!error && data && data.length > 0) {
-          setFunds(data.map((row: DBTrack, i: number) => dbToFund(row, i)));
+        try {
+          const res = await fetch("/api/tracks");
+          if (res.ok) {
+            const json = await res.json();
+            if (Array.isArray(json) && json.length > 0) rows = json as DBTrack[];
+          }
+        } catch {
+          // fall through to the direct query
+        }
+
+        if (!rows) {
+          const { data, error } = await (siteSupabase as any)
+            .from("investment_tracks")
+            .select(TRACK_COLUMNS)
+            .eq("is_active", true)
+            .order("return_year1", { ascending: false });
+          if (!error && data && data.length > 0) rows = data as DBTrack[];
+        }
+
+        if (rows && rows.length > 0) {
+          setFunds(rows.map((row, i) => dbToFund(row, i)));
           setIsLive(true);
         }
       } catch {

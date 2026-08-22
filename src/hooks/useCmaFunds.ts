@@ -186,17 +186,38 @@ const FUND_COLUMNS = [
   'foreign_exposure', 'foreign_currency_exposure', 'actuarial_adjustment',
 ].join(',');
 
-async function fetchLiveFunds(): Promise<Fund[]> {
-  // Use the cma_funds_latest view for latest data per fund
+/**
+ * Prefer /api/funds: it is cached at Vercel's Frankfurt edge, while the
+ * database is in Tokyo — the difference is roughly 1.7s versus tens of
+ * milliseconds. The direct query stays as the fallback because no /api route
+ * exists under `vite dev` or `vite preview`, and because a broken edge route
+ * should degrade to a slow page rather than a stale one.
+ */
+async function fetchFundRows(): Promise<CmaFundRow[]> {
+  try {
+    const res = await fetch('/api/funds');
+    if (res.ok) {
+      const rows = (await res.json()) as CmaFundRow[];
+      if (Array.isArray(rows) && rows.length > 0) return rows;
+    }
+  } catch {
+    // fall through to the direct query
+  }
+
   const { data, error } = await supabase
     .from('cma_funds_latest' as any)
     .select(FUND_COLUMNS)
     .order('total_assets', { ascending: false });
 
   if (error) throw error;
-  if (!data || data.length === 0) throw new Error('No records in cma_funds_latest');
+  return (data ?? []) as unknown as CmaFundRow[];
+}
 
-  return (data as unknown as CmaFundRow[]).map(dbRowToFund);
+async function fetchLiveFunds(): Promise<Fund[]> {
+  const rows = await fetchFundRows();
+  if (rows.length === 0) throw new Error('No records in cma_funds_latest');
+
+  return rows.map(dbRowToFund);
 }
 
 // ─── Query: last sync info ──────────────────────────────────────────

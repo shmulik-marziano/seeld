@@ -23,11 +23,17 @@ describe("column selection", () => {
     return [...body.matchAll(/^\s*([a-z_]+)\??:/gm)].map((m) => m[1]);
   }
 
-  /** The joined column list assigned to `const NAME = [ … ].join(',')`. */
+  /**
+   * The joined column list assigned to `const NAME = [ … ].join(',')`.
+   * Accepts either quote style — src/ is single-quoted and api/ is double, and
+   * a quote-blind matcher would silently return an empty list and "pass".
+   */
   function columnList(source: string, name: string): string[] {
     const body = source.match(new RegExp(`const ${name} = \\[(.*?)\\]\\.join`, "s"))?.[1];
     if (!body) throw new Error(`${name} not found`);
-    return [...body.matchAll(/'([a-z_]+)'/g)].map((m) => m[1]);
+    const cols = [...body.matchAll(/['"]([a-z_]+)['"]/g)].map((m) => m[1]);
+    if (cols.length === 0) throw new Error(`${name} parsed as empty`);
+    return cols;
   }
 
   // These hooks pull ~1,400 and ~570 rows on public pages. They ask for named
@@ -45,5 +51,19 @@ describe("column selection", () => {
     const missing = interfaceFields(src, "DBTrack")
       .filter((f) => !columnList(src, "TRACK_COLUMNS").includes(f));
     expect(missing).toEqual([]);
+  });
+
+  // The cached edge routes under api/ are built separately from the Vite app,
+  // so each keeps its own copy of the column list. They are the same query
+  // against the same view — if they drift, the edge and the fallback start
+  // returning differently shaped rows and only one of the two paths breaks,
+  // which is the kind of bug that only shows up in production.
+  it.each([
+    ["funds", "useCmaFunds.ts", "FUND_COLUMNS"],
+    ["tracks", "useInvestmentTracks.ts", "TRACK_COLUMNS"],
+  ])("api/%s asks for the same columns as the hook fallback", (route, hook, constant) => {
+    const edge = readFileSync(join(ROOT, "api", `${route}.ts`), "utf8");
+    const client = readFileSync(join(ROOT, "src", "hooks", hook), "utf8");
+    expect(columnList(edge, constant)).toEqual(columnList(client, constant));
   });
 });

@@ -1,0 +1,19 @@
+{
+  /* The cached edge routes under api/ are built by Vercel, not by Vite, so
+     neither tsconfig.app.json (include: src) nor tsconfig.node.json covered
+     them. A type error there fails the deploy rather than the local build,
+     which is the worst place to find one. */
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": ["api"]
+}
