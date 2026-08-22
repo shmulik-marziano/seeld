@@ -1,15 +1,16 @@
-import { createClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import { supabase, SUPABASE_URL } from './client';
 import type { Database } from './site-types';
 
-// Publishable (anon) credentials — safe to ship in the client bundle; access
-// control is enforced by Supabase RLS. Env vars override for other environments.
-export const SITE_SUPABASE_URL = import.meta.env.VITE_SITE_SUPABASE_URL ?? "https://lvifatyksqizwcutfbqp.supabase.co";
-const SITE_SUPABASE_KEY = import.meta.env.VITE_SITE_SUPABASE_PUBLISHABLE_KEY ?? "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2aWZhdHlrc3FpendjdXRmYnFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MDg3NTIsImV4cCI6MjA4OTE4NDc1Mn0.a1ECWY9SDwMveRvi1zj7bA2b7U6BvRv0Mh0rMysg40E";
+// The site client used to be a second createClient() call — same project, same
+// anon key, same default storage key. That meant two GoTrueClient instances
+// sharing one refresh token, each running its own refresh timer: whichever
+// fired second replayed an already-spent token, and Supabase answered by
+// invalidating the session. Users were being signed out at random.
+//
+// There is only one connection here now. `siteSupabase` stays as a separately
+// typed handle onto it, because the public-site tables live in a different
+// generated Database type than the agent app's.
+export const SITE_SUPABASE_URL = SUPABASE_URL;
 
-export const siteSupabase = createClient<Database>(SITE_SUPABASE_URL, SITE_SUPABASE_KEY, {
-  auth: {
-    storage: localStorage,
-    persistSession: true,
-    autoRefreshToken: true,
-  }
-});
+export const siteSupabase = supabase as unknown as SupabaseClient<Database>;

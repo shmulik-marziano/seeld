@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Frank+Ruhl+Libre:wght@700;900&family=Geist+Mono:wght@400;500;600&display=swap');
+/* The Google Fonts stylesheet is linked from index.html, not @import-ed here.
+   As an @import the browser could not even discover it until this file had been
+   downloaded and parsed, so the fonts started one full round trip late. */
 
 @tailwind base;
 @tailwind components;

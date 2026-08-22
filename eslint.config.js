@@ -5,7 +5,11 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  // supabase/functions-export is a read-only snapshot of every edge function
+  // deployed on the shared Supabase project — including fifteen that belong to
+  // sibling products. Nothing here builds or deploys it, and linting other
+  // teams' code only buries our own findings.
+  { ignores: ["dist", "supabase/functions-export"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],

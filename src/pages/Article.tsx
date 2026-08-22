@@ -1,5 +1,6 @@
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Header from "@/components/Header";
+import NotFound from "@/pages/NotFound";
 import { getArticleById, getRelatedArticles, type Article as ArticleData } from "@/data/articles";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { Facebook, Twitter, Linkedin, Link2, ArrowRight } from "lucide-react";
@@ -51,7 +52,10 @@ const Article = () => {
   usePageSeo(article?.title, article?.subtitle);
 
   if (!article) {
-    return <Navigate to="/404" replace />;
+    // Rendered in place rather than redirected to "/404" — there is no such
+    // route, so that only ever worked by falling through to the catch-all, and
+    // `replace` erased the article URL the visitor actually asked for.
+    return <NotFound />;
   }
 
   const relatedArticles = getRelatedArticles(article.id);
@@ -81,14 +85,14 @@ const Article = () => {
           <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
             {/* Back navigation */}
             <div className="mb-10">
-              <a
-                href="/"
+              <Link
+                to="/"
                 className="inline-flex items-center gap-2 text-sm hover:text-[#1D2D3D] transition-colors"
                 style={{ color: MUTED }}
               >
                 <ArrowRight className="w-4 h-4" />
                 חזרה למאמרים
-              </a>
+              </Link>
             </div>
 
             <h1 className="dna-display leading-[1.15] mb-4" style={{ fontSize: "clamp(32px, 5vw, 50px)" }}>
@@ -115,9 +119,13 @@ const Article = () => {
 
             {/* Hero image — framed by a hairline */}
             <div className="rounded-xl overflow-hidden mb-10 border" style={{ borderColor: LINE }}>
+              {/* The hero is the LCP element here, so it is deliberately eager
+                  and high-priority — the opposite of the thumbnails. */}
               <img
                 src={article.image}
                 alt={article.title}
+                fetchPriority="high"
+                decoding="async"
                 className="w-full h-[260px] sm:h-[380px] md:h-[460px] object-cover"
               />
             </div>

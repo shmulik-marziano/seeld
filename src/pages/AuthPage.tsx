@@ -61,7 +61,7 @@ export default function AuthPage() {
   // Switch to onboarding if needed
   useEffect(() => {
     if (isOnboarding && session && mode !== 'onboarding') setMode('onboarding');
-  }, [isOnboarding, session]);
+  }, [isOnboarding, session, mode]);
 
   // Login fields
   const [email, setEmail] = useState('');

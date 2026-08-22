@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, Component, type ReactNode } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { siteSupabase, SITE_SUPABASE_URL } from "@/integrations/supabase/site-client";
+import type { Tables } from "@/integrations/supabase/site-types";
 import { supabase as agentSupabase } from "@/integrations/supabase/client";
 
 // Error boundary to catch runtime crashes
@@ -112,7 +113,7 @@ function SiteAdminInner() {
     } else {
       if (step === "admin" || step === "denied") setStep("login");
     }
-  }, [user, authLoading]);
+  }, [user, authLoading, step]);
 
   // Resend countdown
   useEffect(() => {
@@ -687,7 +688,7 @@ function EmptyState({ icon, title, subtitle }: {
 // ══════════════════════════════════════════════════════
 
 // actual DB schema: id (int8), slug (text), viewed_at (timestamptz), country, city, device, referrer, browser, session_id
-type PageViewRow = { slug: string; viewed_at: string; country?: string; city?: string; device?: string; referrer?: string; browser?: string; session_id?: string };
+type PageViewRow = Omit<Tables<"page_views">, "id">;
 
 const COUNTRY_MAP: Record<string, { flag: string; name: string }> = {
   IL: { flag: "\u{1F1EE}\u{1F1F1}", name: "\u05D9\u05E9\u05E8\u05D0\u05DC" },
@@ -781,7 +782,7 @@ function AnalyticsModule() {
     const from = getRangeDates(range);
 
     let query = siteSupabase
-      .from("page_views" as any)
+      .from("page_views")
       .select("slug, viewed_at, country, city, device, referrer, browser, session_id")
       .order("viewed_at", { ascending: false })
       .limit(5000);
@@ -789,19 +790,19 @@ function AnalyticsModule() {
 
     const { data, error } = await query;
     if (error) console.warn("[Analytics] fetch failed:", error.message);
-    setViews((data as PageViewRow[]) ?? []);
+    setViews(data ?? []);
 
     // Fetch previous period for comparison
     const prev = getPrevRangeDates(range);
     if (prev) {
       const pq = siteSupabase
-        .from("page_views" as any)
+        .from("page_views")
         .select("slug, viewed_at, country, city, device, referrer, browser, session_id")
         .gte("viewed_at", prev.start.toISOString())
         .lt("viewed_at", prev.end.toISOString())
         .limit(5000);
       const { data: pd } = await pq;
-      setPrevViews((pd as PageViewRow[]) ?? []);
+      setPrevViews(pd ?? []);
     } else {
       setPrevViews([]);
     }

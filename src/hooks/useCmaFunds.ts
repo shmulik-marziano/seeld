@@ -10,11 +10,13 @@ import { companyLabels } from '@/types/fund';
 
 // ─── Types for DB records ───────────────────────────────────────────
 
+// Mirrors FUND_COLUMNS below, not the full view: fund_classification,
+// yield_trailing_3yrs/5yrs and fetched_at exist in cma_funds_latest but nothing
+// in the app reads them, so they are no longer fetched.
 interface CmaFundRow {
   id: string;
   fund_id: string;
   fund_name: string;
-  fund_classification: string | null;
   managing_company: string | null;
   source: 'gemelnet' | 'pensyanet' | 'bituachnet';
   product_type: string | null;
@@ -23,8 +25,6 @@ interface CmaFundRow {
   total_assets: number | null;
   monthly_yield: number | null;
   ytd_yield: number | null;
-  yield_trailing_3yrs: number | null;
-  yield_trailing_5yrs: number | null;
   avg_annual_yield_3yrs: number | null;
   avg_annual_yield_5yrs: number | null;
   avg_annual_management_fee: number | null;
@@ -35,7 +35,6 @@ interface CmaFundRow {
   foreign_exposure: number | null;
   foreign_currency_exposure: number | null;
   actuarial_adjustment: number | null;
-  fetched_at: string;
 }
 
 // ─── Map Hebrew company name to ManagingCompany key ─────────────────
@@ -175,11 +174,23 @@ function dbRowToFund(row: CmaFundRow): Fund {
 
 // ─── Fetch from Supabase ────────────────────────────────────────────
 
+// The view carries 26 columns; dbRowToFund reads 18 of them. `select('*')` put
+// the other 8 — classification strings, trailing-yield duplicates, fetched_at
+// timestamps — on the wire for all ~1,400 funds on every visit to the fund
+// finder and the return tables, for nothing.
+const FUND_COLUMNS = [
+  'id', 'fund_id', 'fund_name', 'managing_company', 'source', 'product_type',
+  'specialization', 'report_period', 'total_assets', 'monthly_yield', 'ytd_yield',
+  'avg_annual_yield_3yrs', 'avg_annual_yield_5yrs', 'avg_annual_management_fee',
+  'avg_deposit_fee', 'standard_deviation', 'sharpe_ratio', 'stock_market_exposure',
+  'foreign_exposure', 'foreign_currency_exposure', 'actuarial_adjustment',
+].join(',');
+
 async function fetchLiveFunds(): Promise<Fund[]> {
   // Use the cma_funds_latest view for latest data per fund
   const { data, error } = await supabase
     .from('cma_funds_latest' as any)
-    .select('*')
+    .select(FUND_COLUMNS)
     .order('total_assets', { ascending: false });
 
   if (error) throw error;
@@ -196,7 +207,7 @@ async function fetchSyncStatus(): Promise<{
   totalFunds: number;
 }> {
   const { data: syncLog } = await supabase
-    .from('cma_sync_log' as any)
+    .from('cma_sync_log')
     .select('completed_at, latest_period, records_upserted')
     .eq('status', 'success')
     .order('completed_at', { ascending: false })

@@ -33,7 +33,16 @@ skills-lock.json
 # Internal documentation (kept local only — public repo)
 docs-internal/
 
+# Playwright run output
+test-results/
+playwright-report/
+
 # Environment files (public repo — never commit env values; see .env.example)
 .env
 .env.*
 !.env.example
+
+# Edge functions pulled back from production before the region migration.
+# Two of them carry hardcoded live tokens (see the README in there), and this
+# is a public repo — keep the export out until those secrets are rotated.
+supabase/functions-export/

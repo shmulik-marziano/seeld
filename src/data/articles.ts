@@ -32,7 +32,7 @@ export const articles: Article[] = [
     category: "חיסכון",
     date: "16 בינו׳ 2025",
     readTime: "5 דק׳",
-    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1920&q=80",
+    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200&q=70&auto=format&fit=crop",
     author: {
       name: "שמוליק מרציאנו",
       avatar: seeldLogoHQ,
@@ -69,7 +69,7 @@ export const articles: Article[] = [
     category: "ביטוח בריאות",
     date: "23 בינו׳ 2025",
     readTime: "6 דק׳",
-    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1920&q=80",
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=70&auto=format&fit=crop",
     author: {
       name: "שמוליק מרציאנו",
       avatar: seeldLogoHQ,
@@ -106,7 +106,7 @@ export const articles: Article[] = [
     category: "חיסכון",
     date: "4 בפבר׳ 2025",
     readTime: "5 דק׳",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&q=80",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=70&auto=format&fit=crop",
     author: {
       name: "שמוליק מרציאנו",
       avatar: seeldLogoHQ,
@@ -143,7 +143,7 @@ export const articles: Article[] = [
     category: "ביטוח חיים",
     date: "19 בפבר׳ 2025",
     readTime: "7 דק׳",
-    image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920&q=80",
+    image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&q=70&auto=format&fit=crop",
     author: {
       name: "שמוליק מרציאנו",
       avatar: seeldLogoHQ,
@@ -184,7 +184,7 @@ export const articles: Article[] = [
     category: "ביטוח רכב",
     date: "15 במרץ 2025",
     readTime: "8 דק׳",
-    image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1920&q=80",
+    image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1200&q=70&auto=format&fit=crop",
     author: {
       name: "שמוליק מרציאנו",
       avatar: seeldLogoHQ,
@@ -225,7 +225,7 @@ export const articles: Article[] = [
     category: "השקעות",
     date: "22 במרץ 2025",
     readTime: "7 דק׳",
-    image: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=1920&q=80",
+    image: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=1200&q=70&auto=format&fit=crop",
     author: {
       name: "שמוליק מרציאנו",
       avatar: seeldLogoHQ,
@@ -266,7 +266,7 @@ export const articles: Article[] = [
     category: "ביטוח דירה",
     date: "5 באפר׳ 2025",
     readTime: "6 דק׳",
-    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1920&q=80",
+    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&q=70&auto=format&fit=crop",
     author: {
       name: "שמוליק מרציאנו",
       avatar: seeldLogoHQ,
@@ -307,7 +307,7 @@ export const articles: Article[] = [
     category: "תקציב",
     date: "12 באפר׳ 2025",
     readTime: "6 דק׳",
-    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920&q=80",
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&q=70&auto=format&fit=crop",
     author: {
       name: "שמוליק מרציאנו",
       avatar: seeldLogoHQ,

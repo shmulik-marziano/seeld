@@ -1,46 +1,51 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+// admin-verify v18 — session-based auth (admin email corrected).
+// v16 compared a shared password that leaked into a public GitHub repo and
+// returned onboarding + bank-detail rows to anyone holding it. Since v17 the
+// caller must present a valid Supabase session token belonging to an
+// allow-listed admin email.
+//
+// Restored from the live deployment on 2026-08-22: the copy that sat here was
+// the v16-era file, still carrying the shared-password path and an exec_sql RPC
+// that no longer exists. `supabase functions deploy admin-verify` from this
+// repo would have rolled the fix back and reopened the leak.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const ADMIN_PASSWORD = Deno.env.get("ADMIN_PASSWORD");
+const ADMIN_EMAILS = ["shmulik@seeld-ins.co.il"];
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    if (!ADMIN_PASSWORD) {
-      return new Response(JSON.stringify({ error: "Admin password not configured" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    const authHeader = req.headers.get("Authorization") ?? "";
+    const token = authHeader.replace(/^Bearer\s+/i, "");
 
-    const { password, action } = await req.json();
+    const authClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+    );
+    const { data: { user }, error: userErr } = await authClient.auth.getUser(token);
 
-    if (!password || typeof password !== "string" || password.length > 100) {
-      return new Response(JSON.stringify({ error: "Invalid request" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    if (password !== ADMIN_PASSWORD) {
-      return new Response(JSON.stringify({ error: "סיסמה שגויה" }), {
+    const email = user?.email?.toLowerCase() ?? "";
+    if (userErr || !user || !ADMIN_EMAILS.includes(email)) {
+      return new Response(JSON.stringify({ error: "לא מורשה" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Password correct - use service role to fetch data
+    const { action } = await req.json().catch(() => ({ action: null }));
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
     if (action === "fetch") {
@@ -64,33 +69,6 @@ serve(async (req) => {
       });
     }
 
-    if (action === "migrate") {
-      // Run page_views v2 migration
-      const queries = [
-        "ALTER TABLE page_views ADD COLUMN IF NOT EXISTS country text",
-        "ALTER TABLE page_views ADD COLUMN IF NOT EXISTS city text",
-        "ALTER TABLE page_views ADD COLUMN IF NOT EXISTS device text",
-        "ALTER TABLE page_views ADD COLUMN IF NOT EXISTS referrer text",
-        "ALTER TABLE page_views ADD COLUMN IF NOT EXISTS browser text",
-        "ALTER TABLE page_views ADD COLUMN IF NOT EXISTS session_id text",
-        "CREATE INDEX IF NOT EXISTS idx_page_views_country ON page_views(country)",
-      ];
-      const results: string[] = [];
-      for (const sql of queries) {
-        const { error } = await supabase.rpc("exec_sql", { query: sql }).maybeSingle();
-        if (error) {
-          // Try direct approach - use from().select() to check if column exists
-          results.push(`${sql} → skipped (rpc not available)`);
-        } else {
-          results.push(`${sql} → OK`);
-        }
-      }
-      return new Response(JSON.stringify({ success: true, results }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Default: just verify password
     return new Response(JSON.stringify({ success: true }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

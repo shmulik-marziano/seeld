@@ -10,7 +10,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { Loader2 } from "lucide-react";
 import ScrollToTop from "@/components/ScrollToTop";
 import PageTransition from "@/components/PageTransition";
-import AIChatBot from "@/components/AIChatBot";
+import AIChatBot from "@/components/AIChatBotLoader";
 import AccessibilityButton from "@/components/AccessibilityButton";
 import CookieConsent from "@/components/CookieConsent";
 import ScrollProgress from "@/components/ScrollProgress";
@@ -50,15 +50,22 @@ async function getGeoData(): Promise<{ country: string | null; city: string | nu
   if (cached) {
     try { return JSON.parse(cached); } catch { /* fall through */ }
   }
+  // ipapi.co is a third party and is commonly blocked by ad blockers. Without a
+  // deadline a blocked request just hangs, and the page-view insert behind it
+  // never fires. Cap it and cache the miss so we retry at most once per session.
   try {
-    const res = await fetch("https://ipapi.co/json/");
+    const res = await fetch("https://ipapi.co/json/", {
+      signal: AbortSignal.timeout(3000),
+    });
     if (!res.ok) return { country: null, city: null };
     const data = await res.json();
     const geo = { country: data.country_code ?? null, city: data.city ?? null };
     sessionStorage.setItem("pv_geo", JSON.stringify(geo));
     return geo;
   } catch {
-    return { country: null, city: null };
+    const geo = { country: null, city: null };
+    sessionStorage.setItem("pv_geo", JSON.stringify(geo));
+    return geo;
   }
 }
 
@@ -73,8 +80,11 @@ function PageViewTracker() {
     // Skip admin paths to avoid self-tracking
     if (slug.startsWith("/site-admin") || slug.startsWith("/admin")) return;
 
-    // Non-blocking insert with enriched data
-    (async () => {
+    // Analytics is never worth a millisecond of the first paint: the ipapi.co
+    // lookup and the Supabase insert both open a fresh connection, and on the
+    // landing view they were competing with the fonts and the entry chunk for
+    // bandwidth. Wait for the browser to go idle first.
+    const send = async () => {
       const ua = navigator.userAgent;
       const geo = await getGeoData();
       const row = {
@@ -86,9 +96,22 @@ function PageViewTracker() {
         country: geo.country,
         city: geo.city,
       };
-      const { error } = await siteSupabase.from("page_views" as any).insert(row);
+      const { error } = await siteSupabase.from("page_views").insert(row);
       if (error) console.warn("[PageView] insert failed:", error.message);
-    })();
+    };
+
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    // Deliberately not cancelled on cleanup: a visitor who moves on within the
+    // idle window still visited this page, and dropping the row would quietly
+    // undercount the fastest navigations.
+    if (typeof w.requestIdleCallback === "function") {
+      w.requestIdleCallback(() => { void send(); }, { timeout: 5000 });
+    } else {
+      window.setTimeout(() => { void send(); }, 2000);
+    }
   }, [location.pathname]);
 
   return null;
@@ -219,7 +242,21 @@ const TermsPage = lazy(() => import("@/pages/TermsPage"));
 const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
-const queryClient = new QueryClient();
+// The database lives in ap-northeast-1 (Tokyo) while the users are in Israel —
+// every round trip costs ~250ms before the query even runs. The library defaults
+// (staleTime 0, refetchOnWindowFocus, retry 3) turned every tab-switch into a
+// full refetch of every mounted query, which is what made the app feel stuck.
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      gcTime: 30 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: true,
+      retry: 1,
+    },
+  },
+});
 
 // ── Agent Auth Guards ──
 function AgentAuthGuard() {
@@ -278,8 +315,11 @@ const App = () => (
             <GridBackdrop />
             <ScrollProgress />
             <ScrollToTop />
+            {/* Suspense sits ABOVE the transition on purpose: keyed on pathname,
+                AnimatePresence tore the boundary down and rebuilt it on every
+                navigation, so each lazy chunk remounted its fallback mid-fade. */}
+            <Suspense fallback={<RouteFallback />}>
             <PageTransition>
-              <Suspense fallback={<RouteFallback />}>
               <Routes>
                 {/* ═══ PUBLIC SITE ROUTES ═══ */}
                 <Route path="/" element={<Index />} />
@@ -421,8 +461,8 @@ const App = () => (
 
                 <Route path="*" element={<NotFound />} />
               </Routes>
-              </Suspense>
             </PageTransition>
+            </Suspense>
 
             <AIChatBot />
             <AccessibilityButton />

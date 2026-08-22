@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Kept in sync by hand with the public routes in src/App.tsx.
+  Deliberately absent: /admin and /install (redirects), /site-admin, /style-guide,
+  /saved-calculations and /personal-area (per-user, behind a login), and every
+  /app/*, /portal/* and /client/* route.
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Main Pages -->
   <url><loc>https://seeld.co.il/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
@@ -6,12 +12,22 @@
   <url><loc>https://seeld.co.il/contact</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://seeld.co.il/faq</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://seeld.co.il/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://seeld.co.il/learn</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://seeld.co.il/authors</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://seeld.co.il/calculators</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://seeld.co.il/fund-finder</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://seeld.co.il/return-tables</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://seeld.co.il/investment-tracks</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://seeld.co.il/onboarding</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://seeld.co.il/personal-area</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://seeld.co.il/rights-extraction</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://seeld.co.il/direct-debit</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://seeld.co.il/agents</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- Content hubs -->
+  <url><loc>https://seeld.co.il/wellness</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://seeld.co.il/travel</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://seeld.co.il/creativity</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://seeld.co.il/growth</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
 
   <!-- Insurance Pages -->
   <url><loc>https://seeld.co.il/insurances</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
@@ -28,16 +44,19 @@
   <url><loc>https://seeld.co.il/insurance/disability</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://seeld.co.il/insurance/dental</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://seeld.co.il/insurance/nursing</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://seeld.co.il/insurance/nursing-clalit</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://seeld.co.il/insurance/partners</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://seeld.co.il/insurance/foreign-workers</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
   <!-- Savings & Pension Pages -->
+  <url><loc>https://seeld.co.il/savings</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://seeld.co.il/savings/pension-funds</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://seeld.co.il/savings/gemel-funds</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://seeld.co.il/savings/gemel-investment</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://seeld.co.il/savings/child-savings</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://seeld.co.il/savings/training-funds</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://seeld.co.il/savings/investment</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://seeld.co.il/savings/pension-life-insurance</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://seeld.co.il/savings/employer-funds</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://seeld.co.il/savings/pre-retirement</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://seeld.co.il/savings/post-retirement</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>

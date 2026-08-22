@@ -80,6 +80,16 @@ function dbToFund(row: DBTrack, idx: number): Fund {
   };
 }
 
+// Exactly the columns DBTrack declares. `select("*")` was shipping the whole
+// row — internal sync bookkeeping included — for all ~570 active tracks.
+const TRACK_COLUMNS = [
+  'fund_number', 'name', 'company', 'product_type', 'specialization',
+  'stock_exposure', 'return_year1', 'return_year3', 'return_year5', 'return_month',
+  'fee_assets', 'fee_deposits', 'sharpe_ratio', 'total_assets', 'liquidity',
+  'report_period', 'foreign_exposure', 'currency_exposure', 'stocks_pct',
+  'gov_bonds_pct', 'corp_bonds_pct', 'cash_pct', 'other_pct',
+].join(',');
+
 export function useInvestmentTracks() {
   const [funds, setFunds] = useState<Fund[]>(staticFunds);
   const [isLive, setIsLive] = useState(false);
@@ -90,7 +100,7 @@ export function useInvestmentTracks() {
       try {
         const { data, error } = await (siteSupabase as any)
           .from("investment_tracks")
-          .select("*")
+          .select(TRACK_COLUMNS)
           .eq("is_active", true)
           .order("return_year1", { ascending: false });
 

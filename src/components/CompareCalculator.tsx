@@ -67,18 +67,20 @@ const AnimatedNumber = ({ value, format }: { value: number; format: (n: number) 
   return <>{format(displayValue)}</>;
 };
 
+// Investment tracks with their average annual returns (based on 5-year averages).
+// Module scope on purpose: rebuilt inside the component this array was a fresh
+// reference every render, which is why the memo below had to lie about its deps.
+const tracks: Track[] = [
+  { name: "מניות", rate: 12.25, icon: Rocket },
+  { name: "כללי", rate: 8.21, icon: Scale },
+  { name: "לבני 50-", rate: 9.03, icon: Baby },
+  { name: "הלכתי", rate: 6.96, icon: Star },
+  { name: "אג\"ח", rate: 3.21, icon: Shield },
+];
+
 const CompareCalculator = () => {
   const [investmentAmount, setInvestmentAmount] = useState(100000);
   const [years, setYears] = useState(5);
-
-  // Investment tracks with their average annual returns (based on 5-year averages)
-  const tracks: Track[] = [
-    { name: "מניות", rate: 12.25, icon: Rocket },
-    { name: "כללי", rate: 8.21, icon: Scale },
-    { name: "לבני 50-", rate: 9.03, icon: Baby },
-    { name: "הלכתי", rate: 6.96, icon: Star },
-    { name: "אג\"ח", rate: 3.21, icon: Shield },
-  ];
 
   const results: TrackResult[] = useMemo(() => {
     return tracks.map((track) => {

@@ -56,8 +56,8 @@ const defaultSuggestions = [
   { icon: PiggyBank, text: "רוצה לקבוע פגישה" },
 ];
 
-const AIChatBot = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
+  const [isExpanded, setIsExpanded] = useState(defaultOpen);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
