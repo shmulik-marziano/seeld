@@ -55,21 +55,21 @@ export default function ExecutionQueuePage() {
           <div className="rounded-2xl p-3 md:p-4 bg-destructive/5 border border-destructive/10 transition-all">
             <div className="flex items-center gap-2 mb-1">
               <RotateCcw className="h-4 w-4 text-destructive" />
-              <span className="text-xs font-semibold text-destructive">חזר ליקוי</span>
+              <span className="text-xs font-bold text-destructive">חזר ליקוי</span>
             </div>
             <p className="text-xl md:text-2xl font-bold text-foreground">{defectCount}</p>
           </div>
           <div className="rounded-2xl p-3 md:p-4 bg-amber-50/50 dark:bg-amber-900/10 border border-amber-200/20 transition-all">
             <div className="flex items-center gap-2 mb-1">
               <Clock className="h-4 w-4 text-amber-500" />
-              <span className="text-xs font-semibold text-amber-600">ממתין</span>
+              <span className="text-xs font-bold text-amber-600">ממתין</span>
             </div>
             <p className="text-xl md:text-2xl font-bold text-foreground">{waitingCount}</p>
           </div>
-          <div className="rounded-2xl p-3 md:p-4 bg-[#171717]/5 border border-[#171717]/10 transition-all">
+          <div className="rounded-2xl p-3 md:p-4 bg-[#003D30]/5 border border-[#003D30]/10 transition-all">
             <div className="flex items-center gap-2 mb-1">
-              <CheckCircle2 className="h-4 w-4 text-[#171717]" />
-              <span className="text-xs font-semibold text-[#171717]">בטיפול</span>
+              <CheckCircle2 className="h-4 w-4 text-[#003D30]" />
+              <span className="text-xs font-bold text-[#003D30]">בטיפול</span>
             </div>
             <p className="text-xl md:text-2xl font-bold text-foreground">{inProgressCount}</p>
           </div>
@@ -89,7 +89,7 @@ export default function ExecutionQueuePage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.25, delay: Math.min(i * 0.04, 0.3) }}
             >
-              <Card className={`rounded-2xl border-border/50 hover:shadow-lg hover:shadow-[#171717]/5 transition-all duration-300 hover:-translate-y-0.5 group overflow-hidden ${
+              <Card className={`rounded-2xl border-border/50 hover:shadow-lg hover:shadow-[#003D30]/5 transition-all duration-300 hover:-translate-y-0.5 group overflow-hidden ${
                 isDefect ? 'border-destructive/30' : ''
               }`}>
                 <CardContent className="p-0">
@@ -98,7 +98,7 @@ export default function ExecutionQueuePage() {
                     <div className={`w-1 shrink-0 ${
                       isDefect ? 'bg-destructive' :
                       item.executionStatus === 'ממתין לנתונים' ? 'bg-amber-400' :
-                      'bg-[#171717]'
+                      'bg-[#003D30]'
                     }`} />
 
                     <div className="flex items-start justify-between flex-1 p-3 md:p-4 gap-3">
@@ -107,9 +107,9 @@ export default function ExecutionQueuePage() {
                         <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                           <button
                             onClick={() => navigate(`/app/customers/${item.customerId}`)}
-                            className="font-bold text-sm hover:text-[#171717] transition-colors flex items-center gap-1.5"
+                            className="font-bold text-sm hover:text-[#003D30] transition-colors flex items-center gap-1.5"
                           >
-                            <div className="w-6 h-6 rounded-lg bg-[#171717]/8 flex items-center justify-center text-[10px] font-bold text-[#171717] shrink-0">
+                            <div className="w-6 h-6 rounded-lg bg-[#003D30]/8 flex items-center justify-center text-[10px] font-bold text-[#003D30] shrink-0">
                               {item.customer?.firstName?.[0]}
                             </div>
                             {item.customer?.fullName}
@@ -146,7 +146,7 @@ export default function ExecutionQueuePage() {
 
                         {item.nextStep && (
                           <div className="flex items-center gap-1.5 mt-2 text-xs">
-                            <span className="font-medium text-[#171717]">צעד הבא:</span>
+                            <span className="font-medium text-[#003D30]">צעד הבא:</span>
                             <span className="text-foreground/70">{item.nextStep}</span>
                           </div>
                         )}
@@ -157,7 +157,7 @@ export default function ExecutionQueuePage() {
                         size="sm"
                         variant="ghost"
                         onClick={() => navigate(`/app/customers/${item.customerId}`)}
-                        className="rounded-xl h-9 w-9 p-0 min-h-[36px] hover:bg-[#171717]/10 shrink-0"
+                        className="rounded-xl h-9 w-9 p-0 min-h-[36px] hover:bg-[#003D30]/10 shrink-0"
                       >
                         <ArrowLeft className="h-4 w-4" />
                       </Button>
@@ -176,8 +176,8 @@ export default function ExecutionQueuePage() {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center py-20"
         >
-          <div className="w-20 h-20 rounded-full bg-[#171717]/10 flex items-center justify-center mx-auto mb-5">
-            <Zap className="h-10 w-10 text-[#5c5c5c]" />
+          <div className="w-20 h-20 rounded-full bg-[#003D30]/10 flex items-center justify-center mx-auto mb-5">
+            <Zap className="h-10 w-10 text-[#476356]" />
           </div>
           <p className="text-foreground/70 font-medium mb-1">אין המלצות בתור ביצוע</p>
           <p className="text-sm text-muted-foreground">המלצות שאושרו על ידי לקוחות יופיעו כאן</p>

@@ -1,0 +1,96 @@
+{
+  "illustrations": {
+    "01-journey": {
+      "width": 1536,
+      "height": 1024,
+      "ratio": "3:2",
+      "srcset": {
+        "480": "/brand/illustrations/01-journey-480.webp",
+        "960": "/brand/illustrations/01-journey-960.webp",
+        "1536": "/brand/illustrations/01-journey-1536.webp"
+      }
+    },
+    "02-family-protection": {
+      "width": 1536,
+      "height": 1024,
+      "ratio": "3:2",
+      "srcset": {
+        "480": "/brand/illustrations/02-family-protection-480.webp",
+        "960": "/brand/illustrations/02-family-protection-960.webp",
+        "1536": "/brand/illustrations/02-family-protection-1536.webp"
+      }
+    },
+    "03-saving-growth": {
+      "width": 1536,
+      "height": 1024,
+      "ratio": "3:2",
+      "srcset": {
+        "480": "/brand/illustrations/03-saving-growth-480.webp",
+        "960": "/brand/illustrations/03-saving-growth-960.webp",
+        "1536": "/brand/illustrations/03-saving-growth-1536.webp"
+      }
+    },
+    "04-retirement-horizon": {
+      "width": 1536,
+      "height": 1024,
+      "ratio": "3:2",
+      "srcset": {
+        "480": "/brand/illustrations/04-retirement-horizon-480.webp",
+        "960": "/brand/illustrations/04-retirement-horizon-960.webp",
+        "1536": "/brand/illustrations/04-retirement-horizon-1536.webp"
+      }
+    },
+    "05-clarity-decisions": {
+      "width": 1536,
+      "height": 1024,
+      "ratio": "3:2",
+      "srcset": {
+        "480": "/brand/illustrations/05-clarity-decisions-480.webp",
+        "960": "/brand/illustrations/05-clarity-decisions-960.webp",
+        "1536": "/brand/illustrations/05-clarity-decisions-1536.webp"
+      }
+    },
+    "06-documents-service": {
+      "width": 1536,
+      "height": 1024,
+      "ratio": "3:2",
+      "srcset": {
+        "480": "/brand/illustrations/06-documents-service-480.webp",
+        "960": "/brand/illustrations/06-documents-service-960.webp",
+        "1536": "/brand/illustrations/06-documents-service-1536.webp"
+      }
+    }
+  },
+  "elements": {
+    "signature-landscape": {
+      "png": "/brand/elements/signature-landscape.png",
+      "width": 676,
+      "height": 640
+    },
+    "leaf-canopy": {
+      "png": "/brand/elements/leaf-canopy.png",
+      "width": 960,
+      "height": 640
+    },
+    "balanced-stones": {
+      "png": "/brand/elements/balanced-stones.png",
+      "width": 800,
+      "height": 640
+    },
+    "path-divider": {
+      "png": "/brand/elements/path-divider.png",
+      "width": 960,
+      "height": 160
+    },
+    "bubble-corner": {
+      "png": "/brand/elements/bubble-corner.png",
+      "width": 800,
+      "height": 640
+    },
+    "olive-branch": {
+      "png": "/brand/elements/olive-branch.png",
+      "width": 533,
+      "height": 640
+    }
+  }
+}

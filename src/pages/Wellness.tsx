@@ -32,7 +32,7 @@ const ArticleTile = ({ article }: { article: Article }) => (
         </span>
       </div>
       <p className="mt-2.5 text-[14px] leading-[1.7] line-clamp-2" style={{ color: BODY }}>{article.subtitle}</p>
-      <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#1D2D3D]">
+      <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#003D30]">
         קראו עוד
         <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
       </span>
@@ -64,7 +64,7 @@ const Wellness = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       {/* Hero — white canvas, pastel circles; the shield peeks from the corner */}
@@ -81,7 +81,7 @@ const Wellness = () => {
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-14 sm:pb-20">
           <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px]" style={{ color: MUTED }}>
-            <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+            <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
             <span aria-hidden="true">/</span>
             <span style={{ color: NAVY }}>שירותים ופעולות</span>
           </nav>
@@ -163,7 +163,7 @@ const Wellness = () => {
               <div className="max-w-3xl">
                 <h2
                   className="text-white leading-tight"
-                  style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
+                  style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
                 >
                   רוצים לשמוע עוד?
                 </h2>
@@ -173,7 +173,7 @@ const Wellness = () => {
                 <div className="mt-8">
                   <Link
                     to="/contact"
-                    className="inline-flex items-center justify-center rounded-lg px-9 py-4 bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+                    className="inline-flex items-center justify-center rounded-lg px-9 py-4 bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
                   >
                     צרו קשר
                   </Link>

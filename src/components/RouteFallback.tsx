@@ -1,6 +1,6 @@
 /**
  * RouteFallback — quiet Suspense loader for lazy routes.
- * STYLESEED: white canvas, ink (#171717), Geist Mono wordmark, Snap motion,
+ * STYLESEED: white canvas, ink (#003D30), Geist Mono wordmark, Snap motion,
  * respects prefers-reduced-motion. Greyscale only, no emoji.
  */
 export default function RouteFallback() {
@@ -9,7 +9,7 @@ export default function RouteFallback() {
       role="status"
       aria-live="polite"
       aria-label="טוען עמוד"
-      className="min-h-screen bg-white"
+      className="min-h-screen bg-[#FAF7EF]"
     >
       <style>{`
         @keyframes seeld-route-bar {
@@ -46,7 +46,7 @@ export default function RouteFallback() {
           className="seeld-route-mark select-none text-xs tracking-[0.3em]"
           style={{
             fontFamily: "'Geist Mono', ui-monospace, monospace",
-            color: "#171717",
+            color: "#003D30",
           }}
           aria-hidden="true"
         >

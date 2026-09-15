@@ -31,7 +31,7 @@ const monoNum: React.CSSProperties = { fontFamily: MONO, fontVariantNumeric: "ta
 
 // DNA v3 boxed select: white, hairline border, navy focus
 const selectClass =
-  "w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors appearance-none cursor-pointer min-h-[48px] disabled:opacity-40 disabled:cursor-not-allowed";
+  "w-full px-4 py-3 bg-white border border-[#CCD6CC] rounded-lg text-[#003D30] text-base focus:outline-none focus:border-[#003D30] transition-colors appearance-none cursor-pointer min-h-[48px] disabled:opacity-40 disabled:cursor-not-allowed";
 
 type SortKey = "name" | "year1" | "year3" | "year5" | "fees" | "assets";
 type SortDir = "asc" | "desc";
@@ -62,9 +62,9 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
 
   const getRiskLevel = (fund: Fund) => {
     const stock = fund.stockExposure;
-    if (stock >= 80) return { level: "גבוהה", color: "#a04a5c", tip: "המסלול מתאים למשקיעים אגרסיביים עם אופק של 10+ שנים. כדאי לוודא שרמת הסיכון מתאימה לגיל ולתוכניות שלכם." };
-    if (stock >= 40) return { level: "בינונית", color: "#8a5a1e", tip: "מסלול מאוזן שמתאים לרוב האנשים. פיזור טוב בין מניות לאג\"ח. מומלץ לבדוק את דמי הניהול מול חברות מתחרות." };
-    if (stock >= 10) return { level: "נמוכה-בינונית", color: "#356d60", tip: "מסלול סולידי יחסית. מתאים למי שקרוב לפרישה או רוצה יציבות. כדאי לבדוק שהתשואה מספיקה לצרכים שלכם." };
+    if (stock >= 80) return { level: "גבוהה", color: "#9A4520", tip: "המסלול מתאים למשקיעים אגרסיביים עם אופק של 10+ שנים. כדאי לוודא שרמת הסיכון מתאימה לגיל ולתוכניות שלכם." };
+    if (stock >= 40) return { level: "בינונית", color: "#8A6230", tip: "מסלול מאוזן שמתאים לרוב האנשים. פיזור טוב בין מניות לאג\"ח. מומלץ לבדוק את דמי הניהול מול חברות מתחרות." };
+    if (stock >= 10) return { level: "נמוכה-בינונית", color: "#476356", tip: "מסלול סולידי יחסית. מתאים למי שקרוב לפרישה או רוצה יציבות. כדאי לבדוק שהתשואה מספיקה לצרכים שלכם." };
     return { level: "נמוכה", color: NAVY, tip: "מסלול שמרני מאוד. מתאים לטווח קצר או לפרישה קרובה. שווה לבדוק אם יש מסלולים עם תשואה טובה יותר באותה רמת סיכון." };
   };
 
@@ -154,7 +154,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
                   <p
                     className="tabular-nums"
                     dir="ltr"
-                    style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ, fontSize: "1.65rem", lineHeight: 1.15 }}
+                    style={{ fontFamily: DISPLAY, fontWeight: 700, color: TURQ, fontSize: "1.65rem", lineHeight: 1.15 }}
                   >
                     {fmt(selectedFund.returns.year1)}
                   </p>
@@ -184,8 +184,8 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
                 {pieData.map((d, idx) => (
                   <div key={idx} className="flex items-center justify-between py-2 border-b text-[14px]" style={{ borderColor: LINE }}>
                     <div className="flex items-center gap-2.5">
-                      <span className="w-3 h-3 rounded-[2px]" style={{ background: d.color, boxShadow: "0 0 0 1px rgba(29,45,61,.08)" }} />
-                      <span style={{ color: "#3a4c5a" }}>{d.name}</span>
+                      <span className="w-3 h-3 rounded-[2px]" style={{ background: d.color, boxShadow: "0 0 0 1px rgba(0,61,48,.08)" }} />
+                      <span style={{ color: "#24483C" }}>{d.name}</span>
                     </div>
                     <span className="font-medium" dir="ltr" style={{ ...monoNum, color: NAVY }}>{d.value.toFixed(1)}%</span>
                   </div>
@@ -211,13 +211,13 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
 
             {/* Recommendation */}
             <div className="mt-7 border-t pt-5" style={{ borderColor: LINE }}>
-              <p className="text-[14px] leading-[1.85] max-w-2xl" style={{ color: "#3a4c5a" }}>
+              <p className="text-[14px] leading-[1.85] max-w-2xl" style={{ color: "#24483C" }}>
                 <span className="font-medium" style={{ color: NAVY }}>המלצה: </span>
                 {risk.tip}
               </p>
               <Link
                 to="/contact"
-                className="group mt-3 inline-flex items-center gap-2 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+                className="group mt-3 inline-flex items-center gap-2 text-[14px] font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
               >
                 רוצים בדיקה מקצועית? דברו עם יועץ
                 <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -294,7 +294,7 @@ const InvestmentTracks = () => {
 
   // Return value colored by data semantics: negative coral, above filtered average turquoise
   const returnStyle = (v: number): React.CSSProperties =>
-    v < 0 ? { color: "#a04a5c" } : v > avgReturn ? { color: TURQ_TEXT } : {};
+    v < 0 ? { color: "#9A4520" } : v > avgReturn ? { color: TURQ_TEXT } : {};
 
   const heroStats = [
     { value: new Set(trackData.map(f => f.company)).size, label: "חברות מנהלות" },
@@ -303,7 +303,7 @@ const InvestmentTracks = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main className="dna-page">
@@ -327,9 +327,9 @@ const InvestmentTracks = () => {
           {/* Hero */}
           <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-10 sm:pb-12">
             <nav className="flex items-center gap-2 text-[13px] mb-8" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
-              <span className="font-medium text-[#1D2D3D]">מסלולי השקעה</span>
+              <span className="font-medium text-[#003D30]">מסלולי השקעה</span>
             </nav>
 
             <h1
@@ -355,7 +355,7 @@ const InvestmentTracks = () => {
                     dir="ltr"
                     style={{
                       fontFamily: DISPLAY,
-                      fontWeight: 900,
+                      fontWeight: 700,
                       color: TURQ,
                       fontSize: "clamp(1.9rem, 3.5vw, 2.8rem)",
                       letterSpacing: "-0.02em",
@@ -399,14 +399,14 @@ const InvestmentTracks = () => {
                       placeholder="חיפוש לפי שם מסלול, חברה או מספר קופה"
                       value={search}
                       onChange={e => setSearch(e.target.value)}
-                      className="w-full pr-11 pl-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] placeholder:text-[#5a6a78] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors min-h-[48px]"
+                      className="w-full pr-11 pl-4 py-3 bg-white border border-[#CCD6CC] rounded-lg text-[#003D30] placeholder:text-[#476356] text-base focus:outline-none focus:border-[#003D30] transition-colors min-h-[48px]"
                       dir="rtl"
                     />
                   </div>
                   <button
                     type="button"
                     onClick={() => setShowFilters(!showFilters)}
-                    className={`shrink-0 text-[14px] font-medium border-b pb-0.5 transition-colors min-h-[44px] ${showFilters || hasActiveFilters ? "text-[#1D2D3D] border-[#1D2D3D]" : "text-[#5a6a78] border-transparent hover:text-[#1D2D3D]"}`}
+                    className={`shrink-0 text-[14px] font-medium border-b pb-0.5 transition-colors min-h-[44px] ${showFilters || hasActiveFilters ? "text-[#003D30] border-[#003D30]" : "text-[#476356] border-transparent hover:text-[#003D30]"}`}
                   >
                     סינון מתקדם
                     {hasActiveFilters && (
@@ -451,7 +451,7 @@ const InvestmentTracks = () => {
                     <button
                       type="button"
                       onClick={() => { setProductFilter("all"); setSpecFilter("all"); setCompanyFilter("all"); setSearch(""); }}
-                      className="mt-5 text-[13px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+                      className="mt-5 text-[13px] font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
                     >
                       ניקוי כל הסינונים
                     </button>
@@ -463,7 +463,7 @@ const InvestmentTracks = () => {
                   <button
                     type="button"
                     onClick={() => { setProductFilter("all"); setSpecFilter("all"); }}
-                    className={`shrink-0 pb-4 text-sm sm:text-base font-medium border-b-2 -mb-px transition-colors whitespace-nowrap ${productFilter === "all" ? "text-[#1D2D3D] border-[#4E9D8F]" : "text-[#5a6a78] border-transparent hover:text-[#1D2D3D]"}`}
+                    className={`shrink-0 pb-4 text-sm sm:text-base font-medium border-b-2 -mb-px transition-colors whitespace-nowrap ${productFilter === "all" ? "text-[#003D30] border-[#819B7D]" : "text-[#476356] border-transparent hover:text-[#003D30]"}`}
                   >
                     הכל{" "}
                     <span className="text-[12px] tabular-nums" dir="ltr" style={monoNum}>({trackData.length})</span>
@@ -473,7 +473,7 @@ const InvestmentTracks = () => {
                       key={pt}
                       type="button"
                       onClick={() => { setProductFilter(pt); setSpecFilter("all"); }}
-                      className={`shrink-0 pb-4 text-sm sm:text-base font-medium border-b-2 -mb-px transition-colors whitespace-nowrap ${productFilter === pt ? "text-[#1D2D3D] border-[#4E9D8F]" : "text-[#5a6a78] border-transparent hover:text-[#1D2D3D]"}`}
+                      className={`shrink-0 pb-4 text-sm sm:text-base font-medium border-b-2 -mb-px transition-colors whitespace-nowrap ${productFilter === pt ? "text-[#003D30] border-[#819B7D]" : "text-[#476356] border-transparent hover:text-[#003D30]"}`}
                     >
                       {productTypeLabels[pt]}{" "}
                       <span className="text-[12px] tabular-nums" dir="ltr" style={monoNum}>
@@ -549,7 +549,7 @@ const InvestmentTracks = () => {
                             <tr
                               onClick={() => setExpandedId(isExpanded ? null : fund.id)}
                               className="cursor-pointer"
-                              style={isExpanded ? { backgroundColor: "#E1EAF1" } : undefined}
+                              style={isExpanded ? { backgroundColor: "#E8EDE5" } : undefined}
                             >
                               <td>
                                 <div>{fund.name}</div>
@@ -579,7 +579,7 @@ const InvestmentTracks = () => {
                             </tr>
                             {isExpanded && (
                               <tr>
-                                <td colSpan={8} className="!px-4 !py-6" style={{ backgroundColor: "#F7FAFB" }}>
+                                <td colSpan={8} className="!px-4 !py-6" style={{ backgroundColor: "#F3F5F1" }}>
                                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-8 gap-y-5">
                                     {[
                                       { label: "תשואת חודש", value: fmt(fund.returns.month), ltr: true },
@@ -646,8 +646,8 @@ const InvestmentTracks = () => {
                                             {pieData.map((d, idx) => (
                                               <div key={idx} className="flex items-center justify-between py-1.5 border-b text-[14px]" style={{ borderColor: LINE }}>
                                                 <div className="flex items-center gap-2.5">
-                                                  <span className="w-3 h-3 rounded-[2px]" style={{ background: d.color, boxShadow: "0 0 0 1px rgba(29,45,61,.08)" }} />
-                                                  <span className="font-normal" style={{ color: "#3a4c5a" }}>{d.name}</span>
+                                                  <span className="w-3 h-3 rounded-[2px]" style={{ background: d.color, boxShadow: "0 0 0 1px rgba(0,61,48,.08)" }} />
+                                                  <span className="font-normal" style={{ color: "#24483C" }}>{d.name}</span>
                                                 </div>
                                                 <span className="font-medium tabular-nums" dir="ltr" style={{ ...monoNum, color: NAVY }}>
                                                   {d.value.toFixed(1)}%
@@ -675,7 +675,7 @@ const InvestmentTracks = () => {
                                   <div className="mt-5">
                                     <Link
                                       to="/contact"
-                                      className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+                                      className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
                                     >
                                       איך המסלול הזה משתלב בתיק שלכם? ניתוח ללא עלות
                                       <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -693,16 +693,16 @@ const InvestmentTracks = () => {
                   {filtered.length === 0 && (
                     <div className="border-b py-12" style={{ borderColor: LINE }}>
                       {tracksLoading ? (
-                        <p className="text-base" style={{ color: "#3a4c5a" }}>טוען את נתוני המסלולים...</p>
+                        <p className="text-base" style={{ color: "#24483C" }}>טוען את נתוני המסלולים...</p>
                       ) : (
                         <>
-                          <p className="text-base leading-[1.85] max-w-xl" style={{ color: "#3a4c5a" }}>
+                          <p className="text-base leading-[1.85] max-w-xl" style={{ color: "#24483C" }}>
                             לא נמצאו מסלולים שמתאימים לסינון הנוכחי. נסו לנקות חלק מהסינונים או לחפש בשם אחר.
                           </p>
                           <button
                             type="button"
                             onClick={() => { setProductFilter("all"); setSpecFilter("all"); setCompanyFilter("all"); setSearch(""); }}
-                            className="mt-4 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+                            className="mt-4 text-[14px] font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
                           >
                             ניקוי כל הסינונים
                           </button>
@@ -723,7 +723,7 @@ const InvestmentTracks = () => {
                     >
                       מה זה מסלול השקעה?
                     </h2>
-                    <div className="space-y-4 leading-[1.9] text-base" style={{ color: "#3a4c5a" }}>
+                    <div className="space-y-4 leading-[1.9] text-base" style={{ color: "#24483C" }}>
                       <p>
                         מסלול השקעה קובע איך הכסף שלכם מושקע: כמה הולך למניות, כמה לאגרות חוב, וכמה למזומן. כל קרן פנסיה, קרן השתלמות וקופת גמל מציעה מגוון מסלולים שנבדלים ברמת הסיכון ובפוטנציאל התשואה.
                       </p>
@@ -742,7 +742,7 @@ const InvestmentTracks = () => {
                     >
                       איך לבחור מסלול השקעה?
                     </h2>
-                    <div className="space-y-4 leading-[1.9] text-base" style={{ color: "#3a4c5a" }}>
+                    <div className="space-y-4 leading-[1.9] text-base" style={{ color: "#24483C" }}>
                       <p>
                         הבחירה תלויה בשלושה דברים: גיל, אופק זמן, ורמת סיבולת לסיכון. ככלל אצבע, ככל שאתם צעירים יותר, כדאי לבחור מסלול אגרסיבי יותר כי יש לכם זמן להתאושש מירידות. ככל שמתקרבים לפרישה, עדיף מסלול שמרני יותר.
                       </p>
@@ -779,7 +779,7 @@ const InvestmentTracks = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
           <h2
             className="text-white leading-tight mb-3"
-            style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
+            style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
           >
             רוצים לדעת איך המסלול שלכם מתנהג?
           </h2>
@@ -788,7 +788,7 @@ const InvestmentTracks = () => {
           </p>
           <Link
             to="/contact"
-            className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+            className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
           >
             לניתוח תיק ללא עלות
           </Link>

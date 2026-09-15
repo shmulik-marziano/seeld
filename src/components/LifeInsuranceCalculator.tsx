@@ -11,10 +11,10 @@ import { DISPLAY, MONO, MUTED, NAVY, TURQ } from "@/lib/brand";
 // Frank Ruhl 900 turquoise standout stat, table.dna-data breakdown.
 
 const inputClass =
-  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#E7EDF1] rounded-lg text-[#1D2D3D] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1D2D3D]";
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]";
 const sliderClass =
-  "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#4E9D8F] [&_[role=slider]]:border-[#4E9D8F]";
-const labelClass = "flex items-center gap-2 text-base font-medium text-[#1D2D3D]";
+  "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#819B7D] [&_[role=slider]]:border-[#819B7D]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#003D30]";
 
 // Needs-based (DIME-style) planning assumptions; review yearly.
 const DISCOUNT_RATE = 0.03; // annual real discount rate on the income-replacement annuity
@@ -244,7 +244,7 @@ const LifeInsuranceCalculator = () => {
         <p
           className="tabular-nums"
           dir="ltr"
-          style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ, fontSize: "clamp(2.2rem, 4vw, 2.9rem)", lineHeight: 1.15 }}
+          style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY, fontSize: "clamp(2.2rem, 4vw, 2.9rem)", lineHeight: 1.15 }}
         >
           {formatCurrency(result.recommendedCover)}
         </p>
@@ -271,7 +271,7 @@ const LifeInsuranceCalculator = () => {
               {breakdownRows.map((row) => (
                 <tr key={row.label}>
                   <td>{row.label}</td>
-                  <td className="num" style={row.negative ? { color: "#a04a5c" } : undefined}>
+                  <td className="num" style={row.negative ? { color: "#9A4520" } : undefined}>
                     {row.negative ? `-${formatCurrency(row.value)}` : formatCurrency(row.value)}
                   </td>
                 </tr>
@@ -291,7 +291,7 @@ const LifeInsuranceCalculator = () => {
           נקבע מול חברת הביטוח לפי גיל, מצב בריאותי ותנאי הפוליסה.{" "}
           <Link
             to="/insurance/life"
-            className="font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/30 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+            className="font-medium text-[#003D30] border-b border-[#003D30]/30 pb-0.5 hover:border-[#003D30] transition-colors"
           >
             לפרטים על ביטוח חיים
           </Link>

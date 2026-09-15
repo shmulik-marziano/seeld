@@ -90,7 +90,7 @@ const PoliciesTab = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">הפוליסות והחסכונות שלי</h2>
+        <h2 className="text-xl font-bold">הפוליסות והחסכונות שלי</h2>
         <Button onClick={() => setShowAddDialog(true)} className="gap-2">
           <Plus className="w-4 h-4" />
           הוסף פוליסה
@@ -128,7 +128,7 @@ const PoliciesTab = () => {
                       </div>
                       <div className="space-y-1">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <h3 className="font-semibold text-lg">{policy.policy_name}</h3>
+                          <h3 className="font-bold text-lg">{policy.policy_name}</h3>
                           <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>
                           <Badge variant="outline">{typeInfo.label}</Badge>
                         </div>

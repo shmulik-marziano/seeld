@@ -8,7 +8,7 @@ import { StatusPill } from "@/components/brand/Live";
 // SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
 
 // Repeating umbrella line-art — navy ink at low opacity on the gold tint (craft bar)
-const UMBRELLA_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%231D2D3D' stroke-width='2' stroke-linecap='round' opacity='0.14'%3E%3Cpath d='M14 26 C14 17 20 13 28 13 C36 13 42 17 42 26'/%3E%3Cpath d='M14 26 q3.5 -3 7 0 q3.5 -3 7 0 q3.5 -3 7 0 q3.5 -3 7 0'/%3E%3Cpath d='M28 13 v-3'/%3E%3Cpath d='M28 26 v12 c0 4 6 4 6 1'/%3E%3C/g%3E%3C/svg%3E")`;
+const UMBRELLA_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23003D30' stroke-width='2' stroke-linecap='round' opacity='0.14'%3E%3Cpath d='M14 26 C14 17 20 13 28 13 C36 13 42 17 42 26'/%3E%3Cpath d='M14 26 q3.5 -3 7 0 q3.5 -3 7 0 q3.5 -3 7 0 q3.5 -3 7 0'/%3E%3Cpath d='M28 13 v-3'/%3E%3Cpath d='M28 26 v12 c0 4 6 4 6 1'/%3E%3C/g%3E%3C/svg%3E")`;
 
 const insuranceTypes = [
   { title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳. השוואה בין כל החברות", href: "/insurance/vehicle" },
@@ -31,7 +31,7 @@ const insuranceTypes = [
 
 const Insurances = () => {
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main>
@@ -51,7 +51,7 @@ const Insurances = () => {
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
             <nav className="flex items-center gap-2 text-[13px] mb-10 sm:mb-14" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
               <span className="font-medium" style={{ color: NAVY }}>ביטוח</span>
             </nav>
@@ -93,13 +93,13 @@ const Insurances = () => {
                   <Link
                     key={item.href}
                     to={item.href}
-                    className="group flex items-baseline justify-between gap-6 py-[14px] px-3 -mx-3 rounded-md border-b border-[#E7EDF1] hover:bg-[#E1EAF1]/35 transition-colors"
+                    className="group flex items-baseline justify-between gap-6 py-[14px] px-3 -mx-3 rounded-md border-b border-[#CCD6CC] hover:bg-[#E8EDE5]/35 transition-colors"
                   >
                     <div className="flex items-baseline gap-4 min-w-0">
-                      <h2 className="text-base font-medium text-[#1D2D3D] whitespace-nowrap">{item.title}</h2>
-                      <p className="text-[13px] text-[#5a6a78] truncate hidden sm:block">{item.description}</p>
+                      <h2 className="text-base font-medium text-[#003D30] whitespace-nowrap">{item.title}</h2>
+                      <p className="text-[13px] text-[#476356] truncate hidden sm:block">{item.description}</p>
                     </div>
-                    <span className="text-[#5a6a78] group-hover:text-[#1D2D3D] transition-all group-hover:-translate-x-1 shrink-0">
+                    <span className="text-[#476356] group-hover:text-[#003D30] transition-all group-hover:-translate-x-1 shrink-0">
                       ←
                     </span>
                   </Link>
@@ -129,7 +129,7 @@ const Insurances = () => {
               className="text-white leading-tight mb-3"
               style={{
                 fontFamily: DISPLAY,
-                fontWeight: 900,
+                fontWeight: 700,
                 fontSize: "clamp(1.7rem, 3.2vw, 2.4rem)",
                 letterSpacing: "-0.5px",
               }}
@@ -141,7 +141,7 @@ const Insurances = () => {
             </p>
             <Link
               to="/contact"
-              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
             >
               צרו קשר
             </Link>

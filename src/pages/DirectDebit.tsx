@@ -76,11 +76,11 @@ function validateIsraeliId(id: string): { valid: boolean; message?: string } {
 // ─── Styled pieces (DNA v3) ─────────────────────────────────────────────
 // Consistent keyboard focus for buttons and selectable tiles (Snap: no ring animation)
 const FOCUS_RING =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D2D3D]";
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]";
 
 // DNA v3 boxed input: white, hairline border, navy focus
 const inputClass =
-  "w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] placeholder:text-[#5a6a78] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors min-h-[48px]";
+  "w-full px-4 py-3 bg-white border border-[#CCD6CC] rounded-lg text-[#003D30] placeholder:text-[#476356] text-base focus:outline-none focus:border-[#003D30] transition-colors min-h-[48px]";
 
 function FieldLabel({ label, required, error }: { label: string; required?: boolean; error?: string }) {
   return (
@@ -89,7 +89,7 @@ function FieldLabel({ label, required, error }: { label: string; required?: bool
         {label}
         {required && <span className="mr-1" style={{ color: MUTED }}>*</span>}
       </label>
-      {error && <span className="text-[12px] font-medium" style={{ color: "#a04a5c" }}>{error}</span>}
+      {error && <span className="text-[12px] font-medium" style={{ color: "#9A4520" }}>{error}</span>}
     </div>
   );
 }
@@ -300,7 +300,7 @@ export default function DirectDebit() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-white" dir="rtl">
+      <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
         <Header />
         <main>
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
@@ -336,7 +336,7 @@ export default function DirectDebit() {
             <div className="mt-10">
               <Link
                 to="/"
-                className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+                className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
               >
                 חזרה לדף הבית
                 <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -350,7 +350,7 @@ export default function DirectDebit() {
   }
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main>
@@ -371,7 +371,7 @@ export default function DirectDebit() {
           <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-10 sm:pb-12">
             <div className="mb-8 flex items-baseline justify-between gap-4">
               <nav className="flex items-center gap-2 text-[13px]" style={{ color: MUTED }}>
-                <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+                <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
                 <span aria-hidden="true">←</span>
                 <span className="font-medium" style={{ color: NAVY }}>הוראת קבע</span>
               </nav>
@@ -417,7 +417,7 @@ export default function DirectDebit() {
                         onChange={e => set("accountOwner", e.target.value)}
                         onBlur={() => handleBlur("accountOwner")}
                         placeholder="ישראל ישראלי"
-                        className={touched.accountOwner && errors.accountOwner ? "!border-[#a04a5c]" : ""}
+                        className={touched.accountOwner && errors.accountOwner ? "!border-[#9A4520]" : ""}
                       />
                     </div>
                     <div>
@@ -431,7 +431,7 @@ export default function DirectDebit() {
                         placeholder="9 ספרות"
                         dir="ltr"
                         style={{ fontFamily: MONO, letterSpacing: "0.15em", textAlign: "right" }}
-                        className={touched.idNumber && errors.idNumber ? "!border-[#a04a5c]" : ""}
+                        className={touched.idNumber && errors.idNumber ? "!border-[#9A4520]" : ""}
                       />
                       {touched.idNumber && !errors.idNumber && form.idNumber.length === 9 && (
                         <p className="mt-2 text-[12px] font-medium" style={{ color: TURQ_TEXT }}>
@@ -462,7 +462,7 @@ export default function DirectDebit() {
                         ) : (
                           <button
                             onClick={refreshBanks}
-                            className={cn("text-[11px] text-[#5a6a78] flex items-center gap-1 hover:text-[#1D2D3D] transition-colors", FOCUS_RING)}
+                            className={cn("text-[11px] text-[#476356] flex items-center gap-1 hover:text-[#003D30] transition-colors", FOCUS_RING)}
                           >
                             <RefreshCw className="w-3 h-3" />
                             נתוני גיבוי. לחצו לרענון
@@ -476,24 +476,24 @@ export default function DirectDebit() {
                       placeholder="חיפוש לפי שם בנק או מספר"
                       className="mb-4"
                     />
-                    <div className="max-h-56 overflow-y-auto rounded-lg bg-white border border-[#E7EDF1]">
+                    <div className="max-h-56 overflow-y-auto rounded-lg bg-white border border-[#CCD6CC]">
                       {filteredBanks.map(bank => (
                         <button
                           key={bank.code}
                           type="button"
                           onClick={() => { set("bankCode", bank.code); set("branchNumber", ""); set("branchName", ""); touch("bankCode"); setBankSearch(""); }}
                           className={cn(
-                            "w-full flex items-baseline justify-between gap-4 px-4 py-3 min-h-[44px] text-start border-b border-[#E7EDF1] last:border-0 transition-colors",
+                            "w-full flex items-baseline justify-between gap-4 px-4 py-3 min-h-[44px] text-start border-b border-[#CCD6CC] last:border-0 transition-colors",
                             FOCUS_RING,
                             "focus-visible:-outline-offset-2",
                             form.bankCode === bank.code
-                              ? "bg-[#1D2D3D] text-white"
-                              : "text-[#1D2D3D] hover:bg-[#E1EAF1]/35"
+                              ? "bg-[#003D30] text-white"
+                              : "text-[#003D30] hover:bg-[#E8EDE5]/35"
                           )}
                         >
                           <span className="text-[14px] font-medium">{bank.name}</span>
                           <span
-                            className={cn("text-[11px] tabular-nums shrink-0", form.bankCode === bank.code ? "text-white/70" : "text-[#5a6a78]")}
+                            className={cn("text-[11px] tabular-nums shrink-0", form.bankCode === bank.code ? "text-white/70" : "text-[#476356]")}
                             style={{ fontFamily: MONO }}
                             dir="ltr"
                           >
@@ -525,7 +525,7 @@ export default function DirectDebit() {
                           placeholder="מספר סניף"
                           dir="ltr"
                           style={{ fontFamily: MONO, textAlign: "right" }}
-                          className={touched.branchNumber && errors.branchNumber ? "!border-[#a04a5c]" : ""}
+                          className={touched.branchNumber && errors.branchNumber ? "!border-[#9A4520]" : ""}
                         />
                         {/* Known branches */}
                         {branchOptions.length > 0 && (
@@ -541,12 +541,12 @@ export default function DirectDebit() {
                                     "inline-flex items-baseline gap-1.5 px-3 py-2 min-h-[36px] rounded-md text-[12px] font-medium transition-colors",
                                     FOCUS_RING,
                                     form.branchNumber === num
-                                      ? "bg-[#1D2D3D] text-white"
-                                      : "bg-white text-[#3a4c5a] border border-[#E7EDF1] hover:bg-[#E1EAF1]/35 hover:text-[#1D2D3D]"
+                                      ? "bg-[#003D30] text-white"
+                                      : "bg-white text-[#24483C] border border-[#CCD6CC] hover:bg-[#E8EDE5]/35 hover:text-[#003D30]"
                                   )}
                                 >
                                   <span className="tabular-nums" style={{ fontFamily: MONO }} dir="ltr">{num}</span>
-                                  <span className={form.branchNumber === num ? "text-white/70" : "text-[#5a6a78]"}>·</span>
+                                  <span className={form.branchNumber === num ? "text-white/70" : "text-[#476356]"}>·</span>
                                   <span>{name}</span>
                                 </button>
                               ))}
@@ -573,7 +573,7 @@ export default function DirectDebit() {
                           placeholder="5–12 ספרות"
                           dir="ltr"
                           style={{ fontFamily: MONO, letterSpacing: "0.12em", textAlign: "right" }}
-                          className={touched.accountNumber && errors.accountNumber ? "!border-[#a04a5c]" : ""}
+                          className={touched.accountNumber && errors.accountNumber ? "!border-[#9A4520]" : ""}
                         />
                         <p className="mt-2 text-[11px] tabular-nums" style={{ fontFamily: MONO, color: MUTED }} dir="ltr">
                           {accDigits.length > 0 ? `${accDigits.length}/12` : "5–12"}
@@ -598,8 +598,8 @@ export default function DirectDebit() {
                             "flex flex-col items-center py-4 px-3 rounded-lg transition-colors min-h-[44px]",
                             FOCUS_RING,
                             form.debitDay === opt.value
-                              ? "bg-[#1D2D3D] text-white"
-                              : "bg-white text-[#1D2D3D] border border-[#E7EDF1] hover:bg-[#E1EAF1]/35"
+                              ? "bg-[#003D30] text-white"
+                              : "bg-white text-[#003D30] border border-[#CCD6CC] hover:bg-[#E8EDE5]/35"
                           )}
                         >
                           <span
@@ -609,7 +609,7 @@ export default function DirectDebit() {
                           >
                             {opt.value}
                           </span>
-                          <span className={cn("text-[11px] mt-1.5", form.debitDay === opt.value ? "text-white/70" : "text-[#5a6a78]")}>
+                          <span className={cn("text-[11px] mt-1.5", form.debitDay === opt.value ? "text-white/70" : "text-[#476356]")}>
                             {opt.note}
                           </span>
                         </button>
@@ -624,7 +624,7 @@ export default function DirectDebit() {
                 <button
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className={cn("inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[200px]", FOCUS_RING)}
+                  className={cn("inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors disabled:opacity-60 min-h-[52px] min-w-[200px]", FOCUS_RING)}
                 >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שליחת הוראת קבע"}
                 </button>

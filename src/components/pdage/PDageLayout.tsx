@@ -45,7 +45,7 @@ export function PDageLayout({ children }: { children: ReactNode }) {
             pD
           </div>
           <div>
-            <h1 className="text-lg font-extrabold text-sidebar-foreground tracking-tight">pDage</h1>
+            <h1 className="text-lg font-bold text-sidebar-foreground tracking-tight">pDage</h1>
             <p className="text-[10px] text-sidebar-foreground/35 font-light">ליקויים וחוסרים</p>
           </div>
         </button>
@@ -66,7 +66,7 @@ export function PDageLayout({ children }: { children: ReactNode }) {
               onClick={() => handleNav(item.path)}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm transition-all duration-150 ${
                 isActive
-                  ? 'bg-sidebar-primary/10 text-sidebar-primary font-semibold shadow-sm'
+                  ? 'bg-sidebar-primary/10 text-sidebar-primary font-bold shadow-sm'
                   : 'text-sidebar-foreground/60 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
               }`}
             >
@@ -108,7 +108,7 @@ export function PDageLayout({ children }: { children: ReactNode }) {
           </button>
           <button onClick={() => navigate('/app/pdage')} className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-bold text-xs shadow-sm">pD</div>
-            <h1 className="text-lg font-extrabold text-sidebar-primary tracking-tight">pDage</h1>
+            <h1 className="text-lg font-bold text-sidebar-primary tracking-tight">pDage</h1>
           </button>
         </div>
       )}

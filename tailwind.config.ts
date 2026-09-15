@@ -15,9 +15,26 @@ export default {
     },
     extend: {
       fontFamily: {
-        heebo: ['Heebo', 'sans-serif'],
+        sans: ['Rubik', 'Arial', 'sans-serif'],
+        rubik: ['Rubik', 'Arial', 'sans-serif'],
+        heebo: ['Rubik', 'Arial', 'sans-serif'],
+      },
+      maxWidth: {
+        brand: "1200px",
       },
       colors: {
+        brand: {
+          green: "#003D30",
+          "green-hover": "#002B22",
+          sage: "#819B7D",
+          "sage-light": "#E8EDE5",
+          sand: "#CBA064",
+          rust: "#BD582D",
+          ivory: "#FAF7EF",
+          line: "#CCD6CC",
+          text2: "#476356",
+          body: "#24483C",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

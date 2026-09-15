@@ -21,8 +21,8 @@ const benefits = [
   { title: "תקשורת עם היועץ", desc: "צ'אט ישיר ועדכונים בזמן אמת" },
 ];
 
-// Light turquoise for small text on the navy panel (6.88:1 on #1D2D3D, measured)
-const TURQ_ON_NAVY = "#7fc2b5";
+// Light turquoise for small text on the navy panel (6.88:1 on #003D30, measured)
+const TURQ_ON_NAVY = "#A9C4A5";
 
 const PersonalAreaLogin = () => {
   const [step, setStep] = useState<"choose" | "email" | "otp">("choose");
@@ -87,7 +87,7 @@ const PersonalAreaLogin = () => {
         >
           <h2
             className="leading-none text-white"
-            style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "56px", letterSpacing: "-0.035em" }}
+            style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "56px", letterSpacing: "-0.035em" }}
             dir="ltr"
           >
             SEELD
@@ -147,7 +147,7 @@ const PersonalAreaLogin = () => {
           {/* Mobile header — the navy panel is hidden, so the wordmark sits here */}
           <div className="lg:hidden mb-6 px-1">
             <h2
-              style={{ fontFamily: DISPLAY, fontWeight: 900, color: NAVY, fontSize: "30px", letterSpacing: "-0.02em" }}
+              style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY, fontSize: "30px", letterSpacing: "-0.02em" }}
               dir="ltr"
             >
               SEELD
@@ -172,7 +172,7 @@ const PersonalAreaLogin = () => {
                   {step === "email" && "התחברות עם אימייל"}
                   {step === "otp" && "אימות קוד"}
                 </h1>
-                <p className="text-sm text-[#3a4c5a]">
+                <p className="text-sm text-[#24483C]">
                   {step === "choose" && "התחבר כדי לצפות בפוליסות, המלצות ומידע אישי"}
                   {step === "email" && "הזן את כתובת המייל שלך ונשלח לך קוד חד-פעמי"}
                   {step === "otp" && `הזן את הקוד ששלחנו ל-${email}`}
@@ -193,7 +193,7 @@ const PersonalAreaLogin = () => {
                     {/* Google */}
                     <Button
                       variant="outline"
-                      className="w-full gap-3 h-12 rounded-md text-sm font-medium border-[#E7EDF1] bg-white text-[#1D2D3D] shadow-none transition-colors duration-150 hover:bg-white hover:border-[#1D2D3D] min-h-[48px]"
+                      className="w-full gap-3 h-12 rounded-md text-sm font-medium border-[#CCD6CC] bg-white text-[#003D30] shadow-none transition-colors duration-150 hover:bg-white hover:border-[#003D30] min-h-[48px]"
                       onClick={() => handleSocialLogin("google")}
                       disabled={!!socialLoading}
                     >
@@ -213,7 +213,7 @@ const PersonalAreaLogin = () => {
                     {/* Facebook */}
                     <Button
                       variant="outline"
-                      className="w-full gap-3 h-12 rounded-md text-sm font-medium border-[#E7EDF1] bg-white text-[#1D2D3D] shadow-none transition-colors duration-150 hover:bg-white hover:border-[#1D2D3D] min-h-[48px]"
+                      className="w-full gap-3 h-12 rounded-md text-sm font-medium border-[#CCD6CC] bg-white text-[#003D30] shadow-none transition-colors duration-150 hover:bg-white hover:border-[#003D30] min-h-[48px]"
                       onClick={() => handleSocialLogin("facebook")}
                       disabled={!!socialLoading}
                     >
@@ -228,18 +228,18 @@ const PersonalAreaLogin = () => {
                     </Button>
 
                     <div className="flex items-center gap-3 py-1">
-                      <Separator className="flex-1 bg-[#E7EDF1]" />
+                      <Separator className="flex-1 bg-[#CCD6CC]" />
                       <span className="text-xs font-medium" style={{ color: MUTED }}>או</span>
-                      <Separator className="flex-1 bg-[#E7EDF1]" />
+                      <Separator className="flex-1 bg-[#CCD6CC]" />
                     </div>
 
                     {/* Email OTP */}
                     <Button
                       variant="outline"
-                      className="w-full gap-2 h-12 rounded-md text-sm font-medium border-[#E7EDF1] bg-white text-[#1D2D3D] shadow-none transition-colors duration-150 hover:bg-white hover:border-[#1D2D3D] min-h-[48px]"
+                      className="w-full gap-2 h-12 rounded-md text-sm font-medium border-[#CCD6CC] bg-white text-[#003D30] shadow-none transition-colors duration-150 hover:bg-white hover:border-[#003D30] min-h-[48px]"
                       onClick={() => setStep("email")}
                     >
-                      <Mail className="h-4 w-4 text-[#1D2D3D]" />
+                      <Mail className="h-4 w-4 text-[#003D30]" />
                       התחברות עם קוד חד-פעמי באימייל
                     </Button>
                   </motion.div>
@@ -257,7 +257,7 @@ const PersonalAreaLogin = () => {
                     className="space-y-4"
                   >
                     <div className="space-y-1.5">
-                      <Label className="text-[13px] font-medium text-[#1D2D3D]">כתובת אימייל</Label>
+                      <Label className="text-[13px] font-medium text-[#003D30]">כתובת אימייל</Label>
                       <div className="relative">
                         <Mail className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: MUTED }} />
                         <Input
@@ -267,13 +267,13 @@ const PersonalAreaLogin = () => {
                           placeholder="your@email.com"
                           required
                           dir="ltr"
-                          className="h-12 sm:h-11 pr-10 rounded-md text-base sm:text-sm border-[#E7EDF1] bg-white focus-visible:border-[#1D2D3D] focus-visible:ring-[#1D2D3D]/15 text-left"
+                          className="h-12 sm:h-11 pr-10 rounded-md text-base sm:text-sm border-[#CCD6CC] bg-white focus-visible:border-[#003D30] focus-visible:ring-[#003D30]/15 text-left"
                         />
                       </div>
                     </div>
                     <Button
                       type="submit"
-                      className="w-full h-12 sm:h-11 rounded-md gap-2 font-medium text-base sm:text-sm min-h-[48px] shadow-none bg-[#1D2D3D] text-white transition-colors duration-150 hover:bg-[#16222f]"
+                      className="w-full h-12 sm:h-11 rounded-md gap-2 font-medium text-base sm:text-sm min-h-[48px] shadow-none bg-[#003D30] text-white transition-colors duration-150 hover:bg-[#002B22]"
                       disabled={loading}
                     >
                       {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowLeft className="h-4 w-4" />}
@@ -282,7 +282,7 @@ const PersonalAreaLogin = () => {
                     <button
                       type="button"
                       onClick={() => setStep("choose")}
-                      className="w-full text-sm text-[#5a6a78] hover:text-[#1D2D3D] min-h-[44px] transition-colors duration-150"
+                      className="w-full text-sm text-[#476356] hover:text-[#003D30] min-h-[44px] transition-colors duration-150"
                     >
                       חזרה לאפשרויות התחברות
                     </button>
@@ -299,15 +299,15 @@ const PersonalAreaLogin = () => {
                     transition={{ duration: 0.18, ease: "easeOut" }}
                     className="space-y-5"
                   >
-                    <div className="flex items-center gap-3 rounded-md bg-white p-3.5" style={{ boxShadow: RING, border: "1px solid #E7EDF1" }}>
+                    <div className="flex items-center gap-3 rounded-md bg-white p-3.5" style={{ boxShadow: RING, border: "1px solid #CCD6CC" }}>
                       <CheckCircle2 className="w-4 h-4 shrink-0" style={{ color: TURQ_TEXT }} />
-                      <p className="text-sm text-[#3a4c5a]">
-                        שלחנו קוד חד-פעמי ל-<span className="font-medium text-[#1D2D3D]" dir="ltr">{email}</span>
+                      <p className="text-sm text-[#24483C]">
+                        שלחנו קוד חד-פעמי ל-<span className="font-medium text-[#003D30]" dir="ltr">{email}</span>
                       </p>
                     </div>
 
                     <div className="flex flex-col items-center gap-4">
-                      <Label className="text-[13px] font-medium text-[#1D2D3D]">קוד חד-פעמי (6 ספרות)</Label>
+                      <Label className="text-[13px] font-medium text-[#003D30]">קוד חד-פעמי (6 ספרות)</Label>
                       <InputOTP maxLength={6} value={otp} onChange={setOtp} dir="ltr">
                         <InputOTPGroup style={{ fontFamily: MONO }}>
                           <InputOTPSlot index={0} />
@@ -322,7 +322,7 @@ const PersonalAreaLogin = () => {
 
                     <Button
                       onClick={handleVerifyOtp}
-                      className="w-full h-12 sm:h-11 rounded-md gap-2 font-medium text-base sm:text-sm min-h-[48px] shadow-none bg-[#1D2D3D] text-white transition-colors duration-150 hover:bg-[#16222f]"
+                      className="w-full h-12 sm:h-11 rounded-md gap-2 font-medium text-base sm:text-sm min-h-[48px] shadow-none bg-[#003D30] text-white transition-colors duration-150 hover:bg-[#002B22]"
                       disabled={loading || otp.length !== 6}
                     >
                       {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "אמת והתחבר"}
@@ -332,14 +332,14 @@ const PersonalAreaLogin = () => {
                       <button
                         type="button"
                         onClick={() => { setStep("email"); setOtp(""); }}
-                        className="text-[#1D2D3D] hover:underline min-h-[44px] px-2 font-medium"
+                        className="text-[#003D30] hover:underline min-h-[44px] px-2 font-medium"
                       >
                         שנה כתובת מייל
                       </button>
                       <button
                         type="button"
                         onClick={(e) => handleSendOtp(e as any)}
-                        className="text-[#5a6a78] hover:text-[#1D2D3D] hover:underline min-h-[44px] px-2 transition-colors duration-150 disabled:opacity-40 disabled:pointer-events-none"
+                        className="text-[#476356] hover:text-[#003D30] hover:underline min-h-[44px] px-2 transition-colors duration-150 disabled:opacity-40 disabled:pointer-events-none"
                         disabled={loading}
                       >
                         שלח קוד מחדש
@@ -356,7 +356,7 @@ const PersonalAreaLogin = () => {
             <div>
               <Link
                 to="/"
-                className="text-sm text-[#1D2D3D] hover:underline font-medium min-h-[44px] px-4 inline-flex items-center"
+                className="text-sm text-[#003D30] hover:underline font-medium min-h-[44px] px-4 inline-flex items-center"
               >
                 חזרה לאתר הראשי
               </Link>

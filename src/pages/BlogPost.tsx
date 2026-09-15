@@ -295,10 +295,10 @@ const BlogPost = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white" dir="rtl">
+      <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
         <Header />
         <div className="flex justify-center py-32">
-          <Loader2 className="h-6 w-6 animate-spin text-[#1D2D3D]" />
+          <Loader2 className="h-6 w-6 animate-spin text-[#003D30]" />
         </div>
         <Footer />
       </div>
@@ -307,7 +307,7 @@ const BlogPost = () => {
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-white" dir="rtl">
+      <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
         <Header />
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-24 sm:py-32">
           <h1 className="dna-display" style={{ fontSize: "clamp(30px, 4vw, 38px)" }}>
@@ -325,7 +325,7 @@ const BlogPost = () => {
           </p>
           <Link
             to="/blog"
-            className="mt-8 inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[52px]"
+            className="mt-8 inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors min-h-[52px]"
           >
             חזרה לבלוג
           </Link>
@@ -336,7 +336,7 @@ const BlogPost = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       {/* The reading surface — white canvas, one pastel circle behind the title */}
@@ -351,7 +351,7 @@ const BlogPost = () => {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12 pb-10 sm:pb-12">
             <Link
               to="/blog"
-              className="inline-flex items-center gap-1.5 text-[13px] font-medium hover:text-[#1D2D3D] transition-colors"
+              className="inline-flex items-center gap-1.5 text-[13px] font-medium hover:text-[#003D30] transition-colors"
               style={{ color: MUTED }}
             >
               <ArrowRight className="w-3.5 h-3.5" />
@@ -407,11 +407,11 @@ const BlogPost = () => {
             {/* Reading measure capped at ~65ch (STYLESEED: 45–75 chars per line) */}
             <div
               className="prose prose-base sm:prose-lg
-                prose-headings:text-[#1D2D3D] prose-headings:font-bold
-                prose-p:text-[#3a4c5a] prose-p:leading-[1.9]
-                prose-li:text-[#3a4c5a]
-                prose-strong:text-[#1D2D3D] prose-strong:font-semibold
-                prose-a:text-[#1D2D3D] prose-a:no-underline hover:prose-a:underline"
+                prose-headings:text-[#003D30] prose-headings:font-bold
+                prose-p:text-[#24483C] prose-p:leading-[1.9]
+                prose-li:text-[#24483C]
+                prose-strong:text-[#003D30] prose-strong:font-bold
+                prose-a:text-[#003D30] prose-a:no-underline hover:prose-a:underline"
               style={{ maxWidth: "65ch" }}
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
@@ -424,7 +424,7 @@ const BlogPost = () => {
               <div className="mt-4 flex flex-wrap gap-3">
                 <button
                   onClick={shareWhatsApp}
-                  className="dna-hover inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white border text-[14px] font-medium text-[#1D2D3D] transition-colors min-h-[44px]"
+                  className="dna-hover inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white border text-[14px] font-medium text-[#003D30] transition-colors min-h-[44px]"
                   style={{ borderColor: LINE }}
                 >
                   <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor" aria-hidden="true">
@@ -435,7 +435,7 @@ const BlogPost = () => {
                 </button>
                 <button
                   onClick={copyLink}
-                  className="dna-hover inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white border text-[14px] font-medium text-[#1D2D3D] transition-colors min-h-[44px]"
+                  className="dna-hover inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white border text-[14px] font-medium text-[#003D30] transition-colors min-h-[44px]"
                   style={{ borderColor: LINE }}
                 >
                   <Copy className="w-4 h-4" />
@@ -454,7 +454,7 @@ const BlogPost = () => {
             <div>
               <h3
                 className="text-white leading-tight"
-                style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.5rem, 3vw, 2rem)", letterSpacing: "-0.5px" }}
+                style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.5rem, 3vw, 2rem)", letterSpacing: "-0.5px" }}
               >
                 קיבלנו את הפרטים.
               </h3>
@@ -466,7 +466,7 @@ const BlogPost = () => {
             <div>
               <h3
                 className="text-white leading-tight"
-                style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.5rem, 3vw, 2rem)", letterSpacing: "-0.5px" }}
+                style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.5rem, 3vw, 2rem)", letterSpacing: "-0.5px" }}
               >
                 {leadFormText.title}
               </h3>
@@ -506,7 +506,7 @@ const BlogPost = () => {
                   <button
                     type="submit"
                     disabled={leadSubmitting}
-                    className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors disabled:opacity-60 min-h-[52px] min-w-[180px]"
+                    className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors disabled:opacity-60 min-h-[52px] min-w-[180px]"
                   >
                     {leadSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : leadFormText.cta}
                   </button>
@@ -555,7 +555,7 @@ const BlogPost = () => {
                       {r.excerpt}
                     </p>
                   )}
-                  <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#1D2D3D]">
+                  <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#003D30]">
                     קראו עוד
                     <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
                   </span>

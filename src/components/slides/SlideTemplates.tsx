@@ -31,7 +31,7 @@ function SlideHeader({ title, subtitle, pageNum }: { title: string; subtitle?: s
           </div>
         )}
         <div>
-          <h1 className="text-[52px] font-extrabold leading-tight" style={{ color: GRAY_900 }}>{title}</h1>
+          <h1 className="text-[52px] font-bold leading-tight" style={{ color: GRAY_900 }}>{title}</h1>
           {subtitle && <p className="text-[24px] mt-1" style={{ color: GRAY_500 }}>{subtitle}</p>}
         </div>
       </div>
@@ -95,10 +95,10 @@ function TitleSlideContent(opts: { title: string; subtitle?: string; customerNam
           )}
         </div>
       )}
-      <h1 className="text-[72px] font-extrabold leading-tight" style={{ color: GRAY_900 }}>{displayTitle}</h1>
+      <h1 className="text-[72px] font-bold leading-tight" style={{ color: GRAY_900 }}>{displayTitle}</h1>
       {displaySubtitle && <p className="text-[32px] mt-4" style={{ color: GRAY_500 }}>{displaySubtitle}</p>}
       {opts.customerName && (
-        <p className="text-[36px] font-semibold mt-8" style={{ color: t.primaryColor }}>{opts.customerName}</p>
+        <p className="text-[36px] font-bold mt-8" style={{ color: t.primaryColor }}>{opts.customerName}</p>
       )}
       <div className="mt-12 flex items-center gap-6 text-[22px]" style={{ color: GRAY_500 }}>
         {(t.agencyName || opts.agencyName) && <span>{t.agencyName || opts.agencyName}</span>}
@@ -270,7 +270,7 @@ function ExecSlideContent({ items, customer, pageNum }: { items: ExecItem[]; cus
           <div key={item.id} className="flex items-center gap-6 rounded-xl p-5" style={{ background: GRAY_50, border: `1px solid ${GRAY_200}` }}>
             <div className="w-3 h-3 rounded-full shrink-0" style={{ background: statusColor(item.status) }} />
             <div className="flex-1">
-              <span className="text-[22px] font-semibold" style={{ color: GRAY_900 }}>{item.title}</span>
+              <span className="text-[22px] font-bold" style={{ color: GRAY_900 }}>{item.title}</span>
               {item.actualText && <p className="text-[18px] mt-1" style={{ color: GRAY_500 }}>{item.actualText}</p>}
             </div>
             <span className="text-[18px] font-bold px-4 py-1.5 rounded-full" style={{ background: `${statusColor(item.status)}15`, color: statusColor(item.status) }}>
@@ -311,7 +311,7 @@ function StatsSlideContent(opts: { totalProducts: number; totalRecommendations: 
           { label: 'ממתינים', value: opts.pending, color: YELLOW_500 },
         ].map(stat => (
           <div key={stat.label} className="text-center rounded-3xl p-10" style={{ background: `${stat.color}08`, border: `2px solid ${stat.color}25` }}>
-            <p className="text-[80px] font-extrabold leading-none" style={{ color: stat.color }}>{stat.value}</p>
+            <p className="text-[80px] font-bold leading-none" style={{ color: stat.color }}>{stat.value}</p>
             <p className="text-[24px] mt-4 font-medium" style={{ color: GRAY_700 }}>{stat.label}</p>
           </div>
         ))}
@@ -342,7 +342,7 @@ function ThankYouSlideContent({ agencyName }: { agencyName?: string }) {
           )}
         </div>
       )}
-      <h1 className="text-[72px] font-extrabold" style={{ color: GRAY_900 }}>תודה רבה!</h1>
+      <h1 className="text-[72px] font-bold" style={{ color: GRAY_900 }}>תודה רבה!</h1>
       <p className="text-[32px] mt-6" style={{ color: GRAY_500 }}>
         {t.agencyName || agencyName || 'SEELD'} · ביטוח, חיסכון ופנסיה
       </p>

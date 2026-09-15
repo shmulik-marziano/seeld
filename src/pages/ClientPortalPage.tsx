@@ -432,7 +432,7 @@ export default function ClientPortalPage() {
           </div>
 
           <div className="space-y-3">
-            <h1 className="text-2xl font-extrabold text-foreground leading-tight">
+            <h1 className="text-2xl font-bold text-foreground leading-tight">
               ריכזנו עבורך את ההמלצות<br />בצורה פשוטה וברורה
             </h1>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-[300px] mx-auto">
@@ -504,7 +504,7 @@ export default function ClientPortalPage() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="id-verify-input" className="text-sm font-semibold block text-right text-foreground">
+                <label htmlFor="id-verify-input" className="text-sm font-bold block text-right text-foreground">
                   4 ספרות אחרונות של ת״ז
                 </label>
                 <input
@@ -647,10 +647,10 @@ export default function ClientPortalPage() {
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5 flex-wrap mb-1">
-                <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold border ${urgency.className}`}>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${urgency.className}`}>
                   {urgency.text}
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-muted text-muted-foreground border border-border">
+                <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-muted text-muted-foreground border border-border">
                   {rec.action_type}
                 </span>
                 {completed && (
@@ -857,8 +857,8 @@ export default function ClientPortalPage() {
               <SeeIDLogo size={36} />
             </div>
             <div>
-              <p className="text-[11px] font-semibold tracking-widest uppercase text-[hsl(var(--accent))]">SEELD</p>
-              <h1 className="text-xl font-extrabold text-white">שלום, {customer?.first_name} 👋</h1>
+              <p className="text-[11px] font-bold tracking-widest uppercase text-[hsl(var(--accent))]">SEELD</p>
+              <h1 className="text-xl font-bold text-white">שלום, {customer?.first_name} 👋</h1>
               <p className="text-xs mt-0.5 text-white/50">הנה סקירת המצב וההמלצות שלך</p>
             </div>
           </div>
@@ -871,7 +871,7 @@ export default function ClientPortalPage() {
             ].map((stat, i) => (
               <div key={i} className="rounded-xl p-2.5 text-center bg-white/10 backdrop-blur-sm">
                 <p className="text-[10px] text-white/50">{stat.label}</p>
-                <p className="text-lg font-extrabold text-white">{stat.value}</p>
+                <p className="text-lg font-bold text-white">{stat.value}</p>
               </div>
             ))}
           </div>
@@ -1019,7 +1019,7 @@ export default function ClientPortalPage() {
                   ].map((s, i) => (
                     <div key={i} className={`rounded-2xl p-3 text-center border ${s.cls}`}>
                       <s.icon className="h-5 w-5 mx-auto mb-1" />
-                      <p className="text-lg font-extrabold">{s.count}</p>
+                      <p className="text-lg font-bold">{s.count}</p>
                       <p className="text-[10px] font-medium opacity-70">{s.label}</p>
                     </div>
                   ))}
@@ -1117,24 +1117,24 @@ function StatusScreen({ icon, title, description, showStats, stats }: {
       >
         <div className="flex justify-center">{icon}</div>
         <div className="space-y-2">
-          <h1 className="text-2xl font-extrabold text-foreground">{title}</h1>
+          <h1 className="text-2xl font-bold text-foreground">{title}</h1>
           <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
         </div>
         {showStats && stats && (
           <div className="grid grid-cols-3 gap-2 pt-2">
             <div className="rounded-2xl p-3 text-center bg-[hsl(var(--success))]/10 border border-[hsl(var(--success))]/20">
               <CheckCircle2 className="h-5 w-5 mx-auto mb-1 text-[hsl(var(--success))]" />
-              <p className="text-lg font-extrabold text-[hsl(var(--success))]">{stats.approved}</p>
+              <p className="text-lg font-bold text-[hsl(var(--success))]">{stats.approved}</p>
               <p className="text-[10px] font-medium text-[hsl(var(--success))]/70">אושרו</p>
             </div>
             <div className="rounded-2xl p-3 text-center bg-[hsl(var(--warning))]/10 border border-[hsl(var(--warning))]/20">
               <Clock className="h-5 w-5 mx-auto mb-1 text-[hsl(var(--warning))]" />
-              <p className="text-lg font-extrabold text-[hsl(var(--warning))]">{stats.thinking}</p>
+              <p className="text-lg font-bold text-[hsl(var(--warning))]">{stats.thinking}</p>
               <p className="text-[10px] font-medium text-[hsl(var(--warning))]/70">בחשיבה</p>
             </div>
             <div className="rounded-2xl p-3 text-center bg-destructive/10 border border-destructive/20">
               <XCircle className="h-5 w-5 mx-auto mb-1 text-destructive" />
-              <p className="text-lg font-extrabold text-destructive">{stats.declined}</p>
+              <p className="text-lg font-bold text-destructive">{stats.declined}</p>
               <p className="text-[10px] font-medium text-destructive/70">נדחו</p>
             </div>
           </div>

@@ -11,7 +11,7 @@ import { BODY, DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_PEACH } fro
 
 // Share icon buttons — quiet white squares with a hairline border
 const shareBtnClass =
-  "w-10 h-10 rounded-md bg-white border border-[#E7EDF1] text-[#1D2D3D] hover:bg-[#F4F8F7] transition-colors flex items-center justify-center";
+  "w-10 h-10 rounded-md bg-white border border-[#CCD6CC] text-[#003D30] hover:bg-[#EEF2EC] transition-colors flex items-center justify-center";
 
 // The unified SEELD article card — .dna-concept tile, whole-tile link,
 // .dna-hover quiet lift (Snap motion). Metadata sits under the title.
@@ -37,7 +37,7 @@ const ArticleTile = ({ article }: { article: ArticleData }) => (
         </span>
       </div>
       <p className="mt-2.5 text-[14px] leading-[1.7] line-clamp-2" style={{ color: BODY }}>{article.subtitle}</p>
-      <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#1D2D3D]">
+      <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#003D30]">
         קראו עוד
         <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
       </span>
@@ -66,7 +66,7 @@ const Article = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main>
@@ -87,7 +87,7 @@ const Article = () => {
             <div className="mb-10">
               <Link
                 to="/"
-                className="inline-flex items-center gap-2 text-sm hover:text-[#1D2D3D] transition-colors"
+                className="inline-flex items-center gap-2 text-sm hover:text-[#003D30] transition-colors"
                 style={{ color: MUTED }}
               >
                 <ArrowRight className="w-4 h-4" />
@@ -232,7 +232,7 @@ const Article = () => {
               <div className="flex items-center gap-3">
                 <button
                   onClick={handleCopyLink}
-                  className="flex-1 py-3 rounded-md bg-white border border-[#E7EDF1] text-[#1D2D3D] hover:bg-[#F4F8F7] transition-colors flex items-center justify-center gap-2 min-h-[48px]"
+                  className="flex-1 py-3 rounded-md bg-white border border-[#CCD6CC] text-[#003D30] hover:bg-[#EEF2EC] transition-colors flex items-center justify-center gap-2 min-h-[48px]"
                 >
                   <Link2 className="w-4 h-4" />
                   <span className="text-sm font-medium">העתק קישור</span>
@@ -241,7 +241,7 @@ const Article = () => {
                   href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(window.location.href)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-md bg-white border border-[#E7EDF1] text-[#1D2D3D] hover:bg-[#F4F8F7] transition-colors flex items-center justify-center"
+                  className="w-12 h-12 rounded-md bg-white border border-[#CCD6CC] text-[#003D30] hover:bg-[#EEF2EC] transition-colors flex items-center justify-center"
                   aria-label="שתף בטוויטר"
                 >
                   <Twitter className="w-4 h-4" />
@@ -250,7 +250,7 @@ const Article = () => {
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-md bg-white border border-[#E7EDF1] text-[#1D2D3D] hover:bg-[#F4F8F7] transition-colors flex items-center justify-center"
+                  className="w-12 h-12 rounded-md bg-white border border-[#CCD6CC] text-[#003D30] hover:bg-[#EEF2EC] transition-colors flex items-center justify-center"
                   aria-label="שתף בפייסבוק"
                 >
                   <Facebook className="w-4 h-4" />
@@ -265,7 +265,7 @@ const Article = () => {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 sm:py-16 text-center">
             <h3
               className="text-white leading-tight mb-3"
-              style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.4rem, 2.8vw, 2rem)", letterSpacing: "-0.5px" }}
+              style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.4rem, 2.8vw, 2rem)", letterSpacing: "-0.5px" }}
             >
               נהניתם מהמאמר?
             </h3>
@@ -280,7 +280,7 @@ const Article = () => {
               />
               <button
                 type="button"
-                className="inline-flex items-center justify-center rounded-lg px-8 py-3 bg-white text-[#1D2D3D] text-base font-medium hover:bg-[#E7EDF1] transition-colors min-h-[48px]"
+                className="inline-flex items-center justify-center rounded-lg px-8 py-3 bg-white text-[#003D30] text-base font-medium hover:bg-[#CCD6CC] transition-colors min-h-[48px]"
               >
                 הרשמה
               </button>

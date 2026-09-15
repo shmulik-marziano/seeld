@@ -78,7 +78,7 @@ export function PDageChatPanel({ jobId, jobTitle, onClose, correctionFields, onF
             <Sparkles className="h-3.5 w-3.5 text-primary-foreground" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-foreground">עוזר AI</h3>
+            <h3 className="text-sm font-bold text-foreground">עוזר AI</h3>
             <p className="text-[10px] text-muted-foreground leading-none">pDage AI — עריכת מסמכים</p>
           </div>
         </div>

@@ -1,42 +1,45 @@
 // SEELD design tokens — locked in STYLESEED.md (read it before changing).
-// DNA v3: institutional navy/turquoise/gold from the owner's design system
-// (template_base.html is the source of truth), fused with the live-tech layer.
+// Brand system 2026-09 (SeelD digital brand + illustrations kit v1.1):
+// deep green on ivory, sage / sand / rust as small accents, Rubik only.
 
-/* ── DNA v3 core palette ── */
-export const NAVY = "#1D2D3D";        // headings, primary text, table headers, dark bands
-export const TURQ = "#4E9D8F";        // accent: bars, dots, large stats (3.2:1 — large/UI only)
-export const TURQ_TEXT = "#356d60";   // turquoise for small text (5.99:1 AA)
-export const GOLD = "#D8A24A";        // accent surfaces/markers (decorative)
-export const GOLD_TEXT = "#8a5a1e";   // gold for small text (5.9:1 AA)
-export const BLUE = "#5b9fd0";        // secondary accent (decorative)
-export const BLUE_TEXT = "#4a6fa5";   // blue for small text (5.11:1 AA)
-export const CORAL = "#d67a8a";       // gaps/negative (decorative)
-export const CORAL_TEXT = "#a04a5c";  // coral for small text (5.79:1 AA)
+/* ── Core palette (design-tokens: brand book) ── */
+export const GREEN = "#003D30";        // headings, primary text, primary actions, dark bands
+export const GREEN_HOVER = "#002B22";  // primary action hover
+export const SAGE = "#819B7D";         // secondary surfaces, illustration tone, decorative (never small text)
+export const SAGE_LIGHT = "#E8EDE5";   // light surfaces, soft callouts
+export const SAND = "#CBA064";         // small highlight (decorative)
+export const RUST = "#BD582D";         // small highlight (decorative), destructive
+export const IVORY = "#FAF7EF";        // page background
+export const CARD = "#FFFFFF";         // card surface
 
-export const BODY = "#3a4c5a";        // paragraph text on white (8.89:1)
-export const MUTED = "#5a6a78";       // lead/secondary text (5.57:1)
-export const FAINT = "#9aa6b1";       // decorative-only labels (2.48:1 — never for readable text)
-export const LINE = "#E7EDF1";        // hairline rules
-export const LINE_SOFT = "#EAEFF3";   // table row rules
+export const TEXT_2 = "#476356";       // secondary text (6.0:1 on ivory)
+export const LINE = "#CCD6CC";         // hairline rules / borders
+export const LINE_SOFT = "#E1E8E1";    // table row rules
 
-/* pastel circle surfaces */
-export const PASTEL_BLUE = "#E1EAF1";
-export const PASTEL_PEACH = "#F4EEE6";
-export const PASTEL_MINT = "#D3E4E5";
+/* Text tiers (measured on ivory #FAF7EF) */
+export const BODY = "#24483C";         // paragraph text (9.4:1)
+export const MUTED = TEXT_2;           // lead/secondary text (6.0:1)
+export const FAINT = "#8FA396";        // decorative-only labels — never for readable text
+export const SAND_TEXT = "#8A6230";    // sand for small text (4.9:1)
+export const RUST_TEXT = "#9A4520";    // rust for small text (6.1:1)
+export const SAGE_ON_GREEN = "#A9C4A5"; // light sage for small text on the green band (8.6:1 on #003D30)
 
-/* tinted quote-box surfaces */
-export const TINT_TURQ = "#F4F8F7";
-export const TINT_GOLD = "#FBF5EA";
-export const TINT_BLUE = "#F0F5FB";
+/* Light surfaces (the pastel tier of the kit) */
+export const PASTEL_SAGE = "#E8EDE5";
+export const PASTEL_SAND = "#F1E7D6";
+export const PASTEL_MINT = "#DDE6DA";
 
-/* the signature gradient bar (pixel-sampled from the source) */
-export const GRADIENT_BAR =
-  "linear-gradient(90deg,#4E9D8F 0%,#5b9fd0 24%,#9a8fc0 48%,#e08a9a 70%,#e8a04e 86%,#d65a4e 100%)";
+/* Tinted quote-box surfaces */
+export const TINT_SAGE = "#EEF2EC";
+export const TINT_SAND = "#F5EEE0";
 
-/* typography */
-export const DISPLAY = "'Frank Ruhl Libre', 'Heebo', serif"; // Hebrew headings, 900/700
-export const SANS = "'Heebo', sans-serif";                   // body
-export const MONO = "'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace"; // live-tech layer
+/* The three brand dots (sage · sand · rust) — decorative motif, never status */
+export const DOTS = [SAGE, SAND, RUST] as const;
+
+/* typography — Rubik only (400 / 700). No second heading font. */
+export const SANS = "'Rubik', Arial, sans-serif";
+export const DISPLAY = SANS;   // headings: Rubik 700
+export const MONO = SANS;      // figures: Rubik with tabular-nums (no mono font in the system)
 
 /* regulatory (must appear in the footer of every page) */
 export const LICENSE_LINE = "שמוליק מרציאנו · סוכן ברישיון 138666";
@@ -44,17 +47,33 @@ export const REGULATORY_LINE =
   "האמור באתר מהווה שיווק פנסיוני ואינו מהווה ייעוץ פנסיוני או תחליף לייעוץ המתחשב בנתונים ובצרכים של כל אדם.";
 
 /* shadows */
-export const RING = "0 0 0 1px rgba(29,45,61,.08)";
-export const CARD_SHADOW = "0 2px 12px rgba(29,45,61,0.05), 0 0 0 1px #E1EAF1";
+export const RING = "0 0 0 1px rgba(0,61,48,.08)";
+export const CARD_SHADOW = "0 2px 12px rgba(0,61,48,0.05), 0 0 0 1px #E8EDE5";
 
-/* ── Legacy aliases (previous skin) — kept so unconverted pages compile.
-      Remove after the DNA v3 rollout completes. ── */
-export const INK = NAVY;
-export const BONE = "#ffffff";
-export const PINE = NAVY;
+/* ── Compatibility aliases (previous DNA v3 names) — every page compiles unchanged,
+      and recolors to the new system through these. ── */
+export const NAVY = GREEN;
+export const TURQ = SAGE;
+export const TURQ_TEXT = TEXT_2;
+export const GOLD = SAND;
+export const GOLD_TEXT = SAND_TEXT;
+export const BLUE = SAGE;
+export const BLUE_TEXT = TEXT_2;
+export const CORAL = RUST;
+export const CORAL_TEXT = RUST_TEXT;
+export const PASTEL_BLUE = PASTEL_SAGE;
+export const PASTEL_PEACH = PASTEL_SAND;
+export const TINT_TURQ = TINT_SAGE;
+export const TINT_GOLD = TINT_SAND;
+export const TINT_BLUE = PASTEL_SAGE;
+export const GRADIENT_BAR = `linear-gradient(90deg,${SAGE} 0%,${SAGE} 100%)`;
+
+export const INK = GREEN;
+export const BONE = IVORY;
+export const PINE = GREEN;
 export const BRONZE = MUTED;
 export const SERIF = DISPLAY;
-export const TINT = "#F7FAFB";
-export const CHIP_ORANGE = GOLD_TEXT;
-export const CHIP_GREEN = TURQ_TEXT;
-export const CHIP_YELLOW = "#8a5a1e";
+export const TINT = TINT_SAGE;
+export const CHIP_ORANGE = SAND_TEXT;
+export const CHIP_GREEN = TEXT_2;
+export const CHIP_YELLOW = SAND_TEXT;

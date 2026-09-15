@@ -65,11 +65,11 @@ const faqCategories = [
 
 // Underline tabs — turquoise active marker, navy active text
 const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#5a6a78] border-b-2 border-transparent data-[state=active]:border-[#4E9D8F] data-[state=active]:text-[#1D2D3D] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors";
+  "rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#476356] border-b-2 border-transparent data-[state=active]:border-[#819B7D] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors";
 
 const FAQ = () => {
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main>
@@ -90,7 +90,7 @@ const FAQ = () => {
               className="hidden lg:block absolute select-none"
               style={{
                 fontFamily: DISPLAY,
-                fontWeight: 900,
+                fontWeight: 700,
                 color: NAVY,
                 opacity: 0.05,
                 fontSize: "clamp(180px, 22vw, 320px)",
@@ -105,7 +105,7 @@ const FAQ = () => {
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
             <nav className="flex items-center gap-2 text-[13px] mb-10 sm:mb-14" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
               <span className="font-medium" style={{ color: NAVY }}>שאלות נפוצות</span>
             </nav>
@@ -135,7 +135,7 @@ const FAQ = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
             <ScrollReveal>
               <Tabs defaultValue="insurance" dir="rtl">
-                <TabsList className="flex w-full justify-start gap-8 sm:gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#E7EDF1] rounded-none overflow-x-auto">
+                <TabsList className="flex w-full justify-start gap-8 sm:gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#CCD6CC] rounded-none overflow-x-auto">
                   {faqCategories.map((category) => (
                     <TabsTrigger key={category.id} value={category.id} className={tabTriggerClass}>
                       {category.title}
@@ -151,12 +151,12 @@ const FAQ = () => {
                           <AccordionItem
                             key={idx}
                             value={`${category.id}-${idx}`}
-                            className="border-b border-[#E7EDF1] rounded-none px-0"
+                            className="border-b border-[#CCD6CC] rounded-none px-0"
                           >
-                            <AccordionTrigger className="text-base font-medium hover:no-underline py-5 px-3 -mx-3 rounded-md text-[#1D2D3D] text-start hover:bg-[#E1EAF1]/35 transition-colors">
+                            <AccordionTrigger className="text-base font-medium hover:no-underline py-5 px-3 -mx-3 rounded-md text-[#003D30] text-start hover:bg-[#E8EDE5]/35 transition-colors">
                               {item.q}
                             </AccordionTrigger>
-                            <AccordionContent className="text-[14.5px] leading-[1.85] pb-6 max-w-2xl text-[#3a4c5a]">
+                            <AccordionContent className="text-[14.5px] leading-[1.85] pb-6 max-w-2xl text-[#24483C]">
                               {item.a}
                             </AccordionContent>
                           </AccordionItem>
@@ -177,7 +177,7 @@ const FAQ = () => {
               className="text-white leading-tight mb-3"
               style={{
                 fontFamily: DISPLAY,
-                fontWeight: 900,
+                fontWeight: 700,
                 fontSize: "clamp(1.7rem, 3.2vw, 2.4rem)",
                 letterSpacing: "-0.5px",
               }}
@@ -189,7 +189,7 @@ const FAQ = () => {
             </p>
             <Link
               to="/contact"
-              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
             >
               צרו קשר
             </Link>

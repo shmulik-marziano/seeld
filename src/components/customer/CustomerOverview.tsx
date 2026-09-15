@@ -72,7 +72,7 @@ export function CustomerOverview({ customer, productsCount, activeRecsCount, exe
         {/* ═══ 1. זיהוי וקשר ═══ */}
         <AccordionItem value="identity" className="border rounded-lg bg-card">
           <AccordionTrigger className="px-4 py-3 hover:no-underline">
-            <span className="flex items-center gap-2 text-sm font-semibold"><User className="h-4 w-4 text-primary" />זיהוי וקשר</span>
+            <span className="flex items-center gap-2 text-sm font-bold"><User className="h-4 w-4 text-primary" />זיהוי וקשר</span>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4">
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
@@ -99,7 +99,7 @@ export function CustomerOverview({ customer, productsCount, activeRecsCount, exe
         {/* ═══ 2. משפחה וכתובת ═══ */}
         <AccordionItem value="contact" className="border rounded-lg bg-card">
           <AccordionTrigger className="px-4 py-3 hover:no-underline">
-            <span className="flex items-center gap-2 text-sm font-semibold"><Users className="h-4 w-4 text-primary" />משפחה וכתובת</span>
+            <span className="flex items-center gap-2 text-sm font-bold"><Users className="h-4 w-4 text-primary" />משפחה וכתובת</span>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4">
             <p className="text-xs text-muted-foreground font-medium mb-2">משפחה</p>
@@ -133,7 +133,7 @@ export function CustomerOverview({ customer, productsCount, activeRecsCount, exe
         {/* ═══ 3. כלכלי ותעסוקתי ═══ */}
         <AccordionItem value="financial" className="border rounded-lg bg-card">
           <AccordionTrigger className="px-4 py-3 hover:no-underline">
-            <span className="flex items-center gap-2 text-sm font-semibold"><Briefcase className="h-4 w-4 text-primary" />מצב כלכלי ותעסוקתי</span>
+            <span className="flex items-center gap-2 text-sm font-bold"><Briefcase className="h-4 w-4 text-primary" />מצב כלכלי ותעסוקתי</span>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4">
             <p className="text-xs text-muted-foreground font-medium mb-2">תעסוקה</p>
@@ -187,7 +187,7 @@ export function CustomerOverview({ customer, productsCount, activeRecsCount, exe
         {/* ═══ 4. חיתום ובריאות ═══ */}
         <AccordionItem value="health" className="border rounded-lg bg-card">
           <AccordionTrigger className="px-4 py-3 hover:no-underline">
-            <span className="flex items-center gap-2 text-sm font-semibold"><Heart className="h-4 w-4 text-primary" />חיתום ובריאות</span>
+            <span className="flex items-center gap-2 text-sm font-bold"><Heart className="h-4 w-4 text-primary" />חיתום ובריאות</span>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4">
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
@@ -224,7 +224,7 @@ export function CustomerOverview({ customer, productsCount, activeRecsCount, exe
         {/* ═══ 5. העדפות והתאמה ═══ */}
         <AccordionItem value="preferences" className="border rounded-lg bg-card">
           <AccordionTrigger className="px-4 py-3 hover:no-underline">
-            <span className="flex items-center gap-2 text-sm font-semibold"><Target className="h-4 w-4 text-primary" />העדפות והתאמה</span>
+            <span className="flex items-center gap-2 text-sm font-bold"><Target className="h-4 w-4 text-primary" />העדפות והתאמה</span>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4">
             <p className="text-xs text-muted-foreground font-medium mb-2">מטרות</p>
@@ -264,7 +264,7 @@ export function CustomerOverview({ customer, productsCount, activeRecsCount, exe
         {/* ═══ 6. נתוני ביצוע ואישור ═══ */}
         <AccordionItem value="execution" className="border rounded-lg bg-card">
           <AccordionTrigger className="px-4 py-3 hover:no-underline">
-            <span className="flex items-center gap-2 text-sm font-semibold"><FileCheck className="h-4 w-4 text-primary" />ביצוע, מסמכים ואישור</span>
+            <span className="flex items-center gap-2 text-sm font-bold"><FileCheck className="h-4 w-4 text-primary" />ביצוע, מסמכים ואישור</span>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4">
             <p className="text-xs text-muted-foreground font-medium mb-2">סטטוס אישורים</p>

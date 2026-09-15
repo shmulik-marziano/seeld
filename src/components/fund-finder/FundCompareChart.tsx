@@ -10,7 +10,7 @@ interface FundCompareChartProps {
 
 // Greyscale-led categorical palette (SEELD Mono) — chip colors only for emphasis
 const COLORS = [
-  '#171717', '#6e6e6e', '#b45309', '#15803d',
+  '#003D30', '#476356', '#b45309', '#15803d',
   '#a16207', '#a3a3a3', '#4d4d4d', '#d4d4d4',
 ];
 

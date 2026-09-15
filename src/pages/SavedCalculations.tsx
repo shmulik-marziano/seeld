@@ -132,7 +132,7 @@ const SavedCalculations = () => {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-[#FAF7EF]">
         <Header />
         <div className="flex flex-col items-center justify-center gap-4 h-[60vh]" dir="rtl">
           <Loader2 className="w-6 h-6 animate-spin" style={{ color: NAVY }} />
@@ -143,7 +143,7 @@ const SavedCalculations = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main className="dna-page">
@@ -163,11 +163,11 @@ const SavedCalculations = () => {
           {/* Hero */}
           <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-10 sm:pb-14">
             <nav className="flex items-center gap-2 text-[13px] mb-8" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
-              <Link to="/calculators" className="hover:text-[#1D2D3D] transition-colors">מחשבונים</Link>
+              <Link to="/calculators" className="hover:text-[#003D30] transition-colors">מחשבונים</Link>
               <span aria-hidden="true">←</span>
-              <span className="font-medium text-[#1D2D3D]">החישובים שלי</span>
+              <span className="font-medium text-[#003D30]">החישובים שלי</span>
             </nav>
 
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
@@ -185,7 +185,7 @@ const SavedCalculations = () => {
               <button
                 type="button"
                 onClick={() => navigate("/calculators")}
-                className="shrink-0 inline-flex items-center justify-center px-7 py-3.5 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[48px]"
+                className="shrink-0 inline-flex items-center justify-center px-7 py-3.5 rounded-lg bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors min-h-[48px]"
               >
                 למחשבונים
               </button>
@@ -203,7 +203,7 @@ const SavedCalculations = () => {
                   >
                     נדרשת התחברות
                   </h2>
-                  <p className="text-base leading-[1.85] max-w-xl mb-7" style={{ color: "#3a4c5a" }}>
+                  <p className="text-base leading-[1.85] max-w-xl mb-7" style={{ color: "#24483C" }}>
                     החישובים השמורים מקושרים לחשבון שלכם. התחברו כדי לראות אותם,
                     או פתחו מחשבון וחשבו בלי רישום.
                   </p>
@@ -211,13 +211,13 @@ const SavedCalculations = () => {
                     <button
                       type="button"
                       onClick={() => setShowAuthModal(true)}
-                      className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[52px]"
+                      className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors min-h-[52px]"
                     >
                       התחברות
                     </button>
                     <Link
                       to="/calculators"
-                      className="group inline-flex items-center gap-2 text-base font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+                      className="group inline-flex items-center gap-2 text-base font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
                     >
                       למחשבונים בלי רישום
                       <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -233,19 +233,19 @@ const SavedCalculations = () => {
                   >
                     אין חישובים שמורים עדיין
                   </h2>
-                  <p className="text-base leading-[1.85] max-w-xl mb-7" style={{ color: "#3a4c5a" }}>
+                  <p className="text-base leading-[1.85] max-w-xl mb-7" style={{ color: "#24483C" }}>
                     פתחו מחשבון משכנתא, פנסיה או חיסכון, ושמרו את התוצאה.
                     היא תופיע כאן ותוכלו לחזור אליה מכל מכשיר.
                   </p>
                   <Link
                     to="/calculators"
                     className="dna-hover inline-flex flex-col items-start gap-1.5 px-7 py-5 rounded-xl border"
-                    style={{ backgroundColor: TINT_GOLD, borderColor: "#E1EAF1" }}
+                    style={{ backgroundColor: TINT_GOLD, borderColor: "#E8EDE5" }}
                   >
-                    <span className="text-[15px] font-semibold" style={{ color: NAVY }}>פתיחת מחשבון ←</span>
+                    <span className="text-[15px] font-bold" style={{ color: NAVY }}>פתיחת מחשבון ←</span>
                     <span
-                      className="text-[10px] tracking-[0.2em] font-semibold"
-                      style={{ fontFamily: MONO, color: "#8a5a1e" }}
+                      className="text-[10px] tracking-[0.2em] font-bold"
+                      style={{ fontFamily: MONO, color: "#8A6230" }}
                       dir="ltr"
                     >
                       NO SIGNUP · FREE
@@ -258,7 +258,7 @@ const SavedCalculations = () => {
                   {calculations.map((calc) => (
                     <div
                       key={calc.id}
-                      className="py-6 border-b hover:bg-[#E1EAF1]/25 transition-colors"
+                      className="py-6 border-b hover:bg-[#E8EDE5]/25 transition-colors"
                       style={{ borderColor: LINE }}
                     >
                       <div className="flex items-start justify-between gap-4">
@@ -277,7 +277,7 @@ const SavedCalculations = () => {
                           type="button"
                           onClick={() => deleteCalculation(calc.id)}
                           aria-label="מחיקת החישוב"
-                          className="shrink-0 p-2 text-[#5a6a78] hover:text-[#a04a5c] transition-colors"
+                          className="shrink-0 p-2 text-[#476356] hover:text-[#9A4520] transition-colors"
                         >
                           <Trash2 className="w-4 h-4" strokeWidth={1.5} />
                         </button>
@@ -307,12 +307,12 @@ const SavedCalculations = () => {
 
               {/* Next action */}
               <div className="mt-14 border-t pt-6 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4" style={{ borderColor: LINE }}>
-                <p className="text-[14px] leading-[1.8] max-w-md" style={{ color: "#3a4c5a" }}>
+                <p className="text-[14px] leading-[1.8] max-w-md" style={{ color: "#24483C" }}>
                   רוצים לעבור על התוצאות עם יועץ? נבחן את המספרים מול התיק האמיתי שלכם, ללא עלות.
                 </p>
                 <Link
                   to="/contact"
-                  className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors shrink-0"
+                  className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors shrink-0"
                 >
                   לשיחה עם יועץ
                   <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>

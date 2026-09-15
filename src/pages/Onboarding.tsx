@@ -21,13 +21,13 @@ import Footer from "@/components/Footer";
 
 // Consistent keyboard focus for buttons and selectable tiles (Snap: no ring animation)
 const FOCUS_RING =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D2D3D]";
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]";
 
 // DNA v3 boxed input: white, hairline border, navy focus
 const inputBoxClass =
-  "w-full min-h-[48px] px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg " +
-  "text-base text-[#1D2D3D] placeholder:text-[#5a6a78] " +
-  "focus:outline-none focus:border-[#1D2D3D] transition-colors";
+  "w-full min-h-[48px] px-4 py-3 bg-white border border-[#CCD6CC] rounded-lg " +
+  "text-base text-[#003D30] placeholder:text-[#476356] " +
+  "focus:outline-none focus:border-[#003D30] transition-colors";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface FormData {
@@ -208,7 +208,7 @@ function DateMaskInput({
         className={cn(
           inputBoxClass,
           "pl-10 tracking-widest",
-          error && "!border-[#a04a5c]",
+          error && "!border-[#9A4520]",
           className
         )}
         style={{ fontFamily: MONO }}
@@ -217,7 +217,7 @@ function DateMaskInput({
         <PopoverTrigger asChild>
           <button
             type="button"
-            className={cn("absolute left-2 p-1.5 rounded-md text-[#5a6a78] hover:text-[#1D2D3D] transition-colors", FOCUS_RING)}
+            className={cn("absolute left-2 p-1.5 rounded-md text-[#476356] hover:text-[#003D30] transition-colors", FOCUS_RING)}
             aria-label="בחירת תאריך מלוח שנה"
           >
             <Calendar className="w-4 h-4" />
@@ -286,21 +286,21 @@ function CityInput({
         placeholder="תל אביב"
         className={cn(
           inputBoxClass,
-          error && "!border-[#a04a5c]",
+          error && "!border-[#9A4520]",
           className
         )}
       />
       {open && filtered.length > 0 && (
         <div
-          className="absolute z-[100] top-full mt-1 w-full rounded-lg bg-white border border-[#E7EDF1] overflow-hidden max-h-60 overflow-y-auto"
-          style={{ boxShadow: "0 8px 16px -8px rgba(29,45,61,.12)" }}
+          className="absolute z-[100] top-full mt-1 w-full rounded-lg bg-white border border-[#CCD6CC] overflow-hidden max-h-60 overflow-y-auto"
+          style={{ boxShadow: "0 8px 16px -8px rgba(0,61,48,.12)" }}
         >
           {filtered.map(city => (
             <button
               key={city}
               type="button"
               onMouseDown={() => select(city)}
-              className="w-full text-right px-4 py-3 min-h-[44px] text-sm text-[#1D2D3D] hover:bg-[#E1EAF1]/35 transition-colors border-b border-[#E7EDF1] last:border-0"
+              className="w-full text-right px-4 py-3 min-h-[44px] text-sm text-[#003D30] hover:bg-[#E8EDE5]/35 transition-colors border-b border-[#CCD6CC] last:border-0"
             >
               {city}
             </button>
@@ -351,15 +351,15 @@ function StreetInput({
       />
       {open && filtered.length > 0 && (
         <div
-          className="absolute z-[100] top-full mt-1 w-full rounded-lg bg-white border border-[#E7EDF1] overflow-hidden max-h-60 overflow-y-auto"
-          style={{ boxShadow: "0 8px 16px -8px rgba(29,45,61,.12)" }}
+          className="absolute z-[100] top-full mt-1 w-full rounded-lg bg-white border border-[#CCD6CC] overflow-hidden max-h-60 overflow-y-auto"
+          style={{ boxShadow: "0 8px 16px -8px rgba(0,61,48,.12)" }}
         >
           {filtered.map(street => (
             <button
               key={street}
               type="button"
               onMouseDown={() => { onChange(street); setQuery(street); setOpen(false); }}
-              className="w-full text-right px-4 py-3 min-h-[44px] text-sm text-[#1D2D3D] hover:bg-[#E1EAF1]/35 transition-colors border-b border-[#E7EDF1] last:border-0"
+              className="w-full text-right px-4 py-3 min-h-[44px] text-sm text-[#003D30] hover:bg-[#E8EDE5]/35 transition-colors border-b border-[#CCD6CC] last:border-0"
             >
               {street}
             </button>
@@ -398,7 +398,7 @@ function StepBar({ current }: { current: number }) {
                 <span
                   className={cn(
                     "text-[13px] transition-colors",
-                    active ? "font-semibold text-[#1D2D3D]" : "font-medium text-[#5a6a78]"
+                    active ? "font-bold text-[#003D30]" : "font-medium text-[#476356]"
                   )}
                 >
                   {step.label}
@@ -407,14 +407,14 @@ function StepBar({ current }: { current: number }) {
             );
           })}
         </div>
-        <span className="text-[13px] font-semibold text-[#1D2D3D] sm:hidden">
+        <span className="text-[13px] font-bold text-[#003D30] sm:hidden">
           {STEPS[current].label}
         </span>
         <span className="text-[12.5px] shrink-0" style={{ color: MUTED }}>
           שלב {current + 1} מתוך {STEPS.length}
         </span>
       </div>
-      <div className="relative mt-4 h-[3px] rounded-full bg-[#E7EDF1]">
+      <div className="relative mt-4 h-[3px] rounded-full bg-[#CCD6CC]">
         <div
           className="absolute inset-y-0 right-0 rounded-full transition-all duration-200 ease-out"
           style={{ width: `${((current + 1) / STEPS.length) * 100}%`, backgroundColor: TURQ }}
@@ -430,12 +430,12 @@ function GlassInput({
 }: { label: string; error?: string; required?: boolean; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5 group">
-      <label className="text-[13px] font-medium text-[#5a6a78] group-focus-within:text-[#1D2D3D] transition-colors">
+      <label className="text-[13px] font-medium text-[#476356] group-focus-within:text-[#003D30] transition-colors">
         {label}{required && <span className="mr-1" style={{ color: MUTED }}>*</span>}
       </label>
       {children}
       {error && (
-        <p className="text-[12px] font-medium flex items-center gap-1" style={{ color: "#a04a5c" }}>
+        <p className="text-[12px] font-medium flex items-center gap-1" style={{ color: "#9A4520" }}>
           <AlertCircle className="w-3 h-3 shrink-0" />{error}
         </p>
       )}
@@ -468,7 +468,7 @@ function ConsentCard({
       className={cn(
         "w-full text-right rounded-xl bg-white p-5 border transition-colors cursor-pointer group",
         FOCUS_RING,
-        checked ? "border-[#1D2D3D]" : "border-[#E7EDF1] hover:bg-[#E1EAF1]/25"
+        checked ? "border-[#003D30]" : "border-[#CCD6CC] hover:bg-[#E8EDE5]/25"
       )}
     >
       <div className="flex items-start gap-4">
@@ -476,7 +476,7 @@ function ConsentCard({
         <div
           className={cn(
             "mt-0.5 w-5 h-5 rounded-[4px] shrink-0 flex items-center justify-center border transition-colors",
-            checked ? "bg-[#1D2D3D] border-[#1D2D3D]" : "bg-white border-[#5a6a78]"
+            checked ? "bg-[#003D30] border-[#003D30]" : "bg-white border-[#476356]"
           )}
         >
           {checked && <Check className="w-3.5 h-3.5 text-white" />}
@@ -489,7 +489,7 @@ function ConsentCard({
             target="_blank"
             rel="noopener noreferrer"
             onClick={e => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 text-[12.5px] text-[#5a6a78] hover:text-[#1D2D3D] transition-colors mt-1 font-medium border-b border-[#1D2D3D]/20 pb-0.5"
+            className="inline-flex items-center gap-1.5 text-[12.5px] text-[#476356] hover:text-[#003D30] transition-colors mt-1 font-medium border-b border-[#003D30]/20 pb-0.5"
           >
             <Download className="w-3 h-3" />
             {pdfLabel}
@@ -510,7 +510,7 @@ function SignatureCanvas({ value, onChange }: { value: string; onChange: (v: str
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d")!;
-    ctx.strokeStyle = "#1D2D3D";
+    ctx.strokeStyle = "#003D30";
     ctx.lineWidth = 2.5;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -572,8 +572,8 @@ function SignatureCanvas({ value, onChange }: { value: string; onChange: (v: str
       <div className={cn(
         "relative rounded-lg overflow-hidden border transition-colors",
         hasDrawn
-          ? "border-[#1D2D3D]"
-          : "border-[#5a6a78]/50 border-dashed"
+          ? "border-[#003D30]"
+          : "border-[#476356]/50 border-dashed"
       )}>
         <canvas
           ref={canvasRef}
@@ -590,7 +590,7 @@ function SignatureCanvas({ value, onChange }: { value: string; onChange: (v: str
         />
         {!hasDrawn && (
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none gap-2">
-            <Pen className="w-6 h-6 text-[#1D2D3D]/25" />
+            <Pen className="w-6 h-6 text-[#003D30]/25" />
             <p className="text-sm tracking-widest" style={{ fontFamily: MONO, color: MUTED }}>חתמו כאן</p>
           </div>
         )}
@@ -599,7 +599,7 @@ function SignatureCanvas({ value, onChange }: { value: string; onChange: (v: str
         <button
           type="button"
           onClick={clear}
-          className={cn("flex items-center gap-1.5 text-[12.5px] text-[#5a6a78] hover:text-[#1D2D3D] transition-colors font-medium min-h-[32px]", FOCUS_RING)}
+          className={cn("flex items-center gap-1.5 text-[12.5px] text-[#476356] hover:text-[#003D30] transition-colors font-medium min-h-[32px]", FOCUS_RING)}
         >
           <X className="w-3.5 h-3.5" />
           נקו וחתמו שוב
@@ -615,7 +615,7 @@ function CopyBtn({ text }: { text: string }) {
   return (
     <button
       onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
-      className="p-1.5 rounded-md hover:bg-[#E1EAF1]/50 transition-colors text-[#5a6a78] hover:text-[#1D2D3D]"
+      className="p-1.5 rounded-md hover:bg-[#E8EDE5]/50 transition-colors text-[#476356] hover:text-[#003D30]"
       aria-label="העתקה"
     >
       {copied
@@ -755,7 +755,7 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
       <div ref={topRef} />
 
@@ -777,7 +777,7 @@ export default function Onboarding() {
           <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-10 sm:pb-12">
             <div className="mb-8 flex items-baseline justify-between gap-4">
               <nav className="flex items-center gap-2 text-[13px]" style={{ color: MUTED }}>
-                <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+                <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
                 <span aria-hidden="true">←</span>
                 <span className="font-medium" style={{ color: NAVY }}>פתיחת תיק</span>
               </nav>
@@ -857,7 +857,7 @@ export default function Onboarding() {
                   <div className="mt-10">
                     <Link
                       to="/"
-                      className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+                      className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
                     >
                       חזרה לדף הבית
                       <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -880,11 +880,11 @@ export default function Onboarding() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <GlassInput label="שם פרטי" error={errors.firstName} required>
                           <TechInput value={form.firstName} onChange={e => set("firstName", e.target.value)}
-                            placeholder="ישראל" className={errors.firstName ? "!border-[#a04a5c]" : ""} />
+                            placeholder="ישראל" className={errors.firstName ? "!border-[#9A4520]" : ""} />
                         </GlassInput>
                         <GlassInput label="שם משפחה" error={errors.lastName} required>
                           <TechInput value={form.lastName} onChange={e => set("lastName", e.target.value)}
-                            placeholder="ישראלי" className={errors.lastName ? "!border-[#a04a5c]" : ""} />
+                            placeholder="ישראלי" className={errors.lastName ? "!border-[#9A4520]" : ""} />
                         </GlassInput>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -892,7 +892,7 @@ export default function Onboarding() {
                           <TechInput value={form.idNumber}
                             onChange={e => set("idNumber", e.target.value.replace(/\D/g, ""))}
                             maxLength={9} inputMode="numeric" placeholder="000000000"
-                            className={cn("tracking-widest", errors.idNumber ? "!border-[#a04a5c]" : "")}
+                            className={cn("tracking-widest", errors.idNumber ? "!border-[#9A4520]" : "")}
                             style={{ fontFamily: MONO }} />
                         </GlassInput>
                         <GlassInput label={'תאריך הנפקת ת"ז'} error={errors.idIssueDate} required>
@@ -924,14 +924,14 @@ export default function Onboarding() {
                         <GlassInput label="טלפון נייד" error={errors.phone} required>
                           <TechInput value={form.phone} onChange={e => set("phone", e.target.value)}
                             inputMode="tel" placeholder="050-0000000"
-                            className={errors.phone ? "!border-[#a04a5c]" : ""}
+                            className={errors.phone ? "!border-[#9A4520]" : ""}
                             style={{ fontFamily: MONO }} />
                         </GlassInput>
                         <GlassInput label={'דוא"ל'} error={errors.email} required>
                           <TechInput type="email" value={form.email}
                             onChange={e => set("email", e.target.value)}
                             placeholder="email@example.com"
-                            className={errors.email ? "!border-[#a04a5c]" : ""} />
+                            className={errors.email ? "!border-[#9A4520]" : ""} />
                         </GlassInput>
                       </div>
                     </TechSection>
@@ -986,8 +986,8 @@ export default function Onboarding() {
                                 "px-4 py-2.5 min-h-[44px] rounded-md border text-sm font-medium transition-colors",
                                 FOCUS_RING,
                                 form.maritalStatus === opt
-                                  ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
-                                  : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 hover:text-[#1D2D3D]"
+                                  ? "border-[#003D30] bg-[#003D30] text-white"
+                                  : "border-[#CCD6CC] bg-white text-[#24483C] hover:bg-[#E8EDE5]/35 hover:border-[#003D30]/40 hover:text-[#003D30]"
                               )}
                             >
                               {opt}
@@ -1008,8 +1008,8 @@ export default function Onboarding() {
                                 "px-4 py-2.5 min-h-[44px] rounded-md border text-sm font-medium transition-colors",
                                 FOCUS_RING,
                                 form.healthFund === opt
-                                  ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
-                                  : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 hover:text-[#1D2D3D]"
+                                  ? "border-[#003D30] bg-[#003D30] text-white"
+                                  : "border-[#CCD6CC] bg-white text-[#24483C] hover:bg-[#E8EDE5]/35 hover:border-[#003D30]/40 hover:text-[#003D30]"
                               )}
                             >
                               {opt}
@@ -1025,7 +1025,7 @@ export default function Onboarding() {
                             <button
                               type="button"
                               onClick={() => set("childrenCount", Math.max(0, form.childrenCount - 1))}
-                              className={cn("w-11 h-11 rounded-md border border-[#E7EDF1] bg-white text-[#1D2D3D] font-medium text-lg flex items-center justify-center hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 transition-colors", FOCUS_RING)}
+                              className={cn("w-11 h-11 rounded-md border border-[#CCD6CC] bg-white text-[#003D30] font-medium text-lg flex items-center justify-center hover:bg-[#E8EDE5]/35 hover:border-[#003D30]/40 transition-colors", FOCUS_RING)}
                             >−</button>
                             <span className="w-12 text-center text-2xl tabular-nums" style={{ fontFamily: MONO, fontWeight: 600, color: NAVY }}>
                               {form.childrenCount}
@@ -1033,7 +1033,7 @@ export default function Onboarding() {
                             <button
                               type="button"
                               onClick={() => set("childrenCount", Math.min(24, form.childrenCount + 1))}
-                              className={cn("w-11 h-11 rounded-md border border-[#E7EDF1] bg-white text-[#1D2D3D] font-medium text-lg flex items-center justify-center hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 transition-colors", FOCUS_RING)}
+                              className={cn("w-11 h-11 rounded-md border border-[#CCD6CC] bg-white text-[#003D30] font-medium text-lg flex items-center justify-center hover:bg-[#E8EDE5]/35 hover:border-[#003D30]/40 transition-colors", FOCUS_RING)}
                             >+</button>
                           </div>
                           <div className="flex flex-wrap gap-1.5">
@@ -1046,8 +1046,8 @@ export default function Onboarding() {
                                   "w-10 h-10 rounded-md border text-xs font-medium transition-colors tabular-nums",
                                   FOCUS_RING,
                                   form.childrenCount === n
-                                    ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
-                                    : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40"
+                                    ? "border-[#003D30] bg-[#003D30] text-white"
+                                    : "border-[#CCD6CC] bg-white text-[#24483C] hover:bg-[#E8EDE5]/35 hover:border-[#003D30]/40"
                                 )}
                               >{n}</button>
                             ))}
@@ -1058,8 +1058,8 @@ export default function Onboarding() {
                                 "px-2 h-10 rounded-md border text-xs font-medium transition-colors tabular-nums",
                                 FOCUS_RING,
                                 form.childrenCount > 6
-                                  ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
-                                  : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40"
+                                  ? "border-[#003D30] bg-[#003D30] text-white"
+                                  : "border-[#CCD6CC] bg-white text-[#24483C] hover:bg-[#E8EDE5]/35 hover:border-[#003D30]/40"
                               )}
                             >7+</button>
                           </div>
@@ -1084,8 +1084,8 @@ export default function Onboarding() {
                                   "px-4 py-2.5 min-h-[44px] rounded-md border text-sm font-medium transition-colors",
                                   FOCUS_RING,
                                   selected
-                                    ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
-                                    : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 hover:text-[#1D2D3D]"
+                                    ? "border-[#003D30] bg-[#003D30] text-white"
+                                    : "border-[#CCD6CC] bg-white text-[#24483C] hover:bg-[#E8EDE5]/35 hover:border-[#003D30]/40 hover:text-[#003D30]"
                                 )}
                               >
                                 {selected && <Check className="w-3.5 h-3.5 inline ml-1" />}
@@ -1113,8 +1113,8 @@ export default function Onboarding() {
                                 "px-4 py-2.5 min-h-[44px] rounded-md border text-sm font-medium transition-colors",
                                 FOCUS_RING,
                                 form.annualIncome === opt.value
-                                  ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
-                                  : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 hover:text-[#1D2D3D]"
+                                  ? "border-[#003D30] bg-[#003D30] text-white"
+                                  : "border-[#CCD6CC] bg-white text-[#24483C] hover:bg-[#E8EDE5]/35 hover:border-[#003D30]/40 hover:text-[#003D30]"
                               )}
                             >
                               {opt.label}
@@ -1134,8 +1134,8 @@ export default function Onboarding() {
                                 "px-6 py-2.5 min-h-[44px] rounded-md border text-sm font-medium transition-colors",
                                 FOCUS_RING,
                                 form.smoker === opt.value
-                                  ? "border-[#1D2D3D] bg-[#1D2D3D] text-white"
-                                  : "border-[#E7EDF1] bg-white text-[#3a4c5a] hover:bg-[#E1EAF1]/35 hover:border-[#1D2D3D]/40 hover:text-[#1D2D3D]"
+                                  ? "border-[#003D30] bg-[#003D30] text-white"
+                                  : "border-[#CCD6CC] bg-white text-[#24483C] hover:bg-[#E8EDE5]/35 hover:border-[#003D30]/40 hover:text-[#003D30]"
                               )}
                             >{opt.label}</button>
                           ))}
@@ -1165,7 +1165,7 @@ export default function Onboarding() {
                   <div className="space-y-4">
                     <div className="mb-4">
                       <p className="text-sm leading-[1.8]" style={{ color: BODY }}>
-                        <Lock className="w-3.5 h-3.5 inline ml-1.5 text-[#5a6a78]" />
+                        <Lock className="w-3.5 h-3.5 inline ml-1.5 text-[#476356]" />
                         לחץ על כל כרטיסייה לאישור ההרשאה. ניתן לצפות בנספח המלא לפני האישור.
                       </p>
                     </div>
@@ -1203,7 +1203,7 @@ export default function Onboarding() {
                           pdfLabel={item.label}
                         />
                         {errors[item.key] && (
-                          <p className="text-[12px] font-medium flex items-center gap-1 mt-1.5 mr-2" style={{ color: "#a04a5c" }}>
+                          <p className="text-[12px] font-medium flex items-center gap-1 mt-1.5 mr-2" style={{ color: "#9A4520" }}>
                             <AlertCircle className="w-3 h-3" />{errors[item.key]}
                           </p>
                         )}
@@ -1224,7 +1224,7 @@ export default function Onboarding() {
                         onChange={v => { set("signature", v); setErrors(e => ({ ...e, signature: undefined })); }}
                       />
                       {errors.signature && (
-                        <p className="text-[12px] font-medium flex items-center gap-1 mt-2" style={{ color: "#a04a5c" }}>
+                        <p className="text-[12px] font-medium flex items-center gap-1 mt-2" style={{ color: "#9A4520" }}>
                           <AlertCircle className="w-3 h-3" />{errors.signature}
                         </p>
                       )}
@@ -1289,7 +1289,7 @@ export default function Onboarding() {
                             href={item.pdf}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-[12.5px] text-[#5a6a78] hover:text-[#1D2D3D] transition-colors"
+                            className="inline-flex items-center gap-1 text-[12.5px] text-[#476356] hover:text-[#003D30] transition-colors"
                           >
                             <Download className="w-3.5 h-3.5" />
                             הורד
@@ -1302,7 +1302,7 @@ export default function Onboarding() {
                     {form.signature && (
                       <TechSection title="חתימה" icon={<Pen className="w-4 h-4" />}>
                         <img src={form.signature} alt="חתימה"
-                          className="max-h-20 rounded-md bg-white border border-[#E7EDF1]" />
+                          className="max-h-20 rounded-md bg-white border border-[#CCD6CC]" />
                         <p className="text-[12px] mt-2 tabular-nums" style={{ fontFamily: MONO, color: MUTED }}>
                           {new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" })}
                         </p>
@@ -1318,7 +1318,7 @@ export default function Onboarding() {
                   {step > 0 ? (
                     <button
                       onClick={goPrev}
-                      className={cn("text-sm text-[#5a6a78] hover:text-[#1D2D3D] transition-colors font-medium flex items-center gap-1.5 min-h-[44px]", FOCUS_RING)}
+                      className={cn("text-sm text-[#476356] hover:text-[#003D30] transition-colors font-medium flex items-center gap-1.5 min-h-[44px]", FOCUS_RING)}
                     >
                       <ChevronLeft className="w-4 h-4 rotate-180" />
                       חזרה
@@ -1328,7 +1328,7 @@ export default function Onboarding() {
                   <button
                     onClick={step === 2 ? handleSubmit : goNext}
                     disabled={submitting}
-                    className={cn("inline-flex items-center justify-center gap-2 px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]", FOCUS_RING)}
+                    className={cn("inline-flex items-center justify-center gap-2 px-9 py-4 rounded-lg bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]", FOCUS_RING)}
                   >
                     {submitting
                       ? <><Loader2 className="w-4 h-4 animate-spin" />שולח...</>
@@ -1354,9 +1354,9 @@ function TechSection({
   title, icon, children
 }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="border-t pt-5 space-y-5" style={{ borderColor: "#E7EDF1" }}>
+    <div className="border-t pt-5 space-y-5" style={{ borderColor: "#CCD6CC" }}>
       <div className="flex items-center gap-2.5 mb-1">
-        <span className="text-[#5a6a78]">{icon}</span>
+        <span className="text-[#476356]">{icon}</span>
         <h2 className="text-[16px]" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>{title}</h2>
       </div>
       {children}

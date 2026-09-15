@@ -2,7 +2,7 @@
 // insurance & finance. Navy ink line-work, no fills (SEELD DNA v3),
 // meant to sit on white surfaces and pastel circles.
 
-const stroke = { stroke: "#1D2D3D", strokeWidth: 2.4, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, fill: "none" };
+const stroke = { stroke: "#003D30", strokeWidth: 2.4, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, fill: "none" };
 
 /** Umbrella in light rain — protection */
 export const UmbrellaFigure = ({ className = "" }: { className?: string }) => (

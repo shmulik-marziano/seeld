@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { COMPANIES, type Company } from "@/data/companies";
 import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
-import { SERIF, BRONZE } from "@/lib/brand";
+import { SERIF } from "@/lib/brand";
 
 /*
   CompanyLogos — partner insurance/investment companies as official brand
@@ -34,7 +34,7 @@ function CompanyLogo({ company, size = "md", eager = false }: { company: Company
 /* Grid variant — used on insurance/savings pages */
 function LogoGrid({ companies }: { companies: Company[] }) {
   return (
-    <div className="border-t border-b border-[#171717]/10 py-8 sm:py-10">
+    <div className="border-t border-b border-[#003D30]/10 py-8 sm:py-10">
       <div className="flex flex-wrap items-center gap-x-10 gap-y-7">
         {companies.map((c) => (
           <CompanyLogo key={c.slug} company={c} />
@@ -72,7 +72,7 @@ function LogoMarquee({ companies }: { companies: Company[] }) {
   });
 
   return (
-    <div className="dna-logo-fade relative overflow-hidden border-t border-b border-[#171717]/10 py-7 sm:py-8 select-none">
+    <div className="dna-logo-fade relative overflow-hidden border-t border-b border-[#003D30]/10 py-7 sm:py-8 select-none">
       <motion.div
         ref={rowRef}
         className="flex items-center gap-x-12 sm:gap-x-16 whitespace-nowrap cursor-grab active:cursor-grabbing touch-pan-y"
@@ -101,20 +101,17 @@ export default function CompanyLogos({
     /* The marquee is dropped into page sections that carry their own band
        colour (homepage warm band) — stay transparent there. The grid keeps
        its white plate on service pages. */
-    <section className={variant === "marquee" ? "bg-transparent" : "bg-white"}>
+    <section className={"bg-transparent"}>
       <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
         {title && (
-          <div className="border-t border-[#171717]/20 pt-5 mb-10">
-            <span className="text-[11px] tracking-[0.22em] font-medium block mb-3" style={{ color: BRONZE }}>
-              THE MARKET
-            </span>
+          <div className="border-t border-[#003D30]/20 pt-5 mb-10">
             <h2
-              className="text-[#171717] leading-tight"
-              style={{ fontFamily: SERIF, fontWeight: 600, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+              className="text-[#003D30] leading-tight"
+              style={{ fontFamily: SERIF, fontWeight: 700, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
             >
               {title}
             </h2>
-            {subtitle && <p className="mt-2 text-base text-[#5c5c5c] leading-relaxed max-w-xl">{subtitle}</p>}
+            {subtitle && <p className="mt-2 text-base text-[#476356] leading-relaxed max-w-xl">{subtitle}</p>}
           </div>
         )}
         {variant === "marquee" ? (

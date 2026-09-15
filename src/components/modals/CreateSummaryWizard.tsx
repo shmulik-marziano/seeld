@@ -105,7 +105,7 @@ export function CreateSummaryWizard({ open, onOpenChange }: Props) {
                   <Users className="h-5 w-5" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-semibold text-sm">לקוח קיים</p>
+                  <p className="font-bold text-sm">לקוח קיים</p>
                   <p className="text-xs text-muted-foreground">בחר לקוח מהרשימה וצור סיכום</p>
                 </div>
                 <ArrowLeft className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
@@ -119,7 +119,7 @@ export function CreateSummaryWizard({ open, onOpenChange }: Props) {
                   <UserPlus className="h-5 w-5" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-semibold text-sm">לקוח חדש</p>
+                  <p className="font-bold text-sm">לקוח חדש</p>
                   <p className="text-xs text-muted-foreground">צור לקוח חדש ואז המשך לסיכום</p>
                 </div>
                 <ArrowLeft className="h-4 w-4 text-muted-foreground group-hover:text-emerald-600 transition-colors" />

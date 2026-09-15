@@ -6,7 +6,7 @@ import { DISPLAY, MONO, MUTED, NAVY } from '@/lib/brand';
 // SEELD DNA v3: one quiet white column, navy headings, hairline rules (STYLESEED.md)
 
 const LegalSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <section className="border-t border-[#E7EDF1] pt-5">
+  <section className="border-t border-[#CCD6CC] pt-5">
     <h2 className="text-[19px] mb-3" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
       {title}
     </h2>
@@ -20,7 +20,7 @@ export default function TermsPage() {
   const isPublic = location.pathname === '/terms';
 
   const content = (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-10 text-base leading-[1.9] text-[#3a4c5a] [&_strong]:text-[#1D2D3D] [&_strong]:font-medium">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-10 text-base leading-[1.9] text-[#24483C] [&_strong]:text-[#003D30] [&_strong]:font-medium">
       <LegalSection title="1. כללי">
         <p>
           ברוכים הבאים למערכת SEELD (להלן: "המערכת"), המופעלת על ידי חברת SEELD (להלן: "החברה").
@@ -138,7 +138,7 @@ export default function TermsPage() {
           לכל שאלה או פנייה בנוגע לתנאי שימוש אלו, ניתן לפנות אלינו בדוא"ל:{' '}
           <a
             href="mailto:info@seeld.co.il"
-            className="text-[#1D2D3D] font-medium border-b border-[#1D2D3D]/25 hover:border-[#1D2D3D] transition-colors"
+            className="text-[#003D30] font-medium border-b border-[#003D30]/25 hover:border-[#003D30] transition-colors"
             dir="ltr"
           >
             info@seeld.co.il
@@ -146,7 +146,7 @@ export default function TermsPage() {
         </p>
       </LegalSection>
 
-      <p className="border-t border-[#E7EDF1] pt-5 text-[12px] leading-relaxed" style={{ color: MUTED }}>
+      <p className="border-t border-[#CCD6CC] pt-5 text-[12px] leading-relaxed" style={{ color: MUTED }}>
         &copy; {new Date().getFullYear()} SEELD. כל הזכויות שמורות. תנאי שימוש אלו מהווים את ההסכם
         המלא בין המשתמש לחברה בנוגע לשימוש במערכת.
       </p>
@@ -158,7 +158,7 @@ export default function TermsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       {/* One quiet white column — the whole document */}
@@ -176,7 +176,7 @@ export default function TermsPage() {
               </span>
               <button
                 onClick={() => navigate('/')}
-                className="text-[13px] font-medium hover:text-[#1D2D3D] transition-colors"
+                className="text-[13px] font-medium hover:text-[#003D30] transition-colors"
                 style={{ color: MUTED }}
               >
                 חזרה לדף הבית

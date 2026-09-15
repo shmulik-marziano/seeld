@@ -118,7 +118,7 @@ export default function Learn() {
   const cost = (v: number | null) => (v === null ? "—" : `${v.toFixed(2)}%`);
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main className="dna-page">
@@ -131,9 +131,9 @@ export default function Learn() {
           {/* Hero */}
           <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-10">
             <nav className="flex items-center gap-2 text-[13px] mb-8" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
-              <span className="font-medium text-[#1D2D3D]">מידע ולמידה</span>
+              <span className="font-medium text-[#003D30]">מידע ולמידה</span>
             </nav>
 
             <h1 className="dna-display leading-[1.15] mb-5 max-w-3xl" style={{ fontSize: "clamp(2rem, 5vw, 3.1rem)" }}>
@@ -149,7 +149,7 @@ export default function Learn() {
           {/* Live market snapshot */}
           <section className="border-t" style={{ borderColor: LINE }}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-              <h2 className="text-[26px] sm:text-[32px] leading-tight mb-3" style={{ fontFamily: DISPLAY, fontWeight: 900, color: NAVY }}>
+              <h2 className="text-[26px] sm:text-[32px] leading-tight mb-3" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                 מה קורה בשוק החיסכון
               </h2>
               <p className="text-[15px] leading-[1.85] max-w-2xl mb-6" style={{ color: BODY }}>
@@ -184,12 +184,12 @@ export default function Learn() {
                         <td>{productTypeLabels[r.category]}</td>
                         <td className="num"><span dir="ltr" style={{ fontFamily: MONO }}>{r.count}</span></td>
                         <td className="num">
-                          <span dir="ltr" style={{ fontFamily: MONO, color: (r.ytd ?? 0) < 0 ? "#a04a5c" : TURQ_TEXT }}>
+                          <span dir="ltr" style={{ fontFamily: MONO, color: (r.ytd ?? 0) < 0 ? "#9A4520" : TURQ_TEXT }}>
                             {ret(r.ytd)}
                           </span>
                         </td>
                         <td className="num">
-                          <span dir="ltr" style={{ fontFamily: MONO, color: (r.y3 ?? 0) < 0 ? "#a04a5c" : TURQ_TEXT }}>
+                          <span dir="ltr" style={{ fontFamily: MONO, color: (r.y3 ?? 0) < 0 ? "#9A4520" : TURQ_TEXT }}>
                             {ret(r.y3)}
                           </span>
                         </td>
@@ -229,7 +229,7 @@ export default function Learn() {
           {/* Glossary */}
           <section className="border-t dna-warm-band" style={{ borderColor: LINE }}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-              <h2 className="text-[26px] sm:text-[32px] leading-tight mb-3" style={{ fontFamily: DISPLAY, fontWeight: 900, color: NAVY }}>
+              <h2 className="text-[26px] sm:text-[32px] leading-tight mb-3" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                 המונחים שפוגשים בדוח
               </h2>
               <p className="text-[15px] leading-[1.85] max-w-2xl mb-8" style={{ color: BODY }}>
@@ -253,7 +253,7 @@ export default function Learn() {
           {posts.length > 0 && (
             <section className="border-t" style={{ borderColor: LINE }}>
               <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-                <h2 className="text-[26px] sm:text-[32px] leading-tight mb-8" style={{ fontFamily: DISPLAY, fontWeight: 900, color: NAVY }}>
+                <h2 className="text-[26px] sm:text-[32px] leading-tight mb-8" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                   מדריכים אחרונים
                 </h2>
 
@@ -290,7 +290,7 @@ export default function Learn() {
           {/* Tools */}
           <section className="border-t" style={{ borderColor: LINE }}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-              <h2 className="text-[26px] sm:text-[32px] leading-tight mb-8" style={{ fontFamily: DISPLAY, fontWeight: 900, color: NAVY }}>
+              <h2 className="text-[26px] sm:text-[32px] leading-tight mb-8" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                 כלים לבדיקה עצמית
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -317,7 +317,7 @@ export default function Learn() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
           <h2
             className="text-white leading-tight mb-3"
-            style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
+            style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
           >
             רוצים לדעת איפה אתם עומדים.
           </h2>
@@ -326,7 +326,7 @@ export default function Learn() {
           </p>
           <Link
             to="/contact"
-            className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+            className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
           >
             לבדיקת תיק ללא עלות
           </Link>

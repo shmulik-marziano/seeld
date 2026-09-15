@@ -164,7 +164,7 @@ export function AgentInvitations() {
         {/* Current agents */}
         {agents.length > 0 && (
           <div>
-            <h4 className="text-xs font-semibold text-muted-foreground mb-2">סוכנים פעילים ({agents.length})</h4>
+            <h4 className="text-xs font-bold text-muted-foreground mb-2">סוכנים פעילים ({agents.length})</h4>
             <div className="space-y-1.5">
               {agents.map(a => {
                 const isSelf = a.id === profile?.id;
@@ -220,7 +220,7 @@ export function AgentInvitations() {
           <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
         ) : invitations.length > 0 ? (
           <div>
-            <h4 className="text-xs font-semibold text-muted-foreground mb-2">הזמנות ({invitations.length})</h4>
+            <h4 className="text-xs font-bold text-muted-foreground mb-2">הזמנות ({invitations.length})</h4>
             <div className="space-y-1.5">
               {invitations.map(inv => (
                 <div key={inv.id} className="flex items-center justify-between px-3 py-2 rounded-lg border border-border/50 text-sm">

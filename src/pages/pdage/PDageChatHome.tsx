@@ -211,7 +211,7 @@ export default function PDageChatHome() {
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
                     pDage AI
                   </h1>
                   <p className="text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
@@ -240,7 +240,7 @@ export default function PDageChatHome() {
                       <action.icon className="h-5 w-5" />
                     </div>
                     <div className="text-center">
-                      <span className="text-xs font-semibold text-foreground block">{action.label}</span>
+                      <span className="text-xs font-bold text-foreground block">{action.label}</span>
                       <span className="text-[10px] text-muted-foreground/60 hidden sm:block mt-0.5">{action.desc}</span>
                     </div>
                   </motion.button>
@@ -257,7 +257,7 @@ export default function PDageChatHome() {
                 >
                   <div className="flex items-center gap-2 px-1">
                     <FileText className="h-3.5 w-3.5 text-muted-foreground/50" />
-                    <p className="text-xs font-semibold text-muted-foreground/70">עבודות אחרונות</p>
+                    <p className="text-xs font-bold text-muted-foreground/70">עבודות אחרונות</p>
                   </div>
                   <div className="space-y-1.5">
                     {recentJobs.map(job => {
@@ -297,7 +297,7 @@ export default function PDageChatHome() {
                 >
                   <div className="flex items-center gap-2 px-1">
                     <MessageCircle className="h-3.5 w-3.5 text-muted-foreground/50" />
-                    <p className="text-xs font-semibold text-muted-foreground/70">שיחות אחרונות</p>
+                    <p className="text-xs font-bold text-muted-foreground/70">שיחות אחרונות</p>
                   </div>
                   <div className="space-y-1.5">
                     {pastConversations.slice(0, 3).map(conv => (
@@ -339,7 +339,7 @@ export default function PDageChatHome() {
               >
                 <div className="flex items-center gap-2 px-1">
                   <Sparkles className="h-3.5 w-3.5 text-muted-foreground/50" />
-                  <p className="text-xs font-semibold text-muted-foreground/70">שאל אותי...</p>
+                  <p className="text-xs font-bold text-muted-foreground/70">שאל אותי...</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {suggestions.map((s, i) => (

@@ -249,7 +249,7 @@ export default function AuthPage() {
       {/* Right side -- branding hero (hidden on mobile, shown on lg+) */}
       <div className="hidden lg:flex lg:w-[48%] relative items-center justify-center overflow-hidden"
         style={{
-          background: 'linear-gradient(165deg, #171717 0%, #262626 60%, #171717 100%)',
+          background: 'linear-gradient(165deg, #003D30 0%, #262626 60%, #003D30 100%)',
         }}
       >
         {/* Ambient glow effects */}
@@ -295,7 +295,7 @@ export default function AuthPage() {
               <SeeIDLogo size={48} />
             </div>
             <div className="space-y-2">
-              <h2 className="text-3xl font-extrabold text-white tracking-tight">SEELD</h2>
+              <h2 className="text-3xl font-bold text-white tracking-tight">SEELD</h2>
               <p className="text-base text-white/50 font-light">הפלטפורמה המתקדמת לסוכני ביטוח</p>
             </div>
           </div>
@@ -314,7 +314,7 @@ export default function AuthPage() {
                   <feat.icon className="w-5 h-5 text-white/80" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-white/90">{feat.text}</p>
+                  <p className="text-sm font-bold text-white/90">{feat.text}</p>
                   <p className="text-xs text-white/60 mt-0.5">{feat.desc}</p>
                 </div>
               </motion.div>
@@ -351,7 +351,7 @@ export default function AuthPage() {
           >
             <div className="rounded-2xl p-6 text-center relative overflow-hidden"
               style={{
-                background: 'linear-gradient(165deg, #171717 0%, #262626 100%)',
+                background: 'linear-gradient(165deg, #003D30 0%, #262626 100%)',
               }}
             >
               {/* Mobile ambient glow */}
@@ -362,7 +362,7 @@ export default function AuthPage() {
                   <SeeIDLogo size={38} />
                 </div>
                 <div>
-                  <h2 className="text-xl font-extrabold text-white">SEELD</h2>
+                  <h2 className="text-xl font-bold text-white">SEELD</h2>
                   <p className="text-xs text-white/50 mt-0.5">הפלטפורמה המתקדמת לסוכני ביטוח</p>
                 </div>
               </div>
@@ -437,7 +437,7 @@ export default function AuthPage() {
                           placeholder="••••••••" className="h-12 sm:h-11 pr-10 rounded-xl text-base sm:text-sm border-border/70 focus-visible:ring-primary/30" />
                       </div>
                     </div>
-                    <Button type="submit" className="w-full h-12 sm:h-11 rounded-xl gap-2 font-semibold text-base sm:text-sm min-h-[48px] shadow-sm" disabled={loading}>
+                    <Button type="submit" className="w-full h-12 sm:h-11 rounded-xl gap-2 font-bold text-base sm:text-sm min-h-[48px] shadow-sm" disabled={loading}>
                       {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowLeft className="h-4 w-4" />}
                       התחבר
                     </Button>

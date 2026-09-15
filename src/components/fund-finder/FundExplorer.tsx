@@ -30,7 +30,7 @@ const ReturnCell = ({ value }: { value: number | null | undefined }) => {
     return <span style={{ color: MUTED }}>—</span>;
   }
   return (
-    <span dir="ltr" style={{ fontFamily: MONO, color: value < 0 ? '#a04a5c' : TURQ_TEXT }}>
+    <span dir="ltr" style={{ fontFamily: MONO, color: value < 0 ? '#9A4520' : TURQ_TEXT }}>
       {value > 0 ? '+' : ''}
       {value.toFixed(2)}%
     </span>
@@ -77,7 +77,7 @@ export default function FundExplorer({ funds, loading, children }: Props) {
             value={x.query}
             onChange={(e) => x.setQuery(e.target.value)}
             placeholder="חיפוש לפי שם קופה, מספר קופה או חברה מנהלת"
-            className="w-full ps-12 pe-12 py-4 rounded-xl bg-white border text-[16px] text-[#1D2D3D] placeholder:text-[#5a6a78] focus:outline-none focus:border-[#1D2D3D] transition-colors"
+            className="w-full ps-12 pe-12 py-4 rounded-xl bg-white border text-[16px] text-[#003D30] placeholder:text-[#476356] focus:outline-none focus:border-[#003D30] transition-colors"
             style={{ borderColor: LINE }}
           />
           {x.query && (
@@ -85,7 +85,7 @@ export default function FundExplorer({ funds, loading, children }: Props) {
               type="button"
               onClick={() => x.setQuery('')}
               aria-label="ניקוי החיפוש"
-              className="absolute top-1/2 -translate-y-1/2 end-4 w-8 h-8 grid place-items-center rounded-lg hover:bg-[#E7EDF1] transition-colors"
+              className="absolute top-1/2 -translate-y-1/2 end-4 w-8 h-8 grid place-items-center rounded-lg hover:bg-[#CCD6CC] transition-colors"
             >
               <X className="w-4 h-4" style={{ color: MUTED }} strokeWidth={1.5} />
             </button>
@@ -138,7 +138,7 @@ export default function FundExplorer({ funds, loading, children }: Props) {
           type="button"
           onClick={() => setFiltersOpen((v) => !v)}
           aria-expanded={filtersOpen}
-          className="inline-flex items-center gap-2 text-[14px] hover:text-[#1D2D3D] transition-colors min-h-[44px]"
+          className="inline-flex items-center gap-2 text-[14px] hover:text-[#003D30] transition-colors min-h-[44px]"
           style={{ color: filtersOpen || x.activeFilterCount ? NAVY : MUTED }}
         >
           <SlidersHorizontal className="w-4 h-4" strokeWidth={1.5} aria-hidden="true" />
@@ -158,7 +158,7 @@ export default function FundExplorer({ funds, loading, children }: Props) {
           <button
             type="button"
             onClick={x.clearFilters}
-            className="text-[13px] underline underline-offset-4 hover:text-[#1D2D3D] transition-colors"
+            className="text-[13px] underline underline-offset-4 hover:text-[#003D30] transition-colors"
             style={{ color: MUTED }}
           >
             ניקוי הכל
@@ -173,7 +173,7 @@ export default function FundExplorer({ funds, loading, children }: Props) {
               type="button"
               onClick={() => x.compareTop(n)}
               disabled={x.results.length === 0}
-              className="px-3 py-1.5 rounded-lg border text-[13px] font-medium hover:bg-[#F4F8F7] transition-colors disabled:opacity-40 disabled:pointer-events-none"
+              className="px-3 py-1.5 rounded-lg border text-[13px] font-medium hover:bg-[#EEF2EC] transition-colors disabled:opacity-40 disabled:pointer-events-none"
               style={{ borderColor: LINE, color: NAVY }}
             >
               <span className="tabular-nums" dir="ltr" style={{ fontFamily: MONO }}>{n}</span> המובילות
@@ -358,8 +358,8 @@ export default function FundExplorer({ funds, loading, children }: Props) {
                     <tr
                       key={f.id}
                       onClick={() => !disabled && x.toggleFund(f.id)}
-                      className={disabled ? '' : 'cursor-pointer hover:bg-[#F4F8F7]'}
-                      style={on ? { backgroundColor: '#F4F8F7' } : undefined}
+                      className={disabled ? '' : 'cursor-pointer hover:bg-[#EEF2EC]'}
+                      style={on ? { backgroundColor: '#EEF2EC' } : undefined}
                     >
                       <td>
                         <span
@@ -409,7 +409,7 @@ export default function FundExplorer({ funds, loading, children }: Props) {
                   disabled={disabled}
                   aria-pressed={on}
                   className="w-full text-start py-4 flex gap-3 disabled:opacity-45"
-                  style={on ? { backgroundColor: '#F4F8F7' } : undefined}
+                  style={on ? { backgroundColor: '#EEF2EC' } : undefined}
                 >
                   <span
                     aria-hidden="true"

@@ -9,7 +9,7 @@ import { BODY, DISPLAY, LINE, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, TURQ } from
 
 // Outline contact buttons — white with a hairline border
 const contactBtnClass =
-  "inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white border border-[#E7EDF1] text-[#1D2D3D] hover:bg-[#F4F8F7] transition-colors text-sm font-medium min-h-[44px]";
+  "inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-white border border-[#CCD6CC] text-[#003D30] hover:bg-[#EEF2EC] transition-colors text-sm font-medium min-h-[44px]";
 
 const Authors = () => {
   const specialties = [
@@ -22,7 +22,7 @@ const Authors = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main>
@@ -55,12 +55,12 @@ const Authors = () => {
                   className="w-32 h-32 rounded-full bg-white border flex items-center justify-center flex-shrink-0"
                   style={{ borderColor: LINE }}
                 >
-                  <span className="text-4xl" style={{ fontFamily: DISPLAY, fontWeight: 900, color: NAVY }}>שמ</span>
+                  <span className="text-4xl" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>שמ</span>
                 </div>
                 <div className="flex-1 text-center md:text-right">
                   <h2
                     className="mb-1.5"
-                    style={{ fontFamily: DISPLAY, fontWeight: 900, color: NAVY, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
+                    style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
                   >
                     שמוליק מרציאנו
                   </h2>
@@ -84,7 +84,7 @@ const Authors = () => {
                       href="https://wa.me/972523097444"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#1D2D3D] text-white hover:bg-[#16222f] transition-colors text-sm font-medium min-h-[44px]"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#003D30] text-white hover:bg-[#002B22] transition-colors text-sm font-medium min-h-[44px]"
                     >
                       WhatsApp
                     </a>
@@ -129,7 +129,7 @@ const Authors = () => {
               <div className="max-w-3xl">
                 <h2
                   className="text-white leading-tight mb-3"
-                  style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
+                  style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
                 >
                   רוצים להתחיל?
                 </h2>
@@ -138,7 +138,7 @@ const Authors = () => {
                 </p>
                 <Link
                   to="/contact"
-                  className="inline-flex items-center justify-center rounded-lg px-9 py-4 bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+                  className="inline-flex items-center justify-center rounded-lg px-9 py-4 bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
                 >
                   קבעו פגישה
                 </Link>

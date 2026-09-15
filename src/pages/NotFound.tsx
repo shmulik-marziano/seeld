@@ -39,7 +39,7 @@ const NotFound = () => {
               aria-hidden="true"
               style={{
                 fontFamily: DISPLAY,
-                fontWeight: 900,
+                fontWeight: 700,
                 color: NAVY,
                 opacity: 0.06,
                 fontSize: "clamp(7rem, 24vw, 18rem)",
@@ -68,13 +68,13 @@ const NotFound = () => {
             <div className="mt-10 flex flex-wrap items-center gap-6">
               <Link
                 to="/"
-                className="inline-flex items-center justify-center px-9 py-4 bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[52px] rounded-lg"
+                className="inline-flex items-center justify-center px-9 py-4 bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors min-h-[52px] rounded-lg"
               >
                 לדף הבית
               </Link>
               <Link
                 to="/contact"
-                className="group inline-flex items-center gap-2 text-base font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+                className="group inline-flex items-center gap-2 text-base font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
               >
                 דברו איתנו
                 <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>

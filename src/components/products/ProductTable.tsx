@@ -200,7 +200,7 @@ export function ProductTable({ title, emoji, products, onEdit, onDelete, onCreat
       >
         <div className="flex items-center gap-2.5">
           <span className="text-lg">{emoji}</span>
-          <span className="font-semibold text-sm">{title}</span>
+          <span className="font-bold text-sm">{title}</span>
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="secondary" className="text-[10px] font-bold">{products.length}</Badge>

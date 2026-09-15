@@ -186,7 +186,7 @@ const ClientAIChatbot = () => {
         {/* Header */}
         <div
           className="px-5 py-4 flex items-center gap-3"
-          style={{ background: "linear-gradient(135deg, #171717 0%, #2e2e2e 100%)" }}
+          style={{ background: "linear-gradient(135deg, #003D30 0%, #2e2e2e 100%)" }}
         >
           <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
             <Bot className="w-5 h-5 text-white" />
@@ -196,7 +196,7 @@ const ClientAIChatbot = () => {
             <p className="text-white/60 text-xs">שאלו שאלות כלליות בנושאי ביטוח וחיסכון</p>
           </div>
           <div className="flex items-center gap-1.5 bg-white/10 rounded-full px-3 py-1">
-            <Sparkles className="w-3 h-3 text-[#171717]" />
+            <Sparkles className="w-3 h-3 text-[#003D30]" />
             <span className="text-[10px] text-white/70 font-medium">AI</span>
           </div>
         </div>
@@ -220,9 +220,9 @@ const ClientAIChatbot = () => {
                 className="w-16 h-16 rounded-full flex items-center justify-center mb-4"
                 style={{ background: "linear-gradient(135deg, #f5f5f5 0%, #b2dfdb 100%)" }}
               >
-                <Bot className="w-8 h-8 text-[#171717]" />
+                <Bot className="w-8 h-8 text-[#003D30]" />
               </div>
-              <h4 className="font-bold text-[#171717] mb-1">איך אפשר לעזור?</h4>
+              <h4 className="font-bold text-[#003D30] mb-1">איך אפשר לעזור?</h4>
               <p className="text-gray-400 text-sm mb-6">
                 שאלו שאלות כלליות על ביטוח, חיסכון ופנסיה
               </p>
@@ -233,7 +233,7 @@ const ClientAIChatbot = () => {
                   <button
                     key={i}
                     onClick={() => handleQuickQuestion(tip)}
-                    className="text-right text-xs px-4 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-600 hover:border-[#171717]/30 hover:bg-[#171717]/[0.03] transition-all min-h-[40px]"
+                    className="text-right text-xs px-4 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-600 hover:border-[#003D30]/30 hover:bg-[#003D30]/[0.03] transition-all min-h-[40px]"
                   >
                     {tip}
                   </button>
@@ -253,7 +253,7 @@ const ClientAIChatbot = () => {
                       className={cn(
                         "max-w-[80%] rounded-2xl px-4 py-2.5 shadow-sm",
                         isUser
-                          ? "bg-[#171717] text-white rounded-br-md"
+                          ? "bg-[#003D30] text-white rounded-br-md"
                           : "bg-white text-gray-800 border border-gray-200 rounded-bl-md"
                       )}
                     >
@@ -273,8 +273,8 @@ const ClientAIChatbot = () => {
               {messages.length > 1 && messages[messages.length - 1]?.role === "assistant" && !isLoading && (
                 <div className="flex justify-center">
                   <div className="bg-[#f5f5f5] rounded-full px-4 py-1.5 flex items-center gap-2">
-                    <AlertTriangle className="w-3 h-3 text-[#171717]/60" />
-                    <span className="text-[10px] text-[#171717]/70 font-medium">
+                    <AlertTriangle className="w-3 h-3 text-[#003D30]/60" />
+                    <span className="text-[10px] text-[#003D30]/70 font-medium">
                       לפני ביצוע פעולה, מומלץ להתייעץ עם הסוכן שלך
                     </span>
                   </div>
@@ -295,14 +295,14 @@ const ClientAIChatbot = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="שאלו שאלה כללית..."
-              className="flex-1 rounded-full border border-gray-200 px-4 py-3 text-base sm:text-sm focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717]/30 transition-all min-h-[44px]"
+              className="flex-1 rounded-full border border-gray-200 px-4 py-3 text-base sm:text-sm focus:outline-none focus:border-[#003D30] focus:ring-1 focus:ring-[#003D30]/30 transition-all min-h-[44px]"
               disabled={isLoading}
             />
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
               className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 transition-all disabled:opacity-40 min-w-[44px] min-h-[44px]"
-              style={{ background: "#171717", color: "white" }}
+              style={{ background: "#003D30", color: "white" }}
             >
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

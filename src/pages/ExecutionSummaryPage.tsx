@@ -183,11 +183,11 @@ export default function ExecutionSummaryPage() {
     <div className="p-4 md:p-6 max-w-7xl mx-auto space-y-5" dir="rtl">
       {/* Breadcrumbs */}
       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <button onClick={() => navigate('/')} className="hover:text-[#171717] transition-colors">ראשי</button>
+        <button onClick={() => navigate('/')} className="hover:text-[#003D30] transition-colors">ראשי</button>
         <span className="text-muted-foreground/50">‹</span>
-        <button onClick={() => navigate('/app/customers')} className="hover:text-[#171717] transition-colors">לקוחות</button>
+        <button onClick={() => navigate('/app/customers')} className="hover:text-[#003D30] transition-colors">לקוחות</button>
         <span className="text-muted-foreground/50">‹</span>
-        <button onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:text-[#171717] transition-colors">{customer.fullName}</button>
+        <button onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:text-[#003D30] transition-colors">{customer.fullName}</button>
         <span className="text-muted-foreground/50">‹</span>
         <span className="text-foreground font-medium">סיכום ביצועים</span>
       </div>
@@ -195,12 +195,12 @@ export default function ExecutionSummaryPage() {
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:bg-[#171717]/10">
+          <Button variant="ghost" size="sm" onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:bg-[#003D30]/10">
             <ArrowRight className="h-4 w-4" />
           </Button>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-xl md:text-2xl font-bold text-[#171717]">סיכום ביצועים</h1>
+              <h1 className="text-xl md:text-2xl font-bold text-[#003D30]">סיכום ביצועים</h1>
               {activeSummary && (
                 <span className="text-xs px-2 py-1 rounded-full bg-muted font-medium">
                   #{activeSummary.summaryNumber} · {SUMMARY_STATUS_LABELS[activeSummary.status as ExecutionSummaryStatus] || activeSummary.status}
@@ -216,8 +216,8 @@ export default function ExecutionSummaryPage() {
               <Button variant="outline" size="sm" onClick={handleShareWhatsApp} className="gap-1.5 text-[#15803d] border-[#15803d]/30 hover:bg-[#15803d]/5 rounded-full">
                 <MessageCircle className="h-3.5 w-3.5" />WhatsApp
               </Button>
-              <Button variant="outline" size="sm" onClick={handleShareLink} className="gap-1.5 rounded-full border-[#171717]/30 hover:bg-[#171717]/10">
-                <Share2 className="h-3.5 w-3.5 text-[#171717]" />העתק לינק
+              <Button variant="outline" size="sm" onClick={handleShareLink} className="gap-1.5 rounded-full border-[#003D30]/30 hover:bg-[#003D30]/10">
+                <Share2 className="h-3.5 w-3.5 text-[#003D30]" />העתק לינק
               </Button>
               <Button variant="outline" size="sm" onClick={handleExportPdf} className="gap-1.5 rounded-full">
                 <Download className="h-3.5 w-3.5" />PDF
@@ -231,7 +231,7 @@ export default function ExecutionSummaryPage() {
             </>
           )}
           {canCreate && (
-            <Button size="sm" onClick={handleCreate} className="gap-1.5 rounded-full bg-[#171717] hover:bg-[#171717]/90 shadow-md shadow-[#171717]/15">
+            <Button size="sm" onClick={handleCreate} className="gap-1.5 rounded-full bg-[#003D30] hover:bg-[#003D30]/90 shadow-md shadow-[#003D30]/15">
               <ClipboardCheck className="h-3.5 w-3.5" />סיכום חדש
             </Button>
           )}
@@ -261,7 +261,7 @@ export default function ExecutionSummaryPage() {
         <Card className="text-center py-12">
           <CardContent className="flex flex-col items-center gap-4">
             <ClipboardCheck className="h-12 w-12 text-muted-foreground/30" />
-            <h3 className="text-lg font-semibold">אין סיכום ביצועים עדיין</h3>
+            <h3 className="text-lg font-bold">אין סיכום ביצועים עדיין</h3>
             <p className="text-sm text-muted-foreground max-w-md">
               {canCreate
                 ? `ישנן ${relevantRecs.length} המלצות מאושרות/בביצוע. צור סיכום ביצועים כדי לתעד מה בוצע בפועל.`
@@ -289,11 +289,11 @@ export default function ExecutionSummaryPage() {
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">סטטוס</p>
-                  <p className="font-medium text-[#171717]">{SUMMARY_STATUS_LABELS[activeSummary.status as ExecutionSummaryStatus]}</p>
+                  <p className="font-medium text-[#003D30]">{SUMMARY_STATUS_LABELS[activeSummary.status as ExecutionSummaryStatus]}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">בוצע מלא</p>
-                  <p className="font-semibold text-[#15803d]">{completedCount}/{totalItems}</p>
+                  <p className="font-bold text-[#15803d]">{completedCount}/{totalItems}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">בוצע חלקית</p>
@@ -454,7 +454,7 @@ export default function ExecutionSummaryPage() {
               <Button variant="outline" onClick={handleExportPdf} className="gap-1.5 rounded-full">
                 <Download className="h-4 w-4" />שמירה + PDF
               </Button>
-              <Button onClick={handleComplete} disabled={saving} className="gap-1.5 rounded-full bg-[#171717] hover:bg-[#171717]/90 shadow-md shadow-[#171717]/15">
+              <Button onClick={handleComplete} disabled={saving} className="gap-1.5 rounded-full bg-[#003D30] hover:bg-[#003D30]/90 shadow-md shadow-[#003D30]/15">
                 <CheckCircle2 className="h-4 w-4" />סיום וסימון לקוח
               </Button>
             </div>

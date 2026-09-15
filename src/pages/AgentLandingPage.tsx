@@ -22,8 +22,8 @@ import {
 
 // SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
 
-// Light turquoise for small text on the navy band (6.88:1 on #1D2D3D, measured)
-const TURQ_ON_NAVY = "#7fc2b5";
+// Light turquoise for small text on the navy band (6.88:1 on #003D30, measured)
+const TURQ_ON_NAVY = "#A9C4A5";
 
 /* ─── Helpers ───────────────────────────────────────────────────── */
 
@@ -39,9 +39,9 @@ const fadeUp = {
 
 // Shared DNA v3 CTA styles — institutional navy, rounded-lg
 const ctaPrimary =
-  "inline-flex items-center justify-center gap-2 rounded-lg px-9 py-4 bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[48px]";
+  "inline-flex items-center justify-center gap-2 rounded-lg px-9 py-4 bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors min-h-[48px]";
 const ctaGhost =
-  "inline-flex items-center justify-center rounded-lg px-9 py-4 bg-white text-[#1D2D3D] text-base font-medium hover:bg-[#1D2D3D]/5 transition-colors min-h-[48px]";
+  "inline-flex items-center justify-center rounded-lg px-9 py-4 bg-white text-[#003D30] text-base font-medium hover:bg-[#003D30]/5 transition-colors min-h-[48px]";
 
 // Section heading — starts its block, no eyebrow, no numerals (STYLESEED bans)
 const SectionHead = ({ title, lede, center = true }: { title: string; lede?: string; center?: boolean }) => (
@@ -63,7 +63,7 @@ const SectionHead = ({ title, lede, center = true }: { title: string; lede?: str
 
 export default function AgentLandingPage() {
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       {/* ══════════════════════════════════
@@ -102,7 +102,7 @@ export default function AgentLandingPage() {
             {/* Right — Content */}
             <div className="space-y-8 lg:space-y-10">
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2, ease: "easeOut" }}>
-                <span className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white text-[13px] font-medium text-[#1D2D3D] border border-[#E7EDF1]">
+                <span className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white text-[13px] font-medium text-[#003D30] border border-[#CCD6CC]">
                   <LiveDot size={6} />
                   SEELD · פורטל סוכני הביטוח
                   <span className="text-[11px] tracking-[0.12em] font-medium" style={{ fontFamily: MONO, color: GOLD_TEXT }}>BETA</span>
@@ -186,8 +186,8 @@ export default function AgentLandingPage() {
                     <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </motion.div>
-                <motion.div className="absolute top-[55%] right-[15%] w-[200px] sm:w-[280px] h-[60px] sm:h-[75px] rounded-full bg-white flex items-center px-4 border border-[#E1EAF1]"
-                  style={{ boxShadow: "0 2px 12px rgba(29,45,61,0.05)" }}
+                <motion.div className="absolute top-[55%] right-[15%] w-[200px] sm:w-[280px] h-[60px] sm:h-[75px] rounded-full bg-white flex items-center px-4 border border-[#E8EDE5]"
+                  style={{ boxShadow: "0 2px 12px rgba(0,61,48,0.05)" }}
                   initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.62, duration: 0.25, ease: "easeOut" }}>
                   <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full" style={{ backgroundColor: NAVY }} />
                   <div className="flex-1 mx-3 h-[2px] rounded-full" style={{ backgroundColor: LINE }} />
@@ -283,7 +283,7 @@ export default function AgentLandingPage() {
                 <br /><br />
                 בלי לקפוץ בין מערכות. בלי לשכוח. בלי להקליד פעמיים.
                 <br />
-                <span className="font-semibold" style={{ color: NAVY }}>זה לא חלום. זה SEELD.</span>
+                <span className="font-bold" style={{ color: NAVY }}>זה לא חלום. זה SEELD.</span>
               </p>
             </div>
             <div className="mt-10">
@@ -354,7 +354,7 @@ export default function AgentLandingPage() {
       <section style={{ backgroundColor: NAVY }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
           <motion.h2 className="text-white leading-tight mb-16 text-center"
-            style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.7rem, 3.2vw, 2.4rem)", letterSpacing: "-0.5px" }}
+            style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.7rem, 3.2vw, 2.4rem)", letterSpacing: "-0.5px" }}
             initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.25, ease: "easeOut" }}>
             מספרים, לא סיסמאות
@@ -579,7 +579,7 @@ export default function AgentLandingPage() {
             </h2>
             <p className="text-sm max-w-xl mx-auto leading-[1.8]" style={{ color: MUTED }}>
               המערכת בנויה על תשתיות מאובטחות. השימוש בפלטפורמה כפוף
-              ל<Link to="/terms" className="underline hover:text-[#1D2D3D]">תנאי השימוש</Link> ול<Link to="/privacy" className="underline hover:text-[#1D2D3D]">מדיניות הפרטיות</Link> שלנו.
+              ל<Link to="/terms" className="underline hover:text-[#003D30]">תנאי השימוש</Link> ול<Link to="/privacy" className="underline hover:text-[#003D30]">מדיניות הפרטיות</Link> שלנו.
             </p>
           </motion.div>
           <motion.div className="border-t" style={{ borderColor: LINE }}
@@ -592,7 +592,7 @@ export default function AgentLandingPage() {
               <motion.div key={i} variants={fadeUp} className="flex items-start gap-4 py-5 border-b" style={{ borderColor: LINE }}>
                 <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: TURQ_TEXT }} aria-hidden="true" />
                 <div>
-                  <span className="font-semibold" style={{ color: NAVY }}>{title}</span>
+                  <span className="font-bold" style={{ color: NAVY }}>{title}</span>
                   <span style={{ color: BODY }}> · {desc}</span>
                 </div>
               </motion.div>
@@ -610,7 +610,7 @@ export default function AgentLandingPage() {
             initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.25, ease: "easeOut" }}>
             <h2 className="text-white leading-tight mb-4"
-              style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.9rem, 3.6vw, 2.75rem)", letterSpacing: "-0.5px" }}>
+              style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.9rem, 3.6vw, 2.75rem)", letterSpacing: "-0.5px" }}>
               מספיק עם הניירת.
             </h2>
             <p className="text-sm sm:text-lg mb-8 max-w-xl mx-auto" style={{ color: "rgba(255,255,255,.65)" }}>
@@ -618,7 +618,7 @@ export default function AgentLandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-10">
               <Link to="/app/auth"
-                className="inline-flex items-center justify-center gap-2 rounded-lg px-9 py-4 bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[48px]">
+                className="inline-flex items-center justify-center gap-2 rounded-lg px-9 py-4 bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[48px]">
                 התחל בחינם
                 <ArrowLeft className="w-4 h-4" />
               </Link>

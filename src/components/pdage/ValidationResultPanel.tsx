@@ -22,7 +22,7 @@ export function ValidationResultPanel({ result }: Props) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Icon className={`h-5 w-5 ${color}`} />
-            <span className={`text-sm font-semibold ${color}`}>{label}</span>
+            <span className={`text-sm font-bold ${color}`}>{label}</span>
           </div>
           <span className={`text-2xl font-bold ${color}`}>{score}<span className="text-sm font-normal text-muted-foreground">/100</span></span>
         </div>

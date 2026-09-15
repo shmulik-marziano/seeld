@@ -10,13 +10,15 @@ import IncomeTaxCalculator from "@/components/IncomeTaxCalculator";
 import LifeInsuranceCalculator from "@/components/LifeInsuranceCalculator";
 import CarInsuranceEstimator from "@/components/CarInsuranceEstimator";
 import { Link } from "react-router-dom";
-import { LiveDot } from "@/components/brand/Live";
-import { DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, PASTEL_PEACH } from "@/lib/brand";
+import { BalancedStones, BrandDots } from "@/components/brand/Elements";
+import { BrandIcon } from "@/components/brand/BrandIcon";
+import { GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from "@/lib/brand";
 
-// SEELD DNA v3 (STYLESEED.md): white canvas, pastel circles, hairline separators.
+// Calculator page: inputs and results stay central. One small vector element in
+// the hero corner, no full illustration (kit p.06: operational screens stay clean).
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-sm sm:text-base font-medium text-[#5a6a78] border-b-2 border-transparent data-[state=active]:border-[#4E9D8F] data-[state=active]:text-[#1D2D3D] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+  "rounded-none bg-transparent px-0 pb-4 text-[15px] sm:text-[16px] font-bold text-[#476356] border-b-2 border-transparent data-[state=active]:border-[#003D30] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const tabDefs = [
   { value: "mortgage", label: "משכנתא", title: "מחשבון משכנתא", lede: "חשבו החזר חודשי ועלות כוללת של המשכנתא", Component: MortgageCalculator },
@@ -31,73 +33,46 @@ const tabDefs = [
 
 const Calculators = () => {
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
       <Header />
 
       <main>
         <div className="dna-page">
-          {/* Pastel circle backdrop — decorative, never behind small text */}
           <div className="dna-circles" aria-hidden="true">
             <div
-              className="dna-circ"
-              style={{ width: 280, height: 280, top: -120, left: -100, backgroundColor: PASTEL_BLUE, opacity: 0.5 }}
-            />
-            <div
               className="dna-circ hidden md:block"
-              style={{ width: 220, height: 220, top: 380, right: -110, backgroundColor: PASTEL_PEACH, opacity: 0.55 }}
-            />
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 240, height: 240, bottom: -130, left: "30%", backgroundColor: PASTEL_MINT, opacity: 0.45 }}
+              style={{ width: 300, height: 300, top: -140, left: -120, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
             />
           </div>
 
           <div className="relative z-10">
             {/* Hero */}
-            <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-10 sm:pb-14">
-              <nav className="flex items-center gap-2 text-[13px] mb-8" style={{ color: MUTED }}>
-                <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
-                <span aria-hidden="true">←</span>
-                <span className="font-medium text-[#1D2D3D]">מחשבונים</span>
+            <section className="max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-8 sm:pb-10">
+              <nav className="flex items-center gap-2 text-[14px] mb-8" style={{ color: MUTED }} aria-label="ניווט משני">
+                <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
+                <BrandIcon name="arrow-left" size={14} />
+                <span className="font-bold" style={{ color: GREEN }} aria-current="page">מחשבונים</span>
               </nav>
 
-              <h1
-                className="dna-display leading-[1.15] mb-5 max-w-3xl"
-                style={{ fontSize: "clamp(2rem, 5vw, 3.1rem)" }}
-              >
-                מחשבונים פיננסיים
-              </h1>
-              <p className="text-base sm:text-[17px] max-w-2xl leading-[1.9]" style={{ color: MUTED }}>
-                משכנתא, פנסיה, חיסכון, מס, ביטוח והשוואת מסלולים. חופשי, ללא רישום.
-              </p>
-            </section>
-
-            {/* Standalone mono ticker band — hairlines top and bottom */}
-            <section className="border-t border-b" style={{ borderColor: LINE }}>
-              <div
-                className="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4"
-                dir="ltr"
-              >
-                <span
-                  className="inline-flex items-center gap-3 text-[12px] sm:text-[13px] font-semibold tracking-[0.24em] whitespace-nowrap tabular-nums"
-                  style={{ fontFamily: MONO, color: NAVY }}
-                >
-                  <LiveDot size={7} />
-                  NO SIGNUP · FREE
-                </span>
-                <span
-                  className="hidden sm:inline-flex text-[11px] font-semibold tracking-[0.24em] whitespace-nowrap tabular-nums"
-                  style={{ fontFamily: MONO, color: MUTED }}
-                >
-                  8 TOOLS · ILS
-                </span>
+              <div className="flex items-start justify-between gap-8">
+                <div>
+                  <BrandDots className="mb-4" />
+                  <h1 className="dna-display leading-[1.15] mb-4 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
+                    מחשבונים פיננסיים
+                  </h1>
+                  <p className="text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
+                    משכנתא, פנסיה, חיסכון, מס, ביטוח והשוואת מסלולים. חופשי, ללא רישום.
+                    התוצאות הן הערכה לפי ההנחות שבכל מחשבון, לא תחליף לבדיקה של התיק.
+                  </p>
+                </div>
+                <BalancedStones className="hidden lg:block w-40 shrink-0" />
               </div>
             </section>
 
             {/* Calculator tabs */}
-            <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+            <section className="max-w-brand mx-auto px-5 sm:px-8 pb-12 sm:pb-16">
               <Tabs defaultValue="mortgage" dir="rtl">
-                <TabsList className="flex w-full flex-wrap justify-start gap-x-6 gap-y-1 sm:gap-x-8 h-auto bg-transparent p-0 mb-10 border-b border-[#E7EDF1] rounded-none">
+                <TabsList className="flex w-full flex-wrap justify-start gap-x-6 gap-y-1 sm:gap-x-8 h-auto bg-transparent p-0 mb-8 border-b rounded-none" style={{ borderColor: LINE }}>
                   {tabDefs.map((tab) => (
                     <TabsTrigger key={tab.value} value={tab.value} className={tabTriggerClass}>
                       {tab.label}
@@ -108,14 +83,11 @@ const Calculators = () => {
                 {tabDefs.map(({ value, title, lede, Component }) => (
                   <TabsContent key={value} value={value} className="mt-0">
                     <div className="text-right">
-                      <div className="mb-8">
-                        <h2
-                          className="dna-display leading-tight mb-2"
-                          style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)" }}
-                        >
+                      <div className="mb-6">
+                        <h2 className="dna-display leading-tight mb-1.5" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>
                           {title}
                         </h2>
-                        <p className="text-[14.5px] leading-[1.85]" style={{ color: MUTED }}>{lede}</p>
+                        <p className="text-[16px] leading-[1.7]" style={{ color: MUTED }}>{lede}</p>
                       </div>
                       <Component />
                     </div>
@@ -126,24 +98,23 @@ const Calculators = () => {
           </div>
         </div>
 
-        {/* Closing CTA — institutional navy band */}
-        <section style={{ backgroundColor: NAVY }}>
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
-            <h2
-              className="text-white leading-tight mb-3"
-              style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
-            >
-              צריכים עזרה בתכנון?
+        {/* Closing — deep green band */}
+        <section className="dna-navy-band">
+          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(26px, 3vw, 34px)" }}>
+              המחשבון נותן הערכה. התיק נותן תשובה.
             </h2>
-            <p className="text-base leading-[1.85] mb-8 max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
-              המחשבונים הם נקודת התחלה. לתכנון פיננסי מקיף, דברו עם המומחים שלנו.
+            <p className="text-[17px] leading-[1.7] mb-8 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
+              רוצים לראות את המספרים האמיתיים שלכם? בדיקת תיק 360 מסדרת את הביטוחים, הפנסיה והחיסכון בתמונה אחת.
             </p>
-            <Link
-              to="/contact"
-              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
-            >
-              קביעת פגישת ייעוץ
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
+                בדיקת תיק 360
+              </Link>
+              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
+                תיאום פגישה
+              </Link>
+            </div>
           </div>
         </section>
       </main>

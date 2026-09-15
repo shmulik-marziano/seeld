@@ -40,7 +40,7 @@ const AccessibilityButton = () => {
       {/* Quiet launcher — white circle, hairline ring, ink glyph */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-40 flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#5c5c5c] opacity-60 transition-all duration-200 hover:opacity-100 hover:text-[#171717]"
+        className="fixed bottom-6 right-6 z-40 flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#476356] opacity-60 transition-all duration-200 hover:opacity-100 hover:text-[#003D30]"
         style={{ boxShadow: RING }}
         aria-label="הגדרות נגישות"
         aria-expanded={isOpen}
@@ -58,7 +58,7 @@ const AccessibilityButton = () => {
           aria-label="הגדרות נגישות"
         >
           <div className="mb-3 flex items-baseline justify-between">
-            <h3 className="text-sm font-semibold text-[#171717]">נגישות</h3>
+            <h3 className="text-sm font-bold text-[#003D30]">נגישות</h3>
             <span
               className="text-[10px] font-medium tracking-[0.12em]"
               style={{ fontFamily: MONO, color: FAINT }}
@@ -74,14 +74,14 @@ const AccessibilityButton = () => {
               <button
                 onClick={() => updateFontSize(-10)}
                 aria-label="הקטנת גודל טקסט"
-                className="flex h-8 w-8 items-center justify-center rounded-md border border-[#ebebeb] bg-white text-[13px] font-medium text-[#171717] transition-colors duration-150 hover:border-[#171717]"
+                className="flex h-8 w-8 items-center justify-center rounded-md border border-[#ebebeb] bg-white text-[13px] font-medium text-[#003D30] transition-colors duration-150 hover:border-[#003D30]"
               >
                 א-
               </button>
               <button
                 onClick={() => updateFontSize(10)}
                 aria-label="הגדלת גודל טקסט"
-                className="flex h-8 w-8 items-center justify-center rounded-md border border-[#ebebeb] bg-white text-[13px] font-medium text-[#171717] transition-colors duration-150 hover:border-[#171717]"
+                className="flex h-8 w-8 items-center justify-center rounded-md border border-[#ebebeb] bg-white text-[13px] font-medium text-[#003D30] transition-colors duration-150 hover:border-[#003D30]"
               >
                 א+
               </button>
@@ -96,8 +96,8 @@ const AccessibilityButton = () => {
             className={cn(
               "mb-2 w-full rounded-md border px-3 py-2 text-right text-[14px] font-medium transition-colors duration-150",
               settings.highContrast
-                ? "border-[#171717] bg-[#171717] text-white"
-                : "border-[#ebebeb] bg-white text-[#171717] hover:border-[#171717]"
+                ? "border-[#003D30] bg-[#003D30] text-white"
+                : "border-[#ebebeb] bg-white text-[#003D30] hover:border-[#003D30]"
             )}
           >
             ניגודיות גבוהה
@@ -110,8 +110,8 @@ const AccessibilityButton = () => {
             className={cn(
               "mb-3 w-full rounded-md border px-3 py-2 text-right text-[14px] font-medium transition-colors duration-150",
               settings.reducedMotion
-                ? "border-[#171717] bg-[#171717] text-white"
-                : "border-[#ebebeb] bg-white text-[#171717] hover:border-[#171717]"
+                ? "border-[#003D30] bg-[#003D30] text-white"
+                : "border-[#ebebeb] bg-white text-[#003D30] hover:border-[#003D30]"
             )}
           >
             הפחתת אנימציות
@@ -120,7 +120,7 @@ const AccessibilityButton = () => {
           {/* Reset */}
           <button
             onClick={resetAll}
-            className="w-full border-t pt-2.5 text-center text-[13px] text-[#6e6e6e] transition-colors duration-150 hover:text-[#171717]"
+            className="w-full border-t pt-2.5 text-center text-[13px] text-[#476356] transition-colors duration-150 hover:text-[#003D30]"
             style={{ borderColor: LINE }}
           >
             איפוס

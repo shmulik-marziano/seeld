@@ -1,92 +1,108 @@
-# STYLESEED.md — SEELD Design Lock (DNA v3)
+# STYLESEED.md — SEELD Design Lock (Brand system 2026-09)
 
 > **This file is binding.** Re-read it at the start of every prompt that touches UI.
-> It encodes the owner's uploaded design system (2026-07-07, seelddesignsystem.zip:
-> DESIGN_DNA.md + template_base.html + logo_final.png) fused with the site's
-> live-tech layer. The brief: **a large financial institution meets Silicon Valley.**
-> To change it, the owner must say so.
+> It encodes the owner's brand system delivered 2026-09-15: the SeelD digital brand
+> (deep green on ivory, Rubik) plus the illustrations and icons kit v1.1
+> (`SeelD-Illustrations-Guide.pdf`, 12 pages). It replaces DNA v3 (navy/turquoise/gold,
+> Frank Ruhl Libre/Heebo) in full. To change it, the owner must say so.
 
 ## Locked decisions
 
 | Axis | Value |
 |---|---|
-| App type | Financial-services site (SEELD, Hebrew RTL) — institutional trust + hi-tech aliveness |
-| Skin | **SEELD DNA v3** — white canvas, navy/turquoise/gold, pastel circles, signature gradient bar |
-| Source of truth | `template_base.html` from the owner's kit (tokens binding; A4 layout is PDF-only — web is responsive) |
-| Fonts | Hebrew headings: **Frank Ruhl Libre 900** (h3: 700). Body: **Heebo** 300–700. Numbers & live-tech labels: **Geist Mono**, tabular. |
-| Motion | **Snap** — 0.15–0.25s ease-out, no springs. `prefers-reduced-motion` respected everywhere. |
-| Radius | 10–12px cards (`.dna-concept` 12px), 8–10px boxes, pills for chips only. |
-| Logo | The SeeID mark only (colored dot arc + droplet + navy wordmark). No placeholder, no white box, no halo. |
-| Signature | The 5px gradient bar (`.dna-gbar`) at the very bottom of every page. |
+| App type | Financial-services site (שילד ביטוח ופיננסים, Hebrew RTL): clear picture, documented decisions, guidance you can follow |
+| Character | professional, measured, personal, orderly. Deep green and the new logos lead; bubbles, paths, layered landscape and leaves add life |
+| Canvas | **Ivory `#FAF7EF`** page background. **White `#FFFFFF`** card surface. About 70% light surfaces, 20% deep green, 10% accents |
+| Font | **Rubik** only, weights **400 and 700**. Fallback `Arial, sans-serif`. No second heading font, no mono font (figures use Rubik + `tabular-nums`) |
+| Logo | The kit's PNG assets only: `/public/brand/logo.png` (Hebrew lockup: שילד + ביטוח ופיננסים, symbol on the left) and `/public/brand/logo-icon.png` (symbol crop). Never redrawn, stretched, recolored, shadowed or boxed. Clear space ≥ ¼ symbol height. On dark grounds the logo sits on an ivory card |
+| Radius | card 16 · button 12 · field 10 |
+| Tap target | ≥ 48px |
+| Content width | 1200px (`max-w-brand`); wider only for data interfaces, with a reason |
+| Gutters | 20px phone · ≥ 32px desktop |
+| Spacing scale | 4 8 12 16 24 32 48 64 96 |
+| Motion | short ease-out (0.15–0.25s), no springs, no looping background animation. `prefers-reduced-motion` respected everywhere |
 
-## Palette (measured contrast on white — use the right tier)
+## Palette (measured on ivory #FAF7EF)
 
 ```
-navy        #1D2D3D   headings, primary text, table headers, dark bands (14.05:1)
-body        #3a4c5a   paragraph text (8.89:1)
-muted       #5a6a78   lead/secondary text (5.57:1)
-faint       #9aa6b1   DECORATIVE ONLY — 2.48:1. Never for text that must be read.
-line        #E7EDF1   hairline rules · line-soft #EAEFF3 table rows
+green       #003D30   headings, primary text, primary actions, dark bands   (12.5:1)
+green-hover #002B22
+body        #24483C   paragraph text                                         (9.4:1)
+text-2      #476356   secondary text, lead, labels                          (6.0:1)
+faint       #8FA396   DECORATIVE ONLY — never for readable text
+line        #CCD6CC   hairlines, borders · line-soft #E1E8E1 table rows
 
-turquoise   #4E9D8F   accent: bars, dots, big stats (3.21:1 — ≥24px text / UI only)
-turq-text   #356d60   turquoise SMALL text (5.99:1 AA)
-gold        #D8A24A   accent surfaces/markers (3.66:1 — large/UI only) · text: #8a5a1e (5.9:1)
-blue        #5b9fd0   secondary accent · text: #4a6fa5 (5.11:1)
-coral       #d67a8a   gaps/negative values · text: #a04a5c (5.79:1)
+sage        #819B7D   secondary surfaces, illustration tone, dots — NOT for small text (3.1:1)
+sage-light  #E8EDE5   light surfaces, callouts, bubbles
+sand        #CBA064   small highlight, dots (decorative) · text: #8A6230 (4.9:1)
+rust        #BD582D   small highlight, dots, destructive (decorative) · text: #9A4520 (6.1:1)
 
-pastels     #E1EAF1 (blue) · #F4EEE6 (peach) · #D3E4E5 (mint)   — circle backdrops, opacity 0.4–0.6
-tints       #F4F8F7 (turq) · #FBF5EA (gold) · #F0F5FB (blue)    — quote-box surfaces
-gradient    linear-gradient(90deg,#4E9D8F 0%,#5b9fd0 24%,#9a8fc0 48%,#e08a9a 70%,#e8a04e 86%,#d65a4e 100%)
+on green:   ivory #FAF7EF for primary text · #A9C4A5 (sage-on-green) for secondary (8.6:1)
+pastels:    #E8EDE5 sage · #F1E7D6 sand · #DDE6DA mint   (bubbles, opacity 0.7–0.9)
+tints:      #EEF2EC sage · #F5EEE0 sand                  (quote boxes)
 ```
 
-Rule: brand color that fails contrast gets the `_TEXT` variant — POUR beats taste, always.
-All tokens live in `src/lib/brand.ts`; component classes in `src/index.css` (`.dna-*`).
+Rule: an accent that fails contrast gets the `_TEXT` variant. Sage on ivory is never body or small text.
+All tokens live in `src/lib/brand.ts` (legacy names NAVY/TURQ/GOLD… are aliases onto this palette);
+component classes in `src/index.css`.
 
-## Component library (from the kit — use these, don't invent)
+## Typography
 
-- **`.dna-page` + `.dna-circles`/`.dna-circ`** — white surface, 2–4 absolute pastel circles per screen, opacity 0.4–0.6, z-0, content z-10. Circles never sit behind small text.
-- **`.dna-display`** — Frank Ruhl Libre 900 headings. h1 clamp(34px,5vw,50px), h2 30–38px, h3 19px/700.
-- **`.dna-quote`** (+ `.gold` / `.blue`) — side-bar highlight box: label (`.dna-ql`) + text (`.dna-qt`).
-- **`.dna-concept`** — bordered card, 12px radius, faint navy shadow. Interactive cards add `.dna-hover`.
-- **`table.dna-data`** — navy header, zebra rows, `.num` cells LTR tabular.
-- **`.dna-pill-item`** — turquoise-dot list rows.
-- **`.dna-callout`** — soft pastel-blue note box.
-- **`.dna-gbar`** — the signature gradient bar. Bottom of every page.
-- **Giant background numeral/letter** — Frank Ruhl 900, opacity 0.05, decorative corner. Sparingly.
+| Role | Size |
+|---|---|
+| h1 | 48–56px desktop · 32–36 phone (`clamp(32px, 4.6vw, 56px)`), Rubik 700, line-height ≈1.15 |
+| h2 section | 28–32 desktop · 24–28 phone |
+| body | 16–18px, line-height ≈1.6–1.7 |
+| helper | 14px minimum, in `text-2` or darker |
 
-## The live-tech layer (the Silicon Valley half — keep, recolored)
+Headings start their block. Headings are Rubik 700 in deep green.
 
-CountUp, LiveDot, LiveClock, MarketMarquee, DrawSpark survive — recolored to the DNA:
-dots/accents turquoise `#4E9D8F`, standout figures turquoise or gold, mono labels in
-Geist Mono at `muted` (#5a6a78) or stronger. They are functional signals (live data,
-market returns, availability), never decoration. One live gesture per screen region.
+## Component library (use these, don't invent)
 
-## Craft bar (the owner's reference standard — Franky's-level execution)
+- **`.dna-page` + `.dna-circles`/`.dna-circ`** — ivory surface, at most 2–3 pastel bubbles per opening, never behind small text, fields, sums, tables or buttons; `pointer-events: none`.
+- **`.dna-display`** — Rubik 700 heading.
+- **`.btn-primary`** (green, ivory text) · **`.btn-secondary`** (green outline) · **`.btn-on-green`** / **`.btn-on-green-outline`** (on the green band). 48px min height, 12px radius.
+- **`.link-rule`** — text link with a hairline underline rule.
+- **`.field`** — white input, `#CCD6CC` border, 10px radius, green focus ring, `aria-invalid` turns the border rust. Every field has a visible `<label>`; required fields carry a rust asterisk.
+- **`.dna-concept`** — white card, 16px radius, hairline border. `.dna-hover` adds a quiet lift.
+- **`.dna-quote`** (+ `.gold` = sand, `.blue` = sage-light) — side-bar highlight box.
+- **`table.dna-data`** — green header, zebra rows, `.num` cells LTR tabular.
+- **`.dna-pill-item`** — sage-dot list rows. **`.dna-callout`** — sage-light note box.
+- **`.dna-navy-band`** — the deep green CTA band: sand hairline on top, one soft sage bubble.
+- **`.dna-warm-band`** — ivory→sand tint band (partner logo strip).
+- **`.brand-dots` / `<BrandDots />`** — the three dots sage · sand · rust. Decorative motif, never a status, meter or confirmation.
+- **`<Illustration name=… />`** (`src/components/brand/Illustration.tsx`) — the six kit illustrations from `/public/brand/illustrations/*-{480,960,1536}.webp`, 3:2, `object-fit: contain`, opaque ivory background, never cropped, flipped, filtered or made transparent. `priority` only above the fold; lazy otherwise. `alt=""` when the heading explains it; `describe` when it is content.
+- **`<BrandIcon name=… />`** (`src/components/brand/BrandIcon.tsx`) — the 24 kit icons (24 grid, 1.75 stroke, round caps) mapped onto lucide glyphs; `currentColor`. 20–24 for navigation/actions, 32–40 for a service symbol. Icon-only buttons need `label`.
+- **Elements** (`src/components/brand/Elements.tsx`) — `BubbleCorner`, `PathDivider`, `LeafCanopy`, `BalancedStones`, `OliveBranch`, `SignatureLandscape`. Decorative, `aria-hidden`, in page margins and transitions only.
 
-The owner measures against best-of-web craft. Within the DNA v3 palette, every screen must
-carry real craft, not flat utility:
-- **Texture**: a whisper of paper grain (SVG feTurbulence, opacity ≤0.35) on pastel/tint
-  surfaces and navy bands — surfaces feel printed, not painted.
-- **Brand illustration**: line-art patterns (umbrellas, coins, growth curves) as tile
-  backgrounds; the cast figures redrawn in navy ink with one turquoise/gold accent.
-- **Bold tile CTAs**: full-width label bars inside cards (the reference's "ABOUT" bar):
-  navy bar, white 13-14px letterspaced label, hover lightens.
-- **One playful gesture per key screen** (clock, marquee, count-up, pattern) — witty,
-  never noisy. Wit lives in craft, not copy.
+## Illustration map (kit p.11) — dosage
 
-## HARD BANS (AI tells — the owner's explicit list, enforced in QA)
+| Asset | Where | How |
+|---|---|---|
+| `01-journey` | home hero · service opening | main art beside the headline and action |
+| `02-family-protection` | health, life, family cover | service art or wide card |
+| `03-saving-growth` | pension and savings | service art or related content |
+| `04-retirement-horizon` | retirement planning | service art at the centre of the story |
+| `05-clarity-decisions` | portfolio review 360, the process, meeting summary | medium art beside the explanation |
+| `06-documents-service` | documents, requests, empty state in the personal area | small art beside the action |
 
-1. **No eyebrow labels above headings.** A heading starts its block. (A corner
-   `section-tag` far from the heading is allowed, sparingly, decorative-grade.)
-2. **No section numbering** — no `01`, `02 /`, `STEP 03` ornaments. (A real form wizard
-   may show progress in plain words, not ornamental numerals.)
-3. **No single colored/italic word inside a heading** for "emphasis".
-4. **No unrelated stock photos.** No photo? Use brand graphics (pastel circles, line art).
-5. **No emoji anywhere** (UI, code, copy, commits) — lucide inline SVG or plain words.
-6. **No em-dash in UI copy.** Use comma or period.
-7. **No English words inside a Hebrew sentence.** Translate, or give the term its own
-   standalone line/label. Standalone mono tags (a ticker band, "LIVE") are labels, not sentences.
-8. Numbers/license/phones never break across lines: `white-space:nowrap` + `dir="ltr"` spans.
+Home: one main illustration + one or two secondary uses. Service page: the one matching art (property, vehicle, travel and business pages stay illustration-free and use a vector element). Article: choose by content; keep an existing explanatory image. Calculators and forms: inputs and results stay central, no full illustration. Never repeat a full landscape in every section.
+
+Priority order on every screen: **understanding the service → the next action → readability → decoration.** If art pushes information down or stretches the phone view, shrink it.
+
+## The central path
+
+Every service leads to **בדיקת תיק 360** (`/#portfolio-review`, the lead form on the home page) and **תיאום פגישה** (`/contact`). Primary button = the page's own working action; secondary = the 360 review or the meeting. No button or link may point at a placeholder.
+
+## HARD BANS
+
+1. No eyebrow labels above headings, no section numbering ornaments, no single colored word inside a heading.
+2. No stock photos, no 3D characters, no other flat illustration style mixed with the kit.
+3. No emoji anywhere. No em-dash in UI copy. No English words inside a Hebrew sentence (a standalone Latin label such as a brand name is a label, not a sentence).
+4. No invented figures: returns, savings, counts of clients, response times, testimonials, availability. Missing content → mark and stop.
+5. No looping background animation, flashing, glass effects or heavy shadows. Grain filters at most whisper-level, never on illustrations.
+6. Numbers, license, phones never break across lines: `white-space: nowrap` + `dir="ltr"` spans.
+7. The old SeeID mark, Frank Ruhl Libre, Heebo, Geist Mono and the navy/turquoise/gold palette are retired. Do not reintroduce them.
 
 ## Regulatory (every page)
 
@@ -94,18 +110,17 @@ Footer must carry, verbatim:
 - `שמוליק מרציאנו · סוכן ברישיון 138666`
 - `האמור באתר מהווה שיווק פנסיוני ואינו מהווה ייעוץ פנסיוני או תחליף לייעוץ המתחשב בנתונים ובצרכים של כל אדם.`
 
-Never invent figures, returns, prices, or policy terms. Missing content → mark and stop.
-
 ## RTL rules (critical)
 
 - `dir="rtl"` at the root; prefer logical properties (`margin-inline`, `padding-inline`).
-- Numbers/English inside Hebrew text: `tabular-nums` + pointed `dir="ltr"` span.
-- After any layout change: render and LOOK (Playwright screenshot). Never trust code alone in RTL.
+- Numbers/English inside Hebrew text: `tabular-nums` + a pointed `dir="ltr"` span.
+- Never flip the logo, people or leaves in RTL; check directional arrows separately (`arrow-left` points to "next" in RTL).
+- After any layout change: render and LOOK (`node scripts/shot_brand.mjs <url> <dir> <routes…>`). Never trust code alone in RTL.
 
-## Process gates (unchanged discipline)
+## Process gates
 
-- Zero hardcoded off-palette hex in new work; tokens from `brand.ts` or `.dna-*` classes.
-- Desktop body text ≥15px; real loading/error/empty states on every interactive surface.
-- `python3 scripts/check_no_emoji.py` + `python3 scripts/contrast.py <fg> <bg>` for new pairs; AA minimum.
-- Full-route Playwright sweep (zero page errors, zero horizontal overflow at 390/1440) before merge.
-- Mobile first: most clients arrive on phones. Verify 390px on every converted page.
+- Zero hardcoded off-palette hex in new work; tokens from `brand.ts` or the classes above.
+- Body text ≥ 16px desktop; helper ≥ 14px; contrast AA (4.5:1) for text.
+- Real loading/error/empty states on every interactive surface; forms validate per field, keep input after an error, block double submit, confirm only after the write succeeded.
+- Full-route sweep before merge: zero page errors, zero horizontal overflow at 390 and 1440.
+- Mobile first: verify 390px on every converted page. Check 360, 390, 768, 1440 and 200% zoom on key pages.

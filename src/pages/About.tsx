@@ -25,7 +25,7 @@ const SectionHead = ({ title, lede }: { title: string; lede?: string }) => (
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main>
@@ -45,7 +45,7 @@ const About = () => {
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-14 sm:pb-20">
             <nav className="flex items-center gap-2 text-[13px] mb-10 sm:mb-14" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
               <span className="font-medium" style={{ color: NAVY }}>אודות</span>
             </nav>
@@ -72,7 +72,7 @@ const About = () => {
               {/* The counting card — 600+ families (the page's live gesture) */}
               <div className="dna-concept !p-6 sm:!p-8 flex flex-col justify-between min-h-[200px]">
                 <span
-                  className="text-[11px] tracking-[0.2em] font-semibold"
+                  className="text-[11px] tracking-[0.2em] font-bold"
                   style={{ fontFamily: MONO, color: MUTED }}
                   dir="ltr"
                 >
@@ -84,7 +84,7 @@ const About = () => {
                     dir="ltr"
                     style={{
                       fontFamily: DISPLAY,
-                      fontWeight: 900,
+                      fontWeight: 700,
                       color: TURQ,
                       fontSize: "clamp(3rem, 6vw, 4.6rem)",
                       letterSpacing: "-0.02em",
@@ -156,7 +156,7 @@ const About = () => {
                       dir="ltr"
                       style={{
                         fontFamily: DISPLAY,
-                        fontWeight: 900,
+                        fontWeight: 700,
                         color: TURQ,
                         fontSize: "clamp(2.5rem, 4.5vw, 3.4rem)",
                         letterSpacing: "-0.02em",
@@ -253,7 +253,7 @@ const About = () => {
               className="text-white leading-tight mb-3"
               style={{
                 fontFamily: DISPLAY,
-                fontWeight: 900,
+                fontWeight: 700,
                 fontSize: "clamp(1.7rem, 3.2vw, 2.4rem)",
                 letterSpacing: "-0.5px",
               }}
@@ -266,7 +266,7 @@ const About = () => {
             <div className="flex flex-wrap items-center gap-6">
               <Link
                 to="/contact"
-                className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+                className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
               >
                 צרו קשר
               </Link>

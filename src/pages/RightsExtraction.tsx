@@ -41,7 +41,7 @@ const RightsExtraction = () => {
   const stepsRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main>
@@ -61,7 +61,7 @@ const RightsExtraction = () => {
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
             <nav className="flex items-center gap-2 text-[13px] mb-10 sm:mb-14" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
               <span className="font-medium" style={{ color: NAVY }}>מיצוי זכויות</span>
             </nav>
@@ -161,7 +161,7 @@ const RightsExtraction = () => {
               className="text-white leading-tight mb-3"
               style={{
                 fontFamily: DISPLAY,
-                fontWeight: 900,
+                fontWeight: 700,
                 fontSize: "clamp(1.7rem, 3.2vw, 2.4rem)",
                 letterSpacing: "-0.5px",
               }}
@@ -173,7 +173,7 @@ const RightsExtraction = () => {
             </p>
             <Link
               to="/contact"
-              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
             >
               בדיקת זכאות
             </Link>

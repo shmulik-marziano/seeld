@@ -5,7 +5,7 @@ const coverageTypes = [
   {
     title: "ביטוח מבנה",
     icon: Shield,
-    color: "#171717",
+    color: "#003D30",
     items: ["נזקי שריפה", "נזקי רעידת אדמה", "נזקי סערה"],
   },
   {

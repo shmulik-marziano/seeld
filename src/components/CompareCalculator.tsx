@@ -10,10 +10,10 @@ import { DISPLAY, MONO, MUTED, NAVY, TURQ, TURQ_TEXT } from "@/lib/brand";
 // Frank Ruhl 900 turquoise standout stats, kit CSS bar chart with mono LTR values.
 
 const inputClass =
-  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#E7EDF1] rounded-lg text-[#1D2D3D] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1D2D3D]";
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]";
 const sliderClass =
-  "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#4E9D8F] [&_[role=slider]]:border-[#4E9D8F]";
-const labelClass = "flex items-center gap-2 text-base font-medium text-[#1D2D3D]";
+  "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#819B7D] [&_[role=slider]]:border-[#819B7D]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#003D30]";
 
 interface Track {
   name: string;
@@ -128,11 +128,11 @@ const CompareCalculator = () => {
             type="text"
             value={investmentAmount.toLocaleString("he-IL")}
             onChange={(e) => handleAmountChange(e.target.value)}
-            className="h-20 text-center text-3xl md:text-4xl font-bold tabular-nums bg-white border-[#E7EDF1] rounded-lg text-[#1D2D3D] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1D2D3D]"
+            className="h-20 text-center text-3xl md:text-4xl font-bold tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]"
             dir="ltr"
           />
           <span
-            className="absolute left-6 top-1/2 -translate-y-1/2 text-2xl font-semibold"
+            className="absolute left-6 top-1/2 -translate-y-1/2 text-2xl font-bold"
             style={{ color: TURQ, fontFamily: MONO }}
             aria-hidden="true"
           >
@@ -150,7 +150,7 @@ const CompareCalculator = () => {
           </Label>
           <span
             className="text-2xl tabular-nums"
-            style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ }}
+            style={{ fontFamily: DISPLAY, fontWeight: 700, color: TURQ }}
           >
             {years} שנים
           </span>
@@ -179,7 +179,7 @@ const CompareCalculator = () => {
             <div
               key={track.name}
               className="dna-concept dna-hover relative text-center"
-              style={isBest ? { borderColor: TURQ, boxShadow: "0 0 0 1px #4E9D8F" } : undefined}
+              style={isBest ? { borderColor: TURQ, boxShadow: "0 0 0 1px #819B7D" } : undefined}
             >
               {isBest && (
                 <span
@@ -202,7 +202,7 @@ const CompareCalculator = () => {
                 dir="ltr"
                 style={{
                   fontFamily: DISPLAY,
-                  fontWeight: 900,
+                  fontWeight: 700,
                   color: isBest ? TURQ : NAVY,
                   fontSize: "clamp(1.4rem, 2vw, 1.7rem)",
                   lineHeight: 1.15,
@@ -241,14 +241,14 @@ const CompareCalculator = () => {
                     className="h-full rounded-md transition-all duration-200 ease-out"
                     style={{
                       width: `${negative ? Math.min(100, Math.abs(barWidth)) : barWidth}%`,
-                      backgroundColor: negative ? "#d67a8a" : TURQ,
+                      backgroundColor: negative ? "#BD582D" : TURQ,
                     }}
                   />
                 </div>
                 <span
                   className="w-28 shrink-0 text-left text-[13px] font-medium tabular-nums"
                   dir="ltr"
-                  style={{ fontFamily: MONO, color: negative ? "#a04a5c" : NAVY }}
+                  style={{ fontFamily: MONO, color: negative ? "#9A4520" : NAVY }}
                 >
                   {formatCurrency(track.profit)}
                 </span>
@@ -265,7 +265,7 @@ const CompareCalculator = () => {
           <p
             className="tabular-nums"
             dir="ltr"
-            style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ, fontSize: "clamp(1.6rem, 2.4vw, 2rem)", lineHeight: 1.15 }}
+            style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY, fontSize: "clamp(1.6rem, 2.4vw, 2rem)", lineHeight: 1.15 }}
           >
             <AnimatedNumber value={maxProfit - minProfit} format={formatCurrency} />
           </p>

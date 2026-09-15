@@ -117,7 +117,7 @@ export default function FundCostCalculator({ funds }: FundCostCalculatorProps) {
           <>
             <Separator />
             <div className="space-y-3">
-              <h4 className="font-semibold text-sm">עלות שנתית צפויה</h4>
+              <h4 className="font-bold text-sm">עלות שנתית צפויה</h4>
               {costResults.map(({ fund, balance, annualCost }) => (
                 <div key={fund.id} className="flex justify-between items-center text-xs bg-muted rounded-lg px-3 py-2">
                   <span className="truncate max-w-[160px]">{fund.name}</span>
@@ -140,7 +140,7 @@ export default function FundCostCalculator({ funds }: FundCostCalculatorProps) {
           <>
             <Separator />
             <div className="space-y-2">
-              <h4 className="font-semibold text-sm">ממוצע משוקלל</h4>
+              <h4 className="font-bold text-sm">ממוצע משוקלל</h4>
               <div className="bg-primary/5 border border-primary/20 rounded-xl p-4">
                 <p className="text-xs text-muted-foreground mb-2">
                   סה"כ יתרה: {formatCurrency(weightedResult.totalBalance)}

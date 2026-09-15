@@ -6,7 +6,6 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { StatusPill } from "@/components/brand/Live";
-import { MONO } from "@/lib/brand";
 
 const navLinks = [
   { href: "/insurances", label: "ביטוח" },
@@ -34,14 +33,14 @@ const mobileSecondaryLinks = [
   { href: "/agents", label: "כניסה לסוכנים" },
 ];
 
-// Shared desktop nav item classes (quiet precision: Heebo 500, ink on hover/active)
+// Shared desktop nav item classes (quiet precision: Rubik, ink on hover/active)
 const desktopLinkClass = (active: boolean) =>
   cn(
-    "text-[13.5px] font-medium transition-colors",
+    "text-[15px] font-medium transition-colors",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[hsl(var(--ring))]",
     active
-      ? "text-[#1D2D3D] underline decoration-[#4E9D8F] decoration-2 underline-offset-[10px]"
-      : "text-[#5a6a78] hover:text-[#1D2D3D]"
+      ? "text-[#003D30] underline decoration-[#819B7D] decoration-2 underline-offset-[10px]"
+      : "text-[#476356] hover:text-[#003D30]"
   );
 
 const Header = () => {
@@ -102,8 +101,8 @@ const Header = () => {
 
   return (
     <header
-      className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur-sm"
-      style={{ borderColor: "#E7EDF1" }}
+      className="sticky top-0 z-50 border-b bg-[#FAF7EF]/95 backdrop-blur-sm"
+      style={{ borderColor: "#CCD6CC" }}
     >
       {/* Keep focused elements clear of the sticky header (WCAG 2.4.11) */}
       <style>{"html{scroll-padding-top:96px}"}</style>
@@ -112,13 +111,13 @@ const Header = () => {
       <a
         href="#main"
         onClick={handleSkipToMain}
-        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:right-3 focus:z-[60] focus:bg-white focus:text-[#1D2D3D] focus:px-4 focus:py-2.5 focus:text-[13.5px] focus:font-medium focus:rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:right-3 focus:z-[60] focus:bg-white focus:text-[#003D30] focus:px-4 focus:py-2.5 focus:text-[13.5px] focus:font-medium focus:rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
       >
         דלג לתוכן
       </a>
 
       {/* The toolbar — institutional white bar */}
-      <div className={cn("transition-shadow duration-200", isScrolled && "shadow-[0_6px_18px_-12px_rgba(29,45,61,0.25)]")}>
+      <div className={cn("transition-shadow duration-200", isScrolled && "shadow-[0_6px_18px_-12px_rgba(0,61,48,0.25)]")}>
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex items-center justify-between h-[64px]">
           {/* Logo */}
@@ -150,14 +149,14 @@ const Header = () => {
 
             <Link
               to="/personal-area"
-              className="hidden lg:inline-flex items-center justify-center rounded-lg px-6 py-2.5 bg-[#1D2D3D] text-white text-[13.5px] font-medium tracking-wide hover:bg-[#1D2D3D]/90 transition-colors min-h-[42px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+              className="hidden lg:inline-flex btn-primary !min-h-[44px] !py-2 !px-5 !text-[15px]"
             >
               האזור האישי
             </Link>
 
             {/* Mobile Menu Button */}
             <button
-              className="lg:hidden p-2 flex items-center justify-center text-[#1D2D3D] min-w-[44px] min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+              className="lg:hidden p-2 flex items-center justify-center text-[#003D30] min-w-[44px] min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
               onClick={() => setIsMenuOpen(true)}
               aria-label="פתח תפריט"
               aria-expanded={isMenuOpen}
@@ -187,7 +186,7 @@ const Header = () => {
             />
             {/* Panel — Snap slide (0.2s, ease-out); warm-paper surface, bento chrome */}
             <motion.div
-              className="fixed top-0 right-0 bottom-0 w-[85vw] sm:w-[360px] bg-white z-50 lg:hidden border-l border-[#E7EDF1]"
+              className="fixed top-0 right-0 bottom-0 w-[85vw] sm:w-[360px] bg-white z-50 lg:hidden border-l border-[#CCD6CC]"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -196,17 +195,18 @@ const Header = () => {
               aria-modal="true"
               aria-label="תפריט ניווט"
             >
-              <div className="flex items-center justify-between px-6 h-[68px] border-b border-[#E7EDF1]">
-                <span
-                  dir="ltr"
-                  className="text-[15px] font-semibold tracking-[-0.02em] text-[#1D2D3D]"
-                  style={{ fontFamily: "'Heebo', sans-serif" }}
-                >
-                  SEELD<span className="text-[#4E9D8F]">.</span>
-                </span>
+              <div className="flex items-center justify-between px-6 h-[68px] border-b border-[#CCD6CC]">
+                <img
+                  src="/brand/logo.png"
+                  alt="שילד ביטוח ופיננסים"
+                  width={93}
+                  height={40}
+                  style={{ height: 40, width: "auto" }}
+                  draggable={false}
+                />
                 <button
                   onClick={() => setIsMenuOpen(false)}
-                  className="p-2 flex items-center justify-center min-w-[44px] min-h-[44px] text-[#1D2D3D] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+                  className="p-2 flex items-center justify-center min-w-[44px] min-h-[44px] text-[#003D30] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
                   aria-label="סגור תפריט"
                 >
                   <X className="h-5 w-5" strokeWidth={1.5} />
@@ -224,11 +224,11 @@ const Header = () => {
                     to={link.href}
                     aria-current={isActive(link.href) ? "page" : undefined}
                     className={cn(
-                      "py-[15px] border-b border-[#E7EDF1] text-[18px] font-semibold transition-colors",
+                      "py-[15px] border-b border-[#CCD6CC] text-[18px] font-bold transition-colors",
                       "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]",
                       isActive(link.href)
-                        ? "text-[#1D2D3D]"
-                        : "text-[#3a4c5a] hover:text-[#1D2D3D]"
+                        ? "text-[#003D30]"
+                        : "text-[#24483C] hover:text-[#003D30]"
                     )}
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -238,10 +238,7 @@ const Header = () => {
 
                 {/* Secondary group — mono eyebrow */}
                 <div className="mt-8">
-                  <div
-                    className="text-[11px] tracking-[0.18em] font-medium text-[#5c5c5c] mb-3"
-                    style={{ fontFamily: MONO }}
-                  >
+                  <div className="text-[13px] font-bold text-[#476356] mb-3">
                     חשבון
                   </div>
                   <div className="flex flex-col">
@@ -249,7 +246,7 @@ const Header = () => {
                       <Link
                         key={link.href}
                         to={link.href}
-                        className="py-2.5 text-[14px] font-medium text-[#5a6a78] hover:text-[#1D2D3D] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+                        className="py-2.5 text-[14px] font-medium text-[#476356] hover:text-[#003D30] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         {link.label}
@@ -264,17 +261,17 @@ const Header = () => {
                   <div className="grid grid-cols-2 gap-3">
                     <a
                       href="tel:0523097444"
-                      className="flex flex-col items-center justify-center px-3 py-2.5 rounded-lg border border-[#E7EDF1] text-[14px] font-medium text-[#1D2D3D] hover:bg-[#F4F8F7] transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+                      className="flex flex-col items-center justify-center px-3 py-2.5 rounded-lg border border-[#CCD6CC] text-[14px] font-medium text-[#003D30] hover:bg-[#EEF2EC] transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       חייגו
-                      <span dir="ltr" className="tabular-nums text-[12px] font-normal text-[#5a6a78] whitespace-nowrap">052-309-7444</span>
+                      <span dir="ltr" className="tabular-nums text-[12px] font-normal text-[#476356] whitespace-nowrap">052-309-7444</span>
                     </a>
                     <a
                       href="https://wa.me/972523097444"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-[#E7EDF1] text-[14px] font-medium text-[#1D2D3D] hover:bg-[#F4F8F7] transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+                      className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-[#CCD6CC] text-[14px] font-medium text-[#003D30] hover:bg-[#EEF2EC] transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       WhatsApp
@@ -282,10 +279,10 @@ const Header = () => {
                   </div>
                   <Link
                     to="/contact"
-                    className="flex items-center justify-center w-full px-6 py-4 rounded-lg bg-[#1D2D3D] text-white text-[15px] font-medium tracking-wide hover:bg-[#1D2D3D]/90 transition-colors min-h-[52px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
+                    className="btn-primary w-full !min-h-[52px]"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    בדיקת תיק ללא עלות
+                    בדיקת תיק 360
                   </Link>
                   <button
                     type="button"
@@ -293,7 +290,7 @@ const Header = () => {
                     className="block mx-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
                     aria-label="פתיחת שיחה עם היועץ"
                   >
-                    <StatusPill>היועץ מחובר עכשיו</StatusPill>
+                    <StatusPill>שיחה עם היועץ הדיגיטלי</StatusPill>
                   </button>
                 </div>
               </nav>

@@ -17,7 +17,7 @@ import { LiveClock, StatusPill } from "@/components/brand/Live";
 
 // DNA v3 boxed input: white, hairline border, navy focus
 const inputClass =
-  "w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] placeholder:text-[#5a6a78] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors min-h-[48px]";
+  "w-full px-4 py-3 bg-white border border-[#CCD6CC] rounded-lg text-[#003D30] placeholder:text-[#476356] text-base focus:outline-none focus:border-[#003D30] transition-colors min-h-[48px]";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -78,7 +78,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main>
@@ -98,7 +98,7 @@ const Contact = () => {
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
             <nav className="flex items-center gap-2 text-[13px] mb-10 sm:mb-14" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
               <span className="font-medium" style={{ color: NAVY }}>צור קשר</span>
             </nav>
@@ -182,7 +182,7 @@ const Contact = () => {
                         onChange={handleChange}
                         required
                         aria-label="נושא הפנייה"
-                        className="w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors appearance-none cursor-pointer min-h-[48px]"
+                        className="w-full px-4 py-3 bg-white border border-[#CCD6CC] rounded-lg text-[#003D30] text-base focus:outline-none focus:border-[#003D30] transition-colors appearance-none cursor-pointer min-h-[48px]"
                       >
                         <option value="">בחרו נושא</option>
                         <option value="pension">תכנון פנסיוני</option>
@@ -199,7 +199,7 @@ const Contact = () => {
                         value={formData.message}
                         onChange={handleChange}
                         rows={4}
-                        className="w-full px-4 py-3 bg-white border border-[#E7EDF1] rounded-lg text-[#1D2D3D] placeholder:text-[#5a6a78] text-base focus:outline-none focus:border-[#1D2D3D] transition-colors resize-none"
+                        className="w-full px-4 py-3 bg-white border border-[#CCD6CC] rounded-lg text-[#003D30] placeholder:text-[#476356] text-base focus:outline-none focus:border-[#003D30] transition-colors resize-none"
                         placeholder="במה נוכל לעזור?"
                         aria-label="במה נוכל לעזור?"
                       />
@@ -207,7 +207,7 @@ const Contact = () => {
                         <button
                           type="submit"
                           disabled={submitting}
-                          className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
+                          className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors disabled:opacity-60 min-h-[52px] min-w-[160px]"
                         >
                           {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שלחו פנייה"}
                         </button>
@@ -229,7 +229,7 @@ const Contact = () => {
                         <span className="text-[13px]" style={{ color: MUTED }}>טלפון</span>
                         <a
                           href="tel:0523097444"
-                          className="text-base tabular-nums whitespace-nowrap text-[#1D2D3D] border-b border-transparent hover:border-[#1D2D3D]/40 transition-colors"
+                          className="text-base tabular-nums whitespace-nowrap text-[#003D30] border-b border-transparent hover:border-[#003D30]/40 transition-colors"
                           dir="ltr"
                         >
                           052-309-7444
@@ -242,7 +242,7 @@ const Contact = () => {
                         <span className="text-[13px]" style={{ color: MUTED }}>אימייל</span>
                         <a
                           href="mailto:info@seeld.co.il"
-                          className="text-base text-[#1D2D3D] border-b border-transparent hover:border-[#1D2D3D]/40 transition-colors"
+                          className="text-base text-[#003D30] border-b border-transparent hover:border-[#003D30]/40 transition-colors"
                           dir="ltr"
                         >
                           info@seeld.co.il
@@ -269,7 +269,7 @@ const Contact = () => {
                     <LiveClock size={52} color={NAVY} className="shrink-0" />
                     <div>
                       <span
-                        className="text-[11px] font-semibold tracking-[0.2em] tabular-nums"
+                        className="text-[11px] font-bold tracking-[0.2em] tabular-nums"
                         style={{ fontFamily: MONO, color: TURQ_TEXT }}
                         dir="ltr"
                       >

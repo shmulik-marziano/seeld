@@ -33,6 +33,7 @@ const ScrollReveal = ({
     return (
       <motion.div
         className={cn(className)}
+        data-reveal=""
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
@@ -69,6 +70,7 @@ const ScrollReveal = ({
   return (
     <motion.div
       className={cn(className)}
+      data-reveal=""
       initial={{ opacity: 0, ...offset }}
       whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-50px" }}

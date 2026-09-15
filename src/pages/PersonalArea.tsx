@@ -6,17 +6,17 @@ import PersonalAreaLogin from "@/components/personal-area/PersonalAreaLogin";
 import PersonalAreaDashboard from "@/components/personal-area/PersonalAreaDashboard";
 import { LiveTag } from "@/components/brand/Live";
 
-const HEEBO = "'Heebo', sans-serif";
+const HEEBO = "'Rubik', Arial, sans-serif";
 
 const PersonalArea = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white" dir="rtl">
+      <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
         <Header />
         <section className="flex items-center justify-center h-[60vh]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#1D2D3D]" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#003D30]" />
         </section>
       </div>
     );
@@ -29,12 +29,12 @@ const PersonalArea = () => {
 
   // Logged in — dashboard with site chrome
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       {/* Hero — quiet ink tile */}
       <section>
-        <div style={{ backgroundColor: "#1D2D3D" }}>
+        <div style={{ backgroundColor: "#003D30" }}>
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-14 relative z-10">
             <div className="border-t border-white/20 pt-5">
               <LiveTag dark dot>PERSONAL AREA · SECURE</LiveTag>

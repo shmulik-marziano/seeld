@@ -13,11 +13,11 @@ import CompanyLogos from "@/components/CompanyLogos";
 import { DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, TINT_GOLD, TURQ } from "@/lib/brand";
 import { StatusPill } from "@/components/brand/Live";
 // Repeating umbrella line-art — navy ink at low opacity on the gold tint (canon: HeroSection)
-const UMBRELLA_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%231D2D3D' stroke-width='2' stroke-linecap='round' opacity='0.14'%3E%3Cpath d='M14 26 C14 17 20 13 28 13 C36 13 42 17 42 26'/%3E%3Cpath d='M14 26 q3.5 -3 7 0 q3.5 -3 7 0 q3.5 -3 7 0 q3.5 -3 7 0'/%3E%3Cpath d='M28 13 v-3'/%3E%3Cpath d='M28 26 v12 c0 4 6 4 6 1'/%3E%3C/g%3E%3C/svg%3E")`;
+const UMBRELLA_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23003D30' stroke-width='2' stroke-linecap='round' opacity='0.14'%3E%3Cpath d='M14 26 C14 17 20 13 28 13 C36 13 42 17 42 26'/%3E%3Cpath d='M14 26 q3.5 -3 7 0 q3.5 -3 7 0 q3.5 -3 7 0 q3.5 -3 7 0'/%3E%3Cpath d='M28 13 v-3'/%3E%3Cpath d='M28 26 v12 c0 4 6 4 6 1'/%3E%3C/g%3E%3C/svg%3E")`;
 
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-2.5 -mx-2.5 pb-4 text-base font-medium text-[#5a6a78] hover:bg-[#E1EAF1]/35 hover:text-[#1D2D3D] border-b-2 border-transparent data-[state=active]:border-[#4E9D8F] data-[state=active]:text-[#1D2D3D] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+  "rounded-none bg-transparent px-2.5 -mx-2.5 pb-4 text-base font-medium text-[#476356] hover:bg-[#E8EDE5]/35 hover:text-[#003D30] border-b-2 border-transparent data-[state=active]:border-[#819B7D] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.7rem, 3vw, 2.2rem)" }}>
@@ -86,7 +86,7 @@ const PensionLifeInsurance = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       {/* HERO — white DNA canvas, the page's single pastel-circle backdrop */}
@@ -104,15 +104,15 @@ const PensionLifeInsurance = () => {
         <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10">
           {/* Breadcrumb */}
           <div className="mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[13px] text-[#5a6a78]">
-              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+            <nav className="flex items-center gap-2 text-[13px] text-[#476356]">
+              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
-              <Link to="/savings" className="hover:text-[#1D2D3D] transition-colors">חיסכון ופנסיה</Link>
+              <Link to="/savings" className="hover:text-[#003D30] transition-colors">חיסכון ופנסיה</Link>
               <span aria-hidden="true">←</span>
-              <span className="font-medium text-[#1D2D3D]">ביטוח חיים פנסיוני</span>
+              <span className="font-medium text-[#003D30]">ביטוח חיים פנסיוני</span>
             </nav>
             <span
-              className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium whitespace-nowrap text-[#5a6a78]"
+              className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium whitespace-nowrap text-[#476356]"
               style={{ fontFamily: MONO }}
             >
               חיסכון ופנסיה
@@ -122,19 +122,19 @@ const PensionLifeInsurance = () => {
           <h1 className="dna-display leading-[1.12] mb-6 max-w-3xl" style={{ fontSize: "clamp(34px, 5vw, 50px)" }}>
             חיסכון פנסיוני עם הגנה מלאה
           </h1>
-          <p className="text-base sm:text-[17px] text-[#5a6a78] max-w-2xl leading-[1.9] mb-9">
+          <p className="text-base sm:text-[17px] text-[#476356] max-w-2xl leading-[1.9] mb-9">
             שילוב בין חיסכון פנסיוני לביטוח חיים המעניק הגנה מקיפה למשפחה: ביטוח מנהלים עם כיסויים מותאמים.
           </p>
           <div className="flex flex-wrap items-center gap-6">
             <a
               href="#analysis-form"
-              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[52px]"
+              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors min-h-[52px]"
             >
               ניתוח ביטוח מנהלים חינם
             </a>
             <a
               href="#product-types"
-              className="group inline-flex items-center gap-2 text-base font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+              className="group inline-flex items-center gap-2 text-base font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
             >
               סוגי כיסויים
               <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -177,7 +177,7 @@ const PensionLifeInsurance = () => {
                   <h3 className="text-[19px] mb-2.5" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                     {item.title}
                   </h3>
-                  <p className="text-[14.5px] text-[#3a4c5a] leading-[1.8]">{item.desc}</p>
+                  <p className="text-[14.5px] text-[#24483C] leading-[1.8]">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -188,7 +188,7 @@ const PensionLifeInsurance = () => {
         <section id="product-types" className="border-t scroll-mt-24" style={{ borderColor: LINE }}>
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
             <Tabs defaultValue="guide" dir="rtl">
-              <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#E7EDF1] rounded-none overflow-x-auto scrollbar-hide">
+              <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#CCD6CC] rounded-none overflow-x-auto scrollbar-hide">
                 <TabsTrigger value="guide" className={tabTriggerClass}>
                   המדריך
                 </TabsTrigger>
@@ -208,7 +208,7 @@ const PensionLifeInsurance = () => {
                       <div className="mb-6">
                         <SectionTitle>{article.title}</SectionTitle>
                       </div>
-                      <div className="space-y-4 text-[#3a4c5a] leading-[1.9] text-base">
+                      <div className="space-y-4 text-[#24483C] leading-[1.9] text-base">
                         {article.paragraphs.map((p, pIdx) => (
                           <p key={pIdx}>{p}</p>
                         ))}
@@ -226,7 +226,7 @@ const PensionLifeInsurance = () => {
               <TabsContent value="types" className="mt-0">
                 <div className="mb-10">
                   <SectionTitle>מרכיבי ביטוח מנהלים</SectionTitle>
-                  <p className="text-[#5a6a78] mt-2 text-base leading-relaxed max-w-xl">
+                  <p className="text-[#476356] mt-2 text-base leading-relaxed max-w-xl">
                     חיסכון וביטוח במוצר אחד
                   </p>
                 </div>
@@ -236,7 +236,7 @@ const PensionLifeInsurance = () => {
                       <h3 className="text-[17px] mb-2" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                         {type.title}
                       </h3>
-                      <p className="text-[#3a4c5a] text-[14px] leading-[1.8] mb-4">{type.description}</p>
+                      <p className="text-[#24483C] text-[14px] leading-[1.8] mb-4">{type.description}</p>
                       <ul className="space-y-2">
                         {type.features.map((feature, fIdx) => (
                           <li key={fIdx} className="dna-pill-item !py-1.5 text-[14px]">
@@ -257,12 +257,12 @@ const PensionLifeInsurance = () => {
                       <AccordionItem
                         key={idx}
                         value={`faq-${idx}`}
-                        className="border-b border-[#E7EDF1] rounded-none px-0"
+                        className="border-b border-[#CCD6CC] rounded-none px-0"
                       >
-                        <AccordionTrigger className="text-start text-base font-medium text-[#1D2D3D] hover:no-underline py-5 px-3 -mx-3 rounded-md hover:bg-[#E1EAF1]/35 transition-colors duration-150">
+                        <AccordionTrigger className="text-start text-base font-medium text-[#003D30] hover:no-underline py-5 px-3 -mx-3 rounded-md hover:bg-[#E8EDE5]/35 transition-colors duration-150">
                           {item.q}
                         </AccordionTrigger>
-                        <AccordionContent className="text-[#3a4c5a] leading-[1.85] pb-6 text-[14px]">
+                        <AccordionContent className="text-[#24483C] leading-[1.85] pb-6 text-[14px]">
                           {item.a}
                         </AccordionContent>
                       </AccordionItem>
@@ -285,7 +285,7 @@ const PensionLifeInsurance = () => {
             <div className="mb-10 text-center sm:text-right">
               <h2
                 className="text-white leading-tight mb-3"
-                style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: 'clamp(1.7rem, 3vw, 2.3rem)', letterSpacing: '-0.5px' }}
+                style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 'clamp(1.7rem, 3vw, 2.3rem)', letterSpacing: '-0.5px' }}
               >
                 רוצים ניתוח ביטוח מנהלים חינם?
               </h2>

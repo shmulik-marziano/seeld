@@ -29,13 +29,13 @@ export const MarketMarquee = ({
           {items.map((item, i) => (
             <span
               key={i}
-              className="inline-flex items-center gap-2.5 px-4 text-[12.5px] sm:text-[13.5px] font-semibold tracking-[0.12em] text-[#171717] whitespace-nowrap tabular-nums"
+              className="inline-flex items-center gap-2.5 px-4 text-[12.5px] sm:text-[13.5px] font-bold tracking-[0.12em] text-[#003D30] whitespace-nowrap tabular-nums"
               style={{ fontFamily: MONO }}
             >
               {item.dot && <LiveDot size={6} />}
               <span dir="auto">{item.label}</span>
               {item.value && <span dir="ltr">{item.value}</span>}
-              <span className="text-[#171717]/30 select-none">—</span>
+              <span className="text-[#003D30]/30 select-none">—</span>
             </span>
           ))}
         </div>

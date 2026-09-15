@@ -241,14 +241,14 @@ export default function LeadsPage() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('/app/dashboard')}
-            className="w-10 h-10 rounded-full bg-[#171717] flex items-center justify-center hover:bg-[#171717]/80 transition-colors">
+            className="w-10 h-10 rounded-full bg-[#003D30] flex items-center justify-center hover:bg-[#003D30]/80 transition-colors">
             <ArrowRight className="w-5 h-5 text-white" />
           </button>
           <div className="w-12 h-12 rounded-full bg-[#b45309] flex items-center justify-center shadow-lg">
             <Target className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold text-[#171717]">לידים</h1>
+            <h1 className="text-2xl font-bold text-[#003D30]">לידים</h1>
             <p className="text-sm text-gray-400">{leads.length} לידים מהאתר</p>
           </div>
         </div>
@@ -257,7 +257,7 @@ export default function LeadsPage() {
       {/* Stats Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {[
-          { label: 'סה״כ', value: stats.total, color: '#171717', bg: '#17171715' },
+          { label: 'סה״כ', value: stats.total, color: '#003D30', bg: '#003D3015' },
           { label: 'חדשים', value: stats.new, color: '#0369a1', bg: '#e0f2fe' },
           { label: 'בטיפול', value: stats.inProgress, color: '#1e40af', bg: '#dbeafe' },
           { label: 'נסגרו', value: stats.closed, color: '#166534', bg: '#dcfce7' },
@@ -267,7 +267,7 @@ export default function LeadsPage() {
             className="rounded-2xl p-4 border border-gray-100 shadow-sm"
             style={{ backgroundColor: s.bg }}>
             <p className="text-[11px] font-bold" style={{ color: s.color + 'aa' }}>{s.label}</p>
-            <p className="text-2xl font-black mt-1" style={{ color: s.color }}>{s.value}</p>
+            <p className="text-2xl font-bold mt-1" style={{ color: s.color }}>{s.value}</p>
           </motion.div>
         ))}
       </div>
@@ -304,7 +304,7 @@ export default function LeadsPage() {
       {/* Content */}
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-[#171717]" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#003D30]" />
         </div>
       ) : error ? (
         <div className="bg-white rounded-2xl border border-red-100 p-8 text-center">
@@ -316,7 +316,7 @@ export default function LeadsPage() {
           <div className="w-16 h-16 rounded-full bg-[#b45309]/10 flex items-center justify-center mx-auto mb-4">
             <Target className="w-8 h-8 text-[#b45309]" />
           </div>
-          <p className="text-lg font-extrabold text-[#171717] mb-2">
+          <p className="text-lg font-bold text-[#003D30] mb-2">
             {leads.length === 0 ? 'אין לידים עדיין' : 'לא נמצאו תוצאות'}
           </p>
           <p className="text-sm text-gray-400">
@@ -337,13 +337,13 @@ export default function LeadsPage() {
                 className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm bg-[#171717]">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm bg-[#003D30]">
                       {lead.type === 'insurance'
                         ? <Shield className="w-5 h-5 text-white" />
                         : <Wallet className="w-5 h-5 text-white" />}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-extrabold text-[#171717] truncate">{lead.full_name}</p>
+                      <p className="text-sm font-bold text-[#003D30] truncate">{lead.full_name}</p>
                       <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                         <select
                           value={lead.status}
@@ -355,7 +355,7 @@ export default function LeadsPage() {
                             <option key={s} value={s}>{STATUS_MAP[s].label}</option>
                           ))}
                         </select>
-                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#17171720] text-[#171717]">
+                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#003D3020] text-[#003D30]">
                           {lead.type === 'insurance' ? 'ביטוח' : 'פנסיה'} &middot; {lead.subType}
                         </span>
                         {lead.assigned_to && (

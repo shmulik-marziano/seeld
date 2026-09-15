@@ -208,7 +208,7 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
           {/* Step 1: Contact Info */}
           {step === 1 && (
             <div className="space-y-4">
-              <h4 className="font-semibold text-lg">פרטים אישיים</h4>
+              <h4 className="font-bold text-lg">פרטים אישיים</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="fullName">שם מלא *</Label>
@@ -273,7 +273,7 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
           {/* Step 2: Employment Info */}
           {step === 2 && (
             <div className="space-y-4">
-              <h4 className="font-semibold text-lg">פרטי תעסוקה</h4>
+              <h4 className="font-bold text-lg">פרטי תעסוקה</h4>
               <div>
                 <Label htmlFor="employmentStatus">סטטוס תעסוקה</Label>
                 <Select value={employmentStatus} onValueChange={setEmploymentStatus}>
@@ -342,7 +342,7 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
           {step === 3 && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h4 className="font-semibold text-lg">מוצרים קיימים</h4>
+                <h4 className="font-bold text-lg">מוצרים קיימים</h4>
                 <Button type="button" variant="outline" size="sm" onClick={addProduct}>
                   <Plus className="w-4 h-4 ml-1" />
                   הוסף מוצר
@@ -440,7 +440,7 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
           {/* Step 4: Goals & Preferences */}
           {step === 4 && (
             <div className="space-y-4">
-              <h4 className="font-semibold text-lg">יעדים והעדפות</h4>
+              <h4 className="font-bold text-lg">יעדים והעדפות</h4>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -528,7 +528,7 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
           {/* Step 5: Additional Info & Submit */}
           {step === 5 && (
             <div className="space-y-4">
-              <h4 className="font-semibold text-lg">פרטים נוספים</h4>
+              <h4 className="font-bold text-lg">פרטים נוספים</h4>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-center gap-2">

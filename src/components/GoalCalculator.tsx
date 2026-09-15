@@ -11,10 +11,10 @@ import { balanceNeededFor, PENSION_FACTOR_NOTE } from "@/lib/pension";
 // Frank Ruhl 900 turquoise standout stat, kit CSS progress bar.
 
 const inputClass =
-  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#E7EDF1] rounded-lg text-[#1D2D3D] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1D2D3D]";
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]";
 const sliderClass =
-  "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#4E9D8F] [&_[role=slider]]:border-[#4E9D8F]";
-const labelClass = "flex items-center gap-2 text-base font-medium text-[#1D2D3D]";
+  "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#819B7D] [&_[role=slider]]:border-[#819B7D]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#003D30]";
 
 interface GoalResult {
   monthlyNeeded: number;
@@ -134,11 +134,11 @@ const GoalCalculator = () => {
             type="text"
             value={targetMonthlyPension.toLocaleString("he-IL")}
             onChange={(e) => handleAmountChange(e.target.value, setTargetMonthlyPension, 100000)}
-            className="h-20 text-center text-3xl md:text-4xl font-bold tabular-nums bg-white border-[#E7EDF1] rounded-lg text-[#1D2D3D] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1D2D3D]"
+            className="h-20 text-center text-3xl md:text-4xl font-bold tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]"
             dir="ltr"
           />
           <span
-            className="absolute left-6 top-1/2 -translate-y-1/2 text-2xl font-semibold"
+            className="absolute left-6 top-1/2 -translate-y-1/2 text-2xl font-bold"
             style={{ color: TURQ, fontFamily: MONO }}
             aria-hidden="true"
           >
@@ -274,7 +274,7 @@ const GoalCalculator = () => {
           <p
             className="tabular-nums"
             dir="ltr"
-            style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ, fontSize: "clamp(1.9rem, 3vw, 2.3rem)", lineHeight: 1.15 }}
+            style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY, fontSize: "clamp(1.9rem, 3vw, 2.3rem)", lineHeight: 1.15 }}
           >
             <AnimatedNumber value={result.monthlyNeeded} format={formatCurrency} />
           </p>
@@ -284,7 +284,7 @@ const GoalCalculator = () => {
         {/* Total Needed */}
         <div className="dna-concept">
           <p className="text-[13px] mb-2" style={{ color: MUTED }}>צבירה נדרשת</p>
-          <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+          <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             <AnimatedNumber value={result.totalNeeded} format={formatCurrency} />
           </p>
           <p className="text-[11.5px] mt-2 leading-[1.7]" style={{ color: MUTED }}>
@@ -295,7 +295,7 @@ const GoalCalculator = () => {
         {/* Gap to Bridge */}
         <div className="dna-concept">
           <p className="text-[13px] mb-2" style={{ color: MUTED }}>פער לגישור</p>
-          <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: "#a04a5c" }}>
+          <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: "#9A4520" }}>
             <AnimatedNumber value={result.gap} format={formatCurrency} />
           </p>
         </div>
@@ -303,7 +303,7 @@ const GoalCalculator = () => {
         {/* Years to Retirement */}
         <div className="dna-concept">
           <p className="text-[13px] mb-2" style={{ color: MUTED }}>שנים להפקדה</p>
-          <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+          <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             {result.yearsToRetirement}
           </p>
         </div>

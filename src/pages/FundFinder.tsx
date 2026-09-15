@@ -39,7 +39,7 @@ const FundFinder = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main className="dna-page">
@@ -59,9 +59,9 @@ const FundFinder = () => {
           {/* Hero */}
           <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-10 sm:pb-12">
             <nav className="flex items-center gap-2 text-[13px] mb-8" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
-              <span className="font-medium text-[#1D2D3D]">איתור קופות</span>
+              <span className="font-medium text-[#003D30]">איתור קופות</span>
             </nav>
 
             <h1
@@ -104,13 +104,13 @@ const FundFinder = () => {
                         {toolbarToggles.map((t) => (
                           <label
                             key={t.label}
-                            className="flex items-center gap-1.5 text-[13px] cursor-pointer hover:text-[#1D2D3D] transition-colors"
+                            className="flex items-center gap-1.5 text-[13px] cursor-pointer hover:text-[#003D30] transition-colors"
                             style={{ color: MUTED }}
                           >
                             <Checkbox
                               checked={t.checked}
                               onCheckedChange={(c) => t.onChange(!!c)}
-                              className="border-[#1D2D3D] data-[state=checked]:bg-[#1D2D3D] data-[state=checked]:border-[#1D2D3D]"
+                              className="border-[#003D30] data-[state=checked]:bg-[#003D30] data-[state=checked]:border-[#003D30]"
                             />
                             {t.label}
                           </label>
@@ -123,12 +123,12 @@ const FundFinder = () => {
                             value={printRecipient}
                             onChange={(e) => setPrintRecipient(e.target.value)}
                             placeholder="נמען להדפסה"
-                            className="w-36 px-3 py-1.5 bg-white border border-[#E7EDF1] rounded-lg text-[13px] text-[#1D2D3D] placeholder:text-[#5a6a78] focus:outline-none focus:border-[#1D2D3D] transition-colors"
+                            className="w-36 px-3 py-1.5 bg-white border border-[#CCD6CC] rounded-lg text-[13px] text-[#003D30] placeholder:text-[#476356] focus:outline-none focus:border-[#003D30] transition-colors"
                           />
                           <button
                             type="button"
                             onClick={handlePrint}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#1D2D3D] text-[13px] font-medium text-white hover:bg-[#16222f] transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#003D30] text-[13px] font-medium text-white hover:bg-[#002B22] transition-colors"
                           >
                             <Printer className="w-3.5 h-3.5" strokeWidth={1.5} aria-hidden="true" />
                             הדפסה
@@ -186,7 +186,7 @@ const FundFinder = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
           <h2
             className="text-white leading-tight mb-3"
-            style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', letterSpacing: '-0.5px' }}
+            style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', letterSpacing: '-0.5px' }}
           >
             מצאתם קופה מעניינת?
           </h2>
@@ -196,7 +196,7 @@ const FundFinder = () => {
           </p>
           <Link
             to="/contact"
-            className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+            className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
           >
             דברו עם יועץ
           </Link>

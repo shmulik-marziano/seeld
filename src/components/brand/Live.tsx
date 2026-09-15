@@ -2,7 +2,7 @@
 // Locked in STYLESEED.md: chips mark real people/statuses, never decoration.
 import { useEffect, useRef, useState } from "react";
 import { useInView, useReducedMotion } from "framer-motion";
-import { MONO, CHIP_GREEN, FAINT, INK } from "@/lib/brand";
+import { MONO, CHIP_GREEN, INK, TEXT_2 } from "@/lib/brand";
 
 /** Number that counts up once when scrolled into view (Snap: fast ease-out) */
 export const CountUp = ({
@@ -67,7 +67,7 @@ export const LiveTag = ({
 }: { children: React.ReactNode; dot?: boolean; dark?: boolean }) => (
   <span
     className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.12em] font-medium"
-    style={{ fontFamily: MONO, color: dark ? "rgba(250,250,250,.6)" : FAINT }}
+    style={{ fontFamily: MONO, color: dark ? "rgba(250,247,239,.75)" : TEXT_2 }}
   >
     {dot && <LiveDot size={6} />}
     {children}

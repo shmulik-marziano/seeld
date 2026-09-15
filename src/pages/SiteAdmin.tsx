@@ -16,7 +16,7 @@ class AdminErrorBoundary extends Component<{ children: ReactNode }, { error: Err
             <h2 style={{ color: '#b91c1c', fontSize: 20, fontWeight: 800, marginBottom: 8 }}>שגיאה בטעינת מנהל האתר</h2>
             <p style={{ color: '#666', fontSize: 14, marginBottom: 16 }}>{this.state.error.message}</p>
             <button onClick={() => { this.setState({ error: null }); window.location.reload(); }}
-              style={{ background: '#171717', color: 'white', border: 'none', padding: '10px 24px', borderRadius: 50, cursor: 'pointer', fontWeight: 700 }}>
+              style={{ background: '#003D30', color: 'white', border: 'none', padding: '10px 24px', borderRadius: 50, cursor: 'pointer', fontWeight: 700 }}>
               נסה שוב
             </button>
           </div>
@@ -196,7 +196,7 @@ function SiteAdminInner() {
   if (authLoading && step !== "admin") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f0f2f5]">
-        <Loader2 className="w-8 h-8 animate-spin text-[#171717]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#003D30]" />
       </div>
     );
   }
@@ -209,7 +209,7 @@ function SiteAdminInner() {
           <div className="w-16 h-16 rounded-full bg-[#b91c1c]/10 flex items-center justify-center mx-auto mb-4">
             <Shield className="w-8 h-8 text-[#b91c1c]" />
           </div>
-          <h2 className="text-xl font-bold text-[#171717] mb-2">אין הרשאה</h2>
+          <h2 className="text-xl font-bold text-[#003D30] mb-2">אין הרשאה</h2>
           <p className="text-gray-500 text-sm mb-6">
             המייל {user?.email} אינו מורשה לגשת לממשק הניהול.
           </p>
@@ -234,10 +234,10 @@ function SiteAdminInner() {
         <div className="absolute top-[25%] left-[20%] w-[90px] h-[90px] rounded-full opacity-30 pointer-events-none"
           style={{ background: "radial-gradient(circle, #b91c1c, transparent 70%)" }} />
         <div className="absolute top-[18%] left-[32%] w-[110px] h-[110px] rounded-full opacity-35 pointer-events-none"
-          style={{ background: "radial-gradient(circle, #171717, transparent 70%)" }} />
+          style={{ background: "radial-gradient(circle, #003D30, transparent 70%)" }} />
         <div className="absolute bottom-[15%] right-[10%] w-[60px] h-[60px] rounded-full opacity-20 pointer-events-none bg-[#b45309]" />
-        <div className="absolute bottom-[25%] right-[25%] w-[30px] h-[30px] rounded-full opacity-15 pointer-events-none bg-[#171717]" />
-        <div className="absolute top-[5%] right-[40%] w-3 h-3 rounded-full bg-[#171717] opacity-[0.05] pointer-events-none" />
+        <div className="absolute bottom-[25%] right-[25%] w-[30px] h-[30px] rounded-full opacity-15 pointer-events-none bg-[#003D30]" />
+        <div className="absolute top-[5%] right-[40%] w-3 h-3 rounded-full bg-[#003D30] opacity-[0.05] pointer-events-none" />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -250,13 +250,13 @@ function SiteAdminInner() {
               <div className="flex items-center justify-center gap-3">
                 <div
                   className="w-14 h-14 rounded-2xl flex items-center justify-center"
-                  style={{ background: "linear-gradient(135deg, #171717 0%, #2e2e2e 100%)" }}
+                  style={{ background: "linear-gradient(135deg, #003D30 0%, #2e2e2e 100%)" }}
                 >
                   <Shield className="w-7 h-7 text-white" />
                 </div>
               </div>
               <div>
-                <h1 className="text-2xl font-extrabold text-[#171717]">ניהול האתר</h1>
+                <h1 className="text-2xl font-bold text-[#003D30]">ניהול האתר</h1>
                 <p className="text-sm text-gray-400 mt-1">SEELD Site Admin</p>
               </div>
             </div>
@@ -274,7 +274,7 @@ function SiteAdminInner() {
                   {/* Google Login */}
                   <Button
                     variant="outline"
-                    className="w-full gap-3 h-13 rounded-full text-sm font-semibold border-gray-200 hover:bg-gray-50 shadow-sm min-h-[52px]"
+                    className="w-full gap-3 h-13 rounded-full text-sm font-bold border-gray-200 hover:bg-gray-50 shadow-sm min-h-[52px]"
                     onClick={async () => {
                       setLoading(true);
                       const { error } = await signInWithGoogle("/site-admin");
@@ -312,14 +312,14 @@ function SiteAdminInner() {
                         placeholder={ADMIN_EMAIL}
                         required
                         dir="ltr"
-                        className="h-12 pr-11 rounded-full text-sm border-gray-200 focus-visible:ring-[#171717]/40 text-left"
+                        className="h-12 pr-11 rounded-full text-sm border-gray-200 focus-visible:ring-[#003D30]/40 text-left"
                       />
                     </div>
                     <div className="flex gap-2">
                       <Button
                         type="button"
                         onClick={() => handleSendMagicLink()}
-                        className="flex-1 h-11 rounded-full gap-2 text-sm font-semibold bg-[#171717] hover:bg-[#2e2e2e] shadow-lg shadow-[#171717]/15"
+                        className="flex-1 h-11 rounded-full gap-2 text-sm font-bold bg-[#003D30] hover:bg-[#2e2e2e] shadow-lg shadow-[#003D30]/15"
                         disabled={loading}
                       >
                         {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Link2 className="h-4 w-4" />}
@@ -348,13 +348,13 @@ function SiteAdminInner() {
                   exit={{ opacity: 0, x: 20 }}
                   className="space-y-5 text-center"
                 >
-                  <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center" style={{ background: "#17171720" }}>
-                    <Mail className="w-7 h-7 text-[#171717]" />
+                  <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center" style={{ background: "#003D3020" }}>
+                    <Mail className="w-7 h-7 text-[#003D30]" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#171717] text-lg mb-1">בדוק את המייל</h3>
+                    <h3 className="font-bold text-[#003D30] text-lg mb-1">בדוק את המייל</h3>
                     <p className="text-sm text-gray-500">
-                      שלחנו לינק כניסה ל-<span className="font-semibold text-[#171717]" dir="ltr">{email}</span>
+                      שלחנו לינק כניסה ל-<span className="font-bold text-[#003D30]" dir="ltr">{email}</span>
                     </p>
                     <p className="text-xs text-gray-400 mt-2">לחץ על הלינק במייל כדי להתחבר. בדוק גם בספאם.</p>
                   </div>
@@ -372,7 +372,7 @@ function SiteAdminInner() {
                     <button
                       type="button"
                       onClick={() => { setStep("login"); setOtp(""); }}
-                      className="text-sm text-gray-400 hover:text-[#171717] py-2 transition-colors"
+                      className="text-sm text-gray-400 hover:text-[#003D30] py-2 transition-colors"
                     >
                       חזרה לאפשרויות התחברות
                     </button>
@@ -389,10 +389,10 @@ function SiteAdminInner() {
                   exit={{ opacity: 0, x: 20 }}
                   className="space-y-5"
                 >
-                  <div className="bg-[#171717]/10 rounded-2xl p-3.5 flex items-center gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-[#171717] shrink-0" />
-                    <p className="text-xs text-[#171717]/80">
-                      קוד נשלח ל-<span className="font-semibold text-[#171717]" dir="ltr">{email}</span>
+                  <div className="bg-[#003D30]/10 rounded-2xl p-3.5 flex items-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-[#003D30] shrink-0" />
+                    <p className="text-xs text-[#003D30]/80">
+                      קוד נשלח ל-<span className="font-bold text-[#003D30]" dir="ltr">{email}</span>
                     </p>
                   </div>
 
@@ -429,11 +429,11 @@ function SiteAdminInner() {
                           target?.focus();
                         }}
                         className={cn(
-                          "w-12 h-12 rounded-full border-2 text-center text-lg font-bold text-[#171717] outline-none transition-all",
+                          "w-12 h-12 rounded-full border-2 text-center text-lg font-bold text-[#003D30] outline-none transition-all",
                           otp[i]
-                            ? "border-[#171717] bg-[#171717]/5 shadow-sm"
+                            ? "border-[#003D30] bg-[#003D30]/5 shadow-sm"
                             : "border-gray-200 bg-white hover:border-gray-300",
-                          "focus:border-[#171717] focus:ring-2 focus:ring-[#171717]/20"
+                          "focus:border-[#003D30] focus:ring-2 focus:ring-[#003D30]/20"
                         )}
                       />
                     ))}
@@ -441,7 +441,7 @@ function SiteAdminInner() {
 
                   <Button
                     onClick={handleVerifyOtp}
-                    className="w-full h-12 rounded-full font-semibold bg-[#171717] hover:bg-[#2e2e2e] shadow-lg shadow-[#171717]/15"
+                    className="w-full h-12 rounded-full font-bold bg-[#003D30] hover:bg-[#2e2e2e] shadow-lg shadow-[#003D30]/15"
                     disabled={loading || otp.length !== 6}
                   >
                     {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "אמת והיכנס"}
@@ -451,7 +451,7 @@ function SiteAdminInner() {
                     <button
                       type="button"
                       onClick={() => { setStep("login"); setOtp(""); }}
-                      className="text-sm text-gray-400 hover:text-[#171717] transition-colors"
+                      className="text-sm text-gray-400 hover:text-[#003D30] transition-colors"
                     >
                       חזרה
                     </button>
@@ -461,7 +461,7 @@ function SiteAdminInner() {
                       disabled={resendTimer > 0 || loading}
                       className={cn(
                         "text-sm transition-colors flex items-center gap-1",
-                        resendTimer > 0 ? "text-gray-300" : "text-[#171717] hover:text-[#171717]"
+                        resendTimer > 0 ? "text-gray-300" : "text-[#003D30] hover:text-[#003D30]"
                       )}
                     >
                       <RefreshCw className="w-3 h-3" />
@@ -539,7 +539,7 @@ function SiteAdminInner() {
               <Menu className="w-5 h-5 text-gray-600" />
             </button>
             <div>
-              <h1 className="text-lg font-bold text-[#171717]">
+              <h1 className="text-lg font-bold text-[#003D30]">
                 {TABS.find(t => t.id === activeTab)?.label}
               </h1>
               <p className="text-xs text-gray-400 hidden sm:block">ניהול ופיקוח על אתר SEELD</p>
@@ -587,12 +587,12 @@ function SidebarContent({
       <div className="p-5 border-b flex items-center gap-3">
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ background: "linear-gradient(135deg, #171717 0%, #262626 100%)" }}
+          style={{ background: "linear-gradient(135deg, #003D30 0%, #262626 100%)" }}
         >
           <Shield className="w-5 h-5 text-white" />
         </div>
         <div>
-          <p className="font-bold text-sm text-[#171717]">SEELD Admin</p>
+          <p className="font-bold text-sm text-[#003D30]">SEELD Admin</p>
           <p className="text-[10px] text-gray-400">ניהול האתר</p>
         </div>
       </div>
@@ -608,8 +608,8 @@ function SidebarContent({
               className={cn(
                 "w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-right",
                 isActive
-                  ? "bg-[#171717] text-white shadow-md shadow-[#171717]/15"
-                  : "text-gray-600 hover:bg-gray-100 hover:text-[#171717]"
+                  ? "bg-[#003D30] text-white shadow-md shadow-[#003D30]/15"
+                  : "text-gray-600 hover:bg-gray-100 hover:text-[#003D30]"
               )}
             >
               <tab.icon className="w-4 h-4 shrink-0" />
@@ -647,7 +647,7 @@ function StatCard({ icon, color, bg, label, value }: {
           {icon}
         </div>
         <div>
-          <p className="text-2xl font-extrabold text-[#171717]">{value}</p>
+          <p className="text-2xl font-bold text-[#003D30]">{value}</p>
           <p className="text-[11px] text-gray-400">{label}</p>
         </div>
       </div>
@@ -661,7 +661,7 @@ function ModuleHeader({ title, subtitle, action }: {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
       <div>
-        <h2 className="text-xl font-bold text-[#171717]">{title}</h2>
+        <h2 className="text-xl font-bold text-[#003D30]">{title}</h2>
         {subtitle && <p className="text-sm text-gray-400 mt-0.5">{subtitle}</p>}
       </div>
       {action}
@@ -677,7 +677,7 @@ function EmptyState({ icon, title, subtitle }: {
       <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4 text-gray-400">
         {icon}
       </div>
-      <h3 className="font-semibold text-gray-600 mb-1">{title}</h3>
+      <h3 className="font-bold text-gray-600 mb-1">{title}</h3>
       <p className="text-sm text-gray-400">{subtitle}</p>
     </div>
   );
@@ -729,7 +729,7 @@ const PAGE_LABELS: Record<string, string> = {
   "/app/dashboard": "\u05D3\u05E9\u05D1\u05D5\u05E8\u05D3 \u05E1\u05D5\u05DB\u05DF",
 };
 
-function Sparkline({ data, color = "#171717", width = 80, height = 28 }: { data: number[]; color?: string; width?: number; height?: number }) {
+function Sparkline({ data, color = "#003D30", width = 80, height = 28 }: { data: number[]; color?: string; width?: number; height?: number }) {
   if (data.length < 2) return null;
   const max = Math.max(...data, 1);
   const points = data.map((v, i) => {
@@ -942,9 +942,9 @@ function AnalyticsModule() {
     return c ? `${c.flag} ${c.name}` : code;
   };
 
-  const DEVICE_COLORS: Record<string, string> = { desktop: "#171717", mobile: "#737373", tablet: "#b45309" };
+  const DEVICE_COLORS: Record<string, string> = { desktop: "#003D30", mobile: "#737373", tablet: "#b45309" };
   const DEVICE_LABELS: Record<string, string> = { desktop: "\u05DE\u05D7\u05E9\u05D1", mobile: "\u05E0\u05D9\u05D9\u05D3", tablet: "\u05D8\u05D0\u05D1\u05DC\u05D8" };
-  const BROWSER_COLORS: Record<string, string> = { Chrome: "#171717", Safari: "#737373", Firefox: "#b45309", Edge: "#15803d", Other: "#b91c1c" };
+  const BROWSER_COLORS: Record<string, string> = { Chrome: "#003D30", Safari: "#737373", Firefox: "#b45309", Edge: "#15803d", Other: "#b91c1c" };
   const DEVICE_ICONS: Record<string, string> = { desktop: "מחשב", mobile: "נייד", tablet: "טאבלט" };
 
   const TrendArrow = ({ value, invertColors = false }: { value: number; invertColors?: boolean }) => {
@@ -971,7 +971,7 @@ function AnalyticsModule() {
                   onClick={() => setRange(r)}
                   className={cn(
                     "px-3 py-1.5 text-xs font-medium transition-colors",
-                    range === r ? "bg-[#171717] text-white" : "text-gray-500 hover:text-[#171717]"
+                    range === r ? "bg-[#003D30] text-white" : "text-gray-500 hover:text-[#003D30]"
                   )}
                 >
                   {r === "today" ? "\u05D4\u05D9\u05D5\u05DD" : r === "week" ? "\u05E9\u05D1\u05D5\u05E2" : r === "month" ? "\u05D7\u05D5\u05D3\u05E9" : "\u05D4\u05DB\u05DC"}
@@ -993,9 +993,9 @@ function AnalyticsModule() {
             <p className="text-xs text-gray-400">{"\u05E6\u05E4\u05D9\u05D5\u05EA"}</p>
             <TrendArrow value={pctChange(totalViews, prevTotalViews)} />
           </div>
-          <p className="text-3xl font-extrabold text-[#171717]">{loading ? "..." : totalViews.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-[#003D30]">{loading ? "..." : totalViews.toLocaleString()}</p>
           <div className="mt-3">
-            <Sparkline data={sparkViews} color="#171717" />
+            <Sparkline data={sparkViews} color="#003D30" />
           </div>
         </div>
         {/* Unique Visitors */}
@@ -1004,7 +1004,7 @@ function AnalyticsModule() {
             <p className="text-xs text-gray-400">{"\u05DE\u05D1\u05E7\u05E8\u05D9\u05DD \u05D9\u05D9\u05D7\u05D5\u05D3\u05D9\u05D9\u05DD"}</p>
             <TrendArrow value={pctChange(uniqueSessions, prevUniqueSessions)} />
           </div>
-          <p className="text-3xl font-extrabold text-[#171717]">{loading ? "..." : uniqueSessions.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-[#003D30]">{loading ? "..." : uniqueSessions.toLocaleString()}</p>
           <div className="mt-3">
             <Sparkline data={sparkSessions} color="#b45309" />
           </div>
@@ -1015,7 +1015,7 @@ function AnalyticsModule() {
             <p className="text-xs text-gray-400">{"\u05E9\u05D9\u05E2\u05D5\u05E8 \u05E0\u05D8\u05D9\u05E9\u05D4"}</p>
             <TrendArrow value={pctChange(bounceRate, prevBounceRate)} invertColors />
           </div>
-          <p className="text-3xl font-extrabold text-[#171717]">{loading ? "..." : `${bounceRate}%`}</p>
+          <p className="text-3xl font-bold text-[#003D30]">{loading ? "..." : `${bounceRate}%`}</p>
           <div className="mt-3">
             <Sparkline data={[0, 0, 0, 0, 0, 0, 0].map(() => bounceRate)} color="#b91c1c" />
           </div>
@@ -1026,7 +1026,7 @@ function AnalyticsModule() {
             <p className="text-xs text-gray-400">{"\u05DE\u05DE\u05D5\u05E6\u05E2 \u05E2\u05DE\u05D5\u05D3\u05D9\u05DD / \u05D1\u05D9\u05E7\u05D5\u05E8"}</p>
             <TrendArrow value={pctChange(avgPages, prevAvgPages)} />
           </div>
-          <p className="text-3xl font-extrabold text-[#171717]">{loading ? "..." : avgPages}</p>
+          <p className="text-3xl font-bold text-[#003D30]">{loading ? "..." : avgPages}</p>
           <div className="mt-3">
             <Sparkline data={[0, 0, 0, 0, 0, 0, 0].map(() => avgPages)} color="#15803d" />
           </div>
@@ -1039,12 +1039,12 @@ function AnalyticsModule() {
         <div className="space-y-6">
           {/* Views Over Time */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h3 className="text-sm font-bold text-[#171717] mb-4 flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-[#171717]" />
+            <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-[#003D30]" />
               {"\u05E6\u05E4\u05D9\u05D5\u05EA \u05DC\u05D0\u05D5\u05E8\u05DA \u05D6\u05DE\u05DF"}
             </h3>
             {loading ? (
-              <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#171717]" /></div>
+              <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#003D30]" /></div>
             ) : dailyEntries.length === 0 ? (
               <p className="text-sm text-gray-400 text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
             ) : (
@@ -1058,11 +1058,11 @@ function AnalyticsModule() {
                           className="w-full rounded-t-md transition-all duration-300 cursor-pointer"
                           style={{
                             height: `${Math.max(pct, count > 0 ? 8 : 2)}%`,
-                            background: "linear-gradient(180deg, #171717, #171717)",
+                            background: "linear-gradient(180deg, #003D30, #003D30)",
                             minHeight: 3,
                           }}
                         />
-                        <span className="absolute -top-6 text-[10px] font-bold text-[#171717] bg-white px-1.5 py-0.5 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                        <span className="absolute -top-6 text-[10px] font-bold text-[#003D30] bg-white px-1.5 py-0.5 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                           {count}
                         </span>
                       </div>
@@ -1079,12 +1079,12 @@ function AnalyticsModule() {
 
           {/* Top Pages */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h3 className="text-sm font-bold text-[#171717] mb-4 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#171717]" />
+            <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-[#003D30]" />
               {"\u05E2\u05DE\u05D5\u05D3\u05D9\u05DD \u05DE\u05D5\u05D1\u05D9\u05DC\u05D9\u05DD"}
             </h3>
             {loading ? (
-              <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#171717]" /></div>
+              <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#003D30]" /></div>
             ) : topPages.length === 0 ? (
               <p className="text-sm text-gray-400 text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
             ) : (
@@ -1094,13 +1094,13 @@ function AnalyticsModule() {
                   return (
                     <div key={slug} className="group">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-sm text-[#171717] font-medium truncate flex items-center gap-2">
-                          <FileText className="w-3.5 h-3.5 text-[#171717] shrink-0" />
+                        <span className="text-sm text-[#003D30] font-medium truncate flex items-center gap-2">
+                          <FileText className="w-3.5 h-3.5 text-[#003D30] shrink-0" />
                           {label(slug)}
                         </span>
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] text-gray-400">{pct}%</span>
-                          <span className="text-xs font-bold text-[#171717] min-w-[32px] text-left" dir="ltr">{count}</span>
+                          <span className="text-xs font-bold text-[#003D30] min-w-[32px] text-left" dir="ltr">{count}</span>
                         </div>
                       </div>
                       <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -1108,7 +1108,7 @@ function AnalyticsModule() {
                           className="h-full rounded-full transition-all duration-500"
                           style={{
                             width: `${pct}%`,
-                            background: "linear-gradient(90deg, #171717, #171717)",
+                            background: "linear-gradient(90deg, #003D30, #003D30)",
                           }}
                         />
                       </div>
@@ -1124,8 +1124,8 @@ function AnalyticsModule() {
         <div className="space-y-6">
           {/* Countries */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h3 className="text-sm font-bold text-[#171717] mb-4 flex items-center gap-2">
-              <Globe className="w-4 h-4 text-[#171717]" />
+            <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
+              <Globe className="w-4 h-4 text-[#003D30]" />
               {"\u05DE\u05D3\u05D9\u05E0\u05D5\u05EA"}
             </h3>
             {topCountries.length === 0 ? (
@@ -1140,11 +1140,11 @@ function AnalyticsModule() {
                         className="h-full rounded-full"
                         style={{
                           width: `${Math.round((count / maxCountry) * 100)}%`,
-                          background: "linear-gradient(90deg, #171717, #171717)",
+                          background: "linear-gradient(90deg, #003D30, #003D30)",
                         }}
                       />
                     </div>
-                    <span className="text-xs font-bold text-[#171717] min-w-[28px] text-left" dir="ltr">{count}</span>
+                    <span className="text-xs font-bold text-[#003D30] min-w-[28px] text-left" dir="ltr">{count}</span>
                   </div>
                 ))}
               </div>
@@ -1153,7 +1153,7 @@ function AnalyticsModule() {
 
           {/* Devices */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h3 className="text-sm font-bold text-[#171717] mb-4 flex items-center gap-2">
+            <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
               <MapPin className="w-4 h-4 text-[#b45309]" />
               {"\u05DE\u05DB\u05E9\u05D9\u05E8\u05D9\u05DD"}
             </h3>
@@ -1178,7 +1178,7 @@ function AnalyticsModule() {
                 <div key={d} className="flex items-center gap-1.5 text-xs text-gray-500">
                   <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: DEVICE_COLORS[d] }} />
                   <span>{DEVICE_LABELS[d]}</span>
-                  <span className="font-bold text-[#171717]">{deviceCounts[d]}</span>
+                  <span className="font-bold text-[#003D30]">{deviceCounts[d]}</span>
                 </div>
               ))}
             </div>
@@ -1186,7 +1186,7 @@ function AnalyticsModule() {
 
           {/* Browsers */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h3 className="text-sm font-bold text-[#171717] mb-4 flex items-center gap-2">
+            <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
               <Globe className="w-4 h-4 text-[#15803d]" />
               {"\u05D3\u05E4\u05D3\u05E4\u05E0\u05D9\u05DD"}
             </h3>
@@ -1211,7 +1211,7 @@ function AnalyticsModule() {
                 <div key={name} className="flex items-center gap-1.5 text-xs text-gray-500">
                   <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: BROWSER_COLORS[name] ?? "#999" }} />
                   <span>{name}</span>
-                  <span className="font-bold text-[#171717]">{count}</span>
+                  <span className="font-bold text-[#003D30]">{count}</span>
                 </div>
               ))}
             </div>
@@ -1219,7 +1219,7 @@ function AnalyticsModule() {
 
           {/* Top Referrers */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h3 className="text-sm font-bold text-[#171717] mb-4 flex items-center gap-2">
+            <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
               <Link2 className="w-4 h-4 text-[#b91c1c]" />
               {"\u05DE\u05E7\u05D5\u05E8\u05D5\u05EA \u05EA\u05E0\u05D5\u05E2\u05D4"}
             </h3>
@@ -1229,8 +1229,8 @@ function AnalyticsModule() {
               <div className="space-y-2">
                 {topReferrers.map(([domain, count]) => (
                   <div key={domain} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-gray-50">
-                    <span className="text-sm text-[#171717] truncate max-w-[200px]" dir="ltr">{domain}</span>
-                    <span className="text-xs font-bold text-[#171717]">{count}</span>
+                    <span className="text-sm text-[#003D30] truncate max-w-[200px]" dir="ltr">{domain}</span>
+                    <span className="text-xs font-bold text-[#003D30]">{count}</span>
                   </div>
                 ))}
               </div>
@@ -1241,13 +1241,13 @@ function AnalyticsModule() {
 
       {/* ── Section 3: Live Feed ── */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h3 className="text-sm font-bold text-[#171717] mb-4 flex items-center gap-2">
-          <Clock className="w-4 h-4 text-[#171717]" />
+        <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
+          <Clock className="w-4 h-4 text-[#003D30]" />
           {"\u05E4\u05E2\u05D9\u05DC\u05D5\u05EA \u05D0\u05D7\u05E8\u05D5\u05E0\u05D4"}
           <span className="mr-auto text-[10px] text-gray-400 font-normal">{"\u05DE\u05EA\u05E2\u05D3\u05DB\u05DF \u05DB\u05DC 30 \u05E9\u05E0\u05D9\u05D5\u05EA"}</span>
         </h3>
         {loading ? (
-          <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#171717]" /></div>
+          <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#003D30]" /></div>
         ) : views.length === 0 ? (
           <p className="text-sm text-gray-400 text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
         ) : (
@@ -1264,7 +1264,7 @@ function AnalyticsModule() {
                   <span className="text-xs text-gray-400 shrink-0 min-w-[60px]" dir="ltr">
                     {isToday ? timeStr : `${dateStr} ${timeStr}`}
                   </span>
-                  <span className="font-medium text-[#171717] truncate flex-1">{label(v.slug)}</span>
+                  <span className="font-medium text-[#003D30] truncate flex-1">{label(v.slug)}</span>
                   {cInfo && <span className="text-sm shrink-0" title={cInfo.name}>{cInfo.flag}</span>}
                   {deviceIcon && <span className="text-[10px] text-gray-400 shrink-0 bg-gray-100 px-1.5 py-0.5 rounded" title={v.device}>{deviceIcon}</span>}
                   {v.browser && <span className="text-[10px] text-gray-400 shrink-0 bg-gray-100 px-1.5 py-0.5 rounded">{v.browser}</span>}
@@ -1322,13 +1322,13 @@ function TrackSyncCard() {
       >
         <RefreshCw className={cn("w-6 h-6 text-white", syncing && "animate-spin")} />
       </div>
-      <h4 className="font-bold text-[#171717] mb-0.5">סנכרן מסלולי השקעה</h4>
+      <h4 className="font-bold text-[#003D30] mb-0.5">סנכרן מסלולי השקעה</h4>
       <p className="text-xs text-gray-400 mb-3">העלה קובץ Excel מגמלנט/פנסיהנט</p>
-      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#15803d] text-white text-xs font-semibold cursor-pointer hover:bg-[#7dab5a] transition-colors">
+      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#15803d] text-white text-xs font-bold cursor-pointer hover:bg-[#7dab5a] transition-colors">
         <input type="file" accept=".xls,.xlsx" onChange={handleFileUpload} className="hidden" ref={fileRef} />
         {syncing ? "מסנכרן..." : "בחר קובץ"}
       </label>
-      {result && <p className="text-xs mt-2 text-[#171717]">{result}</p>}
+      {result && <p className="text-xs mt-2 text-[#003D30]">{result}</p>}
     </div>
   );
 }
@@ -1356,14 +1356,14 @@ function OverviewModule() {
     fetchStats();
   }, []);
 
-  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#171717]" /></div>;
+  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#003D30]" /></div>;
 
   return (
     <div className="space-y-6">
       <ModuleHeader title="סקירה כללית" subtitle="סטטיסטיקות ומצב כללי של האתר" />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={<MessageSquare className="w-5 h-5" />} color="#171717" bg="#f5f5f5" label="לידים ופניות" value={stats.leads} />
+        <StatCard icon={<MessageSquare className="w-5 h-5" />} color="#003D30" bg="#f5f5f5" label="לידים ופניות" value={stats.leads} />
         <StatCard icon={<Users className="w-5 h-5" />} color="#6366f1" bg="#ede9fe" label="שאלוני הצטרפות" value={stats.onboarding} />
         <StatCard icon={<PenTool className="w-5 h-5" />} color="#f59e0b" bg="#fef3c7" label="פוסטים בבלוג" value={stats.blogPosts} />
         <StatCard icon={<Mail className="w-5 h-5" />} color="#b91c1c" bg="#fee2e2" label="פניות צור קשר" value={stats.contacts} />
@@ -1373,13 +1373,13 @@ function OverviewModule() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <QuickActionCard
           icon={<UserPlus className="w-6 h-6 text-white" />}
-          gradient="linear-gradient(135deg, #171717 0%, #2e2e2e 100%)"
+          gradient="linear-gradient(135deg, #003D30 0%, #2e2e2e 100%)"
           title="הזמן סוכן חדש"
           subtitle="שלח לינק הזמנה לסוכן חדש"
         />
         <QuickActionCard
           icon={<Link2 className="w-6 h-6 text-white" />}
-          gradient="linear-gradient(135deg, #171717 0%, #3ba8a8 100%)"
+          gradient="linear-gradient(135deg, #003D30 0%, #3ba8a8 100%)"
           title="הזמן לקוח לאזור אישי"
           subtitle="שלח לינק כניסה ללקוח קיים"
         />
@@ -1406,7 +1406,7 @@ function QuickActionCard({ icon, gradient, title, subtitle }: {
       >
         {icon}
       </div>
-      <h4 className="font-bold text-[#171717] mb-0.5">{title}</h4>
+      <h4 className="font-bold text-[#003D30] mb-0.5">{title}</h4>
       <p className="text-xs text-gray-400">{subtitle}</p>
     </div>
   );
@@ -1474,7 +1474,7 @@ function BlogModule() {
       />
 
       {loading ? (
-        <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#171717]" /></div>
+        <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#003D30]" /></div>
       ) : filtered.length === 0 ? (
         <EmptyState icon={<PenTool className="w-8 h-8" />} title="אין פוסטים" subtitle="עדיין לא פורסמו פוסטים בבלוג" />
       ) : (
@@ -1482,9 +1482,9 @@ function BlogModule() {
           {filtered.map((post) => (
             <div key={post.id} className="bg-white rounded-xl p-4 border shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
               <div className="min-w-0 flex-1">
-                <h4 className="font-semibold text-[#171717] truncate">{post.title}</h4>
+                <h4 className="font-bold text-[#003D30] truncate">{post.title}</h4>
                 <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
-                  {post.category && <span className="bg-[#f5f5f5] text-[#171717] px-2 py-0.5 rounded-full text-[10px] font-medium">{post.category}</span>}
+                  {post.category && <span className="bg-[#f5f5f5] text-[#003D30] px-2 py-0.5 rounded-full text-[10px] font-medium">{post.category}</span>}
                   <span>{new Date(post.created_at).toLocaleDateString("he-IL")}</span>
                   <span className={post.status === "published" ? "text-green-600" : "text-gray-400"}>
                     {post.status === "published" ? "פורסם" : "טיוטה"}
@@ -1527,7 +1527,7 @@ function LeadsModule() {
     fetch();
   }, []);
 
-  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#171717]" /></div>;
+  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#003D30]" /></div>;
 
   return (
     <div>
@@ -1536,7 +1536,7 @@ function LeadsModule() {
       <div className="flex gap-2 mb-6">
         <Button
           variant={tab === "leads" ? "default" : "outline"}
-          className={cn("rounded-full gap-2", tab === "leads" && "bg-[#171717] hover:bg-[#262626]")}
+          className={cn("rounded-full gap-2", tab === "leads" && "bg-[#003D30] hover:bg-[#262626]")}
           onClick={() => setTab("leads")}
         >
           <TrendingUp className="w-4 h-4" />
@@ -1544,7 +1544,7 @@ function LeadsModule() {
         </Button>
         <Button
           variant={tab === "contacts" ? "default" : "outline"}
-          className={cn("rounded-full gap-2", tab === "contacts" && "bg-[#171717] hover:bg-[#262626]")}
+          className={cn("rounded-full gap-2", tab === "contacts" && "bg-[#003D30] hover:bg-[#262626]")}
           onClick={() => setTab("contacts")}
         >
           <Mail className="w-4 h-4" />
@@ -1561,11 +1561,11 @@ function LeadsModule() {
               <div key={lead.id} className="bg-white rounded-xl p-4 border shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-semibold text-[#171717]">{lead.full_name}</h4>
+                    <h4 className="font-bold text-[#003D30]">{lead.full_name}</h4>
                     <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
                       <span dir="ltr">{lead.phone}</span>
                       <span>{lead.email}</span>
-                      <span className="bg-[#f5f5f5] text-[#171717] px-2 py-0.5 rounded-full text-[10px] font-medium">{lead.insurance_type}</span>
+                      <span className="bg-[#f5f5f5] text-[#003D30] px-2 py-0.5 rounded-full text-[10px] font-medium">{lead.insurance_type}</span>
                     </div>
                   </div>
                   <span className="text-xs text-gray-400">{new Date(lead.created_at).toLocaleDateString("he-IL")}</span>
@@ -1583,7 +1583,7 @@ function LeadsModule() {
               <div key={c.id} className="bg-white rounded-xl p-4 border shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-semibold text-[#171717]">{c.name}</h4>
+                    <h4 className="font-bold text-[#003D30]">{c.name}</h4>
                     <p className="text-xs text-gray-400 mt-0.5">{c.email}</p>
                     {c.message && <p className="text-sm text-gray-600 mt-2 line-clamp-2">{c.message}</p>}
                   </div>
@@ -1644,13 +1644,13 @@ function ClientInvitesModule() {
       <ModuleHeader title="הזמנת לקוחות לאזור האישי" subtitle="שלח לינק כניסה ללקוחות קיימים" />
 
       <div className="bg-white rounded-2xl p-6 shadow-sm border mb-6">
-        <h3 className="font-bold text-[#171717] mb-4 flex items-center gap-2">
+        <h3 className="font-bold text-[#003D30] mb-4 flex items-center gap-2">
           <Link2 className="w-5 h-5" />
           שלח לינק כניסה
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           <div>
-            <Label className="text-xs font-medium text-[#171717]">שם הלקוח</Label>
+            <Label className="text-xs font-medium text-[#003D30]">שם הלקוח</Label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -1659,7 +1659,7 @@ function ClientInvitesModule() {
             />
           </div>
           <div>
-            <Label className="text-xs font-medium text-[#171717]">טלפון</Label>
+            <Label className="text-xs font-medium text-[#003D30]">טלפון</Label>
             <Input
               type="tel"
               value={phone}
@@ -1670,7 +1670,7 @@ function ClientInvitesModule() {
             />
           </div>
           <div>
-            <Label className="text-xs font-medium text-[#171717]">אימייל</Label>
+            <Label className="text-xs font-medium text-[#003D30]">אימייל</Label>
             <Input
               type="email"
               value={email}
@@ -1685,7 +1685,7 @@ function ClientInvitesModule() {
           <Button
             onClick={handleSend}
             disabled={sending || !email}
-            className="gap-2 rounded-full bg-[#171717] hover:bg-[#262626] shadow-lg shadow-[#171717]/15"
+            className="gap-2 rounded-full bg-[#003D30] hover:bg-[#262626] shadow-lg shadow-[#003D30]/15"
           >
             {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             שלח לינק
@@ -1700,7 +1700,7 @@ function ClientInvitesModule() {
       {/* Sent log */}
       {sent.length > 0 && (
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h4 className="text-sm font-bold text-[#171717] mb-3">נשלחו היום ({sent.length})</h4>
+          <h4 className="text-sm font-bold text-[#003D30] mb-3">נשלחו היום ({sent.length})</h4>
           <div className="space-y-2">
             {sent.map((item, i) => (
               <div key={i} className="flex items-center gap-2 text-sm text-gray-600 bg-[#f5f5f5]/50 rounded-lg px-3 py-2">
@@ -1816,7 +1816,7 @@ function AgentManagementModule() {
     }
   };
 
-  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#171717]" /></div>;
+  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#003D30]" /></div>;
 
   return (
     <div>
@@ -1824,13 +1824,13 @@ function AgentManagementModule() {
 
       {/* Invite form */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border mb-6">
-        <h3 className="font-bold text-[#171717] mb-4 flex items-center gap-2">
+        <h3 className="font-bold text-[#003D30] mb-4 flex items-center gap-2">
           <UserPlus className="w-5 h-5" />
           הזמן סוכן חדש
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <Label className="text-xs font-medium text-[#171717]">אימייל הסוכן</Label>
+            <Label className="text-xs font-medium text-[#003D30]">אימייל הסוכן</Label>
             <Input
               type="email"
               value={email}
@@ -1842,7 +1842,7 @@ function AgentManagementModule() {
             />
           </div>
           <div>
-            <Label className="text-xs font-medium text-[#171717]">טלפון הסוכן</Label>
+            <Label className="text-xs font-medium text-[#003D30]">טלפון הסוכן</Label>
             <Input
               type="tel"
               value={agentPhone}
@@ -1857,7 +1857,7 @@ function AgentManagementModule() {
           <Button
             onClick={handleInvite}
             disabled={sending || !email.trim()}
-            className="gap-2 rounded-full bg-[#171717] hover:bg-[#262626] shadow-lg shadow-[#171717]/15"
+            className="gap-2 rounded-full bg-[#003D30] hover:bg-[#262626] shadow-lg shadow-[#003D30]/15"
           >
             {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             שלח הזמנה
@@ -1868,7 +1868,7 @@ function AgentManagementModule() {
       {/* Active agents */}
       {agents.length > 0 && (
         <div className="bg-white rounded-2xl p-6 shadow-sm border mb-6">
-          <h4 className="text-sm font-bold text-[#171717] mb-4 flex items-center gap-2">
+          <h4 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
             <UserCheck className="w-4 h-4" />
             סוכנים פעילים ({agents.length})
           </h4>
@@ -1876,17 +1876,17 @@ function AgentManagementModule() {
             {agents.map((a) => (
               <div key={a.id} className="flex items-center justify-between px-4 py-3 rounded-xl bg-gray-50 border border-gray-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: "linear-gradient(135deg, #171717, #262626)" }}>
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: "linear-gradient(135deg, #003D30, #262626)" }}>
                     {a.full_name?.charAt(0) || "?"}
                   </div>
                   <div>
-                    <p className="font-medium text-sm text-[#171717]">{a.full_name}</p>
+                    <p className="font-medium text-sm text-[#003D30]">{a.full_name}</p>
                     {a.phone && <p className="text-[11px] text-gray-400" dir="ltr">{a.phone}</p>}
                   </div>
                 </div>
                 <span className={cn(
                   "text-[10px] font-medium px-2.5 py-1 rounded-full",
-                  a.role === "admin" ? "bg-[#f5f5f5] text-[#171717]" : "bg-gray-100 text-gray-500"
+                  a.role === "admin" ? "bg-[#f5f5f5] text-[#003D30]" : "bg-gray-100 text-gray-500"
                 )}>
                   {a.role === "admin" ? "מנהל" : "סוכן"}
                 </span>
@@ -1899,7 +1899,7 @@ function AgentManagementModule() {
       {/* Pending invitations */}
       {invitations.length > 0 && (
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h4 className="text-sm font-bold text-[#171717] mb-4 flex items-center gap-2">
+          <h4 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
             <Clock className="w-4 h-4" />
             הזמנות ({invitations.length})
           </h4>
@@ -1971,7 +1971,7 @@ function OnboardingModule() {
     return !search || name.includes(search.toLowerCase()) || (s.phone ?? "").includes(search) || (s.email ?? "").includes(search.toLowerCase());
   });
 
-  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#171717]" /></div>;
+  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#003D30]" /></div>;
 
   return (
     <div>
@@ -1996,11 +1996,11 @@ function OnboardingModule() {
               <div key={s.id} className="bg-white rounded-xl p-4 border shadow-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#f5f5f5] flex items-center justify-center text-[#171717] font-bold text-sm">
+                    <div className="w-10 h-10 rounded-full bg-[#f5f5f5] flex items-center justify-center text-[#003D30] font-bold text-sm">
                       {(s.first_name?.[0] || "?").toUpperCase()}
                     </div>
                     <div>
-                      <h4 className="font-semibold text-[#171717]">{fullName}</h4>
+                      <h4 className="font-bold text-[#003D30]">{fullName}</h4>
                       <div className="flex items-center gap-3 mt-0.5 text-xs text-gray-400">
                         {s.phone && <span dir="ltr">{s.phone}</span>}
                         {s.email && <span>{s.email}</span>}
@@ -2067,7 +2067,7 @@ function DirectDebitModule() {
     fetchDD();
   }, []);
 
-  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#171717]" /></div>;
+  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#003D30]" /></div>;
 
   return (
     <div>
@@ -2092,7 +2092,7 @@ function DirectDebitModule() {
               {submissions.map(s => (
                 <tr key={s.id} className="border-b hover:bg-gray-50 transition-colors">
                   <td className="py-3 px-4 text-gray-400">{new Date(s.created_at).toLocaleDateString("he-IL")}</td>
-                  <td className="py-3 px-4 font-medium text-[#171717]">{[s.first_name, s.last_name].filter(Boolean).join(" ") || "—"}</td>
+                  <td className="py-3 px-4 font-medium text-[#003D30]">{[s.first_name, s.last_name].filter(Boolean).join(" ") || "—"}</td>
                   <td className="py-3 px-4">{s.account_owner ?? "—"}</td>
                   <td className="py-3 px-4">{s.bank_name ?? "—"}</td>
                   <td className="py-3 px-4">{s.bank_branch ?? "—"}</td>
@@ -2118,7 +2118,7 @@ function SettingsModule() {
 
       <div className="space-y-4">
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h3 className="font-bold text-[#171717] mb-4 flex items-center gap-2">
+          <h3 className="font-bold text-[#003D30] mb-4 flex items-center gap-2">
             <Globe className="w-5 h-5" />
             פרטי האתר
           </h3>
@@ -2131,7 +2131,7 @@ function SettingsModule() {
         </div>
 
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h3 className="font-bold text-[#171717] mb-4 flex items-center gap-2">
+          <h3 className="font-bold text-[#003D30] mb-4 flex items-center gap-2">
             <Shield className="w-5 h-5" />
             אבטחה
           </h3>
@@ -2143,7 +2143,7 @@ function SettingsModule() {
         </div>
 
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h3 className="font-bold text-[#171717] mb-4 flex items-center gap-2">
+          <h3 className="font-bold text-[#003D30] mb-4 flex items-center gap-2">
             <Link2 className="w-5 h-5" />
             קישורים מהירים
           </h3>
@@ -2165,7 +2165,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
       <span className="text-sm text-gray-500">{label}</span>
-      <span className="text-sm font-medium text-[#171717]" dir="ltr">{value}</span>
+      <span className="text-sm font-medium text-[#003D30]" dir="ltr">{value}</span>
     </div>
   );
 }
@@ -2176,7 +2176,7 @@ function LinkButton({ label, href }: { label: string; href: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-2 px-4 py-3 rounded-xl border border-gray-200 hover:border-[#171717]/30 hover:bg-[#f5f5f5]/30 text-sm text-[#171717] font-medium transition-all"
+      className="flex items-center gap-2 px-4 py-3 rounded-xl border border-gray-200 hover:border-[#003D30]/30 hover:bg-[#f5f5f5]/30 text-sm text-[#003D30] font-medium transition-all"
     >
       <Globe className="w-4 h-4 text-gray-400" />
       {label}

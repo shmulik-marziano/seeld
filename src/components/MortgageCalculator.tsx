@@ -10,10 +10,10 @@ import { CORAL, CORAL_TEXT, DISPLAY, MONO, MUTED, NAVY, TURQ } from "@/lib/brand
 // Frank Ruhl 900 turquoise standout stat, CSS bar chart with mono LTR values.
 
 const inputClass =
-  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#E7EDF1] rounded-lg text-[#1D2D3D] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1D2D3D]";
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]";
 const sliderClass =
-  "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#4E9D8F] [&_[role=slider]]:border-[#4E9D8F]";
-const labelClass = "flex items-center gap-2 text-base font-medium text-[#1D2D3D]";
+  "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#819B7D] [&_[role=slider]]:border-[#819B7D]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#003D30]";
 
 interface MortgageResult {
   monthlyPayment: number;
@@ -186,7 +186,7 @@ const MortgageCalculator = () => {
           <p
             className="tabular-nums"
             dir="ltr"
-            style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ, fontSize: "clamp(1.9rem, 3vw, 2.3rem)", lineHeight: 1.15 }}
+            style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY, fontSize: "clamp(1.9rem, 3vw, 2.3rem)", lineHeight: 1.15 }}
           >
             {formatCurrency(result.monthlyPayment)}
           </p>
@@ -195,7 +195,7 @@ const MortgageCalculator = () => {
         {/* Total Payment */}
         <div className="dna-concept">
           <p className="text-[13px] mb-2" style={{ color: MUTED }}>סה"כ תשלום</p>
-          <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+          <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             {formatCurrency(result.totalPayment)}
           </p>
         </div>
@@ -203,7 +203,7 @@ const MortgageCalculator = () => {
         {/* Total Interest */}
         <div className="dna-concept">
           <p className="text-[13px] mb-2" style={{ color: MUTED }}>סה"כ ריבית</p>
-          <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: CORAL_TEXT }}>
+          <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: CORAL_TEXT }}>
             {formatCurrency(result.totalInterest)}
           </p>
         </div>
@@ -211,7 +211,7 @@ const MortgageCalculator = () => {
         {/* Number of Payments */}
         <div className="dna-concept">
           <p className="text-[13px] mb-2" style={{ color: MUTED }}>מספר תשלומים</p>
-          <p className="text-[22px] font-semibold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+          <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             {loanTerm * 12}
           </p>
         </div>

@@ -5,7 +5,7 @@ const coverageTypes = [
   {
     title: "ביטוח מקיף",
     icon: Shield,
-    color: "#171717",
+    color: "#003D30",
     items: [
       "גניבה מלאה וחלקית",
       "נזקי תאונה",
@@ -78,9 +78,9 @@ const VehicleInsurance = () => {
   return (
     <InsurancePageTemplate
       heroIcon={Car}
-      heroIconColor="#171717"
+      heroIconColor="#003D30"
       heroCategory="ביטוח רכב"
-      heroTitle={<>הגנה מקיפה על <span className="text-[#171717]">הרכב שלכם</span></>}
+      heroTitle={<>הגנה מקיפה על <span className="text-[#003D30]">הרכב שלכם</span></>}
       heroDescription="ביטוח רכב מותאם אישית לצרכים שלכם - מביטוח חובה ועד כיסוי מקיף הכולל גניבה, תאונות ונזקי טבע."
       heroCTAText="קבלו הצעה מותאמת"
       heroSecondaryCTA={{ text: "סוגי כיסויים", href: "#coverage" }}

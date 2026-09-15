@@ -58,12 +58,12 @@ const Blog = () => {
   const tabClass = (active: boolean) =>
     `rounded-none bg-transparent px-0 pb-4 text-[15px] font-medium border-b-2 transition-colors shrink-0 min-h-[44px] ${
       active
-        ? "border-[#4E9D8F] text-[#1D2D3D]"
-        : "border-transparent text-[#5a6a78] hover:text-[#1D2D3D]"
+        ? "border-[#819B7D] text-[#003D30]"
+        : "border-transparent text-[#476356] hover:text-[#003D30]"
     }`;
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main>
@@ -81,7 +81,7 @@ const Blog = () => {
           </div>
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
             <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px]" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">/</span>
               <span style={{ color: NAVY }}>בלוג</span>
             </nav>
@@ -118,7 +118,7 @@ const Blog = () => {
             {/* Posts */}
             {loading ? (
               <div className="flex justify-center py-20">
-                <Loader2 className="h-6 w-6 animate-spin text-[#1D2D3D]" />
+                <Loader2 className="h-6 w-6 animate-spin text-[#003D30]" />
               </div>
             ) : filtered.length === 0 ? (
               <div className="py-20 text-center">
@@ -128,7 +128,7 @@ const Blog = () => {
                 {activeCategory && (
                   <button
                     onClick={() => setActiveCategory(null)}
-                    className="mt-4 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+                    className="mt-4 text-[14px] font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
                   >
                     לכל הפוסטים
                   </button>
@@ -166,7 +166,7 @@ const Blog = () => {
                           {post.excerpt}
                         </p>
                       )}
-                      <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#1D2D3D]">
+                      <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#003D30]">
                         קראו עוד
                         <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
                       </span>
@@ -189,7 +189,7 @@ const Blog = () => {
                 </div>
                 <Link
                   to="/contact"
-                  className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[52px]"
+                  className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors min-h-[52px]"
                 >
                   דברו עם יועץ
                 </Link>

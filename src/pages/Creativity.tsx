@@ -22,7 +22,7 @@ const Creativity = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main>
@@ -40,7 +40,7 @@ const Creativity = () => {
           </div>
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-14 sm:pb-20">
             <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px]" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">/</span>
               <span style={{ color: NAVY }}>ביטוח רכוש ורכב</span>
             </nav>
@@ -54,7 +54,7 @@ const Creativity = () => {
               <div className="mt-8">
                 <Link
                   to="/contact"
-                  className="inline-flex items-center justify-center rounded-lg px-9 py-4 bg-[#1D2D3D] text-white text-base font-medium tracking-wide hover:bg-[#16222f] transition-colors min-h-[52px]"
+                  className="inline-flex items-center justify-center rounded-lg px-9 py-4 bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors min-h-[52px]"
                 >
                   הצטרפו ל-SEELD
                 </Link>
@@ -85,13 +85,13 @@ const Creativity = () => {
                       <h3 className="text-[17px] leading-snug" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                         {type.title}
                       </h3>
-                      <span className="text-[#5a6a78] group-hover:text-[#1D2D3D] transition-all group-hover:-translate-x-1 shrink-0">←</span>
+                      <span className="text-[#476356] group-hover:text-[#003D30] transition-all group-hover:-translate-x-1 shrink-0">←</span>
                     </div>
                     <p className="mt-2 text-[14px] leading-[1.7]" style={{ color: BODY }}>{type.description}</p>
                     <p className="mt-3 text-[13px]" style={{ color: MUTED }}>
                       {type.features.join(" · ")}
                     </p>
-                    <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#1D2D3D]">
+                    <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#003D30]">
                       לפרטים
                     </span>
                   </Link>
@@ -113,7 +113,7 @@ const Creativity = () => {
                       dir={stat.ltr ? "ltr" : undefined}
                       style={{
                         fontFamily: DISPLAY,
-                        fontWeight: 900,
+                        fontWeight: 700,
                         color: TURQ,
                         fontSize: "clamp(2rem, 4vw, 3rem)",
                         letterSpacing: "-0.02em",
@@ -140,7 +140,7 @@ const Creativity = () => {
               <div className="max-w-3xl">
                 <h2
                   className="text-white leading-tight"
-                  style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
+                  style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
                 >
                   מוכנים לחסוך על הביטוח?
                 </h2>
@@ -150,7 +150,7 @@ const Creativity = () => {
                 <div className="mt-8">
                   <Link
                     to="/contact"
-                    className="inline-flex items-center justify-center rounded-lg px-9 py-4 bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+                    className="inline-flex items-center justify-center rounded-lg px-9 py-4 bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
                   >
                     התחילו עכשיו
                   </Link>

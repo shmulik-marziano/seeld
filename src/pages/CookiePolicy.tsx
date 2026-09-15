@@ -5,7 +5,7 @@ import { DISPLAY, MONO, MUTED, NAVY } from "@/lib/brand";
 // SEELD DNA v3: one quiet white column, navy headings, hairline rules (STYLESEED.md)
 
 const LegalSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <section className="border-t border-[#E7EDF1] pt-5">
+  <section className="border-t border-[#CCD6CC] pt-5">
     <h2 className="text-[19px] mb-3" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
       {title}
     </h2>
@@ -15,7 +15,7 @@ const LegalSection = ({ title, children }: { title: string; children: React.Reac
 
 const CookiePolicy = () => {
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       {/* One quiet white column — the whole document */}
@@ -33,7 +33,7 @@ const CookiePolicy = () => {
       </section>
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 pb-16 sm:pb-24">
-        <div className="space-y-10 text-base leading-[1.9] text-[#3a4c5a] [&_strong]:text-[#1D2D3D] [&_strong]:font-medium">
+        <div className="space-y-10 text-base leading-[1.9] text-[#24483C] [&_strong]:text-[#003D30] [&_strong]:font-medium">
           <LegalSection title="מה הן עוגיות?">
             <p>
               עוגיות (Cookies) הן קבצי טקסט קטנים שנשמרים במכשיר שלכם בעת ביקור באתר.
@@ -93,21 +93,21 @@ const CookiePolicy = () => {
           <LegalSection title="יצירת קשר">
             <p className="mb-4">לשאלות בנוגע למדיניות העוגיות, ניתן לפנות אלינו:</p>
             <div>
-              <div className="flex items-baseline justify-between py-3 border-b border-[#E7EDF1]">
+              <div className="flex items-baseline justify-between py-3 border-b border-[#CCD6CC]">
                 <span className="text-[13px]" style={{ color: MUTED }}>אימייל</span>
                 <a
                   href="mailto:info@seeld.co.il"
-                  className="text-[#1D2D3D] border-b border-transparent hover:border-[#1D2D3D]/40 transition-colors"
+                  className="text-[#003D30] border-b border-transparent hover:border-[#003D30]/40 transition-colors"
                   dir="ltr"
                 >
                   info@seeld.co.il
                 </a>
               </div>
-              <div className="flex items-baseline justify-between py-3 border-b border-[#E7EDF1]">
+              <div className="flex items-baseline justify-between py-3 border-b border-[#CCD6CC]">
                 <span className="text-[13px]" style={{ color: MUTED }}>טלפון</span>
                 <a
                   href="tel:0523097444"
-                  className="text-[#1D2D3D] tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#1D2D3D]/40 transition-colors"
+                  className="text-[#003D30] tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#003D30]/40 transition-colors"
                   dir="ltr"
                 >
                   052-309-7444

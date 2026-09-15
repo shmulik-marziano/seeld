@@ -26,7 +26,7 @@ const toFundReturn = (f: (typeof staticFunds)[number]): FundReturn => ({
 });
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-sm sm:text-base font-medium text-[#5a6a78] border-b-2 border-transparent data-[state=active]:border-[#4E9D8F] data-[state=active]:text-[#1D2D3D] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+  "rounded-none bg-transparent px-0 pb-4 text-sm sm:text-base font-medium text-[#476356] border-b-2 border-transparent data-[state=active]:border-[#819B7D] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const ReturnTables = () => {
   const { data: liveFunds, isError } = useCmaFunds();
@@ -105,7 +105,7 @@ const ReturnTables = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       <main className="dna-page">
@@ -129,9 +129,9 @@ const ReturnTables = () => {
           {/* Hero + top-return stat tile */}
           <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-8 sm:pb-10">
             <nav className="flex items-center gap-2 text-[13px] mb-8" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#1D2D3D] transition-colors">דף הבית</Link>
+              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
-              <span className="font-medium text-[#1D2D3D]">לוחות תשואה</span>
+              <span className="font-medium text-[#003D30]">לוחות תשואה</span>
             </nav>
 
             <div className="grid gap-8 lg:grid-cols-[1fr_260px] items-start">
@@ -155,7 +155,7 @@ const ReturnTables = () => {
                   </span>
                   <Link
                     to="/fund-finder"
-                    className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+                    className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
                   >
                     לכלי איתור והשוואת קופות
                     <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -167,25 +167,25 @@ const ReturnTables = () => {
               <Link
                 to="/fund-finder"
                 className="dna-hover rounded-xl flex flex-col items-center justify-center gap-1 p-6 min-h-[150px] border"
-                style={{ backgroundColor: TINT_TURQ, borderColor: "#E1EAF1" }}
+                style={{ backgroundColor: TINT_TURQ, borderColor: "#E8EDE5" }}
                 dir="ltr"
                 aria-label="התשואה השנתית המובילה · לכלי איתור והשוואת קופות"
               >
                 <span
                   className="text-[30px] sm:text-[36px] tabular-nums"
-                  style={{ fontFamily: DISPLAY, fontWeight: 900, color: TURQ, lineHeight: 1.1 }}
+                  style={{ fontFamily: DISPLAY, fontWeight: 700, color: TURQ, lineHeight: 1.1 }}
                 >
                   {maxYear >= 0 ? "+" : ""}{maxYear.toFixed(2)}%
                 </span>
-                <span className="text-[10px] tracking-[0.2em] font-semibold" style={{ fontFamily: MONO, color: TURQ_TEXT }}>
+                <span className="text-[10px] tracking-[0.2em] font-bold" style={{ fontFamily: MONO, color: TURQ_TEXT }}>
                   TOP RETURN · 12M
                 </span>
                 {topFund && (
-                  <span className="mt-1.5 max-w-[210px] truncate text-[11px]" style={{ color: "#3a4c5a" }} dir="rtl">
+                  <span className="mt-1.5 max-w-[210px] truncate text-[11px]" style={{ color: "#24483C" }} dir="rtl">
                     {topFund.name}
                   </span>
                 )}
-                <span className="mt-1.5 text-[9px] tracking-[0.22em] font-semibold" style={{ fontFamily: MONO, color: TURQ_TEXT }}>
+                <span className="mt-1.5 text-[9px] tracking-[0.22em] font-bold" style={{ fontFamily: MONO, color: TURQ_TEXT }}>
                   FUND FINDER →
                 </span>
               </Link>
@@ -195,7 +195,7 @@ const ReturnTables = () => {
             <MarketMarquee
               items={marqueeItems}
               ariaLabel="תשואות 12 חודשים מובילות לפי קטגוריה"
-              className="mt-8 !bg-white !rounded-xl border border-[#E1EAF1] after:!content-none"
+              className="mt-8 !bg-white !rounded-xl border border-[#E8EDE5] after:!content-none"
             />
           </section>
 
@@ -203,7 +203,7 @@ const ReturnTables = () => {
           <section className="border-t" style={{ borderColor: LINE }}>
             <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
               <Tabs defaultValue={(tabDefs.find((t) => t.funds.length > 0) ?? tabDefs[0]).value} dir="rtl">
-                <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#E7EDF1] rounded-none overflow-x-auto scrollbar-hide">
+                <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#CCD6CC] rounded-none overflow-x-auto scrollbar-hide">
                   {tabDefs.map((tab) => (
                     <TabsTrigger key={tab.value} value={tab.value} className={tabTriggerClass}>
                       {tab.label}
@@ -217,13 +217,13 @@ const ReturnTables = () => {
                       <FundReturnTable funds={tab.funds} title={tab.title} />
                     ) : (
                       <div className="border-t pt-6 pb-10" style={{ borderColor: LINE }}>
-                        <p className="text-base leading-[1.85] max-w-xl" style={{ color: "#3a4c5a" }}>
+                        <p className="text-base leading-[1.85] max-w-xl" style={{ color: "#24483C" }}>
                           אין עדיין נתונים בקטגוריה הזו לתקופה הנוכחית. נסו קטגוריה אחרת,
                           או חפשו קופה ספציפית בכלי איתור הקופות.
                         </p>
                         <Link
                           to="/fund-finder"
-                          className="group mt-4 inline-flex items-center gap-2 text-[14px] font-medium text-[#1D2D3D] border-b border-[#1D2D3D]/25 pb-0.5 hover:border-[#1D2D3D] transition-colors"
+                          className="group mt-4 inline-flex items-center gap-2 text-[14px] font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
                         >
                           לאיתור קופות
                           <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -248,7 +248,7 @@ const ReturnTables = () => {
                         dir="ltr"
                         style={{
                           fontFamily: DISPLAY,
-                          fontWeight: 900,
+                          fontWeight: 700,
                           color: TURQ,
                           fontSize: "clamp(2.2rem, 4vw, 3.2rem)",
                           letterSpacing: "-0.02em",
@@ -299,7 +299,7 @@ const ReturnTables = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
           <h2
             className="text-white leading-tight mb-3"
-            style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
+            style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
           >
             המספרים ברורים. מה עושים איתם?
           </h2>
@@ -309,7 +309,7 @@ const ReturnTables = () => {
           </p>
           <Link
             to="/contact"
-            className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#1D2D3D] text-base font-medium tracking-wide hover:bg-[#E7EDF1] transition-colors min-h-[52px]"
+            className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
           >
             בדיקת תיק ללא עלות
           </Link>

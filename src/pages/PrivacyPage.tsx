@@ -6,7 +6,7 @@ import { DISPLAY, MONO, MUTED, NAVY } from '@/lib/brand';
 // SEELD DNA v3: one quiet white column, navy headings, hairline rules (STYLESEED.md)
 
 const LegalSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <section className="border-t border-[#E7EDF1] pt-5 space-y-3">
+  <section className="border-t border-[#CCD6CC] pt-5 space-y-3">
     <h2 className="text-[19px]" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
       {title}
     </h2>
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
   const isPublic = location.pathname === '/privacy';
 
   const content = (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-10 text-base leading-[1.9] text-[#3a4c5a] [&_strong]:text-[#1D2D3D] [&_strong]:font-medium">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 space-y-10 text-base leading-[1.9] text-[#24483C] [&_strong]:text-[#003D30] [&_strong]:font-medium">
       <LegalSection title="1. כללי">
         <p>
           מערכת SEELD (להלן: "המערכת") מופעלת על ידי חברת SEELD בע"מ (להלן: "החברה").
@@ -125,28 +125,28 @@ export default function PrivacyPage() {
           ניתן לפנות אלינו:
         </p>
         <div>
-          <div className="flex items-baseline justify-between py-3 border-b border-[#E7EDF1]">
+          <div className="flex items-baseline justify-between py-3 border-b border-[#CCD6CC]">
             <span className="text-[13px]" style={{ color: MUTED }}>חברה</span>
             <span style={{ color: NAVY }}>SEELD בע"מ</span>
           </div>
-          <div className="flex items-baseline justify-between py-3 border-b border-[#E7EDF1]">
+          <div className="flex items-baseline justify-between py-3 border-b border-[#CCD6CC]">
             <span className="text-[13px]" style={{ color: MUTED }}>דואר אלקטרוני</span>
             <a
               href="mailto:info@seeld.co.il"
-              className="text-[#1D2D3D] border-b border-transparent hover:border-[#1D2D3D]/40 transition-colors"
+              className="text-[#003D30] border-b border-transparent hover:border-[#003D30]/40 transition-colors"
               dir="ltr"
             >
               info@seeld.co.il
             </a>
           </div>
-          <div className="flex items-baseline justify-between py-3 border-b border-[#E7EDF1]">
+          <div className="flex items-baseline justify-between py-3 border-b border-[#CCD6CC]">
             <span className="text-[13px]" style={{ color: MUTED }}>אתר</span>
             <span style={{ color: NAVY }} dir="ltr">seeld.co.il</span>
           </div>
         </div>
       </LegalSection>
 
-      <p className="border-t border-[#E7EDF1] pt-5 text-[12px] leading-relaxed" style={{ color: MUTED }}>
+      <p className="border-t border-[#CCD6CC] pt-5 text-[12px] leading-relaxed" style={{ color: MUTED }}>
         &copy; {new Date().getFullYear()} SEELD. כל הזכויות שמורות.
       </p>
     </div>
@@ -157,7 +157,7 @@ export default function PrivacyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <Header />
 
       {/* One quiet white column — the whole document */}
@@ -175,7 +175,7 @@ export default function PrivacyPage() {
               </span>
               <button
                 onClick={() => navigate(-1)}
-                className="text-[13px] font-medium hover:text-[#1D2D3D] transition-colors"
+                className="text-[13px] font-medium hover:text-[#003D30] transition-colors"
                 style={{ color: MUTED }}
               >
                 חזרה

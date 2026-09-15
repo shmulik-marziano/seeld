@@ -75,7 +75,7 @@ export default function PDageDashboard() {
       {/* Recent jobs */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold text-foreground">עבודות אחרונות</h2>
+          <h2 className="text-lg font-bold text-foreground">עבודות אחרונות</h2>
           <Button variant="ghost" size="sm" onClick={() => navigate('/app/pdage/history')} className="gap-1 text-muted-foreground">
             הכל
             <ArrowLeft className="h-3.5 w-3.5" />

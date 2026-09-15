@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { MONO, CARD_SHADOW, MUTED, LINE } from "@/lib/brand";
+import { CARD_SHADOW, LINE } from "@/lib/brand";
 
 const CookieConsent = () => {
   const [visible, setVisible] = useState(false);
@@ -36,20 +36,16 @@ const CookieConsent = () => {
           role="region"
           aria-label="הסכמה לשימוש בעוגיות"
         >
-          <div className="rounded-lg bg-white" style={{ boxShadow: CARD_SHADOW }}>
+          <div className="rounded-2xl bg-white border border-[#CCD6CC]" style={{ boxShadow: CARD_SHADOW }}>
             <div className="px-5 pb-4 pt-4">
-              <p
-                className="text-[11px] font-medium tracking-[0.12em]"
-                style={{ fontFamily: MONO, color: MUTED }}
-                dir="ltr"
-              >
-                COOKIES
+              <p className="text-[14px] font-bold text-[#003D30]">
+                עוגיות באתר
               </p>
-              <p className="mt-2 text-[14px] leading-relaxed text-[#4d4d4d]">
+              <p className="mt-2 text-[15px] leading-relaxed text-[#24483C]">
                 אתר זה משתמש בעוגיות הכרחיות לתפקוד תקין ובעוגיות אנליטיות לשיפור השירות.{" "}
                 <Link
                   to="/cookie-policy"
-                  className="font-medium text-[#171717] underline underline-offset-2 hover:no-underline"
+                  className="font-medium text-[#003D30] underline underline-offset-2 hover:no-underline"
                 >
                   מדיניות העוגיות
                 </Link>
@@ -58,13 +54,13 @@ const CookieConsent = () => {
             <div className="flex items-center justify-end gap-2 border-t px-4 py-3" style={{ borderColor: LINE }}>
               <button
                 onClick={decline}
-                className="min-h-[36px] rounded-md px-3 text-[13px] font-medium text-[#5c5c5c] transition-colors duration-150 hover:bg-[#f5f5f5] hover:text-[#171717]"
+                className="min-h-[40px] rounded-lg px-3 text-[14px] font-bold text-[#476356] transition-colors duration-150 hover:bg-[#EEF2EC] hover:text-[#003D30]"
               >
                 הכרחיות בלבד
               </button>
               <button
                 onClick={accept}
-                className="min-h-[36px] rounded-md bg-[#171717] px-5 text-[13px] font-medium text-white transition-colors duration-150 hover:bg-[#262626]"
+                className="min-h-[40px] rounded-lg bg-[#003D30] px-5 text-[14px] font-bold text-[#FAF7EF] transition-colors duration-150 hover:bg-[#002B22]"
               >
                 אישור
               </button>

@@ -447,7 +447,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
           {/* Step 1: Contact Info */}
           {step === 1 && (
             <div className="space-y-4">
-              <h4 className="font-semibold text-lg">פרטים אישיים</h4>
+              <h4 className="font-bold text-lg">פרטים אישיים</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="fullName">שם מלא *</Label>
@@ -503,7 +503,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
           {/* Step 2: Insurance-specific details */}
           {step === 2 && (
             <div className="space-y-4">
-              <h4 className="font-semibold text-lg">פרטי הביטוח</h4>
+              <h4 className="font-bold text-lg">פרטי הביטוח</h4>
               {getTypeSpecificFields()}
               <div>
                 <Label htmlFor="currentInsurer">מבטח נוכחי (אם יש)</Label>
@@ -537,7 +537,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
           {/* Step 3: Additional Info & Submit */}
           {step === 3 && (
             <div className="space-y-4">
-              <h4 className="font-semibold text-lg">פרטים נוספים</h4>
+              <h4 className="font-bold text-lg">פרטים נוספים</h4>
               <div>
                 <Label htmlFor="preferredContactTime">זמן מועדף ליצירת קשר</Label>
                 <Select value={preferredContactTime} onValueChange={setPreferredContactTime}>
