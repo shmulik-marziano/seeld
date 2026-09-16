@@ -2,18 +2,18 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ScrollReveal from "@/components/ScrollReveal";
 import FundReturnTable from "@/components/FundReturnTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LiveTag } from "@/components/brand/Live";
-import { MarketMarquee } from "@/components/brand/Marquee";
 import { allFunds as staticFunds, cmaLastUpdate } from "@/data/cmaFundsData";
 import { useCmaFunds, useCmaSyncStatus, formatPeriod } from "@/hooks/useCmaFunds";
 import type { FundReturn } from "@/data/fundReturns";
-import { DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, PASTEL_PEACH, TINT_TURQ, TURQ, TURQ_TEXT } from "@/lib/brand";
+import { BrandIcon } from "@/components/brand/BrandIcon";
+import { BrandDots, LeafCanopy } from "@/components/brand/Elements";
+import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, RUST_TEXT, SAGE_ON_GREEN } from "@/lib/brand";
 
-// SEELD DNA v3 (STYLESEED.md): white canvas, pastel circles, hairline separators,
-// marquee on a white tile (HeroSection usage), turquoise big stats.
+// Return tables (SEELD brand system 2026-09): a tool page. The tables stay
+// central; the data source and date are stated; one vector element in the
+// hero margin; the moving ticker is replaced by a static labelled list.
 
 // Convert CMA Fund format to the existing FundReturn format used by FundReturnTable
 const toFundReturn = (f: (typeof staticFunds)[number]): FundReturn => ({
@@ -26,15 +26,22 @@ const toFundReturn = (f: (typeof staticFunds)[number]): FundReturn => ({
 });
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-sm sm:text-base font-medium text-[#476356] border-b-2 border-transparent data-[state=active]:border-[#819B7D] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+  "rounded-none bg-transparent px-0 pb-4 text-[15px] sm:text-[16px] font-bold text-[#476356] border-b-2 border-transparent data-[state=active]:border-[#003D30] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+
+const Pct = ({ value }: { value: number }) => (
+  <span dir="ltr" className="tabular-nums whitespace-nowrap font-bold" style={{ color: value < 0 ? RUST_TEXT : GREEN }}>
+    {value > 0 ? "+" : ""}
+    {value.toFixed(2)}%
+  </span>
+);
 
 const ReturnTables = () => {
-  const { data: liveFunds, isError } = useCmaFunds();
+  const { data: liveFunds, isLoading, isError } = useCmaFunds();
   const { data: syncStatus } = useCmaSyncStatus();
   const allFunds = (!isError && liveFunds && liveFunds.length > 0) ? liveFunds : staticFunds;
   const isLive = !isError && liveFunds && liveFunds.length > 0;
 
-  // Build fund lists from the new CMA data source
+  // Build fund lists from the CMA data source
   const studyFundsGeneral = useMemo(
     () => allFunds.filter((f) => f.productType === "hishtalmut" && f.specialization === "general").map(toFundReturn),
     [allFunds]
@@ -69,12 +76,12 @@ const ReturnTables = () => {
   );
 
   const tabDefs = [
-    { value: "study-general", label: "השתלמות כללי", funds: studyFundsGeneral, title: "קרנות השתלמות - מסלול כללי" },
-    { value: "study-stocks", label: "השתלמות מניות", funds: studyFundsStocks, title: "קרנות השתלמות - מסלול מניות" },
-    { value: "gemel", label: "קופות גמל", funds: gemelFunds, title: "קופות גמל - מסלול כללי" },
-    { value: "gemel-invest", label: "גמל להשקעה", funds: gemelInvestFunds, title: "קופות גמל להשקעה - כללי" },
-    { value: "pension", label: "פנסיה כללי", funds: pensionFunds, title: "קרנות פנסיה - מסלול כללי" },
-    { value: "pension-stocks", label: "פנסיה מניות", funds: pensionStocks, title: "קרנות פנסיה - מסלול מניות" },
+    { value: "study-general", label: "השתלמות כללי", funds: studyFundsGeneral, title: "קרנות השתלמות, מסלול כללי" },
+    { value: "study-stocks", label: "השתלמות מניות", funds: studyFundsStocks, title: "קרנות השתלמות, מסלול מניות" },
+    { value: "gemel", label: "קופות גמל", funds: gemelFunds, title: "קופות גמל, מסלול כללי" },
+    { value: "gemel-invest", label: "גמל להשקעה", funds: gemelInvestFunds, title: "קופות גמל להשקעה, מסלול כללי" },
+    { value: "pension", label: "פנסיה כללי", funds: pensionFunds, title: "קרנות פנסיה, מסלול כללי" },
+    { value: "pension-stocks", label: "פנסיה מניות", funds: pensionStocks, title: "קרנות פנסיה, מסלול מניות" },
     { value: "savings", label: "פוליסות חיסכון", funds: savingsPolicies, title: "פוליסות חיסכון" },
     { value: "child", label: "חיסכון לכל ילד", funds: childSavings, title: "חיסכון לכל ילד" },
   ];
@@ -87,234 +94,210 @@ const ReturnTables = () => {
 
   const lastUpdate = syncStatus?.latestPeriod ? formatPeriod(syncStatus.latestPeriod) : cmaLastUpdate;
 
-  // Marquee feed — top 12-month return per product category, derived from the table data
-  const marqueeItems: { label: string; value?: string; dot?: boolean }[] = [
-    { label: isLive ? "LIVE DATA" : "LOCAL DATA", dot: isLive },
-    ...tabDefs
-      .filter((t) => t.funds.length > 0)
-      .map((t) => {
-        const top = Math.max(...t.funds.map((f) => f.yearReturn));
-        return { label: t.label, value: `${top >= 0 ? "+" : ""}${top.toFixed(1)}%` };
-      }),
-  ];
+  // Top 12-month return per product category, derived from the table data
+  const categoryTops = tabDefs
+    .filter((t) => t.funds.length > 0)
+    .map((t) => ({ label: t.label, value: Math.max(...t.funds.map((f) => f.yearReturn)) }));
 
   const stats = [
-    { value: maxYear.toFixed(2), unit: "%", label: "תשואה שנתית מובילה", detail: topFund?.name },
-    { value: maxFiveYear.toFixed(2), unit: "%", label: "תשואת 5 שנים מובילה", detail: topFiveYearFund?.name },
-    { value: String(totalFunds), unit: "", label: "קרנות במעקב", detail: "8 קטגוריות מוצר" },
+    { value: Number.isFinite(maxYear) ? maxYear : null, unit: "%", label: "תשואה שנתית מובילה", detail: topFund?.name },
+    { value: Number.isFinite(maxFiveYear) ? maxFiveYear : null, unit: "%", label: "תשואת 5 שנים מובילה", detail: topFiveYearFund?.name },
+    { value: totalFunds, unit: "", label: "קרנות במעקב", detail: `${tabDefs.length} קטגוריות מוצר` },
   ];
 
+  const dataStatus = isLoading
+    ? "טוען נתונים עדכניים מהמאגר. בינתיים מוצגים נתונים מקומיים."
+    : isLive
+      ? "הנתונים נטענו מהמאגר העדכני."
+      : "המאגר העדכני לא זמין כרגע. מוצגים נתונים מקומיים מהעדכון האחרון שנשמר.";
+
   return (
-    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
       <Header />
 
-      <main className="dna-page">
-        {/* Pastel circle backdrop — decorative, never behind small text */}
-        <div className="dna-circles" aria-hidden="true">
-          <div
-            className="dna-circ"
-            style={{ width: 280, height: 280, top: -120, right: -100, backgroundColor: PASTEL_BLUE, opacity: 0.5 }}
-          />
-          <div
-            className="dna-circ hidden md:block"
-            style={{ width: 220, height: 220, top: 420, left: -110, backgroundColor: PASTEL_PEACH, opacity: 0.55 }}
-          />
-          <div
-            className="dna-circ hidden md:block"
-            style={{ width: 240, height: 240, bottom: -130, right: "36%", backgroundColor: PASTEL_MINT, opacity: 0.45 }}
-          />
-        </div>
+      <main>
+        {/* Hero: ivory, two pastel bubbles in the margins only */}
+        <div className="dna-page">
+          <div className="dna-circles" aria-hidden="true">
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 300, height: 300, top: -150, right: -130, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
+            />
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 180, height: 180, top: 60, left: -100, backgroundColor: PASTEL_SAND, opacity: 0.7 }}
+            />
+          </div>
 
-        <div className="relative z-10">
-          {/* Hero + top-return stat tile */}
-          <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-8 sm:pb-10">
-            <nav className="flex items-center gap-2 text-[13px] mb-8" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
-              <span aria-hidden="true">←</span>
-              <span className="font-medium text-[#003D30]">לוחות תשואה</span>
+          <section className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-8 sm:pb-10">
+            <nav className="flex items-center gap-2 text-[14px] mb-8" style={{ color: MUTED }} aria-label="ניווט משני">
+              <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
+              <BrandIcon name="arrow-left" size={14} />
+              <span className="font-bold" style={{ color: GREEN }} aria-current="page">לוחות תשואה</span>
             </nav>
 
-            <div className="grid gap-8 lg:grid-cols-[1fr_260px] items-start">
+            <div className="flex items-start justify-between gap-8">
               <div>
-                <h1
-                  className="dna-display leading-[1.15] mb-5 max-w-3xl"
-                  style={{ fontSize: "clamp(2rem, 5vw, 3.1rem)" }}
-                >
+                <BrandDots className="mb-4" />
+                <h1 className="dna-display leading-[1.15] mb-4 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                   לוחות תשואה
                 </h1>
-                <p className="text-base sm:text-[17px] max-w-2xl leading-[1.9] mb-8" style={{ color: MUTED }}>
+                <p className="text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
                   תשואות רשמיות של קרנות השתלמות, קופות גמל, קרנות פנסיה ופוליסות חיסכון בישראל.
                   הנתונים נמשכים מגמלנט, ביטוחנט ופנסיהנט ומתעדכנים מדי חודש.
                 </p>
 
-                <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
-                  <LiveTag dot={isLive}>{isLive ? "LIVE DATA" : "LOCAL DATA"}</LiveTag>
-                  <span className="text-[13px]" style={{ color: MUTED }}>
-                    עדכון אחרון:{" "}
-                    <span className="tabular-nums" style={{ fontFamily: MONO, color: NAVY }}>{lastUpdate}</span>
-                  </span>
-                  <Link
-                    to="/fund-finder"
-                    className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
-                  >
+                <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-[15px]" style={{ color: MUTED }}>
+                  <div className="flex gap-2">
+                    <dt>מקור הנתונים:</dt>
+                    <dd className="font-bold" style={{ color: GREEN }}>רשות שוק ההון, ביטוח וחיסכון</dd>
+                  </div>
+                  <div className="flex gap-2">
+                    <dt>עדכון אחרון:</dt>
+                    <dd className="font-bold tabular-nums" style={{ color: GREEN }}>{lastUpdate}</dd>
+                  </div>
+                </dl>
+                <p className="mt-2 text-[14px]" style={{ color: MUTED }} role="status">{dataStatus}</p>
+
+                <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+                  <Link to="/fund-finder" className="link-rule text-[15px]">
                     לכלי איתור והשוואת קופות
-                    <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
+                    <BrandIcon name="arrow-left" size={16} />
                   </Link>
                 </div>
               </div>
-
-              {/* Turquoise-tint stat tile — live top 12-month return, links to the fund finder */}
-              <Link
-                to="/fund-finder"
-                className="dna-hover rounded-xl flex flex-col items-center justify-center gap-1 p-6 min-h-[150px] border"
-                style={{ backgroundColor: TINT_TURQ, borderColor: "#E8EDE5" }}
-                dir="ltr"
-                aria-label="התשואה השנתית המובילה · לכלי איתור והשוואת קופות"
-              >
-                <span
-                  className="text-[30px] sm:text-[36px] tabular-nums"
-                  style={{ fontFamily: DISPLAY, fontWeight: 700, color: TURQ, lineHeight: 1.1 }}
-                >
-                  {maxYear >= 0 ? "+" : ""}{maxYear.toFixed(2)}%
-                </span>
-                <span className="text-[10px] tracking-[0.2em] font-bold" style={{ fontFamily: MONO, color: TURQ_TEXT }}>
-                  TOP RETURN · 12M
-                </span>
-                {topFund && (
-                  <span className="mt-1.5 max-w-[210px] truncate text-[11px]" style={{ color: "#24483C" }} dir="rtl">
-                    {topFund.name}
-                  </span>
-                )}
-                <span className="mt-1.5 text-[9px] tracking-[0.22em] font-bold" style={{ fontFamily: MONO, color: TURQ_TEXT }}>
-                  FUND FINDER →
-                </span>
-              </Link>
+              <LeafCanopy className="hidden lg:block w-44 shrink-0" />
             </div>
 
-            {/* Market marquee band — white tile (HeroSection usage) */}
-            <MarketMarquee
-              items={marqueeItems}
-              ariaLabel="תשואות 12 חודשים מובילות לפי קטגוריה"
-              className="mt-8 !bg-white !rounded-xl border border-[#E8EDE5] after:!content-none"
-            />
-          </section>
-
-          {/* Tables — underline tabs, one dense view */}
-          <section className="border-t" style={{ borderColor: LINE }}>
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-              <Tabs defaultValue={(tabDefs.find((t) => t.funds.length > 0) ?? tabDefs[0]).value} dir="rtl">
-                <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#CCD6CC] rounded-none overflow-x-auto scrollbar-hide">
-                  {tabDefs.map((tab) => (
-                    <TabsTrigger key={tab.value} value={tab.value} className={tabTriggerClass}>
-                      {tab.label}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-
-                {tabDefs.map((tab) => (
-                  <TabsContent key={tab.value} value={tab.value} className="mt-0">
-                    {tab.funds.length > 0 ? (
-                      <FundReturnTable funds={tab.funds} title={tab.title} />
-                    ) : (
-                      <div className="border-t pt-6 pb-10" style={{ borderColor: LINE }}>
-                        <p className="text-base leading-[1.85] max-w-xl" style={{ color: "#24483C" }}>
-                          אין עדיין נתונים בקטגוריה הזו לתקופה הנוכחית. נסו קטגוריה אחרת,
-                          או חפשו קופה ספציפית בכלי איתור הקופות.
-                        </p>
-                        <Link
-                          to="/fund-finder"
-                          className="group mt-4 inline-flex items-center gap-2 text-[14px] font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
-                        >
-                          לאיתור קופות
-                          <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
-                        </Link>
-                      </div>
-                    )}
-                  </TabsContent>
-                ))}
-              </Tabs>
-            </div>
-          </section>
-
-          {/* Numbers band — turquoise big stats over hairlines */}
-          <section className="border-t" style={{ borderColor: LINE }}>
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-              <ScrollReveal>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-10 border-t border-b py-10 sm:py-12" style={{ borderColor: LINE }}>
-                  {stats.map((stat) => (
-                    <div key={stat.label} className="text-center px-4">
-                      <div
-                        className="tabular-nums mb-2"
-                        dir="ltr"
-                        style={{
-                          fontFamily: DISPLAY,
-                          fontWeight: 700,
-                          color: TURQ,
-                          fontSize: "clamp(2.2rem, 4vw, 3.2rem)",
-                          letterSpacing: "-0.02em",
-                          lineHeight: 1.1,
-                        }}
-                      >
-                        {stat.value}
-                        {stat.unit && <span style={{ fontSize: "0.55em" }}>{stat.unit}</span>}
-                      </div>
-                      <div className="text-[13px] tracking-[0.1em]" style={{ color: MUTED }}>{stat.label}</div>
-                      {stat.detail && (
-                        <div className="mt-1 text-[12px] truncate max-w-[260px] mx-auto" style={{ color: MUTED }}>
-                          {stat.detail}
-                        </div>
-                      )}
+            {/* Top 12-month return per category: a static labelled list */}
+            {categoryTops.length > 0 && (
+              <div className="dna-concept mt-10">
+                <p className="text-[16px] font-bold mb-3" style={{ color: GREEN }}>
+                  התשואה השנתית הגבוהה ביותר בכל קטגוריה
+                </p>
+                <dl className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-3">
+                  {categoryTops.map((c) => (
+                    <div key={c.label} className="flex items-baseline justify-between gap-3 border-b pb-2" style={{ borderColor: LINE }}>
+                      <dt className="text-[15px]" style={{ color: BODY }}>{c.label}</dt>
+                      <dd className="text-[16px]"><Pct value={c.value} /></dd>
                     </div>
                   ))}
-                </div>
-              </ScrollReveal>
-            </div>
-          </section>
-
-          {/* Disclaimer */}
-          <section className="border-t" style={{ borderColor: LINE }}>
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-              <div className="max-w-3xl">
-                <div className="dna-quote gold">
-                  <div className="dna-ql">הבהרה חשובה</div>
-                  <div className="dna-qt">
-                    הנתונים המוצגים מבוססים על מידע ממקורות ציבוריים של רשות שוק ההון (גמלנט, ביטוחנט, פנסיהנט)
-                    ומיועדים להשוואה כללית בלבד. תשואות עבר אינן מעידות על תשואות עתידיות.
-                    דמי הניהול אינם כלולים בחישוב התשואות. לפני קבלת החלטות פיננסיות,
-                    מומלץ להתייעץ עם יועץ פנסיוני או פיננסי מוסמך.
-                  </div>
-                </div>
-                <p className="mt-4 text-[13px]" style={{ color: MUTED }}>
-                  <span className="font-medium" style={{ color: NAVY }}>מקור הנתונים:</span>{" "}
-                  רשות שוק ההון, ביטוח וחיסכון, משרד האוצר.
-                </p>
+                </dl>
               </div>
-            </div>
+            )}
           </section>
         </div>
-      </main>
 
-      {/* Closing CTA — institutional navy band */}
-      <section style={{ backgroundColor: NAVY }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
-          <h2
-            className="text-white leading-tight mb-3"
-            style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
-          >
-            המספרים ברורים. מה עושים איתם?
-          </h2>
-          <p className="text-base leading-[1.85] mb-8 max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
-            תשואה היא רק חלק מהתמונה. דמי ניהול, רמת סיכון והתאמה אישית משנים את התוצאה.
-            יועץ מהצוות יעבור איתכם על התיק, ללא עלות.
-          </p>
-          <Link
-            to="/contact"
-            className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
-          >
-            בדיקת תיק ללא עלות
-          </Link>
-        </div>
-      </section>
+        {/* Tables: underline tabs, one dense view */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-12 sm:py-16">
+            <BrandDots className="mb-4" />
+            <h2 className="dna-display leading-tight mb-8" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>
+              התשואות לפי קטגוריה
+            </h2>
+
+            <Tabs defaultValue={(tabDefs.find((t) => t.funds.length > 0) ?? tabDefs[0]).value} dir="rtl">
+              <TabsList className="flex w-full flex-wrap justify-start gap-x-6 gap-y-1 sm:gap-x-8 h-auto bg-transparent p-0 mb-8 border-b rounded-none" style={{ borderColor: LINE }}>
+                {tabDefs.map((tab) => (
+                  <TabsTrigger key={tab.value} value={tab.value} className={tabTriggerClass}>
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+
+              {tabDefs.map((tab) => (
+                <TabsContent key={tab.value} value={tab.value} className="mt-0">
+                  {tab.funds.length > 0 ? (
+                    <FundReturnTable funds={tab.funds} title={tab.title} />
+                  ) : (
+                    <div className="dna-concept max-w-xl" role="status">
+                      <p className="text-[16px] leading-[1.7]" style={{ color: BODY }}>
+                        {isLoading
+                          ? "טוען את הנתונים של הקטגוריה הזו."
+                          : "אין עדיין נתונים בקטגוריה הזו לתקופה הנוכחית. נסו קטגוריה אחרת, או חפשו קופה ספציפית בכלי איתור הקופות."}
+                      </p>
+                      {!isLoading && (
+                        <Link to="/fund-finder" className="link-rule mt-4 text-[15px]">
+                          לאיתור קופות
+                          <BrandIcon name="arrow-left" size={16} />
+                        </Link>
+                      )}
+                    </div>
+                  )}
+                </TabsContent>
+              ))}
+            </Tabs>
+          </div>
+        </section>
+
+        {/* Numbers band: green big figures over hairlines */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-12 sm:py-16">
+            <dl className="grid grid-cols-1 sm:grid-cols-3 gap-y-10 border-t border-b py-10 sm:py-12" style={{ borderColor: LINE }}>
+              {stats.map((stat) => (
+                <div key={stat.label} className="text-center px-4">
+                  <dd
+                    className="tabular-nums mb-2 whitespace-nowrap"
+                    dir="ltr"
+                    style={{ fontWeight: 700, color: stat.value === null ? MUTED : GREEN, fontSize: stat.value === null ? "1.25rem" : "clamp(2.2rem, 4vw, 3.2rem)", letterSpacing: "-0.02em", lineHeight: 1.1 }}
+                  >
+                    {stat.value === null
+                      ? "אין נתון"
+                      : stat.unit === "%"
+                        ? `${(stat.value as number).toFixed(2)}%`
+                        : String(stat.value)}
+                  </dd>
+                  <dt className="text-[15px]" style={{ color: MUTED }}>{stat.label}</dt>
+                  {stat.detail && (
+                    <p className="mt-1 text-[14px] truncate max-w-[260px] mx-auto" style={{ color: MUTED }}>
+                      {stat.detail}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </dl>
+          </div>
+        </section>
+
+        {/* Disclaimer */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-10 sm:py-14">
+            <div className="dna-callout max-w-3xl text-[15px]">
+              <p className="font-bold mb-1" style={{ color: GREEN }}>הבהרה חשובה</p>
+              <p>
+                הנתונים המוצגים מבוססים על מידע ממקורות ציבוריים של רשות שוק ההון (גמלנט, ביטוחנט, פנסיהנט)
+                ומיועדים להשוואה כללית בלבד. תשואות עבר אינן מעידות על תשואות עתידיות.
+                דמי הניהול אינם כלולים בחישוב התשואות. לפני קבלת החלטות פיננסיות,
+                מומלץ להתייעץ עם יועץ פנסיוני או פיננסי מוסמך.
+              </p>
+              <p className="mt-2" style={{ color: MUTED }}>
+                מקור הנתונים: רשות שוק ההון, ביטוח וחיסכון, משרד האוצר.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Closing: deep green band, the central path */}
+        <section className="dna-navy-band">
+          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(26px, 3vw, 34px)" }}>
+              המספרים ברורים. מה עושים איתם?
+            </h2>
+            <p className="text-[17px] leading-[1.7] mb-8 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
+              תשואה היא רק חלק מהתמונה. דמי ניהול, רמת סיכון והתאמה אישית משנים את התוצאה.
+              בדיקת תיק 360 מסדרת את הביטוחים, הפנסיה והחיסכון בתמונה אחת.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
+                בדיקת תיק 360
+              </Link>
+              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
+                תיאום פגישה
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
 
       <Footer />
     </div>

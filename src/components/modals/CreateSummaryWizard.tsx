@@ -115,14 +115,14 @@ export function CreateSummaryWizard({ open, onOpenChange }: Props) {
                 onClick={handleNewCustomer}
                 className="w-full flex items-center gap-3 p-4 rounded-xl border-2 border-transparent bg-accent/30 hover:border-primary/30 hover:bg-accent/60 transition-all text-right group"
               >
-                <div className="p-2.5 rounded-lg bg-emerald-500/10 text-emerald-600 group-hover:bg-emerald-500/20 transition-colors">
+                <div className="p-2.5 rounded-lg bg-[#2F6B4E]/10 text-[#2F6B4E] group-hover:bg-[#2F6B4E]/20 transition-colors">
                   <UserPlus className="h-5 w-5" />
                 </div>
                 <div className="flex-1">
                   <p className="font-bold text-sm">לקוח חדש</p>
                   <p className="text-xs text-muted-foreground">צור לקוח חדש ואז המשך לסיכום</p>
                 </div>
-                <ArrowLeft className="h-4 w-4 text-muted-foreground group-hover:text-emerald-600 transition-colors" />
+                <ArrowLeft className="h-4 w-4 text-muted-foreground group-hover:text-[#2F6B4E] transition-colors" />
               </button>
             </motion.div>
           )}

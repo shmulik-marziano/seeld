@@ -108,7 +108,7 @@ const CarInsuranceEstimator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="גיל הנהג הצעיר ברכב"
             value={[driverAge]}
             onValueChange={([value]) => setDriverAge(value)}
             min={17}
@@ -138,7 +138,7 @@ const CarInsuranceEstimator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="ותק רישיון (שנים)"
             value={[effectiveLicenseYears]}
             onValueChange={([value]) => setLicenseYears(value)}
             min={0}
@@ -166,7 +166,7 @@ const CarInsuranceEstimator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="שווי הרכב"
             value={[carValue]}
             onValueChange={([value]) => setCarValue(value)}
             min={20000}

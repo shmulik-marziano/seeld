@@ -106,7 +106,7 @@ const PensionCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="גיל נוכחי"
             value={[currentAge]}
             onValueChange={([value]) => value < retirementAge && setCurrentAge(value)}
             min={18}
@@ -134,7 +134,7 @@ const PensionCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="גיל פרישה"
             value={[retirementAge]}
             onValueChange={([value]) => value > currentAge && setRetirementAge(value)}
             min={60}
@@ -160,7 +160,7 @@ const PensionCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="משכורת חודשית"
             value={[monthlySalary]}
             onValueChange={([value]) => setMonthlySalary(value)}
             min={5000}
@@ -186,7 +186,7 @@ const PensionCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="חיסכון קיים"
             value={[currentSavings]}
             onValueChange={([value]) => setCurrentSavings(value)}
             min={0}
@@ -206,7 +206,7 @@ const PensionCalculator = () => {
           <div className="space-y-3">
             <Label className="text-sm text-[#003D30]">הפקדת עובד (%)</Label>
             <div className="flex items-center gap-3">
-              <Slider
+              <Slider thumbLabel="הפקדת עובד (%)"
                 value={[employeeDeposit]}
                 onValueChange={([value]) => setEmployeeDeposit(value)}
                 min={0}
@@ -222,7 +222,7 @@ const PensionCalculator = () => {
           <div className="space-y-3">
             <Label className="text-sm text-[#003D30]">הפקדת מעסיק (%)</Label>
             <div className="flex items-center gap-3">
-              <Slider
+              <Slider thumbLabel="הפקדת מעסיק (%)"
                 value={[employerDeposit]}
                 onValueChange={([value]) => setEmployerDeposit(value)}
                 min={0}
@@ -238,7 +238,7 @@ const PensionCalculator = () => {
           <div className="space-y-3">
             <Label className="text-sm text-[#003D30]">פיצויים (%)</Label>
             <div className="flex items-center gap-3">
-              <Slider
+              <Slider thumbLabel="פיצויים (%)"
                 value={[severanceDeposit]}
                 onValueChange={([value]) => setSeveranceDeposit(value)}
                 min={0}
@@ -254,7 +254,7 @@ const PensionCalculator = () => {
           <div className="space-y-3">
             <Label className="text-sm text-[#003D30]">תשואה שנתית צפויה (%)</Label>
             <div className="flex items-center gap-3">
-              <Slider
+              <Slider thumbLabel="תשואה שנתית צפויה (%)"
                 value={[annualReturn]}
                 onValueChange={([value]) => setAnnualReturn(value)}
                 min={0}

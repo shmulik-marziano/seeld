@@ -17,11 +17,11 @@ const MOCK_KNOWLEDGE = [
 ];
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "תבניות": "#7c3aed",
-  "נהלים": "#059669",
+  "תבניות": "#476356",
+  "נהלים": "#2F6B4E",
   "טפסים": "#2563eb",
-  "מדריכים": "#f59e0b",
-  "כלים": "#e11d48",
+  "מדריכים": "#CBA064",
+  "כלים": "#BD582D",
 };
 
 export default function BrainPage() {
@@ -37,9 +37,9 @@ export default function BrainPage() {
 
   const stats = [
     { label: "פריטי ידע", value: "87", change: "+4", icon: Brain, color: tool.color },
-    { label: "תבניות פעילות", value: "23", change: "+2", icon: FileText, color: "#7c3aed" },
-    { label: "צפיות החודש", value: "1,240", change: "+18%", icon: Eye, color: "#059669" },
-    { label: "עודכנו השבוע", value: "6", change: "+3", icon: Clock, color: "#f59e0b" },
+    { label: "תבניות פעילות", value: "23", change: "+2", icon: FileText, color: "#476356" },
+    { label: "צפיות החודש", value: "1,240", change: "+18%", icon: Eye, color: "#2F6B4E" },
+    { label: "עודכנו השבוע", value: "6", change: "+3", icon: Clock, color: "#CBA064" },
   ];
 
   return (
@@ -51,10 +51,10 @@ export default function BrainPage() {
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: s.color + "15" }}>
                 <s.icon className="w-5 h-5" style={{ color: s.color }} />
               </div>
-              <span className="text-xs text-green-600 font-medium">{s.change}</span>
+              <span className="text-xs text-[#2F6B4E] font-medium">{s.change}</span>
             </div>
-            <p className="text-2xl font-bold text-gray-800">{s.value}</p>
-            <p className="text-sm text-gray-500 mt-0.5">{s.label}</p>
+            <p className="text-2xl font-bold text-[#003D30]">{s.value}</p>
+            <p className="text-sm text-[#476356] mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
@@ -62,17 +62,17 @@ export default function BrainPage() {
       <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-4 mb-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#476356]" />
             <input
               type="text"
               placeholder="חיפוש במאגר הידע..."
-              className="w-full pr-10 pl-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#003D30]/20"
+              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#003D30]/20"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <select
-            className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none"
+            className="px-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
           >
@@ -93,36 +93,36 @@ export default function BrainPage() {
       <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-16 text-center">
-            <div className="w-16 h-16 rounded-full bg-gray-100 mx-auto mb-4 flex items-center justify-center">
-              <Brain className="w-8 h-8 text-gray-300" />
+            <div className="w-16 h-16 rounded-full bg-[#E8EDE5] mx-auto mb-4 flex items-center justify-center">
+              <Brain className="w-8 h-8 text-[#8FA396]" />
             </div>
-            <p className="text-gray-500 font-medium mb-1">אין פריטים להצגה</p>
-            <p className="text-sm text-gray-400">הוסף פריט ידע חדש למאגר</p>
+            <p className="text-[#476356] font-medium mb-1">אין פריטים להצגה</p>
+            <p className="text-sm text-[#476356]">הוסף פריט ידע חדש למאגר</p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-[#E1E8E1]">
             {filtered.map((k) => {
-              const catColor = CATEGORY_COLORS[k.category] || "#6366f1";
+              const catColor = CATEGORY_COLORS[k.category] || "#819B7D";
               return (
-                <div key={k.id} className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50/50 transition-colors cursor-pointer">
+                <div key={k.id} className="flex items-center gap-4 px-5 py-4 hover:bg-[#F3F5F1]/50 transition-colors cursor-pointer">
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: catColor + "15" }}>
                     <FileText className="w-5 h-5" style={{ color: catColor }} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-800">{k.title}</p>
+                    <p className="text-sm font-medium text-[#003D30]">{k.title}</p>
                     <div className="flex items-center gap-3 mt-1">
                       <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ backgroundColor: catColor + "15", color: catColor }}>
                         {k.category}
                       </span>
                       {k.tags.map((tag) => (
-                        <span key={tag} className="text-xs text-gray-400 flex items-center gap-0.5">
+                        <span key={tag} className="text-xs text-[#476356] flex items-center gap-0.5">
                           <Tag className="w-2.5 h-2.5" />
                           {tag}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 flex-shrink-0 text-xs text-gray-400">
+                  <div className="flex items-center gap-4 flex-shrink-0 text-xs text-[#476356]">
                     <span className="flex items-center gap-1">
                       <Eye className="w-3 h-3" />
                       {k.views}
@@ -131,11 +131,11 @@ export default function BrainPage() {
                     <span>{k.author}</span>
                   </div>
                   <div className="flex items-center gap-1 flex-shrink-0">
-                    <button className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors" title="הורדה">
-                      <Download className="w-4 h-4 text-gray-400" />
+                    <button className="p-1.5 hover:bg-[#E8EDE5] rounded-lg transition-colors" title="הורדה">
+                      <Download className="w-4 h-4 text-[#476356]" />
                     </button>
-                    <button className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors">
-                      <MoreVertical className="w-4 h-4 text-gray-400" />
+                    <button className="p-1.5 hover:bg-[#E8EDE5] rounded-lg transition-colors">
+                      <MoreVertical className="w-4 h-4 text-[#476356]" />
                     </button>
                   </div>
                 </div>

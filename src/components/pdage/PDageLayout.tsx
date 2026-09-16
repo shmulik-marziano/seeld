@@ -41,7 +41,7 @@ export function PDageLayout({ children }: { children: ReactNode }) {
       {/* Brand header */}
       <div className="px-5 pt-6 pb-5 border-b border-sidebar-border/60 flex items-center justify-between">
         <button onClick={() => navigate('/app/pdage')} className="flex items-center gap-3 hover:opacity-80 transition-opacity group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-bold text-sm shadow-md shadow-primary/10 group-hover:shadow-lg group-hover:shadow-primary/20 transition-shadow">
+          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm shadow-md shadow-primary/10 group-hover:shadow-lg group-hover:shadow-primary/20 transition-shadow">
             pD
           </div>
           <div>
@@ -107,7 +107,7 @@ export function PDageLayout({ children }: { children: ReactNode }) {
             <Menu className="h-5 w-5" />
           </button>
           <button onClick={() => navigate('/app/pdage')} className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-bold text-xs shadow-sm">pD</div>
+            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs shadow-sm">pD</div>
             <h1 className="text-lg font-bold text-sidebar-primary tracking-tight">pDage</h1>
           </button>
         </div>

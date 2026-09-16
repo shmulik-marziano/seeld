@@ -32,18 +32,18 @@ export default function ActivityLogPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-[#003D30]">יומן פעולות</h1>
-          <p className="text-sm text-gray-400">{data.activityLog.length} רשומות</p>
+          <p className="text-sm text-[#476356]">{data.activityLog.length} רשומות</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="p-3 sm:p-4 border-b border-gray-100 flex flex-col sm:flex-row gap-3">
+      <div className="bg-white rounded-2xl border border-[#E1E8E1] shadow-sm overflow-hidden">
+        <div className="p-3 sm:p-4 border-b border-[#E1E8E1] flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input placeholder="חיפוש..." value={search} onChange={e => setSearch(e.target.value)} className="pr-10 rounded-full border-gray-200 min-h-[44px]" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#476356]" />
+            <Input placeholder="חיפוש..." value={search} onChange={e => setSearch(e.target.value)} className="pr-10 rounded-full border-[#CCD6CC] min-h-[44px]" />
           </div>
           <Select value={levelFilter} onValueChange={setLevelFilter}>
-            <SelectTrigger className="w-full sm:w-36 rounded-full border-gray-200 min-h-[44px]">
+            <SelectTrigger className="w-full sm:w-36 rounded-full border-[#CCD6CC] min-h-[44px]">
               <SelectValue placeholder="סוג אירוע" />
             </SelectTrigger>
             <SelectContent>
@@ -55,22 +55,22 @@ export default function ActivityLogPage() {
           </Select>
         </div>
 
-        <div className="divide-y divide-gray-50 max-h-[calc(100vh-250px)] overflow-y-auto">
+        <div className="divide-y divide-[#E1E8E1] max-h-[calc(100vh-250px)] overflow-y-auto">
           {filtered.length === 0 ? (
-            <p className="p-8 text-center text-gray-400">לא נמצאו רשומות</p>
+            <p className="p-8 text-center text-[#476356]">לא נמצאו רשומות</p>
           ) : filtered.map(a => {
             const customerName = getCustomerName(a.customerId);
             return (
-              <div key={a.id} className="flex items-start gap-3 p-4 hover:bg-[#fafafa] transition-colors">
+              <div key={a.id} className="flex items-start gap-3 p-4 hover:bg-[#FAF7EF] transition-colors">
                 <div className={`w-2.5 h-2.5 rounded-full mt-2 shrink-0 ${
-                  a.level === 'הצלחה' ? 'bg-[#15803d]' : a.level === 'אזהרה' ? 'bg-[#b45309]' : 'bg-[#003D30]'
+                  a.level === 'הצלחה' ? 'bg-[#2F6B4E]' : a.level === 'אזהרה' ? 'bg-[#8A6230]' : 'bg-[#003D30]'
                 }`} />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-[#003D30]">{a.title}</p>
-                  {a.detail && <p className="text-xs text-gray-400 mt-0.5">{a.detail}</p>}
+                  {a.detail && <p className="text-xs text-[#476356] mt-0.5">{a.detail}</p>}
                   {customerName && <p className="text-xs text-[#003D30] mt-0.5 font-medium">{customerName}</p>}
                 </div>
-                <span className="text-xs text-gray-400 shrink-0">
+                <span className="text-xs text-[#476356] shrink-0">
                   {new Date(a.timestamp).toLocaleDateString('he-IL')} {new Date(a.timestamp).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>

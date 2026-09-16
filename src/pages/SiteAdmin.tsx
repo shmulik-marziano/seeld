@@ -11,9 +11,9 @@ class AdminErrorBoundary extends Component<{ children: ReactNode }, { error: Err
   render() {
     if (this.state.error) {
       return (
-        <div dir="rtl" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0f2f5', padding: 20 }}>
+        <div dir="rtl" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FAF7EF', padding: 20 }}>
           <div style={{ background: 'white', borderRadius: 24, padding: 32, maxWidth: 500, textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
-            <h2 style={{ color: '#b91c1c', fontSize: 20, fontWeight: 800, marginBottom: 8 }}>שגיאה בטעינת מנהל האתר</h2>
+            <h2 style={{ color: '#9A4520', fontSize: 20, fontWeight: 800, marginBottom: 8 }}>שגיאה בטעינת מנהל האתר</h2>
             <p style={{ color: '#666', fontSize: 14, marginBottom: 16 }}>{this.state.error.message}</p>
             <button onClick={() => { this.setState({ error: null }); window.location.reload(); }}
               style={{ background: '#003D30', color: 'white', border: 'none', padding: '10px 24px', borderRadius: 50, cursor: 'pointer', fontWeight: 700 }}>
@@ -195,7 +195,7 @@ function SiteAdminInner() {
   // ── Loading state ──
   if (authLoading && step !== "admin") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f0f2f5]">
+      <div className="min-h-screen flex items-center justify-center bg-[#FAF7EF]">
         <Loader2 className="w-8 h-8 animate-spin text-[#003D30]" />
       </div>
     );
@@ -204,16 +204,16 @@ function SiteAdminInner() {
   // ── Denied ──
   if (step === "denied") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f0f2f5] px-4" dir="rtl">
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 max-w-sm text-center">
-          <div className="w-16 h-16 rounded-full bg-[#b91c1c]/10 flex items-center justify-center mx-auto mb-4">
-            <Shield className="w-8 h-8 text-[#b91c1c]" />
+      <div className="min-h-screen flex items-center justify-center bg-[#FAF7EF] px-4" dir="rtl">
+        <div className="bg-white rounded-3xl p-8 shadow-xl border border-[#E1E8E1] max-w-sm text-center">
+          <div className="w-16 h-16 rounded-full bg-[#9A4520]/10 flex items-center justify-center mx-auto mb-4">
+            <Shield className="w-8 h-8 text-[#9A4520]" />
           </div>
           <h2 className="text-xl font-bold text-[#003D30] mb-2">אין הרשאה</h2>
-          <p className="text-gray-500 text-sm mb-6">
+          <p className="text-[#476356] text-sm mb-6">
             המייל {user?.email} אינו מורשה לגשת לממשק הניהול.
           </p>
-          <Button onClick={handleSignOut} variant="outline" className="rounded-full gap-2 border-gray-200">
+          <Button onClick={handleSignOut} variant="outline" className="rounded-full gap-2 border-[#CCD6CC]">
             <LogOut className="w-4 h-4" />
             התנתק
           </Button>
@@ -226,16 +226,16 @@ function SiteAdminInner() {
   if (step === "login" || step === "otp" || step === "magic-sent") {
     return (
       <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden" dir="rtl"
-        style={{ background: "#f0f2f5" }}
+        style={{ background: "#FAF7EF" }}
       >
         {/* Decorative bubbles matching site design */}
         <div className="absolute top-[10%] left-[8%] w-[140px] h-[140px] rounded-full opacity-40 pointer-events-none"
-          style={{ background: "radial-gradient(circle, #b45309, transparent 70%)" }} />
+          style={{ background: "radial-gradient(circle, #8A6230, transparent 70%)" }} />
         <div className="absolute top-[25%] left-[20%] w-[90px] h-[90px] rounded-full opacity-30 pointer-events-none"
-          style={{ background: "radial-gradient(circle, #b91c1c, transparent 70%)" }} />
+          style={{ background: "radial-gradient(circle, #9A4520, transparent 70%)" }} />
         <div className="absolute top-[18%] left-[32%] w-[110px] h-[110px] rounded-full opacity-35 pointer-events-none"
           style={{ background: "radial-gradient(circle, #003D30, transparent 70%)" }} />
-        <div className="absolute bottom-[15%] right-[10%] w-[60px] h-[60px] rounded-full opacity-20 pointer-events-none bg-[#b45309]" />
+        <div className="absolute bottom-[15%] right-[10%] w-[60px] h-[60px] rounded-full opacity-20 pointer-events-none bg-[#8A6230]" />
         <div className="absolute bottom-[25%] right-[25%] w-[30px] h-[30px] rounded-full opacity-15 pointer-events-none bg-[#003D30]" />
         <div className="absolute top-[5%] right-[40%] w-3 h-3 rounded-full bg-[#003D30] opacity-[0.05] pointer-events-none" />
 
@@ -244,20 +244,20 @@ function SiteAdminInner() {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-[420px] relative z-10"
         >
-          <div className="bg-white rounded-3xl border border-gray-100 shadow-xl p-8 space-y-6">
+          <div className="bg-white rounded-3xl border border-[#E1E8E1] shadow-xl p-8 space-y-6">
             {/* Header */}
             <div className="text-center space-y-3">
               <div className="flex items-center justify-center gap-3">
                 <div
                   className="w-14 h-14 rounded-2xl flex items-center justify-center"
-                  style={{ background: "linear-gradient(135deg, #003D30 0%, #2e2e2e 100%)" }}
+                  style={{ background: "linear-gradient(135deg, #003D30 0%, #003D30 100%)" }}
                 >
                   <Shield className="w-7 h-7 text-white" />
                 </div>
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-[#003D30]">ניהול האתר</h1>
-                <p className="text-sm text-gray-400 mt-1">SEELD Site Admin</p>
+                <p className="text-sm text-[#476356] mt-1">SEELD Site Admin</p>
               </div>
             </div>
 
@@ -274,7 +274,7 @@ function SiteAdminInner() {
                   {/* Google Login */}
                   <Button
                     variant="outline"
-                    className="w-full gap-3 h-13 rounded-full text-sm font-bold border-gray-200 hover:bg-gray-50 shadow-sm min-h-[52px]"
+                    className="w-full gap-3 h-13 rounded-full text-sm font-bold border-[#CCD6CC] hover:bg-[#F3F5F1] shadow-sm min-h-[52px]"
                     onClick={async () => {
                       setLoading(true);
                       const { error } = await signInWithGoogle("/site-admin");
@@ -296,15 +296,15 @@ function SiteAdminInner() {
                   </Button>
 
                   <div className="flex items-center gap-3 py-1">
-                    <div className="flex-1 h-px bg-gray-200" />
-                    <span className="text-[11px] text-gray-400">או באימייל</span>
-                    <div className="flex-1 h-px bg-gray-200" />
+                    <div className="flex-1 h-px bg-[#CCD6CC]" />
+                    <span className="text-[11px] text-[#476356]">או באימייל</span>
+                    <div className="flex-1 h-px bg-[#CCD6CC]" />
                   </div>
 
                   {/* Magic link + OTP */}
                   <form onSubmit={handleSendOtp} className="space-y-3">
                     <div className="relative">
-                      <Mail className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Mail className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#476356]" />
                       <Input
                         type="email"
                         value={email}
@@ -312,14 +312,14 @@ function SiteAdminInner() {
                         placeholder={ADMIN_EMAIL}
                         required
                         dir="ltr"
-                        className="h-12 pr-11 rounded-full text-sm border-gray-200 focus-visible:ring-[#003D30]/40 text-left"
+                        className="h-12 pr-11 rounded-full text-sm border-[#CCD6CC] focus-visible:ring-[#003D30]/40 text-left"
                       />
                     </div>
                     <div className="flex gap-2">
                       <Button
                         type="button"
                         onClick={() => handleSendMagicLink()}
-                        className="flex-1 h-11 rounded-full gap-2 text-sm font-bold bg-[#003D30] hover:bg-[#2e2e2e] shadow-lg shadow-[#003D30]/15"
+                        className="flex-1 h-11 rounded-full gap-2 text-sm font-bold bg-[#003D30] hover:bg-[#003D30] shadow-lg shadow-[#003D30]/15"
                         disabled={loading}
                       >
                         {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Link2 className="h-4 w-4" />}
@@ -328,7 +328,7 @@ function SiteAdminInner() {
                       <Button
                         type="submit"
                         variant="outline"
-                        className="h-11 rounded-full gap-1.5 text-sm border-gray-200 px-4"
+                        className="h-11 rounded-full gap-1.5 text-sm border-[#CCD6CC] px-4"
                         disabled={loading}
                       >
                         <Mail className="h-3.5 w-3.5" />
@@ -353,10 +353,10 @@ function SiteAdminInner() {
                   </div>
                   <div>
                     <h3 className="font-bold text-[#003D30] text-lg mb-1">בדוק את המייל</h3>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-[#476356]">
                       שלחנו לינק כניסה ל-<span className="font-bold text-[#003D30]" dir="ltr">{email}</span>
                     </p>
-                    <p className="text-xs text-gray-400 mt-2">לחץ על הלינק במייל כדי להתחבר. בדוק גם בספאם.</p>
+                    <p className="text-xs text-[#476356] mt-2">לחץ על הלינק במייל כדי להתחבר. בדוק גם בספאם.</p>
                   </div>
 
                   <div className="flex flex-col gap-2">
@@ -364,7 +364,7 @@ function SiteAdminInner() {
                       variant="outline"
                       onClick={() => handleSendMagicLink()}
                       disabled={resendTimer > 0 || loading}
-                      className="w-full rounded-full gap-2 h-11 border-gray-200"
+                      className="w-full rounded-full gap-2 h-11 border-[#CCD6CC]"
                     >
                       <RefreshCw className="w-4 h-4" />
                       {resendTimer > 0 ? `שלח שוב (${resendTimer}s)` : "שלח שוב"}
@@ -372,7 +372,7 @@ function SiteAdminInner() {
                     <button
                       type="button"
                       onClick={() => { setStep("login"); setOtp(""); }}
-                      className="text-sm text-gray-400 hover:text-[#003D30] py-2 transition-colors"
+                      className="text-sm text-[#476356] hover:text-[#003D30] py-2 transition-colors"
                     >
                       חזרה לאפשרויות התחברות
                     </button>
@@ -432,7 +432,7 @@ function SiteAdminInner() {
                           "w-12 h-12 rounded-full border-2 text-center text-lg font-bold text-[#003D30] outline-none transition-all",
                           otp[i]
                             ? "border-[#003D30] bg-[#003D30]/5 shadow-sm"
-                            : "border-gray-200 bg-white hover:border-gray-300",
+                            : "border-[#CCD6CC] bg-white hover:border-[#CCD6CC]",
                           "focus:border-[#003D30] focus:ring-2 focus:ring-[#003D30]/20"
                         )}
                       />
@@ -441,7 +441,7 @@ function SiteAdminInner() {
 
                   <Button
                     onClick={handleVerifyOtp}
-                    className="w-full h-12 rounded-full font-bold bg-[#003D30] hover:bg-[#2e2e2e] shadow-lg shadow-[#003D30]/15"
+                    className="w-full h-12 rounded-full font-bold bg-[#003D30] hover:bg-[#003D30] shadow-lg shadow-[#003D30]/15"
                     disabled={loading || otp.length !== 6}
                   >
                     {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "אמת והיכנס"}
@@ -451,7 +451,7 @@ function SiteAdminInner() {
                     <button
                       type="button"
                       onClick={() => { setStep("login"); setOtp(""); }}
-                      className="text-sm text-gray-400 hover:text-[#003D30] transition-colors"
+                      className="text-sm text-[#476356] hover:text-[#003D30] transition-colors"
                     >
                       חזרה
                     </button>
@@ -461,7 +461,7 @@ function SiteAdminInner() {
                       disabled={resendTimer > 0 || loading}
                       className={cn(
                         "text-sm transition-colors flex items-center gap-1",
-                        resendTimer > 0 ? "text-gray-300" : "text-[#003D30] hover:text-[#003D30]"
+                        resendTimer > 0 ? "text-[#8FA396]" : "text-[#003D30] hover:text-[#003D30]"
                       )}
                     >
                       <RefreshCw className="w-3 h-3" />
@@ -473,10 +473,10 @@ function SiteAdminInner() {
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center justify-center gap-2 mt-5 text-gray-400">
+          <div className="flex items-center justify-center gap-2 mt-5 text-[#476356]">
             <Lock className="w-3 h-3" />
             <span className="text-[10px]">גישה מורשית בלבד</span>
-            <div className="w-1 h-1 rounded-full bg-gray-300" />
+            <div className="w-1 h-1 rounded-full bg-[#8FA396]" />
             <span className="text-[10px]">SEELD &copy; {new Date().getFullYear()}</span>
           </div>
         </motion.div>
@@ -489,7 +489,7 @@ function SiteAdminInner() {
   // ══════════════════════════════════════════════════════
 
   return (
-    <div className="min-h-screen bg-[#f0f2f5] flex" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF] flex" dir="rtl">
       {/* ── Sidebar (desktop) ── */}
       <aside className="hidden lg:flex flex-col w-[260px] border-l bg-white shrink-0 sticky top-0 h-screen">
         <SidebarContent
@@ -534,18 +534,18 @@ function SiteAdminInner() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center hover:bg-gray-100"
+              className="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center hover:bg-[#E8EDE5]"
             >
-              <Menu className="w-5 h-5 text-gray-600" />
+              <Menu className="w-5 h-5 text-[#476356]" />
             </button>
             <div>
               <h1 className="text-lg font-bold text-[#003D30]">
                 {TABS.find(t => t.id === activeTab)?.label}
               </h1>
-              <p className="text-xs text-gray-400 hidden sm:block">ניהול ופיקוח על אתר SEELD</p>
+              <p className="text-xs text-[#476356] hidden sm:block">ניהול ופיקוח על אתר SEELD</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-400">
+          <div className="flex items-center gap-2 text-xs text-[#476356]">
             <div className="w-2 h-2 rounded-full bg-green-400" />
             <span className="hidden sm:inline">{ADMIN_EMAIL}</span>
           </div>
@@ -587,13 +587,13 @@ function SidebarContent({
       <div className="p-5 border-b flex items-center gap-3">
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ background: "linear-gradient(135deg, #003D30 0%, #262626 100%)" }}
+          style={{ background: "linear-gradient(135deg, #003D30 0%, #003D30 100%)" }}
         >
           <Shield className="w-5 h-5 text-white" />
         </div>
         <div>
           <p className="font-bold text-sm text-[#003D30]">SEELD Admin</p>
-          <p className="text-[10px] text-gray-400">ניהול האתר</p>
+          <p className="text-[10px] text-[#476356]">ניהול האתר</p>
         </div>
       </div>
 
@@ -609,7 +609,7 @@ function SidebarContent({
                 "w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-right",
                 isActive
                   ? "bg-[#003D30] text-white shadow-md shadow-[#003D30]/15"
-                  : "text-gray-600 hover:bg-gray-100 hover:text-[#003D30]"
+                  : "text-[#476356] hover:bg-[#E8EDE5] hover:text-[#003D30]"
               )}
             >
               <tab.icon className="w-4 h-4 shrink-0" />
@@ -623,7 +623,7 @@ function SidebarContent({
       <div className="p-3 border-t">
         <button
           onClick={onSignOut}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-gray-500 hover:bg-red-50 hover:text-red-600 transition-all"
+          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-[#476356] hover:bg-[#F3E2D8] hover:text-[#9A4520] transition-all"
         >
           <LogOut className="w-4 h-4" />
           התנתק
@@ -648,7 +648,7 @@ function StatCard({ icon, color, bg, label, value }: {
         </div>
         <div>
           <p className="text-2xl font-bold text-[#003D30]">{value}</p>
-          <p className="text-[11px] text-gray-400">{label}</p>
+          <p className="text-[11px] text-[#476356]">{label}</p>
         </div>
       </div>
     </div>
@@ -662,7 +662,7 @@ function ModuleHeader({ title, subtitle, action }: {
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
       <div>
         <h2 className="text-xl font-bold text-[#003D30]">{title}</h2>
-        {subtitle && <p className="text-sm text-gray-400 mt-0.5">{subtitle}</p>}
+        {subtitle && <p className="text-sm text-[#476356] mt-0.5">{subtitle}</p>}
       </div>
       {action}
     </div>
@@ -674,11 +674,11 @@ function EmptyState({ icon, title, subtitle }: {
 }) {
   return (
     <div className="text-center py-16">
-      <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4 text-gray-400">
+      <div className="w-16 h-16 rounded-full bg-[#E8EDE5] flex items-center justify-center mx-auto mb-4 text-[#476356]">
         {icon}
       </div>
-      <h3 className="font-bold text-gray-600 mb-1">{title}</h3>
-      <p className="text-sm text-gray-400">{subtitle}</p>
+      <h3 className="font-bold text-[#476356] mb-1">{title}</h3>
+      <p className="text-sm text-[#476356]">{subtitle}</p>
     </div>
   );
 }
@@ -942,16 +942,16 @@ function AnalyticsModule() {
     return c ? `${c.flag} ${c.name}` : code;
   };
 
-  const DEVICE_COLORS: Record<string, string> = { desktop: "#003D30", mobile: "#737373", tablet: "#b45309" };
+  const DEVICE_COLORS: Record<string, string> = { desktop: "#003D30", mobile: "#476356", tablet: "#8A6230" };
   const DEVICE_LABELS: Record<string, string> = { desktop: "\u05DE\u05D7\u05E9\u05D1", mobile: "\u05E0\u05D9\u05D9\u05D3", tablet: "\u05D8\u05D0\u05D1\u05DC\u05D8" };
-  const BROWSER_COLORS: Record<string, string> = { Chrome: "#003D30", Safari: "#737373", Firefox: "#b45309", Edge: "#15803d", Other: "#b91c1c" };
+  const BROWSER_COLORS: Record<string, string> = { Chrome: "#003D30", Safari: "#476356", Firefox: "#8A6230", Edge: "#2F6B4E", Other: "#9A4520" };
   const DEVICE_ICONS: Record<string, string> = { desktop: "מחשב", mobile: "נייד", tablet: "טאבלט" };
 
   const TrendArrow = ({ value, invertColors = false }: { value: number; invertColors?: boolean }) => {
     const isPositive = invertColors ? value < 0 : value > 0;
     const isNegative = invertColors ? value > 0 : value < 0;
     return (
-      <span className={cn("text-xs font-bold flex items-center gap-0.5", isPositive ? "text-green-500" : isNegative ? "text-red-500" : "text-gray-400")}>
+      <span className={cn("text-xs font-bold flex items-center gap-0.5", isPositive ? "text-[#2F6B4E]" : isNegative ? "text-[#9A4520]" : "text-[#476356]")}>
         {value > 0 ? "\u25B2" : value < 0 ? "\u25BC" : "\u2013"} {Math.abs(value)}%
       </span>
     );
@@ -964,14 +964,14 @@ function AnalyticsModule() {
         subtitle="\u05DE\u05E2\u05E7\u05D1 \u05D1\u05D9\u05E7\u05D5\u05E8\u05D9\u05DD \u05D5\u05E0\u05EA\u05D5\u05E0\u05D9 \u05D2\u05DC\u05D9\u05E9\u05D4 \u05D1\u05D0\u05EA\u05E8"
         action={
           <div className="flex items-center gap-2">
-            <div className="flex rounded-full border border-gray-200 overflow-hidden">
+            <div className="flex rounded-full border border-[#CCD6CC] overflow-hidden">
               {(["today", "week", "month", "all"] as const).map((r) => (
                 <button
                   key={r}
                   onClick={() => setRange(r)}
                   className={cn(
                     "px-3 py-1.5 text-xs font-medium transition-colors",
-                    range === r ? "bg-[#003D30] text-white" : "text-gray-500 hover:text-[#003D30]"
+                    range === r ? "bg-[#003D30] text-white" : "text-[#476356] hover:text-[#003D30]"
                   )}
                 >
                   {r === "today" ? "\u05D4\u05D9\u05D5\u05DD" : r === "week" ? "\u05E9\u05D1\u05D5\u05E2" : r === "month" ? "\u05D7\u05D5\u05D3\u05E9" : "\u05D4\u05DB\u05DC"}
@@ -988,9 +988,9 @@ function AnalyticsModule() {
       {/* ── Section 1: KPI Strip ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Views */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-gray-400">{"\u05E6\u05E4\u05D9\u05D5\u05EA"}</p>
+            <p className="text-xs text-[#476356]">{"\u05E6\u05E4\u05D9\u05D5\u05EA"}</p>
             <TrendArrow value={pctChange(totalViews, prevTotalViews)} />
           </div>
           <p className="text-3xl font-bold text-[#003D30]">{loading ? "..." : totalViews.toLocaleString()}</p>
@@ -999,36 +999,36 @@ function AnalyticsModule() {
           </div>
         </div>
         {/* Unique Visitors */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-gray-400">{"\u05DE\u05D1\u05E7\u05E8\u05D9\u05DD \u05D9\u05D9\u05D7\u05D5\u05D3\u05D9\u05D9\u05DD"}</p>
+            <p className="text-xs text-[#476356]">{"\u05DE\u05D1\u05E7\u05E8\u05D9\u05DD \u05D9\u05D9\u05D7\u05D5\u05D3\u05D9\u05D9\u05DD"}</p>
             <TrendArrow value={pctChange(uniqueSessions, prevUniqueSessions)} />
           </div>
           <p className="text-3xl font-bold text-[#003D30]">{loading ? "..." : uniqueSessions.toLocaleString()}</p>
           <div className="mt-3">
-            <Sparkline data={sparkSessions} color="#b45309" />
+            <Sparkline data={sparkSessions} color="#8A6230" />
           </div>
         </div>
         {/* Bounce Rate */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-gray-400">{"\u05E9\u05D9\u05E2\u05D5\u05E8 \u05E0\u05D8\u05D9\u05E9\u05D4"}</p>
+            <p className="text-xs text-[#476356]">{"\u05E9\u05D9\u05E2\u05D5\u05E8 \u05E0\u05D8\u05D9\u05E9\u05D4"}</p>
             <TrendArrow value={pctChange(bounceRate, prevBounceRate)} invertColors />
           </div>
           <p className="text-3xl font-bold text-[#003D30]">{loading ? "..." : `${bounceRate}%`}</p>
           <div className="mt-3">
-            <Sparkline data={[0, 0, 0, 0, 0, 0, 0].map(() => bounceRate)} color="#b91c1c" />
+            <Sparkline data={[0, 0, 0, 0, 0, 0, 0].map(() => bounceRate)} color="#9A4520" />
           </div>
         </div>
         {/* Avg Pages / Session */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-gray-400">{"\u05DE\u05DE\u05D5\u05E6\u05E2 \u05E2\u05DE\u05D5\u05D3\u05D9\u05DD / \u05D1\u05D9\u05E7\u05D5\u05E8"}</p>
+            <p className="text-xs text-[#476356]">{"\u05DE\u05DE\u05D5\u05E6\u05E2 \u05E2\u05DE\u05D5\u05D3\u05D9\u05DD / \u05D1\u05D9\u05E7\u05D5\u05E8"}</p>
             <TrendArrow value={pctChange(avgPages, prevAvgPages)} />
           </div>
           <p className="text-3xl font-bold text-[#003D30]">{loading ? "..." : avgPages}</p>
           <div className="mt-3">
-            <Sparkline data={[0, 0, 0, 0, 0, 0, 0].map(() => avgPages)} color="#15803d" />
+            <Sparkline data={[0, 0, 0, 0, 0, 0, 0].map(() => avgPages)} color="#2F6B4E" />
           </div>
         </div>
       </div>
@@ -1038,7 +1038,7 @@ function AnalyticsModule() {
         {/* Left Column */}
         <div className="space-y-6">
           {/* Views Over Time */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
             <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-[#003D30]" />
               {"\u05E6\u05E4\u05D9\u05D5\u05EA \u05DC\u05D0\u05D5\u05E8\u05DA \u05D6\u05DE\u05DF"}
@@ -1046,7 +1046,7 @@ function AnalyticsModule() {
             {loading ? (
               <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#003D30]" /></div>
             ) : dailyEntries.length === 0 ? (
-              <p className="text-sm text-gray-400 text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
+              <p className="text-sm text-[#476356] text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
             ) : (
               <div>
                 <div className="flex items-end gap-1" style={{ height: 120 }}>
@@ -1069,7 +1069,7 @@ function AnalyticsModule() {
                     );
                   })}
                 </div>
-                <div className="flex justify-between mt-2 text-[9px] text-gray-400">
+                <div className="flex justify-between mt-2 text-[9px] text-[#476356]">
                   {dailyEntries.length > 0 && <span>{new Date(dailyEntries[0][0]).toLocaleDateString("he-IL", { day: "2-digit", month: "2-digit" })}</span>}
                   {dailyEntries.length > 1 && <span>{new Date(dailyEntries[dailyEntries.length - 1][0]).toLocaleDateString("he-IL", { day: "2-digit", month: "2-digit" })}</span>}
                 </div>
@@ -1078,7 +1078,7 @@ function AnalyticsModule() {
           </div>
 
           {/* Top Pages */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
             <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-[#003D30]" />
               {"\u05E2\u05DE\u05D5\u05D3\u05D9\u05DD \u05DE\u05D5\u05D1\u05D9\u05DC\u05D9\u05DD"}
@@ -1086,7 +1086,7 @@ function AnalyticsModule() {
             {loading ? (
               <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#003D30]" /></div>
             ) : topPages.length === 0 ? (
-              <p className="text-sm text-gray-400 text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
+              <p className="text-sm text-[#476356] text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
             ) : (
               <div className="space-y-3">
                 {topPages.map(([slug, count]) => {
@@ -1099,11 +1099,11 @@ function AnalyticsModule() {
                           {label(slug)}
                         </span>
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] text-gray-400">{pct}%</span>
+                          <span className="text-[10px] text-[#476356]">{pct}%</span>
                           <span className="text-xs font-bold text-[#003D30] min-w-[32px] text-left" dir="ltr">{count}</span>
                         </div>
                       </div>
-                      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-2 bg-[#E8EDE5] rounded-full overflow-hidden">
                         <div
                           className="h-full rounded-full transition-all duration-500"
                           style={{
@@ -1123,19 +1123,19 @@ function AnalyticsModule() {
         {/* Right Column */}
         <div className="space-y-6">
           {/* Countries */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
             <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
               <Globe className="w-4 h-4 text-[#003D30]" />
               {"\u05DE\u05D3\u05D9\u05E0\u05D5\u05EA"}
             </h3>
             {topCountries.length === 0 ? (
-              <p className="text-sm text-gray-400 text-center py-4">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9 \u05DE\u05D3\u05D9\u05E0\u05D5\u05EA"}</p>
+              <p className="text-sm text-[#476356] text-center py-4">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9 \u05DE\u05D3\u05D9\u05E0\u05D5\u05EA"}</p>
             ) : (
               <div className="space-y-2.5">
                 {topCountries.map(([code, count]) => (
                   <div key={code} className="flex items-center gap-3">
                     <span className="text-sm min-w-[120px] truncate">{countryLabel(code)}</span>
-                    <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="flex-1 h-2 bg-[#E8EDE5] rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full"
                         style={{
@@ -1152,9 +1152,9 @@ function AnalyticsModule() {
           </div>
 
           {/* Devices */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
             <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-[#b45309]" />
+              <MapPin className="w-4 h-4 text-[#8A6230]" />
               {"\u05DE\u05DB\u05E9\u05D9\u05E8\u05D9\u05DD"}
             </h3>
             {/* Stacked horizontal bar */}
@@ -1175,7 +1175,7 @@ function AnalyticsModule() {
             </div>
             <div className="flex items-center gap-4 justify-center flex-wrap">
               {(["desktop", "mobile", "tablet"] as const).map((d) => (
-                <div key={d} className="flex items-center gap-1.5 text-xs text-gray-500">
+                <div key={d} className="flex items-center gap-1.5 text-xs text-[#476356]">
                   <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: DEVICE_COLORS[d] }} />
                   <span>{DEVICE_LABELS[d]}</span>
                   <span className="font-bold text-[#003D30]">{deviceCounts[d]}</span>
@@ -1185,9 +1185,9 @@ function AnalyticsModule() {
           </div>
 
           {/* Browsers */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
             <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
-              <Globe className="w-4 h-4 text-[#15803d]" />
+              <Globe className="w-4 h-4 text-[#2F6B4E]" />
               {"\u05D3\u05E4\u05D3\u05E4\u05E0\u05D9\u05DD"}
             </h3>
             {/* Stacked horizontal bar */}
@@ -1208,7 +1208,7 @@ function AnalyticsModule() {
             </div>
             <div className="flex items-center gap-4 justify-center flex-wrap">
               {topBrowsers.map(([name, count]) => (
-                <div key={name} className="flex items-center gap-1.5 text-xs text-gray-500">
+                <div key={name} className="flex items-center gap-1.5 text-xs text-[#476356]">
                   <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: BROWSER_COLORS[name] ?? "#999" }} />
                   <span>{name}</span>
                   <span className="font-bold text-[#003D30]">{count}</span>
@@ -1218,17 +1218,17 @@ function AnalyticsModule() {
           </div>
 
           {/* Top Referrers */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
             <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
-              <Link2 className="w-4 h-4 text-[#b91c1c]" />
+              <Link2 className="w-4 h-4 text-[#9A4520]" />
               {"\u05DE\u05E7\u05D5\u05E8\u05D5\u05EA \u05EA\u05E0\u05D5\u05E2\u05D4"}
             </h3>
             {topReferrers.length === 0 ? (
-              <p className="text-sm text-gray-400 text-center py-4">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9 \u05D4\u05E4\u05E0\u05D9\u05D5\u05EA"}</p>
+              <p className="text-sm text-[#476356] text-center py-4">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9 \u05D4\u05E4\u05E0\u05D9\u05D5\u05EA"}</p>
             ) : (
               <div className="space-y-2">
                 {topReferrers.map(([domain, count]) => (
-                  <div key={domain} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-gray-50">
+                  <div key={domain} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-[#F3F5F1]">
                     <span className="text-sm text-[#003D30] truncate max-w-[200px]" dir="ltr">{domain}</span>
                     <span className="text-xs font-bold text-[#003D30]">{count}</span>
                   </div>
@@ -1240,16 +1240,16 @@ function AnalyticsModule() {
       </div>
 
       {/* ── Section 3: Live Feed ── */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
         <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
           <Clock className="w-4 h-4 text-[#003D30]" />
           {"\u05E4\u05E2\u05D9\u05DC\u05D5\u05EA \u05D0\u05D7\u05E8\u05D5\u05E0\u05D4"}
-          <span className="mr-auto text-[10px] text-gray-400 font-normal">{"\u05DE\u05EA\u05E2\u05D3\u05DB\u05DF \u05DB\u05DC 30 \u05E9\u05E0\u05D9\u05D5\u05EA"}</span>
+          <span className="mr-auto text-[10px] text-[#476356] font-normal">{"\u05DE\u05EA\u05E2\u05D3\u05DB\u05DF \u05DB\u05DC 30 \u05E9\u05E0\u05D9\u05D5\u05EA"}</span>
         </h3>
         {loading ? (
           <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#003D30]" /></div>
         ) : views.length === 0 ? (
-          <p className="text-sm text-gray-400 text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
+          <p className="text-sm text-[#476356] text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
         ) : (
           <div className="space-y-1 max-h-80 overflow-y-auto">
             {views.slice(0, 50).map((v, i) => {
@@ -1260,14 +1260,14 @@ function AnalyticsModule() {
               const cInfo = v.country ? COUNTRY_MAP[v.country] : null;
               const deviceIcon = v.device ? (DEVICE_ICONS[v.device] ?? "") : "";
               return (
-                <div key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 text-sm transition-colors">
-                  <span className="text-xs text-gray-400 shrink-0 min-w-[60px]" dir="ltr">
+                <div key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#F3F5F1] text-sm transition-colors">
+                  <span className="text-xs text-[#476356] shrink-0 min-w-[60px]" dir="ltr">
                     {isToday ? timeStr : `${dateStr} ${timeStr}`}
                   </span>
                   <span className="font-medium text-[#003D30] truncate flex-1">{label(v.slug)}</span>
                   {cInfo && <span className="text-sm shrink-0" title={cInfo.name}>{cInfo.flag}</span>}
-                  {deviceIcon && <span className="text-[10px] text-gray-400 shrink-0 bg-gray-100 px-1.5 py-0.5 rounded" title={v.device}>{deviceIcon}</span>}
-                  {v.browser && <span className="text-[10px] text-gray-400 shrink-0 bg-gray-100 px-1.5 py-0.5 rounded">{v.browser}</span>}
+                  {deviceIcon && <span className="text-[10px] text-[#476356] shrink-0 bg-[#E8EDE5] px-1.5 py-0.5 rounded" title={v.device}>{deviceIcon}</span>}
+                  {v.browser && <span className="text-[10px] text-[#476356] shrink-0 bg-[#E8EDE5] px-1.5 py-0.5 rounded">{v.browser}</span>}
                 </div>
               );
             })}
@@ -1318,13 +1318,13 @@ function TrackSyncCard() {
     <div className="bg-white rounded-2xl p-5 shadow-sm border hover:shadow-md transition-all">
       <div
         className="w-12 h-12 rounded-full flex items-center justify-center mb-3"
-        style={{ background: "linear-gradient(135deg, #15803d 0%, #6fa34d 100%)" }}
+        style={{ background: "linear-gradient(135deg, #2F6B4E 0%, #6fa34d 100%)" }}
       >
         <RefreshCw className={cn("w-6 h-6 text-white", syncing && "animate-spin")} />
       </div>
       <h4 className="font-bold text-[#003D30] mb-0.5">סנכרן מסלולי השקעה</h4>
-      <p className="text-xs text-gray-400 mb-3">העלה קובץ Excel מגמלנט/פנסיהנט</p>
-      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#15803d] text-white text-xs font-bold cursor-pointer hover:bg-[#7dab5a] transition-colors">
+      <p className="text-xs text-[#476356] mb-3">העלה קובץ Excel מגמלנט/פנסיהנט</p>
+      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#2F6B4E] text-white text-xs font-bold cursor-pointer hover:bg-[#7dab5a] transition-colors">
         <input type="file" accept=".xls,.xlsx" onChange={handleFileUpload} className="hidden" ref={fileRef} />
         {syncing ? "מסנכרן..." : "בחר קובץ"}
       </label>
@@ -1363,17 +1363,17 @@ function OverviewModule() {
       <ModuleHeader title="סקירה כללית" subtitle="סטטיסטיקות ומצב כללי של האתר" />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={<MessageSquare className="w-5 h-5" />} color="#003D30" bg="#f5f5f5" label="לידים ופניות" value={stats.leads} />
-        <StatCard icon={<Users className="w-5 h-5" />} color="#6366f1" bg="#ede9fe" label="שאלוני הצטרפות" value={stats.onboarding} />
-        <StatCard icon={<PenTool className="w-5 h-5" />} color="#f59e0b" bg="#fef3c7" label="פוסטים בבלוג" value={stats.blogPosts} />
-        <StatCard icon={<Mail className="w-5 h-5" />} color="#b91c1c" bg="#fee2e2" label="פניות צור קשר" value={stats.contacts} />
+        <StatCard icon={<MessageSquare className="w-5 h-5" />} color="#003D30" bg="#EEF2EC" label="לידים ופניות" value={stats.leads} />
+        <StatCard icon={<Users className="w-5 h-5" />} color="#819B7D" bg="#ede9fe" label="שאלוני הצטרפות" value={stats.onboarding} />
+        <StatCard icon={<PenTool className="w-5 h-5" />} color="#CBA064" bg="#F5EEE0" label="פוסטים בבלוג" value={stats.blogPosts} />
+        <StatCard icon={<Mail className="w-5 h-5" />} color="#9A4520" bg="#F3E2D8" label="פניות צור קשר" value={stats.contacts} />
       </div>
 
       {/* Quick actions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <QuickActionCard
           icon={<UserPlus className="w-6 h-6 text-white" />}
-          gradient="linear-gradient(135deg, #003D30 0%, #2e2e2e 100%)"
+          gradient="linear-gradient(135deg, #003D30 0%, #003D30 100%)"
           title="הזמן סוכן חדש"
           subtitle="שלח לינק הזמנה לסוכן חדש"
         />
@@ -1385,7 +1385,7 @@ function OverviewModule() {
         />
         <QuickActionCard
           icon={<PenTool className="w-6 h-6 text-white" />}
-          gradient="linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"
+          gradient="linear-gradient(135deg, #CBA064 0%, #d97706 100%)"
           title="כתוב פוסט חדש"
           subtitle="הוסף תוכן לבלוג האתר"
         />
@@ -1407,7 +1407,7 @@ function QuickActionCard({ icon, gradient, title, subtitle }: {
         {icon}
       </div>
       <h4 className="font-bold text-[#003D30] mb-0.5">{title}</h4>
-      <p className="text-xs text-gray-400">{subtitle}</p>
+      <p className="text-xs text-[#476356]">{subtitle}</p>
     </div>
   );
 }
@@ -1458,12 +1458,12 @@ function BlogModule() {
         action={
           <div className="flex items-center gap-2">
             <div className="relative">
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#476356]" />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="חפש פוסט..."
-                className="pr-10 rounded-full h-10 w-[200px] border-gray-200"
+                className="pr-10 rounded-full h-10 w-[200px] border-[#CCD6CC]"
               />
             </div>
             <Button onClick={fetchPosts} variant="outline" size="icon" className="rounded-full">
@@ -1483,16 +1483,16 @@ function BlogModule() {
             <div key={post.id} className="bg-white rounded-xl p-4 border shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
               <div className="min-w-0 flex-1">
                 <h4 className="font-bold text-[#003D30] truncate">{post.title}</h4>
-                <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
-                  {post.category && <span className="bg-[#f5f5f5] text-[#003D30] px-2 py-0.5 rounded-full text-[10px] font-medium">{post.category}</span>}
+                <div className="flex items-center gap-3 mt-1 text-xs text-[#476356]">
+                  {post.category && <span className="bg-[#EEF2EC] text-[#003D30] px-2 py-0.5 rounded-full text-[10px] font-medium">{post.category}</span>}
                   <span>{new Date(post.created_at).toLocaleDateString("he-IL")}</span>
-                  <span className={post.status === "published" ? "text-green-600" : "text-gray-400"}>
+                  <span className={post.status === "published" ? "text-[#2F6B4E]" : "text-[#476356]"}>
                     {post.status === "published" ? "פורסם" : "טיוטה"}
                   </span>
                 </div>
               </div>
               <div className="flex items-center gap-1 shrink-0 mr-3">
-                <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 text-red-400 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(post.id)}>
+                <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 text-[#9A4520] hover:text-[#9A4520] hover:bg-[#F3E2D8]" onClick={() => handleDelete(post.id)}>
                   <Trash2 className="w-3.5 h-3.5" />
                 </Button>
               </div>
@@ -1536,7 +1536,7 @@ function LeadsModule() {
       <div className="flex gap-2 mb-6">
         <Button
           variant={tab === "leads" ? "default" : "outline"}
-          className={cn("rounded-full gap-2", tab === "leads" && "bg-[#003D30] hover:bg-[#262626]")}
+          className={cn("rounded-full gap-2", tab === "leads" && "bg-[#003D30] hover:bg-[#003D30]")}
           onClick={() => setTab("leads")}
         >
           <TrendingUp className="w-4 h-4" />
@@ -1544,7 +1544,7 @@ function LeadsModule() {
         </Button>
         <Button
           variant={tab === "contacts" ? "default" : "outline"}
-          className={cn("rounded-full gap-2", tab === "contacts" && "bg-[#003D30] hover:bg-[#262626]")}
+          className={cn("rounded-full gap-2", tab === "contacts" && "bg-[#003D30] hover:bg-[#003D30]")}
           onClick={() => setTab("contacts")}
         >
           <Mail className="w-4 h-4" />
@@ -1562,13 +1562,13 @@ function LeadsModule() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-bold text-[#003D30]">{lead.full_name}</h4>
-                    <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                    <div className="flex items-center gap-3 mt-1 text-xs text-[#476356]">
                       <span dir="ltr">{lead.phone}</span>
                       <span>{lead.email}</span>
-                      <span className="bg-[#f5f5f5] text-[#003D30] px-2 py-0.5 rounded-full text-[10px] font-medium">{lead.insurance_type}</span>
+                      <span className="bg-[#EEF2EC] text-[#003D30] px-2 py-0.5 rounded-full text-[10px] font-medium">{lead.insurance_type}</span>
                     </div>
                   </div>
-                  <span className="text-xs text-gray-400">{new Date(lead.created_at).toLocaleDateString("he-IL")}</span>
+                  <span className="text-xs text-[#476356]">{new Date(lead.created_at).toLocaleDateString("he-IL")}</span>
                 </div>
               </div>
             ))}
@@ -1584,10 +1584,10 @@ function LeadsModule() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-bold text-[#003D30]">{c.name}</h4>
-                    <p className="text-xs text-gray-400 mt-0.5">{c.email}</p>
-                    {c.message && <p className="text-sm text-gray-600 mt-2 line-clamp-2">{c.message}</p>}
+                    <p className="text-xs text-[#476356] mt-0.5">{c.email}</p>
+                    {c.message && <p className="text-sm text-[#476356] mt-2 line-clamp-2">{c.message}</p>}
                   </div>
-                  <span className="text-xs text-gray-400 shrink-0">{new Date(c.created_at).toLocaleDateString("he-IL")}</span>
+                  <span className="text-xs text-[#476356] shrink-0">{new Date(c.created_at).toLocaleDateString("he-IL")}</span>
                 </div>
               </div>
             ))}
@@ -1655,7 +1655,7 @@ function ClientInvitesModule() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="ישראל ישראלי"
-              className="mt-1 rounded-full border-gray-200"
+              className="mt-1 rounded-full border-[#CCD6CC]"
             />
           </div>
           <div>
@@ -1666,7 +1666,7 @@ function ClientInvitesModule() {
               onChange={(e) => setPhone(e.target.value)}
               placeholder="052-000-0000"
               dir="ltr"
-              className="mt-1 rounded-full border-gray-200 text-left"
+              className="mt-1 rounded-full border-[#CCD6CC] text-left"
             />
           </div>
           <div>
@@ -1677,7 +1677,7 @@ function ClientInvitesModule() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="client@email.com"
               dir="ltr"
-              className="mt-1 rounded-full border-gray-200 text-left"
+              className="mt-1 rounded-full border-[#CCD6CC] text-left"
             />
           </div>
         </div>
@@ -1685,12 +1685,12 @@ function ClientInvitesModule() {
           <Button
             onClick={handleSend}
             disabled={sending || !email}
-            className="gap-2 rounded-full bg-[#003D30] hover:bg-[#262626] shadow-lg shadow-[#003D30]/15"
+            className="gap-2 rounded-full bg-[#003D30] hover:bg-[#003D30] shadow-lg shadow-[#003D30]/15"
           >
             {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             שלח לינק
           </Button>
-          <Button variant="outline" onClick={handleCopyLink} className="gap-2 rounded-full border-gray-200">
+          <Button variant="outline" onClick={handleCopyLink} className="gap-2 rounded-full border-[#CCD6CC]">
             <Copy className="w-4 h-4" />
             העתק קישור
           </Button>
@@ -1703,8 +1703,8 @@ function ClientInvitesModule() {
           <h4 className="text-sm font-bold text-[#003D30] mb-3">נשלחו היום ({sent.length})</h4>
           <div className="space-y-2">
             {sent.map((item, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm text-gray-600 bg-[#f5f5f5]/50 rounded-lg px-3 py-2">
-                <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
+              <div key={i} className="flex items-center gap-2 text-sm text-[#476356] bg-[#EEF2EC]/50 rounded-lg px-3 py-2">
+                <CheckCircle2 className="w-4 h-4 text-[#2F6B4E] shrink-0" />
                 {item}
               </div>
             ))}
@@ -1837,7 +1837,7 @@ function AgentManagementModule() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="agent@example.com"
               dir="ltr"
-              className="mt-1 rounded-full border-gray-200 text-left"
+              className="mt-1 rounded-full border-[#CCD6CC] text-left"
               onKeyDown={(e) => e.key === "Enter" && handleInvite()}
             />
           </div>
@@ -1849,7 +1849,7 @@ function AgentManagementModule() {
               onChange={(e) => setAgentPhone(e.target.value)}
               placeholder="052-000-0000"
               dir="ltr"
-              className="mt-1 rounded-full border-gray-200 text-left"
+              className="mt-1 rounded-full border-[#CCD6CC] text-left"
             />
           </div>
         </div>
@@ -1857,7 +1857,7 @@ function AgentManagementModule() {
           <Button
             onClick={handleInvite}
             disabled={sending || !email.trim()}
-            className="gap-2 rounded-full bg-[#003D30] hover:bg-[#262626] shadow-lg shadow-[#003D30]/15"
+            className="gap-2 rounded-full bg-[#003D30] hover:bg-[#003D30] shadow-lg shadow-[#003D30]/15"
           >
             {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             שלח הזמנה
@@ -1874,19 +1874,19 @@ function AgentManagementModule() {
           </h4>
           <div className="space-y-2">
             {agents.map((a) => (
-              <div key={a.id} className="flex items-center justify-between px-4 py-3 rounded-xl bg-gray-50 border border-gray-100">
+              <div key={a.id} className="flex items-center justify-between px-4 py-3 rounded-xl bg-[#F3F5F1] border border-[#E1E8E1]">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: "linear-gradient(135deg, #003D30, #262626)" }}>
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: "linear-gradient(135deg, #003D30, #003D30)" }}>
                     {a.full_name?.charAt(0) || "?"}
                   </div>
                   <div>
                     <p className="font-medium text-sm text-[#003D30]">{a.full_name}</p>
-                    {a.phone && <p className="text-[11px] text-gray-400" dir="ltr">{a.phone}</p>}
+                    {a.phone && <p className="text-[11px] text-[#476356]" dir="ltr">{a.phone}</p>}
                   </div>
                 </div>
                 <span className={cn(
                   "text-[10px] font-medium px-2.5 py-1 rounded-full",
-                  a.role === "admin" ? "bg-[#f5f5f5] text-[#003D30]" : "bg-gray-100 text-gray-500"
+                  a.role === "admin" ? "bg-[#EEF2EC] text-[#003D30]" : "bg-[#E8EDE5] text-[#476356]"
                 )}>
                   {a.role === "admin" ? "מנהל" : "סוכן"}
                 </span>
@@ -1908,19 +1908,19 @@ function AgentManagementModule() {
               const isExpired = inv.expires_at && new Date(inv.expires_at) < new Date();
               const isAccepted = inv.status === "accepted";
               return (
-                <div key={inv.id} className="flex items-center justify-between px-4 py-3 rounded-xl border border-gray-100 bg-gray-50">
+                <div key={inv.id} className="flex items-center justify-between px-4 py-3 rounded-xl border border-[#E1E8E1] bg-[#F3F5F1]">
                   <div className="flex items-center gap-3">
                     <span className="text-sm font-mono" dir="ltr">{inv.email}</span>
                     {isAccepted ? (
-                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-700 flex items-center gap-1">
+                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#E8EDE5] text-[#2F6B4E] flex items-center gap-1">
                         <CheckCircle2 className="w-3 h-3" />התקבלה
                       </span>
                     ) : isExpired ? (
-                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 flex items-center gap-1">
+                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#E8EDE5] text-[#476356] flex items-center gap-1">
                         <XCircle className="w-3 h-3" />פג תוקף
                       </span>
                     ) : (
-                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 flex items-center gap-1">
+                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#F5EEE0] text-[#8A6230] flex items-center gap-1">
                         <Clock className="w-3 h-3" />ממתינה
                       </span>
                     )}
@@ -1931,7 +1931,7 @@ function AgentManagementModule() {
                         <Send className="w-3 h-3" />שלח שוב
                       </Button>
                     )}
-                    <Button variant="ghost" size="sm" onClick={() => handleDeleteInvitation(inv.id)} className="h-8 w-8 p-0 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full">
+                    <Button variant="ghost" size="sm" onClick={() => handleDeleteInvitation(inv.id)} className="h-8 w-8 p-0 text-[#9A4520] hover:text-[#9A4520] hover:bg-[#F3E2D8] rounded-full">
                       <Trash2 className="w-3.5 h-3.5" />
                     </Button>
                   </div>
@@ -1980,8 +1980,8 @@ function OnboardingModule() {
         subtitle={`${submissions.length} שאלונים`}
         action={
           <div className="relative">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="חפש..." className="pr-10 rounded-full h-10 w-[200px] border-gray-200" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#476356]" />
+            <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="חפש..." className="pr-10 rounded-full h-10 w-[200px] border-[#CCD6CC]" />
           </div>
         }
       />
@@ -1996,24 +1996,24 @@ function OnboardingModule() {
               <div key={s.id} className="bg-white rounded-xl p-4 border shadow-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#f5f5f5] flex items-center justify-center text-[#003D30] font-bold text-sm">
+                    <div className="w-10 h-10 rounded-full bg-[#EEF2EC] flex items-center justify-center text-[#003D30] font-bold text-sm">
                       {(s.first_name?.[0] || "?").toUpperCase()}
                     </div>
                     <div>
                       <h4 className="font-bold text-[#003D30]">{fullName}</h4>
-                      <div className="flex items-center gap-3 mt-0.5 text-xs text-gray-400">
+                      <div className="flex items-center gap-3 mt-0.5 text-xs text-[#476356]">
                         {s.phone && <span dir="ltr">{s.phone}</span>}
                         {s.email && <span>{s.email}</span>}
                         {s.city && <span>{s.city}</span>}
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <div className="flex items-center gap-2 text-xs text-[#476356]">
                     <span className={cn(
                       "px-2 py-0.5 rounded-full text-[10px] font-medium",
-                      s.status === "new" ? "bg-blue-100 text-blue-700" :
-                      s.status === "in_progress" ? "bg-yellow-100 text-yellow-700" :
-                      s.status === "closed" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
+                      s.status === "new" ? "bg-[#E8EDE5] text-[#476356]" :
+                      s.status === "in_progress" ? "bg-[#F5EEE0] text-[#8A6230]" :
+                      s.status === "closed" ? "bg-[#E8EDE5] text-[#2F6B4E]" : "bg-[#E8EDE5] text-[#476356]"
                     )}>
                       {s.status === "new" ? "חדש" : s.status === "in_progress" ? "בטיפול" : s.status === "closed" ? "סגור" : s.status}
                     </span>
@@ -2079,19 +2079,19 @@ function DirectDebitModule() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b bg-gray-50">
-                <th className="text-right py-3 px-4 font-medium text-gray-500">תאריך</th>
-                <th className="text-right py-3 px-4 font-medium text-gray-500">שם לקוח</th>
-                <th className="text-right py-3 px-4 font-medium text-gray-500">בעל חשבון</th>
-                <th className="text-right py-3 px-4 font-medium text-gray-500">בנק</th>
-                <th className="text-right py-3 px-4 font-medium text-gray-500">סניף</th>
-                <th className="text-right py-3 px-4 font-medium text-gray-500">מספר חשבון</th>
+              <tr className="border-b bg-[#F3F5F1]">
+                <th className="text-right py-3 px-4 font-medium text-[#476356]">תאריך</th>
+                <th className="text-right py-3 px-4 font-medium text-[#476356]">שם לקוח</th>
+                <th className="text-right py-3 px-4 font-medium text-[#476356]">בעל חשבון</th>
+                <th className="text-right py-3 px-4 font-medium text-[#476356]">בנק</th>
+                <th className="text-right py-3 px-4 font-medium text-[#476356]">סניף</th>
+                <th className="text-right py-3 px-4 font-medium text-[#476356]">מספר חשבון</th>
               </tr>
             </thead>
             <tbody>
               {submissions.map(s => (
-                <tr key={s.id} className="border-b hover:bg-gray-50 transition-colors">
-                  <td className="py-3 px-4 text-gray-400">{new Date(s.created_at).toLocaleDateString("he-IL")}</td>
+                <tr key={s.id} className="border-b hover:bg-[#F3F5F1] transition-colors">
+                  <td className="py-3 px-4 text-[#476356]">{new Date(s.created_at).toLocaleDateString("he-IL")}</td>
                   <td className="py-3 px-4 font-medium text-[#003D30]">{[s.first_name, s.last_name].filter(Boolean).join(" ") || "—"}</td>
                   <td className="py-3 px-4">{s.account_owner ?? "—"}</td>
                   <td className="py-3 px-4">{s.bank_name ?? "—"}</td>
@@ -2163,8 +2163,8 @@ function SettingsModule() {
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
-      <span className="text-sm text-gray-500">{label}</span>
+    <div className="flex items-center justify-between py-2 border-b border-[#E1E8E1] last:border-0">
+      <span className="text-sm text-[#476356]">{label}</span>
       <span className="text-sm font-medium text-[#003D30]" dir="ltr">{value}</span>
     </div>
   );
@@ -2176,9 +2176,9 @@ function LinkButton({ label, href }: { label: string; href: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-2 px-4 py-3 rounded-xl border border-gray-200 hover:border-[#003D30]/30 hover:bg-[#f5f5f5]/30 text-sm text-[#003D30] font-medium transition-all"
+      className="flex items-center gap-2 px-4 py-3 rounded-xl border border-[#CCD6CC] hover:border-[#003D30]/30 hover:bg-[#EEF2EC]/30 text-sm text-[#003D30] font-medium transition-all"
     >
-      <Globe className="w-4 h-4 text-gray-400" />
+      <Globe className="w-4 h-4 text-[#476356]" />
       {label}
     </a>
   );

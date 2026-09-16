@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PensionAnalysisForm from "@/components/PensionAnalysisForm";
@@ -10,18 +11,45 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
-import { DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, TURQ } from "@/lib/brand";
-import { StatusPill } from "@/components/brand/Live";
-import { DrawSpark } from "@/components/brand/Strokes";
+import { Illustration } from "@/components/brand/Illustration";
+import { BrandDots } from "@/components/brand/Elements";
+import { BrandIcon } from "@/components/brand/BrandIcon";
+import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN } from "@/lib/brand";
+
+// Brand service page (kit p.05): the saving-and-growth art beside the headline
+// and the action; the analysis form stays central in the closing green band.
+
+// Figures inside Hebrew copy (sums, percentages, ranges) render tabular and LTR-safe.
+const FIGURE_RE = /(?:₪\s?)?\d(?:[\d,.:/\-–]*\d)?(?:\s?[%₪])?/g;
+
+const FigureText = ({ text }: { text: string }) => {
+  const nodes: ReactNode[] = [];
+  let last = 0;
+  for (const m of text.matchAll(FIGURE_RE)) {
+    const i = m.index ?? 0;
+    if (i > last) nodes.push(text.slice(last, i));
+    nodes.push(
+      <span key={i} dir="ltr" className="tabular-nums whitespace-nowrap">
+        {m[0]}
+      </span>,
+    );
+    last = i + m[0].length;
+  }
+  if (last === 0) return <>{text}</>;
+  if (last < text.length) nodes.push(text.slice(last));
+  return <>{nodes}</>;
+};
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-2.5 -mx-2.5 pb-4 text-base font-medium text-[#476356] hover:bg-[#E8EDE5]/35 hover:text-[#003D30] border-b-2 border-transparent data-[state=active]:border-[#819B7D] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+  "rounded-none bg-transparent px-2.5 -mx-2.5 pb-4 text-[16px] font-bold text-[#476356] hover:text-[#003D30] border-b-2 border-transparent data-[state=active]:border-[#003D30] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
-const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.7rem, 3vw, 2.2rem)" }}>
+const SectionTitle = ({ children }: { children: ReactNode }) => (
+  <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>
     {children}
   </h2>
 );
+
+const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
 
 const GemelInvestment = () => {
   const productTypes = [
@@ -40,6 +68,13 @@ const GemelInvestment = () => {
       description: "מגוון מסלולי השקעה המותאמים לפרופיל הסיכון שלכם",
       features: ["מסלולים מנוהלים", "התאמה אישית", "מעקב ביצועים"],
     },
+  ];
+
+  const benefits = [
+    { title: "נזילות מלאה", desc: "משיכת כספים בכל עת ללא קנסות" },
+    { title: "דחיית מס", desc: "0% מס על רווחים עד למשיכה" },
+    { title: "ריבית דריבית", desc: "הכסף עובד בצורה מלאה ללא ניכויים" },
+    { title: "מסלולים מגוונים", desc: "התאמת מסלול ההשקעה לפרופיל שלכם" },
   ];
 
   const articles = [
@@ -84,116 +119,87 @@ const GemelInvestment = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
       <Header />
 
-      {/* HERO — white DNA canvas, the page's single pastel-circle backdrop */}
-      <section className="dna-page">
+      {/* HERO — the subject art beside the headline */}
+      <section className="dna-page overflow-hidden">
         <div className="dna-circles" aria-hidden="true">
           <div
             className="dna-circ hidden md:block"
-            style={{ width: 280, height: 280, top: -120, left: -100, backgroundColor: PASTEL_BLUE, opacity: 0.5 }}
+            style={{ width: 320, height: 320, top: -150, left: -120, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
           />
           <div
             className="dna-circ hidden md:block"
-            style={{ width: 220, height: 220, bottom: -120, left: "30%", backgroundColor: PASTEL_MINT, opacity: 0.45 }}
+            style={{ width: 180, height: 180, bottom: -80, left: "36%", backgroundColor: PASTEL_SAND, opacity: 0.7 }}
           />
         </div>
-        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10">
-          <div className="mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[13px] text-[#476356]">
-              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
-              <span aria-hidden="true">←</span>
-              <Link to="/savings" className="hover:text-[#003D30] transition-colors">חיסכון ופנסיה</Link>
-              <span aria-hidden="true">←</span>
-              <span className="font-medium text-[#003D30]">קופת גמל להשקעה</span>
-            </nav>
-            <span
-              className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium whitespace-nowrap text-[#476356]"
-              style={{ fontFamily: MONO }}
-            >
-              חיסכון ופנסיה
-            </span>
-          </div>
+        <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-12 sm:pb-16">
+          <nav className="mb-8 sm:mb-12 flex items-center gap-2 text-[14px]" style={{ color: MUTED }} aria-label="ניווט משני">
+            <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
+            <BrandIcon name="arrow-left" size={14} />
+            <Link to="/savings" className="hover:underline underline-offset-4">חיסכון ופנסיה</Link>
+            <BrandIcon name="arrow-left" size={14} />
+            <span className="font-bold" style={{ color: GREEN }} aria-current="page">קופת גמל להשקעה</span>
+          </nav>
 
-          <h1 className="dna-display leading-[1.12] mb-6 max-w-3xl" style={{ fontSize: "clamp(34px, 5vw, 50px)" }}>
-            השקיעו בחכמה עם יתרונות מס
-          </h1>
-          <p className="text-base sm:text-[17px] text-[#476356] max-w-2xl leading-[1.9] mb-9">
-            מוצר השקעה ייחודי המשלב את היתרונות של קופת גמל עם גמישות של חשבון השקעות: נזילות מלאה ודחיית מס.
-          </p>
-          <div className="flex flex-wrap items-center gap-6">
-            <a
-              href="#analysis-form"
-              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors min-h-[52px]"
-            >
-              ייעוץ לקופת גמל להשקעה
-            </a>
-            <a
-              href="#product-types"
-              className="group inline-flex items-center gap-2 text-base font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
-            >
-              יתרונות המוצר
-              <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
-            </a>
-          </div>
-          <button
-            type="button"
-            onClick={() => window.dispatchEvent(new Event('seeld:open-chat'))}
-            className="mt-7 inline-flex rounded-full dna-hover"
-            aria-label="פתיחת שיחה עם יועץ SEELD AI"
-          >
-            <StatusPill>יש שאלה על גמל להשקעה? היועץ מחובר</StatusPill>
-          </button>
-
-          {/* Turquoise stat + growth curve — the savings-page craft gesture */}
-          <div className="mt-12 border-t pt-6 flex flex-wrap items-end justify-between gap-6" style={{ borderColor: LINE }}>
+          <div className="grid gap-10 lg:gap-16 items-center lg:grid-cols-[1.05fr_1fr]">
             <div>
-              <div
-                className="tabular-nums whitespace-nowrap"
-                dir="ltr"
-                style={{ fontFamily: DISPLAY, fontWeight: 700, color: TURQ, fontSize: "clamp(2.4rem, 4vw, 3.1rem)", lineHeight: 1.05, letterSpacing: "-0.02em" }}
-              >
-                ₪79,006
+              <h1 className="dna-display leading-[1.15] max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
+                קופת גמל להשקעה
+              </h1>
+              <p className="mt-5 text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
+                מוצר השקעה ייחודי המשלב את היתרונות של קופת גמל עם גמישות של חשבון השקעות: נזילות מלאה ודחיית מס.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
+                <a href="#analysis-form" className="btn-primary sm:min-w-[220px]">
+                  ייעוץ לקופת גמל להשקעה
+                </a>
+                <Link to="/#portfolio-review" className="btn-secondary sm:min-w-[200px]">
+                  בדיקת תיק 360
+                </Link>
               </div>
-              <div className="mt-1.5 text-[13px]" style={{ color: MUTED }}>תקרת הפקדה שנתית</div>
+              <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
+                <a href="#product-types" className="link-rule text-[15px]">
+                  יתרונות המוצר
+                  <BrandIcon name="arrow-left" size={18} />
+                </a>
+                <button type="button" className="link-rule text-[15px]" onClick={openChat}>
+                  <BrandIcon name="message" size={18} />
+                  שאלו את היועץ הדיגיטלי
+                </button>
+              </div>
             </div>
-            <DrawSpark color={TURQ} className="hidden sm:block w-44 md:w-60" height={40} />
+
+            <Illustration name="03-saving-growth" priority sizes="(min-width: 1024px) 560px, 100vw" />
           </div>
         </div>
       </section>
 
       <main>
-        {/* ══════ BENEFITS ══════ */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <div className="mb-10">
-              <SectionTitle>למה קופת גמל להשקעה?</SectionTitle>
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
-              {[
-                { title: "נזילות מלאה", desc: "משיכת כספים בכל עת ללא קנסות" },
-                { title: "דחיית מס", desc: "0% מס על רווחים עד למשיכה" },
-                { title: "ריבית דריבית", desc: "הכסף עובד בצורה מלאה ללא ניכויים" },
-                { title: "מסלולים מגוונים", desc: "התאמת מסלול ההשקעה לפרופיל שלכם" },
-              ].map((item, idx) => (
-                <div key={idx}>
-                  <div className="h-[3px] w-9 rounded-full mb-5" style={{ backgroundColor: TURQ }} aria-hidden="true" />
-                  <h3 className="text-[19px] mb-2.5" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
-                    {item.title}
-                  </h3>
-                  <p className="text-[14.5px] text-[#24483C] leading-[1.8]">{item.desc}</p>
+        {/* BENEFITS */}
+        <section className="border-t bg-white" style={{ borderColor: LINE }}>
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-12 sm:py-16">
+            <BrandDots className="mb-4" />
+            <h2 className="dna-display leading-tight mb-10" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
+              למה קופת גמל להשקעה?
+            </h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8">
+              {benefits.map((item) => (
+                <div key={item.title} className="border-t pt-5" style={{ borderColor: LINE }}>
+                  <h3 className="text-[19px] mb-2" style={{ color: GREEN }}>{item.title}</h3>
+                  <p className="text-[16px] leading-[1.7]" style={{ color: BODY }}><FigureText text={item.desc} /></p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ══════ THE KNOWLEDGE — one tabbed section ══════ */}
+        {/* THE KNOWLEDGE — one tabbed section */}
         <section id="product-types" className="border-t scroll-mt-24" style={{ borderColor: LINE }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-12 sm:py-16">
             <Tabs defaultValue="guide" dir="rtl">
-              <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#CCD6CC] rounded-none overflow-x-auto scrollbar-hide">
+              <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b rounded-none overflow-x-auto scrollbar-hide" style={{ borderColor: LINE }}>
                 <TabsTrigger value="guide" className={tabTriggerClass}>
                   המדריך
                 </TabsTrigger>
@@ -209,20 +215,20 @@ const GemelInvestment = () => {
               <TabsContent value="guide" className="mt-0">
                 <div className="max-w-3xl">
                   {articles.map((article, idx) => (
-                    <div key={idx} className={idx > 0 ? 'mt-14' : ''}>
+                    <div key={idx} className={idx > 0 ? "mt-14" : ""}>
                       <div className="mb-6">
                         <SectionTitle>{article.title}</SectionTitle>
                       </div>
-                      <div className="space-y-4 text-[#24483C] leading-[1.9] text-base">
+                      <div className="space-y-4 leading-[1.8] text-[17px]" style={{ color: BODY }}>
                         {article.paragraphs.map((p, pIdx) => (
-                          <p key={pIdx}>{p}</p>
+                          <p key={pIdx}><FigureText text={p} /></p>
                         ))}
                       </div>
                     </div>
                   ))}
                   <div className="dna-quote mt-12">
                     <div className="dna-ql">בשורה התחתונה</div>
-                    <div className="dna-qt">{bottomLine}</div>
+                    <div className="dna-qt"><FigureText text={bottomLine} /></div>
                   </div>
                 </div>
               </TabsContent>
@@ -231,21 +237,19 @@ const GemelInvestment = () => {
               <TabsContent value="types" className="mt-0">
                 <div className="mb-10">
                   <SectionTitle>יתרונות קופת גמל להשקעה</SectionTitle>
-                  <p className="text-[#476356] mt-2 text-base leading-relaxed max-w-xl">
+                  <p className="mt-2 text-[17px] leading-relaxed max-w-xl" style={{ color: MUTED }}>
                     הכירו את היתרונות המרכזיים של המוצר
                   </p>
                 </div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
-                  {productTypes.map((type, idx) => (
-                    <div key={idx} className="dna-concept">
-                      <h3 className="text-[17px] mb-2" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
-                        {type.title}
-                      </h3>
-                      <p className="text-[#24483C] text-[14px] leading-[1.8] mb-3.5">{type.description}</p>
-                      <ul className="space-y-2">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {productTypes.map((type) => (
+                    <div key={type.title} className="dna-concept">
+                      <h3 className="text-[18px] mb-2" style={{ color: GREEN }}>{type.title}</h3>
+                      <p className="text-[15px] leading-[1.7] mb-3" style={{ color: BODY }}><FigureText text={type.description} /></p>
+                      <ul>
                         {type.features.map((feature, fIdx) => (
-                          <li key={fIdx} className="dna-pill-item !py-1.5 text-[14px]">
-                            {feature}
+                          <li key={fIdx} className="dna-pill-item !py-1.5 text-[15px]">
+                            <span><FigureText text={feature} /></span>
                           </li>
                         ))}
                       </ul>
@@ -275,13 +279,14 @@ const GemelInvestment = () => {
                       <AccordionItem
                         key={idx}
                         value={`faq-${idx}`}
-                        className="border-b border-[#CCD6CC] rounded-none px-0"
+                        className="border-b rounded-none px-0"
+                        style={{ borderColor: LINE }}
                       >
-                        <AccordionTrigger className="text-start text-base font-medium text-[#003D30] hover:no-underline py-5 px-3 -mx-3 rounded-md hover:bg-[#E8EDE5]/35 transition-colors duration-150">
-                          {item.q}
+                        <AccordionTrigger className="text-start text-[17px] font-bold hover:no-underline py-5 px-3 -mx-3 rounded-lg hover:bg-white transition-colors duration-150" style={{ color: GREEN }}>
+                          <FigureText text={item.q} />
                         </AccordionTrigger>
-                        <AccordionContent className="text-[#24483C] leading-[1.85] pb-6 text-[14px]">
-                          {item.a}
+                        <AccordionContent className="leading-[1.75] pb-6 text-[16px]" style={{ color: BODY }}>
+                          <FigureText text={item.a} />
                         </AccordionContent>
                       </AccordionItem>
                     ))}
@@ -292,23 +297,21 @@ const GemelInvestment = () => {
           </div>
         </section>
 
-        {/* ══════ COMPANIES ══════ */}
+        {/* COMPANIES */}
         <section className="border-t" style={{ borderColor: LINE }}>
           <CompanyLogos variant="grid" />
         </section>
 
-        {/* ══════ ANALYSIS FORM — navy band ══════ */}
-        <section id="analysis-form" className="scroll-mt-24" style={{ backgroundColor: NAVY }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <div className="mb-10 text-center sm:text-right">
-              <h2
-                className="text-white leading-tight mb-3"
-                style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 'clamp(1.7rem, 3vw, 2.3rem)', letterSpacing: '-0.5px' }}
-              >
+        {/* ANALYSIS FORM — deep green band, the central path */}
+        <section id="analysis-form" className="scroll-mt-24 dna-navy-band">
+          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <div className="mb-10">
+              <BrandDots className="mb-4" />
+              <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(28px, 3.2vw, 32px)" }}>
                 רוצים ייעוץ לקופת גמל להשקעה?
               </h2>
-              <p className="text-base leading-relaxed max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
-                הזינו את הפרטים ונמצא לכם את הקופה המתאימה ביותר
+              <p className="text-[17px] leading-[1.7] max-w-xl" style={{ color: SAGE_ON_GREEN }}>
+                הזינו את הפרטים ונמצא לכם את הקופה המתאימה ביותר. אפשר גם להתחיל בבדיקת תיק 360 מלאה.
               </p>
             </div>
             <div className="max-w-2xl">
@@ -317,6 +320,14 @@ const GemelInvestment = () => {
                 title="ייעוץ לקופת גמל להשקעה"
                 description="מלאו את הפרטים ונמצא לכם את הקופה המתאימה ביותר"
               />
+            </div>
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
+                בדיקת תיק 360
+              </Link>
+              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
+                תיאום פגישה
+              </Link>
             </div>
           </div>
         </section>

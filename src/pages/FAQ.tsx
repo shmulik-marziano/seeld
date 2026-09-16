@@ -9,12 +9,12 @@ import {
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
-import {
-  DISPLAY, LINE, MUTED, NAVY, PASTEL_BLUE, PASTEL_PEACH,
-} from "@/lib/brand";
-import { StatusPill } from "@/components/brand/Live";
+import { BrandDots, LeafCanopy } from "@/components/brand/Elements";
+import { BrandIcon } from "@/components/brand/BrandIcon";
+import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from "@/lib/brand";
 
-// SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
+// FAQ: no illustration (kit dosage); one vector element in the opening, the
+// questions carry the page.
 
 const faqCategories = [
   {
@@ -53,89 +53,68 @@ const faqCategories = [
     title: "כללי",
     questions: [
       { q: "למה לפנות לסוכן ביטוח ולא לקנות ישירות מחברת ביטוח?", a: "סוכן ביטוח עצמאי משווה בין כל חברות הביטוח בשוק ומתאים את הפוליסה לצרכים שלכם. הוא מלווה אתכם גם בעת תביעה ודואג לאינטרס שלכם, ללא עלות נוספת." },
-      { q: "האם יש עלות לייעוץ ראשוני?", a: "לא. שיחת הייעוץ הראשונית ב-SEELD היא ללא עלות וללא התחייבות. נשמח להכיר אתכם ולהבין את הצרכים שלכם." },
+      { q: "האם יש עלות לייעוץ ראשוני?", a: "לא. שיחת הייעוץ הראשונית בשילד היא ללא עלות וללא התחייבות. נשמח להכיר אתכם ולהבין את הצרכים שלכם." },
       { q: "מה זה ׳חילוץ זכויות׳?", a: "חילוץ זכויות הוא תהליך שבו בודקים האם יש לכם כספים ׳שקטים׳: חסכונות פנסיוניים, ביטוחים ישנים או קופות גמל שנשכחו. אנחנו עוזרים לאתר ולמצות את כל הזכויות שלכם." },
       { q: "איך אני יודע שהביטוח שלי מתאים לי?", a: "מומלץ לעשות סקירת ביטוח אחת לשנה-שנתיים, או בכל שינוי משמעותי בחיים (נישואים, לידה, משכנתא, שינוי עבודה). צרו קשר ונשמח לבדוק את הכיסויים שלכם." },
       { q: "כמה זמן לוקח לעבור חברה?", a: "בין שבוע לחודש, תלוי בסוג המוצר. אנחנו מטפלים בהכל: טפסים, ניוד, בדיקה שלא נפגעים כיסויים קיימים." },
       { q: "מה קורה אם יש בעיה עם חברת הביטוח?", a: "שמוליק מטפל. זה בדיוק למה יש סוכן, שלא תצטרכו להתמודד עם החברה לבד. אנחנו הכתובת שלכם." },
-      { q: "מה זה סריקת תיק?", a: "בדיקה של כל מה שיש לכם: ביטוחים, פנסיה, חיסכון. מוצאים חסרים, כפלים, ודמי ניהול גבוהים. בלי עלות ובלי התחייבות." },
+      { q: "מה זה בדיקת תיק 360?", a: "בדיקה של כל מה שיש לכם: ביטוחים, פנסיה, חיסכון. מוצאים חסרים, כפלים, ודמי ניהול גבוהים, ומסכמים הכול בתמונה אחת. בלי עלות ובלי התחייבות." },
     ],
   },
 ];
 
-// Underline tabs — turquoise active marker, navy active text
 const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-base font-medium text-[#476356] border-b-2 border-transparent data-[state=active]:border-[#819B7D] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors";
+  "rounded-none bg-transparent px-0 pb-4 text-[16px] font-bold text-[#476356] border-b-2 border-transparent data-[state=active]:border-[#003D30] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const FAQ = () => {
   return (
-    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
       <Header />
 
       <main>
         {/* HERO — find your answer */}
-        <section className="dna-page">
-          {/* Pastel circle backdrop — decorative, never behind small text */}
+        <section className="dna-page overflow-hidden">
           <div className="dna-circles" aria-hidden="true">
             <div
               className="dna-circ hidden md:block"
-              style={{ width: 280, height: 280, top: -120, left: -100, backgroundColor: PASTEL_BLUE, opacity: 0.55 }}
+              style={{ width: 300, height: 300, top: -140, left: -110, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
             />
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 210, height: 210, bottom: -110, right: -70, backgroundColor: PASTEL_PEACH, opacity: 0.5 }}
-            />
-            {/* The playful gesture: a giant background question mark (Frank Ruhl 900, decorative) */}
-            <div
-              className="hidden lg:block absolute select-none"
-              style={{
-                fontFamily: DISPLAY,
-                fontWeight: 700,
-                color: NAVY,
-                opacity: 0.05,
-                fontSize: "clamp(180px, 22vw, 320px)",
-                lineHeight: 1,
-                left: "6%",
-                top: "-4%",
-              }}
-            >
-              ?
-            </div>
           </div>
 
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
-            <nav className="flex items-center gap-2 text-[13px] mb-10 sm:mb-14" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
-              <span aria-hidden="true">←</span>
-              <span className="font-medium" style={{ color: NAVY }}>שאלות נפוצות</span>
+          <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-10 sm:pb-14">
+            <nav className="flex items-center gap-2 text-[14px] mb-8 sm:mb-12" style={{ color: MUTED }} aria-label="ניווט משני">
+              <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
+              <BrandIcon name="arrow-left" size={14} />
+              <span className="font-bold" style={{ color: GREEN }} aria-current="page">שאלות נפוצות</span>
             </nav>
 
-            <h1
-              className="dna-display leading-[1.12] mb-6 max-w-3xl"
-              style={{ fontSize: "clamp(34px, 5vw, 50px)" }}
-            >
-              שאלות נפוצות
-            </h1>
-            <p className="text-base sm:text-[17px] max-w-2xl leading-[1.9] mb-8" style={{ color: MUTED }}>
-              שאלות שכולם שואלים. תשובות שפחות שומעים.
-            </p>
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-              className="block dna-hover rounded-full"
-              aria-label="פתיחת שיחה עם יועץ SEELD"
-            >
-              <StatusPill>היועץ מחובר עכשיו · שאלו במקום לגלול</StatusPill>
-            </button>
+            <div className="relative">
+              <LeafCanopy className="hidden lg:block absolute -top-8 left-0 w-56 opacity-90" />
+              <BrandDots className="mb-5" />
+              <h1 className="dna-display leading-[1.15] mb-5 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
+                שאלות נפוצות
+              </h1>
+              <p className="text-[17px] sm:text-[18px] max-w-2xl leading-[1.7] mb-6" style={{ color: MUTED }}>
+                שאלות שכולם שואלים. תשובות שפחות שומעים.
+              </p>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
+                className="link-rule text-[15px]"
+              >
+                <BrandIcon name="message" size={18} />
+                לא מצאתם? שאלו את היועץ הדיגיטלי
+              </button>
+            </div>
           </div>
         </section>
 
         {/* QUESTIONS — categories as underline tabs */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        <section className="border-t bg-white" style={{ borderColor: LINE }}>
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
               <Tabs defaultValue="insurance" dir="rtl">
-                <TabsList className="flex w-full justify-start gap-8 sm:gap-10 h-auto bg-transparent p-0 mb-10 border-b border-[#CCD6CC] rounded-none overflow-x-auto">
+                <TabsList className="flex w-full justify-start gap-6 sm:gap-10 h-auto bg-transparent p-0 mb-8 border-b rounded-none overflow-x-auto scrollbar-hide" style={{ borderColor: LINE }}>
                   {faqCategories.map((category) => (
                     <TabsTrigger key={category.id} value={category.id} className={tabTriggerClass}>
                       {category.title}
@@ -151,12 +130,13 @@ const FAQ = () => {
                           <AccordionItem
                             key={idx}
                             value={`${category.id}-${idx}`}
-                            className="border-b border-[#CCD6CC] rounded-none px-0"
+                            className="border-b rounded-none px-0"
+                            style={{ borderColor: LINE }}
                           >
-                            <AccordionTrigger className="text-base font-medium hover:no-underline py-5 px-3 -mx-3 rounded-md text-[#003D30] text-start hover:bg-[#E8EDE5]/35 transition-colors">
+                            <AccordionTrigger className="text-[17px] font-bold hover:no-underline py-5 px-3 -mx-3 rounded-lg text-start hover:bg-[#EEF2EC] transition-colors" style={{ color: GREEN }}>
                               {item.q}
                             </AccordionTrigger>
-                            <AccordionContent className="text-[14.5px] leading-[1.85] pb-6 max-w-2xl text-[#24483C]">
+                            <AccordionContent className="text-[16px] leading-[1.75] pb-6 max-w-2xl" style={{ color: BODY }}>
                               {item.a}
                             </AccordionContent>
                           </AccordionItem>
@@ -170,29 +150,19 @@ const FAQ = () => {
           </div>
         </section>
 
-        {/* CTA — institutional navy band */}
-        <section style={{ backgroundColor: NAVY }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
-            <h2
-              className="text-white leading-tight mb-3"
-              style={{
-                fontFamily: DISPLAY,
-                fontWeight: 700,
-                fontSize: "clamp(1.7rem, 3.2vw, 2.4rem)",
-                letterSpacing: "-0.5px",
-              }}
-            >
+        {/* CTA — deep green band */}
+        <section className="dna-navy-band">
+          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
+            <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(26px, 3.2vw, 36px)" }}>
               לא מצאתם תשובה?
             </h2>
-            <p className="text-base leading-[1.85] mb-9 max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
+            <p className="text-[17px] leading-[1.7] mb-9 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
               שאלה על התיק שלכם היא לא שאלה נפוצה. בשביל זה יש בן אדם.
             </p>
-            <Link
-              to="/contact"
-              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
-            >
-              צרו קשר
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">בדיקת תיק 360</Link>
+              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">תיאום פגישה</Link>
+            </div>
           </div>
         </section>
       </main>

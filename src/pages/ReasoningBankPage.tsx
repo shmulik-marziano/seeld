@@ -161,7 +161,7 @@ export default function ReasoningBankPage() {
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="flex gap-2 flex-wrap">
                     <Badge variant="outline" className="text-xs rounded-full border-[#003D30]/30 text-[#003D30] bg-[#003D30]/5">{entry.category}</Badge>
-                    <Badge variant="secondary" className="text-xs rounded-full bg-[#b45309]/10 text-[#b45309]">{entry.recommendation_type}</Badge>
+                    <Badge variant="secondary" className="text-xs rounded-full bg-[#8A6230]/10 text-[#8A6230]">{entry.recommendation_type}</Badge>
                   </div>
                   <div className="flex gap-1 shrink-0">
                     <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => handleOpen(entry)}>

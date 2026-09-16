@@ -26,14 +26,14 @@ const CHANNEL_COLORS: Record<string, string> = {
   "WhatsApp": "#25D366",
   "מייל": "#4F46E5",
   "SMS": "#0EA5E9",
-  "טלפון": "#059669",
+  "טלפון": "#2F6B4E",
 };
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  "נענה": { bg: "#dcfce7", text: "#166534" },
-  "נשלח": { bg: "#dbeafe", text: "#1e40af" },
-  "נמסר": { bg: "#e0f2fe", text: "#0369a1" },
-  "ממתין": { bg: "#fef3c7", text: "#92400e" },
+  "נענה": { bg: "#E8EDE5", text: "#2F6B4E" },
+  "נשלח": { bg: "#E8EDE5", text: "#476356" },
+  "נמסר": { bg: "#E8EDE5", text: "#476356" },
+  "ממתין": { bg: "#F5EEE0", text: "#8A6230" },
 };
 
 export default function BridgePage() {
@@ -49,8 +49,8 @@ export default function BridgePage() {
 
   const stats = [
     { label: "הודעות היום", value: "24", change: "+8", icon: MessageSquare, color: tool.color },
-    { label: "ממתינות למענה", value: "5", change: "+2", icon: Clock, color: "#f59e0b" },
-    { label: "שיחות נכנסות", value: "7", change: "+3", icon: Phone, color: "#059669" },
+    { label: "ממתינות למענה", value: "5", change: "+2", icon: Clock, color: "#CBA064" },
+    { label: "שיחות נכנסות", value: "7", change: "+3", icon: Phone, color: "#2F6B4E" },
     { label: "נשלחו", value: "12", change: "+4", icon: Send, color: "#4f46e5" },
   ];
 
@@ -63,10 +63,10 @@ export default function BridgePage() {
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: s.color + "15" }}>
                 <s.icon className="w-5 h-5" style={{ color: s.color }} />
               </div>
-              <span className="text-xs text-green-600 font-medium">{s.change}</span>
+              <span className="text-xs text-[#2F6B4E] font-medium">{s.change}</span>
             </div>
-            <p className="text-2xl font-bold text-gray-800">{s.value}</p>
-            <p className="text-sm text-gray-500 mt-0.5">{s.label}</p>
+            <p className="text-2xl font-bold text-[#003D30]">{s.value}</p>
+            <p className="text-sm text-[#476356] mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
@@ -74,17 +74,17 @@ export default function BridgePage() {
       <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-4 mb-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#476356]" />
             <input
               type="text"
               placeholder="חיפוש הודעה לפי לקוח או נושא..."
-              className="w-full pr-10 pl-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#003D30]/20"
+              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#003D30]/20"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <select
-            className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none"
+            className="px-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none"
             value={channelFilter}
             onChange={(e) => setChannelFilter(e.target.value)}
           >
@@ -104,40 +104,40 @@ export default function BridgePage() {
       <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-16 text-center">
-            <div className="w-16 h-16 rounded-full bg-gray-100 mx-auto mb-4 flex items-center justify-center">
-              <MessageSquare className="w-8 h-8 text-gray-300" />
+            <div className="w-16 h-16 rounded-full bg-[#E8EDE5] mx-auto mb-4 flex items-center justify-center">
+              <MessageSquare className="w-8 h-8 text-[#8FA396]" />
             </div>
-            <p className="text-gray-500 font-medium mb-1">אין הודעות להצגה</p>
-            <p className="text-sm text-gray-400">שלח הודעה חדשה או שנה את המסננים</p>
+            <p className="text-[#476356] font-medium mb-1">אין הודעות להצגה</p>
+            <p className="text-sm text-[#476356]">שלח הודעה חדשה או שנה את המסננים</p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-[#E1E8E1]">
             {filtered.map((m) => {
               const ChannelIcon = CHANNEL_ICONS[m.channel] || MessageSquare;
-              const channelColor = CHANNEL_COLORS[m.channel] || "#6366f1";
+              const channelColor = CHANNEL_COLORS[m.channel] || "#819B7D";
               const statusColor = STATUS_COLORS[m.status] || STATUS_COLORS["ממתין"];
               return (
-                <div key={m.id} className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50/50 transition-colors cursor-pointer">
+                <div key={m.id} className="flex items-center gap-4 px-5 py-4 hover:bg-[#F3F5F1]/50 transition-colors cursor-pointer">
                   <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: channelColor + "15" }}>
                     <ChannelIcon className="w-5 h-5" style={{ color: channelColor }} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className="font-medium text-gray-800">{m.client}</span>
-                      <span className="text-xs text-gray-400">{m.direction === "נכנס" ? "←" : "→"}</span>
-                      <span className="text-xs text-gray-400">{m.channel}</span>
+                      <span className="font-medium text-[#003D30]">{m.client}</span>
+                      <span className="text-xs text-[#476356]">{m.direction === "נכנס" ? "←" : "→"}</span>
+                      <span className="text-xs text-[#476356]">{m.channel}</span>
                     </div>
-                    <p className="text-sm text-gray-700 font-medium mb-0.5">{m.subject}</p>
-                    <p className="text-xs text-gray-400 truncate">{m.preview}</p>
+                    <p className="text-sm text-[#24483C] font-medium mb-0.5">{m.subject}</p>
+                    <p className="text-xs text-[#476356] truncate">{m.preview}</p>
                   </div>
                   <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                    <span className="text-xs text-gray-400">{m.date}</span>
+                    <span className="text-xs text-[#476356]">{m.date}</span>
                     <span className="px-2.5 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: statusColor.bg, color: statusColor.text }}>
                       {m.status}
                     </span>
                   </div>
-                  <button className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0">
-                    <MoreVertical className="w-4 h-4 text-gray-400" />
+                  <button className="p-1.5 hover:bg-[#E8EDE5] rounded-lg transition-colors flex-shrink-0">
+                    <MoreVertical className="w-4 h-4 text-[#476356]" />
                   </button>
                 </div>
               );

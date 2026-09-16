@@ -145,7 +145,7 @@ const SavingsCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="סכום התחלתי"
             value={[initialAmount]}
             onValueChange={([value]) => setInitialAmount(value)}
             min={0}
@@ -172,7 +172,7 @@ const SavingsCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="הפקדה חודשית"
             value={[monthlyDeposit]}
             onValueChange={([value]) => setMonthlyDeposit(value)}
             min={0}
@@ -205,7 +205,7 @@ const SavingsCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="ריבית שנתית (%)"
             value={[annualInterest]}
             onValueChange={([value]) => setAnnualInterest(value)}
             min={0}
@@ -237,7 +237,7 @@ const SavingsCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="תקופת חיסכון (שנים)"
             value={[years]}
             onValueChange={([value]) => setYears(value)}
             min={1}

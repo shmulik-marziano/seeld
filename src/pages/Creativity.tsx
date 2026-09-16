@@ -1,98 +1,125 @@
+import type { ReactNode } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import { BODY, DISPLAY, LINE, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, TURQ } from "@/lib/brand";
-import { FamilyFigure } from "@/components/brand/Figures";
+import { BrandDots, BubbleCorner } from "@/components/brand/Elements";
+import { BrandIcon } from "@/components/brand/BrandIcon";
+import { BODY, GREEN, IVORY, LINE, MUTED, SAGE_ON_GREEN } from "@/lib/brand";
 
-// SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
+// Property, vehicle, business and travel cover stay illustration-free (kit p.11):
+// the corner bubbles in the hero margin, four doors, and the central path.
+
+// Figures inside coverage copy (24/7 and the like) render tabular and LTR-safe.
+const FIGURE_RE = /\d(?:[\d,.:/\-–]*\d)?/g;
+
+const FigureText = ({ text }: { text: string }) => {
+  const nodes: ReactNode[] = [];
+  let last = 0;
+  for (const m of text.matchAll(FIGURE_RE)) {
+    const i = m.index ?? 0;
+    if (i > last) nodes.push(text.slice(last, i));
+    nodes.push(
+      <span key={i} dir="ltr" className="tabular-nums whitespace-nowrap">
+        {m[0]}
+      </span>,
+    );
+    last = i + m[0].length;
+  }
+  if (last === 0) return <>{text}</>;
+  if (last < text.length) nodes.push(text.slice(last));
+  return <>{nodes}</>;
+};
+
+const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
 
 const Creativity = () => {
   const insuranceTypes = [
-    { title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳ · השוואה בין כל החברות", features: ["ביטוח חובה", "ביטוח מקיף", "צד ג'", "נזקי גוף"], href: "/insurance/vehicle" },
+    { title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳. השוואה בין כל החברות", features: ["ביטוח חובה", "ביטוח מקיף", "צד ג'", "נזקי גוף"], href: "/insurance/vehicle" },
     { title: "ביטוח דירה", description: "מבנה ותכולה, בלי הפתעות מאוחרות", features: ["ביטוח מבנה", "ביטוח תכולה", "צד ג'", "נזקי טבע"], href: "/insurance/home" },
     { title: "ביטוח עסק", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק בכל גודל", features: ["אחריות מקצועית", "רכוש עסקי", "הפסד הכנסות", "חבות מעסיקים"], href: "/insurance/business" },
     { title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", features: ["הוצאות רפואיות", "ביטול טיסה", "אובדן מזוודות", "חירום 24/7"], href: "/insurance/travel" },
   ];
 
-  const stats = [
-    { value: "מגוון", label: "חברות ביטוח להשוואה", ltr: false },
-    { value: "30%", label: "חיסכון ממוצע ללקוחות", ltr: true },
-    { value: "24/7", label: "שירות ותמיכה", ltr: true },
-  ];
-
   return (
-    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
       <Header />
 
       <main>
-        {/* Hero — white canvas, pastel circles; the family peeks from the corner */}
-        <section className="dna-page">
-          <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ"
-              style={{ width: 260, height: 260, top: -110, left: -90, backgroundColor: PASTEL_BLUE, opacity: 0.55 }}
-            />
-            <div
-              className="dna-circ"
-              style={{ width: 200, height: 200, bottom: -100, right: "20%", backgroundColor: PASTEL_MINT, opacity: 0.45 }}
-            />
-          </div>
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-14 sm:pb-20">
-            <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px]" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
-              <span aria-hidden="true">/</span>
-              <span style={{ color: NAVY }}>ביטוח רכוש ורכב</span>
+        {/* HERO — ivory canvas, the corner bubbles in the margin */}
+        <section className="dna-page overflow-hidden">
+          <BubbleCorner className="hidden lg:block absolute -top-28 -left-28 w-[380px] opacity-70" flip />
+          <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-12 sm:pb-16">
+            <nav aria-label="ניווט משני" className="mb-8 sm:mb-12 flex items-center gap-2 text-[14px]" style={{ color: MUTED }}>
+              <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
+              <BrandIcon name="arrow-left" size={14} />
+              <span className="font-bold" style={{ color: GREEN }} aria-current="page">ביטוח רכוש ורכב</span>
             </nav>
-            <div className="mt-10 sm:mt-14 max-w-3xl">
-              <h1 className="dna-display leading-[1.15]" style={{ fontSize: "clamp(34px, 5vw, 50px)" }}>
+            <div className="max-w-3xl">
+              <h1 className="dna-display leading-[1.15]" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                 ביטוח רכוש ורכב
               </h1>
-              <p className="mt-5 text-lg sm:text-xl leading-[1.8] max-w-2xl" style={{ color: MUTED }}>
+              <p className="mt-5 text-[17px] sm:text-[18px] leading-[1.7] max-w-2xl" style={{ color: MUTED }}>
                 רכב, דירה, עסק ונסיעות: השוואת הצעות מחיר מול כל החברות בשוק, ללא עלות.
               </p>
-              <div className="mt-8">
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center justify-center rounded-lg px-9 py-4 bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors min-h-[52px]"
-                >
-                  הצטרפו ל-SEELD
+              <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
+                <Link to="/contact" className="btn-primary sm:min-w-[220px]">
+                  תיאום פגישה
+                </Link>
+                <Link to="/#portfolio-review" className="btn-secondary sm:min-w-[200px]">
+                  בדיקת תיק 360
                 </Link>
               </div>
+              <button type="button" className="mt-6 link-rule text-[15px]" onClick={openChat}>
+                <BrandIcon name="message" size={18} />
+                שאלו את היועץ הדיגיטלי
+              </button>
             </div>
           </div>
-          <FamilyFigure className="absolute left-2 bottom-2 w-16 h-16 opacity-60 rotate-12 pointer-events-none" />
         </section>
 
-        {/* Insurance types — the unified .dna-concept card tiles */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+        {/* Insurance types — white card tiles, whole-tile links */}
+        <section className="border-t bg-white" style={{ borderColor: LINE }}>
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
-              <div className="mb-12 sm:mb-14">
-                <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.6rem, 3vw, 2.2rem)" }}>
+              <div className="mb-10 sm:mb-12">
+                <BrandDots className="mb-4" />
+                <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
                   תחומי הכיסוי
                 </h2>
+                <p className="mt-4 text-[17px] leading-[1.7] max-w-xl" style={{ color: MUTED }}>
+                  ארבעה תחומים, לכל אחד עמוד משלו עם הכיסויים, המדריך וטופס להצעה.
+                </p>
               </div>
             </ScrollReveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {insuranceTypes.map((type, i) => (
                 <ScrollReveal key={type.title} delay={i * 60} className="h-full">
                   <Link
                     to={type.href}
-                    className="dna-concept dna-hover group flex h-full flex-col !p-5 sm:!p-6"
+                    className="group dna-concept dna-hover flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                    style={{ borderColor: LINE }}
                   >
-                    <div className="flex items-baseline justify-between gap-4">
-                      <h3 className="text-[17px] leading-snug" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
-                        {type.title}
-                      </h3>
-                      <span className="text-[#476356] group-hover:text-[#003D30] transition-all group-hover:-translate-x-1 shrink-0">←</span>
+                    <div className="flex items-start justify-between gap-4">
+                      <h3 className="text-[20px] leading-snug" style={{ color: GREEN }}>{type.title}</h3>
+                      <BrandIcon
+                        name="arrow-left"
+                        size={18}
+                        className="shrink-0 mt-1.5 transition-transform group-hover:-translate-x-1"
+                        style={{ color: GREEN }}
+                      />
                     </div>
-                    <p className="mt-2 text-[14px] leading-[1.7]" style={{ color: BODY }}>{type.description}</p>
-                    <p className="mt-3 text-[13px]" style={{ color: MUTED }}>
-                      {type.features.join(" · ")}
-                    </p>
-                    <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#003D30]">
-                      לפרטים
+                    <p className="mt-2 text-[16px] leading-[1.7]" style={{ color: BODY }}>{type.description}</p>
+                    <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[14px]" style={{ color: MUTED }}>
+                      {type.features.map((feature) => (
+                        <li key={feature} className="dna-pill-item !py-0 !gap-2 text-[14px] !text-[#476356]">
+                          <FigureText text={feature} />
+                        </li>
+                      ))}
+                    </ul>
+                    <span className="link-rule mt-auto pt-5 text-[15px] self-start">
+                      לפרטי הביטוח
+                      <BrandIcon name="arrow-left" size={18} className="transition-transform group-hover:-translate-x-1" />
                     </span>
                   </Link>
                 </ScrollReveal>
@@ -101,60 +128,47 @@ const Creativity = () => {
           </div>
         </section>
 
-        {/* Numbers */}
+        {/* How we compare */}
         <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-10 border-t border-b py-10 sm:py-14" style={{ borderColor: LINE }}>
-                {stats.map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <div
-                      className="tabular-nums mb-2"
-                      dir={stat.ltr ? "ltr" : undefined}
-                      style={{
-                        fontFamily: DISPLAY,
-                        fontWeight: 700,
-                        color: TURQ,
-                        fontSize: "clamp(2rem, 4vw, 3rem)",
-                        letterSpacing: "-0.02em",
-                        lineHeight: 1.1,
-                      }}
-                    >
-                      {stat.value}
-                    </div>
-                    <div className="text-[13px] tracking-[0.1em]" style={{ color: MUTED }}>{stat.label}</div>
-                  </div>
-                ))}
+              <div className="mb-8">
+                <BrandDots className="mb-4" />
+                <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
+                  איך משווים
+                </h2>
               </div>
-              <p className="mt-5 text-center text-[13px]" style={{ color: MUTED }}>
-                למה לבחור ב-SEELD? המספרים עונים.
-              </p>
+              <div className="max-w-3xl space-y-5 text-[17px] leading-[1.8]" style={{ color: BODY }}>
+                <p>
+                  משאירים פרטים בעמוד הביטוח המתאים, ואנחנו אוספים הצעות מכל חברות הביטוח שעובדות איתנו.
+                  ההשוואה מתייחסת לכיסוי, להשתתפות העצמית ולחריגים, לא רק למחיר.
+                </p>
+                <p>
+                  חוזרים אליכם עם המלצה מנומקת ומתועדת, ומטפלים בטפסים ובמעבר בין החברות. ללא עלות וללא התחייבות.
+                </p>
+              </div>
             </ScrollReveal>
           </div>
         </section>
 
-        {/* CTA — institutional navy band */}
-        <section style={{ backgroundColor: NAVY }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        {/* CLOSING — deep green band, the central path */}
+        <section className="dna-navy-band">
+          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
-              <div className="max-w-3xl">
-                <h2
-                  className="text-white leading-tight"
-                  style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
-                >
-                  מוכנים לחסוך על הביטוח?
-                </h2>
-                <p className="mt-3 text-base leading-[1.85] max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
-                  השאירו פרטים ויועץ יחזור אליכם עם הצעות מחיר תוך שעות.
-                </p>
-                <div className="mt-8">
-                  <Link
-                    to="/contact"
-                    className="inline-flex items-center justify-center rounded-lg px-9 py-4 bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
-                  >
-                    התחילו עכשיו
-                  </Link>
-                </div>
+              <BrandDots className="mb-4" />
+              <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(28px, 3.2vw, 32px)" }}>
+                רוצים להשוות הצעות מחיר?
+              </h2>
+              <p className="text-[17px] leading-[1.7] mb-8 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
+                השאירו פרטים ויועץ מהצוות יחזור אליכם עם הצעות להשוואה. אפשר גם לבדוק את כל התיק בבת אחת.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
+                  בדיקת תיק 360
+                </Link>
+                <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
+                  תיאום פגישה
+                </Link>
               </div>
             </ScrollReveal>
           </div>

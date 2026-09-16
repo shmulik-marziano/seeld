@@ -12,9 +12,9 @@ export default function ToolPage({ slug, children }: ToolPageProps) {
 
   if (!tool) {
     return (
-      <div className="min-h-screen bg-[#fafafa] flex items-center justify-center" dir="rtl">
+      <div className="min-h-screen bg-[#FAF7EF] flex items-center justify-center" dir="rtl">
         <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-12 text-center">
-          <p className="text-gray-500 text-lg">הכלי לא נמצא</p>
+          <p className="text-[#476356] text-lg">הכלי לא נמצא</p>
         </div>
       </div>
     );
@@ -22,7 +22,7 @@ export default function ToolPage({ slug, children }: ToolPageProps) {
 
   if (tool.status === "planned") {
     return (
-      <div className="min-h-screen bg-[#fafafa]" dir="rtl">
+      <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
         <ToolHeader tool={tool} />
         <div className="max-w-3xl mx-auto px-6 py-20">
           <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-16 text-center">
@@ -32,9 +32,9 @@ export default function ToolPage({ slug, children }: ToolPageProps) {
             >
               <Clock className="w-10 h-10" style={{ color: tool.color }} />
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-3">בקרוב...</h2>
-            <p className="text-gray-500 text-lg mb-2">{tool.description}</p>
-            <p className="text-sm text-gray-400">הכלי בפיתוח ויושק בקרוב. הישארו מעודכנים!</p>
+            <h2 className="text-2xl font-bold text-[#003D30] mb-3">בקרוב...</h2>
+            <p className="text-[#476356] text-lg mb-2">{tool.description}</p>
+            <p className="text-sm text-[#476356]">הכלי בפיתוח ויושק בקרוב. הישארו מעודכנים!</p>
             <div
               className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white text-sm font-medium"
               style={{ background: `linear-gradient(135deg, ${tool.gradient[0]}, ${tool.gradient[1]})` }}
@@ -49,7 +49,7 @@ export default function ToolPage({ slug, children }: ToolPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#fafafa]" dir="rtl">
+    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
       <ToolHeader tool={tool} />
       <div className="max-w-7xl mx-auto px-6 py-6">{children}</div>
     </div>

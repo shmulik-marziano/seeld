@@ -123,7 +123,7 @@ export function AgentInvitations() {
 
   const statusBadge = (status: string, expiresAt: string | null) => {
     const isExpired = expiresAt && new Date(expiresAt) < new Date();
-    if (status === 'accepted') return <Badge variant="default" className="bg-emerald-500/10 text-emerald-600 border-emerald-200 gap-1"><CheckCircle2 className="h-3 w-3" />התקבלה</Badge>;
+    if (status === 'accepted') return <Badge variant="default" className="bg-[#2F6B4E]/10 text-[#2F6B4E] border-[#819B7D] gap-1"><CheckCircle2 className="h-3 w-3" />התקבלה</Badge>;
     if (isExpired) return <Badge variant="secondary" className="gap-1"><XCircle className="h-3 w-3" />פג תוקף</Badge>;
     return <Badge variant="outline" className="gap-1"><Clock className="h-3 w-3" />ממתינה</Badge>;
   };

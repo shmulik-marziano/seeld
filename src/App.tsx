@@ -476,8 +476,8 @@ const App = () => (
               className="hidden sm:block fixed bottom-24 left-4 z-50 group"
               aria-label="שלח הודעה בוואטסאפ"
             >
-              <div className="relative flex items-center justify-center w-14 h-14 rounded-full bg-white transition-colors duration-150 group-hover:bg-[#fafafa]"
-                style={{ boxShadow: "0 0 0 1px rgba(0,0,0,.08), 0 2px 2px rgba(0,0,0,.04), 0 8px 8px -8px rgba(0,0,0,.04)" }}
+              <div className="relative flex items-center justify-center w-14 h-14 rounded-full bg-white transition-colors duration-150 group-hover:bg-[#EEF2EC]"
+                style={{ boxShadow: "0 0 0 1px #CCD6CC, 0 8px 20px -12px rgba(0,61,48,.35)" }}
               >
                 <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-[#25D366] border border-white" />
                 <svg viewBox="0 0 24 24" className="w-7 h-7 fill-[#003D30] relative z-10" xmlns="http://www.w3.org/2000/svg">

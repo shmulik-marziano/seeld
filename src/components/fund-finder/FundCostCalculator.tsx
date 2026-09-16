@@ -1,13 +1,13 @@
 import { useState, useMemo } from 'react';
-import { Calculator, Wallet } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import type { Fund } from '@/types/fund';
 import { calculateAnnualCost, calculateWeightedAverage } from '@/data/cmaFundsData';
 import { companyLabels } from '@/types/fund';
+import { BrandIcon } from '@/components/brand/BrandIcon';
+import { BODY, GREEN, LINE, MUTED, RUST_TEXT, TINT_SAGE } from '@/lib/brand';
+
+// Cost calculator for the picked funds: every input has a visible label,
+// results appear only after "חישוב", and a row with no figures says so
+// instead of showing a zero cost.
 
 interface FundCostCalculatorProps {
   funds: Fund[];
@@ -42,132 +42,127 @@ export default function FundCostCalculator({ funds }: FundCostCalculatorProps) {
 
   if (funds.length === 0) return null;
 
+  const hasAnyInput = funds.some((f) => (balances[f.id] || 0) > 0 || (deposits[f.id] || 0) > 0);
+
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base flex items-center gap-2">
-          <Calculator className="w-5 h-5" />
-          חישוב עלויות וממוצע משוקלל
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {/* טבלת הזנת נתונים */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b">
-                <th className="text-right py-2 pr-1 font-medium">קופה</th>
-                <th className="text-center py-2 font-medium">יתרה (₪)</th>
-                <th className="text-center py-2 font-medium">הפקדה שנתית (₪)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {funds.map((fund) => (
-                <tr key={fund.id} className="border-b last:border-0">
-                  <td className="py-2 pr-1">
-                    <div>
-                      <p className="font-medium text-xs">{fund.name}</p>
-                      <p className="text-[10px] text-muted-foreground">{companyLabels[fund.company]}</p>
-                    </div>
-                  </td>
-                  <td className="py-2 px-1">
-                    <Input
-                      type="number"
-                      value={balances[fund.id] || ''}
-                      onChange={(e) =>
-                        setBalances((prev) => ({ ...prev, [fund.id]: Number(e.target.value) }))
-                      }
-                      placeholder="0"
-                      className="text-center h-8 text-xs"
-                      dir="ltr"
-                    />
-                  </td>
-                  <td className="py-2 px-1">
-                    <Input
-                      type="number"
-                      value={deposits[fund.id] || ''}
-                      onChange={(e) =>
-                        setDeposits((prev) => ({ ...prev, [fund.id]: Number(e.target.value) }))
-                      }
-                      placeholder="0"
-                      className="text-center h-8 text-xs"
-                      dir="ltr"
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+    <section className="dna-concept !p-5 sm:!p-6" aria-labelledby="fund-cost-title">
+      <h3 id="fund-cost-title" className="flex items-center gap-2 text-[18px]" style={{ color: GREEN }}>
+        <BrandIcon name="calculator" size={22} />
+        חישוב עלויות וממוצע משוקלל
+      </h3>
+      <p className="mt-1 mb-5 text-[15px] leading-[1.7]" style={{ color: MUTED }}>
+        הזינו יתרה והפקדה שנתית לכל קופה. העלות השנתית מחושבת לפי דמי הניהול שפורסמו.
+      </p>
 
-        {/* כפתורי חישוב */}
-        <div className="flex gap-2">
-          <Button onClick={() => setShowResults(true)} className="flex-1 text-sm">
-            <Calculator className="w-4 h-4 ml-1" />
-            חשב עלות שנתית
-          </Button>
-          <Button onClick={() => setShowResults(true)} variant="secondary" className="flex-1 text-sm">
-            <Wallet className="w-4 h-4 ml-1" />
-            חשב ממוצע משוקלל
-          </Button>
-        </div>
-
-        {/* תוצאות עלות */}
-        {showResults && costResults.length > 0 && (
-          <>
-            <Separator />
-            <div className="space-y-3">
-              <h4 className="font-bold text-sm">עלות שנתית צפויה</h4>
-              {costResults.map(({ fund, balance, annualCost }) => (
-                <div key={fund.id} className="flex justify-between items-center text-xs bg-muted rounded-lg px-3 py-2">
-                  <span className="truncate max-w-[160px]">{fund.name}</span>
-                  <div className="text-left">
-                    <span className="font-bold text-destructive">{formatCurrency(annualCost)}</span>
-                    {balance > 0 && (
-                      <span className="text-muted-foreground mr-1">
-                        ({((annualCost / balance) * 100).toFixed(2)}%)
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-
-        {/* תוצאות ממוצע משוקלל */}
-        {showResults && weightedResult && (
-          <>
-            <Separator />
-            <div className="space-y-2">
-              <h4 className="font-bold text-sm">ממוצע משוקלל</h4>
-              <div className="bg-primary/5 border border-primary/20 rounded-xl p-4">
-                <p className="text-xs text-muted-foreground mb-2">
-                  סה"כ יתרה: {formatCurrency(weightedResult.totalBalance)}
-                </p>
-                <div className="grid grid-cols-2 gap-3 text-center">
-                  <div>
-                    <p className="text-xs text-muted-foreground">שנה</p>
-                    <p className="text-lg font-bold text-primary">{weightedResult.year1.toFixed(2)}%</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">3 שנים</p>
-                    <p className="text-lg font-bold text-primary">{weightedResult.year3.toFixed(2)}%</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">24 חוד.</p>
-                    <p className="text-lg font-bold text-primary">{weightedResult.year2.toFixed(2)}%</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">5 שנים</p>
-                    <p className="text-lg font-bold text-primary">{weightedResult.year5.toFixed(2)}%</p>
-                  </div>
-                </div>
+      <div className="space-y-3">
+        {funds.map((fund) => (
+          <div key={fund.id} className="rounded-[12px] border p-4" style={{ borderColor: LINE }}>
+            <p className="text-[15px] font-bold" style={{ color: GREEN }}>{fund.name}</p>
+            <p className="text-[14px] mb-3" style={{ color: MUTED }}>{companyLabels[fund.company]}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label htmlFor={`cost-balance-${fund.id}`} className="block text-[14px] font-bold mb-1.5" style={{ color: GREEN }}>
+                  יתרה (₪)
+                </label>
+                <input
+                  id={`cost-balance-${fund.id}`}
+                  type="number"
+                  inputMode="decimal"
+                  min={0}
+                  value={balances[fund.id] || ''}
+                  onChange={(e) => setBalances((prev) => ({ ...prev, [fund.id]: Number(e.target.value) }))}
+                  className="field tabular-nums"
+                  dir="ltr"
+                  style={{ textAlign: 'right' }}
+                />
+              </div>
+              <div>
+                <label htmlFor={`cost-deposit-${fund.id}`} className="block text-[14px] font-bold mb-1.5" style={{ color: GREEN }}>
+                  הפקדה שנתית (₪)
+                </label>
+                <input
+                  id={`cost-deposit-${fund.id}`}
+                  type="number"
+                  inputMode="decimal"
+                  min={0}
+                  value={deposits[fund.id] || ''}
+                  onChange={(e) => setDeposits((prev) => ({ ...prev, [fund.id]: Number(e.target.value) }))}
+                  className="field tabular-nums"
+                  dir="ltr"
+                  style={{ textAlign: 'right' }}
+                />
               </div>
             </div>
-          </>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-5 flex flex-wrap items-center gap-4">
+        <button type="button" onClick={() => setShowResults(true)} className="btn-primary min-w-[200px]">
+          חישוב עלות וממוצע משוקלל
+        </button>
+        {showResults && !hasAnyInput && (
+          <p className="text-[14px]" style={{ color: RUST_TEXT }} role="status">
+            לא הוזנו יתרה או הפקדה. הזינו לפחות נתון אחד כדי לקבל תוצאה.
+          </p>
         )}
-      </CardContent>
-    </Card>
+      </div>
+
+      {showResults && hasAnyInput && costResults.length > 0 && (
+        <div className="mt-6 border-t pt-5" style={{ borderColor: LINE }} role="status">
+          <h4 className="text-[16px] mb-3" style={{ color: GREEN }}>עלות שנתית צפויה</h4>
+          <ul className="space-y-2">
+            {costResults.map(({ fund, balance, deposit, annualCost }) => (
+              <li
+                key={fund.id}
+                className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 rounded-[10px] px-4 py-2.5 text-[15px]"
+                style={{ backgroundColor: TINT_SAGE }}
+              >
+                <span className="min-w-0 truncate" style={{ color: BODY }}>{fund.name}</span>
+                {balance === 0 && deposit === 0 ? (
+                  <span style={{ color: MUTED }}>לא הוזנו נתונים</span>
+                ) : (
+                  <span dir="ltr" className="tabular-nums whitespace-nowrap">
+                    <span className="font-bold" style={{ color: GREEN }}>{formatCurrency(annualCost)}</span>
+                    {balance > 0 && (
+                      <span style={{ color: MUTED }}> ({((annualCost / balance) * 100).toFixed(2)}%)</span>
+                    )}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {showResults && weightedResult && (
+        <div className="mt-6 border-t pt-5" style={{ borderColor: LINE }}>
+          <h4 className="text-[16px] mb-3" style={{ color: GREEN }}>ממוצע משוקלל לפי היתרות</h4>
+          <div className="rounded-[12px] p-4 sm:p-5" style={{ backgroundColor: TINT_SAGE }}>
+            <p className="text-[14px] mb-3" style={{ color: MUTED }}>
+              סך היתרות:{' '}
+              <span dir="ltr" className="tabular-nums whitespace-nowrap font-bold" style={{ color: GREEN }}>
+                {formatCurrency(weightedResult.totalBalance)}
+              </span>
+            </p>
+            <dl className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { label: 'שנה', value: weightedResult.year1 },
+                { label: '24 חודשים', value: weightedResult.year2 },
+                { label: '3 שנים', value: weightedResult.year3 },
+                { label: '5 שנים', value: weightedResult.year5 },
+              ].map((cell) => (
+                <div key={cell.label}>
+                  <dt className="text-[14px]" style={{ color: MUTED }}>{cell.label}</dt>
+                  <dd dir="ltr" className="text-[20px] font-bold tabular-nums text-right" style={{ color: GREEN }}>
+                    {cell.value.toFixed(2)}%
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+      )}
+    </section>
   );
 }

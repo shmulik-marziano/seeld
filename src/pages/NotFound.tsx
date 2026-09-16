@@ -1,9 +1,13 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
-import { DISPLAY, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT } from "@/lib/brand";
-import { UmbrellaFigure } from "@/components/brand/Figures";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { Illustration } from "@/components/brand/Illustration";
+import { BrandDots } from "@/components/brand/Elements";
+import { BrandIcon } from "@/components/brand/BrandIcon";
+import { GREEN, IVORY, MUTED, PASTEL_SAGE } from "@/lib/brand";
 
-// SEELD DNA v3: white canvas, pastel circles, colossal ghost numeral (STYLESEED.md)
+// 404: a small journey illustration and the way home. No ghost numerals.
 
 const NotFound = () => {
   const location = useLocation();
@@ -13,79 +17,56 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white" dir="rtl">
+    <div className="min-h-screen flex flex-col" dir="rtl" style={{ backgroundColor: IVORY }}>
+      <Header />
+
       <main className="flex-1 flex">
         <section className="dna-page flex-1 flex items-center overflow-hidden">
-          {/* Pastel circle backdrop — decorative, never behind small text */}
           <div className="dna-circles" aria-hidden="true">
             <div
-              className="dna-circ"
-              style={{ width: 300, height: 300, top: -120, right: -90, backgroundColor: PASTEL_BLUE, opacity: 0.55 }}
-            />
-            <div
-              className="dna-circ"
-              style={{ width: 220, height: 220, bottom: -110, left: "22%", backgroundColor: PASTEL_MINT, opacity: 0.45 }}
+              className="dna-circ hidden md:block"
+              style={{ width: 300, height: 300, top: -140, left: -110, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
             />
           </div>
 
-          {/* The rotated umbrella — protection, tipped over (navy line-art) */}
-          <UmbrellaFigure className="absolute left-2 top-6 w-40 h-40 sm:w-52 sm:h-52 opacity-40 rotate-[24deg] pointer-events-none" />
+          <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 w-full py-16 sm:py-24">
+            <div className="grid gap-10 lg:gap-16 lg:grid-cols-[1.1fr_0.9fr] items-center">
+              <div>
+                <BrandDots className="mb-5" />
+                <p className="text-[15px] font-bold mb-3" style={{ color: MUTED }}>
+                  שגיאה <span dir="ltr" className="tabular-nums">404</span>
+                </p>
+                <h1 className="dna-display leading-[1.15] max-w-xl" style={{ fontSize: "clamp(30px, 4vw, 44px)" }}>
+                  העמוד הזה לא קיים. רוב הדברים החשובים אצלנו דווקא מכוסים.
+                </h1>
+                <p className="mt-5 text-[17px] leading-[1.7] max-w-lg" style={{ color: MUTED }}>
+                  ייתכן שהקישור השתנה או שהכתובת הוקלדה בטעות. השביל הביתה קצר.
+                </p>
+                <div className="mt-9 flex flex-col sm:flex-row gap-3">
+                  <Link to="/" className="btn-primary sm:min-w-[200px]">לדף הבית</Link>
+                  <Link to="/contact" className="btn-secondary sm:min-w-[200px]">דברו איתנו</Link>
+                </div>
+                <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[15px]">
+                  <Link to="/insurances" className="link-rule">ביטוח <BrandIcon name="arrow-left" size={16} /></Link>
+                  <Link to="/savings" className="link-rule">חיסכון ופנסיה <BrandIcon name="arrow-left" size={16} /></Link>
+                  <Link to="/calculators" className="link-rule">מחשבונים <BrandIcon name="arrow-left" size={16} /></Link>
+                  <Link to="/learn" className="link-rule">מידע ולמידה <BrandIcon name="arrow-left" size={16} /></Link>
+                </div>
+              </div>
 
-          <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 w-full py-20">
-            {/* The colossal 404 — Frank Ruhl 900, navy ghost */}
-            <div
-              className="leading-none select-none tabular-nums"
-              dir="ltr"
-              aria-hidden="true"
-              style={{
-                fontFamily: DISPLAY,
-                fontWeight: 700,
-                color: NAVY,
-                opacity: 0.06,
-                fontSize: "clamp(7rem, 24vw, 18rem)",
-                letterSpacing: "-0.04em",
-                textAlign: "right",
-              }}
-            >
-              404
-            </div>
-
-            <h1
-              className="mt-8 text-xl sm:text-2xl max-w-xl leading-[1.5]"
-              style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}
-            >
-              העמוד הזה לא קיים. רוב הדברים החשובים אצלנו דווקא מכוסים.
-            </h1>
-
-            <p
-              className="mt-3 text-[11px] tracking-[0.18em]"
-              style={{ fontFamily: MONO, color: MUTED }}
-              dir="ltr"
-            >
-              ERROR · PAGE NOT FOUND
-            </p>
-
-            <div className="mt-10 flex flex-wrap items-center gap-6">
-              <Link
-                to="/"
-                className="inline-flex items-center justify-center px-9 py-4 bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors min-h-[52px] rounded-lg"
-              >
-                לדף הבית
-              </Link>
-              <Link
-                to="/contact"
-                className="group inline-flex items-center gap-2 text-base font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
-              >
-                דברו איתנו
-                <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
-              </Link>
+              <Illustration
+                name="01-journey"
+                priority
+                sizes="(min-width: 1024px) 480px, 100vw"
+                className="max-w-md mx-auto lg:max-w-none"
+              />
             </div>
           </div>
         </section>
       </main>
 
-      {/* The signature gradient bar — bottom of every page */}
-      <div className="dna-gbar" />
+      <Footer />
+      <span className="sr-only" style={{ color: GREEN }} aria-hidden="true" />
     </div>
   );
 };

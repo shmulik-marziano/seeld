@@ -50,7 +50,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
   // Non-app routes: just render with existing back-bar logic
   if (!isAppRoute) {
     return (
-      <div className="flex flex-col min-h-screen" dir="rtl" style={{ backgroundColor: '#fafafa' }}>
+      <div className="flex flex-col min-h-screen" dir="rtl" style={{ backgroundColor: '#FAF7EF' }}>
         <main className="flex-1 overflow-y-auto">
           <div className="p-3 sm:p-4 md:p-6">{children}</div>
         </main>
@@ -60,7 +60,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen" dir="rtl" style={{ backgroundColor: '#fafafa' }}>
+    <div className="flex min-h-screen" dir="rtl" style={{ backgroundColor: '#FAF7EF' }}>
       {/* ── Sidebar (desktop only) ── */}
       <aside
         className={`hidden md:flex flex-col flex-shrink-0 bg-white border-l border-[#003D30]/[0.06] transition-all duration-200 ease-in-out ${
@@ -88,7 +88,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           {!sidebarCollapsed && (
             <button
               onClick={() => setSidebarCollapsed(true)}
-              className="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+              className="p-1 rounded hover:bg-[#E8EDE5] text-[#476356] hover:text-[#476356] transition-colors"
             >
               <PanelLeftClose className="w-4 h-4" />
             </button>
@@ -103,14 +103,14 @@ export function AppLayout({ children }: { children: ReactNode }) {
             className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 mb-1 transition-colors ${
               isActive('/app/dashboard')
                 ? 'bg-[#003D30]/5 text-[#003D30] font-bold'
-                : 'text-gray-600 hover:bg-gray-50'
+                : 'text-[#476356] hover:bg-[#F3F5F1]'
             }`}
           >
             <LayoutDashboard className="w-4 h-4 flex-shrink-0" style={{ color: DECK.color }} />
             {!sidebarCollapsed && <span className="text-sm">{DECK.hebrewName}</span>}
           </Link>
 
-          <div className="h-px bg-gray-100 my-2" />
+          <div className="h-px bg-[#E8EDE5] my-2" />
 
           {/* Phase sections */}
           {PHASES.map((phase) => {
@@ -124,7 +124,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
                   onClick={() => !sidebarCollapsed && togglePhase(phase.id)}
                   className={`flex items-center w-full rounded-md px-2.5 py-1.5 transition-colors ${
                     sidebarCollapsed ? 'justify-center' : 'justify-between'
-                  } hover:bg-gray-50`}
+                  } hover:bg-[#F3F5F1]`}
                   title={sidebarCollapsed ? phase.label : undefined}
                 >
                   {sidebarCollapsed ? (
@@ -134,11 +134,11 @@ export function AppLayout({ children }: { children: ReactNode }) {
                     />
                   ) : (
                     <>
-                      <span className="text-xs uppercase tracking-wide text-gray-400 font-medium">
+                      <span className="text-xs uppercase tracking-wide text-[#476356] font-medium">
                         {phase.label}
                       </span>
                       <ChevronLeft
-                        className={`w-3 h-3 text-gray-300 transition-transform ${
+                        className={`w-3 h-3 text-[#8FA396] transition-transform ${
                           isExpanded ? '-rotate-90' : ''
                         }`}
                       />
@@ -161,7 +161,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
                           className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors ${
                             active
                               ? 'bg-[#003D30]/5 text-[#003D30] font-bold'
-                              : 'text-gray-600 hover:bg-gray-50'
+                              : 'text-[#476356] hover:bg-[#F3F5F1]'
                           } ${sidebarCollapsed ? 'justify-center w-10 mx-auto' : ''}`}
                         >
                           <Icon className="w-4 h-4 flex-shrink-0" style={{ color: tool.color }} />
@@ -192,10 +192,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
             className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors ${
               isActive('/app/settings')
                 ? 'bg-[#003D30]/5 text-[#003D30] font-bold'
-                : 'text-gray-600 hover:bg-gray-50'
+                : 'text-[#476356] hover:bg-[#F3F5F1]'
             } ${sidebarCollapsed ? 'justify-center' : ''}`}
           >
-            <Settings className="w-4 h-4 flex-shrink-0 text-gray-400" />
+            <Settings className="w-4 h-4 flex-shrink-0 text-[#476356]" />
             {!sidebarCollapsed && <span className="text-sm">הגדרות</span>}
           </Link>
 
@@ -203,7 +203,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           {sidebarCollapsed && (
             <button
               onClick={() => setSidebarCollapsed(false)}
-              className="flex items-center justify-center w-full rounded-lg px-2.5 py-2 mt-1 text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition-colors"
+              className="flex items-center justify-center w-full rounded-lg px-2.5 py-2 mt-1 text-[#476356] hover:bg-[#F3F5F1] hover:text-[#476356] transition-colors"
             >
               <PanelLeftOpen className="w-4 h-4" />
             </button>
@@ -216,12 +216,12 @@ export function AppLayout({ children }: { children: ReactNode }) {
         {/* Back bar for non-dashboard pages */}
         {!isDashboard && (
           <div
-            className="sticky top-0 z-40 flex items-center px-4 h-11 border-b border-gray-100/70 md:hidden"
-            style={{ backgroundColor: 'rgba(248,249,252,0.95)', backdropFilter: 'blur(12px)' }}
+            className="sticky top-0 z-40 flex items-center px-4 h-11 border-b border-[#E1E8E1]/70 md:hidden"
+            style={{ backgroundColor: 'rgba(250,247,239,0.95)', backdropFilter: 'blur(12px)' }}
           >
             <button
               onClick={() => navigate('/app/dashboard')}
-              className="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-[#003D30] transition-colors"
+              className="flex items-center gap-1.5 text-xs font-bold text-[#476356] hover:text-[#003D30] transition-colors"
             >
               <ChevronRight className="w-3.5 h-3.5 rotate-180" />
               SEELD פלטפורמה
@@ -236,7 +236,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
       {/* ── Mobile bottom tab bar ── */}
       <div
-        className="fixed bottom-0 inset-x-0 z-50 flex md:hidden items-center justify-around bg-white border-t border-gray-200 h-14 px-1"
+        className="fixed bottom-0 inset-x-0 z-50 flex md:hidden items-center justify-around bg-white border-t border-[#CCD6CC] h-14 px-1"
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         {mobileBottomTabs.map((tab) => {
@@ -253,7 +253,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
               key={tab.path}
               to={tab.path}
               className={`flex flex-col items-center justify-center gap-0.5 flex-1 py-1 transition-colors ${
-                active ? 'text-[#003D30]' : 'text-gray-400'
+                active ? 'text-[#003D30]' : 'text-[#476356]'
               }`}
             >
               <Icon className="w-5 h-5" />

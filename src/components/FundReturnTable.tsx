@@ -1,59 +1,73 @@
+import type { CSSProperties } from "react";
 import { FundReturn } from "@/data/fundReturns";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { TrendingUp, TrendingDown } from "lucide-react";
+import { BODY, GREEN, MUTED, RUST_TEXT } from "@/lib/brand";
+
+// Return table for one product category (SEELD brand system 2026-09):
+// table.dna-data, figures in LTR tabular cells, a missing value is named,
+// never rendered as 0. Wide table scrolls inside its own container on phones.
 
 interface FundReturnTableProps {
   funds: FundReturn[];
   title: string;
 }
 
-const FundReturnTable = ({ funds, title }: FundReturnTableProps) => {
-  const formatPercent = (value: number | null) => {
-    if (value === null) {
-      return <span className="flex justify-center text-muted-foreground">—</span>;
-    }
-    const isPositive = value >= 0;
-    return (
-      <span className={`flex items-center gap-1 justify-center font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
-        {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-        {value.toFixed(2)}%
-      </span>
-    );
-  };
+const TH: CSSProperties = { fontSize: 14 };
+const NONE = "אין נתון";
 
+const Pct = ({ value }: { value: number | null | undefined }) => {
+  if (value === null || value === undefined || Number.isNaN(value)) {
+    return <span style={{ color: MUTED }}>{NONE}</span>;
+  }
   return (
-    <div className="rounded-2xl border border-border bg-card overflow-hidden">
-      <div className="bg-muted px-6 py-4">
-        <h3 className="text-lg font-bold">{title}</h3>
-      </div>
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-right">שם הקרן</TableHead>
-              <TableHead className="text-center">חברה</TableHead>
-              <TableHead className="text-center">חודש</TableHead>
-              <TableHead className="text-center">שנה</TableHead>
-              <TableHead className="text-center">3 שנים</TableHead>
-              <TableHead className="text-center">5 שנים</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {funds.map((fund, index) => (
-              <TableRow key={index} className="hover:bg-muted/50 transition-colors">
-                <TableCell className="font-medium text-right">{fund.name}</TableCell>
-                <TableCell className="text-center text-muted-foreground">{fund.company}</TableCell>
-                <TableCell>{formatPercent(fund.monthReturn)}</TableCell>
-                <TableCell>{formatPercent(fund.yearReturn)}</TableCell>
-                <TableCell>{formatPercent(fund.threeYearReturn)}</TableCell>
-                <TableCell>{formatPercent(fund.fiveYearReturn)}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    </div>
+    <span className="font-bold" style={{ color: value < 0 ? RUST_TEXT : GREEN }}>
+      {value > 0 ? "+" : ""}
+      {value.toFixed(2)}%
+    </span>
   );
 };
+
+const FundReturnTable = ({ funds, title }: FundReturnTableProps) => (
+  <div>
+    <div className="mb-4 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+      <h3 className="text-[18px]" style={{ color: GREEN }}>
+        {title}
+      </h3>
+      <p className="text-[14px]" style={{ color: MUTED }}>
+        <span dir="ltr" className="tabular-nums">{funds.length}</span> קרנות · תשואות באחוזים
+      </p>
+    </div>
+
+    <div className="overflow-x-auto rounded-[10px]">
+      <table className="dna-data min-w-[640px]" style={{ fontSize: 15 }}>
+        <caption className="sr-only">{title}</caption>
+        <thead>
+          <tr>
+            <th scope="col" style={TH}>שם הקרן</th>
+            <th scope="col" style={TH}>חברה</th>
+            <th scope="col" style={TH}>חודש</th>
+            <th scope="col" style={TH}>שנה</th>
+            <th scope="col" style={TH}>3 שנים</th>
+            <th scope="col" style={TH}>5 שנים</th>
+          </tr>
+        </thead>
+        <tbody>
+          {funds.map((fund, index) => (
+            <tr key={`${fund.name}-${index}`}>
+              <td>{fund.name}</td>
+              <td className="whitespace-nowrap" style={{ color: BODY }}>{fund.company}</td>
+              <td className="num"><Pct value={fund.monthReturn} /></td>
+              <td className="num"><Pct value={fund.yearReturn} /></td>
+              <td className="num"><Pct value={fund.threeYearReturn} /></td>
+              <td className="num"><Pct value={fund.fiveYearReturn} /></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p className="mt-2 text-[14px] sm:hidden" style={{ color: MUTED }}>
+      אפשר לגלול את הטבלה לצדדים כדי לראות את כל העמודות.
+    </p>
+  </div>
+);
 
 export default FundReturnTable;

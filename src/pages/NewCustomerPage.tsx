@@ -194,7 +194,7 @@ export default function NewCustomerPage() {
     <div
       className={`border-2 border-dashed rounded-2xl p-6 md:p-8 text-center cursor-pointer transition-all duration-300 ${
         dragging ? 'border-[#003D30] bg-[#003D30]/10 scale-[1.02]' :
-        fileList.length > 0 ? 'border-emerald-400/50 bg-emerald-50/30 dark:bg-emerald-900/10' : 'border-border/60 hover:border-[#003D30]/50 hover:bg-[#003D30]/5'
+        fileList.length > 0 ? 'border-emerald-400/50 bg-[#E8EDE5]/30 dark:bg-[#003D30]/10' : 'border-border/60 hover:border-[#003D30]/50 hover:bg-[#003D30]/5'
       }`}
       onClick={() => inputRef.current?.click()}
       onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
@@ -205,8 +205,8 @@ export default function NewCustomerPage() {
       {fileList.length > 0 ? (
         <div className="space-y-2">
           {fileList.map((file, i) => (
-            <div key={i} className="flex items-center justify-center gap-2 bg-emerald-50/50 dark:bg-emerald-900/20 rounded-xl p-2">
-              <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+            <div key={i} className="flex items-center justify-center gap-2 bg-[#E8EDE5]/50 dark:bg-[#003D30]/20 rounded-xl p-2">
+              <CheckCircle2 className="h-5 w-5 text-[#2F6B4E]" />
               <span className="text-sm font-medium text-foreground">{file.name}</span>
               <span className="text-xs text-muted-foreground bg-muted rounded-lg px-2 py-0.5">({(file.size / 1024).toFixed(0)} KB)</span>
             </div>
@@ -417,8 +417,8 @@ export default function NewCustomerPage() {
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
             <CardHeader className="pb-3 bg-gradient-to-b from-blue-50/50 dark:from-blue-900/5 to-transparent">
               <CardTitle className="flex items-center gap-2.5 text-base">
-                <div className="w-7 h-7 rounded-lg bg-blue-100/60 dark:bg-blue-900/20 flex items-center justify-center">
-                  <MapPin className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                <div className="w-7 h-7 rounded-lg bg-[#E8EDE5]/60 dark:bg-[#003D30]/20 flex items-center justify-center">
+                  <MapPin className="h-3.5 w-3.5 text-[#476356] dark:text-[#476356]" />
                 </div>
                 כתובת
               </CardTitle>
@@ -449,8 +449,8 @@ export default function NewCustomerPage() {
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
             <CardHeader className="pb-3 bg-gradient-to-b from-amber-50/50 dark:from-amber-900/5 to-transparent">
               <CardTitle className="flex items-center gap-2.5 text-base">
-                <div className="w-7 h-7 rounded-lg bg-amber-100/60 dark:bg-amber-900/20 flex items-center justify-center">
-                  <Briefcase className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+                <div className="w-7 h-7 rounded-lg bg-[#F5EEE0]/60 dark:bg-[#8A6230]/20 flex items-center justify-center">
+                  <Briefcase className="h-3.5 w-3.5 text-[#8A6230] dark:text-amber-400" />
                 </div>
                 תעסוקה ובריאות
               </CardTitle>
@@ -498,8 +498,8 @@ export default function NewCustomerPage() {
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
             <CardHeader className="pb-3 bg-gradient-to-b from-rose-50/40 dark:from-rose-900/5 to-transparent">
               <CardTitle className="flex items-center gap-2.5 text-base">
-                <div className="w-7 h-7 rounded-lg bg-rose-100/50 dark:bg-rose-900/20 flex items-center justify-center">
-                  <Heart className="h-3.5 w-3.5 text-rose-500 dark:text-rose-400" />
+                <div className="w-7 h-7 rounded-lg bg-[#F3E2D8]/50 dark:bg-rose-900/20 flex items-center justify-center">
+                  <Heart className="h-3.5 w-3.5 text-[#9A4520] dark:text-[#9A4520]" />
                 </div>
                 הערות פנימיות
               </CardTitle>

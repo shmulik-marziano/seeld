@@ -167,7 +167,7 @@ const GoalCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="הגיל שלך היום"
             value={[currentAge]}
             onValueChange={([value]) => value < retirementAge && setCurrentAge(value)}
             min={18}
@@ -195,7 +195,7 @@ const GoalCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="גיל פרישה"
             value={[retirementAge]}
             onValueChange={([value]) => value > currentAge && setRetirementAge(value)}
             min={60}
@@ -218,7 +218,7 @@ const GoalCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="כמה יש לך כבר?"
             value={[currentBalance]}
             onValueChange={([value]) => setCurrentBalance(value)}
             min={0}
@@ -251,7 +251,7 @@ const GoalCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="תשואה שנתית צפויה (%)"
             value={[annualReturn]}
             onValueChange={([value]) => setAnnualReturn(value)}
             min={0}

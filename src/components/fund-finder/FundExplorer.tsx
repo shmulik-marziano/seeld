@@ -1,59 +1,75 @@
-import { useState } from 'react';
-import { Search, X, SlidersHorizontal, ArrowUpDown, Check } from 'lucide-react';
+import { useState, type CSSProperties } from 'react';
+import { ArrowUpDown } from 'lucide-react';
 import type { Fund, ProductType } from '@/types/fund';
 import { productTypeLabels, companyLabels, specializationLabels } from '@/types/fund';
 import { useFundExplorer, MAX_COMPARE, type SortKey } from '@/hooks/useFundExplorer';
-import { BODY, DISPLAY, GOLD_TEXT, LINE, MONO, MUTED, NAVY, TURQ_TEXT } from '@/lib/brand';
+import { BrandIcon } from '@/components/brand/BrandIcon';
+import { BODY, GREEN, IVORY, LINE, MUTED, RUST_TEXT, SAGE_ON_GREEN, SAND_TEXT, TINT_SAGE } from '@/lib/brand';
 
 /*
-  FundExplorer — the search surface for comparing funds (SEELD DNA v3).
-  One input, results that update as you type, a sortable table, and a tray
-  that collects what you picked. Filters are secondary and folded away until
-  asked for, so the first screen is a ranked list rather than a blank form.
+  FundExplorer (SEELD brand system 2026-09): one search field, results that
+  update as you type, a sortable table.dna-data and a tray that collects what
+  you picked. Filters are secondary and folded away until asked for. Every
+  query, filter, sort and compare action lives in useFundExplorer unchanged.
 */
 
 const PRODUCT_ORDER: ProductType[] = ['hishtalmut', 'gemel', 'pensia', 'gemel_invest', 'polisa'];
 
-const pct = (v: number | null | undefined) => (v === null || v === undefined ? '—' : `${v.toFixed(2)}%`);
+const TH: CSSProperties = { fontSize: 14 };
+const NONE = 'אין נתון';
+const missing = (v: number | null | undefined) => v === null || v === undefined || Number.isNaN(v);
+
+const pct = (v: number | null | undefined) => (missing(v) ? NONE : `${(v as number).toFixed(2)}%`);
 
 // Assets arrive in millions ILS; past a billion the millions read as noise.
 const formatAssets = (millions: number | null) => {
-  if (millions === null || millions === undefined) return '—';
-  return millions >= 1000
-    ? `${(millions / 1000).toLocaleString('he-IL', { maximumFractionDigits: 1 })} מיליארד`
-    : `${Math.round(millions).toLocaleString('he-IL')} מיליון`;
+  if (missing(millions)) return NONE;
+  const m = millions as number;
+  return m >= 1000
+    ? `${(m / 1000).toLocaleString('he-IL', { maximumFractionDigits: 1 })} מיליארד`
+    : `${Math.round(m).toLocaleString('he-IL')} מיליון`;
 };
 
-/** Returns read better with a sign and a colour that survives contrast checks. */
+/** Returns read better with a sign; a missing value is named, never 0. */
 const ReturnCell = ({ value }: { value: number | null | undefined }) => {
-  if (value === null || value === undefined) {
-    return <span style={{ color: MUTED }}>—</span>;
+  if (missing(value)) {
+    return <span style={{ color: MUTED }}>{NONE}</span>;
   }
+  const v = value as number;
   return (
-    <span dir="ltr" style={{ fontFamily: MONO, color: value < 0 ? '#9A4520' : TURQ_TEXT }}>
-      {value > 0 ? '+' : ''}
-      {value.toFixed(2)}%
+    <span dir="ltr" className="tabular-nums font-bold whitespace-nowrap" style={{ color: v < 0 ? RUST_TEXT : GREEN }}>
+      {v > 0 ? '+' : ''}
+      {v.toFixed(2)}%
     </span>
   );
 };
 
-const COLUMNS: { key: SortKey; label: string; numeric: boolean; hideOn?: string }[] = [
+const COLUMNS: { key: SortKey; label: string; numeric: boolean }[] = [
   { key: 'name', label: 'קופה', numeric: false },
   { key: 'ytd', label: 'מתחילת השנה', numeric: true },
-  { key: 'year3', label: 'ממוצע 3 שנים', numeric: true, hideOn: 'hidden lg:table-cell' },
-  { key: 'year5', label: 'ממוצע 5 שנים', numeric: true, hideOn: 'hidden xl:table-cell' },
+  { key: 'year3', label: 'ממוצע 3 שנים', numeric: true },
+  { key: 'year5', label: 'ממוצע 5 שנים', numeric: true },
   { key: 'fee', label: 'דמי ניהול', numeric: true },
-  { key: 'assets', label: 'נכסים (₪)', numeric: true, hideOn: 'hidden lg:table-cell' },
+  { key: 'assets', label: 'נכסים (₪)', numeric: true },
 ];
+
+const chipStyle = (on: boolean): CSSProperties =>
+  on
+    ? { backgroundColor: GREEN, color: IVORY, borderColor: GREEN }
+    : { backgroundColor: '#ffffff', color: BODY, borderColor: LINE };
+
+const chipClass = 'inline-flex items-center gap-1.5 rounded-[10px] border px-3.5 py-2 text-[14px] font-bold transition-colors min-h-[44px]';
 
 interface Props {
   funds: Fund[] | undefined;
   loading?: boolean;
-  /** Rendered under the tray — the comparison view owned by the page. */
+  /** The live database could not be reached; the static snapshot is shown. */
+  error?: boolean;
+  /** Rendered under the tray: the comparison view owned by the page. */
   children?: (selected: Fund[], remove: (id: string) => void, clear: () => void) => React.ReactNode;
 }
 
-export default function FundExplorer({ funds, loading, children }: Props) {
+export default function FundExplorer({ funds, loading, error, children }: Props) {
   const x = useFundExplorer(funds);
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -61,39 +77,42 @@ export default function FundExplorer({ funds, loading, children }: Props) {
 
   return (
     <div className="space-y-6">
-      {/* ── Search bar ─────────────────────────────────────────────── */}
+      {/* ── Search ─────────────────────────────────────────────────── */}
       <div>
-        <label htmlFor="fund-search" className="sr-only">חיפוש קופה לפי שם, מספר או חברה</label>
+        <label htmlFor="fund-search" className="block text-[14px] font-bold mb-1.5" style={{ color: GREEN }}>
+          חיפוש קופה
+        </label>
         <div className="relative">
-          <Search
-            className="absolute top-1/2 -translate-y-1/2 start-4 w-5 h-5 pointer-events-none"
-            style={{ color: MUTED }}
-            strokeWidth={1.5}
-            aria-hidden="true"
-          />
           <input
             id="fund-search"
             type="search"
             value={x.query}
             onChange={(e) => x.setQuery(e.target.value)}
-            placeholder="חיפוש לפי שם קופה, מספר קופה או חברה מנהלת"
-            className="w-full ps-12 pe-12 py-4 rounded-xl bg-white border text-[16px] text-[#003D30] placeholder:text-[#476356] focus:outline-none focus:border-[#003D30] transition-colors"
-            style={{ borderColor: LINE }}
+            placeholder="שם קופה, מספר קופה או חברה מנהלת"
+            className="field pe-12"
+            autoComplete="off"
           />
-          {x.query && (
+          {x.query ? (
             <button
               type="button"
               onClick={() => x.setQuery('')}
-              aria-label="ניקוי החיפוש"
-              className="absolute top-1/2 -translate-y-1/2 end-4 w-8 h-8 grid place-items-center rounded-lg hover:bg-[#CCD6CC] transition-colors"
+              className="absolute top-1/2 -translate-y-1/2 end-2 grid h-10 w-10 place-items-center rounded-[10px] transition-colors hover:bg-[#E8EDE5]"
+              style={{ color: MUTED }}
             >
-              <X className="w-4 h-4" style={{ color: MUTED }} strokeWidth={1.5} />
+              <BrandIcon name="close" size={18} label="ניקוי החיפוש" />
             </button>
+          ) : (
+            <BrandIcon
+              name="search"
+              size={20}
+              className="pointer-events-none absolute top-1/2 -translate-y-1/2 end-4"
+              style={{ color: MUTED }}
+            />
           )}
         </div>
       </div>
 
-      {/* ── Product category tabs ──────────────────────────────────── */}
+      {/* ── Product category ───────────────────────────────────────── */}
       <div className="flex flex-wrap gap-2" role="tablist" aria-label="סוג מוצר">
         {PRODUCT_ORDER.map((p) => {
           const active = x.productType === p;
@@ -104,12 +123,8 @@ export default function FundExplorer({ funds, loading, children }: Props) {
               role="tab"
               aria-selected={active}
               onClick={() => x.setProductType(p)}
-              className="px-4 py-2.5 rounded-lg text-[14px] font-medium transition-colors min-h-[44px] border"
-              style={
-                active
-                  ? { backgroundColor: NAVY, color: '#fff', borderColor: NAVY }
-                  : { backgroundColor: '#fff', color: BODY, borderColor: LINE }
-              }
+              className={chipClass}
+              style={chipStyle(active)}
             >
               {productTypeLabels[p]}
             </button>
@@ -117,19 +132,23 @@ export default function FundExplorer({ funds, loading, children }: Props) {
         })}
       </div>
 
+      {error && (
+        <p className="dna-callout text-[15px]" role="status">
+          המאגר העדכני לא זמין כרגע. מוצגים נתונים מקומיים מהעדכון האחרון שנשמר.
+        </p>
+      )}
+
       {/* ── Result count + filter toggle ───────────────────────────── */}
       <div className="flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-b py-3" style={{ borderColor: LINE }}>
-        <span className="text-[14px]" style={{ color: BODY }}>
-          <span className="tabular-nums font-medium" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
+        <span className="text-[15px]" style={{ color: BODY }}>
+          <span className="tabular-nums font-bold" dir="ltr" style={{ color: GREEN }}>
             {x.results.length.toLocaleString('en-US')}
           </span>{' '}
           {x.results.length === 1 ? 'קופה' : 'קופות'}
           {x.results.length !== x.poolSize && (
             <span style={{ color: MUTED }}>
               {' '}מתוך{' '}
-              <span className="tabular-nums" dir="ltr" style={{ fontFamily: MONO }}>
-                {x.poolSize.toLocaleString('en-US')}
-              </span>
+              <span className="tabular-nums" dir="ltr">{x.poolSize.toLocaleString('en-US')}</span>
             </span>
           )}
         </span>
@@ -138,16 +157,16 @@ export default function FundExplorer({ funds, loading, children }: Props) {
           type="button"
           onClick={() => setFiltersOpen((v) => !v)}
           aria-expanded={filtersOpen}
-          className="inline-flex items-center gap-2 text-[14px] hover:text-[#003D30] transition-colors min-h-[44px]"
-          style={{ color: filtersOpen || x.activeFilterCount ? NAVY : MUTED }}
+          className="inline-flex items-center gap-2 text-[15px] font-bold transition-colors min-h-[44px]"
+          style={{ color: filtersOpen || x.activeFilterCount ? GREEN : MUTED }}
         >
-          <SlidersHorizontal className="w-4 h-4" strokeWidth={1.5} aria-hidden="true" />
+          <BrandIcon name="settings" size={18} />
           סינון מתקדם
           {x.activeFilterCount > 0 && (
             <span
-              className="tabular-nums px-1.5 py-0.5 rounded text-[11px] text-white"
+              className="tabular-nums rounded-[6px] px-1.5 py-0.5 text-[13px]"
               dir="ltr"
-              style={{ fontFamily: MONO, backgroundColor: NAVY }}
+              style={{ backgroundColor: GREEN, color: IVORY }}
             >
               {x.activeFilterCount}
             </span>
@@ -158,25 +177,25 @@ export default function FundExplorer({ funds, loading, children }: Props) {
           <button
             type="button"
             onClick={x.clearFilters}
-            className="text-[13px] underline underline-offset-4 hover:text-[#003D30] transition-colors"
+            className="text-[14px] underline underline-offset-4 transition-colors min-h-[44px]"
             style={{ color: MUTED }}
           >
             ניקוי הכל
           </button>
         )}
 
-        <div className="ms-auto flex items-center gap-2">
-          <span className="text-[13px]" style={{ color: MUTED }}>השוואה מהירה:</span>
+        <div className="ms-auto flex flex-wrap items-center gap-2">
+          <span className="text-[14px]" style={{ color: MUTED }}>השוואה מהירה:</span>
           {[3, 5].map((n) => (
             <button
               key={n}
               type="button"
               onClick={() => x.compareTop(n)}
               disabled={x.results.length === 0}
-              className="px-3 py-1.5 rounded-lg border text-[13px] font-medium hover:bg-[#EEF2EC] transition-colors disabled:opacity-40 disabled:pointer-events-none"
-              style={{ borderColor: LINE, color: NAVY }}
+              className="rounded-[10px] border px-3 py-1.5 text-[14px] font-bold transition-colors min-h-[44px] hover:bg-[#EEF2EC] disabled:opacity-40 disabled:pointer-events-none"
+              style={{ borderColor: LINE, color: GREEN }}
             >
-              <span className="tabular-nums" dir="ltr" style={{ fontFamily: MONO }}>{n}</span> המובילות
+              <span className="tabular-nums" dir="ltr">{n}</span> המובילות
             </button>
           ))}
         </div>
@@ -184,9 +203,9 @@ export default function FundExplorer({ funds, loading, children }: Props) {
 
       {/* ── Advanced filters ───────────────────────────────────────── */}
       {filtersOpen && (
-        <div className="rounded-xl border p-5 space-y-6" style={{ borderColor: LINE }}>
+        <div className="dna-concept space-y-6">
           <fieldset>
-            <legend className="text-[13px] font-medium mb-3" style={{ color: NAVY }}>חברה מנהלת</legend>
+            <legend className="text-[14px] font-bold mb-3" style={{ color: GREEN }}>חברה מנהלת</legend>
             <div className="flex flex-wrap gap-2">
               {x.availableCompanies.map((c) => {
                 const on = x.companies.includes(c.value);
@@ -196,11 +215,11 @@ export default function FundExplorer({ funds, loading, children }: Props) {
                     type="button"
                     aria-pressed={on}
                     onClick={() => x.toggleCompany(c.value)}
-                    className="px-3 py-2 rounded-lg border text-[13px] transition-colors min-h-[40px]"
-                    style={on ? { backgroundColor: NAVY, color: '#fff', borderColor: NAVY } : { borderColor: LINE, color: BODY }}
+                    className={chipClass}
+                    style={chipStyle(on)}
                   >
-                    {c.label}{' '}
-                    <span className="tabular-nums" dir="ltr" style={{ fontFamily: MONO, opacity: 0.65 }}>{c.count}</span>
+                    {c.label}
+                    <span className="tabular-nums font-normal" dir="ltr" style={{ opacity: 0.75 }}>{c.count}</span>
                   </button>
                 );
               })}
@@ -208,7 +227,7 @@ export default function FundExplorer({ funds, loading, children }: Props) {
           </fieldset>
 
           <fieldset>
-            <legend className="text-[13px] font-medium mb-3" style={{ color: NAVY }}>מסלול השקעה</legend>
+            <legend className="text-[14px] font-bold mb-3" style={{ color: GREEN }}>מסלול השקעה</legend>
             <div className="flex flex-wrap gap-2">
               {x.availableSpecializations.map((s) => {
                 const on = x.specializations.includes(s.value);
@@ -218,11 +237,11 @@ export default function FundExplorer({ funds, loading, children }: Props) {
                     type="button"
                     aria-pressed={on}
                     onClick={() => x.toggleSpecialization(s.value)}
-                    className="px-3 py-2 rounded-lg border text-[13px] transition-colors min-h-[40px]"
-                    style={on ? { backgroundColor: NAVY, color: '#fff', borderColor: NAVY } : { borderColor: LINE, color: BODY }}
+                    className={chipClass}
+                    style={chipStyle(on)}
                   >
-                    {s.label}{' '}
-                    <span className="tabular-nums" dir="ltr" style={{ fontFamily: MONO, opacity: 0.65 }}>{s.count}</span>
+                    {s.label}
+                    <span className="tabular-nums font-normal" dir="ltr" style={{ opacity: 0.75 }}>{s.count}</span>
                   </button>
                 );
               })}
@@ -230,10 +249,10 @@ export default function FundExplorer({ funds, loading, children }: Props) {
           </fieldset>
 
           <fieldset>
-            <legend className="text-[13px] font-medium mb-3" style={{ color: NAVY }}>
+            <legend className="text-[14px] font-bold mb-3" style={{ color: GREEN }}>
               חשיפה למניות{' '}
-              <span className="tabular-nums font-normal" dir="ltr" style={{ fontFamily: MONO, color: MUTED }}>
-                {x.stockRange[0]}%–{x.stockRange[1]}%
+              <span className="tabular-nums font-normal" dir="ltr" style={{ color: MUTED }}>
+                {x.stockRange[0]}% - {x.stockRange[1]}%
               </span>
             </legend>
             <div className="flex flex-wrap gap-2">
@@ -246,8 +265,8 @@ export default function FundExplorer({ funds, loading, children }: Props) {
                       type="button"
                       aria-pressed={on}
                       onClick={() => x.setStockRange([lo, hi])}
-                      className="px-3 py-2 rounded-lg border text-[13px] transition-colors min-h-[40px]"
-                      style={on ? { backgroundColor: NAVY, color: '#fff', borderColor: NAVY } : { borderColor: LINE, color: BODY }}
+                      className={chipClass}
+                      style={chipStyle(on)}
                     >
                       {label}
                     </button>
@@ -261,19 +280,17 @@ export default function FundExplorer({ funds, loading, children }: Props) {
 
       {/* ── Compare tray ───────────────────────────────────────────── */}
       {x.selectedFunds.length > 0 && (
-        <div className="rounded-xl p-4 sm:p-5" style={{ backgroundColor: NAVY }}>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-3 mb-3">
-            <span className="text-[13px] text-white">
-              <span className="tabular-nums" dir="ltr" style={{ fontFamily: MONO }}>
-                {x.selectedFunds.length}/{MAX_COMPARE}
-              </span>{' '}
+        <div className="rounded-[12px] p-4 sm:p-5" style={{ backgroundColor: GREEN }}>
+          <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <span className="text-[15px] font-bold" style={{ color: IVORY }}>
+              <span className="tabular-nums" dir="ltr">{x.selectedFunds.length}/{MAX_COMPARE}</span>{' '}
               קופות בהשוואה
             </span>
             <button
               type="button"
               onClick={x.clearSelection}
-              className="text-[13px] underline underline-offset-4 transition-colors hover:text-white"
-              style={{ color: 'rgba(255,255,255,.7)' }}
+              className="text-[14px] underline underline-offset-4 transition-colors min-h-[44px]"
+              style={{ color: SAGE_ON_GREEN }}
             >
               ניקוי ההשוואה
             </button>
@@ -284,10 +301,11 @@ export default function FundExplorer({ funds, loading, children }: Props) {
                 key={f.id}
                 type="button"
                 onClick={() => x.removeFund(f.id)}
-                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 text-[13px] text-white hover:bg-white/20 transition-colors"
+                className="inline-flex items-center gap-2 rounded-[10px] px-3 py-2 text-[14px] transition-colors min-h-[44px]"
+                style={{ backgroundColor: 'rgba(250,247,239,0.12)', color: IVORY }}
               >
                 <span className="max-w-[220px] truncate">{f.name}</span>
-                <X className="w-3.5 h-3.5 shrink-0" strokeWidth={1.5} aria-hidden="true" />
+                <BrandIcon name="close" size={16} className="shrink-0" />
                 <span className="sr-only">הסרה מההשוואה</span>
               </button>
             ))}
@@ -300,50 +318,48 @@ export default function FundExplorer({ funds, loading, children }: Props) {
 
       {/* ── Results ────────────────────────────────────────────────── */}
       {loading && x.results.length === 0 ? (
-        <p className="py-10 text-center text-[15px]" style={{ color: MUTED }}>טוען את מאגר הקופות...</p>
+        <p className="py-10 text-center text-[16px]" style={{ color: MUTED }} role="status">
+          טוען את מאגר הקופות...
+        </p>
       ) : x.results.length === 0 ? (
-        <div className="py-12 text-center">
-          <h3 className="text-xl mb-2" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
+        <div className="dna-concept py-10 text-center" role="status">
+          <h3 className="text-[20px] mb-2" style={{ color: GREEN }}>
             לא נמצאו קופות שמתאימות לחיפוש
           </h3>
-          <p className="text-[15px] mb-5" style={{ color: BODY }}>
+          <p className="text-[16px] mb-5" style={{ color: BODY }}>
             אפשר לנסות שם חלקי, מספר קופה, או לנקות את הסינון.
           </p>
-          <button
-            type="button"
-            onClick={x.clearFilters}
-            className="px-5 py-3 rounded-lg text-[14px] font-medium text-white min-h-[44px]"
-            style={{ backgroundColor: NAVY }}
-          >
+          <button type="button" onClick={x.clearFilters} className="btn-primary">
             ניקוי הסינון
           </button>
         </div>
       ) : (
         <>
-          {/* Desktop: sortable table */}
-          <div className="hidden sm:block overflow-x-auto">
-            <table className="dna-data">
+          {/* Desktop and tablet: sortable table */}
+          <div className="hidden sm:block overflow-x-auto rounded-[10px]">
+            <table className="dna-data min-w-[760px]" style={{ fontSize: 15 }}>
+              <caption className="sr-only">תוצאות החיפוש. לחיצה על שורה מוסיפה את הקופה להשוואה.</caption>
               <thead>
                 <tr>
-                  <th scope="col" className="w-10">
+                  <th scope="col" className="w-12" style={TH}>
                     <span className="sr-only">בחירה להשוואה</span>
                   </th>
                   {COLUMNS.map((c) => {
                     const active = x.sortKey === c.key;
                     return (
-                      <th key={c.key} scope="col" className={c.hideOn ?? ''} aria-sort={active ? (x.sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}>
+                      <th
+                        key={c.key}
+                        scope="col"
+                        style={TH}
+                        aria-sort={active ? (x.sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+                      >
                         <button
                           type="button"
                           onClick={() => x.sortBy(c.key)}
-                          className="inline-flex items-center gap-1.5 hover:opacity-80 transition-opacity"
+                          className="inline-flex items-center gap-1.5 whitespace-nowrap transition-opacity hover:opacity-80"
                         >
                           {c.label}
-                          <ArrowUpDown
-                            className="w-3 h-3"
-                            style={{ opacity: active ? 1 : 0.4 }}
-                            strokeWidth={1.5}
-                            aria-hidden="true"
-                          />
+                          <ArrowUpDown className="h-3.5 w-3.5" style={{ opacity: active ? 1 : 0.45 }} strokeWidth={1.75} aria-hidden="true" />
                         </button>
                       </th>
                     );
@@ -359,35 +375,40 @@ export default function FundExplorer({ funds, loading, children }: Props) {
                       key={f.id}
                       onClick={() => !disabled && x.toggleFund(f.id)}
                       className={disabled ? '' : 'cursor-pointer hover:bg-[#EEF2EC]'}
-                      style={on ? { backgroundColor: '#EEF2EC' } : undefined}
+                      style={on ? { backgroundColor: TINT_SAGE } : undefined}
                     >
                       <td>
-                        <span
-                          aria-hidden="true"
-                          className="w-5 h-5 grid place-items-center rounded border"
-                          style={on ? { backgroundColor: NAVY, borderColor: NAVY } : { borderColor: '#c7d2da' }}
+                        <button
+                          type="button"
+                          role="checkbox"
+                          aria-checked={on}
+                          aria-label={on ? `הסרת ${f.name} מההשוואה` : `הוספת ${f.name} להשוואה`}
+                          disabled={disabled}
+                          onClick={(e) => { e.stopPropagation(); x.toggleFund(f.id); }}
+                          className="grid h-6 w-6 place-items-center rounded-[6px] border transition-colors disabled:opacity-40"
+                          style={on ? { backgroundColor: GREEN, borderColor: GREEN } : { borderColor: LINE, backgroundColor: '#ffffff' }}
                         >
-                          {on && <Check className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />}
-                        </span>
+                          {on && <BrandIcon name="check" size={16} style={{ color: IVORY }} />}
+                        </button>
                       </td>
                       <td>
                         <span className="block">{f.name}</span>
-                        <span className="block text-[12px] font-normal" style={{ color: MUTED }}>
+                        <span className="block text-[14px] font-normal" style={{ color: MUTED }}>
                           {companyLabels[f.company] ?? ''} · {specializationLabels[f.specialization] ?? ''}
                           {' · '}
-                          <span className="tabular-nums" dir="ltr" style={{ fontFamily: MONO }}>{f.fundNumber}</span>
+                          <span className="tabular-nums" dir="ltr">{f.fundNumber}</span>
                         </span>
                       </td>
                       <td className="num"><ReturnCell value={f.returns.year1} /></td>
-                      <td className="num hidden lg:table-cell"><ReturnCell value={f.returns.year3} /></td>
-                      <td className="num hidden xl:table-cell"><ReturnCell value={f.returns.year5} /></td>
+                      <td className="num"><ReturnCell value={f.returns.year3} /></td>
+                      <td className="num"><ReturnCell value={f.returns.year5} /></td>
                       <td className="num">
-                        <span dir="ltr" style={{ fontFamily: MONO, color: GOLD_TEXT }}>
-                          {pct(f.fees.savingsFeePercent)}
+                        <span dir="ltr" style={{ color: missing(f.fees.savingsFeePercent) ? MUTED : SAND_TEXT }}>
+                          {missing(f.fees.savingsFeePercent) ? 'לא פורסם' : pct(f.fees.savingsFeePercent)}
                         </span>
                       </td>
-                      <td className="num hidden lg:table-cell">
-                        <span dir="ltr" style={{ fontFamily: MONO }}>{formatAssets(f.totalAssets)}</span>
+                      <td className="num">
+                        <span dir="ltr" style={{ color: missing(f.totalAssets) ? MUTED : BODY }}>{formatAssets(f.totalAssets)}</span>
                       </td>
                     </tr>
                   );
@@ -396,8 +417,8 @@ export default function FundExplorer({ funds, loading, children }: Props) {
             </table>
           </div>
 
-          {/* Mobile: cards, because a seven-column table at 390px is unreadable */}
-          <div className="sm:hidden divide-y" style={{ borderColor: LINE }}>
+          {/* Phone: stacked rows carry the same figures as the table */}
+          <div className="sm:hidden border-t" style={{ borderColor: LINE }}>
             {x.results.slice(0, 60).map((f) => {
               const on = selectedSet.has(f.id);
               const disabled = !on && x.isFull;
@@ -408,30 +429,36 @@ export default function FundExplorer({ funds, loading, children }: Props) {
                   onClick={() => !disabled && x.toggleFund(f.id)}
                   disabled={disabled}
                   aria-pressed={on}
-                  className="w-full text-start py-4 flex gap-3 disabled:opacity-45"
-                  style={on ? { backgroundColor: '#EEF2EC' } : undefined}
+                  className="flex w-full gap-3 border-b py-4 text-start disabled:opacity-45"
+                  style={{ borderColor: LINE, backgroundColor: on ? TINT_SAGE : undefined }}
                 >
                   <span
                     aria-hidden="true"
-                    className="mt-0.5 w-5 h-5 shrink-0 grid place-items-center rounded border"
-                    style={on ? { backgroundColor: NAVY, borderColor: NAVY } : { borderColor: '#c7d2da' }}
+                    className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-[6px] border"
+                    style={on ? { backgroundColor: GREEN, borderColor: GREEN } : { borderColor: LINE, backgroundColor: '#ffffff' }}
                   >
-                    {on && <Check className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />}
+                    {on && <BrandIcon name="check" size={16} style={{ color: IVORY }} />}
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block text-[15px] font-medium" style={{ color: NAVY }}>{f.name}</span>
-                    <span className="block text-[12px] mt-0.5" style={{ color: MUTED }}>
+                    <span className="block text-[16px] font-bold" style={{ color: GREEN }}>{f.name}</span>
+                    <span className="mt-0.5 block text-[14px]" style={{ color: MUTED }}>
                       {companyLabels[f.company] ?? ''} · {specializationLabels[f.specialization] ?? ''}
+                      {' · '}
+                      <span className="tabular-nums" dir="ltr">{f.fundNumber}</span>
                     </span>
-                    <span className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[13px]">
-                      <span style={{ color: MUTED }}>
-                        מתחילת השנה <ReturnCell value={f.returns.year1} />
-                      </span>
-                      <span style={{ color: MUTED }}>
-                        דמי ניהול{' '}
-                        <span dir="ltr" style={{ fontFamily: MONO, color: GOLD_TEXT }}>
-                          {pct(f.fees.savingsFeePercent)}
+                    <span className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-[14px]" style={{ color: MUTED }}>
+                      <span>מתחילת השנה: <ReturnCell value={f.returns.year1} /></span>
+                      <span>ממוצע 3 שנים: <ReturnCell value={f.returns.year3} /></span>
+                      <span>ממוצע 5 שנים: <ReturnCell value={f.returns.year5} /></span>
+                      <span>
+                        דמי ניהול:{' '}
+                        <span dir="ltr" className="tabular-nums font-bold" style={{ color: missing(f.fees.savingsFeePercent) ? MUTED : SAND_TEXT }}>
+                          {missing(f.fees.savingsFeePercent) ? 'לא פורסם' : pct(f.fees.savingsFeePercent)}
                         </span>
+                      </span>
+                      <span className="col-span-2">
+                        נכסים:{' '}
+                        <span dir="ltr" className="tabular-nums" style={{ color: BODY }}>{formatAssets(f.totalAssets)} ₪</span>
                       </span>
                     </span>
                   </span>
@@ -441,10 +468,13 @@ export default function FundExplorer({ funds, loading, children }: Props) {
           </div>
 
           {x.results.length > 100 && (
-            <p className="text-[13px] pt-2" style={{ color: MUTED }}>
-              מוצגות{' '}
-              <span className="tabular-nums" dir="ltr" style={{ fontFamily: MONO }}>100</span>{' '}
-              הקופות הראשונות לפי הסידור הנוכחי. אפשר לצמצם עם חיפוש או סינון.
+            <p className="hidden sm:block pt-2 text-[14px]" style={{ color: MUTED }}>
+              מוצגות <span className="tabular-nums" dir="ltr">100</span> הקופות הראשונות לפי הסידור הנוכחי. אפשר לצמצם עם חיפוש או סינון.
+            </p>
+          )}
+          {x.results.length > 60 && (
+            <p className="sm:hidden pt-2 text-[14px]" style={{ color: MUTED }}>
+              מוצגות <span className="tabular-nums" dir="ltr">60</span> הקופות הראשונות לפי הסידור הנוכחי. אפשר לצמצם עם חיפוש או סינון.
             </p>
           )}
         </>

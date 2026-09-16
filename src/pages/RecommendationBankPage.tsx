@@ -36,11 +36,11 @@ function getDecisionBadge(status: string) {
     case 'טיוטה': return <Badge variant="outline" className="text-xs rounded-full">טיוטה</Badge>;
     case 'נשלח': return <Badge className="text-xs bg-[#003D30]/10 text-[#003D30] border-[#003D30]/20 rounded-full">נשלח</Badge>;
     case 'נצפה': return <Badge className="text-xs bg-[#003D30]/10 text-[#003D30] border-[#003D30]/20 rounded-full">נצפה</Badge>;
-    case 'מאשר': return <Badge className="text-xs bg-[#15803d]/10 text-[#15803d] border-[#15803d]/20 rounded-full">מאשר</Badge>;
-    case 'רוצה לחשוב': return <Badge className="text-xs bg-[#b45309]/10 text-[#b45309] border-[#b45309]/20 rounded-full">לחשוב</Badge>;
-    case 'לא מעוניין': return <Badge className="text-xs bg-[#b91c1c]/10 text-[#b91c1c] border-[#b91c1c]/20 rounded-full">לא מעוניין</Badge>;
+    case 'מאשר': return <Badge className="text-xs bg-[#2F6B4E]/10 text-[#2F6B4E] border-[#2F6B4E]/20 rounded-full">מאשר</Badge>;
+    case 'רוצה לחשוב': return <Badge className="text-xs bg-[#8A6230]/10 text-[#8A6230] border-[#8A6230]/20 rounded-full">לחשוב</Badge>;
+    case 'לא מעוניין': return <Badge className="text-xs bg-[#9A4520]/10 text-[#9A4520] border-[#9A4520]/20 rounded-full">לא מעוניין</Badge>;
     case 'עבר לביצוע': return <Badge className="text-xs bg-[#003D30]/10 text-[#003D30] border-[#003D30]/20 rounded-full">בביצוע</Badge>;
-    case 'בוצע': return <Badge className="text-xs bg-[#15803d]/10 text-[#15803d] border-[#15803d]/20 rounded-full">בוצע</Badge>;
+    case 'בוצע': return <Badge className="text-xs bg-[#2F6B4E]/10 text-[#2F6B4E] border-[#2F6B4E]/20 rounded-full">בוצע</Badge>;
     default: return <Badge variant="outline" className="text-xs rounded-full">{status}</Badge>;
   }
 }
@@ -147,8 +147,8 @@ export default function RecommendationBankPage() {
         actions={
           <div className="flex gap-2">
             {filtered.length > 0 && (
-              <Button variant="outline" onClick={() => setShowPresentation(true)} className="gap-2 rounded-full border-[#b45309]/30 hover:bg-[#b45309]/10">
-                <Presentation className="h-4 w-4 text-[#b45309]" />מצגת
+              <Button variant="outline" onClick={() => setShowPresentation(true)} className="gap-2 rounded-full border-[#8A6230]/30 hover:bg-[#8A6230]/10">
+                <Presentation className="h-4 w-4 text-[#8A6230]" />מצגת
               </Button>
             )}
             <Button onClick={() => navigate('/app/recommendations/new')} className="gap-2 rounded-full bg-[#003D30] hover:bg-[#003D30]/90 shadow-md shadow-[#003D30]/15">
@@ -169,10 +169,10 @@ export default function RecommendationBankPage() {
           { label: 'סה"כ', value: stats.total, color: 'text-[#003D30]' },
           { label: 'טיוטות', value: stats.drafts, color: 'text-muted-foreground' },
           { label: 'נשלחו', value: stats.sent, color: 'text-[#003D30]' },
-          { label: 'ממתינות', value: stats.thinking, color: 'text-[#b45309]' },
-          { label: 'מאושרות', value: stats.approved, color: 'text-[#15803d]' },
+          { label: 'ממתינות', value: stats.thinking, color: 'text-[#8A6230]' },
+          { label: 'מאושרות', value: stats.approved, color: 'text-[#2F6B4E]' },
           { label: 'בוצעו', value: stats.executed, color: 'text-[#003D30]' },
-          { label: 'נדחו', value: stats.rejected, color: 'text-[#b91c1c]' },
+          { label: 'נדחו', value: stats.rejected, color: 'text-[#9A4520]' },
         ].map(s => (
           <Card key={s.label} className="rounded-2xl border-border/50 shadow-sm">
             <CardContent className="p-3 text-center">

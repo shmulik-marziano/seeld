@@ -32,7 +32,7 @@ const FAQ_SECTIONS: { title: string; color: string; items: FAQItem[] }[] = [
   },
   {
     title: 'ניהול לקוחות',
-    color: '#b45309',
+    color: '#8A6230',
     items: [
       {
         q: 'איך יוצרים המלצה ללקוח?',
@@ -77,15 +77,15 @@ const FAQ_SECTIONS: { title: string; color: string; items: FAQItem[] }[] = [
 function FAQAccordion({ item, isOpen, onToggle }: { item: FAQItem; isOpen: boolean; onToggle: () => void }) {
   const Icon = item.icon;
   return (
-    <div className="border border-gray-100 rounded-2xl overflow-hidden bg-white hover:shadow-sm transition-shadow">
+    <div className="border border-[#E1E8E1] rounded-2xl overflow-hidden bg-white hover:shadow-sm transition-shadow">
       <button onClick={onToggle}
-        className="w-full flex items-center gap-3 p-4 text-right transition-colors hover:bg-gray-50/50">
+        className="w-full flex items-center gap-3 p-4 text-right transition-colors hover:bg-[#F3F5F1]/50">
         <div className="w-9 h-9 rounded-full bg-[#003D30]/5 flex items-center justify-center flex-shrink-0">
           <Icon className="w-4 h-4 text-[#003D30]" />
         </div>
         <span className="flex-1 text-sm font-bold text-[#003D30]">{item.q}</span>
         <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-          <ChevronDown className="w-4 h-4 text-gray-400" />
+          <ChevronDown className="w-4 h-4 text-[#476356]" />
         </motion.div>
       </button>
       <AnimatePresence>
@@ -93,7 +93,7 @@ function FAQAccordion({ item, isOpen, onToggle }: { item: FAQItem; isOpen: boole
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }}>
             <div className="px-4 pb-4 pr-16">
-              <p className="text-sm text-gray-500 leading-relaxed">{item.a}</p>
+              <p className="text-sm text-[#476356] leading-relaxed">{item.a}</p>
             </div>
           </motion.div>
         )}
@@ -121,16 +121,16 @@ export default function HelpPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-[#003D30]">מרכז עזרה</h1>
-          <p className="text-sm text-gray-400">שאלות נפוצות ותמיכה</p>
+          <p className="text-sm text-[#476356]">שאלות נפוצות ותמיכה</p>
         </div>
       </div>
 
       {/* Hero */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
         className="rounded-2xl p-6 sm:p-8 mb-8 relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #003D30 0%, #2e2e2e 100%)' }}>
+        style={{ background: 'linear-gradient(135deg, #003D30 0%, #003D30 100%)' }}>
         <div className="absolute top-0 left-0 w-40 h-40 rounded-full bg-[#003D30]/10 -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-32 h-32 rounded-full bg-[#b45309]/10 translate-x-1/3 translate-y-1/3" />
+        <div className="absolute bottom-0 right-0 w-32 h-32 rounded-full bg-[#8A6230]/10 translate-x-1/3 translate-y-1/3" />
         <div className="relative">
           <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">איך נוכל לעזור?</h2>
           <p className="text-sm text-white/70 max-w-lg">
@@ -161,37 +161,37 @@ export default function HelpPage() {
 
       {/* Contact Section */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-        className="rounded-2xl bg-white border border-gray-100 shadow-sm p-6 sm:p-8">
+        className="rounded-2xl bg-white border border-[#E1E8E1] shadow-sm p-6 sm:p-8">
         <h3 className="text-lg font-bold text-[#003D30] mb-5">צריכים עזרה נוספת?</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <a href="mailto:support@seeld.ai"
-            className="flex items-center gap-3 p-4 rounded-2xl border border-gray-100 hover:border-[#003D30] hover:shadow-md transition-all group">
-            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-[#003D30]/10 transition-colors">
-              <Mail className="w-5 h-5 text-blue-500 group-hover:text-[#003D30] transition-colors" />
+            className="flex items-center gap-3 p-4 rounded-2xl border border-[#E1E8E1] hover:border-[#003D30] hover:shadow-md transition-all group">
+            <div className="w-10 h-10 rounded-full bg-[#E8EDE5] flex items-center justify-center group-hover:bg-[#003D30]/10 transition-colors">
+              <Mail className="w-5 h-5 text-[#476356] group-hover:text-[#003D30] transition-colors" />
             </div>
             <div>
               <p className="text-sm font-bold text-[#003D30]">מייל</p>
-              <p className="text-xs text-gray-400">support@seeld.ai</p>
+              <p className="text-xs text-[#476356]">support@seeld.ai</p>
             </div>
           </a>
           <a href="tel:052-3097444"
-            className="flex items-center gap-3 p-4 rounded-2xl border border-gray-100 hover:border-[#003D30] hover:shadow-md transition-all group">
-            <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center group-hover:bg-[#003D30]/10 transition-colors">
-              <Phone className="w-5 h-5 text-green-500 group-hover:text-[#003D30] transition-colors" />
+            className="flex items-center gap-3 p-4 rounded-2xl border border-[#E1E8E1] hover:border-[#003D30] hover:shadow-md transition-all group">
+            <div className="w-10 h-10 rounded-full bg-[#E8EDE5] flex items-center justify-center group-hover:bg-[#003D30]/10 transition-colors">
+              <Phone className="w-5 h-5 text-[#2F6B4E] group-hover:text-[#003D30] transition-colors" />
             </div>
             <div>
               <p className="text-sm font-bold text-[#003D30]">טלפון</p>
-              <p className="text-xs text-gray-400" dir="ltr">052-309-7444</p>
+              <p className="text-xs text-[#476356]" dir="ltr">052-309-7444</p>
             </div>
           </a>
           <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-3 p-4 rounded-2xl border border-gray-100 hover:border-[#003D30] hover:shadow-md transition-all group">
+            className="flex items-center gap-3 p-4 rounded-2xl border border-[#E1E8E1] hover:border-[#003D30] hover:shadow-md transition-all group">
             <div className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center group-hover:bg-[#003D30]/10 transition-colors">
               <MessageCircle className="w-5 h-5 text-[#25D366] group-hover:text-[#003D30] transition-colors" />
             </div>
             <div>
               <p className="text-sm font-bold text-[#003D30]">WhatsApp</p>
-              <p className="text-xs text-gray-400">הודעה מהירה</p>
+              <p className="text-xs text-[#476356]">הודעה מהירה</p>
             </div>
           </a>
         </div>
@@ -201,9 +201,9 @@ export default function HelpPage() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
         className="mt-6 rounded-2xl p-6 text-center border-2 border-dashed"
         style={{ borderColor: '#003D3020', backgroundColor: '#003D3005' }}>
-        <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400 mb-1"
+        <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#476356] mb-1"
           style={{ fontFamily: "sans-serif" }}>SEELD פלטפורמה</p>
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-[#476356]">
           פלטפורמת ניהול סוכנויות ביטוח מתקדמת &middot; גרסה 2.0
         </p>
       </motion.div>

@@ -4,57 +4,48 @@ import Footer from "@/components/Footer";
 import { Loader2 } from "lucide-react";
 import PersonalAreaLogin from "@/components/personal-area/PersonalAreaLogin";
 import PersonalAreaDashboard from "@/components/personal-area/PersonalAreaDashboard";
-import { LiveTag } from "@/components/brand/Live";
-
-const HEEBO = "'Rubik', Arial, sans-serif";
+import { BrandDots } from "@/components/brand/Elements";
+import { IVORY, SAGE_ON_GREEN } from "@/lib/brand";
 
 const PersonalArea = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+      <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
         <Header />
-        <section className="flex items-center justify-center h-[60vh]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#003D30]" />
+        <section className="flex items-center justify-center h-[60vh]" aria-busy="true" aria-live="polite">
+          <Loader2 className="w-8 h-8 animate-spin text-[#003D30]" aria-hidden="true" />
+          <span className="sr-only">טוען את האזור האישי</span>
         </section>
       </div>
     );
   }
 
-  // Not logged in — full-screen login with its own branding
+  // Not signed in: the entry screen carries its own chrome
   if (!user) {
     return <PersonalAreaLogin />;
   }
 
-  // Logged in — dashboard with site chrome
+  // Signed in: site chrome, a deep-green title band, the dashboard on ivory
   return (
-    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
       <Header />
 
-      {/* Hero — quiet ink tile */}
-      <section>
-        <div style={{ backgroundColor: "#003D30" }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-14 relative z-10">
-            <div className="border-t border-white/20 pt-5">
-              <LiveTag dark dot>PERSONAL AREA · SECURE</LiveTag>
-              <h1
-                className="mt-4 text-[#fafafa] leading-tight"
-                style={{ fontFamily: HEEBO, fontWeight: 600, fontSize: "clamp(1.8rem, 4vw, 2.6rem)", letterSpacing: "-0.02em" }}
-              >
-                האזור האישי
-              </h1>
-              <p className="mt-2 text-[#fafafa]/50 text-base sm:text-lg">
-                צפו בפוליסות, מסמכים, המלצות ומידע מותאם אישית
-              </p>
-            </div>
-          </div>
+      <section className="dna-navy-band">
+        <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-10 sm:py-12">
+          <BrandDots className="mb-4" />
+          <h1 className="leading-tight" style={{ color: IVORY, fontSize: "clamp(28px, 3.4vw, 36px)" }}>
+            האזור האישי
+          </h1>
+          <p className="mt-2 text-[17px] leading-[1.6] max-w-xl" style={{ color: SAGE_ON_GREEN }}>
+            הפוליסות, החיסכון, המסמכים והפניות שלכם, במקום אחד.
+          </p>
         </div>
       </section>
 
-      {/* Dashboard — paper tile */}
       <main>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+        <div className="max-w-brand mx-auto px-5 sm:px-8 py-8 sm:py-10">
           <PersonalAreaDashboard />
         </div>
       </main>

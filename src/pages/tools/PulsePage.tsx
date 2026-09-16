@@ -16,9 +16,9 @@ const MOCK_TRACKING = [
 ];
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  "בתהליך": { bg: "#dbeafe", text: "#1e40af" },
-  "הושלם": { bg: "#dcfce7", text: "#166534" },
-  "חסום": { bg: "#fee2e2", text: "#991b1b" },
+  "בתהליך": { bg: "#E8EDE5", text: "#476356" },
+  "הושלם": { bg: "#E8EDE5", text: "#2F6B4E" },
+  "חסום": { bg: "#F3E2D8", text: "#9A4520" },
 };
 
 export default function PulsePage() {
@@ -29,9 +29,9 @@ export default function PulsePage() {
 
   const stats = [
     { label: "תהליכים פעילים", value: "28", change: "+4", icon: Activity, color: tool.color },
-    { label: "הושלמו החודש", value: "15", change: "+6", icon: CheckCircle, color: "#059669" },
-    { label: "חסומים", value: "4", change: "+1", icon: AlertTriangle, color: "#e11d48" },
-    { label: "תזכורות להיום", value: "6", change: "-", icon: Calendar, color: "#f59e0b" },
+    { label: "הושלמו החודש", value: "15", change: "+6", icon: CheckCircle, color: "#2F6B4E" },
+    { label: "חסומים", value: "4", change: "+1", icon: AlertTriangle, color: "#BD582D" },
+    { label: "תזכורות להיום", value: "6", change: "-", icon: Calendar, color: "#CBA064" },
   ];
 
   return (
@@ -43,10 +43,10 @@ export default function PulsePage() {
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: s.color + "15" }}>
                 <s.icon className="w-5 h-5" style={{ color: s.color }} />
               </div>
-              <span className="text-xs text-green-600 font-medium">{s.change}</span>
+              <span className="text-xs text-[#2F6B4E] font-medium">{s.change}</span>
             </div>
-            <p className="text-2xl font-bold text-gray-800">{s.value}</p>
-            <p className="text-sm text-gray-500 mt-0.5">{s.label}</p>
+            <p className="text-2xl font-bold text-[#003D30]">{s.value}</p>
+            <p className="text-sm text-[#476356] mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
@@ -54,11 +54,11 @@ export default function PulsePage() {
       <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-4 mb-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#476356]" />
             <input
               type="text"
               placeholder="חיפוש תהליך לפי לקוח או המלצה..."
-              className="w-full pr-10 pl-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#003D30]/20"
+              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#003D30]/20"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -73,16 +73,16 @@ export default function PulsePage() {
       <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-16 text-center">
-            <div className="w-16 h-16 rounded-full bg-gray-100 mx-auto mb-4 flex items-center justify-center">
-              <Activity className="w-8 h-8 text-gray-300" />
+            <div className="w-16 h-16 rounded-full bg-[#E8EDE5] mx-auto mb-4 flex items-center justify-center">
+              <Activity className="w-8 h-8 text-[#8FA396]" />
             </div>
-            <p className="text-gray-500 font-medium mb-1">אין תהליכים להצגה</p>
-            <p className="text-sm text-gray-400">הוסף מעקב על תהליך ביצוע</p>
+            <p className="text-[#476356] font-medium mb-1">אין תהליכים להצגה</p>
+            <p className="text-sm text-[#476356]">הוסף מעקב על תהליך ביצוע</p>
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-gray-50 text-gray-500">
+              <tr className="bg-[#F3F5F1] text-[#476356]">
                 <th className="text-right px-4 py-3 font-medium">לקוח</th>
                 <th className="text-right px-4 py-3 font-medium">המלצה</th>
                 <th className="text-right px-4 py-3 font-medium">אבן דרך נוכחית</th>
@@ -97,43 +97,43 @@ export default function PulsePage() {
               {filtered.map((t) => {
                 const statusColor = STATUS_COLORS[t.status] || STATUS_COLORS["בתהליך"];
                 return (
-                  <tr key={t.id} className="border-t border-gray-100 hover:bg-gray-50/50 transition-colors">
-                    <td className="px-4 py-3 font-medium text-gray-800">{t.client}</td>
-                    <td className="px-4 py-3 text-gray-700">{t.recommendation}</td>
-                    <td className="px-4 py-3 text-gray-600 text-xs">{t.milestone}</td>
+                  <tr key={t.id} className="border-t border-[#E1E8E1] hover:bg-[#F3F5F1]/50 transition-colors">
+                    <td className="px-4 py-3 font-medium text-[#003D30]">{t.client}</td>
+                    <td className="px-4 py-3 text-[#24483C]">{t.recommendation}</td>
+                    <td className="px-4 py-3 text-[#476356] text-xs">{t.milestone}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-center gap-2">
-                        <div className="w-20 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="w-20 h-1.5 bg-[#CCD6CC] rounded-full overflow-hidden">
                           <div
                             className="h-full rounded-full transition-all"
                             style={{
                               width: `${t.progress}%`,
-                              backgroundColor: t.progress === 100 ? "#059669" : t.status === "חסום" ? "#e11d48" : "#3b82f6",
+                              backgroundColor: t.progress === 100 ? "#2F6B4E" : t.status === "חסום" ? "#BD582D" : "#3b82f6",
                             }}
                           />
                         </div>
-                        <span className="text-xs text-gray-500">{t.progress}%</span>
+                        <span className="text-xs text-[#476356]">{t.progress}%</span>
                       </div>
                     </td>
                     <td className="px-4 py-3 text-xs">
                       {t.blocker ? (
-                        <span className="text-red-500 flex items-center gap-1">
+                        <span className="text-[#9A4520] flex items-center gap-1">
                           <AlertTriangle className="w-3 h-3" />
                           {t.blocker}
                         </span>
                       ) : (
-                        <span className="text-gray-400">—</span>
+                        <span className="text-[#476356]">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-center text-gray-500 text-xs">{t.dueDate}</td>
+                    <td className="px-4 py-3 text-center text-[#476356] text-xs">{t.dueDate}</td>
                     <td className="px-4 py-3 text-center">
                       <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: statusColor.bg, color: statusColor.text }}>
                         {t.status}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <button className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors">
-                        <MoreVertical className="w-4 h-4 text-gray-400" />
+                      <button className="p-1.5 hover:bg-[#E8EDE5] rounded-lg transition-colors">
+                        <MoreVertical className="w-4 h-4 text-[#476356]" />
                       </button>
                     </td>
                   </tr>

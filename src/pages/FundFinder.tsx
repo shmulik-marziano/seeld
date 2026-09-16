@@ -8,15 +8,18 @@ import FundCompareChart from '@/components/fund-finder/FundCompareChart';
 import FundCostCalculator from '@/components/fund-finder/FundCostCalculator';
 import { useCmaFunds, useCmaSyncStatus, formatPeriod } from '@/hooks/useCmaFunds';
 import { cmaLastUpdate } from '@/data/cmaFundsData';
-import { Printer } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
-import { LiveTag } from '@/components/brand/Live';
-import { DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT } from '@/lib/brand';
+import { BrandIcon } from '@/components/brand/BrandIcon';
+import { BrandDots, OliveBranch } from '@/components/brand/Elements';
+import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN } from '@/lib/brand';
 
-// SEELD DNA v3 (STYLESEED.md): white canvas, pastel circles, hairline separators.
+// Fund finder (SEELD brand system 2026-09): a tool page. The search, the
+// table and the comparison stay central; one vector element in the hero
+// margin, no illustration. Queries, filters, sorting and compare actions are
+// unchanged (useFundExplorer / useCmaFunds).
 
 const FundFinder = () => {
-  // Live data from Supabase (falls back to static data automatically)
+  // Live data from Supabase (falls back to the static snapshot automatically)
   const { data: liveFunds, isLoading: fundsLoading, isError: fundsError } = useCmaFunds();
   const { data: syncStatus } = useCmaSyncStatus();
   const isLive = !fundsError && liveFunds && liveFunds.length > 0;
@@ -32,176 +35,189 @@ const FundFinder = () => {
   const lastUpdate = syncStatus?.latestPeriod ? formatPeriod(syncStatus.latestPeriod) : cmaLastUpdate;
 
   const toolbarToggles = [
-    { label: 'תשואות חודשיות', checked: showMonthly, onChange: setShowMonthly },
-    { label: 'חקירה לעומק', checked: showDeepDrill, onChange: setShowDeepDrill },
-    { label: 'גרפים', checked: showChart, onChange: setShowChart },
-    { label: 'חישוב עלויות', checked: showCostCalc, onChange: setShowCostCalc },
+    { id: 'toggle-monthly', label: 'תשואות חודשיות', checked: showMonthly, onChange: setShowMonthly },
+    { id: 'toggle-deep', label: 'חקירה לעומק', checked: showDeepDrill, onChange: setShowDeepDrill },
+    { id: 'toggle-chart', label: 'גרף השוואה', checked: showChart, onChange: setShowChart },
+    { id: 'toggle-cost', label: 'חישוב עלויות', checked: showCostCalc, onChange: setShowCostCalc },
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
       <Header />
 
-      <main className="dna-page">
-        {/* Pastel circle backdrop — decorative, never behind small text */}
-        <div className="dna-circles" aria-hidden="true">
-          <div
-            className="dna-circ"
-            style={{ width: 280, height: 280, top: -120, left: -110, backgroundColor: PASTEL_BLUE, opacity: 0.5 }}
-          />
-          <div
-            className="dna-circ hidden md:block"
-            style={{ width: 220, height: 220, top: 320, right: -110, backgroundColor: PASTEL_MINT, opacity: 0.45 }}
-          />
-        </div>
+      <main>
+        {/* Hero: ivory, two pastel bubbles in the margins only */}
+        <div className="dna-page">
+          <div className="dna-circles" aria-hidden="true">
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 300, height: 300, top: -150, left: -130, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
+            />
+            <div
+              className="dna-circ hidden md:block"
+              style={{ width: 180, height: 180, top: 40, right: -100, backgroundColor: PASTEL_SAND, opacity: 0.7 }}
+            />
+          </div>
 
-        <div className="relative z-10">
-          {/* Hero */}
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-10 sm:pb-12">
-            <nav className="flex items-center gap-2 text-[13px] mb-8" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
-              <span aria-hidden="true">←</span>
-              <span className="font-medium text-[#003D30]">איתור קופות</span>
+          <section className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-8 sm:pb-10">
+            <nav className="flex items-center gap-2 text-[14px] mb-8" style={{ color: MUTED }} aria-label="ניווט משני">
+              <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
+              <BrandIcon name="arrow-left" size={14} />
+              <span className="font-bold" style={{ color: GREEN }} aria-current="page">איתור קופות</span>
             </nav>
 
-            <h1
-              className="dna-display leading-[1.15] mb-5 max-w-3xl"
-              style={{ fontSize: 'clamp(2rem, 5vw, 3.1rem)' }}
-            >
-              איתור והשוואת קופות
-            </h1>
-            <p className="text-base sm:text-[17px] max-w-2xl leading-[1.9] mb-8" style={{ color: MUTED }}>
-              חיפוש, סינון והשוואה בין קופות גמל, קרנות השתלמות, קרנות פנסיה ופוליסות חיסכון.
-              הנתונים נמשכים ממקורות רשות שוק ההון: גמלנט, ביטוחנט ופנסיהנט.
-            </p>
+            <div className="flex items-start justify-between gap-8">
+              <div>
+                <BrandDots className="mb-4" />
+                <h1 className="dna-display leading-[1.15] mb-4 max-w-3xl" style={{ fontSize: 'clamp(32px, 4.4vw, 52px)' }}>
+                  איתור והשוואת קופות
+                </h1>
+                <p className="text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
+                  חיפוש, סינון והשוואה בין קופות גמל, קרנות השתלמות, קרנות פנסיה ופוליסות חיסכון.
+                  הנתונים נמשכים ממקורות רשות שוק ההון: גמלנט, ביטוחנט ופנסיהנט.
+                </p>
 
-            <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
-              <LiveTag dot={isLive}>{isLive ? 'LIVE DATA' : 'LOCAL DATA'}</LiveTag>
-              <span className="text-[13px]" style={{ color: MUTED }}>
-                עדכון אחרון:{' '}
-                <span className="tabular-nums" style={{ fontFamily: MONO, color: NAVY }}>{lastUpdate}</span>
-              </span>
-              {syncStatus?.totalFunds ? (
-                <span className="text-[13px]" style={{ color: MUTED }}>
-                  <span className="tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
-                    {syncStatus.totalFunds.toLocaleString('en-US')}
-                  </span>{' '}
-                  קופות במאגר
-                </span>
-              ) : null}
+                <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-[15px]" style={{ color: MUTED }}>
+                  <div className="flex gap-2">
+                    <dt>מקור הנתונים:</dt>
+                    <dd className="font-bold" style={{ color: GREEN }}>רשות שוק ההון, ביטוח וחיסכון</dd>
+                  </div>
+                  <div className="flex gap-2">
+                    <dt>עדכון אחרון:</dt>
+                    <dd className="font-bold tabular-nums" style={{ color: GREEN }}>{lastUpdate}</dd>
+                  </div>
+                  {syncStatus?.totalFunds ? (
+                    <div className="flex gap-2">
+                      <dt>קופות במאגר:</dt>
+                      <dd className="font-bold">
+                        <span dir="ltr" className="tabular-nums whitespace-nowrap" style={{ color: GREEN }}>
+                          {syncStatus.totalFunds.toLocaleString('en-US')}
+                        </span>
+                      </dd>
+                    </div>
+                  ) : null}
+                </dl>
+                <p className="mt-2 text-[14px]" style={{ color: MUTED }} role="status">
+                  {fundsLoading
+                    ? 'טוען נתונים עדכניים מהמאגר. בינתיים מוצגים נתונים מקומיים.'
+                    : isLive
+                      ? 'הנתונים נטענו מהמאגר העדכני.'
+                      : 'המאגר העדכני לא זמין כרגע. מוצגים נתונים מקומיים מהעדכון האחרון שנשמר.'}
+                </p>
+              </div>
+              <OliveBranch className="hidden lg:block w-36 shrink-0" />
             </div>
           </section>
+        </div>
 
-          {/* Tool body — one live search over the whole database */}
-          <section className="border-t" style={{ borderColor: LINE }}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
-              <FundExplorer funds={liveFunds} loading={fundsLoading}>
-                {(selected, remove) =>
-                  selected.length > 0 ? (
-                    <div className="space-y-8">
-                      {/* What to show about the picked funds */}
-                      <div className="border-t border-b py-3.5 flex flex-wrap items-center gap-x-6 gap-y-3" style={{ borderColor: LINE }}>
-                        {toolbarToggles.map((t) => (
-                          <label
-                            key={t.label}
-                            className="flex items-center gap-1.5 text-[13px] cursor-pointer hover:text-[#003D30] transition-colors"
-                            style={{ color: MUTED }}
-                          >
-                            <Checkbox
-                              checked={t.checked}
-                              onCheckedChange={(c) => t.onChange(!!c)}
-                              className="border-[#003D30] data-[state=checked]:bg-[#003D30] data-[state=checked]:border-[#003D30]"
-                            />
+        {/* Tool body: one live search over the whole database */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-10 sm:py-14">
+            <FundExplorer funds={liveFunds} loading={fundsLoading} error={fundsError}>
+              {(selected, remove) =>
+                selected.length > 0 ? (
+                  <div className="space-y-8">
+                    {/* What to show about the picked funds */}
+                    <div className="dna-concept flex flex-wrap items-center gap-x-6 gap-y-3 !py-4">
+                      {toolbarToggles.map((t) => (
+                        <div key={t.id} className="flex items-center gap-2">
+                          <Checkbox
+                            id={t.id}
+                            checked={t.checked}
+                            onCheckedChange={(c) => t.onChange(!!c)}
+                            className="h-5 w-5 border-[#003D30] data-[state=checked]:bg-[#003D30] data-[state=checked]:border-[#003D30]"
+                          />
+                          <label htmlFor={t.id} className="cursor-pointer text-[15px]" style={{ color: BODY }}>
                             {t.label}
                           </label>
-                        ))}
+                        </div>
+                      ))}
 
-                        <div className="ms-auto flex items-center gap-3">
-                          <label htmlFor="print-recipient" className="sr-only">נמען להדפסה</label>
+                      <div className="ms-auto flex flex-wrap items-end gap-3">
+                        <div>
+                          <label htmlFor="print-recipient" className="block text-[14px] font-bold mb-1" style={{ color: GREEN }}>
+                            נמען להדפסה
+                          </label>
                           <input
                             id="print-recipient"
                             value={printRecipient}
                             onChange={(e) => setPrintRecipient(e.target.value)}
-                            placeholder="נמען להדפסה"
-                            className="w-36 px-3 py-1.5 bg-white border border-[#CCD6CC] rounded-lg text-[13px] text-[#003D30] placeholder:text-[#476356] focus:outline-none focus:border-[#003D30] transition-colors"
+                            className="field w-48 !min-h-[44px] !py-2"
+                            autoComplete="off"
                           />
-                          <button
-                            type="button"
-                            onClick={handlePrint}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#003D30] text-[13px] font-medium text-white hover:bg-[#002B22] transition-colors"
-                          >
-                            <Printer className="w-3.5 h-3.5" strokeWidth={1.5} aria-hidden="true" />
-                            הדפסה
-                          </button>
                         </div>
+                        <button type="button" onClick={handlePrint} className="btn-secondary !min-h-[44px] !py-2">
+                          <BrandIcon name="document" size={18} />
+                          הדפסה
+                        </button>
                       </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                        {selected.map((fund, i) => (
-                          <FundCard
-                            key={fund.id}
-                            fund={fund}
-                            rank={i + 1}
-                            onRemove={remove}
-                            showMonthly={showMonthly}
-                            showDeepDrill={showDeepDrill}
-                          />
-                        ))}
-                      </div>
-
-                      {showChart && selected.length > 1 && <FundCompareChart funds={selected} />}
-                      {showCostCalc && <FundCostCalculator funds={selected} />}
                     </div>
-                  ) : null
-                }
-              </FundExplorer>
-            </div>
-          </section>
+                    {printRecipient && (
+                      <p className="hidden print:block text-[16px]" style={{ color: GREEN }}>
+                        השוואה עבור: {printRecipient}
+                      </p>
+                    )}
 
-          {/* Disclaimer */}
-          <section className="border-t" style={{ borderColor: LINE }}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-              <div className="max-w-3xl">
-                <div className="dna-quote gold">
-                  <div className="dna-ql">הבהרה חשובה</div>
-                  <div className="dna-qt">
-                    הנתונים המוצגים מבוססים על מידע ממקורות ציבוריים של רשות שוק ההון, ביטוח וחיסכון
-                    (גמלנט, ביטוחנט, פנסיהנט) ומיועדים להשוואה כללית בלבד. תשואות עבר אינן מעידות על
-                    תשואות עתידיות. שיעור העלויות מחושב על פי דמי הניהול שהוזנו ואינו כולל מרכיבים נוספים.
-                    לפני קבלת החלטות פיננסיות, מומלץ להתייעץ עם יועץ פנסיוני או פיננסי מוסמך.
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                      {selected.map((fund) => (
+                        <FundCard
+                          key={fund.id}
+                          fund={fund}
+                          onRemove={remove}
+                          showMonthly={showMonthly}
+                          showDeepDrill={showDeepDrill}
+                        />
+                      ))}
+                    </div>
+
+                    {showChart && selected.length > 1 && <FundCompareChart funds={selected} />}
+                    {showCostCalc && <FundCostCalculator funds={selected} />}
                   </div>
-                </div>
-                <p className="mt-4 text-[13px]" style={{ color: MUTED }}>
-                  <span className="font-medium" style={{ color: NAVY }}>מקור הנתונים:</span>{' '}
-                  רשות שוק ההון, ביטוח וחיסכון, משרד האוצר. הנתונים מתעדכנים בהתאם לפרסום הרשמי.
-                </p>
-              </div>
-            </div>
-          </section>
-        </div>
-      </main>
+                ) : null
+              }
+            </FundExplorer>
+          </div>
+        </section>
 
-      {/* Closing CTA — institutional navy band */}
-      <section className="dna-navy-band" style={{ backgroundColor: NAVY }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
-          <h2
-            className="text-white leading-tight mb-3"
-            style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', letterSpacing: '-0.5px' }}
-          >
-            מצאתם קופה מעניינת?
-          </h2>
-          <p className="text-base leading-[1.85] mb-8 max-w-xl" style={{ color: 'rgba(255,255,255,.65)' }}>
-            לפני שמניידים, כדאי לבדוק דמי ניהול, כיסויים ורצף זכויות.
-            יועץ מהצוות יעבור איתכם על ההשוואה, ללא עלות וללא התחייבות.
-          </p>
-          <Link
-            to="/contact"
-            className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
-          >
-            דברו עם יועץ
-          </Link>
-        </div>
-      </section>
+        {/* Disclaimer */}
+        <section className="border-t" style={{ borderColor: LINE }}>
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-10 sm:py-14">
+            <div className="dna-callout max-w-3xl text-[15px]">
+              <p className="font-bold mb-1" style={{ color: GREEN }}>הבהרה חשובה</p>
+              <p>
+                הנתונים המוצגים מבוססים על מידע ממקורות ציבוריים של רשות שוק ההון, ביטוח וחיסכון
+                (גמלנט, ביטוחנט, פנסיהנט) ומיועדים להשוואה כללית בלבד. תשואות עבר אינן מעידות על
+                תשואות עתידיות. שיעור העלויות מחושב על פי דמי הניהול שהוזנו ואינו כולל מרכיבים נוספים.
+                לפני קבלת החלטות פיננסיות, מומלץ להתייעץ עם יועץ פנסיוני או פיננסי מוסמך.
+              </p>
+              <p className="mt-2" style={{ color: MUTED }}>
+                מקור הנתונים: רשות שוק ההון, ביטוח וחיסכון, משרד האוצר. הנתונים מתעדכנים בהתאם לפרסום הרשמי.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Closing: deep green band, the central path */}
+        <section className="dna-navy-band">
+          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: 'clamp(26px, 3vw, 34px)' }}>
+              מצאתם קופה מעניינת?
+            </h2>
+            <p className="text-[17px] leading-[1.7] mb-8 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
+              לפני שמניידים, כדאי לבדוק דמי ניהול, כיסויים ורצף זכויות.
+              בדיקת תיק 360 מסדרת את ההשוואה מול התיק הקיים שלכם.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
+                בדיקת תיק 360
+              </Link>
+              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
+                תיאום פגישה
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
 
       <Footer />
     </div>

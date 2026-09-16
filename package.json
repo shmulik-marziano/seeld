@@ -11,7 +11,10 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "brand:shots": "node scripts/shot_brand.mjs",
+    "brand:axe": "node scripts/axe_brand.mjs",
+    "brand:measure": "node scripts/measure_brand.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.11",

@@ -57,11 +57,11 @@ type UnifiedLead = {
 };
 
 const STATUS_MAP: Record<LeadStatus, { label: string; bg: string; text: string }> = {
-  new:         { label: 'חדש',       bg: '#e0f2fe', text: '#0369a1' },
-  contacted:   { label: 'נוצר קשר',  bg: '#fef3c7', text: '#92400e' },
-  in_progress: { label: 'בטיפול',    bg: '#dbeafe', text: '#1e40af' },
-  closed:      { label: 'נסגר',      bg: '#dcfce7', text: '#166534' },
-  cancelled:   { label: 'בוטל',      bg: '#fee2e2', text: '#991b1b' },
+  new:         { label: 'חדש',       bg: '#E8EDE5', text: '#476356' },
+  contacted:   { label: 'נוצר קשר',  bg: '#F5EEE0', text: '#8A6230' },
+  in_progress: { label: 'בטיפול',    bg: '#E8EDE5', text: '#476356' },
+  closed:      { label: 'נסגר',      bg: '#E8EDE5', text: '#2F6B4E' },
+  cancelled:   { label: 'בוטל',      bg: '#F3E2D8', text: '#9A4520' },
 };
 
 const INSURANCE_TYPE_MAP: Record<string, string> = {
@@ -244,12 +244,12 @@ export default function LeadsPage() {
             className="w-10 h-10 rounded-full bg-[#003D30] flex items-center justify-center hover:bg-[#003D30]/80 transition-colors">
             <ArrowRight className="w-5 h-5 text-white" />
           </button>
-          <div className="w-12 h-12 rounded-full bg-[#b45309] flex items-center justify-center shadow-lg">
+          <div className="w-12 h-12 rounded-full bg-[#8A6230] flex items-center justify-center shadow-lg">
             <Target className="h-5 w-5 text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-[#003D30]">לידים</h1>
-            <p className="text-sm text-gray-400">{leads.length} לידים מהאתר</p>
+            <p className="text-sm text-[#476356]">{leads.length} לידים מהאתר</p>
           </div>
         </div>
       </div>
@@ -258,13 +258,13 @@ export default function LeadsPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {[
           { label: 'סה״כ', value: stats.total, color: '#003D30', bg: '#003D3015' },
-          { label: 'חדשים', value: stats.new, color: '#0369a1', bg: '#e0f2fe' },
-          { label: 'בטיפול', value: stats.inProgress, color: '#1e40af', bg: '#dbeafe' },
-          { label: 'נסגרו', value: stats.closed, color: '#166534', bg: '#dcfce7' },
+          { label: 'חדשים', value: stats.new, color: '#476356', bg: '#E8EDE5' },
+          { label: 'בטיפול', value: stats.inProgress, color: '#476356', bg: '#E8EDE5' },
+          { label: 'נסגרו', value: stats.closed, color: '#2F6B4E', bg: '#E8EDE5' },
         ].map((s, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.08 }}
-            className="rounded-2xl p-4 border border-gray-100 shadow-sm"
+            className="rounded-2xl p-4 border border-[#E1E8E1] shadow-sm"
             style={{ backgroundColor: s.bg }}>
             <p className="text-[11px] font-bold" style={{ color: s.color + 'aa' }}>{s.label}</p>
             <p className="text-2xl font-bold mt-1" style={{ color: s.color }}>{s.value}</p>
@@ -273,17 +273,17 @@ export default function LeadsPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm mb-4">
+      <div className="bg-white rounded-2xl border border-[#E1E8E1] shadow-sm mb-4">
         <div className="p-3 sm:p-4 flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#476356]" />
             <Input placeholder="חיפוש לפי שם, מייל או טלפון..." value={search}
               onChange={e => setSearch(e.target.value)}
-              className="pr-10 rounded-full border-gray-200 min-h-[44px]" />
+              className="pr-10 rounded-full border-[#CCD6CC] min-h-[44px]" />
           </div>
           <div className="flex gap-2">
             <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-              className="rounded-full border border-gray-200 px-4 py-2 text-sm font-bold text-gray-600 bg-white min-h-[44px]">
+              className="rounded-full border border-[#CCD6CC] px-4 py-2 text-sm font-bold text-[#476356] bg-white min-h-[44px]">
               <option value="all">כל הסטטוסים</option>
               <option value="new">חדש</option>
               <option value="contacted">נוצר קשר</option>
@@ -292,7 +292,7 @@ export default function LeadsPage() {
               <option value="cancelled">בוטל</option>
             </select>
             <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)}
-              className="rounded-full border border-gray-200 px-4 py-2 text-sm font-bold text-gray-600 bg-white min-h-[44px]">
+              className="rounded-full border border-[#CCD6CC] px-4 py-2 text-sm font-bold text-[#476356] bg-white min-h-[44px]">
               <option value="all">כל הסוגים</option>
               <option value="insurance">ביטוח</option>
               <option value="pension">פנסיה</option>
@@ -308,18 +308,18 @@ export default function LeadsPage() {
         </div>
       ) : error ? (
         <div className="bg-white rounded-2xl border border-red-100 p-8 text-center">
-          <p className="text-red-500 font-bold mb-2">שגיאה בטעינת הלידים</p>
-          <p className="text-sm text-gray-400">{error}</p>
+          <p className="text-[#9A4520] font-bold mb-2">שגיאה בטעינת הלידים</p>
+          <p className="text-sm text-[#476356]">{error}</p>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
-          <div className="w-16 h-16 rounded-full bg-[#b45309]/10 flex items-center justify-center mx-auto mb-4">
-            <Target className="w-8 h-8 text-[#b45309]" />
+        <div className="bg-white rounded-2xl border border-[#E1E8E1] p-12 text-center">
+          <div className="w-16 h-16 rounded-full bg-[#8A6230]/10 flex items-center justify-center mx-auto mb-4">
+            <Target className="w-8 h-8 text-[#8A6230]" />
           </div>
           <p className="text-lg font-bold text-[#003D30] mb-2">
             {leads.length === 0 ? 'אין לידים עדיין' : 'לא נמצאו תוצאות'}
           </p>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-[#476356]">
             {leads.length === 0
               ? 'לידים שנכנסים מהאתר יופיעו כאן אוטומטית'
               : 'נסה לשנות את מסנני החיפוש'}
@@ -334,7 +334,7 @@ export default function LeadsPage() {
               <motion.div key={lead.id}
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.03 }}
-                className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 hover:shadow-md transition-shadow">
+                className="bg-white rounded-2xl border border-[#E1E8E1] shadow-sm p-4 hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm bg-[#003D30]">
@@ -359,7 +359,7 @@ export default function LeadsPage() {
                           {lead.type === 'insurance' ? 'ביטוח' : 'פנסיה'} &middot; {lead.subType}
                         </span>
                         {lead.assigned_to && (
-                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#b4530920] text-[#b45309] flex items-center gap-1">
+                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#8A623020] text-[#8A6230] flex items-center gap-1">
                             <User className="w-3 h-3" />{lead.assigned_to}
                           </span>
                         )}
@@ -369,32 +369,32 @@ export default function LeadsPage() {
                   <div className="flex items-center gap-1.5 flex-shrink-0">
                     {lead.phone && (
                       <a href={`tel:${lead.phone}`}
-                        className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center hover:bg-green-100 transition-colors">
-                        <Phone className="w-3.5 h-3.5 text-green-600" />
+                        className="w-8 h-8 rounded-full bg-[#E8EDE5] flex items-center justify-center hover:bg-[#E8EDE5] transition-colors">
+                        <Phone className="w-3.5 h-3.5 text-[#2F6B4E]" />
                       </a>
                     )}
                     {lead.email && (
                       <a href={`mailto:${lead.email}`}
-                        className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center hover:bg-blue-100 transition-colors">
-                        <Mail className="w-3.5 h-3.5 text-blue-600" />
+                        className="w-8 h-8 rounded-full bg-[#E8EDE5] flex items-center justify-center hover:bg-[#E8EDE5] transition-colors">
+                        <Mail className="w-3.5 h-3.5 text-[#476356]" />
                       </a>
                     )}
                     <button onClick={() => handleConvert(lead)}
                       disabled={convertingId === lead.id}
                       title="צור לקוח מהליד"
-                      className="w-8 h-8 rounded-full bg-[#b45309]/10 flex items-center justify-center hover:bg-[#b45309]/20 transition-colors disabled:opacity-50">
+                      className="w-8 h-8 rounded-full bg-[#8A6230]/10 flex items-center justify-center hover:bg-[#8A6230]/20 transition-colors disabled:opacity-50">
                       {convertingId === lead.id
-                        ? <Loader2 className="w-3.5 h-3.5 text-[#b45309] animate-spin" />
-                        : <UserPlus className="w-3.5 h-3.5 text-[#b45309]" />}
+                        ? <Loader2 className="w-3.5 h-3.5 text-[#8A6230] animate-spin" />
+                        : <UserPlus className="w-3.5 h-3.5 text-[#8A6230]" />}
                     </button>
                     <button onClick={() => toggleExpand(lead)}
                       title={expanded ? 'סגור פרטים' : 'פרטים והערות'}
-                      className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-100 transition-colors">
-                      <ChevronDown className={`w-3.5 h-3.5 text-gray-500 transition-transform ${expanded ? 'rotate-180' : ''}`} />
+                      className="w-8 h-8 rounded-full bg-[#F3F5F1] flex items-center justify-center hover:bg-[#E8EDE5] transition-colors">
+                      <ChevronDown className={`w-3.5 h-3.5 text-[#476356] transition-transform ${expanded ? 'rotate-180' : ''}`} />
                     </button>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 mt-3 text-[11px] text-gray-400">
+                <div className="flex items-center gap-4 mt-3 text-[11px] text-[#476356]">
                   <span className="flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
                     {new Date(lead.created_at).toLocaleDateString('he-IL')}
@@ -404,7 +404,7 @@ export default function LeadsPage() {
                   {lead.id_number && <span>ת.ז {lead.id_number}</span>}
                 </div>
                 {!expanded && lead.notes && (
-                  <p className="text-xs text-gray-400 mt-2 line-clamp-1 border-t border-gray-50 pt-2">{lead.notes}</p>
+                  <p className="text-xs text-[#476356] mt-2 line-clamp-1 border-t border-[#E1E8E1] pt-2">{lead.notes}</p>
                 )}
                 <AnimatePresence>
                   {expanded && (
@@ -414,18 +414,18 @@ export default function LeadsPage() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                       className="overflow-hidden">
-                      <div className="mt-3 pt-3 border-t border-gray-100 space-y-3">
+                      <div className="mt-3 pt-3 border-t border-[#E1E8E1] space-y-3">
                         {lead.additional_notes && (
                           <div>
-                            <p className="text-[11px] font-bold text-gray-400 mb-1">מה הלקוח כתב בטופס</p>
-                            <p className="text-xs text-gray-600 whitespace-pre-wrap">{lead.additional_notes}</p>
+                            <p className="text-[11px] font-bold text-[#476356] mb-1">מה הלקוח כתב בטופס</p>
+                            <p className="text-xs text-[#476356] whitespace-pre-wrap">{lead.additional_notes}</p>
                           </div>
                         )}
                         <div>
-                          <p className="text-[11px] font-bold text-gray-400 mb-1">הערות פנימיות</p>
+                          <p className="text-[11px] font-bold text-[#476356] mb-1">הערות פנימיות</p>
                           <Textarea value={noteDraft} onChange={e => setNoteDraft(e.target.value)}
                             placeholder="תיעוד שיחה, סיכום, תזכורת..."
-                            className="text-xs rounded-xl border-gray-200 min-h-[70px]" />
+                            className="text-xs rounded-xl border-[#CCD6CC] min-h-[70px]" />
                           <div className="flex justify-end mt-2">
                             <Button size="sm" onClick={() => handleSaveNote(lead)}
                               disabled={savingNote || noteDraft === (lead.notes || '')}

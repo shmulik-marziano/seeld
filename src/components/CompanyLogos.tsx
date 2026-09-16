@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { COMPANIES, type Company } from "@/data/companies";
-import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
-import { SERIF } from "@/lib/brand";
+import { motion, useAnimationFrame, useMotionValue, useReducedMotion } from "framer-motion";
+import { LINE, MUTED } from "@/lib/brand";
 
 /*
   CompanyLogos — partner insurance/investment companies as official brand
@@ -34,7 +34,7 @@ function CompanyLogo({ company, size = "md", eager = false }: { company: Company
 /* Grid variant — used on insurance/savings pages */
 function LogoGrid({ companies }: { companies: Company[] }) {
   return (
-    <div className="border-t border-b border-[#003D30]/10 py-8 sm:py-10">
+    <div className="border-t border-b py-8 sm:py-10" style={{ borderColor: LINE }}>
       <div className="flex flex-wrap items-center gap-x-10 gap-y-7">
         {companies.map((c) => (
           <CompanyLogo key={c.slug} company={c} />
@@ -46,17 +46,21 @@ function LogoGrid({ companies }: { companies: Company[] }) {
 
 /* Marquee variant — used on homepage. Auto-scrolls slowly, and the visitor
    can grab it with the mouse (or a finger) to scrub through all the logos;
-   auto-scroll resumes when they let go. Infinite wrap over a doubled list. */
+   auto-scroll resumes when they let go. Infinite wrap over a doubled list.
+
+   The strip is laid out LTR on purpose: the page is RTL, so a flex row would
+   start at the right edge and overflow to the LEFT, and the leftward drift
+   (negative x) would reveal empty space instead of the next logos. Logos carry
+   no reading direction, so LTR layout is safe. With reduced motion the strip
+   stands still and stays scrubbable. */
 const MARQUEE_SPEED = 42; // px per second
 
-// .dna-logo-fade masks the strip edges instead of painting a white overlay, so
-// the marquee sits correctly on the cream warm band and every logo stays
-// readable as it passes through (narrower fade on phones).
 function LogoMarquee({ companies }: { companies: Company[] }) {
   const doubled = [...companies, ...companies];
   const x = useMotionValue(0);
   const rowRef = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState(false);
+  const reduced = useReducedMotion();
 
   useAnimationFrame((_, delta) => {
     const row = rowRef.current;
@@ -64,7 +68,7 @@ function LogoMarquee({ companies }: { companies: Company[] }) {
     const half = row.scrollWidth / 2;
     if (half <= 0) return;
     let next = x.get();
-    if (!dragging) next -= (MARQUEE_SPEED * delta) / 1000;
+    if (!dragging && !reduced) next -= (MARQUEE_SPEED * delta) / 1000;
     // wrap into (-half, 0] so the loop is seamless in both drag directions
     if (next <= -half) next += half;
     if (next > 0) next -= half;
@@ -72,7 +76,11 @@ function LogoMarquee({ companies }: { companies: Company[] }) {
   });
 
   return (
-    <div className="dna-logo-fade relative overflow-hidden border-t border-b border-[#003D30]/10 py-7 sm:py-8 select-none">
+    <div
+      dir="ltr"
+      className="dna-logo-fade relative overflow-hidden border-t border-b py-7 sm:py-8 select-none"
+      style={{ borderColor: LINE }}
+    >
       <motion.div
         ref={rowRef}
         className="flex items-center gap-x-12 sm:gap-x-16 whitespace-nowrap cursor-grab active:cursor-grabbing touch-pan-y"
@@ -98,20 +106,16 @@ export default function CompanyLogos({
   subtitle = "כל השחקניות המובילות בישראל. משווים, ובוחרים את מה שנכון לכם.",
 }: Props) {
   return (
-    /* The marquee is dropped into page sections that carry their own band
-       colour (homepage warm band) — stay transparent there. The grid keeps
-       its white plate on service pages. */
-    <section className={"bg-transparent"}>
-      <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+    /* Transparent: the strip sits on whatever band the page gives it
+       (the sand band on the homepage, the ivory canvas on service pages). */
+    <section className="bg-transparent">
+      <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
         {title && (
-          <div className="border-t border-[#003D30]/20 pt-5 mb-10">
-            <h2
-              className="text-[#003D30] leading-tight"
-              style={{ fontFamily: SERIF, fontWeight: 700, fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
-            >
+          <div className="mb-10">
+            <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>
               {title}
             </h2>
-            {subtitle && <p className="mt-2 text-base text-[#476356] leading-relaxed max-w-xl">{subtitle}</p>}
+            {subtitle && <p className="mt-2 text-[17px] leading-relaxed max-w-xl" style={{ color: MUTED }}>{subtitle}</p>}
           </div>
         )}
         {variant === "marquee" ? (

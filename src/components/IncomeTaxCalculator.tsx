@@ -111,7 +111,7 @@ const IncomeTaxCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="שכר חודשי ברוטו"
             value={[grossMonthly]}
             onValueChange={([value]) => setGrossMonthly(value)}
             min={5000}

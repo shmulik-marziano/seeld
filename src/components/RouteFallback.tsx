@@ -1,7 +1,7 @@
 /**
  * RouteFallback — quiet Suspense loader for lazy routes.
- * STYLESEED: white canvas, ink (#003D30), Geist Mono wordmark, Snap motion,
- * respects prefers-reduced-motion. Greyscale only, no emoji.
+ * Ivory canvas, a thin green progress bar and the brand symbol pulsing.
+ * Respects prefers-reduced-motion. No text, no emoji.
  */
 export default function RouteFallback() {
   return (
@@ -17,7 +17,7 @@ export default function RouteFallback() {
           100% { transform: translateX(400%); }
         }
         @keyframes seeld-route-pulse {
-          0%, 100% { opacity: 0.25; }
+          0%, 100% { opacity: 0.35; }
           50%      { opacity: 1; }
         }
         .seeld-route-bar {
@@ -28,30 +28,27 @@ export default function RouteFallback() {
         }
         @media (prefers-reduced-motion: reduce) {
           .seeld-route-bar { animation: none; transform: translateX(0); width: 100%; }
-          .seeld-route-mark { animation: none; opacity: 0.6; }
+          .seeld-route-mark { animation: none; opacity: 0.8; }
         }
       `}</style>
 
-      {/* Thin indeterminate progress bar, ink on white */}
+      {/* Thin indeterminate progress bar, deep green on ivory */}
       <div className="fixed top-0 inset-x-0 h-0.5 overflow-hidden" aria-hidden="true">
-        <div
-          className="seeld-route-bar h-full w-1/4"
-          style={{ backgroundColor: "#ffffff" }}
-        />
+        <div className="seeld-route-bar h-full w-1/4" style={{ backgroundColor: "#003D30" }} />
       </div>
 
-      {/* Small mono wordmark pulse, centered */}
+      {/* The brand symbol, pulsing softly, centered */}
       <div className="flex min-h-screen items-center justify-center">
-        <span
-          className="seeld-route-mark select-none text-xs tracking-[0.3em]"
-          style={{
-            fontFamily: "'Geist Mono', ui-monospace, monospace",
-            color: "#003D30",
-          }}
+        <img
+          src="/brand/logo-icon.png"
+          alt=""
+          width={44}
+          height={64}
+          className="seeld-route-mark select-none"
+          style={{ height: 64, width: "auto" }}
+          draggable={false}
           aria-hidden="true"
-        >
-          SEELD
-        </span>
+        />
       </div>
     </div>
   );

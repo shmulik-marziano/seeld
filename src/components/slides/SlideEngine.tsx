@@ -100,7 +100,7 @@ function ThemeSettingsPanel({
       <div className="p-4 space-y-5 text-sm">
         {/* Colors */}
         <div className="space-y-3">
-          <h4 className="text-xs font-bold text-white/60 uppercase tracking-wider">צבעים</h4>
+          <h4 className="text-xs font-bold text-white/60">צבעים</h4>
           <div className="space-y-2">
             <Label className="text-white/80 text-xs">צבע ראשי</Label>
             <div className="flex gap-2 items-center">
@@ -175,7 +175,7 @@ function ThemeSettingsPanel({
 
         {/* Logo */}
         <div className="space-y-3 pt-2 border-t border-white/10">
-          <h4 className="text-xs font-bold text-white/60 uppercase tracking-wider">לוגו</h4>
+          <h4 className="text-xs font-bold text-white/60">לוגו</h4>
           <div className="flex items-center justify-between">
             <Label className="text-white/80 text-xs">הצג לוגו</Label>
             <Switch
@@ -193,7 +193,7 @@ function ThemeSettingsPanel({
 
         {/* Text */}
         <div className="space-y-3 pt-2 border-t border-white/10">
-          <h4 className="text-xs font-bold text-white/60 uppercase tracking-wider">טקסט</h4>
+          <h4 className="text-xs font-bold text-white/60">טקסט</h4>
           <div className="space-y-2">
             <Label className="text-white/80 text-xs">שם סוכנות</Label>
             <Input

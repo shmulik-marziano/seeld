@@ -652,10 +652,10 @@ export default function FileImportPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-[#b45309]/20 hover:border-[#b45309]/40 transition-colors cursor-pointer rounded-2xl" onClick={() => fileInputRef.current?.click()}>
+            <Card className="border-[#8A6230]/20 hover:border-[#8A6230]/40 transition-colors cursor-pointer rounded-2xl" onClick={() => fileInputRef.current?.click()}>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <User className="h-4 w-4 text-[#b45309]" />
+                  <User className="h-4 w-4 text-[#8A6230]" />
                   קובץ ללקוח בודד
                 </CardTitle>
               </CardHeader>
@@ -666,10 +666,10 @@ export default function FileImportPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-[#15803d]/20 hover:border-[#15803d]/40 transition-colors cursor-pointer rounded-2xl" onClick={() => fileInputRef.current?.click()}>
+            <Card className="border-[#2F6B4E]/20 hover:border-[#2F6B4E]/40 transition-colors cursor-pointer rounded-2xl" onClick={() => fileInputRef.current?.click()}>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <FolderArchive className="h-4 w-4 text-[#15803d]" />
+                  <FolderArchive className="h-4 w-4 text-[#2F6B4E]" />
                   ZIP / קיט / מסלקה
                 </CardTitle>
               </CardHeader>
@@ -708,7 +708,7 @@ export default function FileImportPage() {
                     {u.state === 'matching' && <Search className="h-4 w-4 animate-pulse text-primary" />}
                     {u.state === 'processing' && <Loader2 className="h-4 w-4 animate-spin text-accent-foreground" />}
                     {u.state === 'preview' && <Eye className="h-4 w-4 text-primary" />}
-                    {u.state === 'done' && <CheckCircle2 className="h-4 w-4 text-green-600" />}
+                    {u.state === 'done' && <CheckCircle2 className="h-4 w-4 text-[#2F6B4E]" />}
                     {u.state === 'error' && <XCircle className="h-4 w-4 text-destructive" />}
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{u.file.name}</p>
@@ -822,12 +822,12 @@ export default function FileImportPage() {
                             </Badge>
                           </TableCell>
                           <TableCell className="text-xs">
-                            {item.productsCreated > 0 && <span className="text-green-600">+{item.productsCreated}</span>}
-                            {item.productsUpdated > 0 && <span className="text-blue-600 mr-1">↻{item.productsUpdated}</span>}
+                            {item.productsCreated > 0 && <span className="text-[#2F6B4E]">+{item.productsCreated}</span>}
+                            {item.productsUpdated > 0 && <span className="text-[#476356] mr-1">↻{item.productsUpdated}</span>}
                             {item.productsCreated === 0 && item.productsUpdated === 0 && '-'}
                           </TableCell>
                           <TableCell>
-                            {item.status === 'success' && <CheckCircle2 className="h-4 w-4 text-green-600" />}
+                            {item.status === 'success' && <CheckCircle2 className="h-4 w-4 text-[#2F6B4E]" />}
                             {item.status === 'error' && (
                               <div className="flex items-center gap-1">
                                 <XCircle className="h-4 w-4 text-destructive" />
@@ -838,8 +838,8 @@ export default function FileImportPage() {
                             )}
                             {item.status === 'needs_review' && (
                               <div className="flex items-center gap-1">
-                                <AlertTriangle className="h-4 w-4 text-amber-500" />
-                                <span className="text-xs text-amber-600 max-w-[120px] truncate" title={item.errorMessage}>
+                                <AlertTriangle className="h-4 w-4 text-[#8A6230]" />
+                                <span className="text-xs text-[#8A6230] max-w-[120px] truncate" title={item.errorMessage}>
                                   {item.errorMessage || 'דורש בדיקה'}
                                 </span>
                               </div>
@@ -876,9 +876,9 @@ export default function FileImportPage() {
 
           {/* Summary */}
           {uploads.some(u => u.state === 'done') && (
-            <Card className="border-green-200 bg-green-50/50 dark:bg-green-950/20 dark:border-green-800">
+            <Card className="border-[#819B7D] bg-[#E8EDE5]/50 dark:bg-green-950/20 dark:border-green-800">
               <CardHeader className="pb-3">
-                <CardTitle className="text-base flex items-center gap-2 text-green-700 dark:text-green-400">
+                <CardTitle className="text-base flex items-center gap-2 text-[#2F6B4E] dark:text-green-400">
                   <CheckCircle2 className="h-4 w-4" />
                   סיכום ייבוא
                 </CardTitle>
@@ -886,11 +886,11 @@ export default function FileImportPage() {
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                   <div className="text-center p-3 bg-background rounded-lg">
-                    <p className="text-2xl font-bold text-green-600">{summary.customersCreated}</p>
+                    <p className="text-2xl font-bold text-[#2F6B4E]">{summary.customersCreated}</p>
                     <p className="text-xs text-muted-foreground">לקוחות נוצרו</p>
                   </div>
                   <div className="text-center p-3 bg-background rounded-lg">
-                    <p className="text-2xl font-bold text-blue-600">{summary.customersUpdated}</p>
+                    <p className="text-2xl font-bold text-[#476356]">{summary.customersUpdated}</p>
                     <p className="text-xs text-muted-foreground">לקוחות עודכנו</p>
                   </div>
                   <div className="text-center p-3 bg-background rounded-lg">
@@ -898,7 +898,7 @@ export default function FileImportPage() {
                     <p className="text-xs text-muted-foreground">מוצרים ({summary.productsCreated} חדשים)</p>
                   </div>
                   <div className="text-center p-3 bg-background rounded-lg">
-                    <p className="text-2xl font-bold text-amber-500">{summary.needsManualReview}</p>
+                    <p className="text-2xl font-bold text-[#8A6230]">{summary.needsManualReview}</p>
                     <p className="text-xs text-muted-foreground">דורשים בדיקה</p>
                   </div>
                 </div>
@@ -966,9 +966,9 @@ export default function FileImportPage() {
                                 </Badge>
                               </TableCell>
                               <TableCell>
-                                {item.status === 'success' && <CheckCircle2 className="h-3.5 w-3.5 text-green-600" />}
+                                {item.status === 'success' && <CheckCircle2 className="h-3.5 w-3.5 text-[#2F6B4E]" />}
                                 {item.status === 'error' && <XCircle className="h-3.5 w-3.5 text-destructive" />}
-                                {item.status === 'needs_review' && <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />}
+                                {item.status === 'needs_review' && <AlertTriangle className="h-3.5 w-3.5 text-[#8A6230]" />}
                               </TableCell>
                               <TableCell>
                                 {item.customerId && (
@@ -1014,9 +1014,9 @@ export default function FileImportPage() {
             <div className="space-y-4">
               {/* Status */}
               <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/40">
-                {detailItem.status === 'success' && <CheckCircle2 className="h-4 w-4 text-green-600" />}
+                {detailItem.status === 'success' && <CheckCircle2 className="h-4 w-4 text-[#2F6B4E]" />}
                 {detailItem.status === 'error' && <XCircle className="h-4 w-4 text-destructive" />}
-                {detailItem.status === 'needs_review' && <AlertTriangle className="h-4 w-4 text-amber-500" />}
+                {detailItem.status === 'needs_review' && <AlertTriangle className="h-4 w-4 text-[#8A6230]" />}
                 <span className="text-sm font-medium">
                   {detailItem.status === 'success' ? 'הושלם בהצלחה' : detailItem.status === 'error' ? 'שגיאה' : 'דורש בדיקה'}
                 </span>
@@ -1206,7 +1206,7 @@ export default function FileImportPage() {
                           </TableCell>
                           <TableCell className="text-muted-foreground">{idx + 1}</TableCell>
                           <TableCell className={`font-medium text-sm ${entry.excluded ? 'line-through' : ''}`}>{name}</TableCell>
-                          <TableCell className="font-mono text-xs">{entry.customer.idNumber || <span className="text-amber-500">חסר</span>}</TableCell>
+                          <TableCell className="font-mono text-xs">{entry.customer.idNumber || <span className="text-[#8A6230]">חסר</span>}</TableCell>
                           <TableCell className="text-xs">{entry.customer.mobilePhone || '-'}</TableCell>
                           <TableCell className="text-xs max-w-[120px] truncate">{entry.sourceFile || '-'}</TableCell>
                           <TableCell>

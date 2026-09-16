@@ -155,7 +155,7 @@ const CompareCalculator = () => {
             {years} שנים
           </span>
         </div>
-        <Slider
+        <Slider thumbLabel="לכמה שנים?"
           value={[years]}
           onValueChange={([value]) => setYears(value)}
           min={1}

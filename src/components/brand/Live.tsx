@@ -40,13 +40,9 @@ export const CountUp = ({
   );
 };
 
-/** Pulsing status dot (green = available/live) */
+/** Small sage dot — a quiet marker, static (no looping animation in the brand). */
 export const LiveDot = ({ color = CHIP_GREEN, size = 7 }: { color?: string; size?: number }) => (
   <span className="relative inline-flex" style={{ width: size, height: size }} aria-hidden="true">
-    <span
-      className="absolute inline-flex h-full w-full rounded-full opacity-40 animate-ping"
-      style={{ backgroundColor: color }}
-    />
     <span className="relative inline-flex rounded-full h-full w-full" style={{ backgroundColor: color }} />
   </span>
 );
@@ -66,8 +62,8 @@ export const LiveTag = ({
   children, dot = false, dark = false,
 }: { children: React.ReactNode; dot?: boolean; dark?: boolean }) => (
   <span
-    className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.12em] font-medium"
-    style={{ fontFamily: MONO, color: dark ? "rgba(250,247,239,.75)" : TEXT_2 }}
+    className="inline-flex items-center gap-1.5 text-[14px] font-medium"
+    style={{ fontFamily: MONO, color: dark ? "rgba(250,247,239,.85)" : TEXT_2 }}
   >
     {dot && <LiveDot size={6} />}
     {children}
@@ -186,8 +182,8 @@ export const LiveClock = ({
 /** Status pill on white — ink text, hairline ring */
 export const StatusPill = ({ children }: { children: React.ReactNode }) => (
   <span
-    className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-[13px] font-medium"
-    style={{ color: INK, boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }}
+    className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-[14px] font-bold"
+    style={{ color: INK, boxShadow: "0 0 0 1px #CCD6CC" }}
   >
     <LiveDot size={6} />
     {children}

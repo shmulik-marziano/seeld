@@ -96,7 +96,7 @@ const MortgageCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="סכום המשכנתא"
             value={[loanAmount]}
             onValueChange={([value]) => setLoanAmount(value)}
             min={100000}
@@ -130,7 +130,7 @@ const MortgageCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="ריבית שנתית (%)"
             value={[interestRate]}
             onValueChange={([value]) => setInterestRate(value)}
             min={0}
@@ -163,7 +163,7 @@ const MortgageCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="תקופת ההלוואה (שנים)"
             value={[loanTerm]}
             onValueChange={([value]) => setLoanTerm(value)}
             min={5}

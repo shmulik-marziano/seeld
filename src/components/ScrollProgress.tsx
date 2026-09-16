@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
+import { GREEN } from "@/lib/brand";
 
 const ScrollProgress = () => {
   const { scrollYProgress } = useScroll();
@@ -20,7 +21,8 @@ const ScrollProgress = () => {
   return (
     <motion.div
       className="fixed top-0 left-0 right-0 h-[3px] z-50 origin-left"
-      style={{ scaleX, backgroundColor: "#003D30" }}
+      style={{ scaleX, backgroundColor: GREEN }}
+      aria-hidden="true"
     />
   );
 };

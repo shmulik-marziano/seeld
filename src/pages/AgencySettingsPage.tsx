@@ -34,9 +34,9 @@ export default function AgencySettingsPage() {
     entityType: 'סוכנות ביטוח',
     phone: '',
     email: '',
-    primaryColor: '#3d6b4f',
-    secondaryColor: '#c4a265',
-    accentColor: '#d4856a',
+    primaryColor: '#2F6B4E',
+    secondaryColor: '#CBA064',
+    accentColor: '#BD582D',
     logoUrl: '',
   });
 
@@ -54,9 +54,9 @@ export default function AgencySettingsPage() {
         entityType: agency.entityType || 'סוכנות ביטוח',
         phone: agency.phone || '',
         email: agency.email || '',
-        primaryColor: agency.primaryColor || '#3d6b4f',
-        secondaryColor: agency.secondaryColor || '#c4a265',
-        accentColor: agency.accentColor || '#d4856a',
+        primaryColor: agency.primaryColor || '#2F6B4E',
+        secondaryColor: agency.secondaryColor || '#CBA064',
+        accentColor: agency.accentColor || '#BD582D',
         logoUrl: agency.logoUrl || '',
       });
     }
@@ -151,7 +151,7 @@ export default function AgencySettingsPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-[#003D30]">הגדרות סוכנות</h1>
-          <p className="text-sm text-gray-400">ניהול פרטי הסוכנות, מיתוג, צבעים ומסלולי השקעה</p>
+          <p className="text-sm text-[#476356]">ניהול פרטי הסוכנות, מיתוג, צבעים ומסלולי השקעה</p>
         </div>
       </div>
 

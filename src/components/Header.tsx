@@ -82,6 +82,19 @@ const Header = () => {
     setIsMenuOpen(false);
   }, [pathname]);
 
+  // Escape closes the drawer (it is a dialog) and returns focus to the opener
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsMenuOpen(false);
+        (document.querySelector<HTMLButtonElement>('button[aria-label="פתח תפריט"]'))?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isMenuOpen]);
+
   // Skip link: pages render <main> without an id, so focus the first <main> directly.
   const handleSkipToMain = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();

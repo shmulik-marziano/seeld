@@ -138,9 +138,9 @@ export default function CustomerCardPage() {
         {/* Action buttons - horizontal scroll on mobile */}
         <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1 -mx-1 px-1">
           <Button variant="outline" size="sm" onClick={handleCopyLink} className="gap-1.5 shrink-0 min-h-[40px] text-xs sm:text-sm rounded-full border-[#003D30]/30 hover:bg-[#003D30]/10 hover:border-[#003D30]"><Link2 className="h-3.5 w-3.5 text-[#003D30]" />העתק לינק</Button>
-          <Button variant="outline" size="sm" onClick={() => setShowPresentation(true)} className="gap-1.5 shrink-0 min-h-[40px] text-xs sm:text-sm rounded-full border-[#b45309]/30 hover:bg-[#b45309]/10 hover:border-[#b45309]"><Presentation className="h-3.5 w-3.5 text-[#b45309]" />מצגת</Button>
+          <Button variant="outline" size="sm" onClick={() => setShowPresentation(true)} className="gap-1.5 shrink-0 min-h-[40px] text-xs sm:text-sm rounded-full border-[#8A6230]/30 hover:bg-[#8A6230]/10 hover:border-[#8A6230]"><Presentation className="h-3.5 w-3.5 text-[#8A6230]" />מצגת</Button>
           <Button variant="outline" size="sm" onClick={() => setCustomerModalOpen(true)} className="gap-1.5 shrink-0 min-h-[40px] text-xs sm:text-sm rounded-full border-[#003D30]/20 hover:bg-[#003D30]/5"><Pencil className="h-3.5 w-3.5" />עריכה</Button>
-          <Button variant="outline" size="sm" onClick={handleDelete} className="gap-1.5 text-[#b91c1c] hover:text-[#b91c1c] shrink-0 min-h-[40px] text-xs sm:text-sm rounded-full border-[#b91c1c]/30 hover:bg-[#b91c1c]/10"><Trash2 className="h-3.5 w-3.5" />מחיקה</Button>
+          <Button variant="outline" size="sm" onClick={handleDelete} className="gap-1.5 text-[#9A4520] hover:text-[#9A4520] shrink-0 min-h-[40px] text-xs sm:text-sm rounded-full border-[#9A4520]/30 hover:bg-[#9A4520]/10"><Trash2 className="h-3.5 w-3.5" />מחיקה</Button>
         </div>
       </div>
 
@@ -277,9 +277,9 @@ export default function CustomerCardPage() {
                     {['טיוטה', 'נשלח', 'נצפה', 'רוצה לחשוב'].includes(r.decisionStatus) && (
                       <div className="flex gap-2 mt-3 pt-3 border-t flex-wrap">
                         {r.decisionStatus === 'טיוטה' && <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { decisionStatus: 'נשלח' })} className="min-h-[40px] text-xs rounded-full">שלח ללקוח</Button>}
-                        <Button size="sm" variant="default" onClick={() => updateRecommendation(r.id, { decisionStatus: 'מאשר' })} className="bg-[#15803d] hover:bg-[#15803d]/90 min-h-[40px] text-xs rounded-full text-white">מאשר</Button>
-                        <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { decisionStatus: 'רוצה לחשוב' })} className="min-h-[40px] text-xs rounded-full border-[#b45309]/30 text-[#b45309] hover:bg-[#b45309]/10">רוצה לחשוב</Button>
-                        <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { decisionStatus: 'לא מעוניין' })} className="text-[#b91c1c] min-h-[40px] text-xs rounded-full border-[#b91c1c]/30 hover:bg-[#b91c1c]/10">לא מעוניין</Button>
+                        <Button size="sm" variant="default" onClick={() => updateRecommendation(r.id, { decisionStatus: 'מאשר' })} className="bg-[#2F6B4E] hover:bg-[#2F6B4E]/90 min-h-[40px] text-xs rounded-full text-white">מאשר</Button>
+                        <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { decisionStatus: 'רוצה לחשוב' })} className="min-h-[40px] text-xs rounded-full border-[#8A6230]/30 text-[#8A6230] hover:bg-[#8A6230]/10">רוצה לחשוב</Button>
+                        <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { decisionStatus: 'לא מעוניין' })} className="text-[#9A4520] min-h-[40px] text-xs rounded-full border-[#9A4520]/30 hover:bg-[#9A4520]/10">לא מעוניין</Button>
                       </div>
                     )}
                     {r.decisionStatus === 'מאשר' && !r.executionStatus && (
@@ -336,7 +336,7 @@ export default function CustomerCardPage() {
                   <div className="flex items-center gap-0.5 sm:gap-1">
                     {EXEC_STEPS.map((step, i) => (
                       <div key={step} className="flex items-center flex-1">
-                        <div className={`flex-1 h-2 rounded-full ${i <= stepIdx ? 'bg-[#15803d]' : 'bg-muted'}`} />
+                        <div className={`flex-1 h-2 rounded-full ${i <= stepIdx ? 'bg-[#2F6B4E]' : 'bg-muted'}`} />
                       </div>
                     ))}
                   </div>
@@ -374,10 +374,10 @@ export default function CustomerCardPage() {
                           קדם ל-{EXEC_STEPS[stepIdx + 1]}
                         </Button>
                       )}
-                      <Button size="sm" variant="outline" className="text-[#b91c1c] min-h-[40px] text-xs rounded-full border-[#b91c1c]/30 hover:bg-[#b91c1c]/10" onClick={() => updateRecommendation(r.id, { executionStatus: 'חזר ליקוי' })}>
+                      <Button size="sm" variant="outline" className="text-[#9A4520] min-h-[40px] text-xs rounded-full border-[#9A4520]/30 hover:bg-[#9A4520]/10" onClick={() => updateRecommendation(r.id, { executionStatus: 'חזר ליקוי' })}>
                         חזר ליקוי
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { executionStatus: 'הושלם', decisionStatus: 'בוצע' })} className="text-[#15803d] min-h-[40px] text-xs rounded-full border-[#15803d]/30 hover:bg-[#15803d]/10">
+                      <Button size="sm" variant="outline" onClick={() => updateRecommendation(r.id, { executionStatus: 'הושלם', decisionStatus: 'בוצע' })} className="text-[#2F6B4E] min-h-[40px] text-xs rounded-full border-[#2F6B4E]/30 hover:bg-[#2F6B4E]/10">
                         <CheckCircle2 className="h-3.5 w-3.5 ml-1" />סמן כהושלם
                       </Button>
                     </div>
@@ -426,8 +426,8 @@ export default function CustomerCardPage() {
                       </div>
                     </div>
                     <span className={`text-[10px] sm:text-xs px-2 sm:px-2.5 py-1 rounded-full font-medium shrink-0 ${
-                      s.status === 'completed' ? 'bg-[#15803d]/10 text-[#15803d]' :
-                      s.status === 'partial' ? 'bg-[#b45309]/10 text-[#b45309]' :
+                      s.status === 'completed' ? 'bg-[#2F6B4E]/10 text-[#2F6B4E]' :
+                      s.status === 'partial' ? 'bg-[#8A6230]/10 text-[#8A6230]' :
                       s.status === 'in_progress' ? 'bg-[#003D30]/10 text-[#003D30]' :
                       'bg-muted text-muted-foreground'
                     }`}>
@@ -450,7 +450,7 @@ export default function CustomerCardPage() {
               <p className="text-center text-muted-foreground py-8 text-sm">אין פעולות</p>
             ) : activities.map(a => (
               <div key={a.id} className="flex items-start gap-2 sm:gap-3 p-3 bg-card rounded-lg border">
-                <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${a.level === 'הצלחה' ? 'bg-[#15803d]' : a.level === 'אזהרה' ? 'bg-[#b45309]' : 'bg-[#003D30]'}`} />
+                <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${a.level === 'הצלחה' ? 'bg-[#2F6B4E]' : a.level === 'אזהרה' ? 'bg-[#8A6230]' : 'bg-[#003D30]'}`} />
                 <div className="flex-1 min-w-0">
                   <p className="text-xs sm:text-sm font-medium">{a.title}</p>
                   {a.detail && <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{a.detail}</p>}

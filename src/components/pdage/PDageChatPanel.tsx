@@ -74,7 +74,7 @@ export function PDageChatPanel({ jobId, jobTitle, onClose, correctionFields, onF
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
             <Sparkles className="h-3.5 w-3.5 text-primary-foreground" />
           </div>
           <div>
@@ -97,7 +97,7 @@ export function PDageChatPanel({ jobId, jobTitle, onClose, correctionFields, onF
           </div>
         ) : messages.length === 0 ? (
           <div className="text-center py-8 space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center mx-auto">
               <MessageCircle className="h-6 w-6 text-primary/60" />
             </div>
             <div>
@@ -140,7 +140,7 @@ export function PDageChatPanel({ jobId, jobTitle, onClose, correctionFields, onF
               <div className={`w-7 h-7 rounded-lg shrink-0 flex items-center justify-center ${
                 msg.role === 'user' 
                   ? 'bg-primary/10 text-primary' 
-                  : 'bg-gradient-to-br from-primary to-accent text-primary-foreground'
+                  : 'bg-primary text-primary-foreground'
               }`}>
                 {msg.role === 'user' ? <User className="h-3.5 w-3.5" /> : <Sparkles className="h-3.5 w-3.5" />}
               </div>
@@ -163,7 +163,7 @@ export function PDageChatPanel({ jobId, jobTitle, onClose, correctionFields, onF
 
         {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
           <div className="flex gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
               <Sparkles className="h-3.5 w-3.5 text-primary-foreground" />
             </div>
             <div className="bg-muted rounded-xl rounded-tl-sm px-4 py-3">

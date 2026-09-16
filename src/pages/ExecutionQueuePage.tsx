@@ -9,9 +9,9 @@ import { motion } from 'framer-motion';
 
 const executionStatusConfig: Record<string, { color: string; bg: string; borderColor: string; icon: string }> = {
   'חזר ליקוי': { color: 'text-destructive', bg: 'bg-destructive/5', borderColor: 'border-destructive/30', icon: '🔴' },
-  'ממתין לנתונים': { color: 'text-amber-600', bg: 'bg-amber-50/50 dark:bg-amber-900/10', borderColor: 'border-amber-300/30', icon: '🟡' },
-  'בטיפול': { color: 'text-blue-600', bg: 'bg-blue-50/50 dark:bg-blue-900/10', borderColor: 'border-blue-300/30', icon: '🔵' },
-  'הושלם': { color: 'text-emerald-600', bg: 'bg-emerald-50/50 dark:bg-emerald-900/10', borderColor: 'border-emerald-300/30', icon: '🟢' },
+  'ממתין לנתונים': { color: 'text-[#8A6230]', bg: 'bg-[#F5EEE0]/50 dark:bg-[#8A6230]/10', borderColor: 'border-[#CBA064]/30', icon: '🟡' },
+  'בטיפול': { color: 'text-[#476356]', bg: 'bg-[#E8EDE5]/50 dark:bg-[#003D30]/10', borderColor: 'border-[#819B7D]/30', icon: '🔵' },
+  'הושלם': { color: 'text-[#2F6B4E]', bg: 'bg-[#E8EDE5]/50 dark:bg-[#003D30]/10', borderColor: 'border-[#819B7D]/30', icon: '🟢' },
 };
 
 export default function ExecutionQueuePage() {
@@ -59,10 +59,10 @@ export default function ExecutionQueuePage() {
             </div>
             <p className="text-xl md:text-2xl font-bold text-foreground">{defectCount}</p>
           </div>
-          <div className="rounded-2xl p-3 md:p-4 bg-amber-50/50 dark:bg-amber-900/10 border border-amber-200/20 transition-all">
+          <div className="rounded-2xl p-3 md:p-4 bg-[#F5EEE0]/50 dark:bg-[#8A6230]/10 border border-[#CBA064]/20 transition-all">
             <div className="flex items-center gap-2 mb-1">
-              <Clock className="h-4 w-4 text-amber-500" />
-              <span className="text-xs font-bold text-amber-600">ממתין</span>
+              <Clock className="h-4 w-4 text-[#8A6230]" />
+              <span className="text-xs font-bold text-[#8A6230]">ממתין</span>
             </div>
             <p className="text-xl md:text-2xl font-bold text-foreground">{waitingCount}</p>
           </div>
@@ -129,13 +129,13 @@ export default function ExecutionQueuePage() {
                         )}
 
                         {missing.length > 0 && (
-                          <div className="flex items-start gap-1.5 mt-2 p-2 rounded-xl bg-amber-50/50 dark:bg-amber-900/10 border border-amber-200/30">
-                            <AlertTriangle className="h-3.5 w-3.5 text-amber-500 mt-0.5 shrink-0" />
+                          <div className="flex items-start gap-1.5 mt-2 p-2 rounded-xl bg-[#F5EEE0]/50 dark:bg-[#8A6230]/10 border border-[#CBA064]/30">
+                            <AlertTriangle className="h-3.5 w-3.5 text-[#8A6230] mt-0.5 shrink-0" />
                             <div>
-                              <span className="text-xs font-medium text-amber-700 dark:text-amber-400">חוסרים:</span>
+                              <span className="text-xs font-medium text-[#8A6230] dark:text-amber-400">חוסרים:</span>
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {missing.map((m, idx) => (
-                                  <span key={idx} className="text-[10px] bg-amber-100/60 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 rounded-md px-1.5 py-0.5">
+                                  <span key={idx} className="text-[10px] bg-[#F5EEE0]/60 dark:bg-[#8A6230]/30 text-[#8A6230] dark:text-amber-300 rounded-md px-1.5 py-0.5">
                                     {m}
                                   </span>
                                 ))}

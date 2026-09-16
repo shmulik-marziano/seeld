@@ -9,10 +9,15 @@ import { join } from "node:path";
 
 const [base = "http://localhost:4173", outDir = "shots", ...routes] = process.argv.slice(2);
 const pages = routes.length ? routes : ["/", "/insurance/health", "/calculators"];
-const viewports = [
-  { name: "desktop", width: 1440, height: 900 },
-  { name: "phone", width: 390, height: 844 },
-];
+// Override with SHOT_VIEWPORTS="name:WxH,name:WxH" (e.g. "s360:360x800,tablet:768x1024,zoom200:720x900"
+// — 720px wide ≈ a 1440px screen at 200% browser zoom).
+const viewports = (process.env.SHOT_VIEWPORTS || "desktop:1440x900,phone:390x844")
+  .split(",")
+  .map((s) => {
+    const [name, dims] = s.split(":");
+    const [width, height] = dims.split("x").map(Number);
+    return { name, width, height };
+  });
 
 mkdirSync(outDir, { recursive: true });
 const browser = await chromium.launch();

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { siteSupabase } from "@/integrations/supabase/site-client";
-import { Lightbulb, Loader2, Calendar } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { BrandIcon } from "@/components/brand/BrandIcon";
+import { BODY, GREEN, LINE, MUTED } from "@/lib/brand";
 
 type Recommendation = {
   id: string;
@@ -13,13 +15,15 @@ type Recommendation = {
   priority: string | null;
 };
 
+// Decision states of a documented recommendation. A state is a record of what
+// was decided, not an approval of cover.
 const statusConfig: Record<string, { label: string; bg: string; text: string }> = {
-  pending: { label: "ממתין", bg: "#fef3c7", text: "#92400e" },
-  approved: { label: "אושר", bg: "#d1fae5", text: "#065f46" },
-  rejected: { label: "נדחה", bg: "#fee2e2", text: "#991b1b" },
-  implemented: { label: "מומש", bg: "#dbeafe", text: "#1e40af" },
-  sent: { label: "נשלח", bg: "#e0e7ff", text: "#3730a3" },
-  draft: { label: "טיוטה", bg: "#f3f4f6", text: "#374151" },
+  draft: { label: "טיוטה", bg: "#E1E8E1", text: "#476356" },
+  sent: { label: "נשלחה אליכם", bg: "#E8EDE5", text: "#003D30" },
+  pending: { label: "ממתינה להחלטה", bg: "#F5EEE0", text: "#8A6230" },
+  approved: { label: "אושרה על ידכם", bg: "#E8EDE5", text: "#003D30" },
+  rejected: { label: "נדחתה", bg: "#F6E5DC", text: "#9A4520" },
+  implemented: { label: "בוצעה", bg: "#003D30", text: "#FAF7EF" },
 };
 
 const RecommendationsTab = ({ customerId }: { customerId: string }) => {
@@ -41,7 +45,7 @@ const RecommendationsTab = ({ customerId }: { customerId: string }) => {
       if (error) throw error;
       setRecommendations((data || []) as Recommendation[]);
     } catch {
-      toast.error("שגיאה בטעינת ההמלצות");
+      toast.error("טעינת ההמלצות לא הצליחה. נסו לרענן את העמוד.");
     } finally {
       setLoading(false);
     }
@@ -49,63 +53,63 @@ const RecommendationsTab = ({ customerId }: { customerId: string }) => {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-16">
-        <Loader2 className="w-7 h-7 animate-spin" style={{ color: "#003D30" }} />
+      <div className="flex justify-center py-16" aria-busy="true" aria-live="polite">
+        <Loader2 className="w-7 h-7 animate-spin" style={{ color: GREEN }} aria-hidden="true" />
+        <span className="sr-only">טוען המלצות</span>
       </div>
     );
   }
 
   if (recommendations.length === 0) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm border p-12 text-center">
-        <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: "#fef3c7" }}>
-          <Lightbulb className="w-8 h-8" style={{ color: "#f59e0b" }} />
-        </div>
-        <h3 className="text-lg font-bold mb-2" style={{ color: "#003D30" }}>אין המלצות עדיין</h3>
-        <p className="text-gray-500">הסוכן שלך יכין עבורך המלצות מותאמות אישית בקרוב.</p>
+      <div className="dna-concept !p-8 sm:!p-10 text-center">
+        <BrandIcon name="document" size={40} className="mx-auto mb-4" style={{ color: GREEN }} />
+        <h3 className="text-[20px] mb-2" style={{ color: GREEN }}>אין עדיין המלצות מתועדות</h3>
+        <p className="text-[16px] leading-[1.6] max-w-md mx-auto" style={{ color: BODY }}>
+          כשהיועץ יתעד המלצות בתיק, הן יופיעו כאן עם ההסבר שלצידן והחלטה שלכם לכל אחת.
+        </p>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold" style={{ color: "#003D30" }}>המלצות הסוכן</h2>
-      <div className="grid gap-4">
+      <div className="flex items-baseline justify-between gap-4">
+        <h2 className="text-[22px]" style={{ color: GREEN }}>המלצות היועץ</h2>
+        <span className="text-[14px]" style={{ color: MUTED }}>
+          <span dir="ltr" className="tabular-nums">{recommendations.length}</span> המלצות
+        </span>
+      </div>
+      <ul className="grid gap-4">
         {recommendations.map((rec) => {
           const status = statusConfig[rec.status || "pending"] || statusConfig.pending;
           return (
-            <div key={rec.id} className="bg-white rounded-2xl shadow-sm border p-5 hover:shadow-md transition-shadow">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-start gap-4 flex-1">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "#fef3c7" }}>
-                    <Lightbulb className="w-5 h-5" style={{ color: "#f59e0b" }} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <h3 className="font-bold text-base" style={{ color: "#003D30" }}>
-                        {rec.title || "המלצה"}
-                      </h3>
-                      <span
-                        className="inline-flex items-center rounded-full px-3 py-0.5 text-xs font-medium"
-                        style={{ background: status.bg, color: status.text }}
-                      >
-                        {status.label}
-                      </span>
-                    </div>
-                    {rec.rationale && (
-                      <p className="text-sm text-gray-600 leading-relaxed mb-2">{rec.rationale}</p>
-                    )}
-                    <div className="flex items-center gap-1 text-xs text-gray-400">
-                      <Calendar className="w-3 h-3" />
-                      {new Date(rec.created_at).toLocaleDateString("he-IL")}
-                    </div>
-                  </div>
-                </div>
+            <li key={rec.id} className="dna-concept">
+              <div className="flex items-start justify-between gap-3 flex-wrap mb-2">
+                <h3 className="text-[18px] leading-snug" style={{ color: GREEN }}>
+                  {rec.title || "המלצה"}
+                </h3>
+                <span
+                  className="inline-flex items-center rounded-full px-3 py-1 text-[13px] font-bold shrink-0"
+                  style={{ backgroundColor: status.bg, color: status.text }}
+                >
+                  {status.label}
+                </span>
               </div>
-            </div>
+              {rec.rationale && (
+                <p className="text-[16px] leading-[1.7] mb-3" style={{ color: BODY }}>{rec.rationale}</p>
+              )}
+              <div className="flex flex-wrap gap-x-5 gap-y-1 text-[14px] pt-3 border-t" style={{ color: MUTED, borderColor: LINE }}>
+                <span>
+                  תועדה בתאריך <span dir="ltr" className="tabular-nums">{new Date(rec.created_at).toLocaleDateString("he-IL")}</span>
+                </span>
+                {rec.category && <span>תחום: {rec.category}</span>}
+                {rec.priority && <span>עדיפות: {rec.priority}</span>}
+              </div>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </div>
   );
 };

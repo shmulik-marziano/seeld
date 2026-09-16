@@ -87,7 +87,7 @@ const LifeInsuranceCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="הכנסה חודשית שהמשפחה תצטרך"
             value={[monthlyNeed]}
             onValueChange={([value]) => setMonthlyNeed(value)}
             min={3000}
@@ -117,7 +117,7 @@ const LifeInsuranceCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="שנות תמיכה נדרשות"
             value={[supportYears]}
             onValueChange={([value]) => setSupportYears(value)}
             min={5}
@@ -146,7 +146,7 @@ const LifeInsuranceCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="יתרת משכנתא וחובות"
             value={[debts]}
             onValueChange={([value]) => setDebts(value)}
             min={0}
@@ -176,7 +176,7 @@ const LifeInsuranceCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="מספר ילדים"
             value={[children]}
             onValueChange={([value]) => setChildren(value)}
             min={0}
@@ -201,7 +201,7 @@ const LifeInsuranceCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="קרן לימודים לכל ילד"
             value={[educationFund]}
             onValueChange={([value]) => setEducationFund(value)}
             min={0}
@@ -226,7 +226,7 @@ const LifeInsuranceCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <Slider
+          <Slider thumbLabel="כיסוי קיים וחיסכון נזיל"
             value={[existingCover]}
             onValueChange={([value]) => setExistingCover(value)}
             min={0}

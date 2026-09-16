@@ -1138,8 +1138,8 @@ export default function NewRecommendationPage() {
         <div className="space-y-6">
           <Card className="border-[#003D30]/20 rounded-2xl overflow-hidden">
             <CardContent className="p-8 md:p-10 text-center space-y-4 bg-gradient-to-b from-emerald-50/30 dark:from-emerald-900/5 to-transparent">
-              <div className="w-18 h-18 rounded-full bg-emerald-100/60 dark:bg-emerald-900/20 flex items-center justify-center mx-auto shadow-lg shadow-emerald-200/20">
-                <CheckCircle2 className="h-9 w-9 text-emerald-500" />
+              <div className="w-18 h-18 rounded-full bg-[#E8EDE5]/60 dark:bg-[#003D30]/20 flex items-center justify-center mx-auto shadow-lg shadow-emerald-200/20">
+                <CheckCircle2 className="h-9 w-9 text-[#2F6B4E]" />
               </div>
               <h2 className="text-xl md:text-2xl font-bold">גרסה {summaryVersion} — ההמלצות נוצרו בהצלחה!</h2>
               <p className="text-muted-foreground text-sm">

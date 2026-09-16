@@ -17,10 +17,10 @@ import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const quickActions = [
-  { label: 'העלאת מסמך', desc: 'סריקה ואיתור חוסרים', icon: Upload, path: '/app/pdage/upload', gradient: 'from-emerald-500 to-teal-600', bg: 'bg-emerald-500/8' },
-  { label: 'היסטוריה', desc: 'תיקונים קודמים', icon: History, path: '/app/pdage/history', gradient: 'from-blue-500 to-indigo-600', bg: 'bg-blue-500/8' },
-  { label: 'בנק חוסרים', desc: 'תבניות מוכנות', icon: BookOpen, path: '/app/pdage/deficiency-bank', gradient: 'from-amber-500 to-orange-600', bg: 'bg-amber-500/8' },
-  { label: 'דשבורד', desc: 'סטטיסטיקות ונתונים', icon: LayoutDashboard, path: '/app/pdage/overview', gradient: 'from-violet-500 to-purple-600', bg: 'bg-violet-500/8' },
+  { label: 'העלאת מסמך', desc: 'סריקה ואיתור חוסרים', icon: Upload, path: '/app/pdage/upload', gradient: 'from-primary to-primary', bg: 'bg-secondary' },
+  { label: 'היסטוריה', desc: 'תיקונים קודמים', icon: History, path: '/app/pdage/history', gradient: 'from-primary to-primary', bg: 'bg-secondary' },
+  { label: 'בנק חוסרים', desc: 'תבניות מוכנות', icon: BookOpen, path: '/app/pdage/deficiency-bank', gradient: 'from-primary to-primary', bg: 'bg-secondary' },
+  { label: 'דשבורד', desc: 'סטטיסטיקות ונתונים', icon: LayoutDashboard, path: '/app/pdage/overview', gradient: 'from-primary to-primary', bg: 'bg-secondary' },
 ];
 
 const suggestions = [
@@ -203,7 +203,7 @@ export default function PDageChatHome() {
                 className="text-center space-y-4"
               >
                 <div className="relative mx-auto w-fit">
-                  <div className="w-18 h-18 rounded-2xl bg-gradient-to-br from-primary via-primary to-accent flex items-center justify-center shadow-lg shadow-primary/15">
+                  <div className="w-18 h-18 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/15">
                     <Sparkles className="h-9 w-9 text-primary-foreground" />
                   </div>
                   <div className="absolute -bottom-1 -left-1 w-5 h-5 rounded-full bg-emerald-400 border-2 border-background flex items-center justify-center">
@@ -236,7 +236,7 @@ export default function PDageChatHome() {
                     onClick={() => navigate(action.path)}
                     className="group flex flex-col items-center gap-2.5 p-4 sm:p-5 rounded-2xl border border-border/60 hover:border-primary/25 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 bg-card"
                   >
-                    <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${action.gradient} flex items-center justify-center text-white shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all duration-200`}>
+                    <div className={`w-11 h-11 rounded-xl bg-primary flex items-center justify-center text-white shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all duration-200`}>
                       <action.icon className="h-5 w-5" />
                     </div>
                     <div className="text-center">
@@ -371,7 +371,7 @@ export default function PDageChatHome() {
                   <div className={`w-8 h-8 rounded-xl shrink-0 flex items-center justify-center shadow-sm ${
                     msg.role === 'user'
                       ? 'bg-primary/10 text-primary ring-1 ring-primary/10'
-                      : 'bg-gradient-to-br from-primary to-accent text-primary-foreground'
+                      : 'bg-primary text-primary-foreground'
                   }`}>
                     {msg.role === 'user' ? <User className="h-4 w-4" /> : <Sparkles className="h-4 w-4" />}
                   </div>
@@ -397,7 +397,7 @@ export default function PDageChatHome() {
                   animate={{ opacity: 1, y: 0 }}
                   className="flex gap-3"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-sm">
+                  <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center shadow-sm">
                     <Sparkles className="h-4 w-4 text-primary-foreground" />
                   </div>
                   <div className="bg-card border border-border/50 rounded-2xl rounded-tl-md px-5 py-4 shadow-sm">

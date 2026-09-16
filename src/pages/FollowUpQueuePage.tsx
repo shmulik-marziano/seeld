@@ -10,10 +10,10 @@ import { motion } from 'framer-motion';
 const FOLLOW_UP_STATUSES = ['טיוטה', 'נשלח', 'נצפה', 'רוצה לחשוב'];
 
 const statusConfig: Record<string, { color: string; bg: string; icon: string }> = {
-  'טיוטה': { color: 'text-slate-600', bg: 'bg-slate-50 dark:bg-slate-900/20', icon: '📝' },
-  'נשלח': { color: 'text-blue-600', bg: 'bg-blue-50/50 dark:bg-blue-900/10', icon: '📤' },
-  'נצפה': { color: 'text-amber-600', bg: 'bg-amber-50/50 dark:bg-amber-900/10', icon: '👁' },
-  'רוצה לחשוב': { color: 'text-purple-600', bg: 'bg-purple-50/50 dark:bg-purple-900/10', icon: '🤔' },
+  'טיוטה': { color: 'text-[#003D30]', bg: 'bg-[#F3F5F1] dark:bg-slate-900/20', icon: '📝' },
+  'נשלח': { color: 'text-[#476356]', bg: 'bg-[#E8EDE5]/50 dark:bg-[#003D30]/10', icon: '📤' },
+  'נצפה': { color: 'text-[#8A6230]', bg: 'bg-[#F5EEE0]/50 dark:bg-[#8A6230]/10', icon: '👁' },
+  'רוצה לחשוב': { color: 'text-[#476356]', bg: 'bg-[#E8EDE5]/50 dark:bg-[#003D30]/10', icon: '🤔' },
 };
 
 export default function FollowUpQueuePage() {

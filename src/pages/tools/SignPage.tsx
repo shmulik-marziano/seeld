@@ -16,10 +16,10 @@ const MOCK_SIGNATURES = [
 ];
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  "נחתם": { bg: "#dcfce7", text: "#166534" },
-  "נשלח": { bg: "#dbeafe", text: "#1e40af" },
-  "ממתין": { bg: "#fef3c7", text: "#92400e" },
-  "פג תוקף": { bg: "#fee2e2", text: "#991b1b" },
+  "נחתם": { bg: "#E8EDE5", text: "#2F6B4E" },
+  "נשלח": { bg: "#E8EDE5", text: "#476356" },
+  "ממתין": { bg: "#F5EEE0", text: "#8A6230" },
+  "פג תוקף": { bg: "#F3E2D8", text: "#9A4520" },
 };
 
 export default function SignPage() {
@@ -30,9 +30,9 @@ export default function SignPage() {
 
   const stats = [
     { label: "מסמכים שנחתמו", value: "89", change: "+12", icon: PenTool, color: tool.color },
-    { label: "ממתינים לחתימה", value: "7", change: "-2", icon: Clock, color: "#f59e0b" },
-    { label: "שיעור חתימה", value: "92%", change: "+3%", icon: CheckCircle, color: "#059669" },
-    { label: "פגי תוקף", value: "3", change: "+1", icon: AlertTriangle, color: "#e11d48" },
+    { label: "ממתינים לחתימה", value: "7", change: "-2", icon: Clock, color: "#CBA064" },
+    { label: "שיעור חתימה", value: "92%", change: "+3%", icon: CheckCircle, color: "#2F6B4E" },
+    { label: "פגי תוקף", value: "3", change: "+1", icon: AlertTriangle, color: "#BD582D" },
   ];
 
   return (
@@ -44,10 +44,10 @@ export default function SignPage() {
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: s.color + "15" }}>
                 <s.icon className="w-5 h-5" style={{ color: s.color }} />
               </div>
-              <span className="text-xs text-green-600 font-medium">{s.change}</span>
+              <span className="text-xs text-[#2F6B4E] font-medium">{s.change}</span>
             </div>
-            <p className="text-2xl font-bold text-gray-800">{s.value}</p>
-            <p className="text-sm text-gray-500 mt-0.5">{s.label}</p>
+            <p className="text-2xl font-bold text-[#003D30]">{s.value}</p>
+            <p className="text-sm text-[#476356] mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
@@ -55,11 +55,11 @@ export default function SignPage() {
       <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-4 mb-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#476356]" />
             <input
               type="text"
               placeholder="חיפוש מסמך חתימה..."
-              className="w-full pr-10 pl-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#003D30]/20"
+              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#003D30]/20"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -74,16 +74,16 @@ export default function SignPage() {
       <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-16 text-center">
-            <div className="w-16 h-16 rounded-full bg-gray-100 mx-auto mb-4 flex items-center justify-center">
-              <PenTool className="w-8 h-8 text-gray-300" />
+            <div className="w-16 h-16 rounded-full bg-[#E8EDE5] mx-auto mb-4 flex items-center justify-center">
+              <PenTool className="w-8 h-8 text-[#8FA396]" />
             </div>
-            <p className="text-gray-500 font-medium mb-1">אין מסמכי חתימה</p>
-            <p className="text-sm text-gray-400">שלח מסמך חדש לחתימה דיגיטלית</p>
+            <p className="text-[#476356] font-medium mb-1">אין מסמכי חתימה</p>
+            <p className="text-sm text-[#476356]">שלח מסמך חדש לחתימה דיגיטלית</p>
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-gray-50 text-gray-500">
+              <tr className="bg-[#F3F5F1] text-[#476356]">
                 <th className="text-right px-4 py-3 font-medium">לקוח</th>
                 <th className="text-right px-4 py-3 font-medium">מסמך</th>
                 <th className="text-right px-4 py-3 font-medium">סוג</th>
@@ -97,20 +97,20 @@ export default function SignPage() {
               {filtered.map((s) => {
                 const statusColor = STATUS_COLORS[s.status] || STATUS_COLORS["ממתין"];
                 return (
-                  <tr key={s.id} className="border-t border-gray-100 hover:bg-gray-50/50 transition-colors">
-                    <td className="px-4 py-3 font-medium text-gray-800">{s.client}</td>
-                    <td className="px-4 py-3 text-gray-700">{s.document}</td>
-                    <td className="px-4 py-3 text-gray-600">{s.type}</td>
-                    <td className="px-4 py-3 text-gray-500 text-xs">{s.sentTo}</td>
+                  <tr key={s.id} className="border-t border-[#E1E8E1] hover:bg-[#F3F5F1]/50 transition-colors">
+                    <td className="px-4 py-3 font-medium text-[#003D30]">{s.client}</td>
+                    <td className="px-4 py-3 text-[#24483C]">{s.document}</td>
+                    <td className="px-4 py-3 text-[#476356]">{s.type}</td>
+                    <td className="px-4 py-3 text-[#476356] text-xs">{s.sentTo}</td>
                     <td className="px-4 py-3 text-center">
                       <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: statusColor.bg, color: statusColor.text }}>
                         {s.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-center text-gray-500 text-xs">{s.signedAt || "—"}</td>
+                    <td className="px-4 py-3 text-center text-[#476356] text-xs">{s.signedAt || "—"}</td>
                     <td className="px-4 py-3 text-center">
-                      <button className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors">
-                        <MoreVertical className="w-4 h-4 text-gray-400" />
+                      <button className="p-1.5 hover:bg-[#E8EDE5] rounded-lg transition-colors">
+                        <MoreVertical className="w-4 h-4 text-[#476356]" />
                       </button>
                     </td>
                   </tr>

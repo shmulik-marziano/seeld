@@ -3,52 +3,45 @@ import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { articles, type Article } from "@/data/articles";
 import { Link } from "react-router-dom";
-import { BODY, DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_MINT, PASTEL_PEACH, TURQ } from "@/lib/brand";
-import { ShieldFigure } from "@/components/brand/Figures";
+import { BrandDots, LeafCanopy } from "@/components/brand/Elements";
+import { BrandIcon } from "@/components/brand/BrandIcon";
+import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN } from "@/lib/brand";
 
-// SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
+// Health, life and nursing overview: one vector element in the hero margin,
+// the service doors, the guides and the central path. No full illustration here.
 
-// The unified SEELD article card — .dna-concept tile, whole-tile link,
-// .dna-hover quiet lift (Snap motion). Metadata sits under the title.
+// Article card: white tile, whole-tile link. Text first, no stock photo.
 const ArticleTile = ({ article }: { article: Article }) => (
   <Link
     to={`/article/${article.id}`}
-    className="dna-concept dna-hover group flex h-full flex-col overflow-hidden !p-0"
+    className="group dna-concept dna-hover flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
   >
-    <div className="aspect-[16/10] overflow-hidden">
-      <img src={article.image} alt="" loading="lazy" className="w-full h-full object-cover" />
-    </div>
-    <div className="flex flex-1 flex-col p-5 sm:p-6">
-      <h3 className="text-[17px] leading-snug" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
-        {article.title}
-      </h3>
-      <div
-        className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[11px] tracking-[0.08em]"
-        style={{ fontFamily: MONO, color: MUTED }}
-      >
-        <span>{article.category}</span>
-        <span className="tabular-nums">
-          {article.date} · <span dir="ltr">{article.readTime}</span>
-        </span>
-      </div>
-      <p className="mt-2.5 text-[14px] leading-[1.7] line-clamp-2" style={{ color: BODY }}>{article.subtitle}</p>
-      <span className="mt-auto pt-5 inline-flex items-center gap-2 text-[13px] font-medium text-[#003D30]">
+    <span className="text-[14px] font-bold" style={{ color: MUTED }}>{article.category}</span>
+    <h3 className="mt-2 text-[18px] leading-snug" style={{ color: GREEN }}>{article.title}</h3>
+    <p className="mt-2.5 text-[15px] leading-[1.7] line-clamp-3" style={{ color: BODY }}>{article.subtitle}</p>
+    <div className="mt-auto pt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+      <span className="text-[14px] tabular-nums" style={{ color: MUTED }}>
+        {article.date} · {article.readTime}
+      </span>
+      <span className="link-rule text-[15px]">
         קראו עוד
-        <span className="inline-block transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
+        <BrandIcon name="arrow-left" size={18} className="transition-transform group-hover:-translate-x-1" />
       </span>
     </div>
   </Link>
 );
 
-// DNA v3: the heading starts its block — no eyebrow, no ornamental index.
 const SectionHead = ({ title, lede }: { title: string; lede?: string }) => (
-  <div className="mb-12 sm:mb-14">
-    <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.6rem, 3vw, 2.2rem)" }}>
+  <div className="mb-10 sm:mb-12">
+    <BrandDots className="mb-4" />
+    <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
       {title}
     </h2>
-    {lede && <p className="mt-4 text-base leading-[1.85] max-w-xl" style={{ color: MUTED }}>{lede}</p>}
+    {lede && <p className="mt-4 text-[17px] leading-[1.7] max-w-xl" style={{ color: MUTED }}>{lede}</p>}
   </div>
 );
+
+const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
 
 const Wellness = () => {
   const healthInsuranceArticles = articles.filter(article =>
@@ -56,63 +49,80 @@ const Wellness = () => {
     article.category.includes("ביטוח חיים")
   );
 
-  const services = [
-    { title: "ביטוח בריאות פרטי", description: "כיסוי רפואי מקיף לטיפולים, ניתוחים ותרופות" },
-    { title: "ביטוח חיים", description: "הגנה כלכלית למשפחה, לפי מה שבאמת צריך" },
-    { title: "ביטוח סיעודי", description: "כיסוי מקיף למקרה של צורך בטיפול סיעודי" },
+  const services: { title: string; description: string; href?: string }[] = [
+    { title: "ביטוח בריאות פרטי", description: "כיסוי רפואי מקיף לטיפולים, ניתוחים ותרופות", href: "/insurance/health" },
+    { title: "ביטוח חיים", description: "הגנה כלכלית למשפחה, לפי מה שבאמת צריך", href: "/insurance/life" },
+    { title: "ביטוח סיעודי", description: "כיסוי מקיף למקרה של צורך בטיפול סיעודי", href: "/insurance/nursing" },
     { title: "ליווי מקצועי", description: "צוות יועצים מנוסה לבחירת הפוליסה המתאימה" },
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
       <Header />
 
-      {/* Hero — white canvas, pastel circles; the shield peeks from the corner */}
-      <section className="dna-page">
+      {/* HERO — ivory canvas, one vector element in the margin */}
+      <section className="dna-page overflow-hidden">
         <div className="dna-circles" aria-hidden="true">
           <div
-            className="dna-circ"
-            style={{ width: 260, height: 260, top: -110, left: -90, backgroundColor: PASTEL_MINT, opacity: 0.5 }}
+            className="dna-circ hidden md:block"
+            style={{ width: 300, height: 300, top: -140, left: -110, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
           />
           <div
-            className="dna-circ"
-            style={{ width: 200, height: 200, bottom: -100, right: "20%", backgroundColor: PASTEL_PEACH, opacity: 0.5 }}
+            className="dna-circ hidden md:block"
+            style={{ width: 180, height: 180, bottom: -100, left: "22%", backgroundColor: PASTEL_SAND, opacity: 0.7 }}
           />
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-14 sm:pb-20">
-          <nav aria-label="ניווט משני" className="flex items-center gap-2 text-[13px]" style={{ color: MUTED }}>
-            <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
-            <span aria-hidden="true">/</span>
-            <span style={{ color: NAVY }}>שירותים ופעולות</span>
+        <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-12 sm:pb-16">
+          <nav aria-label="ניווט משני" className="mb-8 sm:mb-12 flex items-center gap-2 text-[14px]" style={{ color: MUTED }}>
+            <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
+            <BrandIcon name="arrow-left" size={14} />
+            <span className="font-bold" style={{ color: GREEN }} aria-current="page">שירותים ופעולות</span>
           </nav>
-          <div className="mt-10 sm:mt-14 max-w-3xl">
-            <h1 className="dna-display leading-[1.15]" style={{ fontSize: "clamp(34px, 5vw, 50px)" }}>
-              שירותים ופעולות
-            </h1>
-            <p className="mt-5 text-lg sm:text-xl leading-[1.8] max-w-2xl" style={{ color: MUTED }}>
-              ביטוח בריאות, חיים וסיעוד: המידע, הכלים וההשוואות, במקום אחד.
-            </p>
+          <div className="relative">
+            <LeafCanopy className="hidden lg:block absolute -top-8 left-0 w-56 opacity-90" />
+            <div className="max-w-3xl">
+              <h1 className="dna-display leading-[1.15]" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
+                שירותים ופעולות
+              </h1>
+              <p className="mt-5 text-[17px] sm:text-[18px] leading-[1.7] max-w-2xl" style={{ color: MUTED }}>
+                ביטוח בריאות, חיים וסיעוד: המידע, הכלים וההשוואות, במקום אחד.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
+                <Link to="/contact" className="btn-primary sm:min-w-[220px]">
+                  תיאום פגישה
+                </Link>
+                <Link to="/#portfolio-review" className="btn-secondary sm:min-w-[200px]">
+                  בדיקת תיק 360
+                </Link>
+              </div>
+              <button type="button" className="mt-6 link-rule text-[15px]" onClick={openChat}>
+                <BrandIcon name="message" size={18} />
+                שאלו את היועץ הדיגיטלי
+              </button>
+            </div>
           </div>
         </div>
-        <ShieldFigure className="absolute left-2 bottom-2 w-16 h-16 opacity-60 rotate-12 pointer-events-none" />
       </section>
 
       <main>
         {/* Services */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+        <section className="border-t bg-white" style={{ borderColor: LINE }}>
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
               <SectionHead title="השירותים שלנו" />
             </ScrollReveal>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
               {services.map((service, i) => (
                 <ScrollReveal key={service.title} delay={i * 60}>
-                  <div className="h-full">
-                    <div className="h-[3px] w-9 rounded-full mb-5" style={{ backgroundColor: TURQ }} aria-hidden="true" />
-                    <h3 className="text-[19px] mb-2.5" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
-                      {service.title}
-                    </h3>
-                    <p className="text-[14.5px] leading-[1.8]" style={{ color: BODY }}>{service.description}</p>
+                  <div className="h-full border-t pt-5" style={{ borderColor: LINE }}>
+                    <h3 className="text-[19px] mb-2" style={{ color: GREEN }}>{service.title}</h3>
+                    <p className="text-[16px] leading-[1.7]" style={{ color: BODY }}>{service.description}</p>
+                    {service.href && (
+                      <Link to={service.href} className="link-rule mt-4 text-[15px]">
+                        לפרטי הביטוח
+                        <BrandIcon name="arrow-left" size={18} />
+                      </Link>
+                    )}
                   </div>
                 </ScrollReveal>
               ))}
@@ -122,14 +132,14 @@ const Wellness = () => {
 
         {/* Articles */}
         <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
               <SectionHead
                 title="מאמרים ומדריכים"
                 lede="כל מה שצריך לדעת על ביטוח בריאות וביטוח חיים"
               />
             </ScrollReveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {healthInsuranceArticles.map((article) => (
                 <ArticleTile key={article.id} article={article} />
               ))}
@@ -137,15 +147,15 @@ const Wellness = () => {
           </div>
         </section>
 
-        {/* Why SEELD */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+        {/* Why us */}
+        <section className="border-t bg-white" style={{ borderColor: LINE }}>
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
-              <SectionHead title="למה SEELD?" />
+              <SectionHead title="למה שילד?" />
             </ScrollReveal>
-            <div className="max-w-3xl space-y-5 text-base sm:text-[17px] leading-[1.9]" style={{ color: BODY }}>
+            <div className="max-w-3xl space-y-5 text-[17px] leading-[1.8]" style={{ color: BODY }}>
               <p>
-                לכל לקוח ב-SEELD יש יועץ אחד שמכיר את התיק ומלווה אותו,
+                לכל לקוח בשילד יש יועץ אחד שמכיר את התיק ומלווה אותו,
                 מהייעוץ הראשוני ועד הטיפול בתביעות.
               </p>
               <p>
@@ -156,28 +166,24 @@ const Wellness = () => {
           </div>
         </section>
 
-        {/* CTA — institutional navy band */}
-        <section style={{ backgroundColor: NAVY }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        {/* CLOSING — deep green band, the central path */}
+        <section className="dna-navy-band">
+          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
-              <div className="max-w-3xl">
-                <h2
-                  className="text-white leading-tight"
-                  style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.5px" }}
-                >
-                  רוצים לשמוע עוד?
-                </h2>
-                <p className="mt-3 text-base leading-[1.85] max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
-                  השאירו פרטים ונחזור אליכם עם השוואה מסודרת.
-                </p>
-                <div className="mt-8">
-                  <Link
-                    to="/contact"
-                    className="inline-flex items-center justify-center rounded-lg px-9 py-4 bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
-                  >
-                    צרו קשר
-                  </Link>
-                </div>
+              <BrandDots className="mb-4" />
+              <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(28px, 3.2vw, 32px)" }}>
+                רוצים לשמוע עוד?
+              </h2>
+              <p className="text-[17px] leading-[1.7] mb-8 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
+                השאירו פרטים ונחזור אליכם עם השוואה מסודרת. ללא עלות וללא התחייבות.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
+                  בדיקת תיק 360
+                </Link>
+                <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
+                  תיאום פגישה
+                </Link>
               </div>
             </ScrollReveal>
           </div>

@@ -46,3 +46,4 @@ playwright-report/
 # Two of them carry hardcoded live tokens (see the README in there), and this
 # is a public repo — keep the export out until those secrets are rotated.
 supabase/functions-export/
+dist-*

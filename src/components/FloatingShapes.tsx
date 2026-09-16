@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { GREEN, LINE, SAGE, SAND } from "@/lib/brand";
 
 /*
   Floating ambient shapes that drift across the viewport.
   They sit behind all content (z-0, pointer-events-none) and use
   CSS animations only — zero JS animation loops, zero re-renders.
+  Colors come from the brand tokens (STYLESEED.md); the drift is skipped
+  entirely when the visitor prefers reduced motion.
 */
 
 interface Shape {
@@ -19,10 +22,8 @@ interface Shape {
   opacity: number;
 }
 
-// Quiet greyscale drift — decoration never carries color (STYLESEED.md)
-const COLORS = [
-  "#003D30", "#a3a3a3", "#d4d4d4", "#476356",
-];
+// Quiet brand-tone drift — sage, sand, hairline and deep green at whisper opacity
+const COLORS = [GREEN, SAGE, LINE, SAND];
 
 const DRIFTS: Shape["drift"][] = ["float-a", "float-b", "float-c", "float-d"];
 
@@ -81,7 +82,8 @@ export default function FloatingShapes() {
   const [shapes, setShapes] = useState<Shape[]>([]);
 
   useEffect(() => {
-    // Generate once on mount — fewer on mobile
+    // Generate once on mount — fewer on mobile, none when motion is reduced
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
     const isMobile = window.innerWidth < 768;
     setShapes(generateShapes(isMobile ? 10 : 18));
   }, []);

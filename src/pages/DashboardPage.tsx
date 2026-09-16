@@ -27,13 +27,13 @@ import doodleLightbulb from '@/assets/doodle-lightbulb.png';
 // ─── Palette ──────────────────────────────────────────────────────────────────
 const C = {
   teal:   '#003D30',
-  orange: '#b45309',
-  coral:  '#b91c1c',
-  green:  '#15803d',
-  yellow: '#a16207',
-  purple: '#4d4d4d',
-  dark:   '#262626',
-  gray:   '#94a3b8',
+  orange: '#8A6230',
+  coral:  '#9A4520',
+  green:  '#2F6B4E',
+  yellow: '#8A6230',
+  purple: '#476356',
+  dark:   '#003D30',
+  gray:   '#8FA396',
 };
 
 type BubbleType = { label: string; icon: React.ElementType; path: string | null; e: boolean };
@@ -523,7 +523,7 @@ function HoneycombCanvas({ bubbles, hiddenMap, editMode, onToggleBubble, onBubbl
                   initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0, opacity: 0 }}
                   onClick={e => { e.stopPropagation(); onToggleBubble(b.sectionTitle, b.originalIndex); }}
-                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg z-20 border-2 border-white"
+                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#BD582D] text-white flex items-center justify-center shadow-lg z-20 border-2 border-white"
                 >
                   <X className="w-3 h-3" />
                 </motion.button>
@@ -624,7 +624,7 @@ export default function DashboardPage() {
   const totalBubbles = SECTIONS.reduce((s, sec) => s + sec.bubbles.length, 0);
 
   return (
-    <div className="-m-3 sm:-m-4 md:-m-6 relative" style={{ backgroundColor: '#fafafa' }} dir="rtl">
+    <div className="-m-3 sm:-m-4 md:-m-6 relative" style={{ backgroundColor: '#FAF7EF' }} dir="rtl">
 
       {/* Wiggle keyframe */}
       <style>{`
@@ -637,9 +637,9 @@ export default function DashboardPage() {
 
       {/* ── Background ── */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden select-none z-0">
-        <div className="absolute -top-48 -right-48 w-[560px] h-[560px] rounded-full blur-[100px] opacity-[0.08]" style={{ backgroundColor: '#0a0a0a' }} />
-        <div className="absolute top-[40%] -left-52 w-[420px] h-[420px] rounded-full blur-[100px] opacity-[0.06]" style={{ backgroundColor: '#b45309' }} />
-        <div className="absolute bottom-0 right-[35%] w-[360px] h-[360px] rounded-full blur-[100px] opacity-[0.05]" style={{ backgroundColor: '#0a0a0a' }} />
+        <div className="absolute -top-48 -right-48 w-[560px] h-[560px] rounded-full blur-[100px] opacity-[0.08]" style={{ backgroundColor: '#003D30' }} />
+        <div className="absolute top-[40%] -left-52 w-[420px] h-[420px] rounded-full blur-[100px] opacity-[0.06]" style={{ backgroundColor: '#8A6230' }} />
+        <div className="absolute bottom-0 right-[35%] w-[360px] h-[360px] rounded-full blur-[100px] opacity-[0.05]" style={{ backgroundColor: '#003D30' }} />
         <svg className="absolute top-0 right-[2%] w-[500px] h-[650px] opacity-[0.1]" viewBox="0 0 500 600" fill="none">
           <motion.path d="M450,30 C380,50 300,130 320,230 C340,330 220,380 160,450 C130,490 140,540 200,560"
             stroke="#003D30" strokeWidth="2.5" strokeDasharray="10 8" strokeLinecap="round" fill="none"
@@ -661,9 +661,9 @@ export default function DashboardPage() {
       <div className="relative z-10 flex min-h-screen">
 
         {/* ══ LEFT LEGEND (desktop only, sticky) ══ */}
-        <aside className="hidden lg:flex flex-col gap-1.5 pt-6 pb-10 px-3 sticky top-0 h-screen overflow-y-auto flex-shrink-0 border-l border-gray-100/80"
-          style={{ width: 178, backgroundColor: 'rgba(248,249,252,0.85)', backdropFilter: 'blur(10px)' }}>
-          <p className="text-[9px] font-bold tracking-[0.22em] uppercase text-gray-400 px-1 mb-2">קטגוריות</p>
+        <aside className="hidden lg:flex flex-col gap-1.5 pt-6 pb-10 px-3 sticky top-0 h-screen overflow-y-auto flex-shrink-0 border-l border-[#E1E8E1]/80"
+          style={{ width: 178, backgroundColor: 'rgba(250,247,239,0.85)', backdropFilter: 'blur(10px)' }}>
+          <p className="text-[9px] font-bold tracking-[0.22em] uppercase text-[#476356] px-1 mb-2">קטגוריות</p>
           {SECTIONS.map(sec => {
             const isActive = activeSection === sec.title;
             return (
@@ -698,7 +698,7 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               onClick={() => setActiveSection(null)}
-              className="flex items-center justify-center gap-1.5 mt-3 px-3 py-2 rounded-full border-2 border-dashed border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors"
+              className="flex items-center justify-center gap-1.5 mt-3 px-3 py-2 rounded-full border-2 border-dashed border-[#CCD6CC] text-[#476356] hover:border-gray-400 hover:text-[#476356] transition-colors"
             >
               <RotateCcw className="w-3 h-3" />
               <span className="text-[10px] font-bold">הצג הכל</span>
@@ -716,7 +716,7 @@ export default function DashboardPage() {
               <div>
                 <div className="text-sm font-bold text-[#003D30] leading-none"
                   style={{ fontFamily: "sans-serif" }}>SEELD</div>
-                <div className="text-[8px] font-bold tracking-[0.2em] text-gray-400 uppercase">פלטפורמה</div>
+                <div className="text-[8px] font-bold tracking-[0.2em] text-[#476356] uppercase">פלטפורמה</div>
               </div>
             </button>
 
@@ -727,7 +727,7 @@ export default function DashboardPage() {
                   className="w-9 h-9 rounded-full flex items-center justify-center shadow-sm transition-all"
                   style={{
                     backgroundColor: editMode || menuOpen ? '#003D30' : 'white',
-                    color: editMode || menuOpen ? '#ffffff' : '#94a3b8',
+                    color: editMode || menuOpen ? '#ffffff' : '#8FA396',
                     border: editMode ? '2px solid #003D30' : '2px solid #e2e8f0',
                   }}>
                   <PenTool className="w-3.5 h-3.5" />
@@ -742,48 +742,48 @@ export default function DashboardPage() {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.88, y: -10 }}
                         transition={{ type: 'spring', stiffness: 380, damping: 26 }}
-                        className="absolute left-0 top-11 z-50 w-52 rounded-2xl overflow-hidden border border-gray-100"
+                        className="absolute left-0 top-11 z-50 w-52 rounded-2xl overflow-hidden border border-[#E1E8E1]"
                         style={{ backgroundColor: 'white', boxShadow: '0 12px 40px rgba(0,0,0,0.16)' }}
                       >
                         <div className="px-4 pt-3 pb-1.5">
-                          <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-gray-400">ניהול לוח</p>
+                          <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-[#476356]">ניהול לוח</p>
                         </div>
 
                         <button onClick={() => { setEditMode(v => !v); setMenuOpen(false); }}
-                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-right">
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#F3F5F1] transition-colors text-right">
                           <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-                            style={{ backgroundColor: editMode ? '#003D30' : '#f1f5f9' }}>
+                            style={{ backgroundColor: editMode ? '#003D30' : '#EEF2EC' }}>
                             <PenTool className="w-4 h-4" style={{ color: editMode ? '#ffffff' : '#64748b' }} />
                           </div>
                           <div>
-                            <p className="text-sm font-bold text-gray-800 leading-none mb-0.5">
+                            <p className="text-sm font-bold text-[#003D30] leading-none mb-0.5">
                               {editMode ? 'סיום עריכה' : 'עריכת לוח'}
                             </p>
-                            <p className="text-[10px] text-gray-400">הסתר ושחזר בועות</p>
+                            <p className="text-[10px] text-[#476356]">הסתר ושחזר בועות</p>
                           </div>
                         </button>
 
                         {totalHidden > 0 && (
                           <button onClick={showAll}
-                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-blue-50 transition-colors text-right border-t border-gray-50">
-                            <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                              <Eye className="w-4 h-4 text-blue-500" />
+                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#E8EDE5] transition-colors text-right border-t border-[#E1E8E1]">
+                            <div className="w-8 h-8 rounded-xl bg-[#E8EDE5] flex items-center justify-center flex-shrink-0">
+                              <Eye className="w-4 h-4 text-[#476356]" />
                             </div>
                             <div>
-                              <p className="text-sm font-bold text-blue-700 leading-none mb-0.5">הצג הכל</p>
-                              <p className="text-[10px] text-blue-400">{totalHidden} בועות מוסתרות</p>
+                              <p className="text-sm font-bold text-[#476356] leading-none mb-0.5">הצג הכל</p>
+                              <p className="text-[10px] text-[#476356]">{totalHidden} בועות מוסתרות</p>
                             </div>
                           </button>
                         )}
 
                         <button onClick={resetAll}
-                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors text-right border-t border-gray-50">
-                          <div className="w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
-                            <RotateCcw className="w-4 h-4 text-red-400" />
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#F3E2D8] transition-colors text-right border-t border-[#E1E8E1]">
+                          <div className="w-8 h-8 rounded-xl bg-[#F3E2D8] flex items-center justify-center flex-shrink-0">
+                            <RotateCcw className="w-4 h-4 text-[#9A4520]" />
                           </div>
                           <div>
-                            <p className="text-sm font-bold text-red-600 leading-none mb-0.5">איפוס</p>
-                            <p className="text-[10px] text-red-400">חזרה לברירת מחדל</p>
+                            <p className="text-sm font-bold text-[#9A4520] leading-none mb-0.5">איפוס</p>
+                            <p className="text-[10px] text-[#9A4520]">חזרה לברירת מחדל</p>
                           </div>
                         </button>
                       </motion.div>
@@ -794,7 +794,7 @@ export default function DashboardPage() {
 
               {/* Sign out */}
               <button onClick={signOutFn}
-                className="w-9 h-9 rounded-full flex items-center justify-center border-2 border-gray-100 text-gray-300 hover:text-red-400 hover:border-red-100 hover:bg-red-50 transition-all">
+                className="w-9 h-9 rounded-full flex items-center justify-center border-2 border-[#E1E8E1] text-[#8FA396] hover:text-[#9A4520] hover:border-red-100 hover:bg-[#F3E2D8] transition-all">
                 <LogOut className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -806,19 +806,19 @@ export default function DashboardPage() {
               <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }} className="overflow-hidden mb-5">
                 <div className="flex items-center justify-between px-5 py-3 rounded-2xl"
-                  style={{ backgroundColor: '#0a0a0a', boxShadow: '0 4px 20px rgba(23,23,23,0.25)' }}>
+                  style={{ backgroundColor: '#003D30', boxShadow: '0 4px 20px rgba(0,61,48,0.25)' }}>
                   <div className="flex items-center gap-2.5">
                     <div className="w-7 h-7 rounded-full bg-teal-400/20 flex items-center justify-center">
-                      <PenTool className="w-3.5 h-3.5 text-teal-300" />
+                      <PenTool className="w-3.5 h-3.5 text-[#A9C4A5]" />
                     </div>
                     <div>
                       <p className="text-sm font-bold text-white leading-none">מצב עריכה פעיל</p>
-                      <p className="text-[10px] text-teal-300/70 mt-0.5">לחץ ✕ להסתרת בועה · לחץ + לשחזור</p>
+                      <p className="text-[10px] text-[#A9C4A5] mt-0.5">לחץ ✕ להסתרת בועה · לחץ + לשחזור</p>
                     </div>
                   </div>
                   <button onClick={() => setEditMode(false)}
                     className="flex items-center gap-1.5 px-3.5 py-2 rounded-full font-bold text-xs"
-                    style={{ backgroundColor: '#0a0a0a', color: '#ffffff' }}>
+                    style={{ backgroundColor: '#003D30', color: '#ffffff' }}>
                     <Check className="w-3.5 h-3.5" /> סיום
                   </button>
                 </div>
@@ -828,11 +828,11 @@ export default function DashboardPage() {
 
           {/* Greeting */}
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
-            <p className="text-[9px] font-bold tracking-[0.26em] uppercase text-gray-400 mb-0.5"
+            <p className="text-[9px] font-bold tracking-[0.26em] uppercase text-[#476356] mb-0.5"
               style={{ fontFamily: "sans-serif" }}>SEELD • פלטפורמה</p>
             <h1 className="text-3xl font-bold text-[#003D30] leading-none"
               style={{ fontFamily: "'Rubik', Arial, sans-serif" }}>{getGreeting()}</h1>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-[#476356] mt-1">
               {activeSection
                 ? <><span className="text-[#003D30] font-bold">{activeSection}</span>{' · '}{displayBubbles.length} בועות</>
                 : <>{totalBubbles - totalHidden} בועות פעילות

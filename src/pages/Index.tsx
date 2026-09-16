@@ -489,21 +489,23 @@ const Index = () => {
 
             <ol className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 max-w-4xl">
               {processSteps.map((step, i) => (
-                <ScrollReveal key={step.title} delay={i * 70}>
-                  <li className="dna-concept h-full !p-6">
-                    <h3 className="text-[20px] mb-4" style={{ color: GREEN }}>{step.title}</h3>
-                    <dl className="space-y-3 text-[15px] leading-[1.7]">
-                      <div>
-                        <dt className="font-bold" style={{ color: GREEN }}>אתם</dt>
-                        <dd style={{ color: BODY }}>{step.you}</dd>
-                      </div>
-                      <div>
-                        <dt className="font-bold" style={{ color: GREEN }}>אנחנו</dt>
-                        <dd style={{ color: BODY }}>{step.we}</dd>
-                      </div>
-                    </dl>
-                  </li>
-                </ScrollReveal>
+                <li key={step.title} className="h-full">
+                  <ScrollReveal delay={i * 70} className="h-full">
+                    <div className="dna-concept h-full !p-6">
+                      <h3 className="text-[20px] mb-4" style={{ color: GREEN }}>{step.title}</h3>
+                      <dl className="space-y-3 text-[15px] leading-[1.7]">
+                        <div>
+                          <dt className="font-bold" style={{ color: GREEN }}>אתם</dt>
+                          <dd style={{ color: BODY }}>{step.you}</dd>
+                        </div>
+                        <div>
+                          <dt className="font-bold" style={{ color: GREEN }}>אנחנו</dt>
+                          <dd style={{ color: BODY }}>{step.we}</dd>
+                        </div>
+                      </dl>
+                    </div>
+                  </ScrollReveal>
+                </li>
               ))}
             </ol>
 

@@ -213,7 +213,7 @@ export default function ExecutionSummaryPage() {
         <div className="flex gap-2">
           {activeSummary && (
             <>
-              <Button variant="outline" size="sm" onClick={handleShareWhatsApp} className="gap-1.5 text-[#15803d] border-[#15803d]/30 hover:bg-[#15803d]/5 rounded-full">
+              <Button variant="outline" size="sm" onClick={handleShareWhatsApp} className="gap-1.5 text-[#2F6B4E] border-[#2F6B4E]/30 hover:bg-[#2F6B4E]/5 rounded-full">
                 <MessageCircle className="h-3.5 w-3.5" />WhatsApp
               </Button>
               <Button variant="outline" size="sm" onClick={handleShareLink} className="gap-1.5 rounded-full border-[#003D30]/30 hover:bg-[#003D30]/10">
@@ -222,8 +222,8 @@ export default function ExecutionSummaryPage() {
               <Button variant="outline" size="sm" onClick={handleExportPdf} className="gap-1.5 rounded-full">
                 <Download className="h-3.5 w-3.5" />PDF
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setShowPresentation(true)} className="gap-1.5 rounded-full border-[#b45309]/30 hover:bg-[#b45309]/10">
-                <Presentation className="h-3.5 w-3.5 text-[#b45309]" />מצגת
+              <Button variant="outline" size="sm" onClick={() => setShowPresentation(true)} className="gap-1.5 rounded-full border-[#8A6230]/30 hover:bg-[#8A6230]/10">
+                <Presentation className="h-3.5 w-3.5 text-[#8A6230]" />מצגת
               </Button>
               <Button variant="outline" size="sm" onClick={handleSave} disabled={saving} className="gap-1.5 rounded-full">
                 <Save className="h-3.5 w-3.5" />שמירה
@@ -293,15 +293,15 @@ export default function ExecutionSummaryPage() {
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">בוצע מלא</p>
-                  <p className="font-bold text-[#15803d]">{completedCount}/{totalItems}</p>
+                  <p className="font-bold text-[#2F6B4E]">{completedCount}/{totalItems}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">בוצע חלקית</p>
-                  <p className="font-medium text-[#b45309]">{partialCount}</p>
+                  <p className="font-medium text-[#8A6230]">{partialCount}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">לא בוצע</p>
-                  <p className="font-medium text-[#b91c1c]">{totalItems - completedCount - partialCount}</p>
+                  <p className="font-medium text-[#9A4520]">{totalItems - completedCount - partialCount}</p>
                 </div>
               </div>
             </CardContent>
@@ -320,7 +320,7 @@ export default function ExecutionSummaryPage() {
 
               return (
                 <motion.div key={si.id} variants={item} initial="hidden" animate="show" transition={{ delay: idx * 0.05 }}>
-                  <Card className={`transition-all rounded-2xl border-border/50 shadow-sm ${si.executionStatus === 'fully_executed' ? 'border-[#15803d]/30 bg-[#15803d]/5' : si.executionStatus === 'partially_executed' ? 'border-[#b45309]/30 bg-[#b45309]/5' : ''}`}>
+                  <Card className={`transition-all rounded-2xl border-border/50 shadow-sm ${si.executionStatus === 'fully_executed' ? 'border-[#2F6B4E]/30 bg-[#2F6B4E]/5' : si.executionStatus === 'partially_executed' ? 'border-[#8A6230]/30 bg-[#8A6230]/5' : ''}`}>
                     <CardContent className="p-5 space-y-4">
                       {/* Header */}
                       <div className="flex items-start justify-between">
@@ -329,8 +329,8 @@ export default function ExecutionSummaryPage() {
                             <span className="font-bold text-sm">{rec?.title || 'המלצה'}</span>
                             {rec && <StatusBadge type="action" status={rec.actionType} />}
                             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                              si.executionStatus === 'fully_executed' ? 'bg-[#15803d]/10 text-[#15803d]' :
-                              si.executionStatus === 'partially_executed' ? 'bg-[#b45309]/10 text-[#b45309]' :
+                              si.executionStatus === 'fully_executed' ? 'bg-[#2F6B4E]/10 text-[#2F6B4E]' :
+                              si.executionStatus === 'partially_executed' ? 'bg-[#8A6230]/10 text-[#8A6230]' :
                               'bg-muted text-muted-foreground'
                             }`}>
                               {ITEM_STATUS_LABELS[si.executionStatus as ItemExecutionStatus]}
