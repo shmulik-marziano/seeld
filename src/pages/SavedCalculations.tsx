@@ -243,12 +243,8 @@ const SavedCalculations = () => {
                     style={{ backgroundColor: TINT_GOLD, borderColor: "#E8EDE5" }}
                   >
                     <span className="text-[15px] font-bold" style={{ color: NAVY }}>פתיחת מחשבון ←</span>
-                    <span
-                      className="text-[10px] tracking-[0.2em] font-bold"
-                      style={{ fontFamily: MONO, color: "#8A6230" }}
-                      dir="ltr"
-                    >
-                      NO SIGNUP · FREE
+                    <span className="text-[14px]" style={{ color: MUTED }}>
+                      ללא רישום וללא עלות
                     </span>
                   </Link>
                 </div>
@@ -264,8 +260,8 @@ const SavedCalculations = () => {
                       <div className="flex items-start justify-between gap-4">
                         <div className="min-w-0">
                           <div
-                            className="text-[11px] tracking-[0.16em] font-medium mb-1.5"
-                            style={{ fontFamily: MONO, color: TURQ_TEXT }}
+                            className="text-[14px] font-bold mb-1.5"
+                            style={{ color: TURQ_TEXT }}
                           >
                             {calculatorTypeLabels[calc.calculator_type] || calc.calculator_type}
                           </div>

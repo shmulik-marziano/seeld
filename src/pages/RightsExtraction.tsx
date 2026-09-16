@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import {
   BODY, DISPLAY, LINE, MUTED, NAVY, PASTEL_BLUE, PASTEL_PEACH, TURQ,
 } from "@/lib/brand";
-import { StatusPill } from "@/components/brand/Live";
 import { ProgressRail } from "@/components/brand/Strokes";
 
 // SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
@@ -144,39 +143,35 @@ const RightsExtraction = () => {
                 <button
                   type="button"
                   onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                  className="block dna-hover rounded-full"
-                  aria-label="פתיחת שיחה עם יועץ SEELD"
+                  className="link-rule text-[15px]"
                 >
-                  <StatusPill>היועץ מחובר עכשיו · שאלו אם זה רלוונטי אליכם</StatusPill>
+                  לא בטוחים אם זה רלוונטי אליכם? שאלו את היועץ הדיגיטלי
                 </button>
               </div>
             </ScrollReveal>
           </div>
         </section>
 
-        {/* CTA — institutional navy band */}
-        <section style={{ backgroundColor: NAVY }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        {/* CTA — deep green band, the central path */}
+        <section className="dna-navy-band">
+          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
             <h2
-              className="text-white leading-tight mb-3"
-              style={{
-                fontFamily: DISPLAY,
-                fontWeight: 700,
-                fontSize: "clamp(1.7rem, 3.2vw, 2.4rem)",
-                letterSpacing: "-0.5px",
-              }}
+              className="leading-tight mb-3"
+              style={{ color: "#FAF7EF", fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(26px, 3.2vw, 34px)" }}
             >
               נבדוק מה מגיע לכם
             </h2>
-            <p className="text-base leading-[1.85] mb-9 max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
+            <p className="text-[17px] leading-[1.7] mb-9 max-w-xl" style={{ color: "#A9C4A5" }}>
               הבדיקה ללא עלות וללא התחייבות. אם אין כלום, לפחות תדעו.
             </p>
-            <Link
-              to="/contact"
-              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[52px]"
-            >
-              בדיקת זכאות
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link to="/contact" className="btn-on-green sm:min-w-[220px]">
+                בדיקת זכאות
+              </Link>
+              <Link to="/#portfolio-review" className="btn-on-green-outline sm:min-w-[220px]">
+                בדיקת תיק 360
+              </Link>
+            </div>
           </div>
         </section>
       </main>

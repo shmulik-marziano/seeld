@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import {
   BODY, DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, TURQ_TEXT,
 } from "@/lib/brand";
-import { LiveDot, StatusPill } from "@/components/brand/Live";
+import { LiveDot } from "@/components/brand/Live";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
 // SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
@@ -307,8 +307,8 @@ export default function DirectDebit() {
             <div className="border-t pt-6" style={{ borderColor: LINE }}>
               <div className="flex items-center gap-2.5 mb-4">
                 <LiveDot size={7} />
-                <span className="text-[12px] tracking-[0.14em] font-medium" style={{ fontFamily: MONO, color: MUTED }} dir="ltr">
-                  RECEIVED
+                <span className="text-[14px] font-bold" style={{ color: MUTED }}>
+                  הטופס התקבל
                 </span>
               </div>
               <h1 className="dna-display leading-tight mb-3" style={{ fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}>
@@ -375,9 +375,6 @@ export default function DirectDebit() {
                 <span aria-hidden="true">←</span>
                 <span className="font-medium" style={{ color: NAVY }}>הוראת קבע</span>
               </nav>
-              <span className="text-[11px] tracking-[0.14em] font-medium" style={{ color: MUTED, fontFamily: MONO }} dir="ltr">
-                SECURE · PCI DSS
-              </span>
             </div>
 
             <h1 className="dna-display leading-[1.12] mb-4" style={{ fontSize: "clamp(1.9rem, 4.5vw, 2.8rem)" }}>
@@ -393,10 +390,9 @@ export default function DirectDebit() {
             <button
               type="button"
               onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-              className="block dna-hover rounded-full"
-              aria-label="פתיחת שיחה עם יועץ SEELD"
+              className="link-rule text-[15px]"
             >
-              <StatusPill>היועץ מחובר עכשיו · שאלו לפני שממלאים</StatusPill>
+              יש שאלה לפני שממלאים? שאלו את היועץ הדיגיטלי
             </button>
           </div>
         </section>

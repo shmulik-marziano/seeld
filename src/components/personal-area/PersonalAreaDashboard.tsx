@@ -300,7 +300,7 @@ const PersonalAreaDashboard = () => {
 
         {/* ── תיק ── */}
         <TabsContent value="file" className="mt-0">
-          <SubNav items={FILE_NAV} value={fileSection} onChange={setFileSection} label="חלקי התיק" />
+          <SubNav items={FILE_NAV} value={fileSection} onChange={(v) => setFileSection(v as FileSection)} label="חלקי התיק" />
 
           {fileSection === "policies" && (
             <div className="space-y-6">
@@ -337,7 +337,7 @@ const PersonalAreaDashboard = () => {
 
         {/* ── פניות ── */}
         <TabsContent value="requests" className="mt-0">
-          <SubNav items={REQUEST_NAV} value={requestSection} onChange={setRequestSection} label="סוגי הפניות" />
+          <SubNav items={REQUEST_NAV} value={requestSection} onChange={(v) => setRequestSection(v as RequestSection)} label="סוגי הפניות" />
 
           {requestSection === "agent" && (
             customer ? (

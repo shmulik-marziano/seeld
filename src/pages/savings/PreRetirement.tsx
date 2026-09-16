@@ -10,9 +10,12 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
-import { DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, TURQ } from "@/lib/brand";
-import { StatusPill } from "@/components/brand/Live";
-import { DrawSpark } from "@/components/brand/Strokes";
+import { BODY, DISPLAY, GREEN, IVORY, LINE, MONO, MUTED, NAVY, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN, TURQ } from "@/lib/brand";
+import { Illustration } from "@/components/brand/Illustration";
+import { BrandDots } from "@/components/brand/Elements";
+import { BrandIcon } from "@/components/brand/BrandIcon";
+
+const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
 
 const tabTriggerClass =
   "rounded-none bg-transparent px-2.5 -mx-2.5 pb-4 text-base font-medium text-[#476356] hover:bg-[#E8EDE5]/35 hover:text-[#003D30] border-b-2 border-transparent data-[state=active]:border-[#819B7D] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
@@ -84,106 +87,81 @@ const PreRetirement = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
       <Header />
 
-      {/* HERO — white DNA canvas, the page's single pastel-circle backdrop */}
-      <section className="dna-page">
+      {/* HERO — the retirement-horizon art beside the headline */}
+      <section className="dna-page overflow-hidden">
         <div className="dna-circles" aria-hidden="true">
           <div
             className="dna-circ hidden md:block"
-            style={{ width: 280, height: 280, top: -120, left: -100, backgroundColor: PASTEL_BLUE, opacity: 0.5 }}
+            style={{ width: 320, height: 320, top: -150, left: -120, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
           />
           <div
             className="dna-circ hidden md:block"
-            style={{ width: 220, height: 220, bottom: -120, left: "30%", backgroundColor: PASTEL_MINT, opacity: 0.45 }}
+            style={{ width: 180, height: 180, bottom: -80, left: "36%", backgroundColor: PASTEL_SAND, opacity: 0.7 }}
           />
         </div>
-        <div className="max-w-5xl mx-auto px-5 sm:px-8 pt-12 sm:pt-16 pb-12 sm:pb-16 relative z-10">
-          {/* Breadcrumb */}
-          <div className="mb-10 sm:mb-14 flex items-baseline justify-between gap-4">
-            <nav className="flex items-center gap-2 text-[13px] text-[#476356]">
-              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
-              <span aria-hidden="true">←</span>
-              <Link to="/savings" className="hover:text-[#003D30] transition-colors">חיסכון ופנסיה</Link>
-              <span aria-hidden="true">←</span>
-              <span className="font-medium text-[#003D30]">לפני פרישה</span>
-            </nav>
-            <span
-              className="hidden sm:inline text-[11px] tracking-[0.22em] font-medium whitespace-nowrap text-[#476356]"
-              style={{ fontFamily: MONO }}
-            >
-              חיסכון ופנסיה
-            </span>
-          </div>
+        <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-12 sm:pb-16">
+          <nav className="mb-8 sm:mb-12 flex items-center gap-2 text-[14px]" style={{ color: MUTED }} aria-label="ניווט משני">
+            <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
+            <BrandIcon name="arrow-left" size={14} />
+            <Link to="/savings" className="hover:underline underline-offset-4">חיסכון ופנסיה</Link>
+            <BrandIcon name="arrow-left" size={14} />
+            <span className="font-bold" style={{ color: GREEN }} aria-current="page">לפני פרישה</span>
+          </nav>
 
-          <h1 className="dna-display leading-[1.12] mb-6 max-w-3xl" style={{ fontSize: "clamp(34px, 5vw, 50px)" }}>
-            הכנה מקיפה לפרישה
-          </h1>
-          <p className="text-base sm:text-[17px] text-[#476356] max-w-2xl leading-[1.9] mb-9">
-            כל מה שצריך לדעת לפני המעבר לפנסיה: תחשיב קצבה, איחוד חסכונות ותכנון מס אופטימלי.
-          </p>
-          <div className="flex flex-wrap items-center gap-6">
-            <a
-              href="#analysis-form"
-              className="inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors min-h-[52px]"
-            >
-              ייעוץ לפני פרישה
-            </a>
-            <a
-              href="#product-types"
-              className="group inline-flex items-center gap-2 text-base font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
-            >
-              שלבי ההכנה
-              <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
-            </a>
-          </div>
-          <button
-            type="button"
-            onClick={() => window.dispatchEvent(new Event('seeld:open-chat'))}
-            className="mt-7 inline-flex rounded-full dna-hover"
-            aria-label="פתיחת שיחה עם יועץ SEELD AI"
-          >
-            <StatusPill>יש שאלה על הכנה לפרישה? היועץ מחובר</StatusPill>
-          </button>
-
-          {/* Turquoise stat + growth curve — the savings-page craft gesture */}
-          <div className="mt-12 border-t pt-6 flex flex-wrap items-end justify-between gap-6" style={{ borderColor: LINE }}>
+          <div className="grid gap-10 lg:gap-16 items-center lg:grid-cols-[1.05fr_1fr]">
             <div>
-              <div
-                className="tabular-nums whitespace-nowrap"
-                dir="ltr"
-                style={{ fontFamily: DISPLAY, fontWeight: 700, color: TURQ, fontSize: "clamp(2.4rem, 4vw, 3.1rem)", lineHeight: 1.05, letterSpacing: "-0.02em" }}
-              >
-                3–5
+              <h1 className="dna-display leading-[1.15] max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
+                הכנה מקיפה לפרישה
+              </h1>
+              <p className="mt-5 text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
+                כל מה שצריך לדעת לפני המעבר לפנסיה: תחשיב קצבה, איחוד חסכונות ותכנון מס אופטימלי.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
+                <a href="#analysis-form" className="btn-primary sm:min-w-[220px]">
+                  ייעוץ לפני פרישה
+                </a>
+                <Link to="/#portfolio-review" className="btn-secondary sm:min-w-[200px]">
+                  בדיקת תיק 360
+                </Link>
               </div>
-              <div className="mt-1.5 text-[13px]" style={{ color: MUTED }}>שנים לפני הפרישה</div>
+              <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
+                <a href="#product-types" className="link-rule text-[15px]">
+                  שלבי ההכנה
+                  <BrandIcon name="arrow-left" size={18} />
+                </a>
+                <button type="button" className="link-rule text-[15px]" onClick={openChat}>
+                  <BrandIcon name="message" size={18} />
+                  שאלו את היועץ הדיגיטלי
+                </button>
+              </div>
             </div>
-            <DrawSpark color={TURQ} className="hidden sm:block w-44 md:w-60" height={40} />
+
+            <Illustration name="04-retirement-horizon" priority sizes="(min-width: 1024px) 560px, 100vw" />
           </div>
         </div>
       </section>
 
       <main>
-        {/* ══════ BENEFITS ══════ */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <div className="mb-10">
-              <SectionTitle>מה כולל ליווי לפני פרישה?</SectionTitle>
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
+        {/* BENEFITS */}
+        <section className="border-t bg-white" style={{ borderColor: LINE }}>
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-12 sm:py-16">
+            <BrandDots className="mb-4" />
+            <h2 className="dna-display leading-tight mb-10" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
+              מה כולל ליווי לפני פרישה?
+            </h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8">
               {[
                 { title: "תחשיב קצבה", desc: "חישוב מדויק של הקצבה הצפויה" },
                 { title: "איחוד חסכונות", desc: "ריכוז כל החסכונות למקום אחד" },
                 { title: "תכנון מס", desc: "אופטימיזציה של המס בפרישה" },
                 { title: "הגנה מלאה", desc: "ביטוחים וזכויות מותאמים לפרישה" },
               ].map((item, idx) => (
-                <div key={idx}>
-                  <div className="h-[3px] w-9 rounded-full mb-5" style={{ backgroundColor: TURQ }} aria-hidden="true" />
-                  <h3 className="text-[19px] mb-2.5" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
-                    {item.title}
-                  </h3>
-                  <p className="text-[14.5px] text-[#24483C] leading-[1.8]">{item.desc}</p>
+                <div key={idx} className="border-t pt-5" style={{ borderColor: LINE }}>
+                  <h3 className="text-[19px] mb-2" style={{ color: GREEN }}>{item.title}</h3>
+                  <p className="text-[16px] leading-[1.7]" style={{ color: BODY }}>{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -285,18 +263,16 @@ const PreRetirement = () => {
           <CompanyLogos variant="grid" />
         </section>
 
-        {/* ══════ ANALYSIS FORM — navy band ══════ */}
-        <section id="analysis-form" className="scroll-mt-24" style={{ backgroundColor: NAVY }}>
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <div className="mb-10 text-center sm:text-right">
-              <h2
-                className="text-white leading-tight mb-3"
-                style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 'clamp(1.7rem, 3vw, 2.3rem)', letterSpacing: '-0.5px' }}
-              >
+        {/* ANALYSIS FORM — deep green band, the central path */}
+        <section id="analysis-form" className="scroll-mt-24 dna-navy-band">
+          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
+            <div className="mb-10">
+              <BrandDots className="mb-4" />
+              <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(28px, 3.2vw, 32px)" }}>
                 מתכוננים לפרישה?
               </h2>
-              <p className="text-base leading-relaxed max-w-xl" style={{ color: "rgba(255,255,255,.65)" }}>
-                הזינו את הפרטים וקבלו ניתוח מקיף של החסכונות הפנסיוניים שלכם
+              <p className="text-[17px] leading-[1.7] max-w-xl" style={{ color: SAGE_ON_GREEN }}>
+                הזינו את הפרטים וקבלו ניתוח מקיף של החסכונות הפנסיוניים שלכם. אפשר גם להתחיל בבדיקת תיק 360 מלאה.
               </p>
             </div>
             <div className="max-w-2xl">
@@ -305,6 +281,14 @@ const PreRetirement = () => {
                 title="ייעוץ לפני פרישה"
                 description="מלאו את הפרטים וקבלו ניתוח מקיף של החסכונות הפנסיוניים שלכם"
               />
+            </div>
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
+                בדיקת תיק 360
+              </Link>
+              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
+                תיאום פגישה
+              </Link>
             </div>
           </div>
         </section>

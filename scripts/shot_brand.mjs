@@ -44,7 +44,16 @@ for (const vp of viewports) {
     }
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(500);
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    // Real horizontal overflow only: body width beyond the viewport, or a page that
+    // actually scrolls sideways. (documentElement.scrollWidth over-reports for RTL
+    // scroll containers in Chromium, so it is not used.)
+    const overflow = await page.evaluate(() => {
+      const vw = document.documentElement.clientWidth;
+      window.scrollTo(-2000, 0); const neg = Math.abs(window.scrollX);
+      window.scrollTo(2000, 0); const pos = Math.abs(window.scrollX);
+      window.scrollTo(0, 0);
+      return Math.max(0, document.body.scrollWidth - vw, neg, pos);
+    });
     const slug = route === "/" ? "home" : route.replace(/^\//, "").replace(/[\/:]/g, "_");
     const file = join(outDir, `${slug}-${vp.name}.png`);
     await page.screenshot({ path: file, fullPage: true });

@@ -14,7 +14,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { CountUp, LiveDot } from "@/components/brand/Live";
+import { LiveDot } from "@/components/brand/Live";
 import {
   BLUE, BODY, DISPLAY, GOLD, GOLD_TEXT, LINE, MONO, MUTED, NAVY,
   PASTEL_BLUE, PASTEL_MINT, PASTEL_PEACH, TURQ, TURQ_TEXT,
@@ -105,7 +105,7 @@ export default function AgentLandingPage() {
                 <span className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white text-[13px] font-medium text-[#003D30] border border-[#CCD6CC]">
                   <LiveDot size={6} />
                   SEELD · פורטל סוכני הביטוח
-                  <span className="text-[11px] tracking-[0.12em] font-medium" style={{ fontFamily: MONO, color: GOLD_TEXT }}>BETA</span>
+                  <span className="text-[12px] font-bold" style={{ color: GOLD_TEXT }} dir="ltr">BETA</span>
                 </span>
               </motion.div>
 
@@ -351,8 +351,8 @@ export default function AgentLandingPage() {
       {/* ══════════════════════════════════
           SECTION 5 — המספרים (navy band)
           ══════════════════════════════════ */}
-      <section style={{ backgroundColor: NAVY }}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+      <section className="dna-navy-band">
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
           <motion.h2 className="text-white leading-tight mb-16 text-center"
             style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(1.7rem, 3.2vw, 2.4rem)", letterSpacing: "-0.5px" }}
             initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
@@ -362,7 +362,7 @@ export default function AgentLandingPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-10">
             {[
               { display: "5", suffix: " דקות", label: "קליטת לקוח חדש מקצה לקצה", delay: 0 },
-              { display: null, suffix: "%", label: "חיסכון בזמן עבודה ידנית", delay: 0.05, isCount: true },
+              { display: "89", suffix: "%", label: "חיסכון בזמן עבודה ידנית", delay: 0.05 },
               { display: "אפס", suffix: "", label: "הקלדה ידנית כפולה", delay: 0.1 },
               { display: "24/7", suffix: "", label: "עובדת גם כשאתה לא", delay: 0.15 },
             ].map((item, i) => (
@@ -372,20 +372,11 @@ export default function AgentLandingPage() {
                 viewport={{ once: true }} transition={{ duration: 0.25, delay: item.delay, ease: "easeOut" }}>
                 <div className="text-4xl sm:text-5xl md:text-6xl tabular-nums mb-3 text-white" dir="ltr"
                   style={{ fontFamily: MONO, fontWeight: 600, letterSpacing: "-0.02em" }}>
-                  {item.isCount ? <CountUp to={89} /> : item.display}{item.suffix}
+                  {item.display}{item.suffix}
                 </div>
                 <p className="text-sm sm:text-base font-medium leading-snug" style={{ color: "rgba(255,255,255,.65)" }}>{item.label}</p>
               </motion.div>
             ))}
-          </div>
-          <div className="mt-12 flex items-center justify-center gap-2.5" dir="ltr">
-            <LiveDot size={6} color={TURQ_ON_NAVY} />
-            <span
-              className="text-[11px] tracking-[0.18em] font-medium"
-              style={{ fontFamily: MONO, fontVariantNumeric: "tabular-nums", color: TURQ_ON_NAVY }}
-            >
-              SEELD · AGENTS · LIVE
-            </span>
           </div>
         </div>
       </section>
@@ -604,8 +595,8 @@ export default function AgentLandingPage() {
       {/* ══════════════════════════════════
           SECTION 11 — CTA סגירה (navy band)
           ══════════════════════════════════ */}
-      <section style={{ backgroundColor: NAVY }}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
+      <section className="dna-navy-band">
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
           <motion.div
             initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.25, ease: "easeOut" }}>

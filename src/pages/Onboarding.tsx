@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import {
   BODY, DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, TURQ, TURQ_TEXT,
 } from "@/lib/brand";
-import { LiveDot, StatusPill } from "@/components/brand/Live";
+import { LiveDot } from "@/components/brand/Live";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
@@ -781,9 +781,6 @@ export default function Onboarding() {
                 <span aria-hidden="true">←</span>
                 <span className="font-medium" style={{ color: NAVY }}>פתיחת תיק</span>
               </nav>
-              <span className="text-[11px] tracking-[0.14em] font-medium" style={{ color: MUTED, fontFamily: MONO }} dir="ltr">
-                SECURE
-              </span>
             </div>
 
             <h1 className="dna-display leading-[1.12] mb-4" style={{ fontSize: "clamp(1.9rem, 4.5vw, 2.8rem)" }}>
@@ -799,10 +796,9 @@ export default function Onboarding() {
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                className="mt-7 block dna-hover rounded-full"
-                aria-label="פתיחת שיחה עם יועץ SEELD"
+                className="mt-7 link-rule text-[15px]"
               >
-                <StatusPill>היועץ מחובר עכשיו · שאלו לפני שממלאים</StatusPill>
+                יש שאלה לפני שממלאים? שאלו את היועץ הדיגיטלי
               </button>
             )}
           </div>
@@ -829,8 +825,8 @@ export default function Onboarding() {
                   <div>
                     <div className="flex items-center gap-2.5 mb-4">
                       <LiveDot size={7} />
-                      <span className="text-[12px] tracking-[0.14em] font-medium" style={{ fontFamily: MONO, color: MUTED }} dir="ltr">
-                        RECEIVED
+                      <span className="text-[14px] font-bold" style={{ color: MUTED }}>
+                        השאלון התקבל
                       </span>
                     </div>
                     <h2 className="dna-display leading-tight mb-3" style={{ fontSize: "clamp(1.7rem, 3.4vw, 2.5rem)" }}>
@@ -1249,8 +1245,8 @@ export default function Onboarding() {
                     <div>
                       <div className="flex items-center gap-2.5 mb-3">
                         <LiveDot size={7} />
-                        <span className="text-[12px] tracking-[0.14em] font-medium" style={{ fontFamily: MONO, color: MUTED }} dir="ltr">
-                          SENT
+                        <span className="text-[14px] font-bold" style={{ color: MUTED }}>
+                          נשלח
                         </span>
                       </div>
                       <h2 className="text-xl" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
