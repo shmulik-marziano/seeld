@@ -120,7 +120,7 @@ const IncomeTaxCalculator = () => {
             aria-label="שכר חודשי ברוטו"
             className={sliderClass}
           />
-          <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
+          <div className="flex justify-between text-[14px] tabular-nums" style={{ color: MUTED }} dir="ltr">
             <span>₪5,000</span>
             <span>₪100,000</span>
           </div>
@@ -173,7 +173,7 @@ const IncomeTaxCalculator = () => {
             className={inputClass}
             dir="ltr"
           />
-          <p className="text-xs leading-relaxed" style={{ color: MUTED }}>
+          <p className="text-[14px] leading-relaxed" style={{ color: MUTED }}>
             ילדים, עולה חדש ותואר אקדמי מוסיפים כל אחד נקודות זיכוי. כל נקודה שווה{" "}
             {money(CREDIT_POINT_VALUE_2026)} בחודש.
           </p>
@@ -184,7 +184,7 @@ const IncomeTaxCalculator = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         {/* Monthly Tax - standout stat */}
         <div className="dna-concept col-span-1 md:col-span-2 lg:col-span-1">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>מס חודשי</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>מס חודשי</p>
           <p
             className="tabular-nums"
             dir="ltr"
@@ -192,7 +192,7 @@ const IncomeTaxCalculator = () => {
           >
             {formatCurrency(result.monthlyTax)}
           </p>
-          <p className="text-xs mt-1" style={{ color: MUTED }}>
+          <p className="text-[14px] mt-1" style={{ color: MUTED }}>
             אחרי זיכוי של {money(result.creditValue)} (
             <span dir="ltr" className="tabular-nums">{result.creditPoints}</span> נקודות)
           </p>
@@ -200,7 +200,7 @@ const IncomeTaxCalculator = () => {
 
         {/* Net after income tax */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>נטו ממס הכנסה</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>נטו ממס הכנסה</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             {formatCurrency(result.netAfterIncomeTax)}
           </p>
@@ -208,7 +208,7 @@ const IncomeTaxCalculator = () => {
 
         {/* Annual Tax */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>מס שנתי</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>מס שנתי</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: "#9A4520" }}>
             {formatCurrency(result.annualTax)}
           </p>
@@ -216,20 +216,20 @@ const IncomeTaxCalculator = () => {
 
         {/* Marginal Rate */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>מס שולי</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>מס שולי</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             {result.marginalRate.toFixed(0)}%
           </p>
-          <p className="text-xs mt-1" style={{ color: MUTED }}>על השקל הבא שתרוויחו</p>
+          <p className="text-[14px] mt-1" style={{ color: MUTED }}>על השקל הבא שתרוויחו</p>
         </div>
 
         {/* Effective Rate */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>מס אפקטיבי</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>מס אפקטיבי</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             {result.effectiveRate.toFixed(1)}%
           </p>
-          <p className="text-xs mt-1" style={{ color: MUTED }}>מתוך הברוטו בפועל</p>
+          <p className="text-[14px] mt-1" style={{ color: MUTED }}>מתוך הברוטו בפועל</p>
         </div>
       </div>
 

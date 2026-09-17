@@ -207,7 +207,7 @@ table.dna-data thead th {
   background: #003D30;
   color: #FAF7EF;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 14px;
   padding: 10px 14px;
   text-align: start;
 }
@@ -648,3 +648,37 @@ body {
   background: #FAF7EF;
   border-radius: 16px;
 }
+
+/* ══ Mobile craft (2026-09-17) ══
+   Small rules that separate a phone-native page from a shrunk desktop page. */
+html {
+  -webkit-text-size-adjust: 100%;   /* iOS: no surprise text inflation in landscape */
+  text-size-adjust: 100%;
+  scroll-padding-top: 88px;         /* anchors land below the sticky header */
+}
+a, button, [role="button"], input, select, textarea, summary, label {
+  -webkit-tap-highlight-color: transparent;  /* our own focus/active styles, not the grey flash */
+  touch-action: manipulation;                /* no double-tap zoom delay on controls */
+}
+h1, h2, h3 { text-wrap: balance; }           /* no orphan word on the last line of a heading */
+p, li, dd, figcaption { text-wrap: pretty; } /* fewer widows in paragraphs */
+:root { --safe-bottom: env(safe-area-inset-bottom, 0px); }
+@media (max-width: 639px) {
+  /* Room for the floating launchers so the last content line is never covered. */
+  main { padding-bottom: calc(24px + var(--safe-bottom)); }
+}
+/* Hero art on a phone: never taller than a third of the screen, so the first
+   action stays within reach (STYLESEED: if art stretches the phone view, shrink it). */
+@media (max-width: 767px) {
+  .brand-hero-art { max-height: 220px; width: auto; max-width: 100%; margin-inline: auto; }
+}
+/* Breadcrumb links and rule links: a 44px hit area without moving the text or the rule. */
+nav[aria-label="ניווט משני"] a { position: relative; display: inline-block; padding-block: 12px; margin-block: -12px; }
+.link-rule { position: relative; }
+.link-rule::after { content: ""; position: absolute; inset: -10px 0; }
+/* A scroll container is also a positioning context. Otherwise an absolutely
+   positioned child (the `sr-only` labels inside a wide table, for example)
+   positions against the page, escapes the container and widens the document,
+   which a phone browser answers by zooming the whole page out. */
+.overflow-x-auto:not(.absolute):not(.fixed):not(.sticky),
+.overflow-auto:not(.absolute):not(.fixed):not(.sticky) { position: relative; }

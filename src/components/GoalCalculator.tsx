@@ -226,7 +226,7 @@ const GoalCalculator = () => {
             step={10000}
             className={sliderClass}
           />
-          <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
+          <div className="flex justify-between text-[14px] tabular-nums" style={{ color: MUTED }} dir="ltr">
             <span>₪0</span>
             <span>₪2,000,000</span>
           </div>
@@ -259,7 +259,7 @@ const GoalCalculator = () => {
             step={0.5}
             className={sliderClass}
           />
-          <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
+          <div className="flex justify-between text-[14px] tabular-nums" style={{ color: MUTED }} dir="ltr">
             <span>0%</span>
             <span>10%</span>
           </div>
@@ -270,7 +270,7 @@ const GoalCalculator = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Monthly Needed - standout stat */}
         <div className="dna-concept col-span-1 md:col-span-2 lg:col-span-1">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>צריך להפקיד בחודש</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>צריך להפקיד בחודש</p>
           <p
             className="tabular-nums"
             dir="ltr"
@@ -278,12 +278,12 @@ const GoalCalculator = () => {
           >
             <AnimatedNumber value={result.monthlyNeeded} format={formatCurrency} />
           </p>
-          <p className="text-xs mt-1" style={{ color: MUTED }}>כדי להגיע ליעד שלך</p>
+          <p className="text-[14px] mt-1" style={{ color: MUTED }}>כדי להגיע ליעד שלך</p>
         </div>
 
         {/* Total Needed */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>צבירה נדרשת</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>צבירה נדרשת</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             <AnimatedNumber value={result.totalNeeded} format={formatCurrency} />
           </p>
@@ -294,7 +294,7 @@ const GoalCalculator = () => {
 
         {/* Gap to Bridge */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>פער לגישור</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>פער לגישור</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: "#9A4520" }}>
             <AnimatedNumber value={result.gap} format={formatCurrency} />
           </p>
@@ -302,7 +302,7 @@ const GoalCalculator = () => {
 
         {/* Years to Retirement */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>שנים להפקדה</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>שנים להפקדה</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             {result.yearsToRetirement}
           </p>
@@ -334,11 +334,11 @@ const GoalCalculator = () => {
               style={{ width: `${progressPercent}%`, backgroundColor: TURQ }}
             />
           </div>
-          <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED, fontFamily: MONO }} dir="ltr">
+          <div className="flex justify-between text-[14px] tabular-nums" style={{ color: MUTED, fontFamily: MONO }} dir="ltr">
             <span>₪0</span>
             <span>{formatCurrency(result.totalNeeded)}</span>
           </div>
-          <p className="text-[13px]" style={{ color: MUTED }}>
+          <p className="text-[14px]" style={{ color: MUTED }}>
             החיסכון הקיים מכסה{" "}
             <span dir="ltr" className="tabular-nums font-medium" style={{ fontFamily: MONO, color: NAVY }}>
               {progressPercent.toFixed(0)}%

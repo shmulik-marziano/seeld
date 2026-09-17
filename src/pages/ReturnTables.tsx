@@ -23,7 +23,7 @@ import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, RUST_TEXT, S
 const INITIAL_TRACKS = 6;
 
 const chip = (active: boolean) =>
-  `inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[15px] font-bold whitespace-nowrap transition-colors ${
+  `inline-flex min-h-[44px] items-center gap-1.5 rounded-full px-4 py-2 text-[15px] font-bold whitespace-nowrap transition-colors ${
     active ? "text-[#FAF7EF]" : "hover:bg-white"
   }`;
 
@@ -274,7 +274,7 @@ const ReturnTables = () => {
                         type="button"
                         onClick={() => setView(v)}
                         aria-pressed={view === v}
-                        className={`rounded-[8px] px-3 py-1.5 text-[14px] font-bold transition-colors ${view === v ? "text-[#FAF7EF]" : ""}`}
+                        className={`min-h-[44px] rounded-[8px] px-3 py-1.5 text-[14px] font-bold transition-colors ${view === v ? "text-[#FAF7EF]" : ""}`}
                         style={view === v ? { background: GREEN } : { color: GREEN }}
                       >
                         {v === "compact" ? "תצוגה מצומצמת" : "כל העמודות"}

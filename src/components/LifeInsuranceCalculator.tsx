@@ -126,7 +126,7 @@ const LifeInsuranceCalculator = () => {
             aria-label="שנות תמיכה נדרשות"
             className={sliderClass}
           />
-          <p className="text-xs leading-relaxed" style={{ color: MUTED }}>
+          <p className="text-[14px] leading-relaxed" style={{ color: MUTED }}>
             נקודת ייחוס מקובלת: עד שהילד הצעיר ביותר יגיע לגיל{" "}
             <span dir="ltr" className="tabular-nums">21</span>.
           </p>
@@ -240,7 +240,7 @@ const LifeInsuranceCalculator = () => {
 
       {/* Result: recommended cover — standout stat */}
       <div className="dna-concept !p-6">
-        <p className="text-[13px] mb-2" style={{ color: MUTED }}>סכום הכיסוי המומלץ</p>
+        <p className="text-[14px] mb-2" style={{ color: MUTED }}>סכום הכיסוי המומלץ</p>
         <p
           className="tabular-nums"
           dir="ltr"
@@ -248,7 +248,7 @@ const LifeInsuranceCalculator = () => {
         >
           {formatCurrency(result.recommendedCover)}
         </p>
-        <p className="text-xs mt-2" style={{ color: MUTED }}>
+        <p className="text-[14px] mt-2" style={{ color: MUTED }}>
           כך שההכנסה, החובות ועתיד הילדים מכוסים גם בלעדיכם.
         </p>
       </div>

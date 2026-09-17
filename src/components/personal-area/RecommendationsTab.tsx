@@ -90,7 +90,7 @@ const RecommendationsTab = ({ customerId }: { customerId: string }) => {
                   {rec.title || "המלצה"}
                 </h3>
                 <span
-                  className="inline-flex items-center rounded-full px-3 py-1 text-[13px] font-bold shrink-0"
+                  className="inline-flex items-center rounded-full px-3 py-1 text-[14px] font-bold shrink-0"
                   style={{ backgroundColor: status.bg, color: status.text }}
                 >
                   {status.label}

@@ -9,6 +9,8 @@
 - רכיבים: `src/components/returns/` (BoardTable, TrackCard, ReturnChart, MarketMap).
 - דוח מסירה: `docs/history/2026-09-17-returns-board.md`.
 
+**מובייל ורמת גימור בענף `feature/mobile-craft`** (מעל לוח התשואות, ממתין לאישור): כפתורים צפים קומפקטיים בטלפון, תיקון גלישה ועימוד במסלולי השקעה, כרטיסי שירות קומפקטיים בבית, טקסט 14 פיקסל מינימום, יעדי מגע 44, איורי קיט במקום תמונות סטוק בבלוג, `api/geo.ts` במקום שירות מיקום חיצוני. כלי סקר: `scripts/mobile_audit.mjs`. דוח + תוכנית "צוות עיצוב": `docs/history/2026-09-17-mobile-and-craft.md`.
+
 - הנעילה העיצובית: `STYLESEED.md`. הטוקנים: `src/lib/brand.ts`. הנכסים: `public/brand/`.
 - דוח מסירה של המיתוג: `docs/history/2026-09-16-brand-rollout.md`.
 - כלי בדיקה: `npm run brand:shots` (צילומי מסך), `npm run brand:axe` (נגישות), `npm run brand:measure` (ביצועים), `scripts/calc_snapshot.mjs` (השוואת תוצאות מחשבונים).

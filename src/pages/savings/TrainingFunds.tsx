@@ -139,7 +139,7 @@ const TrainingFunds = () => {
               </div>
             </div>
 
-            <Illustration name="03-saving-growth" priority sizes="(min-width: 1024px) 560px, 100vw" />
+            <Illustration name="03-saving-growth" priority sizes="(min-width: 1024px) 560px, 100vw" className="brand-hero-art" />
           </div>
         </div>
       </section>

@@ -319,24 +319,31 @@ const Index = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
               {serviceAreas.map((area, i) => (
                 <ScrollReveal key={area.href} delay={i * 80}>
+                  {/* Phone: a row (small art beside the text) so three cards fit in
+                      one and a half screens instead of three. Tablet and up: the
+                      full illustration card. */}
                   <Link
                     to={area.href}
-                    className="group block h-full rounded-2xl bg-white border overflow-hidden dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                    className="group flex h-full items-start gap-4 rounded-2xl bg-white border overflow-hidden p-4 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30] md:block md:p-0"
                     style={{ borderColor: LINE }}
                   >
-                    <Illustration
-                      name={area.illustration}
-                      sizes="(min-width: 768px) 380px, 100vw"
-                      className="!rounded-none border-b"
+                    <div
+                      className="w-[104px] shrink-0 overflow-hidden rounded-xl border md:w-auto md:rounded-none md:border-0 md:border-b"
                       style={{ borderColor: LINE }}
-                    />
-                    <div className="p-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <BrandIcon name={area.icon} size={32} style={{ color: GREEN }} />
-                        <h3 className="text-[22px] leading-tight" style={{ color: GREEN }}>{area.title}</h3>
+                    >
+                      <Illustration
+                        name={area.illustration}
+                        sizes="(min-width: 768px) 380px, 104px"
+                        className="!rounded-none"
+                      />
+                    </div>
+                    <div className="min-w-0 md:p-6">
+                      <div className="flex items-center gap-3 mb-2 md:mb-3">
+                        <BrandIcon name={area.icon} size={32} className="hidden md:block" style={{ color: GREEN }} />
+                        <h3 className="text-[19px] leading-tight md:text-[22px]" style={{ color: GREEN }}>{area.title}</h3>
                       </div>
-                      <p className="text-[16px] leading-[1.7]" style={{ color: BODY }}>{area.description}</p>
-                      <span className="link-rule mt-5 text-[15px]">
+                      <p className="text-[15px] leading-[1.6] md:text-[16px] md:leading-[1.7]" style={{ color: BODY }}>{area.description}</p>
+                      <span className="link-rule mt-3 text-[15px] md:mt-5">
                         לפרטי השירות
                         <BrandIcon name="arrow-left" size={18} className="transition-transform group-hover:-translate-x-1" />
                       </span>
@@ -465,7 +472,9 @@ const Index = () => {
                 </ScrollReveal>
               </div>
 
-              <ScrollReveal delay={150}>
+              {/* Decoration only; on a phone it would sit below the form and push
+                  the next section a full screen down. */}
+              <ScrollReveal delay={150} className="hidden md:block">
                 <Illustration
                   name="05-clarity-decisions"
                   sizes="(min-width: 1024px) 460px, 80vw"

@@ -163,7 +163,7 @@ const CompareCalculator = () => {
           step={1}
           className={sliderClass}
         />
-        <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
+        <div className="flex justify-between text-[14px] tabular-nums" style={{ color: MUTED }} dir="ltr">
           <span>שנה</span>
           <span>20 שנים</span>
         </div>
@@ -193,7 +193,7 @@ const CompareCalculator = () => {
               <h3 className="text-[17px] mb-1" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                 {track.name}
               </h3>
-              <p className="text-[13px] mb-4" style={{ color: MUTED }}>
+              <p className="text-[14px] mb-4" style={{ color: MUTED }}>
                 <span dir="ltr" className="tabular-nums" style={{ fontFamily: MONO }}>{track.rate}%</span> בשנה
               </p>
 
@@ -211,7 +211,7 @@ const CompareCalculator = () => {
                 <AnimatedNumber value={track.finalValue} format={formatCurrency} />
               </p>
 
-              <p className="text-[13px] font-medium tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: TURQ_TEXT }}>
+              <p className="text-[14px] font-medium tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: TURQ_TEXT }}>
                 +<AnimatedNumber value={track.profit} format={formatCurrency} />
               </p>
             </div>
@@ -246,7 +246,7 @@ const CompareCalculator = () => {
                   />
                 </div>
                 <span
-                  className="w-28 shrink-0 text-left text-[13px] font-medium tabular-nums"
+                  className="w-28 shrink-0 text-left text-[14px] font-medium tabular-nums"
                   dir="ltr"
                   style={{ fontFamily: MONO, color: negative ? "#9A4520" : NAVY }}
                 >

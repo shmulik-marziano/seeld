@@ -85,11 +85,11 @@ const inputClass =
 function FieldLabel({ label, required, error }: { label: string; required?: boolean; error?: string }) {
   return (
     <div className="flex items-baseline justify-between mb-1.5 gap-4">
-      <label className="text-[13px] font-medium" style={{ color: MUTED }}>
+      <label className="text-[14px] font-medium" style={{ color: MUTED }}>
         {label}
         {required && <span className="mr-1" style={{ color: MUTED }}>*</span>}
       </label>
-      {error && <span className="text-[12px] font-medium" style={{ color: "#9A4520" }}>{error}</span>}
+      {error && <span className="text-[14px] font-medium" style={{ color: "#9A4520" }}>{error}</span>}
     </div>
   );
 }
@@ -328,7 +328,7 @@ export default function DirectDebit() {
                 ["יום חיוב", `${form.debitDay} בחודש`],
               ].map(([label, val]) => (
                 <div key={label} className="flex items-baseline justify-between gap-6 py-[14px] border-b" style={{ borderColor: LINE }}>
-                  <span className="text-[13px] shrink-0" style={{ color: MUTED }}>{label}</span>
+                  <span className="text-[14px] shrink-0" style={{ color: MUTED }}>{label}</span>
                   <span className="text-base tabular-nums text-left" style={{ fontFamily: MONO, color: NAVY }}>{val}</span>
                 </div>
               ))}
@@ -370,7 +370,7 @@ export default function DirectDebit() {
 
           <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-10 sm:pb-12">
             <div className="mb-8 flex items-baseline justify-between gap-4">
-              <nav className="flex items-center gap-2 text-[13px]" style={{ color: MUTED }}>
+              <nav className="flex items-center gap-2 text-[14px]" style={{ color: MUTED }}>
                 <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
                 <span aria-hidden="true">←</span>
                 <span className="font-medium" style={{ color: NAVY }}>הוראת קבע</span>
@@ -383,7 +383,7 @@ export default function DirectDebit() {
             <p className="text-base leading-[1.9] mb-2" style={{ color: MUTED }}>
               שתי דקות למלא. אפס אותיות קטנות.
             </p>
-            <p className="text-[13px] mb-8" style={{ color: MUTED }}>
+            <p className="text-[14px] mb-8" style={{ color: MUTED }}>
               שמוליק מרציאנו · סוכן ביטוח ופנסיה מוסמך
             </p>
 
@@ -430,7 +430,7 @@ export default function DirectDebit() {
                         className={touched.idNumber && errors.idNumber ? "!border-[#9A4520]" : ""}
                       />
                       {touched.idNumber && !errors.idNumber && form.idNumber.length === 9 && (
-                        <p className="mt-2 text-[12px] font-medium" style={{ color: TURQ_TEXT }}>
+                        <p className="mt-2 text-[14px] font-medium" style={{ color: TURQ_TEXT }}>
                           ת"ז תקינה. ספרת ביקורת אומתה.
                         </p>
                       )}
@@ -526,7 +526,7 @@ export default function DirectDebit() {
                         {/* Known branches */}
                         {branchOptions.length > 0 && (
                           <div className="mt-4">
-                            <p className="text-[12.5px] mb-2.5" style={{ color: MUTED }}>סניפים מוכרים, לבחירה מהירה:</p>
+                            <p className="text-[14px] mb-2.5" style={{ color: MUTED }}>סניפים מוכרים, לבחירה מהירה:</p>
                             <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
                               {branchOptions.map(([num, name]) => (
                                 <button
@@ -534,7 +534,7 @@ export default function DirectDebit() {
                                   type="button"
                                   onClick={() => handleBranchSelect(num)}
                                   className={cn(
-                                    "inline-flex items-baseline gap-1.5 px-3 py-2 min-h-[36px] rounded-md text-[12px] font-medium transition-colors",
+                                    "inline-flex items-baseline gap-1.5 px-3 py-2 min-h-[36px] rounded-md text-[14px] font-medium transition-colors",
                                     FOCUS_RING,
                                     form.branchNumber === num
                                       ? "bg-[#003D30] text-white"
@@ -551,7 +551,7 @@ export default function DirectDebit() {
                         )}
                         {/* Auto-filled branch name */}
                         {form.branchName && (
-                          <p className="mt-3 text-[13px]" style={{ color: MUTED }}>
+                          <p className="mt-3 text-[14px]" style={{ color: MUTED }}>
                             שם סניף: <span className="font-medium" style={{ color: NAVY }}>{form.branchName}</span>
                           </p>
                         )}
@@ -624,7 +624,7 @@ export default function DirectDebit() {
                 >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שליחת הוראת קבע"}
                 </button>
-                <p className="mt-5 text-[12.5px]" style={{ color: MUTED }}>
+                <p className="mt-5 text-[14px]" style={{ color: MUTED }}>
                   מאובטח ומוצפן · תקן PCI DSS
                 </p>
               </div>

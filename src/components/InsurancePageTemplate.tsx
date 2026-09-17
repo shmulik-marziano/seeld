@@ -195,7 +195,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
         </div>
         <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-12 sm:pb-16">
           {/* Breadcrumb */}
-          <nav className="mb-8 sm:mb-12 flex items-center gap-2 text-[14px]" style={{ color: MUTED }} aria-label="ניווט משני">
+          <nav className="mb-6 sm:mb-10 flex items-center gap-2 text-[14px]" style={{ color: MUTED }} aria-label="ניווט משני">
             <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
             <BrandIcon name="arrow-left" size={14} />
             <Link to="/insurances" className="hover:underline underline-offset-4">ביטוח</Link>
@@ -241,7 +241,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                 name={art}
                 priority
                 sizes="(min-width: 1024px) 560px, 100vw"
-                className="shadow-[0_16px_40px_-24px_rgba(0,61,48,0.35)]"
+                className="brand-hero-art shadow-[0_16px_40px_-24px_rgba(0,61,48,0.35)]"
               />
             )}
           </div>

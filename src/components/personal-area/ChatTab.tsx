@@ -183,7 +183,7 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
             <div key={gi}>
               <div className="flex items-center justify-center my-4">
                 <span
-                  className="bg-white rounded-full px-4 py-1 text-[13px] border"
+                  className="bg-white rounded-full px-4 py-1 text-[14px] border"
                   style={{ color: MUTED, borderColor: LINE }}
                 >
                   {formatDate(group.date)}
@@ -206,7 +206,7 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
                     >
                       <p className="text-[15px] leading-relaxed whitespace-pre-wrap">{msg.content}</p>
                       <p
-                        className="text-[12px] mt-1 tabular-nums"
+                        className="text-[14px] mt-1 tabular-nums"
                         style={{ color: isCustomer ? SAGE_ON_GREEN : MUTED }}
                         dir="ltr"
                       >

@@ -29,7 +29,7 @@ export const MarketMarquee = ({
           {items.map((item, i) => (
             <span
               key={i}
-              className="inline-flex items-center gap-2.5 px-4 text-[12.5px] sm:text-[13.5px] font-bold tracking-[0.12em] text-[#003D30] whitespace-nowrap tabular-nums"
+              className="inline-flex items-center gap-2.5 px-4 text-[14px] sm:text-[13.5px] font-bold tracking-[0.12em] text-[#003D30] whitespace-nowrap tabular-nums"
               style={{ fontFamily: MONO }}
             >
               {item.dot && <LiveDot size={6} />}

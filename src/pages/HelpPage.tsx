@@ -201,7 +201,7 @@ export default function HelpPage() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
         className="mt-6 rounded-2xl p-6 text-center border-2 border-dashed"
         style={{ borderColor: '#003D3020', backgroundColor: '#003D3005' }}>
-        <p className="text-[12px] font-bold text-[#476356] mb-1"
+        <p className="text-[14px] font-bold text-[#476356] mb-1"
           style={{ fontFamily: "sans-serif" }}>SEELD פלטפורמה</p>
         <p className="text-xs text-[#476356]">
           פלטפורמת ניהול סוכנויות ביטוח מתקדמת &middot; גרסה 2.0

@@ -141,7 +141,7 @@ const SaveCalculationButton = ({
           onClick={handleSave}
           disabled={disabled || saving}
           variant="outline"
-          className="gap-2"
+          className="gap-2 min-h-[44px]"
         >
           {saving ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -155,7 +155,7 @@ const SaveCalculationButton = ({
           onClick={() => setShowEmailModal(true)}
           disabled={disabled}
           variant="outline"
-          className="gap-2"
+          className="gap-2 min-h-[44px]"
         >
           <Mail className="w-4 h-4" />
           שלח במייל

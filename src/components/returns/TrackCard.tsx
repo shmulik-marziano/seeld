@@ -84,7 +84,7 @@ const TrackCard = ({ trackKey, productLabel, funds, view }: TrackCardProps) => {
               type="button"
               onClick={() => setChartOpen((v) => !v)}
               aria-expanded={chartOpen}
-              className={`inline-flex items-center gap-1.5 rounded-[10px] px-3.5 py-2 text-[14px] font-bold transition-colors ${chartOpen ? "text-[#FAF7EF]" : ""}`}
+              className={`inline-flex items-center gap-1.5 min-h-[44px] rounded-[10px] px-3.5 py-2 text-[14px] font-bold transition-colors ${chartOpen ? "text-[#FAF7EF]" : ""}`}
               style={chartOpen ? { background: GREEN } : { boxShadow: `inset 0 0 0 1.5px ${GREEN}`, color: GREEN }}
             >
               <BrandIcon name="chart" size={18} />
@@ -94,7 +94,7 @@ const TrackCard = ({ trackKey, productLabel, funds, view }: TrackCardProps) => {
               type="button"
               onClick={exportExcel}
               disabled={exporting}
-              className="inline-flex items-center gap-1.5 rounded-[10px] px-3.5 py-2 text-[14px] font-bold transition-colors disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 min-h-[44px] rounded-[10px] px-3.5 py-2 text-[14px] font-bold transition-colors disabled:opacity-60"
               style={{ boxShadow: `inset 0 0 0 1.5px ${GREEN}`, color: GREEN }}
             >
               <BrandIcon name="download" size={18} />
@@ -103,7 +103,7 @@ const TrackCard = ({ trackKey, productLabel, funds, view }: TrackCardProps) => {
             <button
               type="button"
               onClick={() => window.print()}
-              className="inline-flex items-center gap-1.5 rounded-[10px] px-3.5 py-2 text-[14px] font-bold transition-colors"
+              className="inline-flex items-center gap-1.5 min-h-[44px] rounded-[10px] px-3.5 py-2 text-[14px] font-bold transition-colors"
               style={{ boxShadow: `inset 0 0 0 1.5px ${GREEN}`, color: GREEN }}
             >
               <BrandIcon name="document" size={18} />

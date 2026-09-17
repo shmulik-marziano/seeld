@@ -139,7 +139,7 @@ const PreRetirement = () => {
               </div>
             </div>
 
-            <Illustration name="04-retirement-horizon" priority sizes="(min-width: 1024px) 560px, 100vw" />
+            <Illustration name="04-retirement-horizon" priority sizes="(min-width: 1024px) 560px, 100vw" className="brand-hero-art" />
           </div>
         </div>
       </section>

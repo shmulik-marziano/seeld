@@ -59,7 +59,7 @@ const RightsExtraction = () => {
           </div>
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
-            <nav className="flex items-center gap-2 text-[13px] mb-10 sm:mb-14" style={{ color: MUTED }}>
+            <nav className="flex items-center gap-2 text-[14px] mb-10 sm:mb-14" style={{ color: MUTED }}>
               <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
               <span className="font-medium" style={{ color: NAVY }}>מיצוי זכויות</span>

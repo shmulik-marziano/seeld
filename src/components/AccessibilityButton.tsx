@@ -46,8 +46,8 @@ const AccessibilityButton = () => {
       {/* Quiet launcher — white circle, hairline ring, green glyph */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#476356] opacity-80 transition-all duration-200 hover:opacity-100 hover:text-[#003D30] focus-visible:opacity-100"
-        style={{ boxShadow: RING }}
+        className="fixed right-4 sm:right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#476356] opacity-80 transition-all duration-200 hover:opacity-100 hover:text-[#003D30] focus-visible:opacity-100"
+        style={{ boxShadow: RING, bottom: "calc(24px + env(safe-area-inset-bottom, 0px))" }}
         aria-label="הגדרות נגישות"
         aria-expanded={isOpen}
         title="נגישות"
@@ -58,8 +58,8 @@ const AccessibilityButton = () => {
       {/* Panel */}
       {isOpen && (
         <div
-          className="fixed bottom-[76px] right-6 z-40 w-64 rounded-2xl bg-white p-4 border"
-          style={{ boxShadow: CARD_SHADOW, borderColor: LINE }}
+          className="fixed right-4 sm:right-6 z-40 w-64 max-w-[calc(100vw-32px)] rounded-2xl bg-white p-4 border"
+          style={{ boxShadow: CARD_SHADOW, borderColor: LINE, bottom: "calc(80px + env(safe-area-inset-bottom, 0px))" }}
           role="group"
           aria-label="הגדרות נגישות"
         >

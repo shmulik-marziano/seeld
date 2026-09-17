@@ -240,7 +240,7 @@ const CarInsuranceEstimator = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Annual range - standout stat */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>
             טווח פרמיה שנתי משוער ({coverageLabels[coverage]})
           </p>
           <p
@@ -255,7 +255,7 @@ const CarInsuranceEstimator = () => {
 
         {/* Monthly equivalent */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>שווה ערך חודשי</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>שווה ערך חודשי</p>
           <p
             className="text-[22px] font-bold tabular-nums"
             dir="ltr"

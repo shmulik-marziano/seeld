@@ -162,7 +162,7 @@ const SavedCalculations = () => {
         <div className="relative z-10">
           {/* Hero */}
           <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-10 sm:pb-14">
-            <nav className="flex items-center gap-2 text-[13px] mb-8" style={{ color: MUTED }}>
+            <nav className="flex items-center gap-2 text-[14px] mb-8" style={{ color: MUTED }}>
               <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
               <Link to="/calculators" className="hover:text-[#003D30] transition-colors">מחשבונים</Link>
@@ -293,7 +293,7 @@ const SavedCalculations = () => {
                         </ul>
                       )}
 
-                      <p className="mt-3 text-[12px]" style={{ color: MUTED }}>
+                      <p className="mt-3 text-[14px]" style={{ color: MUTED }}>
                         <span dir="ltr" style={monoNum}>{formatDate(calc.created_at)}</span>
                       </p>
                     </div>

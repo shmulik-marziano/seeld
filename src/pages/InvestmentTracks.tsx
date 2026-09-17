@@ -27,6 +27,7 @@ const fmtAssets = (m: number | null | undefined) =>
 const n0 = (v: number | null | undefined) => (missing(v) ? 0 : (v as number));
 
 const TH: CSSProperties = { fontSize: 14 };
+const PAGE = 60;
 
 type SortKey = "name" | "year1" | "year3" | "year5" | "fees" | "assets";
 type SortDir = "asc" | "desc";
@@ -331,7 +332,7 @@ const InvestmentTracks = () => {
       : "המאגר העדכני לא זמין כרגע. מוצגים נתונים מקומיים מהעדכון האחרון שנשמר.";
 
   const sortButton = (key: SortKey, label: string) => (
-    <button type="button" onClick={() => toggleSort(key)} className="inline-flex items-center gap-1.5 whitespace-nowrap transition-opacity hover:opacity-80">
+    <button type="button" onClick={() => toggleSort(key)} className="inline-flex min-h-[44px] items-center gap-1.5 whitespace-nowrap transition-opacity hover:opacity-80">
       {label}
       <ArrowUpDown className="h-3.5 w-3.5" style={{ opacity: sortKey === key ? 1 : 0.45 }} strokeWidth={1.75} aria-hidden="true" />
     </button>
@@ -339,7 +340,15 @@ const InvestmentTracks = () => {
   const ariaSort = (key: SortKey) => (sortKey === key ? (sortDir === "asc" ? "ascending" : "descending") : "none") as "ascending" | "descending" | "none";
 
   const tabClass = (active: boolean) =>
-    `shrink-0 pb-4 text-[15px] sm:text-[16px] font-bold border-b-2 -mb-px transition-colors whitespace-nowrap ${active ? "text-[#003D30] border-[#003D30]" : "text-[#476356] border-transparent hover:text-[#003D30]"}`;
+    `shrink-0 min-h-[44px] pt-1 pb-4 text-[15px] sm:text-[16px] font-bold border-b-2 -mb-px transition-colors whitespace-nowrap ${active ? "text-[#003D30] border-[#003D30]" : "text-[#476356] border-transparent hover:text-[#003D30]"}`;
+
+  // The table shows PAGE rows at a time (571 rows at once made the phone page
+  // sixty screens long). The count resets whenever the filters change.
+  const filterKey = [productFilter, specFilter, companyFilter, search, sortKey, sortDir].join("|");
+  const [visibleFor, setVisibleFor] = useState<{ key: string; n: number }>({ key: "", n: PAGE });
+  const visible = visibleFor.key === filterKey ? visibleFor.n : PAGE;
+  const shown = filtered.slice(0, visible);
+  const showMore = () => setVisibleFor({ key: filterKey, n: visible + PAGE });
 
   return (
     <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
@@ -447,7 +456,7 @@ const InvestmentTracks = () => {
                   <BrandIcon name="settings" size={18} />
                   סינון מתקדם
                   {hasActiveFilters && (
-                    <span className="tabular-nums rounded-[6px] px-1.5 py-0.5 text-[13px]" dir="ltr" style={{ backgroundColor: GREEN, color: IVORY }}>
+                    <span className="tabular-nums rounded-[6px] px-1.5 py-0.5 text-[14px]" dir="ltr" style={{ backgroundColor: GREEN, color: IVORY }}>
                       {[productFilter, specFilter, companyFilter].filter(v => v !== "all").length}
                     </span>
                   )}
@@ -553,7 +562,7 @@ const InvestmentTracks = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {filtered.map((fund) => {
+                        {shown.map((fund) => {
                           const isExpanded = expandedId === fund.id;
                           const detailId = `track-detail-${fund.id}`;
                           return (
@@ -581,7 +590,7 @@ const InvestmentTracks = () => {
                                     onClick={(e) => { e.stopPropagation(); setExpandedId(isExpanded ? null : fund.id); }}
                                     aria-expanded={isExpanded}
                                     aria-controls={detailId}
-                                    className="grid h-9 w-9 place-items-center rounded-[8px] transition-colors hover:bg-[#E8EDE5]"
+                                    className="grid h-11 w-11 place-items-center rounded-[8px] transition-colors hover:bg-[#E8EDE5]"
                                     style={{ color: GREEN }}
                                   >
                                     <BrandIcon
@@ -658,6 +667,16 @@ const InvestmentTracks = () => {
                   <p className="mt-2 text-[14px] lg:hidden" style={{ color: MUTED }}>
                     אפשר לגלול את הטבלה לצדדים כדי לראות את כל העמודות.
                   </p>
+                  {filtered.length > shown.length && (
+                    <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
+                      <button type="button" onClick={showMore} className="btn-secondary">
+                        הצגת עוד {Math.min(PAGE, filtered.length - shown.length)} מסלולים
+                      </button>
+                      <span className="text-[15px] tabular-nums" style={{ color: MUTED }}>
+                        מוצגים {shown.length} מתוך {filtered.length}
+                      </span>
+                    </div>
+                  )}
                 </>
               ) : (
                 <div className="dna-concept max-w-xl" role="status">

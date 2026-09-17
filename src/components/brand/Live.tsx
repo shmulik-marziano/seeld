@@ -50,7 +50,7 @@ export const LiveDot = ({ color = CHIP_GREEN, size = 7 }: { color?: string; size
 /** People chip — a live collaboration-style tag (the Flim gesture) */
 export const LiveChip = ({ label, color }: { label: string; color: string }) => (
   <span
-    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-white text-[13px] font-medium whitespace-nowrap"
+    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-white text-[14px] font-medium whitespace-nowrap"
     style={{ backgroundColor: color, boxShadow: "0 2px 6px rgba(0,0,0,.12)" }}
   >
     {label}

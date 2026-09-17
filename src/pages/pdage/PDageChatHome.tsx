@@ -167,7 +167,7 @@ export default function PDageChatHome() {
                 >
                   <MessageCircle className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="truncate text-foreground text-[13px]">{conv.title}</p>
+                    <p className="truncate text-foreground text-[14px]">{conv.title}</p>
                     <p className="text-[10px] text-muted-foreground/70 mt-0.5">
                       {format(new Date(conv.updated_at), 'dd/MM/yy HH:mm')}
                     </p>

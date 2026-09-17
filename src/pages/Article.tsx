@@ -9,9 +9,31 @@ import { toast } from "sonner";
 import { BrandDots } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, SAGE_ON_GREEN, TINT_SAGE } from "@/lib/brand";
+import { Illustration } from "@/components/brand/Illustration";
+import { illustrationForCategory, isStockPhoto } from "@/lib/coverArt";
 
-// Article: one reading column on ivory, the article's own explanatory image
-// kept, deep green closing band (STYLESEED.md).
+// Article: one reading column on ivory, deep green closing band (STYLESEED.md).
+// The article keeps its own image only when it is a real one; the stock photos
+// the early articles shipped with are replaced by the category illustration.
+
+const ArticleCover = ({ article, priority = false, className = "" }: { article: ArticleData; priority?: boolean; className?: string }) =>
+  isStockPhoto(article.image) ? (
+    <Illustration
+      name={illustrationForCategory(article.category)}
+      priority={priority}
+      sizes={priority ? "(min-width: 768px) 720px, 100vw" : "(min-width: 1024px) 380px, 100vw"}
+      className={`!rounded-none h-full w-full ${className}`}
+    />
+  ) : (
+    <img
+      src={article.image}
+      alt={priority ? article.title : ""}
+      loading={priority ? undefined : "lazy"}
+      fetchPriority={priority ? "high" : undefined}
+      decoding="async"
+      className={`w-full h-full object-cover ${className}`}
+    />
+  );
 
 // Share buttons — 44px squares with the hairline outline
 const shareBtnClass =
@@ -23,8 +45,8 @@ const ArticleTile = ({ article }: { article: ArticleData }) => (
     to={`/article/${article.id}`}
     className="dna-concept dna-hover group flex h-full flex-col overflow-hidden !p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
   >
-    <div className="aspect-[16/10] overflow-hidden border-b" style={{ borderColor: LINE }}>
-      <img src={article.image} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+    <div className={`${isStockPhoto(article.image) ? "aspect-[3/2]" : "aspect-[16/10]"} overflow-hidden border-b`} style={{ borderColor: LINE }}>
+      <ArticleCover article={article} />
     </div>
     <div className="flex flex-1 flex-col p-5 sm:p-6">
       <h3 className="text-[18px] leading-snug" style={{ color: GREEN }}>{article.title}</h3>
@@ -137,18 +159,17 @@ const Article = () => {
               {article.subtitle}
             </p>
 
-            {/* The article's own image — kept because it explains the piece */}
-            <div className="rounded-2xl overflow-hidden mb-10 border bg-white" style={{ borderColor: LINE }}>
-              {/* The hero is the LCP element here, so it is deliberately eager
-                  and high-priority — the opposite of the thumbnails. */}
-              <img
-                src={article.image}
-                alt={article.title}
-                fetchPriority="high"
-                decoding="async"
-                className="w-full aspect-[16/9] object-cover"
-              />
-            </div>
+            {/* The hero is the LCP element here, so it is deliberately eager
+                and high-priority — the opposite of the thumbnails. */}
+            {isStockPhoto(article.image) ? (
+              <div className="mb-10">
+                <ArticleCover article={article} priority className="brand-hero-art" />
+              </div>
+            ) : (
+              <div className="rounded-2xl overflow-hidden mb-10 border bg-white" style={{ borderColor: LINE }}>
+                <ArticleCover article={article} priority className="aspect-[16/9]" />
+              </div>
+            )}
 
             {/* Author + share */}
             <div className="flex flex-wrap items-center justify-between gap-5 border-t border-b py-6 mb-12" style={{ borderColor: LINE }}>

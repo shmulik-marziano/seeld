@@ -68,7 +68,7 @@ const mean = (values: (number | null | undefined)[]) => {
 /** 12-month sparkline of the monthly yields: a small SVG with a zero baseline. */
 const Sparkline = ({ fund }: { fund: BoardFund }) => {
   const pts = (fund.series_12m ?? []).filter((p) => p.y !== null) as { p: number; y: number }[];
-  if (pts.length < 2) return <span className="text-[13px]" style={{ color: MUTED }}>אין סדרה חודשית</span>;
+  if (pts.length < 2) return <span className="text-[14px]" style={{ color: MUTED }}>אין סדרה חודשית</span>;
   const w = 220, h = 56, pad = 4;
   const ys = pts.map((p) => p.y);
   const min = Math.min(0, ...ys), max = Math.max(0, ...ys);
@@ -148,14 +148,14 @@ const BoardTable = ({ funds, view, charted, onToggleChart, chartFull = false, ca
         <thead>
           <tr>
             <th scope="col" aria-sort={ariaSort("fund_name")}>
-              <button type="button" onClick={() => toggleSort("fund_name")} className="inline-flex items-center gap-1.5 whitespace-nowrap font-bold">
+              <button type="button" onClick={() => toggleSort("fund_name")} className="inline-flex min-h-[44px] items-center gap-1.5 whitespace-nowrap font-bold">
                 שם הקופה
                 <SortMark active={sortKey === "fund_name"} dir={sortDir} />
               </button>
             </th>
             {cols.map((c) => (
               <th key={c.key} scope="col" aria-sort={ariaSort(c.key)} className="num" title={c.title}>
-                <button type="button" onClick={() => toggleSort(c.key)} className="inline-flex items-center gap-1.5 whitespace-nowrap font-bold">
+                <button type="button" onClick={() => toggleSort(c.key)} className="inline-flex min-h-[44px] items-center gap-1.5 whitespace-nowrap font-bold">
                   {c.short ?? c.label}
                   <SortMark active={sortKey === c.key} dir={sortDir} />
                 </button>
@@ -175,13 +175,13 @@ const BoardTable = ({ funds, view, charted, onToggleChart, chartFull = false, ca
                       type="button"
                       onClick={() => toggleOpen(f)}
                       aria-expanded={isOpen}
-                      className="flex items-start gap-1.5 text-start font-bold hover:underline underline-offset-4"
+                      className="flex min-h-[44px] items-start gap-1.5 text-start font-bold hover:underline underline-offset-4"
                       style={{ color: GREEN }}
                     >
                       <BrandIcon name="chevron-down" size={16} className={`mt-1 shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`} />
                       <span>{f.fund_name}</span>
                     </button>
-                    <span className="block text-[13px] font-normal mt-0.5" style={{ color: MUTED }}>{f.company}</span>
+                    <span className="block text-[14px] font-normal mt-0.5" style={{ color: MUTED }}>{f.company}</span>
                   </td>
                   {cols.map((c) => (
                     <td key={c.key} className="num">
@@ -194,7 +194,7 @@ const BoardTable = ({ funds, view, charted, onToggleChart, chartFull = false, ca
                     <td colSpan={totalCols}>
                       <div dir="rtl" className="grid gap-x-8 gap-y-4 md:grid-cols-[auto_1fr] items-start py-2">
                         <div>
-                          <p className="text-[13px] mb-1" style={{ color: MUTED }}>תשואה חודשית, 12 חודשים אחרונים</p>
+                          <p className="text-[14px] mb-1" style={{ color: MUTED }}>תשואה חודשית, 12 חודשים אחרונים</p>
                           <Sparkline fund={f} />
                         </div>
                         <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2 text-[14px]">
@@ -265,7 +265,7 @@ const SortMark = ({ active, dir }: { active: boolean; dir: "asc" | "desc" }) => 
 
 const Detail = ({ label, children }: { label: string; children: React.ReactNode }) => (
   <div>
-    <dt className="text-[13px]" style={{ color: MUTED }}>{label}</dt>
+    <dt className="text-[14px]" style={{ color: MUTED }}>{label}</dt>
     <dd className="text-[15px]" style={{ color: BODY }}>{children}</dd>
   </div>
 );

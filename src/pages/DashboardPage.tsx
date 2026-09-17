@@ -663,7 +663,7 @@ export default function DashboardPage() {
         {/* ══ LEFT LEGEND (desktop only, sticky) ══ */}
         <aside className="hidden lg:flex flex-col gap-1.5 pt-6 pb-10 px-3 sticky top-0 h-screen overflow-y-auto flex-shrink-0 border-l border-[#E1E8E1]/80"
           style={{ width: 178, backgroundColor: 'rgba(250,247,239,0.85)', backdropFilter: 'blur(10px)' }}>
-          <p className="text-[12px] font-bold text-[#476356] px-1 mb-2">קטגוריות</p>
+          <p className="text-[14px] font-bold text-[#476356] px-1 mb-2">קטגוריות</p>
           {SECTIONS.map(sec => {
             const isActive = activeSection === sec.title;
             return (
@@ -716,7 +716,7 @@ export default function DashboardPage() {
               <div>
                 <div className="text-sm font-bold text-[#003D30] leading-none"
                   style={{ fontFamily: "sans-serif" }}>SEELD</div>
-                <div className="text-[12px] font-bold text-[#476356] uppercase">פלטפורמה</div>
+                <div className="text-[14px] font-bold text-[#476356] uppercase">פלטפורמה</div>
               </div>
             </button>
 
@@ -746,7 +746,7 @@ export default function DashboardPage() {
                         style={{ backgroundColor: 'white', boxShadow: '0 12px 40px rgba(0,0,0,0.16)' }}
                       >
                         <div className="px-4 pt-3 pb-1.5">
-                          <p className="text-[12px] font-bold text-[#476356]">ניהול לוח</p>
+                          <p className="text-[14px] font-bold text-[#476356]">ניהול לוח</p>
                         </div>
 
                         <button onClick={() => { setEditMode(v => !v); setMenuOpen(false); }}
@@ -828,7 +828,7 @@ export default function DashboardPage() {
 
           {/* Greeting */}
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
-            <p className="text-[12px] font-bold text-[#476356] mb-0.5"
+            <p className="text-[14px] font-bold text-[#476356] mb-0.5"
               style={{ fontFamily: "sans-serif" }}>SEELD • פלטפורמה</p>
             <h1 className="text-3xl font-bold text-[#003D30] leading-none"
               style={{ fontFamily: "'Rubik', Arial, sans-serif" }}>{getGreeting()}</h1>

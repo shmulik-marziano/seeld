@@ -42,7 +42,7 @@ const MarketMap = ({ rows }: { rows: CompanyMapRow[] }) => {
                 <th scope="col">חברה</th>
                 {PRODUCTS.map((p) => (
                   <th key={p.key} scope="col" className="num">
-                    <Link to={`/return-tables/${p.slug}`} className="hover:underline underline-offset-4 whitespace-nowrap">{p.short}</Link>
+                    <Link to={`/return-tables/${p.slug}`} className="inline-flex min-h-[44px] items-center hover:underline underline-offset-4 whitespace-nowrap">{p.short}</Link>
                   </th>
                 ))}
                 <th scope="col" className="num">סה"כ</th>
@@ -82,7 +82,7 @@ const MarketMap = ({ rows }: { rows: CompanyMapRow[] }) => {
             <BrandIcon name={showAll ? "chevron-down" : "arrow-left"} size={16} className={showAll ? "rotate-180" : ""} />
           </button>
         )}
-        <p className="mt-3 text-[13px]" style={{ color: MUTED }}>
+        <p className="mt-3 text-[14px]" style={{ color: MUTED }}>
           * גיוסים חלקיים: לפוליסות חיסכון (ביטוחנט) אין נתוני הפקדות ומשיכות במקור, ולכן אינן כלולות בעמודה זו.
         </p>
       </div>

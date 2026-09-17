@@ -6,10 +6,13 @@ import Footer from "@/components/Footer";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 import { BrandDots, OliveBranch } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
+import { Illustration } from "@/components/brand/Illustration";
+import { illustrationForCategory, isStockPhoto } from "@/lib/coverArt";
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from "@/lib/brand";
 
 // Blog hub: ivory canvas, one vector element in the opening margin, white
-// article cards. No kit illustration here (dosage, STYLESEED.md).
+// article cards. A card shows the post's own photo when it has one; a stock
+// photo (banned by STYLESEED) is replaced by the category's kit illustration.
 
 interface BlogPost {
   id: string;
@@ -28,7 +31,7 @@ const formatDate = (dateStr: string | null) => {
 };
 
 const tabClass = (active: boolean) =>
-  `rounded-none bg-transparent px-0 pb-4 text-[16px] font-bold border-b-2 transition-colors shrink-0 min-h-[44px] whitespace-nowrap ${
+  `rounded-none bg-transparent min-w-[44px] justify-center px-0 pb-4 text-[16px] font-bold border-b-2 transition-colors shrink-0 min-h-[44px] whitespace-nowrap ${
     active ? "border-[#003D30] text-[#003D30]" : "border-transparent text-[#476356] hover:text-[#003D30]"
   }`;
 
@@ -183,9 +186,13 @@ const Blog = () => {
                     to={`/blog/${post.slug}`}
                     className="dna-concept dna-hover group flex h-full flex-col overflow-hidden !p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
                   >
-                    {post.cover_image_url && (
+                    {post.cover_image_url && !isStockPhoto(post.cover_image_url) ? (
                       <div className="aspect-[16/10] overflow-hidden border-b" style={{ borderColor: LINE }}>
                         <img src={post.cover_image_url} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      <div className="aspect-[3/2] overflow-hidden border-b" style={{ borderColor: LINE }}>
+                        <Illustration name={illustrationForCategory(post.category)} sizes="(min-width: 1024px) 380px, 100vw" className="!rounded-none h-full w-full" />
                       </div>
                     )}
                     <div className="flex flex-1 flex-col p-5 sm:p-6">

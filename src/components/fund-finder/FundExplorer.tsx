@@ -164,7 +164,7 @@ export default function FundExplorer({ funds, loading, error, children }: Props)
           סינון מתקדם
           {x.activeFilterCount > 0 && (
             <span
-              className="tabular-nums rounded-[6px] px-1.5 py-0.5 text-[13px]"
+              className="tabular-nums rounded-[6px] px-1.5 py-0.5 text-[14px]"
               dir="ltr"
               style={{ backgroundColor: GREEN, color: IVORY }}
             >

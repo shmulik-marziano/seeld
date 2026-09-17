@@ -217,7 +217,7 @@ function DateMaskInput({
         <PopoverTrigger asChild>
           <button
             type="button"
-            className={cn("absolute left-2 p-1.5 rounded-md text-[#476356] hover:text-[#003D30] transition-colors", FOCUS_RING)}
+            className={cn("absolute left-1 flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md text-[#476356] hover:text-[#003D30] transition-colors", FOCUS_RING)}
             aria-label="בחירת תאריך מלוח שנה"
           >
             <Calendar className="w-4 h-4" />
@@ -397,7 +397,7 @@ function StepBar({ current }: { current: number }) {
                 )}
                 <span
                   className={cn(
-                    "text-[13px] transition-colors",
+                    "text-[14px] transition-colors",
                     active ? "font-bold text-[#003D30]" : "font-medium text-[#476356]"
                   )}
                 >
@@ -407,10 +407,10 @@ function StepBar({ current }: { current: number }) {
             );
           })}
         </div>
-        <span className="text-[13px] font-bold text-[#003D30] sm:hidden">
+        <span className="text-[14px] font-bold text-[#003D30] sm:hidden">
           {STEPS[current].label}
         </span>
-        <span className="text-[12.5px] shrink-0" style={{ color: MUTED }}>
+        <span className="text-[14px] shrink-0" style={{ color: MUTED }}>
           שלב {current + 1} מתוך {STEPS.length}
         </span>
       </div>
@@ -430,12 +430,12 @@ function GlassInput({
 }: { label: string; error?: string; required?: boolean; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5 group">
-      <label className="text-[13px] font-medium text-[#476356] group-focus-within:text-[#003D30] transition-colors">
+      <label className="text-[14px] font-medium text-[#476356] group-focus-within:text-[#003D30] transition-colors">
         {label}{required && <span className="mr-1" style={{ color: MUTED }}>*</span>}
       </label>
       {children}
       {error && (
-        <p className="text-[12px] font-medium flex items-center gap-1" style={{ color: "#9A4520" }}>
+        <p className="text-[14px] font-medium flex items-center gap-1" style={{ color: "#9A4520" }}>
           <AlertCircle className="w-3 h-3 shrink-0" />{error}
         </p>
       )}
@@ -483,13 +483,13 @@ function ConsentCard({
         </div>
         <div className="flex-1 space-y-1.5">
           <p className="font-medium text-[15px]" style={{ color: NAVY }}>{title}</p>
-          <p className="text-[13px] leading-[1.7]" style={{ color: BODY }}>{description}</p>
+          <p className="text-[14px] leading-[1.7]" style={{ color: BODY }}>{description}</p>
           <a
             href={pdfPath}
             target="_blank"
             rel="noopener noreferrer"
             onClick={e => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 text-[12.5px] text-[#476356] hover:text-[#003D30] transition-colors mt-1 font-medium border-b border-[#003D30]/20 pb-0.5"
+            className="inline-flex items-center gap-1.5 text-[14px] text-[#476356] hover:text-[#003D30] transition-colors mt-1 font-medium border-b border-[#003D30]/20 pb-0.5"
           >
             <Download className="w-3 h-3" />
             {pdfLabel}
@@ -599,7 +599,7 @@ function SignatureCanvas({ value, onChange }: { value: string; onChange: (v: str
         <button
           type="button"
           onClick={clear}
-          className={cn("flex items-center gap-1.5 text-[12.5px] text-[#476356] hover:text-[#003D30] transition-colors font-medium min-h-[32px]", FOCUS_RING)}
+          className={cn("flex items-center gap-1.5 text-[14px] text-[#476356] hover:text-[#003D30] transition-colors font-medium min-h-[32px]", FOCUS_RING)}
         >
           <X className="w-3.5 h-3.5" />
           נקו וחתמו שוב
@@ -629,7 +629,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
   if (!value) return null;
   return (
     <div className="flex items-center justify-between py-2.5 border-b last:border-0 group" style={{ borderColor: LINE }}>
-      <span className="text-[12.5px]" style={{ color: MUTED }}>{label}</span>
+      <span className="text-[14px]" style={{ color: MUTED }}>{label}</span>
       <div className="flex items-center gap-1">
         <span className="text-sm font-medium tabular-nums" style={{ fontFamily: MONO, color: NAVY }}>{value}</span>
         <CopyBtn text={value} />
@@ -776,20 +776,20 @@ export default function Onboarding() {
 
           <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-10 sm:pb-12">
             <div className="mb-8 flex items-baseline justify-between gap-4">
-              <nav className="flex items-center gap-2 text-[13px]" style={{ color: MUTED }}>
+              <nav className="flex items-center gap-2 text-[14px]" style={{ color: MUTED }}>
                 <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
                 <span aria-hidden="true">←</span>
                 <span className="font-medium" style={{ color: NAVY }}>פתיחת תיק</span>
               </nav>
             </div>
 
-            <h1 className="dna-display leading-[1.12] mb-4" style={{ fontSize: "clamp(1.9rem, 4.5vw, 2.8rem)" }}>
+            <h1 className="dna-display leading-[1.12] mb-4" style={{ fontSize: "clamp(2rem, 4.5vw, 2.8rem)" }}>
               שאלון הצטרפות
             </h1>
             <p className="text-base leading-[1.9] mb-2" style={{ color: MUTED }}>
               ארבעה שלבים, בלי אותיות קטנות. בסוף שמוליק מתקשר.
             </p>
-            <p className="text-[13px]" style={{ color: MUTED }}>
+            <p className="text-[14px]" style={{ color: MUTED }}>
               שמוליק מרציאנו · סוכן ביטוח ופנסיה מוסמך
             </p>
             {!submitted && step === 0 && (
@@ -844,7 +844,7 @@ export default function Onboarding() {
                       ["אימייל", form.email],
                     ].map(([label, val]) => (
                       <div key={label} className="flex items-baseline justify-between gap-6 py-[14px] border-b" style={{ borderColor: LINE }}>
-                        <span className="text-[13px] shrink-0" style={{ color: MUTED }}>{label}</span>
+                        <span className="text-[14px] shrink-0" style={{ color: MUTED }}>{label}</span>
                         <span className="text-base tabular-nums text-left" style={{ fontFamily: MONO, color: NAVY }}>{val}</span>
                       </div>
                     ))}
@@ -1039,7 +1039,7 @@ export default function Onboarding() {
                                 type="button"
                                 onClick={() => set("childrenCount", n)}
                                 className={cn(
-                                  "w-10 h-10 rounded-md border text-xs font-medium transition-colors tabular-nums",
+                                  "w-11 h-11 rounded-md border text-xs font-medium transition-colors tabular-nums",
                                   FOCUS_RING,
                                   form.childrenCount === n
                                     ? "border-[#003D30] bg-[#003D30] text-white"
@@ -1051,7 +1051,7 @@ export default function Onboarding() {
                               type="button"
                               onClick={() => set("childrenCount", form.childrenCount > 6 ? form.childrenCount : 7)}
                               className={cn(
-                                "px-2 h-10 rounded-md border text-xs font-medium transition-colors tabular-nums",
+                                "px-3 h-11 rounded-md border text-xs font-medium transition-colors tabular-nums",
                                 FOCUS_RING,
                                 form.childrenCount > 6
                                   ? "border-[#003D30] bg-[#003D30] text-white"
@@ -1064,7 +1064,7 @@ export default function Onboarding() {
 
                       {/* Employment Status - multi select */}
                       <GlassInput label="מעמד תעסוקתי">
-                        <p className="text-[12.5px] mb-2" style={{ color: MUTED }}>ניתן לסמן יותר מאחד</p>
+                        <p className="text-[14px] mb-2" style={{ color: MUTED }}>ניתן לסמן יותר מאחד</p>
                         <div className="flex flex-wrap gap-2">
                           {["שכיר/ה", "עצמאי/ת", "שכיר/ה בעל/ת שליטה"].map(opt => {
                             const selected = form.employmentStatus.includes(opt);
@@ -1138,7 +1138,7 @@ export default function Onboarding() {
                         </div>
                         {form.smoker === true && (
                           <div className="mt-3 animate-in slide-in-from-top-2 duration-200">
-                            <label className="text-[13px] font-medium block mb-1.5" style={{ color: MUTED }}>
+                            <label className="text-[14px] font-medium block mb-1.5" style={{ color: MUTED }}>
                               כמות סיגריות ביום
                             </label>
                             <TechInput
@@ -1199,7 +1199,7 @@ export default function Onboarding() {
                           pdfLabel={item.label}
                         />
                         {errors[item.key] && (
-                          <p className="text-[12px] font-medium flex items-center gap-1 mt-1.5 mr-2" style={{ color: "#9A4520" }}>
+                          <p className="text-[14px] font-medium flex items-center gap-1 mt-1.5 mr-2" style={{ color: "#9A4520" }}>
                             <AlertCircle className="w-3 h-3" />{errors[item.key]}
                           </p>
                         )}
@@ -1220,7 +1220,7 @@ export default function Onboarding() {
                         onChange={v => { set("signature", v); setErrors(e => ({ ...e, signature: undefined })); }}
                       />
                       {errors.signature && (
-                        <p className="text-[12px] font-medium flex items-center gap-1 mt-2" style={{ color: "#9A4520" }}>
+                        <p className="text-[14px] font-medium flex items-center gap-1 mt-2" style={{ color: "#9A4520" }}>
                           <AlertCircle className="w-3 h-3" />{errors.signature}
                         </p>
                       )}
@@ -1228,7 +1228,7 @@ export default function Onboarding() {
 
                     {/* Confirmation box */}
                     <div className="border-t pt-5" style={{ borderColor: LINE }}>
-                      <p className="text-[13px] leading-[1.8]" style={{ color: BODY }}>
+                      <p className="text-[14px] leading-[1.8]" style={{ color: BODY }}>
                         בלחיצה על ״שלח ואשר״ אני מאשר/ת שקראתי את תוכן ההרשאות ומסכים/ה לתנאים.<br />
                         <span className="font-medium mt-1 block tabular-nums" style={{ fontFamily: MONO, color: NAVY }}>
                           {form.firstName} {form.lastName} · {form.idNumber}
@@ -1285,7 +1285,7 @@ export default function Onboarding() {
                             href={item.pdf}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-[12.5px] text-[#476356] hover:text-[#003D30] transition-colors"
+                            className="inline-flex items-center gap-1 text-[14px] text-[#476356] hover:text-[#003D30] transition-colors"
                           >
                             <Download className="w-3.5 h-3.5" />
                             הורד
@@ -1299,7 +1299,7 @@ export default function Onboarding() {
                       <TechSection title="חתימה" icon={<Pen className="w-4 h-4" />}>
                         <img src={form.signature} alt="חתימה"
                           className="max-h-20 rounded-md bg-white border border-[#CCD6CC]" />
-                        <p className="text-[12px] mt-2 tabular-nums" style={{ fontFamily: MONO, color: MUTED }}>
+                        <p className="text-[14px] mt-2 tabular-nums" style={{ fontFamily: MONO, color: MUTED }}>
                           {new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" })}
                         </p>
                       </TechSection>

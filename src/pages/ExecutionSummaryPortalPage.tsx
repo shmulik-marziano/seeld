@@ -225,7 +225,7 @@ export default function ExecutionSummaryPortalPage() {
                 {groups.map(g => (
                   <div key={g.key} className="rounded-xl p-3 text-center border" style={{ backgroundColor: STATUS_STYLE[g.key === 'done' ? 'fully_executed' : g.key === 'partial' ? 'partially_executed' : 'not_executed'].bg, borderColor: LINE }}>
                     <dd className="text-[22px] font-bold tabular-nums" style={{ color: GREEN }} dir="ltr">{g.items.length}</dd>
-                    <dt className="text-[13px]" style={{ color: MUTED }}>{g.title}</dt>
+                    <dt className="text-[14px]" style={{ color: MUTED }}>{g.title}</dt>
                   </div>
                 ))}
               </dl>
@@ -278,7 +278,7 @@ function SummaryItemCard({ item }: { item: ItemData }) {
           {item.actual_execution_text || item.recommended_text_snapshot?.split('\n')[0] || 'פעולה'}
         </p>
         <span
-          className="text-[13px] px-3 py-1 rounded-full font-bold shrink-0"
+          className="text-[14px] px-3 py-1 rounded-full font-bold shrink-0"
           style={{ backgroundColor: style.bg, color: style.text }}
         >
           {label}

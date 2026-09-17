@@ -153,7 +153,7 @@ const SavingsCalculator = () => {
             step={5000}
             className={sliderClass}
           />
-          <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
+          <div className="flex justify-between text-[14px] tabular-nums" style={{ color: MUTED }} dir="ltr">
             <span>₪0</span>
             <span>₪500,000</span>
           </div>
@@ -180,7 +180,7 @@ const SavingsCalculator = () => {
             step={100}
             className={sliderClass}
           />
-          <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
+          <div className="flex justify-between text-[14px] tabular-nums" style={{ color: MUTED }} dir="ltr">
             <span>₪0</span>
             <span>₪20,000</span>
           </div>
@@ -213,7 +213,7 @@ const SavingsCalculator = () => {
             step={0.5}
             className={sliderClass}
           />
-          <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
+          <div className="flex justify-between text-[14px] tabular-nums" style={{ color: MUTED }} dir="ltr">
             <span>0%</span>
             <span>15%</span>
           </div>
@@ -245,7 +245,7 @@ const SavingsCalculator = () => {
             step={1}
             className={sliderClass}
           />
-          <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
+          <div className="flex justify-between text-[14px] tabular-nums" style={{ color: MUTED }} dir="ltr">
             <span>שנה</span>
             <span>30 שנים</span>
           </div>
@@ -256,7 +256,7 @@ const SavingsCalculator = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Savings - standout stat */}
         <div className="dna-concept col-span-1 md:col-span-2 lg:col-span-1">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>סה"כ חיסכון</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה"כ חיסכון</p>
           <p
             className="tabular-nums"
             dir="ltr"
@@ -268,7 +268,7 @@ const SavingsCalculator = () => {
 
         {/* Total Deposits */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>סה"כ הפקדות</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה"כ הפקדות</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             <AnimatedNumber value={result.totalDeposits} format={formatCurrency} />
           </p>
@@ -276,7 +276,7 @@ const SavingsCalculator = () => {
 
         {/* Total Interest */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>רווחי ריבית</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>רווחי ריבית</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: TURQ_TEXT }}>
             <AnimatedNumber value={result.totalInterest} format={formatCurrency} />
           </p>
@@ -284,7 +284,7 @@ const SavingsCalculator = () => {
 
         {/* Interest Multiplier */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>תשואה על ההפקדות</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>תשואה על ההפקדות</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             <AnimatedNumber
               value={(result.totalInterest / result.totalDeposits) * 100}
@@ -311,7 +311,7 @@ const SavingsCalculator = () => {
                 className="flex-1 flex flex-col justify-end group relative h-full"
               >
                 {/* Tooltip */}
-                <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-white border border-[#E8EDE5] rounded-lg p-2.5 text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg text-[#24483C]">
+                <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-white border border-[#E8EDE5] rounded-lg p-2.5 text-[14px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg text-[#24483C]">
                   <p className="font-bold" style={{ color: NAVY }}>שנה {yearData.year}</p>
                   <p>סה"כ: <span dir="ltr" className="tabular-nums" style={{ fontFamily: MONO }}>{formatCurrency(yearData.balance)}</span></p>
                   <p>הפקדות: <span dir="ltr" className="tabular-nums" style={{ fontFamily: MONO }}>{formatCurrency(yearData.deposits)}</span></p>
@@ -335,7 +335,7 @@ const SavingsCalculator = () => {
         </div>
 
         {/* X-axis labels */}
-        <div className="flex gap-1 text-xs tabular-nums" style={{ color: MUTED, fontFamily: MONO }} dir="ltr">
+        <div className="flex gap-1 text-[14px] tabular-nums" style={{ color: MUTED, fontFamily: MONO }} dir="ltr">
           {result.yearlyBreakdown.map((yearData, index) => (
             <div key={yearData.year} className="flex-1 text-center">
               {years <= 15 || index % 2 === 0 ? yearData.year : ""}
@@ -344,7 +344,7 @@ const SavingsCalculator = () => {
         </div>
 
         {/* Legend */}
-        <div className="mt-5 flex flex-wrap gap-x-8 gap-y-2 text-[13.5px]" style={{ color: NAVY }}>
+        <div className="mt-5 flex flex-wrap gap-x-8 gap-y-2 text-[14px]" style={{ color: NAVY }}>
           <span className="inline-flex items-center gap-2">
             <span className="w-3 h-3 rounded-[3px]" style={{ backgroundColor: NAVY }} aria-hidden="true" />
             הפקדות:{" "}

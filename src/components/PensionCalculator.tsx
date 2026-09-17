@@ -281,7 +281,7 @@ const PensionCalculator = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Monthly Pension - standout stat */}
         <div className="dna-concept col-span-1 md:col-span-2 lg:col-span-1">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>פנסיה חודשית צפויה</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>פנסיה חודשית צפויה</p>
           <p
             className="tabular-nums"
             dir="ltr"
@@ -289,7 +289,7 @@ const PensionCalculator = () => {
           >
             {formatCurrency(result.monthlyPension)}
           </p>
-          <p className="text-xs mt-1" style={{ color: MUTED }}>
+          <p className="text-[14px] mt-1" style={{ color: MUTED }}>
             {((result.monthlyPension / monthlySalary) * 100).toFixed(0)}% מהשכר הנוכחי
           </p>
           <p className="text-[11.5px] mt-2 leading-[1.7]" style={{ color: MUTED }}>
@@ -299,7 +299,7 @@ const PensionCalculator = () => {
 
         {/* Total Savings */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>סה"כ חיסכון בפרישה</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה"כ חיסכון בפרישה</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             {formatCurrency(result.totalSavings)}
           </p>
@@ -307,7 +307,7 @@ const PensionCalculator = () => {
 
         {/* Total Returns */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>רווחי השקעה</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>רווחי השקעה</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: TURQ_TEXT }}>
             {formatCurrency(result.totalReturns)}
           </p>
@@ -315,7 +315,7 @@ const PensionCalculator = () => {
 
         {/* Years to Retirement */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>שנים עד פרישה</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>שנים עד פרישה</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             {result.yearsToRetirement}
           </p>
@@ -346,7 +346,7 @@ const PensionCalculator = () => {
         </div>
 
         {/* Legend */}
-        <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-[13.5px]" style={{ color: NAVY }}>
+        <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-[14px]" style={{ color: NAVY }}>
           <span className="inline-flex items-center gap-2">
             <span className="w-3 h-3 rounded-[3px]" style={{ backgroundColor: NAVY }} aria-hidden="true" />
             הפקדות:{" "}

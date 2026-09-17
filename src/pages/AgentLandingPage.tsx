@@ -102,10 +102,10 @@ export default function AgentLandingPage() {
             {/* Right — Content */}
             <div className="space-y-8 lg:space-y-10">
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2, ease: "easeOut" }}>
-                <span className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white text-[13px] font-medium text-[#003D30] border border-[#CCD6CC]">
+                <span className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white text-[14px] font-medium text-[#003D30] border border-[#CCD6CC]">
                   <LiveDot size={6} />
                   SEELD · פורטל סוכני הביטוח
-                  <span className="text-[12px] font-bold" style={{ color: GOLD_TEXT }} dir="ltr">BETA</span>
+                  <span className="text-[14px] font-bold" style={{ color: GOLD_TEXT }} dir="ltr">BETA</span>
                 </span>
               </motion.div>
 

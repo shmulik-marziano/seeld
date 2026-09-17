@@ -251,7 +251,7 @@ const Header = () => {
 
                 {/* Secondary group — mono eyebrow */}
                 <div className="mt-8">
-                  <div className="text-[13px] font-bold text-[#476356] mb-3">
+                  <div className="text-[14px] font-bold text-[#476356] mb-3">
                     חשבון
                   </div>
                   <div className="flex flex-col">
@@ -278,7 +278,7 @@ const Header = () => {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       חייגו
-                      <span dir="ltr" className="tabular-nums text-[12px] font-normal text-[#476356] whitespace-nowrap">052-309-7444</span>
+                      <span dir="ltr" className="tabular-nums text-[14px] font-normal text-[#476356] whitespace-nowrap">052-309-7444</span>
                     </a>
                     <a
                       href="https://wa.me/972523097444"

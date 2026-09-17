@@ -9,6 +9,8 @@ import { toast } from "sonner";
 import { BrandDots } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, RUST, RUST_TEXT, SAGE_ON_GREEN } from "@/lib/brand";
+import { Illustration } from "@/components/brand/Illustration";
+import { illustrationForCategory, isStockPhoto } from "@/lib/coverArt";
 
 // Blog post: one reading column on ivory, the post's own cover image when it
 // has one, a white lead-form band, deep green closing band (STYLESEED.md).
@@ -389,8 +391,9 @@ const BlogPost = () => {
             )}
           </div>
 
-          {/* Cover image — the post's own, kept when it has one */}
-          {post.cover_image_url && (
+          {/* Cover: the post's own photo when it has one. A stock photo (banned by
+              STYLESEED) is replaced by the category's kit illustration. */}
+          {post.cover_image_url && !isStockPhoto(post.cover_image_url) ? (
             <div className="max-w-3xl mx-auto px-5 sm:px-8">
               <div className="rounded-2xl overflow-hidden border bg-white" style={{ borderColor: LINE }}>
                 <img
@@ -400,6 +403,10 @@ const BlogPost = () => {
                   decoding="async"
                 />
               </div>
+            </div>
+          ) : (
+            <div className="max-w-3xl mx-auto px-5 sm:px-8">
+              <Illustration name={illustrationForCategory(post.category)} priority sizes="(min-width: 768px) 720px, 100vw" className="brand-hero-art" />
             </div>
           )}
 

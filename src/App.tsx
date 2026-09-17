@@ -50,16 +50,16 @@ async function getGeoData(): Promise<{ country: string | null; city: string | nu
   if (cached) {
     try { return JSON.parse(cached); } catch { /* fall through */ }
   }
-  // ipapi.co is a third party and is commonly blocked by ad blockers. Without a
-  // deadline a blocked request just hangs, and the page-view insert behind it
-  // never fires. Cap it and cache the miss so we retry at most once per session.
+  // /api/geo reads Vercel's own geo headers: same origin, no third party, no
+  // CORS noise in the console. Capped so a missing route (local preview) never
+  // delays the page-view insert; the miss is cached for the session.
   try {
-    const res = await fetch("https://ipapi.co/json/", {
+    const res = await fetch("/api/geo", {
       signal: AbortSignal.timeout(3000),
     });
     if (!res.ok) return { country: null, city: null };
     const data = await res.json();
-    const geo = { country: data.country_code ?? null, city: data.city ?? null };
+    const geo = { country: data.country ?? null, city: data.city ?? null };
     sessionStorage.setItem("pv_geo", JSON.stringify(geo));
     return geo;
   } catch {

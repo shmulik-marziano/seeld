@@ -100,7 +100,7 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
           return (
             <li key={file.id} className="flex items-center gap-4 p-4" style={{ borderColor: LINE }}>
               <span
-                className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 text-[12px] font-bold"
+                className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 text-[14px] font-bold"
                 style={{ backgroundColor: "#E8EDE5", color: GREEN }}
                 dir="ltr"
                 aria-hidden="true"
@@ -118,7 +118,7 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
               </div>
 
               <span
-                className="inline-flex items-center rounded-full px-3 py-1 text-[13px] font-bold shrink-0"
+                className="inline-flex items-center rounded-full px-3 py-1 text-[14px] font-bold shrink-0"
                 style={{ backgroundColor: status.bg, color: status.text }}
               >
                 {status.label}

@@ -70,7 +70,7 @@ const ReturnChart = ({ funds, height = 300 }: ReturnChartProps) => {
                 if (!active || !payload || payload.length === 0) return null;
                 const period = (payload[0].payload as Point).p;
                 return (
-                  <div dir="rtl" className="rounded-xl border bg-white px-3.5 py-2.5 text-[13px] shadow-sm" style={{ borderColor: "#CCD6CC", color: BODY }}>
+                  <div dir="rtl" className="rounded-xl border bg-white px-3.5 py-2.5 text-[14px] shadow-sm" style={{ borderColor: "#CCD6CC", color: BODY }}>
                     <div className="font-bold mb-1" style={{ color: GREEN }}>{periodLabel(period) || String(label)}</div>
                     {payload.map((entry) => {
                       const idx = Number(String(entry.dataKey).slice(1));
@@ -119,7 +119,7 @@ const ReturnChart = ({ funds, height = 300 }: ReturnChartProps) => {
           </li>
         ))}
       </ul>
-      <p className="mt-2 text-[13px]" style={{ color: MUTED }}>
+      <p className="mt-2 text-[14px]" style={{ color: MUTED }}>
         תשואה מצטברת ב־12 החודשים האחרונים, לפי התשואות החודשיות שפורסמו. עד שש קופות בגרף.
       </p>
     </div>

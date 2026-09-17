@@ -18,7 +18,7 @@ import { GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from "@/lib/bra
 // the hero corner, no full illustration (kit p.06: operational screens stay clean).
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-[15px] sm:text-[16px] font-bold text-[#476356] border-b-2 border-transparent data-[state=active]:border-[#003D30] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+  "rounded-none bg-transparent min-w-[44px] justify-center px-0 pb-4 text-[15px] sm:text-[16px] font-bold text-[#476356] border-b-2 border-transparent data-[state=active]:border-[#003D30] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const tabDefs = [
   { value: "mortgage", label: "משכנתא", title: "מחשבון משכנתא", lede: "חשבו החזר חודשי ועלות כוללת של המשכנתא", Component: MortgageCalculator },

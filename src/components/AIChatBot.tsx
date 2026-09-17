@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, Loader2, X, FileText, Calculator, Shield, PiggyBank, Phone, RotateCcw } from "lucide-react";
+import { Send, Loader2, X, FileText, Calculator, Shield, PiggyBank, Phone, RotateCcw, MessageCircle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
@@ -255,12 +255,15 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             onClick={() => setIsExpanded(true)}
-            className="fixed bottom-6 left-4 sm:left-6 z-50 flex min-h-[52px] items-center gap-2.5 rounded-full bg-[#003D30] py-3 pr-5 pl-4 text-white transition-colors duration-150 hover:bg-[#002B22] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
-            style={{ boxShadow: "0 10px 28px -10px rgba(0,61,48,.55), inset 0 0 0 1px rgba(255,255,255,.08)" }}
+            // Phone: a 52px round button (the label would cover a line of content
+            // on every screen). From 640px: the labelled pill.
+            className="fixed left-4 sm:left-6 z-50 flex h-[52px] w-[52px] items-center justify-center gap-2.5 rounded-full bg-[#003D30] text-white transition-colors duration-150 hover:bg-[#002B22] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))] sm:h-auto sm:w-auto sm:min-h-[52px] sm:py-3 sm:pr-5 sm:pl-4"
+            style={{ bottom: "calc(20px + env(safe-area-inset-bottom, 0px))", boxShadow: "0 10px 28px -10px rgba(0,61,48,.55), inset 0 0 0 1px rgba(255,255,255,.08)" }}
             aria-label="פתחו שיחה עם היועץ הדיגיטלי של SEELD"
           >
-            <LiveDot size={8} />
-            <span className="text-[14px] font-bold tracking-[0.02em]">שיחה עם היועץ הדיגיטלי</span>
+            <MessageCircle className="h-6 w-6 sm:hidden" strokeWidth={1.75} aria-hidden="true" />
+            <span className="hidden sm:inline-flex"><LiveDot size={8} /></span>
+            <span className="hidden sm:inline text-[14px] font-bold tracking-[0.02em]">שיחה עם היועץ הדיגיטלי</span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -273,7 +276,8 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed z-50 flex flex-col inset-x-2 bottom-2 top-16 sm:inset-auto sm:bottom-4 sm:left-6 sm:h-[min(700px,calc(100dvh-3rem))] sm:w-[440px] lg:w-[500px]"
+            className="fixed z-50 flex flex-col inset-x-2 top-16 sm:inset-auto sm:bottom-4 sm:left-6 sm:h-[min(700px,calc(100dvh-3rem))] sm:w-[440px] lg:w-[500px]"
+            style={{ bottom: "calc(8px + env(safe-area-inset-bottom, 0px))" }}
             role="dialog"
             aria-label="שיחה עם היועץ הדיגיטלי של SEELD"
           >
@@ -353,7 +357,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
                       href="https://wa.me/972523097444"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 rounded-lg py-3 text-[13px] font-medium text-[#003D30] transition-colors duration-150 hover:bg-[#003D30]/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                      className="flex items-center justify-center gap-2 rounded-lg py-3 text-[14px] font-medium text-[#003D30] transition-colors duration-150 hover:bg-[#003D30]/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
                       style={{ boxShadow: "inset 0 0 0 1.5px #003D30" }}
                     >
                       <Phone className="h-3.5 w-3.5" strokeWidth={1.75} />
@@ -406,7 +410,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
                           <button
                             key={i}
                             onClick={() => streamChat(s.text)}
-                            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[13px] font-medium text-[#476356] transition-colors duration-150 hover:text-[#003D30] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[14px] font-medium text-[#476356] transition-colors duration-150 hover:text-[#003D30] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
                             style={{ boxShadow: HAIRLINE }}
                           >
                             <s.icon className="h-3 w-3" strokeWidth={1.75} />

@@ -202,7 +202,7 @@ const Footer = () => {
                 ].map((row) => (
                   <div
                     key={row.label}
-                    className="flex items-baseline justify-between gap-4 py-[15px] border-b"
+                    className="flex items-center justify-between gap-4 py-[7px] border-b"
                     style={{ borderColor: LINE }}
                   >
                     <span className="text-[14px]" style={{ color: MUTED }}>{row.label}</span>
@@ -211,27 +211,27 @@ const Footer = () => {
                         href={row.href}
                         target={row.href.startsWith("http") ? "_blank" : undefined}
                         rel={row.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="text-base font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#003D30]/40 transition-colors"
+                        className="inline-flex min-h-[44px] items-center text-base font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#003D30]/40 transition-colors"
                         style={{ color: GREEN }}
                         dir={row.ltr ? "ltr" : undefined}
                       >
                         {row.value}
                       </a>
                     ) : (
-                      <span className="text-base" style={{ color: GREEN }}>{row.value}</span>
+                      <span className="inline-flex min-h-[44px] items-center text-base" style={{ color: GREEN }}>{row.value}</span>
                     )}
                   </div>
                 ))}
               </div>
 
-              <div className="flex flex-wrap gap-x-6 gap-y-2 mt-7">
+              <div className="flex flex-wrap gap-x-5 gap-y-0 mt-5">
                 {socialLinks.map((social) => (
                   <a
                     key={social.label}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[14px] font-bold border-b border-transparent hover:border-[#003D30]/40 transition-colors"
+                    className="inline-flex min-h-[44px] items-center px-0.5 text-[14px] font-bold border-b border-transparent hover:border-[#003D30]/40 transition-colors"
                     style={{ color: MUTED }}
                   >
                     {social.label}
@@ -239,10 +239,10 @@ const Footer = () => {
                 ))}
               </div>
 
-              <div className="mt-9 pt-6 border-t flex flex-wrap gap-x-6 gap-y-2 text-[14px]" style={{ borderColor: LINE }}>
-                <Link to="/about" className="hover:underline underline-offset-4" style={{ color: MUTED }}>מי אנחנו</Link>
-                <Link to="/faq" className="hover:underline underline-offset-4" style={{ color: MUTED }}>שאלות נפוצות</Link>
-                <Link to="/learn" className="hover:underline underline-offset-4" style={{ color: MUTED }}>מידע ולמידה</Link>
+              <div className="mt-7 pt-4 border-t flex flex-wrap gap-x-5 gap-y-0 text-[14px]" style={{ borderColor: LINE }}>
+                <Link to="/about" className="inline-flex min-h-[44px] items-center px-0.5 hover:underline underline-offset-4" style={{ color: MUTED }}>מי אנחנו</Link>
+                <Link to="/faq" className="inline-flex min-h-[44px] items-center px-0.5 hover:underline underline-offset-4" style={{ color: MUTED }}>שאלות נפוצות</Link>
+                <Link to="/learn" className="inline-flex min-h-[44px] items-center px-0.5 hover:underline underline-offset-4" style={{ color: MUTED }}>מידע ולמידה</Link>
               </div>
             </div>
           </div>
@@ -283,10 +283,11 @@ const Footer = () => {
                 <h3 className="text-[16px] mb-5" style={{ color: IVORY }}>
                   {col.title}
                 </h3>
-                <ul className="space-y-2.5 text-[15px]" style={{ color: SAGE_ON_GREEN }}>
+                <ul className="space-y-1 text-[15px]" style={{ color: SAGE_ON_GREEN }}>
                   {col.links.map((l, i) => (
                     <li key={l.href + l.label} className={i >= 6 ? "hidden md:list-item" : undefined}>
-                      <Link to={l.href} className="hover:text-[#FAF7EF] hover:underline underline-offset-4 transition-colors">
+                      {/* 44px rows: the footer is read with a thumb more than with a mouse */}
+                      <Link to={l.href} className="inline-flex min-h-[44px] items-center hover:text-[#FAF7EF] hover:underline underline-offset-4 transition-colors md:min-h-0 md:py-1">
                         {l.label}
                       </Link>
                     </li>
@@ -299,29 +300,29 @@ const Footer = () => {
               <h3 className="text-[16px] mb-5" style={{ color: IVORY }}>
                 צור קשר
               </h3>
-              <ul className="space-y-2.5 text-[15px]" style={{ color: SAGE_ON_GREEN }}>
+              <ul className="space-y-1 text-[15px]" style={{ color: SAGE_ON_GREEN }}>
                 <li>
                   <a
                     href="tel:0523097444"
-                    className="hover:text-[#FAF7EF] transition-colors tabular-nums whitespace-nowrap"
+                    className="inline-flex min-h-[44px] items-center hover:text-[#FAF7EF] transition-colors tabular-nums whitespace-nowrap md:min-h-0 md:py-1"
                     dir="ltr"
                   >
                     052-309-7444
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:info@seeld.co.il" className="hover:text-[#FAF7EF] transition-colors break-all" dir="ltr">
+                  <a href="mailto:info@seeld.co.il" className="inline-flex min-h-[44px] items-center hover:text-[#FAF7EF] transition-colors break-all md:min-h-0 md:py-1" dir="ltr">
                     info@seeld.co.il
                   </a>
                 </li>
-                <li>רעננה · ירושלים</li>
+                <li className="py-2 md:py-1">רעננה · ירושלים</li>
                 <li className="pt-2">
-                  <Link to="/personal-area" className="font-bold hover:underline underline-offset-4" style={{ color: IVORY }}>
+                  <Link to="/personal-area" className="inline-flex min-h-[44px] items-center font-bold hover:underline underline-offset-4 md:min-h-0 md:py-1" style={{ color: IVORY }}>
                     לאזור האישי
                   </Link>
                 </li>
                 <li>
-                  <Link to="/agents" className="hover:text-[#FAF7EF] transition-colors">
+                  <Link to="/agents" className="inline-flex min-h-[44px] items-center hover:text-[#FAF7EF] transition-colors md:min-h-0 md:py-1">
                     כניסה לסוכנים
                   </Link>
                 </li>
@@ -354,14 +355,15 @@ const Footer = () => {
           {/* Bottom bar */}
           <div className="pt-6 border-t" style={{ borderColor: "rgba(250,247,239,0.18)" }}>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-              <p className="text-[13px]" style={{ color: SAGE_ON_GREEN }}>
+              <p className="text-[14px]" style={{ color: SAGE_ON_GREEN }}>
                 &copy; {new Date().getFullYear()} שילד ביטוח ופיננסים. כל הזכויות שמורות.
               </p>
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-2 text-[13px]" style={{ color: SAGE_ON_GREEN }}>
-                <Link to="/privacy" className="hover:text-[#FAF7EF] transition-colors">מדיניות פרטיות</Link>
-                <Link to="/terms" className="hover:text-[#FAF7EF] transition-colors">תנאי שימוש</Link>
-                <Link to="/accessibility" className="hover:text-[#FAF7EF] transition-colors">נגישות</Link>
-                <Link to="/cookie-policy" className="hover:text-[#FAF7EF] transition-colors">עוגיות</Link>
+              {/* 14px minimum and a 44px tap height (WCAG 2.5.8) on the legal links */}
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-0 text-[14px]" style={{ color: SAGE_ON_GREEN }}>
+                <Link to="/privacy" className="inline-flex min-h-[44px] items-center px-1 hover:text-[#FAF7EF] transition-colors">מדיניות פרטיות</Link>
+                <Link to="/terms" className="inline-flex min-h-[44px] items-center px-1 hover:text-[#FAF7EF] transition-colors">תנאי שימוש</Link>
+                <Link to="/accessibility" className="inline-flex min-h-[44px] items-center px-1 hover:text-[#FAF7EF] transition-colors">נגישות</Link>
+                <Link to="/cookie-policy" className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center px-1 hover:text-[#FAF7EF] transition-colors">עוגיות</Link>
               </div>
             </div>
           </div>

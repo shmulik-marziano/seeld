@@ -104,7 +104,7 @@ const MortgageCalculator = () => {
             step={50000}
             className={`mt-2 ${sliderClass}`}
           />
-          <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
+          <div className="flex justify-between text-[14px] tabular-nums" style={{ color: MUTED }} dir="ltr">
             <span>₪100,000</span>
             <span>₪5,000,000</span>
           </div>
@@ -138,7 +138,7 @@ const MortgageCalculator = () => {
             step={0.1}
             className={`mt-2 ${sliderClass}`}
           />
-          <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
+          <div className="flex justify-between text-[14px] tabular-nums" style={{ color: MUTED }} dir="ltr">
             <span>0%</span>
             <span>10%</span>
           </div>
@@ -171,7 +171,7 @@ const MortgageCalculator = () => {
             step={1}
             className={`mt-2 ${sliderClass}`}
           />
-          <div className="flex justify-between text-xs tabular-nums" style={{ color: MUTED }} dir="ltr">
+          <div className="flex justify-between text-[14px] tabular-nums" style={{ color: MUTED }} dir="ltr">
             <span>5 שנים</span>
             <span>30 שנים</span>
           </div>
@@ -182,7 +182,7 @@ const MortgageCalculator = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Monthly Payment - standout stat */}
         <div className="dna-concept col-span-1 md:col-span-2 lg:col-span-1">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>החזר חודשי</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>החזר חודשי</p>
           <p
             className="tabular-nums"
             dir="ltr"
@@ -194,7 +194,7 @@ const MortgageCalculator = () => {
 
         {/* Total Payment */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>סה"כ תשלום</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה"כ תשלום</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             {formatCurrency(result.totalPayment)}
           </p>
@@ -202,7 +202,7 @@ const MortgageCalculator = () => {
 
         {/* Total Interest */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>סה"כ ריבית</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה"כ ריבית</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: CORAL_TEXT }}>
             {formatCurrency(result.totalInterest)}
           </p>
@@ -210,7 +210,7 @@ const MortgageCalculator = () => {
 
         {/* Number of Payments */}
         <div className="dna-concept">
-          <p className="text-[13px] mb-2" style={{ color: MUTED }}>מספר תשלומים</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>מספר תשלומים</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             {loanTerm * 12}
           </p>
@@ -241,7 +241,7 @@ const MortgageCalculator = () => {
         </div>
 
         {/* Legend */}
-        <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-[13.5px]" style={{ color: NAVY }}>
+        <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-[14px]" style={{ color: NAVY }}>
           <span className="inline-flex items-center gap-2">
             <span className="w-3 h-3 rounded-[3px]" style={{ backgroundColor: TURQ }} aria-hidden="true" />
             קרן ({result.principalPercent.toFixed(0)}%):{" "}
