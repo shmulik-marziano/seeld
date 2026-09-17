@@ -10,7 +10,7 @@ import IncomeTaxCalculator from "@/components/IncomeTaxCalculator";
 import LifeInsuranceCalculator from "@/components/LifeInsuranceCalculator";
 import CarInsuranceEstimator from "@/components/CarInsuranceEstimator";
 import { Link } from "react-router-dom";
-import { BalancedStones, BrandDots } from "@/components/brand/Elements";
+import { BalancedStones } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from "@/lib/brand";
 
@@ -56,7 +56,6 @@ const Calculators = () => {
 
               <div className="flex items-start justify-between gap-8">
                 <div>
-                  <BrandDots className="mb-4" />
                   <h1 className="dna-display leading-[1.15] mb-4 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                     מחשבונים פיננסיים
                   </h1>

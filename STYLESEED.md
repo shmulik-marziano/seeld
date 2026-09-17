@@ -124,3 +124,14 @@ Footer must carry, verbatim:
 - Real loading/error/empty states on every interactive surface; forms validate per field, keep input after an error, block double submit, confirm only after the write succeeded.
 - Full-route sweep before merge: zero page errors, zero horizontal overflow at 390 and 1440.
 - Mobile first: verify 390px on every converted page. Check 360, 390, 768, 1440 and 200% zoom on key pages.
+
+## Addendum 2026-09-17 · the owner's design mock
+
+The owner's mock set (site, service page, process, knowledge hub, app screens) is the reference above the kit map where they differ:
+
+- **Home opening art** = the circles-and-leaf composition with the three door cards (`src/components/brand/HeroComposition.tsx`), not the journey landscape. Landscapes stay for service and savings openings.
+- **Cards are the grammar** for services, products and key points: white, hairline, radius 16, a line icon in a tinted disc (sage / sand / mint), title, one or two lines, arrow or rule link.
+- **Numbers** in the brand triad (01 sage, 02 sand, 03 rust, 04 green) for steps.
+- **No repeated ornament**: the three dots live only inside the illustrations. `BrandDots` is not used above headings.
+- **Header**: five nav items; the personal area is an outlined round pill with the user glyph. Phone header: logo and menu only.
+- **One primary action per opening** plus one rule link. Section titles are short; a trailing period is allowed ("כך עובדים יחד.").

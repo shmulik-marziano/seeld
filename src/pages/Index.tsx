@@ -2,75 +2,70 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import Header from "@/components/Header";
-import { TIERS, type ProductLink } from "@/data/productDirectory";
+import { TIERS, type ProductTier } from "@/data/productDirectory";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import ScrollReveal from "@/components/ScrollReveal";
 import CompanyLogos from "@/components/CompanyLogos";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Illustration, type IllustrationName } from "@/components/brand/Illustration";
-import { BrandDots, BubbleCorner, PathDivider } from "@/components/brand/Elements";
+import { Illustration } from "@/components/brand/Illustration";
+import { BubbleCorner, PathDivider } from "@/components/brand/Elements";
 import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
-import { BODY, GREEN, IVORY, LINE, MUTED, SAGE_ON_GREEN } from "@/lib/brand";
+import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, RUST, SAGE, SAGE_ON_GREEN, SAND, TINT_SAGE } from "@/lib/brand";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
 // ── Data ──
 
+// "במה אפשר לעזור?" — the three services from the design mock. The products
+// themselves are listed in the directory below, by tier.
 const serviceAreas: {
   title: string;
   description: string;
   href: string;
-  illustration: IllustrationName;
   icon: BrandIconName;
+  tint: string;
 }[] = [
   {
-    title: "הכסף והנכסים",
-    description: "פוליסות השקעה, קופות גמל, קרנות השתלמות ופנסיה במבט אחד: דמי ניהול, מסלולים, הפקדות ותשואות. קודם הכסף, אחר כך ההגנה עליו.",
-    href: "/savings",
-    illustration: "03-saving-growth",
-    icon: "leaf",
+    title: "בדיקת תיק 360",
+    description: "סוקרים את כל הפוליסות, הקרנות והחיסכון, ומזהים חסרים, כפילויות ודמי ניהול גבוהים.",
+    href: "#portfolio-review",
+    icon: "document",
+    tint: PASTEL_SAGE,
   },
   {
-    title: "משפחה והגנה",
-    description: "ביטוחי חיים, משכנתא, בריאות, מחלות קשות ותאונות אישיות, כחלק מתמונה משפחתית אחת. בודקים מה יש, מה חסר ומה כפול.",
-    href: "/insurances",
-    illustration: "02-family-protection",
-    icon: "shield",
+    title: "תכנון פיננסי ופנסיוני",
+    description: "בונים תוכנית שמתאימה לכם ולמטרות שלכם: הפקדות, מסלולים, מיסוי ותזמון.",
+    href: "/savings/financial-planning",
+    icon: "chart",
+    tint: PASTEL_SAND,
   },
   {
-    title: "לקראת פרישה",
-    description: "הבנת התמונה הקיימת והכנה לשלב הבא: קצבאות, משיכות, מיסוי ותזמון. תוכנית שאפשר לעקוב אחריה.",
-    href: "/savings/pre-retirement",
-    illustration: "04-retirement-horizon",
-    icon: "retirement",
+    title: "ליווי שוטף",
+    description: "אנחנו כאן גם בהמשך: מעקב שנתי, עדכונים באירועי חיים וטיפול מול החברות.",
+    href: "#process",
+    icon: "family",
+    tint: PASTEL_MINT,
   },
+];
+
+// Icon and tint per product tier (panels below the service cards)
+const TIER_STYLE: Record<ProductTier["key"], { icon: BrandIconName; tint: string }> = {
+  finance: { icon: "leaf", tint: PASTEL_SAGE },
+  life: { icon: "heart", tint: PASTEL_SAND },
+  general: { icon: "home", tint: PASTEL_MINT },
+};
+
+// The process, as a numbered timeline (mock: 01 sage, 02 sand, 03 rust, 04 green).
+const processSteps: { title: string; short: string; icon: BrandIconName; color: string }[] = [
+  { title: "מיפוי התיק", short: "מרכזים את כל המידע הקיים ממקורות רשמיים.", icon: "document", color: SAGE },
+  { title: "פגישה והחלטות", short: "מבינים את התמונה ואת האפשרויות, ומחליטים יחד.", icon: "family", color: SAND },
+  { title: "ביצוע הפעולות", short: "מקדמים את מה שסוכם: טפסים, ניודים וחברות.", icon: "settings", color: RUST },
+  { title: "מעקב ועדכון", short: "בודקים מה הושלם ומה נותר, אחת לשנה ובכל שינוי.", icon: "chart", color: GREEN },
 ];
 
 
 
-const processSteps: { title: string; you: string; we: string }[] = [
-  {
-    title: "מיפוי התיק",
-    you: "משאירים פרטים וחותמים על ייפוי כוח לשליפת הנתונים.",
-    we: "שולפים את כל הפוליסות, הקרנות והחיסכון ממקורות רשמיים ומסדרים אותם בתמונה אחת.",
-  },
-  {
-    title: "פגישה והחלטות",
-    you: "עוברים איתנו על התמונה, שואלים ומחליטים בקצב שלכם.",
-    we: "מציגים את המצב הקיים, את הפערים ואת האפשרויות, עם המלצות מנומקות ומתועדות.",
-  },
-  {
-    title: "ביצוע הפעולות",
-    you: "מאשרים את מה שהוחלט.",
-    we: "מטפלים בטפסים, בניודים ובחברות, ומעדכנים אתכם בכל שלב.",
-  },
-  {
-    title: "מעקב ועדכון",
-    you: "מעדכנים אותנו באירועי חיים: עבודה חדשה, ילד, דירה, פרישה.",
-    we: "בוחנים את התיק מחדש אחת לשנה ובכל שינוי, ומתעדים כל החלטה באזור האישי.",
-  },
-];
 
 const knowledgeItems: { title: string; description: string; href?: string; icon: BrandIconName }[] = [
   { title: "מחשבונים", description: "משכנתא, פנסיה, חיסכון, מס והשוואת מסלולים. חופשי, ללא רישום.", href: "/calculators", icon: "calculator" },
@@ -138,7 +133,6 @@ const leadSubjects = [
 
 const SectionHead = ({ title, lede, center = false }: { title: string; lede?: string; center?: boolean }) => (
   <div className={`mb-10 sm:mb-14 ${center ? "text-center mx-auto" : ""}`}>
-    <BrandDots className="mb-4" />
     <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
       {title}
     </h2>
@@ -148,24 +142,6 @@ const SectionHead = ({ title, lede, center = false }: { title: string; lede?: st
   </div>
 );
 
-const ProductList = ({ items, phoneLimit = 6 }: { items: ProductLink[]; phoneLimit?: number }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
-    {items.map((item, i) => (
-      <Link
-        key={item.title + item.href}
-        to={item.href}
-        className={`group items-baseline justify-between gap-6 py-[14px] px-3 -mx-3 rounded-lg border-b hover:bg-white transition-colors ${i >= phoneLimit ? "hidden md:flex" : "flex"}`}
-        style={{ borderColor: LINE }}
-      >
-        <div className="flex items-baseline gap-4 min-w-0">
-          <h3 className="text-[16px] font-bold whitespace-nowrap" style={{ color: GREEN }}>{item.title}</h3>
-          <p className="text-[14px] truncate hidden sm:block" style={{ color: MUTED }}>{item.description}</p>
-        </div>
-        <BrandIcon name="arrow-left" size={18} className="shrink-0 transition-transform group-hover:-translate-x-1" style={{ color: GREEN }} />
-      </Link>
-    ))}
-  </div>
-);
 
 const FieldLabel = ({ htmlFor, children, required }: { htmlFor: string; children: React.ReactNode; required?: boolean }) => (
   <label htmlFor={htmlFor} className="block text-[14px] font-bold mb-1.5" style={{ color: GREEN }}>
@@ -280,67 +256,80 @@ const Index = () => {
           <div className="max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
             <ScrollReveal>
               <SectionHead
-                title="פיננסים וביטוח, במקום אחד"
+                title="במה אפשר לעזור?"
                 lede="כמו בבית השקעות גדול ובחברת ביטוח גדולה, רק עם יועץ אחד שמכיר אתכם. קודם הכסף והנכסים, אחר כך ההגנה עליהם."
               />
             </ScrollReveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
-              {serviceAreas.map((area, i) => (
-                <ScrollReveal key={area.href} delay={i * 80}>
-                  {/* Phone: a row (small art beside the text) so three cards fit in
-                      one and a half screens instead of three. Tablet and up: the
-                      full illustration card. */}
-                  <Link
-                    to={area.href}
-                    className="group flex h-full items-start gap-4 rounded-2xl bg-white border overflow-hidden p-4 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30] md:block md:p-0"
-                    style={{ borderColor: LINE }}
-                  >
-                    <div
-                      className="w-[104px] shrink-0 overflow-hidden rounded-xl border md:w-auto md:rounded-none md:border-0 md:border-b"
-                      style={{ borderColor: LINE }}
-                    >
-                      <Illustration
-                        name={area.illustration}
-                        sizes="(min-width: 768px) 380px, 104px"
-                        className="!rounded-none"
-                      />
-                    </div>
-                    <div className="min-w-0 md:p-6">
-                      <div className="flex items-center gap-3 mb-2 md:mb-3">
-                        <BrandIcon name={area.icon} size={32} className="hidden md:block" style={{ color: GREEN }} />
-                        <h3 className="text-[19px] leading-tight md:text-[22px]" style={{ color: GREEN }}>{area.title}</h3>
-                      </div>
-                      <p className="text-[15px] leading-[1.6] md:text-[16px] md:leading-[1.7]" style={{ color: BODY }}>{area.description}</p>
-                      <span className="link-rule mt-3 text-[15px] md:mt-5">
-                        לפרטי השירות
-                        <BrandIcon name="arrow-left" size={18} className="transition-transform group-hover:-translate-x-1" />
-                      </span>
-                    </div>
-                  </Link>
-                </ScrollReveal>
-              ))}
+            {/* Three service cards (mock): icon in a tinted disc, title, two lines, a rule link */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+              {serviceAreas.map((area, i) => {
+                const inner = (
+                  <>
+                    <span className="flex h-14 w-14 items-center justify-center rounded-full" style={{ background: area.tint }}>
+                      <BrandIcon name={area.icon} size={28} style={{ color: GREEN }} />
+                    </span>
+                    <h3 className="mt-5 text-[20px] leading-tight md:text-[22px]" style={{ color: GREEN }}>{area.title}</h3>
+                    <p className="mt-2 text-[15px] leading-[1.6] md:text-[16px] md:leading-[1.7]" style={{ color: BODY }}>{area.description}</p>
+                    <span className="link-rule mt-5 text-[15px]">
+                      לפרטים נוספים
+                      <BrandIcon name="arrow-left" size={18} className="transition-transform group-hover:-translate-x-1" />
+                    </span>
+                  </>
+                );
+                const cls = "group flex h-full flex-col items-start rounded-2xl bg-white border p-6 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]";
+                return (
+                  <ScrollReveal key={area.href} delay={i * 80}>
+                    {area.href.startsWith("#") ? (
+                      <a href={area.href} className={cls} style={{ borderColor: LINE }}>{inner}</a>
+                    ) : (
+                      <Link to={area.href} className={cls} style={{ borderColor: LINE }}>{inner}</Link>
+                    )}
+                  </ScrollReveal>
+                );
+              })}
             </div>
 
             {/* The directory: three tiers in the owner's order (finance, then
                 life and health cover, then general insurance). Every product
                 keeps its link; the same order runs through the hubs and the footer. */}
-            <div className="mt-14 sm:mt-20 space-y-12 sm:space-y-16">
+            {/* Three panels in the card grammar of the mock (icon disc, title, one
+                line, a short list with arrows, one link), finance first. */}
+            <div className="mt-12 sm:mt-16 grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
               {TIERS.map((tier, i) => (
-                <ScrollReveal key={tier.key} delay={i * 60}>
-                  <div id={`home-${tier.key}`} className="scroll-mt-24">
-                    <div className="mb-3 sm:mb-5 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-6 border-b pb-3" style={{ borderColor: LINE }}>
-                      <h3 className="text-[22px] sm:text-[24px] leading-tight" style={{ color: GREEN }}>{tier.title}</h3>
-                      <p className="text-[15px]" style={{ color: MUTED }}>{tier.lede}</p>
+                <ScrollReveal key={tier.key} delay={i * 60} className="h-full">
+                  <section
+                    id={`home-${tier.key}`}
+                    aria-labelledby={`home-${tier.key}-title`}
+                    className="flex h-full flex-col rounded-2xl bg-white border p-6 scroll-mt-24"
+                    style={{ borderColor: LINE }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ background: TIER_STYLE[tier.key].tint }}>
+                        <BrandIcon name={TIER_STYLE[tier.key].icon} size={24} style={{ color: GREEN }} />
+                      </span>
+                      <h3 id={`home-${tier.key}-title`} className="text-[21px] leading-tight" style={{ color: GREEN }}>{tier.title}</h3>
                     </div>
-                    <ProductList items={tier.items} phoneLimit={tier.homeCount} />
-                    <div className="mt-6">
-                      <Link to={tier.href} className="link-rule text-[15px]">
-                        {tier.linkLabel}
-                        <BrandIcon name="arrow-left" size={18} />
-                      </Link>
-                    </div>
-                  </div>
+                    <p className="mt-3 text-[15px] leading-[1.6]" style={{ color: MUTED }}>{tier.lede}</p>
+                    <ul className="mt-4 flex-1 divide-y divide-[#E1E8E1]">
+                      {tier.items.slice(0, tier.homeCount).map((item) => (
+                        <li key={item.href}>
+                          <Link
+                            to={item.href}
+                            className="group flex min-h-[48px] items-center justify-between gap-4 py-2 text-[16px] font-bold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                            style={{ color: GREEN }}
+                          >
+                            <span>{item.title}</span>
+                            <BrandIcon name="arrow-left" size={18} className="shrink-0 transition-transform group-hover:-translate-x-1" style={{ color: SAGE }} />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link to={tier.href} className="link-rule mt-5 self-start text-[15px]">
+                      {tier.linkLabel}
+                      <BrandIcon name="arrow-left" size={18} />
+                    </Link>
+                  </section>
                 </ScrollReveal>
               ))}
             </div>
@@ -445,41 +434,65 @@ const Index = () => {
         </section>
 
         {/* PROCESS — how we work together */}
-        <section className="relative border-t overflow-hidden" style={{ borderColor: LINE }}>
+        <section id="process" className="relative border-t overflow-hidden scroll-mt-24" style={{ borderColor: LINE }}>
           <BubbleCorner className="hidden lg:block absolute -top-24 -left-24 w-[380px] opacity-70" flip />
           <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
             <ScrollReveal>
               <SectionHead
-                title="איך עובדים יחד"
-                lede="ארבעה שלבים, מהמיפוי ועד המעקב. בכל שלב ברור מה אתם עושים ומה אנחנו עושים."
+                title="כך עובדים יחד."
+                lede="כל שלב ברור. כל החלטה מתועדת."
               />
             </ScrollReveal>
 
-            <ol className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 max-w-4xl">
+            {/* The timeline (mock): numbered discs in the brand colours. Phone: a
+                vertical line down the right with white cards; from 768px: one row
+                on the sage band with arrows between the steps. */}
+            <ol className="relative grid grid-cols-1 gap-5 md:grid-cols-4 md:gap-6 md:rounded-2xl md:p-8" style={{ background: undefined }}>
+              <div className="pointer-events-none absolute inset-0 hidden rounded-2xl md:block" style={{ background: TINT_SAGE }} aria-hidden="true" />
               {processSteps.map((step, i) => (
-                <li key={step.title} className="h-full">
-                  <ScrollReveal delay={i * 70} className="h-full">
-                    <div className="dna-concept h-full !p-6">
-                      <h3 className="text-[20px] mb-4" style={{ color: GREEN }}>{step.title}</h3>
-                      <dl className="space-y-3 text-[15px] leading-[1.7]">
-                        <div>
-                          <dt className="font-bold" style={{ color: GREEN }}>אתם</dt>
-                          <dd style={{ color: BODY }}>{step.you}</dd>
-                        </div>
-                        <div>
-                          <dt className="font-bold" style={{ color: GREEN }}>אנחנו</dt>
-                          <dd style={{ color: BODY }}>{step.we}</dd>
-                        </div>
-                      </dl>
+                <li key={step.title} className="relative flex items-start gap-4 md:flex-col md:gap-5">
+                  {/* connector: vertical on the phone, arrow on desktop */}
+                  {i < processSteps.length - 1 && (
+                    <>
+                      <span className="absolute right-[27px] top-[60px] -bottom-5 w-px md:hidden" style={{ background: LINE }} aria-hidden="true" />
+                      <span className="absolute -left-6 top-[14px] hidden md:block" style={{ color: MUTED }} aria-hidden="true">
+                        <BrandIcon name="arrow-left" size={20} />
+                      </span>
+                    </>
+                  )}
+                  <span
+                    className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-[18px] font-bold tabular-nums"
+                    style={{ background: step.color, color: "#FAF7EF" }}
+                    dir="ltr"
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div className="flex-1 rounded-2xl bg-white border p-5 md:p-5" style={{ borderColor: LINE }}>
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full" style={{ background: PASTEL_SAGE }}>
+                        <BrandIcon name={step.icon} size={20} style={{ color: GREEN }} />
+                      </span>
+                      <h3 className="text-[18px] leading-tight" style={{ color: GREEN }}>{step.title}</h3>
                     </div>
-                  </ScrollReveal>
+                    <p className="mt-3 text-[15px] leading-[1.6]" style={{ color: BODY }}>{step.short}</p>
+                  </div>
                 </li>
               ))}
             </ol>
 
-            <div className="mt-10 flex flex-col sm:flex-row gap-3">
-              <a href="#portfolio-review" className="btn-primary sm:min-w-[220px]">בדיקת תיק 360</a>
-              <Link to="/contact" className="btn-secondary sm:min-w-[200px]">תיאום פגישה</Link>
+            {/* The green promise band (mock) */}
+            <div className="dna-navy-band relative mt-8 overflow-hidden rounded-2xl px-6 py-8 sm:mt-10 sm:px-10 sm:py-10">
+              <BubbleCorner className="absolute -bottom-16 -left-16 w-[260px] opacity-60" />
+              <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h3 className="text-[24px] leading-tight sm:text-[28px]" style={{ color: IVORY }}>תמיד יודעים מה השלב הבא</h3>
+                  <p className="mt-2 text-[16px] sm:text-[17px]" style={{ color: SAGE_ON_GREEN }}>ליווי רציף שמחזיק אתכם בדרך הנכונה.</p>
+                </div>
+                <Link to="/contact" className="btn-on-green sm:min-w-[220px]">
+                  לתיאום פגישה
+                  <BrandIcon name="arrow-left" size={18} />
+                </Link>
+              </div>
             </div>
           </div>
         </section>
@@ -501,7 +514,9 @@ const Index = () => {
                 <Link key={item.title} to={item.href!} className="group block dna-concept dna-hover h-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex items-center gap-3">
-                      <BrandIcon name={item.icon} size={28} style={{ color: GREEN }} />
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full" style={{ background: PASTEL_SAGE }}>
+                        <BrandIcon name={item.icon} size={22} style={{ color: GREEN }} />
+                      </span>
                       <h3 className="text-[18px]" style={{ color: GREEN }}>{item.title}</h3>
                     </div>
                     <BrandIcon name="arrow-left" size={18} className="shrink-0 mt-1 transition-transform group-hover:-translate-x-1" style={{ color: GREEN }} />

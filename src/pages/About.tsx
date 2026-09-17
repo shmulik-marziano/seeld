@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
 import { Illustration } from "@/components/brand/Illustration";
-import { BrandDots, OliveBranch } from "@/components/brand/Elements";
+import { OliveBranch } from "@/components/brand/Elements";
 import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from "@/lib/brand";
 
@@ -11,7 +11,6 @@ import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from "@/l
 
 const SectionHead = ({ title, lede }: { title: string; lede?: string }) => (
   <div className="mb-10 sm:mb-14">
-    <BrandDots className="mb-4" />
     <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
       {title}
     </h2>
@@ -52,7 +51,6 @@ const About = () => {
 
             <div className="grid gap-10 lg:gap-16 lg:grid-cols-[1.05fr_1fr] items-center">
               <div>
-                <BrandDots className="mb-5" />
                 <h1 className="dna-display leading-[1.15] mb-5 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                   הבית שמאחורי התיק שלכם
                 </h1>

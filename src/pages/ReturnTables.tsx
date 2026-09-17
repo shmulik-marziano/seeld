@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import TrackCard from "@/components/returns/TrackCard";
 import MarketMap from "@/components/returns/MarketMap";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { BrandDots, LeafCanopy } from "@/components/brand/Elements";
+import { LeafCanopy } from "@/components/brand/Elements";
 import {
   fmtAssets, fmtPct, periodLabel, productBySlug, PRODUCTS, trackLabel,
   useCmaBoard, useCompanyMap, type BoardFund, type BoardProduct,
@@ -130,7 +130,6 @@ const ReturnTables = () => {
 
             <div className="flex items-start justify-between gap-8">
               <div className="min-w-0">
-                <BrandDots className="mb-4" />
                 <h1 className="dna-display leading-[1.15] mb-4 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                   {title}
                 </h1>
@@ -205,7 +204,6 @@ const ReturnTables = () => {
             {board && !product && (
               <div className="space-y-12">
                 <div>
-                  <BrandDots className="mb-4" />
                   <h2 className="dna-display leading-tight mb-2" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>מפת השוק לפי חברה</h2>
                   <p className="text-[16px] mb-6 max-w-2xl" style={{ color: MUTED }}>
                     סך הנכסים המנוהלים לכל חברה, לפי מוצר, וגיוסים נטו ב־12 החודשים האחרונים.
@@ -218,7 +216,6 @@ const ReturnTables = () => {
                 </div>
 
                 <div>
-                  <BrandDots className="mb-4" />
                   <h2 className="dna-display leading-tight mb-6" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>לפי מוצר</h2>
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {productSummaries.map((p) => (

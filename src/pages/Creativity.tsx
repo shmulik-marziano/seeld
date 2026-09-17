@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import { BrandDots, BubbleCorner } from "@/components/brand/Elements";
+import { BubbleCorner } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, SAGE_ON_GREEN } from "@/lib/brand";
 
@@ -83,7 +83,6 @@ const Creativity = () => {
           <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
               <div className="mb-10 sm:mb-12">
-                <BrandDots className="mb-4" />
                 <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
                   תחומי הכיסוי
                 </h2>
@@ -133,7 +132,6 @@ const Creativity = () => {
           <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
               <div className="mb-8">
-                <BrandDots className="mb-4" />
                 <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
                   איך משווים
                 </h2>
@@ -155,7 +153,6 @@ const Creativity = () => {
         <section className="dna-navy-band">
           <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
-              <BrandDots className="mb-4" />
               <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(28px, 3.2vw, 32px)" }}>
                 רוצים להשוות הצעות מחיר?
               </h2>

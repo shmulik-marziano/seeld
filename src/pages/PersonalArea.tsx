@@ -4,7 +4,6 @@ import Footer from "@/components/Footer";
 import { Loader2 } from "lucide-react";
 import PersonalAreaLogin from "@/components/personal-area/PersonalAreaLogin";
 import PersonalAreaDashboard from "@/components/personal-area/PersonalAreaDashboard";
-import { BrandDots } from "@/components/brand/Elements";
 import { IVORY, SAGE_ON_GREEN } from "@/lib/brand";
 
 const PersonalArea = () => {
@@ -34,7 +33,6 @@ const PersonalArea = () => {
 
       <section className="dna-navy-band">
         <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-10 sm:py-12">
-          <BrandDots className="mb-4" />
           <h1 className="leading-tight" style={{ color: IVORY, fontSize: "clamp(28px, 3.4vw, 36px)" }}>
             האזור האישי
           </h1>

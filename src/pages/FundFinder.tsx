@@ -10,7 +10,7 @@ import { useCmaFunds, useCmaSyncStatus, formatPeriod } from '@/hooks/useCmaFunds
 import { cmaLastUpdate } from '@/data/cmaFundsData';
 import { Checkbox } from '@/components/ui/checkbox';
 import { BrandIcon } from '@/components/brand/BrandIcon';
-import { BrandDots, OliveBranch } from '@/components/brand/Elements';
+import { OliveBranch } from '@/components/brand/Elements';
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN } from '@/lib/brand';
 
 // Fund finder (SEELD brand system 2026-09): a tool page. The search, the
@@ -68,7 +68,6 @@ const FundFinder = () => {
 
             <div className="flex items-start justify-between gap-8">
               <div>
-                <BrandDots className="mb-4" />
                 <h1 className="dna-display leading-[1.15] mb-4 max-w-3xl" style={{ fontSize: 'clamp(32px, 4.4vw, 52px)' }}>
                   איתור והשוואת קופות
                 </h1>

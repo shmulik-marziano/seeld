@@ -5,7 +5,6 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { ITEM_STATUS_LABELS, ItemExecutionStatus } from '@/types/execution-summary';
 import { Illustration } from '@/components/brand/Illustration';
-import { BrandDots } from '@/components/brand/Elements';
 import { BrandIcon } from '@/components/brand/BrandIcon';
 import { BODY, GREEN, IVORY, LINE, MUTED, SAGE_ON_GREEN } from '@/lib/brand';
 
@@ -140,7 +139,6 @@ export default function ExecutionSummaryPortalPage() {
         <motion.div {...fade} className="w-full max-w-md">
           <div className="dna-concept !p-6 sm:!p-8">
             <div className="flex justify-center mb-6"><LogoLine /></div>
-            <BrandDots className="mb-3" />
             <h1 className="text-[24px] leading-tight" style={{ color: GREEN }}>סיכום ביצוע</h1>
             <p className="mt-2 text-[16px] leading-[1.6]" style={{ color: BODY }}>
               {customerName ? `שלום ${customerName}. ` : ''}

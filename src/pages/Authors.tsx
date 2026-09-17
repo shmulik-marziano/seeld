@@ -2,7 +2,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 import ScrollReveal from "@/components/ScrollReveal";
-import { BrandDots } from "@/components/brand/Elements";
 import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from "@/lib/brand";
 
@@ -39,7 +38,6 @@ const Authors = () => {
               <span className="font-bold" style={{ color: GREEN }} aria-current="page">הסוכן שלכם</span>
             </nav>
 
-            <BrandDots className="mb-5" />
             <h1 className="dna-display leading-[1.15] mb-5 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
               הסוכן שלכם
             </h1>
@@ -96,7 +94,6 @@ const Authors = () => {
           <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
               <div className="mb-10 sm:mb-14">
-                <BrandDots className="mb-4" />
                 <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
                   תחומי התמחות
                 </h2>

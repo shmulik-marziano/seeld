@@ -6,7 +6,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 import { useCmaFunds, useCmaSyncStatus, formatPeriod } from "@/hooks/useCmaFunds";
 import { productTypeLabels, type ProductType } from "@/types/fund";
-import { BrandDots, LeafCanopy } from "@/components/brand/Elements";
+import { LeafCanopy } from "@/components/brand/Elements";
 import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, RUST_TEXT, SAGE_ON_GREEN, SAND_TEXT } from "@/lib/brand";
 
@@ -94,7 +94,6 @@ const TOOLS: { to: string; title: string; body: string; icon: BrandIconName }[] 
 
 const SectionHead = ({ title, lede }: { title: string; lede?: string }) => (
   <div className="mb-8 sm:mb-10">
-    <BrandDots className="mb-4" />
     <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
       {title}
     </h2>
@@ -174,7 +173,6 @@ export default function Learn() {
 
             <div className="relative">
               <LeafCanopy className="hidden lg:block absolute -top-8 left-0 w-56 opacity-90" />
-              <BrandDots className="mb-5" />
               <h1 className="dna-display leading-[1.15] mb-5 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                 מידע ולמידה
               </h1>

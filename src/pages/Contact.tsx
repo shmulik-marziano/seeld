@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { useAuth } from "@/hooks/useAuth";
 import { Illustration } from "@/components/brand/Illustration";
-import { BrandDots } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE } from "@/lib/brand";
 
@@ -140,7 +139,6 @@ const Contact = () => {
 
             <div className="grid gap-10 lg:gap-16 lg:grid-cols-[1.15fr_0.85fr] items-center">
               <div>
-                <BrandDots className="mb-5" />
                 <h1 className="dna-display leading-[1.15] mb-5 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                   נדבר על התיק שלכם
                 </h1>

@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Illustration } from "@/components/brand/Illustration";
-import { BrandDots } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { GREEN, IVORY, MUTED, PASTEL_SAGE } from "@/lib/brand";
 
@@ -32,7 +31,6 @@ const NotFound = () => {
           <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 w-full py-16 sm:py-24">
             <div className="grid gap-10 lg:gap-16 lg:grid-cols-[1.1fr_0.9fr] items-center">
               <div>
-                <BrandDots className="mb-5" />
                 <p className="text-[15px] font-bold mb-3" style={{ color: MUTED }}>
                   שגיאה <span dir="ltr" className="tabular-nums">404</span>
                 </p>

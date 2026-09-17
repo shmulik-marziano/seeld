@@ -88,6 +88,6 @@ export const TIERS: ProductTier[] = [
     href: "/insurances#general",
     linkLabel: "לכל 10 תחומי הביטוח הכללי",
     items: GENERAL_INSURANCE,
-    homeCount: 4,
+    homeCount: 6,
   },
 ];

@@ -7,7 +7,7 @@ import { useInvestmentTracks } from "@/hooks/useInvestmentTracks";
 import { productTypeLabels, specializationLabels, companyLabels } from "@/types/fund";
 import type { Fund, ProductType, Specialization, ManagingCompany } from "@/types/fund";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { BrandDots, BalancedStones } from "@/components/brand/Elements";
+import { BalancedStones } from "@/components/brand/Elements";
 import {
   BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, RUST_TEXT, SAGE_ON_GREEN, SAND_TEXT, TEXT_2, TINT_SAGE,
 } from "@/lib/brand";
@@ -121,7 +121,6 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
   return (
     <section aria-labelledby="checker-title">
       <div className="mb-8">
-        <BrandDots className="mb-4" />
         <h2 id="checker-title" className="dna-display leading-tight" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>
           בדקו את המסלול שלכם
         </h2>
@@ -377,7 +376,6 @@ const InvestmentTracks = () => {
 
             <div className="flex items-start justify-between gap-8">
               <div>
-                <BrandDots className="mb-4" />
                 <h1 className="dna-display leading-[1.15] mb-4 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                   מסלולי השקעה
                 </h1>
@@ -422,7 +420,6 @@ const InvestmentTracks = () => {
             {/* All tracks: filters + table */}
             <section aria-labelledby="all-tracks-title">
               <div className="mb-8 border-t pt-10" style={{ borderColor: LINE }}>
-                <BrandDots className="mb-4" />
                 <h2 id="all-tracks-title" className="dna-display leading-tight" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>
                   כל המסלולים
                 </h2>
@@ -699,7 +696,6 @@ const InvestmentTracks = () => {
             {/* Educational content */}
             <section className="grid md:grid-cols-2 gap-x-16 gap-y-12 border-t pt-12" style={{ borderColor: LINE }}>
               <div>
-                <BrandDots className="mb-4" />
                 <h2 className="dna-display leading-tight mb-5" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>
                   מה זה מסלול השקעה?
                 </h2>
@@ -714,7 +710,6 @@ const InvestmentTracks = () => {
               </div>
 
               <div>
-                <BrandDots className="mb-4" />
                 <h2 className="dna-display leading-tight mb-5" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>
                   איך לבחור מסלול השקעה?
                 </h2>

@@ -2,18 +2,19 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Link, useLocation } from "react-router-dom";
 import SeeIDLogo from "@/components/SeeIDLogo";
-import { Menu, X } from "lucide-react";
+import { Menu, User, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { StatusPill } from "@/components/brand/Live";
 
+// Five items, as in the design mock: the two product hubs, the process, the
+// knowledge hub and contact. Tools and the blog live under ידע וכלים and in
+// the footer; the drawer keeps the direct links.
 const navLinks = [
   { href: "/savings", label: "פיננסים" },
   { href: "/insurances", label: "ביטוח" },
-  { href: "/calculators", label: "מחשבונים" },
-  { href: "/fund-finder", label: "השוואת קופות" },
-  { href: "/blog", label: "בלוג" },
-  { href: "/learn", label: "מידע ולמידה" },
+  { href: "/#process", label: "איך זה עובד" },
+  { href: "/learn", label: "ידע וכלים" },
   { href: "/contact", label: "צור קשר" },
 ];
 
@@ -21,10 +22,11 @@ const mobileNavLinks = [
   { href: "/", label: "דף הבית" },
   { href: "/savings", label: "פיננסים" },
   { href: "/insurances", label: "ביטוח" },
+  { href: "/#process", label: "איך זה עובד" },
+  { href: "/learn", label: "ידע וכלים" },
   { href: "/calculators", label: "מחשבונים" },
-  { href: "/fund-finder", label: "השוואת קופות" },
+  { href: "/return-tables", label: "לוח התשואות" },
   { href: "/blog", label: "בלוג" },
-  { href: "/learn", label: "מידע ולמידה" },
   { href: "/contact", label: "צור קשר" },
 ];
 
@@ -152,19 +154,14 @@ const Header = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-5">
-            <Link
-              to="/agents"
-              aria-current={isActive("/agents") ? "page" : undefined}
-              className={cn("hidden lg:block", desktopLinkClass(isActive("/agents")))}
-            >
-              לסוכנים
-            </Link>
-
+            {/* Outlined pill with the user glyph, as in the mock. The agents'
+                entrance moved to the drawer and the footer. */}
             <Link
               to="/personal-area"
-              className="hidden lg:inline-flex btn-primary !min-h-[44px] !py-2 !px-5 !text-[15px]"
+              className="!hidden lg:!inline-flex btn-secondary !min-h-[44px] !py-2 !px-5 !text-[15px] !rounded-full gap-2"
             >
-              האזור האישי
+              <User className="h-[18px] w-[18px]" strokeWidth={1.75} aria-hidden="true" />
+              אזור אישי
             </Link>
 
             {/* Mobile Menu Button */}

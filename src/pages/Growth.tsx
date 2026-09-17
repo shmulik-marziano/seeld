@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { articles, type Article } from "@/data/articles";
 import { Link } from "react-router-dom";
-import { BalancedStones, BrandDots } from "@/components/brand/Elements";
+import { BalancedStones } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN } from "@/lib/brand";
 
@@ -33,7 +33,6 @@ const ArticleTile = ({ article }: { article: Article }) => (
 
 const SectionHead = ({ title, lede }: { title: string; lede?: string }) => (
   <div className="mb-10 sm:mb-12">
-    <BrandDots className="mb-4" />
     <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
       {title}
     </h2>
@@ -171,7 +170,6 @@ const Growth = () => {
         <section className="dna-navy-band">
           <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <ScrollReveal>
-              <BrandDots className="mb-4" />
               <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(28px, 3.2vw, 32px)" }}>
                 מוכנים לתכנן את העתיד?
               </h2>

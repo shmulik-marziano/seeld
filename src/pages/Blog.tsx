@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteSupabase } from "@/integrations/supabase/site-client";
-import { BrandDots, OliveBranch } from "@/components/brand/Elements";
+import { OliveBranch } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { Illustration } from "@/components/brand/Illustration";
 import { illustrationForCategory, isStockPhoto } from "@/lib/coverArt";
@@ -103,7 +103,6 @@ const Blog = () => {
             </nav>
             <div className="relative">
               <OliveBranch className="hidden lg:block absolute -top-10 left-4 w-36 opacity-80" />
-              <BrandDots className="mb-5" />
               <h1 className="dna-display leading-[1.15] mb-5 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                 הבלוג של שילד
               </h1>

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
-import { BrandDots, LeafCanopy } from "@/components/brand/Elements";
+import { LeafCanopy } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from "@/lib/brand";
 
@@ -90,7 +90,6 @@ const FAQ = () => {
 
             <div className="relative">
               <LeafCanopy className="hidden lg:block absolute -top-8 left-0 w-56 opacity-90" />
-              <BrandDots className="mb-5" />
               <h1 className="dna-display leading-[1.15] mb-5 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                 שאלות נפוצות
               </h1>

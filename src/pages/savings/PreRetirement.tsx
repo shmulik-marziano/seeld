@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
 import { BODY, DISPLAY, GREEN, IVORY, LINE, MONO, MUTED, NAVY, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN, TURQ } from "@/lib/brand";
 import { Illustration } from "@/components/brand/Illustration";
-import { BrandDots } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 
 const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
@@ -148,7 +147,6 @@ const PreRetirement = () => {
         {/* BENEFITS */}
         <section className="border-t bg-white" style={{ borderColor: LINE }}>
           <div className="max-w-brand mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <BrandDots className="mb-4" />
             <h2 className="dna-display leading-tight mb-10" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
               מה כולל ליווי לפני פרישה?
             </h2>
@@ -267,7 +265,6 @@ const PreRetirement = () => {
         <section id="analysis-form" className="scroll-mt-24 dna-navy-band">
           <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <div className="mb-10">
-              <BrandDots className="mb-4" />
               <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(28px, 3.2vw, 32px)" }}>
                 מתכוננים לפרישה?
               </h2>

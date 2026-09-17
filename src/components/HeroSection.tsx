@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
-import { Illustration } from "@/components/brand/Illustration";
-import { BrandDots } from "@/components/brand/Elements";
+import { HeroComposition } from "@/components/brand/HeroComposition";
+import { BrandIcon } from "@/components/brand/BrandIcon";
 import { GREEN, MUTED, PASTEL_SAGE, PASTEL_SAND } from "@/lib/brand";
 
-// Brand hero (kit p.04): ivory canvas, the journey illustration beside the
-// headline, text and actions lead. Two bubbles at most, never behind text.
+// Brand hero (design mock, 2026-09): ivory canvas, the circles-and-leaf
+// composition with the three door cards beside the headline; text and the
+// actions lead. Two bubbles at most, never behind text.
 
 const snap = (delay: number) => ({
   initial: { opacity: 0, y: 8 },
@@ -34,9 +35,6 @@ const HeroSection = () => {
         <div className="grid gap-10 lg:gap-16 lg:grid-cols-[1fr_1.05fr] items-center">
           {/* The argument */}
           <div>
-            <motion.div {...anim(0)}>
-              <BrandDots className="mb-5" />
-            </motion.div>
             <motion.h1
               {...anim(0.04)}
               className="dna-display leading-[1.15]"
@@ -55,12 +53,13 @@ const HeroSection = () => {
               סוכנות ביטוח ופיננסים עצמאית שעובדת מול כל החברות, עם יועץ אחד שמכיר אתכם.
             </motion.p>
 
-            <motion.div {...anim(0.12)} className="mt-9 flex flex-col sm:flex-row gap-3">
+            <motion.div {...anim(0.12)} className="mt-9 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
               <a href="#portfolio-review" className="btn-primary sm:min-w-[220px]">
                 בדיקת תיק 360
               </a>
-              <Link to="/contact" className="btn-secondary sm:min-w-[200px]">
-                תיאום פגישה
+              <Link to="/#process" className="link-rule text-[16px] self-start sm:self-auto">
+                איך זה עובד
+                <BrandIcon name="arrow-left" size={18} />
               </Link>
             </motion.div>
 
@@ -69,14 +68,9 @@ const HeroSection = () => {
             </motion.p>
           </div>
 
-          {/* The journey illustration — full composition, never cropped */}
+          {/* The opening art: circles, the leaf and the three door cards */}
           <motion.div {...anim(0.1)} className="relative">
-            <Illustration
-              name="01-journey"
-              priority
-              sizes="(min-width: 1024px) 620px, 100vw"
-              className="shadow-[0_16px_40px_-24px_rgba(0,61,48,0.35)]"
-            />
+            <HeroComposition />
           </motion.div>
         </div>
 

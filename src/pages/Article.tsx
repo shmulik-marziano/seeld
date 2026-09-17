@@ -6,7 +6,6 @@ import { getArticleById, getRelatedArticles, type Article as ArticleData } from 
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { Facebook, Twitter, Linkedin, Link2 } from "lucide-react";
 import { toast } from "sonner";
-import { BrandDots } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, SAGE_ON_GREEN, TINT_SAGE } from "@/lib/brand";
 import { Illustration } from "@/components/brand/Illustration";
@@ -140,7 +139,6 @@ const Article = () => {
               <span className="font-bold" style={{ color: GREEN }} aria-current="page">{article.category}</span>
             </nav>
 
-            <BrandDots className="mb-5" />
             <h1 className="dna-display leading-[1.15] mb-5" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
               {article.title}
             </h1>
@@ -243,7 +241,6 @@ const Article = () => {
           <section className="border-t bg-white" style={{ borderColor: LINE }}>
             <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
               <div className="mb-8 sm:mb-10">
-                <BrandDots className="mb-4" />
                 <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
                   אולי יעניין אתכם גם
                 </h2>

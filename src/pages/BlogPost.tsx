@@ -6,7 +6,6 @@ import Footer from "@/components/Footer";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { toast } from "sonner";
-import { BrandDots } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, RUST, RUST_TEXT, SAGE_ON_GREEN } from "@/lib/brand";
 import { Illustration } from "@/components/brand/Illustration";
@@ -326,7 +325,6 @@ const BlogPost = () => {
       <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
         <Header />
         <main className="max-w-3xl mx-auto px-5 sm:px-8 py-24 sm:py-32">
-          <BrandDots className="mb-5" />
           <h1 className="dna-display leading-[1.15]" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
             הפוסט לא נמצא
           </h1>
@@ -363,7 +361,6 @@ const BlogPost = () => {
               )}
             </nav>
 
-            <BrandDots className="mb-5" />
             <h1 className="dna-display leading-[1.15]" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
               {post.title}
             </h1>
@@ -446,7 +443,6 @@ const BlogPost = () => {
         {/* LEAD CAPTURE — the page's own action, on a white band */}
         <section id="lead-form" ref={leadFormRef} className="scroll-mt-24 border-t bg-white" style={{ borderColor: LINE }}>
           <div className="max-w-3xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <BrandDots className="mb-4" />
             {leadSubmitted ? (
               <div role="status">
                 <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
@@ -533,7 +529,6 @@ const BlogPost = () => {
           <section className="border-t" style={{ borderColor: LINE }}>
             <div className="max-w-3xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
               <div className="mb-8 sm:mb-10">
-                <BrandDots className="mb-4" />
                 <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
                   מאמרים נוספים
                 </h2>

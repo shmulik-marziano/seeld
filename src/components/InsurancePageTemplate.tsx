@@ -13,9 +13,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
 import type { LucideIcon } from 'lucide-react';
 import { Illustration, type IllustrationName } from '@/components/brand/Illustration';
-import { BrandDots, LeafCanopy } from '@/components/brand/Elements';
+import { LeafCanopy } from '@/components/brand/Elements';
 import { BrandIcon } from '@/components/brand/BrandIcon';
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from '@/lib/brand';
+import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN } from '@/lib/brand';
 
 // Brand service page (kit p.05): one illustration beside the central explanation
 // when the subject has one; otherwise a vector element keeps the page clean.
@@ -253,16 +253,22 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
         {keyPoints && keyPoints.length > 0 && (
           <section className="border-t bg-white" style={{ borderColor: LINE }}>
             <div className="max-w-brand mx-auto px-5 sm:px-8 py-12 sm:py-16">
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10">
+              {/* Key points as list cards (mock "מה כוללת הבדיקה?"): icon in a tinted disc, title, one paragraph */}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                 {keyPoints.map((kp, idx) => {
                   const Icon = kp.icon;
+                  const tint = [PASTEL_SAGE, PASTEL_SAND, PASTEL_MINT][idx % 3];
                   return (
-                    <div key={idx}>
-                      <Icon className="w-8 h-8 mb-4" strokeWidth={1.75} style={{ color: GREEN }} aria-hidden="true" />
-                      <h3 className="text-[19px] mb-2" style={{ color: GREEN }}>
-                        {kp.title}
-                      </h3>
-                      <p className="text-[16px] leading-[1.7]" style={{ color: BODY }}>{kp.description}</p>
+                    <div key={idx} className="flex items-start gap-4 rounded-2xl bg-white border p-5" style={{ borderColor: LINE }}>
+                      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ background: tint }}>
+                        <Icon className="w-6 h-6" strokeWidth={1.75} style={{ color: GREEN }} aria-hidden="true" />
+                      </span>
+                      <div className="min-w-0">
+                        <h3 className="text-[18px] mb-1.5" style={{ color: GREEN }}>
+                          {kp.title}
+                        </h3>
+                        <p className="text-[15px] leading-[1.7]" style={{ color: BODY }}>{kp.description}</p>
+                      </div>
                     </div>
                   );
                 })}
@@ -427,7 +433,6 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
         <section id={enrollmentFormId} className="scroll-mt-24 dna-navy-band">
           <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <div className="mb-10">
-              <BrandDots className="mb-4" />
               <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: 'clamp(26px, 3vw, 34px)' }}>
                 רוצים הצעה מותאמת?
               </h2>

@@ -3,7 +3,7 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
-import { BrandDots, OliveBranch } from "@/components/brand/Elements";
+import { OliveBranch } from "@/components/brand/Elements";
 import { GREEN, IVORY, LICENSE_LINE, LINE, MUTED, REGULATORY_LINE, SAGE_ON_GREEN } from "@/lib/brand";
 
 // The license number must never break across lines: split the verbatim
@@ -126,7 +126,6 @@ const Footer = () => {
           <OliveBranch className="hidden lg:block absolute -bottom-10 left-6 w-40 opacity-70" />
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-24 items-start relative">
             <div>
-              <BrandDots className="mb-5" />
               <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.75rem, 3vw, 2.25rem)" }}>
                 נדבר על התיק שלכם?
               </h2>

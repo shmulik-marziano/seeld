@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { Loader2, Mail } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Illustration } from "@/components/brand/Illustration";
-import { BrandDots } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE } from "@/lib/brand";
 
@@ -130,7 +129,6 @@ const PersonalAreaLogin = () => {
             </div>
 
             <div className="dna-concept !p-6 sm:!p-8">
-              <BrandDots className="mb-4" />
               <h1 className="text-[26px] sm:text-[28px] leading-tight" style={{ color: GREEN }}>
                 {step === "choose" && "כניסה לאזור האישי"}
                 {step === "email" && "כניסה עם קוד לאימייל"}

@@ -12,7 +12,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import CompanyLogos from "@/components/CompanyLogos";
 import { Illustration } from "@/components/brand/Illustration";
-import { BrandDots } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN } from "@/lib/brand";
 
@@ -180,7 +179,6 @@ const PensionLifeInsurance = () => {
         {/* BENEFITS */}
         <section className="border-t bg-white" style={{ borderColor: LINE }}>
           <div className="max-w-brand mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <BrandDots className="mb-4" />
             <h2 className="dna-display leading-tight mb-10" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
               יתרונות ביטוח מנהלים
             </h2>
@@ -293,7 +291,6 @@ const PensionLifeInsurance = () => {
         <section id="analysis-form" className="scroll-mt-24 dna-navy-band">
           <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <div className="mb-10">
-              <BrandDots className="mb-4" />
               <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(28px, 3.2vw, 32px)" }}>
                 רוצים ניתוח ביטוח מנהלים חינם?
               </h2>
