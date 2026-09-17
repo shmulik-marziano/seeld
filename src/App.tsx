@@ -337,6 +337,7 @@ const App = () => (
                 <Route path="/article/:id" element={<Article />} />
                 <Route path="/calculators" element={<Calculators />} />
                 <Route path="/return-tables" element={<ReturnTables />} />
+                <Route path="/return-tables/:product" element={<ReturnTables />} />
                 <Route path="/fund-finder" element={<FundFinder />} />
                 <Route path="/saved-calculations" element={<SavedCalculations />} />
                 <Route path="/personal-area" element={<PersonalArea />} />

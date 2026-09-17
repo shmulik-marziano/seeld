@@ -600,6 +600,44 @@ body {
 .field[aria-invalid="true"] { border-color: #BD582D; }
 .field:disabled { background: #EEF2EC; color: #476356; }
 
+/* ══ Returns board ══ */
+.board-table { min-width: 100%; }
+.board-table thead th { position: sticky; top: 0; z-index: 2; }
+.board-table th.num, .board-table td.num { text-align: left; direction: ltr; white-space: nowrap; }
+.board-table thead th.num button { direction: rtl; }
+.board-table tbody tr:nth-child(odd) { background: #ffffff; }
+.board-table tbody tr.details-row { background: #F3F5F1; }
+.board-table tbody tr.details-row > td { border-bottom: 1px solid #CCD6CC; }
+.board-table .fund-cell {
+  position: sticky;
+  right: 0;
+  z-index: 1;
+  background: inherit;
+  min-width: 220px;
+  max-width: 340px;
+  box-shadow: -1px 0 0 #E1E8E1 inset;
+}
+.board-table thead th:first-child { background: #003D30; z-index: 3; position: sticky; right: 0; }
+.board-table tfoot th, .board-table tfoot td {
+  padding: 10px 14px;
+  border-top: 2px solid #CCD6CC;
+  background: #EEF2EC;
+  font-weight: 700;
+  color: #003D30;
+  text-align: start;
+}
+.board-table tfoot th { position: sticky; right: 0; }
+@media (max-width: 767px) {
+  .board-table .fund-cell { min-width: 170px; max-width: 220px; }
+}
+@media print {
+  header, footer, .no-print, .fixed, .dna-circles { display: none !important; }
+  body { background: #fff !important; }
+  .board-card { break-inside: avoid; box-shadow: none !important; }
+  .board-table .fund-cell, .board-table thead th { position: static !important; }
+  .overflow-x-auto { overflow: visible !important; }
+}
+
 /* Illustration frame — ivory surface, contain, never cropped */
 .brand-illustration {
   display: block;

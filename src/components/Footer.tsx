@@ -18,7 +18,7 @@ const linkColumns: { title: string; links: { href: string; label: string }[] }[]
       { href: "/onboarding", label: "שאלון הצטרפות" },
       { href: "/direct-debit", label: "מילוי טופס הו\"ק" },
       { href: "/calculators", label: "מחשבונים" },
-      { href: "/return-tables", label: "טבלאות תשואה" },
+      { href: "/return-tables", label: "לוח התשואות" },
       { href: "/rights-extraction", label: "מיצוי זכויות" },
     ],
   },

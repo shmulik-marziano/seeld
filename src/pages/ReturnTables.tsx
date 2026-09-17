@@ -1,261 +1,317 @@
-import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import FundReturnTable from "@/components/FundReturnTable";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { allFunds as staticFunds, cmaLastUpdate } from "@/data/cmaFundsData";
-import { useCmaFunds, useCmaSyncStatus, formatPeriod } from "@/hooks/useCmaFunds";
-import type { FundReturn } from "@/data/fundReturns";
+import TrackCard from "@/components/returns/TrackCard";
+import MarketMap from "@/components/returns/MarketMap";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BrandDots, LeafCanopy } from "@/components/brand/Elements";
+import {
+  fmtAssets, fmtPct, periodLabel, productBySlug, PRODUCTS, trackLabel,
+  useCmaBoard, useCompanyMap, type BoardFund, type BoardProduct,
+} from "@/hooks/useCmaBoard";
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, RUST_TEXT, SAGE_ON_GREEN } from "@/lib/brand";
 
-// Return tables (SEELD brand system 2026-09): a tool page. The tables stay
-// central; the data source and date are stated; one vector element in the
-// hero margin; the moving ticker is replaced by a static labelled list.
+/**
+ * לוח התשואות: an overview (market map by company) and one board per product,
+ * each split into track categories with sortable tables, group averages,
+ * charts and exports. All figures come from the Capital Market Authority's
+ * public monthly data, refreshed automatically (sync twice a week + monthly,
+ * board refresh daily).
+ */
 
-// Convert CMA Fund format to the existing FundReturn format used by FundReturnTable
-const toFundReturn = (f: (typeof staticFunds)[number]): FundReturn => ({
-  name: f.name,
-  company: f.name.split(" ")[0], // first word as company display
-  monthReturn: f.returns.month,
-  yearReturn: f.returns.year1,
-  threeYearReturn: f.returns.year3,
-  fiveYearReturn: f.returns.year5,
-});
+const INITIAL_TRACKS = 6;
 
-const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-[15px] sm:text-[16px] font-bold text-[#476356] border-b-2 border-transparent data-[state=active]:border-[#003D30] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
-
-const Pct = ({ value }: { value: number }) => (
-  <span dir="ltr" className="tabular-nums whitespace-nowrap font-bold" style={{ color: value < 0 ? RUST_TEXT : GREEN }}>
-    {value > 0 ? "+" : ""}
-    {value.toFixed(2)}%
-  </span>
-);
+const chip = (active: boolean) =>
+  `inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[15px] font-bold whitespace-nowrap transition-colors ${
+    active ? "text-[#FAF7EF]" : "hover:bg-white"
+  }`;
 
 const ReturnTables = () => {
-  const { data: liveFunds, isLoading, isError } = useCmaFunds();
-  const { data: syncStatus } = useCmaSyncStatus();
-  const allFunds = (!isError && liveFunds && liveFunds.length > 0) ? liveFunds : staticFunds;
-  const isLive = !isError && liveFunds && liveFunds.length > 0;
+  const { product: slug } = useParams<{ product?: string }>();
+  const product = productBySlug(slug);
+  const { data: board, isLoading, isError } = useCmaBoard();
+  const { data: companyMap } = useCompanyMap();
 
-  // Build fund lists from the CMA data source
-  const studyFundsGeneral = useMemo(
-    () => allFunds.filter((f) => f.productType === "hishtalmut" && f.specialization === "general").map(toFundReturn),
-    [allFunds]
+  const [search, setSearch] = useState("");
+  const [company, setCompany] = useState("all");
+  const [view, setView] = useState<"full" | "compact">(() =>
+    typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches ? "compact" : "full",
   );
-  const studyFundsStocks = useMemo(
-    () => allFunds.filter((f) => f.productType === "hishtalmut" && f.specialization === "stocks").map(toFundReturn),
-    [allFunds]
-  );
-  const gemelFunds = useMemo(
-    () => allFunds.filter((f) => f.productType === "gemel" && f.specialization === "general").map(toFundReturn),
-    [allFunds]
-  );
-  const gemelInvestFunds = useMemo(
-    () => allFunds.filter((f) => f.productType === "gemel_invest").map(toFundReturn),
-    [allFunds]
-  );
-  const pensionFunds = useMemo(
-    () => allFunds.filter((f) => f.productType === "pensia" && f.specialization === "general").map(toFundReturn),
-    [allFunds]
-  );
-  const pensionStocks = useMemo(
-    () => allFunds.filter((f) => f.productType === "pensia" && f.specialization === "stocks").map(toFundReturn),
-    [allFunds]
-  );
-  const savingsPolicies = useMemo(
-    () => allFunds.filter((f) => f.productType === "polisa").map(toFundReturn),
-    [allFunds]
-  );
-  const childSavings = useMemo(
-    () => allFunds.filter((f) => f.productType === "child_savings").map(toFundReturn),
-    [allFunds]
+  const [showAllTracks, setShowAllTracks] = useState(false);
+
+  // A new product resets the filters and the expanded state
+  useEffect(() => {
+    setSearch("");
+    setCompany("all");
+    setShowAllTracks(false);
+  }, [slug]);
+
+  const period = useMemo(() => (board ? Math.max(...board.map((f) => f.report_period)) : null), [board]);
+
+  const productFunds = useMemo(
+    () => (board && product ? board.filter((f) => f.board_product === product.key) : []),
+    [board, product],
   );
 
-  const tabDefs = [
-    { value: "study-general", label: "השתלמות כללי", funds: studyFundsGeneral, title: "קרנות השתלמות, מסלול כללי" },
-    { value: "study-stocks", label: "השתלמות מניות", funds: studyFundsStocks, title: "קרנות השתלמות, מסלול מניות" },
-    { value: "gemel", label: "קופות גמל", funds: gemelFunds, title: "קופות גמל, מסלול כללי" },
-    { value: "gemel-invest", label: "גמל להשקעה", funds: gemelInvestFunds, title: "קופות גמל להשקעה, מסלול כללי" },
-    { value: "pension", label: "פנסיה כללי", funds: pensionFunds, title: "קרנות פנסיה, מסלול כללי" },
-    { value: "pension-stocks", label: "פנסיה מניות", funds: pensionStocks, title: "קרנות פנסיה, מסלול מניות" },
-    { value: "savings", label: "פוליסות חיסכון", funds: savingsPolicies, title: "פוליסות חיסכון" },
-    { value: "child", label: "חיסכון לכל ילד", funds: childSavings, title: "חיסכון לכל ילד" },
-  ];
+  const companies = useMemo(
+    () => [...new Set(productFunds.map((f) => f.company))].sort((a, b) => a.localeCompare(b, "he")),
+    [productFunds],
+  );
 
-  const totalFunds = allFunds.length;
-  const maxYear = useMemo(() => Math.max(...allFunds.map((f) => f.returns.year1)), [allFunds]);
-  const maxFiveYear = useMemo(() => Math.max(...allFunds.map((f) => f.returns.year5 ?? -Infinity)), [allFunds]);
-  const topFund = useMemo(() => allFunds.find((f) => f.returns.year1 === maxYear), [allFunds, maxYear]);
-  const topFiveYearFund = useMemo(() => allFunds.find((f) => f.returns.year5 === maxFiveYear), [allFunds, maxFiveYear]);
+  const filtered = useMemo(() => {
+    const q = search.trim();
+    return productFunds.filter(
+      (f) => (company === "all" || f.company === company) && (!q || f.fund_name.includes(q) || f.company.includes(q)),
+    );
+  }, [productFunds, search, company]);
 
-  const lastUpdate = syncStatus?.latestPeriod ? formatPeriod(syncStatus.latestPeriod) : cmaLastUpdate;
+  // Tracks ordered by total assets, largest first (how the market reads them)
+  const tracks = useMemo(() => {
+    const by = new Map<string, BoardFund[]>();
+    for (const f of filtered) {
+      const list = by.get(f.track) ?? [];
+      list.push(f);
+      by.set(f.track, list);
+    }
+    return [...by.entries()]
+      .map(([key, funds]) => ({ key, funds, assets: funds.reduce((s, f) => s + (f.total_assets ?? 0), 0) }))
+      .sort((a, b) => b.assets - a.assets);
+  }, [filtered]);
 
-  // Top 12-month return per product category, derived from the table data
-  const categoryTops = tabDefs
-    .filter((t) => t.funds.length > 0)
-    .map((t) => ({ label: t.label, value: Math.max(...t.funds.map((f) => f.yearReturn)) }));
+  const visibleTracks = showAllTracks || search || company !== "all" ? tracks : tracks.slice(0, INITIAL_TRACKS);
+  const hiddenCount = tracks.length - visibleTracks.length;
 
-  const stats = [
-    { value: Number.isFinite(maxYear) ? maxYear : null, unit: "%", label: "תשואה שנתית מובילה", detail: topFund?.name },
-    { value: Number.isFinite(maxFiveYear) ? maxFiveYear : null, unit: "%", label: "תשואת 5 שנים מובילה", detail: topFiveYearFund?.name },
-    { value: totalFunds, unit: "", label: "קרנות במעקב", detail: `${tabDefs.length} קטגוריות מוצר` },
-  ];
+  // Overview: per-product summary cards
+  const productSummaries = useMemo(() => {
+    if (!board) return [];
+    return PRODUCTS.map((p) => {
+      const funds = board.filter((f) => f.board_product === p.key);
+      const general = funds.filter((f) => f.track === "general" && f.ret_12m !== null);
+      const top = general.sort((a, b) => (b.ret_12m ?? -Infinity) - (a.ret_12m ?? -Infinity))[0];
+      return {
+        ...p,
+        funds: funds.length,
+        tracks: new Set(funds.map((f) => f.track)).size,
+        assets: funds.reduce((s, f) => s + (f.total_assets ?? 0), 0),
+        top,
+      };
+    }).filter((p) => p.funds > 0);
+  }, [board]);
 
-  const dataStatus = isLoading
-    ? "טוען נתונים עדכניים מהמאגר. בינתיים מוצגים נתונים מקומיים."
-    : isLive
-      ? "הנתונים נטענו מהמאגר העדכני."
-      : "המאגר העדכני לא זמין כרגע. מוצגים נתונים מקומיים מהעדכון האחרון שנשמר.";
+  const title = product ? `לוח התשואות: ${product.label}` : "לוח התשואות";
 
   return (
     <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
       <Header />
 
       <main>
-        {/* Hero: ivory, two pastel bubbles in the margins only */}
+        {/* Hero */}
         <div className="dna-page">
           <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 300, height: 300, top: -150, right: -130, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
-            />
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 180, height: 180, top: 60, left: -100, backgroundColor: PASTEL_SAND, opacity: 0.7 }}
-            />
+            <div className="dna-circ hidden md:block" style={{ width: 300, height: 300, top: -150, right: -130, backgroundColor: PASTEL_SAGE, opacity: 0.8 }} />
+            <div className="dna-circ hidden md:block" style={{ width: 180, height: 180, top: 60, left: -100, backgroundColor: PASTEL_SAND, opacity: 0.7 }} />
           </div>
 
-          <section className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-8 sm:pb-10">
+          <section className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-6 sm:pb-8">
             <nav className="flex items-center gap-2 text-[14px] mb-8" style={{ color: MUTED }} aria-label="ניווט משני">
               <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
               <BrandIcon name="arrow-left" size={14} />
-              <span className="font-bold" style={{ color: GREEN }} aria-current="page">לוחות תשואה</span>
+              {product ? (
+                <>
+                  <Link to="/return-tables" className="hover:underline underline-offset-4">לוח התשואות</Link>
+                  <BrandIcon name="arrow-left" size={14} />
+                  <span className="font-bold" style={{ color: GREEN }} aria-current="page">{product.label}</span>
+                </>
+              ) : (
+                <span className="font-bold" style={{ color: GREEN }} aria-current="page">לוח התשואות</span>
+              )}
             </nav>
 
             <div className="flex items-start justify-between gap-8">
-              <div>
+              <div className="min-w-0">
                 <BrandDots className="mb-4" />
                 <h1 className="dna-display leading-[1.15] mb-4 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-                  לוחות תשואה
+                  {title}
                 </h1>
                 <p className="text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
-                  תשואות רשמיות של קרנות השתלמות, קופות גמל, קרנות פנסיה ופוליסות חיסכון בישראל.
-                  הנתונים נמשכים מגמלנט, ביטוחנט ופנסיהנט ומתעדכנים מדי חודש.
+                  {product
+                    ? `כל ${product.label} בישראל לפי מסלול השקעה: תשואות, סיכון, חשיפות ודמי ניהול, מהדיווח הרשמי האחרון.`
+                    : "השוואת תשואות ודמי ניהול לפי חברה, מוצר ומסלול השקעה, מנתוני רשות שוק ההון. בחרו מוצר, או התחילו ממפת השוק."}
                 </p>
 
-                <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-[15px]" style={{ color: MUTED }}>
+                <dl className="mt-5 flex flex-wrap gap-x-8 gap-y-2 text-[15px]" style={{ color: MUTED }}>
                   <div className="flex gap-2">
-                    <dt>מקור הנתונים:</dt>
-                    <dd className="font-bold" style={{ color: GREEN }}>רשות שוק ההון, ביטוח וחיסכון</dd>
+                    <dt>נכון ל:</dt>
+                    <dd className="font-bold" style={{ color: GREEN }}>{period ? periodLabel(period) : "טוען"}</dd>
                   </div>
                   <div className="flex gap-2">
-                    <dt>עדכון אחרון:</dt>
-                    <dd className="font-bold tabular-nums" style={{ color: GREEN }}>{lastUpdate}</dd>
+                    <dt>מקור:</dt>
+                    <dd className="font-bold" style={{ color: GREEN }}>רשות שוק ההון, ביטוח וחיסכון (data.gov.il)</dd>
                   </div>
+                  <div className="flex gap-2">
+                    <dt>עדכון:</dt>
+                    <dd className="font-bold" style={{ color: GREEN }}>אוטומטי, עם פרסום הדיווח החודשי</dd>
+                  </div>
+                  {product && (
+                    <div className="flex gap-2">
+                      <dt>מיון:</dt>
+                      <dd className="font-bold" style={{ color: GREEN }}>תשואת 12 החודשים האחרונים</dd>
+                    </div>
+                  )}
                 </dl>
-                <p className="mt-2 text-[14px]" style={{ color: MUTED }} role="status">{dataStatus}</p>
-
-                <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-                  <Link to="/fund-finder" className="link-rule text-[15px]">
-                    לכלי איתור והשוואת קופות
-                    <BrandIcon name="arrow-left" size={16} />
-                  </Link>
-                </div>
               </div>
               <LeafCanopy className="hidden lg:block w-44 shrink-0" />
             </div>
 
-            {/* Top 12-month return per category: a static labelled list */}
-            {categoryTops.length > 0 && (
-              <div className="dna-concept mt-10">
-                <p className="text-[16px] font-bold mb-3" style={{ color: GREEN }}>
-                  התשואה השנתית הגבוהה ביותר בכל קטגוריה
-                </p>
-                <dl className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-3">
-                  {categoryTops.map((c) => (
-                    <div key={c.label} className="flex items-baseline justify-between gap-3 border-b pb-2" style={{ borderColor: LINE }}>
-                      <dt className="text-[15px]" style={{ color: BODY }}>{c.label}</dt>
-                      <dd className="text-[16px]"><Pct value={c.value} /></dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            )}
+            {/* Product navigation */}
+            <nav className="mt-8 -mx-5 px-5 sm:mx-0 sm:px-0 flex gap-2 overflow-x-auto scrollbar-hide pb-1" aria-label="מוצרים">
+              <Link to="/return-tables" className={chip(!product)} style={!product ? { background: GREEN } : { color: GREEN, boxShadow: `inset 0 0 0 1.5px ${LINE}` }} aria-current={!product ? "page" : undefined}>
+                מפת השוק
+              </Link>
+              {PRODUCTS.map((p) => {
+                const active = product?.key === p.key;
+                return (
+                  <Link key={p.key} to={`/return-tables/${p.slug}`} className={chip(active)} style={active ? { background: GREEN } : { color: GREEN, boxShadow: `inset 0 0 0 1.5px ${LINE}` }} aria-current={active ? "page" : undefined}>
+                    {p.short}
+                  </Link>
+                );
+              })}
+            </nav>
           </section>
         </div>
 
-        {/* Tables: underline tabs, one dense view */}
+        {/* Body */}
         <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <BrandDots className="mb-4" />
-            <h2 className="dna-display leading-tight mb-8" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>
-              התשואות לפי קטגוריה
-            </h2>
+          <div className="max-w-brand mx-auto px-5 sm:px-8 py-10 sm:py-14">
+            {isLoading && (
+              <div className="dna-concept max-w-xl" role="status" aria-live="polite">
+                <p className="text-[16px]" style={{ color: BODY }}>טוען את הדיווח האחרון של רשות שוק ההון.</p>
+              </div>
+            )}
 
-            <Tabs defaultValue={(tabDefs.find((t) => t.funds.length > 0) ?? tabDefs[0]).value} dir="rtl">
-              <TabsList className="flex w-full flex-wrap justify-start gap-x-6 gap-y-1 sm:gap-x-8 h-auto bg-transparent p-0 mb-8 border-b rounded-none" style={{ borderColor: LINE }}>
-                {tabDefs.map((tab) => (
-                  <TabsTrigger key={tab.value} value={tab.value} className={tabTriggerClass}>
-                    {tab.label}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+            {isError && !board && (
+              <div className="dna-concept max-w-xl" role="alert">
+                <p className="text-[16px] leading-[1.7]" style={{ color: BODY }}>
+                  המאגר לא זמין כרגע. נסו לרענן בעוד רגע, או חפשו קופה ספציפית בכלי איתור הקופות.
+                </p>
+                <Link to="/fund-finder" className="link-rule mt-4 text-[15px]">
+                  לאיתור קופות
+                  <BrandIcon name="arrow-left" size={16} />
+                </Link>
+              </div>
+            )}
 
-              {tabDefs.map((tab) => (
-                <TabsContent key={tab.value} value={tab.value} className="mt-0">
-                  {tab.funds.length > 0 ? (
-                    <FundReturnTable funds={tab.funds} title={tab.title} />
+            {board && !product && (
+              <div className="space-y-12">
+                <div>
+                  <BrandDots className="mb-4" />
+                  <h2 className="dna-display leading-tight mb-2" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>מפת השוק לפי חברה</h2>
+                  <p className="text-[16px] mb-6 max-w-2xl" style={{ color: MUTED }}>
+                    סך הנכסים המנוהלים לכל חברה, לפי מוצר, וגיוסים נטו ב־12 החודשים האחרונים.
+                  </p>
+                  {companyMap && companyMap.length > 0 ? (
+                    <MarketMap rows={companyMap} />
                   ) : (
-                    <div className="dna-concept max-w-xl" role="status">
-                      <p className="text-[16px] leading-[1.7]" style={{ color: BODY }}>
-                        {isLoading
-                          ? "טוען את הנתונים של הקטגוריה הזו."
-                          : "אין עדיין נתונים בקטגוריה הזו לתקופה הנוכחית. נסו קטגוריה אחרת, או חפשו קופה ספציפית בכלי איתור הקופות."}
-                      </p>
-                      {!isLoading && (
-                        <Link to="/fund-finder" className="link-rule mt-4 text-[15px]">
-                          לאיתור קופות
-                          <BrandIcon name="arrow-left" size={16} />
-                        </Link>
-                      )}
-                    </div>
-                  )}
-                </TabsContent>
-              ))}
-            </Tabs>
-          </div>
-        </section>
-
-        {/* Numbers band: green big figures over hairlines */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-12 sm:py-16">
-            <dl className="grid grid-cols-1 sm:grid-cols-3 gap-y-10 border-t border-b py-10 sm:py-12" style={{ borderColor: LINE }}>
-              {stats.map((stat) => (
-                <div key={stat.label} className="text-center px-4">
-                  <dd
-                    className="tabular-nums mb-2 whitespace-nowrap"
-                    dir="ltr"
-                    style={{ fontWeight: 700, color: stat.value === null ? MUTED : GREEN, fontSize: stat.value === null ? "1.25rem" : "clamp(2.2rem, 4vw, 3.2rem)", letterSpacing: "-0.02em", lineHeight: 1.1 }}
-                  >
-                    {stat.value === null
-                      ? "אין נתון"
-                      : stat.unit === "%"
-                        ? `${(stat.value as number).toFixed(2)}%`
-                        : String(stat.value)}
-                  </dd>
-                  <dt className="text-[15px]" style={{ color: MUTED }}>{stat.label}</dt>
-                  {stat.detail && (
-                    <p className="mt-1 text-[14px] truncate max-w-[260px] mx-auto" style={{ color: MUTED }}>
-                      {stat.detail}
-                    </p>
+                    <p className="text-[15px]" style={{ color: MUTED }} role="status">טוען את מפת השוק.</p>
                   )}
                 </div>
-              ))}
-            </dl>
+
+                <div>
+                  <BrandDots className="mb-4" />
+                  <h2 className="dna-display leading-tight mb-6" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>לפי מוצר</h2>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {productSummaries.map((p) => (
+                      <Link key={p.key} to={`/return-tables/${p.slug}`} className="group dna-concept dna-hover block h-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]">
+                        <div className="flex items-start justify-between gap-3">
+                          <h3 className="text-[19px]" style={{ color: GREEN }}>{p.label}</h3>
+                          <BrandIcon name="arrow-left" size={18} className="mt-1 shrink-0 transition-transform group-hover:-translate-x-1" style={{ color: GREEN }} />
+                        </div>
+                        <p className="mt-1 text-[14px]" style={{ color: MUTED }}>
+                          {p.funds} קופות · {p.tracks} מסלולים · {fmtAssets(p.assets)}
+                        </p>
+                        {p.top && (
+                          <p className="mt-3 text-[14px] leading-[1.6]" style={{ color: BODY }}>
+                            המובילה במסלול הכללי ב־12 חודשים:{" "}
+                            <span className="font-bold" style={{ color: GREEN }}>{p.top.fund_name}</span>{" "}
+                            <span dir="ltr" className="tabular-nums font-bold" style={{ color: (p.top.ret_12m ?? 0) < 0 ? RUST_TEXT : GREEN }}>{fmtPct(p.top.ret_12m)}</span>
+                          </p>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {board && product && (
+              <div>
+                {/* Filters */}
+                <div className="no-print flex flex-wrap items-end gap-x-5 gap-y-3 mb-6">
+                  <div className="w-full sm:w-72">
+                    <label htmlFor="board-search" className="block text-[14px] font-bold mb-1.5" style={{ color: GREEN }}>חיפוש קופה</label>
+                    <input
+                      id="board-search"
+                      type="search"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      placeholder="שם קופה או חברה"
+                      className="field"
+                    />
+                  </div>
+                  <div className="w-full sm:w-56">
+                    <label htmlFor="board-company" className="block text-[14px] font-bold mb-1.5" style={{ color: GREEN }}>חברה מנהלת</label>
+                    <select id="board-company" value={company} onChange={(e) => setCompany(e.target.value)} className="field appearance-none cursor-pointer">
+                      <option value="all">כל החברות</option>
+                      {companies.map((c) => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <fieldset className="flex items-center gap-1 rounded-[10px] p-1" style={{ boxShadow: `inset 0 0 0 1.5px ${LINE}` }}>
+                    <legend className="sr-only">רוחב הטבלה</legend>
+                    {(["compact", "full"] as const).map((v) => (
+                      <button
+                        key={v}
+                        type="button"
+                        onClick={() => setView(v)}
+                        aria-pressed={view === v}
+                        className={`rounded-[8px] px-3 py-1.5 text-[14px] font-bold transition-colors ${view === v ? "text-[#FAF7EF]" : ""}`}
+                        style={view === v ? { background: GREEN } : { color: GREEN }}
+                      >
+                        {v === "compact" ? "תצוגה מצומצמת" : "כל העמודות"}
+                      </button>
+                    ))}
+                  </fieldset>
+                  <p className="text-[14px] sm:mr-auto" style={{ color: MUTED }} role="status">
+                    {filtered.length} קופות ב־{tracks.length} מסלולים
+                  </p>
+                </div>
+
+                {tracks.length === 0 ? (
+                  <div className="dna-concept max-w-xl" role="status">
+                    <p className="text-[16px]" style={{ color: BODY }}>לא נמצאו קופות שמתאימות לסינון.</p>
+                    <button type="button" onClick={() => { setSearch(""); setCompany("all"); }} className="link-rule mt-3 text-[15px]">
+                      ניקוי הסינון
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {visibleTracks.map((t) => (
+                      <TrackCard key={`${product.key}-${t.key}-${company}-${search}`} trackKey={t.key} productLabel={product.label} funds={t.funds} view={view} />
+                    ))}
+                    {hiddenCount > 0 && (
+                      <div className="text-center">
+                        <button type="button" onClick={() => setShowAllTracks(true)} className="btn-secondary">
+                          הצגת עוד {hiddenCount} מסלולים
+                          <span className="text-[14px] font-normal" style={{ color: MUTED }}>
+                            ({tracks.slice(INITIAL_TRACKS).map((t) => trackLabel(t.key)).join(", ")})
+                          </span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </section>
 
@@ -265,20 +321,17 @@ const ReturnTables = () => {
             <div className="dna-callout max-w-3xl text-[15px]">
               <p className="font-bold mb-1" style={{ color: GREEN }}>הבהרה חשובה</p>
               <p>
-                הנתונים המוצגים מבוססים על מידע ממקורות ציבוריים של רשות שוק ההון (גמלנט, ביטוחנט, פנסיהנט)
-                ומיועדים להשוואה כללית בלבד. תשואות עבר אינן מעידות על תשואות עתידיות.
-                דמי הניהול אינם כלולים בחישוב התשואות. לפני קבלת החלטות פיננסיות,
-                מומלץ להתייעץ עם יועץ פנסיוני או פיננסי מוסמך.
-              </p>
-              <p className="mt-2" style={{ color: MUTED }}>
-                מקור הנתונים: רשות שוק ההון, ביטוח וחיסכון, משרד האוצר.
+                הנתונים מבוססים על הדיווחים הציבוריים של רשות שוק ההון, ביטוח וחיסכון (גמלנט, פנסיהנט וביטוחנט)
+                כפי שפורסמו באתר data.gov.il, ומיועדים להשוואה כללית בלבד. תשואות עבר אינן מעידות על תשואות עתידיות,
+                והתשואות מוצגות ברוטו, לפני ניכוי דמי ניהול. תשואות 3, 6 ו־12 חודשים מחושבות מהתשואות החודשיות שפורסמו;
+                תשואות 3 ו־5 שנים הן כפי שפורסמו במקור. המידע אינו ייעוץ פנסיוני או שיווק פנסיוני מותאם אישית.
               </p>
             </div>
           </div>
         </section>
 
         {/* Closing: deep green band, the central path */}
-        <section className="dna-navy-band">
+        <section className="dna-navy-band no-print">
           <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
             <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(26px, 3vw, 34px)" }}>
               המספרים ברורים. מה עושים איתם?
@@ -288,12 +341,8 @@ const ReturnTables = () => {
               בדיקת תיק 360 מסדרת את הביטוחים, הפנסיה והחיסכון בתמונה אחת.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
-                בדיקת תיק 360
-              </Link>
-              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
-                תיאום פגישה
-              </Link>
+              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">בדיקת תיק 360</Link>
+              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">תיאום פגישה</Link>
             </div>
           </div>
         </section>
@@ -304,4 +353,5 @@ const ReturnTables = () => {
   );
 };
 
+export type { BoardProduct };
 export default ReturnTables;
