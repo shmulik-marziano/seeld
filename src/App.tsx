@@ -181,6 +181,7 @@ const About = lazy(() => import("@/pages/About"));
 const Learn = lazy(() => import("@/pages/Learn"));
 const Authors = lazy(() => import("@/pages/Authors"));
 const Contact = lazy(() => import("@/pages/Contact"));
+const PortfolioReview = lazy(() => import("@/pages/PortfolioReview"));
 const Calculators = lazy(() => import("@/pages/Calculators"));
 const ReturnTables = lazy(() => import("@/pages/ReturnTables"));
 const FundFinder = lazy(() => import("@/pages/FundFinder"));
@@ -329,6 +330,7 @@ const App = () => (
                 <Route path="/learn" element={<Learn />} />
                 <Route path="/authors" element={<Authors />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/portfolio-review" element={<PortfolioReview />} />
                 <Route path="/onboarding" element={<Onboarding />} />
                 {/* Legacy password-based admin removed — SiteAdmin (Supabase auth) replaces it */}
                 <Route path="/admin" element={<Navigate to="/site-admin" replace />} />

@@ -178,7 +178,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
   const defaultTab = hasArticles ? 'guide' : hasCoverage ? 'coverage' : 'faq';
   const tabCount = [hasArticles, hasCoverage, hasFaq].filter(Boolean).length;
 
-  const secondary = heroSecondaryCTA ?? { text: 'בדיקת תיק 360', href: '/contact' };
+  const secondary = heroSecondaryCTA ?? { text: 'בדיקת תיק 360', href: '/portfolio-review' };
   const secondaryIsRoute = secondary.href.startsWith('/');
 
   return (

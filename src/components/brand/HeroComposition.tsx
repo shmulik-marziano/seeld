@@ -28,7 +28,7 @@ const Leaf = () => (
   </svg>
 );
 
-export const HeroComposition = ({ className = "" }: { className?: string }) => (
+export const HeroComposition = ({ className = "", cards = true }: { className?: string; cards?: boolean }) => (
   <div className={`relative mx-auto aspect-square w-full max-w-[300px] sm:max-w-[420px] lg:max-w-[540px] ${className}`}>
     <div className="absolute inset-0" aria-hidden="true">
       {/* environment: the pale field behind everything */}
@@ -52,7 +52,7 @@ export const HeroComposition = ({ className = "" }: { className?: string }) => (
       </div>
     </div>
 
-    {CARDS.map((c) => (
+    {cards && CARDS.map((c) => (
       <Link
         key={c.href}
         to={c.href}

@@ -15,7 +15,7 @@ const linkColumns: { title: string; links: { href: string; label: string }[] }[]
   {
     title: "שירותים",
     links: [
-      { href: "/contact", label: "בדיקת תיק 360" },
+      { href: "/portfolio-review", label: "בדיקת תיק 360" },
       { href: "/onboarding", label: "שאלון הצטרפות" },
       { href: "/direct-debit", label: "מילוי טופס הו״ק" },
       { href: "/calculators", label: "מחשבונים" },
