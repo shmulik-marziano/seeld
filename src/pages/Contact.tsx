@@ -9,6 +9,7 @@ import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { useAuth } from "@/hooks/useAuth";
 import { Illustration } from "@/components/brand/Illustration";
 import { BrandIcon } from "@/components/brand/BrandIcon";
+import { FormSuccess } from "@/components/brand/FormSuccess";
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE } from "@/lib/brand";
 
 // Contact: the form is the page's action. The clarity illustration sits beside
@@ -51,6 +52,7 @@ const Contact = () => {
   });
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [sent, setSent] = useState(false);
   const { user } = useAuth();
 
   const validate = () => {
@@ -99,7 +101,7 @@ const Contact = () => {
         console.error("Failed to send email notification:", emailErr);
       }
 
-      toast.success("הפנייה התקבלה. נחזור אליכם לתיאום שיחה.");
+      setSent(true);
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
       setErrors({});
     } catch {
@@ -163,7 +165,10 @@ const Contact = () => {
             <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-24 items-start">
               {/* The one action: the form */}
               <ScrollReveal>
-                <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+                {sent ? (
+                <FormSuccess onReset={() => setSent(false)} />
+                ) : (
+<form onSubmit={handleSubmit} className="space-y-4" noValidate>
                   <div>
                     <FieldLabel htmlFor="name" required>שם מלא</FieldLabel>
                     <input
@@ -264,6 +269,7 @@ const Contact = () => {
                     הפרטים משמשים ליצירת קשר בלבד. אנחנו לא מעבירים אותם לגורם שלישי.
                   </p>
                 </form>
+                )}
               </ScrollReveal>
 
               {/* Side column: details rows + mini FAQ */}

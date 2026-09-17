@@ -89,10 +89,10 @@ function resolveSpecialization(spec: string | null): Specialization {
   const s = spec.trim();
   if (s.includes('מניות') && s.includes('סחיר')) return 'stocks_tradable';
   if (s.includes('מניות')) return 'stocks';
-  if (s.includes('אג"ח') && s.includes('סחיר')) return 'bonds_tradable';
-  if (s.includes('אג"ח')) return 'bonds';
+  if (s.includes('אג״ח') && s.includes('סחיר')) return 'bonds_tradable';
+  if (s.includes('אג״ח')) return 'bonds';
   if (s.includes('כספי') || s.includes('שקלי')) return 'money_market';
-  if (s.includes('חו"ל')) return 'foreign';
+  if (s.includes('חו״ל')) return 'foreign';
   if (s.includes('עוקב') || s.includes('מדד')) return 'index_tracking';
   if (s.includes('הלכ')) return 'halacha';
   if (s.includes('קיימות')) return 'sustainability';

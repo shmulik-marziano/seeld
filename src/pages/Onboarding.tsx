@@ -891,7 +891,7 @@ export default function Onboarding() {
                             className={cn("tracking-widest", errors.idNumber ? "!border-[#9A4520]" : "")}
                             style={{ fontFamily: MONO }} />
                         </GlassInput>
-                        <GlassInput label={'תאריך הנפקת ת"ז'} error={errors.idIssueDate} required>
+                        <GlassInput label={'תאריך הנפקת ת״ז'} error={errors.idIssueDate} required>
                           <DateMaskInput
                             value={form.idIssueDate}
                             onChange={v => set("idIssueDate", v)}
@@ -923,7 +923,7 @@ export default function Onboarding() {
                             className={errors.phone ? "!border-[#9A4520]" : ""}
                             style={{ fontFamily: MONO }} />
                         </GlassInput>
-                        <GlassInput label={'דוא"ל'} error={errors.email} required>
+                        <GlassInput label={'דוא״ל'} error={errors.email} required>
                           <TechInput type="email" value={form.email}
                             onChange={e => set("email", e.target.value)}
                             placeholder="email@example.com"
@@ -1262,10 +1262,10 @@ export default function Onboarding() {
                       <SummaryRow label="שם מלא" value={`${form.firstName} ${form.lastName}`} />
                       <SummaryRow label="מספר זהות" value={form.idNumber} />
                       <SummaryRow label="תאריך לידה" value={form.birthDate} />
-                      <SummaryRow label={'הנפקת ת"ז'} value={form.idIssueDate} />
+                      <SummaryRow label={'הנפקת ת״ז'} value={form.idIssueDate} />
                       <SummaryRow label="ארץ לידה" value={form.birthCountry} />
                       <SummaryRow label="טלפון" value={form.phone} />
-                      <SummaryRow label={'דוא"ל'} value={form.email} />
+                      <SummaryRow label={'דוא״ל'} value={form.email} />
                       <SummaryRow label="כתובת" value={[form.street, form.houseNumber, form.city].filter(Boolean).join(" ")} />
                     </TechSection>
 

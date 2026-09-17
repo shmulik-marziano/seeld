@@ -162,18 +162,18 @@ export default function FundCard({ fund, onRemove, showMonthly = false, showDeep
         <dl>
           <Row label="הוצאות ישירות" value={pct(dd.directExpenses)} />
           <Row label="עלות שנתית צפויה" value={pct(dd.expectedAnnualCost)} />
-          <Row label={'חשיפה לחו"ל'} value={pct(dd.foreignExposure)} />
-          <Row label={'חשיפה למט"ח'} value={pct(dd.currencyExposure)} />
+          <Row label={'חשיפה לחו״ל'} value={pct(dd.foreignExposure)} />
+          <Row label={'חשיפה למט״ח'} value={pct(dd.currencyExposure)} />
         </dl>
         <dl className="mt-2 border-t pt-2" style={{ borderColor: LINE }}>
-          <Row label={'אג"ח מיועדות'} value={pct(dd.designatedBonds)} />
-          <Row label={'אג"ח ממשלתי סחיר'} value={pct(dd.govBondsTradable)} />
-          <Row label={'אג"ח קונצרני סחיר'} value={pct(dd.corpBondsTradable)} />
-          <Row label={'אג"ח קונצרני לא סחיר'} value={pct(dd.corpBondsNonTradable)} />
+          <Row label={'אג״ח מיועדות'} value={pct(dd.designatedBonds)} />
+          <Row label={'אג״ח ממשלתי סחיר'} value={pct(dd.govBondsTradable)} />
+          <Row label={'אג״ח קונצרני סחיר'} value={pct(dd.corpBondsTradable)} />
+          <Row label={'אג״ח קונצרני לא סחיר'} value={pct(dd.corpBondsNonTradable)} />
           <Row label="מניות ואופציות" value={pct(dd.stocksAndOptions)} />
           <Row label="פיקדונות" value={pct(dd.deposits)} />
           <Row label="קרנות נאמנות" value={pct(dd.mutualFunds)} />
-          <Row label={'מזומנים ושו"מ'} value={pct(dd.cashEquivalents)} />
+          <Row label={'מזומנים ושו״מ'} value={pct(dd.cashEquivalents)} />
           <Row label="נכסים אחרים" value={pct(dd.otherAssets)} />
         </dl>
         <dl className="mt-2 border-t pt-2" style={{ borderColor: LINE }}>

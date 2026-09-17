@@ -69,7 +69,7 @@ function validateIsraeliId(id: string): { valid: boolean; message?: string } {
     if (num > 9) num -= 9;
     sum += num;
   }
-  if (sum % 10 !== 0) return { valid: false, message: 'ספרת ביקורת שגויה. יש לבדוק את מספר ת"ז' };
+  if (sum % 10 !== 0) return { valid: false, message: 'ספרת ביקורת שגויה. יש לבדוק את מספר ת״ז' };
   return { valid: true };
 }
 
@@ -321,7 +321,7 @@ export default function DirectDebit() {
             <div className="mt-10 border-t" style={{ borderColor: LINE }}>
               {[
                 ["בעל החשבון", form.accountOwner],
-                ['ת"ז', form.idNumber],
+                ['ת״ז', form.idNumber],
                 ["בנק", `${bankData?.name} (${form.bankCode})`],
                 ["סניף", `${form.branchNumber}${form.branchName ? ` · ${form.branchName}` : ""}`],
                 ["מספר חשבון", form.accountNumber],
@@ -431,7 +431,7 @@ export default function DirectDebit() {
                       />
                       {touched.idNumber && !errors.idNumber && form.idNumber.length === 9 && (
                         <p className="mt-2 text-[14px] font-medium" style={{ color: TURQ_TEXT }}>
-                          ת"ז תקינה. ספרת ביקורת אומתה.
+                          ת״ז תקינה. ספרת ביקורת אומתה.
                         </p>
                       )}
                     </div>

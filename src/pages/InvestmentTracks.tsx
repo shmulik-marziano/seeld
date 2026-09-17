@@ -37,8 +37,8 @@ type SortDir = "asc" | "desc";
 const allocationRows = (dd: Fund["deepDrill"], splitMutual: boolean) => {
   const rows = [
     { name: "מניות", value: n0(dd.stocksAndOptions) },
-    { name: 'אג"ח ממשלתי', value: n0(dd.govBondsTradable) + n0(dd.designatedBonds) },
-    { name: 'אג"ח קונצרני', value: n0(dd.corpBondsTradable) + n0(dd.corpBondsNonTradable) },
+    { name: 'אג״ח ממשלתי', value: n0(dd.govBondsTradable) + n0(dd.designatedBonds) },
+    { name: 'אג״ח קונצרני', value: n0(dd.corpBondsTradable) + n0(dd.corpBondsNonTradable) },
     { name: "מזומן", value: n0(dd.cashEquivalents) + n0(dd.deposits) },
     ...(splitMutual
       ? [{ name: "קרנות נאמנות", value: n0(dd.mutualFunds) }, { name: "אחר", value: n0(dd.otherAssets) }]
@@ -113,7 +113,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
     const stock = fund.stockExposure;
     if (missing(stock)) return { level: NONE, color: MUTED, tip: "נתוני החשיפה למניות של המסלול לא פורסמו, ולכן אי אפשר לקבוע את רמת הסיכון מהנתונים שכאן." };
     if (stock >= 80) return { level: "גבוהה", color: RUST_TEXT, tip: "המסלול מתאים למשקיעים אגרסיביים עם אופק של 10+ שנים. כדאי לוודא שרמת הסיכון מתאימה לגיל ולתוכניות שלכם." };
-    if (stock >= 40) return { level: "בינונית", color: SAND_TEXT, tip: "מסלול מאוזן שמתאים לרוב האנשים. פיזור טוב בין מניות לאג\"ח. מומלץ לבדוק את דמי הניהול מול חברות מתחרות." };
+    if (stock >= 40) return { level: "בינונית", color: SAND_TEXT, tip: "מסלול מאוזן שמתאים לרוב האנשים. פיזור טוב בין מניות לאג״ח. מומלץ לבדוק את דמי הניהול מול חברות מתחרות." };
     if (stock >= 10) return { level: "נמוכה-בינונית", color: TEXT_2, tip: "מסלול סולידי יחסית. מתאים למי שקרוב לפרישה או רוצה יציבות. כדאי לבדוק שהתשואה מספיקה לצרכים שלכם." };
     return { level: "נמוכה", color: GREEN, tip: "מסלול שמרני מאוד. מתאים לטווח קצר או לפרישה קרובה. שווה לבדוק אם יש מסלולים עם תשואה טובה יותר באותה רמת סיכון." };
   };
@@ -214,7 +214,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4">
-                  <dt style={{ color: MUTED }}>חשיפה לחו"ל</dt>
+                  <dt style={{ color: MUTED }}>חשיפה לחו״ל</dt>
                   <dd dir="ltr" className="tabular-nums font-bold" style={{ color: GREEN }}>
                     {missing(selectedFund.deepDrill.foreignExposure) ? NONE : `${selectedFund.deepDrill.foreignExposure}%`}
                   </dd>
@@ -631,13 +631,13 @@ const InvestmentTracks = () => {
                                         <AllocationBars rows={allocationRows(fund.deepDrill, true)} />
                                         <dl className="space-y-2 text-[15px] md:border-s md:ps-8" style={{ borderColor: LINE }}>
                                           <div className="flex justify-between gap-4">
-                                            <dt style={{ color: MUTED }}>חשיפה לחו"ל</dt>
+                                            <dt style={{ color: MUTED }}>חשיפה לחו״ל</dt>
                                             <dd dir="ltr" className="tabular-nums font-bold" style={{ color: GREEN }}>
                                               {missing(fund.deepDrill.foreignExposure) ? NONE : `${fund.deepDrill.foreignExposure}%`}
                                             </dd>
                                           </div>
                                           <div className="flex justify-between gap-4">
-                                            <dt style={{ color: MUTED }}>חשיפת מט"ח</dt>
+                                            <dt style={{ color: MUTED }}>חשיפת מט״ח</dt>
                                             <dd dir="ltr" className="tabular-nums font-bold" style={{ color: GREEN }}>
                                               {missing(fund.deepDrill.currencyExposure) ? NONE : `${fund.deepDrill.currencyExposure}%`}
                                             </dd>

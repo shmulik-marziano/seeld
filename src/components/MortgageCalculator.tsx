@@ -194,7 +194,7 @@ const MortgageCalculator = () => {
 
         {/* Total Payment */}
         <div className="dna-concept">
-          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה"כ תשלום</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה״כ תשלום</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             {formatCurrency(result.totalPayment)}
           </p>
@@ -202,7 +202,7 @@ const MortgageCalculator = () => {
 
         {/* Total Interest */}
         <div className="dna-concept">
-          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה"כ ריבית</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה״כ ריבית</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: CORAL_TEXT }}>
             {formatCurrency(result.totalInterest)}
           </p>
@@ -301,7 +301,7 @@ const MortgageCalculator = () => {
                   })()
                 )}
               </strong>{" "}
-              בסה"כ.
+              בסה״כ.
             </div>
           )}
 

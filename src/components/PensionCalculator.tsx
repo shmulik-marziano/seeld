@@ -269,7 +269,7 @@ const PensionCalculator = () => {
           </div>
         </div>
         <div className="dna-callout mt-5 text-sm text-center">
-          סה"כ הפקדה חודשית:{" "}
+          סה״כ הפקדה חודשית:{" "}
           <strong style={{ color: NAVY }}>
             {formatCurrency((monthlySalary * (employeeDeposit + employerDeposit + severanceDeposit)) / 100)}
           </strong>{" "}
@@ -299,7 +299,7 @@ const PensionCalculator = () => {
 
         {/* Total Savings */}
         <div className="dna-concept">
-          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה"כ חיסכון בפרישה</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה״כ חיסכון בפרישה</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             {formatCurrency(result.totalSavings)}
           </p>

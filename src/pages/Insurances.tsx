@@ -4,7 +4,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
 import { Illustration } from "@/components/brand/Illustration";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN } from "@/lib/brand";
+import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN } from "@/lib/brand";
 import { GENERAL_INSURANCE, LIFE_HEALTH } from "@/data/productDirectory";
 
 // Brand hub page (kit p.05): the family-protection art beside the headline and
@@ -84,25 +84,28 @@ const Insurances = () => {
               {/* Two groups in the site-wide order: the cover for the person and
                   the family first, general insurance after it. */}
               {[
-                { id: "life", title: "ביטוחי חיים ובריאות", lede: "ההגנה על המשפחה, על ההכנסה ועל הבית.", items: LIFE_HEALTH },
-                { id: "general", title: "ביטוח כללי", lede: "רכב, דירה, עסק, נסיעות ושאר הכיסויים.", items: GENERAL_INSURANCE },
+                { id: "life", title: "ביטוחי חיים ובריאות", lede: "ההגנה על המשפחה, על ההכנסה ועל הבית.", items: LIFE_HEALTH, icon: "heart" as const, tint: PASTEL_SAND },
+                { id: "general", title: "ביטוח כללי", lede: "רכב, דירה, עסק, נסיעות ושאר הכיסויים.", items: GENERAL_INSURANCE, icon: "home" as const, tint: PASTEL_MINT },
               ].map((group, gi) => (
                 <div key={group.id} id={group.id} className={`scroll-mt-24 ${gi > 0 ? "mt-12 sm:mt-16" : ""}`}>
                   <div className="mb-3 sm:mb-5 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-6 border-b pb-3" style={{ borderColor: LINE }}>
                     <h3 className="text-[22px] sm:text-[24px] leading-tight" style={{ color: GREEN }}>{group.title}</h3>
                     <p className="text-[15px]" style={{ color: MUTED }}>{group.lede}</p>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {group.items.map((item) => (
                       <Link
                         key={item.href}
                         to={item.href}
-                        className="group flex items-center justify-between gap-6 py-[14px] px-3 -mx-3 rounded-lg border-b hover:bg-[#EEF2EC] transition-colors"
+                        className="group flex items-center gap-4 rounded-2xl bg-white border p-4 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
                         style={{ borderColor: LINE }}
                       >
-                        <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 min-w-0">
-                          <h4 className="text-[16px] font-bold sm:whitespace-nowrap" style={{ color: GREEN }}>{item.title}</h4>
-                          <p className="text-[14px] sm:truncate" style={{ color: MUTED }}>{item.description}</p>
+                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ background: group.tint }}>
+                          <BrandIcon name={group.icon} size={22} style={{ color: GREEN }} />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <h4 className="text-[17px] font-bold leading-tight" style={{ color: GREEN }}>{item.title}</h4>
+                          <p className="mt-1 text-[14px] leading-[1.5]" style={{ color: MUTED }}>{item.description}</p>
                         </div>
                         <BrandIcon
                           name="arrow-left"

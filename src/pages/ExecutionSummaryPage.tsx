@@ -358,7 +358,7 @@ export default function ExecutionSummaryPage() {
                         />
                         <div className="flex-1">
                           <p className="text-sm font-medium">בוצע בדיוק כמו ההמלצה</p>
-                          <p className="text-xs text-muted-foreground">לחיצה תעתיק אוטומטית את תוכן ההמלצה ותסמן כ"בוצע מלא"</p>
+                          <p className="text-xs text-muted-foreground">לחיצה תעתיק אוטומטית את תוכן ההמלצה ותסמן כ״בוצע מלא"</p>
                         </div>
                         {si.executedAsRecommended && <CheckCircle2 className="h-5 w-5 text-success" />}
                       </div>

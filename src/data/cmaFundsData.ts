@@ -107,7 +107,7 @@ export const allFunds: Fund[] = [
   {
     "id": "3",
     "fundNumber": "7800",
-    "name": "אלטשולר שחם חיסכון פלוס אשראי ואג\"ח עם מניות (עד 25% במניות)",
+    "name": "אלטשולר שחם חיסכון פלוס אשראי ואג״ח עם מניות (עד 25% במניות)",
     "company": "altshuler",
     "productType": "gemel_invest",
     "specialization": "stocks",
@@ -154,7 +154,7 @@ export const allFunds: Fund[] = [
   {
     "id": "4",
     "fundNumber": "7801",
-    "name": "אלטשולר שחם חיסכון פלוס אשראי ואג\"ח",
+    "name": "אלטשולר שחם חיסכון פלוס אשראי ואג״ח",
     "company": "altshuler",
     "productType": "gemel_invest",
     "specialization": "credit_bonds",
@@ -342,7 +342,7 @@ export const allFunds: Fund[] = [
   {
     "id": "8",
     "fundNumber": "7837",
-    "name": "אנליסט קופת גמל להשקעה אשראי ואג\"ח",
+    "name": "אנליסט קופת גמל להשקעה אשראי ואג״ח",
     "company": "analyst",
     "productType": "gemel_invest",
     "specialization": "credit_bonds",
@@ -624,7 +624,7 @@ export const allFunds: Fund[] = [
   {
     "id": "14",
     "fundNumber": "7862",
-    "name": "*** מיטב גמל להשקעה אשראי ואג\"ח",
+    "name": "*** מיטב גמל להשקעה אשראי ואג״ח",
     "company": "meitav",
     "productType": "gemel_invest",
     "specialization": "credit_bonds",
@@ -765,7 +765,7 @@ export const allFunds: Fund[] = [
   {
     "id": "17",
     "fundNumber": "7905",
-    "name": "*** הפניקס גמל להשקעה אשראי ואג\"ח",
+    "name": "*** הפניקס גמל להשקעה אשראי ואג״ח",
     "company": "fenix",
     "productType": "gemel_invest",
     "specialization": "credit_bonds",
@@ -812,7 +812,7 @@ export const allFunds: Fund[] = [
   {
     "id": "18",
     "fundNumber": "7906",
-    "name": "*** הפניקס גמל להשקעהאשראי ואג\"ח עם מניות (עד 25% מניות)",
+    "name": "*** הפניקס גמל להשקעהאשראי ואג״ח עם מניות (עד 25% מניות)",
     "company": "fenix",
     "productType": "gemel_invest",
     "specialization": "stocks",
@@ -1047,7 +1047,7 @@ export const allFunds: Fund[] = [
   {
     "id": "23",
     "fundNumber": "7932",
-    "name": "מגדל גמל להשקעה אג\"ח ממשלות",
+    "name": "מגדל גמל להשקעה אג״ח ממשלות",
     "company": "migdal",
     "productType": "gemel_invest",
     "specialization": "bonds",
@@ -1141,7 +1141,7 @@ export const allFunds: Fund[] = [
   {
     "id": "25",
     "fundNumber": "7935",
-    "name": "מגדל גמל להשקעה אשראי ואג\"ח עם מניות (עד 25% מניות)",
+    "name": "מגדל גמל להשקעה אשראי ואג״ח עם מניות (עד 25% מניות)",
     "company": "migdal",
     "productType": "gemel_invest",
     "specialization": "stocks",
@@ -1517,7 +1517,7 @@ export const allFunds: Fund[] = [
   {
     "id": "33",
     "fundNumber": "7980",
-    "name": "מיטב גמל להשקעה אשראי ואג\"ח עם מניות (עד 25% במניות)",
+    "name": "מיטב גמל להשקעה אשראי ואג״ח עם מניות (עד 25% במניות)",
     "company": "meitav",
     "productType": "gemel_invest",
     "specialization": "stocks",
@@ -1564,7 +1564,7 @@ export const allFunds: Fund[] = [
   {
     "id": "34",
     "fundNumber": "7986",
-    "name": "אנליסט קופת גמל להשקעה אשראי ואג\"ח עד 25% מניות",
+    "name": "אנליסט קופת גמל להשקעה אשראי ואג״ח עד 25% מניות",
     "company": "analyst",
     "productType": "gemel_invest",
     "specialization": "stocks",
@@ -1658,7 +1658,7 @@ export const allFunds: Fund[] = [
   {
     "id": "36",
     "fundNumber": "7989",
-    "name": "*** כלל גמל לעתיד אשראי ואג\"ח",
+    "name": "*** כלל גמל לעתיד אשראי ואג״ח",
     "company": "clal",
     "productType": "gemel",
     "specialization": "credit_bonds",
@@ -1752,7 +1752,7 @@ export const allFunds: Fund[] = [
   {
     "id": "38",
     "fundNumber": "7992",
-    "name": "כלל גמל לעתיד אשראי ואג\"ח עם מניות(עד 25% מניות)",
+    "name": "כלל גמל לעתיד אשראי ואג״ח עם מניות(עד 25% מניות)",
     "company": "clal",
     "productType": "gemel",
     "specialization": "stocks",
@@ -1987,7 +1987,7 @@ export const allFunds: Fund[] = [
   {
     "id": "43",
     "fundNumber": "8521",
-    "name": "*** הראל גמל להשקעה אשראי ואג\"ח עם מניות (עד 25% מניות)",
+    "name": "*** הראל גמל להשקעה אשראי ואג״ח עם מניות (עד 25% מניות)",
     "company": "harel",
     "productType": "gemel_invest",
     "specialization": "stocks",
@@ -2175,7 +2175,7 @@ export const allFunds: Fund[] = [
   {
     "id": "47",
     "fundNumber": "8678",
-    "name": "מנורה מבטחים גמל להשקעה אג\"ח עד 25% מניות",
+    "name": "מנורה מבטחים גמל להשקעה אג״ח עד 25% מניות",
     "company": "menora",
     "productType": "gemel_invest",
     "specialization": "stocks",
@@ -2269,7 +2269,7 @@ export const allFunds: Fund[] = [
   {
     "id": "49",
     "fundNumber": "8684",
-    "name": "מנורה מבטחים גמל להשקעה עוקב מדדי אג\"ח עד 25% מניות",
+    "name": "מנורה מבטחים גמל להשקעה עוקב מדדי אג״ח עד 25% מניות",
     "company": "menora",
     "productType": "gemel_invest",
     "specialization": "index_tracking",
@@ -2457,7 +2457,7 @@ export const allFunds: Fund[] = [
   {
     "id": "53",
     "fundNumber": "9639",
-    "name": "אינפיניטי גמל להשקעה אשראי ואג\"ח עם מניות (עד 25% מניות)",
+    "name": "אינפיניטי גמל להשקעה אשראי ואג״ח עם מניות (עד 25% מניות)",
     "company": "infinity",
     "productType": "gemel_invest",
     "specialization": "stocks",
@@ -2551,7 +2551,7 @@ export const allFunds: Fund[] = [
   {
     "id": "55",
     "fundNumber": "11391",
-    "name": "ילין לפידות קופת גמל להשקעה מסלול אשראי ואג\"ח",
+    "name": "ילין לפידות קופת גמל להשקעה מסלול אשראי ואג״ח",
     "company": "yelin",
     "productType": "gemel_invest",
     "specialization": "credit_bonds",
@@ -2598,7 +2598,7 @@ export const allFunds: Fund[] = [
   {
     "id": "56",
     "fundNumber": "11392",
-    "name": "ילין לפידות קופת גמל להשקעה מסלול אשראי ואג\"ח עם מניות (עד 25% מניות)",
+    "name": "ילין לפידות קופת גמל להשקעה מסלול אשראי ואג״ח עם מניות (עד 25% מניות)",
     "company": "yelin",
     "productType": "gemel_invest",
     "specialization": "stocks",
@@ -2645,7 +2645,7 @@ export const allFunds: Fund[] = [
   {
     "id": "57",
     "fundNumber": "11393",
-    "name": "ילין לפידות קופת גמל להשקעה מסלול אג\"ח ממשלות",
+    "name": "ילין לפידות קופת גמל להשקעה מסלול אג״ח ממשלות",
     "company": "yelin",
     "productType": "gemel_invest",
     "specialization": "bonds",
@@ -3021,7 +3021,7 @@ export const allFunds: Fund[] = [
   {
     "id": "65",
     "fundNumber": "12955",
-    "name": "מור גמל להשקעה - אשראי ואג\"ח עם מניות (עד 25% מניות)",
+    "name": "מור גמל להשקעה - אשראי ואג״ח עם מניות (עד 25% מניות)",
     "company": "mor",
     "productType": "gemel_invest",
     "specialization": "stocks",
@@ -3397,7 +3397,7 @@ export const allFunds: Fund[] = [
   {
     "id": "73",
     "fundNumber": "13354",
-    "name": "מנורה מבטחים גמל להשקעה אשראי ואג\"ח",
+    "name": "מנורה מבטחים גמל להשקעה אשראי ואג״ח",
     "company": "menora",
     "productType": "gemel_invest",
     "specialization": "credit_bonds",
@@ -3726,7 +3726,7 @@ export const allFunds: Fund[] = [
   {
     "id": "80",
     "fundNumber": "14077",
-    "name": "** עמ\"י קופת גמל להשקעה כללי",
+    "name": "** עמ״י קופת גמל להשקעה כללי",
     "company": "clal",
     "productType": "gemel_invest",
     "specialization": "general",
@@ -3773,7 +3773,7 @@ export const allFunds: Fund[] = [
   {
     "id": "81",
     "fundNumber": "14118",
-    "name": "** גל קופ\"ג להשקעה כללי",
+    "name": "** גל קופ״ג להשקעה כללי",
     "company": "clal",
     "productType": "gemel",
     "specialization": "general",
@@ -3914,7 +3914,7 @@ export const allFunds: Fund[] = [
   {
     "id": "84",
     "fundNumber": "14482",
-    "name": "מור גמל להשקעה - אשראי ואג\"ח",
+    "name": "מור גמל להשקעה - אשראי ואג״ח",
     "company": "mor",
     "productType": "gemel_invest",
     "specialization": "credit_bonds",
@@ -4384,7 +4384,7 @@ export const allFunds: Fund[] = [
   {
     "id": "94",
     "fundNumber": "14944",
-    "name": "מגדל גמל להשקעה מסלול אשראי ואג\"ח",
+    "name": "מגדל גמל להשקעה מסלול אשראי ואג״ח",
     "company": "migdal",
     "productType": "gemel_invest",
     "specialization": "credit_bonds",
@@ -4572,7 +4572,7 @@ export const allFunds: Fund[] = [
   {
     "id": "98",
     "fundNumber": "15215",
-    "name": "הפניקס גמל להשקעה אג\"ח סחיר",
+    "name": "הפניקס גמל להשקעה אג״ח סחיר",
     "company": "fenix",
     "productType": "gemel_invest",
     "specialization": "bonds_tradable",
@@ -4713,7 +4713,7 @@ export const allFunds: Fund[] = [
   {
     "id": "101",
     "fundNumber": "15254",
-    "name": "מור גמל להשקעה - אג\"ח עם מניות (עד 25% מניות) סחיר",
+    "name": "מור גמל להשקעה - אג״ח עם מניות (עד 25% מניות) סחיר",
     "company": "mor",
     "productType": "gemel_invest",
     "specialization": "stocks",
@@ -4760,7 +4760,7 @@ export const allFunds: Fund[] = [
   {
     "id": "102",
     "fundNumber": "15255",
-    "name": "מור גמל להשקעה - אג\"ח סחיר",
+    "name": "מור גמל להשקעה - אג״ח סחיר",
     "company": "mor",
     "productType": "gemel_invest",
     "specialization": "bonds_tradable",
@@ -4901,7 +4901,7 @@ export const allFunds: Fund[] = [
   {
     "id": "105",
     "fundNumber": "15258",
-    "name": "מור גמל להשקעה - עוקב מדדים אג\"ח עם מניות (עד 25% מניות)",
+    "name": "מור גמל להשקעה - עוקב מדדים אג״ח עם מניות (עד 25% מניות)",
     "company": "mor",
     "productType": "gemel_invest",
     "specialization": "index_tracking",
@@ -4995,7 +4995,7 @@ export const allFunds: Fund[] = [
   {
     "id": "107",
     "fundNumber": "15260",
-    "name": "*** מור גמל להשקעה - עוקב מדדי אג\"ח",
+    "name": "*** מור גמל להשקעה - עוקב מדדי אג״ח",
     "company": "mor",
     "productType": "gemel_invest",
     "specialization": "index_tracking",
@@ -5042,7 +5042,7 @@ export const allFunds: Fund[] = [
   {
     "id": "108",
     "fundNumber": "15283",
-    "name": "הראל גמל להשקעה אשראי ואג\"ח",
+    "name": "הראל גמל להשקעה אשראי ואג״ח",
     "company": "harel",
     "productType": "gemel_invest",
     "specialization": "credit_bonds",
@@ -5136,7 +5136,7 @@ export const allFunds: Fund[] = [
   {
     "id": "110",
     "fundNumber": "15285",
-    "name": "הראל גמל להשקעה עוקב מדדי אג\"ח",
+    "name": "הראל גמל להשקעה עוקב מדדי אג״ח",
     "company": "harel",
     "productType": "gemel_invest",
     "specialization": "index_tracking",
@@ -5230,7 +5230,7 @@ export const allFunds: Fund[] = [
   {
     "id": "112",
     "fundNumber": "15287",
-    "name": "הראל גמל להשקעה אג\"ח סחיר",
+    "name": "הראל גמל להשקעה אג״ח סחיר",
     "company": "harel",
     "productType": "gemel_invest",
     "specialization": "bonds_tradable",
@@ -5324,7 +5324,7 @@ export const allFunds: Fund[] = [
   {
     "id": "114",
     "fundNumber": "15289",
-    "name": "הראל גמל להשקעה מסלול סחיר- אג\"ח עם מניות (עד 25% מניות)",
+    "name": "הראל גמל להשקעה מסלול סחיר- אג״ח עם מניות (עד 25% מניות)",
     "company": "harel",
     "productType": "gemel_invest",
     "specialization": "stocks",
@@ -5371,7 +5371,7 @@ export const allFunds: Fund[] = [
   {
     "id": "115",
     "fundNumber": "15290",
-    "name": "הראל גמל להשקעה עוקב מדדים- אג\"ח עם מניות (עד 25% מניות)",
+    "name": "הראל גמל להשקעה עוקב מדדים- אג״ח עם מניות (עד 25% מניות)",
     "company": "harel",
     "productType": "gemel_invest",
     "specialization": "index_tracking",
@@ -5559,7 +5559,7 @@ export const allFunds: Fund[] = [
   {
     "id": "119",
     "fundNumber": "15347",
-    "name": "מיטב גמל להשקעה אג\"ח סחיר",
+    "name": "מיטב גמל להשקעה אג״ח סחיר",
     "company": "meitav",
     "productType": "gemel_invest",
     "specialization": "bonds_tradable",
@@ -5606,7 +5606,7 @@ export const allFunds: Fund[] = [
   {
     "id": "120",
     "fundNumber": "15348",
-    "name": "מיטב גמל להשקעה סחיר - אג\"ח עם מניות (עד 25% מניות)",
+    "name": "מיטב גמל להשקעה סחיר - אג״ח עם מניות (עד 25% מניות)",
     "company": "meitav",
     "productType": "gemel_invest",
     "specialization": "stocks",
@@ -5747,7 +5747,7 @@ export const allFunds: Fund[] = [
   {
     "id": "123",
     "fundNumber": "15351",
-    "name": "מיטב גמל להשקעה עוקב מדדי אג\"ח עם מניות (עד 25% מניות)",
+    "name": "מיטב גמל להשקעה עוקב מדדי אג״ח עם מניות (עד 25% מניות)",
     "company": "meitav",
     "productType": "gemel_invest",
     "specialization": "index_tracking",
@@ -5935,7 +5935,7 @@ export const allFunds: Fund[] = [
   {
     "id": "127",
     "fundNumber": "15428",
-    "name": "כלל גמל לעתיד אג\"ח סחיר",
+    "name": "כלל גמל לעתיד אג״ח סחיר",
     "company": "clal",
     "productType": "gemel",
     "specialization": "bonds_tradable",
@@ -6123,7 +6123,7 @@ export const allFunds: Fund[] = [
   {
     "id": "131",
     "fundNumber": "15457",
-    "name": "מגדל גמל להשקעה עוקב מדדי אג\"ח",
+    "name": "מגדל גמל להשקעה עוקב מדדי אג״ח",
     "company": "migdal",
     "productType": "gemel_invest",
     "specialization": "index_tracking",

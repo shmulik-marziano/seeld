@@ -8,7 +8,8 @@ import { useCmaFunds, useCmaSyncStatus, formatPeriod } from "@/hooks/useCmaFunds
 import { productTypeLabels, type ProductType } from "@/types/fund";
 import { LeafCanopy } from "@/components/brand/Elements";
 import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, RUST_TEXT, SAGE_ON_GREEN, SAND_TEXT } from "@/lib/brand";
+import { CircleArt } from "@/components/brand/CircleArt";
+import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, RUST_TEXT, SAGE_ON_GREEN, SAND_TEXT } from "@/lib/brand";
 
 /*
   מידע ולמידה — the knowledge hub. Three layers, deliberately:
@@ -113,6 +114,8 @@ export default function Learn() {
   const { data: syncStatus } = useCmaSyncStatus();
   const [posts, setPosts] = useState<PostRow[]>([]);
   const [postsLoading, setPostsLoading] = useState(true);
+  const [guideQuery, setGuideQuery] = useState("");
+  const [guideCategory, setGuideCategory] = useState<string | null>(null);
   const [query, setQuery] = useState("");
 
   useEffect(() => {
@@ -174,12 +177,11 @@ export default function Learn() {
             <div className="relative">
               <LeafCanopy className="hidden lg:block absolute -top-8 left-0 w-56 opacity-90" />
               <h1 className="dna-display leading-[1.15] mb-5 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-                מידע ולמידה
+                להבין לפני שמחליטים.
               </h1>
               <p className="text-[17px] sm:text-[18px] max-w-2xl leading-[1.7] mb-6" style={{ color: MUTED }}>
-                המספרים שמאחורי החיסכון שלכם, בשפה פשוטה. המידע כאן מחושב מנתוני רשות שוק ההון
-                ומתעדכן מדי חודש עם פרסום הדוחות הרשמיים, כך שמה שאתם רואים הוא המצב העדכני ולא
-                תמונה משנה שעברה.
+                תוכן מקצועי שיעזור לכם לקבל החלטות בטוחות יותר. המספרים כאן מחושבים מנתוני רשות שוק ההון
+                ומתעדכנים מדי חודש עם פרסום הדוחות הרשמיים.
               </p>
               <button
                 type="button"
@@ -328,27 +330,71 @@ export default function Learn() {
                 <p className="text-[16px]" style={{ color: MUTED }} role="status">טוענים את המדריכים האחרונים.</p>
               ) : (
                 <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    {posts.map((p) => (
-                      <Link key={p.id} to={`/blog/${p.slug}`} className="dna-concept dna-hover group flex flex-col h-full">
-                        <h3 className="text-[18px] leading-snug mb-2" style={{ color: GREEN }}>{p.title}</h3>
-                        <p className="text-[14px] mb-3" style={{ color: MUTED }}>
-                          {p.category && <span>{p.category}</span>}
-                          {p.category && p.published_at && <span aria-hidden="true"> · </span>}
-                          {p.published_at && (
-                            <span className="tabular-nums whitespace-nowrap">{formatDate(p.published_at)}</span>
-                          )}
-                        </p>
-                        {p.excerpt && (
-                          <p className="text-[15px] leading-[1.7] line-clamp-3" style={{ color: BODY }}>{p.excerpt}</p>
-                        )}
-                        <span className="link-rule mt-auto pt-5 text-[15px] self-start">
-                          לקריאה
-                          <BrandIcon name="arrow-left" size={18} className="transition-transform group-hover:-translate-x-1" />
-                        </span>
-                      </Link>
-                    ))}
+                  {/* Search and category chips (mock), then list cards with the abstract thumbnail */}
+                  <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex flex-wrap gap-2" role="group" aria-label="סינון לפי נושא">
+                      {[null, ...new Set(posts.map((p) => p.category).filter(Boolean) as string[])].map((c) => {
+                        const active = guideCategory === c;
+                        return (
+                          <button
+                            key={c ?? "all"}
+                            type="button"
+                            onClick={() => setGuideCategory(c)}
+                            aria-pressed={active}
+                            className={`inline-flex min-h-[44px] items-center rounded-full px-4 text-[15px] font-bold transition-colors ${active ? "text-[#FAF7EF]" : "bg-white hover:bg-[#EEF2EC]"}`}
+                            style={active ? { background: GREEN } : { color: GREEN, boxShadow: `inset 0 0 0 1px ${LINE}` }}
+                          >
+                            {c ?? "הכל"}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div className="relative sm:w-72">
+                      <label htmlFor="guide-search" className="sr-only">חיפוש נושא</label>
+                      <input
+                        id="guide-search"
+                        type="search"
+                        value={guideQuery}
+                        onChange={(e) => setGuideQuery(e.target.value)}
+                        placeholder="חיפוש נושא"
+                        className="field pe-11"
+                        autoComplete="off"
+                      />
+                      <BrandIcon name="search" size={20} className="pointer-events-none absolute top-1/2 -translate-y-1/2 end-4" style={{ color: MUTED }} />
+                    </div>
                   </div>
+
+                  {(() => {
+                    const q = guideQuery.trim().toLowerCase();
+                    const shown = posts.filter((p) =>
+                      (!guideCategory || p.category === guideCategory) &&
+                      (!q || p.title.toLowerCase().includes(q) || (p.excerpt ?? "").toLowerCase().includes(q)),
+                    );
+                    if (shown.length === 0) {
+                      return <p className="text-[16px]" style={{ color: MUTED }}>לא נמצאו מדריכים לחיפוש הזה.</p>;
+                    }
+                    return (
+                      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                        {shown.map((p, i) => (
+                          <Link
+                            key={p.id}
+                            to={`/blog/${p.slug}`}
+                            className="group flex items-center gap-4 rounded-2xl bg-white border p-4 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                            style={{ borderColor: LINE }}
+                          >
+                            <div className="min-w-0 flex-1">
+                              <h3 className="text-[17px] leading-snug" style={{ color: GREEN }}>{p.title}</h3>
+                              {p.excerpt && (
+                                <p className="mt-1.5 text-[14px] leading-[1.6] line-clamp-2" style={{ color: MUTED }}>{p.excerpt}</p>
+                              )}
+                            </div>
+                            <CircleArt variant={i} className="w-24 shrink-0 sm:w-28" />
+                            <BrandIcon name="arrow-left" size={18} className="shrink-0 transition-transform group-hover:-translate-x-1" style={{ color: GREEN }} />
+                          </Link>
+                        ))}
+                      </div>
+                    );
+                  })()}
 
                   <div className="mt-8">
                     <Link to="/blog" className="link-rule text-[15px]">
@@ -369,11 +415,13 @@ export default function Learn() {
               <SectionHead title="כלים לבדיקה עצמית" />
             </ScrollReveal>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-              {TOOLS.map((t) => (
+              {TOOLS.map((t, ti) => (
                 <Link key={t.to} to={t.to} className="group block dna-concept dna-hover h-full">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex items-center gap-3">
-                      <BrandIcon name={t.icon} size={28} style={{ color: GREEN }} />
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full" style={{ background: [PASTEL_SAGE, PASTEL_SAND, PASTEL_MINT][ti % 3] }}>
+                        <BrandIcon name={t.icon} size={22} style={{ color: GREEN }} />
+                      </span>
                       <h3 className="text-[18px]" style={{ color: GREEN }}>{t.title}</h3>
                     </div>
                     <BrandIcon name="arrow-left" size={18} className="shrink-0 mt-1 transition-transform group-hover:-translate-x-1" style={{ color: GREEN }} />

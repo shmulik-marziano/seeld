@@ -11,6 +11,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Illustration } from "@/components/brand/Illustration";
 import { BubbleCorner, PathDivider } from "@/components/brand/Elements";
 import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
+import { FormSuccess } from "@/components/brand/FormSuccess";
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, RUST, SAGE, SAGE_ON_GREEN, SAND, TINT_SAGE } from "@/lib/brand";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
@@ -160,10 +161,12 @@ const Index = () => {
   const [leadForm, setLeadForm] = useState({ name: "", phone: "", subject: "" });
   const [leadErrors, setLeadErrors] = useState<{ name?: string; phone?: string }>({});
   const [leadSubmitting, setLeadSubmitting] = useState(false);
+  const [leadSent, setLeadSent] = useState(false);
 
   const [contactForm, setContactForm] = useState({ name: "", phone: "", email: "", message: "" });
   const [contactErrors, setContactErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
   const [contactSubmitting, setContactSubmitting] = useState(false);
+  const [contactSent, setContactSent] = useState(false);
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -195,7 +198,7 @@ const Index = () => {
           },
         });
       } catch { /* notification failure is non-blocking */ }
-      toast.success("הפרטים התקבלו. נחזור אליכם לתיאום הבדיקה.");
+      setLeadSent(true);
       setLeadForm({ name: "", phone: "", subject: "" });
     } catch {
       toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
@@ -234,7 +237,7 @@ const Index = () => {
           },
         });
       } catch { /* notification failure is non-blocking */ }
-      toast.success("הפרטים התקבלו. נחזור אליכם לתיאום הפגישה.");
+      setContactSent(true);
       setContactForm({ name: "", phone: "", email: "", message: "" });
     } catch {
       toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
@@ -349,7 +352,10 @@ const Index = () => {
                 </ScrollReveal>
 
                 <ScrollReveal delay={100}>
-                  <form onSubmit={handleLeadSubmit} noValidate className="max-w-xl">
+                  {leadSent ? (
+                  <FormSuccess className="max-w-xl" next="נחזור אליכם ביום העסקים הבא לתיאום הבדיקה." onReset={() => setLeadSent(false)} />
+                  ) : (
+<form onSubmit={handleLeadSubmit} noValidate className="max-w-xl">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <FieldLabel htmlFor="lead-name" required>שם מלא</FieldLabel>
@@ -417,6 +423,7 @@ const Index = () => {
                       הפרטים משמשים ליצירת קשר בלבד. אנחנו לא מעבירים אותם לגורם שלישי.
                     </p>
                   </form>
+                  )}
                 </ScrollReveal>
               </div>
 
@@ -591,7 +598,7 @@ const Index = () => {
 
             <div className="max-w-3xl">
               <Accordion type="single" collapsible>
-                {faqItems.map((item, i) => (
+                {faqItems.slice(0, 4).map((item, i) => (
                   <AccordionItem
                     key={i}
                     value={`faq-${i}`}
@@ -630,7 +637,10 @@ const Index = () => {
 
             <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-24">
               <ScrollReveal>
-                <form className="space-y-4" onSubmit={handleContactSubmit} noValidate>
+                {contactSent ? (
+                <FormSuccess next="נחזור אליכם ביום העסקים הבא לתיאום הפגישה." onReset={() => setContactSent(false)} />
+                ) : (
+<form className="space-y-4" onSubmit={handleContactSubmit} noValidate>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <FieldLabel htmlFor="contact-name" required>שם מלא</FieldLabel>
@@ -695,6 +705,7 @@ const Index = () => {
                     </button>
                   </div>
                 </form>
+                )}
               </ScrollReveal>
 
               <ScrollReveal delay={100}>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { OliveBranch } from "@/components/brand/Elements";
+import { FormSuccess } from "@/components/brand/FormSuccess";
 import { GREEN, IVORY, LICENSE_LINE, LINE, MUTED, REGULATORY_LINE, SAGE_ON_GREEN } from "@/lib/brand";
 
 // The license number must never break across lines: split the verbatim
@@ -16,7 +17,7 @@ const linkColumns: { title: string; links: { href: string; label: string }[] }[]
     links: [
       { href: "/contact", label: "בדיקת תיק 360" },
       { href: "/onboarding", label: "שאלון הצטרפות" },
-      { href: "/direct-debit", label: "מילוי טופס הו\"ק" },
+      { href: "/direct-debit", label: "מילוי טופס הו״ק" },
       { href: "/calculators", label: "מחשבונים" },
       { href: "/return-tables", label: "לוח התשואות" },
       { href: "/rights-extraction", label: "מיצוי זכויות" },
@@ -72,6 +73,7 @@ const socialLinks = [
 const Footer = () => {
   const [formData, setFormData] = useState({ name: "", phone: "", email: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [sent, setSent] = useState(false);
   const [errors, setErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
 
   const validate = () => {
@@ -108,7 +110,7 @@ const Footer = () => {
           },
         });
       } catch { /* notification failure is non-blocking */ }
-      toast.success("הפרטים התקבלו. נחזור אליכם בהקדם.");
+      setSent(true);
       setFormData({ name: "", phone: "", email: "" });
       setErrors({});
     } catch {
@@ -133,7 +135,10 @@ const Footer = () => {
                 השאירו שם וטלפון. נחזור אליכם לתיאום שיחה ראשונה, בלי התחייבות.
               </p>
 
-              <form onSubmit={handleSubmit} className="space-y-4 max-w-md" noValidate>
+              {sent ? (
+              <FormSuccess className="max-w-md" onReset={() => setSent(false)} />
+              ) : (
+<form onSubmit={handleSubmit} className="space-y-4 max-w-md" noValidate>
                 <div>
                   <label htmlFor="footer-name" className="block text-[14px] font-bold mb-1.5" style={{ color: GREEN }}>
                     שם מלא <span aria-hidden="true" style={{ color: "#BD582D" }}>*</span>
@@ -201,6 +206,7 @@ const Footer = () => {
                   </button>
                 </div>
               </form>
+              )}
             </div>
 
             {/* Contact details */}

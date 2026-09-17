@@ -123,7 +123,7 @@ export default function FileImportPage() {
       ['מוצרים עודכנו', sum.productsUpdated],
       ['שגיאות', sum.filesFailed],
       ['דורשים בדיקה', sum.needsManualReview],
-      ['סה"כ שורות', items.length],
+      ['סה״כ שורות', items.length],
     ];
 
     const detailHeaders = ['#', 'קובץ מקור', 'ת.ז.', 'שם לקוח', 'פעולה', 'סטטוס', 'מוצרים חדשים', 'מוצרים עודכנו', 'שגיאה'];
@@ -1053,8 +1053,8 @@ export default function FileImportPage() {
                       { label: 'עיסוק', value: detailItem.parsedCustomer.occupation },
                       { label: 'סטטוס תעסוקה', value: detailItem.parsedCustomer.employmentStatus },
                       { label: 'קופת חולים', value: detailItem.parsedCustomer.healthFund },
-                      { label: 'גובה (ס"מ)', value: detailItem.parsedCustomer.height?.toString() },
-                      { label: 'משקל (ק"ג)', value: detailItem.parsedCustomer.weight?.toString() },
+                      { label: 'גובה (ס״מ)', value: detailItem.parsedCustomer.height?.toString() },
+                      { label: 'משקל (ק״ג)', value: detailItem.parsedCustomer.weight?.toString() },
                       { label: 'מעשן', value: detailItem.parsedCustomer.isSmoker === true ? 'כן' : detailItem.parsedCustomer.isSmoker === false ? 'לא' : undefined },
                       { label: 'מקור', value: detailItem.parsedCustomer.source },
                       { label: 'סטטוס', value: detailItem.parsedCustomer.status },

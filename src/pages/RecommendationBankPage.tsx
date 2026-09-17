@@ -166,7 +166,7 @@ export default function RecommendationBankPage() {
         className="grid grid-cols-3 md:grid-cols-7 gap-2"
       >
         {[
-          { label: 'סה"כ', value: stats.total, color: 'text-[#003D30]' },
+          { label: 'סה״כ', value: stats.total, color: 'text-[#003D30]' },
           { label: 'טיוטות', value: stats.drafts, color: 'text-muted-foreground' },
           { label: 'נשלחו', value: stats.sent, color: 'text-[#003D30]' },
           { label: 'ממתינות', value: stats.thinking, color: 'text-[#8A6230]' },

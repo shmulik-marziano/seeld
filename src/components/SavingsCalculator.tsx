@@ -256,7 +256,7 @@ const SavingsCalculator = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Savings - standout stat */}
         <div className="dna-concept col-span-1 md:col-span-2 lg:col-span-1">
-          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה"כ חיסכון</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה״כ חיסכון</p>
           <p
             className="tabular-nums"
             dir="ltr"
@@ -268,7 +268,7 @@ const SavingsCalculator = () => {
 
         {/* Total Deposits */}
         <div className="dna-concept">
-          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה"כ הפקדות</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>סה״כ הפקדות</p>
           <p className="text-[22px] font-bold tabular-nums" dir="ltr" style={{ fontFamily: MONO, color: NAVY }}>
             <AnimatedNumber value={result.totalDeposits} format={formatCurrency} />
           </p>
@@ -313,7 +313,7 @@ const SavingsCalculator = () => {
                 {/* Tooltip */}
                 <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-white border border-[#E8EDE5] rounded-lg p-2.5 text-[14px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg text-[#24483C]">
                   <p className="font-bold" style={{ color: NAVY }}>שנה {yearData.year}</p>
-                  <p>סה"כ: <span dir="ltr" className="tabular-nums" style={{ fontFamily: MONO }}>{formatCurrency(yearData.balance)}</span></p>
+                  <p>סה״כ: <span dir="ltr" className="tabular-nums" style={{ fontFamily: MONO }}>{formatCurrency(yearData.balance)}</span></p>
                   <p>הפקדות: <span dir="ltr" className="tabular-nums" style={{ fontFamily: MONO }}>{formatCurrency(yearData.deposits)}</span></p>
                   <p>ריבית: <span dir="ltr" className="tabular-nums" style={{ fontFamily: MONO }}>{formatCurrency(yearData.interest)}</span></p>
                 </div>

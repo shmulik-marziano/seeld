@@ -75,7 +75,7 @@ const tracks: Track[] = [
   { name: "כללי", rate: 8.21, icon: Scale },
   { name: "לבני 50-", rate: 9.03, icon: Baby },
   { name: "הלכתי", rate: 6.96, icon: Star },
-  { name: "אג\"ח", rate: 3.21, icon: Shield },
+  { name: "אג״ח", rate: 3.21, icon: Shield },
 ];
 
 const CompareCalculator = () => {
@@ -260,7 +260,7 @@ const CompareCalculator = () => {
         {/* Difference Summary */}
         <div className="dna-callout mt-6 text-sm">
           <p className="font-medium mb-2" style={{ color: NAVY }}>
-            ההפרש בין מסלול מניות למסלול אג"ח לאורך {years} שנים:
+            ההפרש בין מסלול מניות למסלול אג״ח לאורך {years} שנים:
           </p>
           <p
             className="tabular-nums"
@@ -282,7 +282,7 @@ const CompareCalculator = () => {
 
           {years <= 3 && (
             <div className="dna-callout text-sm">
-              <strong style={{ color: NAVY }}>טווח קצר:</strong> עם {years} שנים בלבד, מסלול אג"ח או כללי עשוי להיות בטוח יותר
+              <strong style={{ color: NAVY }}>טווח קצר:</strong> עם {years} שנים בלבד, מסלול אג״ח או כללי עשוי להיות בטוח יותר
               ולהגן על ההשקעה שלכם מתנודות שוק.
             </div>
           )}
@@ -312,7 +312,7 @@ const CompareCalculator = () => {
                 minProfit,
               }}
               tips={[
-                `הפרש בין מניות לאג"ח: ${formatCurrency(maxProfit - minProfit)}`,
+                `הפרש בין מניות לאג״ח: ${formatCurrency(maxProfit - minProfit)}`,
                 years >= 10 ? `אופק ארוך - מסלול מניות מומלץ` : undefined,
               ].filter(Boolean) as string[]}
             />

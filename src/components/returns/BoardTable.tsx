@@ -34,8 +34,8 @@ export const COLUMNS: ColumnDef[] = [
   { key: "std_dev", label: "סטיית תקן", kind: "num", title: "סטיית תקן חודשית של התשואות" },
   { key: "sharpe", label: "שארפ", kind: "num", title: "מדד שארפ: תשואה עודפת ליחידת סיכון" },
   { key: "stock_pct", label: "מניות", kind: "pct", title: "חשיפה למניות מסך הנכסים" },
-  { key: "foreign_pct", label: "חו\"ל", kind: "pct", title: "חשיפה לנכסים בחו\"ל מסך הנכסים" },
-  { key: "fx_pct", label: "מט\"ח", kind: "pct", title: "חשיפה למטבע חוץ מסך הנכסים" },
+  { key: "foreign_pct", label: "חו״ל", kind: "pct", title: "חשיפה לנכסים בחו״ל מסך הנכסים" },
+  { key: "fx_pct", label: "מט״ח", kind: "pct", title: "חשיפה למטבע חוץ מסך הנכסים" },
   { key: "mgmt_fee", label: "דמי ניהול", kind: "pct", compact: true, title: "דמי ניהול שנתיים ממוצעים מהצבירה" },
   { key: "total_assets", label: "נכסים", short: "נכסים (מיליוני ₪)", kind: "millions", title: "סך הנכסים המנוהלים במיליוני ₪" },
 ];

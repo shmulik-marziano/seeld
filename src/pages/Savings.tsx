@@ -81,17 +81,20 @@ const Savings = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {savingsCategories.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}
-                    className="group flex items-center justify-between gap-6 py-[14px] px-3 -mx-3 rounded-lg border-b hover:bg-[#EEF2EC] transition-colors"
+                    className="group flex items-center gap-4 rounded-2xl bg-white border p-4 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
                     style={{ borderColor: LINE }}
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 min-w-0">
-                      <h3 className="text-[16px] font-bold sm:whitespace-nowrap" style={{ color: GREEN }}>{item.title}</h3>
-                      <p className="text-[14px] sm:truncate" style={{ color: MUTED }}>{item.description}</p>
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ background: PASTEL_SAGE }}>
+                      <BrandIcon name="leaf" size={22} style={{ color: GREEN }} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-[17px] font-bold leading-tight" style={{ color: GREEN }}>{item.title}</h3>
+                      <p className="mt-1 text-[14px] leading-[1.5]" style={{ color: MUTED }}>{item.description}</p>
                     </div>
                     <BrandIcon
                       name="arrow-left"

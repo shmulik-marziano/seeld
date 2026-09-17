@@ -240,7 +240,7 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                   />
                 </div>
                 <div>
-                  <Label htmlFor="email">דוא"ל *</Label>
+                  <Label htmlFor="email">דוא״ל *</Label>
                   <Input 
                     id="email" 
                     type="email" 

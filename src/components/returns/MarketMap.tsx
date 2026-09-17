@@ -45,7 +45,7 @@ const MarketMap = ({ rows }: { rows: CompanyMapRow[] }) => {
                     <Link to={`/return-tables/${p.slug}`} className="inline-flex min-h-[44px] items-center hover:underline underline-offset-4 whitespace-nowrap">{p.short}</Link>
                   </th>
                 ))}
-                <th scope="col" className="num">סה"כ</th>
+                <th scope="col" className="num">סה״כ</th>
                 <th scope="col" className="num">גיוסים (12 ח')</th>
               </tr>
             </thead>

@@ -36,7 +36,7 @@ export default function PrivacyPage() {
     >
       <LegalSection title="1. כללי">
         <p>
-          מערכת SEELD (להלן: "המערכת") מופעלת על ידי חברת SEELD בע"מ (להלן: "החברה").
+          מערכת SEELD (להלן: "המערכת") מופעלת על ידי חברת SEELD בע״מ (להלן: "החברה").
           מדיניות פרטיות זו מתארת כיצד אנו אוספים, משתמשים, מאחסנים ומגנים על מידע אישי
           של משתמשי המערכת, לרבות סוכני ביטוח, יועצים פיננסיים ולקוחות קצה.
         </p>
@@ -113,7 +113,7 @@ export default function PrivacyPage() {
       </LegalSection>
 
       <LegalSection title="7. זכויות הלקוח">
-        <p>בהתאם לחוק הגנת הפרטיות, התשמ"א-1981, עומדות לך הזכויות הבאות:</p>
+        <p>בהתאם לחוק הגנת הפרטיות, התשמ״א-1981, עומדות לך הזכויות הבאות:</p>
         <PillList
           items={[
             <><strong>זכות עיון:</strong> הזכות לעיין במידע שנאסף עליך.</>,
@@ -150,7 +150,7 @@ export default function PrivacyPage() {
         <div className="border-t" style={{ borderColor: LINE }}>
           <div className="flex items-baseline justify-between gap-4 py-[15px] border-b" style={{ borderColor: LINE }}>
             <span className="text-[14px]" style={{ color: MUTED }}>חברה</span>
-            <span className="text-[16px] font-bold" style={{ color: GREEN }}>SEELD בע"מ</span>
+            <span className="text-[16px] font-bold" style={{ color: GREEN }}>SEELD בע״מ</span>
           </div>
           <div className="flex items-baseline justify-between gap-4 py-[15px] border-b" style={{ borderColor: LINE }}>
             <span className="text-[14px]" style={{ color: MUTED }}>דואר אלקטרוני</span>

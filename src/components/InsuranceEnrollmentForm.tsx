@@ -147,7 +147,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="propertySizeSqm">שטח במ"ר</Label>
+                <Label htmlFor="propertySizeSqm">שטח במ״ר</Label>
                 <Input 
                   id="propertySizeSqm" 
                   type="number" 
@@ -479,7 +479,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                   />
                 </div>
                 <div>
-                  <Label htmlFor="email">דוא"ל *</Label>
+                  <Label htmlFor="email">דוא״ל *</Label>
                   <Input 
                     id="email" 
                     type="email" 

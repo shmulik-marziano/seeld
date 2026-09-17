@@ -39,10 +39,10 @@ export type Specialization =
 export const specializationLabels: Record<Specialization, string> = {
   general: 'כללי',
   stocks: 'מניות',
-  bonds: 'אג"ח',
-  bonds_tradable: 'אג"ח סחיר',
+  bonds: 'אג״ח',
+  bonds_tradable: 'אג״ח סחיר',
   money_market: 'כספי (שקלי)',
-  foreign: 'חו"ל',
+  foreign: 'חו״ל',
   index_tracking: 'עוקבי מדדים',
   halacha: 'הלכתי',
   sustainability: 'קיימות',
@@ -52,7 +52,7 @@ export const specializationLabels: Record<Specialization, string> = {
   age_under_50: 'גילאי 50 ומטה',
   age_50_60: 'גילאי 50-60',
   age_over_60: 'גילאי 60 ומעלה',
-  credit_bonds: 'אשראי ואג"ח',
+  credit_bonds: 'אשראי ואג״ח',
   other: 'אחר',
 };
 
@@ -100,12 +100,12 @@ export interface MonthlyReturn {
 export interface DeepDrillData {
   directExpenses: number | null;       // הוצאות ישירות (%)
   expectedAnnualCost: number;          // עלות שנתית צפויה (%)
-  foreignExposure: number;             // חשיפה לחו"ל (%)
-  currencyExposure: number;            // חשיפה למט"ח (%)
-  designatedBonds: number | null;      // אג"ח מיועדות (%)
-  govBondsTradable: number | null;     // אג"ח ממשלתיות סחירות (%)
-  corpBondsTradable: number | null;    // אג"ח קונצרני סחיר + תעודות סל (%)
-  corpBondsNonTradable: number | null; // אג"ח קונצרניות לא סחיר (%)
+  foreignExposure: number;             // חשיפה לחו״ל (%)
+  currencyExposure: number;            // חשיפה למט״ח (%)
+  designatedBonds: number | null;      // אג״ח מיועדות (%)
+  govBondsTradable: number | null;     // אג״ח ממשלתיות סחירות (%)
+  corpBondsTradable: number | null;    // אג״ח קונצרני סחיר + תעודות סל (%)
+  corpBondsNonTradable: number | null; // אג״ח קונצרניות לא סחיר (%)
   stocksAndOptions: number | null;     // מניות/אופציות ותעודות סל (%)
   deposits: number | null;             // פיקדונות (%)
   mutualFunds: number | null;          // קרנות נאמנות (%)
@@ -159,7 +159,7 @@ export interface Fund {
   deepDrill: DeepDrillData;
 
   // מטא-דאטה
-  totalAssets: number;               // סה"כ נכסים (מיליוני ₪)
+  totalAssets: number;               // סה״כ נכסים (מיליוני ₪)
   lastUpdate: string;                // תאריך עדכון אחרון
   isActive: boolean;                 // האם פעילה
 }
