@@ -120,13 +120,22 @@ async function fetchBoard(): Promise<BoardFund[]> {
   } catch {
     // fall through to the direct query
   }
-  const { data, error } = await supabase
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .from("cma_board" as any)
-    .select(BOARD_COLUMNS)
-    .order("total_assets", { ascending: false, nullsFirst: false });
-  if (error) throw error;
-  const rows = (data ?? []) as unknown as BoardFund[];
+  // Supabase returns at most 1,000 rows per request; the board has more.
+  const PAGE = 1000;
+  const rows: BoardFund[] = [];
+  for (let from = 0; from < 20000; from += PAGE) {
+    const { data, error } = await supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .from("cma_board" as any)
+      .select(BOARD_COLUMNS)
+      .order("total_assets", { ascending: false, nullsFirst: false })
+      .order("fund_id", { ascending: true })
+      .range(from, from + PAGE - 1);
+    if (error) throw error;
+    const page = (data ?? []) as unknown as BoardFund[];
+    rows.push(...page);
+    if (page.length < PAGE) break;
+  }
   if (rows.length === 0) throw new Error("No records in cma_board");
   return rows;
 }

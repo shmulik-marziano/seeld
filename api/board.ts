@@ -35,20 +35,33 @@ export default async function handler(req: Request): Promise<Response> {
   const filter = product && PRODUCTS.has(product) ? `&board_product=eq.${product}` : "";
   const url =
     `${SUPABASE_URL}/rest/v1/cma_board` +
-    `?select=${BOARD_COLUMNS}&order=total_assets.desc.nullslast${filter}`;
+    `?select=${BOARD_COLUMNS}&order=total_assets.desc.nullslast,fund_id.asc${filter}`;
 
-  let upstream: Response;
-  try {
-    upstream = await fetch(url, {
-      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
-    });
-  } catch {
-    return fail("upstream unreachable");
+  // PostgREST caps one response at 1,000 rows (Supabase max_rows) and the board
+  // holds more than that, so the rows are read in pages and joined here.
+  const PAGE = 1000;
+  const rows: unknown[] = [];
+  for (let from = 0; from < 20000; from += PAGE) {
+    let upstream: Response;
+    try {
+      upstream = await fetch(url, {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          Range: `${from}-${from + PAGE - 1}`,
+          "Range-Unit": "items",
+        },
+      });
+    } catch {
+      return fail("upstream unreachable");
+    }
+    if (!upstream.ok && upstream.status !== 206) return fail(`upstream ${upstream.status}`);
+    const page = (await upstream.json()) as unknown[];
+    rows.push(...page);
+    if (page.length < PAGE) break;
   }
 
-  if (!upstream.ok) return fail(`upstream ${upstream.status}`);
-
-  return new Response(upstream.body, {
+  return new Response(JSON.stringify(rows), {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       // One origin fetch per hour; served stale for a day while revalidating.
