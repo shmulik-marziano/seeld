@@ -258,7 +258,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
             // Phone: a 52px round button (the label would cover a line of content
             // on every screen). From 640px: the labelled pill.
             className="fixed left-4 sm:left-6 z-50 flex h-12 w-12 items-center justify-center gap-2.5 rounded-full bg-[#003D30] text-white transition-colors duration-150 hover:bg-[#002B22] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))] sm:h-auto sm:w-auto sm:min-h-[52px] sm:py-3 sm:pr-5 sm:pl-4"
-            style={{ bottom: "calc(20px + env(safe-area-inset-bottom, 0px))", boxShadow: "0 10px 28px -10px rgba(0,61,48,.55), inset 0 0 0 1px rgba(255,255,255,.08)" }}
+            style={{ bottom: "calc(20px + var(--float-lift, 0px) + env(safe-area-inset-bottom, 0px))", boxShadow: "0 10px 28px -10px rgba(0,61,48,.55), inset 0 0 0 1px rgba(255,255,255,.08)" }}
             aria-label="פתחו שיחה עם היועץ הדיגיטלי של SEELD"
           >
             <MessageCircle className="h-6 w-6 sm:hidden" strokeWidth={1.75} aria-hidden="true" />

@@ -1,41 +1,33 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { siteSupabase } from "@/integrations/supabase/site-client";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import PoliciesTab from "./PoliciesTab";
-import RecommendationsTab from "./RecommendationsTab";
-import DocumentsTab from "./DocumentsTab";
 import ChatTab from "./ChatTab";
 import ClientAIChatbot from "./ClientAIChatbot";
-import DisclaimerBanner, { LegalFooterDisclaimer } from "./DisclaimerBanner";
-import { Illustration } from "@/components/brand/Illustration";
+import DocumentsTab from "./DocumentsTab";
+import RequestsPanel from "./RequestsPanel";
+import FileTab from "./FileTab";
+import { InsbaseConnectCard } from "./InsbaseConnectCard";
+import { LegalFooterDisclaimer } from "./DisclaimerBanner";
 import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
-import { BODY, GREEN, LINE, MUTED } from "@/lib/brand";
+import { callTool, disconnect, finishConnect, loadLink, snapshotSummary, type InsbaseLink } from "@/lib/insbase";
+import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN, TINT_SAGE } from "@/lib/brand";
 
-type Customer = {
-  id: string;
-  first_name: string | null;
-  last_name: string | null;
-  email: string | null;
-  phone: string | null;
-  status: string | null;
-  created_at: string;
-};
+/**
+ * The personal area in the app-mock structure: בית · תיק · פניות · פרופיל,
+ * a bottom tab bar on phones and top tabs from 640px.
+ *
+ * Data: the InsBase link (the customer's real file, insbase.io) drives בית and
+ * תיק; requests go to contact_submissions (own rows) and, when linked, also to
+ * the agency's service desk through InsBase; the agency CRM record (customers)
+ * unlocks the advisor chat and the document list when the visitor's email is
+ * on file. Everything else works for any signed-in visitor.
+ */
 
-// The personal area is not launched yet: design and interface are in place,
-// but live customer data stays disconnected until the flow is production-ready
-// (user decision 2026-07-20). Flip to true to reconnect email-based lookup.
-const PERSONAL_AREA_LIVE = false;
-
-// Kit navigation, right to left: בית · תיק · פניות · פרופיל.
-// Insurance, documents and the advisor's recommendations sit under תיק;
-// a message to the advisor (and the digital assistant) under פניות.
+type Customer = { id: string; first_name: string | null; last_name: string | null; email: string | null; phone: string | null; status: string | null; created_at: string };
 type MainTab = "home" | "file" | "requests" | "profile";
-type FileSection = "policies" | "recommendations" | "documents";
-type RequestSection = "agent" | "assistant";
 
 const MAIN_NAV: { value: MainTab; label: string; icon: BrandIconName }[] = [
   { value: "home", label: "בית", icon: "home" },
@@ -44,80 +36,76 @@ const MAIN_NAV: { value: MainTab; label: string; icon: BrandIconName }[] = [
   { value: "profile", label: "פרופיל", icon: "user" },
 ];
 
-const FILE_NAV: { value: FileSection; label: string }[] = [
-  { value: "policies", label: "ביטוחים וחיסכון" },
-  { value: "recommendations", label: "המלצות" },
-  { value: "documents", label: "מסמכים" },
-];
-
-const REQUEST_NAV: { value: RequestSection; label: string }[] = [
-  { value: "agent", label: "הודעה ליועץ" },
-  { value: "assistant", label: "היועץ הדיגיטלי" },
-];
-
-const mainTabClass =
-  "flex items-center gap-2 rounded-none bg-transparent px-1 pt-2 pb-3 min-h-[48px] text-[16px] font-bold text-[#476356] border-b-2 border-transparent data-[state=active]:border-[#003D30] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
-
-const statusLabel = (status: string | null) => {
-  if (status === "active") return "תיק פעיל";
-  if (status === "lead") return "בתהליך פתיחה";
-  return status || "תיק פעיל";
-};
-
 const formatDate = (iso: string) => new Date(iso).toLocaleDateString("he-IL");
 
 const PersonalAreaDashboard = () => {
   const { user, signOut } = useAuth();
-  const [customer, setCustomer] = useState<Customer | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
   const [tab, setTab] = useState<MainTab>("home");
-  const [fileSection, setFileSection] = useState<FileSection>("policies");
-  const [requestSection, setRequestSection] = useState<RequestSection>("agent");
+  const [customer, setCustomer] = useState<Customer | null>(null);
+  const [link, setLink] = useState<InsbaseLink | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [snapshot, setSnapshot] = useState<string | null>(null);
+  const [requestSubject, setRequestSubject] = useState<string | null>(null);
+  const [assistant, setAssistant] = useState(false);
 
+  // Lift the floating launchers above the phone tab bar while this screen is open.
   useEffect(() => {
-    if (!PERSONAL_AREA_LIVE) {
-      setNotFound(true);
-      setLoading(false);
-      return;
-    }
-    if (user?.email) {
-      fetchCustomer(user.email);
-    }
-  }, [user]);
+    document.documentElement.classList.add("pa-open");
+    return () => document.documentElement.classList.remove("pa-open");
+  }, []);
 
-  const fetchCustomer = async (email: string) => {
-    try {
-      const { data, error } = await siteSupabase
-        .from("customers")
-        .select("*")
-        .eq("email", email)
-        .single();
-
-      if (error || !data) {
-        setNotFound(true);
-      } else {
-        setCustomer(data as Customer);
+  // Boot: finish an InsBase callback if we are returning from it, then load the link and the CRM record.
+  useEffect(() => {
+    if (!user) return;
+    let alive = true;
+    (async () => {
+      try {
+        const linked = await finishConnect(user.id);
+        if (linked) { toast.success("התיק חובר. ברוכים הבאים."); setTab("file"); }
+      } catch {
+        toast.error("החיבור לא הושלם. נסו שוב.");
       }
-    } catch {
-      setNotFound(true);
-    } finally {
+      // The CRM record, by email (RLS: a customer reads only their own row).
+      const findCustomer = async (): Promise<Customer | null> => {
+        if (!user.email) return null;
+        try {
+          const { data } = await siteSupabase
+            .from("customers" as never)
+            .select("id, first_name, last_name, email, phone, status, created_at")
+            .ilike("email", user.email)
+            .maybeSingle();
+          return (data as unknown as Customer | null) ?? null;
+        } catch {
+          return null;
+        }
+      };
+      const [l, c] = await Promise.all([loadLink(user.id), findCustomer()]);
+      if (!alive) return;
+      setLink(l);
+      setCustomer(c);
       setLoading(false);
-    }
-  };
+    })();
+    return () => { alive = false; };
+  }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // The snapshot for the home card, once linked
+  useEffect(() => {
+    if (!link) { setSnapshot(null); return; }
+    let alive = true;
+    callTool(link, "portfolio_snapshot").then(({ answer, link: l }) => { if (!alive) return; if (l !== link) setLink(l); setSnapshot(answer.text); }).catch(() => alive && setSnapshot(""));
+    return () => { alive = false; };
+  }, [link?.access_token]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSignOut = async () => {
     await signOut();
     toast.success("התנתקתם מהאזור האישי.");
   };
 
-  const openFile = (section: FileSection) => {
-    setFileSection(section);
-    setTab("file");
-  };
-  const openRequests = (section: RequestSection) => {
-    setRequestSection(section);
-    setTab("requests");
+  const handleDisconnect = async () => {
+    if (!user) return;
+    await disconnect(user.id);
+    setLink(null);
+    toast.success("התיק נותק מהאזור האישי. הגישה מאינסבייס לא נמחקה; הסוכנות יכולה לבטלה לבקשתכם.");
   };
 
   if (loading) {
@@ -129,104 +117,71 @@ const PersonalAreaDashboard = () => {
     );
   }
 
-  // ── No active file yet: the one screen every signed-in visitor sees today ──
-  if (notFound) {
-    return (
-      <div dir="rtl" className="dna-concept !p-6 sm:!p-10">
-        <div className="grid gap-8 md:grid-cols-[1fr_280px] items-center">
-          <div>
-            <h2 className="text-[24px] sm:text-[28px] leading-tight" style={{ color: GREEN }}>
-              עדיין אין תיק פעיל בכניסה הזו
-            </h2>
-            <p className="mt-3 text-[17px] leading-[1.7]" style={{ color: BODY }}>
-              כדי לפתוח תיק אישי ולראות כאן את הפוליסות, החיסכון והמסמכים, דברו עם היועץ.
-              אפשר להתחיל בבדיקת תיק 360 ללא עלות.
-            </p>
-            {user?.email && (
-              <p className="mt-3 text-[14px]" style={{ color: MUTED }}>
-                מחוברים עם{" "}
-                <span className="font-bold whitespace-nowrap" style={{ color: GREEN }} dir="ltr">{user.email}</span>
-              </p>
-            )}
-            <div className="mt-7 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-              <Link to="/contact" className="btn-primary sm:min-w-[200px]">
-                תיאום פגישה
-              </Link>
-              <a
-                href="https://wa.me/972523097444"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary sm:min-w-[200px]"
-              >
-                <span>הודעה ב</span>
-                <span dir="ltr">WhatsApp</span>
-              </a>
-            </div>
-            <button type="button" onClick={handleSignOut} className="link-rule mt-6 text-[15px]">
-              <BrandIcon name="close" size={16} />
-              התנתקות
-            </button>
-          </div>
-          <Illustration
-            name="06-documents-service"
-            sizes="(min-width: 768px) 280px, 60vw"
-            className="max-w-[280px] mx-auto"
-          />
-        </div>
-      </div>
-    );
-  }
-
-  const fullName = [customer?.first_name, customer?.last_name].filter(Boolean).join(" ");
   const displayName =
-    fullName || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "";
+    (snapshot ? snapshotSummary(snapshot).title.replace(/^תמונת מצב\s*[—-]\s*/, "") : "") ||
+    [customer?.first_name, customer?.last_name].filter(Boolean).join(" ") ||
+    (user?.user_metadata?.full_name as string | undefined) ||
+    user?.email?.split("@")[0] || "";
 
-  const profileRows: { label: string; value: string | null | undefined; ltr?: boolean }[] = [
-    { label: "שם מלא", value: fullName || user?.user_metadata?.full_name },
-    { label: "אימייל", value: customer?.email || user?.email, ltr: true },
-    { label: "טלפון", value: customer?.phone, ltr: true },
-    { label: "מצב התיק", value: customer ? statusLabel(customer.status) : null },
-    { label: "התיק נפתח", value: customer?.created_at ? formatDate(customer.created_at) : null },
+  const tiles: { title: string; desc: string; icon: BrandIconName; tint: string; go: () => void }[] = [
+    { title: "הביטוחים שלי", desc: link ? "כיסויים, סכומים ותשלומים" : "יופיעו אחרי חיבור התיק", icon: "shield", tint: PASTEL_SAND, go: () => setTab("file") },
+    { title: "הכסף שלי", desc: link ? "צבירות, דמי ניהול ונזילות" : "יופיעו אחרי חיבור התיק", icon: "leaf", tint: PASTEL_SAGE, go: () => setTab("file") },
+    { title: "מסמכים", desc: customer ? "הקבצים שנקלטו לתיק" : "שליחת מסמכים ליועץ", icon: "document", tint: PASTEL_MINT, go: () => { setRequestSubject("שליחת מסמך"); setTab("requests"); } },
+    { title: "פניות", desc: "שאלה, עדכון פרטים או בקשה", icon: "message", tint: PASTEL_SAGE, go: () => setTab("requests") },
   ];
 
-  const SubNav = <T extends string>({
-    items, value, onChange, label,
-  }: { items: { value: T; label: string }[]; value: T; onChange: (v: T) => void; label: string }) => (
-    <div role="tablist" aria-label={label} className="flex flex-wrap gap-2 mb-6">
-      {items.map((item) => {
-        const active = item.value === value;
-        return (
-          <button
-            key={item.value}
-            type="button"
-            role="tab"
-            aria-selected={active}
-            onClick={() => onChange(item.value)}
-            className="min-h-[44px] px-4 rounded-full text-[15px] font-bold border transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
-            style={
-              active
-                ? { backgroundColor: GREEN, color: "#FAF7EF", borderColor: GREEN }
-                : { backgroundColor: "#FFFFFF", color: GREEN, borderColor: LINE }
-            }
-          >
-            {item.label}
-          </button>
-        );
-      })}
-    </div>
+  const nextAction = !link
+    ? { title: "חיבור התיק", body: "כדי לראות כאן את הפוליסות, הצבירות והכיסויים, חברו את התיק עם תעודת הזהות והקוד האישי מהסוכנות.", cta: "חיבור התיק", go: () => setTab("file") }
+    : { title: "עדכון מסמכים", body: "כדי שנוכל להמשיך לקדם את התיק, שלחו לנו מסמכים חדשים או עדכונים ברגע שיש.", cta: "שליחת מסמך", go: () => { setRequestSubject("שליחת מסמך"); setTab("requests"); } };
+
+  const profileRows: { label: string; value: string | null | undefined; ltr?: boolean }[] = [
+    { label: "שם מלא", value: displayName },
+    { label: "אימייל", value: user?.email, ltr: true },
+    { label: "טלפון", value: customer?.phone, ltr: true },
+    { label: "התיק באינסבייס", value: link ? `מחובר מ-${formatDate(link.connected_at)}` : "לא מחובר" },
+    { label: "רשומה בסוכנות", value: customer ? `קיימת · נפתחה ${formatDate(customer.created_at)}` : "לא אותרה לפי האימייל" },
+  ];
+
+  const TabBar = ({ bottom }: { bottom?: boolean }) => (
+    <nav
+      aria-label="ניווט האזור האישי"
+      className={bottom
+        ? "fixed inset-x-0 bottom-0 z-40 border-t bg-white sm:hidden"
+        : "hidden sm:flex items-center gap-2 border-b mb-8"}
+      style={bottom ? { borderColor: LINE, paddingBottom: "env(safe-area-inset-bottom, 0px)" } : { borderColor: LINE }}
+    >
+      <div className={bottom ? "grid grid-cols-4" : "flex gap-2"}>
+        {MAIN_NAV.map((item) => {
+          const active = tab === item.value;
+          return (
+            <button
+              key={item.value}
+              type="button"
+              onClick={() => setTab(item.value)}
+              aria-current={active ? "page" : undefined}
+              className={bottom
+                ? "flex min-h-[60px] flex-col items-center justify-center gap-1 text-[13px] font-bold"
+                : "flex min-h-[48px] items-center gap-2 px-2 pb-3 text-[16px] font-bold border-b-2 -mb-px transition-colors"}
+              style={active ? { color: GREEN, borderColor: GREEN } : { color: "#476356", borderColor: "transparent" }}
+            >
+              <BrandIcon name={item.icon} size={bottom ? 22 : 20} />
+              {item.label}
+            </button>
+          );
+        })}
+      </div>
+    </nav>
   );
 
   return (
-    <div dir="rtl">
-      {/* ── Greeting ── */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+    <div dir="rtl" className="pb-20 sm:pb-0">
+      {/* Greeting */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
         <div>
-          <h2 className="text-[24px] sm:text-[28px] leading-tight" style={{ color: GREEN }}>
-            {displayName ? `שלום, ${displayName}` : "שלום"}
+          <h2 className="text-[26px] sm:text-[30px] leading-tight" style={{ color: GREEN }}>
+            {tab === "home" ? "התיק שלי" : tab === "file" ? "התיק שלי" : tab === "requests" ? "הפניות שלי" : "הפרופיל שלי"}
           </h2>
-          <p className="mt-1 text-[16px]" style={{ color: MUTED }}>
-            {customer ? `${statusLabel(customer.status)} · נפתח בתאריך ${formatDate(customer.created_at)}` : "ברוכים הבאים לאזור האישי"}
-          </p>
+          <p className="mt-1 text-[16px]" style={{ color: MUTED }}>{displayName ? `שלום, ${displayName}` : "ברוכים הבאים לאזור האישי"}</p>
         </div>
         <button type="button" onClick={handleSignOut} className="link-rule text-[15px] self-start sm:self-auto">
           <BrandIcon name="close" size={16} />
@@ -234,126 +189,121 @@ const PersonalAreaDashboard = () => {
         </button>
       </div>
 
-      {/* ── Main navigation: בית · תיק · פניות · פרופיל ── */}
-      <Tabs value={tab} onValueChange={(v) => setTab(v as MainTab)} dir="rtl">
-        <TabsList
-          className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-8 border-b rounded-none overflow-x-auto scrollbar-hide"
-          style={{ borderColor: LINE }}
-          aria-label="ניווט האזור האישי"
-        >
-          {MAIN_NAV.map((item) => (
-            <TabsTrigger key={item.value} value={item.value} className={mainTabClass}>
-              <BrandIcon name={item.icon} size={20} />
-              {item.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+      <TabBar />
 
-        {/* ── בית ── */}
-        <TabsContent value="home" className="mt-0 space-y-6">
-          <DisclaimerBanner
-            variant="info"
-            text="המידע באזור האישי הוא לצורכי מידע כללי ואינו מחליף ייעוץ מקצועי. לפני כל פעולה, מומלץ להתייעץ עם היועץ."
-          />
+      {/* ── בית ── */}
+      {tab === "home" && (
+        <div className="space-y-5">
+          {/* The overview card (mock "מבט כללי") */}
+          {link ? (
+            <div className="dna-navy-band relative overflow-hidden rounded-2xl p-5 sm:p-6">
+              <div className="flex items-center gap-3">
+                <BrandIcon name="chart" size={22} style={{ color: SAGE_ON_GREEN }} />
+                <h3 className="text-[20px] leading-tight" style={{ color: IVORY }}>מבט כללי</h3>
+              </div>
+              {snapshot === null ? (
+                <p className="mt-3 text-[15px]" style={{ color: SAGE_ON_GREEN }}>מביאים את תמונת המצב מהתיק.</p>
+              ) : snapshot === "" ? (
+                <p className="mt-3 text-[15px]" style={{ color: SAGE_ON_GREEN }}>תמונת המצב לא נטענה. נסו לרענן.</p>
+              ) : (
+                <p className="mt-3 text-[16px] leading-[1.7] tabular-nums" style={{ color: IVORY }}>{snapshotSummary(snapshot).summary}</p>
+              )}
+              <button type="button" onClick={() => setTab("file")} className="btn-on-green-outline mt-5 w-full sm:w-auto">
+                לתמונת המצב המלאה
+                <BrandIcon name="arrow-left" size={18} />
+              </button>
+            </div>
+          ) : (
+            <InsbaseConnectCard compact />
+          )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {([
-              { title: "הביטוחים והחיסכון", desc: "כל הפוליסות והחסכונות שבתיק, עם החברה, המספר והסכומים.", icon: "shield" as BrandIconName, go: () => openFile("policies") },
-              { title: "המסמכים", desc: "הקבצים שהתקבלו לתיק ומצב הבדיקה של כל אחד.", icon: "document" as BrandIconName, go: () => openFile("documents") },
-              { title: "פנייה ליועץ", desc: "כתבו ליועץ. התשובה נשמרת כאן, בשיחה אחת.", icon: "message" as BrandIconName, go: () => openRequests("agent") },
-            ]).map((door) => (
+          {/* Four tiles */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            {tiles.map((t) => (
               <button
-                key={door.title}
+                key={t.title}
                 type="button"
-                onClick={door.go}
-                className="group dna-concept dna-hover text-start h-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                onClick={t.go}
+                className="group flex flex-col items-start rounded-2xl bg-white border p-4 text-start dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                style={{ borderColor: LINE }}
               >
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <div className="flex items-center gap-3">
-                    <BrandIcon name={door.icon} size={28} style={{ color: GREEN }} />
-                    <h3 className="text-[18px]" style={{ color: GREEN }}>{door.title}</h3>
-                  </div>
-                  <BrandIcon name="arrow-left" size={18} className="shrink-0 mt-1 transition-transform group-hover:-translate-x-1" style={{ color: GREEN }} />
-                </div>
-                <p className="text-[15px] leading-[1.6]" style={{ color: BODY }}>{door.desc}</p>
+                <span className="flex h-11 w-11 items-center justify-center rounded-full" style={{ background: t.tint }}>
+                  <BrandIcon name={t.icon} size={22} style={{ color: GREEN }} />
+                </span>
+                <span className="mt-3 text-[17px] font-bold leading-tight" style={{ color: GREEN }}>{t.title}</span>
+                <span className="mt-1 text-[14px] leading-[1.5]" style={{ color: MUTED }}>{t.desc}</span>
+                <span className="mt-2 inline-flex items-center gap-1 text-[14px] font-bold" style={{ color: GREEN }}>
+                  <BrandIcon name="arrow-left" size={16} className="transition-transform group-hover:-translate-x-1" />
+                </span>
               </button>
             ))}
           </div>
 
-          <div className="dna-concept">
-            <h3 className="text-[18px] mb-4" style={{ color: GREEN }}>הפרטים בתיק</h3>
-            <dl className="border-t" style={{ borderColor: LINE }}>
-              {profileRows.slice(0, 3).map((row) => (
-                <div key={row.label} className="flex items-baseline justify-between gap-4 py-3 border-b" style={{ borderColor: LINE }}>
-                  <dt className="text-[14px]" style={{ color: MUTED }}>{row.label}</dt>
-                  <dd className="text-[16px] font-bold text-left" style={{ color: row.value ? GREEN : MUTED }} dir={row.value && row.ltr ? "ltr" : undefined}>
-                    {row.value || "לא צוין"}
-                  </dd>
+          {/* Next action */}
+          <div>
+            <h3 className="text-[18px] mb-3" style={{ color: GREEN }}>הפעולה הבאה</h3>
+            <div className="rounded-2xl p-5" style={{ background: TINT_SAGE }}>
+              <div className="flex items-start gap-4">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white" style={{ boxShadow: `inset 0 0 0 1px ${LINE}` }}>
+                  <BrandIcon name="upload" size={20} style={{ color: GREEN }} />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[17px] font-bold" style={{ color: GREEN }}>{nextAction.title}</p>
+                  <p className="mt-1 text-[15px] leading-[1.6]" style={{ color: BODY }}>{nextAction.body}</p>
                 </div>
-              ))}
-            </dl>
-            <p className="mt-4 text-[14px]" style={{ color: MUTED }}>
-              פרט שגוי או חסר? כתבו ליועץ תחת פניות והוא יעדכן את התיק.
-            </p>
+              </div>
+              <button type="button" onClick={nextAction.go} className="btn-primary mt-4 w-full sm:w-auto">{nextAction.cta}</button>
+            </div>
           </div>
-        </TabsContent>
 
-        {/* ── תיק ── */}
-        <TabsContent value="file" className="mt-0">
-          <SubNav items={FILE_NAV} value={fileSection} onChange={(v) => setFileSection(v as FileSection)} label="חלקי התיק" />
+          <p className="text-[14px] leading-[1.6]" style={{ color: MUTED }}>
+            המידע באזור האישי מוצג כפי שהוא רשום במקורות, עם מקור ותאריך. הוא אינו ייעוץ. החלטות מקבלים יחד עם הסוכנות.
+          </p>
+        </div>
+      )}
 
-          {fileSection === "policies" && (
-            <div className="space-y-6">
-              <DisclaimerBanner
-                variant="legal"
-                text="נתוני הפוליסות מוצגים לצורכי מידע ואינם מחליפים את תנאי הפוליסה המקוריים. למידע מדויק ומעודכן, פנו לחברת הביטוח או ליועץ."
-              />
-              <PoliciesTab />
-            </div>
-          )}
-
-          {fileSection === "recommendations" && (
-            <div className="space-y-6">
-              <DisclaimerBanner
-                variant="warning"
-                text="ההמלצות מבוססות על ניתוח התיק על ידי היועץ. לפני ביצוע, מומלץ לעבור עליהן יחד ולקבל הסבר מלא."
-              />
-              {customer ? (
-                <RecommendationsTab customerId={customer.id} />
-              ) : (
-                <p className="text-[16px]" style={{ color: MUTED }}>ההמלצות יופיעו כאן לאחר שהתיק ייפתח.</p>
-              )}
-            </div>
-          )}
-
-          {fileSection === "documents" && (
-            customer ? (
+      {/* ── תיק ── */}
+      {tab === "file" && (
+        <div className="space-y-8">
+          <FileTab link={link} onLink={setLink} />
+          {customer && (
+            <section>
+              <h3 className="text-[20px] mb-3" style={{ color: GREEN }}>המסמכים שנקלטו לתיק</h3>
               <DocumentsTab customerId={customer.id} />
-            ) : (
-              <p className="text-[16px]" style={{ color: MUTED }}>המסמכים יופיעו כאן לאחר שהתיק ייפתח.</p>
-            )
+            </section>
           )}
-        </TabsContent>
+        </div>
+      )}
 
-        {/* ── פניות ── */}
-        <TabsContent value="requests" className="mt-0">
-          <SubNav items={REQUEST_NAV} value={requestSection} onChange={(v) => setRequestSection(v as RequestSection)} label="סוגי הפניות" />
-
-          {requestSection === "agent" && (
-            customer ? (
+      {/* ── פניות ── */}
+      {tab === "requests" && (
+        <div className="space-y-8">
+          <RequestsPanel initialSubject={requestSubject} onSubjectConsumed={() => setRequestSubject(null)} link={link} />
+          <section className="rounded-2xl bg-white border p-5 sm:p-6" style={{ borderColor: LINE }}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <h3 className="text-[18px] leading-tight" style={{ color: GREEN }}>היועץ הדיגיטלי</h3>
+                <p className="mt-1 text-[14px]" style={{ color: MUTED }}>שאלות כלליות על ביטוח, פנסיה וחיסכון. לא נתון אישי ולא ייעוץ.</p>
+              </div>
+              <button type="button" onClick={() => setAssistant((v) => !v)} className="btn-secondary w-full sm:w-auto" aria-expanded={assistant}>
+                {assistant ? "סגירה" : "פתיחת שיחה"}
+              </button>
+            </div>
+            {assistant && <div className="mt-5"><ClientAIChatbot /></div>}
+          </section>
+          {customer && (
+            <section>
+              <h3 className="text-[18px] mb-3" style={{ color: GREEN }}>הודעות עם היועץ</h3>
               <ChatTab customerId={customer.id} customerName={displayName || "לקוח"} />
-            ) : (
-              <p className="text-[16px]" style={{ color: MUTED }}>הפנייה ליועץ תיפתח כאן לאחר שהתיק ייפתח.</p>
-            )
+            </section>
           )}
+        </div>
+      )}
 
-          {requestSection === "assistant" && <ClientAIChatbot />}
-        </TabsContent>
-
-        {/* ── פרופיל ── */}
-        <TabsContent value="profile" className="mt-0 space-y-6">
-          <div className="dna-concept">
-            <h3 className="text-[18px] mb-4" style={{ color: GREEN }}>הפרופיל שלכם</h3>
+      {/* ── פרופיל ── */}
+      {tab === "profile" && (
+        <div className="space-y-5">
+          <div className="rounded-2xl bg-white border p-5 sm:p-6" style={{ borderColor: LINE }}>
             <dl className="border-t" style={{ borderColor: LINE }}>
               {profileRows.map((row) => (
                 <div key={row.label} className="flex items-baseline justify-between gap-4 py-3 border-b" style={{ borderColor: LINE }}>
@@ -364,23 +314,36 @@ const PersonalAreaDashboard = () => {
                 </div>
               ))}
             </dl>
-            <p className="mt-4 text-[14px]" style={{ color: MUTED }}>
-              עדכון פרטים נעשה דרך היועץ, כדי שהתיק והפוליסות יישארו תואמים.
-            </p>
+            <p className="mt-4 text-[14px]" style={{ color: MUTED }}>עדכון פרטים נעשה דרך פנייה, כדי שהתיק והפוליסות יישארו תואמים.</p>
+          </div>
+
+          <div className="rounded-2xl p-5 sm:p-6" style={{ background: TINT_SAGE }}>
+            <h3 className="text-[18px]" style={{ color: GREEN }}>החיבור לאינסבייס</h3>
+            {link ? (
+              <>
+                <p className="mt-1 text-[15px] leading-[1.6]" style={{ color: BODY }}>
+                  התיק מחובר מ-{formatDate(link.connected_at)}. הניתוק מוחק את מפתחות הגישה מהאזור האישי; כדי לבטל את הגישה גם באינסבייס, פנו לסוכנות.
+                </p>
+                <button type="button" onClick={handleDisconnect} className="btn-secondary mt-4 w-full sm:w-auto">ניתוק התיק</button>
+              </>
+            ) : (
+              <>
+                <p className="mt-1 text-[15px] leading-[1.6]" style={{ color: BODY }}>התיק עדיין לא מחובר. החיבור נעשה עם תעודת זהות והקוד האישי מהסוכנות.</p>
+                <button type="button" onClick={() => setTab("file")} className="btn-primary mt-4 w-full sm:w-auto">חיבור התיק</button>
+              </>
+            )}
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
-            <button type="button" onClick={() => openRequests("agent")} className="btn-primary sm:min-w-[200px]">
-              כתבו ליועץ
-            </button>
-            <button type="button" onClick={handleSignOut} className="btn-secondary sm:min-w-[200px]">
-              התנתקות
-            </button>
+            <button type="button" onClick={() => setTab("requests")} className="btn-primary sm:min-w-[200px]">כתבו לנו</button>
+            <button type="button" onClick={handleSignOut} className="btn-secondary sm:min-w-[200px]">התנתקות</button>
+            <Link to="/" className="link-rule self-center text-[15px]">לאתר</Link>
           </div>
-        </TabsContent>
-      </Tabs>
+        </div>
+      )}
 
       <LegalFooterDisclaimer />
+      <TabBar bottom />
     </div>
   );
 };

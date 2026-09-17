@@ -47,7 +47,7 @@ const AccessibilityButton = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed right-4 sm:right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#476356] opacity-80 transition-all duration-200 hover:opacity-100 hover:text-[#003D30] focus-visible:opacity-100"
-        style={{ boxShadow: RING, bottom: "calc(20px + env(safe-area-inset-bottom, 0px))" }}
+        style={{ boxShadow: RING, bottom: "calc(20px + var(--float-lift, 0px) + env(safe-area-inset-bottom, 0px))" }}
         aria-label="הגדרות נגישות"
         aria-expanded={isOpen}
         title="נגישות"

@@ -682,3 +682,7 @@ nav[aria-label="ניווט משני"] a { position: relative; display: inline-bl
    which a phone browser answers by zooming the whole page out. */
 .overflow-x-auto:not(.absolute):not(.fixed):not(.sticky),
 .overflow-auto:not(.absolute):not(.fixed):not(.sticky) { position: relative; }
+/* Personal area: a bottom tab bar on phones lifts the floating launchers above it. */
+@media (max-width: 639px) {
+  html.pa-open { --float-lift: 64px; }
+}
