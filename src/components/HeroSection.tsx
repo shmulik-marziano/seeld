@@ -42,7 +42,7 @@ const HeroSection = () => {
               className="dna-display leading-[1.15]"
               style={{ fontSize: "clamp(32px, 4.6vw, 56px)" }}
             >
-              הביטוח והכסף שלכם,
+              הכסף, הנכסים והביטוח שלכם,
               <br />
               בתמונה ברורה.
             </motion.h1>

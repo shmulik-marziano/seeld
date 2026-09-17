@@ -8,8 +8,8 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { StatusPill } from "@/components/brand/Live";
 
 const navLinks = [
+  { href: "/savings", label: "פיננסים" },
   { href: "/insurances", label: "ביטוח" },
-  { href: "/savings/pension-funds", label: "חיסכון ופנסיה" },
   { href: "/calculators", label: "מחשבונים" },
   { href: "/fund-finder", label: "השוואת קופות" },
   { href: "/blog", label: "בלוג" },
@@ -19,8 +19,8 @@ const navLinks = [
 
 const mobileNavLinks = [
   { href: "/", label: "דף הבית" },
+  { href: "/savings", label: "פיננסים" },
   { href: "/insurances", label: "ביטוח" },
-  { href: "/savings/pension-funds", label: "חיסכון ופנסיה" },
   { href: "/calculators", label: "מחשבונים" },
   { href: "/fund-finder", label: "השוואת קופות" },
   { href: "/blog", label: "בלוג" },

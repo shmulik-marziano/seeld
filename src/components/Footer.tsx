@@ -22,29 +22,42 @@ const linkColumns: { title: string; links: { href: string; label: string }[] }[]
       { href: "/rights-extraction", label: "מיצוי זכויות" },
     ],
   },
+  // The product columns follow the site-wide order: finance, then life and
+  // health cover, then general insurance (src/data/productDirectory.ts).
   {
-    title: "ביטוחים",
+    title: "פיננסים",
     links: [
-      { href: "/insurance/health", label: "ביטוח בריאות" },
-      { href: "/insurance/life", label: "ביטוח חיים" },
-      { href: "/insurance/vehicle", label: "ביטוח רכב" },
-      { href: "/insurance/home", label: "ביטוח דירה" },
-      { href: "/insurance/mortgage", label: "ביטוח משכנתא" },
-      { href: "/insurance/travel", label: "ביטוח נסיעות" },
-      { href: "/insurance/disability", label: "אובדן כושר עבודה" },
-      { href: "/insurance/business", label: "ביטוח עסק" },
-    ],
-  },
-  {
-    title: "חיסכון ופנסיה",
-    links: [
-      { href: "/savings/pension-funds", label: "קרנות פנסיה" },
+      { href: "/savings/investment", label: "פוליסות השקעה" },
       { href: "/savings/gemel-funds", label: "קופות גמל" },
       { href: "/savings/training-funds", label: "קרנות השתלמות" },
+      { href: "/savings/pension-funds", label: "קרנות פנסיה" },
       { href: "/savings/gemel-investment", label: "גמל להשקעה" },
       { href: "/savings/child-savings", label: "חיסכון לילד" },
       { href: "/savings/pre-retirement", label: "לקראת פרישה" },
       { href: "/savings/financial-planning", label: "תכנון פיננסי" },
+    ],
+  },
+  {
+    title: "ביטוחי חיים ובריאות",
+    links: [
+      { href: "/insurance/life", label: "ביטוח חיים" },
+      { href: "/insurance/mortgage", label: "ביטוח משכנתא" },
+      { href: "/insurance/health", label: "ביטוח בריאות" },
+      { href: "/insurance/critical-illness", label: "מחלות קשות" },
+      { href: "/insurance/accidents", label: "תאונות אישיות" },
+      { href: "/insurance/partners", label: "ביטוח שותפים" },
+    ],
+  },
+  {
+    title: "ביטוח כללי",
+    links: [
+      { href: "/insurance/vehicle", label: "ביטוח רכב" },
+      { href: "/insurance/home", label: "ביטוח דירה" },
+      { href: "/insurance/business", label: "ביטוח עסק" },
+      { href: "/insurance/travel", label: "ביטוח נסיעות" },
+      { href: "/insurance/disability", label: "אובדן כושר עבודה" },
+      { href: "/insurance/nursing", label: "ביטוח סיעודי" },
+      { href: "/insurances", label: "לכל תחומי הביטוח" },
     ],
   },
 ];
@@ -177,7 +190,7 @@ const Footer = () => {
                   {errors.email && <p id="footer-email-err" className="mt-1.5 text-[14px]" style={{ color: "#9A4520" }}>{errors.email}</p>}
                 </div>
                 <div className="pt-2 flex flex-wrap items-center gap-5">
-                  <button type="submit" disabled={submitting} className="btn-primary min-w-[180px]">
+                  <button type="submit" disabled={submitting} className="btn-primary w-full sm:w-auto sm:min-w-[180px]">
                     {submitting ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : "שלחו ונחזור אליכם"}
                   </button>
                   <button
@@ -277,7 +290,7 @@ const Footer = () => {
           </div>
 
           {/* Link columns */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-10 gap-y-10 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-10 gap-y-10 mb-12">
             {linkColumns.map((col) => (
               <div key={col.title}>
                 <h3 className="text-[16px] mb-5" style={{ color: IVORY }}>

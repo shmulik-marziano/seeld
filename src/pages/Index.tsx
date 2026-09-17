@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Header from "@/components/Header";
+import { TIERS, type ProductLink } from "@/data/productDirectory";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -25,18 +25,18 @@ const serviceAreas: {
   icon: BrandIconName;
 }[] = [
   {
-    title: "משפחה והגנה",
-    description: "ביטוחי בריאות, חיים, אובדן כושר עבודה וסיעוד, כחלק מתמונה משפחתית אחת. בודקים מה יש, מה חסר ומה כפול.",
-    href: "/insurances",
-    illustration: "02-family-protection",
-    icon: "shield",
-  },
-  {
-    title: "חיסכון ותכנון",
-    description: "מבט מסודר על הפנסיה, קרנות ההשתלמות, קופות הגמל והמטרות קדימה. דמי ניהול, מסלולים והפקדות במקום אחד.",
+    title: "הכסף והנכסים",
+    description: "פוליסות השקעה, קופות גמל, קרנות השתלמות ופנסיה במבט אחד: דמי ניהול, מסלולים, הפקדות ותשואות. קודם הכסף, אחר כך ההגנה עליו.",
     href: "/savings",
     illustration: "03-saving-growth",
     icon: "leaf",
+  },
+  {
+    title: "משפחה והגנה",
+    description: "ביטוחי חיים, משכנתא, בריאות, מחלות קשות ותאונות אישיות, כחלק מתמונה משפחתית אחת. בודקים מה יש, מה חסר ומה כפול.",
+    href: "/insurances",
+    illustration: "02-family-protection",
+    icon: "shield",
   },
   {
     title: "לקראת פרישה",
@@ -47,38 +47,7 @@ const serviceAreas: {
   },
 ];
 
-const insuranceTypes = [
-  { title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳ · השוואה בין כל החברות", href: "/insurance/vehicle" },
-  { title: "ביטוח בריאות", description: "כיסוי שמשלים את הסל ולא כופל אותו", href: "/insurance/health" },
-  { title: "ביטוח חיים", description: "הגנה כלכלית למשפחה, לפי מה שבאמת צריך", href: "/insurance/life" },
-  { title: "ביטוח דירה", description: "מבנה ותכולה, בלי הפתעות מאוחרות", href: "/insurance/home" },
-  { title: "ביטוח שוכרים", description: "כיסוי תכולה ואחריות צד ג׳ לשוכרים", href: "/insurance/renters" },
-  { title: "ביטוח עסקי", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק", href: "/insurance/business" },
-  { title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", href: "/insurance/travel" },
-  { title: "ביטוח שיניים", description: "טיפולי שיניים ואורתודנטיה", href: "/insurance/dental" },
-  { title: "אובדן כושר עבודה", description: "תשלום חודשי אם לא תוכלו לעבוד", href: "/insurance/disability" },
-  { title: "ביטוח סיעודי", description: "מימון טיפול סיעודי בבית או במוסד", href: "/insurance/nursing" },
-  { title: "ביטוח משכנתא", description: "שמירה על הדירה גם במקרה בלתי צפוי", href: "/insurance/mortgage" },
-  { title: "מחלות קשות", description: "פיצוי כספי חד־פעמי עם אבחון מחלה", href: "/insurance/critical-illness" },
-  { title: "תאונות אישיות", description: "פיצוי על אשפוז, שבר או נכות מתאונה", href: "/insurance/accidents" },
-  { title: "ביטוח שותפים", description: "רציפות עסקית במקרה של אובדן שותף", href: "/insurance/partners" },
-  { title: "עובדים זרים", description: "ביטוח חובה בהתאם לחוק", href: "/insurance/foreign-workers" },
-  { title: "סיעודי כללית", description: "כיסוי סיעודי משלים לחברי כללית", href: "/insurance/nursing-clalit" },
-];
 
-const savingsProducts = [
-  { title: "קרנות פנסיה", description: "הפקדות, כיסויים ובחירת מסלול נכונה", href: "/savings/pension-funds" },
-  { title: "קופות גמל", description: "חיסכון לטווח ארוך עם הטבות מס", href: "/savings/gemel-funds" },
-  { title: "גמל להשקעה", description: "חיסכון נזיל בשוק ההון, ללא נעילה", href: "/savings/gemel-investment" },
-  { title: "חיסכון לכל ילד", description: "ניהול כספי התוכנית הממשלתית", href: "/savings/child-savings" },
-  { title: "קרנות השתלמות", description: "חיסכון לשש שנים עם פטור ממס", href: "/savings/training-funds" },
-  { title: "השקעות", description: "בחירת מסלולים ומעקב תשואות", href: "/savings/investment" },
-  { title: "ביטוח חיים פנסיוני", description: "חיסכון עם כיסוי למקרה מוות ונכות", href: "/insurance/life" },
-  { title: "קופות מעסיקים", description: "הפקדות לעובדים וציות לחוק", href: "/savings/employer-funds" },
-  { title: "טרום פרישה", description: "5–10 שנים לפנסיה? הזמן לסדר הכול", href: "/savings/pre-retirement" },
-  { title: "לאחר פרישה", description: "משיכות, קצבאות ותכנון מס", href: "/savings/post-retirement" },
-  { title: "תכנון פיננסי", description: "מיפוי מלא של הנכסים ובניית תוכנית", href: "/savings/financial-planning" },
-];
 
 const processSteps: { title: string; you: string; we: string }[] = [
   {
@@ -152,14 +121,16 @@ const trustList = [
 
 const leadSubjects = [
   "בדיקת תיק 360",
-  "ביטוח בריאות",
+  "פנסיה וחיסכון",
+  "פוליסות השקעה, גמל והשתלמות",
+  "ניוד פנסיה",
   "ביטוח חיים",
+  "ביטוח משכנתא",
+  "ביטוח בריאות",
   "ביטוח רכב",
   "ביטוח דירה",
-  "פנסיה וחיסכון",
   "ביטוח עסקי",
   "ביטוח נסיעות",
-  "ניוד פנסיה",
   "אחר",
 ];
 
@@ -177,13 +148,13 @@ const SectionHead = ({ title, lede, center = false }: { title: string; lede?: st
   </div>
 );
 
-const ProductList = ({ items }: { items: { title: string; description: string; href: string }[] }) => (
+const ProductList = ({ items, phoneLimit = 6 }: { items: ProductLink[]; phoneLimit?: number }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
     {items.map((item, i) => (
       <Link
         key={item.title + item.href}
         to={item.href}
-        className={`group items-baseline justify-between gap-6 py-[14px] px-3 -mx-3 rounded-lg border-b hover:bg-white transition-colors ${i >= 6 ? "hidden md:flex" : "flex"}`}
+        className={`group items-baseline justify-between gap-6 py-[14px] px-3 -mx-3 rounded-lg border-b hover:bg-white transition-colors ${i >= phoneLimit ? "hidden md:flex" : "flex"}`}
         style={{ borderColor: LINE }}
       >
         <div className="flex items-baseline gap-4 min-w-0">
@@ -206,8 +177,6 @@ const FieldLabel = ({ htmlFor, children, required }: { htmlFor: string; children
 const FieldError = ({ id, children }: { id: string; children?: string }) =>
   children ? <p id={id} className="mt-1.5 text-[14px]" style={{ color: "#9A4520" }}>{children}</p> : null;
 
-const tabTriggerClass =
-  "rounded-none bg-transparent px-0 pb-4 text-[16px] font-bold text-[#476356] border-b-2 border-transparent data-[state=active]:border-[#003D30] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors";
 
 const PHONE_RE = /^0\d{1,2}-?\d{7}$/;
 
@@ -311,8 +280,8 @@ const Index = () => {
           <div className="max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
             <ScrollReveal>
               <SectionHead
-                title="לכל שירות יש נושא מזוהה"
-                lede="שלושה תחומי ליווי, משפחה חזותית אחת. בוחרים את הדלת המתאימה, ואנחנו ממשיכים משם."
+                title="פיננסים וביטוח, במקום אחד"
+                lede="כמו בבית השקעות גדול ובחברת ביטוח גדולה, רק עם יועץ אחד שמכיר אתכם. קודם הכסף והנכסים, אחר כך ההגנה עליהם."
               />
             </ScrollReveal>
 
@@ -353,38 +322,27 @@ const Index = () => {
               ))}
             </div>
 
-            {/* The full catalogue — every product keeps its link */}
-            <div className="mt-14 sm:mt-20">
-              <Tabs defaultValue="insurance" dir="rtl">
-                <TabsList className="flex w-full justify-start gap-10 h-auto bg-transparent p-0 mb-8 border-b rounded-none" style={{ borderColor: LINE }}>
-                  <TabsTrigger value="insurance" className={tabTriggerClass}>
-                    כל הביטוחים
-                  </TabsTrigger>
-                  <TabsTrigger value="savings" className={tabTriggerClass}>
-                    חיסכון ופנסיה
-                  </TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="insurance" className="mt-0">
-                  <ProductList items={insuranceTypes} />
-                  <div className="mt-8">
-                    <Link to="/insurances" className="link-rule text-[15px]">
-                      לכל 16 תחומי הביטוח
-                      <BrandIcon name="arrow-left" size={18} />
-                    </Link>
+            {/* The directory: three tiers in the owner's order (finance, then
+                life and health cover, then general insurance). Every product
+                keeps its link; the same order runs through the hubs and the footer. */}
+            <div className="mt-14 sm:mt-20 space-y-12 sm:space-y-16">
+              {TIERS.map((tier, i) => (
+                <ScrollReveal key={tier.key} delay={i * 60}>
+                  <div id={`home-${tier.key}`} className="scroll-mt-24">
+                    <div className="mb-3 sm:mb-5 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-6 border-b pb-3" style={{ borderColor: LINE }}>
+                      <h3 className="text-[22px] sm:text-[24px] leading-tight" style={{ color: GREEN }}>{tier.title}</h3>
+                      <p className="text-[15px]" style={{ color: MUTED }}>{tier.lede}</p>
+                    </div>
+                    <ProductList items={tier.items} phoneLimit={tier.homeCount} />
+                    <div className="mt-6">
+                      <Link to={tier.href} className="link-rule text-[15px]">
+                        {tier.linkLabel}
+                        <BrandIcon name="arrow-left" size={18} />
+                      </Link>
+                    </div>
                   </div>
-                </TabsContent>
-
-                <TabsContent value="savings" className="mt-0">
-                  <ProductList items={savingsProducts} />
-                  <div className="mt-8">
-                    <Link to="/savings" className="link-rule text-[15px]">
-                      לכל 11 מוצרי החיסכון והפנסיה
-                      <BrandIcon name="arrow-left" size={18} />
-                    </Link>
-                  </div>
-                </TabsContent>
-              </Tabs>
+                </ScrollReveal>
+              ))}
             </div>
           </div>
         </section>
@@ -449,8 +407,9 @@ const Index = () => {
                         </select>
                       </div>
                     </div>
-                    <div className="mt-6 flex flex-wrap items-center gap-5">
-                      <button type="submit" disabled={leadSubmitting} className="btn-primary min-w-[200px]">
+                    {/* Phone: the button spans the form like the fields above it */}
+                    <div className="mt-6 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-4 sm:gap-5">
+                      <button type="submit" disabled={leadSubmitting} className="btn-primary w-full sm:w-auto sm:min-w-[200px]">
                         {leadSubmitting ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : "שלחו ונתחיל בבדיקה"}
                       </button>
                       <span className="text-[15px]" style={{ color: MUTED }}>
@@ -572,8 +531,8 @@ const Index = () => {
                     לכל לקוח יש יועץ אישי: אדם אחד שמכיר את התיק, את המשפחה ואת השינויים לאורך השנים.
                     לא מוקד, לא נציג מתחלף.
                   </p>
-                  <div className="pt-3 flex flex-wrap items-center gap-6">
-                    <Link to="/contact" className="btn-primary">תיאום פגישה</Link>
+                  <div className="pt-3 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                    <Link to="/contact" className="btn-primary w-full sm:w-auto">תיאום פגישה</Link>
                     <Link to="/about" className="link-rule text-[16px]">
                       הכירו את הצוות
                       <BrandIcon name="arrow-left" size={18} />
@@ -716,7 +675,7 @@ const Index = () => {
                     />
                   </div>
                   <div className="pt-2">
-                    <button type="submit" disabled={contactSubmitting} className="btn-primary min-w-[180px]">
+                    <button type="submit" disabled={contactSubmitting} className="btn-primary w-full sm:w-auto sm:min-w-[180px]">
                       {contactSubmitting ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : "שלחו לתיאום"}
                     </button>
                   </div>
@@ -772,19 +731,20 @@ const Index = () => {
 
         {/* CLOSING — deep green band */}
         <section className="dna-navy-band">
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24 text-center">
+          {/* Phone: aligned to the start like every other section; centred from 640px */}
+          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24 text-start sm:text-center">
             <ScrollReveal>
               <h2 className="leading-tight" style={{ color: IVORY, fontSize: "clamp(28px, 3.6vw, 40px)" }}>
                 תמונה ברורה מתחילה בשיחה אחת.
               </h2>
-              <p className="mt-4 text-[17px] sm:text-[18px] max-w-xl mx-auto" style={{ color: SAGE_ON_GREEN }}>
+              <p className="mt-4 text-[17px] sm:text-[18px] max-w-xl sm:mx-auto" style={{ color: SAGE_ON_GREEN }}>
                 בדיקת תיק 360 ללא עלות וללא התחייבות. מכאן ממשיכים יחד.
               </p>
-              <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a href="#portfolio-review" className="btn-on-green min-w-[220px]">
+              <div className="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-center gap-3">
+                <a href="#portfolio-review" className="btn-on-green sm:min-w-[220px]">
                   בדיקת תיק 360
                 </a>
-                <Link to="/contact" className="btn-on-green-outline min-w-[220px]">
+                <Link to="/contact" className="btn-on-green-outline sm:min-w-[220px]">
                   תיאום פגישה
                 </Link>
               </div>

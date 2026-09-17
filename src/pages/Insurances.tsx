@@ -6,29 +6,12 @@ import { Illustration } from "@/components/brand/Illustration";
 import { BrandDots } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN } from "@/lib/brand";
+import { GENERAL_INSURANCE, LIFE_HEALTH } from "@/data/productDirectory";
 
 // Brand hub page (kit p.05): the family-protection art beside the headline and
 // the action, then the full index of the 16 insurance lines. Every line keeps
 // its link; the page closes on the central path (360 review / meeting).
 
-const insuranceTypes = [
-  { title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳. השוואה בין כל החברות", href: "/insurance/vehicle" },
-  { title: "ביטוח בריאות", description: "כיסוי שמשלים את הסל ולא כופל אותו", href: "/insurance/health" },
-  { title: "ביטוח חיים", description: "הגנה כלכלית למשפחה, לפי מה שבאמת צריך", href: "/insurance/life" },
-  { title: "ביטוח דירה", description: "מבנה ותכולה, בלי הפתעות מאוחרות", href: "/insurance/home" },
-  { title: "ביטוח שוכרים", description: "כיסוי תכולה ואחריות צד ג׳ לשוכרים", href: "/insurance/renters" },
-  { title: "ביטוח עסקי", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק", href: "/insurance/business" },
-  { title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", href: "/insurance/travel" },
-  { title: "ביטוח שיניים", description: "טיפולי שיניים ואורתודנטיה", href: "/insurance/dental" },
-  { title: "אובדן כושר עבודה", description: "תשלום חודשי אם לא תוכלו לעבוד", href: "/insurance/disability" },
-  { title: "ביטוח סיעודי", description: "מימון טיפול סיעודי בבית או במוסד", href: "/insurance/nursing" },
-  { title: "ביטוח משכנתא", description: "שמירה על הדירה גם במקרה בלתי צפוי", href: "/insurance/mortgage" },
-  { title: "מחלות קשות", description: "פיצוי כספי חד־פעמי עם אבחון מחלה", href: "/insurance/critical-illness" },
-  { title: "תאונות אישיות", description: "פיצוי על אשפוז, שבר או נכות מתאונה", href: "/insurance/accidents" },
-  { title: "ביטוח שותפים", description: "רציפות עסקית במקרה של אובדן שותף", href: "/insurance/partners" },
-  { title: "עובדים זרים", description: "ביטוח חובה בהתאם לחוק", href: "/insurance/foreign-workers" },
-  { title: "סיעודי כללית", description: "כיסוי סיעודי משלים לחברי כללית", href: "/insurance/nursing-clalit" },
-];
 
 const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
 
@@ -100,27 +83,40 @@ const Insurances = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
-                {insuranceTypes.map((item) => (
-                  <Link
-                    key={item.href}
-                    to={item.href}
-                    className="group flex items-center justify-between gap-6 py-[14px] px-3 -mx-3 rounded-lg border-b hover:bg-[#EEF2EC] transition-colors"
-                    style={{ borderColor: LINE }}
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 min-w-0">
-                      <h3 className="text-[16px] font-bold sm:whitespace-nowrap" style={{ color: GREEN }}>{item.title}</h3>
-                      <p className="text-[14px] sm:truncate" style={{ color: MUTED }}>{item.description}</p>
-                    </div>
-                    <BrandIcon
-                      name="arrow-left"
-                      size={18}
-                      className="shrink-0 transition-transform group-hover:-translate-x-1"
-                      style={{ color: GREEN }}
-                    />
-                  </Link>
-                ))}
-              </div>
+              {/* Two groups in the site-wide order: the cover for the person and
+                  the family first, general insurance after it. */}
+              {[
+                { id: "life", title: "ביטוחי חיים ובריאות", lede: "ההגנה על המשפחה, על ההכנסה ועל הבית.", items: LIFE_HEALTH },
+                { id: "general", title: "ביטוח כללי", lede: "רכב, דירה, עסק, נסיעות ושאר הכיסויים.", items: GENERAL_INSURANCE },
+              ].map((group, gi) => (
+                <div key={group.id} id={group.id} className={`scroll-mt-24 ${gi > 0 ? "mt-12 sm:mt-16" : ""}`}>
+                  <div className="mb-3 sm:mb-5 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-6 border-b pb-3" style={{ borderColor: LINE }}>
+                    <h3 className="text-[22px] sm:text-[24px] leading-tight" style={{ color: GREEN }}>{group.title}</h3>
+                    <p className="text-[15px]" style={{ color: MUTED }}>{group.lede}</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+                    {group.items.map((item) => (
+                      <Link
+                        key={item.href}
+                        to={item.href}
+                        className="group flex items-center justify-between gap-6 py-[14px] px-3 -mx-3 rounded-lg border-b hover:bg-[#EEF2EC] transition-colors"
+                        style={{ borderColor: LINE }}
+                      >
+                        <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 min-w-0">
+                          <h4 className="text-[16px] font-bold sm:whitespace-nowrap" style={{ color: GREEN }}>{item.title}</h4>
+                          <p className="text-[14px] sm:truncate" style={{ color: MUTED }}>{item.description}</p>
+                        </div>
+                        <BrandIcon
+                          name="arrow-left"
+                          size={18}
+                          className="shrink-0 transition-transform group-hover:-translate-x-1"
+                          style={{ color: GREEN }}
+                        />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </ScrollReveal>
 
             <ScrollReveal delay={80}>
