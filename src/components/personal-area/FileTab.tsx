@@ -4,7 +4,8 @@ import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
 import { InsbaseAnswer } from "./InsbaseAnswer";
 import { InsbaseConnectCard } from "./InsbaseConnectCard";
 import PoliciesTab from "./PoliciesTab";
-import { callTool, type InsbaseLink, type InsbaseTool } from "@/lib/insbase";
+import { callTool, type InsbaseLink, type InsbaseProduct, type InsbaseTool } from "@/lib/insbase";
+import { ProductCards } from "./ProductCards";
 import { BODY, GREEN, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, TINT_SAGE } from "@/lib/brand";
 
 /**
@@ -13,7 +14,7 @@ import { BODY, GREEN, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, TINT_S
  * a term explainer). Products the visitor added by hand sit below, always.
  */
 
-type Section = { key: string; label: string; icon: BrandIconName; tint: string; tools: { title: string; tool: InsbaseTool }[] };
+type Section = { key: string; label: string; icon: BrandIconName; tint: string; tools: { title: string; tool: InsbaseTool; cards?: "savings" | "insurance" | "all" }[] };
 
 const SECTIONS: Section[] = [
   { key: "snapshot", label: "תמונת מצב", icon: "chart", tint: PASTEL_SAGE, tools: [{ title: "תמונת המצב המלאה", tool: "portfolio_snapshot" }] },
@@ -26,25 +27,28 @@ const SECTIONS: Section[] = [
   { key: "cover", label: "הביטוחים שלי", icon: "heart", tint: PASTEL_SAND, tools: [{ title: "כיסויים ביטוחיים", tool: "coverages" }] },
   { key: "advice", label: "המלצות הסוכנות", icon: "message", tint: PASTEL_MINT, tools: [{ title: "ההמלצות המקצועיות שקיבלתם", tool: "agency_recommendations" }] },
   { key: "changes", label: "מה השתנה", icon: "route", tint: PASTEL_MINT, tools: [{ title: "בין שתי הטעינות האחרונות", tool: "whats_changed" }] },
-  { key: "products", label: "רשימת המוצרים", icon: "document", tint: PASTEL_SAND, tools: [{ title: "כל המוצרים", tool: "list_products" }] },
+  { key: "products", label: "רשימת המוצרים", icon: "document", tint: PASTEL_SAND, tools: [{ title: "כל המוצרים", tool: "list_products", cards: "all" }] },
 ];
 
 const chip = (active: boolean) =>
   `inline-flex min-h-[44px] items-center gap-2 rounded-full px-4 text-[15px] font-bold whitespace-nowrap transition-colors ${active ? "text-[#FAF7EF]" : "bg-white hover:bg-[#EEF2EC]"}`;
 
-const AnswerCard = ({ link, title, tool, args, onLink }: { link: InsbaseLink; title: string; tool: InsbaseTool; args?: Record<string, string>; onLink: (l: InsbaseLink) => void }) => {
+const AnswerCard = ({ link, title, tool, args, onLink, cards }: { link: InsbaseLink; title: string; tool: InsbaseTool; args?: Record<string, string>; onLink: (l: InsbaseLink) => void; cards?: "savings" | "insurance" | "all" }) => {
   const [text, setText] = useState<string | null>(null);
+  const [products, setProducts] = useState<InsbaseProduct[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     let alive = true;
-    setText(null); setError(null);
+    setText(null); setProducts(null); setError(null);
     callTool(link, tool, args).then(({ answer, link: l }) => {
       if (!alive) return;
       if (l !== link) onLink(l);
       setText(answer.text);
+      if (answer.structured?.products) setProducts(answer.structured.products);
     }).catch(() => alive && setError("התשובה לא נטענה. נסו לרענן, או פתחו פנייה."));
     return () => { alive = false; };
   }, [tool, JSON.stringify(args ?? {})]); // eslint-disable-line react-hooks/exhaustive-deps
+  const showCards = cards && products && products.length > 0;
   return (
     <section className="rounded-2xl bg-white border p-5 sm:p-6" style={{ borderColor: LINE }} aria-busy={text === null && !error}>
       <h3 className="text-[18px] leading-tight mb-3" style={{ color: GREEN }}>{title}</h3>
@@ -52,6 +56,15 @@ const AnswerCard = ({ link, title, tool, args, onLink }: { link: InsbaseLink; ti
         <p className="text-[15px]" style={{ color: "#9A4520" }}>{error}</p>
       ) : text === null ? (
         <div className="flex items-center gap-3 py-4" style={{ color: MUTED }}><Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /><span className="text-[15px]">מביאים מהתיק</span></div>
+      ) : showCards ? (
+        // Structured data from the server: one card per product (app mock). The text stays available below it.
+        <>
+          <ProductCards products={products!} kind={cards === "all" ? undefined : cards} />
+          <details className="mt-4">
+            <summary className="cursor-pointer text-[14px] font-bold" style={{ color: GREEN }}>הטקסט המלא של התשובה</summary>
+            <div className="mt-3"><InsbaseAnswer text={text} compact /></div>
+          </details>
+        </>
       ) : (
         <InsbaseAnswer text={text} />
       )}
@@ -101,7 +114,7 @@ export const FileTab = ({ link, onLink }: { link: InsbaseLink | null; onLink: (l
           </div>
           <div className="space-y-4">
             {current.tools.map((t) => (
-              <AnswerCard key={t.tool} link={link} title={t.title} tool={t.tool} onLink={onLink} />
+              <AnswerCard key={t.tool} link={link} title={t.title} tool={t.tool} onLink={onLink} cards={t.cards} />
             ))}
           </div>
           <TermExplainer link={link} onLink={onLink} />

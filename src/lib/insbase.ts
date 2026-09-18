@@ -148,9 +148,26 @@ async function refresh(link: InsbaseLink): Promise<InsbaseLink> {
   return next;
 }
 
+/** One product card, as the InsBase server returns it in `structuredContent` (list_products). */
+export interface InsbaseProduct {
+  policy_number: string;
+  family: string;
+  product_type: string;
+  producer: string;
+  plan_name: string | null;
+  status: string;
+  active: boolean;
+  kind: "savings" | "insurance";
+  source: string;
+  valid_date: string;
+  highlights: { label: string; display: string; source: string; valid_date: string }[];
+}
+
 export interface ToolAnswer {
   text: string;
   isError: boolean;
+  /** Present only when the server sent structured data alongside the text. */
+  structured?: { products?: InsbaseProduct[] } & Record<string, unknown>;
 }
 
 let seq = 1;
@@ -179,7 +196,10 @@ export async function callTool(link: InsbaseLink, tool: InsbaseTool, args: Recor
   if (body.error) throw new Error(body.error.message || "insbase error");
   const content = (body.result?.content ?? []) as { type: string; text?: string }[];
   const text = content.filter((c) => c.type === "text").map((c) => c.text ?? "").join("\n").trim();
-  return { answer: { text, isError: Boolean(body.result?.isError) }, link: current };
+  const structured = body.result?.structuredContent && typeof body.result.structuredContent === "object"
+    ? (body.result.structuredContent as ToolAnswer["structured"])
+    : undefined;
+  return { answer: { text, isError: Boolean(body.result?.isError), structured }, link: current };
 }
 
 /** The first line of the snapshot after the title: the summary sentence. */
