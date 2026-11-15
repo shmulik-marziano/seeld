@@ -107,7 +107,7 @@ async function launchBrowser() {
     process.env.DEBUG = [process.env.DEBUG, "pw:browser"].filter(Boolean).join(","); // surface Chromium stderr in build logs
     // Vercel's build image has no Chromium: use the serverless build.
     const sparticuz = (await import("@sparticuz/chromium")).default;
-    return chromium.launch({ executablePath: await sparticuz.executablePath(), args: [...sparticuz.args, "--disable-dev-shm-usage"], headless: true });
+    return chromium.launch({ executablePath: await sparticuz.executablePath(), args: [...sparticuz.args.filter((a) => !/single-process|no-zygote/.test(a)), "--disable-dev-shm-usage"], headless: true });
   }
   return chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ["--no-sandbox"] });
 }
