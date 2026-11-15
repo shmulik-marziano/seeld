@@ -37,11 +37,11 @@ const CookieConsent = () => {
           aria-label="הסכמה לשימוש בעוגיות"
         >
           <div className="rounded-2xl bg-white border border-[#CCD6CC]" style={{ boxShadow: CARD_SHADOW }}>
-            <div className="px-5 pb-4 pt-4">
-              <p className="text-[14px] font-bold text-[#003D30]">
+            <div className="px-4 pb-3 pt-3 sm:px-5 sm:pb-4 sm:pt-4">
+              <p className="hidden sm:block text-[14px] font-bold text-[#003D30]">
                 עוגיות באתר
               </p>
-              <p className="mt-2 text-[15px] leading-relaxed text-[#24483C]">
+              <p className="sm:mt-2 text-[14px] sm:text-[15px] leading-snug sm:leading-relaxed text-[#24483C]">
                 אתר זה משתמש בעוגיות הכרחיות לתפקוד תקין ובעוגיות אנליטיות לשיפור השירות.{" "}
                 <Link
                   to="/cookie-policy"
@@ -51,16 +51,16 @@ const CookieConsent = () => {
                 </Link>
               </p>
             </div>
-            <div className="flex items-center justify-end gap-2 border-t px-4 py-3" style={{ borderColor: LINE }}>
+            <div className="flex items-center justify-end gap-2 border-t px-3 py-2 sm:px-4 sm:py-3" style={{ borderColor: LINE }}>
               <button
                 onClick={decline}
-                className="min-h-[40px] rounded-lg px-3 text-[14px] font-bold text-[#476356] transition-colors duration-150 hover:bg-[#EEF2EC] hover:text-[#003D30]"
+                className="min-h-[44px] rounded-lg px-3 text-[14px] font-bold text-[#476356] transition-colors duration-150 hover:bg-[#EEF2EC] hover:text-[#003D30]"
               >
                 הכרחיות בלבד
               </button>
               <button
                 onClick={accept}
-                className="min-h-[40px] rounded-lg bg-[#003D30] px-5 text-[14px] font-bold text-[#FAF7EF] transition-colors duration-150 hover:bg-[#002B22]"
+                className="min-h-[44px] rounded-lg bg-[#003D30] px-5 text-[14px] font-bold text-[#FAF7EF] transition-colors duration-150 hover:bg-[#002B22]"
               >
                 אישור
               </button>
