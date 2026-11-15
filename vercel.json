@@ -1,5 +1,6 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "PRERENDER_STRICT=1 npm run build:seo",
+  "cleanUrls": true,
   "outputDirectory": "dist",
   "framework": "vite",
   "headers": [
@@ -27,7 +28,8 @@
     }
   ],
   "rewrites": [
-    { "source": "/((?!assets|api|_next|favicon|manifest|sw|workbox).*)", "destination": "/index.html" }
+    { "source": "/:prefix(app|admin|site-admin|portal|client|execution-portal|personal-area|saved-calculations|style-guide|install|article|blog|return-tables)/:rest*", "destination": "/_shell.html" },
+    { "source": "/:prefix(app|admin|site-admin|personal-area|saved-calculations|style-guide|install)", "destination": "/_shell.html" }
   ],
   "redirects": [
     { "source": "/", "has": [{ "type": "host", "value": "seeld-ins.com" }], "destination": "https://seeld.co.il/", "permanent": true },
