@@ -171,6 +171,7 @@ async function main() {
           .replace(/<link rel="canonical"[^>]*>/, "")
           .replace(/<meta property="og:url"[^>]*>/, "")
           .replace(/<title>[^<]*<\/title>/, "<title>העמוד לא נמצא | SEELD</title>")
+          .replace(/<script type="application\/ld\+json" id="route-jsonld">.*?<\/script>/s, "")
           .replace(/<meta name="robots"[^>]*>/, "")
           .replace("</head>", '<meta name="robots" content="noindex, nofollow"></head>') : html;
         const out = route === "/__not-found__"

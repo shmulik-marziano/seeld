@@ -155,7 +155,7 @@ export const PortfolioReviewForm = ({ className = "", idPrefix = "lead", source 
           או חייגו{" "}
           <a
             href="tel:0523097444"
-            className="font-bold border-b border-[#003D30]/30 hover:border-[#003D30] transition-colors tabular-nums whitespace-nowrap"
+            className="inline-flex min-h-[44px] items-center font-bold border-b border-[#003D30]/30 hover:border-[#003D30] transition-colors tabular-nums whitespace-nowrap"
             style={{ color: GREEN }}
             dir="ltr"
           >

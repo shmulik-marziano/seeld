@@ -13,7 +13,7 @@ import { BubbleCorner, PathDivider } from "@/components/brand/Elements";
 import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
 import { FormSuccess } from "@/components/brand/FormSuccess";
 import { PortfolioReviewForm } from "@/components/PortfolioReviewForm";
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, RUST, SAGE, SAGE_ON_GREEN, SAND, TINT_SAGE } from "@/lib/brand";
+import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, RUST, RUST_TEXT, SAGE, SAGE_ON_GREEN, SAND, TINT_SAGE } from "@/lib/brand";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
@@ -143,6 +143,18 @@ const FieldError = ({ id, children }: { id: string; children?: string }) =>
 
 
 const PHONE_RE = /^0\d{1,2}-?\d{7}$/;
+
+// Number discs: pick the text colour that clears WCAG AA (4.5:1) on each brand
+// disc. Rust uses its small-text variant; light discs (sage, sand) take dark ink.
+const discBg = (c: string) => (c.toUpperCase() === RUST ? RUST_TEXT : c);
+const discInk = (bg: string) => {
+  const ch = (i: number) => {
+    const v = parseInt(bg.slice(i, i + 2), 16) / 255;
+    return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+  };
+  const lum = 0.2126 * ch(1) + 0.7152 * ch(3) + 0.0722 * ch(5);
+  return lum > 0.25 ? "#1A1A1A" : "#FAF7EF";
+};
 
 const Index = () => {
 
@@ -342,7 +354,7 @@ const Index = () => {
                   )}
                   <span
                     className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-[18px] font-bold tabular-nums"
-                    style={{ background: step.color, color: "#FAF7EF" }}
+                    style={{ background: discBg(step.color), color: discInk(discBg(step.color)) }}
                     dir="ltr"
                   >
                     {String(i + 1).padStart(2, "0")}
@@ -596,7 +608,7 @@ const Index = () => {
                           href={row.href}
                           target={row.href.startsWith("http") ? "_blank" : undefined}
                           rel={row.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                          className="text-[16px] font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#003D30]/40 transition-colors"
+                          className="inline-flex min-h-[44px] items-center text-[16px] font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#003D30]/40 transition-colors"
                           style={{ color: GREEN }}
                           dir={row.ltr ? "ltr" : undefined}
                         >

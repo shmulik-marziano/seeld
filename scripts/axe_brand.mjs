@@ -16,7 +16,7 @@ const viewports = [
 const browser = await chromium.launch();
 let bad = 0;
 for (const vp of viewports) {
-  const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, locale: "he-IL" });
+  const ctx = await browser.newContext({ bypassCSP: true,  viewport: { width: vp.width, height: vp.height }, locale: "he-IL" });
   await ctx.addInitScript(() => { try { localStorage.setItem("cookie-consent", "accepted"); } catch { /* ignore */ } });
   for (const route of pages) {
     const page = await ctx.newPage();

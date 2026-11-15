@@ -21,7 +21,7 @@ for (const vp of viewports) {
   for (const route of pages) {
     const samples = [];
     for (let i = 0; i < RUNS; i++) {
-      const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, locale: "he-IL" });
+      const ctx = await browser.newContext({ bypassCSP: true,  viewport: { width: vp.width, height: vp.height }, locale: "he-IL" });
       await ctx.addInitScript(() => {
         try { localStorage.setItem("cookie-consent", "accepted"); } catch { /* ignore */ }
         window.__lcp = 0; window.__cls = 0;
