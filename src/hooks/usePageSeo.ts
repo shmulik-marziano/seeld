@@ -10,7 +10,7 @@ function set(selector: string, attr: "content" | "href", value: string) {
  * dynamic data (blog post, article) has loaded. RouteSeo handles the
  * generic per-route tags; this hook wins because it runs after data load.
  */
-export function usePageSeo(title?: string | null, description?: string | null) {
+export function usePageSeo(title?: string | null, description?: string | null, jsonLd?: object | null) {
   useEffect(() => {
     if (!title) return;
     const full = title.includes("SEELD") ? title : `${title} | SEELD`;
@@ -22,5 +22,15 @@ export function usePageSeo(title?: string | null, description?: string | null) {
       set('meta[property="og:description"]', "content", description);
       set('meta[name="twitter:description"]', "content", description);
     }
-  }, [title, description]);
+    if (jsonLd) {
+      let el = document.head.querySelector<HTMLScriptElement>("script#page-jsonld");
+      if (!el) {
+        el = document.createElement("script");
+        el.type = "application/ld+json";
+        el.id = "page-jsonld";
+        document.head.appendChild(el);
+      }
+      el.textContent = JSON.stringify(jsonLd);
+    }
+  }, [title, description, jsonLd]);
 }

@@ -40,18 +40,41 @@ async function routesFromSitemap() {
   return [...xml.matchAll(/<loc>https?:\/\/[^/]+([^<]*)<\/loc>/g)].map((m) => m[1] || "/");
 }
 
-async function blogSlugs() {
+async function blogPosts() {
   try {
     const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? (await readAnonKey());
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/blog_posts?select=slug&status=eq.published&order=published_at.desc`,
+      `${SUPABASE_URL}/rest/v1/blog_posts?select=slug,title,excerpt,updated_at,published_at&status=eq.published&order=published_at.desc`,
       { headers: { apikey: key, Authorization: `Bearer ${key}` } },
     );
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return (await res.json()).map((r) => `/blog/${r.slug}`);
+    return await res.json();
   } catch (e) {
-    console.warn(`[prerender] blog slugs unavailable (${e.message}); skipping blog posts`);
+    console.warn(`[prerender] blog posts unavailable (${e.message}); skipping blog posts`);
     return [];
+  }
+}
+
+const xmlEscape = (v) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+// sitemap.xml: static routes as-is, plus every published post with its real updated_at.
+async function writeSitemapAndLlms(routes, posts) {
+  const postByPath = new Map(posts.map((p) => [`/blog/${p.slug}`, p]));
+  const urls = routes.filter((r) => r !== "/__not-found__").map((r) => {
+    const post = postByPath.get(r);
+    const lastmod = post?.updated_at ? `<lastmod>${post.updated_at.slice(0, 10)}</lastmod>` : "";
+    return `  <url><loc>https://seeld.co.il${r === "/" ? "/" : r}</loc>${lastmod}</url>`;
+  });
+  await writeFile(join(DIST, "sitemap.xml"),
+    ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', ...urls, "</urlset>", ""].join("\n"));
+
+  const llmsSrc = join(ROOT, "public/llms.txt");
+  if (existsSync(llmsSrc)) {
+    const list = posts.length
+      ? ["## מאמרים בבלוג", "", ...posts.map((p) =>
+          `- [${p.title}](https://seeld.co.il/blog/${p.slug})${p.excerpt ? `: ${p.excerpt.replace(/\s+/g, " ").trim()}` : ""}`)].join("\n")
+      : "";
+    await writeFile(join(DIST, "llms.txt"), (await readFile(llmsSrc, "utf8")).replace("{{BLOG_POSTS}}", list));
   }
 }
 
@@ -120,10 +143,11 @@ async function main() {
   if (!existsSync(shellPath)) await copyFile(join(DIST, "index.html"), shellPath); // pristine SPA shell
   const shell = await readFile(shellPath, "utf8");
 
+  const posts = await blogPosts();
   let routes = [...new Set([
     ...(await routesFromSitemap()),
     ...RETURN_TABLE_SLUGS.map((s) => `/return-tables/${s}`),
-    ...(await blogSlugs()),
+    ...posts.map((p) => `/blog/${p.slug}`),
   ])];
   if (process.env.PRERENDER_ONLY) routes = process.env.PRERENDER_ONLY.split(",");
 
@@ -163,6 +187,7 @@ async function main() {
 
   await browser.close();
   server.close();
+  if (!process.env.PRERENDER_ONLY) await writeSitemapAndLlms(routes, posts);
   console.log(`[prerender] ${routes.length - failures.length}/${routes.length} routes written`);
   if (thin.length) console.warn(`[prerender] thin pages (no h1 or <300 chars):\n  ${thin.join("\n  ")}`);
   if (failures.length) {
