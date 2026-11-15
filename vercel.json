@@ -1,6 +1,5 @@
 {
   "buildCommand": "PRERENDER_STRICT=1 npm run build:seo",
-  "cleanUrls": true,
   "outputDirectory": "dist",
   "framework": "vite",
   "headers": [
@@ -28,8 +27,19 @@
     }
   ],
   "rewrites": [
-    { "source": "/:prefix(app|admin|site-admin|portal|client|execution-portal|personal-area|saved-calculations|style-guide|install|article|blog|return-tables)/:rest*", "destination": "/_shell.html" },
-    { "source": "/:prefix(app|admin|site-admin|personal-area|saved-calculations|style-guide|install)", "destination": "/_shell.html" }
+    { "source": "/app/:path*", "destination": "/_shell.html" },
+    { "source": "/portal/:path*", "destination": "/_shell.html" },
+    { "source": "/client/:path*", "destination": "/_shell.html" },
+    { "source": "/execution-portal/:path*", "destination": "/_shell.html" },
+    { "source": "/article/:path*", "destination": "/_shell.html" },
+    { "source": "/blog/:path*", "destination": "/_shell.html" },
+    { "source": "/return-tables/:path*", "destination": "/_shell.html" },
+    { "source": "/admin", "destination": "/_shell.html" },
+    { "source": "/site-admin", "destination": "/_shell.html" },
+    { "source": "/personal-area", "destination": "/_shell.html" },
+    { "source": "/saved-calculations", "destination": "/_shell.html" },
+    { "source": "/style-guide", "destination": "/_shell.html" },
+    { "source": "/install", "destination": "/_shell.html" }
   ],
   "redirects": [
     { "source": "/", "has": [{ "type": "host", "value": "seeld-ins.com" }], "destination": "https://seeld.co.il/", "permanent": true },
