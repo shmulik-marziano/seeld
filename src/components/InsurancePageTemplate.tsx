@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import InsuranceEnrollmentForm, { type InsuranceType } from '@/components/InsuranceEnrollmentForm';
@@ -174,6 +175,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
   const hasCoverage =
     (!!coverageTypes && coverageTypes.length > 0) ||
     (!!coverageCategories && coverageCategories.length > 0);
+  useFaqJsonLd(faqItems);
   const hasFaq = faqItems.length > 0;
   const defaultTab = hasArticles ? 'guide' : hasCoverage ? 'coverage' : 'faq';
   const tabCount = [hasArticles, hasCoverage, hasFaq].filter(Boolean).length;

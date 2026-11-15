@@ -104,9 +104,10 @@ function startServer(shell) {
 async function launchBrowser() {
   const { chromium } = await import("@playwright/test");
   if (process.env.VERCEL) {
+    process.env.DEBUG = [process.env.DEBUG, "pw:browser"].filter(Boolean).join(","); // surface Chromium stderr in build logs
     // Vercel's build image has no Chromium: use the serverless build.
     const sparticuz = (await import("@sparticuz/chromium")).default;
-    return chromium.launch({ executablePath: await sparticuz.executablePath(), args: sparticuz.args, headless: true });
+    return chromium.launch({ executablePath: await sparticuz.executablePath(), args: [...sparticuz.args, "--disable-dev-shm-usage"], headless: true });
   }
   return chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ["--no-sandbox"] });
 }
@@ -158,7 +159,7 @@ async function main() {
 
   const failures = [];
   const thin = [];
-  const CONCURRENCY = 4;
+  const CONCURRENCY = process.env.VERCEL ? 1 : 4;
   const queue = [...routes, "/__not-found__"];
   await Promise.all(Array.from({ length: CONCURRENCY }, async () => {
     while (queue.length) {

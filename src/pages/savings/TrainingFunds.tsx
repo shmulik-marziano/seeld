@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import Footer from "@/components/Footer";
 import PensionAnalysisForm from "@/components/PensionAnalysisForm";
 import {
@@ -84,6 +85,7 @@ const TrainingFunds = () => {
       a: "כן, המעבר חינמי ופשוט. אפשר לעבור לקרן עם דמי ניהול נמוכים יותר או ביצועים טובים יותר בכל עת. אנחנו ב-SEELD מטפלים בכל התהליך עבורכם.",
     },
   ];
+  useFaqJsonLd(faqItems);
 
   return (
     <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
