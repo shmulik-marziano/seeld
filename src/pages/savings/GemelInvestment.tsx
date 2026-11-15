@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PensionAnalysisForm from "@/components/PensionAnalysisForm";
@@ -116,6 +117,7 @@ const GemelInvestment = () => {
       a: "תקרת ההפקדה השנתית עומדת על כ-79,000 שקלים. ניתן להפקיד סכום חד-פעמי או בהוראת קבע חודשית, ואין סכום מינימלי להפקדה.",
     },
   ];
+  useFaqJsonLd(faqItems);
 
   return (
     <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>

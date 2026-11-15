@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PensionAnalysisForm from "@/components/PensionAnalysisForm";
@@ -116,6 +117,7 @@ const EmployerFunds = () => {
       a: "בהסדר ארגוני, דמי הניהול יכולים להיות נמוכים משמעותית, לעתים 50% פחות מדמי הניהול הסטנדרטיים. ההבדל הזה מצטבר לסכומים גדולים לאורך שנות העבודה של כל עובד.",
     },
   ];
+  useFaqJsonLd(faqItems);
 
   return (
     <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>

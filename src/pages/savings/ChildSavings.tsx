@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PensionAnalysisForm from "@/components/PensionAnalysisForm";
@@ -116,6 +117,7 @@ const ChildSavings = () => {
       a: "אם ההורים לא בוחרים תוך זמן מוגדר, המדינה מפקידה את הכסף בגוף שנבחר במכרז ממשלתי, במסלול ברירת מחדל. מומלץ לבחור באופן אקטיבי כדי להתאים את מסלול ההשקעה לצרכים שלכם.",
     },
   ];
+  useFaqJsonLd(faqItems);
 
   return (
     <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>

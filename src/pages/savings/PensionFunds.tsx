@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PensionAnalysisForm from "@/components/PensionAnalysisForm";
@@ -116,6 +117,7 @@ const PensionFunds = () => {
       a: "דמי ניהול ממוצעים הם כ-0.2%-0.5% מהצבירה ו-1.5%-4% מההפקדה. עם משא ומתן נכון ניתן להגיע לדמי ניהול נמוכים משמעותית, במיוחד אם יש לכם צבירה גבוהה.",
     },
   ];
+  useFaqJsonLd(faqItems);
 
   return (
     <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>

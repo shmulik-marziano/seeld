@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PensionAnalysisForm from "@/components/PensionAnalysisForm";
@@ -109,6 +110,7 @@ const GemelFunds = () => {
       a: "במקרים רבים כן. קופות גמל ישנות עשויות לגבות דמי ניהול גבוהים ולהשקיע במסלולים שאינם אופטימליים. העברת קופת גמל היא תהליך פשוט וללא עלות, וניתוח מקצועי יחשוף האם כדאי לבצע מהלך כזה.",
     },
   ];
+  useFaqJsonLd(faqItems);
 
   return (
     <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>

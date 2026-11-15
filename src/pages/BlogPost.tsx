@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Copy, Loader2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteSupabase } from "@/integrations/supabase/site-client";
+import { buildBlogPostingGraph } from "@/lib/structuredData";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { toast } from "sonner";
 import { BrandIcon } from "@/components/brand/BrandIcon";
@@ -30,6 +31,7 @@ interface BlogPostData {
   author: string | null;
   published_at: string | null;
   cover_image_url: string | null;
+  updated_at?: string | null;
 }
 
 const formatDate = (dateStr: string | null) => {
@@ -58,7 +60,12 @@ const BlogPost = () => {
   const [leadSubmitted, setLeadSubmitted] = useState(false);
   const leadFormRef = useRef<HTMLDivElement>(null);
 
-  usePageSeo(post?.title, post?.excerpt);
+  const postJsonLd = useMemo(() => {
+    if (!post) return null;
+    const plain = post.content.replace(/<[^>]+>/g, " ").replace(/[#*_>`[\]()]/g, "").replace(/\s+/g, " ").trim();
+    return buildBlogPostingGraph(post, post.excerpt ?? plain.slice(0, 155));
+  }, [post]);
+  usePageSeo(post?.title, post?.excerpt, postJsonLd);
 
   useEffect(() => {
     const fetchPost = async () => {

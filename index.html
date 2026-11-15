@@ -85,36 +85,82 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "InsuranceAgency",
-      "name": "שילד ביטוח ופיננסים",
-      "alternateName": "SEELD",
-      "description": "סוכנות ביטוח ופיננסים עצמאית מבית עמיתים הון: ביטוח, חיסכון, פנסיה והשקעות. מיפוי התיק, השוואה בין החברות וליווי הביצוע.",
-      "url": "https://seeld.co.il",
-      "telephone": "+972-52-309-7444",
-      "email": "info@seeld.co.il",
-      "address": [
+      "@graph": [
         {
-          "@type": "PostalAddress",
-          "addressLocality": "רעננה",
-          "addressRegion": "מרכז",
-          "addressCountry": "IL"
+          "@type": [
+            "InsuranceAgency",
+            "FinancialService"
+          ],
+          "@id": "https://seeld.co.il/#organization",
+          "name": "שילד ביטוח ופיננסים",
+          "alternateName": [
+            "SEELD",
+            "שילד"
+          ],
+          "description": "סוכנות ביטוח ופיננסים עצמאית מבית עמיתים הון: ביטוח, חיסכון, פנסיה והשקעות. מיפוי התיק, השוואה בין החברות וליווי הביצוע.",
+          "url": "https://seeld.co.il/",
+          "logo": "https://seeld.co.il/og-cover.png",
+          "image": "https://seeld.co.il/og-cover.png",
+          "telephone": "+972-52-309-7444",
+          "email": "info@seeld.co.il",
+          "address": [
+            {
+              "@type": "PostalAddress",
+              "addressLocality": "רעננה",
+              "addressRegion": "מרכז",
+              "addressCountry": "IL"
+            },
+            {
+              "@type": "PostalAddress",
+              "addressLocality": "ירושלים",
+              "addressRegion": "ירושלים",
+              "addressCountry": "IL"
+            }
+          ],
+          "areaServed": {
+            "@type": "Country",
+            "name": "ישראל"
+          },
+          "knowsLanguage": "he",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "telephone": "+972-52-309-7444",
+            "email": "info@seeld.co.il",
+            "availableLanguage": "he"
+          },
+          "founder": {
+            "@type": "Person",
+            "name": "שמוליק מרציאנו",
+            "jobTitle": "סוכן ביטוח ופיננסים"
+          },
+          "parentOrganization": {
+            "@type": "Organization",
+            "name": "עמיתים הון"
+          },
+          "knowsAbout": [
+            "ביטוח בריאות",
+            "ביטוח חיים",
+            "ביטוח משכנתא",
+            "ביטוח סיעודי",
+            "קרן פנסיה",
+            "קופת גמל",
+            "קרן השתלמות",
+            "תכנון פיננסי",
+            "מיצוי זכויות"
+          ]
         },
         {
-          "@type": "PostalAddress",
-          "addressLocality": "ירושלים",
-          "addressRegion": "ירושלים",
-          "addressCountry": "IL"
+          "@type": "WebSite",
+          "@id": "https://seeld.co.il/#website",
+          "url": "https://seeld.co.il/",
+          "name": "שילד ביטוח ופיננסים",
+          "inLanguage": "he-IL",
+          "publisher": {
+            "@id": "https://seeld.co.il/#organization"
+          }
         }
-      ],
-      "areaServed": "ישראל",
-      "founder": {
-        "@type": "Person",
-        "name": "שמוליק מרציאנו"
-      },
-      "parentOrganization": {
-        "@type": "Organization",
-        "name": "עמיתים הון"
-      }
+      ]
     }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />

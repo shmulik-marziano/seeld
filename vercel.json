@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "PRERENDER_STRICT=1 npm run build:seo",
   "outputDirectory": "dist",
   "framework": "vite",
   "headers": [
@@ -27,7 +27,19 @@
     }
   ],
   "rewrites": [
-    { "source": "/((?!assets|api|_next|favicon|manifest|sw|workbox).*)", "destination": "/index.html" }
+    { "source": "/app/:path*", "destination": "/_shell.html" },
+    { "source": "/portal/:path*", "destination": "/_shell.html" },
+    { "source": "/client/:path*", "destination": "/_shell.html" },
+    { "source": "/execution-portal/:path*", "destination": "/_shell.html" },
+    { "source": "/article/:path*", "destination": "/_shell.html" },
+    { "source": "/blog/:path*", "destination": "/_shell.html" },
+    { "source": "/return-tables/:path*", "destination": "/_shell.html" },
+    { "source": "/admin", "destination": "/_shell.html" },
+    { "source": "/site-admin", "destination": "/_shell.html" },
+    { "source": "/personal-area", "destination": "/_shell.html" },
+    { "source": "/saved-calculations", "destination": "/_shell.html" },
+    { "source": "/style-guide", "destination": "/_shell.html" },
+    { "source": "/install", "destination": "/_shell.html" }
   ],
   "redirects": [
     { "source": "/", "has": [{ "type": "host", "value": "seeld-ins.com" }], "destination": "https://seeld.co.il/", "permanent": true },
