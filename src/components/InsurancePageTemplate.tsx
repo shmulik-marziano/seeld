@@ -26,7 +26,7 @@ import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND,
 // tabular and LTR-safe.
 const FIGURE_RE = /(?:₪\s?)?\d(?:[\d,.:/\-–]*\d)?(?:\s?[%₪])?/g;
 
-const FigureText = ({ text }: { text: string }) => {
+export const FigureText = ({ text }: { text: string }) => {
   const nodes: ReactNode[] = [];
   let last = 0;
   for (const m of text.matchAll(FIGURE_RE)) {
