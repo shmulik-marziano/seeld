@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import AnswerSummary from "@/components/AnswerSummary";
 import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -149,6 +150,7 @@ const ChildSavings = () => {
               <h1 className="dna-display leading-[1.15] max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                 חיסכון לכל ילד
               </h1>
+              <AnswerSummary />
               <p className="mt-5 text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
                 תוכנית חיסכון ממשלתית המבטיחה קרן פתיחה לכל ילד בישראל בהגיעו לגיל <span dir="ltr" className="tabular-nums whitespace-nowrap">18</span>. בחרו את המסלול הנכון והגדילו את הסכום.
               </p>

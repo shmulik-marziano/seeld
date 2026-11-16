@@ -1,6 +1,7 @@
 // JSON-LD builders. The Organization node lives in index.html (so every page, even
 // without JavaScript, carries it); everything here references it by @id.
 import { faqCategories } from "@/data/faq";
+import { answerSummaries, ANSWER_REVIEWED } from "@/data/answerSummaries";
 
 export const SITE_URL = "https://seeld.co.il";
 export const ORG_ID = `${SITE_URL}/#organization`;
@@ -91,6 +92,7 @@ export function buildRouteGraph({ path, title, description }: PageInfo): Node {
       availableChannel: { "@type": "ServiceChannel", serviceUrl: urlFor("/portfolio-review") },
     });
     page.mainEntity = { "@id": `${url}#service` };
+    if (answerSummaries[path]) page.lastReviewed = ANSWER_REVIEWED;
   }
 
   if (path === "/return-tables" || path.startsWith("/return-tables/")) {

@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import AnswerSummary from "@/components/AnswerSummary";
 import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import Footer from "@/components/Footer";
 import PensionAnalysisForm from "@/components/PensionAnalysisForm";
@@ -117,6 +118,7 @@ const PreRetirement = () => {
               <h1 className="dna-display leading-[1.15] max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                 הכנה מקיפה לפרישה
               </h1>
+              <AnswerSummary />
               <p className="mt-5 text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
                 כל מה שצריך לדעת לפני המעבר לפנסיה: תחשיב קצבה, איחוד חסכונות ותכנון מס אופטימלי.
               </p>

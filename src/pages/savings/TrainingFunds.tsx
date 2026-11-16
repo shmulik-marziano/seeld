@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import AnswerSummary from "@/components/AnswerSummary";
 import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import Footer from "@/components/Footer";
 import PensionAnalysisForm from "@/components/PensionAnalysisForm";
@@ -117,6 +118,7 @@ const TrainingFunds = () => {
               <h1 className="dna-display leading-[1.15] max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                 החיסכון הכי משתלם בישראל
               </h1>
+              <AnswerSummary />
               <p className="mt-5 text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
                 קרן השתלמות היא אפיק החיסכון המועדף בישראל: פטור מלא ממס רווחי הון ונזילות לאחר <span dir="ltr" className="tabular-nums">6</span> שנים בלבד.
               </p>
