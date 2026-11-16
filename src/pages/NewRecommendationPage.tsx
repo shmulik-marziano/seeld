@@ -58,7 +58,15 @@ interface RecDraft {
 }
 
 interface ReasoningEntry {
-  id: string; category: string; recommendation_type: string; text: string; tags: string[];
+  id: string; category: string; recommendation_type: string; text: string; tags: string[]; usage_count?: number;
+}
+
+interface ParseFilePayload {
+  fileName: string;
+  fileType: string;
+  customerId: string;
+  fileBase64?: string;
+  fileContent?: string;
 }
 
 function createRecDraft(product: Product): RecDraft {
@@ -90,6 +98,9 @@ function createRecDraft(product: Product): RecDraft {
     costAfter: '',
   };
 }
+
+// Preserves original `err.message` semantics for thrown non-Error objects (e.g. Supabase errors)
+const errMessage = (e: unknown): string | undefined => (e as { message?: string } | null | undefined)?.message;
 
 export default function NewRecommendationPage() {
   const navigate = useNavigate();
@@ -173,8 +184,8 @@ export default function NewRecommendationPage() {
       setSelectedCustomerId(customer.id);
       toast.success('הלקוח נוצר');
       setStep('manage-products');
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה');
+    } catch (err: unknown) {
+      toast.error(errMessage(err) || 'שגיאה');
     } finally {
       setSaving(false);
     }
@@ -217,7 +228,7 @@ export default function NewRecommendationPage() {
         setFileUploadStatus(`מנתח ${i + 1}/${expandedFiles.length}: ${file.name}...`);
 
         const isBinary = file.name.toLowerCase().endsWith('.xlsx') || file.name.toLowerCase().endsWith('.xls');
-        const bodyPayload: Record<string, any> = {
+        const bodyPayload: ParseFilePayload = {
           fileName: file.name,
           fileType: file.name.toLowerCase().includes('hb') || isBinary ? 'הר ביטוח' : 'מסלקה',
           customerId: selectedCustomerId,
@@ -254,9 +265,9 @@ export default function NewRecommendationPage() {
       await refreshData();
       setFileUploadStatus('');
       toast.success(`נמצאו ${totalProducts} מוצרים (ללא ביטוח רכב/דירה)`);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Upload error:', err);
-      toast.error(err.message || 'שגיאה בהעלאת הקובץ');
+      toast.error(errMessage(err) || 'שגיאה בהעלאת הקובץ');
     } finally {
       setFileUploading(false);
       setFileUploadStatus('');
@@ -280,8 +291,8 @@ export default function NewRecommendationPage() {
       setRecDrafts(prev => prev.filter(d => d.productId !== productId));
       await deleteProduct(productId);
       toast.success('מוצר נמחק');
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה במחיקת מוצר');
+    } catch (err: unknown) {
+      toast.error(errMessage(err) || 'שגיאה במחיקת מוצר');
     }
   };
 
@@ -339,7 +350,7 @@ export default function NewRecommendationPage() {
         rationale: currentRationale ? `${currentRationale}\n${entry.text}` : entry.text,
       });
       // Increment usage count
-      supabase.from('reasoning_bank').update({ usage_count: (entry as any).usage_count + 1 || 1 } as any).eq('id', entry.id).then();
+      supabase.from('reasoning_bank').update({ usage_count: (entry.usage_count as number) + 1 || 1 }).eq('id', entry.id).then();
     }
     setReasoningModalOpen(false);
     toast.success('נימוק נוסף להמלצה');
@@ -382,8 +393,8 @@ export default function NewRecommendationPage() {
         nextStep: rec.nextStep || '',
       });
       toast.success('המלצה נוצרה בעזרת AI');
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה ביצירת המלצה');
+    } catch (err: unknown) {
+      toast.error(errMessage(err) || 'שגיאה ביצירת המלצה');
     } finally {
       setAiLoading(prev => ({ ...prev, [productId]: false }));
     }
@@ -418,13 +429,13 @@ export default function NewRecommendationPage() {
         .limit(1);
 
       const nextVersion = existingSummaries && existingSummaries.length > 0
-        ? (existingSummaries[0] as any).version + 1
+        ? existingSummaries[0].version + 1
         : 1;
 
       // Mark previous versions as not current
       if (nextVersion > 1) {
         await supabase.from('recommendation_summaries')
-          .update({ is_current: false } as any)
+          .update({ is_current: false })
           .eq('customer_id', selectedCustomerId)
           .eq('agent_id', user.id);
       }
@@ -439,12 +450,12 @@ export default function NewRecommendationPage() {
           status: 'draft',
           is_current: true,
           link_expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-        } as any)
+        })
         .select()
         .single();
 
       if (summaryError) throw summaryError;
-      const summary = summaryData as any;
+      const summary = summaryData;
 
       const ids: string[] = [];
       for (let i = 0; i < activeDrafts.length; i++) {
@@ -496,8 +507,8 @@ export default function NewRecommendationPage() {
       setSummaryLinkToken(summary.link_token);
       toast.success(`גרסה ${nextVersion} — ${activeDrafts.length} המלצות נוצרו בהצלחה`);
       setStep('summary');
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה');
+    } catch (err: unknown) {
+      toast.error(errMessage(err) || 'שגיאה');
     } finally {
       setSaving(false);
     }
@@ -506,11 +517,11 @@ export default function NewRecommendationPage() {
   const handleSendSummary = async () => {
     if (!summaryId) return;
     await supabase.from('recommendation_summaries')
-      .update({ status: 'sent', sent_at: new Date().toISOString() } as any)
+      .update({ status: 'sent', sent_at: new Date().toISOString() })
       .eq('id', summaryId);
     // Update all linked recommendations to "נשלח"
-    await (supabase.from('recommendations')
-      .update({ decision_status: 'נשלח' }) as any)
+    await supabase.from('recommendations')
+      .update({ decision_status: 'נשלח' })
       .eq('summary_id', summaryId);
     toast.success('הסיכום נשלח — ההמלצות ננעלו לעריכה');
   };

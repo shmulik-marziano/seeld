@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Download, Loader2, Play, FileText, AlertTriangle, CheckCircle2, Clock, RefreshCw, Sparkles, MessageCircle, Pencil } from 'lucide-react';
+import { Download, Loader2, Play, FileText, AlertTriangle, CheckCircle2, Clock, RefreshCw, Sparkles, MessageCircle, Pencil, type LucideIcon } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useApp } from '@/contexts/AppContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -12,7 +12,11 @@ import { format } from 'date-fns';
 import { PDageChatPanel } from '@/components/pdage/PDageChatPanel';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-const statusConfig: Record<string, { label: string; icon: any; color: string }> = {
+type PdageCustomerRef = { full_name?: string | null; id_number?: string | null } | null;
+type PdageCategoryRef = { name: string } | null;
+type PdageDeficiencyRef = { title: string; description?: string | null } | null;
+
+const statusConfig: Record<string, { label: string; icon: LucideIcon; color: string }> = {
   pending: { label: 'ממתין', icon: Clock, color: 'bg-warning/10 text-warning' },
   processing: { label: 'בעיבוד', icon: Loader2, color: 'bg-info/10 text-info' },
   review: { label: 'לבדיקה', icon: RefreshCw, color: 'bg-accent/10 text-accent' },
@@ -75,22 +79,23 @@ export default function PDageJobView() {
       toast.success('ניתוח AI הושלם בהצלחה');
       queryClient.invalidateQueries({ queryKey: ['pdage-job', jobId] });
       queryClient.invalidateQueries({ queryKey: ['pdage-job-activities', jobId] });
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errMessage = (err as { message?: string }).message;
       console.error('Processing error:', err);
       // Update job to failed
       await supabase.from('correction_jobs').update({
         status: 'failed',
-        processing_notes: err.message || 'שגיאה בעיבוד AI',
+        processing_notes: errMessage || 'שגיאה בעיבוד AI',
       }).eq('id', job.id);
 
       await supabase.from('correction_activity_log').insert({
         job_id: job.id,
         action_type: 'processing_failed',
         title: 'עיבוד AI נכשל',
-        details: err.message || 'שגיאה לא ידועה',
+        details: errMessage || 'שגיאה לא ידועה',
       });
 
-      toast.error(err.message || 'שגיאה בעיבוד');
+      toast.error(errMessage || 'שגיאה בעיבוד');
       queryClient.invalidateQueries({ queryKey: ['pdage-job', jobId] });
       queryClient.invalidateQueries({ queryKey: ['pdage-job-activities', jobId] });
     } finally {
@@ -125,9 +130,9 @@ export default function PDageJobView() {
     );
   }
 
-  const customer = job.pdage_customers as any;
-  const category = job.deficiency_categories as any;
-  const deficiency = job.deficiency_bank as any;
+  const customer = job.pdage_customers as unknown as PdageCustomerRef;
+  const category = job.deficiency_categories as unknown as PdageCategoryRef;
+  const deficiency = job.deficiency_bank as unknown as PdageDeficiencyRef;
   const st = statusConfig[job.status] || statusConfig.pending;
   const StatusIcon = st.icon;
 

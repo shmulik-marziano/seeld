@@ -13,6 +13,19 @@ import { toast } from 'sonner';
 import { customerBasicSchema } from '@/services/validations';
 import { motion } from 'framer-motion';
 import JSZip from 'jszip';
+import type { Gender, MaritalStatus } from '@/types';
+
+interface ParseFilePayload {
+  fileName: string;
+  fileType: string;
+  extractCustomerInfo?: boolean;
+  customerId?: string;
+  fileBase64?: string;
+  fileContent?: string;
+}
+
+// Preserves original `err.message` semantics for thrown non-Error objects (e.g. Supabase errors)
+const errMessage = (e: unknown): string | undefined => (e as { message?: string } | null | undefined)?.message;
 
 export default function NewCustomerPage() {
   const navigate = useNavigate();
@@ -95,7 +108,7 @@ export default function NewCustomerPage() {
       ];
       const mergedInfo: Record<string, string> = {};
       for (const entry of orderedFiles) {
-        const bodyPayload: Record<string, any> = { fileName: entry.file.name, fileType: entry.type, extractCustomerInfo: true };
+        const bodyPayload: ParseFilePayload = { fileName: entry.file.name, fileType: entry.type, extractCustomerInfo: true };
         if (isBinaryFile(entry.file)) { bodyPayload.fileBase64 = await readFileAsBase64(entry.file); }
         else { const text = await entry.file.text(); bodyPayload.fileContent = text.substring(0, 80000); }
         try {
@@ -118,7 +131,7 @@ export default function NewCustomerPage() {
         toast.success('פרטי לקוח חולצו מהקבצים בהצלחה');
       } else { toast.info('לא נמצאו פרטי לקוח בקבצים, יש למלא ידנית'); }
       setStep(2);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Analysis error:', err);
       toast.error('שגיאה בניתוח הקובץ');
       setStep(2);
@@ -142,9 +155,9 @@ export default function NewCustomerPage() {
         idNumber: form.idNumber,
         mobilePhone: form.mobilePhone,
         email: form.email || undefined,
-        gender: (form.gender as any) || undefined,
+        gender: (form.gender as Gender) || undefined,
         birthDate: form.birthDate || undefined,
-        maritalStatus: (form.maritalStatus as any) || undefined,
+        maritalStatus: (form.maritalStatus as MaritalStatus) || undefined,
         numberOfChildren: form.numberOfChildren ? parseInt(form.numberOfChildren) : undefined,
         city: form.city || undefined,
         street: form.street || undefined,
@@ -166,7 +179,7 @@ export default function NewCustomerPage() {
         await addSourceFile({ customerId: customer.id, type: entry.type, fileName: entry.file.name, analysisStatus: 'בניתוח' });
         const filePath = `${customer.id}/${Date.now()}_${entry.file.name}`;
         await supabase.storage.from('source-files').upload(filePath, entry.file);
-        const bodyPayload: Record<string, any> = { fileName: entry.file.name, fileType: entry.type, customerId: customer.id };
+        const bodyPayload: ParseFilePayload = { fileName: entry.file.name, fileType: entry.type, customerId: customer.id };
         if (isBinaryFile(entry.file)) { bodyPayload.fileBase64 = await readFileAsBase64(entry.file); }
         else { const text = await entry.file.text(); bodyPayload.fileContent = text.substring(0, 80000); }
         const response = await supabase.functions.invoke('parse-insurance-file', { body: bodyPayload });
@@ -174,8 +187,8 @@ export default function NewCustomerPage() {
       }
       toast.success('הלקוח נוצר בהצלחה');
       navigate(`/app/customers/${customer.id}`);
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה ביצירת לקוח');
+    } catch (err: unknown) {
+      toast.error(errMessage(err) || 'שגיאה ביצירת לקוח');
     } finally { setCreating(false); }
   };
 

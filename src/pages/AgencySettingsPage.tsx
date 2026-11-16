@@ -91,8 +91,8 @@ export default function AgencySettingsPage() {
 
       setField('logoUrl', publicUrl);
       toast.success('הלוגו הועלה בהצלחה');
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה בהעלאת הלוגו');
+    } catch (err: unknown) {
+      toast.error((err as { message?: string }).message || 'שגיאה בהעלאת הלוגו');
     } finally {
       setUploadingLogo(false);
     }
@@ -127,8 +127,8 @@ export default function AgencySettingsPage() {
       toast.success('ההגדרות נשמרו בהצלחה');
       // Refresh the page to pick up changes
       window.location.reload();
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה בשמירת ההגדרות');
+    } catch (err: unknown) {
+      toast.error((err as { message?: string }).message || 'שגיאה בשמירת ההגדרות');
     } finally {
       setSaving(false);
     }

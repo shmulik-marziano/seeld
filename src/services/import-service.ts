@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import type { Json, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 import JSZip from 'jszip';
 
 // Types
@@ -214,7 +215,7 @@ export async function upsertCustomer(
     throw new Error('לקוח לא נמצא במערכת ומצב העבודה הוא עדכון בלבד');
   }
 
-  const dbData: Record<string, any> = {};
+  const dbData: Record<string, unknown> = {};
   if (parsed.firstName) dbData.first_name = parsed.firstName;
   if (parsed.lastName) dbData.last_name = parsed.lastName;
   if (parsed.fullName) dbData.full_name = parsed.fullName;
@@ -246,14 +247,15 @@ export async function upsertCustomer(
     // Update - only fill missing fields
     const { data: existing } = await supabase.from('customers').select('*').eq('id', existingId).single();
     if (existing) {
-      const updates: Record<string, any> = {};
+      const updates: Record<string, unknown> = {};
+      const existingRow = existing as Record<string, unknown>;
       for (const [key, val] of Object.entries(dbData)) {
-        if (val !== null && val !== undefined && val !== '' && (!existing[key] || existing[key] === '')) {
+        if (val !== null && val !== undefined && val !== '' && (!existingRow[key] || existingRow[key] === '')) {
           updates[key] = val;
         }
       }
       if (Object.keys(updates).length > 0) {
-        await supabase.from('customers').update(updates).eq('id', existingId);
+        await supabase.from('customers').update(updates as TablesUpdate<'customers'>).eq('id', existingId);
       }
     }
     return { id: existingId, action: 'update' };
@@ -266,7 +268,7 @@ export async function upsertCustomer(
     if (!dbData.id_type) dbData.id_type = 'תעודת זהות';
     dbData.agent_id = agentId;
     
-    const { data: row, error } = await (supabase.from('customers') as any).insert(dbData).select('id').single();
+    const { data: row, error } = await supabase.from('customers').insert(dbData as TablesInsert<'customers'>).select('id').single();
     if (error) throw error;
     return { id: row.id, action: 'create' };
   }
@@ -283,7 +285,7 @@ export async function upsertProducts(
   for (const p of products) {
     const existingId = await findExistingProduct(customerId, p.policyNumber, p.company, p.productType);
     
-    const dbData: Record<string, any> = {
+    const dbData: Record<string, unknown> = {
       customer_id: customerId,
       category: p.category,
       company: p.company || null,
@@ -303,16 +305,16 @@ export async function upsertProducts(
 
     if (existingId) {
       // Update non-null fields
-      const updates: Record<string, any> = {};
+      const updates: Record<string, unknown> = {};
       for (const [key, val] of Object.entries(dbData)) {
         if (key === 'customer_id' || key === 'agent_id') continue;
         if (val !== null && val !== undefined) updates[key] = val;
       }
-      await supabase.from('products').update(updates).eq('id', existingId);
+      await supabase.from('products').update(updates as TablesUpdate<'products'>).eq('id', existingId);
       updated++;
     } else {
       dbData.agent_id = agentId;
-      await (supabase.from('products') as any).insert(dbData);
+      await supabase.from('products').insert(dbData as TablesInsert<'products'>);
       created++;
     }
   }
@@ -350,7 +352,7 @@ export async function uploadFileToStorage(file: File, customerId: string): Promi
 
 // Create import batch
 export async function createImportBatch(agentId: string, fileName: string, fileType: string, importMode: ImportMode): Promise<string> {
-  const { data, error } = await (supabase.from('import_batches') as any).insert({
+  const { data, error } = await supabase.from('import_batches').insert({
     agent_id: agentId,
     file_name: fileName,
     file_type: fileType,
@@ -362,13 +364,13 @@ export async function createImportBatch(agentId: string, fileName: string, fileT
 }
 
 // Update import batch
-export async function updateImportBatch(batchId: string, updates: Record<string, any>): Promise<void> {
-  await (supabase.from('import_batches') as any).update(updates).eq('id', batchId);
+export async function updateImportBatch(batchId: string, updates: TablesUpdate<'import_batches'>): Promise<void> {
+  await supabase.from('import_batches').update(updates).eq('id', batchId);
 }
 
 // Create import batch item
 export async function createImportBatchItem(batchId: string, item: Partial<ImportItem>): Promise<string> {
-  const { data, error } = await (supabase.from('import_batch_items') as any).insert({
+  const { data, error } = await supabase.from('import_batch_items').insert({
     batch_id: batchId,
     row_number: item.rowNumber || null,
     customer_id_number: item.customerIdNumber || null,
@@ -377,7 +379,7 @@ export async function createImportBatchItem(batchId: string, item: Partial<Impor
     status: item.status || 'pending',
     error_message: item.errorMessage || null,
     customer_id: item.customerId || null,
-    details: { customer: item.parsedCustomer, products: item.parsedProducts },
+    details: { customer: item.parsedCustomer, products: item.parsedProducts } as unknown as Json,
     source_file_name: item.sourceFileName || null,
     products_created: item.productsCreated || 0,
     products_updated: item.productsUpdated || 0,
@@ -387,26 +389,26 @@ export async function createImportBatchItem(batchId: string, item: Partial<Impor
 }
 
 // Update import batch item
-export async function updateImportBatchItem(itemId: string, updates: Record<string, any>): Promise<void> {
-  await (supabase.from('import_batch_items') as any).update(updates).eq('id', itemId);
+export async function updateImportBatchItem(itemId: string, updates: TablesUpdate<'import_batch_items'>): Promise<void> {
+  await supabase.from('import_batch_items').update(updates).eq('id', itemId);
 }
 
 // Load import history
 export async function loadImportHistory(): Promise<ImportBatch[]> {
-  const { data: batches } = await (supabase.from('import_batches') as any)
+  const { data: batches } = await supabase.from('import_batches')
     .select('*')
     .order('created_at', { ascending: false })
     .limit(50);
 
   if (!batches || batches.length === 0) return [];
 
-  const batchIds = batches.map((b: any) => b.id);
-  const { data: items } = await (supabase.from('import_batch_items') as any)
+  const batchIds = batches.map((b) => b.id);
+  const { data: items } = await supabase.from('import_batch_items')
     .select('*')
     .in('batch_id', batchIds)
     .order('row_number', { ascending: true });
 
-  return batches.map((b: any) => ({
+  return batches.map((b) => ({
     id: b.id,
     fileName: b.file_name,
     fileType: b.file_type,
@@ -417,7 +419,7 @@ export async function loadImportHistory(): Promise<ImportBatch[]> {
     needsReview: b.needs_review,
     importMode: (b.import_mode || 'create_and_update') as ImportMode,
     createdAt: b.created_at,
-    items: (items || []).filter((i: any) => i.batch_id === b.id).map((i: any) => ({
+    items: (items || []).filter((i) => i.batch_id === b.id).map((i) => ({
       id: i.id,
       rowNumber: i.row_number || undefined,
       customerIdNumber: i.customer_id_number || undefined,
@@ -426,8 +428,8 @@ export async function loadImportHistory(): Promise<ImportBatch[]> {
       status: (i.status || 'pending') as ItemStatus,
       errorMessage: i.error_message || undefined,
       customerId: i.customer_id || undefined,
-      parsedCustomer: i.details?.customer,
-      parsedProducts: i.details?.products,
+      parsedCustomer: (i.details as { customer?: ParsedCustomer } | null)?.customer,
+      parsedProducts: (i.details as { products?: ParsedProduct[] } | null)?.products,
       productsCreated: i.products_created || 0,
       productsUpdated: i.products_updated || 0,
       sourceFileName: i.source_file_name || undefined,

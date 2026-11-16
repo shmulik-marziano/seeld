@@ -4,6 +4,17 @@ import { allFunds as staticFunds } from "@/data/cmaFundsData";
 import type { Fund } from "@/types/fund";
 import type { ManagingCompany, ProductType, Specialization } from "@/types/fund";
 
+// investment_tracks is not in the generated site types; minimal local shape for the one query below.
+interface UntypedTracksClient {
+  from(table: string): {
+    select(columns: string): {
+      eq(column: string, value: unknown): {
+        order(column: string, opts: { ascending: boolean }): PromiseLike<{ data: unknown[] | null; error: unknown }>;
+      };
+    };
+  };
+}
+
 interface DBTrack {
   fund_number: string;
   name: string;
@@ -114,7 +125,7 @@ export function useInvestmentTracks() {
         }
 
         if (!rows) {
-          const { data, error } = await (siteSupabase as any)
+          const { data, error } = await (siteSupabase as unknown as UntypedTracksClient)
             .from("investment_tracks")
             .select(TRACK_COLUMNS)
             .eq("is_active", true)

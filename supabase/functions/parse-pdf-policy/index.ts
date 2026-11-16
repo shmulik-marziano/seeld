@@ -178,7 +178,7 @@ serve(async (req) => {
     const customer: ParsedCustomer = {};
     for (const [key, val] of Object.entries(parsed.customer)) {
       if (val !== null && val !== undefined && val !== '' && val !== 'null') {
-        (customer as any)[key] = val;
+        (customer as Record<string, unknown>)[key] = val;
       }
     }
     customer.source = 'PDF פוליסה';
@@ -186,11 +186,11 @@ serve(async (req) => {
     // Filter out car/home insurance and clean products
     const excludedKeywords = ['רכב', 'דירה', 'מבנה', 'תכולה'];
     const products: ParsedProduct[] = parsed.products
-      .filter((p: any) => {
+      .filter((p) => {
         const combined = `${p.productType || ''} ${p.subDescription || ''} ${p.notes || ''}`.toLowerCase();
         return !excludedKeywords.some(k => combined.includes(k));
       })
-      .map((p: any) => ({
+      .map((p) => ({
         category: p.category || 'ביטוח',
         company: p.company || undefined,
         productType: p.productType || undefined,
@@ -216,9 +216,9 @@ serve(async (req) => {
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Parse PDF error:', err);
-    return new Response(JSON.stringify({ error: err.message || 'שגיאה בפיענוח ה-PDF' }), {
+    return new Response(JSON.stringify({ error: (err as { message?: string }).message || 'שגיאה בפיענוח ה-PDF' }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

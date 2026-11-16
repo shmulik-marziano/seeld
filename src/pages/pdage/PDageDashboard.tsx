@@ -7,6 +7,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useApp } from '@/contexts/AppContext';
 import { format } from 'date-fns';
 
+type PdageCustomerRef = { full_name?: string | null; id_number?: string | null } | null;
+
 const statusMap: Record<string, { label: string; color: string }> = {
   pending: { label: 'ממתין', color: 'text-warning' },
   processing: { label: 'בעיבוד', color: 'text-info' },
@@ -96,7 +98,7 @@ export default function PDageDashboard() {
           <div className="space-y-2">
             {jobs.map(job => {
               const st = statusMap[job.status] || statusMap.pending;
-              const customer = job.pdage_customers as any;
+              const customer = job.pdage_customers as unknown as PdageCustomerRef;
               return (
                 <Card key={job.id} className="hover:shadow-md transition-shadow cursor-pointer border-none shadow-sm" onClick={() => navigate(`/app/pdage/job/${job.id}`)}>
                   <CardContent className="p-4 flex items-center gap-4">

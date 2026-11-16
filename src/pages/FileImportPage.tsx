@@ -52,6 +52,9 @@ interface FileUploadEntry {
   filesToProcess?: { file: File; type: ImportFileType }[];
 }
 
+// Preserves original `err.message` semantics for thrown non-Error objects (e.g. Supabase errors)
+const errMessage = (e: unknown): string | undefined => (e as { message?: string } | null | undefined)?.message;
+
 export default function FileImportPage() {
   const navigate = useNavigate();
   const { session, data, refreshData } = useApp();
@@ -149,7 +152,7 @@ export default function FileImportPage() {
     ]);
 
     const productHeaders = ['#', 'ת.ז. לקוח', 'שם לקוח', 'קטגוריה', 'חברה', 'סוג מוצר', 'מספר פוליסה', 'פרמיה חודשית', 'הפקדה חודשית', 'צבירה', 'מסלול'];
-    const productRows: any[][] = [];
+    const productRows: (string | number)[][] = [];
     let prodIdx = 0;
     for (const item of items) {
       if (item.parsedProducts && item.parsedProducts.length > 0) {
@@ -235,12 +238,12 @@ export default function FileImportPage() {
             for (const c of parsed.customers) {
               allPreview.push({ ...c, sourceFile: file.name });
             }
-          } catch (err: any) {
+          } catch (err: unknown) {
             errorItems.push({
               id: crypto.randomUUID(),
               action: 'error',
               status: 'error',
-              errorMessage: err.message || 'שגיאה בפיענוח PDF',
+              errorMessage: errMessage(err) || 'שגיאה בפיענוח PDF',
               productsCreated: 0,
               productsUpdated: 0,
               sourceFileName: file.name,
@@ -268,12 +271,12 @@ export default function FileImportPage() {
           for (const c of parsed.customers) {
             allPreview.push({ ...c, sourceFile: file.name });
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           errorItems.push({
             id: crypto.randomUUID(),
             action: 'error',
             status: 'error',
-            errorMessage: err.message || 'שגיאה בפיענוח הקובץ',
+            errorMessage: errMessage(err) || 'שגיאה בפיענוח הקובץ',
             productsCreated: 0,
             productsUpdated: 0,
             sourceFileName: file.name,
@@ -289,9 +292,9 @@ export default function FileImportPage() {
         // Only errors, no data to preview
         updateEntry({ state: 'error', items: errorItems, error: 'לא נמצאו נתונים לייבוא' });
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Parse error:', err);
-      updateEntry({ state: 'error', error: err.message || 'שגיאה כללית בפיענוח' });
+      updateEntry({ state: 'error', error: errMessage(err) || 'שגיאה כללית בפיענוח' });
       toast.error(`שגיאה בפיענוח ${entry.file.name}`);
     }
   };
@@ -376,12 +379,12 @@ export default function FileImportPage() {
           };
           allItems.push(item);
           await createImportBatchItem(batchId, item);
-        } catch (err: any) {
+        } catch (err: unknown) {
           const item: ImportItem = {
             id: itemId, rowNumber: rowNum,
             customerIdNumber: parsed.idNumber, customerName,
             action: 'error', status: 'error',
-            errorMessage: err.message || 'שגיאה בעיבוד',
+            errorMessage: errMessage(err) || 'שגיאה בעיבוד',
             productsCreated: 0, productsUpdated: 0,
             sourceFileName: sourceFile,
             parsedCustomer: parsed, parsedProducts: products,
@@ -412,9 +415,9 @@ export default function FileImportPage() {
       await loadHistory();
 
       toast.success(`ייבוא ${entry.file.name} הושלם: ${succeeded} הצליחו`);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Import error:', err);
-      updateEntry({ state: 'error', error: err.message || 'שגיאה כללית בייבוא' });
+      updateEntry({ state: 'error', error: errMessage(err) || 'שגיאה כללית בייבוא' });
       toast.error(`שגיאה בייבוא ${entry.file.name}`);
     }
   };
@@ -446,7 +449,7 @@ export default function FileImportPage() {
     }));
   };
 
-  const updatePreviewCustomer = (uploadIdx: number, entryIdx: number, field: keyof ParsedCustomer, value: any) => {
+  const updatePreviewCustomer = (uploadIdx: number, entryIdx: number, field: keyof ParsedCustomer, value: ParsedCustomer[keyof ParsedCustomer]) => {
     setUploads(prev => prev.map((u, i) => {
       if (i !== uploadIdx || !u.previewEntries) return u;
       return {
@@ -458,7 +461,7 @@ export default function FileImportPage() {
     }));
   };
 
-  const updatePreviewProduct = (uploadIdx: number, entryIdx: number, prodIdx: number, field: keyof ParsedProduct, value: any) => {
+  const updatePreviewProduct = (uploadIdx: number, entryIdx: number, prodIdx: number, field: keyof ParsedProduct, value: ParsedProduct[keyof ParsedProduct]) => {
     setUploads(prev => prev.map((u, i) => {
       if (i !== uploadIdx || !u.previewEntries) return u;
       return {
@@ -541,8 +544,8 @@ export default function FileImportPage() {
       await refreshData();
       toast.success(`קובץ שויך בהצלחה ל-${customerName}`);
       setManualAssignItem(null);
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה בשיוך');
+    } catch (err: unknown) {
+      toast.error(errMessage(err) || 'שגיאה בשיוך');
     }
     setManualAssigning(false);
   };

@@ -16,6 +16,8 @@ import { usePdageChat } from '@/hooks/usePdageChat';
 import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 
+type PdageCustomerRef = { full_name?: string | null; id_number?: string | null } | null;
+
 const quickActions = [
   { label: 'העלאת מסמך', desc: 'סריקה ואיתור חוסרים', icon: Upload, path: '/app/pdage/upload', gradient: 'from-primary to-primary', bg: 'bg-secondary' },
   { label: 'היסטוריה', desc: 'תיקונים קודמים', icon: History, path: '/app/pdage/history', gradient: 'from-primary to-primary', bg: 'bg-secondary' },
@@ -110,7 +112,7 @@ export default function PDageChatHome() {
   const hasMessages = messages.length > 0;
 
   const markdownComponents = {
-    a: ({ href, children, ...props }: any) => {
+    a: ({ href, children, ...props }: React.ComponentPropsWithoutRef<'a'>) => {
       if (href?.startsWith('navigation:')) {
         const path = href.replace('navigation:', '');
         return (
@@ -261,7 +263,7 @@ export default function PDageChatHome() {
                   </div>
                   <div className="space-y-1.5">
                     {recentJobs.map(job => {
-                      const customer = (job as any).pdage_customers as any;
+                      const customer = job.pdage_customers as unknown as PdageCustomerRef;
                       return (
                         <button
                           key={job.id}

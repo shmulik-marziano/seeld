@@ -133,7 +133,7 @@ export function FileUploadSection({ customerId }: FileUploadSectionProps) {
         setUploads(prev => prev.map((u, j) => j === idx ? { ...u, state: 'parsing' } : u));
 
         // Read file content - binary files as base64, text files as text
-        const bodyPayload: Record<string, any> = {
+        const bodyPayload: Record<string, unknown> = {
           fileName: upload.file.name,
           fileType: upload.type,
           customerId,
@@ -169,9 +169,9 @@ export function FileUploadSection({ customerId }: FileUploadSectionProps) {
 
         // Refresh data to show new products
         await refreshData();
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Upload error:', err);
-        setUploads(prev => prev.map((u, j) => j === idx ? { ...u, state: 'error', error: err.message } : u));
+        setUploads(prev => prev.map((u, j) => j === idx ? { ...u, state: 'error', error: (err as Error).message } : u));
         toast.error(`שגיאה בעיבוד ${upload.file.name}`);
       }
     }

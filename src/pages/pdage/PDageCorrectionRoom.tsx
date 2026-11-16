@@ -20,6 +20,11 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { CorrectionFieldEditor, type CorrectionFields } from '@/components/pdage/CorrectionFieldEditor';
 import { ValidationResultPanel } from '@/components/pdage/ValidationResultPanel';
 import jsPDF from 'jspdf';
+import type { Json } from '@/integrations/supabase/types';
+
+type PdageCustomerRef = { full_name?: string | null; id_number?: string | null } | null;
+type PdageCategoryRef = { name: string } | null;
+type PdageDeficiencyRef = { title: string; description?: string | null } | null;
 
 const DEFAULT_FIELDS: CorrectionFields = {
   customerName: '',
@@ -66,8 +71,8 @@ export default function PDageCorrectionRoom() {
   // Load fields from job
   useEffect(() => {
     if (job && !fieldsLoaded) {
-      const customer = job.pdage_customers as any;
-      const saved = (job as any).correction_fields as CorrectionFields | null;
+      const customer = job.pdage_customers as unknown as PdageCustomerRef;
+      const saved = job.correction_fields as unknown as CorrectionFields | null;
       if (saved && Object.keys(saved).length > 0) {
         setFields({ ...DEFAULT_FIELDS, ...saved });
       } else {
@@ -78,10 +83,10 @@ export default function PDageCorrectionRoom() {
         });
       }
       // Load validation if exists
-      if ((job as any).validation_score != null) {
+      if (job.validation_score != null) {
         setValidationResult({
-          score: (job as any).validation_score,
-          warnings: ((job as any).validation_warnings as string[]) || [],
+          score: job.validation_score,
+          warnings: (job.validation_warnings as string[] | null) || [],
         });
       }
       setFieldsLoaded(true);
@@ -98,13 +103,13 @@ export default function PDageCorrectionRoom() {
     try {
       const { error } = await supabase
         .from('correction_jobs')
-        .update({ correction_fields: fields as any, updated_at: new Date().toISOString() })
+        .update({ correction_fields: fields as unknown as Json, updated_at: new Date().toISOString() })
         .eq('id', jobId);
       if (error) throw error;
       toast.success('השדות נשמרו בהצלחה');
       queryClient.invalidateQueries({ queryKey: ['pdage-job', jobId] });
-    } catch (err: any) {
-      toast.error('שגיאה בשמירה: ' + (err.message || ''));
+    } catch (err: unknown) {
+      toast.error('שגיאה בשמירה: ' + ((err as { message?: string }).message || ''));
     } finally {
       setSaving(false);
     }
@@ -128,7 +133,7 @@ export default function PDageCorrectionRoom() {
       // Save validation to DB
       await supabase.from('correction_jobs').update({
         validation_score: result.score,
-        validation_warnings: result.warnings as any,
+        validation_warnings: result.warnings as Json,
       }).eq('id', jobId);
 
       await supabase.from('correction_activity_log').insert({
@@ -143,8 +148,8 @@ export default function PDageCorrectionRoom() {
       } else {
         toast.warning(`ציון תקינות: ${result.score}/100 — נדרשים תיקונים נוספים`);
       }
-    } catch (err: any) {
-      toast.error('שגיאה בסריקה: ' + (err.message || ''));
+    } catch (err: unknown) {
+      toast.error('שגיאה בסריקה: ' + ((err as { message?: string }).message || ''));
     } finally {
       setValidating(false);
     }
@@ -154,9 +159,9 @@ export default function PDageCorrectionRoom() {
     if (!job) return;
     setGenerating(true);
     try {
-      const customer = job.pdage_customers as any;
-      const deficiency = job.deficiency_bank as any;
-      const category = job.deficiency_categories as any;
+      const customer = job.pdage_customers as unknown as PdageCustomerRef;
+      const deficiency = job.deficiency_bank as unknown as PdageDeficiencyRef;
+      const category = job.deficiency_categories as unknown as PdageCategoryRef;
 
       const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
       const pageWidth = doc.internal.pageSize.getWidth();
@@ -300,8 +305,8 @@ export default function PDageCorrectionRoom() {
 
       toast.success('PDF מתוקן הופק בהצלחה!');
       queryClient.invalidateQueries({ queryKey: ['pdage-job', jobId] });
-    } catch (err: any) {
-      toast.error('שגיאה ביצירת PDF: ' + (err.message || ''));
+    } catch (err: unknown) {
+      toast.error('שגיאה ביצירת PDF: ' + ((err as { message?: string }).message || ''));
     } finally {
       setGenerating(false);
     }
@@ -324,9 +329,9 @@ export default function PDageCorrectionRoom() {
     );
   }
 
-  const customer = job.pdage_customers as any;
-  const deficiency = job.deficiency_bank as any;
-  const category = job.deficiency_categories as any;
+  const customer = job.pdage_customers as unknown as PdageCustomerRef;
+  const deficiency = job.deficiency_bank as unknown as PdageDeficiencyRef;
+  const category = job.deficiency_categories as unknown as PdageCategoryRef;
 
   return (
     <div className="flex flex-col sm:flex-row gap-4 max-w-7xl mx-auto h-auto sm:h-[calc(100vh-5rem)] px-4 sm:px-0">

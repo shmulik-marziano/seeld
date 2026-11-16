@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { AppData, Customer, Product, Recommendation, ActivityEntry, EventLevel, SourceFile } from '../types';
+import { AppData, Customer, CustomerExtendedData, Product, Recommendation, ActivityEntry, EventLevel, SourceFile } from '../types';
 import { Session } from '@supabase/supabase-js';
+import type { Tables, TablesInsert, TablesUpdate } from '@/integrations/supabase/types';
 
 function calculateAge(birthDate: string): number {
   const birth = new Date(birthDate);
@@ -17,18 +18,18 @@ function calculateBMI(h?: number, w?: number): number | undefined {
 }
 
 // Map DB row to frontend type
-function mapCustomer(row: any): Customer {
+function mapCustomer(row: Tables<'customers'>): Customer {
   return {
     id: row.id,
     firstName: row.first_name,
     lastName: row.last_name,
     fullName: row.full_name || `${row.first_name} ${row.last_name}`.trim(),
-    idType: row.id_type || 'תעודת זהות',
+    idType: (row.id_type as Customer['idType']) || 'תעודת זהות',
     idNumber: row.id_number,
     birthDate: row.birth_date || '',
     age: row.birth_date ? calculateAge(row.birth_date) : 0,
-    gender: row.gender || 'זכר',
-    maritalStatus: row.marital_status || 'רווק/ה',
+    gender: (row.gender as Customer['gender']) || 'זכר',
+    maritalStatus: (row.marital_status as Customer['maritalStatus']) || 'רווק/ה',
     mobilePhone: row.mobile_phone,
     otherPhone: row.other_phone || undefined,
     email: row.email || undefined,
@@ -41,7 +42,7 @@ function mapCustomer(row: any): Customer {
     country: row.country || undefined,
     source: row.source || undefined,
     internalNotes: row.internal_notes || undefined,
-    status: row.status || 'חדש',
+    status: (row.status as Customer['status']) || 'חדש',
     nextFollowUp: row.next_follow_up || undefined,
     employmentStatus: row.employment_status || undefined,
     occupation: row.occupation || undefined,
@@ -77,20 +78,20 @@ function mapCustomer(row: any): Customer {
     spouseName: row.spouse_name || undefined,
     numberOfChildren: row.number_of_children ?? undefined,
     beneficiaries: row.beneficiaries || undefined,
-    extendedData: (row.extended_data && typeof row.extended_data === 'object') ? row.extended_data : {},
+    extendedData: (row.extended_data && typeof row.extended_data === 'object') ? (row.extended_data as CustomerExtendedData) : {},
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
 }
 
-function mapProduct(row: any): Product {
+function mapProduct(row: Tables<'products'>): Product {
   return {
-    id: row.id, customerId: row.customer_id, category: row.category,
+    id: row.id, customerId: row.customer_id, category: row.category as Product['category'],
     company: row.company || '', productType: row.product_type || '',
     subDescription: row.sub_description || undefined,
     policyNumber: row.policy_number || undefined,
     productNumber: row.product_number || undefined,
-    isActive: row.is_active ?? true, phase: row.phase || 'פעיל',
+    isActive: row.is_active ?? true, phase: (row.phase as Product['phase']) || 'פעיל',
     monthlyPremium: row.monthly_premium ? Number(row.monthly_premium) : undefined,
     monthlyDeposit: row.monthly_deposit ? Number(row.monthly_deposit) : undefined,
     accumulation: row.accumulation ? Number(row.accumulation) : undefined,
@@ -108,7 +109,7 @@ function mapProduct(row: any): Product {
   };
 }
 
-function mapRecommendation(row: any): Recommendation {
+function mapRecommendation(row: Tables<'recommendations'>): Recommendation {
   return {
     id: row.id, customerId: row.customer_id,
     linkedProductId: row.linked_product_id || undefined,
@@ -116,10 +117,10 @@ function mapRecommendation(row: any): Recommendation {
     currentState: row.current_state || undefined,
     basedOn: row.based_on || undefined,
     improvement: row.improvement || undefined,
-    actionType: row.action_type || 'הצטרפות בלבד',
+    actionType: (row.action_type as Recommendation['actionType']) || 'הצטרפות בלבד',
     requiresQuote: row.requires_quote ?? false,
-    decisionStatus: row.decision_status || 'טיוטה',
-    executionStatus: row.execution_status || undefined,
+    decisionStatus: (row.decision_status as Recommendation['decisionStatus']) || 'טיוטה',
+    executionStatus: (row.execution_status as Recommendation['executionStatus']) || undefined,
     nextStep: row.next_step || undefined,
     missingForExecution: row.missing_for_execution || undefined,
     executionNote: row.execution_note || undefined,
@@ -142,19 +143,19 @@ function mapRecommendation(row: any): Recommendation {
   };
 }
 
-function mapSourceFile(row: any): SourceFile {
+function mapSourceFile(row: Tables<'source_files'>): SourceFile {
   return {
     id: row.id, customerId: row.customer_id,
-    type: row.type || 'מסלקה', fileName: row.file_name,
-    uploadedAt: row.uploaded_at, analysisStatus: row.analysis_status || 'ממתין',
+    type: (row.type as SourceFile['type']) || 'מסלקה', fileName: row.file_name,
+    uploadedAt: row.uploaded_at, analysisStatus: (row.analysis_status as SourceFile['analysisStatus']) || 'ממתין',
   };
 }
 
-function mapActivity(row: any): ActivityEntry {
+function mapActivity(row: Tables<'activity_log'>): ActivityEntry {
   return {
     id: row.id, timestamp: row.created_at,
     title: row.title, detail: row.detail || undefined,
-    level: row.level || 'מידע',
+    level: (row.level as EventLevel) || 'מידע',
     customerId: row.customer_id || undefined,
     productId: row.product_id || undefined,
     recommendationId: row.recommendation_id || undefined,
@@ -162,8 +163,8 @@ function mapActivity(row: any): ActivityEntry {
 }
 
 // Map frontend Customer to DB insert/update
-function customerToDb(input: Partial<Customer>, agentId?: string): Record<string, any> {
-  const m: Record<string, any> = {};
+function customerToDb(input: Partial<Customer>, agentId?: string): TablesUpdate<'customers'> {
+  const m: TablesUpdate<'customers'> = {};
   if (agentId) m.agent_id = agentId;
   if (input.firstName !== undefined) m.first_name = input.firstName;
   if (input.lastName !== undefined) m.last_name = input.lastName;
@@ -222,7 +223,7 @@ function customerToDb(input: Partial<Customer>, agentId?: string): Record<string
   if (input.spouseName !== undefined) m.spouse_name = input.spouseName || null;
   if (input.numberOfChildren !== undefined) m.number_of_children = input.numberOfChildren ?? null;
   if (input.beneficiaries !== undefined) m.beneficiaries = input.beneficiaries || null;
-  if (input.extendedData !== undefined) m.extended_data = input.extendedData;
+  if (input.extendedData !== undefined) m.extended_data = input.extendedData as TablesUpdate<'customers'>['extended_data'];
   return m;
 }
 
@@ -393,7 +394,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const addCustomer = useCallback(async (input: Partial<Customer>): Promise<Customer> => {
     const dbData = customerToDb(input, agentId);
-    const { data: row, error } = await supabase.from('customers').insert(dbData as any).select().single();
+    const { data: row, error } = await supabase.from('customers').insert(dbData as TablesInsert<'customers'>).select().single();
     if (error) throw error;
     const customer = mapCustomer(row);
     setData(prev => ({ ...prev, customers: [customer, ...prev.customers] }));
@@ -433,7 +434,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [data.customers, logActivity]);
 
   const addProduct = useCallback(async (input: Partial<Product> & { customerId: string }): Promise<Product> => {
-    const dbData: Record<string, any> = {
+    const dbData: TablesInsert<'products'> = {
       agent_id: agentId,
       customer_id: input.customerId,
       category: input.category || 'כסף',
@@ -458,7 +459,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       notes: input.notes || null,
       manually_completed: input.manuallyCompleted ?? false,
     };
-    const { data: row, error } = await supabase.from('products').insert(dbData as any).select().single();
+    const { data: row, error } = await supabase.from('products').insert(dbData).select().single();
     if (error) throw error;
     const product = mapProduct(row);
     setData(prev => ({ ...prev, products: [product, ...prev.products] }));
@@ -467,7 +468,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [agentId, logActivity]);
 
   const updateProduct = useCallback(async (id: string, updates: Partial<Product>) => {
-    const dbData: Record<string, any> = {};
+    const dbData: TablesUpdate<'products'> = {};
     if (updates.category !== undefined) dbData.category = updates.category;
     if (updates.company !== undefined) dbData.company = updates.company || null;
     if (updates.productType !== undefined) dbData.product_type = updates.productType || null;
@@ -505,7 +506,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logActivity]);
 
   const addRecommendation = useCallback(async (input: Partial<Recommendation> & { customerId: string }): Promise<Recommendation> => {
-    const dbData: Record<string, any> = {
+    const dbData: TablesInsert<'recommendations'> = {
       agent_id: agentId,
       customer_id: input.customerId,
       linked_product_id: input.linkedProductId || null,
@@ -526,7 +527,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       recommended_investment_track_custom: input.recommendedInvestmentTrackCustom || null,
       recommended_risk_level: input.recommendedRiskLevel || null,
     };
-    const { data: row, error } = await supabase.from('recommendations').insert(dbData as any).select().single();
+    const { data: row, error } = await supabase.from('recommendations').insert(dbData).select().single();
     if (error) throw error;
     const rec = mapRecommendation(row);
     setData(prev => ({ ...prev, recommendations: [rec, ...prev.recommendations] }));
@@ -535,7 +536,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [agentId, logActivity]);
 
   const updateRecommendation = useCallback(async (id: string, updates: Partial<Recommendation>) => {
-    const dbData: Record<string, any> = {};
+    const dbData: TablesUpdate<'recommendations'> = {};
     if (updates.linkedProductId !== undefined) dbData.linked_product_id = updates.linkedProductId || null;
     if (updates.title !== undefined) dbData.title = updates.title;
     if (updates.rationale !== undefined) dbData.rationale = updates.rationale;

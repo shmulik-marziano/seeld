@@ -3,6 +3,19 @@ import { useAuth } from "@/hooks/useAuth";
 import { siteSupabase, SITE_SUPABASE_URL } from "@/integrations/supabase/site-client";
 import type { Tables } from "@/integrations/supabase/site-types";
 import { supabase as agentSupabase } from "@/integrations/supabase/client";
+import type { Tables as AgentTables } from "@/integrations/supabase/types";
+
+interface DDSubmission {
+  id: string;
+  created_at: string;
+  first_name?: string | null;
+  last_name?: string | null;
+  account_owner?: string | null;
+  bank_name?: string | null;
+  bank_branch?: string | null;
+  bank_account?: string | null;
+}
+
 
 // Error boundary to catch runtime crashes
 class AdminErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
@@ -77,11 +90,13 @@ const TABS: { id: AdminTab; label: string; icon: typeof LayoutDashboard }[] = [
 // ══════════════════════════════════════════════════════
 //  MAIN COMPONENT
 // ══════════════════════════════════════════════════════
+type AuthApi = ReturnType<typeof useAuth>;
+
 
 function SiteAdminInner() {
-  let user: any = null, authLoading = false, signInWithOtp: any = () => Promise.resolve({ error: null }),
-      verifyOtp: any = () => Promise.resolve({ error: null }), signInWithGoogle: any = () => Promise.resolve({ error: null }),
-      signOut: any = () => Promise.resolve();
+  let user: AuthApi["user"] = null, authLoading = false, signInWithOtp: AuthApi["signInWithOtp"] = () => Promise.resolve({ error: null }),
+      verifyOtp: AuthApi["verifyOtp"] = () => Promise.resolve({ error: null }), signInWithGoogle: AuthApi["signInWithGoogle"] = () => Promise.resolve({ error: null }),
+      signOut: AuthApi["signOut"] = () => Promise.resolve();
   try {
     const auth = useAuth();
     user = auth.user; authLoading = auth.loading;
@@ -457,7 +472,7 @@ function SiteAdminInner() {
                     </button>
                     <button
                       type="button"
-                      onClick={(e) => handleSendOtp(e as any)}
+                      onClick={(e) => handleSendOtp(e as React.FormEvent)}
                       disabled={resendTimer > 0 || loading}
                       className={cn(
                         "text-sm transition-colors flex items-center gap-1",
@@ -1308,8 +1323,8 @@ function TrackSyncCard() {
 
       if (error) throw error;
       setResult(`סונכרנו ${data?.tracks_synced || 0} מסלולים מ-${data?.companies?.length || 0} חברות`);
-    } catch (err: any) {
-      setResult("שגיאה: " + (err.message || "לא ידוע"));
+    } catch (err: unknown) {
+      setResult("שגיאה: " + ((err as { message?: string }).message || "לא ידוע"));
     }
     setSyncing(false);
   };
@@ -1509,8 +1524,8 @@ function BlogModule() {
 // ══════════════════════════════════════════════════════
 
 function LeadsModule() {
-  const [leads, setLeads] = useState<any[]>([]);
-  const [contacts, setContacts] = useState<any[]>([]);
+  const [leads, setLeads] = useState<Tables<"insurance_leads">[]>([]);
+  const [contacts, setContacts] = useState<Tables<"contact_submissions">[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<"leads" | "contacts">("leads");
 
@@ -1723,8 +1738,8 @@ function AgentManagementModule() {
   const [email, setEmail] = useState("");
   const [agentPhone, setAgentPhone] = useState("");
   const [sending, setSending] = useState(false);
-  const [agents, setAgents] = useState<any[]>([]);
-  const [invitations, setInvitations] = useState<any[]>([]);
+  const [agents, setAgents] = useState<Pick<AgentTables<"profiles">, "id" | "full_name" | "phone" | "role" | "created_at">[]>([]);
+  const [invitations, setInvitations] = useState<AgentTables<"agency_invitations">[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
@@ -1776,8 +1791,8 @@ function AgentManagementModule() {
       setEmail("");
       setAgentPhone("");
       fetchData();
-    } catch (err: any) {
-      toast.error(err.message || "שגיאה בשליחת ההזמנה");
+    } catch (err: unknown) {
+      toast.error((err as { message?: string }).message || "שגיאה בשליחת ההזמנה");
     } finally {
       setSending(false);
     }
@@ -1790,7 +1805,7 @@ function AgentManagementModule() {
     fetchData();
   };
 
-  const handleResend = async (inv: any) => {
+  const handleResend = async (inv: AgentTables<"agency_invitations">) => {
     setSending(true);
     try {
       const { data: agencies } = await agentSupabase.from("agencies").select("id, name").limit(1);
@@ -1809,8 +1824,8 @@ function AgentManagementModule() {
       if (res.data?.error) throw new Error(res.data.error);
       toast.success(`הזמנה נשלחה מחדש ל-${inv.email}`);
       fetchData();
-    } catch (err: any) {
-      toast.error(err.message || "שגיאה בשליחה מחדש");
+    } catch (err: unknown) {
+      toast.error((err as { message?: string }).message || "שגיאה בשליחה מחדש");
     } finally {
       setSending(false);
     }
@@ -1950,7 +1965,7 @@ function AgentManagementModule() {
 // ══════════════════════════════════════════════════════
 
 function OnboardingModule() {
-  const [submissions, setSubmissions] = useState<any[]>([]);
+  const [submissions, setSubmissions] = useState<Tables<"onboarding_submissions">[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
@@ -2034,7 +2049,7 @@ function OnboardingModule() {
 // ══════════════════════════════════════════════════════
 
 function DirectDebitModule() {
-  const [submissions, setSubmissions] = useState<any[]>([]);
+  const [submissions, setSubmissions] = useState<DDSubmission[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -30,8 +30,8 @@ serve(async (req) => {
       .eq("id", jobId)
       .single();
 
-    const deficiency = job?.deficiency_bank as any;
-    const category = job?.deficiency_categories as any;
+    const deficiency = job?.deficiency_bank as { title?: string; description?: string } | null;
+    const category = job?.deficiency_categories as { name?: string } | null;
 
     const systemPrompt = `אתה מומחה לבדיקת תקינות מסמכים ביטוחיים ופיננסיים בישראל.
 תפקידך לבדוק שכל השדות מלאים ותקינים ושהחוסר שזוהה תוקן.
@@ -99,7 +99,7 @@ ${deficiency?.description ? `תיאור: ${deficiency.description}` : ""}
     return new Response(JSON.stringify(parsed), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error("validate-correction error:", e);
     return new Response(
       JSON.stringify({ error: e instanceof Error ? e.message : "שגיאה לא ידועה" }),

@@ -135,7 +135,7 @@ export interface CustomerExtendedData {
   residenceStatus?: string;
 
   // ── כללי נוסף ──
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface Customer {
@@ -270,7 +270,7 @@ export interface Recommendation {
   costBefore?: number;
   costAfter?: number;
   recommendationType?: string;
-  productSnapshot?: any;
+  productSnapshot?: unknown;
   advantages?: string;
   disadvantages?: string;
   sortOrder?: number;

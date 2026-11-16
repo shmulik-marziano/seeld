@@ -2,6 +2,24 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import * as XLSX from "https://esm.sh/xlsx@0.18.5";
 
+interface AiProduct {
+  category?: string;
+  productType?: string;
+  subDescription?: string;
+  notes?: string;
+  company?: string;
+  policyNumber?: string | number;
+  monthlyPremium?: unknown;
+  monthlyDeposit?: unknown;
+  accumulation?: unknown;
+  managementFeeDeposit?: unknown;
+  managementFeeAccumulation?: unknown;
+  returnYear?: unknown;
+  return3Years?: unknown;
+  track?: string;
+  isActive?: boolean;
+}
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
@@ -92,10 +110,10 @@ serve(async (req) => {
           // Use sheet_to_json for better data extraction
           const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
           textContent += `\n=== גיליון: ${sheetName} ===\n`;
-          for (const row of jsonData as any[][]) {
-            const nonEmpty = row.filter((cell: any) => cell !== "" && cell !== null && cell !== undefined);
+          for (const row of jsonData as unknown[][]) {
+            const nonEmpty = row.filter((cell: unknown) => cell !== "" && cell !== null && cell !== undefined);
             if (nonEmpty.length > 0) {
-              textContent += row.map((cell: any) => String(cell ?? "")).join("\t") + "\n";
+              textContent += row.map((cell: unknown) => String(cell ?? "")).join("\t") + "\n";
             }
           }
         }
@@ -271,7 +289,7 @@ ${commonRules}`;
     
     content = content.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
 
-    let products;
+    let products: AiProduct[];
     try {
       products = JSON.parse(content);
     } catch {
@@ -287,7 +305,7 @@ ${commonRules}`;
 
     // Filter out car and home insurance products
     const excludedTypes = ['ביטוח רכב', 'ביטוח דירה', 'רכב', 'דירה', 'רכב חובה', 'רכב מקיף', 'ביטוח רכב חובה', 'ביטוח רכב מקיף', 'ביטוח דירה ותכולה', 'ביטוח מבנה', 'ביטוח תכולה'];
-    products = products.filter((p: any) => {
+    products = products.filter((p) => {
       const type = (p.productType || '').toLowerCase();
       const sub = (p.subDescription || '').toLowerCase();
       const notes = (p.notes || '').toLowerCase();
@@ -311,7 +329,7 @@ ${commonRules}`;
       );
     }
 
-    const insertData = products.map((p: any) => ({
+    const insertData = products.map((p) => ({
       customer_id: customerId,
       agent_id: user.id,
       category: p.category || "כסף",
@@ -360,10 +378,10 @@ ${commonRules}`;
       JSON.stringify({ success: true, products: inserted, count: inserted?.length || 0 }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: (error as { message?: string }).message }),
       { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

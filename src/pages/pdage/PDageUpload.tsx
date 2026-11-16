@@ -100,9 +100,9 @@ export default function PDageUpload() {
 
       toast.success('הקובץ הועלה בהצלחה');
       navigate(`/app/pdage/job/${job.id}/deficiency`);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      toast.error('שגיאה בהעלאת הקובץ: ' + (err.message || ''));
+      toast.error('שגיאה בהעלאת הקובץ: ' + ((err as { message?: string }).message || ''));
     } finally {
       setUploading(false);
     }

@@ -109,9 +109,9 @@ serve(async (req) => {
 
       if (jobError || !job) throw new Error("Job not found");
 
-      const customer = job.pdage_customers as any;
-      const category = job.deficiency_categories as any;
-      const deficiency = job.deficiency_bank as any;
+      const customer = job.pdage_customers as { full_name?: string; id_number?: string } | null;
+      const category = job.deficiency_categories as { name?: string } | null;
+      const deficiency = job.deficiency_bank as { title?: string; description?: string } | null;
       const deficiencyText = deficiency
         ? `${deficiency.title} — ${deficiency.description || ""}`
         : job.free_text_deficiency || "לא צוין";
@@ -212,7 +212,7 @@ ${fieldsContext || "  (אין שדות מלאים עדיין)"}
 
         // Build confirmation messages for second call
         const updateSummary = updates
-          .map((u: any) => `${fieldLabels[u.field] || u.field}: "${u.value}"`)
+          .map((u) => `${fieldLabels[u.field] || u.field}: "${u.value}"`)
           .join(", ");
 
         const confirmMessages = [
@@ -309,7 +309,7 @@ ${fieldsContext || "  (אין שדות מלאים עדיין)"}
     return new Response(response.body, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error("pdage-chat error:", e);
     return new Response(
       JSON.stringify({

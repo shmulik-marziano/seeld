@@ -93,7 +93,7 @@ export default function ReasoningBankPage() {
       const { error } = await supabase.from('reasoning_bank').insert({
         agent_id: session?.user?.id, category: form.category,
         recommendation_type: form.recommendation_type, text: form.text, tags,
-      } as any);
+      });
       if (error) { toast.error('שגיאה ביצירה'); return; }
       toast.success('נימוק נוסף');
     }
@@ -102,7 +102,7 @@ export default function ReasoningBankPage() {
   };
 
   const handleArchive = async (id: string) => {
-    await supabase.from('reasoning_bank').update({ archived_at: new Date().toISOString() } as any).eq('id', id);
+    await supabase.from('reasoning_bank').update({ archived_at: new Date().toISOString() }).eq('id', id);
     setEntries(prev => prev.filter(e => e.id !== id));
     toast.success('נימוק הועבר לארכיון');
   };

@@ -110,12 +110,12 @@ serve(async (req) => {
     }
     const workbook = XLSX.read(data, { type: "array" });
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as any[][];
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as (string | number)[][];
 
     console.log(`Parsed ${rows.length} rows`);
 
     // Parse funds (start after header rows)
-    const tracks: any[] = [];
+    const tracks: Record<string, unknown>[] = [];
     for (let r = 16; r < rows.length; r++) {
       const row = rows[r];
       if (!row || !row[18]) continue;
@@ -135,15 +135,15 @@ serve(async (req) => {
         product_type: detectProductType(name),
         specialization: spec,
         stock_exposure: se,
-        return_year1: parseFloat(row[14]) || 0,
-        return_year3: parseFloat(row[12]) || 0,
-        return_year5: parseFloat(row[10]) || 0,
-        return_month: +((parseFloat(row[14]) || 0) / 12).toFixed(2),
-        fee_assets: parseFloat(row[6]) || 0,
-        fee_deposits: parseFloat(row[7]) || 0,
-        sharpe_ratio: parseFloat(row[9]) || null,
-        total_assets: parseFloat(row[4]) || 0,
-        liquidity: parseFloat(row[1]) || null,
+        return_year1: parseFloat(String(row[14])) || 0,
+        return_year3: parseFloat(String(row[12])) || 0,
+        return_year5: parseFloat(String(row[10])) || 0,
+        return_month: +((parseFloat(String(row[14])) || 0) / 12).toFixed(2),
+        fee_assets: parseFloat(String(row[6])) || 0,
+        fee_deposits: parseFloat(String(row[7])) || 0,
+        sharpe_ratio: parseFloat(String(row[9])) || null,
+        total_assets: parseFloat(String(row[4])) || 0,
+        liquidity: parseFloat(String(row[1])) || null,
         report_period: String(row[15] || "").trim(),
         foreign_exposure: se > 60 ? 35 : 20,
         currency_exposure: se > 60 ? 20 : 10,
