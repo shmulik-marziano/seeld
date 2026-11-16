@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { siteSupabase } from "@/integrations/supabase/site-client";
+import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { BrandIcon } from "@/components/brand/BrandIcon";
@@ -36,14 +36,14 @@ const RecommendationsTab = ({ customerId }: { customerId: string }) => {
 
   const fetchRecommendations = async () => {
     try {
-      const { data, error } = await siteSupabase
+      const { data, error } = await supabase
         .from("recommendations")
         .select("*")
         .eq("customer_id", customerId)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setRecommendations((data || []) as Recommendation[]);
+      setRecommendations((data || []) as unknown as Recommendation[]);
     } catch {
       toast.error("טעינת ההמלצות לא הצליחה. נסו לרענן את העמוד.");
     } finally {

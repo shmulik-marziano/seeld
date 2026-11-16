@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { siteSupabase } from "@/integrations/supabase/site-client";
+import { untypedSupabase } from "@/integrations/supabase/site-client";
 import { Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Illustration } from "@/components/brand/Illustration";
@@ -26,7 +26,7 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
     fetchMessages();
 
     // Subscribe to realtime updates
-    const channel = siteSupabase
+    const channel = untypedSupabase
       .channel(`customer_messages_${customerId}`)
       .on(
         "postgres_changes",
@@ -48,7 +48,7 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
       .subscribe();
 
     return () => {
-      siteSupabase.removeChannel(channel);
+      untypedSupabase.removeChannel(channel);
     };
   }, [customerId]);
 
@@ -63,7 +63,7 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
 
   const fetchMessages = async () => {
     try {
-      const { data, error } = await siteSupabase
+      const { data, error } = await untypedSupabase
         .from("customer_messages")
         .select("*")
         .eq("customer_id", customerId)
@@ -84,7 +84,7 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
 
     setSending(true);
     try {
-      const { error } = await siteSupabase
+      const { error } = await untypedSupabase
         .from("customer_messages")
         .insert({
           customer_id: customerId,
