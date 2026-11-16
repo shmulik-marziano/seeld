@@ -42,7 +42,7 @@
 
 /* ── frames ── */
 .neo-frame { position: relative; margin: clamp(10px, 2vw, 20px); border: 1px solid var(--gold); }
-.neo-arch { border: 1.5px solid var(--gold); border-radius: 999px 999px 8px 8px; padding: 12px; background: var(--butter); }
+.neo-arch { border: 1.5px solid var(--gold); border-radius: 999px 999px 8px 8px; padding: 12px; background: var(--ga, var(--butter)); }
 .neo-arch > div { border-radius: 999px 999px 4px 4px; overflow: hidden; border: 1px solid var(--gold-soft); }
 
 /* ── actions ── */
@@ -64,8 +64,8 @@
 /* ── section grounds: one pastel per chapter ── */
 .neo-ground { padding-block: clamp(80px, 10vw, 150px); }
 .neo-ground--cream { background: var(--cream); }
-.neo-ground--sage { background: var(--sage); }
-.neo-ground--sky { background: var(--sky); }
+.neo-ground--a { background: var(--ga, var(--sage)); }
+.neo-ground--b { background: var(--gb, var(--sky)); }
 .neo-ground--paper { background: var(--paper); }
 
 /* ── in-page nav ── */

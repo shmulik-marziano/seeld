@@ -1,4 +1,4 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageNeo from '@/components/neo/InsurancePageNeo';
 import { Home, Shield, Flame } from "lucide-react";
 
 const coverageTypes = [
@@ -63,7 +63,7 @@ const articles = [
 
 const HomeInsurance = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageNeo
       heroIcon={Home}
       heroIconColor="#b45309"
       heroCategory="ביטוח דירה"

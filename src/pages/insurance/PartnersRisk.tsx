@@ -1,9 +1,9 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageNeo from '@/components/neo/InsurancePageNeo';
 import { Users, Shield, Building } from 'lucide-react';
 
 const PartnersRisk = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageNeo
       heroIcon={Users}
       heroIconColor="#b91c1c"
       heroCategory="ריסק שותפים"

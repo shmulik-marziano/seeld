@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import type { CSSProperties } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CompanyLogos from "@/components/CompanyLogos";
@@ -10,6 +11,7 @@ import { BrandIcon } from "@/components/brand/BrandIcon";
 import { FigureText, type InsurancePageProps } from "@/components/InsurancePageTemplate";
 import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import { useActiveSection } from "./useActiveSection";
+import { themeFor } from "./themes";
 import "./neo.css";
 
 const FONT_HREF = "https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@700;900&display=swap";
@@ -61,7 +63,9 @@ export default function InsurancePageNeo(props: InsurancePageProps) {
     enrollmentTitle,
     enrollmentDescription,
     enrollmentFormId = "contact-form",
+    extraContentAfterKeyPoints,
   } = props;
+  const { pathname } = useLocation();
 
   useFaqJsonLd(faqItems);
 
@@ -92,7 +96,7 @@ export default function InsurancePageNeo(props: InsurancePageProps) {
   const next = () => ++chapter;
 
   return (
-    <div className="neo min-h-screen" dir="rtl">
+    <div className="neo min-h-screen" dir="rtl" style={themeFor(pathname) as CSSProperties}>
       <Header />
 
       <main>
@@ -165,6 +169,8 @@ export default function InsurancePageNeo(props: InsurancePageProps) {
           </section>
         )}
 
+        {extraContentAfterKeyPoints}
+
         {/* GUIDE: paper ground */}
         {hasGuide && (
           <section id="guide" className="neo-ground neo-ground--paper scroll-mt-32">
@@ -183,7 +189,7 @@ export default function InsurancePageNeo(props: InsurancePageProps) {
 
         {/* COVERAGE: sage ground */}
         {hasCoverage && (
-          <section id="coverage" className="neo-ground neo-ground--sage scroll-mt-32">
+          <section id="coverage" className="neo-ground neo-ground--a scroll-mt-32">
             <div className="neo-wrap">
               <Chapter n={next()} title={coverageTitle} sub={coverageSubtitle} />
               <div className="neo-narrow" style={{ maxWidth: 920 }}>
@@ -220,7 +226,7 @@ export default function InsurancePageNeo(props: InsurancePageProps) {
 
         {/* FAQ: sky ground */}
         {hasFaq && (
-          <section id="faq" className="neo-ground neo-ground--sky scroll-mt-32">
+          <section id="faq" className="neo-ground neo-ground--b scroll-mt-32">
             <div className="neo-wrap">
               <Chapter n={next()} title="שאלות נפוצות" />
               <div className="neo-narrow neo-faq">

@@ -1,9 +1,9 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageNeo from '@/components/neo/InsurancePageNeo';
 import { Home, Shield, Heart } from 'lucide-react';
 
 const MortgageInsurance = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageNeo
       heroIcon={Home}
       heroIconColor="#b91c1c"
       heroCategory="ביטוח משכנתא"

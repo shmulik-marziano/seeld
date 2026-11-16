@@ -1,9 +1,9 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageNeo from '@/components/neo/InsurancePageNeo';
 import { HeartPulse, Shield, Baby, Users, Award } from 'lucide-react';
 
 const CriticalIllness = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageNeo
       heroIcon={HeartPulse}
       heroIconColor="#b91c1c"
       heroCategory="מחלות קשות"

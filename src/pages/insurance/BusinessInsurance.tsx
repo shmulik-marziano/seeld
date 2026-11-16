@@ -1,9 +1,9 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageNeo from '@/components/neo/InsurancePageNeo';
 import { Building2, Shield, Users } from 'lucide-react';
 
 const BusinessInsurance = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageNeo
       heroIcon={Building2}
       heroIconColor="#b91c1c"
       heroCategory="ביטוח עסקים"

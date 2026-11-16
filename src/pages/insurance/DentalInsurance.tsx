@@ -1,9 +1,9 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageNeo from '@/components/neo/InsurancePageNeo';
 import { Smile, Shield, Star } from 'lucide-react';
 
 const DentalInsurance = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageNeo
       heroIcon={Smile}
       heroIconColor="#b91c1c"
       heroCategory="ביטוח שיניים"

@@ -1,9 +1,9 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageNeo from '@/components/neo/InsurancePageNeo';
 import { Briefcase, Shield, Heart } from 'lucide-react';
 
 const DisabilityInsurance = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageNeo
       heroIcon={Briefcase}
       heroIconColor="#b91c1c"
       heroCategory="ביטוח אובדן כושר עבודה"

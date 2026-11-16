@@ -1,9 +1,9 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageNeo from '@/components/neo/InsurancePageNeo';
 import { Users, Globe, Shield } from 'lucide-react';
 
 const ForeignWorkersInsurance = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageNeo
       heroIcon={Globe}
       heroIconColor="#b91c1c"
       heroCategory="ביטוח עובדים זרים ותיירים"

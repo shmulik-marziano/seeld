@@ -1,4 +1,4 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageNeo from '@/components/neo/InsurancePageNeo';
 import { Plane, Heart, Briefcase } from 'lucide-react';
 import travelLogos from '@/assets/travel-insurance-logos.jpeg';
 
@@ -39,7 +39,7 @@ const TravelInsurance = () => {
   );
 
   return (
-    <InsurancePageTemplate
+    <InsurancePageNeo
       heroIcon={Plane}
       heroIconColor="#b91c1c"
       heroCategory="ביטוח נסיעות"

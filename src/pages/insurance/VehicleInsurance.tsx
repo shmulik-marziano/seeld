@@ -1,4 +1,4 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageNeo from '@/components/neo/InsurancePageNeo';
 import { Car, Shield, FileText } from "lucide-react";
 
 const coverageTypes = [
@@ -76,7 +76,7 @@ const articles = [
 
 const VehicleInsurance = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageNeo
       heroIcon={Car}
       heroIconColor="#003D30"
       heroCategory="ביטוח רכב"
