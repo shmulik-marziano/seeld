@@ -9,6 +9,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { toast } from "sonner";
 import { CheckCircle, Send, Car, Home, Briefcase, Plane, Heart, Shield } from "lucide-react";
+import type { Database } from "@/integrations/supabase/site-types";
+
+type LeadInsert = Database["public"]["Tables"]["insurance_leads"]["Insert"];
 
 export type InsuranceType = 'vehicle' | 'home' | 'business' | 'travel' | 'dental' |
   'disability' | 'foreign_workers' | 'nursing' | 'health' | 
@@ -381,7 +384,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
       
       const { error } = await supabase
         .from('insurance_leads')
-        .insert([leadData as any]);
+        .insert([leadData as LeadInsert]);
       
       if (error) throw error;
       

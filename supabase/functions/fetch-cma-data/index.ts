@@ -22,11 +22,18 @@ const corsHeaders = {
 
 // ─── Data Source Configuration ───────────────────────────────────────
 
+interface CkanRecord {
+  [key: string]: unknown;
+  FUND_CLASSIFICATION?: string;
+  SPECIALIZATION?: string;
+  TARGET_POPULATION?: string;
+}
+
 interface DataSource {
   name: string;
   source: "gemelnet" | "pensyanet" | "bituachnet";
   resourceId: string;
-  mapProductType: (record: Record<string, any>) => string;
+  mapProductType: (record: CkanRecord) => string;
 }
 
 const DATA_SOURCES: DataSource[] = [
@@ -86,7 +93,7 @@ function describeError(err: unknown): string {
 async function fetchAllRecords(
   resourceId: string,
   latestPeriodOnly: boolean = true
-): Promise<{ records: Record<string, any>[]; total: number; latestPeriod: number | null }> {
+): Promise<{ records: CkanRecord[]; total: number; latestPeriod: number | null }> {
   // Find the latest report period. NOTE: data.gov.il blocks the
   // datastore_search_sql endpoint with 403, so asking datastore_search for a
   // single record sorted by period descending is the only way to read it. When
@@ -109,7 +116,7 @@ async function fetchAllRecords(
   }
 
   // Fetch records (latest period or all)
-  const allRecords: Record<string, any>[] = [];
+  const allRecords: CkanRecord[] = [];
   let offset = 0;
   let total = 0;
 
@@ -154,9 +161,9 @@ async function fetchAllRecords(
 // ─── Map CKAN Record to DB Row ──────────────────────────────────────
 
 function mapRecord(
-  record: Record<string, any>,
+  record: CkanRecord,
   ds: DataSource
-): Record<string, any> {
+): Record<string, unknown> {
   return {
     fund_id: String(record.FUND_ID || record._id || ""),
     fund_name: record.FUND_NAME || "",
@@ -203,7 +210,7 @@ function mapRecord(
   };
 }
 
-function parseNum(v: any): number | null {
+function parseNum(v: unknown): number | null {
   if (v === null || v === undefined || v === "" || v === "NULL") return null;
   const n = Number(v);
   return isNaN(n) ? null : n;
@@ -213,7 +220,7 @@ function parseNum(v: any): number | null {
 
 async function upsertBatch(
   supabase: ReturnType<typeof createClient>,
-  rows: Record<string, any>[]
+  rows: Record<string, unknown>[]
 ): Promise<number> {
   if (rows.length === 0) return 0;
 

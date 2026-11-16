@@ -35,13 +35,13 @@ export function CustomerModal({ open, onClose, customer }: Props) {
     }
   }, [open, customer]);
 
-  const set = (key: keyof Customer, value: any) => {
+  const set = (key: keyof Customer, value: unknown) => {
     const next = { ...form, [key]: value };
     if (key === 'healthFund') next.supplementaryInsurance = undefined;
     setForm(next);
   };
 
-  const setExt = (key: keyof CustomerExtendedData, value: any) => {
+  const setExt = (key: keyof CustomerExtendedData, value: unknown) => {
     setForm(prev => ({
       ...prev,
       extendedData: { ...(prev.extendedData || {}), [key]: value === '' ? undefined : value },
@@ -76,8 +76,8 @@ export function CustomerModal({ open, onClose, customer }: Props) {
         toast.success('לקוח נוצר');
       }
       onClose();
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה');
+    } catch (err: unknown) {
+      toast.error((err as { message?: string }).message || 'שגיאה');
     }
   };
 

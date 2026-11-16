@@ -60,12 +60,12 @@ interface ParseResult {
   error?: string;
 }
 
-function cleanStr(v: any): string | undefined {
+function cleanStr(v: unknown): string | undefined {
   if (v === null || v === undefined || v === '') return undefined;
   return String(v).trim();
 }
 
-function cleanNum(v: any): number | undefined {
+function cleanNum(v: unknown): number | undefined {
   if (v === null || v === undefined || v === '') return undefined;
   const n = Number(String(v).replace(/[₪,%\s]/g, ''));
   return isNaN(n) ? undefined : n;
@@ -84,7 +84,7 @@ function detectFileType(fileName: string, sheetNames: string[]): string {
   return 'unknown';
 }
 
-function findHeaderRow(sheet: any[][], headerKeywords: string[]): number {
+function findHeaderRow(sheet: unknown[][], headerKeywords: string[]): number {
   for (let i = 0; i < Math.min(sheet.length, 15); i++) {
     const row = sheet[i];
     if (!row) continue;
@@ -95,7 +95,7 @@ function findHeaderRow(sheet: any[][], headerKeywords: string[]): number {
   return 0;
 }
 
-function getColumnMap(headerRow: any[]): Record<string, number> {
+function getColumnMap(headerRow: unknown[]): Record<string, number> {
   const map: Record<string, number> = {};
   headerRow.forEach((cell, idx) => {
     if (cell) map[String(cell).trim()] = idx;
@@ -103,7 +103,7 @@ function getColumnMap(headerRow: any[]): Record<string, number> {
   return map;
 }
 
-function getVal(row: any[], colMap: Record<string, number>, ...keys: string[]): any {
+function getVal(row: unknown[], colMap: Record<string, number>, ...keys: string[]): unknown {
   for (const key of keys) {
     for (const [col, idx] of Object.entries(colMap)) {
       if (col.includes(key) || key.includes(col)) {
@@ -116,14 +116,18 @@ function getVal(row: any[], colMap: Record<string, number>, ...keys: string[]): 
 
 // ===== XML Clearing House Parser =====
 
-function getElementText(parent: any, tagName: string): string | undefined {
+interface XmlParent {
+  querySelector(selector: string): { textContent: string | null } | null;
+}
+
+function getElementText(parent: XmlParent, tagName: string): string | undefined {
   const el = parent.querySelector(tagName);
   if (!el) return undefined;
   const text = el.textContent?.trim();
   return text || undefined;
 }
 
-function getElementNum(parent: any, tagName: string): number | undefined {
+function getElementNum(parent: XmlParent, tagName: string): number | undefined {
   const text = getElementText(parent, tagName);
   if (!text) return undefined;
   const n = parseFloat(text.replace(/[,\s]/g, ''));
@@ -452,7 +456,7 @@ function parseClearingHouseXml(xmlContent: string): ParseResult {
 
 function parseCustomersExport(wb: XLSX.WorkBook): ParseResult {
   const sheetName = wb.SheetNames.find(s => s === 'לקוחות') || wb.SheetNames[0];
-  const sheet = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: 1 }) as any[][];
+  const sheet = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: 1 }) as unknown[][];
   
   const headerIdx = findHeaderRow(sheet, ['שם פרטי', 'שם משפחה', 'מזהה', 'טלפון']);
   const colMap = getColumnMap(sheet[headerIdx] || []);
@@ -518,7 +522,7 @@ function detectHbCategory(productType: string | undefined): ParsedProduct['categ
 
 function parseHbResults(wb: XLSX.WorkBook): ParseResult {
   const sheetName = wb.SheetNames.find(s => s === 'תיק ביטוחי') || wb.SheetNames[0];
-  const sheet = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: 1 }) as any[][];
+  const sheet = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: 1 }) as unknown[][];
 
   const headerIdx = findHeaderRow(sheet, ['תעודת זהות', 'ענף', 'חברה', 'פוליסה']);
   const colMap = getColumnMap(sheet[headerIdx] || []);
@@ -598,7 +602,7 @@ function parseAgentReport(wb: XLSX.WorkBook): ParseResult {
   const customer: ParsedCustomer = {};
   
   if (customerSheetName) {
-    const sheet = XLSX.utils.sheet_to_json(wb.Sheets[customerSheetName], { header: 1 }) as any[][];
+    const sheet = XLSX.utils.sheet_to_json(wb.Sheets[customerSheetName], { header: 1 }) as unknown[][];
     const kvMap: Record<string, string> = {};
     for (const row of sheet) {
       if (row && row[0] && row[1]) {
@@ -642,7 +646,7 @@ function parseAgentReport(wb: XLSX.WorkBook): ParseResult {
   
   const savingsSheetName = wb.SheetNames.find(s => s.includes('חיסכון') || s.includes('כסף'));
   if (savingsSheetName) {
-    const sheet = XLSX.utils.sheet_to_json(wb.Sheets[savingsSheetName], { header: 1 }) as any[][];
+    const sheet = XLSX.utils.sheet_to_json(wb.Sheets[savingsSheetName], { header: 1 }) as unknown[][];
     const headerIdx = findHeaderRow(sheet, ['חברה', 'מוצר', 'פוליסה']);
     if (headerIdx >= 0) {
       const colMap = getColumnMap(sheet[headerIdx]);
@@ -670,7 +674,7 @@ function parseAgentReport(wb: XLSX.WorkBook): ParseResult {
   
   const insuranceSheetName = wb.SheetNames.find(s => s.includes('ביטוח') && !s.includes('תיק'));
   if (insuranceSheetName) {
-    const sheet = XLSX.utils.sheet_to_json(wb.Sheets[insuranceSheetName], { header: 1 }) as any[][];
+    const sheet = XLSX.utils.sheet_to_json(wb.Sheets[insuranceSheetName], { header: 1 }) as unknown[][];
     const headerIdx = findHeaderRow(sheet, ['חברה', 'מוצר', 'פוליסה', 'פרמיה']);
     if (headerIdx >= 0) {
       const colMap = getColumnMap(sheet[headerIdx]);

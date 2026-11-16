@@ -50,7 +50,7 @@ interface RecRow {
   recommended_investment_track: string | null; recommended_investment_track_custom: string | null;
   recommended_risk_level: string | null;
   cost_before: number | null; cost_after: number | null;
-  execution_status: string | null; product_snapshot: any;
+  execution_status: string | null; product_snapshot: unknown;
   recommendation_type: string | null; based_on: string | null;
 }
 
@@ -139,7 +139,7 @@ export default function ClientPortalPage() {
     if (blockStatus.blocked) { setState('blocked'); return; }
 
     (async () => {
-      let summaryData: any = null;
+      let summaryData: unknown = null;
 
       // First try by link_token (works for /portal/:token and /client/:id?token=xxx)
       const { data: byToken } = await supabase
@@ -237,7 +237,7 @@ export default function ClientPortalPage() {
 
     // Initialize decisions from existing data
     const initDecisions: Record<string, RecDecision> = {};
-    (rRes.data || []).forEach((r: any) => {
+    (rRes.data || []).forEach((r) => {
       if (['מאשר', 'רוצה לחשוב', 'לא מעוניין'].includes(r.decision_status)) {
         initDecisions[r.id] = { status: r.decision_status as DecisionChoice, note: r.customer_note || '' };
       }

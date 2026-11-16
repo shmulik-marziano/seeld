@@ -70,8 +70,8 @@ export function AgentInvitations() {
       toast.success(`הזמנה נשלחה ל-${email}`);
       setEmail('');
       fetchData();
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה בשליחת ההזמנה');
+    } catch (err: unknown) {
+      toast.error((err as { message?: string }).message || 'שגיאה בשליחת ההזמנה');
     } finally {
       setSending(false);
     }
@@ -103,8 +103,8 @@ export function AgentInvitations() {
       if (res.data?.error) throw new Error(res.data.error);
       toast.success(`הזמנה נשלחה מחדש ל-${inv.email}`);
       fetchData();
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה בשליחה מחדש');
+    } catch (err: unknown) {
+      toast.error((err as { message?: string }).message || 'שגיאה בשליחה מחדש');
     } finally {
       setSending(false);
     }
@@ -116,8 +116,8 @@ export function AgentInvitations() {
       if (error) throw error;
       toast.success(`${agentName} הוסר מהסוכנות`);
       fetchData();
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה בהסרת הסוכן');
+    } catch (err: unknown) {
+      toast.error((err as { message?: string }).message || 'שגיאה בהסרת הסוכן');
     }
   };
 

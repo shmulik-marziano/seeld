@@ -1,14 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useApp } from '@/contexts/AppContext';
+import type { CustomerStatus } from '@/types';
+import type { Tables, TablesUpdate } from '@/integrations/supabase/types';
 import { ExecutionSummary, ExecutionSummaryItem, ExecutionSummaryStatus, ItemExecutionStatus } from '@/types/execution-summary';
 
-function mapSummary(row: any): ExecutionSummary {
+function mapSummary(row: Tables<'execution_summaries'>): ExecutionSummary {
   return {
     id: row.id,
     agentId: row.agent_id,
     customerId: row.customer_id,
-    status: row.status,
+    status: row.status as ExecutionSummaryStatus,
     summaryNumber: row.summary_number,
     version: row.version,
     generalNotes: row.general_notes || undefined,
@@ -17,7 +19,7 @@ function mapSummary(row: any): ExecutionSummary {
   };
 }
 
-function mapItem(row: any): ExecutionSummaryItem {
+function mapItem(row: Tables<'execution_summary_items'>): ExecutionSummaryItem {
   return {
     id: row.id,
     executionSummaryId: row.execution_summary_id,
@@ -26,7 +28,7 @@ function mapItem(row: any): ExecutionSummaryItem {
     executedAsRecommended: row.executed_as_recommended,
     recommendedTextSnapshot: row.recommended_text_snapshot || undefined,
     actualExecutionText: row.actual_execution_text || undefined,
-    executionStatus: row.execution_status,
+    executionStatus: row.execution_status as ItemExecutionStatus,
     executionNotes: row.execution_notes || undefined,
     executedAt: row.executed_at || undefined,
     executedBy: row.executed_by || undefined,
@@ -83,7 +85,7 @@ export function useExecutionSummaries(customerId?: string) {
       status: 'draft',
       summary_number: summaryNumber,
       version: 1,
-    } as any).select().single();
+    }).select().single();
     if (error) throw error;
 
     const summary = mapSummary(row);
@@ -113,7 +115,7 @@ export function useExecutionSummaries(customerId?: string) {
     if (itemInserts.length > 0) {
       const { data: insertedItems } = await supabase
         .from('execution_summary_items')
-        .insert(itemInserts as any)
+        .insert(itemInserts)
         .select();
       if (insertedItems) {
         setItems(prev => [...prev, ...insertedItems.map(mapItem)]);
@@ -123,14 +125,14 @@ export function useExecutionSummaries(customerId?: string) {
     setSummaries(prev => [summary, ...prev]);
 
     // Update customer status
-    await updateCustomer(custId, { status: 'בביצוע' as any });
+    await updateCustomer(custId, { status: 'בביצוע' });
     await logActivity('סיכום ביצועים נוצר', `סיכום #${summaryNumber}`, 'הצלחה', { customerId: custId });
 
     return summary;
   }, [agentId, summaries, data.recommendations, data.products, logActivity, updateCustomer]);
 
   const updateSummary = useCallback(async (id: string, updates: Partial<{ status: ExecutionSummaryStatus; generalNotes: string }>) => {
-    const dbData: Record<string, any> = {};
+    const dbData: TablesUpdate<'execution_summaries'> = {};
     if (updates.status !== undefined) dbData.status = updates.status;
     if (updates.generalNotes !== undefined) dbData.general_notes = updates.generalNotes || null;
 
@@ -151,7 +153,7 @@ export function useExecutionSummaries(customerId?: string) {
     executedAt: string;
     executedBy: string;
   }>) => {
-    const dbData: Record<string, any> = {};
+    const dbData: TablesUpdate<'execution_summary_items'> = {};
     if (updates.executedAsRecommended !== undefined) dbData.executed_as_recommended = updates.executedAsRecommended;
     if (updates.actualExecutionText !== undefined) dbData.actual_execution_text = updates.actualExecutionText || null;
     if (updates.executionStatus !== undefined) dbData.execution_status = updates.executionStatus;
@@ -186,7 +188,7 @@ export function useExecutionSummaries(customerId?: string) {
     }
 
     let summaryStatus: ExecutionSummaryStatus;
-    let customerStatus: string;
+    let customerStatus: CustomerStatus;
 
     if (allFullyExecuted) {
       summaryStatus = 'completed';
@@ -200,7 +202,7 @@ export function useExecutionSummaries(customerId?: string) {
     }
 
     await updateSummary(summaryId, { status: summaryStatus });
-    await updateCustomer(custId, { status: customerStatus as any });
+    await updateCustomer(custId, { status: customerStatus });
     await logActivity(
       allFullyExecuted ? 'סיכום ביצועים הושלם' : 'סיכום ביצועים נשמר',
       `סטטוס: ${summaryStatus}`,

@@ -1,10 +1,11 @@
-import jsPDF from 'jspdf';
+import jsPDF, { type TextOptionsLight } from 'jspdf';
 import 'jspdf-autotable';
+import type { UserOptions } from 'jspdf-autotable';
 
 // Extend jsPDF type for autotable
 declare module 'jspdf' {
   interface jsPDF {
-    autoTable: (options: any) => jsPDF;
+    autoTable: (options: UserOptions) => jsPDF;
     lastAutoTable: { finalY: number };
   }
 }
@@ -23,7 +24,7 @@ function reverseHebrew(text: string): string {
 }
 
 // Simple approach: use Unicode-aware text positioning
-function addRtlText(doc: jsPDF, text: string, x: number, y: number, options?: any) {
+function addRtlText(doc: jsPDF, text: string, x: number, y: number, options?: TextOptionsLight) {
   doc.text(text, x, y, { align: 'right', ...options });
 }
 

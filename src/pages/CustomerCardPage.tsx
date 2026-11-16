@@ -479,7 +479,7 @@ export default function CustomerCardPage() {
           recommendations: recs.map(r => ({
             ...r,
             product: products.find(p => p.id === r.linkedProductId),
-          })) as any,
+          })),
           agencyName: agency?.name,
         })}
       />

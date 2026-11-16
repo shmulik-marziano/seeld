@@ -65,9 +65,9 @@ serve(async (req) => {
       }
     }
 
-    const customer = job.pdage_customers as any;
-    const category = job.deficiency_categories as any;
-    const deficiency = job.deficiency_bank as any;
+    const customer = job.pdage_customers as { full_name?: string; id_number?: string } | null;
+    const category = job.deficiency_categories as { name?: string } | null;
+    const deficiency = job.deficiency_bank as { title?: string; description?: string } | null;
     const deficiencyText = deficiency
       ? `${deficiency.title} — ${deficiency.description || ""}`
       : job.free_text_deficiency || "לא צוין";
@@ -150,7 +150,7 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
     );
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error("process-correction error:", e);
 
     // Try to update job status to failed

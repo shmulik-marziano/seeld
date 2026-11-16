@@ -9,6 +9,10 @@ import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
+type PdageCustomerRef = { full_name?: string | null; id_number?: string | null } | null;
+type PdageCategoryRef = { name: string } | null;
+type PdageDeficiencyRef = { title: string; description?: string | null } | null;
+
 const statusMap: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
   pending: { label: 'ממתין', variant: 'outline' },
   processing: { label: 'בעיבוד', variant: 'secondary' },
@@ -67,9 +71,9 @@ export default function PDageHistory() {
       ) : (
         <div className="space-y-2">
           {jobs.map(job => {
-            const customer = job.pdage_customers as any;
-            const category = job.deficiency_categories as any;
-            const deficiency = job.deficiency_bank as any;
+            const customer = job.pdage_customers as unknown as PdageCustomerRef;
+            const category = job.deficiency_categories as unknown as PdageCategoryRef;
+            const deficiency = job.deficiency_bank as unknown as PdageDeficiencyRef;
             const st = statusMap[job.status] || statusMap.pending;
 
             return (

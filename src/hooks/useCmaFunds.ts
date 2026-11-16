@@ -205,7 +205,7 @@ async function fetchFundRows(): Promise<CmaFundRow[]> {
   }
 
   const { data, error } = await supabase
-    .from('cma_funds_latest' as any)
+    .from('cma_funds_latest' as never)
     .select(FUND_COLUMNS)
     .order('total_assets', { ascending: false });
 
@@ -249,7 +249,7 @@ async function fetchSyncStatus(): Promise<SyncStatus> {
     .limit(1);
 
   const { count } = await supabase
-    .from('cma_funds_latest' as any)
+    .from('cma_funds_latest' as never)
     .select('*', { count: 'exact', head: true });
 
   return {
@@ -261,7 +261,7 @@ async function fetchSyncStatus(): Promise<SyncStatus> {
 
 // ─── Trigger manual sync ────────────────────────────────────────────
 
-async function triggerSync(source?: string): Promise<any> {
+async function triggerSync(source?: string): Promise<unknown> {
   const { data, error } = await supabase.functions.invoke('fetch-cma-data', {
     body: source ? { source } : {},
   });

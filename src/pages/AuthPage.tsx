@@ -80,7 +80,7 @@ export default function AuthPage() {
     acceptTerms: false,
   });
 
-  const setField = (key: string, value: any) =>
+  const setField = (key: string, value: string | boolean) =>
     setSignupForm(prev => ({ ...prev, [key]: value }));
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -91,8 +91,8 @@ export default function AuthPage() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       toast.success('התחברת בהצלחה');
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה בהתחברות');
+    } catch (err: unknown) {
+      toast.error((err as { message?: string }).message || 'שגיאה בהתחברות');
     } finally {
       setLoading(false);
     }
@@ -157,8 +157,8 @@ export default function AuthPage() {
 
       toast.success(pendingInvitation ? 'הצטרפת לסוכנות בהצלחה!' : 'נרשמת בהצלחה! מועבר למערכת...');
       window.location.href = '/app/dashboard';
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה בהרשמה');
+    } catch (err: unknown) {
+      toast.error((err as { message?: string }).message || 'שגיאה בהרשמה');
     } finally {
       setLoading(false);
     }
@@ -221,8 +221,8 @@ export default function AuthPage() {
 
       toast.success(invitation ? 'הצטרפת לסוכנות בהצלחה!' : 'הפרופיל נוצר בהצלחה!');
       window.location.href = '/app/dashboard';
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה ביצירת פרופיל');
+    } catch (err: unknown) {
+      toast.error((err as { message?: string }).message || 'שגיאה ביצירת פרופיל');
     } finally {
       setLoading(false);
     }
@@ -238,8 +238,8 @@ export default function AuthPage() {
         },
       });
       if (error) throw error;
-    } catch (err: any) {
-      toast.error(err.message || 'שגיאה בהתחברות עם Google');
+    } catch (err: unknown) {
+      toast.error((err as { message?: string }).message || 'שגיאה בהתחברות עם Google');
       setGoogleLoading(false);
     }
   };
