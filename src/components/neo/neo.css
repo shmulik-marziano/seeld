@@ -41,8 +41,8 @@
 .neo-chapter { text-align: center; margin-bottom: clamp(40px, 6vw, 72px); }
 
 /* ── frames ── */
-.neo-frame { position: relative; margin: clamp(10px, 2vw, 20px); border: 1px solid var(--gold); }
-.neo-arch { border: 1.5px solid var(--gold); border-radius: 999px 999px 8px 8px; padding: 12px; background: var(--ga, var(--butter)); }
+.neo-frame { position: relative; margin: clamp(10px, 2vw, 20px); border: 1px solid var(--gold); background: var(--gh, var(--paper)); }
+.neo-arch { border: 1.5px solid var(--gold); border-radius: 999px 999px 8px 8px; padding: 12px; background: var(--paper); }
 .neo-arch > div { border-radius: 999px 999px 4px 4px; overflow: hidden; border: 1px solid var(--gold-soft); }
 
 /* ── actions ── */

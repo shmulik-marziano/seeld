@@ -1,5 +1,5 @@
-// Chapter-ground colours from the SEELD-BOOKS kit. Each insurance topic gets its own pair
-// (coverage ground, FAQ ground), so pages rotate through the palette from topic to topic.
+// Ground colours from the SEELD-BOOKS kit. Each insurance topic gets its own triple
+// (hero, coverage, FAQ grounds), so pages rotate through the palette from topic to topic.
 export const GROUND = {
   paper: "#FBF6EB",
   cream: "#F8EFD8",
@@ -10,18 +10,20 @@ export const GROUND = {
   mist: "#E8EDED",
 } as const;
 
-type Pair = readonly [a: string, b: string];
+type Triple = readonly [hero: string, coverage: string, faq: string];
 
-const PAIRS: Pair[] = [
-  [GROUND.sage, GROUND.sky],
-  [GROUND.sky, GROUND.blush],
-  [GROUND.butter, GROUND.sage],
-  [GROUND.blush, GROUND.butter],
-  [GROUND.mist, GROUND.sky],
-  [GROUND.cream, GROUND.sage],
+// The three cover colours of the book kit (sage, sky, butter) in every order: each page gets one
+// per big block (hero, coverage, FAQ), so the three never repeat on a page and rotate between pages.
+const TRIPLES: Triple[] = [
+  [GROUND.sage, GROUND.sky, GROUND.butter],
+  [GROUND.sky, GROUND.butter, GROUND.sage],
+  [GROUND.butter, GROUND.sage, GROUND.sky],
+  [GROUND.sage, GROUND.butter, GROUND.sky],
+  [GROUND.sky, GROUND.sage, GROUND.butter],
+  [GROUND.butter, GROUND.sky, GROUND.sage],
 ];
 
-/** Route slug (last path segment) -> pair index. Unknown slugs fall back to the first pair. */
+/** Route slug (last path segment) -> triple index. Unknown slugs fall back to the first triple. */
 const BY_SLUG: Record<string, number> = {
   life: 0,
   mortgage: 1,
@@ -41,8 +43,8 @@ const BY_SLUG: Record<string, number> = {
   "foreign-workers": 2,
 };
 
-export function themeFor(pathname: string): { "--ga": string; "--gb": string } {
+export function themeFor(pathname: string): { "--gh": string; "--ga": string; "--gb": string } {
   const slug = pathname.replace(/\/$/, "").split("/").pop() ?? "";
-  const [a, b] = PAIRS[BY_SLUG[slug] ?? 0];
-  return { "--ga": a, "--gb": b };
+  const [h, a, b] = TRIPLES[BY_SLUG[slug] ?? 0];
+  return { "--gh": h, "--ga": a, "--gb": b };
 }
