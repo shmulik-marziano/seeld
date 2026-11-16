@@ -1,4 +1,4 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageInst from '@/components/inst/InsurancePageInst';
 import { Shield, Heart, Users, Baby, FileCheck, AlertTriangle } from "lucide-react";
 
 const coverageCategories = [
@@ -92,7 +92,7 @@ const articles = [
 
 const LifeInsurance = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageInst
       heroIcon={Heart}
       heroIconColor="#b91c1c"
       heroCategory="ביטוחי חיים"
