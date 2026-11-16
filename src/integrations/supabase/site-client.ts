@@ -14,3 +14,7 @@ import type { Database } from './site-types';
 export const SITE_SUPABASE_URL = SUPABASE_URL;
 
 export const siteSupabase = supabase as unknown as SupabaseClient<Database>;
+
+// Handle for tables that are in neither generated Database type (e.g. customer_messages).
+// Same single connection as above; results are untyped, so callers cast rows to their own interface.
+export const untypedSupabase = supabase as unknown as SupabaseClient<any, 'public', any>; // eslint-disable-line @typescript-eslint/no-explicit-any -- tables outside the generated types

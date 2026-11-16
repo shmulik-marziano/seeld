@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { siteSupabase } from "@/integrations/supabase/site-client";
+import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Illustration } from "@/components/brand/Illustration";
@@ -43,14 +43,14 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
 
   const fetchFiles = async () => {
     try {
-      const { data, error } = await siteSupabase
+      const { data, error } = await supabase
         .from("source_files")
         .select("*")
         .eq("customer_id", customerId)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setFiles((data || []) as SourceFile[]);
+      setFiles((data || []) as unknown as SourceFile[]);
     } catch {
       toast.error("טעינת המסמכים לא הצליחה. נסו לרענן את העמוד.");
     } finally {
