@@ -1,86 +1,109 @@
-/* Neo-minimal system (sample: /insurance/life). Scoped under .neo so nothing leaks into the
-   rest of the site. Same brand tokens (green / ivory / sage, Rubik 400+700) — less ornament:
-   large type, hairlines instead of cards, generous space, no hidden-until-scroll content. */
+/* Neo-minimal system, sample page /insurance/life. Scoped under .neo so nothing leaks.
+   Language taken from the SEELD-BOOKS print kit: warm paper + pastel "chapter" grounds,
+   deep navy ink, gold hairlines and diamond dividers, arch frames, serif display type
+   (Frank Ruhl Libre) over a plain sans body. Ornament is thin and sparing; whitespace does the work. */
 .neo {
-  --neo-ink: #003D30;
-  --neo-body: #24483C;
-  --neo-muted: #476356;
-  --neo-line: #CCD6CC;
-  --neo-paper: #FAF7EF;
-  --neo-tint: #EEF2EC;
-  --neo-accent: #BD582D;       /* rust, used only as a 6px mark */
-  --neo-gutter: clamp(20px, 5vw, 64px);
-  background: var(--neo-paper);
-  color: var(--neo-body);
+  --ink: #1F3354;            /* headings, primary actions */
+  --body: #2A3A57;           /* paragraph text on paper (10:1) */
+  --muted: #4E5B73;          /* secondary text (6.4:1 on paper) */
+  --gold: #A8803A;           /* hairlines, diamonds, frames: decorative only */
+  --gold-text: #75561F;      /* gold for readable small text (6.3:1 on paper) */
+  --gold-soft: #D0B788;
+  --paper: #FBF6EB;
+  --cream: #F8EFD8;
+  --butter: #F4E6BF;
+  --sage: #E2E9D3;
+  --sky: #D6E2EF;
+  --blush: #F2DBD6;
+  --mist: #E8EDED;
+  --gutter: clamp(20px, 5vw, 64px);
+  --serif: "Frank Ruhl Libre", "David Libre", Georgia, serif;
+  background: var(--paper);
+  color: var(--body);
 }
-.neo-wrap { max-width: 1240px; margin-inline: auto; padding-inline: var(--neo-gutter); }
+.neo-wrap { max-width: 1160px; margin-inline: auto; padding-inline: var(--gutter); }
+.neo-narrow { max-width: 760px; margin-inline: auto; }
 
-/* type */
-.neo-eyebrow { display: inline-flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; letter-spacing: .02em; color: var(--neo-muted); }
-.neo-eyebrow::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--neo-accent); }
-.neo-h1 { font-weight: 700; color: var(--neo-ink); font-size: clamp(44px, 7.2vw, 96px); line-height: 1.02; letter-spacing: -0.025em; text-wrap: balance; }
-.neo-h1 em { font-style: normal; color: var(--neo-muted); }
-.neo-lead { font-size: clamp(19px, 1.7vw, 23px); line-height: 1.65; color: var(--neo-ink); max-width: 36em; text-wrap: pretty; }
-.neo-h2 { font-weight: 700; color: var(--neo-ink); font-size: clamp(30px, 3.6vw, 46px); line-height: 1.1; letter-spacing: -0.02em; }
-.neo-num { font-variant-numeric: tabular-nums; font-size: 14px; font-weight: 700; color: var(--neo-muted); letter-spacing: .04em; }
-.neo-text { font-size: 18px; line-height: 1.85; color: var(--neo-body); max-width: 40em; text-wrap: pretty; }
+/* ── type ── */
+.neo-eyebrow { display: block; font-size: 14px; font-weight: 700; letter-spacing: .22em; color: var(--gold-text); }
+.neo-h1 { font-family: var(--serif); font-weight: 900; color: var(--ink); font-size: clamp(44px, 7vw, 92px); line-height: 1.04; letter-spacing: -.01em; text-wrap: balance; }
+.neo-h1 span { color: var(--gold-text) !important; }          /* titles pass an accent span; re-ink it in gold */
+.neo-lead { font-size: clamp(19px, 1.7vw, 22px); line-height: 1.75; color: var(--ink); text-wrap: pretty; }
+.neo-h2 { font-family: var(--serif); font-weight: 700; color: var(--ink); font-size: clamp(34px, 4.4vw, 56px); line-height: 1.12; text-wrap: balance; }
+.neo-text { font-size: 18px; line-height: 1.9; color: var(--body); text-wrap: pretty; }
 
-/* actions */
-.neo-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 28px; font-size: 17px; font-weight: 700; border-radius: 999px; border: 1.5px solid var(--neo-ink); transition: background-color .2s, color .2s, transform .2s; }
-.neo-btn--solid { background: var(--neo-ink); color: var(--neo-paper); }
-.neo-btn--solid:hover { background: #002B22; }
-.neo-btn--ghost { background: transparent; color: var(--neo-ink); }
-.neo-btn--ghost:hover { background: var(--neo-ink); color: var(--neo-paper); }
+/* gold diamond divider (hairline · diamond · hairline) */
+.neo-rule { display: flex; align-items: center; justify-content: center; gap: 10px; margin-block: 22px; }
+.neo-rule::before, .neo-rule::after { content: ""; height: 1px; width: clamp(40px, 8vw, 88px); background: var(--gold); }
+.neo-rule i { width: 8px; height: 8px; background: var(--gold); transform: rotate(45deg); }
+
+/* chapter heading block: "פרק ראשון" / title / divider */
+.neo-chapter { text-align: center; margin-bottom: clamp(40px, 6vw, 72px); }
+
+/* ── frames ── */
+.neo-frame { position: relative; margin: clamp(10px, 2vw, 20px); border: 1px solid var(--gold); }
+.neo-arch { border: 1.5px solid var(--gold); border-radius: 999px 999px 8px 8px; padding: 12px; background: var(--butter); }
+.neo-arch > div { border-radius: 999px 999px 4px 4px; overflow: hidden; border: 1px solid var(--gold-soft); }
+
+/* ── actions ── */
+.neo-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 30px; font-size: 17px; font-weight: 700; border-radius: 6px; border: 1.5px solid var(--ink); transition: background-color .2s, color .2s, transform .2s; }
+.neo-btn--solid { background: var(--ink); color: var(--paper); }
+.neo-btn--solid:hover { background: #15243D; }
+.neo-btn--onDark { background: var(--gold-soft); color: var(--ink); border-color: var(--gold-soft); }
+.neo-btn--onDark:hover { background: transparent; color: var(--gold-soft); }
 .neo-btn:active { transform: translateY(1px); }
-.neo-btn--onDark { background: var(--neo-paper); color: var(--neo-ink); border-color: var(--neo-paper); }
-.neo-btn--onDark:hover { background: transparent; color: var(--neo-paper); }
-.neo-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; color: var(--neo-ink); background-image: linear-gradient(currentColor, currentColor); background-size: 100% 1.5px; background-position: 0 100%; background-repeat: no-repeat; padding-bottom: 2px; transition: background-size .25s; }
+.neo-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; color: var(--ink); background-image: linear-gradient(var(--gold), var(--gold)); background-size: 100% 1.5px; background-position: 0 100%; background-repeat: no-repeat; padding-bottom: 2px; transition: background-size .25s; }
 .neo-link:hover { background-size: 40% 1.5px; background-position: 100% 100%; }
-.neo a:focus-visible, .neo button:focus-visible, .neo summary:focus-visible { outline: 2px solid var(--neo-ink); outline-offset: 4px; border-radius: 4px; }
+.neo a:focus-visible, .neo button:focus-visible, .neo summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 4px; }
 
-/* section rhythm */
-.neo-section { padding-block: clamp(72px, 10vw, 144px); border-top: 1px solid var(--neo-line); }
-.neo-split { display: grid; gap: 32px; }
-@media (min-width: 1024px) { .neo-split { grid-template-columns: 4fr 8fr; gap: 64px; } .neo-sticky { position: sticky; top: 140px; align-self: start; } }
+/* ── pill badge with circled Hebrew letter (the book's section marker) ── */
+.neo-badge { display: inline-flex; align-items: center; gap: 10px; }
+.neo-badge b { display: inline-flex; align-items: center; min-height: 36px; padding: 0 18px; border: 1px solid var(--gold); border-radius: 999px; color: var(--gold-text); font-size: 16px; font-weight: 700; background: var(--paper); }
+.neo-badge span { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--ink); color: var(--paper); font-family: var(--serif); font-size: 17px; font-weight: 700; }
 
-/* in-page nav */
-.neo-nav { position: sticky; top: 64px; z-index: 40; background: color-mix(in srgb, var(--neo-paper) 92%, transparent); backdrop-filter: blur(8px); border-block: 1px solid var(--neo-line); }
-.neo-nav ul { display: flex; gap: clamp(20px, 4vw, 48px); overflow-x: auto; scrollbar-width: none; }
-.neo-nav a { display: inline-flex; align-items: center; min-height: 48px; white-space: nowrap; font-size: 15px; font-weight: 700; color: var(--neo-muted); border-bottom: 2px solid transparent; transition: color .2s, border-color .2s; }
-.neo-nav a:hover, .neo-nav a[aria-current="true"] { color: var(--neo-ink); border-bottom-color: var(--neo-ink); }
+/* ── section grounds: one pastel per chapter ── */
+.neo-ground { padding-block: clamp(80px, 10vw, 150px); }
+.neo-ground--cream { background: var(--cream); }
+.neo-ground--sage { background: var(--sage); }
+.neo-ground--sky { background: var(--sky); }
+.neo-ground--paper { background: var(--paper); }
 
-/* key facts: numbered columns divided by hairlines */
-.neo-facts { display: grid; }
-@media (min-width: 768px) { .neo-facts { grid-template-columns: repeat(3, 1fr); } .neo-fact + .neo-fact { border-inline-start: 1px solid var(--neo-line); } .neo-fact { padding-inline: clamp(20px, 3vw, 40px); } .neo-fact:first-child { padding-inline-start: 0; } .neo-fact:last-child { padding-inline-end: 0; } }
-.neo-fact { padding-block: 28px; border-top: 1px solid var(--neo-line); }
-@media (min-width: 768px) { .neo-fact { border-top: 0; } }
-.neo-fact h3 { margin-top: 14px; font-size: 22px; font-weight: 700; color: var(--neo-ink); line-height: 1.25; }
-.neo-fact p { margin-top: 10px; font-size: 16px; line-height: 1.7; color: var(--neo-body); }
+/* ── in-page nav ── */
+.neo-nav { position: sticky; top: 64px; z-index: 40; background: color-mix(in srgb, var(--paper) 94%, transparent); backdrop-filter: blur(8px); border-block: 1px solid var(--gold-soft); }
+.neo-nav ul { display: flex; justify-content: center; gap: clamp(20px, 4vw, 48px); overflow-x: auto; scrollbar-width: none; }
+.neo-nav a { display: inline-flex; align-items: center; min-height: 48px; white-space: nowrap; font-size: 15px; font-weight: 700; color: var(--muted); border-bottom: 2px solid transparent; transition: color .2s, border-color .2s; }
+.neo-nav a:hover, .neo-nav a[aria-current="true"] { color: var(--ink); border-bottom-color: var(--gold); }
 
-/* coverage: ruled rows, no cards */
-.neo-cat + .neo-cat { margin-top: 56px; }
-.neo-cat h3 { font-size: 14px; font-weight: 700; letter-spacing: .04em; color: var(--neo-muted); margin-bottom: 8px; }
-.neo-row { display: grid; gap: 6px; padding-block: 22px; border-top: 1px solid var(--neo-line); }
-.neo-row:last-child { border-bottom: 1px solid var(--neo-line); }
+/* ── key points: ruled columns, pill + letter, no cards ── */
+.neo-facts { display: grid; border-top: 1px solid var(--gold-soft); }
+@media (min-width: 768px) { .neo-facts { grid-template-columns: repeat(3, 1fr); } .neo-fact + .neo-fact { border-inline-start: 1px solid var(--gold-soft); } }
+.neo-fact { padding: clamp(24px, 3vw, 40px); }
+.neo-fact p { margin-top: 16px; font-size: 17px; line-height: 1.8; color: var(--body); }
+
+/* ── coverage: ruled rows ── */
+.neo-cat + .neo-cat { margin-top: 48px; }
+.neo-cat h3 { font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--gold-text); text-align: center; margin-bottom: 16px; }
+.neo-row { display: grid; gap: 6px; padding-block: 22px; border-top: 1px solid var(--gold); }
+.neo-row:last-child { border-bottom: 1px solid var(--gold); }
 @media (min-width: 768px) { .neo-row { grid-template-columns: 5fr 7fr; gap: 32px; align-items: baseline; } }
-.neo-row h4 { font-size: 20px; font-weight: 700; color: var(--neo-ink); }
-.neo-row p { font-size: 16px; line-height: 1.7; }
+.neo-row h4 { font-family: var(--serif); font-size: 24px; font-weight: 700; color: var(--ink); }
+.neo-row p { font-size: 17px; line-height: 1.75; }
 
-/* faq: native details, +/- marker, answers stay in the DOM */
-.neo-faq details { border-top: 1px solid var(--neo-line); }
-.neo-faq details:last-child { border-bottom: 1px solid var(--neo-line); }
-.neo-faq summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 64px; padding-block: 22px; font-size: clamp(18px, 1.8vw, 22px); font-weight: 700; color: var(--neo-ink); }
+/* ── faq: native details ── */
+.neo-faq details { border-top: 1px solid var(--gold); }
+.neo-faq details:last-child { border-bottom: 1px solid var(--gold); }
+.neo-faq summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 68px; padding-block: 22px; font-family: var(--serif); font-size: clamp(21px, 2vw, 26px); font-weight: 700; color: var(--ink); }
 .neo-faq summary::-webkit-details-marker { display: none; }
-.neo-faq summary::after { content: "+"; flex: none; width: 36px; height: 36px; display: grid; place-items: center; border: 1.5px solid var(--neo-ink); border-radius: 50%; font-size: 22px; font-weight: 400; line-height: 1; transition: background-color .2s, color .2s; }
-.neo-faq details[open] summary::after { content: "−"; background: var(--neo-ink); color: var(--neo-paper); }
-.neo-faq details > div { padding-bottom: 28px; max-width: 42em; font-size: 17px; line-height: 1.8; }
+.neo-faq summary::after { content: "+"; flex: none; width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid var(--gold); border-radius: 50%; color: var(--gold-text); font-family: sans-serif; font-size: 22px; line-height: 1; transition: background-color .2s, color .2s; }
+.neo-faq details[open] summary::after { content: "−"; background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.neo-faq details > div { padding-bottom: 28px; font-size: 18px; line-height: 1.85; }
 
-/* closing band */
-.neo-band { background: var(--neo-ink); color: var(--neo-paper); }
-.neo-band .neo-h2 { color: var(--neo-paper); font-size: clamp(36px, 5vw, 68px); }
-.neo-band p { color: #A9C4A5; }
+/* ── closing band: deep ink with gold frame ── */
+.neo-band { background: var(--ink); color: var(--paper); padding: clamp(10px, 2vw, 20px); }
+.neo-band-inner { border: 1px solid var(--gold); padding-block: clamp(64px, 9vw, 128px); }
+.neo-band .neo-h2 { color: var(--paper); }
+.neo-band p { color: #D5DCE8; }
+.neo-band .neo-rule::before, .neo-band .neo-rule::after, .neo-band .neo-rule i { background: var(--gold-soft); }
+.neo-band .neo-eyebrow { color: var(--gold-soft); }
 
 @media (prefers-reduced-motion: reduce) { .neo * { transition: none !important; } }
-
-/* page titles often pass an accented <span> (red on the old template): quiet it to the muted ink */
-.neo-h1 span { color: var(--neo-muted) !important; }
