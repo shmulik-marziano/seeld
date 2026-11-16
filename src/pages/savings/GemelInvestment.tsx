@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import AnswerSummary from "@/components/AnswerSummary";
 import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -149,6 +150,7 @@ const GemelInvestment = () => {
               <h1 className="dna-display leading-[1.15] max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                 קופת גמל להשקעה
               </h1>
+              <AnswerSummary />
               <p className="mt-5 text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
                 מוצר השקעה ייחודי המשלב את היתרונות של קופת גמל עם גמישות של חשבון השקעות: נזילות מלאה ודחיית מס.
               </p>

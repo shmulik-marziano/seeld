@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import AnswerSummary from "@/components/AnswerSummary";
 import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -149,6 +150,7 @@ const PensionFunds = () => {
               <h1 className="dna-display leading-[1.15] max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
                 קרנות פנסיה
               </h1>
+              <AnswerSummary />
               <p className="mt-5 text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
                 קרן פנסיה היא מכשיר חיסכון ארוך טווח שמבטיח לכם הכנסה חודשית קבועה לאחר הפרישה. עם הייעוץ שלנו, תבחרו את הקרן שמתאימה בדיוק לכם.
               </p>
