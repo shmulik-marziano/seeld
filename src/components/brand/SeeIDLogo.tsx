@@ -8,8 +8,8 @@ interface SeeIDLogoProps {
   textColor?: string;
 }
 
-const FULL_RATIO = 382.39 / 150;
-const ICON_RATIO = 240 / 390;
+const FULL_RATIO = 1500 / 625;
+const ICON_RATIO = 440 / 625;
 
 /**
  * Brand mark for app surfaces (personal area, agent tools, chat).
