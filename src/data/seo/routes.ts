@@ -42,7 +42,7 @@ export const ROUTES: RouteEntry[] = [
     path: "/", kind: "home", group: "about", changefreq: "weekly", priority: 1.0,
     title: "שילד ביטוח ופיננסים | הביטוח והכסף שלכם, בתמונה ברורה",
     description: "שילד היא סוכנות ביטוח ופיננסים. ממפים את תיק הביטוח, הפנסיה והחיסכון, מבינים את האפשרויות ומלווים את הביצוע. בדיקת תיק 360 ופגישת היכרות.",
-    related: ["/portfolio-review", "/insurances", "/savings", "/return-tables"],
+    related: ["/portfolio-review", "/report", "/insurances", "/savings", "/return-tables"],
   }),
   r({
     path: "/about", kind: "info", group: "about", changefreq: "monthly", priority: 0.8, pageType: "AboutPage",
@@ -55,6 +55,12 @@ export const ROUTES: RouteEntry[] = [
     title: "בדיקת תיק 360 | תמונה מסודרת של הביטוחים והחסכונות | SEELD",
     description: "בדיקת תיק 360: מיפוי כל הביטוחים והחסכונות, בחינת הצרכים ומסמך החלטות עם המלצות מנומקות. משאירים פרטים וחוזרים אליכם.",
     related: ["/rights-extraction", "/insurances", "/savings", "/contact"],
+  }),
+  r({
+    path: "/report", kind: "service", group: "about", changefreq: "monthly", priority: 0.7,
+    title: "הפקת דוח אישי | קבצי מסלקה והר הביטוח בדוח מידע אחד | SEELD",
+    description: "הפקת דוח אישי: מעלים קובץ מסלקה וקובץ הר הביטוח, והמידע מסודר בדוח אחד בעיצוב שילד. דוח מידע, לא ייעוץ. התהליך בהכנה.",
+    related: ["/portfolio-review", "/savings/financial-planning", "/contact", "/privacy"],
   }),
   r({
     path: "/contact", kind: "info", group: "about", changefreq: "monthly", priority: 0.8, pageType: "ContactPage",

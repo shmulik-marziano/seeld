@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { useActiveSection } from "@/components/inst/useActiveSection";
 import { REGULATORY_LINE } from "@/lib/brand";
-import { PASTELS, topicFor, type ArtName, type Pastel } from "./topics";
+import { PASTELS, art3Of, art4Of, topicFor, type ArtName, type Pastel } from "./topics";
 import { SdSpot } from "./SdSpot";
 import { dividerFor, spotAt, type SpotName } from "./spots";
 import type { Story } from "@/data/stories";
@@ -78,9 +78,31 @@ export function SdProgress() {
   return <div className="sd-progress" aria-hidden="true"><div ref={ref} /></div>;
 }
 
-/** Spot that floats on a hero stage (gives the illustration a second layer). Place inside .sd-stage. */
+/**
+ * Spots that orbit a hero stage (place inside .sd-stage): five spots at varied sizes and tilts around the arch,
+ * mirrored left and right so the composition stays balanced. `name` (the page's own hero spot) goes first.
+ */
 export function SdStageSpot({ art, index = 0, name }: { art: ArtName | string; index?: number; name?: SpotName }) {
-  return <SdSpot name={name ?? spotAt(art, index)} size={120} className="sd-stage-spot" />;
+  const pool = [name ?? spotAt(art, index), spotAt(art, index + 1), spotAt(art, index + 2), spotAt(art, index + 3), spotAt(art, index + 4)];
+  const extra: SpotName[] = ["olive-sapling", "seal-check", "pen", "shield-blue", "key-brass"];
+  const names = [...new Set<SpotName>([...pool, ...extra])].slice(0, 5);
+  const sizes = [124, 100, 92, 132, 108];
+  return (
+    <>
+      {names.map((n, i) => (
+        <SdSpot key={n} name={n} size={sizes[i]} className={`sd-orb sd-orb-${i + 1}`} style={{ ["--w" as string]: `${sizes[i]}px` }} />
+      ))}
+    </>
+  );
+}
+
+/** Large decorative illustration layer that sits behind (and partly under) the content of a band, hero or closing block. */
+export function SdArtLayer({ name, className = "sd-band-art" }: { name: ArtName | string; className?: string }) {
+  return (
+    <span className={className} aria-hidden="true">
+      <SdPic name={name} sizes="(min-width:1024px) 640px, 92vw" />
+    </span>
+  );
 }
 
 const hash = (str: string) => [...str].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
@@ -109,28 +131,41 @@ export const SdIcon = ({ name, size = 40 }: { name: string; size?: number }) => 
   <img src={`/art/icons/${name}.svg`} alt="" width={size} height={size} loading="lazy" />
 );
 
-/** Bands whose border to the previous band gets a divider spot by default, and the side it sits on. */
-const DIVIDER_IDS: Record<string, "start" | "end"> = { guide: "start", process: "end", faq: "start" };
+/** Band ids that get a fixed background illustration slot (others rotate through the topic arts). */
+const BAND_ART: Record<string, "art" | "art2" | "art3" | "art4" | "art5"> = {
+  moment: "art5", overview: "art3", guide: "art", checks: "art2", coverage: "art2", "product-types": "art2", process: "art", faq: "art5",
+};
 
 /**
  * Full-bleed colour strip. `tone` is one of the kit pastels, "cream" or "white".
- * Optional: `spot` (corner spot, off unless given), `divider` (spot that crosses the top border; true/false or a name).
- * The divider defaults from the page topic (by path).
+ * Every band carries three decorative layers (all aria-hidden, pointer-events none, lazy): a big topic illustration behind
+ * the text (opacity .15, fades toward the text), a ghost spot on the opposite side, and a spot that bleeds across the seam
+ * to the previous band. Left/right alternate between bands (see .sd-band:nth-of-type in sd.css).
+ * Props: `art` (a name, or false for no background illustration), `spot` (small corner spot, opt-in),
+ * `divider` (seam spot: true/false or a name).
  */
-export function SdBand({ tone, id, children, className = "", spot, divider }: {
+export function SdBand({ tone, id, children, className = "", spot, divider, art: artProp }: {
   tone: Pastel | "cream" | "white"; id?: string; children: ReactNode; className?: string;
-  spot?: SpotName | false; divider?: boolean | SpotName;
+  spot?: SpotName | false; divider?: boolean | SpotName; art?: ArtName | false;
 }) {
   const { pathname } = useLocation();
-  const art = topicFor(pathname).art;
+  const topic = topicFor(pathname);
+  const art = topic.art;
   const h = hash(`${id ?? ""}${tone}`);
   const cornerName = spot || null; // corner spots are opt-in: a spot with no tie to the content looked orphaned
-  const side = id ? DIVIDER_IDS[id] : undefined;
-  const divName = divider === false || (divider === undefined && !side) ? null : typeof divider === "string" ? divider : dividerFor(art, side === "end" ? 0 : side === "start" ? 1 : h);
+  const k = h % 3;
+  const seamName: SpotName | null = divider === false ? null : typeof divider === "string" ? divider : k === 0 ? dividerFor(art, h >> 2) : spotAt(art, h >> 3);
+  const seamSize = k === 0 || typeof divider === "string" ? 190 : 120;
+  const slot = id ? BAND_ART[id] : undefined;
+  const pool: ArtName[] = [art3Of(topic), topic.art5 ?? art, topic.art2, art4Of(topic)];
+  const layerArt: ArtName | false = artProp === false ? false : artProp ?? (slot === "art" ? topic.art : slot === "art2" ? topic.art2 : slot === "art3" ? art3Of(topic) : slot === "art4" ? art4Of(topic) : slot === "art5" ? (topic.art5 ?? art3Of(topic)) : pool[h % pool.length]);
+  const ghost = spotAt(layerArt || art, (h >> 5) + 2);
   return (
     <section id={id} className={`sd-band sd-band-${tone} scroll-mt-28 ${className}`}>
-      {divName && (
-        <span className={`sd-band-div ${side === "end" ? "is-end" : ""}`} aria-hidden="true"><SdSpot name={divName} size={170} /></span>
+      {layerArt && <SdArtLayer name={layerArt} />}
+      {layerArt && <span className="sd-band-ghost" aria-hidden="true"><SdSpot name={ghost} size={240} /></span>}
+      {seamName && (
+        <span className="sd-band-div" aria-hidden="true"><SdSpot name={seamName} size={seamSize} /></span>
       )}
       {cornerName && <span className="sd-band-corner" aria-hidden="true"><SdSpot name={cornerName} size={72} /></span>}
       {children}
@@ -154,12 +189,17 @@ export function SdSubnav({ sections }: { sections: { id: string; label: string }
 
 /** The emotional moment: illustration + what stands in front of the reader. Goes inside an SdBand. */
 export function SdStory({ story, art, flip, spots }: { story: Story; art: ArtName; flip?: boolean; spots?: readonly [SpotName, SpotName] }) {
+  const named = [spots?.[0] ?? spotAt(art, 1), spots?.[1] ?? spotAt(art, 2)];
+  const more = [spotAt(art, 0), spotAt(art, 3), spotAt(art, 4)].filter((n) => !named.includes(n));
+  const four = [...named, ...more].slice(0, 4);
   return (
     <div className="sd-wrap sd-story-grid">
       <div className={`sd-story-art sd-reveal ${flip ? "lg:order-2" : ""}`} aria-hidden="true">
-        <SdPic name={art} sizes="(min-width:1024px) 480px, 90vw" />
-        <SdSpot name={spots?.[0] ?? spotAt(art, 1)} size={96} className="sd-float sd-float-a" />
-        <SdSpot name={spots?.[1] ?? spotAt(art, 2)} size={80} className="sd-float sd-float-b" />
+        <SdPic name={art} sizes="(min-width:1024px) 560px, 96vw" />
+        <SdSpot name={four[0]} size={104} className="sd-float sd-float-a" />
+        <SdSpot name={four[1]} size={88} className="sd-float sd-float-b" />
+        {four[2] && <SdSpot name={four[2]} size={72} className="sd-float sd-float-c" />}
+        {four[3] && <SdSpot name={four[3]} size={80} className="sd-float sd-float-d" />}
       </div>
       <div>
         <span className="sd-eyebrow">{story.kicker}</span>
@@ -198,8 +238,10 @@ export function SdProcess({ art, steps = DEFAULT_STEPS, title = "איך זה ע�
         </ol>
       </div>
       <div className="sd-story-art sd-reveal" aria-hidden="true">
-        <SdPic name={art} sizes="(min-width:1024px) 440px, 90vw" />
-        <SdSpot name={spot ?? spotAt(art, 3)} size={88} className="sd-float sd-float-a" />
+        <SdPic name={art} sizes="(min-width:1024px) 500px, 96vw" />
+        <SdSpot name={spot ?? spotAt(art, 3)} size={96} className="sd-float sd-float-a" />
+        <SdSpot name={spotAt(art, 1)} size={80} className="sd-float sd-float-b" />
+        <SdSpot name={spotAt(art, 2)} size={68} className="sd-float sd-float-d" />
       </div>
     </div>
   );
@@ -207,8 +249,13 @@ export function SdProcess({ art, steps = DEFAULT_STEPS, title = "איך זה ע�
 
 /** Closing navy block: invitation, direct contact, illustration, and the form (children). */
 export function SdContact({ id = "contact-form", title = "נשמח להכיר את התיק שלכם", text, art, spot, children }: { id?: string; title?: string; text?: string; art: ArtName; spot?: SpotName; children: ReactNode }) {
+  const { pathname } = useLocation();
+  const heroArt = topicFor(pathname).art;
   return (
     <section id={id} className="sd-contact scroll-mt-20">
+      <SdArtLayer name={heroArt} className="sd-band-art sd-contact-layer" />
+      <span className="sd-band-ghost sd-contact-ghost" aria-hidden="true"><SdSpot name={spotAt(art, 1)} size={220} /></span>
+      <span className="sd-band-div sd-contact-seam" aria-hidden="true"><SdSpot name={spotAt(art, 0)} size={110} /></span>
       <div className="sd-wrap sd-contact-grid">
         <div>
           <h2 className="sd-h2">{title}</h2>

@@ -10,6 +10,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
+  FileText,
   LayoutDashboard,
   Target,
   CheckSquare,
@@ -182,6 +183,20 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
         {/* Bottom section */}
         <div className="border-t border-white/10 px-2 py-2">
+          {/* Personal report (shell) */}
+          <Link
+            to="/app/report"
+            title={sidebarCollapsed ? 'דוח אישי' : undefined}
+            className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 mb-1 transition-colors ${
+              isActive('/app/report')
+                ? 'app-nav-active bg-white/10 text-white font-bold'
+                : 'text-[#D6E3EF] hover:bg-white/[0.06] hover:text-white'
+            } ${sidebarCollapsed ? 'justify-center' : ''}`}
+          >
+            <FileText className="w-4 h-4 flex-shrink-0 text-[#C5D3E2]" />
+            {!sidebarCollapsed && <span className="text-sm">דוח אישי</span>}
+          </Link>
+
           {/* Settings */}
           <Link
             to="/app/settings"

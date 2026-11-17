@@ -1,8 +1,10 @@
 import type { CSSProperties, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { SdBand, SdCrumbs, SdPic, SdProgress, SdStageSpot, tintStyle } from "./primitives";
+import { SdArtLayer, SdBand, SdCrumbs, SdPic, SdProgress, SdStageSpot, tintStyle } from "./primitives";
 import { PASTELS, type ArtName, type Pastel, type Topic } from "./topics";
+import { SdSpot } from "./SdSpot";
+import { spotAt } from "./spots";
 import "./sd.css";
 import "./pub.css";
 
@@ -123,6 +125,7 @@ export function PubHero({
 }) {
   return (
     <section className={`sd-hero ${compact ? "sd-pub-compact" : ""}`} style={tintStyle(tint)}>
+      <SdArtLayer name={companionArt(art)} className="sd-hero-art" />
       <div className="sd-wrap sd-hero-grid">
         <div className="sd-hero-copy">
           <SdCrumbs items={crumbs} />
@@ -165,7 +168,9 @@ export function PubClose({
 }) {
   return (
     <section className="sd-contact sd-pub-close no-print">
-      <div className="sd-wrap sd-pub-close-grid">
+      <SdArtLayer name={companionArt(art)} className="sd-band-art sd-contact-layer" />
+      <span className="sd-band-ghost sd-contact-ghost" aria-hidden="true"><SdSpot name={spotAt(art, 1)} size={220} /></span>
+      <span className="sd-band-div sd-contact-seam" aria-hidden="true"><SdSpot name={spotAt(art, 0)} size={110} /></span>      <div className="sd-wrap sd-pub-close-grid">
         <div>
           <h2 className="sd-h2">{title}</h2>
           <p className="sd-text mt-4">{text}</p>

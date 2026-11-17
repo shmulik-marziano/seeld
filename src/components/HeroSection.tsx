@@ -1,12 +1,22 @@
+import { Link } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { SdPic, SdIcon, useSdFont } from "@/components/sd/primitives";
 import "@/components/sd/sd.css";
 import "@/components/sd/home.css";
+import "@/components/sd/home-entry.css";
 
 /**
- * Home hero in the kit design: serif headline, one warm sentence, two actions, and a composition
- * of three kit illustrations. Followed by the trust strip. Only used by pages/Index.tsx.
+ * Home hero in the kit design: serif headline, one warm sentence and three clear entrances
+ * (insurance portfolio check, financial planning, personal report), a calm always-visible
+ * entrance for existing clients, and a composition of kit illustrations. Followed by the trust strip.
+ * Only used by pages/Index.tsx.
  */
+
+const doors = [
+  { icon: "shield", t: "בדיקת התיק הביטוחי", s: "מיפוי הביטוחים שיש לכם היום, ושיחה על מה שחסר או כפול.", to: "/portfolio-review", tone: "sky" },
+  { icon: "compass", t: "תכנון פיננסי", s: "פנסיה, חיסכון ומטרות לעתיד, בתמונה אחת ובקצב שלכם.", to: "/savings/financial-planning", tone: "butter" },
+  { icon: "document", t: "הפקת דוח אישי", s: "מעלים קובץ מסלקה והר הביטוח, ומקבלים דוח מידע מסודר.", to: "/report", tone: "ink", badge: "בקרוב" },
+];
 
 const trust = [
   { icon: "search", t: "השוואה בין החברות", s: "בכל חברות הביטוח בשוק" },
@@ -25,14 +35,28 @@ const HeroSection = () => {
           <div className="sd-hero-copy">
             <span className="sd-eyebrow">סוכנות ביטוח ופיננסים עצמאית</span>
             <h1 className="sd-h1 mt-5">הכסף, הנכסים והביטוח שלכם, בתמונה ברורה.</h1>
-            <p className="sd-lead mt-6">
-              אנחנו עוברים איתכם על מה שיש היום, משווים בין כל החברות בשוק, ומסדרים את התיק בשקט ובלי לחץ.
+            <p className="sd-lead mt-5">
+              שלוש דרכים להתחיל, ואתם בוחרים את הקצב. אנחנו מסדרים את המידע ומסבירים אותו בשקט ובלי לחץ.
             </p>
-            <div className="sd-home-ctas">
-              <a href="#contact-form" className="sd-btn">קבלו הצעה{arrow}</a>
-              <a href="#portfolio-review" className="sd-home-btn-ghost">בדיקת תיק 360{arrow}</a>
+
+            <nav className="sd-home-doors" aria-label="שלוש דרכים להתחיל">
+              {doors.map((d) => (
+                <Link key={d.to} to={d.to} className={`sd-home-door is-${d.tone}`}>
+                  <span className="sd-home-door-ic" aria-hidden="true"><SdIcon name={d.icon} size={40} /></span>
+                  <span className="sd-home-door-tx">
+                    <b>{d.t}{d.badge && <i className="sd-home-soon">{d.badge}</i>}</b>
+                    <small>{d.s}</small>
+                  </span>
+                  <span className="sd-home-door-go" aria-hidden="true">{arrow}</span>
+                </Link>
+              ))}
+            </nav>
+
+            <div className="sd-home-client" role="group" aria-label="כניסה ללקוחות">
+              <SdIcon name="lock" size={28} />
+              <span>כבר לקוחות שלנו?</span>
+              <Link to="/personal-area" className="sd-home-client-btn">כניסה ללקוחות{arrow}</Link>
             </div>
-            <p className="sd-home-fine">שיחת היכרות בלי התחייבות מצידכם.</p>
           </div>
 
           <div className="sd-home-stage" aria-hidden="true">

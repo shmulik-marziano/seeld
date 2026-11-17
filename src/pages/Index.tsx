@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { loadSiteSupabase } from "@/integrations/supabase/lazy";
 import "@/components/sd/sd.css";
 import "@/components/sd/home.css";
+import "@/components/sd/home-entry.css";
 
 // ── Data ──
 
@@ -128,10 +129,29 @@ const faqItems = [
   },
 ];
 
+// The self-service report: three plain steps. Honest about its state: the process opens after the design phase.
+const reportSteps = [
+  { n: "1", t: "מעלים את הקבצים", p: "קובץ מסלקה וקובץ הר הביטוח, כפי שהורדתם מהאתרים הרשמיים." },
+  { n: "2", t: "אנחנו מארגנים את המידע", p: "הנתונים מסודרים בדוח אחד בעיצוב שילד, לקריאה ולשמירה." },
+  { n: "3", t: "ממשיכים רק אם תרצו", p: "הצטרפות לסוכנות, חתימה על מינוי סוכן והזמנת מידע ממבטחים דרך הסוכנות." },
+];
+
+// Many easy ways in, for people who arrive from a search or from an AI answer. Each is one small step.
+const startWays = [
+  { icon: "email", t: "שאלה קצרה", p: "שם וטלפון, ונחזור אליכם.", to: "#contact-form", tone: "sky", soon: false },
+  { icon: "document", t: "הפקת דוח אישי", p: "מסלקה והר הביטוח בדוח מידע אחד.", to: "/report", tone: "lavender", soon: true },
+  { icon: "shield", t: "בדיקת התיק הביטוחי", p: "מה יש לכם היום ומה כדאי לבדוק.", to: "/portfolio-review", tone: "sage", soon: false },
+  { icon: "compass", t: "תכנון פיננסי", p: "פנסיה, חיסכון ומטרות, בתמונה אחת.", to: "/savings/financial-planning", tone: "butter", soon: false },
+  { icon: "handshake", t: "מינוי סוכן", p: "הצטרפות לסוכנות וחתימה על טופס מינוי.", to: "/report#join", tone: "rose", soon: true },
+  { icon: "search", t: "הזמנת מידע ממבטחים", p: "בקשה למידע על המוצרים שלכם דרך הסוכנות.", to: "/report#order", tone: "sky", soon: true },
+];
+
 const sections = [
+  { id: "report", label: "דוח אישי" },
   { id: "topics", label: "מה אתם מחפשים" },
   { id: "products", label: "כל המוצרים" },
   { id: "process", label: "איך עובדים איתנו" },
+  { id: "start", label: "דרכים להתחיל" },
   { id: "about", label: "מי אנחנו" },
   { id: "portfolio-review", label: "בדיקת תיק 360" },
   { id: "faq", label: "שאלות נפוצות" },
@@ -208,6 +228,33 @@ const Index = () => {
         <HeroSection />
 
         <SdSubnav sections={sections} />
+
+        {/* 0. THE SELF-SERVICE REPORT */}
+        <SdBand tone="lavender" id="report">
+          <div className="sd-wrap sd-home-report">
+            <div>
+              <h2 className="sd-h2">דוח אישי מהמסלקה ומהר הביטוח</h2>
+              <p className="sd-lead mt-4">
+                מעלים את הקבצים שהורדתם, ואנחנו מארגנים את המידע בדוח אחד מסודר בעיצוב שילד. הדוח הוא דוח מידע, לא ייעוץ.
+              </p>
+              <ol className="sd-home-rsteps">
+                {reportSteps.map((x) => (
+                  <li key={x.n} className="sd-reveal">
+                    <span className="sd-home-rnum" aria-hidden="true">{x.n}</span>
+                    <div><h3>{x.t}</h3><p>{x.p}</p></div>
+                  </li>
+                ))}
+              </ol>
+              <div className="sd-home-ctas">
+                <Link to="/report" className="sd-btn">איך זה עובד{arrow}</Link>
+                <span className="sd-home-soon-note"><i className="sd-home-soon">בקרוב</i> התהליך בהכנה. אפשר להשאיר פרטים ונעדכן כשיפתח.</span>
+              </div>
+            </div>
+            <div className="sd-home-report-art sd-reveal hidden md:block" aria-hidden="true">
+              <SdPic name="10-financial-planning" sizes="(min-width:1024px) 440px, 80vw" />
+            </div>
+          </div>
+        </SdBand>
 
         {/* 1. WHAT ARE YOU LOOKING FOR */}
         <SdBand tone="sage" id="topics">
@@ -286,6 +333,36 @@ const Index = () => {
         {/* 3. HOW WE WORK */}
         <SdBand tone="butter" id="process">
           <SdProcess art="11-claims-service" steps={steps} title="איך עובדים איתנו" />
+        </SdBand>
+
+        {/* 3b. MANY WAYS IN */}
+        <SdBand tone="sage" id="start">
+          <div className="sd-wrap">
+            <div className="sd-band-head">
+              <h2 className="sd-h2">אפשר להתחיל מכל מקום</h2>
+              <p className="sd-lead">בוחרים צעד אחד קטן. אף אחד מהם לא מחייב, וכולם מובילים לאותו צוות.</p>
+            </div>
+            <ul className="sd-home-ways">
+              {startWays.map((w) => {
+                const inner = (
+                  <>
+                    <span className="sd-home-way-ic" aria-hidden="true"><SdIcon name={w.icon} size={44} /></span>
+                    <b>{w.t}{w.soon && <i className="sd-home-soon">בקרוב</i>}</b>
+                    <small>{w.p}</small>
+                    <span className="sd-home-way-go" aria-hidden="true">{arrow}</span>
+                  </>
+                );
+                return (
+                  <li key={w.t} className={`sd-home-way is-${w.tone}`}>
+                    {w.to.startsWith("#") ? <a href={w.to}>{inner}</a> : <Link to={w.to}>{inner}</Link>}
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="sd-home-client-line">
+              כבר לקוחות שלנו? <Link to="/personal-area" className="sd-link">כניסה לאזור האישי{arrow}</Link>
+            </p>
+          </div>
         </SdBand>
 
         {/* 4. WHO WE ARE */}

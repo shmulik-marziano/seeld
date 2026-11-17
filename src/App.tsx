@@ -167,6 +167,8 @@ const AgencySettingsPage = lazy(() => import("@/pages/AgencySettingsPage"));
 const FileImportPage = lazy(() => import("@/pages/FileImportPage"));
 const LeadsPage = lazy(() => import("@/pages/LeadsPage"));
 const HelpPage = lazy(() => import("@/pages/HelpPage"));
+const ReportApp = lazy(() => import("@/pages/app/ReportApp"));
+const ReportPublic = lazy(() => import("@/pages/Report"));
 const AuthPage = lazy(() => import("@/pages/AuthPage"));
 
 // ── Platform Tools (lazy) ──
@@ -423,6 +425,7 @@ const App = () => (
 
                 {/* Agent Landing Page */}
                 <Route path="/agents" element={<AgentLandingPage />} />
+                <Route path="/report" element={<ReportPublic />} />
 
                 {/* ═══ AGENT APP ROUTES (/app/*) ═══ */}
                 <Route path="/portal/:token" element={<ClientPortalPage />} />
@@ -446,6 +449,7 @@ const App = () => (
                   <Route path="/app/file-import" element={<FileImportPage />} />
                   <Route path="/app/leads" element={<LeadsPage />} />
                   <Route path="/app/help" element={<HelpPage />} />
+                  <Route path="/app/report" element={<ReportApp />} />
                   <Route path="/app/settings" element={<AgencySettingsPage />} />
 
                   {/* ═══ PLATFORM TOOLS ═══ */}

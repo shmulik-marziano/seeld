@@ -8,6 +8,7 @@ import {
   SERVICE_LINKS,
   SOCIAL_LINKS,
 } from "@/components/sd/chromeData";
+import { SOCIAL_ICONS } from "@/components/sd/SocialIcons";
 import RelatedPages from "@/components/RelatedPages";
 import "@/components/sd/chrome.css";
 
@@ -111,11 +112,16 @@ const Footer = () => {
               <li><Link to="/agents">כניסה לסוכנים</Link></li>
             </ul>
             <ul className="sd-chrome-foot-social" aria-label="רשתות חברתיות">
-              {SOCIAL_LINKS.map((s) => (
-                <li key={s.label}>
-                  <a href={s.href} target="_blank" rel="noopener noreferrer">{s.label}</a>
-                </li>
-              ))}
+              {SOCIAL_LINKS.map((s) => {
+                const brand = SOCIAL_ICONS[s.label];
+                return (
+                  <li key={s.label}>
+                    <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={brand?.label ?? s.label} title={brand?.label ?? s.label}>
+                      {brand ? brand.icon : s.label}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>

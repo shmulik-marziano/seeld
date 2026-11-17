@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { SdCrumbs, SdPic, SdStageSpot, tintStyle, useSdFont } from "./primitives";
+import { SdArtLayer, SdCrumbs, SdPic, SdStageSpot, tintStyle, useSdFont } from "./primitives";
+import { companionArt } from "./pub";
 import type { ArtName, Pastel } from "./topics";
 import "./sd.css";
 import "./sd-pub.css";
@@ -34,6 +35,7 @@ export function PubHero({ crumbs, eyebrow, title, lead, art, actions, extra }: {
 }) {
   return (
     <section className="sd-hero">
+      <SdArtLayer name={companionArt(art)} className="sd-hero-art" />
       <div className="sd-wrap sd-hero-grid">
         <div className="sd-hero-copy">
           <SdCrumbs items={crumbs} />

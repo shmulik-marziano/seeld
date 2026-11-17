@@ -53,7 +53,7 @@
 .sd a:focus-visible, .sd button:focus-visible, .sd summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 6px; box-shadow: 0 0 0 5px rgba(231,201,139,.7); }
 
 /* hero */
-.sd-hero { position: relative; overflow: hidden; }
+.sd-hero { position: relative; overflow-x: clip; }
 .sd-hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
   background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
   background-size: 56px 56px; mask-image: radial-gradient(ellipse 70% 80% at 25% 40%, #000 0%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse 70% 80% at 25% 40%, #000 0%, transparent 75%); }
@@ -201,7 +201,7 @@
 .sd-faq details > div { padding: 0 22px 22px; font-size: 17px; line-height: 1.85; max-width: 66ch; }
 
 /* closing contact (navy) */
-.sd-contact { position: relative; background: var(--ink) radial-gradient(80% 60% at 85% 0%, rgba(231,201,139,.09), transparent 70%); color: #DCE6F0; overflow: hidden; }
+.sd-contact { position: relative; background: var(--ink) radial-gradient(80% 60% at 85% 0%, rgba(231,201,139,.09), transparent 70%); color: #DCE6F0; overflow-x: clip; }
 .sd-contact-grid { display: grid; gap: 48px; padding-block: clamp(48px, 7vw, 96px); align-items: start; }
 @media (min-width: 1024px) { .sd-contact-grid { grid-template-columns: 5fr 7fr; gap: 72px; } }
 .sd-contact .sd-h2 { color: #fff; }
@@ -293,6 +293,77 @@
   .sd-pub-grid-3 > a.sd-pub-card:last-child:nth-child(odd) .sd-pub-card-art { aspect-ratio: auto; min-height: 200px; border-bottom: 0; border-inline-end: 1px solid var(--line); }
 }
 
-/* floating divider ornament: sits inside its band instead of straddling the seam */
-.sd-band-div { inset-block-start: 8px; translate: none; }
-.sd-band-div img { max-height: clamp(30px, 3.6vw, 46px); }
+/* ── rich art pass (17.11): bigger, more generous illustration layers ─────────────────────────────
+   Every layer is decorative: aria-hidden, pointer-events none, lazy, width/height set, no new files.
+   Left/right alternate between bands through :nth-of-type (bands are contiguous sections of <main>). */
+
+/* hero stage: the illustration is larger than its arch and overflows it; five spots orbit it, mirrored left/right */
+.sd-stage { overflow: visible; }
+.sd-stage img:not(.sd-orb) { width: 124%; max-width: none; max-height: none; margin-block-end: -4%; }
+@media (max-width: 640px) { .sd-stage img:not(.sd-orb) { width: 106%; margin-block-end: -2%; } }
+.sd-stage img.sd-orb { position: absolute; z-index: 2; width: var(--w, 90px); height: auto; max-width: none; max-height: none; margin: 0; object-fit: contain; animation: sd-float 9s ease-in-out infinite; filter: drop-shadow(0 10px 12px rgba(32,57,87,.22)); }
+.sd-orb-1 { left: -6%; top: 8%; rotate: -9deg; animation-delay: -1s !important; }
+.sd-orb-2 { right: -5%; top: 3%; rotate: 8deg; animation-delay: -3.5s !important; }
+.sd-orb-3 { left: -9%; top: 47%; rotate: 5deg; animation-delay: -5s !important; }
+.sd-orb-4 { right: -7%; bottom: 14%; rotate: 6deg; animation-delay: -2.2s !important; }
+.sd-orb-5 { left: 5%; bottom: -5%; rotate: -7deg; animation-delay: -4.2s !important; }
+@media (max-width: 640px) {
+  .sd-stage img.sd-orb { --w: 64px !important; }
+  .sd-orb-1 { left: -2%; } .sd-orb-2 { right: -2%; } .sd-orb-4 { right: -2%; --w: 76px !important; } .sd-orb-5 { left: 2%; --w: 68px !important; }
+  .sd-orb-3 { display: none; }
+}
+
+/* hero: a faint second illustration under the copy column */
+.sd-hero-art { position: absolute; z-index: 0; pointer-events: none; inset-block-end: -6%; right: -6vw; width: clamp(320px, 42vw, 640px); opacity: .1; -webkit-mask-image: linear-gradient(to left, #000 30%, transparent 96%); mask-image: linear-gradient(to left, #000 30%, transparent 96%); }
+.sd-hero-art img { display: block; width: 100%; height: auto; }
+@media (max-width: 1023px) { .sd-hero-art { width: 92vw; right: -22vw; inset-block-end: 0; opacity: .08; } }
+
+/* bands: layers sit behind the content */
+.sd-band { overflow-x: clip; --bleed: clamp(40px, 8vw, 150px); }
+.sd-band > :not(.sd-band-art):not(.sd-band-ghost):not(.sd-band-div):not(.sd-band-corner) { position: relative; z-index: 1; }
+.sd-band-art { position: absolute; z-index: 0; pointer-events: none; inset-block-start: 50%; translate: 0 -50%; width: clamp(400px, 52vw, 840px); opacity: .14; }
+.sd-band-art img { display: block; width: 100%; height: auto; }
+.sd-band:nth-of-type(odd) > .sd-band-art { right: calc(-1 * var(--bleed)); left: auto; -webkit-mask-image: linear-gradient(to left, #000 38%, transparent 100%); mask-image: linear-gradient(to left, #000 38%, transparent 100%); }
+.sd-band:nth-of-type(even) > .sd-band-art { left: calc(-1 * var(--bleed)); right: auto; -webkit-mask-image: linear-gradient(to right, #000 38%, transparent 100%); mask-image: linear-gradient(to right, #000 38%, transparent 100%); }
+.sd-band-ghost { position: absolute; z-index: 0; pointer-events: none; inset-block-end: 7%; width: clamp(140px, 15vw, 250px); opacity: .2; }
+.sd-band-ghost img { display: block; width: 100%; height: auto; }
+.sd-band:nth-of-type(odd) > .sd-band-ghost { left: 1vw; right: auto; rotate: -8deg; }
+.sd-band:nth-of-type(even) > .sd-band-ghost { right: 1vw; left: auto; rotate: 7deg; }
+@media (max-width: 767px) {
+  .sd-band-art { width: 96vw; inset-block-start: auto; inset-block-end: -3%; translate: none; opacity: .16; }
+  .sd-band:nth-of-type(odd) > .sd-band-art { right: -24vw; -webkit-mask-image: linear-gradient(to top, #000 30%, transparent 100%); mask-image: linear-gradient(to top, #000 30%, transparent 100%); }
+  .sd-band:nth-of-type(even) > .sd-band-art { left: -24vw; -webkit-mask-image: linear-gradient(to top, #000 30%, transparent 100%); mask-image: linear-gradient(to top, #000 30%, transparent 100%); }
+  .sd-band-ghost { display: none; }
+}
+
+/* seam spot: bleeds across the border to the previous band, on the side opposite to the band's own illustration */
+.sd-band-div { inset-block-start: 0; translate: 0 -50%; }
+.sd-band-div img { max-width: clamp(96px, 15vw, 230px); max-height: clamp(44px, 6.4vw, 100px); }
+.sd-band:nth-of-type(odd) > .sd-band-div { left: clamp(14px, 9vw, 150px); right: auto; }
+.sd-band:nth-of-type(even) > .sd-band-div { right: clamp(14px, 9vw, 150px); left: auto; }
+@media (max-width: 640px) { .sd-band-div img { max-height: 54px; } }
+
+/* story / process art: larger than its column and tucked toward the page edge; four spots around it */
+.sd-story-art img:not(.sd-float) { width: 108%; max-width: none; margin-inline: -4%; }
+@media (max-width: 1023px) { .sd-story-art img:not(.sd-float) { width: 100%; margin-inline: 0; } }
+.sd-story-art img.sd-float, .sd-contact-art img.sd-float { max-width: 27%; max-height: 27%; }
+.sd-float-a { inset-block-end: -3%; inset-inline-start: -4%; rotate: -8deg; }
+.sd-float-b { inset-block-start: 0; inset-inline-end: -3%; rotate: 7deg; }
+.sd-story-art img.sd-float-c { inset-block-start: 6%; inset-inline-start: -2%; max-width: 17%; max-height: 17%; rotate: -4deg; animation-delay: -5s !important; }
+.sd-story-art img.sd-float-d { inset-block-end: 4%; inset-inline-end: -2%; max-width: 19%; max-height: 19%; rotate: 9deg; animation-delay: -1.5s !important; }
+@media (max-width: 640px) { .sd-story-art img.sd-float-c { display: none; } .sd-story-art img.sd-float { max-width: 24%; } }
+
+/* closing navy block: white ghost of the hero illustration, ghost spot, and a spot on the top edge */
+.sd-contact > .sd-wrap, .sd-contact > .sd-wrap-narrow { position: relative; z-index: 1; }
+.sd-contact { --bleed: clamp(40px, 8vw, 150px); }
+.sd-contact-layer { opacity: .07; right: auto; left: calc(-1 * var(--bleed)); width: clamp(380px, 46vw, 720px); -webkit-mask-image: linear-gradient(to right, #000 38%, transparent 100%); mask-image: linear-gradient(to right, #000 38%, transparent 100%); }
+.sd-contact-layer img { filter: brightness(0) invert(1); }
+.sd-contact-ghost { right: 1vw; left: auto; inset-block-start: auto; inset-block-end: 5%; opacity: .1; }
+.sd-contact-ghost img { filter: brightness(0) invert(1); }
+.sd-contact-seam { display: block; z-index: 3; left: clamp(20px, 10vw, 160px); right: auto; }
+.sd-contact-seam img { max-height: clamp(40px, 5vw, 80px); }
+@media (max-width: 767px) {
+  .sd-contact-layer { width: 96vw; left: -24vw; inset-block-start: auto; inset-block-end: -3%; translate: none; opacity: .06; -webkit-mask-image: linear-gradient(to top, #000 30%, transparent 100%); mask-image: linear-gradient(to top, #000 30%, transparent 100%); }
+  .sd-contact-ghost { display: none; }
+}
+@media print { .sd-band-art, .sd-band-ghost, .sd-hero-art, .sd-contact-layer, .sd-contact-ghost { display: none !important; } }

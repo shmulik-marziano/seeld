@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import SeeIDLogo from "@/components/SeeIDLogo";
 import { ChevronDown, Menu, MessageCircle, Phone, User, X } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { INSURANCE_GROUPS, SAVINGS_LINKS } from "@/components/sd/chromeData";
+import { INSURANCE_GROUPS, SAVINGS_LINKS, iconSrc, type ChromeLink } from "@/components/sd/chromeData";
 import "@/components/sd/chrome.css";
 
 type MenuId = "insurance" | "savings";
@@ -30,6 +30,11 @@ const mobileSecondaryLinks = [
   { href: "/personal-area", label: "האזור האישי" },
   { href: "/agents", label: "כניסה לסוכנים" },
 ];
+
+const RowIcon = ({ link }: { link: ChromeLink }) =>
+  link.icon ? (
+    <img src={iconSrc(link.icon)} alt="" aria-hidden="true" width={30} height={30} className="sd-chrome-ico" draggable={false} />
+  ) : null;
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -201,7 +206,7 @@ const Header = () => {
                         <ul>
                           {g.links.map((l) => (
                             <li key={l.href}>
-                              <Link to={l.href} tabIndex={openMenu === hub.id ? 0 : -1}>{l.label}</Link>
+                              <Link to={l.href} tabIndex={openMenu === hub.id ? 0 : -1}><RowIcon link={l} /><span>{l.label}</span></Link>
                             </li>
                           ))}
                         </ul>
@@ -212,7 +217,7 @@ const Header = () => {
                   <ul className="sd-chrome-sub-list">
                     {SAVINGS_LINKS.map((l) => (
                       <li key={l.href}>
-                        <Link to={l.href} tabIndex={openMenu === hub.id ? 0 : -1}>{l.label}</Link>
+                        <Link to={l.href} tabIndex={openMenu === hub.id ? 0 : -1}><RowIcon link={l} /><span>{l.label}</span></Link>
                       </li>
                     ))}
                   </ul>
@@ -325,12 +330,12 @@ const Header = () => {
                                 <div key={g.title}>
                                   <p className="sd-chrome-sub-title">{g.title}</p>
                                   {g.links.map((l) => (
-                                    <Link key={l.href} to={l.href} onClick={() => setIsMenuOpen(false)}>{l.label}</Link>
+                                    <Link key={l.href} to={l.href} onClick={() => setIsMenuOpen(false)}><RowIcon link={l} /><span>{l.label}</span></Link>
                                   ))}
                                 </div>
                               ))
                             : SAVINGS_LINKS.map((l) => (
-                                <Link key={l.href} to={l.href} onClick={() => setIsMenuOpen(false)}>{l.label}</Link>
+                                <Link key={l.href} to={l.href} onClick={() => setIsMenuOpen(false)}><RowIcon link={l} /><span>{l.label}</span></Link>
                               ))}
                           <Link to={hub.href} className="sd-chrome-sub-all" onClick={() => setIsMenuOpen(false)}>
                             {hub.id === "insurance" ? "לכל תחומי הביטוח" : "לכל תחומי הפיננסים"}

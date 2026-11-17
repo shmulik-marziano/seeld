@@ -10,7 +10,7 @@ import { FigureText } from "@/components/InsurancePageTemplate";
 import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import { answerSummaries, ANSWER_REVIEWED } from "@/data/answerSummaries";
 import { stories } from "@/data/stories";
-import { SdBand, SdContact, SdCrumbs, SdIcon, SdPic, SdProcess, SdProgress, SdStageSpot, SdStory, SdSubnav, tintStyle, useSdFont } from "./primitives";
+import { SdArtLayer, SdBand, SdContact, SdCrumbs, SdIcon, SdPic, SdProcess, SdProgress, SdStageSpot, SdStory, SdSubnav, tintStyle, useSdFont } from "./primitives";
 import { SdSpot } from "./SdSpot";
 import { spotAt } from "./spots";
 import { topicFor, type ArtName, type Topic } from "./topics";
@@ -151,6 +151,7 @@ export default function SavingsPageSd(props: SavingsPageProps) {
       <main>
         {/* HERO */}
         <section className="sd-hero">
+          <SdArtLayer name={topic.art2} className="sd-hero-art" />
           <div className="sd-wrap sd-hero-grid">
             <div className="sd-hero-copy">
               <SdCrumbs items={[{ label: "דף הבית", to: "/" }, { label: "חיסכון ופנסיה", to: "/savings" }, { label: breadcrumbLabel }]} />

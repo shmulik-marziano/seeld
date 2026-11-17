@@ -1,40 +1,43 @@
 /* Shared link data for the site chrome (Header + Footer). Destinations only; no copy that names people. */
-export type ChromeLink = { href: string; label: string };
+export type ChromeLink = { href: string; label: string; icon?: string };
+
+/* Kit pencil icon for a menu row: public/art/icons/<name>.svg (decorative). */
+export const iconSrc = (name: string) => `/art/icons/${name}.svg`;
 
 export const INSURANCE_GROUPS: { title: string; links: ChromeLink[] }[] = [
   {
     title: "חיים ובריאות",
     links: [
-      { href: "/insurance/life", label: "ביטוח חיים" },
-      { href: "/insurance/mortgage", label: "ביטוח משכנתא" },
-      { href: "/insurance/health", label: "ביטוח בריאות" },
-      { href: "/insurance/critical-illness", label: "מחלות קשות" },
-      { href: "/insurance/accidents", label: "תאונות אישיות" },
-      { href: "/insurance/partners", label: "ביטוח שותפים" },
+      { href: "/insurance/life", icon: "family", label: "ביטוח חיים" },
+      { href: "/insurance/mortgage", icon: "key", label: "ביטוח משכנתא" },
+      { href: "/insurance/health", icon: "heart", label: "ביטוח בריאות" },
+      { href: "/insurance/critical-illness", icon: "shield", label: "מחלות קשות" },
+      { href: "/insurance/accidents", icon: "claim", label: "תאונות אישיות" },
+      { href: "/insurance/partners", icon: "handshake", label: "ביטוח שותפים" },
     ],
   },
   {
     title: "ביטוח כללי",
     links: [
-      { href: "/insurance/vehicle", label: "ביטוח רכב" },
-      { href: "/insurance/home", label: "ביטוח דירה" },
-      { href: "/insurance/business", label: "ביטוח עסק" },
-      { href: "/insurance/travel", label: "ביטוח נסיעות" },
-      { href: "/insurance/disability", label: "אובדן כושר עבודה" },
-      { href: "/insurance/nursing", label: "ביטוח סיעודי" },
+      { href: "/insurance/vehicle", icon: "car", label: "ביטוח רכב" },
+      { href: "/insurance/home", icon: "home", label: "ביטוח דירה" },
+      { href: "/insurance/business", icon: "briefcase", label: "ביטוח עסק" },
+      { href: "/insurance/travel", icon: "plane", label: "ביטוח נסיעות" },
+      { href: "/insurance/disability", icon: "umbrella", label: "אובדן כושר עבודה" },
+      { href: "/insurance/nursing", icon: "support", label: "ביטוח סיעודי" },
     ],
   },
 ];
 
 export const SAVINGS_LINKS: ChromeLink[] = [
-  { href: "/savings/investment", label: "פוליסות השקעה" },
-  { href: "/savings/gemel-funds", label: "קופות גמל" },
-  { href: "/savings/training-funds", label: "קרנות השתלמות" },
-  { href: "/savings/pension-funds", label: "קרנות פנסיה" },
-  { href: "/savings/gemel-investment", label: "גמל להשקעה" },
-  { href: "/savings/child-savings", label: "חיסכון לילד" },
-  { href: "/savings/pre-retirement", label: "לקראת פרישה" },
-  { href: "/savings/financial-planning", label: "תכנון פיננסי" },
+  { href: "/savings/investment", icon: "growth", label: "פוליסות השקעה" },
+  { href: "/savings/gemel-funds", icon: "coins", label: "קופות גמל" },
+  { href: "/savings/training-funds", icon: "bank", label: "קרנות השתלמות" },
+  { href: "/savings/pension-funds", icon: "hourglass", label: "קרנות פנסיה" },
+  { href: "/savings/gemel-investment", icon: "chart", label: "גמל להשקעה" },
+  { href: "/savings/child-savings", icon: "wallet", label: "חיסכון לילד" },
+  { href: "/savings/pre-retirement", icon: "retirement", label: "לקראת פרישה" },
+  { href: "/savings/financial-planning", icon: "compass", label: "תכנון פיננסי" },
 ];
 
 export const KNOWLEDGE_LINKS: ChromeLink[] = [
