@@ -26,7 +26,7 @@ select has_extension('pgmq', 'pgmq is installed');
 -- 1. One transaction: the save writes the draft/fields AND enqueues to both destination queues (owner + replica).
 select is((public.save_questionnaire_step('key-0001-aaaa', (select a from t), 'pre', '{"customer.phone":"0501234567"}'::jsonb, 's1', 25, true, false, 'req-1'))->>'status', 'saved', 'first save');
 select is((select count(*) from pgmq.q_salesforce_events), 1::bigint, 'salesforce queue got one message');
-select is((select count(*) from pgmq.q_surense_events), 1::bigint, 'surense queue got one message');
+select is((select count(*) from pgmq.q_surense_outbound), 1::bigint, 'surense queue got one message');
 
 -- 2. Idempotency: a double click returns the stored result and creates nothing.
 select is((public.save_questionnaire_step('key-0001-aaaa', (select a from t), 'pre', '{"customer.phone":"0501234567"}'::jsonb, 's1', 25, true, false, 'req-1'))->>'duplicate', 'true', 'duplicate flagged');
@@ -43,21 +43,22 @@ select is(jsonb_array_length(public.queue_read_batch('salesforce')), 2, 'first r
 select is(jsonb_array_length(public.queue_read_batch('salesforce')), 0, 'visibility timeout hides them from a parallel worker');
 
 -- 5. Ordering gate.
+create temp table m1 as select pg_temp.mid('salesforce_events', (select a from t), 1) as id;
 select is(public.queue_claim('salesforce', pg_temp.mid('salesforce_events', (select a from t), 2), (select a from t), 2, 'w1'), 'not_ready', 'seq 2 waits for seq 1');
 select is(public.queue_claim('salesforce', pg_temp.mid('salesforce_events', (select a from t), 1), (select a from t), 1, 'w1'), 'process', 'seq 1 may run');
 select is(public.queue_claim('salesforce', pg_temp.mid('salesforce_events', (select a from t), 2), (select a from t), 2, 'w2'), 'locked', 'second worker is locked out of this customer');
 select lives_ok(format('select public.queue_complete(%L, %s, %L, 1, %L, null)', 'salesforce', pg_temp.mid('salesforce_events', (select a from t), 1), (select a from t), 'w1'), 'complete seq 1');
 select is(public.queue_claim('salesforce', pg_temp.mid('salesforce_events', (select a from t), 2), (select a from t), 2, 'w2'), 'process', 'seq 2 runs after seq 1 completed');
-select throws_ok(format('select public.queue_complete(%L, %s, %L, 1, %L, null)', 'salesforce', pg_temp.mid('salesforce_events', (select a from t), 1), (select a from t), 'w1'), '40001', null, 'completing out of order is refused');
+select throws_ok(format('select public.queue_complete(%L, %s, %L, 1, %L, null)', 'salesforce', (select id from m1), (select a from t), 'w1'), '40001', null, 'completing out of order is refused');
 
 -- 6. A stuck customer never blocks another customer; dead letter halts only that customer and raises an alert.
 select is((public.save_questionnaire_step('key-0003-bbbb', (select b from t), 'pre', '{"customer.phone":"0508888888"}'::jsonb, 's1', 10, true, false, 'req-3'))->>'status', 'saved', 'customer B saved');
-select lives_ok(format('select public.queue_dead_letter(%L, %s, %L, 1, %L::jsonb, %L, %L)', 'surense', pg_temp.mid('surense_events', (select a from t), 1), (select a from t), '{}', 'max_attempts', 'http_503'), 'dead letter A on surense');
-select is((select count(*) from pgmq.q_surense_events_dlq), 1::bigint, 'dead-letter queue has the message');
+select lives_ok(format('select public.queue_dead_letter(%L, %s, %L, 1, %L::jsonb, %L, %L)', 'surense', pg_temp.mid('surense_outbound', (select a from t), 1), (select a from t), '{}', 'max_attempts', 'http_503'), 'dead letter A on surense');
+select is((select count(*) from pgmq.q_surense_outbound_dlq), 1::bigint, 'dead-letter queue has the message');
 select is((select halted from public.customer_queue_state where customer_key = (select a from t) and destination = 'surense'), true, 'customer A halted on surense');
 select is((select count(*) from public.ops_alerts where kind = 'dead_letter' and status = 'pending'), 1::bigint, 'operational alert raised');
-select is(public.queue_claim('surense', pg_temp.mid('surense_events', (select a from t), 2), (select a from t), 2, 'w1'), 'halted', 'A later message waits');
-select is(public.queue_claim('surense', pg_temp.mid('surense_events', (select b from t), 1), (select b from t), 1, 'w1'), 'process', 'B is not blocked (no head-of-line blocking)');
+select is(public.queue_claim('surense', pg_temp.mid('surense_outbound', (select a from t), 2), (select a from t), 2, 'w1'), 'halted', 'A later message waits');
+select is(public.queue_claim('surense', pg_temp.mid('surense_outbound', (select b from t), 1), (select b from t), 1, 'w1'), 'process', 'B is not blocked (no head-of-line blocking)');
 
 -- 7. Loop prevention.
 select is((public.queue_enqueue_event('salesforce', gen_random_uuid(), public.content_hash_jsonb('{"customer.phone":"0501234567"}'::jsonb), (select a from t), 'customer.upserted', array['customer.phone'], null, null))->>'reason', 'echo', 'echo from Salesforce dropped');

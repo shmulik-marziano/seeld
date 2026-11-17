@@ -1,3 +1,4 @@
+-- PATCHED COPY (review fixes, NOT executed against a database). Original untouched. See C:/tmp/infra/sql-review.md
 -- PROPOSED, NOT APPLIED, needs owner approval.
 -- This file lives in supabase/proposed/ on purpose: the Supabase CLI and the migrations folder never read it.
 -- To adopt: owner approves, then copy into supabase/migrations/<timestamp>_<name>.sql and apply on a
@@ -7,7 +8,7 @@
 --
 -- Event-driven core. Design (docs/platform/EVENT-ARCHITECTURE.md):
 --   * identity_links           unified identity: internal customer id <-> Salesforce id <-> Surense id
---   * TWO destination queues   salesforce_events (fast) and surense_events (slow), each with its own dead-letter queue.
+--   * TWO destination queues   salesforce_events (fast) and surense_outbound (slow), each with its own dead-letter queue.
 --                              Salesforce and Surense never talk to each other, only through the operational DB.
 --   * ONE transaction          save functions write the data AND call pgmq.send in the same transaction. No second outbox.
 --   * event_log                append-only AUDIT of what happened. It is not a queue and nothing is copied from it.
@@ -19,7 +20,7 @@
 
 create extension if not exists pgmq;
 create extension if not exists pgcrypto with schema extensions;
--- Vault (supabase_vault) holds the secrets 'national_id_hmac_key' and 'national_id_enc_key'. Created by the owner, never in git.
+-- Vault (supabase_vault) holds the secrets 'national_id_hmac_key', 'national_id_enc_key' and 'event_hash_key'. Created by the owner, never in git.
 
 -- ---------------------------------------------------------------------------------------------------------------
 -- 1. identity_links: THE router table. One row per person.
@@ -59,7 +60,9 @@ language sql
 immutable
 set search_path = ''
 as $$
-  with s as (select lpad(regexp_replace(coalesce(p_raw, ''), '[\s./-]', '', 'g'), 9, '0') as v)
+  -- FIX: strip separators first, require 1..9 digits BEFORE padding (lpad truncates longer input), reject empty and all-zero.
+  with r as (select regexp_replace(coalesce(p_raw, ''), '[\s./-]', '', 'g') as x),
+       s as (select lpad(x, 9, '0') as v from r where x ~ '^[0-9]{1,9}$' and x !~ '^0+$')
   select case
     when (select v from s) ~ '^[0-9]{9}$'
      and (select coalesce(sum(case when d * w > 9 then d * w - 9 else d * w end), 0) % 10
@@ -165,8 +168,8 @@ $$;
 -- ---------------------------------------------------------------------------------------------------------------
 select pgmq.create('salesforce_events');
 select pgmq.create('salesforce_events_dlq');
-select pgmq.create('surense_events');
-select pgmq.create('surense_events_dlq');
+select pgmq.create('surense_outbound');
+select pgmq.create('surense_outbound_dlq');
 
 create table if not exists public.queue_destinations (
   destination text primary key check (destination in ('salesforce','surense')),
@@ -189,7 +192,7 @@ revoke all on public.queue_destinations from anon, authenticated;
 -- TODO(owner): tune after the vendor limits are documented. enabled stays false until the owner picks the deployment mode.
 insert into public.queue_destinations (destination, queue_name, dlq_name, batch_size, drain_interval_sec, backoff_sec, skip_requeue_sec, halted_requeue_sec)
 values ('salesforce', 'salesforce_events', 'salesforce_events_dlq', 20, 10, '{30,300,1800}', 5, 300),
-       ('surense',    'surense_events',    'surense_events_dlq',     5, 30, '{60,600,3600}', 15, 600)
+       ('surense',    'surense_outbound',    'surense_outbound_dlq',     5, 30, '{60,600,3600}', 15, 600)
 on conflict (destination) do nothing;
 
 create or replace function public.queue_policy(p_destination text)
@@ -300,7 +303,10 @@ begin
   get diagnostics v_n = row_count;
   if v_n = 1 then return null; end if;
   -- The unique index made us wait for a concurrent first call to commit, so its result is visible now.
-  select coalesce(result, jsonb_build_object('status', 'in_progress')) into v_prev from public.idempotency_keys where action = p_action and key = p_key;
+  select coalesce(result, jsonb_build_object('status', 'in_progress')) into v_prev from public.idempotency_keys
+   where action = p_action and key = p_key
+     and (customer_key is null or p_customer is null or customer_key = p_customer);   -- FIX: a key never returns another customer's stored result
+  if v_prev is null then raise exception 'idempotency_key_conflict' using errcode = '23505'; end if;
   return v_prev || jsonb_build_object('duplicate', true);
 end;
 $$;
@@ -315,12 +321,22 @@ as $$ update public.idempotency_keys set result = p_result where action = p_acti
 -- ---------------------------------------------------------------------------------------------------------------
 -- 4. Enqueue (internal). Called ONLY from save functions, inside THEIR transaction. pgmq.send commits with the data.
 -- ---------------------------------------------------------------------------------------------------------------
+-- FIX (review 06-4): keyed hash. A plain SHA-256 of low-entropy values (phone, national id) is brute-forceable from a leaked
+-- queue/event_log/event_registry row. HMAC-SHA256 with a dedicated Vault secret 'event_hash_key' (created by the owner, never in git).
 create or replace function public.content_hash_jsonb(p_value jsonb)
 returns text
-language sql
-immutable
+language plpgsql
+stable
+security definer
 set search_path = ''
-as $$ select encode(extensions.digest(convert_to(coalesce(p_value, 'null'::jsonb)::text, 'utf8'), 'sha256'), 'hex'); $$;
+as $$
+declare v_key text;
+begin
+  select decrypted_secret into v_key from vault.decrypted_secrets where name = 'event_hash_key';
+  if v_key is null then raise exception 'event_hash_key_missing' using errcode = '55000'; end if;
+  return encode(extensions.hmac(convert_to(coalesce(p_value, 'null'::jsonb)::text, 'utf8'), convert_to(v_key, 'utf8'), 'sha256'), 'hex');
+end;
+$$;
 
 create or replace function public.queue_enqueue_event(
   p_origin text,
@@ -356,7 +372,8 @@ begin
   -- Loop prevention 2: echo. Same customer and content as an event we already SENT to the system that now reports it.
   if p_origin in ('salesforce','surense') and exists (
        select 1 from public.event_registry r
-        where r.customer_key = p_customer_key and r.content_hash = p_content_hash and p_origin = any (r.sent_to)) then
+        where r.customer_key = p_customer_key and r.content_hash = p_content_hash and p_origin = any (r.sent_to)
+          and r.first_seen_at > now() - interval '1 day') then   -- FIX: echo window (TODO(owner)); without it an old identical value is dropped forever
     insert into public.event_registry (event_id, customer_key, origin_system, content_hash, sent_to) values (p_event_id, p_customer_key, p_origin, p_content_hash, '{}');
     insert into public.event_log (event_type, event_id, origin_system, customer_key, content_hash, code, request_id)
     values ('event.dropped', p_event_id, p_origin, p_customer_key, p_content_hash, 'echo', p_request_id);
@@ -366,7 +383,13 @@ begin
   -- Routing: owner + replicas of the changed fields (07), minus the origin, minus disabled destinations.
   v_targets := public.route_destinations(p_origin, p_field_keys);
 
-  insert into public.event_registry (event_id, customer_key, origin_system, content_hash) values (p_event_id, p_customer_key, p_origin, p_content_hash);
+  insert into public.event_registry (event_id, customer_key, origin_system, content_hash) values (p_event_id, p_customer_key, p_origin, p_content_hash)
+  on conflict (event_id) do nothing;
+  if not found then   -- FIX: a concurrent identical event id committed first: drop instead of raising unique_violation
+    insert into public.event_log (event_type, event_id, origin_system, customer_key, content_hash, code, request_id)
+    values ('event.dropped', p_event_id, p_origin, p_customer_key, p_content_hash, 'duplicate_event', p_request_id);
+    return jsonb_build_object('status', 'dropped', 'reason', 'duplicate_event');
+  end if;
   insert into public.event_log (event_type, event_id, origin_system, customer_key, content_hash, request_id, meta)
   values ('event.accepted', p_event_id, p_origin, p_customer_key, p_content_hash, p_request_id, jsonb_build_object('targets', to_jsonb(v_targets), 'type', p_type));
 
@@ -410,17 +433,32 @@ alter table public.questionnaire_drafts enable row level security;
 revoke all on public.questionnaire_drafts from anon, authenticated;
 
 -- May the caller write for this customer? The customer themself (auth_user_id), an agent/manager, or the service role.
+-- FIX 1: was LANGUAGE sql referencing current_platform_role() from file 08, which does not exist yet when 06 runs
+--        (SQL function bodies are validated at CREATE time) -> 42883. plpgsql is late bound.
+-- FIX 2: agents are limited to their own agency or assigned customers; managers/super_admin keep full access.
 create or replace function public.platform_can_write_customer(p_customer uuid)
 returns boolean
-language sql
+language plpgsql
 stable
 security definer
 set search_path = ''
 as $$
-  select coalesce(auth.role() = 'service_role', false)
-      or exists (select 1 from public.identity_links il where il.internal_customer_id = p_customer and il.auth_user_id = (select auth.uid()))
-      or public.current_platform_role() in ('agent','manager');   -- TODO(owner): restrict agents to their agency/assigned customers
+declare v_role text; v_uid uuid := (select auth.uid());
+begin
+  if coalesce(auth.role() = 'service_role', false) then return true; end if;
+  if exists (select 1 from public.identity_links il where il.internal_customer_id = p_customer and il.auth_user_id = v_uid) then return true; end if;
+  v_role := public.current_platform_role();
+  if v_role in ('manager','super_admin') then return true; end if;
+  if v_role = 'agent' then
+    return exists (select 1 from public.identity_links il where il.internal_customer_id = p_customer
+                      and il.agency_id is not null and il.agency_id = public.get_user_agency_id(v_uid))
+        or exists (select 1 from public.agent_workbench w where w.customer_key = p_customer and w.assigned_agent_id = v_uid);
+  end if;
+  return false;
+end;
 $$;
+revoke execute on function public.platform_can_write_customer(uuid) from public, anon;
+grant execute on function public.platform_can_write_customer(uuid) to authenticated, service_role;
 
 create or replace function public.save_questionnaire_step(
   p_idempotency_key text,
@@ -496,7 +534,7 @@ declare
   v_res jsonb;
   v_event uuid := md5('lead.create:' || p_idempotency_key)::uuid;
 begin
-  if auth.role() <> 'service_role' then raise exception 'forbidden' using errcode = '42501'; end if;
+  if auth.role() is distinct from 'service_role' then raise exception 'forbidden' using errcode = '42501'; end if;   -- FIX: null-safe
   v_prev := public.idempotency_begin('lead.create', p_idempotency_key, null);
   if v_prev is not null then return v_prev; end if;
 
@@ -679,6 +717,7 @@ begin
   elsif p_action = 'replay' then
     execute format('select message from pgmq.%I where msg_id = $1', 'q_' || d.dlq_name) into v_msg using p_dlq_msg_id;
     if v_msg is null then return 'dlq_message_not_found'; end if;
+    if v_msg ->> 'customerKey' is distinct from p_customer_key::text then return 'dlq_message_other_customer'; end if;   -- FIX
     perform pgmq.send(d.queue_name, v_msg - 'dlq');
     perform pgmq.archive(d.dlq_name, p_dlq_msg_id);
     update public.customer_queue_state set halted = false, halted_seq = null, failure_count = 0, updated_at = now() where customer_key = p_customer_key and destination = p_destination;
@@ -697,7 +736,7 @@ begin
   foreach f in array array[
     'identity_hash_national_id(text)', 'identity_upsert_verified(text,text,uuid,uuid)', 'identity_create_pending(uuid)',
     'identity_set_external_id(uuid,text,text)', 'identity_get_external_ids(uuid)', 'queue_policy(text)',
-    'idempotency_begin(text,text,uuid)', 'idempotency_finish(text,text,jsonb)',
+    'idempotency_begin(text,text,uuid)', 'idempotency_finish(text,text,jsonb)', 'content_hash_jsonb(jsonb)',
     'queue_enqueue_event(text,uuid,text,uuid,text,text[],text,text)', 'save_lead(text,jsonb,text,text,uuid,text)',
     'queue_read_batch(text)', 'queue_claim(text,bigint,uuid,bigint,text)', 'queue_complete(text,bigint,uuid,bigint,text,uuid)',
     'queue_record_failure(text,uuid,bigint,bigint,uuid,text)', 'queue_schedule_retry(text,bigint,uuid,integer)',

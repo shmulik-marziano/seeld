@@ -150,7 +150,7 @@ set search_path = ''
 as $$
 declare d record; r jsonb := '[]'::jsonb; m record; dm record;
 begin
-  if public.current_platform_role() not in ('manager','super_admin') then raise exception 'forbidden' using errcode = '42501'; end if;
+  if coalesce(public.current_platform_role(), '') not in ('manager','super_admin') then raise exception 'forbidden' using errcode = '42501'; end if;
   for d in select * from public.queue_destinations order by destination loop
     select queue_length, oldest_msg_age_sec into m from pgmq.metrics(d.queue_name);
     select queue_length into dm from pgmq.metrics(d.dlq_name);

@@ -1,3 +1,4 @@
+-- PATCHED COPY (review fixes, NOT executed against a database). Original untouched. See C:/tmp/infra/sql-review.md
 -- PROPOSED, NOT APPLIED, needs owner approval.
 -- This file lives in supabase/proposed/ on purpose: the Supabase CLI and the migrations folder never read it.
 -- To adopt: owner approves, then copy into supabase/migrations/<timestamp>_<name>.sql and apply on a
@@ -47,6 +48,7 @@ alter table public.audit_log enable row level security;
 revoke all on public.audit_log from anon, authenticated;
 grant select on public.audit_log to authenticated;
 
+drop policy if exists "agency members read their audit log" on public.audit_log;
 create policy "agency members read their audit log"
   on public.audit_log for select to authenticated
   using (agency_id is not null and agency_id = (select public.get_user_agency_id((select auth.uid()))));

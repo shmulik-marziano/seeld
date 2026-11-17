@@ -1,3 +1,4 @@
+-- PATCHED COPY (review fixes, NOT executed against a database). Original untouched. See C:/tmp/infra/sql-review.md
 -- PROPOSED, NOT APPLIED, needs owner approval.
 -- This file lives in supabase/proposed/ on purpose: the Supabase CLI and the migrations folder never read it.
 -- To adopt: owner approves, then copy into supabase/migrations/<timestamp>_<name>.sql and apply on a
@@ -60,8 +61,9 @@ as $$
   select case
     when exists (select 1 from public.platform_user_roles r where r.user_id = (select auth.uid()) and r.active and r.role = 'super_admin') then 'super_admin'
     when exists (select 1 from public.platform_user_roles r where r.user_id = (select auth.uid()) and r.active and r.role = 'manager') then 'manager'
-    when exists (select 1 from public.platform_user_roles r where r.user_id = (select auth.uid()) and r.active and r.role = 'agent')
-      or exists (select 1 from public.profiles p where p.user_id = (select auth.uid())) then 'agent'
+    -- FIX: the profiles fallback is removed. on_auth_user_created creates a profiles row for EVERY signup (clients included),
+    --      so every logged-in client was an 'agent'. Seed existing agency staff into platform_user_roles instead.
+    when exists (select 1 from public.platform_user_roles r where r.user_id = (select auth.uid()) and r.active and r.role in ('agent','insurance_lead','finance_lead')) then 'agent'
   end;
 $$;
 
@@ -150,7 +152,7 @@ revoke all on public.agent_workbench from anon, authenticated;
 create or replace function public.workbench_urgency(p_breach boolean, p_stage text, p_pct smallint, p_last_action timestamptz, p_sync text)
 returns smallint
 language sql
-immutable
+stable   -- FIX: uses now(), cannot be immutable
 set search_path = ''
 as $$
   -- TODO(owner): placeholder formula, to be tuned with real agent feedback. Always 1..100.
@@ -260,7 +262,8 @@ as $$
 begin
   if new.customer_key is null then return new; end if;
   update public.agent_workbench set
-    last_sync_status = case new.event_type when 'message.completed' then 'ok' when 'message.failed' then 'retrying' else 'halted' end,
+    last_sync_status = case when new.event_type = 'message.completed' and exists (select 1 from public.customer_queue_state s where s.customer_key = new.customer_key and s.halted) then 'halted'   -- FIX: a success on one destination must not hide a DLQ halt on the other
+                            when new.event_type = 'message.completed' then 'ok' when new.event_type = 'message.failed' then 'retrying' else 'halted' end,
     last_error_message = case new.event_type when 'message.completed' then null else left(coalesce(new.destination, '-') || ':' || coalesce(new.code, 'error'), 200) end,
     last_sync_at = new.at
   where customer_key = new.customer_key;
@@ -397,7 +400,7 @@ begin
                              where submitted_at is null and updated_at < now() - interval '7 days' group by 1) s)
    where m.metric_date = current_date and m.scope = 'system';
 
-  select (select queue_length from pgmq.metrics('salesforce_events')), (select queue_length from pgmq.metrics('surense_events')) into v_pending_sf, v_pending_su;
+  select (select queue_length from pgmq.metrics('salesforce_events')), (select queue_length from pgmq.metrics('surense_outbound')) into v_pending_sf, v_pending_su;
   insert into public.management_metrics as m (metric_date, scope, pending_salesforce, pending_surense) values (current_date, 'system', v_pending_sf, v_pending_su)
   on conflict (metric_date) where scope = 'system' do update set pending_salesforce = excluded.pending_salesforce, pending_surense = excluded.pending_surense, updated_at = now();
 end;
@@ -453,8 +456,12 @@ declare
   v_existing uuid;
   v_agent uuid;
   v_reason text;
+  v_row_exists boolean;
 begin
+  if p_line_of_business is null or p_line_of_business not in ('insurance','finance') then raise exception 'bad_line_of_business'; end if;   -- FIX
   perform pg_advisory_xact_lock(hashtext('assign_lead:' || p_line_of_business));     -- serialise: fair round robin, honest load cap
+  select assigned_agent_id into v_existing from public.agent_workbench where customer_key = p_customer;
+  v_row_exists := found;
   if p_manual_agent is not null then
     v_agent := p_manual_agent; v_reason := 'manual_override';
   else
@@ -462,7 +469,6 @@ begin
     if not found then
       v_reason := 'no_rule';
     else
-      select assigned_agent_id into v_existing from public.agent_workbench where customer_key = p_customer;
       if rule.sticky and v_existing is not null and exists (
            select 1 from public.platform_user_roles r where r.user_id = v_existing and r.active and (rule.required_role is null or r.role = rule.required_role)) then
         v_agent := v_existing; v_reason := 'sticky';
@@ -485,9 +491,13 @@ begin
   insert into public.agent_workbench as w (customer_key, agency_id, assigned_agent_id, assigned_at, line_of_business)
   values (p_customer, p_agency, v_agent, case when v_agent is not null then now() end, p_line_of_business)
   on conflict (customer_key) do update
-    set assigned_agent_id = excluded.assigned_agent_id, assigned_at = coalesce(excluded.assigned_at, w.assigned_at),
+    -- FIX: never un-assign an existing agent just because no rule/capacity matched now
+    set assigned_agent_id = coalesce(excluded.assigned_agent_id, w.assigned_agent_id),
+        assigned_at = case when excluded.assigned_agent_id is not null and excluded.assigned_agent_id is distinct from w.assigned_agent_id then excluded.assigned_at else w.assigned_at end,
         line_of_business = excluded.line_of_business, agency_id = coalesce(w.agency_id, excluded.agency_id);
-  return jsonb_build_object('agent_id', v_agent, 'reason', v_reason);
+  -- FIX: the insert trigger only counts brand-new rows; a lead whose row already existed (name/phone trigger ran first) was never counted.
+  if v_row_exists and v_agent is not null and v_existing is null then perform public.metrics_bump(v_agent, 'new_leads', 1); end if;
+  return jsonb_build_object('agent_id', coalesce(v_agent, v_existing), 'reason', v_reason);
 end;
 $$;
 
@@ -516,8 +526,8 @@ begin
   return query select * from public.agent_workbench w
     where (not p_only_hot or w.urgency_score >= 70) and (not p_only_sync_errors or w.last_sync_status in ('error','halted'))
       and ( w.assigned_agent_id = v_uid
-         or (v_mode = 'shared_pool_plus_own' and w.assigned_agent_id is null and w.agency_id is not distinct from v_agency)
-         or (v_mode = 'all_read_only' and w.agency_id is not distinct from v_agency) )
+         or (v_mode = 'shared_pool_plus_own' and w.assigned_agent_id is null and v_agency is not null and w.agency_id = v_agency)   -- FIX: null agency matched every null-agency row
+         or (v_mode = 'all_read_only' and v_agency is not null and w.agency_id = v_agency) )
     order by w.urgency_score desc, w.customer_key limit p_limit offset p_offset;
 end;
 $$;
@@ -552,7 +562,7 @@ set search_path = ''
 as $$
 declare v_before uuid; v_res jsonb;
 begin
-  if public.current_platform_role() not in ('manager','super_admin') then raise exception 'forbidden' using errcode = '42501'; end if;
+  if coalesce(public.current_platform_role(), '') not in ('manager','super_admin') then raise exception 'forbidden' using errcode = '42501'; end if;
   select assigned_agent_id into v_before from public.agent_workbench where customer_key = p_customer;
   v_res := public.assign_lead(p_customer, coalesce((select line_of_business from public.agent_workbench where customer_key = p_customer), 'insurance'), p_agent, null);
   perform public.platform_audit('assignment.manual_override', 'agent_workbench', p_customer::text, jsonb_build_object('agent', v_before), jsonb_build_object('agent', p_agent, 'reason', left(p_reason, 80)));
@@ -572,6 +582,8 @@ begin
   perform public.require_super_admin_fresh();
   if p_key not in ('visibility_mode','response_target_minutes') and p_key !~ '^(flag|integration)\.[a-z_.]+$' then raise exception 'setting_not_editable'; end if;
   if p_key = 'visibility_mode' and p_value not in ('own_only','shared_pool_plus_own','all_read_only') then raise exception 'bad_visibility_mode'; end if;
+  -- FIX: workbench_before_write casts this value to integer on EVERY workbench write; a bad value would break all saves.
+  if p_key = 'response_target_minutes' and p_value !~ '^[1-9][0-9]{0,4}$' then raise exception 'bad_response_target'; end if;
   select value into v_before from public.platform_settings where key = p_key;
   insert into public.platform_settings as s (key, value, updated_by) values (p_key, p_value, (select auth.uid()))
   on conflict (key) do update set value = excluded.value, updated_by = excluded.updated_by, updated_at = now();

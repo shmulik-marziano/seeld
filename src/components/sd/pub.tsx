@@ -18,9 +18,9 @@ export const PUB_TOPICS = {
   calculators: { art: "04-investments-growth", art2: "10-financial-planning", palette: ["sky", "lavender", "butter"] },
   fundFinder: { art: "04-investments-growth", art2: "10-financial-planning", palette: ["sage", "butter", "sky"] },
   returnTables: { art: "04-investments-growth", art2: "05-retirement", palette: ["butter", "sky", "sage"] },
-  rights: { art: "11-claims-service", art2: "02-family-protection", palette: ["rose", "sage", "butter"] },
-  directDebit: { art: "04-investments-growth", art2: "01-hero", palette: ["sky", "butter", "sage"] },
-  onboarding: { art: "01-hero", art2: "11-claims-service", palette: ["sage", "sky", "butter"] },
+  rights: { art: "30-rights-found-key", art2: "32-process-steps", palette: ["rose", "sage", "butter"] },
+  directDebit: { art: "28-direct-debit-calendar", art2: "10-financial-planning", palette: ["sky", "butter", "sage"] },
+  onboarding: { art: "29-onboarding-door", art2: "01-hero", palette: ["sage", "sky", "butter"] },
 } satisfies Record<string, Topic>;
 
 const TONES: Pastel[] = ["sage", "sky", "butter", "rose", "lavender"];

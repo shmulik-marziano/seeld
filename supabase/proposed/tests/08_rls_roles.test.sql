@@ -22,6 +22,10 @@ insert into public.agent_workbench (customer_key, assigned_agent_id, assigned_at
   ('aaaaaaa1-0000-4000-8000-000000000001', '11111111-1111-4111-8111-111111111111', now()),
   ('aaaaaaa1-0000-4000-8000-000000000002', '22222222-2222-4222-8222-222222222222', now()),
   ('aaaaaaa1-0000-4000-8000-000000000003', null, null);
+-- FIX (review 08-5): agents and rows now carry an agency; an agent WITHOUT agency must never match rows with a null agency.
+insert into public.agencies (id, name) values ('acacacac-0000-4000-8000-000000000001', 'Agency A'), ('acacacac-0000-4000-8000-000000000002', 'Agency B');
+update public.profiles set agency_id = 'acacacac-0000-4000-8000-000000000001' where user_id in ('11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222');
+update public.agent_workbench set agency_id = 'acacacac-0000-4000-8000-000000000001';
 -- The workbench insert trigger already created the two agent metric rows; add the system row.
 insert into public.management_metrics (metric_date, scope) values (current_date, 'system') on conflict (metric_date) where scope = 'system' do nothing;
 update public.platform_settings set value = 'own_only' where key = 'visibility_mode';
