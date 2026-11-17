@@ -1,0 +1,46 @@
+/* TravelPurchase — insurer cards for /insurance/travel (scoped, prefix sd-tp-) */
+.sd .sd-tp { padding-block: clamp(8px, 2vw, 16px); scroll-margin-top: 140px; }
+.sd .sd-tp-head { display: grid; gap: 12px; margin-bottom: 28px; max-width: 62ch; }
+.sd .sd-tp-lead { font-size: 17px; line-height: 1.75; color: var(--muted); margin: 0; text-wrap: pretty; }
+.sd .sd-tp-smart { display: flex; align-items: center; gap: 18px; padding: 16px 22px; margin-bottom: 26px; max-width: 640px; background: linear-gradient(135deg, #EAF3FA 0%, #fff 70%); border: 1px solid rgba(32,57,87,.16); border-radius: 22px; text-decoration: none; color: var(--ink); box-shadow: 0 10px 26px -18px rgba(32,57,87,.5); transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+.sd .sd-tp-smart img { width: 64px; height: 64px; flex: none; filter: drop-shadow(0 6px 10px rgba(0,150,200,.28)); }
+.sd .sd-tp-smart-txt { display: grid; gap: 2px; }
+.sd .sd-tp-smart-txt strong { font-size: 18px; font-weight: 700; color: var(--ink); }
+.sd .sd-tp-smart-txt span { font-size: 15px; line-height: 1.55; color: var(--muted); }
+.sd .sd-tp-smart:hover { transform: translateY(-3px); border-color: rgba(173,131,62,.55); box-shadow: 0 20px 36px -20px rgba(32,57,87,.5); }
+.sd .sd-tp-smart:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.sd .sd-tp-or { display: flex; align-items: center; gap: 14px; margin: 0 0 16px; font-size: 14px; font-weight: 600; color: var(--muted); }
+.sd .sd-tp-or::before, .sd .sd-tp-or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+@media (max-width: 520px) { .sd .sd-tp-smart { padding: 14px 16px; gap: 14px; } .sd .sd-tp-smart img { width: 52px; height: 52px; } }
+.sd .sd-tp-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 720px) { .sd .sd-tp-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; } }
+@media (min-width: 1040px) { .sd .sd-tp-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+
+.sd .sd-tp-card {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: 176px; padding: 22px 14px 16px; height: 100%;
+  background: #fff; border: 1px solid var(--line); border-radius: 18px; text-decoration: none; color: var(--ink);
+  box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 8px 22px -16px rgba(32,57,87,.35);
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.sd .sd-tp-card::after { content: ""; position: absolute; inset-inline: 22px; top: 0; height: 2px; border-radius: 0 0 2px 2px; background: var(--gold-line); opacity: 0; transition: opacity .22s ease; }
+.sd a.sd-tp-card:hover { transform: translateY(-4px); border-color: rgba(173,131,62,.55); box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 18px 34px -18px rgba(32,57,87,.45); }
+.sd a.sd-tp-card:hover::after, .sd a.sd-tp-card:focus-visible::after { opacity: 1; }
+.sd a.sd-tp-card:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+.sd .sd-tp-logo { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 64px; }
+.sd .sd-tp-logo img { max-width: 118px; max-height: 52px; width: auto; height: auto; object-fit: contain; }
+.sd .sd-tp-name { font-size: 14px; font-weight: 700; color: var(--ink); text-align: center; }
+.sd .sd-tp-go { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 16px; margin-bottom: -6px; font-size: 14px; font-weight: 700; color: var(--gold-d); }
+.sd .sd-tp-go svg { transition: transform .2s ease; }
+.sd a.sd-tp-card:hover .sd-tp-go svg { transform: translateX(-3px); }
+
+.sd .sd-tp-soon { background: rgba(255,255,255,.55); border-style: dashed; box-shadow: none; }
+.sd .sd-tp-soon .sd-tp-logo img { filter: grayscale(1); opacity: .45; }
+.sd .sd-tp-soon .sd-tp-name { color: var(--muted); }
+.sd .sd-tp-soon .sd-tp-go { color: var(--muted); font-weight: 600; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sd .sd-tp-card, .sd .sd-tp-go svg, .sd .sd-tp-card::after { transition: none; }
+  .sd a.sd-tp-card:hover { transform: none; }
+}

@@ -1,44 +1,9 @@
 import InsurancePageSd from '@/components/sd/InsurancePageSd';
 import { Plane, Heart, Briefcase } from 'lucide-react';
-import travelLogos from '@/assets/travel-insurance-logos.jpeg';
+import TravelPurchase from '@/components/sd/TravelPurchase';
 
 const TravelInsurance = () => {
-  const quickPurchaseBanner = (
-    <section className="py-10 sm:py-16">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="rounded-2xl bg-[#203957] p-8 sm:p-12 text-center space-y-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white">רכשו ביטוח נסיעות לחו״ל עכשיו</h2>
-          <p className="text-white/70 text-base sm:text-lg">אפשר לרכוש ישירות דרך הראל או PassportCard, בליווי הצוות שלנו ב-SEELD</p>
-          <div className="relative inline-block">
-            <img
-              src={travelLogos}
-              alt="הראל ביטוח נסיעות לחו״ל - PassportCard"
-              width={1206}
-              height={365}
-              className="max-w-xs md:max-w-sm mx-auto rounded-xl shadow-lg border border-white/10"
-            />
-            <div className="absolute inset-0 flex">
-              <a
-                href="https://digital.harel-group.co.il/travel-policy?guid=bee1d408-c6a7-410e-b4ee-ac690224bdd3&an=025318"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-1/2 h-full cursor-pointer rounded-l-xl hover:bg-white/5 transition-colors"
-                title="רכישת ביטוח הראל"
-              />
-              <a
-                href="https://buy.passportcard.co.il/?AffiliateId=fOYE25Ik9VYSMk30irogAg%3D%3D"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-1/2 h-full cursor-pointer rounded-r-xl hover:bg-white/5 transition-colors"
-                title="רכישת ביטוח PassportCard"
-              />
-            </div>
-          </div>
-          <p className="text-white/50 text-sm">לחצו על הלוגו כדי לעבור לרכישה</p>
-        </div>
-      </div>
-    </section>
-  );
+  const quickPurchaseBanner = <TravelPurchase />;
 
   return (
     <InsurancePageSd
@@ -47,7 +12,8 @@ const TravelInsurance = () => {
       heroCategory="ביטוח נסיעות"
       heroTitle="ביטוח נסיעות לחו״ל"
       heroDescription="כיסוי רפואי, אובדן מזוודות, ביטול טיסה ועוד, כדי שתוכלו לחשוב על הטיול ולא על מה יקרה אם משהו ישתבש."
-      heroCTAText="רכשו ביטוח עכשיו"
+      heroCTAText="לרכישה אצל חברות הביטוח"
+      heroCTAHref="#travel-purchase"
       breadcrumbLabel="ביטוח נסיעות"
       keyPoints={[
         {
