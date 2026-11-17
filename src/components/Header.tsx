@@ -289,11 +289,11 @@ const Header = () => {
                   <img
                     src="/brand/logo.png"
                     srcSet="/brand/logo-204.png 204w, /brand/logo-306.png 306w, /brand/logo-480.png 480w"
-                    sizes="102px"
+                    sizes="122px"
                     alt="שילד ביטוח ופיננסים"
-                    width={102}
-                    height={40}
-                    style={{ height: 40, width: "auto" }}
+                    width={122}
+                    height={48}
+                    style={{ height: 48, width: "auto" }}
                     draggable={false}
                   />
                   <button ref={closeRef} type="button" onClick={closeDrawer} className="sd-chrome-burger" style={{ display: "inline-flex" }} aria-label="סגור תפריט">
