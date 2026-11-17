@@ -29,18 +29,19 @@ export const toneAt = (i: number): Pastel => TONES[((i % TONES.length) + TONES.l
 /** Illustration (and colour) that fits an article by its category and title. */
 export function artForText(category: string | null | undefined, title = ""): { art: ArtName; tone: Pastel } {
   const t = `${category ?? ""} ${title}`;
-  if (/ילד|ילדים/.test(t)) return { art: "12-childrens-savings", tone: "rose" };
-  if (/פרישה|פנסיה|קצבה|גמלאות/.test(t)) return { art: "05-retirement", tone: "lavender" };
-  if (/משכנתא|דירה/.test(t)) return { art: "06-home-mortgage", tone: "sky" };
-  if (/רכב/.test(t)) return { art: "07-car-insurance", tone: "sky" };
+  if (/ילד|ילדים|חינוך|לימודים/.test(t)) return { art: "41-object-school-bag", tone: "sage" };
+  if (/דמי ניהול|תקציב|הוצאות|חוב|הלוואה/.test(t)) return { art: "35-object-wallet", tone: "rose" };
+  if (/פרישה|פנסיה|קצבה|גמלאות|זמן|ותק/.test(t)) return { art: "37-object-hourglass", tone: "sky" };
+  if (/משכנתא|דירה|נדל/.test(t)) return { art: "36-object-house-key", tone: "sage" };
+  if (/רכב|תאונת דרכים/.test(t)) return { art: "39-object-car-key", tone: "lavender" };
   if (/עסק/.test(t)) return { art: "08-business-insurance", tone: "butter" };
-  if (/נסיעות|חו.?ל/.test(t)) return { art: "09-travel-insurance", tone: "rose" };
-  if (/בריאות|סיעוד|כושר|מחלה/.test(t)) return { art: "03-health-insurance", tone: "rose" };
+  if (/נסיעות|חו.?ל/.test(t)) return { art: "40-object-suitcase", tone: "rose" };
+  if (/בריאות|סיעוד|כושר|מחלה|רפוא/.test(t)) return { art: "38-object-health-bag", tone: "butter" };
   if (/חיים|משפחה|שאירים/.test(t)) return { art: "02-family-protection", tone: "sage" };
   if (/חיסכון|השקע|גמל|השתלמות|ריבית|מדד/.test(t)) return { art: "04-investments-growth", tone: "butter" };
   if (/תקציב|תכנון|פיננס/.test(t)) return { art: "10-financial-planning", tone: "lavender" };
   if (/מסמכ|טפסים|שירות|זכויות|תביע|תלוש/.test(t)) return { art: "11-claims-service", tone: "sage" };
-  if (/ביטוח|פוליס|כיסוי|טעויות/.test(t)) return { art: "01-hero", tone: "sky" };
+  if (/ביטוח|פוליס|כיסוי|טעויות/.test(t)) return { art: "34-object-umbrella", tone: "lavender" };
   return { art: "10-financial-planning", tone: "sky" };
 }
 
@@ -57,12 +58,14 @@ const ART_TONE: Record<ArtName, Pastel> = {
   "09-travel-insurance": "rose", "10-financial-planning": "lavender", "11-claims-service": "sage", "12-childrens-savings": "rose",
   "13-nursing-care": "lavender", "14-accidents-recovery": "butter", "15-critical-illness": "rose", "16-disability-income": "sky", "17-child-savings-sailboat": "rose",
   "18-partners-agreement": "butter", "19-renters-first-home": "sage", "20-vehicle-road": "sky", "21-dental-calm": "sky", "22-foreign-caregiver": "sage", "23-training-desk": "lavender", "24-pension-family-umbrella": "lavender", "25-employer-employee": "butter", "26-pre-retirement-path": "butter", "27-post-retirement-bench": "sage", "28-direct-debit-calendar": "sky", "29-onboarding-door": "sky", "30-rights-found-key": "rose", "31-team-desks": "sage", "32-process-steps": "sage", "33-welcome-table": "butter",
+  "34-object-umbrella": "lavender", "35-object-wallet": "rose", "36-object-house-key": "sage", "37-object-hourglass": "sky", "38-object-health-bag": "butter", "39-object-car-key": "lavender", "40-object-suitcase": "rose", "41-object-school-bag": "sage",
 };
 const ART_POOL: ArtName[] = [
   "04-investments-growth", "10-financial-planning", "05-retirement", "02-family-protection", "03-health-insurance", "11-claims-service",
   "12-childrens-savings", "06-home-mortgage", "08-business-insurance", "01-hero", "07-car-insurance", "09-travel-insurance",
   "13-nursing-care", "14-accidents-recovery", "15-critical-illness", "16-disability-income", "17-child-savings-sailboat",
   "18-partners-agreement", "19-renters-first-home", "20-vehicle-road", "21-dental-calm", "22-foreign-caregiver", "23-training-desk", "24-pension-family-umbrella", "25-employer-employee", "26-pre-retirement-path", "27-post-retirement-bench", "28-direct-debit-calendar", "29-onboarding-door", "30-rights-found-key", "31-team-desks", "32-process-steps", "33-welcome-table",
+  "34-object-umbrella", "35-object-wallet", "36-object-house-key", "37-object-hourglass", "38-object-health-bag", "39-object-car-key", "40-object-suitcase", "41-object-school-bag",
 ];
 
 /** Topically related illustrations, tried in order when the exact one is taken by a neighbouring card. */
@@ -100,6 +103,14 @@ const ART_RELATED: Record<ArtName, ArtName[]> = {
   "31-team-desks": ["08-business-insurance", "11-claims-service"],
   "32-process-steps": ["11-claims-service", "01-hero"],
   "33-welcome-table": ["01-hero", "11-claims-service"],
+  "34-object-umbrella": ["02-family-protection", "01-hero"],
+  "35-object-wallet": ["10-financial-planning", "04-investments-growth"],
+  "36-object-house-key": ["06-home-mortgage", "01-hero"],
+  "37-object-hourglass": ["05-retirement", "10-financial-planning"],
+  "38-object-health-bag": ["03-health-insurance", "02-family-protection"],
+  "39-object-car-key": ["07-car-insurance", "01-hero"],
+  "40-object-suitcase": ["09-travel-insurance", "01-hero"],
+  "41-object-school-bag": ["12-childrens-savings", "02-family-protection"],
 };
 
 /**

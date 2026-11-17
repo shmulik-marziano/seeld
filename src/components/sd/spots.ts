@@ -40,7 +40,8 @@ type ArtKey =
   | "09-travel-insurance" | "10-financial-planning" | "11-claims-service" | "12-childrens-savings"
   | "13-nursing-care" | "14-accidents-recovery" | "15-critical-illness" | "16-disability-income" | "17-child-savings-sailboat"
   | "18-partners-agreement" | "19-renters-first-home" | "20-vehicle-road" | "21-dental-calm" | "22-foreign-caregiver" | "23-training-desk" | "24-pension-family-umbrella" | "25-employer-employee"
-  | "26-pre-retirement-path" | "27-post-retirement-bench" | "28-direct-debit-calendar" | "29-onboarding-door" | "30-rights-found-key" | "31-team-desks" | "32-process-steps" | "33-welcome-table";
+  | "26-pre-retirement-path" | "27-post-retirement-bench" | "28-direct-debit-calendar" | "29-onboarding-door" | "30-rights-found-key" | "31-team-desks" | "32-process-steps" | "33-welcome-table"
+  | "34-object-umbrella" | "35-object-wallet" | "36-object-house-key" | "37-object-hourglass" | "38-object-health-bag" | "39-object-car-key" | "40-object-suitcase" | "41-object-school-bag";
 
 /** Four small spots per illustration topic: [0] floats on the hero stage, the rest are corners, cards and story accents. */
 export const SPOT_BY_ART: Record<ArtKey, readonly SpotName[]> = {
@@ -77,6 +78,14 @@ export const SPOT_BY_ART: Record<ArtKey, readonly SpotName[]> = {
   "31-team-desks": ["briefcase", "pen", "olive-sapling", "seal-check"],
   "32-process-steps": ["compass", "seal-check", "magnifier", "scroll-ribbon"],
   "33-welcome-table": ["tea-hourglass", "pen", "olive-sapling", "pillows"],
+  "34-object-umbrella": ["shield-blue", "olive-sapling", "pillows", "seal-check"],
+  "35-object-wallet": ["coins-stacks", "pen", "seal-check", "olive-sapling"],
+  "36-object-house-key": ["key-brass", "stone-house", "scroll-ribbon", "pillows"],
+  "37-object-hourglass": ["tea-hourglass", "compass", "olive-sapling", "pillows"],
+  "38-object-health-bag": ["heart-pink", "shield-blue", "magnifier", "pillows"],
+  "39-object-car-key": ["car-key", "compass", "shield-navy", "seal-check"],
+  "40-object-suitcase": ["suitcase", "passport", "compass", "plane-toy"],
+  "41-object-school-bag": ["sailboat", "heart-pink", "pen", "olive-sapling-b"],
 };
 
 /** i-th context spot of a topic (wraps around). Unknown art falls back to the generic set. */
