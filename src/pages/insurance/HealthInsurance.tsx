@@ -1,4 +1,4 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageSd from '@/components/sd/InsurancePageSd';
 import { Shield, Heart, Stethoscope, Pill, Building2, FileCheck } from "lucide-react";
 
 const coverageTypes = [
@@ -112,7 +112,7 @@ const articles = [
 
 const HealthInsurance = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageSd art={{ name: "03-health-insurance", tint: "#F3DDD8", contactName: "11-claims-service" }}
       heroIcon={Heart}
       heroIconColor="#b91c1c"
       heroCategory="ביטוח בריאות"

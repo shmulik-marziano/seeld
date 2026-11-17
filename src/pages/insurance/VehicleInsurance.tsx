@@ -1,4 +1,4 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageSd from '@/components/sd/InsurancePageSd';
 import { Car, Shield, FileText } from "lucide-react";
 
 const coverageTypes = [
@@ -76,7 +76,7 @@ const articles = [
 
 const VehicleInsurance = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageSd art={{ name: "07-car-insurance", tint: "#D6E3EF" }}
       heroIcon={Car}
       heroIconColor="#003D30"
       heroCategory="ביטוח רכב"
