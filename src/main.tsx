@@ -3,6 +3,9 @@ import { Component, ErrorInfo, ReactNode } from "react";
 import App from "./App.tsx";
 import "./index.css";
 import { captureSnapshot } from "./lib/prerenderSnapshot";
+import { installChunkRecovery, isChunkLoadFailure, recoverFromChunkFailure } from "./lib/chunkRecovery";
+
+installChunkRecovery();
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: string }> {
   constructor(props: { children: ReactNode }) {
@@ -14,6 +17,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
   }
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("SEELD Error:", error, errorInfo);
+    if (isChunkLoadFailure(error)) void recoverFromChunkFailure();
   }
   render() {
     if (this.state.hasError) {
