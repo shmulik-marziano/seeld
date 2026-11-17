@@ -87,7 +87,7 @@ export default function Insurances() {
         actions={
           <>
             <a href="#insurance-index" className="sd-btn">לרשימת התחומים<Arrow /></a>
-            <Link to="/portfolio-review" className="sd-link">בדיקת תיק 360<Arrow /></Link>
+            <Link to="/portfolio-review" className="sd-link">אפיון צרכים<Arrow /></Link>
           </>
         }
       />
@@ -126,7 +126,7 @@ export default function Insurances() {
         title="לא חייבים לבחור לבד"
         text="נבדוק מה יש לכם, מה כפול ומה חסר, ונחזור אליכם עם תמונה מסודרת. שיחה ראשונה בלי התחייבות מצידכם."
         art="11-claims-service"
-        primary={{ label: "בדיקת תיק 360", to: "/portfolio-review" }}
+        primary={{ label: "אפיון צרכים", to: "/portfolio-review" }}
         secondary={{ label: "תיאום פגישה", to: "/contact" }}
       />
     </PubPage>

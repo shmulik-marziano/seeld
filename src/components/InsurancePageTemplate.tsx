@@ -181,7 +181,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
   const defaultTab = hasArticles ? 'guide' : hasCoverage ? 'coverage' : 'faq';
   const tabCount = [hasArticles, hasCoverage, hasFaq].filter(Boolean).length;
 
-  const secondary = heroSecondaryCTA ?? { text: 'בדיקת תיק 360', href: '/portfolio-review' };
+  const secondary = heroSecondaryCTA ?? { text: 'אפיון צרכים', href: '/portfolio-review' };
   const secondaryIsRoute = secondary.href.startsWith('/');
 
   return (
@@ -441,7 +441,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                 רוצים הצעה מותאמת?
               </h2>
               <p className="text-[17px] leading-relaxed max-w-xl" style={{ color: SAGE_ON_GREEN }}>
-                מלאו את הפרטים ונחזור אליכם עם הצעה שמשווה בין החברות בשוק. אפשר גם להתחיל בבדיקת תיק 360 מלאה.
+                מלאו את הפרטים ונחזור אליכם עם הצעה שמשווה בין החברות בשוק. אפשר גם להתחיל באפיון צרכים מלא.
               </p>
             </div>
             <div className="max-w-2xl">
@@ -453,7 +453,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
             </div>
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <Link to="/contact" className="btn-on-green-outline sm:min-w-[220px]">
-                בדיקת תיק 360
+                אפיון צרכים
               </Link>
               <Link to="/contact" className="link-rule text-[15px] self-center !text-[#FAF7EF] !border-[#FAF7EF]/40 hover:!border-[#FAF7EF]">
                 תיאום פגישה

@@ -1,0 +1,306 @@
+{
+ "key": "travel-trip",
+ "version": 1,
+ "title": "ביטוח נסיעות",
+ "description": "יעד, תאריכים, הנוסעים והפעילויות בטיול. כל השאלות טיוטה לאישור: אין להן מקבילה בבנק.",
+ "status": "live",
+ "group": "extra",
+ "intro": null,
+ "consent": null,
+ "notes": [],
+ "declaration": {
+  "title": "הצהרה",
+  "paragraphs": [
+   "אני מאשר/ת שהפרטים שמסרתי בשאלון נכונים ומלאים למיטב ידיעתי, ושנתתי אותם מרצוני החופשי.",
+   "ידוע לי שהפרטים משמשים את הצוות לטיפול בבקשה שלי, ושהם נמסרים לחברות הביטוח או החיסכון רק לצורך הטיפול הזה."
+  ],
+  "checkbox": "קראתי את ההצהרה ואני מאשר/ת אותה"
+ },
+ "sections": [
+  {
+   "id": "s1",
+   "title": "הנסיעה",
+   "intro": null,
+   "spot": "suitcase",
+   "module": false,
+   "questions": [
+    {
+     "key": "trip_destination",
+     "label": "לאן נוסעים?",
+     "section": "הנסיעה",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": "מדינה או כמה מדינות",
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld-draft",
+     "confidence": "draft",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "draft": true,
+      "todo": "שאלון נסיעה: אין בבנק. כל השאלות טיוטה לאישור."
+     }
+    },
+    {
+     "key": "trip_start",
+     "label": "מתי יוצאים?",
+     "section": "הנסיעה",
+     "type": "date",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld-draft",
+     "confidence": "draft",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "draft": true,
+      "todo": "שאלון נסיעה: אין בבנק. כל השאלות טיוטה לאישור.",
+      "allowFuture": true,
+      "futureOnly": true
+     }
+    },
+    {
+     "key": "trip_end",
+     "label": "מתי חוזרים?",
+     "section": "הנסיעה",
+     "type": "date",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld-draft",
+     "confidence": "draft",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "draft": true,
+      "todo": "שאלון נסיעה: אין בבנק. כל השאלות טיוטה לאישור.",
+      "allowFuture": true,
+      "futureOnly": true,
+      "afterKey": "trip_start"
+     }
+    },
+    {
+     "key": "trip_purpose",
+     "label": "מה מטרת הנסיעה?",
+     "section": "הנסיעה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": null,
+     "options": [
+      "תיור או חופשה",
+      "עבודה",
+      "לימודים",
+      "אחר"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld-draft",
+     "confidence": "draft",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "draft": true,
+      "todo": "שאלון נסיעה: אין בבנק. כל השאלות טיוטה לאישור."
+     }
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "title": "הנוסעים",
+   "intro": null,
+   "spot": "family-figures",
+   "module": false,
+   "questions": [
+    {
+     "key": "trip_travellers",
+     "label": "מי נוסע?",
+     "section": "הנוסעים",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": "שורה לכל נוסע",
+     "options": null,
+     "when": null,
+     "fields": [
+      {
+       "id": "first_name",
+       "type": "text",
+       "label": "שם פרטי",
+       "section": "",
+       "required": true,
+       "maxLength": 50,
+       "format": "person-name"
+      },
+      {
+       "id": "last_name",
+       "type": "text",
+       "label": "שם משפחה",
+       "section": "",
+       "required": true,
+       "maxLength": 50,
+       "format": "person-name"
+      },
+      {
+       "id": "id_number",
+       "type": "text",
+       "label": "מספר תעודת זהות",
+       "section": "",
+       "required": true,
+       "maxLength": 9,
+       "format": "israeli-id"
+      },
+      {
+       "id": "birth",
+       "type": "date",
+       "label": "תאריך לידה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld-draft",
+     "confidence": "draft",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "draft": true,
+      "todo": "שאלון נסיעה: אין בבנק. כל השאלות טיוטה לאישור.",
+      "minEntries": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "s3",
+   "title": "פעילויות בטיול",
+   "intro": null,
+   "spot": "compass",
+   "module": false,
+   "questions": [
+    {
+     "key": "trip_activities_yes",
+     "label": "האם מתוכננות פעילויות מיוחדות, כמו ספורט אתגרי, צלילה או סקי?",
+     "section": "פעילויות בטיול",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld-draft",
+     "confidence": "draft",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "draft": true,
+      "todo": "שאלון נסיעה: אין בבנק. כל השאלות טיוטה לאישור."
+     }
+    },
+    {
+     "key": "trip_activities_detail",
+     "label": "אילו פעילויות?",
+     "section": "פעילויות בטיול",
+     "type": "long",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "trip_activities_yes",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "seeld-draft",
+     "confidence": "draft",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "draft": true,
+      "todo": "שאלון נסיעה: אין בבנק. כל השאלות טיוטה לאישור."
+     }
+    },
+    {
+     "key": "trip_conditions",
+     "label": "האם יש מצב רפואי שהצוות צריך לדעת עליו לפני הנסיעה?",
+     "section": "פעילויות בטיול",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": "איסוף מידע בלבד. הפירוט הבריאותי נעשה בשאלון הבריאות.",
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld-draft",
+     "confidence": "draft",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "draft": true,
+      "todo": "שאלון נסיעה: אין בבנק. כל השאלות טיוטה לאישור."
+     }
+    }
+   ]
+  }
+ ]
+}

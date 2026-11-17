@@ -164,7 +164,7 @@ export default function SavingsPageSd(props: SavingsPageProps) {
               <p className="sd-text mt-6" style={{ color: "var(--muted)" }}>{heroDescription}</p>
               <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
                 <a href="#analysis-form" className="sd-btn">{heroCTAText}{arrow}</a>
-                <Link to="/#portfolio-review" className="sd-link">בדיקת תיק 360{arrow}</Link>
+                <Link to="/#portfolio-review" className="sd-link">אפיון צרכים{arrow}</Link>
                 <a href="#product-types" className="sd-link">{typesLabel}{arrow}</a>
               </div>
               <button type="button" className="sd-sav-chat" onClick={openChat}>
@@ -290,7 +290,7 @@ export default function SavingsPageSd(props: SavingsPageProps) {
         <SdContact id="analysis-form" title={closingTitle} text={closingText} art={spare.close}>
           <PensionAnalysisForm focusArea={form.focusArea} title={form.title} description={form.description} />
           <div className="sd-sav-links">
-            <Link to="/#portfolio-review" className="sd-link">בדיקת תיק 360{arrow}</Link>
+            <Link to="/#portfolio-review" className="sd-link">אפיון צרכים{arrow}</Link>
             <Link to="/contact" className="sd-link">תיאום פגישה{arrow}</Link>
           </div>
         </SdContact>

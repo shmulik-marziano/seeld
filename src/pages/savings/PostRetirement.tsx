@@ -1,4 +1,5 @@
 import SavingsPageSd from "@/components/sd/SavingsPageSd";
+import { RpCrossLink } from "@/components/retire/parts";
 
 // Kit design (SavingsPageSd): content lives here, layout, illustration and colours come from the shared template and topics.ts.
 const PostRetirement = () => {  const productTypes = [
@@ -76,13 +77,14 @@ const PostRetirement = () => {  const productTypes = [
       typesTitle="שירותים לפנסיונרים"
       typesSubtitle="ליווי בניהול הכספים אחרי הפרישה"
       types={productTypes}
+      afterTypes={<RpCrossLink />}
       benefitsTitle="מה כולל ליווי אחרי פרישה?"
       benefits={benefits}
       articles={articles}
       bottomLine={bottomLine}
       faqItems={faqItems}
       closingTitle="כבר בפנסיה? בואו נוודא שהכול מסודר"
-      closingText="השאירו פרטים ונבדוק יחד שהזכויות והקצבה מסודרות. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
+      closingText="השאירו פרטים ונבדוק יחד שהזכויות והקצבה מסודרות. אפשר גם להתחיל באפיון צרכים מלא."
       form={{ focusArea: "pension", title: "ייעוץ לאחר פרישה", description: "השאירו פרטים ונבדוק יחד שהזכויות שלכם מסודרות" }}
     />
   );

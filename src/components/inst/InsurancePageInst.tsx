@@ -59,7 +59,7 @@ export default function InsurancePageInst(props: InsurancePageProps) {
     document.head.appendChild(link);
   }, []);
 
-  const secondary = heroSecondaryCTA ?? { text: "בדיקת תיק 360", href: "/portfolio-review" };
+  const secondary = heroSecondaryCTA ?? { text: "אפיון צרכים", href: "/portfolio-review" };
   const hasPoints = !!keyPoints?.length;
   const hasGuide = !!articles?.length;
   const hasCoverage = !!coverageCategories?.length || !!coverageTypes?.length;

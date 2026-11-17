@@ -1,0 +1,654 @@
+{
+ "key": "needs-assessment",
+ "version": 1,
+ "title": "בירור צרכים",
+ "description": "יחס לסיכון ותמונה פיננסית כללית, כבסיס לשיחה עם הצוות. לא מחושב ציון ולא נבחר מסלול.",
+ "status": "live",
+ "group": "extra",
+ "intro": null,
+ "consent": null,
+ "notes": [],
+ "declaration": {
+  "title": "הצהרה",
+  "paragraphs": [
+   "אני מאשר/ת שהפרטים שמסרתי בשאלון נכונים ומלאים למיטב ידיעתי, ושנתתי אותם מרצוני החופשי.",
+   "ידוע לי שהפרטים משמשים את הצוות לטיפול בבקשה שלי, ושהם נמסרים לחברות הביטוח או החיסכון רק לצורך הטיפול הזה."
+  ],
+  "checkbox": "קראתי את ההצהרה ואני מאשר/ת אותה"
+ },
+ "sections": [
+  {
+   "id": "s1",
+   "title": "בירור צרכים · יחס לסיכון",
+   "intro": null,
+   "spot": "scales",
+   "module": false,
+   "questions": [
+    {
+     "key": "risk_attitude_long_term",
+     "label": "השקעה בסיכון גבוה עשויה להתאים בעיניי לחיסכון פנסיוני ארוך טווח.",
+     "section": "בירור צרכים · יחס לסיכון",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "ההתייחסות משמשת לשיחה עם הסוכן. לא מחושב ממנה ציון סיכון ולא נבחר מסלול השקעה.",
+     "options": [
+      "1 — כלל לא מסכים/ה",
+      "2 — מסכים/ה במידה מועטה",
+      "3 — מסכים/ה",
+      "4 — מסכים/ה במידה גבוהה",
+      "5 — מסכים/ה לחלוטין",
+      "מעדיפ/ה למסור בשיחה"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 658
+     }
+    },
+    {
+     "key": "risk_attitude_volatility",
+     "label": "אני מוכן/ה לתנודות גדולות בחיסכון הפנסיוני כאשר הוא מיועד לטווח ארוך.",
+     "section": "בירור צרכים · יחס לסיכון",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "ההתייחסות משמשת לשיחה עם הסוכן. לא מחושב ממנה ציון סיכון ולא נבחר מסלול השקעה.",
+     "options": [
+      "1 — כלל לא מסכים/ה",
+      "2 — מסכים/ה במידה מועטה",
+      "3 — מסכים/ה",
+      "4 — מסכים/ה במידה גבוהה",
+      "5 — מסכים/ה לחלוטין",
+      "מעדיפ/ה למסור בשיחה"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 659
+     }
+    },
+    {
+     "key": "risk_attitude_loss_awareness",
+     "label": "אני מוכן/ה לקחת סיכון בחיסכון הפנסיוני, ומודע/ת גם לאפשרות של הפסד.",
+     "section": "בירור צרכים · יחס לסיכון",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "ההתייחסות משמשת לשיחה עם הסוכן. לא מחושב ממנה ציון סיכון ולא נבחר מסלול השקעה.",
+     "options": [
+      "1 — כלל לא מסכים/ה",
+      "2 — מסכים/ה במידה מועטה",
+      "3 — מסכים/ה",
+      "4 — מסכים/ה במידה גבוהה",
+      "5 — מסכים/ה לחלוטין",
+      "מעדיפ/ה למסור בשיחה"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 660
+     }
+    },
+    {
+     "key": "risk_attitude_persistence",
+     "label": "אמשיך באותה השקעה גם בירידות חוזרות, כשאני צופה שהן עשויות להימשך בטווח הקצר.",
+     "section": "בירור צרכים · יחס לסיכון",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "ההתייחסות משמשת לשיחה עם הסוכן. לא מחושב ממנה ציון סיכון ולא נבחר מסלול השקעה.",
+     "options": [
+      "1 — כלל לא מסכים/ה",
+      "2 — מסכים/ה במידה מועטה",
+      "3 — מסכים/ה",
+      "4 — מסכים/ה במידה גבוהה",
+      "5 — מסכים/ה לחלוטין",
+      "מעדיפ/ה למסור בשיחה"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 661
+     }
+    },
+    {
+     "key": "risk_attitude_significant_loss",
+     "label": "אני מוכן/ה לסיכון גבוה בתקווה לתשואה גבוהה, גם במחיר אפשרות להפסד משמעותי.",
+     "section": "בירור צרכים · יחס לסיכון",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "ההתייחסות משמשת לשיחה עם הסוכן. לא מחושב ממנה ציון סיכון ולא נבחר מסלול השקעה.",
+     "options": [
+      "1 — כלל לא מסכים/ה",
+      "2 — מסכים/ה במידה מועטה",
+      "3 — מסכים/ה",
+      "4 — מסכים/ה במידה גבוהה",
+      "5 — מסכים/ה לחלוטין",
+      "מעדיפ/ה למסור בשיחה"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 662
+     }
+    },
+    {
+     "key": "risk_attitude_monitoring",
+     "label": "אני עוקב/ת לעיתים קרובות אחר ההשקעות והתשואות של החיסכון הפנסיוני שלי.",
+     "section": "בירור צרכים · יחס לסיכון",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "ההתייחסות משמשת לשיחה עם הסוכן. לא מחושב ממנה ציון סיכון ולא נבחר מסלול השקעה.",
+     "options": [
+      "1 — כלל לא מסכים/ה",
+      "2 — מסכים/ה במידה מועטה",
+      "3 — מסכים/ה",
+      "4 — מסכים/ה במידה גבוהה",
+      "5 — מסכים/ה לחלוטין",
+      "מעדיפ/ה למסור בשיחה"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 663
+     }
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "title": "בירור צרכים · תמונה פיננסית",
+   "intro": null,
+   "spot": "coins-stacks",
+   "module": false,
+   "questions": [
+    {
+     "key": "pension_saving_goals",
+     "label": "מה המטרות שלך בחיסכון?",
+     "section": "בירור צרכים · תמונה פיננסית",
+     "type": "multi",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "ביטחון כלכלי לעתיד",
+      "בירור הטבות מס",
+      "קצבה בפרישה",
+      "סכום הוני בפרישה",
+      "שילוב קצבה וסכום הוני",
+      "חיסכון לטווח קצר או בינוני",
+      "טרם הוחלט"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 648
+     }
+    },
+    {
+     "key": "financial_situation",
+     "label": "איך היית מתאר/ת את המצב הכספי בדרך כלל?",
+     "section": "בירור צרכים · תמונה פיננסית",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 649
+     }
+    },
+    {
+     "key": "future_regular_income",
+     "label": "האם צפויה הכנסה קבועה נוספת אחרי הפרישה?",
+     "section": "בירור צרכים · תמונה פיננסית",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 650
+     }
+    },
+    {
+     "key": "future_income_records",
+     "label": "מקורות הכנסה צפויים אחרי פרישה",
+     "section": "בירור צרכים · תמונה פיננסית",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "future_regular_income",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "source",
+       "type": "text",
+       "label": "מקור ההכנסה",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "monthly_amount",
+       "min": 0,
+       "type": "number",
+       "label": "סכום חודשי צפוי בשקלים",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "start",
+       "type": "text",
+       "label": "ממתי צפויה ההכנסה",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "duration",
+       "type": "text",
+       "label": "לכמה זמן צפויה ההכנסה",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 651,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "existing_savings_disclosure",
+     "label": "פרטים על חסכונות קיימים",
+     "section": "בירור צרכים · תמונה פיננסית",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "אמסור פרטים",
+      "אין",
+      "מעדיפ/ה למסור בשיחה"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 652
+     }
+    },
+    {
+     "key": "existing_savings_records",
+     "label": "החסכונות הקיימים שלך",
+     "section": "בירור צרכים · תמונה פיננסית",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "existing_savings_disclosure",
+      "value": "אמסור פרטים"
+     },
+     "fields": [
+      {
+       "id": "product",
+       "type": "text",
+       "label": "סוג המוצר",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "institution",
+       "type": "text",
+       "label": "הגוף המנהל",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "balance",
+       "min": 0,
+       "type": "number",
+       "label": "יתרה ידועה בשקלים",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "liquidity",
+       "type": "text",
+       "label": "מתי אפשר או מתוכנן להשתמש בכסף",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 653,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "liabilities_disclosure",
+     "label": "פרטים על התחייבויות כספיות",
+     "section": "בירור צרכים · תמונה פיננסית",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "אמסור פרטים",
+      "אין",
+      "מעדיפ/ה למסור בשיחה"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 654
+     }
+    },
+    {
+     "key": "liability_records",
+     "label": "התחייבויות כספיות",
+     "section": "בירור צרכים · תמונה פיננסית",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "liabilities_disclosure",
+      "value": "אמסור פרטים"
+     },
+     "fields": [
+      {
+       "id": "type",
+       "type": "text",
+       "label": "סוג ההתחייבות",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "creditor",
+       "type": "text",
+       "label": "למי חייבים",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "balance",
+       "min": 0,
+       "type": "number",
+       "label": "יתרה בשקלים",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "monthly_payment",
+       "min": 0,
+       "type": "number",
+       "label": "תשלום חודשי בשקלים",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "end",
+       "type": "date",
+       "label": "מועד סיום ידוע",
+       "section": "",
+       "required": false,
+       "maxLength": 500,
+       "allowFuture": true
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 655,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "additional_dependents",
+     "label": "האם יש תלויים כלכליים נוספים מעבר לבן/בת הזוג והילדים?",
+     "section": "בירור צרכים · תמונה פיננסית",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 656
+     }
+    },
+    {
+     "key": "dependent_records",
+     "label": "פרטי התלויים הנוספים",
+     "section": "בירור צרכים · תמונה פיננסית",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "additional_dependents",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "relation",
+       "type": "text",
+       "label": "קרבה",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "age",
+       "max": 120,
+       "min": 0,
+       "type": "number",
+       "label": "גיל",
+       "integer": true,
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "support",
+       "type": "text",
+       "label": "סוג התמיכה",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "monthly_amount",
+       "min": 0,
+       "type": "number",
+       "label": "סכום תמיכה חודשי בשקלים",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 657,
+      "minEntries": 1
+     }
+    }
+   ]
+  }
+ ]
+}

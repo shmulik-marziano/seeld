@@ -27,6 +27,9 @@ const HE = "\\u0590-\\u05FFA-Za-z";
 const APPROVED_ADDR_RE = /[A-Za-z0-9._+-]+@seeld\.info/gi;
 const NAME_RE = new RegExp(`(?<![${HE}])(שמוליק|שמואל מרציאנו|מרציאנו|משה|Shmulik|Marziano)(?![${HE}])`, "u");
 const NEG = "(?<!אינם )(?<!אינן )(?<!אינה )(?<!אינו )(?<!לא )(?<!ללא )";
+// Defined pension terms of art that contain a stem of the no-guarantee rule. They name product features
+// (retirement-planning pages explain them in plain words) and are not promises by the agency. Exact phrases only.
+const TERM_OK_RE = /(מקדם קצבה מובטח|מקדמי קצבה מובטחים|תשלומים מובטחים)/gu;
 // Always errors: promises and unverifiable superlatives.
 const PROMISE_RES = [
   new RegExp(`${NEG}(מובטח|מובטחת|מבטיחים|מבטיחה|נבטיח|נבטיחו|מספר 1)`, "u"),
@@ -190,9 +193,10 @@ for (const p of sitemapPaths) {
   const everythingNoAddr = everything.replace(APPROVED_ADDR_RE, "");
   const nm = everythingNoAddr.match(NAME_RE);
   if (nm) err(p, `personal name "${nm[0]}" (context: ...${everythingNoAddr.slice(Math.max(0, nm.index - 25), nm.index + 30)}...)`);
+  const everythingForPromises = everything.replace(TERM_OK_RE, " ");
   for (const re of PROMISE_RES) {
-    const m = everything.match(re);
-    if (m) (isPost ? warn : err)(p, `promise / invented-claim pattern "${m[0]}" (context: ...${everything.slice(Math.max(0, m.index - 30), m.index + 40)}...)`);
+    const m = everythingForPromises.match(re);
+    if (m) (isPost ? warn : err)(p, `promise / invented-claim pattern "${m[0]}" (context: ...${everythingForPromises.slice(Math.max(0, m.index - 30), m.index + 40)}...)`);
   }
   const strict = `${head} ${d.summaries[p] ?? ""}`;
   for (const re of FIGURE_RES) {

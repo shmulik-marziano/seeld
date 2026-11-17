@@ -170,6 +170,9 @@ const HelpPage = lazy(() => import("@/pages/HelpPage"));
 const ReportApp = lazy(() => import("@/pages/app/ReportApp"));
 // Ops Console (manager / super_admin only; role gate inside). Never imported by public pages.
 const OpsRoutes = lazy(() => import("@/pages/app/ops/OpsRoutes"));
+const QuestionnairesRoutes = lazy(() => import("@/pages/app/questionnaires/QuestionnairesRoutes"));
+const ReportsRoutes = lazy(() => import("@/pages/app/reports/ReportsRoutes"));
+const QuestionnaireClient = lazy(() => import("@/pages/QuestionnaireClient"));
 const ReportPublic = lazy(() => import("@/pages/Report"));
 const AuthPage = lazy(() => import("@/pages/AuthPage"));
 
@@ -267,6 +270,12 @@ const EmployerFunds = lazy(() => import("@/pages/savings/EmployerFunds"));
 const PreRetirement = lazy(() => import("@/pages/savings/PreRetirement"));
 const PostRetirement = lazy(() => import("@/pages/savings/PostRetirement"));
 const FinancialPlanning = lazy(() => import("@/pages/savings/FinancialPlanning"));
+const RetirementPlanning = lazy(() => import("@/pages/savings/retirement/RetirementPlanning"));
+const RetirementHow = lazy(() => import("@/pages/savings/retirement/HowItWorks"));
+const RetirementCase = lazy(() => import("@/pages/savings/retirement/FieldStory"));
+const RetirementFaq = lazy(() => import("@/pages/savings/retirement/RetirementFaq"));
+const RetirementContact = lazy(() => import("@/pages/savings/retirement/RetirementContact"));
+const RetirementChecklist = lazy(() => import("@/pages/savings/retirement/RetirementChecklist"));
 
 // Shared pages (lazy)
 const TermsPage = lazy(() => import("@/pages/TermsPage"));
@@ -418,6 +427,12 @@ const App = () => (
                 <Route path="/savings/pre-retirement" element={<PreRetirement />} />
                 <Route path="/savings/post-retirement" element={<PostRetirement />} />
                 <Route path="/savings/financial-planning" element={<FinancialPlanning />} />
+                <Route path="/savings/retirement-planning" element={<RetirementPlanning />} />
+                <Route path="/savings/retirement-planning/how-it-works" element={<RetirementHow />} />
+                <Route path="/savings/retirement-planning/case-study" element={<RetirementCase />} />
+                <Route path="/savings/retirement-planning/faq" element={<RetirementFaq />} />
+                <Route path="/savings/retirement-planning/contact" element={<RetirementContact />} />
+                <Route path="/savings/retirement-planning/checklist" element={<RetirementChecklist />} />
 
                 {/* Shared */}
                 <Route path="/terms" element={<TermsPage />} />
@@ -430,6 +445,7 @@ const App = () => (
                 <Route path="/report" element={<ReportPublic />} />
 
                 {/* ═══ AGENT APP ROUTES (/app/*) ═══ */}
+                <Route path="/q/:token" element={<QuestionnaireClient />} />
                 <Route path="/portal/:token" element={<ClientPortalPage />} />
                 <Route path="/execution-portal/:token" element={<ExecutionSummaryPortalPage />} />
                 <Route path="/client/:id" element={<ClientPortalPage />} />
@@ -453,6 +469,9 @@ const App = () => (
                   <Route path="/app/help" element={<HelpPage />} />
                   <Route path="/app/report" element={<ReportApp />} />
                   <Route path="/app/ops/*" element={<OpsRoutes />} />
+                  <Route path="/app/questionnaires/*" element={<QuestionnairesRoutes />} />
+                  <Route path="/app/reports" element={<ReportsRoutes />} />
+                  <Route path="/app/reports/*" element={<ReportsRoutes />} />
                   <Route path="/app/settings" element={<AgencySettingsPage />} />
 
                   {/* ═══ PLATFORM TOOLS ═══ */}

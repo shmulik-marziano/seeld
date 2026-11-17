@@ -31,7 +31,7 @@ const compare = [
 
 const commitments = [
   "עובדים מול כמה חברות ביטוח ובתי השקעות, ולא תלויים בחברה אחת.",
-  "בדיקת תיק שלמה: ביטוחים, פנסיה וחיסכון, לא רק מוצר אחד.",
+  "אפיון צרכים שלם: ביטוחים, פנסיה וחיסכון, לא רק מוצר אחד.",
   "מעקב שוטף: חידושים, שינויים במשפחה ועדכוני רגולציה.",
   "בדיקה של כפל ביטוחי, כיסויים חסרים ודמי ניהול שכדאי לבדוק.",
   "אזור אישי: הפוליסות, החיסכון והמסמכים שלכם במקום אחד.",
@@ -60,7 +60,7 @@ export default function About() {
         actions={
           <>
             <Link to="/contact" className="sd-btn">תיאום פגישה<Arrow /></Link>
-            <Link to="/portfolio-review" className="sd-link">בדיקת תיק 360<Arrow /></Link>
+            <Link to="/portfolio-review" className="sd-link">אפיון צרכים<Arrow /></Link>
           </>
         }
       />
@@ -143,10 +143,10 @@ export default function About() {
 
       <PubCta
         title="רוצים להכיר את המצב שלכם?"
-        text="שיחת היכרות בלי התחייבות מצידכם. מתחילים בבדיקת תיק 360 וממשיכים יחד, בקצב שלכם."
+        text="שיחת היכרות בלי התחייבות מצידכם. מתחילים באפיון צרכים וממשיכים יחד, בקצב שלכם."
         art="12-childrens-savings"
         primary={{ label: "תיאום פגישה", to: "/contact" }}
-        secondary={{ label: "בדיקת תיק 360", to: "/portfolio-review" }}
+        secondary={{ label: "אפיון צרכים", to: "/portfolio-review" }}
       />
     </PubPage>
   );

@@ -196,7 +196,7 @@ const Blog = () => {
 
         <PubClose
           title="יש שאלה שלא מצאתם לה תשובה?"
-          text="שאלה על התיק שלכם היא לא שאלה כללית. מתחילים בבדיקת תיק 360, וממשיכים יחד."
+          text="שאלה על התיק שלכם היא לא שאלה כללית. מתחילים באפיון צרכים, וממשיכים יחד."
           art="11-claims-service"
         >
           <button type="button" onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))} className="sd-link-light">

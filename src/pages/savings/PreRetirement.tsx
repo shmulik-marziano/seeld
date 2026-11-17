@@ -1,4 +1,5 @@
 import SavingsPageSd from "@/components/sd/SavingsPageSd";
+import { RpCrossLink } from "@/components/retire/parts";
 
 // Kit design (SavingsPageSd): content lives here, layout, illustration and colours come from the shared template and topics.ts.
 const PreRetirement = () => {  const productTypes = [
@@ -76,13 +77,14 @@ const PreRetirement = () => {  const productTypes = [
       typesTitle="שלבי ההכנה לפרישה"
       typesSubtitle="תהליך מסודר שנועד לעזור לפרוש בצורה מסודרת"
       types={productTypes}
+      afterTypes={<RpCrossLink />}
       benefitsTitle="מה כולל ליווי לפני פרישה?"
       benefits={benefits}
       articles={articles}
       bottomLine={bottomLine}
       faqItems={faqItems}
       closingTitle="מתכוננים לפרישה?"
-      closingText="השאירו פרטים ונבדוק יחד את החסכונות הפנסיוניים שלכם. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
+      closingText="השאירו פרטים ונבדוק יחד את החסכונות הפנסיוניים שלכם. אפשר גם להתחיל באפיון צרכים מלא."
       form={{ focusArea: "pension", title: "ייעוץ לפני פרישה", description: "השאירו פרטים ונבדוק יחד את החסכונות הפנסיוניים שלכם" }}
     />
   );

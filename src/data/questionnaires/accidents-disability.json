@@ -1,0 +1,140 @@
+{
+ "key": "accidents-disability",
+ "version": 1,
+ "title": "תאונות, מגבלות ונכות",
+ "description": "מגבלה תפקודית או נכות מוכרת, וסיבתן. הטפסים של חברות ספציפיות לא נכללו.",
+ "status": "live",
+ "group": "extra",
+ "intro": null,
+ "consent": null,
+ "notes": [],
+ "declaration": {
+  "title": "הצהרה",
+  "paragraphs": [
+   "אני מאשר/ת שהפרטים שמסרתי בשאלון נכונים ומלאים למיטב ידיעתי, ושנתתי אותם מרצוני החופשי.",
+   "ידוע לי שהפרטים משמשים את הצוות לטיפול בבקשה שלי, ושהם נמסרים לחברות הביטוח או החיסכון רק לצורך הטיפול הזה."
+  ],
+  "checkbox": "קראתי את ההצהרה ואני מאשר/ת אותה"
+ },
+ "sections": [
+  {
+   "id": "s1",
+   "title": "מגבלות ונכות",
+   "intro": null,
+   "spot": "magnifier",
+   "module": false,
+   "questions": [
+    {
+     "key": "limitations",
+     "label": "האם קיימת מגבלה תפקודית, נכות מוכרת או היעדרות ממושכת מעבודה עקב מצב רפואי?",
+     "section": "מידע בריאותי משותף",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 700,
+      "gate": true
+     }
+    },
+    {
+     "key": "limitations_detail",
+     "label": "פרט/י את המגבלה, ההכרה או תקופת ההיעדרות.",
+     "section": "מידע בריאותי משותף",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "limitations",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 701
+     }
+    },
+    {
+     "key": "source_limitations_1",
+     "label": "האם הנכות נובעת מתאונה או ממחלה? פרט/י את הסיבה והליקויים הרפואיים.",
+     "section": "מגבלות ונכות",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "limitations",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 566
+     }
+    },
+    {
+     "key": "source_limitations_2",
+     "label": "האם נמצאים בתהליך קביעת נכות או שנקבעו אחוזים? ציין/י מועד קביעה ואחוזי נכות. אם נקבעו מעל 45%, ניתן לצרף את פרוטוקול הביטוח הלאומי.",
+     "section": "מגבלות ונכות",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "limitations",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 567
+     }
+    }
+   ]
+  }
+ ]
+}

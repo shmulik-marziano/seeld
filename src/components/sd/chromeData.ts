@@ -36,6 +36,7 @@ export const SAVINGS_LINKS: ChromeLink[] = [
   { href: "/savings/pension-funds", icon: "hourglass", label: "קרנות פנסיה" },
   { href: "/savings/gemel-investment", icon: "chart", label: "גמל להשקעה" },
   { href: "/savings/child-savings", icon: "wallet", label: "חיסכון לילד" },
+  { href: "/savings/retirement-planning", icon: "umbrella", label: "תכנון פרישה" },
   { href: "/savings/pre-retirement", icon: "retirement", label: "לקראת פרישה" },
   { href: "/savings/financial-planning", icon: "compass", label: "תכנון פיננסי" },
 ];
@@ -50,7 +51,7 @@ export const KNOWLEDGE_LINKS: ChromeLink[] = [
 ];
 
 export const SERVICE_LINKS: ChromeLink[] = [
-  { href: "/portfolio-review", label: "בדיקת תיק 360" },
+  { href: "/portfolio-review", label: "אפיון צרכים" },
   { href: "/rights-extraction", label: "מיצוי זכויות" },
   { href: "/onboarding", label: "שאלון הצטרפות" },
   { href: "/direct-debit", label: "מילוי טופס הו״ק" },

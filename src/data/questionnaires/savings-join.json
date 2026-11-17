@@ -1,0 +1,2237 @@
+{
+ "key": "savings-join",
+ "version": 1,
+ "title": "הצטרפות לחיסכון פנסיוני",
+ "description": "קרן פנסיה, קרן השתלמות וקופת גמל: העדפות, מוטבים, דמי ניהול והפקדות. איסוף מידע בלבד.",
+ "status": "live",
+ "group": "extra",
+ "intro": null,
+ "consent": null,
+ "notes": [],
+ "declaration": {
+  "title": "הצהרה",
+  "paragraphs": [
+   "אני מאשר/ת שהפרטים שמסרתי בשאלון נכונים ומלאים למיטב ידיעתי, ושנתתי אותם מרצוני החופשי.",
+   "ידוע לי שהפרטים משמשים את הצוות לטיפול בבקשה שלי, ושהם נמסרים לחברות הביטוח או החיסכון רק לצורך הטיפול הזה."
+  ],
+  "checkbox": "קראתי את ההצהרה ואני מאשר/ת אותה"
+ },
+ "sections": [
+  {
+   "id": "s1",
+   "title": "בחירת מוצר",
+   "intro": null,
+   "spot": "olive-sapling",
+   "module": false,
+   "questions": [
+    {
+     "key": "join_which",
+     "label": "לאילו מוצרים מתכוונים להצטרף?",
+     "section": "בחירת מוצר",
+     "type": "multi",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "קרן פנסיה",
+      "קרן השתלמות",
+      "קופת גמל"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld",
+     "confidence": "product",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "note": "שאלה מוצרית (לא בבנק): הבנק מחזיק כל מוצר בפרק נפרד, והשאלה מציגה רק את הפרקים הרלוונטיים."
+     }
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "title": "הצטרפות · קרן פנסיה",
+   "intro": null,
+   "spot": null,
+   "module": false,
+   "questions": [
+    {
+     "key": "pension_beneficiary_plan",
+     "label": "האם ברצונך למסור פרטי מוטבים לבדיקה עבור קרן פנסיה?",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "הפרטים מתייחסים למוצר זה בלבד. זהו איסוף מידע ואינו מינוי מוטבים.",
+     "options": [
+      "כן, אמסור פרטים",
+      "אבקש לברר עם הסוכן"
+     ],
+     "when": {
+      "id": "join_which",
+      "value": "קרן פנסיה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 82
+     }
+    },
+    {
+     "key": "pension_beneficiaries",
+     "label": "פרטי המוטבים — קרן פנסיה",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "כל מוטב בשורה נפרדת. החלקים צריכים להסתכם ב־100%; לא נקבעת חלוקה אוטומטית.",
+     "options": null,
+     "when": {
+      "id": "pension_beneficiary_plan",
+      "value": "כן, אמסור פרטים"
+     },
+     "fields": [
+      {
+       "id": "first_name",
+       "type": "text",
+       "label": "שם פרטי",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "last_name",
+       "type": "text",
+       "label": "שם משפחה",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "id_type",
+       "type": "choice",
+       "label": "סוג מסמך מזהה",
+       "options": [
+        "תעודת זהות ישראלית",
+        "דרכון"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "id_number",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "תעודת זהות ישראלית"
+       },
+       "label": "מספר תעודת זהות",
+       "format": "israeli-id",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "passport",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מספר דרכון",
+       "format": "passport",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "passport_country",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מדינת הנפקת הדרכון",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "birth",
+       "type": "date",
+       "label": "תאריך לידה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "country",
+       "type": "text",
+       "label": "מדינה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "city",
+       "type": "text",
+       "label": "יישוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "street",
+       "type": "text",
+       "label": "רחוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "house",
+       "type": "text",
+       "label": "מספר בית",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "apartment",
+       "type": "text",
+       "label": "מספר דירה",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "postal_code",
+       "type": "text",
+       "label": "מיקוד",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "po_box",
+       "type": "text",
+       "label": "תא דואר",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "relation",
+       "type": "text",
+       "label": "קרבה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "share",
+       "max": 100,
+       "min": 0.01,
+       "type": "number",
+       "label": "חלק באחוזים",
+       "section": "",
+       "required": true,
+       "maxLength": 300,
+       "allowUnknown": false
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 83,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "pension_beneficiary_replacement",
+     "label": "אם מוטב ימות לפניך, איזו אפשרות תרצה/י לברר?",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "העדפה להכנת השיחה; אינה הוראה מחייבת.",
+     "options": [
+      "חלוקה שווה לשאר המוטבים",
+      "חלוקה יחסית לשאר המוטבים",
+      "ליורשים החוקיים",
+      "אפשרות אחרת",
+      "אבקש לברר עם הסוכן"
+     ],
+     "when": {
+      "id": "pension_beneficiary_plan",
+      "value": "כן, אמסור פרטים"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 84
+     }
+    },
+    {
+     "key": "pension_beneficiary_replacement_detail",
+     "label": "פירוט האפשרות האחרת",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "pension_beneficiary_replacement",
+      "value": "אפשרות אחרת"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 85
+     }
+    },
+    {
+     "key": "pension_terms_known",
+     "label": "האם סוכמו פרטי ההצטרפות ודמי הניהול עבור קרן פנסיה?",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "join_which",
+      "value": "קרן פנסיה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 102
+     }
+    },
+    {
+     "key": "pension_start_date",
+     "label": "מועד הצטרפות מבוקש",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "date",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "pension_terms_known",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 103,
+      "allowFuture": true
+     }
+    },
+    {
+     "key": "pension_fee_accumulation",
+     "label": "דמי ניהול מהצבירה באחוזים לשנה",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "pension_terms_known",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": 0,
+     "max_val": 100,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 104,
+      "numberKind": "percent",
+      "unit": "%"
+     }
+    },
+    {
+     "key": "pension_fee_deposit",
+     "label": "דמי ניהול מההפקדה באחוזים",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "pension_terms_known",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": 0,
+     "max_val": 100,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 105,
+      "numberKind": "percent",
+      "unit": "%"
+     }
+    },
+    {
+     "key": "pension_allocation_contributions_known",
+     "label": "האם יש מסלולי השקעה מבוקשים עבור רכיב התגמולים?",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "join_which",
+      "value": "קרן פנסיה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 106
+     }
+    },
+    {
+     "key": "pension_allocation_contributions",
+     "label": "חלוקה מבוקשת בין מסלולים — רכיב התגמולים",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "איסוף העדפה בלבד. לא נבחר מסלול ברירת מחדל ולא מבוצע שינוי השקעה.",
+     "options": null,
+     "when": {
+      "id": "pension_allocation_contributions_known",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "track_name",
+       "type": "text",
+       "label": "שם המסלול",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "track_code",
+       "type": "text",
+       "label": "קוד המסלול",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "share",
+       "max": 100,
+       "min": 0.01,
+       "type": "number",
+       "label": "שיעור מהסכום באחוזים",
+       "section": "",
+       "required": true,
+       "maxLength": 300,
+       "allowUnknown": false
+      },
+      {
+       "id": "is_cash",
+       "type": "choice",
+       "label": "האם זה מסלול כספי שקלי?",
+       "options": [
+        "כן",
+        "לא",
+        "לא יודע/ת"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "cash_months",
+       "type": "choice",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "משך השהייה במסלול הכספי",
+       "options": [
+        "6 חודשים",
+        "12 חודשים",
+        "24 חודשים",
+        "לא יודע/ת"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "next_track",
+       "type": "text",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "שם המסלול בתום התקופה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "next_track_code",
+       "type": "text",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "קוד המסלול בתום התקופה",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 107,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "pension_allocation_severance_known",
+     "label": "האם יש מסלולי השקעה מבוקשים עבור רכיב הפיצויים?",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "join_which",
+      "value": "קרן פנסיה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 108
+     }
+    },
+    {
+     "key": "pension_allocation_severance",
+     "label": "חלוקה מבוקשת בין מסלולים — רכיב הפיצויים",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "איסוף העדפה בלבד. לא נבחר מסלול ברירת מחדל ולא מבוצע שינוי השקעה.",
+     "options": null,
+     "when": {
+      "id": "pension_allocation_severance_known",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "track_name",
+       "type": "text",
+       "label": "שם המסלול",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "track_code",
+       "type": "text",
+       "label": "קוד המסלול",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "share",
+       "max": 100,
+       "min": 0.01,
+       "type": "number",
+       "label": "שיעור מהסכום באחוזים",
+       "section": "",
+       "required": true,
+       "maxLength": 300,
+       "allowUnknown": false
+      },
+      {
+       "id": "is_cash",
+       "type": "choice",
+       "label": "האם זה מסלול כספי שקלי?",
+       "options": [
+        "כן",
+        "לא",
+        "לא יודע/ת"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "cash_months",
+       "type": "choice",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "משך השהייה במסלול הכספי",
+       "options": [
+        "6 חודשים",
+        "12 חודשים",
+        "24 חודשים",
+        "לא יודע/ת"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "next_track",
+       "type": "text",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "שם המסלול בתום התקופה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "next_track_code",
+       "type": "text",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "קוד המסלול בתום התקופה",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 109,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "pension_insurance_plan_known",
+     "label": "האם נקבע מסלול ביטוח מבוקש בקרן הפנסיה?",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "join_which",
+      "value": "קרן פנסיה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 110
+     }
+    },
+    {
+     "key": "pension_insurance_plan",
+     "label": "פרטי מסלול הביטוח המבוקש",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "pension_insurance_plan_known",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "name",
+       "type": "text",
+       "label": "שם המסלול",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "code",
+       "type": "text",
+       "label": "קוד המסלול",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "disability_pct",
+       "max": 100,
+       "min": 0,
+       "type": "number",
+       "label": "שיעור כיסוי לנכות באחוזים",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "survivors_pct",
+       "max": 100,
+       "min": 0,
+       "type": "number",
+       "label": "שיעור כיסוי לשאירים באחוזים",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "retirement_age",
+       "max": 80,
+       "min": 50,
+       "type": "number",
+       "label": "גיל פרישה במסלול",
+       "integer": true,
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 111,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "pension_coverage_requests",
+     "label": "האם יש בקשות לבדיקה בנוגע לכיסוי הביטוחי?",
+     "section": "הצטרפות · קרן פנסיה",
+     "type": "long",
+     "required": false,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "למשל ילד עם מוגבלות, קצבת נכות מתפתחת או בירור כיסוי לשאירים. אין במסירת המידע ויתור על כיסוי.",
+     "options": null,
+     "when": {
+      "id": "join_which",
+      "value": "קרן פנסיה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 112
+     }
+    }
+   ]
+  },
+  {
+   "id": "s3",
+   "title": "הצטרפות · קרן השתלמות",
+   "intro": null,
+   "spot": null,
+   "module": false,
+   "questions": [
+    {
+     "key": "study_beneficiary_plan",
+     "label": "האם ברצונך למסור פרטי מוטבים לבדיקה עבור קרן השתלמות?",
+     "section": "הצטרפות · קרן השתלמות",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "הפרטים מתייחסים למוצר זה בלבד. זהו איסוף מידע ואינו מינוי מוטבים.",
+     "options": [
+      "כן, אמסור פרטים",
+      "אבקש לברר עם הסוכן"
+     ],
+     "when": {
+      "id": "join_which",
+      "value": "קרן השתלמות"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 90
+     }
+    },
+    {
+     "key": "study_beneficiaries",
+     "label": "פרטי המוטבים — קרן השתלמות",
+     "section": "הצטרפות · קרן השתלמות",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "כל מוטב בשורה נפרדת. החלקים צריכים להסתכם ב־100%; לא נקבעת חלוקה אוטומטית.",
+     "options": null,
+     "when": {
+      "id": "study_beneficiary_plan",
+      "value": "כן, אמסור פרטים"
+     },
+     "fields": [
+      {
+       "id": "first_name",
+       "type": "text",
+       "label": "שם פרטי",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "last_name",
+       "type": "text",
+       "label": "שם משפחה",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "id_type",
+       "type": "choice",
+       "label": "סוג מסמך מזהה",
+       "options": [
+        "תעודת זהות ישראלית",
+        "דרכון"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "id_number",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "תעודת זהות ישראלית"
+       },
+       "label": "מספר תעודת זהות",
+       "format": "israeli-id",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "passport",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מספר דרכון",
+       "format": "passport",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "passport_country",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מדינת הנפקת הדרכון",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "birth",
+       "type": "date",
+       "label": "תאריך לידה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "country",
+       "type": "text",
+       "label": "מדינה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "city",
+       "type": "text",
+       "label": "יישוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "street",
+       "type": "text",
+       "label": "רחוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "house",
+       "type": "text",
+       "label": "מספר בית",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "apartment",
+       "type": "text",
+       "label": "מספר דירה",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "postal_code",
+       "type": "text",
+       "label": "מיקוד",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "po_box",
+       "type": "text",
+       "label": "תא דואר",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "relation",
+       "type": "text",
+       "label": "קרבה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "share",
+       "max": 100,
+       "min": 0.01,
+       "type": "number",
+       "label": "חלק באחוזים",
+       "section": "",
+       "required": true,
+       "maxLength": 300,
+       "allowUnknown": false
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 91,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "study_beneficiary_replacement",
+     "label": "אם מוטב ימות לפניך, איזו אפשרות תרצה/י לברר?",
+     "section": "הצטרפות · קרן השתלמות",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "העדפה להכנת השיחה; אינה הוראה מחייבת.",
+     "options": [
+      "חלוקה שווה לשאר המוטבים",
+      "חלוקה יחסית לשאר המוטבים",
+      "ליורשים החוקיים",
+      "אפשרות אחרת",
+      "אבקש לברר עם הסוכן"
+     ],
+     "when": {
+      "id": "study_beneficiary_plan",
+      "value": "כן, אמסור פרטים"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 92
+     }
+    },
+    {
+     "key": "study_beneficiary_replacement_detail",
+     "label": "פירוט האפשרות האחרת",
+     "section": "הצטרפות · קרן השתלמות",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "study_beneficiary_replacement",
+      "value": "אפשרות אחרת"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 93
+     }
+    },
+    {
+     "key": "study_terms_known",
+     "label": "האם סוכמו פרטי ההצטרפות ודמי הניהול עבור קרן השתלמות?",
+     "section": "הצטרפות · קרן השתלמות",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "join_which",
+      "value": "קרן השתלמות"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 121
+     }
+    },
+    {
+     "key": "study_start_date",
+     "label": "מועד הצטרפות מבוקש",
+     "section": "הצטרפות · קרן השתלמות",
+     "type": "date",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "study_terms_known",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 122,
+      "allowFuture": true
+     }
+    },
+    {
+     "key": "study_fee_accumulation",
+     "label": "דמי ניהול מהצבירה באחוזים לשנה",
+     "section": "הצטרפות · קרן השתלמות",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "study_terms_known",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": 0,
+     "max_val": 100,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 123,
+      "numberKind": "percent",
+      "unit": "%"
+     }
+    },
+    {
+     "key": "study_allocation_savings_known",
+     "label": "האם יש מסלולי השקעה מבוקשים עבור כספי ההשתלמות?",
+     "section": "הצטרפות · קרן השתלמות",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "join_which",
+      "value": "קרן השתלמות"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 124
+     }
+    },
+    {
+     "key": "study_allocation_savings",
+     "label": "חלוקה מבוקשת בין מסלולים — כספי ההשתלמות",
+     "section": "הצטרפות · קרן השתלמות",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "איסוף העדפה בלבד. לא נבחר מסלול ברירת מחדל ולא מבוצע שינוי השקעה.",
+     "options": null,
+     "when": {
+      "id": "study_allocation_savings_known",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "track_name",
+       "type": "text",
+       "label": "שם המסלול",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "track_code",
+       "type": "text",
+       "label": "קוד המסלול",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "share",
+       "max": 100,
+       "min": 0.01,
+       "type": "number",
+       "label": "שיעור מהסכום באחוזים",
+       "section": "",
+       "required": true,
+       "maxLength": 300,
+       "allowUnknown": false
+      },
+      {
+       "id": "is_cash",
+       "type": "choice",
+       "label": "האם זה מסלול כספי שקלי?",
+       "options": [
+        "כן",
+        "לא",
+        "לא יודע/ת"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "cash_months",
+       "type": "choice",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "משך השהייה במסלול הכספי",
+       "options": [
+        "6 חודשים",
+        "12 חודשים",
+        "24 חודשים",
+        "לא יודע/ת"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "next_track",
+       "type": "text",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "שם המסלול בתום התקופה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "next_track_code",
+       "type": "text",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "קוד המסלול בתום התקופה",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 125,
+      "minEntries": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "s4",
+   "title": "הצטרפות · קופת גמל",
+   "intro": null,
+   "spot": null,
+   "module": false,
+   "questions": [
+    {
+     "key": "provident_beneficiary_plan",
+     "label": "האם ברצונך למסור פרטי מוטבים לבדיקה עבור קופת גמל?",
+     "section": "הצטרפות · קופת גמל",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "הפרטים מתייחסים למוצר זה בלבד. זהו איסוף מידע ואינו מינוי מוטבים.",
+     "options": [
+      "כן, אמסור פרטים",
+      "אבקש לברר עם הסוכן"
+     ],
+     "when": {
+      "id": "join_which",
+      "value": "קופת גמל"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 86
+     }
+    },
+    {
+     "key": "provident_beneficiaries",
+     "label": "פרטי המוטבים — קופת גמל",
+     "section": "הצטרפות · קופת גמל",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "כל מוטב בשורה נפרדת. החלקים צריכים להסתכם ב־100%; לא נקבעת חלוקה אוטומטית.",
+     "options": null,
+     "when": {
+      "id": "provident_beneficiary_plan",
+      "value": "כן, אמסור פרטים"
+     },
+     "fields": [
+      {
+       "id": "first_name",
+       "type": "text",
+       "label": "שם פרטי",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "last_name",
+       "type": "text",
+       "label": "שם משפחה",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "id_type",
+       "type": "choice",
+       "label": "סוג מסמך מזהה",
+       "options": [
+        "תעודת זהות ישראלית",
+        "דרכון"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "id_number",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "תעודת זהות ישראלית"
+       },
+       "label": "מספר תעודת זהות",
+       "format": "israeli-id",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "passport",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מספר דרכון",
+       "format": "passport",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "passport_country",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מדינת הנפקת הדרכון",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "birth",
+       "type": "date",
+       "label": "תאריך לידה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "country",
+       "type": "text",
+       "label": "מדינה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "city",
+       "type": "text",
+       "label": "יישוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "street",
+       "type": "text",
+       "label": "רחוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "house",
+       "type": "text",
+       "label": "מספר בית",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "apartment",
+       "type": "text",
+       "label": "מספר דירה",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "postal_code",
+       "type": "text",
+       "label": "מיקוד",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "po_box",
+       "type": "text",
+       "label": "תא דואר",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "relation",
+       "type": "text",
+       "label": "קרבה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "share",
+       "max": 100,
+       "min": 0.01,
+       "type": "number",
+       "label": "חלק באחוזים",
+       "section": "",
+       "required": true,
+       "maxLength": 300,
+       "allowUnknown": false
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 87,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "provident_beneficiary_replacement",
+     "label": "אם מוטב ימות לפניך, איזו אפשרות תרצה/י לברר?",
+     "section": "הצטרפות · קופת גמל",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "העדפה להכנת השיחה; אינה הוראה מחייבת.",
+     "options": [
+      "חלוקה שווה לשאר המוטבים",
+      "חלוקה יחסית לשאר המוטבים",
+      "ליורשים החוקיים",
+      "אפשרות אחרת",
+      "אבקש לברר עם הסוכן"
+     ],
+     "when": {
+      "id": "provident_beneficiary_plan",
+      "value": "כן, אמסור פרטים"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 88
+     }
+    },
+    {
+     "key": "provident_beneficiary_replacement_detail",
+     "label": "פירוט האפשרות האחרת",
+     "section": "הצטרפות · קופת גמל",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "provident_beneficiary_replacement",
+      "value": "אפשרות אחרת"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 89
+     }
+    },
+    {
+     "key": "provident_terms_known",
+     "label": "האם סוכמו פרטי ההצטרפות ודמי הניהול עבור קופת גמל?",
+     "section": "הצטרפות · קופת גמל",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "join_which",
+      "value": "קופת גמל"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 113
+     }
+    },
+    {
+     "key": "provident_start_date",
+     "label": "מועד הצטרפות מבוקש",
+     "section": "הצטרפות · קופת גמל",
+     "type": "date",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "provident_terms_known",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 114,
+      "allowFuture": true
+     }
+    },
+    {
+     "key": "provident_fee_accumulation",
+     "label": "דמי ניהול מהצבירה באחוזים לשנה",
+     "section": "הצטרפות · קופת גמל",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "provident_terms_known",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": 0,
+     "max_val": 100,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 115,
+      "numberKind": "percent",
+      "unit": "%"
+     }
+    },
+    {
+     "key": "provident_fee_deposit",
+     "label": "דמי ניהול מההפקדה באחוזים",
+     "section": "הצטרפות · קופת גמל",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "provident_terms_known",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": 0,
+     "max_val": 100,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 116,
+      "numberKind": "percent",
+      "unit": "%"
+     }
+    },
+    {
+     "key": "provident_allocation_contributions_known",
+     "label": "האם יש מסלולי השקעה מבוקשים עבור רכיב התגמולים?",
+     "section": "הצטרפות · קופת גמל",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "join_which",
+      "value": "קופת גמל"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 117
+     }
+    },
+    {
+     "key": "provident_allocation_contributions",
+     "label": "חלוקה מבוקשת בין מסלולים — רכיב התגמולים",
+     "section": "הצטרפות · קופת גמל",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "איסוף העדפה בלבד. לא נבחר מסלול ברירת מחדל ולא מבוצע שינוי השקעה.",
+     "options": null,
+     "when": {
+      "id": "provident_allocation_contributions_known",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "track_name",
+       "type": "text",
+       "label": "שם המסלול",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "track_code",
+       "type": "text",
+       "label": "קוד המסלול",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "share",
+       "max": 100,
+       "min": 0.01,
+       "type": "number",
+       "label": "שיעור מהסכום באחוזים",
+       "section": "",
+       "required": true,
+       "maxLength": 300,
+       "allowUnknown": false
+      },
+      {
+       "id": "is_cash",
+       "type": "choice",
+       "label": "האם זה מסלול כספי שקלי?",
+       "options": [
+        "כן",
+        "לא",
+        "לא יודע/ת"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "cash_months",
+       "type": "choice",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "משך השהייה במסלול הכספי",
+       "options": [
+        "6 חודשים",
+        "12 חודשים",
+        "24 חודשים",
+        "לא יודע/ת"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "next_track",
+       "type": "text",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "שם המסלול בתום התקופה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "next_track_code",
+       "type": "text",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "קוד המסלול בתום התקופה",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 118,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "provident_allocation_severance_known",
+     "label": "האם יש מסלולי השקעה מבוקשים עבור רכיב הפיצויים?",
+     "section": "הצטרפות · קופת גמל",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "join_which",
+      "value": "קופת גמל"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 119
+     }
+    },
+    {
+     "key": "provident_allocation_severance",
+     "label": "חלוקה מבוקשת בין מסלולים — רכיב הפיצויים",
+     "section": "הצטרפות · קופת גמל",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "איסוף העדפה בלבד. לא נבחר מסלול ברירת מחדל ולא מבוצע שינוי השקעה.",
+     "options": null,
+     "when": {
+      "id": "provident_allocation_severance_known",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "track_name",
+       "type": "text",
+       "label": "שם המסלול",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "track_code",
+       "type": "text",
+       "label": "קוד המסלול",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "share",
+       "max": 100,
+       "min": 0.01,
+       "type": "number",
+       "label": "שיעור מהסכום באחוזים",
+       "section": "",
+       "required": true,
+       "maxLength": 300,
+       "allowUnknown": false
+      },
+      {
+       "id": "is_cash",
+       "type": "choice",
+       "label": "האם זה מסלול כספי שקלי?",
+       "options": [
+        "כן",
+        "לא",
+        "לא יודע/ת"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "cash_months",
+       "type": "choice",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "משך השהייה במסלול הכספי",
+       "options": [
+        "6 חודשים",
+        "12 חודשים",
+        "24 חודשים",
+        "לא יודע/ת"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "next_track",
+       "type": "text",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "שם המסלול בתום התקופה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "next_track_code",
+       "type": "text",
+       "when": {
+        "id": "is_cash",
+        "value": "כן"
+       },
+       "label": "קוד המסלול בתום התקופה",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 120,
+      "minEntries": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "s5",
+   "title": "הצטרפות · הפקדות תקופתיות",
+   "intro": null,
+   "spot": "coins-stacks",
+   "module": false,
+   "questions": [
+    {
+     "key": "financial_frequency",
+     "label": "מה תדירות ההפקדות הצפויה?",
+     "section": "תוכנית החיסכון",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "חד־פעמית",
+      "חודשית",
+      "רבעונית",
+      "חצי־שנתית",
+      "שנתית",
+      "ניוד חד־פעמי",
+      "אין הפקדות צפויות",
+      "אחר / לא יודע/ת"
+     ],
+     "when": {
+      "id": "join_which",
+      "value": [
+       "קופת גמל",
+       "קרן השתלמות"
+      ]
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s5",
+      "bankId": 622
+     }
+    },
+    {
+     "key": "provident_recurring_amount",
+     "label": "סכום כל הפקדה תקופתית מבוקשת בשקלים",
+     "section": "הצטרפות · הפקדות תקופתיות",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "financial_frequency",
+      "value": [
+       "חודשית",
+       "רבעונית",
+       "חצי־שנתית",
+       "שנתית"
+      ]
+     },
+     "fields": null,
+     "min_val": 0,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s5",
+      "bankId": 157,
+      "numberKind": "amount",
+      "unit": "₪"
+     }
+    },
+    {
+     "key": "provident_collection_day",
+     "label": "יום גבייה מבוקש בחודש",
+     "section": "הצטרפות · הפקדות תקופתיות",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "יש לבדוק מול הסוכן שהיום נתמך בחברה שנבחרה. מסירת העדפה אינה הרשאה לחיוב.",
+     "options": null,
+     "when": {
+      "id": "financial_frequency",
+      "value": "חודשית"
+     },
+     "fields": null,
+     "min_val": 1,
+     "max_val": 31,
+     "integer_only": true,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s5",
+      "bankId": 158,
+      "numberKind": "integer"
+     }
+    },
+    {
+     "key": "provident_collection_month",
+     "label": "חודש תחילת ההפקדות (1–12)",
+     "section": "הצטרפות · הפקדות תקופתיות",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "financial_frequency",
+      "value": [
+       "חודשית",
+       "רבעונית",
+       "חצי־שנתית",
+       "שנתית"
+      ]
+     },
+     "fields": null,
+     "min_val": 1,
+     "max_val": 12,
+     "integer_only": true,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s5",
+      "bankId": 159,
+      "numberKind": "integer"
+     }
+    },
+    {
+     "key": "provident_collection_year",
+     "label": "שנת תחילת ההפקדות",
+     "section": "הצטרפות · הפקדות תקופתיות",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "financial_frequency",
+      "value": [
+       "חודשית",
+       "רבעונית",
+       "חצי־שנתית",
+       "שנתית"
+      ]
+     },
+     "fields": null,
+     "min_val": 1900,
+     "max_val": 2100,
+     "integer_only": true,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s5",
+      "bankId": 160,
+      "numberKind": "year"
+     }
+    }
+   ]
+  }
+ ]
+}

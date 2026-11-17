@@ -82,7 +82,7 @@ const EmployerFunds = () => {  const productTypes = [
       bottomLine={bottomLine}
       faqItems={faqItems}
       closingTitle="רוצים הסדר פנסיוני ארגוני?"
-      closingText="השאירו את פרטי הארגון ונחזור אליכם עם הצעה שמתאימה לכם. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
+      closingText="השאירו את פרטי הארגון ונחזור אליכם עם הצעה שמתאימה לכם. אפשר גם להתחיל באפיון צרכים מלא."
       form={{ focusArea: "pension", title: "ייעוץ לקופות מרכזיות", description: "השאירו את פרטי הארגון ונחזור אליכם עם הצעה שמתאימה לכם" }}
     />
   );

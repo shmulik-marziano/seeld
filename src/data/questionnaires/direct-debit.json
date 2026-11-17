@@ -1,0 +1,729 @@
+{
+ "key": "direct-debit",
+ "version": 1,
+ "title": "הוראת קבע",
+ "description": "פרטי חשבון הבנק ופרטי התשלום, בשלבים קצרים ועם בדיקת תקינות בכל שלב.",
+ "status": "live",
+ "group": "core",
+ "intro": null,
+ "consent": null,
+ "notes": [
+  "נשען על הפרק 'אמצעי תשלום' ו'תשלום הביטוח' בבנק השאלות. הטופס הציבורי /direct-debit לא שונה.",
+  "המסירה כאן היא איסוף מידע בלבד ואינה הרשאה לחיוב (כך נוסח הבנק)."
+ ],
+ "declaration": {
+  "title": "הצהרה",
+  "paragraphs": [
+   "אני מאשר/ת שפרטי החשבון והתשלום שמסרתי נכונים ומלאים למיטב ידיעתי, ושנתתי אותם מרצוני החופשי.",
+   "ידוע לי שאוכל לבקש לשנות או לבטל את ההרשאה לחיוב בפנייה לבנק או לחברה."
+  ],
+  "checkbox": "קראתי את ההצהרה ואני מאשר/ת אותה"
+ },
+ "sections": [
+  {
+   "id": "s1",
+   "title": "הצטרפות · אמצעי תשלום",
+   "intro": null,
+   "spot": "key-brass",
+   "module": false,
+   "questions": [
+    {
+     "key": "payment_choice",
+     "label": "האם ידוע אמצעי התשלום המיועד?",
+     "section": "הצטרפות · אמצעי תשלום",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "חשבון בנק",
+      "אמצעי אחר",
+      "טרם נקבע"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 53
+     }
+    },
+    {
+     "key": "dd_bank",
+     "label": "באיזה בנק מתנהל החשבון?",
+     "section": "הצטרפות · אמצעי תשלום",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": "bank-pick",
+     "hint": "בוחרים את שם הבנק מהרשימה. קוד הבנק יתמלא לבד.",
+     "options": null,
+     "when": {
+      "id": "payment_choice",
+      "value": "חשבון בנק"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld",
+     "confidence": "product",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "widget": "bank",
+      "note": "שדה שטוח שמקביל ל-bank_account.bank_number/bank_name בבנק (הטופס מונחה שלבים)."
+     }
+    },
+    {
+     "key": "dd_branch",
+     "label": "מספר הסניף",
+     "section": "הצטרפות · אמצעי תשלום",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": "branch-code",
+     "hint": "3 ספרות. שם הסניף והיישוב יופיעו לבד כשהמספר נמצא ברשימה.",
+     "options": null,
+     "when": {
+      "id": "payment_choice",
+      "value": "חשבון בנק"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld",
+     "confidence": "product",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "widget": "branch",
+      "note": "מקביל ל-bank_account.branch."
+     }
+    },
+    {
+     "key": "dd_account",
+     "label": "מספר החשבון",
+     "section": "הצטרפות · אמצעי תשלום",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": "bank-account",
+     "hint": "ספרות בלבד, 4 עד 9. אפשר להדביק.",
+     "options": null,
+     "when": {
+      "id": "payment_choice",
+      "value": "חשבון בנק"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld",
+     "confidence": "product",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "note": "מקביל ל-bank_account.account."
+     }
+    },
+    {
+     "key": "dd_holder_is_client",
+     "label": "מי בעל החשבון?",
+     "section": "הצטרפות · אמצעי תשלום",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": null,
+     "options": [
+      "אני בעל/ת החשבון",
+      "בעל החשבון הוא אדם אחר"
+     ],
+     "when": {
+      "id": "payment_choice",
+      "value": "חשבון בנק"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld",
+     "confidence": "product",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "note": "ברירת המחדל: הלקוח. מקביל ל-bank_account.holder/co_holder."
+     }
+    },
+    {
+     "key": "dd_holder_name",
+     "label": "שם בעל החשבון, כפי שמופיע בבנק",
+     "section": "הצטרפות · אמצעי תשלום",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": "full-name",
+     "hint": "שם פרטי ושם משפחה.",
+     "options": null,
+     "when": {
+      "id": "payment_choice",
+      "value": "חשבון בנק"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld",
+     "confidence": "product",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "note": "מקביל ל-bank_account.holder; נדרשים שם פרטי ושם משפחה."
+     }
+    },
+    {
+     "key": "dd_holder_id",
+     "label": "מספר תעודת הזהות של בעל החשבון",
+     "section": "הצטרפות · אמצעי תשלום",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": "israeli-id",
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "payment_choice",
+      "value": "חשבון בנק"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld",
+     "confidence": "product",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "note": "קיים בטופס הציבורי DirectDebit.tsx ואינו בבנק."
+     }
+    },
+    {
+     "key": "dd_debit_day",
+     "label": "באיזה יום בחודש נוח לך שיבוצע החיוב?",
+     "section": "הצטרפות · אמצעי תשלום",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "1 בחודש",
+      "10 בחודש",
+      "15 בחודש",
+      "25 בחודש"
+     ],
+     "when": {
+      "id": "payment_choice",
+      "value": "חשבון בנק"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld",
+     "confidence": "product",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "note": "הימים זהים לטופס הציבורי DirectDebit.tsx."
+     }
+    },
+    {
+     "key": "payment_other",
+     "label": "אמצעי התשלום האחר",
+     "section": "הצטרפות · אמצעי תשלום",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "אין להזין מספר כרטיס אשראי, קוד אבטחה או סיסמה.",
+     "options": null,
+     "when": {
+      "id": "payment_choice",
+      "value": "אמצעי אחר"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 55
+     }
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "title": "הצטרפות · תשלום הביטוח",
+   "intro": null,
+   "spot": "scroll-ribbon",
+   "module": false,
+   "questions": [
+    {
+     "key": "insurance_payer",
+     "label": "מי צפוי לשלם את דמי הביטוח?",
+     "section": "הצטרפות · תשלום הביטוח",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "האדם שעבורו ממלאים פרק זה",
+      "אדם אחר",
+      "גורם אחר — נדרש בירור",
+      "טרם הוחלט"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 148
+     }
+    },
+    {
+     "key": "insurance_payer_person",
+     "label": "פרטי האדם האחר שמשלם",
+     "section": "הצטרפות · תשלום הביטוח",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "פרטי משלם נפרדים מבעל הפוליסה ומהמוטבים. דרכון דורש בירור התאמה מול החברה. הסוכן יבדוק אם נדרשת גם הצהרת משלם נפרד.",
+     "options": null,
+     "when": {
+      "id": "insurance_payer",
+      "value": "אדם אחר"
+     },
+     "fields": [
+      {
+       "id": "first_name",
+       "type": "text",
+       "label": "שם פרטי",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "last_name",
+       "type": "text",
+       "label": "שם משפחה",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "id_type",
+       "type": "choice",
+       "label": "סוג מסמך מזהה",
+       "options": [
+        "תעודת זהות ישראלית",
+        "דרכון"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "identity",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "תעודת זהות ישראלית"
+       },
+       "label": "מספר תעודת זהות",
+       "format": "israeli-id",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "passport",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מספר דרכון",
+       "format": "passport",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "passport_country",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מדינת הנפקת הדרכון",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "relationship",
+       "type": "text",
+       "label": "הקשר למבוטח",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "phone",
+       "type": "text",
+       "label": "טלפון נייד",
+       "format": "phone",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "email",
+       "type": "text",
+       "label": "דואר אלקטרוני",
+       "format": "email",
+       "section": "",
+       "required": false,
+       "maxLength": 500
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 149,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "insurance_payer_other",
+     "label": "שם הגורם המשלם והקשר שלו למבוטח",
+     "section": "הצטרפות · תשלום הביטוח",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "למשל מעסיק או תאגיד. הסוכן ישלים את דרישות הזיהוי והמסמכים; לא ניתנת כאן הרשאה.",
+     "options": null,
+     "when": {
+      "id": "insurance_payer",
+      "value": "גורם אחר — נדרש בירור"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 150
+     }
+    },
+    {
+     "key": "insurance_bank_instruction",
+     "label": "מה מבוקש לבדוק לגבי חיוב חשבון הבנק שמסרת?",
+     "section": "הצטרפות · תשלום הביטוח",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "הקמת הוראה חדשה",
+      "שימוש בהוראה קיימת בחברת הביטוח",
+      "טרם הוחלט"
+     ],
+     "when": {
+      "id": "payment_choice",
+      "value": "חשבון בנק"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 151
+     }
+    },
+    {
+     "key": "insurance_existing_instruction_company",
+     "label": "באיזו חברת ביטוח קיימת הוראת החיוב?",
+     "section": "הצטרפות · תשלום הביטוח",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_bank_instruction",
+      "value": "שימוש בהוראה קיימת בחברת הביטוח"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 152
+     }
+    },
+    {
+     "key": "insurance_existing_instruction_reference",
+     "label": "מספר פוליסה או אסמכתה להוראה הקיימת, אם ידועים",
+     "section": "הצטרפות · תשלום הביטוח",
+     "type": "text",
+     "required": false,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "יש לברר שהחשבון ובעליו תואמים. ציון הוראה קיימת אינו אישור להשתמש בה.",
+     "options": null,
+     "when": {
+      "id": "insurance_bank_instruction",
+      "value": "שימוש בהוראה קיימת בחברת הביטוח"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 153
+     }
+    },
+    {
+     "key": "insurance_bank_limits",
+     "label": "האם יש העדפה להגבלות בהוראת החיוב?",
+     "section": "הצטרפות · תשלום הביטוח",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "לא נבחרת הגבלה מראש. הסוכן יבדוק את ההעדפה מול החברה והבנק; מסירתה אינה יוצרת או משנה הוראת חיוב.",
+     "options": null,
+     "when": {
+      "id": "payment_choice",
+      "value": "חשבון בנק"
+     },
+     "fields": [
+      {
+       "id": "preference",
+       "type": "choice",
+       "label": "ההגבלות המבוקשות לבדיקה",
+       "options": [
+        "ללא מגבלות",
+        "תקרת סכום בלבד",
+        "תאריך סיום בלבד",
+        "תקרת סכום ותאריך סיום",
+        "טרם הוחלט"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "ceiling",
+       "min": 0,
+       "type": "number",
+       "when": {
+        "id": "preference",
+        "value": [
+         "תקרת סכום בלבד",
+         "תקרת סכום ותאריך סיום"
+        ]
+       },
+       "label": "תקרת סכום לחיוב בשקלים",
+       "section": "",
+       "required": true,
+       "maxLength": 500
+      },
+      {
+       "id": "expires",
+       "type": "date",
+       "when": {
+        "id": "preference",
+        "value": [
+         "תאריך סיום בלבד",
+         "תקרת סכום ותאריך סיום"
+        ]
+       },
+       "label": "תאריך סיום מבוקש להרשאה",
+       "section": "",
+       "required": true,
+       "maxLength": 500,
+       "allowFuture": true
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 154,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "insurance_payment_differences",
+     "label": "האם יש הבדלים בתשלום בין הביטוחים שבבקשה?",
+     "section": "הצטרפות · תשלום הביטוח",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "למשל משלם אחר או חשבון אחר עבור מוצר מסוים.",
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 155
+     }
+    },
+    {
+     "key": "insurance_payment_difference_details",
+     "label": "עבור איזה מוצר התשלום שונה, ומה צריך לברר?",
+     "section": "הצטרפות · תשלום הביטוח",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "ציין/י מוצר, משלם ואמצעי תשלום. הסוכן ישלים את ההתאמה לכל מוצר. אין להזין מספר כרטיס אשראי או קוד אבטחה.",
+     "options": null,
+     "when": {
+      "id": "insurance_payment_differences",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 156
+     }
+    }
+   ]
+  },
+  {
+   "id": "s3",
+   "title": "אישור הרשאה לחיוב",
+   "intro": null,
+   "spot": "seal-check",
+   "module": false,
+   "questions": [
+    {
+     "key": "dd_authorisation",
+     "label": "אישור הרשאה לחיוב חשבון",
+     "section": "אישור הרשאה לחיוב",
+     "type": "consent",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": "אני מורה ומאשר/ת לחייב את חשבון הבנק שפרטיו מופיעים לעיל, בסכומי התשלום עבור המוצר שיוסכם, ביום החיוב שבחרתי. ההרשאה היא כללית או כוללת הגבלות (תקרת סכום חיוב ומועד פקיעת תוקף), בהתאם למה שסימנתי בשאלות הקודמות. חיוב שאינו עומד בהגבלות שקבעתי יוחזר על ידי הבנק. אני מצהיר/ה שאני בעל/ת החשבון או מורשה לחתום עליו.",
+     "options": [
+      "אני מאשר/ת"
+     ],
+     "when": {
+      "id": "payment_choice",
+      "value": "חשבון בנק"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld",
+     "confidence": "product",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "note": "נוסח מנוסח מחדש מתוך טפסי הוראת קבע/הרשאה לחיוב של חברות בבנק (ראו docs/product/QUESTIONNAIRES.md)."
+     }
+    }
+   ]
+  }
+ ]
+}

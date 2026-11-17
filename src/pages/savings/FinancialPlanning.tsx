@@ -82,7 +82,7 @@ const FinancialPlanning = () => {  const productTypes = [
       bottomLine={bottomLine}
       faqItems={faqItems}
       closingTitle="מוכנים להתחיל תכנון כלכלי?"
-      closingText="השאירו פרטים ונבנה יחד איתכם תוכנית כלכלית שמתאימה לכם. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
+      closingText="השאירו פרטים ונבנה יחד איתכם תוכנית כלכלית שמתאימה לכם. אפשר גם להתחיל באפיון צרכים מלא."
       form={{ focusArea: "pension", title: "ייעוץ לתכנון כלכלי", description: "השאירו פרטים ונבנה יחד איתכם תוכנית כלכלית שמתאימה לכם" }}
     />
   );

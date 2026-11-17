@@ -82,7 +82,7 @@ const ChildSavings = () => {  const productTypes = [
       bottomLine={bottomLine}
       faqItems={faqItems}
       closingTitle="לא בטוחים איזה מסלול לבחור?"
-      closingText="השאירו פרטים ונעזור לכם לבחור גוף ומסלול שמתאימים לכם. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
+      closingText="השאירו פרטים ונעזור לכם לבחור גוף ומסלול שמתאימים לכם. אפשר גם להתחיל באפיון צרכים מלא."
       form={{ focusArea: "savings", title: "ייעוץ לחיסכון לכל ילד", description: "השאירו פרטים ונעזור לכם לבחור גוף ומסלול שמתאימים לכם" }}
     />
   );

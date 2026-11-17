@@ -1,0 +1,181 @@
+{
+ "key": "retirement-planning",
+ "version": 1,
+ "title": "תכנון פרישה",
+ "description": "מתי מתכננים לפרוש, אילו הכנסות צפויות ומה כבר נעשה.",
+ "status": "live",
+ "group": "extra",
+ "intro": null,
+ "consent": null,
+ "notes": [],
+ "declaration": {
+  "title": "הצהרה",
+  "paragraphs": [
+   "אני מאשר/ת שהפרטים שמסרתי בשאלון נכונים ומלאים למיטב ידיעתי, ושנתתי אותם מרצוני החופשי.",
+   "ידוע לי שהפרטים משמשים את הצוות לטיפול בבקשה שלי, ושהם נמסרים לחברות הביטוח או החיסכון רק לצורך הטיפול הזה."
+  ],
+  "checkbox": "קראתי את ההצהרה ואני מאשר/ת אותה"
+ },
+ "sections": [
+  {
+   "id": "s1",
+   "title": "תכנון פרישה",
+   "intro": null,
+   "spot": "tea-hourglass",
+   "module": false,
+   "questions": [
+    {
+     "key": "retirement_date",
+     "label": "מתי את/ה מתכננ/ת לפרוש?",
+     "section": "תכנון פרישה",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 742
+     }
+    },
+    {
+     "key": "retirement_income",
+     "label": "אילו מקורות הכנסה קיימים או צפויים לאחר הפרישה?",
+     "section": "תכנון פרישה",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 743
+     }
+    },
+    {
+     "key": "retirement_needs",
+     "label": "מה ההכנסה החודשית הרצויה והאם צפויות הוצאות מיוחדות?",
+     "section": "תכנון פרישה",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 744
+     }
+    },
+    {
+     "key": "retirement_previous",
+     "label": "האם בוצעו בעבר משיכת פיצויים, קיבוע זכויות או טיפול בפרישה?",
+     "section": "תכנון פרישה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 745
+     }
+    },
+    {
+     "key": "retirement_previous_detail",
+     "label": "פרט/י אילו פעולות בוצעו ומתי, ככל שידוע.",
+     "section": "תכנון פרישה",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "retirement_previous",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 746
+     }
+    },
+    {
+     "key": "retirement_docs",
+     "label": "אילו מסמכי פרישה או אישורי מס נמצאים ברשותך?",
+     "section": "תכנון פרישה",
+     "type": "long",
+     "required": false,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 747
+     }
+    }
+   ]
+  }
+ ]
+}

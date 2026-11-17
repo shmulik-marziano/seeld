@@ -64,7 +64,7 @@ const Creativity = () => {
           actions={
             <>
               <Link to="/contact" className="sd-btn">תיאום פגישה{arrow}</Link>
-              <Link to="/#portfolio-review" className="sd-link">בדיקת תיק 360{arrow}</Link>
+              <Link to="/#portfolio-review" className="sd-link">אפיון צרכים{arrow}</Link>
               <button type="button" className="sd-link" onClick={openChat}>
                 <BrandIcon name="message" size={18} />
                 שאלו את היועץ הדיגיטלי

@@ -86,7 +86,7 @@ const GemelInvestment = () => {  const productTypes = [
       bottomLine={bottomLine}
       faqItems={faqItems}
       closingTitle="רוצים ייעוץ לקופת גמל להשקעה?"
-      closingText="השאירו פרטים ונעזור לכם למצוא את הקופה שמתאימה לכם. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
+      closingText="השאירו פרטים ונעזור לכם למצוא את הקופה שמתאימה לכם. אפשר גם להתחיל באפיון צרכים מלא."
       form={{ focusArea: "savings", title: "ייעוץ לקופת גמל להשקעה", description: "השאירו פרטים ונעזור לכם למצוא את הקופה שמתאימה לכם" }}
     />
   );

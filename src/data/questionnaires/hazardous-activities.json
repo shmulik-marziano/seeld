@@ -1,0 +1,464 @@
+{
+ "key": "hazardous-activities",
+ "version": 1,
+ "title": "פעילות ותחביבים",
+ "description": "ספורט, תחביבים אתגריים, טיס ושיט. שאלה אחת לכל תחום, ופירוט רק כשיש.",
+ "status": "live",
+ "group": "extra",
+ "intro": null,
+ "consent": null,
+ "notes": [],
+ "declaration": {
+  "title": "הצהרה",
+  "paragraphs": [
+   "אני מאשר/ת שהפרטים שמסרתי בשאלון נכונים ומלאים למיטב ידיעתי, ושנתתי אותם מרצוני החופשי.",
+   "ידוע לי שהפרטים משמשים את הצוות לטיפול בבקשה שלי, ושהם נמסרים לחברות הביטוח או החיסכון רק לצורך הטיפול הזה."
+  ],
+  "checkbox": "קראתי את ההצהרה ואני מאשר/ת אותה"
+ },
+ "sections": [
+  {
+   "id": "s1",
+   "title": "פעילות ותחביבים",
+   "intro": null,
+   "spot": "compass",
+   "module": false,
+   "questions": [
+    {
+     "key": "risk_hobbies",
+     "label": "האם יש פעילות ספורט, תחביבים אתגריים, טיס או שיט מקצועיים?",
+     "section": "פעילות ותחביבים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 548
+     }
+    },
+    {
+     "key": "risk_motor",
+     "label": "האם יש פעילות ספורט מוטורי או רכיבת אופניים?",
+     "section": "פעילות ותחביבים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "risk_hobbies",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 549
+     }
+    },
+    {
+     "key": "source_risk_motor_1",
+     "label": "איזה סוג: אופנוע שטח, אופני הרים או כביש, דאון־היל, טרקטורון או אחר? האם במסלול סגור, מה נפח המנוע, כמה אירועים בשנה והאם בתחרויות?",
+     "section": "פעילות ותחביבים",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "risk_motor",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 550
+     }
+    },
+    {
+     "key": "risk_air",
+     "label": "האם יש פעילות ספורט אווירי?",
+     "section": "פעילות ותחביבים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "risk_hobbies",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 551
+     }
+    },
+    {
+     "key": "source_risk_air_1",
+     "label": "איזה סוג כלי או פעילות: מטוס קל, אולטרלייט, הליקופטר, טרקטורון מעופף, מצנח ממונע, רחיפה, גלישה, דאייה, צניחה או אחר? כמה שעות שנתיות והאם בתחרויות?",
+     "section": "פעילות ותחביבים",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "risk_air",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 552
+     }
+    },
+    {
+     "key": "risk_water",
+     "label": "האם יש פעילות ספורט ימי או צלילה?",
+     "section": "פעילות ותחביבים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "risk_hobbies",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 553
+     }
+    },
+    {
+     "key": "source_risk_water_1",
+     "label": "איזה סוג: אופנוע ים, סקי מים, גלישה, שיט, גלשן רוח, קייט או אחר? בצלילה: רגילה, טכנית, לילה, טרימיקס, מערות, דיג, מקצועית, הדרכה, הצלה או חופשית? מה עומק הצלילה והאם בתחרויות?",
+     "section": "פעילות ותחביבים",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "risk_water",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 554
+     }
+    },
+    {
+     "key": "risk_other",
+     "label": "האם יש ספורט או תחביב אחר?",
+     "section": "פעילות ותחביבים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "risk_hobbies",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 555
+     }
+    },
+    {
+     "key": "source_risk_other_1",
+     "label": "פרט/י סוג: גלישת מצוקים, סנפלינג, טיפוס הרים או קירות, בנג׳י, סקי, טריאתלון, סוסים, אמנות לחימה (איזו), איש הברזל, ירי, ציד, מרתון או אחר. האם בארץ, כמה שעות או קפיצות בשנה והאם בתחרויות?",
+     "section": "פעילות ותחביבים",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "risk_other",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 556
+     }
+    },
+    {
+     "key": "risk_professional",
+     "label": "האם יש עיסוק בספורט מקצועני?",
+     "section": "פעילות ותחביבים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "risk_hobbies",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 557
+     }
+    },
+    {
+     "key": "source_risk_professional_1",
+     "label": "איזה ענף? האם את/ה מאמנ/ת או מורה לספורט והאם עוסק/ת בספורט בפועל?",
+     "section": "פעילות ותחביבים",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "risk_professional",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 558
+     }
+    },
+    {
+     "key": "risk_pilot",
+     "label": "האם יש עיסוק כטייס/ת או כאיש/אשת צוות אוויר?",
+     "section": "פעילות ותחביבים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "risk_hobbies",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 559
+     }
+    },
+    {
+     "key": "source_risk_pilot_1",
+     "label": "האם צבאי בסדיר או במילואים, האם טיסת תובלה ובאיזה מטוס? בטיס מקצועי: סוג הטיסות, כלי הטיס ומספר שעות שנתי לכל סוג פעילות.",
+     "section": "פעילות ותחביבים",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "risk_pilot",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 560
+     }
+    },
+    {
+     "key": "risk_skipper",
+     "label": "האם יש עיסוק בשיט או כסקיפר/ית?",
+     "section": "פעילות ותחביבים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "risk_hobbies",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 561
+     }
+    },
+    {
+     "key": "source_risk_skipper_1",
+     "label": "מה סוג הרישיון, כלי השיט, אזורי השיט ומספר אנשי הצוות?",
+     "section": "פעילות ותחביבים",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "risk_skipper",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 562
+     }
+    }
+   ]
+  }
+ ]
+}

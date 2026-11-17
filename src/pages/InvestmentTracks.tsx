@@ -243,7 +243,7 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
             </div>
             <div className="mt-5">
               <Link to="/#portfolio-review" className="link-rule text-[15px]">
-                רוצים בדיקה מקצועית של התיק? בדיקת תיק 360
+                רוצים בדיקה מקצועית של התיק? אפיון צרכים
                 <BrandIcon name="arrow-left" size={16} />
               </Link>
             </div>
@@ -317,7 +317,7 @@ const TrackDetail = ({ fund }: { fund: Fund }) => (
 
     <div className="mt-5">
       <Link to="/#portfolio-review" className="link-rule text-[15px]">
-        איך המסלול הזה משתלב בתיק שלכם? בדיקת תיק 360
+        איך המסלול הזה משתלב בתיק שלכם? אפיון צרכים
         <BrandIcon name="arrow-left" size={16} />
       </Link>
     </div>
@@ -800,10 +800,10 @@ const InvestmentTracks = () => {
             <div>
               <h2 className="sd-h2">רוצים לדעת איך המסלול שלכם מתנהג?</h2>
               <p className="sd-text mt-4">
-                בבדיקת תיק 360 נבדוק מסלולים, דמי ניהול וחשיפות מול התיק הקיים שלכם, ונמליץ מה לשפר.
+                באפיון צרכים נבדוק מסלולים, דמי ניהול וחשיפות מול התיק הקיים שלכם, ונמליץ מה לשפר.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
-                <Link to="/#portfolio-review" className="sd-btn sd-btn-light">בדיקת תיק 360<BrandIcon name="arrow-left" size={18} /></Link>
+                <Link to="/#portfolio-review" className="sd-btn sd-btn-light">אפיון צרכים<BrandIcon name="arrow-left" size={18} /></Link>
                 <Link to="/contact" className="sd-sav-close-link">תיאום פגישה<BrandIcon name="arrow-left" size={18} /></Link>
               </div>
             </div>

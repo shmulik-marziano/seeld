@@ -81,7 +81,7 @@ export default function FAQ() {
         text="שאלה על התיק שלכם היא לא שאלה נפוצה. בשביל זה יש צוות שמקשיב, בודק וחוזר אליכם."
         art="12-childrens-savings"
         primary={{ label: "תיאום פגישה", to: "/contact" }}
-        secondary={{ label: "בדיקת תיק 360", to: "/portfolio-review" }}
+        secondary={{ label: "אפיון צרכים", to: "/portfolio-review" }}
       />
     </PubPage>
   );

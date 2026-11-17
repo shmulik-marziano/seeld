@@ -187,7 +187,7 @@ export function PubHead({ title, lede }: { title: string; lede?: ReactNode }) {
 
 /** Navy closing block with a call to action (no form), the illustration and direct contact. */
 export function PubClose({
-  title, text, art, primary = { text: "בדיקת תיק 360", to: "/#portfolio-review" }, secondary = { text: "תיאום פגישה", to: "/contact" }, children,
+  title, text, art, primary = { text: "אפיון צרכים", to: "/#portfolio-review" }, secondary = { text: "תיאום פגישה", to: "/contact" }, children,
 }: {
   title: string;
   text: string;

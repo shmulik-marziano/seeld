@@ -9,6 +9,7 @@ Disallow: /app/
 Disallow: /site-admin
 Disallow: /admin
 Disallow: /portal/
+Disallow: /q/
 Disallow: /client/
 Disallow: /execution-portal/
 Disallow: /personal-area
@@ -47,6 +48,7 @@ Disallow: /app/
 Disallow: /site-admin
 Disallow: /admin
 Disallow: /portal/
+Disallow: /q/
 Disallow: /client/
 Disallow: /execution-portal/
 Disallow: /personal-area

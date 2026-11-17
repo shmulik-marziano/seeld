@@ -89,7 +89,7 @@ const TrainingFunds = () => {  const productTypes = [
       bottomLine={bottomLine}
       faqItems={faqItems}
       closingTitle="רוצים שנבדוק את קרנות ההשתלמות שלכם?"
-      closingText="נבדוק יחד אם הקרנות שלכם מתאימות ליעדים שלכם. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
+      closingText="נבדוק יחד אם הקרנות שלכם מתאימות ליעדים שלכם. אפשר גם להתחיל באפיון צרכים מלא."
       form={{ focusArea: "savings", title: "בדיקת קרנות השתלמות", description: "נבדוק אם הקרנות שלכם מתאימות ליעדים שלכם" }}
     />
   );

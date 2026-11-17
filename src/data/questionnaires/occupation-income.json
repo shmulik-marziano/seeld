@@ -1,0 +1,551 @@
+{
+ "key": "occupation-income",
+ "version": 1,
+ "title": "תעסוקה והכנסה",
+ "description": "מעמד תעסוקתי, עיסוק, מעסיקים והכנסות.",
+ "status": "live",
+ "group": "extra",
+ "intro": null,
+ "consent": null,
+ "notes": [],
+ "declaration": {
+  "title": "הצהרה",
+  "paragraphs": [
+   "אני מאשר/ת שהפרטים שמסרתי בשאלון נכונים ומלאים למיטב ידיעתי, ושנתתי אותם מרצוני החופשי.",
+   "ידוע לי שהפרטים משמשים את הצוות לטיפול בבקשה שלי, ושהם נמסרים לחברות הביטוח או החיסכון רק לצורך הטיפול הזה."
+  ],
+  "checkbox": "קראתי את ההצהרה ואני מאשר/ת אותה"
+ },
+ "sections": [
+  {
+   "id": "s1",
+   "title": "הצטרפות · תעסוקה והכנסה",
+   "intro": null,
+   "spot": "briefcase",
+   "module": false,
+   "questions": [
+    {
+     "key": "employment",
+     "label": "מעמד תעסוקתי",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "שכיר/ה",
+      "עצמאי/ת",
+      "שכיר/ה ועצמאי/ת",
+      "שכיר/ה בעל/ת שליטה",
+      "עצמאי/ת באמצעות מעסיק",
+      "לא עובד/ת",
+      "גמלאי/ת",
+      "קטין/ה"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 41
+     }
+    },
+    {
+     "key": "occupation",
+     "label": "מה העיסוק שלך כיום?",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 42
+     }
+    },
+    {
+     "key": "employers",
+     "label": "פרטי המעסיקים",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "employment",
+      "value": [
+       "שכיר/ה",
+       "שכיר/ה ועצמאי/ת",
+       "שכיר/ה בעל/ת שליטה",
+       "עצמאי/ת באמצעות מעסיק"
+      ]
+     },
+     "fields": [
+      {
+       "id": "name",
+       "type": "text",
+       "label": "שם המעסיק",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "registration",
+       "type": "text",
+       "label": "ח.פ. או עוסק מורשה",
+       "format": "digits",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "country",
+       "type": "text",
+       "label": "מדינה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "city",
+       "type": "text",
+       "label": "יישוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "street",
+       "type": "text",
+       "label": "רחוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "house",
+       "type": "text",
+       "label": "מספר בית",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "apartment",
+       "type": "text",
+       "label": "מספר דירה",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "postal_code",
+       "type": "text",
+       "label": "מיקוד",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "po_box",
+       "type": "text",
+       "label": "תא דואר",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "phone",
+       "type": "text",
+       "label": "טלפון המעסיק",
+       "format": "phone",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "position",
+       "type": "text",
+       "label": "תפקיד",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "tenure_years",
+       "max": 100,
+       "min": 0,
+       "type": "number",
+       "label": "ותק בשנים",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 43,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "self_employment",
+     "label": "פרטי העסק העצמאי",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "employment",
+      "value": [
+       "עצמאי/ת",
+       "שכיר/ה ועצמאי/ת",
+       "עצמאי/ת באמצעות מעסיק"
+      ]
+     },
+     "fields": [
+      {
+       "id": "name",
+       "type": "text",
+       "label": "שם העסק",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "registration",
+       "type": "text",
+       "label": "מספר עוסק או חברה",
+       "format": "digits",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "country",
+       "type": "text",
+       "label": "מדינה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "city",
+       "type": "text",
+       "label": "יישוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "street",
+       "type": "text",
+       "label": "רחוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "house",
+       "type": "text",
+       "label": "מספר בית",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "apartment",
+       "type": "text",
+       "label": "מספר דירה",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "postal_code",
+       "type": "text",
+       "label": "מיקוד",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "po_box",
+       "type": "text",
+       "label": "תא דואר",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "industry",
+       "type": "text",
+       "label": "תחום פעילות",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "annual_turnover",
+       "min": 0,
+       "type": "number",
+       "label": "מחזור שנתי בשקלים",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 44,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "previous_occupation",
+     "label": "העיסוק והמעסיק לפני הפרישה",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "employment",
+      "value": "גמלאי/ת"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 45
+     }
+    },
+    {
+     "key": "monthly_income",
+     "label": "הכנסה חודשית ברוטו בשקלים",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": 0,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 46,
+      "numberKind": "amount",
+      "unit": "₪"
+     }
+    },
+    {
+     "key": "annual_income",
+     "label": "הכנסה שנתית ברוטו בשקלים",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": 0,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 47,
+      "numberKind": "amount",
+      "unit": "₪"
+     }
+    },
+    {
+     "key": "has_additional_income",
+     "label": "האם קיימת הכנסה נוספת?",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 48
+     }
+    },
+    {
+     "key": "additional_income",
+     "label": "מקורות הכנסה נוספים",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "has_additional_income",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "source",
+       "type": "text",
+       "label": "מקור ההכנסה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "amount",
+       "min": 0,
+       "type": "number",
+       "label": "סכום",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "currency",
+       "type": "text",
+       "label": "מטבע",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "period",
+       "type": "choice",
+       "label": "תקופת הסכום",
+       "options": [
+        "חודש",
+        "שנה",
+        "חד־פעמי"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 49,
+      "minEntries": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "title": "תעסוקה ומקורות הכנסה",
+   "intro": null,
+   "spot": null,
+   "module": false,
+   "questions": [
+    {
+     "key": "financial_occupation_detail",
+     "label": "האם העיסוק כולל מזומן, נדל״ן, יהלומים או אבני חן, מתכות יקרות, בלדרות, נשק, מטבעות וירטואליים, שירותי אשראי, העברות לחו״ל, הימורים או פעילות ללא מטרת רווח? פרט/י, או כתוב/י שאינו כולל.",
+     "section": "תעסוקה ומקורות הכנסה",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 612
+     }
+    }
+   ]
+  }
+ ]
+}

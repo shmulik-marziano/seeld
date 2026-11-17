@@ -30,6 +30,7 @@ describe("sitemap", () => {
     "/style-guide",
     "/personal-area",
     "/saved-calculations",
+    "/savings/retirement-planning/checklist", // printable lead-magnet page: noindex by design
   ]);
 
   const listed = new Set(

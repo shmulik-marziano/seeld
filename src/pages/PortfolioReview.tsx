@@ -6,7 +6,7 @@ import { topicFor } from "@/components/sd/topics";
 import { Arrow, PubHero, PubPage } from "@/components/sd/pubParts";
 
 /**
- * בדיקת תיק 360, kit design: hero with the one action, the emotional moment, what the review includes,
+ * אפיון צרכים, kit design: hero with the one action, the emotional moment, what the review includes,
  * what to prepare, three questions and the closing navy block that carries the lead form.
  */
 
@@ -14,8 +14,8 @@ const PATH = "/portfolio-review";
 
 const INCLUDED = [
   { title: "מיפוי המוצרים הקיימים", body: "סוקרים את כל הביטוחים והחסכונות שברשותכם, ממקורות רשמיים: המסלקה הפנסיונית והר הביטוח.", icon: "checklist" },
-  { title: "בחינת הצרכים שלכם", body: "מנתחים את המצב הנוכחי מול הגיל, המשפחה וההכנסה, ומזהים פערים, כפילויות ודמי ניהול גבוהים.", icon: "search" },
-  { title: "מסמך החלטות והמשך טיפול", body: "מגבשים המלצות ברורות ומנומקות, ומייצרים תוכנית המשך שאפשר לעקוב אחריה באזור האישי.", icon: "handshake" },
+  { title: "אפיון צרכים ואפיון התא המשפחתי", body: "מתארים את המצב הנוכחי של התא המשפחתי כולו, מול הגיל, ההכנסה והמטרות, ומזהים פערים, כפילויות ודמי ניהול שכדאי לבדוק.", icon: "search" },
+  { title: "מסמך החלטות והמשך טיפול", body: "משקפים את האופציות בתמונת המוצרים הפיננסיים, כולל גידור הסיכונים בביטוח, ומייצרים תוכנית המשך שאפשר לעקוב אחריה באזור האישי.", icon: "handshake" },
 ];
 
 const PREPARE = [
@@ -25,9 +25,9 @@ const PREPARE = [
 ];
 
 const FAQ = [
-  { q: "איך הבדיקה מתנהלת?", a: "הבדיקה הראשונה היא שיחת היכרות שאינה מחייבת. לפני כל החלטה נציג לכם בבהירות את תנאי ההתקשרות." },
+  { q: "איך האפיון מתנהל?", a: "השלב הראשון הוא שיחת היכרות שאינה מחייבת. לפני כל החלטה נציג לכם בבהירות את תנאי ההתקשרות." },
   { q: "כמה זמן זה לוקח?", a: "שליפת הנתונים אורכת כשבוע. הפגישה עצמה כשעה, במשרד, בזום או בטלפון. תוך ימים ספורים מקבלים את מסמך ההחלטות." },
-  { q: "מה קורה אחרי הבדיקה?", a: "אתם מחליטים בקצב שלכם. אם בוחרים לפעול, אנחנו מטפלים בטפסים, בניודים ובחברות, ומעדכנים בכל שלב." },
+  { q: "מה קורה אחרי האפיון?", a: "אתם מחליטים בקצב שלכם. אם בוחרים לפעול, אנחנו מטפלים בטפסים, בניודים ובחברות, ומעדכנים בכל שלב." },
 ];
 
 const PortfolioReview = () => {
@@ -36,7 +36,7 @@ const PortfolioReview = () => {
   const story = stories[PATH];
   const sections = [
     ...(story ? [{ id: "moment", label: "מה עומד מולכם" }] : []),
-    { id: "included", label: "מה כוללת הבדיקה" },
+    { id: "included", label: "מה כולל האפיון" },
     { id: "prepare", label: "מה מכינים" },
     { id: "questions", label: "שאלות" },
     { id: "review-form", label: "להתחיל" },
@@ -45,14 +45,14 @@ const PortfolioReview = () => {
   return (
     <PubPage tint={p1}>
       <PubHero
-        crumbs={[{ label: "דף הבית", to: "/" }, { label: "בדיקת תיק 360" }]}
-        eyebrow="בדיקת תיק 360"
+        crumbs={[{ label: "דף הבית", to: "/" }, { label: "אפיון צרכים" }]}
+        eyebrow="אפיון צרכים"
         title="תמונה מסודרת של הביטוחים והחסכונות שלכם"
-        lead="מה יש, מה חסר, מה כפול ומה עולה יותר מדי. הצוות עושה את הבדיקה ומסביר אותה בשפה פשוטה. שיחת היכרות בלי התחייבות מצידכם."
+        lead="מה יש, מה חסר, מה כפול ומה עולה יותר מדי. הצוות עושה את האפיון ומסביר אותו בשפה פשוטה. שיחת היכרות בלי התחייבות מצידכם."
         art={topic.art}
         actions={
           <>
-            <a href="#review-form" className="sd-btn">להתחיל בבדיקה<Arrow /></a>
+            <a href="#review-form" className="sd-btn">להתחיל באפיון<Arrow /></a>
             <Link to="/contact" className="sd-link">תיאום פגישה<Arrow /></Link>
           </>
         }
@@ -69,8 +69,8 @@ const PortfolioReview = () => {
       <SdBand tone="cream" id="included">
         <div className="sd-wrap">
           <div className="sd-band-head">
-            <span className="sd-eyebrow">הבדיקה</span>
-            <h2 className="sd-h2">מה כוללת הבדיקה?</h2>
+            <span className="sd-eyebrow">האפיון</span>
+            <h2 className="sd-h2">מה כולל אפיון הצרכים?</h2>
           </div>
           <ol className="sd-pub-steps3">
             {INCLUDED.map((item, i) => (
@@ -133,7 +133,7 @@ const PortfolioReview = () => {
         text="השאירו שם וטלפון. נחזור אליכם ביום העסקים הבא לתיאום, ומשם ממשיכים יחד. תמיד תדעו מה השלב הבא."
         art="01-hero"
       >
-        <PortfolioReviewForm idPrefix="review" source="עמוד בדיקת תיק 360" />
+        <PortfolioReviewForm idPrefix="review" source="עמוד אפיון צרכים" />
       </SdContact>
     </PubPage>
   );

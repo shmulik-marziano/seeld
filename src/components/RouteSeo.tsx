@@ -27,6 +27,7 @@ const NOINDEX_PREFIXES = [
   "/style-guide",
   "/personal-area",
   "/saved-calculations",
+  "/savings/retirement-planning/checklist",
 ];
 
 function setMeta(selector: string, attr: "content" | "href", value: string) {

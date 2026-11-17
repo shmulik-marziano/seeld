@@ -82,7 +82,7 @@ const Investment = () => {  const productTypes = [
       bottomLine={bottomLine}
       faqItems={faqItems}
       closingTitle="רוצים ייעוץ השקעות מקצועי?"
-      closingText="ספרו לנו על היעדים שלכם ונבנה יחד תוכנית השקעה שמתאימה לכם. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
+      closingText="ספרו לנו על היעדים שלכם ונבנה יחד תוכנית השקעה שמתאימה לכם. אפשר גם להתחיל באפיון צרכים מלא."
       form={{ focusArea: "investment", title: "ייעוץ השקעות אישי", description: "ספרו לנו על היעדים שלכם ונבנה יחד תוכנית השקעה שמתאימה לכם" }}
     />
   );

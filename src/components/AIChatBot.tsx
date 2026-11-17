@@ -30,7 +30,7 @@ const getSessionId = () => {
 /* ── Suggestion chips based on page context ── */
 const pageSuggestions: Record<string, { icon: typeof Shield; text: string }[]> = {
   "/": [
-    { icon: FileText, text: "מה כוללת בדיקת תיק 360?" },
+    { icon: FileText, text: "מה כולל אפיון צרכים?" },
     { icon: Calculator, text: "איך בודקים אם אני משלם יותר מדי?" },
     { icon: Shield, text: "מה כולל ביטוח בריאות פרטי?" },
     { icon: PiggyBank, text: "איך בוחרים קרן פנסיה?" },
@@ -54,7 +54,7 @@ const pageSuggestions: Record<string, { icon: typeof Shield; text: string }[]> =
 const defaultSuggestions = [
   { icon: FileText, text: "איך מתחיל תהליך הייעוץ?" },
   { icon: Shield, text: "מה כולל הייעוץ ומה זה עולה?" },
-  { icon: Calculator, text: "מה בודקים בבדיקת תיק?" },
+  { icon: Calculator, text: "מה בודקים באפיון צרכים?" },
   { icon: PiggyBank, text: "רוצה לקבוע פגישה" },
 ];
 

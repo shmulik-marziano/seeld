@@ -71,7 +71,7 @@ const PensionFunds = () => {  const pensionTypes = [
       breadcrumbLabel="קרנות פנסיה"
       heroTitle="קרנות פנסיה"
       heroDescription="קרן פנסיה היא חיסכון ארוך טווח שנועד ליצור קצבה חודשית אחרי הפרישה. נעזור לכם לבחור את הקרן ואת המסלול שמתאימים לכם."
-      heroCTAText="בדיקת תיק פנסיוני"
+      heroCTAText="אפיון צרכים פנסיוני"
       typesLabel="סוגי הקרנות"
       typesTitle="סוגי קרנות פנסיה"
       typesSubtitle="הכירו את האפשרויות ובחרו את המסלול שמתאים לכם"
@@ -85,8 +85,8 @@ const PensionFunds = () => {  const pensionTypes = [
       bottomLine={bottomLine}
       faqItems={faqItems}
       closingTitle="רוצים בדיקה פנסיונית?"
-      closingText="השאירו פרטים ונחזור אליכם עם המלצות שמתאימות לכם. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
-      form={{ focusArea: "pension", title: "בדיקת תיק פנסיוני", description: "השאירו פרטים ונחזור אליכם עם המלצות שמתאימות לכם" }}
+      closingText="השאירו פרטים ונחזור אליכם עם המלצות שמתאימות לכם. אפשר גם להתחיל באפיון צרכים מלא."
+      form={{ focusArea: "pension", title: "אפיון צרכים פנסיוני", description: "השאירו פרטים ונחזור אליכם עם המלצות שמתאימות לכם" }}
     />
   );
 };

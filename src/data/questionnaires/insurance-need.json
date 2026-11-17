@@ -1,0 +1,704 @@
+{
+ "key": "insurance-need",
+ "version": 1,
+ "title": "צורך ביטוחי וסכומים",
+ "description": "למה מיועד הביטוח, לכמה זמן, ומה המצב הכלכלי והמשפחתי. פירוט נוסף רק לפי מטרת הביטוח.",
+ "status": "live",
+ "group": "extra",
+ "intro": null,
+ "consent": null,
+ "notes": [],
+ "declaration": {
+  "title": "הצהרה",
+  "paragraphs": [
+   "אני מאשר/ת שהפרטים שמסרתי בשאלון נכונים ומלאים למיטב ידיעתי, ושנתתי אותם מרצוני החופשי.",
+   "ידוע לי שהפרטים משמשים את הצוות לטיפול בבקשה שלי, ושהם נמסרים לחברות הביטוח או החיסכון רק לצורך הטיפול הזה."
+  ],
+  "checkbox": "קראתי את ההצהרה ואני מאשר/ת אותה"
+ },
+ "sections": [
+  {
+   "id": "s1",
+   "title": "צורך ביטוחי וסכומים",
+   "intro": null,
+   "spot": "shield-navy",
+   "module": false,
+   "questions": [
+    {
+     "key": "insurance_policy_owner",
+     "label": "מי בעל הפוליסה המיועד?",
+     "section": "צורך ביטוחי וסכומים",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 664
+     }
+    },
+    {
+     "key": "insurance_purpose",
+     "label": "למה מיועד הביטוח?",
+     "section": "צורך ביטוחי וסכומים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "הגנה למשפחה",
+      "אובדן כושר עבודה",
+      "משכנתא",
+      "הלוואה פרטית",
+      "הלוואה עסקית או השקעה",
+      "אנשי מפתח",
+      "שותפים",
+      "אחר / לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 665
+     }
+    },
+    {
+     "key": "insurance_term",
+     "label": "מה תקופת הביטוח המבוקשת בשנים?",
+     "section": "צורך ביטוחי וסכומים",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 666
+     }
+    },
+    {
+     "key": "insurance_income",
+     "label": "מה המשכורת החודשית, ומה ההכנסות השנתיות בכל אחת משלוש השנים האחרונות מעבודה, דיבידנדים ומקורות אחרים? ציין/י שנה ומטבע.",
+     "section": "צורך ביטוחי וסכומים",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 667
+     }
+    },
+    {
+     "key": "insurance_dependents",
+     "label": "כמה אנשים נתמכים בך כלכלית ומה גיליהם?",
+     "section": "צורך ביטוחי וסכומים",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 668
+     }
+    },
+    {
+     "key": "insurance_other_cover",
+     "label": "פרט/י ביטוחים קיימים והצעות נוספות: חברה, מטרה, סוג כיסוי, סכום והאם מתוכנן ביטול. כלול/י חיים, אובדן כושר עבודה, נכות, מוות מתאונה ומחלות קשות. אם אין, ציין/י שאין.",
+     "section": "צורך ביטוחי וסכומים",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 669
+     }
+    },
+    {
+     "key": "need_requested_amount",
+     "label": "מהו סכום הכיסוי שחשבת עליו, בשקלים?",
+     "section": "צורך ביטוחי וסכומים",
+     "type": "number",
+     "required": false,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": 0,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "seeld",
+     "confidence": "product",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "numberKind": "amount",
+      "unit": "₪",
+      "note": "שאלה מוצרית (לא בבנק): הבנק מחזיק את הסכום כטקסט חופשי בלבד."
+     }
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "title": "פרטי הצורך הביטוחי",
+   "intro": null,
+   "spot": null,
+   "module": false,
+   "questions": [
+    {
+     "key": "insurance_business_0_0",
+     "label": "שם החברה, תחום פעילות, תאריך ייסוד ומספר עובדים.",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "אנשי מפתח"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 670
+     }
+    },
+    {
+     "key": "insurance_business_0_1",
+     "label": "מה תפקידך, כישוריך, השכלתך, ניסיונך והוותק בחברה? האם יש חוזה מיוחד ולכמה שנים?",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "אנשי מפתח"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 671
+     }
+    },
+    {
+     "key": "insurance_business_0_2",
+     "label": "כמה אנשי מפתח יש בחברה, מי מחליף אותך בהיעדרות ומה חלקך ברווח הנקי?",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "אנשי מפתח"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 672
+     }
+    },
+    {
+     "key": "insurance_business_0_3",
+     "label": "האם לך או למשפחתך מניות בחברה? פרט/י אחזקות.",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "אנשי מפתח"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 673
+     }
+    },
+    {
+     "key": "insurance_business_0_4",
+     "label": "כיצד חושבו סכומי הביטוח, מי קבע אותם ומה ההפסד הצפוי לחברה בהיעדרך?",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "אנשי מפתח"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 674
+     }
+    },
+    {
+     "key": "insurance_business_0_5",
+     "label": "לכל אחת משלוש השנים האחרונות: נכסים, התחייבויות, מחזור, רווח והפסד, בציון מטבע.",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "אנשי מפתח"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 675
+     }
+    },
+    {
+     "key": "insurance_business_0_6",
+     "label": "האם קיימים או מתוכננים ביטוחים לאנשי מפתח נוספים? פרט/י.",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "אנשי מפתח"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 676
+     }
+    },
+    {
+     "key": "insurance_business_0_7",
+     "label": "בחברת הזנק: מה הפרויקטים, מועדי הסיום המשוערים ותחזיות המחזור והרווח? אם זו הגנה על השקעה, פרט/י השקעה והסכם. אם אינו רלוונטי, ציין/י זאת.",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "אנשי מפתח"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 677
+     }
+    },
+    {
+     "key": "insurance_business_1_0",
+     "label": "שם השותפות, מספר השותפים או בעלי המניות וחלקך בשותפות.",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "שותפים"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 678
+     }
+    },
+    {
+     "key": "insurance_business_1_1",
+     "label": "מה שווי השותפות לפי הערכת רואה החשבון האחרונה, ומה הנכסים וההתחייבויות?",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "שותפים"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 679
+     }
+    },
+    {
+     "key": "insurance_business_1_2",
+     "label": "האם נרכשות פוליסות לכל השותפים או בעלי המניות? אם לא, מה הסיבה?",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "שותפים"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 680
+     }
+    },
+    {
+     "key": "insurance_business_2_0",
+     "label": "שם החברה או העסק, תחום הפעילות, תפקידך, תאריך ייסוד ומספר מועסקים.",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "הלוואה עסקית או השקעה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 681
+     }
+    },
+    {
+     "key": "insurance_business_2_1",
+     "label": "מה סכום ההלוואה או ההשקעה, מי המלווה או המשקיעים ומיהם המוטבים?",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "הלוואה עסקית או השקעה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 682
+     }
+    },
+    {
+     "key": "insurance_business_2_2",
+     "label": "מה מטרת ההלוואה, תקופתה והביטחונות הנוספים?",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "הלוואה עסקית או השקעה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 683
+     }
+    },
+    {
+     "key": "insurance_business_2_3",
+     "label": "פרט/י פעילות עסקית בחמש השנים האחרונות.",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "הלוואה עסקית או השקעה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 684
+     }
+    },
+    {
+     "key": "insurance_business_2_4",
+     "label": "לכל אחת משלוש השנים האחרונות: נכסים, התחייבויות, מחזור, רווח והפסד, בציון מטבע.",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "הלוואה עסקית או השקעה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 685
+     }
+    },
+    {
+     "key": "insurance_business_2_5",
+     "label": "שמות המשקיעים וסכום ההשקעה של כל אחד; מי עוד מחויב בגין ההלוואה, מה הזיקה ומה שיעור ההתחייבות?",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "הלוואה עסקית או השקעה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 686
+     }
+    },
+    {
+     "key": "insurance_business_3_0",
+     "label": "מה סכום ההלוואה, מטרתה ותקופתה? מי המלווה והמוטב, ומה הביטחונות והמחויבים הנוספים?",
+     "section": "פרטי הצורך הביטוחי",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "insurance_purpose",
+      "value": "הלוואה פרטית"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 687
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -73,7 +73,7 @@ const GemelFunds = () => {  const benefits = [
       bottomLine={bottomLine}
       faqItems={faqItems}
       closingTitle="רוצים שנבדוק את קופות הגמל שלכם?"
-      closingText="שלחו לנו את פרטי הקופות הקיימות ונחזור עם הצעות לשיפור. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
+      closingText="שלחו לנו את פרטי הקופות הקיימות ונחזור עם הצעות לשיפור. אפשר גם להתחיל באפיון צרכים מלא."
       form={{ focusArea: "savings", title: "בדיקת קופות גמל", description: "שלחו לנו את פרטי הקופות הקיימות ונחזור עם הצעות לשיפור" }}
     />
   );

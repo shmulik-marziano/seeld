@@ -1,0 +1,2546 @@
+{
+ "key": "personal-extended",
+ "version": 1,
+ "title": "פרטים אישיים מורחבים",
+ "description": "הפרטים האישיים בתוספת משפחה, תעסוקה והכנסה, תושבות, קופת חולים ומטרות.",
+ "status": "live",
+ "group": "core",
+ "intro": null,
+ "consent": null,
+ "notes": [],
+ "declaration": {
+  "title": "הצהרה",
+  "paragraphs": [
+   "אני מאשר/ת שהפרטים שמסרתי בשאלון נכונים ומלאים למיטב ידיעתי, ושנתתי אותם מרצוני החופשי.",
+   "ידוע לי שהפרטים משמשים את הצוות לטיפול בבקשה שלי, ושהם נמסרים לחברות הביטוח או החיסכון רק לצורך הטיפול הזה."
+  ],
+  "checkbox": "קראתי את ההצהרה ואני מאשר/ת אותה"
+ },
+ "sections": [
+  {
+   "id": "s1",
+   "title": "הצטרפות · פרטים אישיים",
+   "intro": null,
+   "spot": "passport",
+   "module": false,
+   "questions": [
+    {
+     "key": "first_name",
+     "label": "שם פרטי כפי שמופיע במסמך המזהה",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": "person-name",
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 50,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 1
+     }
+    },
+    {
+     "key": "last_name",
+     "label": "שם משפחה כפי שמופיע במסמך המזהה",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": "person-name",
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 50,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 2
+     }
+    },
+    {
+     "key": "previous_last_name",
+     "label": "שם משפחה קודם, אם היה",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "text",
+     "required": false,
+     "allow_unknown": true,
+     "format": "person-name",
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 50,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 3
+     }
+    },
+    {
+     "key": "id_type",
+     "label": "סוג מסמך מזהה",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": null,
+     "options": [
+      "תעודת זהות ישראלית",
+      "דרכון"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 4
+     }
+    },
+    {
+     "key": "identity_document",
+     "label": "מספר תעודת זהות — 9 ספרות",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": "israeli-id",
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "id_type",
+      "value": "תעודת זהות ישראלית"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 5
+     }
+    },
+    {
+     "key": "passport_number",
+     "label": "מספר דרכון",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": "passport",
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "id_type",
+      "value": "דרכון"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 6
+     }
+    },
+    {
+     "key": "passport_country",
+     "label": "מדינת הנפקת הדרכון",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "id_type",
+      "value": "דרכון"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 7
+     }
+    },
+    {
+     "key": "id_issue_date",
+     "label": "תאריך הנפקת מסמך הזיהוי",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "date",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 8,
+      "allowFuture": false
+     }
+    },
+    {
+     "key": "birth",
+     "label": "תאריך לידה",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "date",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 9,
+      "allowFuture": false,
+      "dateRole": "birth"
+     }
+    },
+    {
+     "key": "gender",
+     "label": "מין כפי שמופיע במסמך המזהה",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "זכר",
+      "נקבה",
+      "נדרש בירור מול הסוכן"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 10
+     }
+    },
+    {
+     "key": "birth_country",
+     "label": "ארץ לידה",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 11
+     }
+    },
+    {
+     "key": "immigrated",
+     "label": "האם עלית לישראל?",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 12
+     }
+    },
+    {
+     "key": "immigration_year",
+     "label": "שנת עלייה לישראל",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "immigrated",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": 1900,
+     "max_val": 2026,
+     "integer_only": true,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 13,
+      "numberKind": "year"
+     }
+    },
+    {
+     "key": "has_other_citizenship",
+     "label": "האם יש אזרחות נוספת?",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 14
+     }
+    },
+    {
+     "key": "citizenships",
+     "label": "מדינות האזרחות הנוספות",
+     "section": "הצטרפות · פרטים אישיים",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "has_other_citizenship",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "country",
+       "type": "text",
+       "label": "מדינת אזרחות",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s1",
+      "bankId": 15,
+      "minEntries": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "title": "הצטרפות · קשר וכתובת",
+   "intro": null,
+   "spot": "key-brass",
+   "module": false,
+   "questions": [
+    {
+     "key": "contact_capacity",
+     "label": "דרך יצירת קשר עבור האדם שבפרק זה",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": null,
+     "options": [
+      "פרטי הקשר שלי",
+      "פרטי הורה או נציג מורשה"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 16
+     }
+    },
+    {
+     "key": "contact_representative",
+     "label": "שם ההורה או הנציג המורשה",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "contact_capacity",
+      "value": "פרטי הורה או נציג מורשה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 17
+     }
+    },
+    {
+     "key": "contact_relationship",
+     "label": "הקשר לאדם שעבורו ממלאים",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "contact_capacity",
+      "value": "פרטי הורה או נציג מורשה"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 18
+     }
+    },
+    {
+     "key": "contact_phone",
+     "label": "מספר טלפון ליצירת קשר",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": "phone",
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 19
+     }
+    },
+    {
+     "key": "contact_phone_secondary",
+     "label": "טלפון נוסף או קווי",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": false,
+     "allow_unknown": true,
+     "format": "phone",
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 20
+     }
+    },
+    {
+     "key": "has_email",
+     "label": "האם קיימת כתובת דואר אלקטרוני לקבלת מסמכים?",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": false,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 21
+     }
+    },
+    {
+     "key": "contact_email",
+     "label": "כתובת דואר אלקטרוני",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": true,
+     "allow_unknown": false,
+     "format": "email",
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "has_email",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 22
+     }
+    },
+    {
+     "key": "preferred_contact",
+     "label": "דרכי קשר מועדפות",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "multi",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "אפשר לבחור יותר מאפשרות אחת",
+     "options": [
+      "טלפון",
+      "הודעת טקסט",
+      "דואר אלקטרוני",
+      "דרך הנציג המורשה",
+      "ללא העדפה"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 23
+     }
+    },
+    {
+     "key": "preferred_contact_time",
+     "label": "זמן מועדף ליצירת קשר",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": false,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 24
+     }
+    },
+    {
+     "key": "address_country",
+     "label": "מדינה",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 25
+     }
+    },
+    {
+     "key": "address_city",
+     "label": "יישוב",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 26,
+      "widget": "city"
+     }
+    },
+    {
+     "key": "address_street",
+     "label": "רחוב",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 27,
+      "widget": "street"
+     }
+    },
+    {
+     "key": "address_house",
+     "label": "מספר בית",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 28
+     }
+    },
+    {
+     "key": "address_apartment",
+     "label": "מספר דירה",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": false,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 29
+     }
+    },
+    {
+     "key": "address_postal_code",
+     "label": "מיקוד",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": false,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 30
+     }
+    },
+    {
+     "key": "address_po_box",
+     "label": "תא דואר",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": false,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 31
+     }
+    },
+    {
+     "key": "different_mailing_address",
+     "label": "האם כתובת הדואר שונה מכתובת המגורים?",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 32
+     }
+    },
+    {
+     "key": "mailing_address",
+     "label": "כתובת למשלוח דואר",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "different_mailing_address",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "country",
+       "type": "text",
+       "label": "מדינה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "city",
+       "type": "text",
+       "label": "יישוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "street",
+       "type": "text",
+       "label": "רחוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "house",
+       "type": "text",
+       "label": "מספר בית",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "apartment",
+       "type": "text",
+       "label": "מספר דירה",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "postal_code",
+       "type": "text",
+       "label": "מיקוד",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "po_box",
+       "type": "text",
+       "label": "תא דואר",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 33,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "contact_fax",
+     "label": "פקס, אם נעשה בו שימוש",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": false,
+     "allow_unknown": true,
+     "format": "phone",
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 67
+     }
+    },
+    {
+     "key": "accessible_documents",
+     "label": "האם נדרשים מסמכים בפורמט נגיש?",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 68
+     }
+    },
+    {
+     "key": "accessible_documents_detail",
+     "label": "איזו התאמה תעזור לך לקרוא את המסמכים?",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "accessible_documents",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 69
+     }
+    },
+    {
+     "key": "institution_delivery",
+     "label": "כיצד ברצונך לקבל מסמכים מהגוף המוסדי?",
+     "section": "הצטרפות · קשר וכתובת",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "זו העדפה למסמכי החברה, בנפרד מסיכום הסוכן. בקשה למשלוח בדואר מחייבת כתובת מלאה.",
+     "options": [
+      "דואר אלקטרוני והודעה לנייד",
+      "דואר ישראל",
+      "אבקש לברר עם הסוכן"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s2",
+      "bankId": 70
+     }
+    }
+   ]
+  },
+  {
+   "id": "s3",
+   "title": "הצטרפות · משפחה",
+   "intro": null,
+   "spot": "family-figures",
+   "module": false,
+   "questions": [
+    {
+     "key": "family",
+     "label": "מצב משפחתי",
+     "section": "הצטרפות · משפחה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "רווק/ה",
+      "נשוי/אה",
+      "ידוע/ה בציבור",
+      "גרוש/ה",
+      "אלמן/ה",
+      "מעדיפ/ה למסור בשיחה"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 34
+     }
+    },
+    {
+     "key": "has_spouse",
+     "label": "האם יש בן או בת זוג?",
+     "section": "הצטרפות · משפחה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": {
+      "id": "family",
+      "value": [
+       "נשוי/אה",
+       "ידוע/ה בציבור"
+      ]
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 35
+     }
+    },
+    {
+     "key": "spouse",
+     "label": "פרטי בן או בת זוג",
+     "section": "הצטרפות · משפחה",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "פרטי קשר ומעמד בלבד. אם בן או בת הזוג מצטרפים, יש למלא עבורם את פרקי השאלון כאדם נוסף בבקשה.",
+     "options": null,
+     "when": {
+      "id": "has_spouse",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "first_name",
+       "type": "text",
+       "label": "שם פרטי",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "last_name",
+       "type": "text",
+       "label": "שם משפחה",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "id_type",
+       "type": "choice",
+       "label": "סוג מסמך מזהה",
+       "options": [
+        "תעודת זהות ישראלית",
+        "דרכון"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "id_number",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "תעודת זהות ישראלית"
+       },
+       "label": "מספר תעודת זהות",
+       "format": "israeli-id",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "passport",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מספר דרכון",
+       "format": "passport",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "passport_country",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מדינת הנפקת הדרכון",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "birth",
+       "type": "date",
+       "label": "תאריך לידה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "gender",
+       "type": "choice",
+       "label": "מין כפי שמופיע במסמך המזהה",
+       "options": [
+        "זכר",
+        "נקבה",
+        "נדרש בירור מול הסוכן"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "phone",
+       "type": "text",
+       "label": "טלפון",
+       "format": "phone",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "email",
+       "type": "text",
+       "label": "דואר אלקטרוני",
+       "format": "email",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "health_fund",
+       "type": "choice",
+       "label": "קופת חולים",
+       "options": [
+        "כללית",
+        "מכבי",
+        "מאוחדת",
+        "לאומית",
+        "אין חברות בקופת חולים",
+        "אחר / לא יודע/ת"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "supplemental",
+       "type": "text",
+       "label": "שם הביטוח המשלים או שאין",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "employment",
+       "type": "choice",
+       "label": "מעמד תעסוקתי",
+       "options": [
+        "שכיר/ה",
+        "עצמאי/ת",
+        "שכיר/ה ועצמאי/ת",
+        "שכיר/ה בעל/ת שליטה",
+        "עצמאי/ת באמצעות מעסיק",
+        "לא עובד/ת",
+        "גמלאי/ת",
+        "קטין/ה"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "profession",
+       "type": "text",
+       "label": "עיסוק",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "id_issue_date",
+       "type": "date",
+       "label": "תאריך הנפקת מסמך הזיהוי",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "monthly_income",
+       "min": 0,
+       "type": "number",
+       "label": "שכר או הכנסה חודשית בשקלים",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 36,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "has_children",
+     "label": "האם יש ילדים?",
+     "section": "הצטרפות · משפחה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 37
+     }
+    },
+    {
+     "key": "children_count",
+     "label": "כמה ילדים יש?",
+     "section": "הצטרפות · משפחה",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "has_children",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": 1,
+     "max_val": 20,
+     "integer_only": true,
+     "max_length": 300,
+     "origin": "seeld",
+     "confidence": "product",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "numberKind": "integer",
+      "note": "שאלה מוצרית (לא בבנק): מספר הילדים קובע את מספר שורות הילד."
+     }
+    },
+    {
+     "key": "children",
+     "label": "פרטי הילדים",
+     "section": "הצטרפות · משפחה",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "יש להוסיף שורה נפרדת לכל ילד. הגיל מחושב מתאריך הלידה; קרן הפנסיה מבקשת פרטי ילדים עד גיל 21.",
+     "options": null,
+     "when": {
+      "id": "has_children",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "first_name",
+       "type": "text",
+       "label": "שם פרטי",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "last_name",
+       "type": "text",
+       "label": "שם משפחה",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "id_type",
+       "type": "choice",
+       "label": "סוג מסמך מזהה",
+       "options": [
+        "תעודת זהות ישראלית",
+        "דרכון"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "id_number",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "תעודת זהות ישראלית"
+       },
+       "label": "מספר תעודת זהות",
+       "format": "israeli-id",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "passport",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מספר דרכון",
+       "format": "passport",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "passport_country",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מדינת הנפקת הדרכון",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "birth",
+       "type": "date",
+       "label": "תאריך לידה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "gender",
+       "type": "choice",
+       "label": "מין כפי שמופיע במסמך המזהה",
+       "options": [
+        "זכר",
+        "נקבה",
+        "נדרש בירור מול הסוכן"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 38,
+      "countFrom": "children_count",
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "has_guardian",
+     "label": "האם מונה לאדם זה אפוטרופוס?",
+     "section": "הצטרפות · משפחה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 39
+     }
+    },
+    {
+     "key": "guardian",
+     "label": "פרטי האפוטרופוס",
+     "section": "הצטרפות · משפחה",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": "יש לצרף מסמך מינוי אם נדרש לטיפול. הרישום כאן אינו מאמת את סמכות המינוי.",
+     "options": null,
+     "when": {
+      "id": "has_guardian",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "first_name",
+       "type": "text",
+       "label": "שם פרטי",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "last_name",
+       "type": "text",
+       "label": "שם משפחה",
+       "format": "person-name",
+       "section": "",
+       "required": true,
+       "maxLength": 50
+      },
+      {
+       "id": "id_type",
+       "type": "choice",
+       "label": "סוג מסמך מזהה",
+       "options": [
+        "תעודת זהות ישראלית",
+        "דרכון"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "id_number",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "תעודת זהות ישראלית"
+       },
+       "label": "מספר תעודת זהות",
+       "format": "israeli-id",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "passport",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מספר דרכון",
+       "format": "passport",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "passport_country",
+       "type": "text",
+       "when": {
+        "id": "id_type",
+        "value": "דרכון"
+       },
+       "label": "מדינת הנפקת הדרכון",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "birth",
+       "type": "date",
+       "label": "תאריך לידה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "gender",
+       "type": "choice",
+       "label": "מין כפי שמופיע במסמך המזהה",
+       "options": [
+        "זכר",
+        "נקבה",
+        "נדרש בירור מול הסוכן"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "phone",
+       "type": "text",
+       "label": "טלפון",
+       "format": "phone",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "authority",
+       "type": "text",
+       "label": "סוג המינוי והיקפו",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s3",
+      "bankId": 40,
+      "minEntries": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "s4",
+   "title": "הצטרפות · תעסוקה והכנסה",
+   "intro": null,
+   "spot": "briefcase",
+   "module": false,
+   "questions": [
+    {
+     "key": "employment",
+     "label": "מעמד תעסוקתי",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "שכיר/ה",
+      "עצמאי/ת",
+      "שכיר/ה ועצמאי/ת",
+      "שכיר/ה בעל/ת שליטה",
+      "עצמאי/ת באמצעות מעסיק",
+      "לא עובד/ת",
+      "גמלאי/ת",
+      "סטודנט/ית",
+      "חייל/ת או שירות לאומי",
+      "קטין/ה"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 41,
+      "note": "נוספו סטודנט/ית וחייל/ת או שירות לאומי (לא קיימים בבנק), באישור הבעלים."
+     }
+    },
+    {
+     "key": "occupation",
+     "label": "מה העיסוק שלך כיום?",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 42
+     }
+    },
+    {
+     "key": "employers",
+     "label": "פרטי המעסיקים",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "employment",
+      "value": [
+       "שכיר/ה",
+       "שכיר/ה ועצמאי/ת",
+       "שכיר/ה בעל/ת שליטה",
+       "עצמאי/ת באמצעות מעסיק"
+      ]
+     },
+     "fields": [
+      {
+       "id": "name",
+       "type": "text",
+       "label": "שם המעסיק",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "registration",
+       "type": "text",
+       "label": "ח.פ. או עוסק מורשה",
+       "format": "digits",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "country",
+       "type": "text",
+       "label": "מדינה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "city",
+       "type": "text",
+       "label": "יישוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "street",
+       "type": "text",
+       "label": "רחוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "house",
+       "type": "text",
+       "label": "מספר בית",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "apartment",
+       "type": "text",
+       "label": "מספר דירה",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "postal_code",
+       "type": "text",
+       "label": "מיקוד",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "po_box",
+       "type": "text",
+       "label": "תא דואר",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "phone",
+       "type": "text",
+       "label": "טלפון המעסיק",
+       "format": "phone",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "position",
+       "type": "text",
+       "label": "תפקיד",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "tenure_years",
+       "max": 100,
+       "min": 0,
+       "type": "number",
+       "label": "ותק בשנים",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 43,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "self_employment",
+     "label": "פרטי העסק העצמאי",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "employment",
+      "value": [
+       "עצמאי/ת",
+       "שכיר/ה ועצמאי/ת",
+       "עצמאי/ת באמצעות מעסיק"
+      ]
+     },
+     "fields": [
+      {
+       "id": "name",
+       "type": "text",
+       "label": "שם העסק",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "registration",
+       "type": "text",
+       "label": "מספר עוסק או חברה",
+       "format": "digits",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "country",
+       "type": "text",
+       "label": "מדינה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "city",
+       "type": "text",
+       "label": "יישוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "street",
+       "type": "text",
+       "label": "רחוב",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "house",
+       "type": "text",
+       "label": "מספר בית",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "apartment",
+       "type": "text",
+       "label": "מספר דירה",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "postal_code",
+       "type": "text",
+       "label": "מיקוד",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "po_box",
+       "type": "text",
+       "label": "תא דואר",
+       "section": "",
+       "required": false,
+       "maxLength": 300
+      },
+      {
+       "id": "industry",
+       "type": "text",
+       "label": "תחום פעילות",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "annual_turnover",
+       "min": 0,
+       "type": "number",
+       "label": "מחזור שנתי בשקלים",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 44,
+      "minEntries": 1
+     }
+    },
+    {
+     "key": "previous_occupation",
+     "label": "העיסוק והמעסיק לפני הפרישה",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "employment",
+      "value": "גמלאי/ת"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 45
+     }
+    },
+    {
+     "key": "monthly_income",
+     "label": "הכנסה חודשית ברוטו בשקלים",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": 0,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 46,
+      "numberKind": "amount",
+      "unit": "₪"
+     }
+    },
+    {
+     "key": "annual_income",
+     "label": "הכנסה שנתית ברוטו בשקלים",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "number",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": 0,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 47,
+      "numberKind": "amount",
+      "unit": "₪"
+     }
+    },
+    {
+     "key": "has_additional_income",
+     "label": "האם קיימת הכנסה נוספת?",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 48
+     }
+    },
+    {
+     "key": "additional_income",
+     "label": "מקורות הכנסה נוספים",
+     "section": "הצטרפות · תעסוקה והכנסה",
+     "type": "repeat",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "has_additional_income",
+      "value": "כן"
+     },
+     "fields": [
+      {
+       "id": "source",
+       "type": "text",
+       "label": "מקור ההכנסה",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "amount",
+       "min": 0,
+       "type": "number",
+       "label": "סכום",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "currency",
+       "type": "text",
+       "label": "מטבע",
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      },
+      {
+       "id": "period",
+       "type": "choice",
+       "label": "תקופת הסכום",
+       "options": [
+        "חודש",
+        "שנה",
+        "חד־פעמי"
+       ],
+       "section": "",
+       "required": true,
+       "maxLength": 300
+      }
+     ],
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s4",
+      "bankId": 49,
+      "minEntries": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "s5",
+   "title": "הצטרפות · תושבות",
+   "intro": null,
+   "spot": "compass",
+   "module": false,
+   "questions": [
+    {
+     "key": "foreign_resident",
+     "label": "האם את/ה תושב/ת חוץ?",
+     "section": "הצטרפות · תושבות",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s5",
+      "bankId": 71
+     }
+    },
+    {
+     "key": "foreign_resident_detail_1",
+     "label": "באיזו מדינה את/ה מתגורר/ת?",
+     "section": "הצטרפות · תושבות",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "foreign_resident",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s5",
+      "bankId": 72
+     }
+    },
+    {
+     "key": "israel_connection",
+     "label": "מה הזיקה שלך לישראל?",
+     "section": "הצטרפות · תושבות",
+     "type": "long",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "foreign_resident",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s5",
+      "bankId": 73
+     }
+    }
+   ]
+  },
+  {
+   "id": "s6",
+   "title": "הצטרפות · קופת חולים",
+   "intro": null,
+   "spot": "heart-pink",
+   "module": false,
+   "questions": [
+    {
+     "key": "health_hmo",
+     "label": "באיזו קופת חולים את/ה חבר/ה?",
+     "section": "הצטרפות · קופת חולים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כללית",
+      "מכבי",
+      "מאוחדת",
+      "לאומית",
+      "אין חברות בקופת חולים",
+      "אחר / לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s6",
+      "bankId": 50,
+      "widget": "healthfund"
+     }
+    },
+    {
+     "key": "health_supp",
+     "label": "האם יש לך ביטוח משלים של קופת החולים?",
+     "section": "הצטרפות · קופת חולים",
+     "type": "choice",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "כן",
+      "לא",
+      "לא יודע/ת"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s6",
+      "bankId": 51
+     }
+    },
+    {
+     "key": "health_supp_plan",
+     "label": "שם תוכנית הביטוח המשלים",
+     "section": "הצטרפות · קופת חולים",
+     "type": "text",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": {
+      "id": "health_supp",
+      "value": "כן"
+     },
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s6",
+      "bankId": 52
+     }
+    }
+   ]
+  },
+  {
+   "id": "s7",
+   "title": "הצטרפות · מטרות והעדפות",
+   "intro": null,
+   "spot": "magnifier",
+   "module": false,
+   "questions": [
+    {
+     "key": "referral_reason",
+     "label": "מה הסיבה לפנייה?",
+     "section": "הצטרפות · מטרות והעדפות",
+     "type": "long",
+     "required": false,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s7",
+      "bankId": 56
+     }
+    },
+    {
+     "key": "priority_preference",
+     "label": "מה חשוב לך במיוחד בטיפול?",
+     "section": "הצטרפות · מטרות והעדפות",
+     "type": "long",
+     "required": false,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s7",
+      "bankId": 57
+     }
+    },
+    {
+     "key": "monthly_budget",
+     "label": "תקציב חודשי מתוכנן בשקלים, אם נקבע",
+     "section": "הצטרפות · מטרות והעדפות",
+     "type": "number",
+     "required": false,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": 0,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s7",
+      "bankId": 58,
+      "numberKind": "amount",
+      "unit": "₪"
+     }
+    },
+    {
+     "key": "summary_delivery",
+     "label": "כיצד תרצה/י לקבל את סיכום הטיפול?",
+     "section": "הצטרפות · מטרות והעדפות",
+     "type": "multi",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "דואר אלקטרוני",
+      "דרך הסוכן",
+      "דרך הנציג המורשה",
+      "טרם הוחלט"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 300,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s7",
+      "bankId": 59
+     }
+    },
+    {
+     "key": "service_goals",
+     "label": "באילו נושאים תרצה/י להתמקד בטיפול?",
+     "section": "הצטרפות · מטרות והעדפות",
+     "type": "multi",
+     "required": true,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": [
+      "סדר וריכוז התיק",
+      "הבנת זכויות",
+      "בדיקת עלויות",
+      "איתור כיסוי חסר או עודף",
+      "דוח מרוכז",
+      "התאמת רמת סיכון",
+      "סוגיות מס",
+      "בדיקת נתונים באתרי האוצר",
+      "בדיקת מחזור משכנתא",
+      "התאמת חסכונות",
+      "הכנה לפרישה",
+      "ליווי מתמשך",
+      "טרם הוחלט"
+     ],
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s7",
+      "bankId": 74
+     }
+    },
+    {
+     "key": "service_goals_other",
+     "label": "מטרה נוספת או דגש לטיפול",
+     "section": "הצטרפות · מטרות והעדפות",
+     "type": "long",
+     "required": false,
+     "allow_unknown": true,
+     "format": null,
+     "hint": null,
+     "options": null,
+     "when": null,
+     "fields": null,
+     "min_val": null,
+     "max_val": null,
+     "integer_only": false,
+     "max_length": 500,
+     "origin": "qlio",
+     "confidence": "high",
+     "version": 1,
+     "meta": {
+      "sectionId": "s7",
+      "bankId": 75
+     }
+    }
+   ]
+  }
+ ]
+}

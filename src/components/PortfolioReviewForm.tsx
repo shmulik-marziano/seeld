@@ -13,7 +13,7 @@ import { GREEN, MUTED } from "@/lib/brand";
  */
 
 export const LEAD_SUBJECTS = [
-  "בדיקת תיק 360",
+  "אפיון צרכים",
   "פנסיה וחיסכון",
   "פוליסות השקעה, גמל והשתלמות",
   "ניוד פנסיה",
@@ -47,7 +47,7 @@ interface Props {
   source?: string;
 }
 
-export const PortfolioReviewForm = ({ className = "", idPrefix = "lead", source = "בדיקת תיק 360" }: Props) => {
+export const PortfolioReviewForm = ({ className = "", idPrefix = "lead", source = "אפיון צרכים" }: Props) => {
   const [form, setForm] = useState({ name: "", phone: "", subject: "" });
   const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
   const [submitting, setSubmitting] = useState(false);
@@ -68,7 +68,7 @@ export const PortfolioReviewForm = ({ className = "", idPrefix = "lead", source 
       const { error } = await supabase.from("contact_submissions").insert([{
         name: form.name.trim(),
         email,
-        subject: form.subject || "בדיקת תיק 360",
+        subject: form.subject || "אפיון צרכים",
         message: `[${source}] טלפון: ${form.phone}\nנושא: ${form.subject || "לא צוין"}`,
       }]);
       if (error) throw error;
@@ -80,7 +80,7 @@ export const PortfolioReviewForm = ({ className = "", idPrefix = "lead", source 
               fullName: form.name.trim(),
               phone: form.phone.trim(),
               email,
-              insuranceType: form.subject || "בדיקת תיק 360",
+              insuranceType: form.subject || "אפיון צרכים",
             },
           },
         });
@@ -141,7 +141,7 @@ export const PortfolioReviewForm = ({ className = "", idPrefix = "lead", source 
             onChange={(e) => setForm((p) => ({ ...p, subject: e.target.value }))}
             className="field appearance-none cursor-pointer"
           >
-            <option value="">בדיקת תיק 360 (ברירת מחדל)</option>
+            <option value="">אפיון צרכים (ברירת מחדל)</option>
             {LEAD_SUBJECTS.map((s) => (
               <option key={s} value={s}>{s}</option>
             ))}

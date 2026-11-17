@@ -41,7 +41,7 @@ const Travel = () => {
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
                 <Link to="/insurance/vehicle" className="sd-btn">להצעה לביטוח רכב{arrow}</Link>
-                <Link to="/#portfolio-review" className="sd-link">בדיקת תיק 360{arrow}</Link>
+                <Link to="/#portfolio-review" className="sd-link">אפיון צרכים{arrow}</Link>
               </div>
               <button type="button" className="sd-link mt-6" onClick={openChat}>
                 <BrandIcon name="message" size={18} />
@@ -115,7 +115,7 @@ const Travel = () => {
               הצעת מחיר בלי התחייבות מצידכם, בהשוואה בין החברות. אפשר גם לבדוק את כל התיק בבת אחת.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <Link to="/#portfolio-review" className="sd-btn sd-btn-light">בדיקת תיק 360{arrow}</Link>
+              <Link to="/#portfolio-review" className="sd-btn sd-btn-light">אפיון צרכים{arrow}</Link>
               <Link to="/contact" className="sd-btn sd-btn-light">תיאום פגישה{arrow}</Link>
             </div>
           </div>

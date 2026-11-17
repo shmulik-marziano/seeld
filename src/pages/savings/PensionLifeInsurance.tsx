@@ -82,7 +82,7 @@ const PensionLifeInsurance = () => {  const productTypes = [
       bottomLine={bottomLine}
       faqItems={faqItems}
       closingTitle="רוצים שנבדוק את ביטוח המנהלים שלכם?"
-      closingText="השאירו פרטים ונבדוק אם הפוליסה שלכם עדיין מתאימה לכם. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
+      closingText="השאירו פרטים ונבדוק אם הפוליסה שלכם עדיין מתאימה לכם. אפשר גם להתחיל באפיון צרכים מלא."
       form={{ focusArea: "pension", title: "בדיקת ביטוח חיים פנסיוני", description: "השאירו פרטים ונבדוק אם הפוליסה שלכם עדיין מתאימה לכם" }}
     />
   );

@@ -50,7 +50,7 @@ const Growth = () => {
           actions={
             <>
               <Link to="/contact" className="sd-btn">תיאום פגישה{arrow}</Link>
-              <Link to="/#portfolio-review" className="sd-link">בדיקת תיק 360{arrow}</Link>
+              <Link to="/#portfolio-review" className="sd-link">אפיון צרכים{arrow}</Link>
               <button type="button" className="sd-link" onClick={openChat}>
                 <BrandIcon name="message" size={18} />
                 שאלו את היועץ הדיגיטלי
@@ -128,7 +128,7 @@ const Growth = () => {
 
         <PubClose
           title="מוכנים לתכנן את העתיד?"
-          text="שיחת היכרות בלי התחייבות מצידכם. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
+          text="שיחת היכרות בלי התחייבות מצידכם. אפשר גם להתחיל באפיון צרכים מלא."
           art="05-retirement"
         />
       </main>

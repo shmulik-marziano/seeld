@@ -43,7 +43,7 @@ export const ROUTES: RouteEntry[] = [
   r({
     path: "/", kind: "home", group: "about", changefreq: "weekly", priority: 1.0,
     title: "שילד ביטוח ופיננסים | הביטוח והכסף שלכם, בתמונה ברורה",
-    description: "שילד היא סוכנות ביטוח ופיננסים. ממפים את תיק הביטוח, הפנסיה והחיסכון, מבינים את האפשרויות ומלווים את הביצוע. בדיקת תיק 360 ופגישת היכרות.",
+    description: "שילד היא סוכנות ביטוח ופיננסים. ממפים את תיק הביטוח, הפנסיה והחיסכון, מבינים את האפשרויות ומלווים את הביצוע. אפיון צרכים ושיחת היכרות.",
     related: ["/portfolio-review", "/report", "/insurances", "/savings", "/return-tables"],
   }),
   r({
@@ -54,8 +54,8 @@ export const ROUTES: RouteEntry[] = [
   }),
   r({
     path: "/portfolio-review", kind: "service", group: "about", changefreq: "monthly", priority: 0.9,
-    title: "בדיקת תיק 360 | תמונה מסודרת של הביטוחים והחסכונות | SEELD",
-    description: "בדיקת תיק 360: מיפוי כל הביטוחים והחסכונות, בחינת הצרכים ומסמך החלטות עם המלצות מנומקות. משאירים פרטים וחוזרים אליכם.",
+    title: "אפיון צרכים | תמונה מסודרת של הביטוחים והחסכונות | SEELD",
+    description: "אפיון צרכים: מיפוי כל הביטוחים והחסכונות, אפיון מקיף של התא המשפחתי, שיקוף האופציות בתמונת המוצרים הפיננסיים ומסמך החלטות בכתב, כולל גידור סיכונים. משאירים פרטים וחוזרים אליכם.",
     related: ["/rights-extraction", "/insurances", "/savings", "/contact"],
   }),
   r({
@@ -123,7 +123,7 @@ export const ROUTES: RouteEntry[] = [
   r({
     path: "/wellness", kind: "hub", group: "insurance", changefreq: "weekly", priority: 0.6,
     title: "ביטוח בריאות, חיים וסיעוד | SEELD",
-    description: "ביטוח בריאות, חיים וסיעוד: המידע, הכלים וההשוואות במקום אחד, עם אפשרות לתאם פגישה ולבקש בדיקת תיק 360.",
+    description: "ביטוח בריאות, חיים וסיעוד: המידע, הכלים וההשוואות במקום אחד, עם אפשרות לתאם פגישה ולבקש אפיון צרכים.",
     related: ["/insurance/health", "/insurance/life", "/insurance/nursing", "/portfolio-review"],
   }),
   r({
@@ -383,6 +383,38 @@ export const ROUTES: RouteEntry[] = [
     title: "תכנון פיננסי אישי | SEELD",
     description: "תכנון פיננסי אישי: מיפוי הכנסות, הוצאות, ביטוחים וחסכונות, והגדרת מטרות כלכליות לטווח קצר וארוך.",
     related: ["/portfolio-review", "/calculators", "/savings/pre-retirement"],
+  }),
+
+  // ───────── Retirement planning section (landing + four step pages) ─────────
+  r({
+    path: "/savings/retirement-planning", kind: "savings", group: "savings", changefreq: "monthly", priority: 0.8, parent: "/savings",
+    title: "תכנון פרישה | אפיון צרכים, מיפוי התיק והחלטות בכתב | SEELD",
+    description: "תכנון פרישה לבני 55 ומעלה ולילדיהם: אפיון צרכים ואפיון מקיף של התא המשפחתי, כרטיס לכל קופה ופוליסה, החלטות בכתב וביצוע מדורג. שיחת היכרות ראשונה, בלי התחייבות.",
+    related: ["/savings/retirement-planning/how-it-works", "/savings/retirement-planning/case-study", "/savings/retirement-planning/faq", "/savings/pre-retirement", "/savings/post-retirement"],
+  }),
+  r({
+    path: "/savings/retirement-planning/how-it-works", kind: "savings", group: "savings", changefreq: "monthly", priority: 0.6, parent: "/savings/retirement-planning",
+    title: "איך זה עובד | תהליך תכנון פרישה בחמישה שלבים | SEELD",
+    description: "תהליך תכנון פרישה בחמישה שלבים: פגישת היכרות, מיפוי מלא של התיק, בדיקות ובירורים, פגישת החלטות וביצוע מדורג, כשכל החלטה נרשמת בכתב.",
+    related: ["/savings/retirement-planning", "/savings/retirement-planning/case-study", "/savings/retirement-planning/contact"],
+  }),
+  r({
+    path: "/savings/retirement-planning/case-study", kind: "info", group: "savings", changefreq: "monthly", priority: 0.6, parent: "/savings/retirement-planning",
+    title: "סיפור מהשטח | תיק פרישה של זוג פנסיונרים, הפרטים שונו | SEELD",
+    description: "מקרה מהשטח, הפרטים שונו: מיפוי תיק פנסיוני של זוג בני 78 ו־72, מה נמצא בו ואיך התקבלו ההחלטות, בכתב ושלב אחרי שלב. מקרה אחד, לא תוצאה אופיינית.",
+    related: ["/savings/retirement-planning", "/savings/retirement-planning/how-it-works", "/savings/retirement-planning/faq"],
+  }),
+  r({
+    path: "/savings/retirement-planning/faq", kind: "info", group: "savings", changefreq: "monthly", priority: 0.6, parent: "/savings/retirement-planning",
+    title: "שאלות נפוצות על תכנון פרישה | קיבוע זכויות, קצבה והחזרי מס | SEELD",
+    description: "תשובות בשפה פשוטה לשאלות שלקוחות שאלו: קיבוע זכויות (טופס 161ד), איחוד קופות, קצבה מול הון, פוליסות ישנות, מוטבים ומה קורה כשילדים מסדרים את ענייני ההורים.",
+    related: ["/savings/retirement-planning", "/savings/retirement-planning/contact", "/faq"],
+  }),
+  r({
+    path: "/savings/retirement-planning/contact", kind: "service", group: "savings", changefreq: "monthly", priority: 0.7, parent: "/savings/retirement-planning",
+    title: "שיחת היכרות לתכנון פרישה | SEELD",
+    description: "שיחת היכרות ראשונה לתכנון פרישה, בלי התחייבות: משאירים פרטים בטופס קצר, מישהו מהצוות חוזר לתיאום, ואפשר להוריד את רשימת ההכנה לתכנון פרישה.",
+    related: ["/savings/retirement-planning", "/savings/retirement-planning/how-it-works", "/contact"],
   }),
 
   // ───────── Legal ─────────

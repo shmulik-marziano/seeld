@@ -86,7 +86,7 @@ export default function Authors() {
         title="רוצים להתחיל?"
         text="שיחת היכרות בלי התחייבות מצידכם. נכיר, נבדוק ונבנה יחד תוכנית שמתאימה לכם."
         art="12-childrens-savings"
-        primary={{ label: "בדיקת תיק 360", to: "/portfolio-review" }}
+        primary={{ label: "אפיון צרכים", to: "/portfolio-review" }}
         secondary={{ label: "תיאום פגישה", to: "/contact" }}
       />
     </PubPage>

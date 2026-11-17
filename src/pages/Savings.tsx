@@ -33,7 +33,7 @@ const GROUPS: { id: string; label: string; title: string; lede: string; art: Art
   },
   {
     id: "g-plan", label: "תכנון ופרישה", title: "תכנון ופרישה", lede: "לסדר את התמונה לפני הפרישה ואחריה.", art: "10-financial-planning",
-    hrefs: ["/savings/financial-planning", "/savings/pre-retirement", "/savings/post-retirement"],
+    hrefs: ["/savings/financial-planning", "/savings/retirement-planning", "/savings/pre-retirement", "/savings/post-retirement"],
   },
 ];
 
@@ -59,12 +59,12 @@ const Savings = () => {
               <span className="sd-eyebrow">חיסכון ופנסיה</span>
               <h1 className="sd-h1 mt-5">חיסכון ופנסיה</h1>
               <p className="sd-text mt-6" style={{ color: "var(--muted)" }}>
-                <span dir="ltr" className="tabular-nums whitespace-nowrap">11</span> מוצרי חיסכון ופנסיה, מקרן הפנסיה הראשונה ועד תכנון הפרישה.
+                <span dir="ltr" className="tabular-nums whitespace-nowrap">12</span> מוצרי חיסכון ופנסיה, מקרן הפנסיה הראשונה ועד תכנון הפרישה.
                 בוחרים נושא, ואנחנו מסדרים את דמי הניהול, המסלולים וההפקדות בתמונה אחת.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
                 <a href="#savings-index" className="sd-btn">לרשימת מוצרי החיסכון{arrow}</a>
-                <Link to="/#portfolio-review" className="sd-link">בדיקת תיק 360{arrow}</Link>
+                <Link to="/#portfolio-review" className="sd-link">אפיון צרכים{arrow}</Link>
               </div>
               <button type="button" className="sd-sav-chat" onClick={openChat}>
                 <BrandIcon name="message" size={18} />
@@ -160,7 +160,7 @@ const Savings = () => {
                 נבדוק את הפנסיה, החיסכון ודמי הניהול שלכם, ונחזור אליכם עם תמונה מסודרת. שיחת היכרות בלי התחייבות מצידכם.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
-                <Link to="/#portfolio-review" className="sd-btn sd-btn-light">בדיקת תיק 360{arrow}</Link>
+                <Link to="/#portfolio-review" className="sd-btn sd-btn-light">אפיון צרכים{arrow}</Link>
                 <Link to="/contact" className="sd-sav-close-link">תיאום פגישה{arrow}</Link>
               </div>
             </div>
