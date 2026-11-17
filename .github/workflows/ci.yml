@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit -p tsconfig.app.json
+
+      - name: Lint
+        run: npx eslint .
+
+      - name: Unit tests
+        run: npx vitest run
+
+      - name: Install browser for prerender
+        run: npx playwright install --with-deps chromium
+
+      - name: Build with strict prerender (writes dist/health.json)
+        run: npm run build:seo
+        env:
+          PRERENDER_STRICT: "1"
+
+      - name: AEO check
+        run: npm run check:aeo
+
+      - name: Bundle size budget (main entry, +8% over baseline)
+        run: npm run size:check

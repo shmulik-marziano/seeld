@@ -1,0 +1,63 @@
+name: Site watch
+
+# Every 30 minutes (GitHub cron can drift a few minutes) plus manual runs.
+# Read-only against production. On failure it opens or updates one issue titled "site-watch failure".
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Site to check"
+        required: false
+        default: "https://seeld.co.il"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-watch
+  cancel-in-progress: false
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+    env:
+      BASE_URL: ${{ inputs.base_url || 'https://seeld.co.il' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Health check
+        id: health
+        run: |
+          set +e
+          node scripts/health-check.mjs "$BASE_URL" 2>&1 | tee health.log
+          echo "code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Open or update issue on failure
+        if: steps.health.outputs.code != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="site-watch failure"
+          body="$(printf 'Site: %s\nRun: %s\nTime: %s\n\nSee docs/platform/RUNBOOK.md.\n\n```\n%s\n```\n' "$BASE_URL" "$RUN_URL" "$(date -u +%FT%TZ)" "$(grep -E '^(FAIL|FAILED|  - )' health.log | head -40)")"
+          existing="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$title\" in:title" --json number,title --jq "[.[] | select(.title==\"$title\")][0].number")"
+          if [ -n "$existing" ] && [ "$existing" != "null" ]; then
+            gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "$body"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body "$body"
+          fi
+
+      - name: Fail the run when checks failed
+        if: steps.health.outputs.code != '0'
+        run: exit 1

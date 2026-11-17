@@ -1,0 +1,95 @@
+openapi: 3.0.3
+info:
+  title: SEELD API
+  version: 1.0.0-scaffold
+  description: |
+    Scaffold of the future /api/v1. Only /health and /version exist. Not deployed.
+    Errors always use the standard envelope (see components.schemas.Error).
+    Auth design: docs/platform/API-CLIENT-AUTH.md.
+servers:
+  - url: https://lvifatyksqizwcutfbqp.supabase.co/functions/v1/api-v1
+    description: Supabase edge function (current project, region ap-northeast-1)
+  - url: https://seeld.co.il/api/v1
+    description: Future public alias via Vercel rewrite (not configured)
+security: []
+tags:
+  - name: system
+paths:
+  /health:
+    get:
+      tags: [system]
+      operationId: getHealth
+      summary: Liveness probe
+      security: []
+      responses:
+        "200":
+          description: Service is up
+          headers:
+            x-request-id: { $ref: "#/components/headers/RequestId" }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, time]
+                properties:
+                  status: { type: string, enum: [ok] }
+                  time: { type: string, format: date-time }
+        default: { $ref: "#/components/responses/Error" }
+  /version:
+    get:
+      tags: [system]
+      operationId: getVersion
+      summary: API name, version and deployed commit
+      security: []
+      responses:
+        "200":
+          description: Version info
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [name, apiVersion, commit]
+                properties:
+                  name: { type: string, example: seeld-api }
+                  apiVersion: { type: string, example: 1.0.0-scaffold }
+                  commit: { type: string, nullable: true }
+        default: { $ref: "#/components/responses/Error" }
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API client key (server to server). Stored hashed; scopes and rate limit per client.
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Supabase user session token. Agent routes additionally require aal2 (TOTP).
+  headers:
+    RequestId:
+      description: Echo of x-request-id, or a generated id
+      schema: { type: string }
+  responses:
+    Error:
+      description: Standard error
+      headers:
+        x-request-id: { $ref: "#/components/headers/RequestId" }
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message, requestId]
+          properties:
+            code:
+              type: string
+              enum: [bad_request, unauthenticated, forbidden, not_found, method_not_allowed, conflict, validation_failed, rate_limited, internal, unavailable]
+            message: { type: string }
+            requestId: { type: string }
+            details: {}
