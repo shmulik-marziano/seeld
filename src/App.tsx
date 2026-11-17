@@ -168,6 +168,8 @@ const FileImportPage = lazy(() => import("@/pages/FileImportPage"));
 const LeadsPage = lazy(() => import("@/pages/LeadsPage"));
 const HelpPage = lazy(() => import("@/pages/HelpPage"));
 const ReportApp = lazy(() => import("@/pages/app/ReportApp"));
+// Ops Console (manager / super_admin only; role gate inside). Never imported by public pages.
+const OpsRoutes = lazy(() => import("@/pages/app/ops/OpsRoutes"));
 const ReportPublic = lazy(() => import("@/pages/Report"));
 const AuthPage = lazy(() => import("@/pages/AuthPage"));
 
@@ -450,6 +452,7 @@ const App = () => (
                   <Route path="/app/leads" element={<LeadsPage />} />
                   <Route path="/app/help" element={<HelpPage />} />
                   <Route path="/app/report" element={<ReportApp />} />
+                  <Route path="/app/ops/*" element={<OpsRoutes />} />
                   <Route path="/app/settings" element={<AgencySettingsPage />} />
 
                   {/* ═══ PLATFORM TOOLS ═══ */}

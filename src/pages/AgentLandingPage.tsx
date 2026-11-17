@@ -49,7 +49,7 @@ export default function AgentLandingPage() {
         eyebrow="פורטל לסוכני ביטוח · BETA"
         title="הזמן שלכם שווה יותר מניירת"
         lead="SEELD היא פלטפורמת ניהול לסוכנות הביטוח: מקום אחד, כל הכלים, ופחות עבודה מיותרת בין הלקוח לבין ההחלטה."
-        art="08-business-insurance"
+        art="31-team-desks"
         actions={
           <>
             <Link to="/app/auth" className="sd-btn">להתחיל<Arrow /></Link>

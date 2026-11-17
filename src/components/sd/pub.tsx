@@ -56,11 +56,13 @@ const ART_TONE: Record<ArtName, Pastel> = {
   "05-retirement": "lavender", "06-home-mortgage": "sky", "07-car-insurance": "sky", "08-business-insurance": "butter",
   "09-travel-insurance": "rose", "10-financial-planning": "lavender", "11-claims-service": "sage", "12-childrens-savings": "rose",
   "13-nursing-care": "lavender", "14-accidents-recovery": "butter", "15-critical-illness": "rose", "16-disability-income": "sky", "17-child-savings-sailboat": "rose",
+  "18-partners-agreement": "butter", "19-renters-first-home": "sage", "20-vehicle-road": "sky", "21-dental-calm": "sky", "22-foreign-caregiver": "sage", "23-training-desk": "lavender", "24-pension-family-umbrella": "lavender", "25-employer-employee": "butter", "26-pre-retirement-path": "butter", "27-post-retirement-bench": "sage", "28-direct-debit-calendar": "sky", "29-onboarding-door": "sky", "30-rights-found-key": "rose", "31-team-desks": "sage", "32-process-steps": "sage", "33-welcome-table": "butter",
 };
 const ART_POOL: ArtName[] = [
   "04-investments-growth", "10-financial-planning", "05-retirement", "02-family-protection", "03-health-insurance", "11-claims-service",
   "12-childrens-savings", "06-home-mortgage", "08-business-insurance", "01-hero", "07-car-insurance", "09-travel-insurance",
   "13-nursing-care", "14-accidents-recovery", "15-critical-illness", "16-disability-income", "17-child-savings-sailboat",
+  "18-partners-agreement", "19-renters-first-home", "20-vehicle-road", "21-dental-calm", "22-foreign-caregiver", "23-training-desk", "24-pension-family-umbrella", "25-employer-employee", "26-pre-retirement-path", "27-post-retirement-bench", "28-direct-debit-calendar", "29-onboarding-door", "30-rights-found-key", "31-team-desks", "32-process-steps", "33-welcome-table",
 ];
 
 /** Topically related illustrations, tried in order when the exact one is taken by a neighbouring card. */
@@ -82,6 +84,22 @@ const ART_RELATED: Record<ArtName, ArtName[]> = {
   "15-critical-illness": ["03-health-insurance", "02-family-protection", "13-nursing-care"],
   "16-disability-income": ["10-financial-planning", "11-claims-service", "02-family-protection"],
   "17-child-savings-sailboat": ["12-childrens-savings", "04-investments-growth", "02-family-protection"],
+  "18-partners-agreement": ["08-business-insurance", "10-financial-planning"],
+  "19-renters-first-home": ["06-home-mortgage", "11-claims-service"],
+  "20-vehicle-road": ["07-car-insurance", "01-hero"],
+  "21-dental-calm": ["03-health-insurance", "11-claims-service"],
+  "22-foreign-caregiver": ["09-travel-insurance", "03-health-insurance"],
+  "23-training-desk": ["10-financial-planning", "04-investments-growth"],
+  "24-pension-family-umbrella": ["02-family-protection", "05-retirement"],
+  "25-employer-employee": ["08-business-insurance", "04-investments-growth"],
+  "26-pre-retirement-path": ["05-retirement", "10-financial-planning"],
+  "27-post-retirement-bench": ["05-retirement", "13-nursing-care"],
+  "28-direct-debit-calendar": ["10-financial-planning", "04-investments-growth"],
+  "29-onboarding-door": ["01-hero", "11-claims-service"],
+  "30-rights-found-key": ["10-financial-planning", "11-claims-service"],
+  "31-team-desks": ["08-business-insurance", "11-claims-service"],
+  "32-process-steps": ["11-claims-service", "01-hero"],
+  "33-welcome-table": ["01-hero", "11-claims-service"],
 };
 
 /**

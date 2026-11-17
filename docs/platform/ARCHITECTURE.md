@@ -140,6 +140,9 @@ Supabase: Postgres + RLS, Auth (+MFA), Storage פרטי, cron
 - `.github/workflows/ci.yml`, `site-watch.yml`
 - `docs/platform/RUNBOOK.md`, `openapi.yaml`, `API-CLIENT-AUTH.md`
 
+## 11.1 ארכיטקטורה מונחית אירועים (הצעה)
+האתר והפורטל לא מדברים ישירות עם מערכת הליבה. הצעה מלאה: מסד תפעולי כנתב מרכזי, תור נפרד לכל מערכת (Salesforce, Surense), סדר לפי לקוח, מניעת לולאות, בעלות שדות ודירוג אמון, worker חסר מצב וטבלאות לוח. הכול בקבצים בלבד ולא הוחל. ראו `docs/platform/EVENT-ARCHITECTURE.md` והצעות `supabase/proposed/06` עד `09`.
+
 ## 12. החלטות פתוחות לבעלים
 1. אזור: טוקיו / פרנקפורט (סעיף 5.1).
 2. אישור הצעות ה-SQL (01 עד 05) והחלתן על branch ואז פרודקשן.

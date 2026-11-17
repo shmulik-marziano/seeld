@@ -38,7 +38,9 @@ type ArtKey =
   | "01-hero" | "02-family-protection" | "03-health-insurance" | "04-investments-growth"
   | "05-retirement" | "06-home-mortgage" | "07-car-insurance" | "08-business-insurance"
   | "09-travel-insurance" | "10-financial-planning" | "11-claims-service" | "12-childrens-savings"
-  | "13-nursing-care" | "14-accidents-recovery" | "15-critical-illness" | "16-disability-income" | "17-child-savings-sailboat";
+  | "13-nursing-care" | "14-accidents-recovery" | "15-critical-illness" | "16-disability-income" | "17-child-savings-sailboat"
+  | "18-partners-agreement" | "19-renters-first-home" | "20-vehicle-road" | "21-dental-calm" | "22-foreign-caregiver" | "23-training-desk" | "24-pension-family-umbrella" | "25-employer-employee"
+  | "26-pre-retirement-path" | "27-post-retirement-bench" | "28-direct-debit-calendar" | "29-onboarding-door" | "30-rights-found-key" | "31-team-desks" | "32-process-steps" | "33-welcome-table";
 
 /** Four small spots per illustration topic: [0] floats on the hero stage, the rest are corners, cards and story accents. */
 export const SPOT_BY_ART: Record<ArtKey, readonly SpotName[]> = {
@@ -59,6 +61,22 @@ export const SPOT_BY_ART: Record<ArtKey, readonly SpotName[]> = {
   "15-critical-illness": ["heart-pink", "olive-sapling-b", "pillows", "shield-blue"],
   "16-disability-income": ["shield-navy", "coins-stacks", "pen", "seal-check"],
   "17-child-savings-sailboat": ["sailboat", "treasure-chest", "olive-sapling-b", "heart-pink"],
+  "18-partners-agreement": ["pen", "scales", "seal-check", "key-brass"],
+  "19-renters-first-home": ["key-brass", "olive-sapling", "pillows", "stone-house"],
+  "20-vehicle-road": ["car-key", "shield-navy", "compass", "seal-check"],
+  "21-dental-calm": ["shield-blue", "heart-pink", "olive-sapling", "pillows"],
+  "22-foreign-caregiver": ["suitcase", "passport", "shield-navy", "compass"],
+  "23-training-desk": ["pen", "coins-stacks", "olive-sapling", "magnifier"],
+  "24-pension-family-umbrella": ["shield-navy", "heart-pink", "olive-sapling-b", "pillows"],
+  "25-employer-employee": ["briefcase", "coins-stacks", "olive-sapling", "scales"],
+  "26-pre-retirement-path": ["compass", "tea-hourglass", "olive-sapling", "magnifier"],
+  "27-post-retirement-bench": ["tea-hourglass", "pillows", "olive-sapling", "coins-stacks"],
+  "28-direct-debit-calendar": ["pen", "coins-stacks", "seal-check", "scroll-ribbon"],
+  "29-onboarding-door": ["key-brass", "olive-sapling", "pen", "seal-check"],
+  "30-rights-found-key": ["magnifier", "key-brass", "scroll-ribbon", "seal-check"],
+  "31-team-desks": ["briefcase", "pen", "olive-sapling", "seal-check"],
+  "32-process-steps": ["compass", "seal-check", "magnifier", "scroll-ribbon"],
+  "33-welcome-table": ["tea-hourglass", "pen", "olive-sapling", "pillows"],
 };
 
 /** i-th context spot of a topic (wraps around). Unknown art falls back to the generic set. */

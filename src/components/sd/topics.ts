@@ -20,7 +20,9 @@ export type ArtName =
   | "01-hero" | "02-family-protection" | "03-health-insurance" | "04-investments-growth"
   | "05-retirement" | "06-home-mortgage" | "07-car-insurance" | "08-business-insurance"
   | "09-travel-insurance" | "10-financial-planning" | "11-claims-service" | "12-childrens-savings"
-  | "13-nursing-care" | "14-accidents-recovery" | "15-critical-illness" | "16-disability-income" | "17-child-savings-sailboat";
+  | "13-nursing-care" | "14-accidents-recovery" | "15-critical-illness" | "16-disability-income" | "17-child-savings-sailboat"
+  | "18-partners-agreement" | "19-renters-first-home" | "20-vehicle-road" | "21-dental-calm" | "22-foreign-caregiver" | "23-training-desk" | "24-pension-family-umbrella" | "25-employer-employee"
+  | "26-pre-retirement-path" | "27-post-retirement-bench" | "28-direct-debit-calendar" | "29-onboarding-door" | "30-rights-found-key" | "31-team-desks" | "32-process-steps" | "33-welcome-table";
 
 export type Topic = {
   /** main illustration of the page (hero + emotion band) */
@@ -44,38 +46,42 @@ export const DEFAULT_TOPIC: Topic = { art: "01-hero", art2: "11-claims-service",
 export const TOPICS: Record<string, Topic> = {
   "/insurance/life": { art: "02-family-protection", art2: "12-childrens-savings", art3: "10-financial-planning", art4: "11-claims-service", art5: "05-retirement", palette: ["sage", "sky", "butter"] },
   "/insurance/health": { art: "03-health-insurance", art2: "11-claims-service", art3: "05-retirement", art4: "10-financial-planning", art5: "02-family-protection", palette: ["rose", "butter", "sage"] },
-  "/insurance/vehicle": { art: "07-car-insurance", art2: "01-hero", art3: "10-financial-planning", art4: "11-claims-service", art5: "04-investments-growth", palette: ["sky", "sage", "butter"] },
+  "/insurance/vehicle": { art: "20-vehicle-road", art2: "01-hero", art3: "10-financial-planning", art4: "32-process-steps", art5: "04-investments-growth", palette: ["sky", "sage", "butter"] },
   "/insurance/home": { art: "01-hero", art2: "06-home-mortgage", art3: "02-family-protection", art4: "04-investments-growth", art5: "10-financial-planning", palette: ["butter", "sky", "rose"] },
   "/insurance/mortgage": { art: "06-home-mortgage", art2: "02-family-protection", art3: "12-childrens-savings", art4: "04-investments-growth", art5: "11-claims-service", palette: ["sky", "lavender", "butter"] },
-  "/insurance/renters": { art: "11-claims-service", art2: "06-home-mortgage", art3: "10-financial-planning", art4: "01-hero", art5: "05-retirement", palette: ["lavender", "sage", "butter"] },
+  "/insurance/renters": { art: "19-renters-first-home", art2: "06-home-mortgage", art3: "10-financial-planning", art4: "32-process-steps", art5: "05-retirement", palette: ["lavender", "sage", "butter"] },
   "/insurance/business": { art: "08-business-insurance", art2: "10-financial-planning", art3: "04-investments-growth", art4: "11-claims-service", art5: "01-hero", palette: ["butter", "sage", "sky"] },
-  "/insurance/partners": { art: "10-financial-planning", art2: "08-business-insurance", art3: "02-family-protection", art4: "01-hero", art5: "11-claims-service", palette: ["sage", "butter", "lavender"] },
+  "/insurance/partners": { art: "18-partners-agreement", art2: "08-business-insurance", art3: "02-family-protection", art4: "32-process-steps", art5: "11-claims-service", palette: ["sage", "butter", "lavender"] },
   "/insurance/travel": { art: "09-travel-insurance", art2: "01-hero", art3: "10-financial-planning", art4: "05-retirement", art5: "11-claims-service", palette: ["rose", "sky", "butter"] },
   "/insurance/nursing": { art: "13-nursing-care", art2: "05-retirement", art3: "02-family-protection", art4: "03-health-insurance", art5: "10-financial-planning", palette: ["lavender", "sage", "butter"] },
   "/insurance/nursing-clalit": { art: "03-health-insurance", art2: "05-retirement", art3: "13-nursing-care", art4: "04-investments-growth", art5: "01-hero", palette: ["sage", "lavender", "butter"] },
   "/insurance/critical-illness": { art: "15-critical-illness", art2: "02-family-protection", art3: "03-health-insurance", art4: "05-retirement", art5: "10-financial-planning", palette: ["rose", "sage", "sky"] },
   "/insurance/disability": { art: "16-disability-income", art2: "02-family-protection", art3: "11-claims-service", art4: "10-financial-planning", art5: "05-retirement", palette: ["sky", "rose", "butter"] },
-  "/insurance/dental": { art: "03-health-insurance", art2: "11-claims-service", art3: "01-hero", art4: "04-investments-growth", art5: "10-financial-planning", palette: ["sky", "butter", "sage"] },
+  "/insurance/dental": { art: "21-dental-calm", art2: "11-claims-service", art3: "01-hero", art4: "32-process-steps", art5: "10-financial-planning", palette: ["sky", "butter", "sage"] },
   "/insurance/accidents": { art: "14-accidents-recovery", art2: "03-health-insurance", art3: "05-retirement", art4: "10-financial-planning", art5: "11-claims-service", palette: ["butter", "rose", "sky"] },
-  "/insurance/foreign-workers": { art: "09-travel-insurance", art2: "03-health-insurance", art3: "02-family-protection", art4: "11-claims-service", art5: "10-financial-planning", palette: ["sage", "sky", "lavender"] },
+  "/insurance/foreign-workers": { art: "22-foreign-caregiver", art2: "03-health-insurance", art3: "02-family-protection", art4: "32-process-steps", art5: "10-financial-planning", palette: ["sage", "sky", "lavender"] },
 
   // savings
   "/savings/pension-funds": { art: "05-retirement", art2: "10-financial-planning", art3: "02-family-protection", art4: "04-investments-growth", art5: "11-claims-service", palette: ["sage", "butter", "sky"] },
-  "/savings/pension-life-insurance": { art: "02-family-protection", art2: "05-retirement", art3: "10-financial-planning", art4: "04-investments-growth", art5: "01-hero", palette: ["lavender", "sky", "butter"] },
+  "/savings/pension-life-insurance": { art: "24-pension-family-umbrella", art2: "05-retirement", art3: "10-financial-planning", art4: "04-investments-growth", art5: "01-hero", palette: ["lavender", "sky", "butter"] },
   "/savings/gemel-funds": { art: "04-investments-growth", art2: "12-childrens-savings", art3: "05-retirement", art4: "10-financial-planning", art5: "11-claims-service", palette: ["butter", "sage", "sky"] },
   "/savings/gemel-investment": { art: "04-investments-growth", art2: "10-financial-planning", art3: "12-childrens-savings", art4: "05-retirement", art5: "11-claims-service", palette: ["sky", "butter", "lavender"] },
-  "/savings/training-funds": { art: "10-financial-planning", art2: "08-business-insurance", art3: "04-investments-growth", art4: "05-retirement", art5: "11-claims-service", palette: ["sage", "lavender", "butter"] },
+  "/savings/training-funds": { art: "23-training-desk", art2: "08-business-insurance", art3: "04-investments-growth", art4: "05-retirement", art5: "11-claims-service", palette: ["sage", "lavender", "butter"] },
   "/savings/child-savings": { art: "17-child-savings-sailboat", art2: "12-childrens-savings", art3: "06-home-mortgage", art4: "10-financial-planning", art5: "02-family-protection", palette: ["rose", "sage", "butter"] },
   "/savings/investment": { art: "04-investments-growth", art2: "10-financial-planning", art3: "05-retirement", art4: "01-hero", art5: "11-claims-service", palette: ["sky", "sage", "rose"] },
-  "/savings/employer-funds": { art: "08-business-insurance", art2: "05-retirement", art3: "02-family-protection", art4: "04-investments-growth", art5: "11-claims-service", palette: ["butter", "sky", "sage"] },
-  "/savings/pre-retirement": { art: "10-financial-planning", art2: "05-retirement", art3: "06-home-mortgage", art4: "04-investments-growth", art5: "11-claims-service", palette: ["lavender", "butter", "sage"] },
-  "/savings/post-retirement": { art: "05-retirement", art2: "03-health-insurance", art3: "02-family-protection", art4: "10-financial-planning", art5: "01-hero", palette: ["sage", "rose", "sky"] },
+  "/savings/employer-funds": { art: "25-employer-employee", art2: "05-retirement", art3: "02-family-protection", art4: "04-investments-growth", art5: "11-claims-service", palette: ["butter", "sky", "sage"] },
+  "/savings/pre-retirement": { art: "26-pre-retirement-path", art2: "05-retirement", art3: "06-home-mortgage", art4: "04-investments-growth", art5: "11-claims-service", palette: ["lavender", "butter", "sage"] },
+  "/savings/post-retirement": { art: "27-post-retirement-bench", art2: "03-health-insurance", art3: "02-family-protection", art4: "10-financial-planning", art5: "01-hero", palette: ["sage", "rose", "sky"] },
   "/savings/financial-planning": { art: "10-financial-planning", art2: "04-investments-growth", art3: "01-hero", art4: "05-retirement", art5: "11-claims-service", palette: ["lavender", "sky", "butter"] },
   // other public pages
   "/": { art: "01-hero", art2: "10-financial-planning", palette: ["sage", "sky", "butter"] },
-  "/about": { art: "02-family-protection", art2: "11-claims-service", palette: ["sky", "butter", "sage"] },
+  "/about": { art: "02-family-protection", art2: "11-claims-service", art5: "33-welcome-table", palette: ["sky", "butter", "sage"] },
   "/contact": { art: "11-claims-service", art2: "01-hero", palette: ["butter", "sage", "sky"] },
-  "/faq": { art: "11-claims-service", art2: "10-financial-planning", palette: ["lavender", "sage", "butter"] },
+  "/faq": { art: "11-claims-service", art2: "10-financial-planning", art5: "33-welcome-table", palette: ["lavender", "sage", "butter"] },
+  "/direct-debit": { art: "28-direct-debit-calendar", art2: "10-financial-planning", art3: "11-claims-service", palette: ["sky", "butter", "sage"] },
+  "/onboarding": { art: "29-onboarding-door", art2: "01-hero", art3: "02-family-protection", palette: ["sky", "sage", "butter"] },
+  "/rights-extraction": { art: "30-rights-found-key", art2: "32-process-steps", art3: "10-financial-planning", palette: ["rose", "sage", "butter"] },
+  "/fund-finder": { art: "30-rights-found-key", art2: "04-investments-growth", art3: "10-financial-planning", palette: ["butter", "sky", "lavender"] },
   "/portfolio-review": { art: "11-claims-service", art2: "10-financial-planning", palette: ["sky", "butter", "sage"] },
   "/insurances": { art: "01-hero", art2: "02-family-protection", palette: ["sky", "sage", "butter"] },
   "/investment-tracks": { art: "04-investments-growth", art2: "10-financial-planning", palette: ["sky", "butter", "sage"] },

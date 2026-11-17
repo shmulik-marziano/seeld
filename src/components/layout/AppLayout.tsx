@@ -3,6 +3,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useSdFont } from '@/components/sd/primitives';
 import './app-shell.css';
 import { CreateSummaryWizard } from '@/components/modals/CreateSummaryWizard';
+import { OPS_HOME, opsNavVisible } from '@/pages/app/ops/access';
 import { TOOLS, PHASES, DECK, getToolsByPhase } from '@/config/tools';
 import {
   ChevronRight,
@@ -16,6 +17,7 @@ import {
   CheckSquare,
   MessageSquare,
   MoreHorizontal,
+  Activity,
 } from 'lucide-react';
 
 export function AppLayout({ children }: { children: ReactNode }) {
@@ -40,6 +42,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
   };
 
   const isActive = (path: string) => location.pathname === path;
+  // Ops Console entry: shown only to manager / super_admin (never in production builds until real roles exist).
+  const showOps = opsNavVisible();
   const isToolActive = (slug: string) => location.pathname === `/app/tools/${slug}`;
 
   // Mobile bottom tabs
@@ -113,6 +117,21 @@ export function AppLayout({ children }: { children: ReactNode }) {
             <LayoutDashboard className="w-4 h-4 flex-shrink-0 text-[#E7C98B]" />
             {!sidebarCollapsed && <span className="text-sm">{DECK.hebrewName}</span>}
           </Link>
+
+          {showOps && (
+            <Link
+              to={OPS_HOME}
+              title={sidebarCollapsed ? 'מרכז תפעול' : undefined}
+              className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 mb-1 transition-colors ${
+                location.pathname.startsWith('/app/ops')
+                  ? 'app-nav-active bg-white/10 text-white font-bold'
+                  : 'text-[#D6E3EF] hover:bg-white/[0.06] hover:text-white'
+              } ${sidebarCollapsed ? 'justify-center' : ''}`}
+            >
+              <Activity className="w-4 h-4 flex-shrink-0 text-[#E7C98B]" />
+              {!sidebarCollapsed && <span className="text-sm">מרכז תפעול</span>}
+            </Link>
+          )}
 
           <div className="h-px bg-white/10 my-2" />
 
