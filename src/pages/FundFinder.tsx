@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FundExplorer from '@/components/fund-finder/FundExplorer';
@@ -10,15 +9,20 @@ import { useCmaFunds, useCmaSyncStatus, formatPeriod } from '@/hooks/useCmaFunds
 import { cmaLastUpdate } from '@/data/cmaFundsData';
 import { Checkbox } from '@/components/ui/checkbox';
 import { BrandIcon } from '@/components/brand/BrandIcon';
-import { OliveBranch } from '@/components/brand/Elements';
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN } from '@/lib/brand';
+import { SdBand, tintStyle, useSdFont } from '@/components/sd/primitives';
+import { PUB_TOPICS, PubClose, PubHero } from '@/components/sd/pub';
+import { BODY, GREEN, MUTED } from '@/lib/brand';
+import '@/components/sd/sd.css';
 
-// Fund finder (SEELD brand system 2026-09): a tool page. The search, the
-// table and the comparison stay central; one vector element in the hero
-// margin, no illustration. Queries, filters, sorting and compare actions are
+// Fund finder in the kit design: a tool page. The search, the table and the comparison stay central;
+// the kit hero, colour bands and closing wrap them. Queries, filters, sorting and compare actions are
 // unchanged (useFundExplorer / useCmaFunds).
 
 const FundFinder = () => {
+  useSdFont();
+  const topic = PUB_TOPICS.fundFinder;
+  const [p1, p2] = topic.palette;
+
   // Live data from Supabase (falls back to the static snapshot automatically)
   const { data: liveFunds, isLoading: fundsLoading, isError: fundsError } = useCmaFunds();
   const { data: syncStatus } = useCmaSyncStatus();
@@ -42,76 +46,53 @@ const FundFinder = () => {
   ];
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
+    <div className="sd min-h-screen" dir="rtl" style={tintStyle(p1)}>
       <Header />
 
       <main>
-        {/* Hero: ivory, two pastel bubbles in the margins only */}
-        <div className="dna-page">
-          <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 300, height: 300, top: -150, left: -130, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
-            />
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 180, height: 180, top: 40, right: -100, backgroundColor: PASTEL_SAND, opacity: 0.7 }}
-            />
-          </div>
-
-          <section className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-8 sm:pb-10">
-            <nav className="flex items-center gap-2 text-[14px] mb-8" style={{ color: MUTED }} aria-label="ניווט משני">
-              <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
-              <BrandIcon name="arrow-left" size={14} />
-              <span className="font-bold" style={{ color: GREEN }} aria-current="page">איתור קופות</span>
-            </nav>
-
-            <div className="flex items-start justify-between gap-8">
-              <div>
-                <h1 className="dna-display leading-[1.15] mb-4 max-w-3xl" style={{ fontSize: 'clamp(32px, 4.4vw, 52px)' }}>
-                  איתור והשוואת קופות
-                </h1>
-                <p className="text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
-                  חיפוש, סינון והשוואה בין קופות גמל, קרנות השתלמות, קרנות פנסיה ופוליסות חיסכון.
-                  הנתונים נמשכים ממקורות רשות שוק ההון: גמלנט, ביטוחנט ופנסיהנט.
-                </p>
-
-                <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-[15px]" style={{ color: MUTED }}>
-                  <div className="flex gap-2">
-                    <dt>מקור הנתונים:</dt>
-                    <dd className="font-bold" style={{ color: GREEN }}>רשות שוק ההון, ביטוח וחיסכון</dd>
-                  </div>
-                  <div className="flex gap-2">
-                    <dt>עדכון אחרון:</dt>
-                    <dd className="font-bold tabular-nums" style={{ color: GREEN }}>{lastUpdate}</dd>
-                  </div>
-                  {syncStatus?.totalFunds ? (
-                    <div className="flex gap-2">
-                      <dt>קופות במאגר:</dt>
-                      <dd className="font-bold">
-                        <span dir="ltr" className="tabular-nums whitespace-nowrap" style={{ color: GREEN }}>
-                          {syncStatus.totalFunds.toLocaleString('en-US')}
-                        </span>
-                      </dd>
-                    </div>
-                  ) : null}
-                </dl>
-                <p className="mt-2 text-[14px]" style={{ color: MUTED }} role="status">
-                  {fundsLoading
-                    ? 'טוען נתונים עדכניים מהמאגר. בינתיים מוצגים נתונים מקומיים.'
-                    : isLive
-                      ? 'הנתונים נטענו מהמאגר העדכני.'
-                      : 'המאגר העדכני לא זמין כרגע. מוצגים נתונים מקומיים מהעדכון האחרון שנשמר.'}
-                </p>
+        <PubHero
+          compact
+          crumbs={[{ label: 'דף הבית', to: '/' }, { label: 'איתור קופות' }]}
+          eyebrow="נתוני רשות שוק ההון"
+          title="איתור והשוואת קופות"
+          lead="חיפוש, סינון והשוואה בין קופות גמל, קרנות השתלמות, קרנות פנסיה ופוליסות חיסכון. הנתונים נמשכים ממקורות רשות שוק ההון: גמלנט, ביטוחנט ופנסיהנט."
+          art={topic.art}
+          tint={p1}
+          meta={
+            <dl className="flex flex-wrap gap-x-8 gap-y-2">
+              <div className="flex gap-2">
+                <dt>מקור הנתונים:</dt>
+                <dd><b>רשות שוק ההון, ביטוח וחיסכון</b></dd>
               </div>
-              <OliveBranch className="hidden lg:block w-36 shrink-0" />
-            </div>
-          </section>
-        </div>
+              <div className="flex gap-2">
+                <dt>עדכון אחרון:</dt>
+                <dd><b className="tabular-nums">{lastUpdate}</b></dd>
+              </div>
+              {syncStatus?.totalFunds ? (
+                <div className="flex gap-2">
+                  <dt>קופות במאגר:</dt>
+                  <dd>
+                    <b dir="ltr" className="tabular-nums whitespace-nowrap">
+                      {syncStatus.totalFunds.toLocaleString('en-US')}
+                    </b>
+                  </dd>
+                </div>
+              ) : null}
+            </dl>
+          }
+        >
+          <p className="mt-3 text-[14px]" style={{ color: MUTED }} role="status">
+            {fundsLoading
+              ? 'טוען נתונים עדכניים מהמאגר. בינתיים מוצגים נתונים מקומיים.'
+              : isLive
+                ? 'הנתונים נטענו מהמאגר העדכני.'
+                : 'המאגר העדכני לא זמין כרגע. מוצגים נתונים מקומיים מהעדכון האחרון שנשמר.'}
+          </p>
+        </PubHero>
 
         {/* Tool body: one live search over the whole database */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-10 sm:py-14">
+        <SdBand tone="cream" id="tool" className="!pt-8 sm:!pt-12">
+          <div className="sd-wrap">
             <FundExplorer funds={liveFunds} loading={fundsLoading} error={fundsError}>
               {(selected, remove) =>
                 selected.length > 0 ? (
@@ -176,11 +157,11 @@ const FundFinder = () => {
               }
             </FundExplorer>
           </div>
-        </section>
+        </SdBand>
 
         {/* Disclaimer */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-10 sm:py-14">
+        <SdBand tone={p2} id="disclaimer" className="!py-10 sm:!py-14">
+          <div className="sd-wrap">
             <div className="dna-callout max-w-3xl text-[15px]">
               <p className="font-bold mb-1" style={{ color: GREEN }}>הבהרה חשובה</p>
               <p>
@@ -194,28 +175,13 @@ const FundFinder = () => {
               </p>
             </div>
           </div>
-        </section>
+        </SdBand>
 
-        {/* Closing: deep green band, the central path */}
-        <section className="dna-navy-band">
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: 'clamp(26px, 3vw, 34px)' }}>
-              מצאתם קופה מעניינת?
-            </h2>
-            <p className="text-[17px] leading-[1.7] mb-8 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
-              לפני שמניידים, כדאי לבדוק דמי ניהול, כיסויים ורצף זכויות.
-              בדיקת תיק 360 מסדרת את ההשוואה מול התיק הקיים שלכם.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
-                בדיקת תיק 360
-              </Link>
-              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
-                תיאום פגישה
-              </Link>
-            </div>
-          </div>
-        </section>
+        <PubClose
+          title="מצאתם קופה מעניינת?"
+          text="לפני שמניידים, כדאי לבדוק דמי ניהול, כיסויים ורצף זכויות. בדיקת תיק 360 מסדרת את ההשוואה מול התיק הקיים שלכם."
+          art="10-financial-planning"
+        />
       </main>
 
       <Footer />

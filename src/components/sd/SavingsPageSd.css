@@ -1,0 +1,57 @@
+/* SavingsPageSd (task "savings"): product type cards, bottom line, notes, small tables. Prefix .sd-sav-* */
+.sd-sav-chat { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 14px; font-size: 15px; font-weight: 700; color: var(--muted); }
+.sd-sav-chat:hover { color: var(--ink); }
+
+@media (min-width: 1024px) { .sd-sav-benefits { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 768px) and (max-width: 1023px) { .sd-sav-benefits { grid-template-columns: repeat(2, 1fr); } }
+
+.sd-sav-types { display: grid; gap: 16px; }
+@media (min-width: 768px) { .sd-sav-types { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
+.sd-sav-type { background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: 26px 24px 24px; box-shadow: var(--shadow); }
+.sd-sav-type:nth-child(2) { margin-top: 0; }
+@media (min-width: 768px) { .sd-sav-type:nth-child(2) { transform: translateY(18px); } }
+.sd-sav-type p { margin-top: 8px; font-size: 16px; line-height: 1.75; color: var(--text); }
+.sd-sav-type ul { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+.sd-sav-type li { position: relative; padding-inline-start: 22px; font-size: 15px; line-height: 1.6; color: var(--ink); font-weight: 500; }
+.sd-sav-type li::before { content: ""; position: absolute; inset-inline-start: 0; top: .55em; width: 9px; height: 9px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 3px rgba(173,131,62,.18); }
+
+.sd-sav-after { margin-top: 44px; display: grid; gap: 20px; max-width: 560px; }
+@media (min-width: 768px) { .sd-sav-after { margin-top: 56px; } }
+.sd-sav-table .sd-table tbody th[scope="row"] { width: auto; }
+.sd-sav-table .sd-table td { font-weight: 700; color: var(--ink); }
+
+.sd-sav-note { background: var(--paper); border: 1px solid var(--line); border-inline-start: 4px solid var(--gold); border-radius: 16px; padding: 18px 22px; box-shadow: var(--shadow); }
+.sd-sav-note b { display: block; font-size: 13px; letter-spacing: .08em; color: var(--gold-d); margin-bottom: 6px; }
+.sd-sav-note p { font-size: 17px; line-height: 1.8; color: var(--ink); }
+
+.sd-sav-bottom { margin-top: 56px; padding: 26px 28px; border-radius: 20px; background: var(--tint); border: 1px solid var(--line); }
+.sd-sav-bottom b { display: block; font-size: 13px; letter-spacing: .08em; color: var(--gold-d); margin-bottom: 8px; }
+.sd-sav-bottom p { font-family: var(--serif); font-size: clamp(19px, 1.8vw, 22px); line-height: 1.7; color: var(--ink); text-wrap: pretty; }
+
+.sd-sav-links { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 8px 28px; }
+
+/* hub pages (Savings, InvestmentTracks) */
+.sd-sav-index { display: grid; gap: 14px; }
+@media (min-width: 768px) { .sd-sav-index { grid-template-columns: repeat(2, 1fr); gap: 16px 20px; } }
+@media (min-width: 1100px) { .sd-sav-index { grid-template-columns: repeat(3, 1fr); } }
+.sd-sav-card { display: flex; align-items: center; gap: 16px; height: 100%; min-height: 96px; padding: 18px 20px; background: var(--paper); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); transition: transform .25s ease, box-shadow .25s ease; }
+.sd-sav-card:hover { transform: translateY(-3px); box-shadow: 0 1px 2px rgba(32,57,87,.06), 0 22px 40px -16px rgba(32,57,87,.28); }
+.sd-sav-card em { font-style: normal; flex: none; font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--gold-d); letter-spacing: .08em; }
+.sd-sav-card > div { flex: 1; min-width: 0; }
+.sd-sav-card p { margin-top: 4px; font-size: 15px; line-height: 1.6; color: var(--muted); }
+.sd-sav-go { flex: none; color: var(--ink); transition: transform .2s; }
+.sd-sav-card:hover .sd-sav-go { transform: translateX(-4px); }
+
+.sd-sav-close { display: grid; gap: 40px; padding-block: clamp(48px, 7vw, 88px); align-items: center; }
+@media (min-width: 900px) { .sd-sav-close { grid-template-columns: 1.3fr .7fr; gap: 64px; } }
+.sd-sav-close .sd-contact-art { margin-top: 0; }
+.sd-sav-close-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; color: #fff; border-bottom: 1.5px solid #E7C98B; }
+.sd-sav-close-link:hover { color: #E7C98B; }
+
+.sd-sav-stats { display: grid; gap: 0; margin-top: 36px; border-block: 1px solid var(--line); }
+@media (min-width: 700px) { .sd-sav-stats { grid-template-columns: repeat(3, 1fr); } }
+.sd-sav-stats > div { padding: 22px 16px; text-align: center; }
+@media (min-width: 700px) { .sd-sav-stats > div + div { border-inline-start: 1px solid var(--line); } }
+.sd-sav-stats dd { font-family: var(--serif); font-weight: 700; color: var(--ink); font-size: clamp(30px, 3.5vw, 44px); line-height: 1.1; }
+.sd-sav-stats dt { margin-top: 6px; font-size: 15px; color: var(--muted); }
+.sd-sav-tool { background: var(--paper); border-top: 1px solid var(--line); }

@@ -1,4 +1,4 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageSd from '@/components/sd/InsurancePageSd';
 import { Plane, Heart, Briefcase } from 'lucide-react';
 import travelLogos from '@/assets/travel-insurance-logos.jpeg';
 
@@ -8,7 +8,7 @@ const TravelInsurance = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="rounded-2xl bg-[#203957] p-8 sm:p-12 text-center space-y-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-white">רכשו ביטוח נסיעות לחו״ל עכשיו</h2>
-          <p className="text-white/70 text-base sm:text-lg">רכישה מהירה ומאובטחת דרך הראל ביטוח · הסוכן שלכם ב-SEELD</p>
+          <p className="text-white/70 text-base sm:text-lg">רכישה מהירה ומאובטחת דרך הראל ביטוח · הצוות שלנו ב-SEELD</p>
           <div className="relative inline-block">
             <img
               src={travelLogos}
@@ -39,7 +39,7 @@ const TravelInsurance = () => {
   );
 
   return (
-    <InsurancePageTemplate
+    <InsurancePageSd
       heroIcon={Plane}
       heroIconColor="#b91c1c"
       heroCategory="ביטוח נסיעות"

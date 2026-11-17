@@ -1,88 +1,69 @@
-import { Link } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
-import { HeroComposition } from "@/components/brand/HeroComposition";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { GREEN, MUTED, PASTEL_SAGE, PASTEL_SAND } from "@/lib/brand";
+import { SdPic, SdIcon, useSdFont } from "@/components/sd/primitives";
+import "@/components/sd/sd.css";
+import "@/components/sd/home.css";
 
-// Brand hero (design mock, 2026-09): ivory canvas, the circles-and-leaf
-// composition with the three door cards beside the headline; text and the
-// actions lead. Two bubbles at most, never behind text.
+/**
+ * Home hero in the kit design: serif headline, one warm sentence, two actions, and a composition
+ * of three kit illustrations. Followed by the trust strip. Only used by pages/Index.tsx.
+ */
 
-const snap = (delay: number) => ({
-  initial: { opacity: 0, y: 8 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.22, delay, ease: "easeOut" as const },
-});
+const trust = [
+  { icon: "search", t: "השוואה בין החברות", s: "בכל חברות הביטוח בשוק" },
+  { icon: "handshake", t: "פגישה ראשונה ללא עלות", s: "ואינה מחייבת" },
+  { icon: "shield", t: "צוות סוכנים מקצועי", s: "ליווי מההצעה ועד התביעה" },
+  { icon: "phone", t: "מענה אישי", s: "רעננה וירושלים" },
+];
 
 const HeroSection = () => {
-  const reduced = useReducedMotion();
-  const anim = (delay: number) => (reduced ? {} : snap(delay));
-
+  useSdFont();
+  const arrow = <BrandIcon name="arrow-left" size={18} />;
   return (
-    <section dir="rtl" className="dna-page">
-      <div className="dna-circles" aria-hidden="true">
-        <div
-          className="dna-circ hidden md:block"
-          style={{ width: 360, height: 360, top: -160, left: -140, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
-        />
-        <div
-          className="dna-circ hidden md:block"
-          style={{ width: 180, height: 180, bottom: -60, left: "36%", backgroundColor: PASTEL_SAND, opacity: 0.7 }}
-        />
-      </div>
-
-      <div className="relative z-10 mx-auto max-w-brand px-5 sm:px-8 pt-10 sm:pt-16 pb-12 sm:pb-20">
-        <div className="grid gap-10 lg:gap-16 lg:grid-cols-[1fr_1.05fr] items-center">
-          {/* The argument */}
-          <div>
-            <motion.h1
-              {...anim(0.04)}
-              className="dna-display leading-[1.15]"
-              style={{ fontSize: "clamp(32px, 4.6vw, 56px)" }}
-            >
-              הכסף, הנכסים והביטוח שלכם,
-              <br />
-              בתמונה ברורה.
-            </motion.h1>
-            <motion.p
-              {...anim(0.08)}
-              className="mt-6 text-[17px] sm:text-[18px] leading-[1.7] max-w-lg"
-              style={{ color: MUTED }}
-            >
-              ממפים את התיק, מבינים את האפשרויות ומלווים את הביצוע.
-              סוכנות ביטוח ופיננסים עצמאית שעובדת מול כל החברות, עם יועץ אחד שמכיר אתכם.
-            </motion.p>
-
-            <motion.div {...anim(0.12)} className="mt-9 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
-              <a href="#portfolio-review" className="btn-primary sm:min-w-[220px]">
-                בדיקת תיק 360
-              </a>
-              <Link to="/#process" className="link-rule text-[16px] self-start sm:self-auto">
-                איך זה עובד
-                <BrandIcon name="arrow-left" size={18} />
-              </Link>
-            </motion.div>
-
-            <motion.p {...anim(0.16)} className="mt-6 text-[15px]" style={{ color: MUTED }}>
-              השיחה הראשונה ללא עלות וללא התחייבות. סוכן ברישיון, בפיקוח רשות שוק ההון.
-            </motion.p>
+    <>
+      <section className="sd-hero sd-home-hero">
+        <div className="sd-wrap sd-hero-grid">
+          <div className="sd-hero-copy">
+            <span className="sd-eyebrow">סוכנות ביטוח ופיננסים עצמאית</span>
+            <h1 className="sd-h1 mt-5">הכסף, הנכסים והביטוח שלכם, בתמונה ברורה.</h1>
+            <p className="sd-lead mt-6">
+              אנחנו עוברים איתכם על מה שיש היום, משווים בין כל החברות בשוק, ומסדרים את התיק בשקט ובלי לחץ.
+            </p>
+            <div className="sd-home-ctas">
+              <a href="#contact-form" className="sd-btn">קבלו הצעה{arrow}</a>
+              <a href="#portfolio-review" className="sd-home-btn-ghost">בדיקת תיק 360{arrow}</a>
+            </div>
+            <p className="sd-home-fine">השיחה הראשונה ללא עלות וללא התחייבות.</p>
           </div>
 
-          {/* The opening art: circles, the leaf and the three door cards */}
-          <motion.div {...anim(0.1)} className="relative">
-            <HeroComposition />
-          </motion.div>
+          <div className="sd-home-stage" aria-hidden="true">
+            <div className="sd-home-stage-main">
+              <SdPic name="01-hero" sizes="(min-width:1024px) 560px, 90vw" priority />
+            </div>
+            <div className="sd-home-mini sd-home-mini-a">
+              <SdPic name="02-family-protection" sizes="200px" />
+              <span>המשפחה</span>
+            </div>
+            <div className="sd-home-mini sd-home-mini-b">
+              <SdPic name="04-investments-growth" sizes="170px" />
+              <span>העתיד</span>
+            </div>
+          </div>
         </div>
+      </section>
 
-        {/* Base line under the hero */}
-        <div className="mt-12 sm:mt-16 pt-5 border-t flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 text-[14px]" style={{ borderColor: "#D9DEE4", color: MUTED }}>
-          <span style={{ color: GREEN }} className="font-bold">
-            מיפוי התיק · פגישה והחלטות · ביצוע · מעקב ועדכון
-          </span>
-          <span>מבית עמיתים הון</span>
+      <section className="sd-trust" aria-label="למה לבחור בנו">
+        <div className="sd-wrap">
+          <ul>
+            {trust.map((x) => (
+              <li key={x.t}>
+                <SdIcon name={x.icon} />
+                <div><b>{x.t}</b><span>{x.s}</span></div>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

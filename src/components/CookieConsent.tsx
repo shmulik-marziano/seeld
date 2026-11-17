@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { CARD_SHADOW, LINE } from "@/lib/brand";
+import "@/components/sd/chrome.css";
 
 const CookieConsent = () => {
   const [visible, setVisible] = useState(false);
+  const boxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const consent = localStorage.getItem("cookie-consent");
@@ -13,6 +14,19 @@ const CookieConsent = () => {
       return () => clearTimeout(timer);
     }
   }, []);
+
+  // While the banner is up, lift the floating launchers above it (see chrome.css)
+  useEffect(() => {
+    const root = document.documentElement;
+    if (!visible) { root.style.removeProperty("--sd-cookie-lift"); return; }
+    const el = boxRef.current;
+    if (!el) return;
+    const apply = () => root.style.setProperty("--sd-cookie-lift", `${el.offsetHeight + 12}px`);
+    apply();
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(apply) : null;
+    ro?.observe(el);
+    return () => { ro?.disconnect(); root.style.removeProperty("--sd-cookie-lift"); };
+  }, [visible]);
 
   const accept = () => {
     localStorage.setItem("cookie-consent", "accepted");
@@ -32,39 +46,18 @@ const CookieConsent = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 12, opacity: 0 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 md:max-w-md z-50"
+          ref={boxRef}
+          className="sd-chrome-cookie"
           role="region"
           aria-label="הסכמה לשימוש בעוגיות"
         >
-          <div className="rounded-2xl bg-white border border-[#D9DEE4]" style={{ boxShadow: CARD_SHADOW }}>
-            <div className="px-4 pb-3 pt-3 sm:px-5 sm:pb-4 sm:pt-4">
-              <p className="hidden sm:block text-[14px] font-bold text-[#203957]">
-                עוגיות באתר
-              </p>
-              <p className="sm:mt-2 text-[14px] sm:text-[15px] leading-snug sm:leading-relaxed text-[#2D435D]">
-                אתר זה משתמש בעוגיות הכרחיות לתפקוד תקין ובעוגיות אנליטיות לשיפור השירות.{" "}
-                <Link
-                  to="/cookie-policy"
-                  className="font-medium text-[#203957] underline underline-offset-2 hover:no-underline"
-                >
-                  מדיניות העוגיות
-                </Link>
-              </p>
-            </div>
-            <div className="flex items-center justify-end gap-2 border-t px-3 py-2 sm:px-4 sm:py-3" style={{ borderColor: LINE }}>
-              <button
-                onClick={decline}
-                className="min-h-[44px] rounded-lg px-3 text-[14px] font-bold text-[#55677C] transition-colors duration-150 hover:bg-[#EEF2EC] hover:text-[#203957]"
-              >
-                הכרחיות בלבד
-              </button>
-              <button
-                onClick={accept}
-                className="min-h-[44px] rounded-lg bg-[#203957] px-5 text-[14px] font-bold text-[#FAF7EF] transition-colors duration-150 hover:bg-[#162B45]"
-              >
-                אישור
-              </button>
-            </div>
+          <p className="sd-chrome-cookie-text">
+            אתר זה משתמש בעוגיות הכרחיות לתפקוד תקין ובעוגיות אנליטיות לשיפור השירות.{" "}
+            <Link to="/cookie-policy">מדיניות העוגיות</Link>
+          </p>
+          <div className="sd-chrome-cookie-btns">
+            <button onClick={decline} className="sd-chrome-cookie-ghost">הכרחיות בלבד</button>
+            <button onClick={accept} className="sd-chrome-cookie-ok">אישור</button>
           </div>
         </motion.div>
       )}

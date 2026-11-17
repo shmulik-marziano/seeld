@@ -1,24 +1,21 @@
 import { Link } from "react-router-dom";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import ScrollReveal from "@/components/ScrollReveal";
-import { HeroComposition } from "@/components/brand/HeroComposition";
-import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
 import { PortfolioReviewForm } from "@/components/PortfolioReviewForm";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN, TINT_SAGE } from "@/lib/brand";
+import { stories } from "@/data/stories";
+import { SdBand, SdContact, SdIcon, SdPic, SdStory, SdSubnav } from "@/components/sd/primitives";
+import { topicFor } from "@/components/sd/topics";
+import { Arrow, PubHero, PubPage } from "@/components/sd/pubParts";
 
 /**
- * בדיקת תיק 360 — the service page from the design mock: the opening with the
- * circles art and one action, "מה כוללת הבדיקה?" as three list cards,
- * "מה מכינים לפגישה?" as a tinted checklist, the lead form, three questions
- * and the green closing band. The central path of the site has a home now.
+ * בדיקת תיק 360, kit design: hero with the one action, the emotional moment, what the review includes,
+ * what to prepare, three questions and the closing navy block that carries the lead form.
  */
 
-const INCLUDED: { title: string; body: string; icon: BrandIconName; tint: string }[] = [
-  { title: "מיפוי המוצרים הקיימים", body: "סוקרים את כל הביטוחים והחסכונות שברשותכם, ממקורות רשמיים: המסלקה הפנסיונית והר הביטוח.", icon: "document", tint: PASTEL_SAGE },
-  { title: "בחינת הצרכים שלכם", body: "מנתחים את המצב הנוכחי מול הגיל, המשפחה וההכנסה, ומזהים פערים, כפילויות ודמי ניהול גבוהים.", icon: "chart", tint: PASTEL_SAND },
-  { title: "מסמך החלטות והמשך טיפול", body: "מגבשים המלצות ברורות ומנומקות, ומייצרים תוכנית המשך שאפשר לעקוב אחריה באזור האישי.", icon: "message", tint: PASTEL_MINT },
+const PATH = "/portfolio-review";
+
+const INCLUDED = [
+  { title: "מיפוי המוצרים הקיימים", body: "סוקרים את כל הביטוחים והחסכונות שברשותכם, ממקורות רשמיים: המסלקה הפנסיונית והר הביטוח.", icon: "checklist" },
+  { title: "בחינת הצרכים שלכם", body: "מנתחים את המצב הנוכחי מול הגיל, המשפחה וההכנסה, ומזהים פערים, כפילויות ודמי ניהול גבוהים.", icon: "search" },
+  { title: "מסמך החלטות והמשך טיפול", body: "מגבשים המלצות ברורות ומנומקות, ומייצרים תוכנית המשך שאפשר לעקוב אחריה באזור האישי.", icon: "handshake" },
 ];
 
 const PREPARE = [
@@ -33,168 +30,113 @@ const FAQ = [
   { q: "מה קורה אחרי הבדיקה?", a: "אתם מחליטים בקצב שלכם. אם בוחרים לפעול, אנחנו מטפלים בטפסים, בניודים ובחברות, ומעדכנים בכל שלב." },
 ];
 
-const PortfolioReview = () => (
-  <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
-    <Header />
+const PortfolioReview = () => {
+  const topic = topicFor(PATH);
+  const [p1, p2] = topic.palette;
+  const story = stories[PATH];
+  const sections = [
+    ...(story ? [{ id: "moment", label: "מה עומד מולכם" }] : []),
+    { id: "included", label: "מה כוללת הבדיקה" },
+    { id: "prepare", label: "מה מכינים" },
+    { id: "questions", label: "שאלות" },
+    { id: "review-form", label: "להתחיל" },
+  ];
 
-    <main>
-      {/* OPENING */}
-      <section className="dna-page overflow-hidden">
-        <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-12 sm:pb-16">
-          <nav className="mb-6 sm:mb-10 flex items-center gap-2 text-[14px]" style={{ color: MUTED }} aria-label="ניווט משני">
-            <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
-            <BrandIcon name="arrow-left" size={14} />
-            <span className="font-bold" style={{ color: GREEN }} aria-current="page">בדיקת תיק 360</span>
-          </nav>
+  return (
+    <PubPage tint={p1}>
+      <PubHero
+        crumbs={[{ label: "דף הבית", to: "/" }, { label: "בדיקת תיק 360" }]}
+        eyebrow="בדיקת תיק 360"
+        title="תמונה מסודרת של הביטוחים והחסכונות שלכם"
+        lead="מה יש, מה חסר, מה כפול ומה עולה יותר מדי. הצוות עושה את הבדיקה ומסביר אותה בשפה פשוטה. ללא עלות וללא התחייבות."
+        art={topic.art}
+        actions={
+          <>
+            <a href="#review-form" className="sd-btn">להתחיל בבדיקה<Arrow /></a>
+            <Link to="/contact" className="sd-link">תיאום פגישה<Arrow /></Link>
+          </>
+        }
+      />
 
-          <div className="grid gap-10 lg:gap-16 items-center lg:grid-cols-[1.05fr_1fr]">
-            <div>
-              <h1 className="dna-display leading-[1.15] max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-                בדיקת תיק 360
-              </h1>
-              <p className="mt-5 text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
-                תמונה מסודרת של הביטוחים והחסכונות שלכם: מה יש, מה חסר, מה כפול ומה עולה יותר מדי.
-                ללא עלות וללא התחייבות.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
-                <a href="#review-form" className="btn-primary sm:min-w-[220px]">
-                  להתחיל בבדיקה
-                </a>
-                <Link to="/#process" className="link-rule text-[16px] self-start sm:self-auto">
-                  איך זה עובד
-                  <BrandIcon name="arrow-left" size={18} />
-                </Link>
-              </div>
-            </div>
-            <HeroComposition cards={false} className="!max-w-[260px] sm:!max-w-[360px] lg:!max-w-[440px]" />
+      <SdSubnav sections={sections} />
+
+      {story && (
+        <SdBand tone={p1} id="moment">
+          <SdStory story={story} art={topic.art2} />
+        </SdBand>
+      )}
+
+      <SdBand tone="cream" id="included">
+        <div className="sd-wrap">
+          <div className="sd-band-head">
+            <span className="sd-eyebrow">הבדיקה</span>
+            <h2 className="sd-h2">מה כוללת הבדיקה?</h2>
           </div>
-        </div>
-      </section>
-
-      {/* WHAT IS INCLUDED */}
-      <section className="border-t bg-white" style={{ borderColor: LINE }}>
-        <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-          <ScrollReveal>
-            <h2 className="dna-display leading-tight mb-8 sm:mb-10" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-              מה כוללת הבדיקה?
-            </h2>
-          </ScrollReveal>
-          <ol className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
+          <ol className="sd-pub-steps3">
             {INCLUDED.map((item, i) => (
-              <li key={item.title}>
-                <ScrollReveal delay={i * 70} className="h-full">
-                  <div className="flex h-full items-start gap-4 rounded-2xl border p-5" style={{ borderColor: LINE, backgroundColor: IVORY }}>
-                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ background: item.tint }}>
-                      <BrandIcon name={item.icon} size={24} style={{ color: GREEN }} />
-                    </span>
-                    <div>
-                      <h3 className="text-[18px] leading-tight" style={{ color: GREEN }}>{item.title}</h3>
-                      <p className="mt-1.5 text-[15px] leading-[1.65]" style={{ color: BODY }}>{item.body}</p>
-                    </div>
-                  </div>
-                </ScrollReveal>
+              <li key={item.title} className="sd-point sd-reveal">
+                <em>{String(i + 1).padStart(2, "0")}</em>
+                <SdIcon name={item.icon} size={52} />
+                <h3 className="sd-h3 mt-4">{item.title}</h3>
+                <p>{item.body}</p>
               </li>
             ))}
           </ol>
         </div>
-      </section>
+      </SdBand>
 
-      {/* WHAT TO PREPARE + FORM */}
-      <section id="review-form" className="scroll-mt-24 border-t" style={{ borderColor: LINE }}>
-        <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 items-start">
-            <div>
-              <ScrollReveal>
-                <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-                  נתחיל?
-                </h2>
-                <p className="mt-4 mb-8 text-[17px] leading-[1.7] max-w-xl" style={{ color: MUTED }}>
-                  השאירו שם וטלפון. נחזור אליכם ביום העסקים הבא לתיאום, ומשם ממשיכים יחד.
-                </p>
-              </ScrollReveal>
-              <ScrollReveal delay={80}>
-                <PortfolioReviewForm idPrefix="review" source="עמוד בדיקת תיק 360" />
-              </ScrollReveal>
+      <SdBand tone={p2} id="prepare">
+        <div className="sd-wrap sd-pub-split is-wide-copy">
+          <div>
+            <span className="sd-eyebrow">לקראת הפגישה</span>
+            <h2 className="sd-h2 mt-4">מה מכינים לפגישה?</h2>
+            <div className="sd-pub-prep mt-8">
+              <ul>
+                {PREPARE.map((p) => (
+                  <li key={p.title}>
+                    <div>
+                      <b>{p.title}</b>
+                      <span>{p.body}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            <ScrollReveal delay={120}>
-              <div className="rounded-2xl p-6 sm:p-7" style={{ background: TINT_SAGE }}>
-                <div className="flex items-center gap-4">
-                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white" style={{ boxShadow: `inset 0 0 0 1px ${LINE}` }}>
-                    <BrandIcon name="folder" size={22} style={{ color: GREEN }} />
-                  </span>
-                  <h2 className="text-[22px] leading-tight" style={{ color: GREEN }}>מה מכינים לפגישה?</h2>
-                </div>
-                <ul className="mt-5 space-y-4">
-                  {PREPARE.map((p) => (
-                    <li key={p.title} className="flex items-start gap-3">
-                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white" style={{ boxShadow: `inset 0 0 0 1px ${LINE}` }}>
-                        <BrandIcon name="check" size={14} style={{ color: GREEN }} />
-                      </span>
-                      <span>
-                        <span className="block text-[16px] font-bold" style={{ color: GREEN }}>{p.title}</span>
-                        <span className="block text-[14px] leading-[1.6]" style={{ color: MUTED }}>{p.body}</span>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-5 text-[14px]" style={{ color: MUTED }}>
-                  אין לכם את כל זה? לא נורא. מתחילים ממה שיש, ואת השאר שולפים יחד.
-                </p>
-              </div>
-            </ScrollReveal>
+            <p className="sd-small mt-5">אין לכם את כל זה? לא נורא. מתחילים ממה שיש, ואת השאר שולפים יחד.</p>
+          </div>
+          <div className="sd-pub-art" aria-hidden="true">
+            <SdPic name="10-financial-planning" sizes="(min-width:1024px) 440px, 90vw" />
           </div>
         </div>
-      </section>
+      </SdBand>
 
-      {/* THREE QUESTIONS */}
-      <section className="border-t bg-white" style={{ borderColor: LINE }}>
-        <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-          <ScrollReveal>
-            <h2 className="dna-display leading-tight mb-8" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-              שלוש שאלות שכולם שואלים
-            </h2>
-          </ScrollReveal>
-          <Accordion type="single" collapsible className="max-w-3xl">
+      <SdBand tone="white" id="questions">
+        <div className="sd-wrap-narrow">
+          <div className="sd-band-head"><h2 className="sd-h2">שלוש שאלות שכולם שואלים</h2></div>
+          <div className="sd-faq">
             {FAQ.map((f, i) => (
-              <AccordionItem key={f.q} value={`q-${i}`} className="border-b" style={{ borderColor: LINE }}>
-                <AccordionTrigger className="py-5 text-right text-[17px] font-bold hover:no-underline" style={{ color: GREEN }}>
-                  {f.q}
-                </AccordionTrigger>
-                <AccordionContent className="pb-5 text-[16px] leading-[1.7]" style={{ color: BODY }}>
-                  {f.a}
-                </AccordionContent>
-              </AccordionItem>
+              <details key={f.q} open={i === 0}>
+                <summary>{f.q}</summary>
+                <div>{f.a}</div>
+              </details>
             ))}
-          </Accordion>
+          </div>
           <div className="mt-6">
-            <Link to="/faq" className="link-rule text-[15px]">
-              לכל השאלות הנפוצות
-              <BrandIcon name="arrow-left" size={18} />
-            </Link>
+            <Link to="/faq" className="sd-link">לכל השאלות הנפוצות<Arrow /></Link>
           </div>
         </div>
-      </section>
+      </SdBand>
 
-      {/* CLOSING */}
-      <section className="dna-navy-band">
-        <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-          <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-            תמיד יודעים מה השלב הבא
-          </h2>
-          <p className="text-[17px] leading-[1.7] mb-8 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
-            ליווי רציף שמחזיק אתכם בדרך הנכונה. מהבדיקה הראשונה ועד המעקב השנתי.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <a href="#review-form" className="btn-on-green sm:min-w-[220px]">להתחיל בבדיקה</a>
-            <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">תיאום פגישה</Link>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <Footer />
-  </div>
-);
+      <SdContact
+        id="review-form"
+        title="נתחיל?"
+        text="השאירו שם וטלפון. נחזור אליכם ביום העסקים הבא לתיאום, ומשם ממשיכים יחד. תמיד תדעו מה השלב הבא."
+        art="12-childrens-savings"
+      >
+        <PortfolioReviewForm idPrefix="review" source="עמוד בדיקת תיק 360" />
+      </SdContact>
+    </PubPage>
+  );
+};
 
 export default PortfolioReview;

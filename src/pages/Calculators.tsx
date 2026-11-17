@@ -9,16 +9,17 @@ import CompareCalculator from "@/components/CompareCalculator";
 import IncomeTaxCalculator from "@/components/IncomeTaxCalculator";
 import LifeInsuranceCalculator from "@/components/LifeInsuranceCalculator";
 import CarInsuranceEstimator from "@/components/CarInsuranceEstimator";
-import { Link } from "react-router-dom";
-import { BalancedStones } from "@/components/brand/Elements";
-import { BrandIcon } from "@/components/brand/BrandIcon";
-import { GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from "@/lib/brand";
+import { stories } from "@/data/stories";
+import { SdBand, SdStory, tintStyle, useSdFont } from "@/components/sd/primitives";
+import { PUB_TOPICS, PubClose, PubHero } from "@/components/sd/pub";
+import { LINE } from "@/lib/brand";
+import "@/components/sd/sd.css";
 
-// Calculator page: inputs and results stay central. One small vector element in
-// the hero corner, no full illustration (kit p.06: operational screens stay clean).
+// Calculators in the kit design: the tool stays central (tabs + the unchanged calculators inside a white panel);
+// hero, story and closing carry the kit look. Calculator logic and components are untouched.
 
 const tabTriggerClass =
-  "rounded-none bg-transparent min-w-[44px] justify-center px-0 pb-4 text-[15px] sm:text-[16px] font-bold text-[#55677C] border-b-2 border-transparent data-[state=active]:border-[#203957] data-[state=active]:text-[#203957] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+  "rounded-none bg-transparent min-w-[44px] min-h-[44px] justify-center px-0 pb-4 text-[15px] sm:text-[16px] font-bold text-[#55677C] border-b-2 border-transparent data-[state=active]:border-[#203957] data-[state=active]:text-[#203957] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const tabDefs = [
   { value: "mortgage", label: "משכנתא", title: "מחשבון משכנתא", lede: "חשבו החזר חודשי ועלות כוללת של המשכנתא", Component: MortgageCalculator },
@@ -32,44 +33,29 @@ const tabDefs = [
 ];
 
 const Calculators = () => {
+  useSdFont();
+  const topic = PUB_TOPICS.calculators;
+  const [p1, p2] = topic.palette;
+  const story = stories["/calculators"];
+
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
+    <div className="sd min-h-screen" dir="rtl" style={tintStyle(p1)}>
       <Header />
 
       <main>
-        <div className="dna-page">
-          <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 300, height: 300, top: -140, left: -120, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
-            />
-          </div>
+        <PubHero
+          compact
+          crumbs={[{ label: "דף הבית", to: "/" }, { label: "מחשבונים" }]}
+          eyebrow="משכנתא, פנסיה, חיסכון ומס"
+          title="מחשבונים פיננסיים"
+          lead="משכנתא, פנסיה, חיסכון, מס, ביטוח והשוואת מסלולים. חופשי, ללא רישום. התוצאות הן הערכה לפי ההנחות שבכל מחשבון, לא תחליף לבדיקה של התיק."
+          art={topic.art}
+          tint={p1}
+        />
 
-          <div className="relative z-10">
-            {/* Hero */}
-            <section className="max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-8 sm:pb-10">
-              <nav className="flex items-center gap-2 text-[14px] mb-8" style={{ color: MUTED }} aria-label="ניווט משני">
-                <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
-                <BrandIcon name="arrow-left" size={14} />
-                <span className="font-bold" style={{ color: GREEN }} aria-current="page">מחשבונים</span>
-              </nav>
-
-              <div className="flex items-start justify-between gap-8">
-                <div>
-                  <h1 className="dna-display leading-[1.15] mb-4 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-                    מחשבונים פיננסיים
-                  </h1>
-                  <p className="text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
-                    משכנתא, פנסיה, חיסכון, מס, ביטוח והשוואת מסלולים. חופשי, ללא רישום.
-                    התוצאות הן הערכה לפי ההנחות שבכל מחשבון, לא תחליף לבדיקה של התיק.
-                  </p>
-                </div>
-                <BalancedStones className="hidden lg:block w-40 shrink-0" />
-              </div>
-            </section>
-
-            {/* Calculator tabs */}
-            <section className="max-w-brand mx-auto px-5 sm:px-8 pb-12 sm:pb-16">
+        <SdBand tone="cream" id="tools" className="!pt-8 sm:!pt-12">
+          <div className="sd-wrap">
+            <div className="sd-pub-panel">
               <Tabs defaultValue="mortgage" dir="rtl">
                 <TabsList className="flex w-full flex-wrap justify-start gap-x-6 gap-y-1 sm:gap-x-8 h-auto bg-transparent p-0 mb-8 border-b rounded-none" style={{ borderColor: LINE }}>
                   {tabDefs.map((tab) => (
@@ -83,39 +69,31 @@ const Calculators = () => {
                   <TabsContent key={value} value={value} className="mt-0">
                     <div className="text-right">
                       <div className="mb-6">
-                        <h2 className="dna-display leading-tight mb-1.5" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>
+                        <h2 className="sd-h2 mb-1.5" style={{ fontSize: "clamp(24px, 3vw, 32px)" }}>
                           {title}
                         </h2>
-                        <p className="text-[16px] leading-[1.7]" style={{ color: MUTED }}>{lede}</p>
+                        <p className="text-[16px] leading-[1.7]" style={{ color: "var(--muted)" }}>{lede}</p>
                       </div>
                       <Component />
                     </div>
                   </TabsContent>
                 ))}
               </Tabs>
-            </section>
-          </div>
-        </div>
-
-        {/* Closing — deep green band */}
-        <section className="dna-navy-band">
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(26px, 3vw, 34px)" }}>
-              המחשבון נותן הערכה. התיק נותן תשובה.
-            </h2>
-            <p className="text-[17px] leading-[1.7] mb-8 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
-              רוצים לראות את המספרים האמיתיים שלכם? בדיקת תיק 360 מסדרת את הביטוחים, הפנסיה והחיסכון בתמונה אחת.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
-                בדיקת תיק 360
-              </Link>
-              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
-                תיאום פגישה
-              </Link>
             </div>
           </div>
-        </section>
+        </SdBand>
+
+        {story && (
+          <SdBand tone={p2} id="moment">
+            <SdStory story={story} art={topic.art2} flip />
+          </SdBand>
+        )}
+
+        <PubClose
+          title="המחשבון נותן הערכה. התיק נותן תשובה."
+          text="רוצים לראות את המספרים האמיתיים שלכם? בדיקת תיק 360 מסדרת את הביטוחים, הפנסיה והחיסכון בתמונה אחת."
+          art="05-retirement"
+        />
       </main>
 
       <Footer />

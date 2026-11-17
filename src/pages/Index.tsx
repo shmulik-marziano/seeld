@@ -2,80 +2,99 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import Header from "@/components/Header";
-import { TIERS, type ProductTier } from "@/data/productDirectory";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
-import ScrollReveal from "@/components/ScrollReveal";
 import CompanyLogos from "@/components/CompanyLogos";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Illustration } from "@/components/brand/Illustration";
-import { BubbleCorner, PathDivider } from "@/components/brand/Elements";
-import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
+import { TIERS } from "@/data/productDirectory";
+import { BrandIcon } from "@/components/brand/BrandIcon";
 import { FormSuccess } from "@/components/brand/FormSuccess";
 import { PortfolioReviewForm } from "@/components/PortfolioReviewForm";
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, RUST, RUST_TEXT, SAGE, SAGE_ON_GREEN, SAND, TINT_SAGE } from "@/lib/brand";
+import { SdBand, SdContact, SdIcon, SdPic, SdProcess, SdSubnav, DEFAULT_STEPS } from "@/components/sd/primitives";
+import { PASTELS } from "@/components/sd/topics";
 import { toast } from "sonner";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
+import "@/components/sd/sd.css";
+import "@/components/sd/home.css";
 
 // ── Data ──
 
-// "במה אפשר לעזור?" — the three services from the design mock. The products
-// themselves are listed in the directory below, by tier.
-const serviceAreas: {
-  title: string;
-  description: string;
-  href: string;
-  icon: BrandIconName;
-  tint: string;
-}[] = [
+// "מה אתם מחפשים?": four doors, each with its kit illustration and the product pages behind it.
+const topics = [
   {
-    title: "בדיקת תיק 360",
-    description: "סוקרים את כל הפוליסות, הקרנות והחיסכון, ומזהים חסרים, כפילויות ודמי ניהול גבוהים.",
-    href: "/portfolio-review",
-    icon: "document",
-    tint: PASTEL_SAGE,
+    title: "ביטוח",
+    text: "בריאות, רכב, דירה ונסיעות. כיסוי שמתאים למה שיש לכם, בלי כפילויות.",
+    art: "03-health-insurance",
+    tone: PASTELS.sky.bg,
+    href: "/insurances",
+    links: [
+      { t: "ביטוח בריאות", h: "/insurance/health" },
+      { t: "ביטוח רכב", h: "/insurance/vehicle" },
+      { t: "ביטוח דירה", h: "/insurance/home" },
+      { t: "ביטוח נסיעות", h: "/insurance/travel" },
+    ],
   },
   {
-    title: "תכנון פיננסי ופנסיוני",
-    description: "בונים תוכנית שמתאימה לכם ולמטרות שלכם: הפקדות, מסלולים, מיסוי ותזמון.",
-    href: "/savings/financial-planning",
-    icon: "chart",
-    tint: PASTEL_SAND,
+    title: "חיסכון ופנסיה",
+    text: "פנסיה, גמל והשתלמות. מבינים כמה חסכתם, כמה משלמים ומה אפשר לשפר.",
+    art: "05-retirement",
+    tone: PASTELS.butter.bg,
+    href: "/savings",
+    links: [
+      { t: "קרנות פנסיה", h: "/savings/pension-funds" },
+      { t: "קרנות השתלמות", h: "/savings/training-funds" },
+      { t: "קופות גמל", h: "/savings/gemel-funds" },
+      { t: "תכנון פיננסי", h: "/savings/financial-planning" },
+    ],
   },
   {
-    title: "ליווי שוטף",
-    description: "אנחנו כאן גם בהמשך: מעקב שנתי, עדכונים באירועי חיים וטיפול מול החברות.",
-    href: "#process",
-    icon: "family",
-    tint: PASTEL_MINT,
+    title: "משפחה",
+    text: "הגנה על ההכנסה ועל הבית, וחיסכון לעתיד של הילדים.",
+    art: "12-childrens-savings",
+    tone: PASTELS.rose.bg,
+    href: "/insurance/life",
+    links: [
+      { t: "ביטוח חיים", h: "/insurance/life" },
+      { t: "ביטוח משכנתא", h: "/insurance/mortgage" },
+      { t: "חיסכון לכל ילד", h: "/savings/child-savings" },
+      { t: "אובדן כושר עבודה", h: "/insurance/disability" },
+    ],
+  },
+  {
+    title: "עסק",
+    text: "רכוש, אחריות מקצועית, שותפים ועובדים. שקט לבעלי עסקים.",
+    art: "08-business-insurance",
+    tone: PASTELS.sage.bg,
+    href: "/insurance/business",
+    links: [
+      { t: "ביטוח עסקי", h: "/insurance/business" },
+      { t: "ביטוח שותפים", h: "/insurance/partners" },
+      { t: "קופות מעסיקים", h: "/savings/employer-funds" },
+      { t: "עובדים זרים", h: "/insurance/foreign-workers" },
+    ],
   },
 ];
 
-// Icon and tint per product tier (panels below the service cards)
-const TIER_STYLE: Record<ProductTier["key"], { icon: BrandIconName; tint: string }> = {
-  finance: { icon: "leaf", tint: PASTEL_SAGE },
-  life: { icon: "heart", tint: PASTEL_SAND },
-  general: { icon: "home", tint: PASTEL_MINT },
-};
+const TIER_ACCENT: Record<string, string> = { finance: "#C9DBC4", life: "#EBC8C0", general: "#BFD3E5" };
 
-// The process, as a numbered timeline (mock: 01 sage, 02 sand, 03 rust, 04 green).
-const processSteps: { title: string; short: string; icon: BrandIconName; color: string }[] = [
-  { title: "מיפוי התיק", short: "מרכזים את כל המידע הקיים ממקורות רשמיים.", icon: "document", color: SAGE },
-  { title: "פגישה והחלטות", short: "מבינים את התמונה ואת האפשרויות, ומחליטים יחד.", icon: "family", color: SAND },
-  { title: "ביצוע הפעולות", short: "מקדמים את מה שסוכם: טפסים, ניודים וחברות.", icon: "settings", color: RUST },
-  { title: "מעקב ועדכון", short: "בודקים מה הושלם ומה נותר, אחת לשנה ובכל שינוי.", icon: "chart", color: GREEN },
+const knowledgeItems = [
+  { title: "מחשבונים", description: "משכנתא, פנסיה, חיסכון, מס והשוואת מסלולים. חופשי, ללא רישום.", href: "/calculators" },
+  { title: "איתור קרנות", description: "חיפוש והשוואה של קרנות פנסיה, גמל והשתלמות מכל בתי ההשקעות.", href: "/fund-finder" },
+  { title: "טבלאות תשואות", description: "נתוני תשואה ודמי ניהול רשמיים, מעודכנים מדי חודש.", href: "/return-tables" },
+  { title: "מסלולי השקעה", description: "השוואת חשיפות, רמות סיכון ותשואות בין המסלולים בשוק.", href: "/investment-tracks" },
+  { title: "מידע ולמידה", description: "מדריכים, מאמרים ותשובות לשאלות שעולות בכל תיק.", href: "/learn" },
+  { title: "אזור אישי", description: "הפוליסות, החיסכון, המסמכים וסיכומי הפגישות שלכם במקום אחד.", href: "/personal-area" },
 ];
 
+const steps: typeof DEFAULT_STEPS = [
+  { icon: "checklist", t: "ממפים את התיק", p: "מרכזים את כל המידע הקיים ממקורות רשמיים, ושומעים מה חשוב לכם." },
+  { icon: "search", t: "משווים ומחליטים יחד", p: "מציגים את ההבדלים בין החברות בצורה ברורה. הפגישה הראשונה ללא עלות והחלטה תמיד שלכם." },
+  { icon: "handshake", t: "מבצעים ומלווים", p: "מקדמים את מה שסוכם: טפסים, ניודים ומול החברות. ובהמשך, מעקב אחת לשנה ובכל שינוי." },
+];
 
-
-
-const knowledgeItems: { title: string; description: string; href?: string; icon: BrandIconName }[] = [
-  { title: "מחשבונים", description: "משכנתא, פנסיה, חיסכון, מס והשוואת מסלולים. חופשי, ללא רישום.", href: "/calculators", icon: "calculator" },
-  { title: "איתור קרנות", description: "חיפוש והשוואה של קרנות פנסיה, גמל והשתלמות מכל בתי ההשקעות.", href: "/fund-finder", icon: "search" },
-  { title: "טבלאות תשואות", description: "נתוני תשואה ודמי ניהול רשמיים, מעודכנים מדי חודש.", href: "/return-tables", icon: "chart" },
-  { title: "מסלולי השקעה", description: "השוואת חשיפות, רמות סיכון ותשואות בין המסלולים בשוק.", href: "/investment-tracks", icon: "route" },
-  { title: "מידע ולמידה", description: "מדריכים, מאמרים ותשובות לשאלות שעולות בכל תיק.", href: "/learn", icon: "document" },
-  { title: "אזור אישי", description: "הפוליסות, החיסכון, המסמכים וסיכומי הפגישות שלכם במקום אחד.", href: "/personal-area", icon: "folder" },
+const pillars = [
+  { icon: "shield", t: "צוות מקצועי", p: "סוכני ביטוח, יועצי פנסיה ואנשי פיננסים תחת קורת גג אחת." },
+  { icon: "handshake", t: "עצמאות", p: "ללא התחייבות לחברה וללא יעדי מכירה. רק מה שנכון לכם." },
+  { icon: "search", t: "השוואה בין חברות", p: "הכיסויים והמחירים של כל החברות מוצגים זה לצד זה." },
 ];
 
 const faqItems = [
@@ -105,34 +124,24 @@ const faqItems = [
   },
   {
     question: "מה קורה אם יש בעיה עם חברת הביטוח?",
-    answer: "הצוות שלנו מטפל. זה בדיוק בשביל זה יש סוכן, כדי שלא תצטרכו להתמודד עם החברה לבד.",
+    answer: "הצוות שלנו מטפל. זה בדיוק בשביל זה יש סוכנות, כדי שלא תצטרכו להתמודד עם החברה לבד.",
   },
 ];
 
-const trustList = [
-  { title: "ברישיון ובפיקוח", description: "סוכנות ביטוח פנסיונית ברישיון תחת רשות שוק ההון. ביטוח אחריות מקצועית מלא." },
-  { title: "מבית עמיתים הון", description: "ותק, מוניטין ותשתית של בית פיננסים בישראל." },
-  { title: "יועץ ייעודי", description: "אדם אחד שמלווה את התיק לאורך כל שנות הקשר." },
-  { title: "עצמאות", description: "ללא התחייבות לחברה. ללא יעדי מכירה. רק מה שנכון ללקוח." },
+const sections = [
+  { id: "topics", label: "מה אתם מחפשים" },
+  { id: "products", label: "כל המוצרים" },
+  { id: "process", label: "איך עובדים איתנו" },
+  { id: "about", label: "מי אנחנו" },
+  { id: "portfolio-review", label: "בדיקת תיק 360" },
+  { id: "faq", label: "שאלות נפוצות" },
+  { id: "contact-form", label: "יצירת קשר" },
 ];
 
-
-// ── Shared UI ──
-
-const SectionHead = ({ title, lede, center = false }: { title: string; lede?: string; center?: boolean }) => (
-  <div className={`mb-10 sm:mb-14 ${center ? "text-center mx-auto" : ""}`}>
-    <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-      {title}
-    </h2>
-    {lede && (
-      <p className={`mt-4 text-[17px] leading-[1.7] max-w-xl ${center ? "mx-auto" : ""}`} style={{ color: MUTED }}>{lede}</p>
-    )}
-  </div>
-);
-
+// ── Contact form bits ──
 
 const FieldLabel = ({ htmlFor, children, required }: { htmlFor: string; children: React.ReactNode; required?: boolean }) => (
-  <label htmlFor={htmlFor} className="block text-[14px] font-bold mb-1.5" style={{ color: GREEN }}>
+  <label htmlFor={htmlFor} className="block text-[14px] font-bold mb-1.5" style={{ color: "#203957" }}>
     {children}
     {required && <span aria-hidden="true" style={{ color: "#BD582D" }}> *</span>}
   </label>
@@ -141,23 +150,9 @@ const FieldLabel = ({ htmlFor, children, required }: { htmlFor: string; children
 const FieldError = ({ id, children }: { id: string; children?: string }) =>
   children ? <p id={id} className="mt-1.5 text-[14px]" style={{ color: "#9A4520" }}>{children}</p> : null;
 
-
 const PHONE_RE = /^0\d{1,2}-?\d{7}$/;
 
-// Number discs: pick the text colour that clears WCAG AA (4.5:1) on each brand
-// disc. Rust uses its small-text variant; light discs (sage, sand) take dark ink.
-const discBg = (c: string) => (c.toUpperCase() === RUST ? RUST_TEXT : c);
-const discInk = (bg: string) => {
-  const ch = (i: number) => {
-    const v = parseInt(bg.slice(i, i + 2), 16) / 255;
-    return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
-  };
-  const lum = 0.2126 * ch(1) + 0.7152 * ch(3) + 0.0722 * ch(5);
-  return lum > 0.25 ? "#1A1A1A" : "#FAF7EF";
-};
-
 const Index = () => {
-
   const [contactForm, setContactForm] = useState({ name: "", phone: "", email: "", message: "" });
   const [contactErrors, setContactErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
   const [contactSubmitting, setContactSubmitting] = useState(false);
@@ -202,466 +197,251 @@ const Index = () => {
     }
   };
 
+  const arrow = <BrandIcon name="arrow-left" size={18} />;
+
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
+    <div className="sd min-h-screen" dir="rtl">
       <Header />
 
       <main>
-        {/* HERO */}
         <HeroSection />
 
-        {/* SERVICE AREAS — three illustrated doors */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
-            <ScrollReveal>
-              <SectionHead
-                title="במה אפשר לעזור?"
-                lede="כמו בבית השקעות גדול ובחברת ביטוח גדולה, רק עם יועץ אחד שמכיר אתכם. קודם הכסף והנכסים, אחר כך ההגנה עליהם."
-              />
-            </ScrollReveal>
+        <SdSubnav sections={sections} />
 
-            {/* Three service cards (mock): icon in a tinted disc, title, two lines, a rule link */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-              {serviceAreas.map((area, i) => {
-                const inner = (
-                  <>
-                    <span className="flex h-14 w-14 items-center justify-center rounded-full" style={{ background: area.tint }}>
-                      <BrandIcon name={area.icon} size={28} style={{ color: GREEN }} />
-                    </span>
-                    <h3 className="mt-5 text-[20px] leading-tight md:text-[22px]" style={{ color: GREEN }}>{area.title}</h3>
-                    <p className="mt-2 text-[15px] leading-[1.6] md:text-[16px] md:leading-[1.7]" style={{ color: BODY }}>{area.description}</p>
-                    <span className="link-rule mt-5 text-[15px]">
-                      לפרטים נוספים
-                      <BrandIcon name="arrow-left" size={18} className="transition-transform group-hover:-translate-x-1" />
-                    </span>
-                  </>
-                );
-                const cls = "group flex h-full flex-col items-start rounded-2xl bg-white border p-6 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]";
-                return (
-                  <ScrollReveal key={area.href} delay={i * 80}>
-                    {area.href.startsWith("#") ? (
-                      <a href={area.href} className={cls} style={{ borderColor: LINE }}>{inner}</a>
-                    ) : (
-                      <Link to={area.href} className={cls} style={{ borderColor: LINE }}>{inner}</Link>
-                    )}
-                  </ScrollReveal>
-                );
-              })}
+        {/* 1. WHAT ARE YOU LOOKING FOR */}
+        <SdBand tone="sage" id="topics">
+          <div className="sd-wrap">
+            <div className="sd-band-head">
+              <h2 className="sd-h2">מה אתם מחפשים?</h2>
+              <p className="sd-lead">קודם הכסף והנכסים, אחר כך ההגנה עליהם. בחרו את התחום, ונמשיך משם.</p>
             </div>
-
-            {/* The directory: three tiers in the owner's order (finance, then
-                life and health cover, then general insurance). Every product
-                keeps its link; the same order runs through the hubs and the footer. */}
-            {/* Three panels in the card grammar of the mock (icon disc, title, one
-                line, a short list with arrows, one link), finance first. */}
-            <div className="mt-12 sm:mt-16 grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
-              {TIERS.map((tier, i) => (
-                <ScrollReveal key={tier.key} delay={i * 60} className="h-full">
-                  <section
-                    id={`home-${tier.key}`}
-                    aria-labelledby={`home-${tier.key}-title`}
-                    className="flex h-full flex-col rounded-2xl bg-white border p-6 scroll-mt-24"
-                    style={{ borderColor: LINE }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ background: TIER_STYLE[tier.key].tint }}>
-                        <BrandIcon name={TIER_STYLE[tier.key].icon} size={24} style={{ color: GREEN }} />
-                      </span>
-                      <h3 id={`home-${tier.key}-title`} className="text-[21px] leading-tight" style={{ color: GREEN }}>{tier.title}</h3>
+            <div className="sd-home-topics">
+              {topics.map((tp) => (
+                <article key={tp.title} className="sd-home-topic sd-reveal">
+                  <div className="sd-home-topic-art" style={{ ["--tone" as string]: tp.tone }} aria-hidden="true">
+                    <SdPic name={tp.art} sizes="(min-width:560px) 200px, 80vw" />
+                  </div>
+                  <div className="sd-home-topic-body">
+                    <h3><Link to={tp.href}>{tp.title}</Link></h3>
+                    <p>{tp.text}</p>
+                    <div className="sd-home-chips">
+                      {tp.links.map((l) => <Link key={l.h} to={l.h}>{l.t}</Link>)}
                     </div>
-                    <p className="mt-3 text-[15px] leading-[1.6]" style={{ color: MUTED }}>{tier.lede}</p>
-                    <ul className="mt-4 flex-1 divide-y divide-[#E8E6DE]">
-                      {tier.items.slice(0, tier.homeCount).map((item) => (
-                        <li key={item.href}>
-                          <Link
-                            to={item.href}
-                            className="group flex min-h-[48px] items-center justify-between gap-4 py-2 text-[16px] font-bold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
-                            style={{ color: GREEN }}
-                          >
-                            <span>{item.title}</span>
-                            <BrandIcon name="arrow-left" size={18} className="shrink-0 transition-transform group-hover:-translate-x-1" style={{ color: SAGE }} />
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                    <Link to={tier.href} className="link-rule mt-5 self-start text-[15px]">
-                      {tier.linkLabel}
-                      <BrandIcon name="arrow-left" size={18} />
-                    </Link>
-                  </section>
-                </ScrollReveal>
+                  </div>
+                </article>
               ))}
             </div>
           </div>
-        </section>
+        </SdBand>
 
-        {/* PORTFOLIO REVIEW 360 — the central action */}
-        <section id="portfolio-review" className="scroll-mt-24 border-t bg-white" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
-            <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-20 items-center">
-              <div>
-                <ScrollReveal>
-                  <SectionHead
-                    title="בדיקת תיק 360"
-                    lede="השאירו שם וטלפון. נבחן את הביטוחים, הפנסיה והחיסכון הקיימים, ונחזור אליכם עם תמונה מסודרת והמלצות מנומקות. ללא עלות וללא התחייבות."
-                  />
-                </ScrollReveal>
+        {/* 2. THE FULL DIRECTORY + TOOLS */}
+        <SdBand tone="sky" id="products">
+          <div className="sd-wrap">
+            <div className="sd-band-head">
+              <h2 className="sd-h2">כל המוצרים במקום אחד</h2>
+              <p className="sd-lead">פיננסים, ביטוחי חיים ובריאות וביטוח כללי. לכל מוצר יש עמוד שמסביר אותו בפשטות.</p>
+            </div>
+            <div className="sd-home-tiers">
+              {TIERS.map((tier) => (
+                <section
+                  key={tier.key}
+                  id={`home-${tier.key}`}
+                  aria-labelledby={`home-${tier.key}-title`}
+                  className="sd-home-tier sd-reveal scroll-mt-28"
+                  style={{ ["--accent" as string]: TIER_ACCENT[tier.key] }}
+                >
+                  <h3 id={`home-${tier.key}-title`}>{tier.title}</h3>
+                  <p>{tier.lede}</p>
+                  <ul>
+                    {tier.items.slice(0, tier.homeCount).map((item) => (
+                      <li key={item.href}>
+                        <Link to={item.href}>
+                          <span>{item.title}</span>
+                          <BrandIcon name="arrow-left" size={18} />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link to={tier.href} className="sd-link">{tier.linkLabel}{arrow}</Link>
+                </section>
+              ))}
+            </div>
 
-                <ScrollReveal delay={100}>
-                  <PortfolioReviewForm className="max-w-xl" source="דף הבית" />
-                </ScrollReveal>
-              </div>
-
-              {/* Decoration only; on a phone it would sit below the form and push
-                  the next section a full screen down. */}
-              <ScrollReveal delay={150} className="hidden md:block">
-                <Illustration
-                  name="05-clarity-decisions"
-                  sizes="(min-width: 1024px) 460px, 80vw"
-                  className="max-w-md mx-auto lg:max-w-none"
-                />
-              </ScrollReveal>
+            <div className="sd-home-tools-head">
+              <h3>ידע וכלים</h3>
+              <p>הכלים שהצוות שלנו עובד איתם, פתוחים גם לכם.</p>
+            </div>
+            <div className="sd-home-tools">
+              {knowledgeItems.map((item) => (
+                <Link key={item.href} to={item.href} className="sd-home-tool">
+                  <b>{item.title}<BrandIcon name="arrow-left" size={16} /></b>
+                  <span>{item.description}</span>
+                </Link>
+              ))}
             </div>
           </div>
-        </section>
+        </SdBand>
 
-        {/* PROCESS — how we work together */}
-        <section id="process" className="relative border-t overflow-hidden scroll-mt-24" style={{ borderColor: LINE }}>
-          <BubbleCorner className="hidden lg:block absolute -top-24 -left-24 w-[380px] opacity-70" flip />
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
-            <ScrollReveal>
-              <SectionHead
-                title="כך עובדים יחד."
-                lede="כל שלב ברור. כל החלטה מתועדת."
-              />
-            </ScrollReveal>
+        {/* 3. HOW WE WORK */}
+        <SdBand tone="butter" id="process">
+          <SdProcess art="11-claims-service" steps={steps} title="איך עובדים איתנו" />
+        </SdBand>
 
-            {/* The timeline (mock): numbered discs in the brand colours. Phone: a
-                vertical line down the right with white cards; from 768px: one row
-                on the sage band with arrows between the steps. */}
-            <ol className="relative grid grid-cols-1 gap-5 md:grid-cols-4 md:gap-6 md:rounded-2xl md:p-8" style={{ background: undefined }}>
-              <div className="pointer-events-none absolute inset-0 hidden rounded-2xl md:block" style={{ background: TINT_SAGE }} aria-hidden="true" />
-              {processSteps.map((step, i) => (
-                <li key={step.title} className="relative flex items-start gap-4 md:flex-col md:gap-5">
-                  {/* connector: vertical on the phone, arrow on desktop */}
-                  {i < processSteps.length - 1 && (
-                    <>
-                      <span className="absolute right-[27px] top-[60px] -bottom-5 w-px md:hidden" style={{ background: LINE }} aria-hidden="true" />
-                      <span className="absolute -left-6 top-[14px] hidden md:block" style={{ color: MUTED }} aria-hidden="true">
-                        <BrandIcon name="arrow-left" size={20} />
-                      </span>
-                    </>
-                  )}
-                  <span
-                    className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-[18px] font-bold tabular-nums"
-                    style={{ background: discBg(step.color), color: discInk(discBg(step.color)) }}
-                    dir="ltr"
-                  >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div className="flex-1 rounded-2xl bg-white border p-5 md:p-5" style={{ borderColor: LINE }}>
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full" style={{ background: PASTEL_SAGE }}>
-                        <BrandIcon name={step.icon} size={20} style={{ color: GREEN }} />
-                      </span>
-                      <h3 className="text-[18px] leading-tight" style={{ color: GREEN }}>{step.title}</h3>
-                    </div>
-                    <p className="mt-3 text-[15px] leading-[1.6]" style={{ color: BODY }}>{step.short}</p>
-                  </div>
+        {/* 4. WHO WE ARE */}
+        <SdBand tone="rose" id="about">
+          <div className="sd-wrap sd-home-about">
+            <div>
+              <h2 className="sd-h2">מי אנחנו</h2>
+              <p className="sd-lead mt-5">שילד היא סוכנות ביטוח ופיננסים עצמאית. הלקוח מעל כל שיקול אחר.</p>
+              <p className="sd-text">
+                הצוות שלנו כולל סוכני ביטוח, יועצי פנסיה ואנשי פיננסים. אנחנו לא קשורים לחברה אחת, ולכן ההמלצה נבנית סביב מה שמתאים לכם.
+              </p>
+              <p className="sd-text">
+                אותו צוות מכיר את התיק, את המשפחה ואת השינויים לאורך השנים. לא מוקד, לא נציג מתחלף.
+              </p>
+              <div className="sd-home-ctas">
+                <Link to="/contact" className="sd-btn">תיאום פגישה{arrow}</Link>
+                <Link to="/about" className="sd-link">הכירו את הצוות{arrow}</Link>
+              </div>
+            </div>
+            <ul className="sd-home-pillars">
+              {pillars.map((p) => (
+                <li key={p.t} className="sd-home-pillar sd-reveal">
+                  <SdIcon name={p.icon} size={56} />
+                  <div><h3 className="sd-h3">{p.t}</h3><p>{p.p}</p></div>
                 </li>
               ))}
-            </ol>
+            </ul>
+          </div>
+        </SdBand>
 
-            {/* The green promise band (mock) */}
-            <div className="dna-navy-band relative mt-8 overflow-hidden rounded-2xl px-6 py-8 sm:mt-10 sm:px-10 sm:py-10">
-              <BubbleCorner className="absolute -bottom-16 -left-16 w-[260px] opacity-60" />
-              <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h3 className="text-[24px] leading-tight sm:text-[28px]" style={{ color: IVORY }}>תמיד יודעים מה השלב הבא</h3>
-                  <p className="mt-2 text-[16px] sm:text-[17px]" style={{ color: SAGE_ON_GREEN }}>ליווי רציף שמחזיק אתכם בדרך הנכונה.</p>
-                </div>
-                <Link to="/contact" className="btn-on-green sm:min-w-[220px]">
-                  לתיאום פגישה
-                  <BrandIcon name="arrow-left" size={18} />
-                </Link>
+        {/* 5. PORTFOLIO REVIEW 360 */}
+        <SdBand tone="lavender" id="portfolio-review">
+          <div className="sd-wrap sd-home-360">
+            <div>
+              <h2 className="sd-h2">בדיקת תיק 360</h2>
+              <p className="sd-lead">
+                השאירו שם וטלפון. נבחן את הביטוחים, הפנסיה והחיסכון הקיימים, ונחזור אליכם עם תמונה מסודרת והמלצות מנומקות. ללא עלות וללא התחייבות.
+              </p>
+              <div className="sd-home-360-form">
+                <PortfolioReviewForm source="דף הבית" />
               </div>
             </div>
+            <div className="sd-story-art sd-reveal hidden md:block" aria-hidden="true">
+              <SdPic name="10-financial-planning" sizes="(min-width:1024px) 460px, 80vw" />
+            </div>
           </div>
-        </section>
+        </SdBand>
 
-        <PathDivider className="max-w-brand mx-auto px-5 sm:px-8 h-16 sm:h-24" />
-
-        {/* KNOWLEDGE & TOOLS */}
-        <section>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-12 sm:py-20">
-            <ScrollReveal>
-              <SectionHead
-                title="ידע וכלים"
-                lede="הכלים שהצוות שלנו עובד איתם, פתוחים גם לכם."
-              />
-            </ScrollReveal>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-              {knowledgeItems.map((item) => (
-                <Link key={item.title} to={item.href!} className="group block dna-concept dna-hover h-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]">
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full" style={{ background: PASTEL_SAGE }}>
-                        <BrandIcon name={item.icon} size={22} style={{ color: GREEN }} />
-                      </span>
-                      <h3 className="text-[18px]" style={{ color: GREEN }}>{item.title}</h3>
-                    </div>
-                    <BrandIcon name="arrow-left" size={18} className="shrink-0 mt-1 transition-transform group-hover:-translate-x-1" style={{ color: GREEN }} />
-                  </div>
-                  <p className="text-[15px] leading-[1.7]" style={{ color: BODY }}>{item.description}</p>
-                </Link>
+        {/* 6. FAQ */}
+        <SdBand tone="cream" id="faq">
+          <div className="sd-wrap-narrow">
+            <div className="sd-band-head">
+              <h2 className="sd-h2">שאלות שעולות בכל תיק</h2>
+              <p className="sd-lead">תשובות קצרות לשאלות שכולם שואלים.</p>
+            </div>
+            <div className="sd-faq">
+              {faqItems.slice(0, 5).map((f, i) => (
+                <details key={f.question} open={i === 0}>
+                  <summary>{f.question}</summary>
+                  <div>{f.answer}</div>
+                </details>
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* THE HOUSE */}
-        <section className="border-t bg-white" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
-            <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-24">
-              <ScrollReveal>
-                <SectionHead title="מי אנחנו" />
-                <div className="space-y-5 text-[17px] leading-[1.8]" style={{ color: BODY }}>
-                  <p className="text-[20px] sm:text-[22px] leading-[1.5] font-bold" style={{ color: GREEN }}>
-                    שילד נבנתה סביב עיקרון אחד: הלקוח מעל כל שיקול אחר.
-                  </p>
-                  <p>
-                    הצוות שלנו כולל סוכני ביטוח ברישיון, יועצי פנסיה ואנשי פיננסים.
-                    כולם עצמאיים, ללא תלות בחברה אחת. זו לא אמירה שיווקית, זו התשתית העסקית שלנו.
-                  </p>
-                  <p>
-                    לכל לקוח יש יועץ אישי: אדם אחד שמכיר את התיק, את המשפחה ואת השינויים לאורך השנים.
-                    לא מוקד, לא נציג מתחלף.
-                  </p>
-                  <div className="pt-3 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
-                    <Link to="/contact" className="btn-primary w-full sm:w-auto">תיאום פגישה</Link>
-                    <Link to="/about" className="link-rule text-[16px]">
-                      הכירו את הצוות
-                      <BrandIcon name="arrow-left" size={18} />
-                    </Link>
-                  </div>
-                </div>
-              </ScrollReveal>
-
-              <ScrollReveal delay={100}>
-                <div className="border-t lg:mt-24" style={{ borderColor: LINE }}>
-                  {trustList.map((point) => (
-                    <div key={point.title} className="dna-pill-item !py-5 border-b" style={{ borderColor: LINE }}>
-                      <div>
-                        <h3 className="text-[17px] mb-1.5" style={{ color: GREEN }}>{point.title}</h3>
-                        <p className="text-[15px] leading-relaxed" style={{ color: BODY }}>{point.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </ScrollReveal>
+            <div className="sd-home-more">
+              <Link to="/faq" className="sd-link">לכל השאלות הנפוצות{arrow}</Link>
             </div>
           </div>
+        </SdBand>
+
+        <section style={{ borderTop: "1px solid var(--line)" }}>
+          <CompanyLogos variant="grid" />
         </section>
 
-        {/* PARTNERS */}
-        <section className="border-t dna-warm-band" style={{ borderColor: LINE }}>
-          <ScrollReveal>
-            <CompanyLogos variant="marquee" title="" />
-          </ScrollReveal>
-        </section>
-
-        {/* FAQ */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
-            <ScrollReveal>
-              <SectionHead
-                title="שאלות שעולות בכל תיק"
-                lede="תשובות קצרות לשאלות שכולם שואלים."
-              />
-            </ScrollReveal>
-
-            <div className="max-w-3xl">
-              <Accordion type="single" collapsible>
-                {faqItems.slice(0, 4).map((item, i) => (
-                  <AccordionItem
-                    key={i}
-                    value={`faq-${i}`}
-                    className="border-b rounded-none px-0"
-                    style={{ borderColor: LINE }}
-                  >
-                    <AccordionTrigger className="text-[17px] font-bold hover:no-underline py-5 px-3 -mx-3 rounded-lg text-start hover:bg-white transition-colors" style={{ color: GREEN }}>
-                      {item.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-[16px] leading-[1.75] pb-6 max-w-2xl" style={{ color: BODY }}>
-                      {item.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-
-              <div className="mt-10">
-                <Link to="/faq" className="link-rule text-[15px]">
-                  לכל השאלות הנפוצות
-                  <BrandIcon name="arrow-left" size={18} />
-                </Link>
+        {/* 7. CLOSING: meeting form on navy */}
+        <SdContact id="contact-form" title="תמונה ברורה מתחילה בשיחה אחת" text="בדיקת תיק 360 ללא עלות וללא התחייבות. משאירים פרטים, ואחד מהצוות חוזר לתיאום פגישה במשרד, בזום או בטלפון." art="02-family-protection">
+          <div className="sd-home-formhead">
+            <h3>תיאום פגישה</h3>
+            <p>רעננה · ירושלים</p>
+          </div>
+          {contactSent ? (
+            <FormSuccess next="נחזור אליכם ביום העסקים הבא לתיאום הפגישה." onReset={() => setContactSent(false)} />
+          ) : (
+            <form className="space-y-4" onSubmit={handleContactSubmit} noValidate>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <FieldLabel htmlFor="contact-name" required>שם מלא</FieldLabel>
+                  <input
+                    id="contact-name"
+                    type="text"
+                    autoComplete="name"
+                    value={contactForm.name}
+                    onChange={(e) => setContactForm((prev) => ({ ...prev, name: e.target.value }))}
+                    className="field"
+                    aria-invalid={contactErrors.name ? "true" : undefined}
+                    aria-describedby={contactErrors.name ? "contact-name-err" : undefined}
+                  />
+                  <FieldError id="contact-name-err">{contactErrors.name}</FieldError>
+                </div>
+                <div>
+                  <FieldLabel htmlFor="contact-phone" required>טלפון</FieldLabel>
+                  <input
+                    id="contact-phone"
+                    type="tel"
+                    autoComplete="tel"
+                    value={contactForm.phone}
+                    onChange={(e) => setContactForm((prev) => ({ ...prev, phone: e.target.value }))}
+                    className="field"
+                    dir="ltr"
+                    style={{ textAlign: "right" }}
+                    aria-invalid={contactErrors.phone ? "true" : undefined}
+                    aria-describedby={contactErrors.phone ? "contact-phone-err" : undefined}
+                  />
+                  <FieldError id="contact-phone-err">{contactErrors.phone}</FieldError>
+                </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CONTACT */}
-        <section className="border-t bg-white" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
-            <ScrollReveal>
-              <SectionHead
-                title="תיאום פגישה"
-                lede="השאירו פרטים ויועץ מהצוות יחזור אליכם לתיאום. פגישה במשרד, בזום או בטלפון."
-              />
-            </ScrollReveal>
-
-            <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-24">
-              <ScrollReveal>
-                {contactSent ? (
-                <FormSuccess next="נחזור אליכם ביום העסקים הבא לתיאום הפגישה." onReset={() => setContactSent(false)} />
-                ) : (
-<form className="space-y-4" onSubmit={handleContactSubmit} noValidate>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <FieldLabel htmlFor="contact-name" required>שם מלא</FieldLabel>
-                      <input
-                        id="contact-name"
-                        type="text"
-                        autoComplete="name"
-                        value={contactForm.name}
-                        onChange={(e) => setContactForm(prev => ({ ...prev, name: e.target.value }))}
-                        className="field"
-                        aria-invalid={contactErrors.name ? "true" : undefined}
-                        aria-describedby={contactErrors.name ? "contact-name-err" : undefined}
-                      />
-                      <FieldError id="contact-name-err">{contactErrors.name}</FieldError>
-                    </div>
-                    <div>
-                      <FieldLabel htmlFor="contact-phone" required>טלפון</FieldLabel>
-                      <input
-                        id="contact-phone"
-                        type="tel"
-                        autoComplete="tel"
-                        value={contactForm.phone}
-                        onChange={(e) => setContactForm(prev => ({ ...prev, phone: e.target.value }))}
-                        className="field"
-                        dir="ltr"
-                        style={{ textAlign: "right" }}
-                        aria-invalid={contactErrors.phone ? "true" : undefined}
-                        aria-describedby={contactErrors.phone ? "contact-phone-err" : undefined}
-                      />
-                      <FieldError id="contact-phone-err">{contactErrors.phone}</FieldError>
-                    </div>
-                  </div>
-                  <div>
-                    <FieldLabel htmlFor="contact-email">אימייל <span className="font-normal" style={{ color: MUTED }}>(לא חובה)</span></FieldLabel>
-                    <input
-                      id="contact-email"
-                      type="email"
-                      autoComplete="email"
-                      value={contactForm.email}
-                      onChange={(e) => setContactForm(prev => ({ ...prev, email: e.target.value }))}
-                      className="field"
-                      dir="ltr"
-                      style={{ textAlign: "right" }}
-                      aria-invalid={contactErrors.email ? "true" : undefined}
-                      aria-describedby={contactErrors.email ? "contact-email-err" : undefined}
-                    />
-                    <FieldError id="contact-email-err">{contactErrors.email}</FieldError>
-                  </div>
-                  <div>
-                    <FieldLabel htmlFor="contact-message">במה נוכל לעזור?</FieldLabel>
-                    <textarea
-                      id="contact-message"
-                      rows={3}
-                      value={contactForm.message}
-                      onChange={(e) => setContactForm(prev => ({ ...prev, message: e.target.value }))}
-                      className="field resize-none"
-                    />
-                  </div>
-                  <div className="pt-2">
-                    <button type="submit" disabled={contactSubmitting} className="btn-primary w-full sm:w-auto sm:min-w-[180px]">
-                      {contactSubmitting ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : "שלחו לתיאום"}
-                    </button>
-                  </div>
-                </form>
-                )}
-              </ScrollReveal>
-
-              <ScrollReveal delay={100}>
-                <div className="border-t" style={{ borderColor: LINE }}>
-                  {[
-                    { label: "טלפון", value: "052-309-7444", href: "tel:0523097444", ltr: true },
-                    { label: "WhatsApp", value: "שלחו הודעה", href: "https://wa.me/972523097444" },
-                    { label: "אימייל", value: "info@seeld.co.il", href: "mailto:info@seeld.co.il", ltr: true },
-                    { label: "משרדים", value: "רעננה · ירושלים" },
-                  ].map((row) => (
-                    <div key={row.label} className="flex items-baseline justify-between gap-4 py-[15px] border-b" style={{ borderColor: LINE }}>
-                      <span className="text-[14px]" style={{ color: MUTED }}>{row.label}</span>
-                      {row.href ? (
-                        <a
-                          href={row.href}
-                          target={row.href.startsWith("http") ? "_blank" : undefined}
-                          rel={row.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                          className="inline-flex min-h-[44px] items-center text-[16px] font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#203957]/40 transition-colors"
-                          style={{ color: GREEN }}
-                          dir={row.ltr ? "ltr" : undefined}
-                        >
-                          {row.value}
-                        </a>
-                      ) : (
-                        <span className="text-[16px] tabular-nums" style={{ color: GREEN }}>{row.value}</span>
-                      )}
-                    </div>
-                  ))}
-                  <div className="flex items-baseline justify-between gap-4 py-[15px]">
-                    <span className="text-[14px]" style={{ color: MUTED }}>סוכן ביטוח?</span>
-                    <Link to="/app/auth" className="link-rule text-[15px]">
-                      כניסה לפורטל הסוכנים
-                      <BrandIcon name="arrow-left" size={16} />
-                    </Link>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                    className="mt-6 btn-secondary w-full sm:w-auto"
-                  >
-                    <BrandIcon name="message" size={20} />
-                    שאלה קצרה ליועץ הדיגיטלי
-                  </button>
-                </div>
-              </ScrollReveal>
-            </div>
-          </div>
-        </section>
-
-        {/* CLOSING — deep green band */}
-        <section className="dna-navy-band">
-          {/* Phone: aligned to the start like every other section; centred from 640px */}
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24 text-start sm:text-center">
-            <ScrollReveal>
-              <h2 className="leading-tight" style={{ color: IVORY, fontSize: "clamp(28px, 3.6vw, 40px)" }}>
-                תמונה ברורה מתחילה בשיחה אחת.
-              </h2>
-              <p className="mt-4 text-[17px] sm:text-[18px] max-w-xl sm:mx-auto" style={{ color: SAGE_ON_GREEN }}>
-                בדיקת תיק 360 ללא עלות וללא התחייבות. מכאן ממשיכים יחד.
-              </p>
-              <div className="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-center gap-3">
-                <a href="#portfolio-review" className="btn-on-green sm:min-w-[220px]">
-                  בדיקת תיק 360
-                </a>
-                <Link to="/contact" className="btn-on-green-outline sm:min-w-[220px]">
-                  תיאום פגישה
-                </Link>
+              <div>
+                <FieldLabel htmlFor="contact-email">אימייל <span className="font-normal" style={{ color: "#55677C" }}>(לא חובה)</span></FieldLabel>
+                <input
+                  id="contact-email"
+                  type="email"
+                  autoComplete="email"
+                  value={contactForm.email}
+                  onChange={(e) => setContactForm((prev) => ({ ...prev, email: e.target.value }))}
+                  className="field"
+                  dir="ltr"
+                  style={{ textAlign: "right" }}
+                  aria-invalid={contactErrors.email ? "true" : undefined}
+                  aria-describedby={contactErrors.email ? "contact-email-err" : undefined}
+                />
+                <FieldError id="contact-email-err">{contactErrors.email}</FieldError>
               </div>
-            </ScrollReveal>
+              <div>
+                <FieldLabel htmlFor="contact-message">במה נוכל לעזור?</FieldLabel>
+                <textarea
+                  id="contact-message"
+                  rows={3}
+                  value={contactForm.message}
+                  onChange={(e) => setContactForm((prev) => ({ ...prev, message: e.target.value }))}
+                  className="field resize-none"
+                />
+              </div>
+              <div className="pt-2">
+                <button type="submit" disabled={contactSubmitting} className="btn-primary w-full sm:w-auto sm:min-w-[180px]">
+                  {contactSubmitting ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : "שלחו לתיאום"}
+                </button>
+              </div>
+            </form>
+          )}
+          <div className="sd-home-extras">
+            <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer">שלחו הודעה בוואטסאפ</a>
+            <button type="button" onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}>
+              <BrandIcon name="message" size={18} />
+              שאלה קצרה ליועץ הדיגיטלי
+            </button>
+            <Link to="/app/auth">סוכן ביטוח? כניסה לפורטל הסוכנים</Link>
           </div>
-        </section>
+        </SdContact>
       </main>
 
       <Footer />

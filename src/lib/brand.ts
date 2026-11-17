@@ -42,7 +42,7 @@ export const DISPLAY = SANS;   // headings: Rubik 700
 export const MONO = SANS;      // figures: Rubik with tabular-nums (no mono font in the system)
 
 /* regulatory (must appear in the footer of every page) */
-export const LICENSE_LINE = "שמוליק מרציאנו · סוכן ברישיון 138666";
+export const LICENSE_LINE = "מבית עמיתים הון · סוכנות ברישיון 138666";
 export const REGULATORY_LINE =
   "האמור באתר מהווה שיווק פנסיוני ואינו מהווה ייעוץ פנסיוני או תחליף לייעוץ המתחשב בנתונים ובצרכים של כל אדם.";
 

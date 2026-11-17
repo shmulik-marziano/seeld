@@ -1,14 +1,16 @@
 import type { ReactNode } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ScrollReveal from "@/components/ScrollReveal";
+import { stories } from "@/data/stories";
 import { Link } from "react-router-dom";
-import { BubbleCorner } from "@/components/brand/Elements";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { BODY, GREEN, IVORY, LINE, MUTED, SAGE_ON_GREEN } from "@/lib/brand";
+import { SdBand, SdPic, SdStory, tintStyle, useSdFont } from "@/components/sd/primitives";
+import { PUB_TOPICS, PubClose, PubHead, PubHero, toneAt } from "@/components/sd/pub";
+import { PASTELS, type ArtName } from "@/components/sd/topics";
+import "@/components/sd/sd.css";
 
-// Property, vehicle, business and travel cover stay illustration-free (kit p.11):
-// the corner bubbles in the hero margin, four doors, and the central path.
+// Property, vehicle, business and travel cover in the kit design: hero with illustration, story band,
+// four illustrated doors, how we compare, closing block.
 
 // Figures inside coverage copy (24/7 and the like) render tabular and LTR-safe.
 const FIGURE_RE = /\d(?:[\d,.:/\-–]*\d)?/g;
@@ -32,144 +34,104 @@ const FigureText = ({ text }: { text: string }) => {
 };
 
 const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
+const arrow = <BrandIcon name="arrow-left" size={18} />;
 
 const Creativity = () => {
-  const insuranceTypes = [
-    { title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳. השוואה בין כל החברות", features: ["ביטוח חובה", "ביטוח מקיף", "צד ג'", "נזקי גוף"], href: "/insurance/vehicle" },
-    { title: "ביטוח דירה", description: "מבנה ותכולה, בלי הפתעות מאוחרות", features: ["ביטוח מבנה", "ביטוח תכולה", "צד ג'", "נזקי טבע"], href: "/insurance/home" },
-    { title: "ביטוח עסק", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק בכל גודל", features: ["אחריות מקצועית", "רכוש עסקי", "הפסד הכנסות", "חבות מעסיקים"], href: "/insurance/business" },
-    { title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", features: ["הוצאות רפואיות", "ביטול טיסה", "אובדן מזוודות", "חירום 24/7"], href: "/insurance/travel" },
+  useSdFont();
+  const topic = PUB_TOPICS.creativity;
+  const [p1, p2] = topic.palette;
+  const story = stories["/creativity"];
+
+  const insuranceTypes: { title: string; description: string; features: string[]; href: string; art: ArtName }[] = [
+    { title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳. השוואה בין כל החברות", features: ["ביטוח חובה", "ביטוח מקיף", "צד ג'", "נזקי גוף"], href: "/insurance/vehicle", art: "07-car-insurance" },
+    { title: "ביטוח דירה", description: "מבנה ותכולה, בלי הפתעות מאוחרות", features: ["ביטוח מבנה", "ביטוח תכולה", "צד ג'", "נזקי טבע"], href: "/insurance/home", art: "06-home-mortgage" },
+    { title: "ביטוח עסק", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק בכל גודל", features: ["אחריות מקצועית", "רכוש עסקי", "הפסד הכנסות", "חבות מעסיקים"], href: "/insurance/business", art: "08-business-insurance" },
+    { title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", features: ["הוצאות רפואיות", "ביטול טיסה", "אובדן מזוודות", "חירום 24/7"], href: "/insurance/travel", art: "09-travel-insurance" },
   ];
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
+    <div className="sd min-h-screen" dir="rtl" style={tintStyle(p1)}>
       <Header />
 
       <main>
-        {/* HERO — ivory canvas, the corner bubbles in the margin */}
-        <section className="dna-page overflow-hidden">
-          <BubbleCorner className="hidden lg:block absolute -top-28 -left-28 w-[380px] opacity-70" flip />
-          <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-12 sm:pb-16">
-            <nav aria-label="ניווט משני" className="mb-8 sm:mb-12 flex items-center gap-2 text-[14px]" style={{ color: MUTED }}>
-              <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
-              <BrandIcon name="arrow-left" size={14} />
-              <span className="font-bold" style={{ color: GREEN }} aria-current="page">ביטוח רכוש ורכב</span>
-            </nav>
-            <div className="max-w-3xl">
-              <h1 className="dna-display leading-[1.15]" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-                ביטוח רכוש ורכב
-              </h1>
-              <p className="mt-5 text-[17px] sm:text-[18px] leading-[1.7] max-w-2xl" style={{ color: MUTED }}>
-                רכב, דירה, עסק ונסיעות: השוואת הצעות מחיר מול כל החברות בשוק, ללא עלות.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-                <Link to="/contact" className="btn-primary sm:min-w-[220px]">
-                  תיאום פגישה
-                </Link>
-                <Link to="/#portfolio-review" className="btn-secondary sm:min-w-[200px]">
-                  בדיקת תיק 360
-                </Link>
-              </div>
-              <button type="button" className="mt-6 link-rule text-[15px]" onClick={openChat}>
+        <PubHero
+          crumbs={[{ label: "דף הבית", to: "/" }, { label: "ביטוח רכוש ורכב" }]}
+          eyebrow="רכב, דירה, עסק ונסיעות"
+          title="ביטוח רכוש ורכב"
+          lead="רכב, דירה, עסק ונסיעות: השוואת הצעות מחיר מול כל החברות בשוק, ללא עלות."
+          art={topic.art}
+          tint={p1}
+          actions={
+            <>
+              <Link to="/contact" className="sd-btn">תיאום פגישה{arrow}</Link>
+              <Link to="/#portfolio-review" className="sd-link">בדיקת תיק 360{arrow}</Link>
+              <button type="button" className="sd-link" onClick={openChat}>
                 <BrandIcon name="message" size={18} />
                 שאלו את היועץ הדיגיטלי
               </button>
-            </div>
-          </div>
-        </section>
+            </>
+          }
+        />
 
-        {/* Insurance types — white card tiles, whole-tile links */}
-        <section className="border-t bg-white" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <ScrollReveal>
-              <div className="mb-10 sm:mb-12">
-                <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-                  תחומי הכיסוי
-                </h2>
-                <p className="mt-4 text-[17px] leading-[1.7] max-w-xl" style={{ color: MUTED }}>
-                  ארבעה תחומים, לכל אחד עמוד משלו עם הכיסויים, המדריך וטופס להצעה.
-                </p>
-              </div>
-            </ScrollReveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {story && (
+          <SdBand tone={p1} id="moment">
+            <SdStory story={story} art={topic.art2} />
+          </SdBand>
+        )}
+
+        <SdBand tone="cream" id="coverage">
+          <div className="sd-wrap">
+            <PubHead title="תחומי הכיסוי" lede="ארבעה תחומים, לכל אחד עמוד משלו עם הכיסויים, המדריך וטופס להצעה." />
+            <div className="sd-pub-grid sd-pub-grid-2">
               {insuranceTypes.map((type, i) => (
-                <ScrollReveal key={type.title} delay={i * 60} className="h-full">
-                  <Link
-                    to={type.href}
-                    className="group dna-concept dna-hover flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
-                    style={{ borderColor: LINE }}
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <h3 className="text-[20px] leading-snug" style={{ color: GREEN }}>{type.title}</h3>
-                      <BrandIcon
-                        name="arrow-left"
-                        size={18}
-                        className="shrink-0 mt-1.5 transition-transform group-hover:-translate-x-1"
-                        style={{ color: GREEN }}
-                      />
-                    </div>
-                    <p className="mt-2 text-[16px] leading-[1.7]" style={{ color: BODY }}>{type.description}</p>
-                    <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[14px]" style={{ color: MUTED }}>
+                <Link
+                  key={type.title}
+                  to={type.href}
+                  className="sd-pub-card sd-reveal group"
+                  style={{ ["--band" as string]: PASTELS[toneAt(i + 1)].bg }}
+                >
+                  <div className="sd-pub-card-art" style={{ aspectRatio: "16 / 7" }} aria-hidden="true">
+                    <SdPic name={type.art} sizes="(min-width:1024px) 400px, 90vw" />
+                  </div>
+                  <div className="sd-pub-card-body">
+                    <h3>{type.title}</h3>
+                    <p className="sd-pub-excerpt">{type.description}</p>
+                    <ul className="sd-pub-tags">
                       {type.features.map((feature) => (
-                        <li key={feature} className="dna-pill-item !py-0 !gap-2 text-[14px] !text-[#55677C]">
-                          <FigureText text={feature} />
-                        </li>
+                        <li key={feature}><FigureText text={feature} /></li>
                       ))}
                     </ul>
-                    <span className="link-rule mt-auto pt-5 text-[15px] self-start">
-                      לפרטי הביטוח
-                      <BrandIcon name="arrow-left" size={18} className="transition-transform group-hover:-translate-x-1" />
-                    </span>
-                  </Link>
-                </ScrollReveal>
+                    <span className="sd-pub-card-cta"><span>לפרטי הביטוח</span>{arrow}</span>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>
-        </section>
+        </SdBand>
 
-        {/* How we compare */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <ScrollReveal>
-              <div className="mb-8">
-                <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-                  איך משווים
-                </h2>
-              </div>
-              <div className="max-w-3xl space-y-5 text-[17px] leading-[1.8]" style={{ color: BODY }}>
-                <p>
-                  משאירים פרטים בעמוד הביטוח המתאים, ואנחנו אוספים הצעות מכל חברות הביטוח שעובדות איתנו.
-                  ההשוואה מתייחסת לכיסוי, להשתתפות העצמית ולחריגים, לא רק למחיר.
-                </p>
-                <p>
-                  חוזרים אליכם עם המלצה מנומקת ומתועדת, ומטפלים בטפסים ובמעבר בין החברות. ללא עלות וללא התחייבות.
-                </p>
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
-
-        {/* CLOSING — deep green band, the central path */}
-        <section className="dna-navy-band">
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <ScrollReveal>
-              <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-                רוצים להשוות הצעות מחיר?
-              </h2>
-              <p className="text-[17px] leading-[1.7] mb-8 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
-                השאירו פרטים ויועץ מהצוות יחזור אליכם עם הצעות להשוואה. אפשר גם לבדוק את כל התיק בבת אחת.
+        <SdBand tone={p2} id="compare">
+          <div className="sd-wrap sd-pub-split">
+            <div className="sd-pub-copy">
+              <h2 className="sd-h2" style={{ marginBottom: 24 }}>איך משווים</h2>
+              <p className="sd-text">
+                משאירים פרטים בעמוד הביטוח המתאים, ואנחנו אוספים הצעות מכל חברות הביטוח שעובדות איתנו.
+                ההשוואה מתייחסת לכיסוי, להשתתפות העצמית ולחריגים, לא רק למחיר.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
-                  בדיקת תיק 360
-                </Link>
-                <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
-                  תיאום פגישה
-                </Link>
-              </div>
-            </ScrollReveal>
+              <p className="sd-text">
+                חוזרים אליכם עם המלצה מנומקת ומתועדת, ומטפלים בטפסים ובמעבר בין החברות. ללא עלות וללא התחייבות.
+              </p>
+            </div>
+            <div className="sd-story-art sd-reveal" aria-hidden="true">
+              <SdPic name="11-claims-service" sizes="(min-width:1024px) 440px, 90vw" />
+            </div>
           </div>
-        </section>
+        </SdBand>
+
+        <PubClose
+          title="רוצים להשוות הצעות מחיר?"
+          text="השאירו פרטים והצוות שלנו יחזור אליכם עם הצעות להשוואה. אפשר גם לבדוק את כל התיק בבת אחת."
+          art="01-hero"
+        />
       </main>
 
       <Footer />

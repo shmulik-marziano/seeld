@@ -16,6 +16,9 @@ import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { SdBand, tintStyle, useSdFont } from "@/components/sd/primitives";
+import { PUB_TOPICS, PubClose, PubHero } from "@/components/sd/pub";
+import "@/components/sd/sd.css";
 
 // SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
 
@@ -640,6 +643,9 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function Onboarding() {
+  useSdFont();
+  const topic = PUB_TOPICS.onboarding;
+  const [p1] = topic.palette;
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormData>(initialForm);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
@@ -755,57 +761,34 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+    <div className="sd min-h-screen" dir="rtl" style={tintStyle(p1)}>
       <Header />
       <div ref={topRef} />
 
       <main>
-        {/* ── Hero — one idea: open your file ── */}
-        <section className="dna-page">
-          {/* Pastel circle backdrop — decorative, kept clear of the form text */}
-          <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 260, height: 260, top: -110, left: -100, backgroundColor: PASTEL_BLUE, opacity: 0.55 }}
-            />
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 200, height: 200, top: 30, right: -90, backgroundColor: PASTEL_MINT, opacity: 0.45 }}
-            />
-          </div>
-
-          <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-10 sm:pb-12">
-            <div className="mb-8 flex items-baseline justify-between gap-4">
-              <nav className="flex items-center gap-2 text-[14px]" style={{ color: MUTED }}>
-                <Link to="/" className="hover:text-[#203957] transition-colors">דף הבית</Link>
-                <span aria-hidden="true">←</span>
-                <span className="font-medium" style={{ color: NAVY }}>פתיחת תיק</span>
-              </nav>
-            </div>
-
-            <h1 className="dna-display leading-[1.12] mb-4" style={{ fontSize: "clamp(2rem, 4.5vw, 2.8rem)" }}>
-              שאלון הצטרפות
-            </h1>
-            <p className="text-base leading-[1.9] mb-2" style={{ color: MUTED }}>
-              ארבעה שלבים, בלי אותיות קטנות. בסוף שמוליק מתקשר.
-            </p>
-            <p className="text-[14px]" style={{ color: MUTED }}>
-              שמוליק מרציאנו · סוכן ביטוח ופנסיה מוסמך
-            </p>
-            {!submitted && step === 0 && (
+        <PubHero
+          compact
+          crumbs={[{ label: "דף הבית", to: "/" }, { label: "פתיחת תיק" }]}
+          eyebrow="צוות הסוכנות · ביטוח ופנסיה"
+          title="שאלון הצטרפות"
+          lead="ארבעה שלבים, בלי אותיות קטנות. בסוף הצוות שלנו מתקשר."
+          art={topic.art}
+          tint={p1}
+          actions={
+            !submitted && step === 0 ? (
               <button
                 type="button"
                 onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                className="mt-7 link-rule text-[15px]"
+                className="sd-link"
               >
                 יש שאלה לפני שממלאים? שאלו את היועץ הדיגיטלי
               </button>
-            )}
-          </div>
-        </section>
+            ) : undefined
+          }
+        />
 
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+        <SdBand tone="cream" id="form" className="!pt-8 sm:!pt-12">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6">
             {/* ── Step Bar — plain-word wizard progress ── */}
             {step < 4 && !submitted && (
               <div className="mb-6">
@@ -833,7 +816,7 @@ export default function Onboarding() {
                       {form.firstName}, התיק נשלח
                     </h2>
                     <p className="text-base leading-[1.85] max-w-md" style={{ color: BODY }}>
-                      שמוליק מרציאנו יעבור על הפרטים ויצור קשר בהקדם. הסיכום נשלח גם למייל שלך.
+                      הצוות שלנו יעבור על הפרטים ויצור קשר בהקדם. הסיכום נשלח גם למייל שלך.
                     </p>
                   </div>
 
@@ -1253,7 +1236,7 @@ export default function Onboarding() {
                         התיק נשלח בהצלחה
                       </h2>
                       <p className="text-sm mt-1.5" style={{ color: BODY }}>
-                        סיכום נשלח למייל שלך ולשמוליק. הוא יצור קשר בהקדם.
+                        סיכום נשלח למייל שלך ולצוות שלנו. נחזור אליך בהקדם.
                       </p>
                     </div>
 
@@ -1337,7 +1320,15 @@ export default function Onboarding() {
               )}
             </div>
           </div>
-        </section>
+        </SdBand>
+
+        <PubClose
+          title="צריכים עזרה במילוי?"
+          text="אפשר לשלוח הודעה או להתקשר, והצוות שלנו ילווה אתכם בכל שלב."
+          art={topic.art2}
+          primary={{ text: "יצירת קשר", to: "/contact" }}
+          secondary={null}
+        />
       </main>
 
       <Footer />

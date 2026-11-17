@@ -1,161 +1,128 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import { Illustration } from "@/components/brand/Illustration";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN } from "@/lib/brand";
-import { GENERAL_INSURANCE, LIFE_HEALTH } from "@/data/productDirectory";
+import { GENERAL_INSURANCE, LIFE_HEALTH, type ProductLink } from "@/data/productDirectory";
+import { stories } from "@/data/stories";
+import { SdBand, SdPic, SdStory, SdSubnav } from "@/components/sd/primitives";
+import { PASTELS, TOPICS, topicFor } from "@/components/sd/topics";
+import { Arrow, PubCta, PubHero, PubPage } from "@/components/sd/pubParts";
 
-// Brand hub page (kit p.05): the family-protection art beside the headline and
-// the action, then the full index of the 16 insurance lines. Every line keeps
-// its link; the page closes on the central path (360 review / meeting).
+// Insurance hub (kit design): hero, emotional moment, then one illustrated card per insurance line
+// (all 16 keep their link), grouped as life and health, and general insurance.
 
-
+const PATH = "/insurances";
 const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
 
-const Insurances = () => {
+function Cards({ items }: { items: ProductLink[] }) {
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
-      <Header />
-
-      <main>
-        {/* HERO — the subject art beside the headline */}
-        <section className="dna-page overflow-hidden">
-          <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 320, height: 320, top: -150, left: -120, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
-            />
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 180, height: 180, bottom: -80, left: "36%", backgroundColor: PASTEL_SAND, opacity: 0.7 }}
-            />
-          </div>
-
-          <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-12 sm:pb-16">
-            <nav className="mb-8 sm:mb-12 flex items-center gap-2 text-[14px]" style={{ color: MUTED }} aria-label="ניווט משני">
-              <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
-              <BrandIcon name="arrow-left" size={14} />
-              <span className="font-bold" style={{ color: GREEN }} aria-current="page">ביטוח</span>
-            </nav>
-
-            <div className="grid gap-10 lg:gap-16 items-center lg:grid-cols-[1.05fr_1fr]">
-              <div>
-                <h1 className="dna-display leading-[1.15] max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-                  ביטוח
-                </h1>
-                <p className="mt-5 text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
-                  <span dir="ltr" className="tabular-nums whitespace-nowrap">16</span> תחומי ביטוח, מול כל החברות בישראל.
-                  בוחרים תחום, ואנחנו מסדרים את התמונה המלאה: מה יש, מה חסר ומה כפול.
-                </p>
-                <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-                  <a href="#insurance-index" className="btn-primary sm:min-w-[220px]">
-                    לרשימת תחומי הביטוח
-                  </a>
-                  <Link to="/#portfolio-review" className="btn-secondary sm:min-w-[200px]">
-                    בדיקת תיק 360
-                  </Link>
-                </div>
-                <button type="button" className="mt-6 link-rule text-[15px]" onClick={openChat}>
-                  <BrandIcon name="message" size={18} />
-                  שאלו את היועץ הדיגיטלי
-                </button>
-              </div>
-
-              <Illustration name="02-family-protection" priority sizes="(min-width: 1024px) 560px, 100vw" />
+    <div className="sd-pub-cards">
+      {items.map((item) => {
+        const t = TOPICS[item.href];
+        return (
+          <Link
+            key={item.href}
+            to={item.href}
+            className="sd-pub-card"
+            style={{ ["--card-tint" as string]: PASTELS[t?.palette[0] ?? "sage"].bg }}
+          >
+            <div className="sd-pub-card-art" aria-hidden="true">
+              <SdPic name={t?.art ?? "01-hero"} sizes="(min-width:480px) 190px, 90vw" />
             </div>
-          </div>
-        </section>
-
-        {/* THE INDEX — hairline link list, every product keeps its link */}
-        <section id="insurance-index" className="scroll-mt-24 border-t bg-white" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <ScrollReveal>
-              <div className="mb-10 sm:mb-12">
-                <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-                  כל תחומי הביטוח
-                </h2>
-                <p className="mt-4 text-[17px] leading-[1.7] max-w-xl" style={{ color: MUTED }}>
-                  לכל תחום עמוד משלו: מה מכוסה, מתי כדאי, שאלות נפוצות וטופס להצעה.
-                </p>
-              </div>
-
-              {/* Two groups in the site-wide order: the cover for the person and
-                  the family first, general insurance after it. */}
-              {[
-                { id: "life", title: "ביטוחי חיים ובריאות", lede: "ההגנה על המשפחה, על ההכנסה ועל הבית.", items: LIFE_HEALTH, icon: "heart" as const, tint: PASTEL_SAND },
-                { id: "general", title: "ביטוח כללי", lede: "רכב, דירה, עסק, נסיעות ושאר הכיסויים.", items: GENERAL_INSURANCE, icon: "home" as const, tint: PASTEL_MINT },
-              ].map((group, gi) => (
-                <div key={group.id} id={group.id} className={`scroll-mt-24 ${gi > 0 ? "mt-12 sm:mt-16" : ""}`}>
-                  <div className="mb-3 sm:mb-5 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-6 border-b pb-3" style={{ borderColor: LINE }}>
-                    <h3 className="text-[22px] sm:text-[24px] leading-tight" style={{ color: GREEN }}>{group.title}</h3>
-                    <p className="text-[15px]" style={{ color: MUTED }}>{group.lede}</p>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {group.items.map((item) => (
-                      <Link
-                        key={item.href}
-                        to={item.href}
-                        className="group flex items-center gap-4 rounded-2xl bg-white border p-4 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
-                        style={{ borderColor: LINE }}
-                      >
-                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ background: group.tint }}>
-                          <BrandIcon name={group.icon} size={22} style={{ color: GREEN }} />
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <h4 className="text-[17px] font-bold leading-tight" style={{ color: GREEN }}>{item.title}</h4>
-                          <p className="mt-1 text-[14px] leading-[1.5]" style={{ color: MUTED }}>{item.description}</p>
-                        </div>
-                        <BrandIcon
-                          name="arrow-left"
-                          size={18}
-                          className="shrink-0 transition-transform group-hover:-translate-x-1"
-                          style={{ color: GREEN }}
-                        />
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </ScrollReveal>
-
-            <ScrollReveal delay={80}>
-              <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
-                <p className="text-[16px]" style={{ color: BODY }}>לא בטוחים מה חסר לכם?</p>
-                <button type="button" className="link-rule text-[15px]" onClick={openChat}>
-                  <BrandIcon name="message" size={18} />
-                  שאלו את היועץ הדיגיטלי
-                </button>
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
-
-        {/* CLOSING — deep green band, the central path */}
-        <section className="dna-navy-band">
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-              לא חייבים לבחור לבד
-            </h2>
-            <p className="text-[17px] leading-[1.7] mb-8 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
-              נבדוק מה יש לכם, מה כפול ומה חסר, ונחזור אליכם עם תמונה מסודרת. ללא עלות וללא התחייבות.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
-                בדיקת תיק 360
-              </Link>
-              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
-                תיאום פגישה
-              </Link>
+            <div className="sd-pub-card-body">
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <span className="sd-pub-card-go">לעמוד התחום<BrandIcon name="arrow-left" size={16} /></span>
             </div>
-          </div>
-        </section>
-      </main>
-
-      <Footer />
+          </Link>
+        );
+      })}
     </div>
   );
-};
+}
 
-export default Insurances;
+export default function Insurances() {
+  const topic = topicFor(PATH);
+  const [p1, p2, p3] = topic.palette;
+  const story = stories[PATH];
+  const sections = [
+    ...(story ? [{ id: "moment", label: "מה עומד מולכם" }] : []),
+    { id: "life", label: "חיים ובריאות" },
+    { id: "general", label: "ביטוח כללי" },
+    { id: "help", label: "לא בטוחים?" },
+  ];
+
+  return (
+    <PubPage tint={p1}>
+      <PubHero
+        crumbs={[{ label: "דף הבית", to: "/" }, { label: "כל הביטוחים" }]}
+        eyebrow="כל תחומי הביטוח"
+        title="כל הביטוחים במקום אחד"
+        lead="שישה עשר תחומי ביטוח, מול כל החברות בישראל. בוחרים תחום, ואנחנו מסדרים את התמונה המלאה: מה יש, מה חסר ומה כפול."
+        art={topic.art}
+        actions={
+          <>
+            <a href="#insurance-index" className="sd-btn">לרשימת התחומים<Arrow /></a>
+            <Link to="/portfolio-review" className="sd-link">בדיקת תיק 360<Arrow /></Link>
+          </>
+        }
+      />
+
+      <SdSubnav sections={sections} />
+
+      {story && (
+        <SdBand tone={p1} id="moment">
+          <SdStory story={story} art={topic.art2} />
+        </SdBand>
+      )}
+
+      <div id="insurance-index" className="scroll-mt-28">
+        <SdBand tone="cream" id="life">
+          <div className="sd-wrap">
+            <div className="sd-pub-hubhead">
+              <h2 className="sd-h2">ביטוחי חיים ובריאות</h2>
+              <p>ההגנה על המשפחה, על ההכנסה ועל הבית.</p>
+            </div>
+            <Cards items={LIFE_HEALTH} />
+          </div>
+        </SdBand>
+
+        <SdBand tone={p2} id="general">
+          <div className="sd-wrap">
+            <div className="sd-pub-hubhead">
+              <h2 className="sd-h2">ביטוח כללי</h2>
+              <p>רכב, דירה, עסק, נסיעות ושאר הכיסויים.</p>
+            </div>
+            <Cards items={GENERAL_INSURANCE} />
+          </div>
+        </SdBand>
+      </div>
+
+      <SdBand tone={p3} id="help">
+        <div className="sd-wrap sd-pub-split is-wide-copy">
+          <div>
+            <span className="sd-eyebrow">לא בטוחים מה חסר לכם?</span>
+            <h2 className="sd-h2 mt-4">לא חייבים לבחור לבד</h2>
+            <p className="sd-lead mt-5">נבדוק מה יש לכם, מה כפול ומה חסר, ונחזור אליכם עם תמונה מסודרת. ללא עלות וללא התחייבות.</p>
+            <div className="sd-pub-actions">
+              <Link to="/portfolio-review" className="sd-btn">בדיקת תיק 360<Arrow /></Link>
+              <button type="button" className="sd-link sd-pub-linkbtn" onClick={openChat}>
+                <BrandIcon name="message" size={18} />
+                שאלו את היועץ הדיגיטלי
+              </button>
+            </div>
+          </div>
+          <div className="sd-pub-art" aria-hidden="true">
+            <SdPic name="11-claims-service" sizes="(min-width:1024px) 420px, 90vw" />
+          </div>
+        </div>
+      </SdBand>
+
+      <PubCta
+        title="נשמח לעזור לסדר את זה"
+        text="שיחה ראשונה ללא עלות וללא התחייבות. מספרים לנו על המצב, ואנחנו חוזרים עם השוואה ברורה."
+        art="12-childrens-savings"
+        primary={{ label: "תיאום פגישה", to: "/contact" }}
+        secondary={{ label: "שאלות נפוצות", to: "/faq" }}
+      />
+    </PubPage>
+  );
+}

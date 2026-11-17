@@ -5,8 +5,11 @@ import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import {
-  BODY, DISPLAY, LINE, MONO, MUTED, NAVY, PASTEL_BLUE, PASTEL_MINT, TURQ_TEXT,
+  BODY, DISPLAY, LINE, MONO, MUTED, NAVY, TURQ_TEXT,
 } from "@/lib/brand";
+import { SdBand, tintStyle, useSdFont } from "@/components/sd/primitives";
+import { PUB_TOPICS, PubClose, PubHero } from "@/components/sd/pub";
+import "@/components/sd/sd.css";
 import { LiveDot } from "@/components/brand/Live";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
 
@@ -165,6 +168,9 @@ function useBankData() {
 
 // ─── Main Component ────────────────────────────────────────────────────────────
 export default function DirectDebit() {
+  useSdFont();
+  const topic = PUB_TOPICS.directDebit;
+  const [p1] = topic.palette;
   const { banks, loading: banksLoading, lastUpdated, isLive, refresh: refreshBanks } = useBankData();
   const [form, setForm] = useState<DDForm>(initialDD);
   const [errors, setErrors] = useState<Partial<Record<keyof DDForm, string>>>({});
@@ -300,7 +306,7 @@ export default function DirectDebit() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+      <div className="sd min-h-screen" dir="rtl">
         <Header />
         <main>
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
@@ -350,56 +356,28 @@ export default function DirectDebit() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+    <div className="sd min-h-screen" dir="rtl" style={tintStyle(p1)}>
       <Header />
 
       <main>
-        {/* HERO — one idea: fill the debit order */}
-        <section className="dna-page">
-          {/* Pastel circle backdrop — decorative, kept clear of the form text */}
-          <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 260, height: 260, top: -110, left: -100, backgroundColor: PASTEL_MINT, opacity: 0.5 }}
-            />
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 200, height: 200, top: 40, right: -90, backgroundColor: PASTEL_BLUE, opacity: 0.5 }}
-            />
-          </div>
-
-          <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-10 sm:pb-12">
-            <div className="mb-8 flex items-baseline justify-between gap-4">
-              <nav className="flex items-center gap-2 text-[14px]" style={{ color: MUTED }}>
-                <Link to="/" className="hover:text-[#203957] transition-colors">דף הבית</Link>
-                <span aria-hidden="true">←</span>
-                <span className="font-medium" style={{ color: NAVY }}>הוראת קבע</span>
-              </nav>
-            </div>
-
-            <h1 className="dna-display leading-[1.12] mb-4" style={{ fontSize: "clamp(1.9rem, 4.5vw, 2.8rem)" }}>
-              הוראת קבע
-            </h1>
-            <p className="text-base leading-[1.9] mb-2" style={{ color: MUTED }}>
-              שתי דקות למלא. אפס אותיות קטנות.
-            </p>
-            <p className="text-[14px] mb-8" style={{ color: MUTED }}>
-              שמוליק מרציאנו · סוכן ביטוח ופנסיה מוסמך
-            </p>
-
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-              className="link-rule text-[15px]"
-            >
+        <PubHero
+          compact
+          crumbs={[{ label: "דף הבית", to: "/" }, { label: "הוראת קבע" }]}
+          eyebrow="צוות הסוכנות · ביטוח ופנסיה"
+          title="הוראת קבע"
+          lead="שתי דקות למלא. אפס אותיות קטנות."
+          art={topic.art}
+          tint={p1}
+          actions={
+            <button type="button" className="sd-link" onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}>
               יש שאלה לפני שממלאים? שאלו את היועץ הדיגיטלי
             </button>
-          </div>
-        </section>
+          }
+        />
 
         {/* The one calm form card */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <SdBand tone="cream" id="form" className="!pt-8 sm:!pt-12">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6">
             <div className="dna-concept !p-6 sm:!p-8">
               <div className="space-y-12">
                 {/* Account Owner */}
@@ -630,7 +608,15 @@ export default function DirectDebit() {
               </div>
             </div>
           </div>
-        </section>
+        </SdBand>
+
+        <PubClose
+          title="צריכים עזרה במילוי?"
+          text="אפשר לשלוח הודעה או להתקשר, והצוות שלנו ילווה אתכם בכל שלב."
+          art={topic.art2}
+          primary={{ text: "יצירת קשר", to: "/contact" }}
+          secondary={null}
+        />
       </main>
 
       <Footer />

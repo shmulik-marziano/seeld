@@ -1,138 +1,98 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
-import ScrollReveal from "@/components/ScrollReveal";
-import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from "@/lib/brand";
+import { BrandIcon } from "@/components/brand/BrandIcon";
+import { SdBand, SdIcon, SdPic, SdProcess } from "@/components/sd/primitives";
+import { Arrow, PubCta, PubHero, PubPage } from "@/components/sd/pubParts";
+import { PASTELS, type Pastel } from "@/components/sd/topics";
+import "@/components/sd/sd-pub.css";
 
-// The agent page: ivory canvas, typography and the kit icons carry it. No
-// illustration and no vector element here (dosage, STYLESEED.md).
+// "הצוות המקצועי" (route kept as /authors so the URL, ProfilePage schema and links stay valid).
+// The team is presented without names: areas of expertise, how we work, direct contact.
 
-const specialties: { icon: BrandIconName; title: string; description: string }[] = [
-  { icon: "shield", title: "ביטוח כללי", description: "ביטוחי בריאות, חיים, רכב, דירה, עסקי ונסיעות" },
-  { icon: "leaf", title: "חיסכון ופנסיה", description: "קרנות פנסיה, קופות גמל, קרנות השתלמות והשקעות" },
-  { icon: "heart", title: "ביטוח סיעודי", description: "תכנון כיסוי סיעודי מותאם אישית למבוגרים ומשפחות" },
-  { icon: "family", title: "תכנון פיננסי למשפחות", description: "ליווי מקיף לתכנון כלכלי בכל שלבי החיים" },
-  { icon: "chart", title: "ביטוח עסקי", description: "פתרונות ביטוח מקיפים לעסקים קטנים וגדולים" },
-  { icon: "search", title: "מיצוי זכויות", description: "איתור כספים אבודים והחזרי מס" },
+const specialties: { icon: string; tone: Pastel; title: string; description: string }[] = [
+  { icon: "shield", tone: "sky", title: "ביטוח כללי", description: "ביטוחי בריאות, חיים, רכב, דירה, עסק ונסיעות." },
+  { icon: "hourglass", tone: "butter", title: "חיסכון ופנסיה", description: "קרנות פנסיה, קופות גמל, קרנות השתלמות והשקעות." },
+  { icon: "lock", tone: "lavender", title: "ביטוח סיעודי", description: "תכנון כיסוי סיעודי מותאם למבוגרים ולמשפחות." },
+  { icon: "handshake", tone: "rose", title: "תכנון פיננסי למשפחות", description: "ליווי כלכלי בכל שלבי החיים, מהחתונה ועד הפרישה." },
+  { icon: "checklist", tone: "sage", title: "ביטוח עסקי", description: "פתרונות ביטוח לעסקים קטנים ולעסקים גדולים." },
+  { icon: "search", tone: "sky", title: "מיצוי זכויות", description: "איתור כספים אבודים והחזרי מס." },
 ];
 
-const Authors = () => {
+const steps = [
+  { icon: "phone", t: "שיחה ראשונה", p: "מספרים לנו מה חשוב לכם. אנחנו מקשיבים לפני שמציעים. ללא עלות וללא התחייבות." },
+  { icon: "search", t: "בדיקה והשוואה", p: "הצוות בודק את התיק מול החברות בשוק ומסכם לכם בשפה פשוטה." },
+  { icon: "shield", t: "ליווי לאורך הדרך", p: "אחרי שמחליטים אנחנו נשארים: חידושים, שינויים במשפחה ותביעות." },
+];
+
+export default function Authors() {
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
-      <Header />
+    <PubPage tint="sage">
+      <PubHero
+        crumbs={[{ label: "דף הבית", to: "/" }, { label: "הצוות המקצועי" }]}
+        eyebrow="הצוות המקצועי"
+        title="צוות סוכנים שמכיר את התחום לעומק"
+        lead="ליווי מקצועי ואישי בתחומי הביטוח, הפנסיה והפיננסים. כל פנייה מגיעה לצוות שלם של סוכנים, ולא תלויה באדם אחד."
+        art="02-family-protection"
+        actions={
+          <>
+            <Link to="/contact" className="sd-btn">תיאום פגישה<Arrow /></Link>
+            <Link to="/about" className="sd-link">עוד עלינו<Arrow /></Link>
+          </>
+        }
+      />
 
-      <main>
-        {/* THE AGENT */}
-        <section className="dna-page overflow-hidden">
-          <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 300, height: 300, top: -140, left: -110, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
-            />
+      <SdBand tone="sky" id="specialties">
+        <div className="sd-wrap">
+          <div className="sd-band-head">
+            <span className="sd-eyebrow">תחומי התמחות</span>
+            <h2 className="sd-h2">במה הצוות מתמחה</h2>
+            <p className="sd-lead">שישה תחומים שבהם אנחנו מלווים משפחות ועסקים כל יום.</p>
           </div>
-          <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-12 sm:pb-16">
-            <nav className="flex items-center gap-2 text-[14px] mb-8 sm:mb-12" style={{ color: MUTED }} aria-label="ניווט משני">
-              <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
-              <BrandIcon name="arrow-left" size={14} />
-              <span className="font-bold" style={{ color: GREEN }} aria-current="page">הסוכן שלכם</span>
-            </nav>
-
-            <h1 className="dna-display leading-[1.15] mb-5 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-              הסוכן שלכם
-            </h1>
-            <p className="text-[17px] sm:text-[18px] max-w-2xl leading-[1.7] mb-10 sm:mb-14" style={{ color: MUTED }}>
-              ליווי אישי ומקצועי בתחומי הפיננסים והביטוח.
-            </p>
-
-            {/* Agent card */}
-            <ScrollReveal>
-              <div className="dna-concept !p-6 sm:!p-8 flex flex-col md:flex-row md:items-start gap-6 sm:gap-8 max-w-4xl">
-                <div
-                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-full flex items-center justify-center flex-shrink-0"
-                  style={{ backgroundColor: PASTEL_SAGE, color: GREEN }}
-                  aria-hidden="true"
-                >
-                  <BrandIcon name="user" size={40} />
+          <ul className="sd-pub-values">
+            {specialties.map((s) => (
+              <li key={s.title} className="sd-pub-value sd-reveal">
+                <span className={`sd-pub-disc t-${s.tone}`} style={{ background: PASTELS[s.tone].bg }}><SdIcon name={s.icon} size={34} /></span>
+                <div>
+                  <h3 className="sd-h3">{s.title}</h3>
+                  <p>{s.description}</p>
                 </div>
-                <div className="flex-1">
-                  <h2 className="leading-tight mb-1.5" style={{ fontSize: "clamp(26px, 3vw, 32px)", color: GREEN }}>
-                    שמוליק מרציאנו
-                  </h2>
-                  <p className="text-[17px] font-bold mb-4" style={{ color: MUTED }}>סוכן ביטוח ופנסיה מוסמך</p>
-                  <p className="text-[17px] leading-[1.8] max-w-2xl mb-6" style={{ color: BODY }}>
-                    שמוליק מרציאנו הוא סוכן ביטוח ופנסיה מוסמך עם ניסיון עשיר בתחום הפיננסי.
-                    מתמחה בבניית תוכניות ביטוח וחיסכון מותאמות אישית, תוך שקיפות מלאה
-                    ומחויבות לאינטרס הלקוח. מלווה לקוחות רבים בכל שלבי החיים, מתכנון פנסיוני חכם
-                    ועד הגנה ביטוחית מקיפה.
-                  </p>
-                  <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
-                    <a
-                      href="https://wa.me/972523097444"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-primary sm:min-w-[180px]"
-                    >
-                      <BrandIcon name="message" size={20} />
-                      WhatsApp
-                    </a>
-                    <a href="tel:0523097444" className="btn-secondary">
-                      <span dir="ltr" className="tabular-nums whitespace-nowrap">052-309-7444</span>
-                    </a>
-                    <a href="mailto:shmulik@seeld.co.il" className="btn-secondary">
-                      אימייל
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </SdBand>
 
-        {/* SPECIALTIES */}
-        <section className="border-t bg-white" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <ScrollReveal>
-              <div className="mb-10 sm:mb-14">
-                <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-                  תחומי התמחות
-                </h2>
-              </div>
-            </ScrollReveal>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-              {specialties.map((spec, index) => (
-                <ScrollReveal key={spec.title} delay={index * 60}>
-                  <div className="dna-concept h-full" style={{ backgroundColor: IVORY }}>
-                    <BrandIcon name={spec.icon} size={32} className="mb-4" style={{ color: GREEN }} />
-                    <h3 className="text-[20px] mb-2" style={{ color: GREEN }}>{spec.title}</h3>
-                    <p className="text-[16px] leading-[1.7]" style={{ color: BODY }}>{spec.description}</p>
-                  </div>
-                </ScrollReveal>
-              ))}
+      <SdBand tone="cream" id="process">
+        <SdProcess art="10-financial-planning" steps={steps} title="כך נראה הליווי" />
+      </SdBand>
+
+      <SdBand tone="butter" id="reach">
+        <div className="sd-wrap sd-pub-split is-wide-copy">
+          <div>
+            <span className="sd-eyebrow">דרכי יצירת קשר</span>
+            <h2 className="sd-h2 mt-4">מדברים עם הצוות, בדרך שנוחה לכם</h2>
+            <p className="sd-lead mt-5">טלפון, הודעה או מייל. מי שזמין באותו רגע עונה, והפנייה שלכם נשארת בטיפול הצוות.</p>
+            <div className="sd-pub-actions">
+              <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer" className="sd-btn">
+                <BrandIcon name="message" size={20} />
+                WhatsApp
+              </a>
+              <a href="tel:0523097444" className="sd-link" dir="ltr">052-309-7444</a>
+              <a href="mailto:info@seeld.co.il" className="sd-link" dir="ltr">info@seeld.co.il</a>
             </div>
           </div>
-        </section>
-
-        {/* CTA — deep green band */}
-        <section className="dna-navy-band">
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
-            <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(26px, 3.2vw, 36px)" }}>
-              רוצים להתחיל?
-            </h2>
-            <p className="text-[17px] leading-[1.7] mb-9 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
-              פגישת ייעוץ ראשונית ללא עלות וללא התחייבות. בואו נכיר ונבנה יחד תוכנית מותאמת.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">בדיקת תיק 360</Link>
-              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">תיאום פגישה</Link>
-            </div>
+          <div className="sd-pub-art" aria-hidden="true">
+            <SdPic name="11-claims-service" sizes="(min-width:1024px) 440px, 90vw" />
           </div>
-        </section>
-      </main>
+        </div>
+      </SdBand>
 
-      <Footer />
-    </div>
+      <PubCta
+        title="רוצים להתחיל?"
+        text="פגישת ייעוץ ראשונה ללא עלות וללא התחייבות. נכיר, נבדוק ונבנה יחד תוכנית שמתאימה לכם."
+        art="12-childrens-savings"
+        primary={{ label: "בדיקת תיק 360", to: "/portfolio-review" }}
+        secondary={{ label: "תיאום פגישה", to: "/contact" }}
+      />
+    </PubPage>
   );
-};
-
-export default Authors;
+}

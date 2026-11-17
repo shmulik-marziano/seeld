@@ -1,141 +1,124 @@
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ScrollReveal from "@/components/ScrollReveal";
-import { Link } from "react-router-dom";
-import { Illustration } from "@/components/brand/Illustration";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN } from "@/lib/brand";
 import { FINANCE as savingsCategories } from "@/data/productDirectory";
+import { SdBand, SdCrumbs, SdIcon, SdPic, SdSubnav, tintStyle, useSdFont } from "@/components/sd/primitives";
+import { topicFor } from "@/components/sd/topics";
+import "@/components/sd/sd.css";
+import "@/components/sd/SavingsPageSd.css";
 
-// Brand hub page (kit p.05): the saving-and-growth art beside the headline and
-// the action, then the full index of the 11 savings products. Every product
-// keeps its link; the page closes on the central path (360 review / meeting).
-
+// Savings hub in the kit design: hero with illustration, trust strip, the full index of the 11 products
+// (every product keeps its link) and the navy closing on the central path (360 review / meeting).
 
 const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
 
+const trust = [
+  { icon: "search", t: "השוואה בין הגופים", s: "דמי ניהול ומסלולי השקעה" },
+  { icon: "handshake", t: "פגישה ראשונה ללא עלות", s: "ואינה מחייבת" },
+  { icon: "shield", t: "צוות מקצועי", s: "ליווי לאורך הדרך" },
+  { icon: "phone", t: "מענה אישי", s: "רעננה וירושלים" },
+];
+
 const Savings = () => {
+  const topic = topicFor("/savings");
+  const [p1, p2] = topic.palette;
+  useSdFont();
+  const arrow = <BrandIcon name="arrow-left" size={18} />;
+
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
+    <div className="sd min-h-screen" dir="rtl" style={tintStyle(p1)}>
       <Header />
 
       <main>
-        {/* HERO — the subject art beside the headline */}
-        <section className="dna-page overflow-hidden">
-          <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 320, height: 320, top: -150, left: -120, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
-            />
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 180, height: 180, bottom: -80, left: "36%", backgroundColor: PASTEL_SAND, opacity: 0.7 }}
-            />
-          </div>
-
-          <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-12 sm:pb-16">
-            <nav className="mb-8 sm:mb-12 flex items-center gap-2 text-[14px]" style={{ color: MUTED }} aria-label="ניווט משני">
-              <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
-              <BrandIcon name="arrow-left" size={14} />
-              <span className="font-bold" style={{ color: GREEN }} aria-current="page">חיסכון ופנסיה</span>
-            </nav>
-
-            <div className="grid gap-10 lg:gap-16 items-center lg:grid-cols-[1.05fr_1fr]">
-              <div>
-                <h1 className="dna-display leading-[1.15] max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-                  חיסכון ופנסיה
-                </h1>
-                <p className="mt-5 text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
-                  <span dir="ltr" className="tabular-nums whitespace-nowrap">11</span> מוצרי חיסכון ופנסיה, מקרן הפנסיה הראשונה ועד תכנון הפרישה.
-                  בוחרים נושא, ואנחנו מסדרים את דמי הניהול, המסלולים וההפקדות בתמונה אחת.
-                </p>
-                <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-                  <a href="#savings-index" className="btn-primary sm:min-w-[220px]">
-                    לרשימת מוצרי החיסכון
-                  </a>
-                  <Link to="/#portfolio-review" className="btn-secondary sm:min-w-[200px]">
-                    בדיקת תיק 360
-                  </Link>
-                </div>
-                <button type="button" className="mt-6 link-rule text-[15px]" onClick={openChat}>
-                  <BrandIcon name="message" size={18} />
-                  שאלו את היועץ הדיגיטלי
-                </button>
+        {/* HERO */}
+        <section className="sd-hero">
+          <div className="sd-wrap sd-hero-grid">
+            <div className="sd-hero-copy">
+              <SdCrumbs items={[{ label: "דף הבית", to: "/" }, { label: "חיסכון ופנסיה" }]} />
+              <span className="sd-eyebrow">חיסכון ופנסיה</span>
+              <h1 className="sd-h1 mt-5">חיסכון ופנסיה</h1>
+              <p className="sd-text mt-6" style={{ color: "var(--muted)" }}>
+                <span dir="ltr" className="tabular-nums whitespace-nowrap">11</span> מוצרי חיסכון ופנסיה, מקרן הפנסיה הראשונה ועד תכנון הפרישה.
+                בוחרים נושא, ואנחנו מסדרים את דמי הניהול, המסלולים וההפקדות בתמונה אחת.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
+                <a href="#savings-index" className="sd-btn">לרשימת מוצרי החיסכון{arrow}</a>
+                <Link to="/#portfolio-review" className="sd-link">בדיקת תיק 360{arrow}</Link>
               </div>
+              <button type="button" className="sd-sav-chat" onClick={openChat}>
+                <BrandIcon name="message" size={18} />
+                שאלו את היועץ הדיגיטלי
+              </button>
+            </div>
 
-              <Illustration name="03-saving-growth" priority sizes="(min-width: 1024px) 560px, 100vw" />
+            <div className="sd-stage" aria-hidden="true">
+              <SdPic name={topic.art} sizes="(min-width:1024px) 520px, 90vw" priority />
             </div>
           </div>
         </section>
 
-        {/* THE INDEX — hairline link list, every product keeps its link */}
-        <section id="savings-index" className="scroll-mt-24 border-t bg-white" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <ScrollReveal>
-              <div className="mb-10 sm:mb-12">
-                <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-                  כל מוצרי החיסכון והפנסיה
-                </h2>
-                <p className="mt-4 text-[17px] leading-[1.7] max-w-xl" style={{ color: MUTED }}>
-                  לכל מוצר עמוד משלו: איך הוא עובד, מתי כדאי לבדוק, שאלות נפוצות וטופס לניתוח.
-                </p>
-              </div>
+        {/* TRUST */}
+        <section className="sd-trust" aria-label="למה לבחור בנו">
+          <div className="sd-wrap">
+            <ul>
+              {trust.map((x) => (
+                <li key={x.t}>
+                  <SdIcon name={x.icon} />
+                  <div><b>{x.t}</b><span>{x.s}</span></div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {savingsCategories.map((item) => (
-                  <Link
-                    key={item.href}
-                    to={item.href}
-                    className="group flex items-center gap-4 rounded-2xl bg-white border p-4 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
-                    style={{ borderColor: LINE }}
-                  >
-                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ background: PASTEL_SAGE }}>
-                      <BrandIcon name="leaf" size={22} style={{ color: GREEN }} />
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-[17px] font-bold leading-tight" style={{ color: GREEN }}>{item.title}</h3>
-                      <p className="mt-1 text-[14px] leading-[1.5]" style={{ color: MUTED }}>{item.description}</p>
+        <SdSubnav sections={[{ id: "savings-index", label: "כל המוצרים" }, { id: "savings-contact", label: "יצירת קשר" }]} />
+
+        {/* INDEX: every product keeps its link */}
+        <SdBand tone={p2} id="savings-index">
+          <div className="sd-wrap">
+            <div className="sd-band-head">
+              <h2 className="sd-h2">כל מוצרי החיסכון והפנסיה</h2>
+              <p className="sd-lead">לכל מוצר עמוד משלו: איך הוא עובד, מתי כדאי לבדוק, שאלות נפוצות וטופס לניתוח.</p>
+            </div>
+            <ul className="sd-sav-index">
+              {savingsCategories.map((item, i) => (
+                <li key={item.href}>
+                  <Link to={item.href} className="sd-sav-card">
+                    <em>{String(i + 1).padStart(2, "0")}</em>
+                    <div>
+                      <h3 className="sd-h3">{item.title}</h3>
+                      <p>{item.description}</p>
                     </div>
-                    <BrandIcon
-                      name="arrow-left"
-                      size={18}
-                      className="shrink-0 transition-transform group-hover:-translate-x-1"
-                      style={{ color: GREEN }}
-                    />
+                    <BrandIcon name="arrow-left" size={18} className="sd-sav-go" />
                   </Link>
-                ))}
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={80}>
-              <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
-                <p className="text-[16px]" style={{ color: BODY }}>לא יודעים מה מזה יש לכם?</p>
-                <button type="button" className="link-rule text-[15px]" onClick={openChat}>
-                  <BrandIcon name="message" size={18} />
-                  שאלו את היועץ הדיגיטלי
-                </button>
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
-
-        {/* CLOSING — deep green band, the central path */}
-        <section className="dna-navy-band">
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-              רוצים ניתוח פנסיוני?
-            </h2>
-            <p className="text-[17px] leading-[1.7] mb-8 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
-              נבדוק את הפנסיה, החיסכון ודמי הניהול שלכם, ונחזור אליכם עם תמונה מסודרת. ללא עלות וללא התחייבות.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
-                בדיקת תיק 360
-              </Link>
-              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
-                תיאום פגישה
-              </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
+              <p className="sd-text" style={{ fontSize: 17 }}>לא יודעים מה מזה יש לכם?</p>
+              <button type="button" className="sd-link" onClick={openChat}>
+                <BrandIcon name="message" size={18} />
+                שאלו את היועץ הדיגיטלי
+              </button>
             </div>
+          </div>
+        </SdBand>
+
+        {/* CLOSING */}
+        <section id="savings-contact" className="sd-contact scroll-mt-20">
+          <div className="sd-wrap sd-sav-close">
+            <div>
+              <h2 className="sd-h2">רוצים ניתוח פנסיוני?</h2>
+              <p className="sd-text mt-4">
+                נבדוק את הפנסיה, החיסכון ודמי הניהול שלכם, ונחזור אליכם עם תמונה מסודרת. ללא עלות וללא התחייבות.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
+                <Link to="/#portfolio-review" className="sd-btn sd-btn-light">בדיקת תיק 360{arrow}</Link>
+                <Link to="/contact" className="sd-sav-close-link">תיאום פגישה{arrow}</Link>
+              </div>
+            </div>
+            <div className="sd-contact-art" aria-hidden="true"><SdPic name={topic.art2} sizes="360px" /></div>
           </div>
         </section>
       </main>

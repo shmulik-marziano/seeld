@@ -7,9 +7,12 @@ import { useInvestmentTracks } from "@/hooks/useInvestmentTracks";
 import { productTypeLabels, specializationLabels, companyLabels } from "@/types/fund";
 import type { Fund, ProductType, Specialization, ManagingCompany } from "@/types/fund";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { BalancedStones } from "@/components/brand/Elements";
+import { SdCrumbs, SdPic, tintStyle, useSdFont } from "@/components/sd/primitives";
+import { topicFor } from "@/components/sd/topics";
+import "@/components/sd/sd.css";
+import "@/components/sd/SavingsPageSd.css";
 import {
-  BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, RUST_TEXT, SAGE_ON_GREEN, SAND_TEXT, TEXT_2, TINT_SAGE,
+  BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, RUST_TEXT, SAND_TEXT, TEXT_2, TINT_SAGE,
 } from "@/lib/brand";
 
 // Investment tracks (SEELD brand system 2026-09): a tool page. The checker
@@ -349,71 +352,56 @@ const InvestmentTracks = () => {
   const shown = filtered.slice(0, visible);
   const showMore = () => setVisibleFor({ key: filterKey, n: visible + PAGE });
 
+  const topic = topicFor("/investment-tracks");
+  const [p1] = topic.palette;
+  useSdFont();
+
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
+    <div className="sd min-h-screen" dir="rtl" style={tintStyle(p1)}>
       <Header />
 
       <main>
-        {/* Hero: ivory, two pastel bubbles in the margins only */}
-        <div className="dna-page">
-          <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 300, height: 300, top: -150, left: -130, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
-            />
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 180, height: 180, top: 40, right: -100, backgroundColor: PASTEL_SAND, opacity: 0.7 }}
-            />
-          </div>
-
-          <section className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-8 sm:pb-10">
-            <nav className="flex items-center gap-2 text-[14px] mb-8" style={{ color: MUTED }} aria-label="ניווט משני">
-              <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
-              <BrandIcon name="arrow-left" size={14} />
-              <span className="font-bold" style={{ color: GREEN }} aria-current="page">מסלולי השקעה</span>
-            </nav>
-
-            <div className="flex items-start justify-between gap-8">
-              <div>
-                <h1 className="dna-display leading-[1.15] mb-4 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-                  מסלולי השקעה
-                </h1>
-                <p className="text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
-                  השוואת תשואות, דמי ניהול וחשיפות של מסלולי ההשקעה בישראל:
-                  קרנות השתלמות, קופות גמל, קרנות פנסיה ופוליסות חיסכון.
-                </p>
-                <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-[15px]" style={{ color: MUTED }}>
-                  <div className="flex gap-2">
-                    <dt>מקור הנתונים:</dt>
-                    <dd className="font-bold" style={{ color: GREEN }}>גמלנט, רשות שוק ההון, משרד האוצר</dd>
-                  </div>
-                </dl>
-                <p className="mt-2 text-[14px]" style={{ color: MUTED }} role="status">{dataStatus}</p>
+        {/* HERO (kit) */}
+        <section className="sd-hero">
+          <div className="sd-wrap sd-hero-grid">
+            <div className="sd-hero-copy">
+              <SdCrumbs items={[{ label: "דף הבית", to: "/" }, { label: "מסלולי השקעה" }]} />
+              <span className="sd-eyebrow">השוואת מסלולים</span>
+              <h1 className="sd-h1 mt-5">מסלולי השקעה</h1>
+              <p className="sd-text mt-6" style={{ color: "var(--muted)" }}>
+                השוואת תשואות, דמי ניהול וחשיפות של מסלולי ההשקעה בישראל:
+                קרנות השתלמות, קופות גמל, קרנות פנסיה ופוליסות חיסכון.
+              </p>
+              <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-[15px]" style={{ color: "var(--muted)" }}>
+                <div className="flex gap-2">
+                  <dt>מקור הנתונים:</dt>
+                  <dd className="font-bold" style={{ color: "var(--ink)" }}>גמלנט, רשות שוק ההון, משרד האוצר</dd>
+                </div>
+              </dl>
+              <p className="mt-2 text-[14px]" style={{ color: "var(--muted)" }} role="status">{dataStatus}</p>
+              <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
+                <a href="#checker-title" className="sd-btn">בדקו את המסלול שלכם<BrandIcon name="arrow-left" size={18} /></a>
+                <a href="#all-tracks-title" className="sd-link">לכל המסלולים<BrandIcon name="arrow-left" size={18} /></a>
               </div>
-              <BalancedStones className="hidden lg:block w-40 shrink-0" />
             </div>
-
-            {/* Stat band: green figures over hairlines */}
-            <dl className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-y-8 border-t border-b py-8 sm:py-10" style={{ borderColor: LINE }}>
+            <div className="sd-stage" aria-hidden="true">
+              <SdPic name={topic.art} sizes="(min-width:1024px) 520px, 90vw" priority />
+            </div>
+          </div>
+          <div className="sd-wrap">
+            <dl className="sd-sav-stats">
               {heroStats.map((stat) => (
-                <div key={stat.label} className="text-center px-4">
-                  <dd
-                    className="tabular-nums mb-1.5"
-                    dir="ltr"
-                    style={{ fontWeight: 700, color: GREEN, fontSize: "clamp(1.9rem, 3.5vw, 2.8rem)", letterSpacing: "-0.02em", lineHeight: 1.1 }}
-                  >
-                    {stat.value}
-                  </dd>
-                  <dt className="text-[15px]" style={{ color: MUTED }}>{stat.label}</dt>
+                <div key={stat.label}>
+                  <dd dir="ltr" className="tabular-nums">{stat.value}</dd>
+                  <dt>{stat.label}</dt>
                 </div>
               ))}
             </dl>
-          </section>
-        </div>
+          </div>
+        </section>
 
         {/* Tool body: checker + full table + educational content */}
-        <section className="border-t" style={{ borderColor: LINE }}>
+        <section className="sd-sav-tool">
           <div className="max-w-brand mx-auto px-5 sm:px-8 py-12 sm:py-16 space-y-16 sm:space-y-20">
             <PersonalTrackChecker trackData={trackData} />
 
@@ -740,23 +728,20 @@ const InvestmentTracks = () => {
           </div>
         </section>
 
-        {/* Closing: deep green band, the central path */}
-        <section className="dna-navy-band">
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(26px, 3vw, 34px)" }}>
-              רוצים לדעת איך המסלול שלכם מתנהג?
-            </h2>
-            <p className="text-[17px] leading-[1.7] mb-8 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
-              בבדיקת תיק 360 נבדוק מסלולים, דמי ניהול וחשיפות מול התיק הקיים שלכם, ונמליץ מה לשפר.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">
-                בדיקת תיק 360
-              </Link>
-              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">
-                תיאום פגישה
-              </Link>
+        {/* Closing: navy block, the central path */}
+        <section className="sd-contact">
+          <div className="sd-wrap sd-sav-close">
+            <div>
+              <h2 className="sd-h2">רוצים לדעת איך המסלול שלכם מתנהג?</h2>
+              <p className="sd-text mt-4">
+                בבדיקת תיק 360 נבדוק מסלולים, דמי ניהול וחשיפות מול התיק הקיים שלכם, ונמליץ מה לשפר.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
+                <Link to="/#portfolio-review" className="sd-btn sd-btn-light">בדיקת תיק 360<BrandIcon name="arrow-left" size={18} /></Link>
+                <Link to="/contact" className="sd-sav-close-link">תיאום פגישה<BrandIcon name="arrow-left" size={18} /></Link>
+              </div>
             </div>
+            <div className="sd-contact-art" aria-hidden="true"><SdPic name={topic.art2} sizes="360px" /></div>
           </div>
         </section>
       </main>

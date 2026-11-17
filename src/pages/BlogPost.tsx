@@ -8,9 +8,11 @@ import { buildBlogPostingGraph } from "@/lib/structuredData";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { toast } from "sonner";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { BODY, GREEN, IVORY, LINE, MUTED, RUST, RUST_TEXT, SAGE_ON_GREEN } from "@/lib/brand";
-import { Illustration } from "@/components/brand/Illustration";
-import { illustrationForCategory, isStockPhoto } from "@/lib/coverArt";
+import { BODY, GREEN, IVORY, LINE, MUTED, RUST, RUST_TEXT } from "@/lib/brand";
+import { isStockPhoto } from "@/lib/coverArt";
+import { SdBand, tintStyle, useSdFont } from "@/components/sd/primitives";
+import { PubArticleCard, PubClose, PubHead, PubHero, PubTocAside, PubTocInline, artForText, withHeadingIds } from "@/components/sd/pub";
+import "@/components/sd/sd.css";
 
 // Blog post: one reading column on ivory, the post's own cover image when it
 // has one, a white lead-form band, deep green closing band (STYLESEED.md).
@@ -50,6 +52,7 @@ const FieldError = ({ id, children }: { id: string; children?: string }) =>
   children ? <p id={id} className="mt-1.5 text-[14px]" style={{ color: RUST_TEXT }}>{children}</p> : null;
 
 const BlogPost = () => {
+  useSdFont();
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<BlogPostData | null>(null);
   const [related, setRelated] = useState<BlogPostData[]>([]);
@@ -66,6 +69,8 @@ const BlogPost = () => {
     return buildBlogPostingGraph(post, post.excerpt ?? plain.slice(0, 155));
   }, [post]);
   usePageSeo(post?.title, post?.excerpt, postJsonLd);
+  // h2 headings get ids so the table of contents can link to them; the text itself is untouched
+  const body = useMemo(() => withHeadingIds(post?.content ?? ""), [post?.content]);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -314,6 +319,8 @@ const BlogPost = () => {
     };
   })();
 
+  const art = artForText(post?.category, post?.title);
+
   if (loading) {
     return (
       <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
@@ -349,30 +356,23 @@ const BlogPost = () => {
   }
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
+    <div className="sd min-h-screen" dir="rtl" style={tintStyle(art.tone)}>
       <Header />
 
       <main>
-        {/* THE READING SURFACE */}
-        <section>
-          <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-10 sm:pb-12">
-            <nav className="flex items-center gap-2 text-[14px] mb-8 sm:mb-12" style={{ color: MUTED }} aria-label="ניווט משני">
-              <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
-              <BrandIcon name="arrow-left" size={14} />
-              <Link to="/blog" className="hover:underline underline-offset-4">בלוג</Link>
-              {post.category && (
-                <>
-                  <BrandIcon name="arrow-left" size={14} />
-                  <span className="font-bold" style={{ color: GREEN }} aria-current="page">{post.category}</span>
-                </>
-              )}
-            </nav>
-
-            <h1 className="dna-display leading-[1.15]" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-              {post.title}
-            </h1>
-
-            <p className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[14px]" style={{ color: MUTED }}>
+        <PubHero
+          crumbs={[
+            { label: "דף הבית", to: "/" },
+            { label: "בלוג", to: "/blog" },
+            ...(post.category ? [{ label: post.category }] : []),
+          ]}
+          eyebrow={post.category ?? "בלוג"}
+          title={post.title}
+          lead={post.excerpt ?? undefined}
+          art={art.art}
+          tint={art.tone}
+          meta={
+            <>
               {post.published_at && (
                 <span className="tabular-nums whitespace-nowrap">{formatDate(post.published_at)}</span>
               )}
@@ -380,76 +380,58 @@ const BlogPost = () => {
               <span>
                 <span dir="ltr" className="tabular-nums">{readMinutes(post.content)}</span> דקות קריאה
               </span>
-              {post.author && (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <span>מאת {post.author}</span>
-                </>
+              <span aria-hidden="true">·</span>
+              <span>מאת צוות שילד</span>
+            </>
+          }
+        />
+
+        {/* THE READING SURFACE */}
+        <SdBand tone="white" id="post">
+          <div className="sd-wrap sd-read-layout">
+            <article className="sd-read-col">
+              {/* The post's own photo when it has one; a stock photo is replaced by the hero illustration. */}
+              {post.cover_image_url && !isStockPhoto(post.cover_image_url) && (
+                <div className="rounded-2xl overflow-hidden border bg-white mb-10" style={{ borderColor: LINE }}>
+                  <img
+                    src={post.cover_image_url}
+                    alt={post.title}
+                    className="w-full aspect-[16/9] object-cover"
+                    decoding="async"
+                  />
+                </div>
               )}
-            </p>
 
-            {post.excerpt && (
-              <p className="mt-6 text-[17px] sm:text-[18px] leading-[1.7]" style={{ color: MUTED }}>
-                {post.excerpt}
-              </p>
-            )}
+              <PubTocInline items={body.toc} />
+
+              <div
+                className="sd-prose prose max-w-none"
+                dangerouslySetInnerHTML={{ __html: body.html }}
+              />
+
+              {/* Share */}
+              <div className="sd-share">
+                <p className="text-[14px] font-bold mb-4" style={{ color: GREEN }}>שיתוף הפוסט</p>
+                <div className="flex flex-wrap gap-3">
+                  <button type="button" onClick={shareWhatsApp} className="btn-secondary !min-h-[44px] !px-5 text-[15px]">
+                    <BrandIcon name="message" size={18} />
+                    WhatsApp
+                  </button>
+                  <button type="button" onClick={copyLink} className="btn-secondary !min-h-[44px] !px-5 text-[15px]">
+                    <Copy className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+                    העתקת קישור
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <PubTocAside items={body.toc} art={art.art} tone={art.tone} />
           </div>
-
-          {/* Cover: the post's own photo when it has one. A stock photo (banned by
-              STYLESEED) is replaced by the category's kit illustration. */}
-          {post.cover_image_url && !isStockPhoto(post.cover_image_url) ? (
-            <div className="max-w-3xl mx-auto px-5 sm:px-8">
-              <div className="rounded-2xl overflow-hidden border bg-white" style={{ borderColor: LINE }}>
-                <img
-                  src={post.cover_image_url}
-                  alt={post.title}
-                  className="w-full aspect-[16/9] object-cover"
-                  decoding="async"
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="max-w-3xl mx-auto px-5 sm:px-8">
-              <Illustration name={illustrationForCategory(post.category)} priority sizes="(min-width: 768px) 720px, 100vw" className="brand-hero-art" />
-            </div>
-          )}
-
-          {/* Content */}
-          <article className="max-w-3xl mx-auto px-5 sm:px-8 py-10 sm:py-14">
-            <div
-              className="prose max-w-none
-                prose-headings:text-[#203957] prose-headings:font-bold prose-headings:leading-tight
-                prose-h2:text-[26px] sm:prose-h2:text-[30px] prose-h2:mt-12 prose-h2:mb-4
-                prose-h3:text-[20px] prose-h3:mt-8 prose-h3:mb-3
-                prose-p:text-[17px] prose-p:leading-[1.8] prose-p:text-[#2D435D]
-                prose-li:text-[17px] prose-li:leading-[1.8] prose-li:text-[#2D435D] prose-li:marker:text-[#819B7D]
-                prose-strong:text-[#203957] prose-strong:font-bold
-                prose-a:text-[#203957] prose-a:font-bold prose-a:underline prose-a:underline-offset-4
-                prose-blockquote:border-s-4 prose-blockquote:border-[#819B7D] prose-blockquote:bg-[#EEF2EC] prose-blockquote:not-italic prose-blockquote:rounded-e-xl prose-blockquote:py-4 prose-blockquote:px-5 prose-blockquote:text-[#2D435D]
-                prose-img:rounded-2xl prose-hr:border-[#D9DEE4]"
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
-
-            {/* Share */}
-            <div className="mt-14 border-t pt-6" style={{ borderColor: LINE }}>
-              <p className="text-[14px] font-bold mb-4" style={{ color: GREEN }}>שיתוף הפוסט</p>
-              <div className="flex flex-wrap gap-3">
-                <button type="button" onClick={shareWhatsApp} className="btn-secondary !min-h-[44px] !px-5 text-[15px]">
-                  <BrandIcon name="message" size={18} />
-                  WhatsApp
-                </button>
-                <button type="button" onClick={copyLink} className="btn-secondary !min-h-[44px] !px-5 text-[15px]">
-                  <Copy className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
-                  העתקת קישור
-                </button>
-              </div>
-            </div>
-          </article>
-        </section>
+        </SdBand>
 
         {/* LEAD CAPTURE — the page's own action, on a white band */}
-        <section id="lead-form" ref={leadFormRef} className="scroll-mt-24 border-t bg-white" style={{ borderColor: LINE }}>
-          <div className="max-w-3xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
+        <section id="lead-form" ref={leadFormRef} className={`sd-band sd-band-${art.tone === "sage" ? "sky" : "sage"} scroll-mt-24`}>
+          <div className="sd-wrap-narrow sd-pub-panel !max-w-[760px]">
             {leadSubmitted ? (
               <div role="status">
                 <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
@@ -533,57 +515,41 @@ const BlogPost = () => {
 
         {/* RELATED POSTS */}
         {related.length > 0 && (
-          <section className="border-t" style={{ borderColor: LINE }}>
-            <div className="max-w-3xl mx-auto px-5 sm:px-8 py-14 sm:py-20">
-              <div className="mb-8 sm:mb-10">
-                <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-                  מאמרים נוספים
-                </h2>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-                {related.map((r) => (
-                  <Link
-                    key={r.id}
-                    to={`/blog/${r.slug}`}
-                    className="dna-concept dna-hover group flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
-                  >
-                    <h3 className="text-[18px] leading-snug" style={{ color: GREEN }}>{r.title}</h3>
-                    <p className="mt-2 text-[14px]" style={{ color: MUTED }}>
-                      {r.published_at && (
-                        <span className="tabular-nums whitespace-nowrap">{formatDate(r.published_at)}</span>
-                      )}
-                      <span aria-hidden="true"> · </span>
-                      <span><span dir="ltr" className="tabular-nums">{readMinutes(r.content)}</span> דקות קריאה</span>
-                    </p>
-                    {r.excerpt && (
-                      <p className="mt-3 text-[15px] leading-[1.7] line-clamp-3" style={{ color: BODY }}>{r.excerpt}</p>
-                    )}
-                    <span className="link-rule mt-auto pt-5 text-[15px] self-start">
-                      לקריאה
-                      <BrandIcon name="arrow-left" size={18} className="transition-transform group-hover:-translate-x-1" />
-                    </span>
-                  </Link>
-                ))}
+          <SdBand tone="cream" id="related">
+            <div className="sd-wrap">
+              <PubHead title="מאמרים נוספים" />
+              <div className="sd-pub-grid sd-pub-grid-3">
+                {related.map((r) => {
+                  const a = artForText(r.category, r.title);
+                  return (
+                    <PubArticleCard
+                      key={r.id}
+                      to={`/blog/${r.slug}`}
+                      title={r.title}
+                      kicker={r.category ?? undefined}
+                      meta={
+                        <>
+                          {r.published_at && <span className="tabular-nums whitespace-nowrap">{formatDate(r.published_at)}</span>}
+                          <span aria-hidden="true"> · </span>
+                          <span><span dir="ltr" className="tabular-nums">{readMinutes(r.content)}</span> דקות קריאה</span>
+                        </>
+                      }
+                      excerpt={r.excerpt}
+                      art={a.art}
+                      tone={a.tone}
+                    />
+                  );
+                })}
               </div>
             </div>
-          </section>
+          </SdBand>
         )}
 
-        {/* CTA — deep green band */}
-        <section className="dna-navy-band">
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
-            <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(26px, 3.2vw, 36px)" }}>
-              רוצים לראות את התמונה המלאה של התיק שלכם?
-            </h2>
-            <p className="text-[17px] leading-[1.7] mb-9 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
-              בדיקת תיק 360 מסכמת את הביטוחים, הפנסיה והחיסכון בתמונה אחת. ללא עלות וללא התחייבות.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">בדיקת תיק 360</Link>
-              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">תיאום פגישה</Link>
-            </div>
-          </div>
-        </section>
+        <PubClose
+          title="רוצים לראות את התמונה המלאה של התיק שלכם?"
+          text="בדיקת תיק 360 מסכמת את הביטוחים, הפנסיה והחיסכון בתמונה אחת. ללא עלות וללא התחייבות."
+          art="10-financial-planning"
+        />
       </main>
 
       <Footer />

@@ -1,7 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import { BODY, GREEN, IVORY, LINE, MUTED } from '@/lib/brand';
+import { BODY, GREEN, LINE, MUTED } from '@/lib/brand';
+import { LegalFrame } from '@/components/sd/pubParts';
 
 // Legal page: one quiet reading column, typography only (STYLESEED.md).
 
@@ -181,30 +180,13 @@ export default function PrivacyPage() {
   }
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
-      <Header />
-
-      <main className="pb-10 sm:pb-16">
-        <section>
-          <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-10 sm:pt-14 pb-6">
-            <h1 className="dna-display leading-[1.15]" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-              מדיניות פרטיות
-            </h1>
-            <div className="mt-4 flex flex-wrap items-baseline justify-between gap-4">
-              <span className="text-[14px]" style={{ color: MUTED }}>
-                עודכן במרץ <span dir="ltr" className="tabular-nums whitespace-nowrap">2026</span>
-              </span>
-              <button type="button" onClick={() => navigate(-1)} className="link-rule text-[15px]">
-                חזרה
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {content}
-      </main>
-
-      <Footer />
-    </div>
+    <LegalFrame
+      title="מדיניות פרטיות"
+      tint="sky"
+      art="05-retirement"
+      action={<button type="button" onClick={() => navigate(-1)} className="sd-link sd-pub-linkbtn">חזרה</button>}
+    >
+      {content}
+    </LegalFrame>
   );
 }

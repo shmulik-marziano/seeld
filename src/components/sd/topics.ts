@@ -50,7 +50,7 @@ export const TOPICS: Record<string, Topic> = {
   "/insurance/disability": { art: "02-family-protection", art2: "11-claims-service", palette: ["sky", "rose", "butter"] },
   "/insurance/dental": { art: "03-health-insurance", art2: "11-claims-service", palette: ["sky", "butter", "sage"] },
   "/insurance/accidents": { art: "02-family-protection", art2: "03-health-insurance", palette: ["butter", "rose", "sky"] },
-  "/insurance/foreign-workers": { art: "11-claims-service", art2: "08-business-insurance", palette: ["sage", "sky", "lavender"] },
+  "/insurance/foreign-workers": { art: "02-family-protection", art2: "11-claims-service", palette: ["sage", "sky", "lavender"] },
 
   // savings
   "/savings/pension-funds": { art: "05-retirement", art2: "10-financial-planning", palette: ["sage", "butter", "sky"] },
@@ -71,8 +71,9 @@ export const TOPICS: Record<string, Topic> = {
   "/faq": { art: "11-claims-service", art2: "10-financial-planning", palette: ["lavender", "sage", "butter"] },
   "/portfolio-review": { art: "11-claims-service", art2: "10-financial-planning", palette: ["sky", "butter", "sage"] },
   "/insurances": { art: "01-hero", art2: "02-family-protection", palette: ["sky", "sage", "butter"] },
+  "/investment-tracks": { art: "04-investments-growth", art2: "10-financial-planning", palette: ["sky", "butter", "sage"] },
   "/savings": { art: "04-investments-growth", art2: "05-retirement", palette: ["butter", "sage", "sky"] },
-  "/travel": { art: "09-travel-insurance", art2: "11-claims-service", palette: ["rose", "sky", "butter"] },
+  "/travel": { art: "07-car-insurance", art2: "06-home-mortgage", palette: ["sky", "rose", "butter"] },
   "/wellness": { art: "03-health-insurance", art2: "05-retirement", palette: ["sage", "rose", "sky"] },
   "/growth": { art: "04-investments-growth", art2: "10-financial-planning", palette: ["butter", "sage", "lavender"] },
   "/creativity": { art: "10-financial-planning", art2: "01-hero", palette: ["lavender", "butter", "sage"] },

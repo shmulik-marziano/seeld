@@ -1,9 +1,9 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageSd from '@/components/sd/InsurancePageSd';
 import { Users, Shield, Building } from 'lucide-react';
 
 const PartnersRisk = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageSd
       heroIcon={Users}
       heroIconColor="#b91c1c"
       heroCategory="ריסק שותפים"

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { CARD_SHADOW, RING, LINE, GREEN, BODY, MUTED } from "@/lib/brand";
+import "@/components/sd/chrome.css";
+import { CARD_SHADOW, LINE, GREEN, BODY, MUTED } from "@/lib/brand";
 
 const AccessibilityButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,8 +47,7 @@ const AccessibilityButton = () => {
       {/* Quiet launcher — white circle, hairline ring, green glyph */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed right-4 sm:right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#55677C] opacity-80 transition-all duration-200 hover:opacity-100 hover:text-[#203957] focus-visible:opacity-100"
-        style={{ boxShadow: RING, bottom: "calc(20px + var(--float-lift, 0px) + env(safe-area-inset-bottom, 0px))" }}
+        className="sd-chrome-fab sd-chrome-fab-a11y"
         aria-label="הגדרות נגישות"
         aria-expanded={isOpen}
         title="נגישות"
@@ -58,8 +58,8 @@ const AccessibilityButton = () => {
       {/* Panel */}
       {isOpen && (
         <div
-          className="fixed right-4 sm:right-6 z-40 w-64 max-w-[calc(100vw-32px)] rounded-2xl bg-white p-4 border"
-          style={{ boxShadow: CARD_SHADOW, borderColor: LINE, bottom: "calc(80px + env(safe-area-inset-bottom, 0px))" }}
+          className="sd-chrome-a11y-panel"
+          style={{ boxShadow: CARD_SHADOW, borderColor: LINE }}
           role="group"
           aria-label="הגדרות נגישות"
         >

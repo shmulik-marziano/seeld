@@ -34,9 +34,9 @@ export const articles: Article[] = [
     readTime: "5 דק׳",
     image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200&q=70&auto=format&fit=crop",
     author: {
-      name: "שמוליק מרציאנו",
+      name: "צוות SEELD",
       avatar: seeldLogoHQ,
-      bio: "מתכנן פיננסי וסוכן ביטוח",
+      bio: "צוות הסוכנות",
     },
     content: {
       introduction: "תכנון פנסיוני הוא אחד הצעדים החשובים ביותר שתעשו בחייכם הפיננסיים. ככל שתתחילו מוקדם יותר, כך תיהנו מיותר ביטחון כלכלי בגיל הפרישה. במאמר זה נסקור את העקרונות המרכזיים לבניית תוכנית פנסיונית מוצלחת.",
@@ -71,9 +71,9 @@ export const articles: Article[] = [
     readTime: "6 דק׳",
     image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=70&auto=format&fit=crop",
     author: {
-      name: "שמוליק מרציאנו",
+      name: "צוות SEELD",
       avatar: seeldLogoHQ,
-      bio: "מתכנן פיננסי וסוכן ביטוח",
+      bio: "צוות הסוכנות",
     },
     content: {
       introduction: "ביטוח בריאות פרטי הפך לנדבך חשוב בתכנון הפיננסי של כל משפחה בישראל. עם העלייה בעלויות הרפואה והמתנה הארוכה בשירות הציבורי, פוליסה פרטית יכולה להציל לכם חיים — גם בריאותיים וגם כלכליים.",
@@ -108,9 +108,9 @@ export const articles: Article[] = [
     readTime: "5 דק׳",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=70&auto=format&fit=crop",
     author: {
-      name: "שמוליק מרציאנו",
+      name: "צוות SEELD",
       avatar: seeldLogoHQ,
-      bio: "מתכנן פיננסי וסוכן ביטוח",
+      bio: "צוות הסוכנות",
     },
     content: {
       introduction: "קרן השתלמות היא אחד מאפיקי החיסכון הכי משתלמים בישראל, הודות לפטור ממס רווחי הון לאחר שש שנים. בין אם אתם שכירים או עצמאים, קרן השתלמות יכולה להיות כלי מצוין לבניית הון לטווח בינוני.",
@@ -145,9 +145,9 @@ export const articles: Article[] = [
     readTime: "7 דק׳",
     image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&q=70&auto=format&fit=crop",
     author: {
-      name: "שמוליק מרציאנו",
+      name: "צוות SEELD",
       avatar: seeldLogoHQ,
-      bio: "מתכנן פיננסי וסוכן ביטוח",
+      bio: "צוות הסוכנות",
     },
     content: {
       introduction: "ביטוח חיים הוא רשת הביטחון שמגנה על המשפחה שלכם במקרה שמשהו יקרה לכם. זה לא נושא נעים לחשוב עליו, אבל תכנון נכון יכול להבטיח שהאנשים שאתם אוהבים יהיו מוגנים כלכלית.",
@@ -186,9 +186,9 @@ export const articles: Article[] = [
     readTime: "8 דק׳",
     image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1200&q=70&auto=format&fit=crop",
     author: {
-      name: "שמוליק מרציאנו",
+      name: "צוות SEELD",
       avatar: seeldLogoHQ,
-      bio: "מתכנן פיננסי וסוכן ביטוח",
+      bio: "צוות הסוכנות",
     },
     content: {
       introduction: "ביטוח רכב הוא הוצאה שנתית משמעותית, אבל עם הידע הנכון אפשר לחסוך אלפי שקלים מבלי להתפשר על הכיסוי. במאמר זה נחשוף את הסודות לבחירת פוליסה חכמה.",
@@ -227,9 +227,9 @@ export const articles: Article[] = [
     readTime: "7 דק׳",
     image: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=1200&q=70&auto=format&fit=crop",
     author: {
-      name: "שמוליק מרציאנו",
+      name: "צוות SEELD",
       avatar: seeldLogoHQ,
-      bio: "מתכנן פיננסי וסוכן ביטוח",
+      bio: "צוות הסוכנות",
     },
     content: {
       introduction: "השקעה בשוק ההון יכולה להיות הדרך לבניית הון לטווח ארוך, אבל למתחילים העולם הזה עלול להיראות מפחיד ומורכב. במדריך זה נפשט את הנושא ונעזור לכם להתחיל בצורה נכונה ובטוחה.",
@@ -268,9 +268,9 @@ export const articles: Article[] = [
     readTime: "6 דק׳",
     image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&q=70&auto=format&fit=crop",
     author: {
-      name: "שמוליק מרציאנו",
+      name: "צוות SEELD",
       avatar: seeldLogoHQ,
-      bio: "מתכנן פיננסי וסוכן ביטוח",
+      bio: "צוות הסוכנות",
     },
     content: {
       introduction: "הבית הוא הנכס היקר ביותר שלרוב האנשים. ביטוח דירה ותכולה מגן עליכם מנזקים בלתי צפויים ומבטיח שתוכלו לשקם את חייכם גם אחרי אירוע קשה.",
@@ -309,9 +309,9 @@ export const articles: Article[] = [
     readTime: "6 דק׳",
     image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&q=70&auto=format&fit=crop",
     author: {
-      name: "שמוליק מרציאנו",
+      name: "צוות SEELD",
       avatar: seeldLogoHQ,
-      bio: "מתכנן פיננסי וסוכן ביטוח",
+      bio: "צוות הסוכנות",
     },
     content: {
       introduction: "ניהול תקציב משפחתי הוא הבסיס לכל תכנון פיננסי מוצלח. בלי לדעת לאן הכסף הולך, קשה לחסוך, להשקיע או להגיע ליעדים פיננסיים. במאמר זה נלמד איך לבנות ולנהל תקציב שעובד.",

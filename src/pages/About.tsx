@@ -1,228 +1,153 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import { Illustration } from "@/components/brand/Illustration";
-import { OliveBranch } from "@/components/brand/Elements";
-import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from "@/lib/brand";
+import { stories } from "@/data/stories";
+import { SdBand, SdIcon, SdPic, SdProcess, SdStory, SdSubnav } from "@/components/sd/primitives";
+import { art3Of, topicFor } from "@/components/sd/topics";
+import { Arrow, PubCta, PubHero, PubPage } from "@/components/sd/pubParts";
 
-// Brand page: ivory canvas, one journey illustration in the opening, deep green band at the end.
+// About: the agency is a team of agents. Kit design: hero, emotional moment, values, how we work,
+// company comparison, commitments, closing invitation. No names, no single-agent wording.
 
-const SectionHead = ({ title, lede }: { title: string; lede?: string }) => (
-  <div className="mb-10 sm:mb-14">
-    <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(28px, 3.2vw, 32px)" }}>
-      {title}
-    </h2>
-    {lede && (
-      <p className="mt-4 text-[17px] leading-[1.7] max-w-xl" style={{ color: MUTED }}>{lede}</p>
-    )}
-  </div>
-);
+const PATH = "/about";
 
-const values: { title: string; description: string; icon: BrandIconName }[] = [
-  { title: "שקיפות", description: "תראו את כל התנאים, העמלות ודמי הניהול לפני שמחליטים. בלי הפתעות, בלי אותיות קטנות.", icon: "search" },
-  { title: "מקצועיות", description: "סוכן ביטוח פנסיוני ברישיון, מעודכן ברגולציה ובשינויים בשוק. הידע הזה עובד בשבילכם.", icon: "shield" },
-  { title: "אמינות", description: "האינטרס שלכם קודם. אם משהו לא מתאים, נגיד את זה ישירות.", icon: "check" },
-  { title: "נגישות", description: "ביטוח ופנסיה לא צריכים להיות מסובכים. מסבירים בשפה ברורה, עונים על כל שאלה.", icon: "message" },
+const values = [
+  { icon: "search", tone: "sage", title: "שקיפות", text: "מראים לכם את כל התנאים, העמלות ודמי הניהול לפני שמחליטים. בלי הפתעות ובלי אותיות קטנות." },
+  { icon: "shield", tone: "sky", title: "מקצועיות", text: "צוות סוכנים שמעודכן ברגולציה ובשינויים בשוק. הידע הזה עובד בשבילכם." },
+  { icon: "handshake", tone: "butter", title: "אמינות", text: "האינטרס שלכם קודם. אם משהו לא מתאים לכם, נגיד את זה ישירות." },
+  { icon: "phone", tone: "rose", title: "נגישות", text: "ביטוח ופנסיה לא צריכים להיות מסובכים. מסבירים בשפה ברורה ועונים על כל שאלה." },
 ];
 
-const About = () => {
+const steps = [
+  { icon: "checklist", t: "ממפים את התיק", p: "אוספים יחד איתכם את כל הפוליסות, הקרנות והחסכונות לתמונה אחת, כדי שתראו מה יש." },
+  { icon: "search", t: "משווים בין החברות", p: "בודקים כיסויים, תנאים ועלויות בחברות השונות בשוק, ומציגים את ההבדלים בצורה פשוטה." },
+  { icon: "handshake", t: "מחליטים יחד ונשארים לצידכם", p: "ההחלטה תמיד שלכם. אחר כך אנחנו מטפלים בטפסים ובמעקב, ומעדכנים בכל שלב." },
+];
+
+const compare = [
+  { k: "כיסוי", v: "מה בדיוק מכוסה, ומה מוחרג בכתב קטן שלא תמיד שמים לב אליו." },
+  { k: "עלות", v: "גובה הפרמיה ודמי הניהול, ואיך הם משתנים עם השנים." },
+  { k: "תנאים", v: "השתתפות עצמית, תקופות המתנה, והתנאים בחידוש הפוליסה." },
+  { k: "שירות", v: "איך מטפלים בתביעה, ומי עונה לכם כשצריך." },
+];
+
+const commitments = [
+  "עובדים מול חברות הביטוח ובתי ההשקעות בישראל, בלי תלות בחברה אחת.",
+  "בדיקת תיק שלמה: ביטוחים, פנסיה וחיסכון, לא רק מוצר אחד.",
+  "מעקב שוטף: חידושים, שינויים במשפחה ועדכוני רגולציה.",
+  "זיהוי כפל ביטוחי, כיסויים חסרים ודמי ניהול גבוהים, וטיפול בהם.",
+  "אזור אישי: הפוליסות, החיסכון והמסמכים שלכם במקום אחד.",
+];
+
+export default function About() {
+  const topic = topicFor(PATH);
+  const [p1, p2, p3] = topic.palette;
+  const story = stories[PATH];
+  const sections = [
+    { id: "moment", label: "מה עומד מולכם" },
+    { id: "values", label: "הערכים" },
+    { id: "process", label: "איך עובדים" },
+    { id: "compare", label: "השוואה בין חברות" },
+    { id: "commitments", label: "מה אנחנו עושים" },
+  ];
+
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
-      <Header />
+    <PubPage tint={p1}>
+      <PubHero
+        crumbs={[{ label: "דף הבית", to: "/" }, { label: "מי אנחנו" }]}
+        eyebrow="מי אנחנו"
+        title="הצוות שיושב איתכם על התיק"
+        lead="סוכנות ביטוח, חיסכון ופנסיה עם צוות סוכנים מקצועי, עצמאית ובצד שלכם. ממפים את התיק, משווים בין החברות ומלווים את הביצוע, בלי לחץ."
+        art={topic.art}
+        actions={
+          <>
+            <Link to="/contact" className="sd-btn">תיאום פגישה<Arrow /></Link>
+            <Link to="/portfolio-review" className="sd-link">בדיקת תיק 360<Arrow /></Link>
+          </>
+        }
+      />
 
-      <main>
-        {/* HERO — who we are, beside the journey illustration */}
-        <section className="dna-page overflow-hidden">
-          <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 320, height: 320, top: -150, left: -120, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
-            />
-          </div>
+      <SdSubnav sections={sections} />
 
-          <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-12 sm:pb-16">
-            <nav className="flex items-center gap-2 text-[14px] mb-8 sm:mb-12" style={{ color: MUTED }} aria-label="ניווט משני">
-              <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
-              <BrandIcon name="arrow-left" size={14} />
-              <span className="font-bold" style={{ color: GREEN }} aria-current="page">מי אנחנו</span>
-            </nav>
+      {story && (
+        <SdBand tone={p1} id="moment">
+          <SdStory story={story} art={topic.art2} />
+        </SdBand>
+      )}
 
-            <div className="grid gap-10 lg:gap-16 lg:grid-cols-[1.05fr_1fr] items-center">
-              <div>
-                <h1 className="dna-display leading-[1.15] mb-5 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-                  הבית שמאחורי התיק שלכם
-                </h1>
-                <p className="text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
-                  סוכנות ביטוח, חיסכון ופנסיה מבית עמיתים הון. עצמאית, בפיקוח, ובצד שלכם.
-                  ממפים את התיק, מבינים את האפשרויות ומלווים את הביצוע.
-                </p>
-                <p className="mt-6 text-[15px]" style={{ color: MUTED }}>
-                  בפיקוח רשות שוק ההון · ע.מ{" "}
-                  <span dir="ltr" className="tabular-nums whitespace-nowrap">305275653</span>
-                </p>
-                <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                  <Link to="/contact" className="btn-primary sm:min-w-[200px]">תיאום פגישה</Link>
-                  <Link to="/#portfolio-review" className="btn-secondary sm:min-w-[200px]">בדיקת תיק 360</Link>
-                </div>
-              </div>
-
-              <Illustration
-                name="01-journey"
-                priority
-                sizes="(min-width: 1024px) 560px, 100vw"
-                className="shadow-[0_16px_40px_-24px_rgba(32, 57, 87,0.35)]"
-              />
+      <SdBand tone="cream" id="values">
+        <div className="sd-wrap sd-pub-split">
+          <div>
+            <span className="sd-eyebrow">הערכים שלנו</span>
+            <h2 className="sd-h2 mt-4">ארבעה עקרונות שמכוונים כל שיחה</h2>
+            <p className="sd-lead mt-5">לא סיסמאות על קיר. כך אנחנו מתנהלים מול כל תיק שמגיע אלינו.</p>
+            <div className="sd-pub-art mt-8 hidden lg:block" aria-hidden="true" style={{ maxWidth: 380 }}>
+              <SdPic name={art3Of(topic)} sizes="380px" />
             </div>
           </div>
-        </section>
-
-        {/* STORY */}
-        <section className="border-t bg-white" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
-            <ScrollReveal>
-              <SectionHead title="הסיפור" />
-            </ScrollReveal>
-            <ScrollReveal delay={80}>
-              <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-24 items-start">
-                <div className="space-y-5 leading-[1.8] text-[17px]" style={{ color: BODY }}>
-                  <p>
-                    שילד קמה מתוך אמונה שייעוץ פיננסי טוב צריך להיות נגיש לכולם. לא רק למי שמבין את השפה המקצועית.
-                  </p>
-                  <p>
-                    שמוליק מרציאנו, סוכן ביטוח פנסיוני ברישיון, עובד מול כל חברות הביטוח וקרנות הפנסיה בשוק.
-                    כל לקוח מקבל בדיקה מלאה של מה שיש לו, השוואה בין האפשרויות והמלצה כנה. בלי לחץ.
-                  </p>
-                  <p>
-                    המטרה: שתבינו בדיוק מה יש לכם, למה אתם משלמים, ומה כדאי לשנות. בלי מילים מסובכות, בלי אותיות קטנות.
-                  </p>
+          <ul className="sd-pub-values">
+            {values.map((v) => (
+              <li key={v.title} className="sd-pub-value sd-reveal">
+                <span className={`sd-pub-disc t-${v.tone}`}><SdIcon name={v.icon} size={34} /></span>
+                <div>
+                  <h3 className="sd-h3">{v.title}</h3>
+                  <p>{v.text}</p>
                 </div>
-                <div className="dna-quote gold">
-                  <div className="dna-ql">העיקרון</div>
-                  <div className="dna-qt">
-                    להעמיד את הלקוח מעל כל שיקול אחר. זו לא אמירה שיווקית, זו התשתית המשפטית והעסקית שלנו.
-                  </div>
-                </div>
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </SdBand>
 
-        {/* FACTS + REGISTRY */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <ScrollReveal>
-              <SectionHead title="פרטי הסוכנות" />
-            </ScrollReveal>
-            <ScrollReveal delay={80}>
-              <div className="grid lg:grid-cols-2 gap-10 lg:gap-24">
-                <ul className="border-t" style={{ borderColor: LINE }}>
-                  {[
-                    { label: "ע.מ", value: "305275653", ltr: true },
-                    { label: "רישיון סוכן ביטוח", value: "ברישיון רשות שוק ההון", ltr: false },
-                    { label: "מבית", value: "עמיתים הון", ltr: false },
-                    { label: "משרדים", value: "רעננה · ירושלים", ltr: false },
-                  ].map((item) => (
-                    <li key={item.label} className="flex items-baseline justify-between gap-4 py-[15px] border-b" style={{ borderColor: LINE }}>
-                      <span className="text-[14px]" style={{ color: MUTED }}>{item.label}</span>
-                      <span className="text-[16px] font-bold tabular-nums whitespace-nowrap" style={{ color: GREEN }} dir={item.ltr ? "ltr" : undefined}>
-                        {item.value}
-                      </span>
-                    </li>
+      <SdBand tone={p2} id="process">
+        <SdProcess art="01-hero" steps={steps} title="איך אנחנו עובדים" />
+      </SdBand>
+
+      <SdBand tone={p3} id="compare">
+        <div className="sd-wrap sd-pub-split is-wide-copy">
+          <div>
+            <span className="sd-eyebrow">השוואה בין חברות</span>
+            <h2 className="sd-h2 mt-4">אנחנו לא קשורים לחברה אחת, ולכן אפשר להשוות באמת</h2>
+            <p className="sd-lead mt-5">כשמשווים, לא מסתכלים רק על המחיר. אלה הדברים שאנחנו בודקים בכל מוצר.</p>
+            <div className="sd-table-wrap mt-8">
+              <table className="sd-table">
+                <thead>
+                  <tr><th scope="col">מה בודקים</th><th scope="col">למה זה חשוב</th></tr>
+                </thead>
+                <tbody>
+                  {compare.map((r) => (
+                    <tr key={r.k}><th scope="row">{r.k}</th><td>{r.v}</td></tr>
                   ))}
-                </ul>
-                <ul className="space-y-4">
-                  {[
-                    "עובדים מול חברות הביטוח ובתי ההשקעות בישראל, ללא תלות בחברה אחת.",
-                    "השיחה הראשונה ללא עלות וללא התחייבות.",
-                    "אזור אישי ללקוח: הפוליסות, החיסכון והמסמכים במקום אחד.",
-                  ].map((text) => (
-                    <li key={text} className="dna-pill-item text-[16px]">
-                      <span>{text}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
-
-        {/* WHAT WE DO */}
-        <section className="border-t bg-white" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
-            <ScrollReveal>
-              <SectionHead
-                title="מה אנחנו עושים"
-                lede="ניהול פיננסי נכון מתחיל בהבנה של מה שיש לכם."
-              />
-            </ScrollReveal>
-            <ScrollReveal delay={80}>
-              <ul className="max-w-3xl">
-                {[
-                  "בדיקת כל הפוליסות והמוצרים הפנסיוניים שלכם, מול כל החברות בשוק",
-                  "השוואת מחירים, כיסויים ודמי ניהול. שתדעו שאתם לא משלמים מיותר",
-                  "מעקב שוטף: חידושים, שינויים במשפחה, עדכוני רגולציה. אנחנו בתמונה",
-                  "זיהוי כפל ביטוחי, כיסויים חסרים ודמי ניהול גבוהים, וטיפול מיידי",
-                ].map((text) => (
-                  <li key={text} className="dna-pill-item !py-4 border-b text-[17px] leading-[1.7]" style={{ borderColor: LINE }}>
-                    <span>{text}</span>
-                  </li>
-                ))}
-              </ul>
-            </ScrollReveal>
-          </div>
-        </section>
-
-        {/* VALUES */}
-        <section className="relative border-t overflow-hidden" style={{ borderColor: LINE }}>
-          <OliveBranch className="hidden lg:block absolute -bottom-8 left-8 w-36 opacity-70" />
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
-            <ScrollReveal>
-              <SectionHead title="הערכים" />
-            </ScrollReveal>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-              {values.map((item, i) => (
-                <ScrollReveal key={item.title} delay={i * 60}>
-                  <div className="dna-concept h-full">
-                    <BrandIcon name={item.icon} size={32} className="mb-4" style={{ color: GREEN }} />
-                    <h3 className="text-[20px] mb-2" style={{ color: GREEN }}>{item.title}</h3>
-                    <p className="text-[16px] leading-[1.7]" style={{ color: BODY }}>{item.description}</p>
-                  </div>
-                </ScrollReveal>
-              ))}
+                </tbody>
+              </table>
             </div>
           </div>
-        </section>
-
-        {/* CTA — deep green band */}
-        <section className="dna-navy-band">
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
-            <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(26px, 3.2vw, 36px)" }}>
-              רוצים לבדוק את המצב שלכם?
-            </h2>
-            <p className="text-[17px] leading-[1.7] mb-9 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
-              שיחה ראשונה ללא עלות וללא התחייבות. מתחילים בבדיקת תיק 360, וממשיכים יחד.
-            </p>
-            <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
-              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">בדיקת תיק 360</Link>
-              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">תיאום פגישה</Link>
-              <button
-                type="button"
-                onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                className="link-rule text-[15px] self-center !text-[#FAF7EF] !border-[#FAF7EF]/40 hover:!border-[#FAF7EF]"
-              >
-                <BrandIcon name="message" size={18} />
-                שאלו את היועץ הדיגיטלי
-              </button>
-            </div>
+          <div className="sd-pub-art" aria-hidden="true">
+            <SdPic name="04-investments-growth" sizes="(min-width:1024px) 440px, 90vw" />
           </div>
-        </section>
-      </main>
+        </div>
+      </SdBand>
 
-      <Footer />
-    </div>
+      <SdBand tone="white" id="commitments">
+        <div className="sd-wrap sd-pub-split">
+          <div className="sd-pub-art" aria-hidden="true">
+            <SdPic name="06-home-mortgage" sizes="(min-width:1024px) 480px, 90vw" />
+          </div>
+          <div>
+            <span className="sd-eyebrow">מה אנחנו עושים</span>
+            <h2 className="sd-h2 mt-4">ניהול פיננסי טוב מתחיל בהבנה של מה שיש לכם</h2>
+            <ul className="sd-pub-list mt-8">
+              {commitments.map((c) => <li key={c}><span>{c}</span></li>)}
+            </ul>
+          </div>
+        </div>
+      </SdBand>
+
+      <PubCta
+        title="רוצים להכיר את המצב שלכם?"
+        text="שיחה ראשונה ללא עלות וללא התחייבות. מתחילים בבדיקת תיק 360 וממשיכים יחד, בקצב שלכם."
+        art="12-childrens-savings"
+        primary={{ label: "תיאום פגישה", to: "/contact" }}
+        secondary={{ label: "בדיקת תיק 360", to: "/portfolio-review" }}
+      />
+    </PubPage>
   );
-};
-
-export default About;
+}

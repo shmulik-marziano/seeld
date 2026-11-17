@@ -1,9 +1,9 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageSd from '@/components/sd/InsurancePageSd';
 import { Heart, Shield, Building2 } from 'lucide-react';
 
 const NursingClalitInsurance = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageSd
       heroIcon={Heart}
       heroIconColor="#b91c1c"
       heroCategory="ביטוח סיעודי לחברי כללית"

@@ -1,27 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { Link, useLocation } from "react-router-dom";
 import SeeIDLogo from "@/components/SeeIDLogo";
-import { Menu, User, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ChevronDown, Menu, MessageCircle, Phone, User, X } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { StatusPill } from "@/components/brand/Live";
+import { INSURANCE_GROUPS, SAVINGS_LINKS } from "@/components/sd/chromeData";
+import "@/components/sd/chrome.css";
 
-// Five items, as in the design mock: the two product hubs, the process, the
-// knowledge hub and contact. Tools and the blog live under ידע וכלים and in
-// the footer; the drawer keeps the direct links.
-const navLinks = [
-  { href: "/savings", label: "פיננסים" },
-  { href: "/insurances", label: "ביטוח" },
+type MenuId = "insurance" | "savings";
+
+// Desktop primary nav. Two hubs carry a sub-menu; the rest are direct links.
+// "צור קשר" is the primary action button on the right of the bar.
+const plainLinks = [
   { href: "/#process", label: "איך זה עובד" },
   { href: "/learn", label: "ידע וכלים" },
-  { href: "/contact", label: "צור קשר" },
 ];
 
 const mobileNavLinks = [
   { href: "/", label: "דף הבית" },
-  { href: "/savings", label: "פיננסים" },
-  { href: "/insurances", label: "ביטוח" },
   { href: "/#process", label: "איך זה עובד" },
   { href: "/learn", label: "ידע וכלים" },
   { href: "/calculators", label: "מחשבונים" },
@@ -35,67 +31,93 @@ const mobileSecondaryLinks = [
   { href: "/agents", label: "כניסה לסוכנים" },
 ];
 
-// Shared desktop nav item classes (quiet precision: Rubik, ink on hover/active)
-const desktopLinkClass = (active: boolean) =>
-  cn(
-    "text-[15px] font-medium transition-colors",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[hsl(var(--ring))]",
-    active
-      ? "text-[#203957] underline decoration-[#819B7D] decoration-2 underline-offset-[10px]"
-      : "text-[#55677C] hover:text-[#203957]"
-  );
-
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [openMenu, setOpenMenu] = useState<MenuId | null>(null);
+  const [mobileSection, setMobileSection] = useState<MenuId | null>(null);
   const { pathname } = useLocation();
   const reducedMotion = useReducedMotion();
+  const navRef = useRef<HTMLElement>(null);
+  const openerRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const hoverTimer = useRef<number | undefined>(undefined);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/");
+  const hubActive = (id: MenuId) => (id === "insurance" ? isActive("/insurances") || isActive("/insurance") : isActive("/savings"));
 
-  // Dark mode is parked until it gets a real SEELD Mono dark theme —
-  // the legacy .dark palette is off-system. Force light and clear stale state.
+  // Dark mode is parked until it gets a real SEELD dark theme; force light.
   useEffect(() => {
     document.documentElement.classList.remove("dark");
     localStorage.removeItem("theme");
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 8);
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open
+  // Lock body scroll when the drawer is open
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = isMenuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [isMenuOpen]);
 
-  // Close the mobile menu on route change
+  // Close everything on route change
   useEffect(() => {
     setIsMenuOpen(false);
+    setOpenMenu(null);
   }, [pathname]);
 
-  // Escape closes the drawer (it is a dialog) and returns focus to the opener
+  const closeDrawer = useCallback(() => {
+    setIsMenuOpen(false);
+    openerRef.current?.focus();
+  }, []);
+
+  // Drawer is a dialog: Escape closes, Tab stays inside, focus moves in on open
   useEffect(() => {
     if (!isMenuOpen) return;
+    const t = window.setTimeout(() => closeRef.current?.focus(), 30);
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setIsMenuOpen(false);
-        (document.querySelector<HTMLButtonElement>('button[aria-label="פתח תפריט"]'))?.focus();
-      }
+      if (e.key === "Escape") { closeDrawer(); return; }
+      if (e.key !== "Tab" || !drawerRef.current) return;
+      const f = Array.from(
+        drawerRef.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
+      ).filter((el) => el.offsetParent !== null);
+      if (!f.length) return;
+      const first = f[0];
+      const last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [isMenuOpen]);
+    return () => { window.clearTimeout(t); window.removeEventListener("keydown", onKey); };
+  }, [isMenuOpen, closeDrawer]);
+
+  // Desktop sub-menu: Escape and outside click close it
+  useEffect(() => {
+    if (!openMenu) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpenMenu(null); };
+    const onDown = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) setOpenMenu(null);
+    };
+    window.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onDown);
+    return () => { window.removeEventListener("keydown", onKey); document.removeEventListener("mousedown", onDown); };
+  }, [openMenu]);
+
+  const hoverOpen = (id: MenuId) => {
+    window.clearTimeout(hoverTimer.current);
+    setOpenMenu(id);
+  };
+  const hoverClose = () => {
+    window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => setOpenMenu(null), 140);
+  };
 
   // Skip link: pages render <main> without an id, so focus the first <main> directly.
   const handleSkipToMain = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -114,201 +136,251 @@ const Header = () => {
     window.dispatchEvent(new Event("seeld:open-chat"));
   };
 
+  const hubs: { id: MenuId; href: string; label: string }[] = [
+    { id: "insurance", href: "/insurances", label: "ביטוח" },
+    { id: "savings", href: "/savings", label: "פיננסים" },
+  ];
+
   return (
-    <header
-      className="sticky top-0 z-50 border-b bg-[#FAF7EF]/95 backdrop-blur-sm"
-      style={{ borderColor: "#D9DEE4" }}
-    >
+    <header className="sd-chrome-header" data-scrolled={isScrolled ? "true" : "false"}>
       {/* Keep focused elements clear of the sticky header (WCAG 2.4.11) */}
       <style>{"html{scroll-padding-top:96px}"}</style>
 
       {/* Skip link: first focusable element, visually hidden until focused */}
-      <a
-        href="#main"
-        onClick={handleSkipToMain}
-        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:right-3 focus:z-[60] focus:bg-white focus:text-[#203957] focus:px-4 focus:py-2.5 focus:text-[13.5px] focus:font-medium focus:rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
-      >
+      <a href="#main" onClick={handleSkipToMain} className="sd-chrome-skip">
         דלג לתוכן
       </a>
 
-      {/* The toolbar — institutional white bar */}
-      <div className={cn("transition-shadow duration-200", isScrolled && "shadow-[0_6px_18px_-12px_rgba(32, 57, 87,0.25)]")}>
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="flex items-center justify-between h-[64px]">
-          {/* Logo */}
-          <SeeIDLogo size="md" className="flex-shrink-0" />
+      <div className="sd-chrome-bar">
+        <SeeIDLogo size="md" className="flex-shrink-0" />
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8" aria-label="ניווט ראשי">
-            {navLinks.map((link) => (
+        {/* Desktop navigation */}
+        <nav ref={navRef} className="sd-chrome-nav" aria-label="ניווט ראשי">
+          {hubs.map((hub) => (
+            <div
+              key={hub.id}
+              className="sd-chrome-item"
+              onMouseEnter={() => hoverOpen(hub.id)}
+              onMouseLeave={hoverClose}
+            >
               <Link
-                key={link.href}
-                to={link.href}
-                aria-current={isActive(link.href) ? "page" : undefined}
-                className={desktopLinkClass(isActive(link.href))}
+                to={hub.href}
+                aria-current={hubActive(hub.id) ? "page" : undefined}
+                className="sd-chrome-link"
+                data-active={hubActive(hub.id) ? "true" : "false"}
               >
-                {link.label}
+                {hub.label}
               </Link>
-            ))}
-          </nav>
+              <button
+                type="button"
+                className="sd-chrome-chev"
+                aria-expanded={openMenu === hub.id}
+                aria-controls={`sd-chrome-sub-${hub.id}`}
+                aria-label={`תת-תפריט ${hub.label}`}
+                onClick={() => setOpenMenu(openMenu === hub.id ? null : hub.id)}
+              >
+                <ChevronDown size={16} strokeWidth={2} aria-hidden="true" />
+              </button>
 
-          {/* Actions */}
-          <div className="flex items-center gap-5">
-            {/* Outlined pill with the user glyph, as in the mock. The agents'
-                entrance moved to the drawer and the footer. */}
+              <div
+                id={`sd-chrome-sub-${hub.id}`}
+                className="sd-chrome-sub"
+                data-open={openMenu === hub.id ? "true" : "false"}
+                data-wide={hub.id === "insurance" ? "true" : "false"}
+              >
+                {hub.id === "insurance" ? (
+                  <div className="sd-chrome-sub-grid">
+                    {INSURANCE_GROUPS.map((g) => (
+                      <div key={g.title}>
+                        <p className="sd-chrome-sub-title">{g.title}</p>
+                        <ul>
+                          {g.links.map((l) => (
+                            <li key={l.href}>
+                              <Link to={l.href} tabIndex={openMenu === hub.id ? 0 : -1}>{l.label}</Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <ul className="sd-chrome-sub-list">
+                    {SAVINGS_LINKS.map((l) => (
+                      <li key={l.href}>
+                        <Link to={l.href} tabIndex={openMenu === hub.id ? 0 : -1}>{l.label}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <Link to={hub.href} className="sd-chrome-sub-all" tabIndex={openMenu === hub.id ? 0 : -1}>
+                  {hub.id === "insurance" ? "לכל תחומי הביטוח" : "לכל תחומי הפיננסים"}
+                </Link>
+              </div>
+            </div>
+          ))}
+
+          {plainLinks.map((link) => (
             <Link
-              to="/personal-area"
-              className="!hidden lg:!inline-flex btn-secondary !min-h-[44px] !py-2 !px-5 !text-[15px] !rounded-full gap-2"
+              key={link.href}
+              to={link.href}
+              aria-current={isActive(link.href) ? "page" : undefined}
+              className="sd-chrome-link"
+              data-active={isActive(link.href) ? "true" : "false"}
             >
-              <User className="h-[18px] w-[18px]" strokeWidth={1.75} aria-hidden="true" />
-              אזור אישי
+              {link.label}
             </Link>
+          ))}
+        </nav>
 
-            {/* Mobile Menu Button */}
-            <button
-              className="lg:hidden p-2 flex items-center justify-center text-[#203957] min-w-[44px] min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
-              onClick={() => setIsMenuOpen(true)}
-              aria-label="פתח תפריט"
-              aria-expanded={isMenuOpen}
-            >
-              <Menu className="h-5 w-5" strokeWidth={1.5} />
-            </button>
-          </div>
-        </div>
+        {/* Actions */}
+        <div className="sd-chrome-actions">
+          <Link to="/personal-area" className="sd-chrome-ghost">
+            <User size={18} strokeWidth={1.75} aria-hidden="true" />
+            אזור אישי
+          </Link>
+          <Link to="/contact" className="sd-chrome-cta">צור קשר</Link>
+
+          <button
+            ref={openerRef}
+            type="button"
+            className="sd-chrome-burger"
+            onClick={() => setIsMenuOpen(true)}
+            aria-label="פתח תפריט"
+            aria-expanded={isMenuOpen}
+            aria-haspopup="dialog"
+          >
+            <Menu size={22} strokeWidth={1.6} aria-hidden="true" />
+          </button>
         </div>
       </div>
 
-      {/* Mobile Menu Overlay — portaled to <body>: the header's backdrop-blur
-          creates a containing block that traps position:fixed children inside
-          the 64px bar (drawer rendered clipped and transparent) */}
+      {/* Mobile drawer, portaled to <body>: the header's backdrop blur creates a
+          containing block that would trap position:fixed children inside the bar. */}
       {createPortal(
-      <AnimatePresence>
-        {isMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              className="fixed inset-0 bg-black/30 z-50 lg:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: reducedMotion ? 0 : 0.2, ease: "easeOut" }}
-              onClick={() => setIsMenuOpen(false)}
-            />
-            {/* Panel — Snap slide (0.2s, ease-out); warm-paper surface, bento chrome */}
-            <motion.div
-              className="fixed top-0 right-0 bottom-0 w-[85vw] sm:w-[360px] bg-white z-50 lg:hidden border-l border-[#D9DEE4]"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "tween", duration: reducedMotion ? 0 : 0.2, ease: "easeOut" }}
-              role="dialog"
-              aria-modal="true"
-              aria-label="תפריט ניווט"
-            >
-              <div className="flex items-center justify-between px-6 h-[68px] border-b border-[#D9DEE4]">
-                <img
-                  src="/brand/logo.png"
-                  alt="שילד ביטוח ופיננסים"
-                  width={93}
-                  height={40}
-                  style={{ height: 40, width: "auto" }}
-                  draggable={false}
-                />
-                <button
-                  onClick={() => setIsMenuOpen(false)}
-                  className="p-2 flex items-center justify-center min-w-[44px] min-h-[44px] text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
-                  aria-label="סגור תפריט"
-                >
-                  <X className="h-5 w-5" strokeWidth={1.5} />
-                </button>
-              </div>
-
-              <nav
-                className="flex flex-col px-6 pt-2 pb-8 overflow-y-auto h-[calc(100vh-68px)]"
-                aria-label="ניווט נייד"
+        <AnimatePresence>
+          {isMenuOpen && (
+            <div className="sd-chrome-root">
+              <motion.div
+                className="sd-chrome-backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: reducedMotion ? 0 : 0.2, ease: "easeOut" }}
+                onClick={closeDrawer}
+              />
+              <motion.div
+                ref={drawerRef}
+                className="sd-chrome-drawer"
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ type: "tween", duration: reducedMotion ? 0 : 0.22, ease: "easeOut" }}
+                role="dialog"
+                aria-modal="true"
+                aria-label="תפריט ניווט"
+                dir="rtl"
               >
-                {/* Primary links */}
-                {mobileNavLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    aria-current={isActive(link.href) ? "page" : undefined}
-                    className={cn(
-                      "py-[15px] border-b border-[#D9DEE4] text-[18px] font-bold transition-colors",
-                      "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]",
-                      isActive(link.href)
-                        ? "text-[#203957]"
-                        : "text-[#2D435D] hover:text-[#203957]"
-                    )}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-
-                {/* Secondary group — mono eyebrow */}
-                <div className="mt-8">
-                  <div className="text-[14px] font-bold text-[#55677C] mb-3">
-                    חשבון
-                  </div>
-                  <div className="flex flex-col">
-                    {mobileSecondaryLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        className="py-2.5 text-[14px] font-medium text-[#55677C] hover:text-[#203957] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Bottom: ink CTA + live chat opener */}
-                <div className="mt-auto pt-10 space-y-5">
-                  {/* Quick contact — phone + WhatsApp, thumb-friendly */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <a
-                      href="tel:0523097444"
-                      className="flex flex-col items-center justify-center px-3 py-2.5 rounded-lg border border-[#D9DEE4] text-[14px] font-medium text-[#203957] hover:bg-[#EEF2EC] transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      חייגו
-                      <span dir="ltr" className="tabular-nums text-[14px] font-normal text-[#55677C] whitespace-nowrap">052-309-7444</span>
-                    </a>
-                    <a
-                      href="https://wa.me/972523097444"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-[#D9DEE4] text-[14px] font-medium text-[#203957] hover:bg-[#EEF2EC] transition-colors min-h-[48px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      WhatsApp
-                    </a>
-                  </div>
-                  <Link
-                    to="/contact"
-                    className="btn-primary w-full !min-h-[52px]"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    בדיקת תיק 360
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={openChat}
-                    className="block mx-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]"
-                    aria-label="פתיחת שיחה עם היועץ"
-                  >
-                    <StatusPill>שיחה עם היועץ הדיגיטלי</StatusPill>
+                <div className="sd-chrome-drawer-head">
+                  <img
+                    src="/brand/logo.png"
+                    alt="שילד ביטוח ופיננסים"
+                    width={93}
+                    height={40}
+                    style={{ height: 40, width: "auto" }}
+                    draggable={false}
+                  />
+                  <button ref={closeRef} type="button" onClick={closeDrawer} className="sd-chrome-burger" style={{ display: "inline-flex" }} aria-label="סגור תפריט">
+                    <X size={22} strokeWidth={1.6} aria-hidden="true" />
                   </button>
                 </div>
-              </nav>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>,
-      document.body
+
+                <nav className="sd-chrome-drawer-nav" aria-label="ניווט נייד">
+                  <Link to="/" aria-current={pathname === "/" ? "page" : undefined} className="sd-chrome-drawer-link" onClick={() => setIsMenuOpen(false)}>
+                    דף הבית
+                  </Link>
+
+                  {hubs.map((hub) => (
+                    <div key={hub.id} className="sd-chrome-acc">
+                      <button
+                        type="button"
+                        className="sd-chrome-drawer-link sd-chrome-acc-btn"
+                        aria-expanded={mobileSection === hub.id}
+                        aria-controls={`sd-chrome-m-${hub.id}`}
+                        onClick={() => setMobileSection(mobileSection === hub.id ? null : hub.id)}
+                      >
+                        <span>{hub.label}</span>
+                        <ChevronDown size={18} strokeWidth={2} aria-hidden="true" />
+                      </button>
+                      {mobileSection === hub.id && (
+                        <div id={`sd-chrome-m-${hub.id}`} className="sd-chrome-acc-panel">
+                          {hub.id === "insurance"
+                            ? INSURANCE_GROUPS.map((g) => (
+                                <div key={g.title}>
+                                  <p className="sd-chrome-sub-title">{g.title}</p>
+                                  {g.links.map((l) => (
+                                    <Link key={l.href} to={l.href} onClick={() => setIsMenuOpen(false)}>{l.label}</Link>
+                                  ))}
+                                </div>
+                              ))
+                            : SAVINGS_LINKS.map((l) => (
+                                <Link key={l.href} to={l.href} onClick={() => setIsMenuOpen(false)}>{l.label}</Link>
+                              ))}
+                          <Link to={hub.href} className="sd-chrome-sub-all" onClick={() => setIsMenuOpen(false)}>
+                            {hub.id === "insurance" ? "לכל תחומי הביטוח" : "לכל תחומי הפיננסים"}
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+
+                  {mobileNavLinks.slice(1).map((link) => (
+                    <Link
+                      key={link.href}
+                      to={link.href}
+                      aria-current={isActive(link.href) ? "page" : undefined}
+                      className="sd-chrome-drawer-link"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+
+                  <div className="sd-chrome-drawer-sec">
+                    <p className="sd-chrome-sub-title">חשבון</p>
+                    {mobileSecondaryLinks.map((link) => (
+                      <Link key={link.href} to={link.href} onClick={() => setIsMenuOpen(false)}>{link.label}</Link>
+                    ))}
+                  </div>
+
+                  <div className="sd-chrome-drawer-foot">
+                    <div className="sd-chrome-quick">
+                      <a href="tel:0523097444" onClick={() => setIsMenuOpen(false)}>
+                        <Phone size={16} aria-hidden="true" />
+                        <span dir="ltr">052-309-7444</span>
+                      </a>
+                      <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer" onClick={() => setIsMenuOpen(false)}>
+                        <MessageCircle size={16} aria-hidden="true" />
+                        WhatsApp
+                      </a>
+                    </div>
+                    <Link to="/contact" className="sd-chrome-cta sd-chrome-cta-block" onClick={() => setIsMenuOpen(false)}>
+                      צור קשר
+                    </Link>
+                    <Link to="/personal-area" className="sd-chrome-ghost sd-chrome-cta-block" onClick={() => setIsMenuOpen(false)}>
+                      <User size={18} strokeWidth={1.75} aria-hidden="true" />
+                      אזור אישי
+                    </Link>
+                    <button type="button" onClick={openChat} className="sd-chrome-chatlink" aria-label="פתיחת שיחה עם היועץ">
+                      <i aria-hidden="true" />
+                      שיחה עם היועץ הדיגיטלי
+                    </button>
+                  </div>
+                </nav>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>,
+        document.body
       )}
     </header>
   );

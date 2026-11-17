@@ -1,9 +1,9 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageSd from '@/components/sd/InsurancePageSd';
 import { Package, Shield, Key } from 'lucide-react';
 
 const RentersInsurance = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageSd
       heroIcon={Package}
       heroIconColor="#b91c1c"
       heroCategory="ביטוח תכולה לשוכרים"

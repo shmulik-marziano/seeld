@@ -5,12 +5,14 @@ import Footer from "@/components/Footer";
 import TrackCard from "@/components/returns/TrackCard";
 import MarketMap from "@/components/returns/MarketMap";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { LeafCanopy } from "@/components/brand/Elements";
+import { SdBand, tintStyle, useSdFont } from "@/components/sd/primitives";
+import { PUB_TOPICS, PubClose, PubHero } from "@/components/sd/pub";
+import "@/components/sd/sd.css";
 import {
   fmtAssets, fmtPct, periodLabel, productBySlug, PRODUCTS, trackLabel,
   useCmaBoard, useCompanyMap, type BoardFund, type BoardProduct,
 } from "@/hooks/useCmaBoard";
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, RUST_TEXT, SAGE_ON_GREEN } from "@/lib/brand";
+import { BODY, GREEN, LINE, MUTED, RUST_TEXT } from "@/lib/brand";
 
 /**
  * לוח התשואות: an overview (market map by company) and one board per product,
@@ -28,6 +30,9 @@ const chip = (active: boolean) =>
   }`;
 
 const ReturnTables = () => {
+  useSdFont();
+  const topic = PUB_TOPICS.returnTables;
+  const [p1, p2] = topic.palette;
   const { product: slug } = useParams<{ product?: string }>();
   const product = productBySlug(slug);
   const { data: board, isLoading, isError } = useCmaBoard();
@@ -102,87 +107,68 @@ const ReturnTables = () => {
   const title = product ? `לוח התשואות: ${product.label}` : "לוח התשואות";
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
+    <div className="sd min-h-screen" dir="rtl" style={tintStyle(p1)}>
       <Header />
 
       <main>
-        {/* Hero */}
-        <div className="dna-page">
-          <div className="dna-circles" aria-hidden="true">
-            <div className="dna-circ hidden md:block" style={{ width: 300, height: 300, top: -150, right: -130, backgroundColor: PASTEL_SAGE, opacity: 0.8 }} />
-            <div className="dna-circ hidden md:block" style={{ width: 180, height: 180, top: 60, left: -100, backgroundColor: PASTEL_SAND, opacity: 0.7 }} />
-          </div>
-
-          <section className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 pt-8 sm:pt-12 pb-6 sm:pb-8">
-            <nav className="flex items-center gap-2 text-[14px] mb-8" style={{ color: MUTED }} aria-label="ניווט משני">
-              <Link to="/" className="hover:underline underline-offset-4">דף הבית</Link>
-              <BrandIcon name="arrow-left" size={14} />
-              {product ? (
-                <>
-                  <Link to="/return-tables" className="hover:underline underline-offset-4">לוח התשואות</Link>
-                  <BrandIcon name="arrow-left" size={14} />
-                  <span className="font-bold" style={{ color: GREEN }} aria-current="page">{product.label}</span>
-                </>
-              ) : (
-                <span className="font-bold" style={{ color: GREEN }} aria-current="page">לוח התשואות</span>
-              )}
-            </nav>
-
-            <div className="flex items-start justify-between gap-8">
-              <div className="min-w-0">
-                <h1 className="dna-display leading-[1.15] mb-4 max-w-3xl" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-                  {title}
-                </h1>
-                <p className="text-[17px] sm:text-[18px] max-w-2xl leading-[1.7]" style={{ color: MUTED }}>
-                  {product
-                    ? `כל ${product.label} בישראל לפי מסלול השקעה: תשואות, סיכון, חשיפות ודמי ניהול, מהדיווח הרשמי האחרון.`
-                    : "השוואת תשואות ודמי ניהול לפי חברה, מוצר ומסלול השקעה, מנתוני רשות שוק ההון. בחרו מוצר, או התחילו ממפת השוק."}
-                </p>
-
-                <dl className="mt-5 flex flex-wrap gap-x-8 gap-y-2 text-[15px]" style={{ color: MUTED }}>
-                  <div className="flex gap-2">
-                    <dt>נכון ל:</dt>
-                    <dd className="font-bold" style={{ color: GREEN }}>{period ? periodLabel(period) : "טוען"}</dd>
-                  </div>
-                  <div className="flex gap-2">
-                    <dt>מקור:</dt>
-                    <dd className="font-bold" style={{ color: GREEN }}>רשות שוק ההון, ביטוח וחיסכון (data.gov.il)</dd>
-                  </div>
-                  <div className="flex gap-2">
-                    <dt>עדכון:</dt>
-                    <dd className="font-bold" style={{ color: GREEN }}>אוטומטי, עם פרסום הדיווח החודשי</dd>
-                  </div>
-                  {product && (
-                    <div className="flex gap-2">
-                      <dt>מיון:</dt>
-                      <dd className="font-bold" style={{ color: GREEN }}>תשואת 12 החודשים האחרונים</dd>
-                    </div>
-                  )}
-                </dl>
+        <PubHero
+          compact
+          crumbs={
+            product
+              ? [{ label: "דף הבית", to: "/" }, { label: "לוח התשואות", to: "/return-tables" }, { label: product.label }]
+              : [{ label: "דף הבית", to: "/" }, { label: "לוח התשואות" }]
+          }
+          eyebrow="נתוני רשות שוק ההון"
+          title={title}
+          lead={
+            product
+              ? `כל ${product.label} בישראל לפי מסלול השקעה: תשואות, סיכון, חשיפות ודמי ניהול, מהדיווח הרשמי האחרון.`
+              : "השוואת תשואות ודמי ניהול לפי חברה, מוצר ומסלול השקעה, מנתוני רשות שוק ההון. בחרו מוצר, או התחילו ממפת השוק."
+          }
+          art={topic.art}
+          tint={p1}
+          meta={
+            <dl className="flex flex-wrap gap-x-8 gap-y-2">
+              <div className="flex gap-2">
+                <dt>נכון ל:</dt>
+                <dd><b>{period ? periodLabel(period) : "טוען"}</b></dd>
               </div>
-              <LeafCanopy className="hidden lg:block w-44 shrink-0" />
-            </div>
-
-            {/* Product navigation */}
-            <nav className="mt-8 -mx-5 px-5 sm:mx-0 sm:px-0 flex gap-2 overflow-x-auto scrollbar-hide pb-1" aria-label="מוצרים">
-              <Link to="/return-tables" className={chip(!product)} style={!product ? { background: GREEN } : { color: GREEN, boxShadow: `inset 0 0 0 1.5px ${LINE}` }} aria-current={!product ? "page" : undefined}>
-                מפת השוק
-              </Link>
-              {PRODUCTS.map((p) => {
-                const active = product?.key === p.key;
-                return (
-                  <Link key={p.key} to={`/return-tables/${p.slug}`} className={chip(active)} style={active ? { background: GREEN } : { color: GREEN, boxShadow: `inset 0 0 0 1.5px ${LINE}` }} aria-current={active ? "page" : undefined}>
-                    {p.short}
-                  </Link>
-                );
-              })}
-            </nav>
-          </section>
-        </div>
+              <div className="flex gap-2">
+                <dt>מקור:</dt>
+                <dd><b>רשות שוק ההון, ביטוח וחיסכון (data.gov.il)</b></dd>
+              </div>
+              <div className="flex gap-2">
+                <dt>עדכון:</dt>
+                <dd><b>אוטומטי, עם פרסום הדיווח החודשי</b></dd>
+              </div>
+              {product && (
+                <div className="flex gap-2">
+                  <dt>מיון:</dt>
+                  <dd><b>תשואת 12 החודשים האחרונים</b></dd>
+                </div>
+              )}
+            </dl>
+          }
+        >
+          {/* Product navigation */}
+          <nav className="mt-7 -mx-5 px-5 sm:mx-0 sm:px-0 flex gap-2 overflow-x-auto scrollbar-hide pb-1" aria-label="מוצרים">
+            <Link to="/return-tables" className={chip(!product)} style={!product ? { background: GREEN } : { color: GREEN, background: "#fff", boxShadow: `inset 0 0 0 1.5px ${LINE}` }} aria-current={!product ? "page" : undefined}>
+              מפת השוק
+            </Link>
+            {PRODUCTS.map((p) => {
+              const active = product?.key === p.key;
+              return (
+                <Link key={p.key} to={`/return-tables/${p.slug}`} className={chip(active)} style={active ? { background: GREEN } : { color: GREEN, background: "#fff", boxShadow: `inset 0 0 0 1.5px ${LINE}` }} aria-current={active ? "page" : undefined}>
+                  {p.short}
+                </Link>
+              );
+            })}
+          </nav>
+        </PubHero>
 
         {/* Body */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-10 sm:py-14">
+        <SdBand tone="cream" id="board" className="!pt-8 sm:!pt-12">
+          <div className="sd-wrap">
             {isLoading && (
               <div className="dna-concept max-w-xl" role="status" aria-live="polite">
                 <p className="text-[16px]" style={{ color: BODY }}>טוען את הדיווח האחרון של רשות שוק ההון.</p>
@@ -310,11 +296,11 @@ const ReturnTables = () => {
               </div>
             )}
           </div>
-        </section>
+        </SdBand>
 
         {/* Disclaimer */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-10 sm:py-14">
+        <SdBand tone={p2} id="disclaimer" className="!py-10 sm:!py-14">
+          <div className="sd-wrap">
             <div className="dna-callout max-w-3xl text-[15px]">
               <p className="font-bold mb-1" style={{ color: GREEN }}>הבהרה חשובה</p>
               <p>
@@ -325,24 +311,13 @@ const ReturnTables = () => {
               </p>
             </div>
           </div>
-        </section>
+        </SdBand>
 
-        {/* Closing: deep green band, the central path */}
-        <section className="dna-navy-band no-print">
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-14 sm:py-20">
-            <h2 className="leading-tight mb-3" style={{ color: IVORY, fontSize: "clamp(26px, 3vw, 34px)" }}>
-              המספרים ברורים. מה עושים איתם?
-            </h2>
-            <p className="text-[17px] leading-[1.7] mb-8 max-w-xl" style={{ color: SAGE_ON_GREEN }}>
-              תשואה היא רק חלק מהתמונה. דמי ניהול, רמת סיכון והתאמה אישית משנים את התוצאה.
-              בדיקת תיק 360 מסדרת את הביטוחים, הפנסיה והחיסכון בתמונה אחת.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/#portfolio-review" className="btn-on-green sm:min-w-[220px]">בדיקת תיק 360</Link>
-              <Link to="/contact" className="btn-on-green-outline sm:min-w-[200px]">תיאום פגישה</Link>
-            </div>
-          </div>
-        </section>
+        <PubClose
+          title="המספרים ברורים. מה עושים איתם?"
+          text="תשואה היא רק חלק מהתמונה. דמי ניהול, רמת סיכון והתאמה אישית משנים את התוצאה. בדיקת תיק 360 מסדרת את הביטוחים, הפנסיה והחיסכון בתמונה אחת."
+          art="05-retirement"
+        />
       </main>
 
       <Footer />

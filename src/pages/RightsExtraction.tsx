@@ -1,14 +1,12 @@
-import { useRef } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
-import {
-  BODY, DISPLAY, LINE, MUTED, NAVY, PASTEL_BLUE, PASTEL_PEACH, TURQ,
-} from "@/lib/brand";
-import { ProgressRail } from "@/components/brand/Strokes";
+import { BrandIcon } from "@/components/brand/BrandIcon";
+import { SdBand, SdProcess, tintStyle, useSdFont } from "@/components/sd/primitives";
+import { PUB_TOPICS, PubClose, PubHead, PubHero } from "@/components/sd/pub";
+import "@/components/sd/sd.css";
 
-// SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
+// Rights extraction in the kit design: hero with illustration, the four channels, plain-word steps, closing block.
 
 const rights = [
   { title: "החזרי מס הכנסה", description: "בדיקת החזרי מס עבור 6 שנים אחורה" },
@@ -17,163 +15,81 @@ const rights = [
   { title: "זכויות פנסיוניות", description: "איתור קופות אבודות וכספים שלא ידעתם עליהם" },
 ];
 
-// Plain-word steps — no ornamental numerals (STYLESEED ban 2)
+// Plain-word steps, with kit icons
 const steps = [
-  { title: "מלאו פרטים", description: "כמה שאלות קצרות. שתי דקות, לא יותר." },
-  { title: "נבדוק עבורכם", description: "סריקה של כל הזכויות המגיעות לכם מהמדינה, מביטוח לאומי ומרשויות המס." },
-  { title: "קבלו דוח", description: "רשימת זכויות מסודרת והמלצות לפעולה. בלי אותיות קטנות." },
+  { icon: "checklist", t: "מלאו פרטים", p: "כמה שאלות קצרות. שתי דקות, לא יותר." },
+  { icon: "search", t: "נבדוק עבורכם", p: "סריקה של כל הזכויות המגיעות לכם מהמדינה, מביטוח לאומי ומרשויות המס." },
+  { icon: "handshake", t: "קבלו דוח", p: "רשימת זכויות מסודרת והמלצות לפעולה. בלי אותיות קטנות." },
 ];
 
-// The heading starts its block — no eyebrow, no index (STYLESEED bans).
-const SectionHead = ({ title, lede }: { title: string; lede?: string }) => (
-  <div className="mb-12 sm:mb-16">
-    <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.8rem, 3.2vw, 2.4rem)" }}>
-      {title}
-    </h2>
-    {lede && (
-      <p className="mt-4 text-base leading-[1.85] max-w-xl" style={{ color: MUTED }}>{lede}</p>
-    )}
-  </div>
-);
+const arrow = <BrandIcon name="arrow-left" size={18} />;
 
 const RightsExtraction = () => {
-  const stepsRef = useRef<HTMLDivElement>(null);
+  useSdFont();
+  const topic = PUB_TOPICS.rights;
+  const [p1, p2, p3] = topic.palette;
 
   return (
-    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+    <div className="sd min-h-screen" dir="rtl" style={tintStyle(p1)}>
       <Header />
 
       <main>
-        {/* HERO — money you didn't know was yours */}
-        <section className="dna-page">
-          {/* Pastel circle backdrop — decorative, never behind small text */}
-          <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 280, height: 280, top: -120, left: -90, backgroundColor: PASTEL_PEACH, opacity: 0.55 }}
-            />
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 210, height: 210, bottom: -110, right: -70, backgroundColor: PASTEL_BLUE, opacity: 0.5 }}
-            />
+        <PubHero
+          crumbs={[{ label: "דף הבית", to: "/" }, { label: "מיצוי זכויות" }]}
+          eyebrow="בדיקת זכאות"
+          title="כסף שמגיע לכם. באמת."
+          lead="החזרי מס, קצבאות וקופות שנשכחו. נבדוק מה מגיע לכם מהמדינה, ונדאג שתקבלו את זה."
+          art={topic.art}
+          tint={p1}
+          actions={
+            <>
+              <Link to="/contact" className="sd-btn">בדיקת זכאות{arrow}</Link>
+              <button type="button" className="sd-link" onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}>
+                <BrandIcon name="message" size={18} />
+                שאלו את היועץ הדיגיטלי
+              </button>
+            </>
+          }
+        >
+          <div className="sd-brief">
+            <b>בדיקת זכאות</b>
+            <p>הבדיקה ללא עלות וללא התחייבות. אם אין כלום, לפחות תדעו.</p>
           </div>
+        </PubHero>
 
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
-            <nav className="flex items-center gap-2 text-[14px] mb-10 sm:mb-14" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#203957] transition-colors">דף הבית</Link>
-              <span aria-hidden="true">←</span>
-              <span className="font-medium" style={{ color: NAVY }}>מיצוי זכויות</span>
-            </nav>
-
-            <div className="grid gap-10 lg:grid-cols-[1.6fr_1fr] items-start">
-              <div>
-                <h1
-                  className="dna-display leading-[1.12] mb-6 max-w-3xl"
-                  style={{ fontSize: "clamp(34px, 5vw, 50px)" }}
-                >
-                  כסף שמגיע לכם. באמת.
-                </h1>
-                <p className="text-base sm:text-[17px] max-w-2xl leading-[1.9]" style={{ color: MUTED }}>
-                  החזרי מס, קצבאות וקופות שנשכחו. נבדוק מה מגיע לכם מהמדינה, ונדאג שתקבלו את זה.
-                </p>
-              </div>
-
-              <div className="dna-quote gold">
-                <div className="dna-ql">בדיקת זכאות</div>
-                <div className="dna-qt">
-                  הבדיקה ללא עלות וללא התחייבות. אם אין כלום, לפחות תדעו.
+        <SdBand tone="cream" id="check">
+          <div className="sd-wrap">
+            <PubHead title="מה בודקים" lede="ארבעה ערוצים שבהם רוב הישראלים משאירים כסף על השולחן." />
+            <div className="sd-pub-pillars">
+              {rights.map((right, i) => (
+                <div key={right.title} className="sd-pub-pillar sd-reveal">
+                  <em>{String(i + 1).padStart(2, "0")}</em>
+                  <div>
+                    <h3>{right.title}</h3>
+                    <p>{right.description}</p>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* WHAT WE CHECK */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
-            <ScrollReveal>
-              <SectionHead
-                title="מה בודקים"
-                lede="ארבעה ערוצים שבהם רוב הישראלים משאירים כסף על השולחן."
-              />
-            </ScrollReveal>
-
-            <ScrollReveal delay={80}>
-              <div className="max-w-3xl border-t" style={{ borderColor: LINE }}>
-                {rights.map((right) => (
-                  <div key={right.title} className="dna-pill-item !py-5 border-b" style={{ borderColor: LINE }}>
-                    <div className="flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-10 w-full">
-                      <h3 className="text-base font-medium shrink-0 sm:w-52" style={{ color: NAVY }}>{right.title}</h3>
-                      <p className="text-[14.5px] leading-[1.8]" style={{ color: BODY }}>{right.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
-
-        {/* HOW IT WORKS — a real sequence, plain-word steps */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
-            <ScrollReveal>
-              <SectionHead title="איך זה עובד" />
-            </ScrollReveal>
-
-            <div ref={stepsRef} className="max-w-3xl relative pr-5 sm:pr-7">
-              {/* The rail fills as you read through the steps */}
-              <ProgressRail targetRef={stepsRef} color={TURQ} className="right-0" />
-              {steps.map((step, i) => (
-                <ScrollReveal key={step.title} delay={i * 60}>
-                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-10 py-6 border-b" style={{ borderColor: LINE }}>
-                    <h3
-                      className="text-[19px] shrink-0 sm:w-44"
-                      style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}
-                    >
-                      {step.title}
-                    </h3>
-                    <p className="text-[14.5px] leading-[1.8]" style={{ color: BODY }}>{step.description}</p>
-                  </div>
-                </ScrollReveal>
               ))}
             </div>
-
-            <ScrollReveal delay={80}>
-              <div className="mt-12">
-                <button
-                  type="button"
-                  onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                  className="link-rule text-[15px]"
-                >
-                  לא בטוחים אם זה רלוונטי אליכם? שאלו את היועץ הדיגיטלי
-                </button>
-              </div>
-            </ScrollReveal>
           </div>
-        </section>
+        </SdBand>
 
-        {/* CTA — deep green band, the central path */}
-        <section className="dna-navy-band">
-          <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-16 sm:py-24">
-            <h2
-              className="leading-tight mb-3"
-              style={{ color: "#FAF7EF", fontFamily: DISPLAY, fontWeight: 700, fontSize: "clamp(26px, 3.2vw, 34px)" }}
-            >
-              נבדוק מה מגיע לכם
-            </h2>
-            <p className="text-[17px] leading-[1.7] mb-9 max-w-xl" style={{ color: "#C5D3E2" }}>
-              הבדיקה ללא עלות וללא התחייבות. אם אין כלום, לפחות תדעו.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/contact" className="btn-on-green sm:min-w-[220px]">
-                בדיקת זכאות
-              </Link>
-              <Link to="/#portfolio-review" className="btn-on-green-outline sm:min-w-[220px]">
-                בדיקת תיק 360
-              </Link>
-            </div>
+        <SdBand tone={p2} id="process">
+          <SdProcess art={topic.art2} steps={steps} />
+          <div className="sd-wrap mt-10">
+            <button type="button" className="sd-link" onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}>
+              לא בטוחים אם זה רלוונטי אליכם? שאלו את היועץ הדיגיטלי
+            </button>
           </div>
-        </section>
+        </SdBand>
+
+        <PubClose
+          title="נבדוק מה מגיע לכם"
+          text="הבדיקה ללא עלות וללא התחייבות. אם אין כלום, לפחות תדעו."
+          art={p3 === "butter" ? "10-financial-planning" : "01-hero"}
+          primary={{ text: "בדיקת זכאות", to: "/contact" }}
+          secondary={{ text: "בדיקת תיק 360", to: "/#portfolio-review" }}
+        />
       </main>
 
       <Footer />

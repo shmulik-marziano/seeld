@@ -1,6 +1,5 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { BODY, GREEN, IVORY, LINE, MUTED } from "@/lib/brand";
+import { BODY, GREEN, LINE, MUTED } from "@/lib/brand";
+import { LegalFrame } from "@/components/sd/pubParts";
 
 // Legal page: one quiet reading column, typography only (STYLESEED.md).
 
@@ -30,22 +29,8 @@ const cookieTypes = [
 
 const CookiePolicy = () => {
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
-      <Header />
-
-      <main>
-        <section>
-          <div className="max-w-3xl mx-auto px-5 sm:px-8 pt-10 sm:pt-14 pb-6">
-            <h1 className="dna-display leading-[1.15]" style={{ fontSize: "clamp(32px, 4.4vw, 52px)" }}>
-              מדיניות עוגיות
-            </h1>
-            <p className="mt-4 text-[14px]" style={{ color: MUTED }}>
-              עודכן במרץ <span dir="ltr" className="tabular-nums whitespace-nowrap">2026</span>
-            </p>
-          </div>
-        </section>
-
-        <div className="max-w-3xl mx-auto px-5 sm:px-8 py-8 pb-16 sm:pb-24">
+    <LegalFrame title="מדיניות עוגיות" tint="butter" art="01-hero">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8 py-8">
           <div className="space-y-10 text-[17px] leading-[1.8] [&_strong]:font-bold [&_strong]:text-[#203957]" style={{ color: BODY }}>
             <LegalSection title="מה הן עוגיות?">
               <p>
@@ -109,10 +94,7 @@ const CookiePolicy = () => {
             </LegalSection>
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </div>
+    </LegalFrame>
   );
 };
 

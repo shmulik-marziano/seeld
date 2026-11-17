@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { LINE, MONO, MUTED, NAVY, RING } from "@/lib/brand";
 import { LiveDot, LiveTag } from "@/components/brand/Live";
+import "@/components/sd/chrome.css";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -255,10 +256,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             onClick={() => setIsExpanded(true)}
-            // Phone: a 52px round button (the label would cover a line of content
-            // on every screen). From 640px: the labelled pill.
-            className="fixed left-4 sm:left-6 z-50 flex h-12 w-12 items-center justify-center gap-2.5 rounded-full bg-[#203957] text-white transition-colors duration-150 hover:bg-[#162B45] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))] sm:h-auto sm:w-auto sm:min-h-[52px] sm:py-3 sm:pr-5 sm:pl-4"
-            style={{ bottom: "calc(20px + var(--float-lift, 0px) + env(safe-area-inset-bottom, 0px))", boxShadow: "0 10px 28px -10px rgba(32, 57, 87,.55), inset 0 0 0 1px rgba(255,255,255,.08)" }}
+            className="sd-chrome-fab sd-chrome-fab-chat"
             aria-label="פתחו שיחה עם היועץ הדיגיטלי של SEELD"
           >
             <MessageCircle className="h-6 w-6 sm:hidden" strokeWidth={1.75} aria-hidden="true" />
@@ -276,7 +274,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed z-50 flex flex-col inset-x-2 top-16 sm:inset-auto sm:bottom-4 sm:left-6 sm:h-[min(700px,calc(100dvh-3rem))] sm:w-[440px] lg:w-[500px]"
+            className="fixed z-[60] flex flex-col inset-x-2 top-16 sm:inset-auto sm:bottom-4 sm:left-6 sm:h-[min(700px,calc(100dvh-3rem))] sm:w-[440px] lg:w-[500px]"
             style={{ bottom: "calc(8px + env(safe-area-inset-bottom, 0px))" }}
             role="dialog"
             aria-label="שיחה עם היועץ הדיגיטלי של SEELD"

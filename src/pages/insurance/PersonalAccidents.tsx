@@ -1,9 +1,9 @@
-import InsurancePageTemplate from '@/components/InsurancePageTemplate';
+import InsurancePageSd from '@/components/sd/InsurancePageSd';
 import { Shield, AlertTriangle, Bike, Mountain, Briefcase } from 'lucide-react';
 
 const PersonalAccidents = () => {
   return (
-    <InsurancePageTemplate
+    <InsurancePageSd
       heroIcon={AlertTriangle}
       heroIconColor="#b91c1c"
       heroCategory="תאונות אישיות"
