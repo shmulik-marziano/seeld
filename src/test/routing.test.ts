@@ -45,7 +45,12 @@ describe("sitemap", () => {
 
   it("does not list routes the app no longer serves", () => {
     const routes = new Set(publicRoutes());
-    const stale = [...listed].filter((loc) => !routes.has(loc));
+    // Parameterised public routes (e.g. /return-tables/:slug) serve many concrete URLs.
+    const dynamic = [...APP.matchAll(/<Route path="([^"]+:[^"]*)"/g)]
+      .map((m) => m[1])
+      .filter((p) => !/^\*|^\/app|^\/portal|^\/client|^\/execution-portal/.test(p))
+      .map((p) => new RegExp("^" + p.replace(/:[^/]+/g, "[^/]+") + "$"));
+    const stale = [...listed].filter((loc) => !routes.has(loc) && !dynamic.some((re) => re.test(loc)));
     expect(stale).toEqual([]);
   });
 

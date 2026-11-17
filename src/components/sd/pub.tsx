@@ -12,12 +12,12 @@ export const PUB_TOPICS = {
   blog: { art: "01-hero", art2: "10-financial-planning", palette: ["rose", "sage", "sky"] },
   wellness: { art: "03-health-insurance", art2: "05-retirement", palette: ["sage", "rose", "sky"] },
   growth: { art: "04-investments-growth", art2: "10-financial-planning", palette: ["butter", "sage", "lavender"] },
-  creativity: { art: "07-car-insurance", art2: "02-family-protection", palette: ["lavender", "butter", "sage"] },
-  calculators: { art: "10-financial-planning", art2: "04-investments-growth", palette: ["sky", "lavender", "butter"] },
+  creativity: { art: "01-hero", art2: "10-financial-planning", palette: ["lavender", "butter", "sage"] },
+  calculators: { art: "04-investments-growth", art2: "10-financial-planning", palette: ["sky", "lavender", "butter"] },
   fundFinder: { art: "04-investments-growth", art2: "10-financial-planning", palette: ["sage", "butter", "sky"] },
   returnTables: { art: "04-investments-growth", art2: "05-retirement", palette: ["butter", "sky", "sage"] },
   rights: { art: "11-claims-service", art2: "02-family-protection", palette: ["rose", "sage", "butter"] },
-  directDebit: { art: "11-claims-service", art2: "10-financial-planning", palette: ["sky", "butter", "sage"] },
+  directDebit: { art: "04-investments-growth", art2: "01-hero", palette: ["sky", "butter", "sage"] },
   onboarding: { art: "01-hero", art2: "11-claims-service", palette: ["sage", "sky", "butter"] },
 } satisfies Record<string, Topic>;
 
@@ -38,8 +38,12 @@ export function artForText(category: string | null | undefined, title = ""): { a
   if (/חיסכון|השקע|גמל|השתלמות|ריבית|מדד/.test(t)) return { art: "04-investments-growth", tone: "butter" };
   if (/תקציב|תכנון|פיננס/.test(t)) return { art: "10-financial-planning", tone: "lavender" };
   if (/מסמכ|טפסים|שירות|זכויות|תביע|תלוש/.test(t)) return { art: "11-claims-service", tone: "sage" };
+  if (/ביטוח|פוליס|כיסוי|טעויות/.test(t)) return { art: "01-hero", tone: "sky" };
   return { art: "10-financial-planning", tone: "sky" };
 }
+
+/** A second, different illustration for the same topic (side cards that sit next to the hero art). */
+export const companionArt = (art: ArtName): ArtName => ART_RELATED[art][0];
 
 /** Static article dates carry abbreviated months ("12 באפר׳ 2025"); blog dates are full ("17 במרץ 2026"). Same display for both. */
 const MONTHS_FULL: Record<string, string> = { "בינו׳": "בינואר", "בפבר׳": "בפברואר", "באפר׳": "באפריל", "ביוני׳": "ביוני", "ביולי׳": "ביולי", "באוג׳": "באוגוסט", "בספט׳": "בספטמבר", "באוק׳": "באוקטובר", "בנוב׳": "בנובמבר", "בדצמ׳": "בדצמבר" };
@@ -55,20 +59,40 @@ const ART_POOL: ArtName[] = [
   "12-childrens-savings", "06-home-mortgage", "08-business-insurance", "01-hero", "07-car-insurance", "09-travel-insurance",
 ];
 
+/** Topically related illustrations, tried in order when the exact one is taken by a neighbouring card. */
+const ART_RELATED: Record<ArtName, ArtName[]> = {
+  "01-hero": ["11-claims-service", "06-home-mortgage", "10-financial-planning"],
+  "02-family-protection": ["12-childrens-savings", "03-health-insurance", "05-retirement"],
+  "03-health-insurance": ["02-family-protection", "05-retirement", "11-claims-service"],
+  "04-investments-growth": ["10-financial-planning", "05-retirement", "12-childrens-savings"],
+  "05-retirement": ["04-investments-growth", "02-family-protection", "10-financial-planning"],
+  "06-home-mortgage": ["01-hero", "12-childrens-savings", "02-family-protection"],
+  "07-car-insurance": ["01-hero", "11-claims-service", "04-investments-growth"],
+  "08-business-insurance": ["10-financial-planning", "04-investments-growth", "11-claims-service"],
+  "09-travel-insurance": ["01-hero", "07-car-insurance", "11-claims-service"],
+  "10-financial-planning": ["04-investments-growth", "11-claims-service", "01-hero"],
+  "11-claims-service": ["10-financial-planning", "01-hero", "08-business-insurance"],
+  "12-childrens-savings": ["04-investments-growth", "02-family-protection", "06-home-mortgage"],
+};
+
 /**
  * Illustrations for a run of article cards: keeps each card's topical art, but no art repeats within the previous
- * two cards (a 3-column row) and none matches the bands around the grid (`before` / `after`).
+ * three cards (covers the row and the card directly above in a 3-column grid), none matches the bands around the
+ * grid (`before` / `after`), and the whole run draws on many illustrations (least-used related art wins).
  */
 export function spreadArts(items: { category?: string | null; title?: string }[], before: ArtName[] = [], after: ArtName[] = []): { art: ArtName; tone: Pastel }[] {
   const out: { art: ArtName; tone: Pastel }[] = [];
+  const used = new Map<ArtName, number>();
   items.forEach((it, i) => {
     const pref = artForText(it.category, it.title ?? "");
-    const recent = [...before.slice(-1), ...out.slice(-2).map((o) => o.art)];
+    const recent = [...(i < 2 ? before : before.slice(-1)), ...out.slice(-3).map((o) => o.art)];
     const last = i === items.length - 1;
     const bad = (a: ArtName) => recent.includes(a) || (last && after.includes(a));
-    if (!bad(pref.art)) { out.push(pref); return; }
-    const alt = ART_POOL.find((a) => !bad(a) && a !== pref.art) ?? ART_POOL[i % ART_POOL.length];
-    out.push({ art: alt, tone: ART_TONE[alt] });
+    const order = [...new Set<ArtName>([pref.art, ...ART_RELATED[pref.art], ...ART_POOL])].filter((a) => !bad(a));
+    const pool = order.length ? order.slice(0, 3) : [ART_POOL[i % ART_POOL.length]];
+    const art = pool.reduce((best, a) => ((used.get(a) ?? 0) < (used.get(best) ?? 0) ? a : best), pool[0]);
+    used.set(art, (used.get(art) ?? 0) + 1);
+    out.push(art === pref.art ? pref : { art, tone: ART_TONE[art] });
   });
   return out;
 }

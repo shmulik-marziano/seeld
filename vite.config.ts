@@ -35,7 +35,11 @@ export default defineConfig(({ mode }) => ({
             id.includes("node_modules/react-dom/") ||
             id.includes("node_modules/react-router-dom/") ||
             id.includes("node_modules/react-router/") ||
-            id.includes("node_modules/scheduler/")
+            id.includes("node_modules/scheduler/") ||
+            // tslib is shared by supabase-js AND react-remove-scroll (radix). Left
+            // unassigned, Rollup parks it inside the "supabase" chunk, which makes the
+            // entry statically import supabase-js on every page just for __assign.
+            id.includes("node_modules/tslib/")
           ) {
             return "react-vendor";
           }

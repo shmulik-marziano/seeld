@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useSaveCalculation } from "@/hooks/useSaveCalculation";
 import AuthModal from "@/components/AuthModal";
 import { Json } from "@/integrations/supabase/site-types";
-import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/config";
 import {
   Dialog,
   DialogContent,

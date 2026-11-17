@@ -99,8 +99,7 @@ const PersonalAreaLogin = () => {
             transition={{ duration: 0.25, ease: "easeOut" }}
             className="w-full max-w-[440px]"
           >
-            <div className="sd-ca-login-mobile" aria-hidden="true"><SdPic name="02-family-protection" sizes="260px" priority /></div>
-            <div className="mb-6 flex items-center justify-between gap-4">
+            <div className="mb-4 flex items-center justify-between gap-4">
               <Link
                 to="/"
                 aria-label="שילד ביטוח ופיננסים, לדף הבית"
@@ -116,10 +115,11 @@ const PersonalAreaLogin = () => {
                   draggable={false}
                 />
               </Link>
-              <Link to="/" className="link-rule text-[14px]">
+              <Link to="/" className="sd-ca-back-lnk">
                 חזרה לאתר
               </Link>
             </div>
+            <div className="sd-ca-login-mobile" aria-hidden="true"><SdPic name="02-family-protection" sizes="260px" priority /></div>
 
             <div className="sd-ca-formcard">
               <span className="sd-eyebrow">האזור האישי שלכם</span>

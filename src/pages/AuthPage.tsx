@@ -253,7 +253,7 @@ export default function AuthPage() {
         <div className="relative z-10 px-14 py-10 max-w-[520px] w-full">
           <div className="flex items-center gap-3">
             <Link to="/" aria-label="שילד ביטוח ופיננסים, לדף הבית">
-              <img src="/brand/logo.png" alt="שילד ביטוח ופיננסים" width={LOGO_W} height={44} style={{ height: 44, width: 'auto' }} decoding="async" />
+              <img src="/brand/logo.png" alt="שילד ביטוח ופיננסים" width={LOGO_W} height={44} style={{ height: 72, width: 'auto' }} decoding="async" />
             </Link>
           </div>
           <div className="mt-8" aria-hidden="true"><SdPic name="08-business-insurance" sizes="480px" priority /></div>
@@ -288,9 +288,9 @@ export default function AuthPage() {
           className={`w-full ${mode === 'signup' ? 'max-w-[480px]' : 'max-w-[420px]'}`}
         >
           {/* Mobile header: pastel sky with the illustration */}
-          <div className="lg:hidden mb-6 rounded-3xl px-5 pt-4 text-center border border-[#203957]/15" style={{ background: '#D6E3EF' }}>
-            <img src="/brand/logo.png" alt="שילד ביטוח ופיננסים" width={LOGO_W} height={44} style={{ height: 40, width: 'auto', margin: '0 auto' }} decoding="async" />
-            <div className="mt-2 mx-auto max-w-[240px]" aria-hidden="true"><SdPic name="08-business-insurance" sizes="240px" priority /></div>
+          <div className="lg:hidden mb-6 rounded-3xl px-5 pt-6 text-center border border-[#203957]/15" style={{ background: '#D6E3EF' }}>
+            <img src="/brand/logo.png" alt="שילד ביטוח ופיננסים" width={LOGO_W} height={44} style={{ height: 48, width: 'auto', margin: '0 auto' }} decoding="async" />
+            <div className="mt-5 mx-auto max-w-[240px]" aria-hidden="true"><SdPic name="08-business-insurance" sizes="240px" priority /></div>
           </div>
 
           {/* Form card */}
@@ -350,7 +350,7 @@ export default function AuthPage() {
                       <div className="relative">
                         <Mail className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40" />
                         <Input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                          placeholder="agent@example.com" className="h-12 sm:h-11 pr-10 rounded-xl text-base sm:text-sm border-border/70 focus-visible:ring-primary/30" />
+                          placeholder="agent@example.com" className="placeholder:text-[#8593A3] h-12 sm:h-11 pr-10 rounded-xl text-base sm:text-sm border-border/70 focus-visible:ring-primary/30" />
                       </div>
                     </div>
                     <div className="space-y-1.5">

@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
+import { loadSiteSupabase } from "@/integrations/supabase/lazy";
 import { toast } from "sonner";
 import { CheckCircle, Send, Plus, Trash2, TrendingUp, PiggyBank, Target, Shield } from "lucide-react";
 
@@ -139,6 +139,8 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
         additional_notes: additionalNotes || null,
         preferred_contact_time: preferredContactTime || null,
       };
+      
+      const supabase = await loadSiteSupabase();
       
       const { error } = await supabase
         .from('pension_analysis_leads')

@@ -102,9 +102,9 @@ function StyledInput({ className, ...props }: React.InputHTMLAttributes<HTMLInpu
 }
 
 // Section heading — starts its block, no ornamental numerals (STYLESEED bans)
-function SectionHead({ title }: { title: string }) {
+function SectionHead({ title, first }: { title: string; first?: boolean }) {
   return (
-    <div className="border-t pt-6 mb-7" style={{ borderColor: LINE }}>
+    <div className={first ? "mb-7" : "border-t pt-6 mb-7"} style={{ borderColor: LINE }}>
       <h2 className="text-[19px]" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
         {title}
       </h2>
@@ -382,7 +382,7 @@ export default function DirectDebit() {
               <div className="space-y-12">
                 {/* Account Owner */}
                 <section>
-                  <SectionHead title="בעל החשבון" />
+                  <SectionHead first title="בעל החשבון" />
                   <div className="space-y-6">
                     <div>
                       <FieldLabel label="שם בעל החשבון" required error={touched.accountOwner ? errors.accountOwner : undefined} />
@@ -404,7 +404,7 @@ export default function DirectDebit() {
                         maxLength={9}
                         placeholder="9 ספרות"
                         dir="ltr"
-                        style={{ fontFamily: MONO, letterSpacing: "0.15em", textAlign: "right" }}
+                        style={{ fontFamily: MONO, letterSpacing: form.idNumber ? "0.15em" : "normal", textAlign: "right" }}
                         className={touched.idNumber && errors.idNumber ? "!border-[#9A4520]" : ""}
                       />
                       {touched.idNumber && !errors.idNumber && form.idNumber.length === 9 && (
@@ -436,7 +436,7 @@ export default function DirectDebit() {
                         ) : (
                           <button
                             onClick={refreshBanks}
-                            className={cn("text-[11px] text-[#55677C] flex items-center gap-1 hover:text-[#203957] transition-colors", FOCUS_RING)}
+                            className={cn("text-[11px] text-[#55677C] flex items-center gap-1 hover:text-[#203957] transition-colors py-3 -my-3", FOCUS_RING)}
                           >
                             <RefreshCw className="w-3 h-3" />
                             נתוני גיבוי. לחצו לרענון
@@ -450,7 +450,7 @@ export default function DirectDebit() {
                       placeholder="חיפוש לפי שם בנק או מספר"
                       className="mb-4"
                     />
-                    <div className="max-h-56 overflow-y-auto rounded-lg bg-white border border-[#D9DEE4]">
+                    <div className="sd-fade-b max-h-56 overflow-y-auto rounded-lg bg-white border border-[#D9DEE4]">
                       {filteredBanks.map(bank => (
                         <button
                           key={bank.code}

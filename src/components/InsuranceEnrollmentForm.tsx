@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
+import { loadSiteSupabase } from "@/integrations/supabase/lazy";
 import { toast } from "sonner";
 import { CheckCircle, Send, Car, Home, Briefcase, Plane, Heart, Shield } from "lucide-react";
 import type { Database } from "@/integrations/supabase/site-types";
@@ -381,6 +381,8 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
         leadData.smoker = smoker;
         leadData.pre_existing_conditions = preExistingConditions || null;
       }
+      
+      const supabase = await loadSiteSupabase();
       
       const { error } = await supabase
         .from('insurance_leads')

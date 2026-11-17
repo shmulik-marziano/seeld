@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
+import { loadSiteSupabase } from "@/integrations/supabase/lazy";
 import { FormSuccess } from "@/components/brand/FormSuccess";
 import { GREEN, MUTED } from "@/lib/brand";
 
@@ -63,6 +63,7 @@ export const PortfolioReviewForm = ({ className = "", idPrefix = "lead", source 
     setSubmitting(true);
     try {
       const email = `${form.phone.trim()}@lead.seeld.co.il`;
+      const supabase = await loadSiteSupabase();
       const { error } = await supabase.from("contact_submissions").insert([{
         name: form.name.trim(),
         email,

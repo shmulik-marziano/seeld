@@ -1003,6 +1003,7 @@ export default function Onboarding() {
                           <div className="flex items-center gap-2">
                             <button
                               type="button"
+                              aria-label="פחות ילדים"
                               onClick={() => set("childrenCount", Math.max(0, form.childrenCount - 1))}
                               className={cn("w-11 h-11 rounded-md border border-[#D9DEE4] bg-white text-[#203957] font-medium text-lg flex items-center justify-center hover:bg-[#DFE9DC]/35 hover:border-[#203957]/40 transition-colors", FOCUS_RING)}
                             >−</button>
@@ -1011,36 +1012,10 @@ export default function Onboarding() {
                             </span>
                             <button
                               type="button"
+                              aria-label="עוד ילד"
                               onClick={() => set("childrenCount", Math.min(24, form.childrenCount + 1))}
                               className={cn("w-11 h-11 rounded-md border border-[#D9DEE4] bg-white text-[#203957] font-medium text-lg flex items-center justify-center hover:bg-[#DFE9DC]/35 hover:border-[#203957]/40 transition-colors", FOCUS_RING)}
                             >+</button>
-                          </div>
-                          <div className="flex flex-wrap gap-1.5">
-                            {[0,1,2,3,4,5,6].map(n => (
-                              <button
-                                key={n}
-                                type="button"
-                                onClick={() => set("childrenCount", n)}
-                                className={cn(
-                                  "w-11 h-11 rounded-md border text-xs font-medium transition-colors tabular-nums",
-                                  FOCUS_RING,
-                                  form.childrenCount === n
-                                    ? "border-[#203957] bg-[#203957] text-white"
-                                    : "border-[#D9DEE4] bg-white text-[#2D435D] hover:bg-[#DFE9DC]/35 hover:border-[#203957]/40"
-                                )}
-                              >{n}</button>
-                            ))}
-                            <button
-                              type="button"
-                              onClick={() => set("childrenCount", form.childrenCount > 6 ? form.childrenCount : 7)}
-                              className={cn(
-                                "px-3 h-11 rounded-md border text-xs font-medium transition-colors tabular-nums",
-                                FOCUS_RING,
-                                form.childrenCount > 6
-                                  ? "border-[#203957] bg-[#203957] text-white"
-                                  : "border-[#D9DEE4] bg-white text-[#2D435D] hover:bg-[#DFE9DC]/35 hover:border-[#203957]/40"
-                              )}
-                            >7+</button>
                           </div>
                         </div>
                       </GlassInput>
@@ -1341,7 +1316,7 @@ function TechSection({
   title, icon, children
 }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="border-t pt-5 space-y-5" style={{ borderColor: "#D9DEE4" }}>
+    <div className="ob-tech border-t pt-5 space-y-5" style={{ borderColor: "#D9DEE4" }}>
       <div className="flex items-center gap-2.5 mb-1">
         <span className="text-[#55677C]">{icon}</span>
         <h2 className="text-[16px]" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>{title}</h2>

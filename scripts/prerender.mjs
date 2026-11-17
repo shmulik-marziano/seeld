@@ -66,7 +66,7 @@ async function writeSitemapAndLlms(routes, posts) {
 }
 
 async function readAnonKey() {
-  const src = await readFile(join(ROOT, "src/integrations/supabase/client.ts"), "utf8");
+  const src = await readFile(join(ROOT, "src/integrations/supabase/config.ts"), "utf8");
   const m = src.match(/SUPABASE_PUBLISHABLE_KEY[^"]*"(eyJ[^"]+)"/);
   if (!m) throw new Error("anon key not found");
   return m[1];

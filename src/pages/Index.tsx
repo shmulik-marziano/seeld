@@ -12,7 +12,7 @@ import { PortfolioReviewForm } from "@/components/PortfolioReviewForm";
 import { SdBand, SdContact, SdIcon, SdPic, SdProcess, SdSubnav, DEFAULT_STEPS } from "@/components/sd/primitives";
 import { PASTELS } from "@/components/sd/topics";
 import { toast } from "sonner";
-import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
+import { loadSiteSupabase } from "@/integrations/supabase/lazy";
 import "@/components/sd/sd.css";
 import "@/components/sd/home.css";
 
@@ -169,6 +169,7 @@ const Index = () => {
     if (Object.keys(errs).length) return;
     setContactSubmitting(true);
     try {
+      const supabase = await loadSiteSupabase();
       const { error } = await supabase.from("contact_submissions").insert([{
         name: contactForm.name.trim(),
         email: contactForm.email.trim() || `${contactForm.phone.trim()}@lead.seeld.co.il`,

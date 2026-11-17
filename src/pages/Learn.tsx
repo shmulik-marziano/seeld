@@ -290,11 +290,11 @@ export default function Learn() {
                 </div>
               </div>
             ) : (
-              <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {glossary.map((g, i) => (
-                  <div key={g.term} className="sd-point" style={{ borderTop: `5px solid ${PASTELS[toneAt(i + 2)].deep}` }}>
-                    <dt className="sd-h3" style={{ fontFamily: "var(--serif)", fontSize: 22 }}>{g.term}</dt>
-                    <dd className="mt-2 text-[16px] leading-[1.8]">{g.body}</dd>
+              <dl className="sd-gloss">
+                {glossary.map((g) => (
+                  <div key={g.term} className="sd-gloss-row">
+                    <dt>{g.term}</dt>
+                    <dd>{g.body}</dd>
                   </div>
                 ))}
               </dl>
@@ -383,13 +383,27 @@ export default function Learn() {
         <SdBand tone={p3} id="tools">
           <div className="sd-wrap">
             <PubHead title="כלים לבדיקה עצמית" />
-            <div className="sd-pub-grid sd-pub-grid-3">
-              {TOOLS.map((t, ti) => (
+            <div className="sd-pub-grid sd-pub-grid-2">
+              {TOOLS.slice(0, 2).map((t, ti) => (
+                <PubArticleCard
+                  key={t.to}
+                  to={t.to}
+                  title={t.title}
+                  kicker="כלי"
+                  excerpt={t.body}
+                  art={ti === 0 ? "06-home-mortgage" : "05-retirement"}
+                  tone={ti === 0 ? "sky" : "lavender"}
+                  cta="לכלי"
+                />
+              ))}
+            </div>
+            <div className="sd-pub-grid sd-pub-grid-4 mt-5">
+              {TOOLS.slice(2).map((t, ti) => (
                 <Link
                   key={t.to}
                   to={t.to}
                   className="sd-pub-card sd-pub-card-plain sd-reveal group"
-                  style={{ ["--band" as string]: PASTELS[toneAt(ti + 1)].bg, ["--band-deep" as string]: PASTELS[toneAt(ti + 1)].deep }}
+                  style={{ ["--band" as string]: PASTELS[toneAt(ti + 3)].bg, ["--band-deep" as string]: PASTELS[toneAt(ti + 3)].deep }}
                 >
                   <div className="sd-pub-card-body">
                     <span className="sd-pub-card-icon"><BrandIcon name={t.icon} size={24} /></span>

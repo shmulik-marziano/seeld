@@ -11,7 +11,7 @@ import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, RUST, RUST_TEXT } from "@/lib/brand";
 import { isStockPhoto } from "@/lib/coverArt";
 import { SdBand, tintStyle, useSdFont } from "@/components/sd/primitives";
-import { PubArticleCard, PubClose, PubHead, PubHero, PubTocAside, PubTocInline, artForText, withHeadingIds } from "@/components/sd/pub";
+import { PubArticleCard, PubClose, PubHead, PubHero, PubTocAside, PubTocInline, artForText, companionArt, spreadArts, withHeadingIds } from "@/components/sd/pub";
 import "@/components/sd/sd.css";
 
 // Blog post: one reading column on ivory, the post's own cover image when it
@@ -320,6 +320,7 @@ const BlogPost = () => {
   })();
 
   const art = artForText(post?.category, post?.title);
+  const relatedArts = spreadArts(related, [art.art]);
 
   if (loading) {
     return (
@@ -425,7 +426,7 @@ const BlogPost = () => {
               </div>
             </article>
 
-            <PubTocAside items={body.toc} art={art.art} tone={art.tone} />
+            <PubTocAside items={body.toc} art={companionArt(art.art)} tone={art.tone === "sage" ? "butter" : "sage"} />
           </div>
         </SdBand>
 
@@ -519,8 +520,8 @@ const BlogPost = () => {
             <div className="sd-wrap">
               <PubHead title="מאמרים נוספים" />
               <div className="sd-pub-grid sd-pub-grid-3">
-                {related.map((r) => {
-                  const a = artForText(r.category, r.title);
+                {related.map((r, ri) => {
+                  const a = relatedArts[ri];
                   return (
                     <PubArticleCard
                       key={r.id}
@@ -548,7 +549,7 @@ const BlogPost = () => {
         <PubClose
           title="רוצים לראות את התמונה המלאה של התיק שלכם?"
           text="בדיקת תיק 360 מסכמת את הביטוחים, הפנסיה והחיסכון בתמונה אחת. שיחת היכרות בלי התחייבות מצידכם."
-          art="10-financial-planning"
+          art={art.art === "10-financial-planning" ? "04-investments-growth" : "10-financial-planning"}
         />
       </main>
 

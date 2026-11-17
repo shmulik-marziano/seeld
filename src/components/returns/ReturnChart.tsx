@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { cleanFundName } from "@/lib/utils";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { cumulativeSeries, fmtPct, periodLabel, periodShort, type BoardFund } from "@/hooks/useCmaBoard";
 import { BODY, GREEN, LINE_SOFT, MUTED } from "@/lib/brand";
@@ -80,7 +81,7 @@ const ReturnChart = ({ funds, height = 300 }: ReturnChartProps) => {
                         <div key={String(entry.dataKey)} className="flex items-center justify-between gap-4">
                           <span className="flex items-center gap-1.5">
                             <i style={{ width: 10, height: 10, borderRadius: 2, background: SERIES_COLORS[idx], display: "inline-block" }} aria-hidden="true" />
-                            <span className="max-w-[220px] truncate">{fund?.fund_name}</span>
+                            <span className="max-w-[220px] truncate">{cleanFundName(fund?.fund_name)}</span>
                           </span>
                           <span dir="ltr" className="tabular-nums font-bold" style={{ color: GREEN }}>{fmtPct(v) ?? "—"}</span>
                         </div>
@@ -113,7 +114,7 @@ const ReturnChart = ({ funds, height = 300 }: ReturnChartProps) => {
           <li key={f.fund_id + f.source} className="flex items-center justify-between gap-3 min-w-0">
             <span className="flex items-center gap-2 min-w-0">
               <i style={{ width: 12, height: 12, borderRadius: 3, background: SERIES_COLORS[i], flexShrink: 0, display: "inline-block" }} aria-hidden="true" />
-              <span className="truncate" style={{ color: BODY }}>{f.fund_name}</span>
+              <span className="truncate" style={{ color: BODY }}>{cleanFundName(f.fund_name)}</span>
             </span>
             <span dir="ltr" className="tabular-nums font-bold shrink-0" style={{ color: GREEN }}>{fmtPct(finals[i]) ?? "—"}</span>
           </li>

@@ -1,4 +1,5 @@
 import { Fragment, useMemo, useState } from "react";
+import { cleanFundName } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { fmtMillions, fmtNum, fmtPct, fmtPlainPct, periodLabel, periodShort, type BoardFund } from "@/hooks/useCmaBoard";
@@ -180,7 +181,7 @@ const BoardTable = ({ funds, view, charted, onToggleChart, chartFull = false, ca
                       style={{ color: GREEN }}
                     >
                       <BrandIcon name="chevron-down" size={16} className={`mt-1 shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`} />
-                      <span>{f.fund_name}</span>
+                      <span>{cleanFundName(f.fund_name)}</span>
                     </button>
                     <span className="block text-[14px] font-normal mt-0.5" style={{ color: MUTED }}>{f.company}</span>
                   </td>

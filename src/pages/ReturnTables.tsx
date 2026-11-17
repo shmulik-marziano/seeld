@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { cleanFundName } from "@/lib/utils";
 import { Link, useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -151,7 +152,7 @@ const ReturnTables = () => {
           }
         >
           {/* Product navigation */}
-          <nav className="mt-7 -mx-5 px-5 sm:mx-0 sm:px-0 flex gap-2 overflow-x-auto scrollbar-hide pb-1" aria-label="מוצרים">
+          <nav className="sd-fade-x mt-7 -mx-5 px-5 sm:mx-0 sm:px-0 flex gap-2 overflow-x-auto scrollbar-hide pb-1" aria-label="מוצרים">
             <Link to="/return-tables" className={chip(!product)} style={!product ? { background: GREEN } : { color: GREEN, background: "#fff", boxShadow: `inset 0 0 0 1.5px ${LINE}` }} aria-current={!product ? "page" : undefined}>
               מפת השוק
             </Link>
@@ -180,7 +181,7 @@ const ReturnTables = () => {
                 <p className="text-[16px] leading-[1.7]" style={{ color: BODY }}>
                   המאגר לא זמין כרגע. נסו לרענן בעוד רגע, או חפשו קופה ספציפית בכלי איתור הקופות.
                 </p>
-                <Link to="/fund-finder" className="link-rule mt-4 text-[15px]">
+                <Link to="/fund-finder" className="sd-link mt-4 text-[15px]">
                   לאיתור קופות
                   <BrandIcon name="arrow-left" size={16} />
                 </Link>
@@ -216,7 +217,7 @@ const ReturnTables = () => {
                         {p.top && (
                           <p className="mt-3 text-[14px] leading-[1.6]" style={{ color: BODY }}>
                             המובילה במסלול הכללי ב־12 חודשים:{" "}
-                            <span className="font-bold" style={{ color: GREEN }}>{p.top.fund_name}</span>{" "}
+                            <span className="font-bold" style={{ color: GREEN }}>{cleanFundName(p.top.fund_name)}</span>{" "}
                             <span dir="ltr" className="tabular-nums font-bold" style={{ color: (p.top.ret_12m ?? 0) < 0 ? RUST_TEXT : GREEN }}>{fmtPct(p.top.ret_12m)}</span>
                           </p>
                         )}

@@ -25,7 +25,7 @@ const Wellness = () => {
     article.category.includes("ביטוח חיים")
   );
 
-  const cardArts = spreadArts(healthInsuranceArticles, [topic.art2], ["02-family-protection"]);
+  const cardArts = spreadArts(healthInsuranceArticles, [topic.art, topic.art2], ["02-family-protection"]);
 
   const services: { title: string; description: string; href?: string }[] = [
     { title: "ביטוח בריאות פרטי", description: "כיסוי רפואי מקיף לטיפולים, ניתוחים ותרופות", href: "/insurance/health" },

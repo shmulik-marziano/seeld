@@ -20,7 +20,8 @@ import FloatingShapes from "@/components/FloatingShapes";
 import RouteFallback from "@/components/RouteFallback";
 import RouteSeo from "@/components/RouteSeo";
 import { lazy, Suspense, useEffect, useRef } from "react";
-import { siteSupabase } from "@/integrations/supabase/site-client";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/config";
+import { hasStoredSession, loadSiteSupabase } from "@/integrations/supabase/lazy";
 
 // ── Page View Tracker ──
 function detectDevice(ua: string): "mobile" | "tablet" | "desktop" {
@@ -97,8 +98,32 @@ function PageViewTracker() {
         country: geo.country,
         city: geo.city,
       };
-      const { error } = await siteSupabase.from("page_views").insert(row);
-      if (error) console.warn("[PageView] insert failed:", error.message);
+      if (hasStoredSession()) {
+        // Logged-in visitor: keep going through the SDK so the insert carries
+        // their JWT exactly as before.
+        const supabase = await loadSiteSupabase();
+        const { error } = await supabase.from("page_views").insert(row);
+        if (error) console.warn("[PageView] insert failed:", error.message);
+        return;
+      }
+      // Anonymous visitor (the common case): same PostgREST insert with the anon
+      // key, via fetch — keeps the 45kB supabase-js SDK off every public page.
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/page_views`, {
+          method: "POST",
+          headers: {
+            apikey: SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+            "Content-Type": "application/json",
+            Prefer: "return=minimal",
+          },
+          body: JSON.stringify(row),
+          keepalive: true,
+        });
+        if (!res.ok) console.warn("[PageView] insert failed:", res.status);
+      } catch (e) {
+        console.warn("[PageView] insert failed:", (e as Error).message);
+      }
     };
 
     const w = window as Window & {

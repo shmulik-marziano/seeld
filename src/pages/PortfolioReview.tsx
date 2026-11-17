@@ -105,7 +105,7 @@ const PortfolioReview = () => {
             <p className="sd-small mt-5">אין לכם את כל זה? לא נורא. מתחילים ממה שיש, ואת השאר שולפים יחד.</p>
           </div>
           <div className="sd-pub-art" aria-hidden="true">
-            <SdPic name="05-retirement" sizes="(min-width:1024px) 440px, 90vw" />
+            <SdPic name="06-home-mortgage" sizes="(min-width:1024px) 440px, 90vw" />
           </div>
         </div>
       </SdBand>
@@ -131,7 +131,7 @@ const PortfolioReview = () => {
         id="review-form"
         title="נתחיל?"
         text="השאירו שם וטלפון. נחזור אליכם ביום העסקים הבא לתיאום, ומשם ממשיכים יחד. תמיד תדעו מה השלב הבא."
-        art="12-childrens-savings"
+        art="01-hero"
       >
         <PortfolioReviewForm idPrefix="review" source="עמוד בדיקת תיק 360" />
       </SdContact>

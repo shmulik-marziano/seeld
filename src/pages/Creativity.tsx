@@ -130,7 +130,7 @@ const Creativity = () => {
         <PubClose
           title="רוצים להשוות הצעות מחיר?"
           text="השאירו פרטים והצוות שלנו יחזור אליכם עם הצעות להשוואה. אפשר גם לבדוק את כל התיק בבת אחת."
-          art="01-hero"
+          art="02-family-protection"
         />
       </main>
 

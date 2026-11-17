@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { cleanFundName } from "@/lib/utils";
 import { siteSupabase } from "@/integrations/supabase/site-client";
 import { allFunds as staticFunds } from "@/data/cmaFundsData";
 import type { Fund } from "@/types/fund";
@@ -45,7 +46,7 @@ function dbToFund(row: DBTrack, idx: number): Fund {
   return {
     id: String(idx + 1),
     fundNumber: row.fund_number,
-    name: row.name,
+    name: cleanFundName(row.name),
     company: row.company as ManagingCompany,
     productType: row.product_type as ProductType,
     specialization: row.specialization as Specialization,

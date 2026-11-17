@@ -2,7 +2,7 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
-import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
+import { loadSiteSupabase } from "@/integrations/supabase/lazy";
 import { useAuth } from "@/hooks/useAuth";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { FormSuccess } from "@/components/brand/FormSuccess";
@@ -76,6 +76,7 @@ const Contact = () => {
     const email = formData.email.trim() || `${formData.phone.trim()}@lead.seeld.co.il`;
 
     try {
+      const supabase = await loadSiteSupabase();
       const { error } = await supabase.from("contact_submissions").insert([{
         user_id: user?.id || null,
         name: formData.name.trim(),

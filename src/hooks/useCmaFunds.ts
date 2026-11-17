@@ -2,6 +2,7 @@
  * useCmaFunds — Hook למשיכת נתונים חיים מטבלת cma_funds ב-Supabase
  * עם fallback לנתונים סטטיים מ-cmaFundsData.ts
  */
+import { cleanFundName } from "@/lib/utils";
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { allFunds as staticFunds } from '@/data/cmaFundsData';
@@ -124,7 +125,7 @@ function dbRowToFund(row: CmaFundRow): Fund {
   return {
     id: row.id,
     fundNumber: row.fund_id,
-    name: row.fund_name,
+    name: cleanFundName(row.fund_name),
     company,
     productType,
     specialization,

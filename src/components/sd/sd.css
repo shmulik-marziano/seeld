@@ -247,3 +247,52 @@
 
 /* ── QA fix: no two border dividers (olive branch / scroll / ribbon) on consecutive band borders on phone ── */
 @media (max-width: 640px) { .sd-band:has(> .sd-band-div) + .sd-band > .sd-band-div { display: none; } }
+
+/* ── visual-QA final pass (17.11) ──────────────────────────────────────────────── */
+/* step number sits at the inline-end corner: keep the title clear of it (about, rights, process bands) */
+.sd-step h3 { padding-inline-end: 38px; }
+
+/* hero stage: the offset "shadow plate" must not hug the screen edge on phones */
+@media (max-width: 640px) { .sd-stage::before { inset: 12px 8px -12px -8px; } }
+
+/* text links: real underline so a wrapped link keeps its rule under every line */
+.sd-link { background: none; text-align: start; text-decoration: underline; text-decoration-color: var(--gold); text-decoration-thickness: 1.5px; text-underline-offset: 7px; }
+.sd-link:hover { background: none; text-decoration-thickness: 2.5px; }
+.sd-pub-cta .sd-link, .sd-contact .sd-link { text-decoration-color: #E7C98B; }
+
+/* hit areas: 44px without changing the visual size (padding balanced by negative margin) */
+.sd-crumbs a { display: inline-block; padding-block: 12px; margin-block: -12px; }
+.sd-subnav-in { padding-block: 4px; }
+.sd-subnav a { min-height: 44px; }
+.sd-ca-back-lnk { display: inline-flex; align-items: center; min-height: 44px; padding-inline: 4px; font-size: 14px; font-weight: 700; color: var(--ink); text-decoration: underline; text-decoration-color: rgba(32,57,87,.3); text-underline-offset: 6px; }
+.sd-ca-back-lnk:hover { text-decoration-color: var(--ink); }
+
+/* scroll affordances: fade the edges of strips that scroll sideways / lists that scroll inside a card */
+@media (max-width: 767px) {
+  .sd-fade-x { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 36px), transparent); }
+}
+.sd-fade-b { -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(180deg, #000 calc(100% - 28px), transparent); }
+
+/* glossary: a definition list with hairlines, not ten identical cards */
+.sd-gloss { display: grid; gap: 0 56px; border-top: 1px solid var(--line); }
+@media (min-width: 900px) { .sd-gloss { grid-template-columns: 1fr 1fr; } }
+.sd-gloss-row { padding: 22px 2px 24px; border-bottom: 1px solid var(--line); }
+.sd-gloss-row dt { font-family: var(--serif); font-size: 22px; font-weight: 700; line-height: 1.3; color: var(--ink); }
+.sd-gloss-row dd { margin-top: 8px; font-size: 16px; line-height: 1.8; color: var(--text); }
+
+/* onboarding: the first section of a form card has no divider hanging above it */
+.ob-tech:first-child { border-top-width: 0; padding-top: 0; }
+
+/* an odd last card in a grid does not sit alone: it spans the row as a wide card */
+@media (min-width: 1024px) {
+  .sd-pub-grid-3 > a.sd-pub-card:last-child:nth-child(3n+1) { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .sd-pub-grid-3 > a.sd-pub-card:last-child:nth-child(3n+1) .sd-pub-card-art { aspect-ratio: auto; min-height: 220px; border-bottom: 0; border-inline-end: 1px solid var(--line); }
+}
+@media (min-width: 720px) and (max-width: 1023px) {
+  .sd-pub-grid-3 > a.sd-pub-card:last-child:nth-child(odd) { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .sd-pub-grid-3 > a.sd-pub-card:last-child:nth-child(odd) .sd-pub-card-art { aspect-ratio: auto; min-height: 200px; border-bottom: 0; border-inline-end: 1px solid var(--line); }
+}
+
+/* floating divider ornament: sits inside its band instead of straddling the seam */
+.sd-band-div { inset-block-start: 8px; translate: none; }
+.sd-band-div img { max-height: clamp(30px, 3.6vw, 46px); }

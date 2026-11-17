@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
+import { loadSiteSupabase } from "@/integrations/supabase/lazy";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Json } from "@/integrations/supabase/site-types";
@@ -40,6 +40,7 @@ export const useSaveCalculation = () => {
 
     setSaving(true);
     try {
+      const supabase = await loadSiteSupabase();
       const { error } = await supabase.from("saved_calculations").insert([{
         user_id: user.id,
         calculator_type: calculatorType,

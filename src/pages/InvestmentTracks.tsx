@@ -547,7 +547,7 @@ const InvestmentTracks = () => {
               )}
 
               {/* Product type: underline tabs */}
-              <div className="flex gap-6 sm:gap-8 overflow-x-auto scrollbar-hide border-b mb-5" style={{ borderColor: LINE }} role="tablist" aria-label="סוג מוצר">
+              <div className="sd-fade-x flex gap-6 sm:gap-8 overflow-x-auto scrollbar-hide border-b mb-5" style={{ borderColor: LINE }} role="tablist" aria-label="סוג מוצר">
                 <button
                   type="button"
                   role="tab"
