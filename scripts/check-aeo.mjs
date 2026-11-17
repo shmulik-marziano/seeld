@@ -23,6 +23,8 @@ const warn = (route, msg) => warnings.push(`${route}  ${msg}`);
 // ───── rules ─────
 const FORBIDDEN_WORDS = [/תאגיד/u];
 const HE = "\\u0590-\\u05FFA-Za-z";
+// Owner-approved department mailboxes contain first names; they are allowed in structured data / contact text.
+const APPROVED_ADDR_RE = /[A-Za-z0-9._+-]+@seeld\.info/gi;
 const NAME_RE = new RegExp(`(?<![${HE}])(שמוליק|שמואל מרציאנו|מרציאנו|משה|Shmulik|Marziano)(?![${HE}])`, "u");
 const NEG = "(?<!אינם )(?<!אינן )(?<!אינה )(?<!אינו )(?<!לא )(?<!ללא )";
 // Always errors: promises and unverifiable superlatives.
@@ -185,8 +187,9 @@ for (const p of sitemapPaths) {
   const head = [title, desc, metaContent(html, "property", "og:title"), metaContent(html, "property", "og:description"), ...blocks].join(" ");
   const everything = `${body} ${head}`;
   for (const re of FORBIDDEN_WORDS) if (re.test(everything)) err(p, `forbidden word ${re}`);
-  const nm = everything.match(NAME_RE);
-  if (nm) err(p, `personal name "${nm[0]}" (context: ...${everything.slice(Math.max(0, nm.index - 25), nm.index + 30)}...)`);
+  const everythingNoAddr = everything.replace(APPROVED_ADDR_RE, "");
+  const nm = everythingNoAddr.match(NAME_RE);
+  if (nm) err(p, `personal name "${nm[0]}" (context: ...${everythingNoAddr.slice(Math.max(0, nm.index - 25), nm.index + 30)}...)`);
   for (const re of PROMISE_RES) {
     const m = everything.match(re);
     if (m) (isPost ? warn : err)(p, `promise / invented-claim pattern "${m[0]}" (context: ...${everything.slice(Math.max(0, m.index - 30), m.index + 40)}...)`);

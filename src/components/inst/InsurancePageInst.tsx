@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ContactIcons } from "@/components/sd/ContactIcons";
 import { Link, useLocation } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -228,8 +229,7 @@ export default function InsurancePageInst(props: InsurancePageProps) {
                 משאירים פרטים, ואנחנו חוזרים עם השוואה בין החברות בשוק. הפגישה הראשונה אינה מחייבת.
               </p>
               <div className="inst-reach mt-6">
-                <a href="tel:0523097444" dir="ltr" style={{ justifyContent: "flex-end" }}>052-309-7444</a>
-                <a href="mailto:info@seeld.co.il" dir="ltr" style={{ justifyContent: "flex-end" }}>info@seeld.co.il</a>
+                <ContactIcons tone="light" dept="insurance" />
               </div>
               <p className="inst-small mt-8">{REGULATORY_LINE}</p>
             </div>

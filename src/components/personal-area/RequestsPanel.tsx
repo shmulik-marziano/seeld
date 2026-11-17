@@ -1,3 +1,4 @@
+import { CONTACTS, waHref } from "@/lib/contacts";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { CaEmpty, CaLoading } from "@/components/sd/client";
@@ -117,7 +118,7 @@ const RequestsPanel = ({ initialSubject, onSubjectConsumed, link }: { initialSub
       toast.success("הפנייה נשלחה. נחזור אליכם ביום העסקים הבא.");
       await load();
     } catch {
-      toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
+      toast.error(`השליחה לא עברה. נסו שוב, או חייגו ${CONTACTS.general.phone}.`);
     } finally {
       setSending(false);
     }
@@ -156,7 +157,7 @@ const RequestsPanel = ({ initialSubject, onSubjectConsumed, link }: { initialSub
           <div className="mt-4 rounded-2xl border border-dashed p-4 text-[14px] leading-[1.6]" style={{ borderColor: LINE, color: MUTED }}>
             <span className="font-bold" style={{ color: GREEN }}>צירוף מסמך: </span>
             עד שהחיבור לתיק יושלם, קבצים נשלחים לצוות שלנו ב
-            <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer" className="font-bold underline underline-offset-4" style={{ color: GREEN }} dir="ltr">WhatsApp</a>
+            <a href={waHref(CONTACTS.general)} target="_blank" rel="noopener noreferrer" className="font-bold underline underline-offset-4" style={{ color: GREEN }} dir="ltr">WhatsApp</a>
             . ציינו כאן מה שלחתם.
           </div>
           <div className="mt-5 flex flex-col sm:flex-row gap-3">

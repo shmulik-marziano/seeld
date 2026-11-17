@@ -1,3 +1,4 @@
+import { CONTACTS, telHref } from "@/lib/contacts";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -87,7 +88,7 @@ export const PortfolioReviewForm = ({ className = "", idPrefix = "lead", source 
       setSent(true);
       setForm({ name: "", phone: "", subject: "" });
     } catch {
-      toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
+      toast.error(`השליחה לא עברה. נסו שוב, או חייגו ${CONTACTS.general.phone}.`);
     } finally {
       setSubmitting(false);
     }
@@ -155,12 +156,12 @@ export const PortfolioReviewForm = ({ className = "", idPrefix = "lead", source 
         <span className="text-[15px]" style={{ color: MUTED }}>
           או חייגו{" "}
           <a
-            href="tel:0523097444"
+            href={telHref(CONTACTS.general)}
             className="inline-flex min-h-[44px] items-center font-bold border-b border-[#203957]/30 hover:border-[#203957] transition-colors tabular-nums whitespace-nowrap"
             style={{ color: GREEN }}
             dir="ltr"
           >
-            052-309-7444
+            {CONTACTS.general.phone}
           </a>
         </span>
       </div>

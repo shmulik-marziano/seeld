@@ -9,6 +9,8 @@
 // ADDING A PAGE: add one entry here, one summary in ./../answerSummaries.ts, then run
 // `npm run seo:generate`. See docs/seo/AEO-GUIDE.md.
 
+import { CONTACTS, GENERAL_MAILBOX } from "../../lib/contacts";
+
 export const SITE_URL = "https://seeld.co.il";
 /** Bump when page content changes materially; feeds sitemap lastmod and schema dateModified. */
 export const CONTENT_REVIEWED = "2026-11-17";
@@ -65,7 +67,7 @@ export const ROUTES: RouteEntry[] = [
   r({
     path: "/contact", kind: "info", group: "about", changefreq: "monthly", priority: 0.8, pageType: "ContactPage",
     title: "צור קשר | SEELD",
-    description: "דברו איתנו: טלפון ווטסאפ 052-309-7444, מייל info@seeld.co.il או טופס פנייה. פגישת ייעוץ ראשונה, בלי התחייבות מצידכם.",
+    description: `דברו איתנו: טלפון ווטסאפ (ביטוח ${CONTACTS.insurance.phone}, פיננסים וכללי ${CONTACTS.general.phone}), מייל ${GENERAL_MAILBOX} או טופס פנייה. פגישת ייעוץ ראשונה, בלי התחייבות מצידכם.`,
     related: ["/portfolio-review", "/faq", "/about"],
   }),
   r({

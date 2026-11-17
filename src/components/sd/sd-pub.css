@@ -126,3 +126,14 @@
 /* a page that already ends on a navy call to action does not repeat it in the footer */
 .sd:has(.sd-pub-cta) .sd-chrome-foot-top { display: none; }
 .sd:has(.sd-pub-cta) .sd-chrome-foot-wrap { padding-top: clamp(32px, 4vw, 52px); }
+
+/* contact page: two department cards (icons + small plain text) */
+.sd-pub-depts { margin-top: 28px; display: grid; gap: 12px; max-width: 520px; }
+@media (min-width: 640px) { .sd-pub-depts { grid-template-columns: 1fr 1fr; max-width: 640px; } }
+.sd-pub-dept { background: rgba(255,255,255,.82); border: 1px solid var(--line); border-radius: 18px; padding: 16px 18px 14px; color: var(--ink); }
+.sd-pub-dept h2 { font-size: 18px; font-weight: 700; line-height: 1.35; margin: 0; }
+.sd-pub-dept-note { margin: 4px 0 12px; font-size: 14px; color: var(--muted); line-height: 1.5; }
+.sd-pub-dept-plain { margin: 10px 0 0; display: grid; gap: 2px; font-size: 13.5px; color: var(--muted); }
+.sd-pub-dept-plain span { text-align: right; overflow-wrap: anywhere; }
+.sd-pub-dept-fine { grid-column: 1 / -1; margin: 2px 0 0; font-size: 13.5px; color: var(--muted); }
+.sd-pub-dept-fine a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }

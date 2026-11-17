@@ -4,6 +4,7 @@ import { BrandIcon } from "@/components/brand/BrandIcon";
 import { SdArtLayer, SdBand, SdCrumbs, SdPic, SdProgress, SdStageSpot, tintStyle } from "./primitives";
 import { PASTELS, type ArtName, type Pastel, type Topic } from "./topics";
 import { SdSpot } from "./SdSpot";
+import { ContactIcons } from "./ContactIcons";
 import { spotAt } from "./spots";
 import "./sd.css";
 import "./pub.css";
@@ -209,8 +210,7 @@ export function PubClose({
             {children}
           </div>
           <div className="sd-reach mt-6">
-            <a href="tel:0523097444" dir="ltr" style={{ justifyContent: "flex-end" }}>052-309-7444</a>
-            <a href="mailto:info@seeld.co.il" dir="ltr" style={{ justifyContent: "flex-end" }}>info@seeld.co.il</a>
+            <ContactIcons tone="light" />
           </div>
         </div>
         <div className="sd-contact-art" aria-hidden="true"><SdPic name={art} sizes="360px" /></div>

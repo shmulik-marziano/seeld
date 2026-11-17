@@ -367,3 +367,13 @@
   .sd-contact-ghost { display: none; }
 }
 @media print { .sd-band-art, .sd-band-ghost, .sd-hero-art, .sd-contact-layer, .sd-contact-ghost { display: none !important; } }
+
+/* contact icon buttons (department based, no names) */
+.sd-ci { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.sd-ci a { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; min-width: 44px; min-height: 44px; border-radius: 999px; transition: background-color .2s, color .2s, transform .2s; }
+.sd-ci a:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.sd-ci-light a { color: #fff; background: rgba(255,255,255,.12); border: 1.5px solid rgba(255,255,255,.55); }
+.sd-ci-light a:hover { background: #fff; color: #203957; }
+.sd-ci-dark a { color: #203957; background: #fff; border: 1.5px solid #203957; }
+.sd-ci-dark a:hover { background: #203957; color: #fff; }
+.sd-reach .sd-ci a { font-size: 0; }

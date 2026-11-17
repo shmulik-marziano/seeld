@@ -1,3 +1,4 @@
+import { CONTACTS, telHref, waHref } from "@/lib/contacts";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -174,17 +175,17 @@ export default function HelpPage() {
               <p className="text-xs text-[#55677C]">support@seeld.ai</p>
             </div>
           </a>
-          <a href="tel:052-3097444"
+          <a href={telHref(CONTACTS.general)}
             className="flex items-center gap-3 p-4 rounded-2xl border border-[#E8E6DE] hover:border-[#203957] hover:shadow-md transition-all group">
             <div className="w-10 h-10 rounded-full bg-[#DFE9DC] flex items-center justify-center group-hover:bg-[#203957]/10 transition-colors">
               <Phone className="w-5 h-5 text-[#2F6B4E] group-hover:text-[#203957] transition-colors" />
             </div>
             <div>
               <p className="text-sm font-bold text-[#203957]">טלפון</p>
-              <p className="text-xs text-[#55677C]" dir="ltr">052-309-7444</p>
+              <p className="text-xs text-[#55677C]" dir="ltr">{CONTACTS.general.phone}</p>
             </div>
           </a>
-          <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer"
+          <a href={waHref(CONTACTS.general)} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-3 p-4 rounded-2xl border border-[#E8E6DE] hover:border-[#203957] hover:shadow-md transition-all group">
             <div className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center group-hover:bg-[#203957]/10 transition-colors">
               <MessageCircle className="w-5 h-5 text-[#25D366] group-hover:text-[#203957] transition-colors" />

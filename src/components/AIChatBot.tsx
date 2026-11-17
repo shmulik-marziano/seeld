@@ -1,3 +1,4 @@
+import { CONTACTS, contactFor, waHref } from "@/lib/contacts";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Send, Loader2, X, FileText, Calculator, Shield, PiggyBank, Phone, RotateCcw, MessageCircle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -172,7 +173,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
         }),
       });
 
-      if (!response.ok) throw new Error("משהו השתבש אצלנו. נסו לשלוח שוב, או חייגו 052-309-7444.");
+      if (!response.ok) throw new Error(`משהו השתבש אצלנו. נסו לשלוח שוב, או חייגו ${CONTACTS.general.phone}.`);
       const reader = response.body?.getReader();
       if (!reader) throw new Error("No reader");
       const decoder = new TextDecoder();
@@ -205,7 +206,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
       }
 
       if (!assistantContent) {
-        throw new Error("לא התקבלה תשובה. נסו שוב, או חייגו 052-309-7444.");
+        throw new Error(`לא התקבלה תשובה. נסו שוב, או חייגו ${CONTACTS.general.phone}.`);
       }
 
       const convId = await convPromise;
@@ -215,7 +216,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
       const raw = error instanceof Error ? error.message : "";
       const friendly = /[֐-׿]/.test(raw)
         ? raw
-        : "ההודעה לא נשלחה. בדקו את החיבור ונסו שוב, או חייגו 052-309-7444.";
+        : `ההודעה לא נשלחה. בדקו את החיבור ונסו שוב, או חייגו ${CONTACTS.general.phone}.`;
       setMessages((prev) => [
         ...prev.filter((m) => m.content !== ""),
         { role: "assistant", content: friendly },
@@ -353,14 +354,14 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
                     </div>
                     {/* Human handoff */}
                     <a
-                      href="https://wa.me/972523097444"
+                      href={waHref(CONTACTS[contactFor(location.pathname)])}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-center gap-2 rounded-lg py-3 text-[14px] font-medium text-[#203957] transition-colors duration-150 hover:bg-[#203957]/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
                       style={{ boxShadow: "inset 0 0 0 1.5px #203957" }}
                     >
                       <Phone className="h-3.5 w-3.5" strokeWidth={1.75} />
-                      מעדיפים בן אדם? 052-309-7444
+                      מעדיפים בן אדם? שיחה בוואטסאפ
                     </a>
                   </div>
                 ) : (

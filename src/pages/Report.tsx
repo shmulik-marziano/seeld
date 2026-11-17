@@ -1,3 +1,4 @@
+import { CONTACTS } from "@/lib/contacts";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -54,7 +55,7 @@ const Report = () => {
       setSent(true);
       setForm({ name: "", phone: "", email: "" });
     } catch {
-      toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
+      toast.error(`השליחה לא עברה. נסו שוב, או חייגו ${CONTACTS.general.phone}.`);
     } finally {
       setSubmitting(false);
     }

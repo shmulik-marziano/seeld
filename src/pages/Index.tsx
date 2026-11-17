@@ -1,3 +1,4 @@
+import { CONTACTS } from "@/lib/contacts";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -212,7 +213,7 @@ const Index = () => {
       setContactSent(true);
       setContactForm({ name: "", phone: "", email: "", message: "" });
     } catch {
-      toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
+      toast.error(`השליחה לא עברה. נסו שוב, או חייגו ${CONTACTS.general.phone}.`);
     } finally {
       setContactSubmitting(false);
     }
@@ -512,7 +513,6 @@ const Index = () => {
             </form>
           )}
           <div className="sd-home-extras">
-            <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer">שלחו הודעה בוואטסאפ</a>
             <button type="button" onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}>
               <BrandIcon name="message" size={18} />
               שאלה קצרה ליועץ הדיגיטלי

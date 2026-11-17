@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { MapPin } from "lucide-react";
+import { ContactIcons } from "@/components/sd/ContactIcons";
+import { DEPT_LABEL } from "@/lib/contacts";
 import { REGULATORY_LINE } from "@/lib/brand";
 import {
   INSURANCE_GROUPS,
@@ -90,18 +92,12 @@ const Footer = () => {
           <div className="sd-chrome-foot-col">
             <h3>יצירת קשר</h3>
             <ul className="sd-chrome-foot-contact">
-              <li>
-                <a href="tel:0523097444" dir="ltr">
-                  <Phone size={16} aria-hidden="true" />
-                  052-309-7444
-                </a>
-              </li>
-              <li>
-                <a href="mailto:info@seeld.co.il" dir="ltr">
-                  <Mail size={16} aria-hidden="true" />
-                  info@seeld.co.il
-                </a>
-              </li>
+              {(["insurance", "general"] as const).map((d) => (
+                <li key={d} className="sd-chrome-foot-dept">
+                  <span className="sd-chrome-foot-dept-label">{DEPT_LABEL[d]}</span>
+                  <ContactIcons dept={d} tone="light" />
+                </li>
+              ))}
               <li>
                 <span>
                   <MapPin size={16} aria-hidden="true" />

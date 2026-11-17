@@ -208,3 +208,12 @@
 .sd-chrome-foot-social svg { width: 20px; height: 20px; color: inherit; }
 .sd-chrome-foot-col .sd-chrome-foot-social a svg { color: inherit; }
 @media (prefers-reduced-motion: reduce) { .sd-chrome-foot-social a:hover { transform: none; } }
+.sd-chrome-quick-icons { display: flex; justify-content: center; }
+
+/* footer: one small icon row per department */
+.sd-chrome-foot-dept { display: flex; flex-direction: column; align-items: flex-start; gap: 0; padding-block: 4px 6px; }
+.sd-chrome-foot-dept-label { font-size: 14.5px; font-weight: 700; color: #fff; }
+.sd-chrome-foot-col .sd-ci { gap: 8px; }
+.sd-chrome-foot-col .sd-ci a { width: 44px; height: 44px; min-height: 44px; border-radius: 999px; color: #fff; text-decoration: none; }
+.sd-chrome-foot-col .sd-ci a:hover { color: #203957; text-decoration: none; }
+.sd-chrome-foot-col .sd-ci a svg { color: currentColor; }

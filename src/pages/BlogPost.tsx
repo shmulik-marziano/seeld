@@ -1,3 +1,4 @@
+import { CONTACTS } from "@/lib/contacts";
 import { useMemo, useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Copy, Loader2 } from "lucide-react";
@@ -161,7 +162,7 @@ const BlogPost = () => {
       setLeadErrors({});
       toast.success("הפרטים התקבלו. נחזור אליכם בהקדם.");
     } catch {
-      toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
+      toast.error(`השליחה לא עברה. נסו שוב, או חייגו ${CONTACTS.general.phone}.`);
     } finally {
       setLeadSubmitting(false);
     }

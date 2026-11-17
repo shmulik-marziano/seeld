@@ -1,3 +1,4 @@
+import { ContactIcons } from "@/components/sd/ContactIcons";
 import { Link } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { SdBand, SdIcon, SdPic, SdProcess } from "@/components/sd/primitives";
@@ -72,12 +73,7 @@ export default function Authors() {
             <h2 className="sd-h2 mt-4">מדברים עם הצוות, בדרך שנוחה לכם</h2>
             <p className="sd-lead mt-5">טלפון, הודעה או מייל. מי שזמין באותו רגע עונה, והפנייה שלכם נשארת בטיפול הצוות.</p>
             <div className="sd-pub-actions">
-              <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer" className="sd-btn">
-                <BrandIcon name="message" size={20} />
-                WhatsApp
-              </a>
-              <a href="tel:0523097444" className="sd-link" dir="ltr">052-309-7444</a>
-              <a href="mailto:info@seeld.co.il" className="sd-link" dir="ltr">info@seeld.co.il</a>
+              <ContactIcons tone="dark" dept="general" />
             </div>
           </div>
           <div className="sd-pub-art" aria-hidden="true">

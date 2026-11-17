@@ -1,3 +1,4 @@
+import { CONTACTS } from "@/lib/contacts";
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -226,7 +227,7 @@ export default function ExecutionSummaryPortalPage() {
 
         <footer className="pt-6 border-t text-[14px] leading-[1.6]" style={{ borderColor: LINE, color: MUTED }}>
           <p>הופק על ידי שילד ביטוח ופיננסים. מצב הביצוע משקף את תיעוד הסוכנות ואינו אישור כיסוי.</p>
-          <p className="mt-1">שאלות על אחת הפעולות? אפשר להתקשר 052-309-7444 או לכתוב ל-info@seeld.co.il.</p>
+          <p className="mt-1">שאלות על אחת הפעולות? אפשר להתקשר {CONTACTS.general.phone} או לכתוב ל-info@seeld.co.il.</p>
         </footer>
       </main>
     </CaFrame>

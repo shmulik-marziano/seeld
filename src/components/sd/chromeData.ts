@@ -60,5 +60,4 @@ export const SOCIAL_LINKS: ChromeLink[] = [
   { href: "https://www.linkedin.com/company/seeld-ins", label: "LinkedIn" },
   { href: "https://www.facebook.com/seeld.ins", label: "Facebook" },
   { href: "https://www.instagram.com/seeld.ins", label: "Instagram" },
-  { href: "https://wa.me/972523097444", label: "WhatsApp" },
 ];

@@ -1,3 +1,4 @@
+import { CONTACTS, telHref } from "@/lib/contacts";
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -1023,7 +1024,7 @@ function StatusScreen({ icon, title, description, showStats, stats, tint = 'butt
           <div className="sd-ca-stat sd-ca-tone-rose"><b>{stats.declined}</b><span>נדחו</span></div>
         </div>
       )}
-      <p className="sd-ca-fine">שאלה? <a href="tel:0523097444" dir="ltr">052-309-7444</a> או <a href="mailto:info@seeld.co.il" dir="ltr">info@seeld.co.il</a></p>
+      <p className="sd-ca-fine">שאלה? <a href={telHref(CONTACTS.general)} dir="ltr">{CONTACTS.general.phone}</a> או <a href="mailto:info@seeld.co.il" dir="ltr">info@seeld.co.il</a></p>
       <p className="sd-ca-fine" style={{ marginTop: 6 }}>
         <a href="/terms" target="_blank" rel="noopener noreferrer">תנאי שימוש</a> · <a href="/privacy" target="_blank" rel="noopener noreferrer">מדיניות פרטיות</a>
       </p>

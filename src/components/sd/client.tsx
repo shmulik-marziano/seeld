@@ -1,3 +1,4 @@
+import { CONTACTS, telHref } from "@/lib/contacts";
 import type { CSSProperties, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
@@ -58,7 +59,7 @@ export function CaStatus({ tint, art, icon, title, text, children, role }: {
       <h1>{title}</h1>
       <p role={role}>{text}</p>
       {children}
-      <p className="sd-ca-fine">שאלה? <a href="tel:0523097444" dir="ltr">052-309-7444</a> או <a href="mailto:info@seeld.co.il" dir="ltr">info@seeld.co.il</a></p>
+      <p className="sd-ca-fine">שאלה? <a href={telHref(CONTACTS.general)} dir="ltr">{CONTACTS.general.phone}</a> או <a href="mailto:info@seeld.co.il" dir="ltr">info@seeld.co.il</a></p>
       <p className="sd-ca-fine" style={{ marginTop: 6 }}>
         <Link to="/terms">תנאי שימוש</Link> · <Link to="/privacy">מדיניות פרטיות</Link>
       </p>

@@ -2,7 +2,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { Link, useLocation } from "react-router-dom";
 import SeeIDLogo from "@/components/SeeIDLogo";
-import { ChevronDown, Menu, MessageCircle, Phone, User, X } from "lucide-react";
+import { ChevronDown, Menu, User, X } from "lucide-react";
+import { ContactIcons } from "@/components/sd/ContactIcons";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { INSURANCE_GROUPS, SAVINGS_LINKS, iconSrc, type ChromeLink } from "@/components/sd/chromeData";
 import "@/components/sd/chrome.css";
@@ -365,15 +366,8 @@ const Header = () => {
                   </div>
 
                   <div className="sd-chrome-drawer-foot">
-                    <div className="sd-chrome-quick">
-                      <a href="tel:0523097444" onClick={() => setIsMenuOpen(false)}>
-                        <Phone size={16} aria-hidden="true" />
-                        <span dir="ltr">052-309-7444</span>
-                      </a>
-                      <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer" onClick={() => setIsMenuOpen(false)}>
-                        <MessageCircle size={16} aria-hidden="true" />
-                        WhatsApp
-                      </a>
+                    <div className="sd-chrome-quick-icons">
+                      <ContactIcons tone="dark" onNavigate={() => setIsMenuOpen(false)} />
                     </div>
                     <Link to="/contact" className="sd-chrome-cta sd-chrome-cta-block" onClick={() => setIsMenuOpen(false)}>
                       צור קשר

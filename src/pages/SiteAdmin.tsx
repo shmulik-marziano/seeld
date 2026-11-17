@@ -1,3 +1,4 @@
+import { CONTACTS } from "@/lib/contacts";
 import { useState, useEffect, useCallback, Component, type ReactNode } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { siteSupabase, SITE_SUPABASE_URL } from "@/integrations/supabase/site-client";
@@ -2140,7 +2141,7 @@ function SettingsModule() {
           <div className="space-y-4">
             <InfoRow label="כתובת האתר" value="seeld.co.il" />
             <InfoRow label="אימייל מנהל" value={ADMIN_EMAIL} />
-            <InfoRow label="טלפון" value="052-309-7444" />
+            <InfoRow label="טלפון" value={CONTACTS.general.phone} />
             <InfoRow label="פלטפורמה" value="Vercel + Supabase" />
           </div>
         </div>

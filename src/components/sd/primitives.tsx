@@ -5,6 +5,7 @@ import { useActiveSection } from "@/components/inst/useActiveSection";
 import { REGULATORY_LINE } from "@/lib/brand";
 import { PASTELS, art3Of, art4Of, topicFor, type ArtName, type Pastel } from "./topics";
 import { SdSpot } from "./SdSpot";
+import { ContactIcons } from "./ContactIcons";
 import { dividerFor, spotAt, type SpotName } from "./spots";
 import type { Story } from "@/data/stories";
 import "./sd.css";
@@ -261,8 +262,7 @@ export function SdContact({ id = "contact-form", title = "נשמח להכיר א
           <h2 className="sd-h2">{title}</h2>
           <p className="sd-text mt-4">{text ?? "משאירים פרטים, ואנחנו חוזרים עם השוואה בין החברות בשוק. שיחת ההיכרות בלי התחייבות מצידכם."}</p>
           <div className="sd-reach mt-6">
-            <a href="tel:0523097444" dir="ltr" style={{ justifyContent: "flex-end" }}>052-309-7444</a>
-            <a href="mailto:info@seeld.co.il" dir="ltr" style={{ justifyContent: "flex-end" }}>info@seeld.co.il</a>
+            <ContactIcons tone="light" />
           </div>
           <div className="sd-contact-art" aria-hidden="true"><SdPic name={art} sizes="360px" /><SdSpot name={spot ?? spotAt(art, 2)} size={72} className="sd-float sd-float-b" /></div>
           <p className="sd-small mt-8">{REGULATORY_LINE}</p>

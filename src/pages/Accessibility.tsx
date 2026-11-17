@@ -1,3 +1,4 @@
+import { CONTACTS, telHref } from "@/lib/contacts";
 import { BODY, GREEN, LINE, MUTED } from "@/lib/brand";
 import { LegalFrame } from "@/components/sd/pubParts";
 
@@ -62,12 +63,12 @@ const Accessibility = () => {
                 <div className="flex items-baseline justify-between gap-4 py-[15px] border-b" style={{ borderColor: LINE }}>
                   <span className="text-[14px]" style={{ color: MUTED }}>טלפון</span>
                   <a
-                    href="tel:0523097444"
+                    href={telHref(CONTACTS.general)}
                     className="inline-flex min-h-[44px] items-center text-[16px] font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#203957]/40 transition-colors"
                     style={{ color: GREEN }}
                     dir="ltr"
                   >
-                    052-309-7444
+                    {CONTACTS.general.phone}
                   </a>
                 </div>
                 <div className="flex items-baseline justify-between gap-4 py-[15px] border-b" style={{ borderColor: LINE }}>

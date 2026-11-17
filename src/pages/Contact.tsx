@@ -1,3 +1,5 @@
+import { CONTACTS, GENERAL_MAILBOX, type ContactDept } from "@/lib/contacts";
+import { ContactIcons } from "@/components/sd/ContactIcons";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -7,7 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { FormSuccess } from "@/components/brand/FormSuccess";
 import { stories } from "@/data/stories";
-import { SdBand, SdIcon, SdPic, SdStory } from "@/components/sd/primitives";
+import { SdBand, SdPic, SdStory } from "@/components/sd/primitives";
 import { topicFor } from "@/components/sd/topics";
 import { Arrow, PubHero, PubPage } from "@/components/sd/pubParts";
 
@@ -107,7 +109,7 @@ const Contact = () => {
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
       setErrors({});
     } catch {
-      toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
+      toast.error(`השליחה לא עברה. נסו שוב, או חייגו ${CONTACTS.general.phone}.`);
     } finally {
       setSubmitting(false);
     }
@@ -125,20 +127,26 @@ const Contact = () => {
   const [p1, p2, p3] = topic.palette;
   const story = stories[PATH];
 
+  const depts: { d: ContactDept; title: string; note: string }[] = [
+    { d: "insurance", title: "ביטוח", note: "פוליסות, הצעות והשוואות" },
+    { d: "general", title: "פיננסים, ניהול ושאר הפניות", note: "פנסיה, חיסכון, השקעות וכל נושא אחר" },
+  ];
   const quick = (
-    <div className="sd-pub-quick">
-      <a href="tel:0523097444">
-        <SdIcon name="phone" size={44} />
-        <span><small>טלפון, ימים א׳ עד ה׳ <span dir="ltr" className="tabular-nums whitespace-nowrap">9:00-18:00</span></small><b dir="ltr" style={{ textAlign: "right" }}>052-309-7444</b></span>
-      </a>
-      <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer">
-        <span className="sd-pub-disc t-sage" style={{ width: 44, height: 44 }}><BrandIcon name="message" size={22} style={{ color: "var(--ink)" }} /></span>
-        <span><small>WhatsApp</small><b>שלחו לנו הודעה</b></span>
-      </a>
-      <a href="mailto:info@seeld.co.il">
-        <SdIcon name="email" size={44} />
-        <span><small>אימייל</small><b dir="ltr" style={{ textAlign: "right" }}>info@seeld.co.il</b></span>
-      </a>
+    <div className="sd-pub-depts">
+      {depts.map(({ d, title, note }) => (
+        <section key={d} className="sd-pub-dept" aria-label={title}>
+          <h2>{title}</h2>
+          <p className="sd-pub-dept-note">{note}</p>
+          <ContactIcons dept={d} tone="dark" />
+          <p className="sd-pub-dept-plain">
+            <span dir="ltr" className="tabular-nums whitespace-nowrap">{CONTACTS[d].phone}</span>
+            <span dir="ltr">{CONTACTS[d].email}</span>
+          </p>
+        </section>
+      ))}
+      <p className="sd-pub-dept-fine">
+        ימים א׳ עד ה׳ <span dir="ltr" className="tabular-nums whitespace-nowrap">9:00-18:00</span>. תיבת דואר כללית: <a href={`mailto:${GENERAL_MAILBOX}`} dir="ltr">{GENERAL_MAILBOX}</a>
+      </p>
     </div>
   );
 

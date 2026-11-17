@@ -1,3 +1,4 @@
+import { CONTACTS } from "@/lib/contacts";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -412,7 +413,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
       
     } catch (error) {
       console.error('Error submitting lead:', error);
-      toast.error("השליחה לא עברה. נסו שוב, או חייגו 052-309-7444.");
+      toast.error(`השליחה לא עברה. נסו שוב, או חייגו ${CONTACTS.insurance.phone}.`);
     } finally {
       setIsSubmitting(false);
     }

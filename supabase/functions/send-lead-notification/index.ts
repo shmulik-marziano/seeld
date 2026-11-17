@@ -45,7 +45,7 @@ const focusAreaLabels: Record<string, string> = {
   general: 'ניתוח כללי',
 };
 
-async function sendEmail(to: string[], subject: string, html: string) {
+async function sendEmail(to: string[], subject: string, html: string, cc?: string[]) {
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -55,6 +55,7 @@ async function sendEmail(to: string[], subject: string, html: string) {
     body: JSON.stringify({
       from: "SeelD <noreply@seeld-ins.co.il>",
       to,
+      ...(cc && cc.length ? { cc } : {}),
       subject,
       html,
     }),
@@ -108,12 +109,32 @@ const handler = async (req: Request): Promise<Response> => {
         ? `ליד חדש לניתוח פנסיוני - ${focusAreaLabels[leadData.focusArea || ''] || 'כללי'}`
         : `פנייה חדשה מהאתר - ${sanitize(leadData.fullName)}`;
 
-    // Route emails by relevance:
-    // Insurance/pension leads (hot leads) → shmulik@seeld-ins.co.il
-    // General contact inquiries → info@seeld-ins.co.il
-    const notificationRecipient = type === 'contact'
-      ? "info@seeld-ins.co.il"
-      : "shmulik@seeld-ins.co.il";
+    // Route emails by relevance (all addresses overridable by env vars, no redeploy of code needed):
+    //   insurance leads (type "insurance", a known insuranceType, or a contact subject about
+    //   insurance / travel)        -> LEAD_TO_INSURANCE  (default Moshe@seeld.info)
+    //   pension / financial analysis -> LEAD_TO_FINANCE   (default Shmulik@seeld.info)
+    //   general contact, everything else -> LEAD_TO_GENERAL (default Shmulik@seeld.info)
+    // Transition CC: while LEAD_CC_TRANSITION is not "false"/"0"/"off", the previously used
+    // address is kept in CC so no lead is lost during the move to the new mailboxes.
+    // Owner: set LEAD_CC_TRANSITION=false in the Supabase function secrets to switch it off.
+    const insType = (leadData.insuranceType || '').trim();
+    const isInsuranceLead = type === 'insurance'
+      || (insType !== '' && (insType in insuranceTypeLabels || (type === 'contact' && /ביטוח|נסיעות|נסיעה/.test(insType))));
+
+    const env = (k: string, d: string) => (Deno.env.get(k) || d).trim();
+    const toInsurance = env('LEAD_TO_INSURANCE', 'Moshe@seeld.info');
+    const toFinance = env('LEAD_TO_FINANCE', 'Shmulik@seeld.info');
+    const toGeneral = env('LEAD_TO_GENERAL', 'Shmulik@seeld.info');
+    const ccTransition = !['false', '0', 'off', 'no'].includes((Deno.env.get('LEAD_CC_TRANSITION') ?? 'true').trim().toLowerCase());
+
+    const notificationRecipient = isInsuranceLead ? toInsurance : type === 'pension' ? toFinance : toGeneral;
+    // Previously used addresses: shmulik@seeld-ins.co.il (insurance/pension), info@seeld-ins.co.il (contact).
+    const previousRecipient = isInsuranceLead || type === 'pension'
+      ? env('LEAD_CC_PREV_HOT', 'shmulik@seeld-ins.co.il')
+      : env('LEAD_CC_PREV_CONTACT', 'info@seeld-ins.co.il');
+    const notificationCc = ccTransition && previousRecipient.toLowerCase() !== notificationRecipient.toLowerCase()
+      ? [previousRecipient]
+      : undefined;
 
     const htmlContent = `
       <div dir="rtl" style="font-family: Arial, sans-serif; padding: 20px;">
@@ -147,7 +168,8 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResponse = await sendEmail(
       [notificationRecipient],
       subject,
-      htmlContent
+      htmlContent,
+      notificationCc
     );
 
     console.log("Lead notification email sent successfully:", emailResponse);

@@ -25,15 +25,17 @@ async function loadTs(relPath) {
 }
 
 export async function loadData() {
-  const [routes, summaries, faq] = await Promise.all([
+  const [routes, summaries, faq, contacts] = await Promise.all([
     loadTs("src/data/seo/routes.ts"),
     loadTs("src/data/answerSummaries.ts"),
     loadTs("src/data/faq.ts"),
+    loadTs("src/lib/contacts.ts"),
   ]);
   return {
     SITE_URL: routes.SITE_URL, CONTENT_REVIEWED: routes.CONTENT_REVIEWED,
     ROUTES: routes.ROUTES, ROUTE_BY_PATH: routes.ROUTE_BY_PATH, labelFromTitle: routes.labelFromTitle,
     summaries: summaries.answerSummaries, faqCategories: faq.faqCategories,
+    CONTACTS: contacts.CONTACTS, GENERAL_MAILBOX: contacts.GENERAL_MAILBOX,
   };
 }
 
@@ -79,8 +81,9 @@ const FACTS = (d) => [
   "- משרדים: רעננה וירושלים",
   "- אזור שירות: כל ישראל",
   "- שפה: עברית, כיוון כתיבה מימין לשמאל",
-  "- טלפון ווטסאפ: 052-309-7444",
-  "- דוא״ל: info@seeld.co.il",
+  `- טלפון ווטסאפ, צוות הביטוח: ${d.CONTACTS.insurance.phone}`,
+  `- טלפון ווטסאפ, צוות הפיננסים והכללי: ${d.CONTACTS.general.phone}`,
+  `- תיבת דוא״ל כללית: ${d.GENERAL_MAILBOX}`,
   `- אתר: ${d.SITE_URL}`,
 ];
 

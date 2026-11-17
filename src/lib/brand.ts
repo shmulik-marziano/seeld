@@ -77,3 +77,5 @@ export const TINT = TINT_SAGE;
 export const CHIP_ORANGE = SAND_TEXT;
 export const CHIP_GREEN = TEXT_2;
 export const CHIP_YELLOW = SAND_TEXT;
+
+export * from "./contacts";
