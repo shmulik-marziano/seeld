@@ -53,10 +53,12 @@ const ART_TONE: Record<ArtName, Pastel> = {
   "01-hero": "sky", "02-family-protection": "sage", "03-health-insurance": "rose", "04-investments-growth": "butter",
   "05-retirement": "lavender", "06-home-mortgage": "sky", "07-car-insurance": "sky", "08-business-insurance": "butter",
   "09-travel-insurance": "rose", "10-financial-planning": "lavender", "11-claims-service": "sage", "12-childrens-savings": "rose",
+  "13-nursing-care": "lavender", "14-accidents-recovery": "butter", "15-critical-illness": "rose", "16-disability-income": "sky", "17-child-savings-sailboat": "rose",
 };
 const ART_POOL: ArtName[] = [
   "04-investments-growth", "10-financial-planning", "05-retirement", "02-family-protection", "03-health-insurance", "11-claims-service",
   "12-childrens-savings", "06-home-mortgage", "08-business-insurance", "01-hero", "07-car-insurance", "09-travel-insurance",
+  "13-nursing-care", "14-accidents-recovery", "15-critical-illness", "16-disability-income", "17-child-savings-sailboat",
 ];
 
 /** Topically related illustrations, tried in order when the exact one is taken by a neighbouring card. */
@@ -73,6 +75,11 @@ const ART_RELATED: Record<ArtName, ArtName[]> = {
   "10-financial-planning": ["04-investments-growth", "11-claims-service", "01-hero"],
   "11-claims-service": ["10-financial-planning", "01-hero", "08-business-insurance"],
   "12-childrens-savings": ["04-investments-growth", "02-family-protection", "06-home-mortgage"],
+  "13-nursing-care": ["05-retirement", "02-family-protection", "03-health-insurance"],
+  "14-accidents-recovery": ["03-health-insurance", "11-claims-service", "07-car-insurance"],
+  "15-critical-illness": ["03-health-insurance", "02-family-protection", "13-nursing-care"],
+  "16-disability-income": ["10-financial-planning", "11-claims-service", "02-family-protection"],
+  "17-child-savings-sailboat": ["12-childrens-savings", "04-investments-growth", "02-family-protection"],
 };
 
 /**

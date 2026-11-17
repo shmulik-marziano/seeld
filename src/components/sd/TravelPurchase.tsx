@@ -48,20 +48,6 @@ export default function TravelPurchase() {
           לחיצה על הלוגו פותחת את הרכישה הדיגיטלית באתר חברת הביטוח, בלשונית חדשה. אפשר להשוות בין החברות, ואנחנו כאן לכל שאלה לפני ואחרי.
         </p>
       </div>
-      <a
-        className="sd-tp-smart"
-        href="https://quweb.co.il/quote"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="השוואה חכמה של ביטוחי נסיעות ב-QUWEB, נפתח בלשונית חדשה"
-      >
-        <img src="/logos/quweb-globe.svg" alt="" width={64} height={64} loading="lazy" draggable={false} />
-        <span className="sd-tp-smart-txt">
-          <strong>השוואה חכמה</strong>
-          <span>מחירים וכיסויים של כל החברות במקום אחד, וממשיכים לרכישה</span>
-        </span>
-      </a>
-      <p className="sd-tp-or" aria-hidden="true"><span>או רוצים ישר לרכוש? בחרו חברה</span></p>
       <ul className="sd-tp-grid">
         {PARTNERS.map((p) => (
           <li key={p.slug}>
@@ -90,6 +76,20 @@ export default function TravelPurchase() {
           </li>
         ))}
       </ul>
+      <p className="sd-tp-or" aria-hidden="true"><span>לא בטוחים איזו חברה מתאימה?</span></p>
+      <a
+        className="sd-tp-smart"
+        href="https://quweb.co.il/quote"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="השוואה חכמה של ביטוחי נסיעות ב-QUWEB, נפתח בלשונית חדשה"
+      >
+        <img src="/logos/quweb-globe.svg" alt="" width={64} height={64} loading="lazy" draggable={false} />
+        <span className="sd-tp-smart-txt">
+          <strong>השוואה חכמה</strong>
+          <span>מחירים וכיסויים של כל החברות במקום אחד, וממשיכים לרכישה</span>
+        </span>
+      </a>
     </section>
   );
 }

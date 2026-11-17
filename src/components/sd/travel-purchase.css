@@ -2,14 +2,14 @@
 .sd .sd-tp { padding-block: clamp(8px, 2vw, 16px); scroll-margin-top: 140px; }
 .sd .sd-tp-head { display: grid; gap: 12px; margin-bottom: 28px; max-width: 62ch; }
 .sd .sd-tp-lead { font-size: 17px; line-height: 1.75; color: var(--muted); margin: 0; text-wrap: pretty; }
-.sd .sd-tp-smart { display: flex; align-items: center; gap: 18px; padding: 16px 22px; margin-bottom: 26px; max-width: 640px; background: linear-gradient(135deg, #EAF3FA 0%, #fff 70%); border: 1px solid rgba(32,57,87,.16); border-radius: 22px; text-decoration: none; color: var(--ink); box-shadow: 0 10px 26px -18px rgba(32,57,87,.5); transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+.sd .sd-tp-smart { display: flex; align-items: center; gap: 18px; padding: 16px 22px; margin-top: 0; max-width: 640px; background: linear-gradient(135deg, #EAF3FA 0%, #fff 70%); border: 1px solid rgba(32,57,87,.16); border-radius: 22px; text-decoration: none; color: var(--ink); box-shadow: 0 10px 26px -18px rgba(32,57,87,.5); transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
 .sd .sd-tp-smart img { width: 64px; height: 64px; flex: none; filter: drop-shadow(0 6px 10px rgba(0,150,200,.28)); }
 .sd .sd-tp-smart-txt { display: grid; gap: 2px; }
 .sd .sd-tp-smart-txt strong { font-size: 18px; font-weight: 700; color: var(--ink); }
 .sd .sd-tp-smart-txt span { font-size: 15px; line-height: 1.55; color: var(--muted); }
 .sd .sd-tp-smart:hover { transform: translateY(-3px); border-color: rgba(173,131,62,.55); box-shadow: 0 20px 36px -20px rgba(32,57,87,.5); }
 .sd .sd-tp-smart:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
-.sd .sd-tp-or { display: flex; align-items: center; gap: 14px; margin: 0 0 16px; font-size: 14px; font-weight: 600; color: var(--muted); }
+.sd .sd-tp-or { display: flex; align-items: center; gap: 14px; margin: 30px 0 16px; font-size: 14px; font-weight: 600; color: var(--muted); }
 .sd .sd-tp-or::before, .sd .sd-tp-or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 @media (max-width: 520px) { .sd .sd-tp-smart { padding: 14px 16px; gap: 14px; } .sd .sd-tp-smart img { width: 52px; height: 52px; } }
 .sd .sd-tp-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }

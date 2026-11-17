@@ -37,7 +37,8 @@ export type SpotName = keyof typeof SPOTS;
 type ArtKey =
   | "01-hero" | "02-family-protection" | "03-health-insurance" | "04-investments-growth"
   | "05-retirement" | "06-home-mortgage" | "07-car-insurance" | "08-business-insurance"
-  | "09-travel-insurance" | "10-financial-planning" | "11-claims-service" | "12-childrens-savings";
+  | "09-travel-insurance" | "10-financial-planning" | "11-claims-service" | "12-childrens-savings"
+  | "13-nursing-care" | "14-accidents-recovery" | "15-critical-illness" | "16-disability-income" | "17-child-savings-sailboat";
 
 /** Four small spots per illustration topic: [0] floats on the hero stage, the rest are corners, cards and story accents. */
 export const SPOT_BY_ART: Record<ArtKey, readonly SpotName[]> = {
@@ -53,6 +54,11 @@ export const SPOT_BY_ART: Record<ArtKey, readonly SpotName[]> = {
   "10-financial-planning": ["compass", "pen", "magnifier", "olive-sapling"],
   "11-claims-service": ["seal-check", "magnifier", "scroll-ribbon", "shield-navy"],
   "12-childrens-savings": ["sailboat", "treasure-chest", "olive-sapling-b", "heart-pink"],
+  "13-nursing-care": ["tea-hourglass", "pillows", "heart-pink", "olive-sapling-b"],
+  "14-accidents-recovery": ["shield-blue", "olive-sapling", "pillows", "seal-check"],
+  "15-critical-illness": ["heart-pink", "olive-sapling-b", "pillows", "shield-blue"],
+  "16-disability-income": ["shield-navy", "coins-stacks", "pen", "seal-check"],
+  "17-child-savings-sailboat": ["sailboat", "treasure-chest", "olive-sapling-b", "heart-pink"],
 };
 
 /** i-th context spot of a topic (wraps around). Unknown art falls back to the generic set. */
