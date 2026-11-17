@@ -26,8 +26,8 @@ type Request = {
 const STATUS: Record<string, { label: string; bg: string; fg: string }> = {
   received: { label: "התקבל", bg: PASTEL_SAGE, fg: GREEN },
   in_progress: { label: "בטיפול", bg: PASTEL_MINT, fg: GREEN },
-  waiting_docs: { label: "ממתין למסמך", bg: PASTEL_SAND, fg: "#8A6230" },
-  done: { label: "הושלם", bg: "#E8EDE5", fg: "#476356" },
+  waiting_docs: { label: "ממתין למסמך", bg: PASTEL_SAND, fg: "#7C5C22" },
+  done: { label: "הושלם", bg: "#DFE9DC", fg: "#55677C" },
 };
 
 export const REQUEST_SUBJECTS = [

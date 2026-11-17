@@ -249,7 +249,7 @@ export default function AuthPage() {
       {/* Right side -- branding hero (hidden on mobile, shown on lg+) */}
       <div className="hidden lg:flex lg:w-[48%] relative items-center justify-center overflow-hidden"
         style={{
-          background: 'linear-gradient(165deg, #003D30 0%, #262626 60%, #003D30 100%)',
+          background: 'linear-gradient(165deg, #203957 0%, #262626 60%, #203957 100%)',
         }}
       >
         {/* Ambient glow effects */}
@@ -351,7 +351,7 @@ export default function AuthPage() {
           >
             <div className="rounded-2xl p-6 text-center relative overflow-hidden"
               style={{
-                background: 'linear-gradient(165deg, #003D30 0%, #262626 100%)',
+                background: 'linear-gradient(165deg, #203957 0%, #262626 100%)',
               }}
             >
               {/* Mobile ambient glow */}

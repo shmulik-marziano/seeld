@@ -42,7 +42,7 @@ const FigureText = ({ text }: { text: string }) => {
 };
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-2.5 -mx-2.5 pb-4 text-[16px] font-bold text-[#476356] hover:text-[#003D30] border-b-2 border-transparent data-[state=active]:border-[#003D30] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+  "rounded-none bg-transparent px-2.5 -mx-2.5 pb-4 text-[16px] font-bold text-[#55677C] hover:text-[#203957] border-b-2 border-transparent data-[state=active]:border-[#203957] data-[state=active]:text-[#203957] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const SectionTitle = ({ children }: { children: ReactNode }) => (
   <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>

@@ -17,10 +17,10 @@ const MOCK_LEADS = [
 ];
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  "חדש": { bg: "#E8EDE5", text: "#476356" },
-  "נוצר קשר": { bg: "#F5EEE0", text: "#8A6230" },
-  "בטיפול": { bg: "#E8EDE5", text: "#476356" },
-  "ממתין": { bg: "#DDE6DA", text: "#476356" },
+  "חדש": { bg: "#DFE9DC", text: "#55677C" },
+  "נוצר קשר": { bg: "#F5EEE0", text: "#7C5C22" },
+  "בטיפול": { bg: "#DFE9DC", text: "#55677C" },
+  "ממתין": { bg: "#D6E3EF", text: "#55677C" },
 };
 
 const SOURCE_ICONS: Record<string, React.ElementType> = {
@@ -46,7 +46,7 @@ export default function CatchPage() {
   const stats = [
     { label: "לידים חדשים היום", value: "12", change: "+3", icon: UserPlus, color: tool.color },
     { label: "ממוצע ניקוד", value: "82", change: "+5%", icon: ArrowUpDown, color: "#2F6B4E" },
-    { label: "שיעור המרה", value: "34%", change: "+2%", icon: Phone, color: "#CBA064" },
+    { label: "שיעור המרה", value: "34%", change: "+2%", icon: Phone, color: "#AD833E" },
     { label: "לידים פעילים", value: "47", change: "-", icon: Filter, color: "#BD582D" },
   ];
 
@@ -55,34 +55,34 @@ export default function CatchPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {stats.map((s) => (
-          <div key={s.label} className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-5">
+          <div key={s.label} className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] p-5">
             <div className="flex items-center justify-between mb-3">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: s.color + "15" }}>
                 <s.icon className="w-5 h-5" style={{ color: s.color }} />
               </div>
               <span className="text-xs text-[#2F6B4E] font-medium">{s.change}</span>
             </div>
-            <p className="text-2xl font-bold text-[#003D30]">{s.value}</p>
-            <p className="text-sm text-[#476356] mt-0.5">{s.label}</p>
+            <p className="text-2xl font-bold text-[#203957]">{s.value}</p>
+            <p className="text-sm text-[#55677C] mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
 
       {/* Toolbar */}
-      <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-4 mb-4">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] p-4 mb-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#476356]" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#55677C]" />
             <input
               type="text"
               placeholder="חיפוש ליד לפי שם, טלפון או אימייל..."
-              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#003D30]/20"
+              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#D9DEE4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#203957]/20"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <select
-            className="px-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none"
+            className="px-4 py-2.5 bg-[#F3F5F1] border border-[#D9DEE4] rounded-xl text-sm focus:outline-none"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -92,7 +92,7 @@ export default function CatchPage() {
             <option value="בטיפול">בטיפול</option>
             <option value="ממתין">ממתין</option>
           </select>
-          <button className="flex items-center gap-2 px-5 py-2.5 bg-[#003D30] text-white rounded-full text-sm font-medium hover:bg-[#003D30]/90 transition-colors">
+          <button className="flex items-center gap-2 px-5 py-2.5 bg-[#203957] text-white rounded-full text-sm font-medium hover:bg-[#203957]/90 transition-colors">
             <Plus className="w-4 h-4" />
             ליד חדש
           </button>
@@ -100,19 +100,19 @@ export default function CatchPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-16 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#E8EDE5] mx-auto mb-4 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-[#DFE9DC] mx-auto mb-4 flex items-center justify-center">
               <UserPlus className="w-8 h-8 text-[#8FA396]" />
             </div>
-            <p className="text-[#476356] font-medium mb-1">אין לידים להצגה</p>
-            <p className="text-sm text-[#476356]">נסה לשנות את מסנני החיפוש או להוסיף ליד חדש</p>
+            <p className="text-[#55677C] font-medium mb-1">אין לידים להצגה</p>
+            <p className="text-sm text-[#55677C]">נסה לשנות את מסנני החיפוש או להוסיף ליד חדש</p>
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-[#F3F5F1] text-[#476356]">
+              <tr className="bg-[#F3F5F1] text-[#55677C]">
                 <th className="text-right px-4 py-3 font-medium">שם</th>
                 <th className="text-right px-4 py-3 font-medium">טלפון</th>
                 <th className="text-right px-4 py-3 font-medium">מקור</th>
@@ -128,18 +128,18 @@ export default function CatchPage() {
                 const SourceIcon = SOURCE_ICONS[lead.source] || Globe;
                 const statusColor = STATUS_COLORS[lead.status] || STATUS_COLORS["חדש"];
                 return (
-                  <tr key={lead.id} className="border-t border-[#E1E8E1] hover:bg-[#F3F5F1]/50 transition-colors">
-                    <td className="px-4 py-3 font-medium text-[#003D30]">{lead.name}</td>
-                    <td className="px-4 py-3 text-[#476356]">{lead.phone}</td>
+                  <tr key={lead.id} className="border-t border-[#E8E6DE] hover:bg-[#F3F5F1]/50 transition-colors">
+                    <td className="px-4 py-3 font-medium text-[#203957]">{lead.name}</td>
+                    <td className="px-4 py-3 text-[#55677C]">{lead.phone}</td>
                     <td className="px-4 py-3">
-                      <div className="flex items-center gap-1.5 text-[#476356]">
+                      <div className="flex items-center gap-1.5 text-[#55677C]">
                         <SourceIcon className="w-3.5 h-3.5" />
                         {lead.source}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-[#476356]">{lead.type}</td>
+                    <td className="px-4 py-3 text-[#55677C]">{lead.type}</td>
                     <td className="px-4 py-3 text-center">
-                      <span className={`inline-block w-8 h-8 leading-8 rounded-full text-xs font-bold ${lead.score >= 85 ? "bg-[#E8EDE5] text-[#2F6B4E]" : lead.score >= 70 ? "bg-[#F5EEE0] text-[#8A6230]" : "bg-[#E8EDE5] text-[#476356]"}`}>
+                      <span className={`inline-block w-8 h-8 leading-8 rounded-full text-xs font-bold ${lead.score >= 85 ? "bg-[#DFE9DC] text-[#2F6B4E]" : lead.score >= 70 ? "bg-[#F5EEE0] text-[#7C5C22]" : "bg-[#DFE9DC] text-[#55677C]"}`}>
                         {lead.score}
                       </span>
                     </td>
@@ -148,10 +148,10 @@ export default function CatchPage() {
                         {lead.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-center text-[#476356]">{lead.date}</td>
+                    <td className="px-4 py-3 text-center text-[#55677C]">{lead.date}</td>
                     <td className="px-4 py-3 text-center">
-                      <button className="p-1.5 hover:bg-[#E8EDE5] rounded-lg transition-colors">
-                        <MoreVertical className="w-4 h-4 text-[#476356]" />
+                      <button className="p-1.5 hover:bg-[#DFE9DC] rounded-lg transition-colors">
+                        <MoreVertical className="w-4 h-4 text-[#55677C]" />
                       </button>
                     </td>
                   </tr>

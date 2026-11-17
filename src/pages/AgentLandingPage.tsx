@@ -22,8 +22,8 @@ import {
 
 // SEELD DNA v3: white canvas, pastel circles, navy/turquoise/gold (STYLESEED.md)
 
-// Light turquoise for small text on the navy band (6.88:1 on #003D30, measured)
-const TURQ_ON_NAVY = "#A9C4A5";
+// Light turquoise for small text on the navy band (6.88:1 on #203957, measured)
+const TURQ_ON_NAVY = "#C5D3E2";
 
 /* ─── Helpers ───────────────────────────────────────────────────── */
 
@@ -39,9 +39,9 @@ const fadeUp = {
 
 // Shared DNA v3 CTA styles — institutional navy, rounded-lg
 const ctaPrimary =
-  "inline-flex items-center justify-center gap-2 rounded-lg px-9 py-4 bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors min-h-[48px]";
+  "inline-flex items-center justify-center gap-2 rounded-lg px-9 py-4 bg-[#203957] text-white text-base font-medium tracking-wide hover:bg-[#162B45] transition-colors min-h-[48px]";
 const ctaGhost =
-  "inline-flex items-center justify-center rounded-lg px-9 py-4 bg-white text-[#003D30] text-base font-medium hover:bg-[#003D30]/5 transition-colors min-h-[48px]";
+  "inline-flex items-center justify-center rounded-lg px-9 py-4 bg-white text-[#203957] text-base font-medium hover:bg-[#203957]/5 transition-colors min-h-[48px]";
 
 // Section heading — starts its block, no eyebrow, no numerals (STYLESEED bans)
 const SectionHead = ({ title, lede, center = true }: { title: string; lede?: string; center?: boolean }) => (
@@ -102,7 +102,7 @@ export default function AgentLandingPage() {
             {/* Right — Content */}
             <div className="space-y-8 lg:space-y-10">
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2, ease: "easeOut" }}>
-                <span className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white text-[14px] font-medium text-[#003D30] border border-[#CCD6CC]">
+                <span className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white text-[14px] font-medium text-[#203957] border border-[#D9DEE4]">
                   <LiveDot size={6} />
                   SEELD · פורטל סוכני הביטוח
                   <span className="text-[14px] font-bold" style={{ color: GOLD_TEXT }} dir="ltr">BETA</span>
@@ -186,8 +186,8 @@ export default function AgentLandingPage() {
                     <polyline points="20 6 9 17 4 12" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </motion.div>
-                <motion.div className="absolute top-[55%] right-[15%] w-[200px] sm:w-[280px] h-[60px] sm:h-[75px] rounded-full bg-white flex items-center px-4 border border-[#E8EDE5]"
-                  style={{ boxShadow: "0 2px 12px rgba(0,61,48,0.05)" }}
+                <motion.div className="absolute top-[55%] right-[15%] w-[200px] sm:w-[280px] h-[60px] sm:h-[75px] rounded-full bg-white flex items-center px-4 border border-[#DFE9DC]"
+                  style={{ boxShadow: "0 2px 12px rgba(32, 57, 87,0.05)" }}
                   initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.62, duration: 0.25, ease: "easeOut" }}>
                   <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full" style={{ backgroundColor: NAVY }} />
                   <div className="flex-1 mx-3 h-[2px] rounded-full" style={{ backgroundColor: LINE }} />
@@ -570,7 +570,7 @@ export default function AgentLandingPage() {
             </h2>
             <p className="text-sm max-w-xl mx-auto leading-[1.8]" style={{ color: MUTED }}>
               המערכת בנויה על תשתיות מאובטחות. השימוש בפלטפורמה כפוף
-              ל<Link to="/terms" className="underline hover:text-[#003D30]">תנאי השימוש</Link> ול<Link to="/privacy" className="underline hover:text-[#003D30]">מדיניות הפרטיות</Link> שלנו.
+              ל<Link to="/terms" className="underline hover:text-[#203957]">תנאי השימוש</Link> ול<Link to="/privacy" className="underline hover:text-[#203957]">מדיניות הפרטיות</Link> שלנו.
             </p>
           </motion.div>
           <motion.div className="border-t" style={{ borderColor: LINE }}
@@ -609,7 +609,7 @@ export default function AgentLandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-10">
               <Link to="/app/auth"
-                className="inline-flex items-center justify-center gap-2 rounded-lg px-9 py-4 bg-white text-[#003D30] text-base font-medium tracking-wide hover:bg-[#CCD6CC] transition-colors min-h-[48px]">
+                className="inline-flex items-center justify-center gap-2 rounded-lg px-9 py-4 bg-white text-[#203957] text-base font-medium tracking-wide hover:bg-[#D9DEE4] transition-colors min-h-[48px]">
                 התחל בחינם
                 <ArrowLeft className="w-4 h-4" />
               </Link>

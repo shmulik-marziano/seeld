@@ -28,7 +28,7 @@ export const ProductCards = ({ products, kind }: { products: InsbaseProduct[]; k
                 </h4>
                 <span
                   className="rounded-full px-2.5 py-0.5 text-[13px] font-bold"
-                  style={p.active ? { background: PASTEL_SAGE, color: GREEN } : { background: "#E1E8E1", color: "#476356" }}
+                  style={p.active ? { background: PASTEL_SAGE, color: GREEN } : { background: "#E8E6DE", color: "#55677C" }}
                 >
                   {p.status}
                 </span>
@@ -39,7 +39,7 @@ export const ProductCards = ({ products, kind }: { products: InsbaseProduct[]; k
             </div>
           </div>
           {p.highlights.length > 0 && (
-            <dl className="mt-4 divide-y divide-[#E1E8E1] border-t" style={{ borderColor: "#E1E8E1" }}>
+            <dl className="mt-4 divide-y divide-[#E8E6DE] border-t" style={{ borderColor: "#E8E6DE" }}>
               {p.highlights.map((h, i) => (
                 <div key={i} className="flex items-baseline justify-between gap-4 py-2">
                   <dt className="text-[14px]" style={{ color: MUTED }}>{h.label}</dt>

@@ -219,7 +219,7 @@ const ReturnTables = () => {
                   <h2 className="dna-display leading-tight mb-6" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>לפי מוצר</h2>
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {productSummaries.map((p) => (
-                      <Link key={p.key} to={`/return-tables/${p.slug}`} className="group dna-concept dna-hover block h-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]">
+                      <Link key={p.key} to={`/return-tables/${p.slug}`} className="group dna-concept dna-hover block h-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]">
                         <div className="flex items-start justify-between gap-3">
                           <h3 className="text-[19px]" style={{ color: GREEN }}>{p.label}</h3>
                           <BrandIcon name="arrow-left" size={18} className="mt-1 shrink-0 transition-transform group-hover:-translate-x-1" style={{ color: GREEN }} />

@@ -5,7 +5,7 @@ import { join, extname, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "@playwright/test";
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "dist");
+const ROOT = process.env.SHOT_DIST ? resolve(process.env.SHOT_DIST) : resolve(dirname(fileURLToPath(import.meta.url)), "..", "dist");
 const [route = "/", out = "shots"] = process.argv.slice(2);
 const MIME = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".woff2": "font/woff2" };
 const shell = await readFile(join(ROOT, "_shell.html").replace(/_shell\.html$/, (await stat(join(ROOT, "_shell.html")).then(() => "_shell.html", () => "index.html"))), "utf8");

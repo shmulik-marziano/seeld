@@ -96,7 +96,7 @@ const Creativity = () => {
                 <ScrollReveal key={type.title} delay={i * 60} className="h-full">
                   <Link
                     to={type.href}
-                    className="group dna-concept dna-hover flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                    className="group dna-concept dna-hover flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
                     style={{ borderColor: LINE }}
                   >
                     <div className="flex items-start justify-between gap-4">
@@ -111,7 +111,7 @@ const Creativity = () => {
                     <p className="mt-2 text-[16px] leading-[1.7]" style={{ color: BODY }}>{type.description}</p>
                     <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[14px]" style={{ color: MUTED }}>
                       {type.features.map((feature) => (
-                        <li key={feature} className="dna-pill-item !py-0 !gap-2 text-[14px] !text-[#476356]">
+                        <li key={feature} className="dna-pill-item !py-0 !gap-2 text-[14px] !text-[#55677C]">
                           <FigureText text={feature} />
                         </li>
                       ))}

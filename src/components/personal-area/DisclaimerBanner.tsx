@@ -12,24 +12,24 @@ interface DisclaimerBannerProps {
 const variantStyles: Record<DisclaimerVariant, { bg: string; border: string; icon: typeof Info; iconColor: string; textColor: string }> = {
   info: {
     bg: "#EEF2EC",
-    border: "#CCD6CC",
+    border: "#D9DEE4",
     icon: Info,
-    iconColor: "#003D30",
-    textColor: "#24483C",
+    iconColor: "#203957",
+    textColor: "#2D435D",
   },
   warning: {
     bg: "#F5EEE0",
     border: "#E5D3B3",
     icon: AlertTriangle,
-    iconColor: "#8A6230",
-    textColor: "#24483C",
+    iconColor: "#7C5C22",
+    textColor: "#2D435D",
   },
   legal: {
     bg: "#FFFFFF",
-    border: "#CCD6CC",
+    border: "#D9DEE4",
     icon: Shield,
-    iconColor: "#476356",
-    textColor: "#476356",
+    iconColor: "#55677C",
+    textColor: "#55677C",
   },
 };
 
@@ -53,8 +53,8 @@ const DisclaimerBanner = ({ variant = "info", text, className = "" }: Disclaimer
  * Standard legal disclaimer for the client personal area footer.
  */
 export const LegalFooterDisclaimer = () => (
-  <div className="mt-10 pt-6 border-t space-y-3" style={{ borderColor: "#CCD6CC" }}>
-    <div className="text-[14px] leading-[1.6] text-center max-w-2xl mx-auto space-y-2" style={{ color: "#476356" }}>
+  <div className="mt-10 pt-6 border-t space-y-3" style={{ borderColor: "#D9DEE4" }}>
+    <div className="text-[14px] leading-[1.6] text-center max-w-2xl mx-auto space-y-2" style={{ color: "#55677C" }}>
       <p>
         המידע המוצג באזור האישי הוא לצורכי מידע כללי בלבד ואינו מהווה ייעוץ
         ביטוחי, פנסיוני, פיננסי או משפטי. אין להסתמך עליו כתחליף לייעוץ
@@ -69,7 +69,7 @@ export const LegalFooterDisclaimer = () => (
         נתוני הפוליסות והכיסויים המוצגים עשויים להשתנות ואינם מחליפים את
         תנאי הפוליסה המקוריים. למידע מעודכן, פנו ליועץ.
       </p>
-      <p className="font-bold" style={{ color: "#003D30" }}>
+      <p className="font-bold" style={{ color: "#203957" }}>
         שילד ביטוח ופיננסים &copy; {new Date().getFullYear()}. כל הזכויות שמורות.
       </p>
     </div>

@@ -12,33 +12,33 @@
 @layer base {
   :root {
     /* shadcn semantic tokens (HSL triplets) */
-    --background: 44 52% 96%;          /* ivory #FAF7EF */
-    --foreground: 168 100% 12%;        /* deep green #003D30 */
+    --background: 41 68% 96%;          /* ivory #FAF7EF */
+    --foreground: 212 45% 24%;        /* deep green #203957 */
     --card: 0 0% 100%;                 /* white card surface */
-    --card-foreground: 168 100% 12%;
+    --card-foreground: 212 45% 24%;
     --popover: 0 0% 100%;
-    --popover-foreground: 168 100% 12%;
-    --primary: 168 100% 12%;           /* deep green */
-    --primary-foreground: 44 52% 96%;  /* ivory */
-    --secondary: 98 18% 91%;           /* sage light #E8EDE5 */
-    --secondary-foreground: 168 100% 12%;
-    --muted: 98 18% 91%;
-    --muted-foreground: 157 16% 33%;   /* text-2 #476356 */
-    --accent: 98 18% 91%;
-    --accent-foreground: 168 100% 12%;
+    --popover-foreground: 212 45% 24%;
+    --primary: 212 45% 24%;           /* deep green */
+    --primary-foreground: 41 68% 96%;  /* ivory */
+    --secondary: 106 23% 89%;           /* sage light #DFE9DC */
+    --secondary-foreground: 212 45% 24%;
+    --muted: 106 23% 89%;
+    --muted-foreground: 212 19% 42%;   /* text-2 #55677C */
+    --accent: 106 23% 89%;
+    --accent-foreground: 212 45% 24%;
     --destructive: 18 62% 46%;         /* rust #BD582D */
     --destructive-foreground: 0 0% 100%;
-    --border: 120 11% 82%;             /* line #CCD6CC */
-    --input: 120 11% 82%;
-    --ring: 168 100% 12%;
+    --border: 211 17% 87%;             /* line #D9DEE4 */
+    --input: 211 17% 87%;
+    --ring: 212 45% 24%;
     --radius: 0.75rem;                 /* 12px — buttons; cards use 16px, fields 10px */
 
-    --gold: 35 50% 60%;                /* sand #CBA064 */
-    --gold-foreground: 168 100% 12%;
+    --gold: 37 47% 46%;                /* sand #AD833E */
+    --gold-foreground: 212 45% 24%;
     --success: 157 16% 33%;
     --success-foreground: 0 0% 100%;
     --warning: 35 50% 60%;
-    --warning-foreground: 168 100% 12%;
+    --warning-foreground: 212 45% 24%;
     --info: 104 13% 55%;               /* sage #819B7D */
     --info-foreground: 0 0% 100%;
 
@@ -49,8 +49,8 @@
     /* Legacy warm tones — remapped into the brand palette */
     --pencil: 157 16% 33%;
     --pencil-light: 120 11% 82%;
-    --cream: 44 52% 96%;
-    --cream-dark: 40 40% 89%;          /* sand tint #F1E7D6 */
+    --cream: 41 68% 96%;
+    --cream-dark: 40 40% 89%;          /* sand tint #F4E7C3 */
     --terracotta: 18 62% 46%;
     --terracotta-light: 40 40% 89%;
     --sage: 104 13% 55%;
@@ -63,34 +63,34 @@
     --seeld-sky: 104 13% 55%;
     --seeld-sand: 35 50% 60%;
     --seeld-teal: 157 16% 33%;
-    --seeld-dark: 168 100% 12%;
+    --seeld-dark: 212 45% 24%;
 
-    --sidebar-background: 168 100% 12%;
-    --sidebar-foreground: 44 52% 96%;
+    --sidebar-background: 212 45% 24%;
+    --sidebar-foreground: 41 68% 96%;
     --sidebar-primary: 104 13% 55%;
-    --sidebar-primary-foreground: 168 100% 12%;
-    --sidebar-accent: 168 60% 18%;
-    --sidebar-accent-foreground: 44 52% 96%;
-    --sidebar-border: 168 40% 22%;
+    --sidebar-primary-foreground: 212 45% 24%;
+    --sidebar-accent: 212 45% 18%;
+    --sidebar-accent-foreground: 41 68% 96%;
+    --sidebar-border: 212 30% 28%;
     --sidebar-ring: 104 13% 55%;
   }
 
   /* Dark mode is parked (Header forces light). Kept so `.dark` scoped classes compile. */
   .dark {
     --background: 168 100% 8%;
-    --foreground: 44 52% 96%;
+    --foreground: 41 68% 96%;
     --card: 168 60% 12%;
-    --card-foreground: 44 52% 96%;
+    --card-foreground: 41 68% 96%;
     --popover: 168 60% 12%;
-    --popover-foreground: 44 52% 96%;
+    --popover-foreground: 41 68% 96%;
     --primary: 104 13% 55%;
     --primary-foreground: 168 100% 8%;
     --secondary: 168 40% 16%;
-    --secondary-foreground: 44 52% 96%;
+    --secondary-foreground: 41 68% 96%;
     --muted: 168 40% 14%;
     --muted-foreground: 98 18% 75%;
     --accent: 168 40% 18%;
-    --accent-foreground: 44 52% 96%;
+    --accent-foreground: 41 68% 96%;
     --destructive: 18 62% 40%;
     --destructive-foreground: 0 0% 98%;
     --border: 168 40% 20%;
@@ -115,11 +115,11 @@
   /* Rubik 700 for all headings, one family only */
   h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
-    color: #003D30;
+    color: #203957;
   }
   /* Visible focus everywhere (brand accessibility bar) */
   :focus-visible {
-    outline: 2px solid #003D30;
+    outline: 2px solid #203957;
     outline-offset: 2px;
   }
 }
@@ -129,11 +129,11 @@
     background-image: none;
   }
   .warm-gradient {
-    background: linear-gradient(135deg, #FAF7EF 0%, #F1E7D6 100%);
+    background: linear-gradient(135deg, #FAF7EF 0%, #F4E7C3 100%);
   }
   .glass-card {
     background: #ffffff;
-    border: 1px solid #CCD6CC;
+    border: 1px solid #D9DEE4;
   }
 }
 
@@ -141,7 +141,7 @@
 .dna-page {
   position: relative;
   background-color: #FAF7EF;
-  color: #003D30;
+  color: #203957;
 }
 .dna-circles {
   position: absolute;
@@ -159,7 +159,7 @@
 .dna-display {
   font-family: 'Rubik', Arial, sans-serif;
   font-weight: 700;
-  color: #003D30;
+  color: #203957;
   letter-spacing: -0.01em;
 }
 
@@ -183,28 +183,28 @@
   font-family: 'Rubik', Arial, sans-serif;
   font-weight: 700;
   font-size: 15px;
-  color: #003D30;
+  color: #203957;
   margin-bottom: 6px;
 }
-.dna-quote .dna-qt { font-size: 15px; line-height: 1.65; color: #24483C; }
-.dna-quote.gold { border-color: #CBA064; background: #F5EEE0; }
-.dna-quote.gold .dna-ql { color: #003D30; }
-.dna-quote.blue { border-color: #819B7D; background: #E8EDE5; }
-.dna-quote.blue .dna-ql { color: #003D30; }
+.dna-quote .dna-qt { font-size: 15px; line-height: 1.65; color: #2D435D; }
+.dna-quote.gold { border-color: #AD833E; background: #F5EEE0; }
+.dna-quote.gold .dna-ql { color: #203957; }
+.dna-quote.blue { border-color: #819B7D; background: #DFE9DC; }
+.dna-quote.blue .dna-ql { color: #203957; }
 
 /* card */
 .dna-concept {
   background: #ffffff;
-  border: 1px solid #CCD6CC;
+  border: 1px solid #D9DEE4;
   border-radius: 16px;
   padding: 20px 22px;
-  box-shadow: 0 2px 12px rgba(0,61,48,0.04);
+  box-shadow: 0 2px 12px rgba(32, 57, 87,0.04);
 }
 
 /* data table */
 table.dna-data { width: 100%; border-collapse: collapse; font-size: 14px; }
 table.dna-data thead th {
-  background: #003D30;
+  background: #203957;
   color: #FAF7EF;
   font-weight: 700;
   font-size: 14px;
@@ -216,8 +216,8 @@ table.dna-data thead th:last-child { border-start-end-radius: 10px; }
 table.dna-data tbody td {
   padding: 10px 14px;
   text-align: start;
-  border-bottom: 1px solid #E1E8E1;
-  color: #24483C;
+  border-bottom: 1px solid #E8E6DE;
+  color: #2D435D;
 }
 table.dna-data tbody tr:nth-child(even) { background: #EEF2EC; }
 table.dna-data .num {
@@ -226,7 +226,7 @@ table.dna-data .num {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-table.dna-data tbody td:first-child { font-weight: 700; color: #003D30; }
+table.dna-data tbody td:first-child { font-weight: 700; color: #203957; }
 
 /* pill list — sage dot */
 .dna-pill-item {
@@ -234,7 +234,7 @@ table.dna-data tbody td:first-child { font-weight: 700; color: #003D30; }
   gap: 10px;
   align-items: flex-start;
   padding: 8px 0;
-  color: #24483C;
+  color: #2D435D;
   line-height: 1.6;
 }
 .dna-pill-item::before {
@@ -249,11 +249,11 @@ table.dna-data tbody td:first-child { font-weight: 700; color: #003D30; }
 
 /* soft callout */
 .dna-callout {
-  background: #E8EDE5;
+  background: #DFE9DC;
   border-radius: 12px;
   padding: 14px 18px;
   line-height: 1.6;
-  color: #24483C;
+  color: #2D435D;
 }
 
 /* interactive card hover — quiet lift */
@@ -262,7 +262,7 @@ table.dna-data tbody td:first-child { font-weight: 700; color: #003D30; }
 }
 .dna-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px -14px rgba(0,61,48,0.22);
+  box-shadow: 0 12px 28px -14px rgba(32, 57, 87,0.22);
 }
 .dna-hover:active { transform: translateY(0); box-shadow: none; }
 @media (prefers-reduced-motion: reduce) {
@@ -272,19 +272,19 @@ table.dna-data tbody td:first-child { font-weight: 700; color: #003D30; }
 /* ── Legacy bento panels → brand surfaces ── */
 .bento-panel {
   position: relative;
-  background-color: #E8EDE5;
+  background-color: #DFE9DC;
   border-radius: 20px;
   overflow: hidden;
 }
 .bento-panel-ink {
   position: relative;
-  background-color: #003D30;
+  background-color: #203957;
   border-radius: 20px;
   overflow: hidden;
 }
 .bento-panel-orange {
   position: relative;
-  background-color: #CBA064;
+  background-color: #AD833E;
   border-radius: 20px;
   overflow: hidden;
 }
@@ -293,7 +293,7 @@ table.dna-data tbody td:first-child { font-weight: 700; color: #003D30; }
 }
 .bento-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px -14px rgba(0,61,48,0.35);
+  box-shadow: 0 10px 24px -14px rgba(32, 57, 87,0.35);
 }
 .bento-hover:active {
   transform: translateY(0);
@@ -338,12 +338,12 @@ body {
 /* Dashed decorative connector */
 .dashed-connector {
   border: none;
-  border-top: 2px dashed #003D30;
+  border-top: 2px dashed #203957;
   opacity: 0.15;
 }
 .dashed-connector-vertical {
   border: none;
-  border-right: 2px dashed #003D30;
+  border-right: 2px dashed #203957;
   opacity: 0.12;
 }
 
@@ -368,7 +368,7 @@ body {
 .input-minimal {
   background: transparent;
   border: none;
-  border-bottom: 2px solid rgba(0, 61, 48, 0.15);
+  border-bottom: 2px solid rgba(32, 57, 87, 0.15);
   border-radius: 0;
   padding: 0.875rem 0.25rem;
   font-size: 1rem;
@@ -376,10 +376,10 @@ body {
 }
 .input-minimal:focus {
   outline: none;
-  border-bottom-color: #003D30;
+  border-bottom-color: #203957;
 }
 .input-minimal::placeholder {
-  color: #476356;
+  color: #55677C;
 }
 
 /* Tap targets on mobile — 48px per brand */
@@ -408,28 +408,28 @@ body {
 
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #CCD6CC; border-radius: 999px; }
+::-webkit-scrollbar-thumb { background: #D9DEE4; border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: #819B7D; }
 
 ::selection {
-  background: #003D30;
+  background: #203957;
   color: #FAF7EF;
 }
 
 @media (pointer: fine) {
   * {
     scrollbar-width: thin;
-    scrollbar-color: #CCD6CC transparent;
+    scrollbar-color: #D9DEE4 transparent;
   }
   *::-webkit-scrollbar { width: 8px; height: 8px; }
-  *::-webkit-scrollbar-thumb { background: #CCD6CC; border-radius: 4px; }
+  *::-webkit-scrollbar-thumb { background: #D9DEE4; border-radius: 4px; }
   *::-webkit-scrollbar-thumb:hover { background: #819B7D; }
   *::-webkit-scrollbar-track { background: transparent; }
 }
 
 /* Sand band — a breath between ivory sections */
 .dna-warm-band {
-  background: linear-gradient(180deg, #FAF7EF 0%, #F1E7D6 55%, #FAF7EF 100%);
+  background: linear-gradient(180deg, #FAF7EF 0%, #F4E7C3 55%, #FAF7EF 100%);
 }
 
 /* Logo marquee edges */
@@ -448,14 +448,14 @@ body {
 .dna-navy-band {
   position: relative;
   overflow: hidden;
-  background-color: #003D30;
+  background-color: #203957;
 }
 .dna-navy-band::before {
   content: "";
   position: absolute;
   inset: 0 0 auto 0;
   height: 3px;
-  background: #CBA064;
+  background: #AD833E;
 }
 .dna-navy-band::after {
   content: "";
@@ -494,7 +494,7 @@ body {
   border-radius: 50%;
 }
 .brand-dots > i:nth-child(1) { background: #819B7D; }
-.brand-dots > i:nth-child(2) { background: #CBA064; }
+.brand-dots > i:nth-child(2) { background: #AD833E; }
 .brand-dots > i:nth-child(3) { background: #BD582D; }
 
 /* Buttons */
@@ -506,14 +506,14 @@ body {
   min-height: 48px;
   padding: 12px 28px;
   border-radius: 12px;
-  background: #003D30;
+  background: #203957;
   color: #FAF7EF;
   font-weight: 700;
   font-size: 16px;
   line-height: 1.2;
   transition: background-color 0.15s ease-out, transform 0.15s ease-out;
 }
-.btn-primary:hover { background: #002B22; }
+.btn-primary:hover { background: #162B45; }
 .btn-primary:active { transform: translateY(1px); }
 .btn-primary:disabled { opacity: 0.6; pointer-events: none; }
 .btn-secondary {
@@ -525,14 +525,14 @@ body {
   padding: 12px 28px;
   border-radius: 12px;
   background: transparent;
-  color: #003D30;
+  color: #203957;
   font-weight: 700;
   font-size: 16px;
   line-height: 1.2;
-  box-shadow: inset 0 0 0 1.5px #003D30;
+  box-shadow: inset 0 0 0 1.5px #203957;
   transition: background-color 0.15s ease-out, transform 0.15s ease-out;
 }
-.btn-secondary:hover { background: rgba(0,61,48,0.06); }
+.btn-secondary:hover { background: rgba(32, 57, 87,0.06); }
 .btn-secondary:active { transform: translateY(1px); }
 .btn-secondary:disabled { opacity: 0.6; pointer-events: none; }
 .btn-on-green {
@@ -544,13 +544,13 @@ body {
   padding: 12px 28px;
   border-radius: 12px;
   background: #FAF7EF;
-  color: #003D30;
+  color: #203957;
   font-weight: 700;
   font-size: 16px;
   line-height: 1.2;
   transition: background-color 0.15s ease-out;
 }
-.btn-on-green:hover { background: #E8EDE5; }
+.btn-on-green:hover { background: #DFE9DC; }
 .btn-on-green-outline {
   display: inline-flex;
   align-items: center;
@@ -567,7 +567,7 @@ body {
   transition: background-color 0.15s ease-out;
 }
 .btn-on-green-outline:hover { background: rgba(250,247,239,0.1); }
-.btn-primary:focus-visible, .btn-secondary:focus-visible { outline: 2px solid #003D30; outline-offset: 3px; }
+.btn-primary:focus-visible, .btn-secondary:focus-visible { outline: 2px solid #203957; outline-offset: 3px; }
 .btn-on-green:focus-visible, .btn-on-green-outline:focus-visible { outline: 2px solid #FAF7EF; outline-offset: 3px; }
 
 /* Text link with underline rule */
@@ -575,13 +575,13 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #003D30;
+  color: #203957;
   font-weight: 700;
-  border-bottom: 1px solid rgba(0,61,48,0.3);
+  border-bottom: 1px solid rgba(32, 57, 87,0.3);
   padding-bottom: 2px;
   transition: border-color 0.15s ease-out;
 }
-.link-rule:hover { border-color: #003D30; }
+.link-rule:hover { border-color: #203957; }
 
 /* Fields */
 .field {
@@ -589,16 +589,16 @@ body {
   min-height: 48px;
   padding: 12px 16px;
   background: #ffffff;
-  border: 1px solid #CCD6CC;
+  border: 1px solid #D9DEE4;
   border-radius: 10px;
-  color: #003D30;
+  color: #203957;
   font-size: 16px;
   transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
 }
 .field::placeholder { color: #587364; }
-.field:focus { outline: none; border-color: #003D30; box-shadow: 0 0 0 3px rgba(0,61,48,0.12); }
+.field:focus { outline: none; border-color: #203957; box-shadow: 0 0 0 3px rgba(32, 57, 87,0.12); }
 .field[aria-invalid="true"] { border-color: #BD582D; }
-.field:disabled { background: #EEF2EC; color: #476356; }
+.field:disabled { background: #EEF2EC; color: #55677C; }
 
 /* ══ Returns board ══ */
 .board-table { min-width: 100%; }
@@ -607,7 +607,7 @@ body {
 .board-table thead th.num button { direction: rtl; }
 .board-table tbody tr:nth-child(odd) { background: #ffffff; }
 .board-table tbody tr.details-row { background: #F3F5F1; }
-.board-table tbody tr.details-row > td { border-bottom: 1px solid #CCD6CC; }
+.board-table tbody tr.details-row > td { border-bottom: 1px solid #D9DEE4; }
 .board-table .fund-cell {
   position: sticky;
   right: 0;
@@ -615,15 +615,15 @@ body {
   background: inherit;
   min-width: 220px;
   max-width: 340px;
-  box-shadow: -1px 0 0 #E1E8E1 inset;
+  box-shadow: -1px 0 0 #E8E6DE inset;
 }
-.board-table thead th:first-child { background: #003D30; z-index: 3; position: sticky; right: 0; }
+.board-table thead th:first-child { background: #203957; z-index: 3; position: sticky; right: 0; }
 .board-table tfoot th, .board-table tfoot td {
   padding: 10px 14px;
-  border-top: 2px solid #CCD6CC;
+  border-top: 2px solid #D9DEE4;
   background: #EEF2EC;
   font-weight: 700;
-  color: #003D30;
+  color: #203957;
   text-align: start;
 }
 .board-table tfoot th { position: sticky; right: 0; }

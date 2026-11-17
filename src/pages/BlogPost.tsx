@@ -418,15 +418,15 @@ const BlogPost = () => {
           <article className="max-w-3xl mx-auto px-5 sm:px-8 py-10 sm:py-14">
             <div
               className="prose max-w-none
-                prose-headings:text-[#003D30] prose-headings:font-bold prose-headings:leading-tight
+                prose-headings:text-[#203957] prose-headings:font-bold prose-headings:leading-tight
                 prose-h2:text-[26px] sm:prose-h2:text-[30px] prose-h2:mt-12 prose-h2:mb-4
                 prose-h3:text-[20px] prose-h3:mt-8 prose-h3:mb-3
-                prose-p:text-[17px] prose-p:leading-[1.8] prose-p:text-[#24483C]
-                prose-li:text-[17px] prose-li:leading-[1.8] prose-li:text-[#24483C] prose-li:marker:text-[#819B7D]
-                prose-strong:text-[#003D30] prose-strong:font-bold
-                prose-a:text-[#003D30] prose-a:font-bold prose-a:underline prose-a:underline-offset-4
-                prose-blockquote:border-s-4 prose-blockquote:border-[#819B7D] prose-blockquote:bg-[#EEF2EC] prose-blockquote:not-italic prose-blockquote:rounded-e-xl prose-blockquote:py-4 prose-blockquote:px-5 prose-blockquote:text-[#24483C]
-                prose-img:rounded-2xl prose-hr:border-[#CCD6CC]"
+                prose-p:text-[17px] prose-p:leading-[1.8] prose-p:text-[#2D435D]
+                prose-li:text-[17px] prose-li:leading-[1.8] prose-li:text-[#2D435D] prose-li:marker:text-[#819B7D]
+                prose-strong:text-[#203957] prose-strong:font-bold
+                prose-a:text-[#203957] prose-a:font-bold prose-a:underline prose-a:underline-offset-4
+                prose-blockquote:border-s-4 prose-blockquote:border-[#819B7D] prose-blockquote:bg-[#EEF2EC] prose-blockquote:not-italic prose-blockquote:rounded-e-xl prose-blockquote:py-4 prose-blockquote:px-5 prose-blockquote:text-[#2D435D]
+                prose-img:rounded-2xl prose-hr:border-[#D9DEE4]"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
 
@@ -545,7 +545,7 @@ const BlogPost = () => {
                   <Link
                     key={r.id}
                     to={`/blog/${r.slug}`}
-                    className="dna-concept dna-hover group flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                    className="dna-concept dna-hover group flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
                   >
                     <h3 className="text-[18px] leading-snug" style={{ color: GREEN }}>{r.title}</h3>
                     <p className="mt-2 text-[14px]" style={{ color: MUTED }}>

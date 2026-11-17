@@ -29,7 +29,7 @@ class AdminErrorBoundary extends Component<{ children: ReactNode }, { error: Err
             <h2 style={{ color: '#9A4520', fontSize: 20, fontWeight: 800, marginBottom: 8 }}>שגיאה בטעינת מנהל האתר</h2>
             <p style={{ color: '#666', fontSize: 14, marginBottom: 16 }}>{this.state.error.message}</p>
             <button onClick={() => { this.setState({ error: null }); window.location.reload(); }}
-              style={{ background: '#003D30', color: 'white', border: 'none', padding: '10px 24px', borderRadius: 50, cursor: 'pointer', fontWeight: 700 }}>
+              style={{ background: '#203957', color: 'white', border: 'none', padding: '10px 24px', borderRadius: 50, cursor: 'pointer', fontWeight: 700 }}>
               נסה שוב
             </button>
           </div>
@@ -211,7 +211,7 @@ function SiteAdminInner() {
   if (authLoading && step !== "admin") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FAF7EF]">
-        <Loader2 className="w-8 h-8 animate-spin text-[#003D30]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#203957]" />
       </div>
     );
   }
@@ -220,15 +220,15 @@ function SiteAdminInner() {
   if (step === "denied") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FAF7EF] px-4" dir="rtl">
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-[#E1E8E1] max-w-sm text-center">
+        <div className="bg-white rounded-3xl p-8 shadow-xl border border-[#E8E6DE] max-w-sm text-center">
           <div className="w-16 h-16 rounded-full bg-[#9A4520]/10 flex items-center justify-center mx-auto mb-4">
             <Shield className="w-8 h-8 text-[#9A4520]" />
           </div>
-          <h2 className="text-xl font-bold text-[#003D30] mb-2">אין הרשאה</h2>
-          <p className="text-[#476356] text-sm mb-6">
+          <h2 className="text-xl font-bold text-[#203957] mb-2">אין הרשאה</h2>
+          <p className="text-[#55677C] text-sm mb-6">
             המייל {user?.email} אינו מורשה לגשת לממשק הניהול.
           </p>
-          <Button onClick={handleSignOut} variant="outline" className="rounded-full gap-2 border-[#CCD6CC]">
+          <Button onClick={handleSignOut} variant="outline" className="rounded-full gap-2 border-[#D9DEE4]">
             <LogOut className="w-4 h-4" />
             התנתק
           </Button>
@@ -245,34 +245,34 @@ function SiteAdminInner() {
       >
         {/* Decorative bubbles matching site design */}
         <div className="absolute top-[10%] left-[8%] w-[140px] h-[140px] rounded-full opacity-40 pointer-events-none"
-          style={{ background: "radial-gradient(circle, #8A6230, transparent 70%)" }} />
+          style={{ background: "radial-gradient(circle, #7C5C22, transparent 70%)" }} />
         <div className="absolute top-[25%] left-[20%] w-[90px] h-[90px] rounded-full opacity-30 pointer-events-none"
           style={{ background: "radial-gradient(circle, #9A4520, transparent 70%)" }} />
         <div className="absolute top-[18%] left-[32%] w-[110px] h-[110px] rounded-full opacity-35 pointer-events-none"
-          style={{ background: "radial-gradient(circle, #003D30, transparent 70%)" }} />
-        <div className="absolute bottom-[15%] right-[10%] w-[60px] h-[60px] rounded-full opacity-20 pointer-events-none bg-[#8A6230]" />
-        <div className="absolute bottom-[25%] right-[25%] w-[30px] h-[30px] rounded-full opacity-15 pointer-events-none bg-[#003D30]" />
-        <div className="absolute top-[5%] right-[40%] w-3 h-3 rounded-full bg-[#003D30] opacity-[0.05] pointer-events-none" />
+          style={{ background: "radial-gradient(circle, #203957, transparent 70%)" }} />
+        <div className="absolute bottom-[15%] right-[10%] w-[60px] h-[60px] rounded-full opacity-20 pointer-events-none bg-[#7C5C22]" />
+        <div className="absolute bottom-[25%] right-[25%] w-[30px] h-[30px] rounded-full opacity-15 pointer-events-none bg-[#203957]" />
+        <div className="absolute top-[5%] right-[40%] w-3 h-3 rounded-full bg-[#203957] opacity-[0.05] pointer-events-none" />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-[420px] relative z-10"
         >
-          <div className="bg-white rounded-3xl border border-[#E1E8E1] shadow-xl p-8 space-y-6">
+          <div className="bg-white rounded-3xl border border-[#E8E6DE] shadow-xl p-8 space-y-6">
             {/* Header */}
             <div className="text-center space-y-3">
               <div className="flex items-center justify-center gap-3">
                 <div
                   className="w-14 h-14 rounded-2xl flex items-center justify-center"
-                  style={{ background: "linear-gradient(135deg, #003D30 0%, #003D30 100%)" }}
+                  style={{ background: "linear-gradient(135deg, #203957 0%, #203957 100%)" }}
                 >
                   <Shield className="w-7 h-7 text-white" />
                 </div>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-[#003D30]">ניהול האתר</h1>
-                <p className="text-sm text-[#476356] mt-1">SEELD Site Admin</p>
+                <h1 className="text-2xl font-bold text-[#203957]">ניהול האתר</h1>
+                <p className="text-sm text-[#55677C] mt-1">SEELD Site Admin</p>
               </div>
             </div>
 
@@ -289,7 +289,7 @@ function SiteAdminInner() {
                   {/* Google Login */}
                   <Button
                     variant="outline"
-                    className="w-full gap-3 h-13 rounded-full text-sm font-bold border-[#CCD6CC] hover:bg-[#F3F5F1] shadow-sm min-h-[52px]"
+                    className="w-full gap-3 h-13 rounded-full text-sm font-bold border-[#D9DEE4] hover:bg-[#F3F5F1] shadow-sm min-h-[52px]"
                     onClick={async () => {
                       setLoading(true);
                       const { error } = await signInWithGoogle("/site-admin");
@@ -311,15 +311,15 @@ function SiteAdminInner() {
                   </Button>
 
                   <div className="flex items-center gap-3 py-1">
-                    <div className="flex-1 h-px bg-[#CCD6CC]" />
-                    <span className="text-[11px] text-[#476356]">או באימייל</span>
-                    <div className="flex-1 h-px bg-[#CCD6CC]" />
+                    <div className="flex-1 h-px bg-[#D9DEE4]" />
+                    <span className="text-[11px] text-[#55677C]">או באימייל</span>
+                    <div className="flex-1 h-px bg-[#D9DEE4]" />
                   </div>
 
                   {/* Magic link + OTP */}
                   <form onSubmit={handleSendOtp} className="space-y-3">
                     <div className="relative">
-                      <Mail className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#476356]" />
+                      <Mail className="absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#55677C]" />
                       <Input
                         type="email"
                         value={email}
@@ -327,14 +327,14 @@ function SiteAdminInner() {
                         placeholder={ADMIN_EMAIL}
                         required
                         dir="ltr"
-                        className="h-12 pr-11 rounded-full text-sm border-[#CCD6CC] focus-visible:ring-[#003D30]/40 text-left"
+                        className="h-12 pr-11 rounded-full text-sm border-[#D9DEE4] focus-visible:ring-[#203957]/40 text-left"
                       />
                     </div>
                     <div className="flex gap-2">
                       <Button
                         type="button"
                         onClick={() => handleSendMagicLink()}
-                        className="flex-1 h-11 rounded-full gap-2 text-sm font-bold bg-[#003D30] hover:bg-[#003D30] shadow-lg shadow-[#003D30]/15"
+                        className="flex-1 h-11 rounded-full gap-2 text-sm font-bold bg-[#203957] hover:bg-[#203957] shadow-lg shadow-[#203957]/15"
                         disabled={loading}
                       >
                         {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Link2 className="h-4 w-4" />}
@@ -343,7 +343,7 @@ function SiteAdminInner() {
                       <Button
                         type="submit"
                         variant="outline"
-                        className="h-11 rounded-full gap-1.5 text-sm border-[#CCD6CC] px-4"
+                        className="h-11 rounded-full gap-1.5 text-sm border-[#D9DEE4] px-4"
                         disabled={loading}
                       >
                         <Mail className="h-3.5 w-3.5" />
@@ -363,15 +363,15 @@ function SiteAdminInner() {
                   exit={{ opacity: 0, x: 20 }}
                   className="space-y-5 text-center"
                 >
-                  <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center" style={{ background: "#003D3020" }}>
-                    <Mail className="w-7 h-7 text-[#003D30]" />
+                  <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center" style={{ background: "#20395720" }}>
+                    <Mail className="w-7 h-7 text-[#203957]" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#003D30] text-lg mb-1">בדוק את המייל</h3>
-                    <p className="text-sm text-[#476356]">
-                      שלחנו לינק כניסה ל-<span className="font-bold text-[#003D30]" dir="ltr">{email}</span>
+                    <h3 className="font-bold text-[#203957] text-lg mb-1">בדוק את המייל</h3>
+                    <p className="text-sm text-[#55677C]">
+                      שלחנו לינק כניסה ל-<span className="font-bold text-[#203957]" dir="ltr">{email}</span>
                     </p>
-                    <p className="text-xs text-[#476356] mt-2">לחץ על הלינק במייל כדי להתחבר. בדוק גם בספאם.</p>
+                    <p className="text-xs text-[#55677C] mt-2">לחץ על הלינק במייל כדי להתחבר. בדוק גם בספאם.</p>
                   </div>
 
                   <div className="flex flex-col gap-2">
@@ -379,7 +379,7 @@ function SiteAdminInner() {
                       variant="outline"
                       onClick={() => handleSendMagicLink()}
                       disabled={resendTimer > 0 || loading}
-                      className="w-full rounded-full gap-2 h-11 border-[#CCD6CC]"
+                      className="w-full rounded-full gap-2 h-11 border-[#D9DEE4]"
                     >
                       <RefreshCw className="w-4 h-4" />
                       {resendTimer > 0 ? `שלח שוב (${resendTimer}s)` : "שלח שוב"}
@@ -387,7 +387,7 @@ function SiteAdminInner() {
                     <button
                       type="button"
                       onClick={() => { setStep("login"); setOtp(""); }}
-                      className="text-sm text-[#476356] hover:text-[#003D30] py-2 transition-colors"
+                      className="text-sm text-[#55677C] hover:text-[#203957] py-2 transition-colors"
                     >
                       חזרה לאפשרויות התחברות
                     </button>
@@ -404,10 +404,10 @@ function SiteAdminInner() {
                   exit={{ opacity: 0, x: 20 }}
                   className="space-y-5"
                 >
-                  <div className="bg-[#003D30]/10 rounded-2xl p-3.5 flex items-center gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-[#003D30] shrink-0" />
-                    <p className="text-xs text-[#003D30]/80">
-                      קוד נשלח ל-<span className="font-bold text-[#003D30]" dir="ltr">{email}</span>
+                  <div className="bg-[#203957]/10 rounded-2xl p-3.5 flex items-center gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-[#203957] shrink-0" />
+                    <p className="text-xs text-[#203957]/80">
+                      קוד נשלח ל-<span className="font-bold text-[#203957]" dir="ltr">{email}</span>
                     </p>
                   </div>
 
@@ -444,11 +444,11 @@ function SiteAdminInner() {
                           target?.focus();
                         }}
                         className={cn(
-                          "w-12 h-12 rounded-full border-2 text-center text-lg font-bold text-[#003D30] outline-none transition-all",
+                          "w-12 h-12 rounded-full border-2 text-center text-lg font-bold text-[#203957] outline-none transition-all",
                           otp[i]
-                            ? "border-[#003D30] bg-[#003D30]/5 shadow-sm"
-                            : "border-[#CCD6CC] bg-white hover:border-[#CCD6CC]",
-                          "focus:border-[#003D30] focus:ring-2 focus:ring-[#003D30]/20"
+                            ? "border-[#203957] bg-[#203957]/5 shadow-sm"
+                            : "border-[#D9DEE4] bg-white hover:border-[#D9DEE4]",
+                          "focus:border-[#203957] focus:ring-2 focus:ring-[#203957]/20"
                         )}
                       />
                     ))}
@@ -456,7 +456,7 @@ function SiteAdminInner() {
 
                   <Button
                     onClick={handleVerifyOtp}
-                    className="w-full h-12 rounded-full font-bold bg-[#003D30] hover:bg-[#003D30] shadow-lg shadow-[#003D30]/15"
+                    className="w-full h-12 rounded-full font-bold bg-[#203957] hover:bg-[#203957] shadow-lg shadow-[#203957]/15"
                     disabled={loading || otp.length !== 6}
                   >
                     {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "אמת והיכנס"}
@@ -466,7 +466,7 @@ function SiteAdminInner() {
                     <button
                       type="button"
                       onClick={() => { setStep("login"); setOtp(""); }}
-                      className="text-sm text-[#476356] hover:text-[#003D30] transition-colors"
+                      className="text-sm text-[#55677C] hover:text-[#203957] transition-colors"
                     >
                       חזרה
                     </button>
@@ -476,7 +476,7 @@ function SiteAdminInner() {
                       disabled={resendTimer > 0 || loading}
                       className={cn(
                         "text-sm transition-colors flex items-center gap-1",
-                        resendTimer > 0 ? "text-[#8FA396]" : "text-[#003D30] hover:text-[#003D30]"
+                        resendTimer > 0 ? "text-[#8FA396]" : "text-[#203957] hover:text-[#203957]"
                       )}
                     >
                       <RefreshCw className="w-3 h-3" />
@@ -488,7 +488,7 @@ function SiteAdminInner() {
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center justify-center gap-2 mt-5 text-[#476356]">
+          <div className="flex items-center justify-center gap-2 mt-5 text-[#55677C]">
             <Lock className="w-3 h-3" />
             <span className="text-[10px]">גישה מורשית בלבד</span>
             <div className="w-1 h-1 rounded-full bg-[#8FA396]" />
@@ -549,18 +549,18 @@ function SiteAdminInner() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center hover:bg-[#E8EDE5]"
+              className="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center hover:bg-[#DFE9DC]"
             >
-              <Menu className="w-5 h-5 text-[#476356]" />
+              <Menu className="w-5 h-5 text-[#55677C]" />
             </button>
             <div>
-              <h1 className="text-lg font-bold text-[#003D30]">
+              <h1 className="text-lg font-bold text-[#203957]">
                 {TABS.find(t => t.id === activeTab)?.label}
               </h1>
-              <p className="text-xs text-[#476356] hidden sm:block">ניהול ופיקוח על אתר SEELD</p>
+              <p className="text-xs text-[#55677C] hidden sm:block">ניהול ופיקוח על אתר SEELD</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-xs text-[#476356]">
+          <div className="flex items-center gap-2 text-xs text-[#55677C]">
             <div className="w-2 h-2 rounded-full bg-green-400" />
             <span className="hidden sm:inline">{ADMIN_EMAIL}</span>
           </div>
@@ -602,13 +602,13 @@ function SidebarContent({
       <div className="p-5 border-b flex items-center gap-3">
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ background: "linear-gradient(135deg, #003D30 0%, #003D30 100%)" }}
+          style={{ background: "linear-gradient(135deg, #203957 0%, #203957 100%)" }}
         >
           <Shield className="w-5 h-5 text-white" />
         </div>
         <div>
-          <p className="font-bold text-sm text-[#003D30]">SEELD Admin</p>
-          <p className="text-[10px] text-[#476356]">ניהול האתר</p>
+          <p className="font-bold text-sm text-[#203957]">SEELD Admin</p>
+          <p className="text-[10px] text-[#55677C]">ניהול האתר</p>
         </div>
       </div>
 
@@ -623,8 +623,8 @@ function SidebarContent({
               className={cn(
                 "w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-right",
                 isActive
-                  ? "bg-[#003D30] text-white shadow-md shadow-[#003D30]/15"
-                  : "text-[#476356] hover:bg-[#E8EDE5] hover:text-[#003D30]"
+                  ? "bg-[#203957] text-white shadow-md shadow-[#203957]/15"
+                  : "text-[#55677C] hover:bg-[#DFE9DC] hover:text-[#203957]"
               )}
             >
               <tab.icon className="w-4 h-4 shrink-0" />
@@ -638,7 +638,7 @@ function SidebarContent({
       <div className="p-3 border-t">
         <button
           onClick={onSignOut}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-[#476356] hover:bg-[#F3E2D8] hover:text-[#9A4520] transition-all"
+          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-[#55677C] hover:bg-[#F3E2D8] hover:text-[#9A4520] transition-all"
         >
           <LogOut className="w-4 h-4" />
           התנתק
@@ -662,8 +662,8 @@ function StatCard({ icon, color, bg, label, value }: {
           {icon}
         </div>
         <div>
-          <p className="text-2xl font-bold text-[#003D30]">{value}</p>
-          <p className="text-[11px] text-[#476356]">{label}</p>
+          <p className="text-2xl font-bold text-[#203957]">{value}</p>
+          <p className="text-[11px] text-[#55677C]">{label}</p>
         </div>
       </div>
     </div>
@@ -676,8 +676,8 @@ function ModuleHeader({ title, subtitle, action }: {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
       <div>
-        <h2 className="text-xl font-bold text-[#003D30]">{title}</h2>
-        {subtitle && <p className="text-sm text-[#476356] mt-0.5">{subtitle}</p>}
+        <h2 className="text-xl font-bold text-[#203957]">{title}</h2>
+        {subtitle && <p className="text-sm text-[#55677C] mt-0.5">{subtitle}</p>}
       </div>
       {action}
     </div>
@@ -689,11 +689,11 @@ function EmptyState({ icon, title, subtitle }: {
 }) {
   return (
     <div className="text-center py-16">
-      <div className="w-16 h-16 rounded-full bg-[#E8EDE5] flex items-center justify-center mx-auto mb-4 text-[#476356]">
+      <div className="w-16 h-16 rounded-full bg-[#DFE9DC] flex items-center justify-center mx-auto mb-4 text-[#55677C]">
         {icon}
       </div>
-      <h3 className="font-bold text-[#476356] mb-1">{title}</h3>
-      <p className="text-sm text-[#476356]">{subtitle}</p>
+      <h3 className="font-bold text-[#55677C] mb-1">{title}</h3>
+      <p className="text-sm text-[#55677C]">{subtitle}</p>
     </div>
   );
 }
@@ -744,7 +744,7 @@ const PAGE_LABELS: Record<string, string> = {
   "/app/dashboard": "\u05D3\u05E9\u05D1\u05D5\u05E8\u05D3 \u05E1\u05D5\u05DB\u05DF",
 };
 
-function Sparkline({ data, color = "#003D30", width = 80, height = 28 }: { data: number[]; color?: string; width?: number; height?: number }) {
+function Sparkline({ data, color = "#203957", width = 80, height = 28 }: { data: number[]; color?: string; width?: number; height?: number }) {
   if (data.length < 2) return null;
   const max = Math.max(...data, 1);
   const points = data.map((v, i) => {
@@ -957,16 +957,16 @@ function AnalyticsModule() {
     return c ? `${c.flag} ${c.name}` : code;
   };
 
-  const DEVICE_COLORS: Record<string, string> = { desktop: "#003D30", mobile: "#476356", tablet: "#8A6230" };
+  const DEVICE_COLORS: Record<string, string> = { desktop: "#203957", mobile: "#55677C", tablet: "#7C5C22" };
   const DEVICE_LABELS: Record<string, string> = { desktop: "\u05DE\u05D7\u05E9\u05D1", mobile: "\u05E0\u05D9\u05D9\u05D3", tablet: "\u05D8\u05D0\u05D1\u05DC\u05D8" };
-  const BROWSER_COLORS: Record<string, string> = { Chrome: "#003D30", Safari: "#476356", Firefox: "#8A6230", Edge: "#2F6B4E", Other: "#9A4520" };
+  const BROWSER_COLORS: Record<string, string> = { Chrome: "#203957", Safari: "#55677C", Firefox: "#7C5C22", Edge: "#2F6B4E", Other: "#9A4520" };
   const DEVICE_ICONS: Record<string, string> = { desktop: "מחשב", mobile: "נייד", tablet: "טאבלט" };
 
   const TrendArrow = ({ value, invertColors = false }: { value: number; invertColors?: boolean }) => {
     const isPositive = invertColors ? value < 0 : value > 0;
     const isNegative = invertColors ? value > 0 : value < 0;
     return (
-      <span className={cn("text-xs font-bold flex items-center gap-0.5", isPositive ? "text-[#2F6B4E]" : isNegative ? "text-[#9A4520]" : "text-[#476356]")}>
+      <span className={cn("text-xs font-bold flex items-center gap-0.5", isPositive ? "text-[#2F6B4E]" : isNegative ? "text-[#9A4520]" : "text-[#55677C]")}>
         {value > 0 ? "\u25B2" : value < 0 ? "\u25BC" : "\u2013"} {Math.abs(value)}%
       </span>
     );
@@ -979,14 +979,14 @@ function AnalyticsModule() {
         subtitle="\u05DE\u05E2\u05E7\u05D1 \u05D1\u05D9\u05E7\u05D5\u05E8\u05D9\u05DD \u05D5\u05E0\u05EA\u05D5\u05E0\u05D9 \u05D2\u05DC\u05D9\u05E9\u05D4 \u05D1\u05D0\u05EA\u05E8"
         action={
           <div className="flex items-center gap-2">
-            <div className="flex rounded-full border border-[#CCD6CC] overflow-hidden">
+            <div className="flex rounded-full border border-[#D9DEE4] overflow-hidden">
               {(["today", "week", "month", "all"] as const).map((r) => (
                 <button
                   key={r}
                   onClick={() => setRange(r)}
                   className={cn(
                     "px-3 py-1.5 text-xs font-medium transition-colors",
-                    range === r ? "bg-[#003D30] text-white" : "text-[#476356] hover:text-[#003D30]"
+                    range === r ? "bg-[#203957] text-white" : "text-[#55677C] hover:text-[#203957]"
                   )}
                 >
                   {r === "today" ? "\u05D4\u05D9\u05D5\u05DD" : r === "week" ? "\u05E9\u05D1\u05D5\u05E2" : r === "month" ? "\u05D7\u05D5\u05D3\u05E9" : "\u05D4\u05DB\u05DC"}
@@ -1003,45 +1003,45 @@ function AnalyticsModule() {
       {/* ── Section 1: KPI Strip ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Views */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#E8E6DE] p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-[#476356]">{"\u05E6\u05E4\u05D9\u05D5\u05EA"}</p>
+            <p className="text-xs text-[#55677C]">{"\u05E6\u05E4\u05D9\u05D5\u05EA"}</p>
             <TrendArrow value={pctChange(totalViews, prevTotalViews)} />
           </div>
-          <p className="text-3xl font-bold text-[#003D30]">{loading ? "..." : totalViews.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-[#203957]">{loading ? "..." : totalViews.toLocaleString()}</p>
           <div className="mt-3">
-            <Sparkline data={sparkViews} color="#003D30" />
+            <Sparkline data={sparkViews} color="#203957" />
           </div>
         </div>
         {/* Unique Visitors */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#E8E6DE] p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-[#476356]">{"\u05DE\u05D1\u05E7\u05E8\u05D9\u05DD \u05D9\u05D9\u05D7\u05D5\u05D3\u05D9\u05D9\u05DD"}</p>
+            <p className="text-xs text-[#55677C]">{"\u05DE\u05D1\u05E7\u05E8\u05D9\u05DD \u05D9\u05D9\u05D7\u05D5\u05D3\u05D9\u05D9\u05DD"}</p>
             <TrendArrow value={pctChange(uniqueSessions, prevUniqueSessions)} />
           </div>
-          <p className="text-3xl font-bold text-[#003D30]">{loading ? "..." : uniqueSessions.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-[#203957]">{loading ? "..." : uniqueSessions.toLocaleString()}</p>
           <div className="mt-3">
-            <Sparkline data={sparkSessions} color="#8A6230" />
+            <Sparkline data={sparkSessions} color="#7C5C22" />
           </div>
         </div>
         {/* Bounce Rate */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#E8E6DE] p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-[#476356]">{"\u05E9\u05D9\u05E2\u05D5\u05E8 \u05E0\u05D8\u05D9\u05E9\u05D4"}</p>
+            <p className="text-xs text-[#55677C]">{"\u05E9\u05D9\u05E2\u05D5\u05E8 \u05E0\u05D8\u05D9\u05E9\u05D4"}</p>
             <TrendArrow value={pctChange(bounceRate, prevBounceRate)} invertColors />
           </div>
-          <p className="text-3xl font-bold text-[#003D30]">{loading ? "..." : `${bounceRate}%`}</p>
+          <p className="text-3xl font-bold text-[#203957]">{loading ? "..." : `${bounceRate}%`}</p>
           <div className="mt-3">
             <Sparkline data={[0, 0, 0, 0, 0, 0, 0].map(() => bounceRate)} color="#9A4520" />
           </div>
         </div>
         {/* Avg Pages / Session */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#E8E6DE] p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-[#476356]">{"\u05DE\u05DE\u05D5\u05E6\u05E2 \u05E2\u05DE\u05D5\u05D3\u05D9\u05DD / \u05D1\u05D9\u05E7\u05D5\u05E8"}</p>
+            <p className="text-xs text-[#55677C]">{"\u05DE\u05DE\u05D5\u05E6\u05E2 \u05E2\u05DE\u05D5\u05D3\u05D9\u05DD / \u05D1\u05D9\u05E7\u05D5\u05E8"}</p>
             <TrendArrow value={pctChange(avgPages, prevAvgPages)} />
           </div>
-          <p className="text-3xl font-bold text-[#003D30]">{loading ? "..." : avgPages}</p>
+          <p className="text-3xl font-bold text-[#203957]">{loading ? "..." : avgPages}</p>
           <div className="mt-3">
             <Sparkline data={[0, 0, 0, 0, 0, 0, 0].map(() => avgPages)} color="#2F6B4E" />
           </div>
@@ -1053,15 +1053,15 @@ function AnalyticsModule() {
         {/* Left Column */}
         <div className="space-y-6">
           {/* Views Over Time */}
-          <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
-            <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-[#003D30]" />
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E8E6DE] p-6">
+            <h3 className="text-sm font-bold text-[#203957] mb-4 flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-[#203957]" />
               {"\u05E6\u05E4\u05D9\u05D5\u05EA \u05DC\u05D0\u05D5\u05E8\u05DA \u05D6\u05DE\u05DF"}
             </h3>
             {loading ? (
-              <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#003D30]" /></div>
+              <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#203957]" /></div>
             ) : dailyEntries.length === 0 ? (
-              <p className="text-sm text-[#476356] text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
+              <p className="text-sm text-[#55677C] text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
             ) : (
               <div>
                 <div className="flex items-end gap-1" style={{ height: 120 }}>
@@ -1073,18 +1073,18 @@ function AnalyticsModule() {
                           className="w-full rounded-t-md transition-all duration-300 cursor-pointer"
                           style={{
                             height: `${Math.max(pct, count > 0 ? 8 : 2)}%`,
-                            background: "linear-gradient(180deg, #003D30, #003D30)",
+                            background: "linear-gradient(180deg, #203957, #203957)",
                             minHeight: 3,
                           }}
                         />
-                        <span className="absolute -top-6 text-[10px] font-bold text-[#003D30] bg-white px-1.5 py-0.5 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                        <span className="absolute -top-6 text-[10px] font-bold text-[#203957] bg-white px-1.5 py-0.5 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                           {count}
                         </span>
                       </div>
                     );
                   })}
                 </div>
-                <div className="flex justify-between mt-2 text-[9px] text-[#476356]">
+                <div className="flex justify-between mt-2 text-[9px] text-[#55677C]">
                   {dailyEntries.length > 0 && <span>{new Date(dailyEntries[0][0]).toLocaleDateString("he-IL", { day: "2-digit", month: "2-digit" })}</span>}
                   {dailyEntries.length > 1 && <span>{new Date(dailyEntries[dailyEntries.length - 1][0]).toLocaleDateString("he-IL", { day: "2-digit", month: "2-digit" })}</span>}
                 </div>
@@ -1093,15 +1093,15 @@ function AnalyticsModule() {
           </div>
 
           {/* Top Pages */}
-          <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
-            <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#003D30]" />
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E8E6DE] p-6">
+            <h3 className="text-sm font-bold text-[#203957] mb-4 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-[#203957]" />
               {"\u05E2\u05DE\u05D5\u05D3\u05D9\u05DD \u05DE\u05D5\u05D1\u05D9\u05DC\u05D9\u05DD"}
             </h3>
             {loading ? (
-              <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#003D30]" /></div>
+              <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#203957]" /></div>
             ) : topPages.length === 0 ? (
-              <p className="text-sm text-[#476356] text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
+              <p className="text-sm text-[#55677C] text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
             ) : (
               <div className="space-y-3">
                 {topPages.map(([slug, count]) => {
@@ -1109,21 +1109,21 @@ function AnalyticsModule() {
                   return (
                     <div key={slug} className="group">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-sm text-[#003D30] font-medium truncate flex items-center gap-2">
-                          <FileText className="w-3.5 h-3.5 text-[#003D30] shrink-0" />
+                        <span className="text-sm text-[#203957] font-medium truncate flex items-center gap-2">
+                          <FileText className="w-3.5 h-3.5 text-[#203957] shrink-0" />
                           {label(slug)}
                         </span>
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] text-[#476356]">{pct}%</span>
-                          <span className="text-xs font-bold text-[#003D30] min-w-[32px] text-left" dir="ltr">{count}</span>
+                          <span className="text-[10px] text-[#55677C]">{pct}%</span>
+                          <span className="text-xs font-bold text-[#203957] min-w-[32px] text-left" dir="ltr">{count}</span>
                         </div>
                       </div>
-                      <div className="h-2 bg-[#E8EDE5] rounded-full overflow-hidden">
+                      <div className="h-2 bg-[#DFE9DC] rounded-full overflow-hidden">
                         <div
                           className="h-full rounded-full transition-all duration-500"
                           style={{
                             width: `${pct}%`,
-                            background: "linear-gradient(90deg, #003D30, #003D30)",
+                            background: "linear-gradient(90deg, #203957, #203957)",
                           }}
                         />
                       </div>
@@ -1138,28 +1138,28 @@ function AnalyticsModule() {
         {/* Right Column */}
         <div className="space-y-6">
           {/* Countries */}
-          <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
-            <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
-              <Globe className="w-4 h-4 text-[#003D30]" />
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E8E6DE] p-6">
+            <h3 className="text-sm font-bold text-[#203957] mb-4 flex items-center gap-2">
+              <Globe className="w-4 h-4 text-[#203957]" />
               {"\u05DE\u05D3\u05D9\u05E0\u05D5\u05EA"}
             </h3>
             {topCountries.length === 0 ? (
-              <p className="text-sm text-[#476356] text-center py-4">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9 \u05DE\u05D3\u05D9\u05E0\u05D5\u05EA"}</p>
+              <p className="text-sm text-[#55677C] text-center py-4">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9 \u05DE\u05D3\u05D9\u05E0\u05D5\u05EA"}</p>
             ) : (
               <div className="space-y-2.5">
                 {topCountries.map(([code, count]) => (
                   <div key={code} className="flex items-center gap-3">
                     <span className="text-sm min-w-[120px] truncate">{countryLabel(code)}</span>
-                    <div className="flex-1 h-2 bg-[#E8EDE5] rounded-full overflow-hidden">
+                    <div className="flex-1 h-2 bg-[#DFE9DC] rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full"
                         style={{
                           width: `${Math.round((count / maxCountry) * 100)}%`,
-                          background: "linear-gradient(90deg, #003D30, #003D30)",
+                          background: "linear-gradient(90deg, #203957, #203957)",
                         }}
                       />
                     </div>
-                    <span className="text-xs font-bold text-[#003D30] min-w-[28px] text-left" dir="ltr">{count}</span>
+                    <span className="text-xs font-bold text-[#203957] min-w-[28px] text-left" dir="ltr">{count}</span>
                   </div>
                 ))}
               </div>
@@ -1167,9 +1167,9 @@ function AnalyticsModule() {
           </div>
 
           {/* Devices */}
-          <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
-            <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-[#8A6230]" />
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E8E6DE] p-6">
+            <h3 className="text-sm font-bold text-[#203957] mb-4 flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-[#7C5C22]" />
               {"\u05DE\u05DB\u05E9\u05D9\u05E8\u05D9\u05DD"}
             </h3>
             {/* Stacked horizontal bar */}
@@ -1190,18 +1190,18 @@ function AnalyticsModule() {
             </div>
             <div className="flex items-center gap-4 justify-center flex-wrap">
               {(["desktop", "mobile", "tablet"] as const).map((d) => (
-                <div key={d} className="flex items-center gap-1.5 text-xs text-[#476356]">
+                <div key={d} className="flex items-center gap-1.5 text-xs text-[#55677C]">
                   <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: DEVICE_COLORS[d] }} />
                   <span>{DEVICE_LABELS[d]}</span>
-                  <span className="font-bold text-[#003D30]">{deviceCounts[d]}</span>
+                  <span className="font-bold text-[#203957]">{deviceCounts[d]}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Browsers */}
-          <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
-            <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E8E6DE] p-6">
+            <h3 className="text-sm font-bold text-[#203957] mb-4 flex items-center gap-2">
               <Globe className="w-4 h-4 text-[#2F6B4E]" />
               {"\u05D3\u05E4\u05D3\u05E4\u05E0\u05D9\u05DD"}
             </h3>
@@ -1223,29 +1223,29 @@ function AnalyticsModule() {
             </div>
             <div className="flex items-center gap-4 justify-center flex-wrap">
               {topBrowsers.map(([name, count]) => (
-                <div key={name} className="flex items-center gap-1.5 text-xs text-[#476356]">
+                <div key={name} className="flex items-center gap-1.5 text-xs text-[#55677C]">
                   <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: BROWSER_COLORS[name] ?? "#999" }} />
                   <span>{name}</span>
-                  <span className="font-bold text-[#003D30]">{count}</span>
+                  <span className="font-bold text-[#203957]">{count}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Top Referrers */}
-          <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
-            <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E8E6DE] p-6">
+            <h3 className="text-sm font-bold text-[#203957] mb-4 flex items-center gap-2">
               <Link2 className="w-4 h-4 text-[#9A4520]" />
               {"\u05DE\u05E7\u05D5\u05E8\u05D5\u05EA \u05EA\u05E0\u05D5\u05E2\u05D4"}
             </h3>
             {topReferrers.length === 0 ? (
-              <p className="text-sm text-[#476356] text-center py-4">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9 \u05D4\u05E4\u05E0\u05D9\u05D5\u05EA"}</p>
+              <p className="text-sm text-[#55677C] text-center py-4">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9 \u05D4\u05E4\u05E0\u05D9\u05D5\u05EA"}</p>
             ) : (
               <div className="space-y-2">
                 {topReferrers.map(([domain, count]) => (
                   <div key={domain} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-[#F3F5F1]">
-                    <span className="text-sm text-[#003D30] truncate max-w-[200px]" dir="ltr">{domain}</span>
-                    <span className="text-xs font-bold text-[#003D30]">{count}</span>
+                    <span className="text-sm text-[#203957] truncate max-w-[200px]" dir="ltr">{domain}</span>
+                    <span className="text-xs font-bold text-[#203957]">{count}</span>
                   </div>
                 ))}
               </div>
@@ -1255,16 +1255,16 @@ function AnalyticsModule() {
       </div>
 
       {/* ── Section 3: Live Feed ── */}
-      <div className="bg-white rounded-2xl shadow-sm border border-[#E1E8E1] p-6">
-        <h3 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
-          <Clock className="w-4 h-4 text-[#003D30]" />
+      <div className="bg-white rounded-2xl shadow-sm border border-[#E8E6DE] p-6">
+        <h3 className="text-sm font-bold text-[#203957] mb-4 flex items-center gap-2">
+          <Clock className="w-4 h-4 text-[#203957]" />
           {"\u05E4\u05E2\u05D9\u05DC\u05D5\u05EA \u05D0\u05D7\u05E8\u05D5\u05E0\u05D4"}
-          <span className="mr-auto text-[10px] text-[#476356] font-normal">{"\u05DE\u05EA\u05E2\u05D3\u05DB\u05DF \u05DB\u05DC 30 \u05E9\u05E0\u05D9\u05D5\u05EA"}</span>
+          <span className="mr-auto text-[10px] text-[#55677C] font-normal">{"\u05DE\u05EA\u05E2\u05D3\u05DB\u05DF \u05DB\u05DC 30 \u05E9\u05E0\u05D9\u05D5\u05EA"}</span>
         </h3>
         {loading ? (
-          <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#003D30]" /></div>
+          <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#203957]" /></div>
         ) : views.length === 0 ? (
-          <p className="text-sm text-[#476356] text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
+          <p className="text-sm text-[#55677C] text-center py-6">{"\u05D0\u05D9\u05DF \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD \u05E2\u05D3\u05D9\u05D9\u05DF"}</p>
         ) : (
           <div className="space-y-1 max-h-80 overflow-y-auto">
             {views.slice(0, 50).map((v, i) => {
@@ -1276,13 +1276,13 @@ function AnalyticsModule() {
               const deviceIcon = v.device ? (DEVICE_ICONS[v.device] ?? "") : "";
               return (
                 <div key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#F3F5F1] text-sm transition-colors">
-                  <span className="text-xs text-[#476356] shrink-0 min-w-[60px]" dir="ltr">
+                  <span className="text-xs text-[#55677C] shrink-0 min-w-[60px]" dir="ltr">
                     {isToday ? timeStr : `${dateStr} ${timeStr}`}
                   </span>
-                  <span className="font-medium text-[#003D30] truncate flex-1">{label(v.slug)}</span>
+                  <span className="font-medium text-[#203957] truncate flex-1">{label(v.slug)}</span>
                   {cInfo && <span className="text-sm shrink-0" title={cInfo.name}>{cInfo.flag}</span>}
-                  {deviceIcon && <span className="text-[10px] text-[#476356] shrink-0 bg-[#E8EDE5] px-1.5 py-0.5 rounded" title={v.device}>{deviceIcon}</span>}
-                  {v.browser && <span className="text-[10px] text-[#476356] shrink-0 bg-[#E8EDE5] px-1.5 py-0.5 rounded">{v.browser}</span>}
+                  {deviceIcon && <span className="text-[10px] text-[#55677C] shrink-0 bg-[#DFE9DC] px-1.5 py-0.5 rounded" title={v.device}>{deviceIcon}</span>}
+                  {v.browser && <span className="text-[10px] text-[#55677C] shrink-0 bg-[#DFE9DC] px-1.5 py-0.5 rounded">{v.browser}</span>}
                 </div>
               );
             })}
@@ -1337,13 +1337,13 @@ function TrackSyncCard() {
       >
         <RefreshCw className={cn("w-6 h-6 text-white", syncing && "animate-spin")} />
       </div>
-      <h4 className="font-bold text-[#003D30] mb-0.5">סנכרן מסלולי השקעה</h4>
-      <p className="text-xs text-[#476356] mb-3">העלה קובץ Excel מגמלנט/פנסיהנט</p>
+      <h4 className="font-bold text-[#203957] mb-0.5">סנכרן מסלולי השקעה</h4>
+      <p className="text-xs text-[#55677C] mb-3">העלה קובץ Excel מגמלנט/פנסיהנט</p>
       <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#2F6B4E] text-white text-xs font-bold cursor-pointer hover:bg-[#7dab5a] transition-colors">
         <input type="file" accept=".xls,.xlsx" onChange={handleFileUpload} className="hidden" ref={fileRef} />
         {syncing ? "מסנכרן..." : "בחר קובץ"}
       </label>
-      {result && <p className="text-xs mt-2 text-[#003D30]">{result}</p>}
+      {result && <p className="text-xs mt-2 text-[#203957]">{result}</p>}
     </div>
   );
 }
@@ -1371,16 +1371,16 @@ function OverviewModule() {
     fetchStats();
   }, []);
 
-  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#003D30]" /></div>;
+  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#203957]" /></div>;
 
   return (
     <div className="space-y-6">
       <ModuleHeader title="סקירה כללית" subtitle="סטטיסטיקות ומצב כללי של האתר" />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={<MessageSquare className="w-5 h-5" />} color="#003D30" bg="#EEF2EC" label="לידים ופניות" value={stats.leads} />
+        <StatCard icon={<MessageSquare className="w-5 h-5" />} color="#203957" bg="#EEF2EC" label="לידים ופניות" value={stats.leads} />
         <StatCard icon={<Users className="w-5 h-5" />} color="#819B7D" bg="#ede9fe" label="שאלוני הצטרפות" value={stats.onboarding} />
-        <StatCard icon={<PenTool className="w-5 h-5" />} color="#CBA064" bg="#F5EEE0" label="פוסטים בבלוג" value={stats.blogPosts} />
+        <StatCard icon={<PenTool className="w-5 h-5" />} color="#AD833E" bg="#F5EEE0" label="פוסטים בבלוג" value={stats.blogPosts} />
         <StatCard icon={<Mail className="w-5 h-5" />} color="#9A4520" bg="#F3E2D8" label="פניות צור קשר" value={stats.contacts} />
       </div>
 
@@ -1388,19 +1388,19 @@ function OverviewModule() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <QuickActionCard
           icon={<UserPlus className="w-6 h-6 text-white" />}
-          gradient="linear-gradient(135deg, #003D30 0%, #003D30 100%)"
+          gradient="linear-gradient(135deg, #203957 0%, #203957 100%)"
           title="הזמן סוכן חדש"
           subtitle="שלח לינק הזמנה לסוכן חדש"
         />
         <QuickActionCard
           icon={<Link2 className="w-6 h-6 text-white" />}
-          gradient="linear-gradient(135deg, #003D30 0%, #3ba8a8 100%)"
+          gradient="linear-gradient(135deg, #203957 0%, #3ba8a8 100%)"
           title="הזמן לקוח לאזור אישי"
           subtitle="שלח לינק כניסה ללקוח קיים"
         />
         <QuickActionCard
           icon={<PenTool className="w-6 h-6 text-white" />}
-          gradient="linear-gradient(135deg, #CBA064 0%, #d97706 100%)"
+          gradient="linear-gradient(135deg, #AD833E 0%, #d97706 100%)"
           title="כתוב פוסט חדש"
           subtitle="הוסף תוכן לבלוג האתר"
         />
@@ -1421,8 +1421,8 @@ function QuickActionCard({ icon, gradient, title, subtitle }: {
       >
         {icon}
       </div>
-      <h4 className="font-bold text-[#003D30] mb-0.5">{title}</h4>
-      <p className="text-xs text-[#476356]">{subtitle}</p>
+      <h4 className="font-bold text-[#203957] mb-0.5">{title}</h4>
+      <p className="text-xs text-[#55677C]">{subtitle}</p>
     </div>
   );
 }
@@ -1473,12 +1473,12 @@ function BlogModule() {
         action={
           <div className="flex items-center gap-2">
             <div className="relative">
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#476356]" />
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#55677C]" />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="חפש פוסט..."
-                className="pr-10 rounded-full h-10 w-[200px] border-[#CCD6CC]"
+                className="pr-10 rounded-full h-10 w-[200px] border-[#D9DEE4]"
               />
             </div>
             <Button onClick={fetchPosts} variant="outline" size="icon" className="rounded-full">
@@ -1489,7 +1489,7 @@ function BlogModule() {
       />
 
       {loading ? (
-        <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#003D30]" /></div>
+        <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#203957]" /></div>
       ) : filtered.length === 0 ? (
         <EmptyState icon={<PenTool className="w-8 h-8" />} title="אין פוסטים" subtitle="עדיין לא פורסמו פוסטים בבלוג" />
       ) : (
@@ -1497,11 +1497,11 @@ function BlogModule() {
           {filtered.map((post) => (
             <div key={post.id} className="bg-white rounded-xl p-4 border shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
               <div className="min-w-0 flex-1">
-                <h4 className="font-bold text-[#003D30] truncate">{post.title}</h4>
-                <div className="flex items-center gap-3 mt-1 text-xs text-[#476356]">
-                  {post.category && <span className="bg-[#EEF2EC] text-[#003D30] px-2 py-0.5 rounded-full text-[10px] font-medium">{post.category}</span>}
+                <h4 className="font-bold text-[#203957] truncate">{post.title}</h4>
+                <div className="flex items-center gap-3 mt-1 text-xs text-[#55677C]">
+                  {post.category && <span className="bg-[#EEF2EC] text-[#203957] px-2 py-0.5 rounded-full text-[10px] font-medium">{post.category}</span>}
                   <span>{new Date(post.created_at).toLocaleDateString("he-IL")}</span>
-                  <span className={post.status === "published" ? "text-[#2F6B4E]" : "text-[#476356]"}>
+                  <span className={post.status === "published" ? "text-[#2F6B4E]" : "text-[#55677C]"}>
                     {post.status === "published" ? "פורסם" : "טיוטה"}
                   </span>
                 </div>
@@ -1542,7 +1542,7 @@ function LeadsModule() {
     fetch();
   }, []);
 
-  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#003D30]" /></div>;
+  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#203957]" /></div>;
 
   return (
     <div>
@@ -1551,7 +1551,7 @@ function LeadsModule() {
       <div className="flex gap-2 mb-6">
         <Button
           variant={tab === "leads" ? "default" : "outline"}
-          className={cn("rounded-full gap-2", tab === "leads" && "bg-[#003D30] hover:bg-[#003D30]")}
+          className={cn("rounded-full gap-2", tab === "leads" && "bg-[#203957] hover:bg-[#203957]")}
           onClick={() => setTab("leads")}
         >
           <TrendingUp className="w-4 h-4" />
@@ -1559,7 +1559,7 @@ function LeadsModule() {
         </Button>
         <Button
           variant={tab === "contacts" ? "default" : "outline"}
-          className={cn("rounded-full gap-2", tab === "contacts" && "bg-[#003D30] hover:bg-[#003D30]")}
+          className={cn("rounded-full gap-2", tab === "contacts" && "bg-[#203957] hover:bg-[#203957]")}
           onClick={() => setTab("contacts")}
         >
           <Mail className="w-4 h-4" />
@@ -1576,14 +1576,14 @@ function LeadsModule() {
               <div key={lead.id} className="bg-white rounded-xl p-4 border shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-bold text-[#003D30]">{lead.full_name}</h4>
-                    <div className="flex items-center gap-3 mt-1 text-xs text-[#476356]">
+                    <h4 className="font-bold text-[#203957]">{lead.full_name}</h4>
+                    <div className="flex items-center gap-3 mt-1 text-xs text-[#55677C]">
                       <span dir="ltr">{lead.phone}</span>
                       <span>{lead.email}</span>
-                      <span className="bg-[#EEF2EC] text-[#003D30] px-2 py-0.5 rounded-full text-[10px] font-medium">{lead.insurance_type}</span>
+                      <span className="bg-[#EEF2EC] text-[#203957] px-2 py-0.5 rounded-full text-[10px] font-medium">{lead.insurance_type}</span>
                     </div>
                   </div>
-                  <span className="text-xs text-[#476356]">{new Date(lead.created_at).toLocaleDateString("he-IL")}</span>
+                  <span className="text-xs text-[#55677C]">{new Date(lead.created_at).toLocaleDateString("he-IL")}</span>
                 </div>
               </div>
             ))}
@@ -1598,11 +1598,11 @@ function LeadsModule() {
               <div key={c.id} className="bg-white rounded-xl p-4 border shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-bold text-[#003D30]">{c.name}</h4>
-                    <p className="text-xs text-[#476356] mt-0.5">{c.email}</p>
-                    {c.message && <p className="text-sm text-[#476356] mt-2 line-clamp-2">{c.message}</p>}
+                    <h4 className="font-bold text-[#203957]">{c.name}</h4>
+                    <p className="text-xs text-[#55677C] mt-0.5">{c.email}</p>
+                    {c.message && <p className="text-sm text-[#55677C] mt-2 line-clamp-2">{c.message}</p>}
                   </div>
-                  <span className="text-xs text-[#476356] shrink-0">{new Date(c.created_at).toLocaleDateString("he-IL")}</span>
+                  <span className="text-xs text-[#55677C] shrink-0">{new Date(c.created_at).toLocaleDateString("he-IL")}</span>
                 </div>
               </div>
             ))}
@@ -1659,40 +1659,40 @@ function ClientInvitesModule() {
       <ModuleHeader title="הזמנת לקוחות לאזור האישי" subtitle="שלח לינק כניסה ללקוחות קיימים" />
 
       <div className="bg-white rounded-2xl p-6 shadow-sm border mb-6">
-        <h3 className="font-bold text-[#003D30] mb-4 flex items-center gap-2">
+        <h3 className="font-bold text-[#203957] mb-4 flex items-center gap-2">
           <Link2 className="w-5 h-5" />
           שלח לינק כניסה
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           <div>
-            <Label className="text-xs font-medium text-[#003D30]">שם הלקוח</Label>
+            <Label className="text-xs font-medium text-[#203957]">שם הלקוח</Label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="ישראל ישראלי"
-              className="mt-1 rounded-full border-[#CCD6CC]"
+              className="mt-1 rounded-full border-[#D9DEE4]"
             />
           </div>
           <div>
-            <Label className="text-xs font-medium text-[#003D30]">טלפון</Label>
+            <Label className="text-xs font-medium text-[#203957]">טלפון</Label>
             <Input
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="052-000-0000"
               dir="ltr"
-              className="mt-1 rounded-full border-[#CCD6CC] text-left"
+              className="mt-1 rounded-full border-[#D9DEE4] text-left"
             />
           </div>
           <div>
-            <Label className="text-xs font-medium text-[#003D30]">אימייל</Label>
+            <Label className="text-xs font-medium text-[#203957]">אימייל</Label>
             <Input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="client@email.com"
               dir="ltr"
-              className="mt-1 rounded-full border-[#CCD6CC] text-left"
+              className="mt-1 rounded-full border-[#D9DEE4] text-left"
             />
           </div>
         </div>
@@ -1700,12 +1700,12 @@ function ClientInvitesModule() {
           <Button
             onClick={handleSend}
             disabled={sending || !email}
-            className="gap-2 rounded-full bg-[#003D30] hover:bg-[#003D30] shadow-lg shadow-[#003D30]/15"
+            className="gap-2 rounded-full bg-[#203957] hover:bg-[#203957] shadow-lg shadow-[#203957]/15"
           >
             {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             שלח לינק
           </Button>
-          <Button variant="outline" onClick={handleCopyLink} className="gap-2 rounded-full border-[#CCD6CC]">
+          <Button variant="outline" onClick={handleCopyLink} className="gap-2 rounded-full border-[#D9DEE4]">
             <Copy className="w-4 h-4" />
             העתק קישור
           </Button>
@@ -1715,10 +1715,10 @@ function ClientInvitesModule() {
       {/* Sent log */}
       {sent.length > 0 && (
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h4 className="text-sm font-bold text-[#003D30] mb-3">נשלחו היום ({sent.length})</h4>
+          <h4 className="text-sm font-bold text-[#203957] mb-3">נשלחו היום ({sent.length})</h4>
           <div className="space-y-2">
             {sent.map((item, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm text-[#476356] bg-[#EEF2EC]/50 rounded-lg px-3 py-2">
+              <div key={i} className="flex items-center gap-2 text-sm text-[#55677C] bg-[#EEF2EC]/50 rounded-lg px-3 py-2">
                 <CheckCircle2 className="w-4 h-4 text-[#2F6B4E] shrink-0" />
                 {item}
               </div>
@@ -1831,7 +1831,7 @@ function AgentManagementModule() {
     }
   };
 
-  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#003D30]" /></div>;
+  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#203957]" /></div>;
 
   return (
     <div>
@@ -1839,32 +1839,32 @@ function AgentManagementModule() {
 
       {/* Invite form */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border mb-6">
-        <h3 className="font-bold text-[#003D30] mb-4 flex items-center gap-2">
+        <h3 className="font-bold text-[#203957] mb-4 flex items-center gap-2">
           <UserPlus className="w-5 h-5" />
           הזמן סוכן חדש
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <Label className="text-xs font-medium text-[#003D30]">אימייל הסוכן</Label>
+            <Label className="text-xs font-medium text-[#203957]">אימייל הסוכן</Label>
             <Input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="agent@example.com"
               dir="ltr"
-              className="mt-1 rounded-full border-[#CCD6CC] text-left"
+              className="mt-1 rounded-full border-[#D9DEE4] text-left"
               onKeyDown={(e) => e.key === "Enter" && handleInvite()}
             />
           </div>
           <div>
-            <Label className="text-xs font-medium text-[#003D30]">טלפון הסוכן</Label>
+            <Label className="text-xs font-medium text-[#203957]">טלפון הסוכן</Label>
             <Input
               type="tel"
               value={agentPhone}
               onChange={(e) => setAgentPhone(e.target.value)}
               placeholder="052-000-0000"
               dir="ltr"
-              className="mt-1 rounded-full border-[#CCD6CC] text-left"
+              className="mt-1 rounded-full border-[#D9DEE4] text-left"
             />
           </div>
         </div>
@@ -1872,7 +1872,7 @@ function AgentManagementModule() {
           <Button
             onClick={handleInvite}
             disabled={sending || !email.trim()}
-            className="gap-2 rounded-full bg-[#003D30] hover:bg-[#003D30] shadow-lg shadow-[#003D30]/15"
+            className="gap-2 rounded-full bg-[#203957] hover:bg-[#203957] shadow-lg shadow-[#203957]/15"
           >
             {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             שלח הזמנה
@@ -1883,25 +1883,25 @@ function AgentManagementModule() {
       {/* Active agents */}
       {agents.length > 0 && (
         <div className="bg-white rounded-2xl p-6 shadow-sm border mb-6">
-          <h4 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
+          <h4 className="text-sm font-bold text-[#203957] mb-4 flex items-center gap-2">
             <UserCheck className="w-4 h-4" />
             סוכנים פעילים ({agents.length})
           </h4>
           <div className="space-y-2">
             {agents.map((a) => (
-              <div key={a.id} className="flex items-center justify-between px-4 py-3 rounded-xl bg-[#F3F5F1] border border-[#E1E8E1]">
+              <div key={a.id} className="flex items-center justify-between px-4 py-3 rounded-xl bg-[#F3F5F1] border border-[#E8E6DE]">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: "linear-gradient(135deg, #003D30, #003D30)" }}>
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: "linear-gradient(135deg, #203957, #203957)" }}>
                     {a.full_name?.charAt(0) || "?"}
                   </div>
                   <div>
-                    <p className="font-medium text-sm text-[#003D30]">{a.full_name}</p>
-                    {a.phone && <p className="text-[11px] text-[#476356]" dir="ltr">{a.phone}</p>}
+                    <p className="font-medium text-sm text-[#203957]">{a.full_name}</p>
+                    {a.phone && <p className="text-[11px] text-[#55677C]" dir="ltr">{a.phone}</p>}
                   </div>
                 </div>
                 <span className={cn(
                   "text-[10px] font-medium px-2.5 py-1 rounded-full",
-                  a.role === "admin" ? "bg-[#EEF2EC] text-[#003D30]" : "bg-[#E8EDE5] text-[#476356]"
+                  a.role === "admin" ? "bg-[#EEF2EC] text-[#203957]" : "bg-[#DFE9DC] text-[#55677C]"
                 )}>
                   {a.role === "admin" ? "מנהל" : "סוכן"}
                 </span>
@@ -1914,7 +1914,7 @@ function AgentManagementModule() {
       {/* Pending invitations */}
       {invitations.length > 0 && (
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h4 className="text-sm font-bold text-[#003D30] mb-4 flex items-center gap-2">
+          <h4 className="text-sm font-bold text-[#203957] mb-4 flex items-center gap-2">
             <Clock className="w-4 h-4" />
             הזמנות ({invitations.length})
           </h4>
@@ -1923,19 +1923,19 @@ function AgentManagementModule() {
               const isExpired = inv.expires_at && new Date(inv.expires_at) < new Date();
               const isAccepted = inv.status === "accepted";
               return (
-                <div key={inv.id} className="flex items-center justify-between px-4 py-3 rounded-xl border border-[#E1E8E1] bg-[#F3F5F1]">
+                <div key={inv.id} className="flex items-center justify-between px-4 py-3 rounded-xl border border-[#E8E6DE] bg-[#F3F5F1]">
                   <div className="flex items-center gap-3">
                     <span className="text-sm font-mono" dir="ltr">{inv.email}</span>
                     {isAccepted ? (
-                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#E8EDE5] text-[#2F6B4E] flex items-center gap-1">
+                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#DFE9DC] text-[#2F6B4E] flex items-center gap-1">
                         <CheckCircle2 className="w-3 h-3" />התקבלה
                       </span>
                     ) : isExpired ? (
-                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#E8EDE5] text-[#476356] flex items-center gap-1">
+                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#DFE9DC] text-[#55677C] flex items-center gap-1">
                         <XCircle className="w-3 h-3" />פג תוקף
                       </span>
                     ) : (
-                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#F5EEE0] text-[#8A6230] flex items-center gap-1">
+                      <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#F5EEE0] text-[#7C5C22] flex items-center gap-1">
                         <Clock className="w-3 h-3" />ממתינה
                       </span>
                     )}
@@ -1986,7 +1986,7 @@ function OnboardingModule() {
     return !search || name.includes(search.toLowerCase()) || (s.phone ?? "").includes(search) || (s.email ?? "").includes(search.toLowerCase());
   });
 
-  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#003D30]" /></div>;
+  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#203957]" /></div>;
 
   return (
     <div>
@@ -1995,8 +1995,8 @@ function OnboardingModule() {
         subtitle={`${submissions.length} שאלונים`}
         action={
           <div className="relative">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#476356]" />
-            <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="חפש..." className="pr-10 rounded-full h-10 w-[200px] border-[#CCD6CC]" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#55677C]" />
+            <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="חפש..." className="pr-10 rounded-full h-10 w-[200px] border-[#D9DEE4]" />
           </div>
         }
       />
@@ -2011,24 +2011,24 @@ function OnboardingModule() {
               <div key={s.id} className="bg-white rounded-xl p-4 border shadow-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#EEF2EC] flex items-center justify-center text-[#003D30] font-bold text-sm">
+                    <div className="w-10 h-10 rounded-full bg-[#EEF2EC] flex items-center justify-center text-[#203957] font-bold text-sm">
                       {(s.first_name?.[0] || "?").toUpperCase()}
                     </div>
                     <div>
-                      <h4 className="font-bold text-[#003D30]">{fullName}</h4>
-                      <div className="flex items-center gap-3 mt-0.5 text-xs text-[#476356]">
+                      <h4 className="font-bold text-[#203957]">{fullName}</h4>
+                      <div className="flex items-center gap-3 mt-0.5 text-xs text-[#55677C]">
                         {s.phone && <span dir="ltr">{s.phone}</span>}
                         {s.email && <span>{s.email}</span>}
                         {s.city && <span>{s.city}</span>}
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-[#476356]">
+                  <div className="flex items-center gap-2 text-xs text-[#55677C]">
                     <span className={cn(
                       "px-2 py-0.5 rounded-full text-[10px] font-medium",
-                      s.status === "new" ? "bg-[#E8EDE5] text-[#476356]" :
-                      s.status === "in_progress" ? "bg-[#F5EEE0] text-[#8A6230]" :
-                      s.status === "closed" ? "bg-[#E8EDE5] text-[#2F6B4E]" : "bg-[#E8EDE5] text-[#476356]"
+                      s.status === "new" ? "bg-[#DFE9DC] text-[#55677C]" :
+                      s.status === "in_progress" ? "bg-[#F5EEE0] text-[#7C5C22]" :
+                      s.status === "closed" ? "bg-[#DFE9DC] text-[#2F6B4E]" : "bg-[#DFE9DC] text-[#55677C]"
                     )}>
                       {s.status === "new" ? "חדש" : s.status === "in_progress" ? "בטיפול" : s.status === "closed" ? "סגור" : s.status}
                     </span>
@@ -2082,7 +2082,7 @@ function DirectDebitModule() {
     fetchDD();
   }, []);
 
-  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#003D30]" /></div>;
+  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#203957]" /></div>;
 
   return (
     <div>
@@ -2095,19 +2095,19 @@ function DirectDebitModule() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b bg-[#F3F5F1]">
-                <th className="text-right py-3 px-4 font-medium text-[#476356]">תאריך</th>
-                <th className="text-right py-3 px-4 font-medium text-[#476356]">שם לקוח</th>
-                <th className="text-right py-3 px-4 font-medium text-[#476356]">בעל חשבון</th>
-                <th className="text-right py-3 px-4 font-medium text-[#476356]">בנק</th>
-                <th className="text-right py-3 px-4 font-medium text-[#476356]">סניף</th>
-                <th className="text-right py-3 px-4 font-medium text-[#476356]">מספר חשבון</th>
+                <th className="text-right py-3 px-4 font-medium text-[#55677C]">תאריך</th>
+                <th className="text-right py-3 px-4 font-medium text-[#55677C]">שם לקוח</th>
+                <th className="text-right py-3 px-4 font-medium text-[#55677C]">בעל חשבון</th>
+                <th className="text-right py-3 px-4 font-medium text-[#55677C]">בנק</th>
+                <th className="text-right py-3 px-4 font-medium text-[#55677C]">סניף</th>
+                <th className="text-right py-3 px-4 font-medium text-[#55677C]">מספר חשבון</th>
               </tr>
             </thead>
             <tbody>
               {submissions.map(s => (
                 <tr key={s.id} className="border-b hover:bg-[#F3F5F1] transition-colors">
-                  <td className="py-3 px-4 text-[#476356]">{new Date(s.created_at).toLocaleDateString("he-IL")}</td>
-                  <td className="py-3 px-4 font-medium text-[#003D30]">{[s.first_name, s.last_name].filter(Boolean).join(" ") || "—"}</td>
+                  <td className="py-3 px-4 text-[#55677C]">{new Date(s.created_at).toLocaleDateString("he-IL")}</td>
+                  <td className="py-3 px-4 font-medium text-[#203957]">{[s.first_name, s.last_name].filter(Boolean).join(" ") || "—"}</td>
                   <td className="py-3 px-4">{s.account_owner ?? "—"}</td>
                   <td className="py-3 px-4">{s.bank_name ?? "—"}</td>
                   <td className="py-3 px-4">{s.bank_branch ?? "—"}</td>
@@ -2133,7 +2133,7 @@ function SettingsModule() {
 
       <div className="space-y-4">
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h3 className="font-bold text-[#003D30] mb-4 flex items-center gap-2">
+          <h3 className="font-bold text-[#203957] mb-4 flex items-center gap-2">
             <Globe className="w-5 h-5" />
             פרטי האתר
           </h3>
@@ -2146,7 +2146,7 @@ function SettingsModule() {
         </div>
 
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h3 className="font-bold text-[#003D30] mb-4 flex items-center gap-2">
+          <h3 className="font-bold text-[#203957] mb-4 flex items-center gap-2">
             <Shield className="w-5 h-5" />
             אבטחה
           </h3>
@@ -2158,7 +2158,7 @@ function SettingsModule() {
         </div>
 
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
-          <h3 className="font-bold text-[#003D30] mb-4 flex items-center gap-2">
+          <h3 className="font-bold text-[#203957] mb-4 flex items-center gap-2">
             <Link2 className="w-5 h-5" />
             קישורים מהירים
           </h3>
@@ -2178,9 +2178,9 @@ function SettingsModule() {
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between py-2 border-b border-[#E1E8E1] last:border-0">
-      <span className="text-sm text-[#476356]">{label}</span>
-      <span className="text-sm font-medium text-[#003D30]" dir="ltr">{value}</span>
+    <div className="flex items-center justify-between py-2 border-b border-[#E8E6DE] last:border-0">
+      <span className="text-sm text-[#55677C]">{label}</span>
+      <span className="text-sm font-medium text-[#203957]" dir="ltr">{value}</span>
     </div>
   );
 }
@@ -2191,9 +2191,9 @@ function LinkButton({ label, href }: { label: string; href: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-2 px-4 py-3 rounded-xl border border-[#CCD6CC] hover:border-[#003D30]/30 hover:bg-[#EEF2EC]/30 text-sm text-[#003D30] font-medium transition-all"
+      className="flex items-center gap-2 px-4 py-3 rounded-xl border border-[#D9DEE4] hover:border-[#203957]/30 hover:bg-[#EEF2EC]/30 text-sm text-[#203957] font-medium transition-all"
     >
-      <Globe className="w-4 h-4 text-[#476356]" />
+      <Globe className="w-4 h-4 text-[#55677C]" />
       {label}
     </a>
   );

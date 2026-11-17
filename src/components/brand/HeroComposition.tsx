@@ -46,7 +46,7 @@ export const HeroComposition = ({ className = "", cards = true }: { className?: 
       {/* the white disc with the leaf, on the upper edge of the sage disc */}
       <div
         className="absolute flex items-center justify-center rounded-full bg-white"
-        style={{ width: "30%", height: "30%", top: "14%", right: "40%", boxShadow: "0 16px 36px -22px rgba(0,61,48,0.45)" }}
+        style={{ width: "30%", height: "30%", top: "14%", right: "40%", boxShadow: "0 16px 36px -22px rgba(32, 57, 87,0.45)" }}
       >
         <Leaf />
       </div>
@@ -56,8 +56,8 @@ export const HeroComposition = ({ className = "", cards = true }: { className?: 
       <Link
         key={c.href}
         to={c.href}
-        className={`absolute ${c.pos} flex w-[24%] max-w-[104px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-white text-[14px] sm:text-[15px] font-bold transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]`}
-        style={{ color: GREEN, border: `1px solid ${LINE}`, boxShadow: "0 14px 30px -18px rgba(0,61,48,0.35)", aspectRatio: "1 / 1" }}
+        className={`absolute ${c.pos} flex w-[24%] max-w-[104px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-white text-[14px] sm:text-[15px] font-bold transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]`}
+        style={{ color: GREEN, border: `1px solid ${LINE}`, boxShadow: "0 14px 30px -18px rgba(32, 57, 87,0.35)", aspectRatio: "1 / 1" }}
       >
         <BrandIcon name={c.icon} size={24} />
         {c.label}

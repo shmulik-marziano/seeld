@@ -56,7 +56,7 @@ const ReturnChart = ({ funds, height = 300 }: ReturnChartProps) => {
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 12, right: 16, bottom: 4, left: 0 }}>
             <CartesianGrid stroke={LINE_SOFT} strokeDasharray="0" vertical={false} />
-            <XAxis dataKey="label" tick={{ fontSize: 12, fill: MUTED }} tickLine={false} axisLine={{ stroke: "#CCD6CC" }} />
+            <XAxis dataKey="label" tick={{ fontSize: 12, fill: MUTED }} tickLine={false} axisLine={{ stroke: "#D9DEE4" }} />
             <YAxis
               tick={{ fontSize: 12, fill: MUTED }}
               tickLine={false}
@@ -65,12 +65,12 @@ const ReturnChart = ({ funds, height = 300 }: ReturnChartProps) => {
               tickFormatter={(v: number) => `${v > 0 ? "+" : ""}${v}%`}
             />
             <Tooltip
-              cursor={{ stroke: "#CCD6CC", strokeWidth: 1 }}
+              cursor={{ stroke: "#D9DEE4", strokeWidth: 1 }}
               content={({ active, payload, label }) => {
                 if (!active || !payload || payload.length === 0) return null;
                 const period = (payload[0].payload as Point).p;
                 return (
-                  <div dir="rtl" className="rounded-xl border bg-white px-3.5 py-2.5 text-[14px] shadow-sm" style={{ borderColor: "#CCD6CC", color: BODY }}>
+                  <div dir="rtl" className="rounded-xl border bg-white px-3.5 py-2.5 text-[14px] shadow-sm" style={{ borderColor: "#D9DEE4", color: BODY }}>
                     <div className="font-bold mb-1" style={{ color: GREEN }}>{periodLabel(period) || String(label)}</div>
                     {payload.map((entry) => {
                       const idx = Number(String(entry.dataKey).slice(1));

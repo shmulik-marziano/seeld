@@ -96,7 +96,7 @@ export default function FundExplorer({ funds, loading, error, children }: Props)
             <button
               type="button"
               onClick={() => x.setQuery('')}
-              className="absolute top-1/2 -translate-y-1/2 end-2 grid h-10 w-10 place-items-center rounded-[10px] transition-colors hover:bg-[#E8EDE5]"
+              className="absolute top-1/2 -translate-y-1/2 end-2 grid h-10 w-10 place-items-center rounded-[10px] transition-colors hover:bg-[#DFE9DC]"
               style={{ color: MUTED }}
             >
               <BrandIcon name="close" size={18} label="ניקוי החיפוש" />

@@ -36,16 +36,16 @@ const CookieConsent = () => {
           role="region"
           aria-label="הסכמה לשימוש בעוגיות"
         >
-          <div className="rounded-2xl bg-white border border-[#CCD6CC]" style={{ boxShadow: CARD_SHADOW }}>
+          <div className="rounded-2xl bg-white border border-[#D9DEE4]" style={{ boxShadow: CARD_SHADOW }}>
             <div className="px-4 pb-3 pt-3 sm:px-5 sm:pb-4 sm:pt-4">
-              <p className="hidden sm:block text-[14px] font-bold text-[#003D30]">
+              <p className="hidden sm:block text-[14px] font-bold text-[#203957]">
                 עוגיות באתר
               </p>
-              <p className="sm:mt-2 text-[14px] sm:text-[15px] leading-snug sm:leading-relaxed text-[#24483C]">
+              <p className="sm:mt-2 text-[14px] sm:text-[15px] leading-snug sm:leading-relaxed text-[#2D435D]">
                 אתר זה משתמש בעוגיות הכרחיות לתפקוד תקין ובעוגיות אנליטיות לשיפור השירות.{" "}
                 <Link
                   to="/cookie-policy"
-                  className="font-medium text-[#003D30] underline underline-offset-2 hover:no-underline"
+                  className="font-medium text-[#203957] underline underline-offset-2 hover:no-underline"
                 >
                   מדיניות העוגיות
                 </Link>
@@ -54,13 +54,13 @@ const CookieConsent = () => {
             <div className="flex items-center justify-end gap-2 border-t px-3 py-2 sm:px-4 sm:py-3" style={{ borderColor: LINE }}>
               <button
                 onClick={decline}
-                className="min-h-[44px] rounded-lg px-3 text-[14px] font-bold text-[#476356] transition-colors duration-150 hover:bg-[#EEF2EC] hover:text-[#003D30]"
+                className="min-h-[44px] rounded-lg px-3 text-[14px] font-bold text-[#55677C] transition-colors duration-150 hover:bg-[#EEF2EC] hover:text-[#203957]"
               >
                 הכרחיות בלבד
               </button>
               <button
                 onClick={accept}
-                className="min-h-[44px] rounded-lg bg-[#003D30] px-5 text-[14px] font-bold text-[#FAF7EF] transition-colors duration-150 hover:bg-[#002B22]"
+                className="min-h-[44px] rounded-lg bg-[#203957] px-5 text-[14px] font-bold text-[#FAF7EF] transition-colors duration-150 hover:bg-[#162B45]"
               >
                 אישור
               </button>

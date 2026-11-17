@@ -10,10 +10,10 @@ import { DISPLAY, MONO, MUTED, NAVY, TURQ, TURQ_TEXT } from "@/lib/brand";
 // Frank Ruhl 900 turquoise standout stat, kit CSS bar chart, table.dna-data.
 
 const inputClass =
-  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]";
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#D9DEE4] rounded-lg text-[#203957] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#203957]";
 const sliderClass =
   "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#819B7D] [&_[role=slider]]:border-[#819B7D]";
-const labelClass = "flex items-center gap-2 text-base font-medium text-[#003D30]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#203957]";
 
 interface SavingsResult {
   totalSavings: number;
@@ -311,7 +311,7 @@ const SavingsCalculator = () => {
                 className="flex-1 flex flex-col justify-end group relative h-full"
               >
                 {/* Tooltip */}
-                <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-white border border-[#E8EDE5] rounded-lg p-2.5 text-[14px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg text-[#24483C]">
+                <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-white border border-[#DFE9DC] rounded-lg p-2.5 text-[14px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg text-[#2D435D]">
                   <p className="font-bold" style={{ color: NAVY }}>שנה {yearData.year}</p>
                   <p>סה״כ: <span dir="ltr" className="tabular-nums" style={{ fontFamily: MONO }}>{formatCurrency(yearData.balance)}</span></p>
                   <p>הפקדות: <span dir="ltr" className="tabular-nums" style={{ fontFamily: MONO }}>{formatCurrency(yearData.deposits)}</span></p>

@@ -9,9 +9,9 @@ import { motion } from 'framer-motion';
 
 const executionStatusConfig: Record<string, { color: string; bg: string; borderColor: string; icon: string }> = {
   'חזר ליקוי': { color: 'text-destructive', bg: 'bg-destructive/5', borderColor: 'border-destructive/30', icon: '🔴' },
-  'ממתין לנתונים': { color: 'text-[#8A6230]', bg: 'bg-[#F5EEE0]/50 dark:bg-[#8A6230]/10', borderColor: 'border-[#CBA064]/30', icon: '🟡' },
-  'בטיפול': { color: 'text-[#476356]', bg: 'bg-[#E8EDE5]/50 dark:bg-[#003D30]/10', borderColor: 'border-[#819B7D]/30', icon: '🔵' },
-  'הושלם': { color: 'text-[#2F6B4E]', bg: 'bg-[#E8EDE5]/50 dark:bg-[#003D30]/10', borderColor: 'border-[#819B7D]/30', icon: '🟢' },
+  'ממתין לנתונים': { color: 'text-[#7C5C22]', bg: 'bg-[#F5EEE0]/50 dark:bg-[#7C5C22]/10', borderColor: 'border-[#AD833E]/30', icon: '🟡' },
+  'בטיפול': { color: 'text-[#55677C]', bg: 'bg-[#DFE9DC]/50 dark:bg-[#203957]/10', borderColor: 'border-[#819B7D]/30', icon: '🔵' },
+  'הושלם': { color: 'text-[#2F6B4E]', bg: 'bg-[#DFE9DC]/50 dark:bg-[#203957]/10', borderColor: 'border-[#819B7D]/30', icon: '🟢' },
 };
 
 export default function ExecutionQueuePage() {
@@ -59,17 +59,17 @@ export default function ExecutionQueuePage() {
             </div>
             <p className="text-xl md:text-2xl font-bold text-foreground">{defectCount}</p>
           </div>
-          <div className="rounded-2xl p-3 md:p-4 bg-[#F5EEE0]/50 dark:bg-[#8A6230]/10 border border-[#CBA064]/20 transition-all">
+          <div className="rounded-2xl p-3 md:p-4 bg-[#F5EEE0]/50 dark:bg-[#7C5C22]/10 border border-[#AD833E]/20 transition-all">
             <div className="flex items-center gap-2 mb-1">
-              <Clock className="h-4 w-4 text-[#8A6230]" />
-              <span className="text-xs font-bold text-[#8A6230]">ממתין</span>
+              <Clock className="h-4 w-4 text-[#7C5C22]" />
+              <span className="text-xs font-bold text-[#7C5C22]">ממתין</span>
             </div>
             <p className="text-xl md:text-2xl font-bold text-foreground">{waitingCount}</p>
           </div>
-          <div className="rounded-2xl p-3 md:p-4 bg-[#003D30]/5 border border-[#003D30]/10 transition-all">
+          <div className="rounded-2xl p-3 md:p-4 bg-[#203957]/5 border border-[#203957]/10 transition-all">
             <div className="flex items-center gap-2 mb-1">
-              <CheckCircle2 className="h-4 w-4 text-[#003D30]" />
-              <span className="text-xs font-bold text-[#003D30]">בטיפול</span>
+              <CheckCircle2 className="h-4 w-4 text-[#203957]" />
+              <span className="text-xs font-bold text-[#203957]">בטיפול</span>
             </div>
             <p className="text-xl md:text-2xl font-bold text-foreground">{inProgressCount}</p>
           </div>
@@ -89,7 +89,7 @@ export default function ExecutionQueuePage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.25, delay: Math.min(i * 0.04, 0.3) }}
             >
-              <Card className={`rounded-2xl border-border/50 hover:shadow-lg hover:shadow-[#003D30]/5 transition-all duration-300 hover:-translate-y-0.5 group overflow-hidden ${
+              <Card className={`rounded-2xl border-border/50 hover:shadow-lg hover:shadow-[#203957]/5 transition-all duration-300 hover:-translate-y-0.5 group overflow-hidden ${
                 isDefect ? 'border-destructive/30' : ''
               }`}>
                 <CardContent className="p-0">
@@ -98,7 +98,7 @@ export default function ExecutionQueuePage() {
                     <div className={`w-1 shrink-0 ${
                       isDefect ? 'bg-destructive' :
                       item.executionStatus === 'ממתין לנתונים' ? 'bg-amber-400' :
-                      'bg-[#003D30]'
+                      'bg-[#203957]'
                     }`} />
 
                     <div className="flex items-start justify-between flex-1 p-3 md:p-4 gap-3">
@@ -107,9 +107,9 @@ export default function ExecutionQueuePage() {
                         <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                           <button
                             onClick={() => navigate(`/app/customers/${item.customerId}`)}
-                            className="font-bold text-sm hover:text-[#003D30] transition-colors flex items-center gap-1.5"
+                            className="font-bold text-sm hover:text-[#203957] transition-colors flex items-center gap-1.5"
                           >
-                            <div className="w-6 h-6 rounded-lg bg-[#003D30]/8 flex items-center justify-center text-[10px] font-bold text-[#003D30] shrink-0">
+                            <div className="w-6 h-6 rounded-lg bg-[#203957]/8 flex items-center justify-center text-[10px] font-bold text-[#203957] shrink-0">
                               {item.customer?.firstName?.[0]}
                             </div>
                             {item.customer?.fullName}
@@ -129,13 +129,13 @@ export default function ExecutionQueuePage() {
                         )}
 
                         {missing.length > 0 && (
-                          <div className="flex items-start gap-1.5 mt-2 p-2 rounded-xl bg-[#F5EEE0]/50 dark:bg-[#8A6230]/10 border border-[#CBA064]/30">
-                            <AlertTriangle className="h-3.5 w-3.5 text-[#8A6230] mt-0.5 shrink-0" />
+                          <div className="flex items-start gap-1.5 mt-2 p-2 rounded-xl bg-[#F5EEE0]/50 dark:bg-[#7C5C22]/10 border border-[#AD833E]/30">
+                            <AlertTriangle className="h-3.5 w-3.5 text-[#7C5C22] mt-0.5 shrink-0" />
                             <div>
-                              <span className="text-xs font-medium text-[#8A6230] dark:text-amber-400">חוסרים:</span>
+                              <span className="text-xs font-medium text-[#7C5C22] dark:text-amber-400">חוסרים:</span>
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {missing.map((m, idx) => (
-                                  <span key={idx} className="text-[10px] bg-[#F5EEE0]/60 dark:bg-[#8A6230]/30 text-[#8A6230] dark:text-amber-300 rounded-md px-1.5 py-0.5">
+                                  <span key={idx} className="text-[10px] bg-[#F5EEE0]/60 dark:bg-[#7C5C22]/30 text-[#7C5C22] dark:text-amber-300 rounded-md px-1.5 py-0.5">
                                     {m}
                                   </span>
                                 ))}
@@ -146,7 +146,7 @@ export default function ExecutionQueuePage() {
 
                         {item.nextStep && (
                           <div className="flex items-center gap-1.5 mt-2 text-xs">
-                            <span className="font-medium text-[#003D30]">צעד הבא:</span>
+                            <span className="font-medium text-[#203957]">צעד הבא:</span>
                             <span className="text-foreground/70">{item.nextStep}</span>
                           </div>
                         )}
@@ -157,7 +157,7 @@ export default function ExecutionQueuePage() {
                         size="sm"
                         variant="ghost"
                         onClick={() => navigate(`/app/customers/${item.customerId}`)}
-                        className="rounded-xl h-9 w-9 p-0 min-h-[36px] hover:bg-[#003D30]/10 shrink-0"
+                        className="rounded-xl h-9 w-9 p-0 min-h-[36px] hover:bg-[#203957]/10 shrink-0"
                       >
                         <ArrowLeft className="h-4 w-4" />
                       </Button>
@@ -176,8 +176,8 @@ export default function ExecutionQueuePage() {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center py-20"
         >
-          <div className="w-20 h-20 rounded-full bg-[#003D30]/10 flex items-center justify-center mx-auto mb-5">
-            <Zap className="h-10 w-10 text-[#476356]" />
+          <div className="w-20 h-20 rounded-full bg-[#203957]/10 flex items-center justify-center mx-auto mb-5">
+            <Zap className="h-10 w-10 text-[#55677C]" />
           </div>
           <p className="text-foreground/70 font-medium mb-1">אין המלצות בתור ביצוע</p>
           <p className="text-sm text-muted-foreground">המלצות שאושרו על ידי לקוחות יופיעו כאן</p>

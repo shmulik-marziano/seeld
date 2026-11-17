@@ -183,7 +183,7 @@ export const LiveClock = ({
 export const StatusPill = ({ children }: { children: React.ReactNode }) => (
   <span
     className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-[14px] font-bold"
-    style={{ color: INK, boxShadow: "0 0 0 1px #CCD6CC" }}
+    style={{ color: INK, boxShadow: "0 0 0 1px #D9DEE4" }}
   >
     <LiveDot size={6} />
     {children}

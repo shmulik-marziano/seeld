@@ -32,7 +32,7 @@ const formatDate = (dateStr: string | null) => {
 
 const tabClass = (active: boolean) =>
   `rounded-none bg-transparent min-w-[44px] justify-center px-0 pb-4 text-[16px] font-bold border-b-2 transition-colors shrink-0 min-h-[44px] whitespace-nowrap ${
-    active ? "border-[#003D30] text-[#003D30]" : "border-transparent text-[#476356] hover:text-[#003D30]"
+    active ? "border-[#203957] text-[#203957]" : "border-transparent text-[#55677C] hover:text-[#203957]"
   }`;
 
 const Blog = () => {
@@ -183,7 +183,7 @@ const Blog = () => {
                   <Link
                     key={post.id}
                     to={`/blog/${post.slug}`}
-                    className="dna-concept dna-hover group flex h-full flex-col overflow-hidden !p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                    className="dna-concept dna-hover group flex h-full flex-col overflow-hidden !p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
                   >
                     {post.cover_image_url && !isStockPhoto(post.cover_image_url) ? (
                       <div className="aspect-[16/10] overflow-hidden border-b" style={{ borderColor: LINE }}>

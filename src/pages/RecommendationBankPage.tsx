@@ -35,12 +35,12 @@ const queueFilters: { key: QueueFilter; label: string; }[] = [
 function getDecisionBadge(status: string) {
   switch (status) {
     case 'טיוטה': return <Badge variant="outline" className="text-xs rounded-full">טיוטה</Badge>;
-    case 'נשלח': return <Badge className="text-xs bg-[#003D30]/10 text-[#003D30] border-[#003D30]/20 rounded-full">נשלח</Badge>;
-    case 'נצפה': return <Badge className="text-xs bg-[#003D30]/10 text-[#003D30] border-[#003D30]/20 rounded-full">נצפה</Badge>;
+    case 'נשלח': return <Badge className="text-xs bg-[#203957]/10 text-[#203957] border-[#203957]/20 rounded-full">נשלח</Badge>;
+    case 'נצפה': return <Badge className="text-xs bg-[#203957]/10 text-[#203957] border-[#203957]/20 rounded-full">נצפה</Badge>;
     case 'מאשר': return <Badge className="text-xs bg-[#2F6B4E]/10 text-[#2F6B4E] border-[#2F6B4E]/20 rounded-full">מאשר</Badge>;
-    case 'רוצה לחשוב': return <Badge className="text-xs bg-[#8A6230]/10 text-[#8A6230] border-[#8A6230]/20 rounded-full">לחשוב</Badge>;
+    case 'רוצה לחשוב': return <Badge className="text-xs bg-[#7C5C22]/10 text-[#7C5C22] border-[#7C5C22]/20 rounded-full">לחשוב</Badge>;
     case 'לא מעוניין': return <Badge className="text-xs bg-[#9A4520]/10 text-[#9A4520] border-[#9A4520]/20 rounded-full">לא מעוניין</Badge>;
-    case 'עבר לביצוע': return <Badge className="text-xs bg-[#003D30]/10 text-[#003D30] border-[#003D30]/20 rounded-full">בביצוע</Badge>;
+    case 'עבר לביצוע': return <Badge className="text-xs bg-[#203957]/10 text-[#203957] border-[#203957]/20 rounded-full">בביצוע</Badge>;
     case 'בוצע': return <Badge className="text-xs bg-[#2F6B4E]/10 text-[#2F6B4E] border-[#2F6B4E]/20 rounded-full">בוצע</Badge>;
     default: return <Badge variant="outline" className="text-xs rounded-full">{status}</Badge>;
   }
@@ -148,11 +148,11 @@ export default function RecommendationBankPage() {
         actions={
           <div className="flex gap-2">
             {filtered.length > 0 && (
-              <Button variant="outline" onClick={() => setShowPresentation(true)} className="gap-2 rounded-full border-[#8A6230]/30 hover:bg-[#8A6230]/10">
-                <Presentation className="h-4 w-4 text-[#8A6230]" />מצגת
+              <Button variant="outline" onClick={() => setShowPresentation(true)} className="gap-2 rounded-full border-[#7C5C22]/30 hover:bg-[#7C5C22]/10">
+                <Presentation className="h-4 w-4 text-[#7C5C22]" />מצגת
               </Button>
             )}
-            <Button onClick={() => navigate('/app/recommendations/new')} className="gap-2 rounded-full bg-[#003D30] hover:bg-[#003D30]/90 shadow-md shadow-[#003D30]/15">
+            <Button onClick={() => navigate('/app/recommendations/new')} className="gap-2 rounded-full bg-[#203957] hover:bg-[#203957]/90 shadow-md shadow-[#203957]/15">
               <FileText className="h-4 w-4" />המלצה חדשה
             </Button>
           </div>
@@ -167,12 +167,12 @@ export default function RecommendationBankPage() {
         className="grid grid-cols-3 md:grid-cols-7 gap-2"
       >
         {[
-          { label: 'סה״כ', value: stats.total, color: 'text-[#003D30]' },
+          { label: 'סה״כ', value: stats.total, color: 'text-[#203957]' },
           { label: 'טיוטות', value: stats.drafts, color: 'text-muted-foreground' },
-          { label: 'נשלחו', value: stats.sent, color: 'text-[#003D30]' },
-          { label: 'ממתינות', value: stats.thinking, color: 'text-[#8A6230]' },
+          { label: 'נשלחו', value: stats.sent, color: 'text-[#203957]' },
+          { label: 'ממתינות', value: stats.thinking, color: 'text-[#7C5C22]' },
           { label: 'מאושרות', value: stats.approved, color: 'text-[#2F6B4E]' },
-          { label: 'בוצעו', value: stats.executed, color: 'text-[#003D30]' },
+          { label: 'בוצעו', value: stats.executed, color: 'text-[#203957]' },
           { label: 'נדחו', value: stats.rejected, color: 'text-[#9A4520]' },
         ].map(s => (
           <Card key={s.label} className="rounded-2xl border-border/50 shadow-sm">
@@ -187,8 +187,8 @@ export default function RecommendationBankPage() {
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-3">
         <div className="flex-1 relative group">
-          <Search className="h-4 w-4 absolute right-3 top-3 text-muted-foreground group-focus-within:text-[#003D30]" />
-          <Input placeholder="חיפוש לפי שם לקוח, ת.ז, כותרת, חברה..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pr-10 rounded-xl border-border/60 focus:border-[#003D30]" />
+          <Search className="h-4 w-4 absolute right-3 top-3 text-muted-foreground group-focus-within:text-[#203957]" />
+          <Input placeholder="חיפוש לפי שם לקוח, ת.ז, כותרת, חברה..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pr-10 rounded-xl border-border/60 focus:border-[#203957]" />
         </div>
         <Select value={sortBy} onValueChange={v => setSortBy(v as 'date' | 'customer')}>
           <SelectTrigger className="w-40 rounded-xl"><SelectValue /></SelectTrigger>
@@ -201,9 +201,9 @@ export default function RecommendationBankPage() {
 
       {/* Queue tabs */}
       <Tabs value={queue} onValueChange={v => setQueue(v as QueueFilter)}>
-        <TabsList className="flex-wrap h-auto gap-1 bg-[#003D30]/5 p-1 rounded-full">
+        <TabsList className="flex-wrap h-auto gap-1 bg-[#203957]/5 p-1 rounded-full">
           {queueFilters.map(f => (
-            <TabsTrigger key={f.key} value={f.key} className="text-xs px-3 py-1.5 rounded-full data-[state=active]:bg-[#003D30] data-[state=active]:text-white">
+            <TabsTrigger key={f.key} value={f.key} className="text-xs px-3 py-1.5 rounded-full data-[state=active]:bg-[#203957] data-[state=active]:text-white">
               {f.label}
             </TabsTrigger>
           ))}

@@ -31,7 +31,7 @@ export default function PrivacyPage() {
 
   const content = (
     <div
-      className="max-w-3xl mx-auto px-5 sm:px-8 py-8 space-y-10 text-[17px] leading-[1.8] [&_strong]:font-bold [&_strong]:text-[#003D30]"
+      className="max-w-3xl mx-auto px-5 sm:px-8 py-8 space-y-10 text-[17px] leading-[1.8] [&_strong]:font-bold [&_strong]:text-[#203957]"
       style={{ color: BODY }}
     >
       <LegalSection title="1. כללי">
@@ -156,7 +156,7 @@ export default function PrivacyPage() {
             <span className="text-[14px]" style={{ color: MUTED }}>דואר אלקטרוני</span>
             <a
               href="mailto:info@seeld.co.il"
-              className="inline-flex min-h-[44px] items-center text-[16px] font-bold border-b border-transparent hover:border-[#003D30]/40 transition-colors"
+              className="inline-flex min-h-[44px] items-center text-[16px] font-bold border-b border-transparent hover:border-[#203957]/40 transition-colors"
               style={{ color: GREEN }}
               dir="ltr"
             >

@@ -16,15 +16,15 @@ const MOCK_TICKETS = [
 ];
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  "פתוח": { bg: "#E8EDE5", text: "#476356" },
-  "בטיפול": { bg: "#F5EEE0", text: "#8A6230" },
-  "הושלם": { bg: "#E8EDE5", text: "#2F6B4E" },
+  "פתוח": { bg: "#DFE9DC", text: "#55677C" },
+  "בטיפול": { bg: "#F5EEE0", text: "#7C5C22" },
+  "הושלם": { bg: "#DFE9DC", text: "#2F6B4E" },
 };
 
 const PRIORITY_COLORS: Record<string, { bg: string; text: string }> = {
   "דחוף": { bg: "#F3E2D8", text: "#9A4520" },
-  "גבוהה": { bg: "#F5EEE0", text: "#8A6230" },
-  "רגילה": { bg: "#EEF2EC", text: "#476356" },
+  "גבוהה": { bg: "#F5EEE0", text: "#7C5C22" },
+  "רגילה": { bg: "#EEF2EC", text: "#55677C" },
 };
 
 export default function DeskPage() {
@@ -36,7 +36,7 @@ export default function DeskPage() {
   const stats = [
     { label: "פניות פתוחות", value: "14", change: "+3", icon: Headphones, color: tool.color },
     { label: "טופלו היום", value: "6", change: "+2", icon: CheckCircle, color: "#2F6B4E" },
-    { label: "זמן טיפול ממוצע", value: "2.4 שע׳", change: "-0.3", icon: Clock, color: "#CBA064" },
+    { label: "זמן טיפול ממוצע", value: "2.4 שע׳", change: "-0.3", icon: Clock, color: "#AD833E" },
     { label: "דחופים", value: "2", change: "+1", icon: AlertTriangle, color: "#BD582D" },
   ];
 
@@ -44,51 +44,51 @@ export default function DeskPage() {
     <ToolPage slug="desk">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {stats.map((s) => (
-          <div key={s.label} className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-5">
+          <div key={s.label} className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] p-5">
             <div className="flex items-center justify-between mb-3">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: s.color + "15" }}>
                 <s.icon className="w-5 h-5" style={{ color: s.color }} />
               </div>
               <span className="text-xs text-[#2F6B4E] font-medium">{s.change}</span>
             </div>
-            <p className="text-2xl font-bold text-[#003D30]">{s.value}</p>
-            <p className="text-sm text-[#476356] mt-0.5">{s.label}</p>
+            <p className="text-2xl font-bold text-[#203957]">{s.value}</p>
+            <p className="text-sm text-[#55677C] mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-4 mb-4">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] p-4 mb-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#476356]" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#55677C]" />
             <input
               type="text"
               placeholder="חיפוש פניה לפי לקוח, נושא או מזהה..."
-              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#003D30]/20"
+              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#D9DEE4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#203957]/20"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <button className="flex items-center gap-2 px-5 py-2.5 bg-[#003D30] text-white rounded-full text-sm font-medium hover:bg-[#003D30]/90 transition-colors">
+          <button className="flex items-center gap-2 px-5 py-2.5 bg-[#203957] text-white rounded-full text-sm font-medium hover:bg-[#203957]/90 transition-colors">
             <Plus className="w-4 h-4" />
             פניה חדשה
           </button>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-16 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#E8EDE5] mx-auto mb-4 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-[#DFE9DC] mx-auto mb-4 flex items-center justify-center">
               <Headphones className="w-8 h-8 text-[#8FA396]" />
             </div>
-            <p className="text-[#476356] font-medium mb-1">אין פניות להצגה</p>
-            <p className="text-sm text-[#476356]">פתח פניית שירות חדשה</p>
+            <p className="text-[#55677C] font-medium mb-1">אין פניות להצגה</p>
+            <p className="text-sm text-[#55677C]">פתח פניית שירות חדשה</p>
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-[#F3F5F1] text-[#476356]">
+              <tr className="bg-[#F3F5F1] text-[#55677C]">
                 <th className="text-right px-4 py-3 font-medium">מזהה</th>
                 <th className="text-right px-4 py-3 font-medium">לקוח</th>
                 <th className="text-right px-4 py-3 font-medium">נושא</th>
@@ -105,18 +105,18 @@ export default function DeskPage() {
                 const statusColor = STATUS_COLORS[t.status] || STATUS_COLORS["פתוח"];
                 const priorityColor = PRIORITY_COLORS[t.priority] || PRIORITY_COLORS["רגילה"];
                 return (
-                  <tr key={t.id} className="border-t border-[#E1E8E1] hover:bg-[#F3F5F1]/50 transition-colors">
-                    <td className="px-4 py-3 font-mono text-xs text-[#476356]">{t.id}</td>
-                    <td className="px-4 py-3 font-medium text-[#003D30]">{t.client}</td>
-                    <td className="px-4 py-3 text-[#24483C] max-w-[200px] truncate">{t.subject}</td>
-                    <td className="px-4 py-3 text-center text-[#476356] text-xs">{t.category}</td>
+                  <tr key={t.id} className="border-t border-[#E8E6DE] hover:bg-[#F3F5F1]/50 transition-colors">
+                    <td className="px-4 py-3 font-mono text-xs text-[#55677C]">{t.id}</td>
+                    <td className="px-4 py-3 font-medium text-[#203957]">{t.client}</td>
+                    <td className="px-4 py-3 text-[#2D435D] max-w-[200px] truncate">{t.subject}</td>
+                    <td className="px-4 py-3 text-center text-[#55677C] text-xs">{t.category}</td>
                     <td className="px-4 py-3 text-center">
                       <span className="px-2.5 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: priorityColor.bg, color: priorityColor.text }}>
                         {t.priority}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <div className="flex items-center justify-center gap-1 text-[#476356]">
+                      <div className="flex items-center justify-center gap-1 text-[#55677C]">
                         <User className="w-3 h-3" />
                         <span className="text-xs">{t.assignee}</span>
                       </div>
@@ -126,10 +126,10 @@ export default function DeskPage() {
                         {t.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-center text-[#476356]">{t.date}</td>
+                    <td className="px-4 py-3 text-center text-[#55677C]">{t.date}</td>
                     <td className="px-4 py-3 text-center">
-                      <button className="p-1.5 hover:bg-[#E8EDE5] rounded-lg transition-colors">
-                        <MoreVertical className="w-4 h-4 text-[#476356]" />
+                      <button className="p-1.5 hover:bg-[#DFE9DC] rounded-lg transition-colors">
+                        <MoreVertical className="w-4 h-4 text-[#55677C]" />
                       </button>
                     </td>
                   </tr>

@@ -97,7 +97,7 @@ const Insurances = () => {
                       <Link
                         key={item.href}
                         to={item.href}
-                        className="group flex items-center gap-4 rounded-2xl bg-white border p-4 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                        className="group flex items-center gap-4 rounded-2xl bg-white border p-4 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
                         style={{ borderColor: LINE }}
                       >
                         <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ background: group.tint }}>

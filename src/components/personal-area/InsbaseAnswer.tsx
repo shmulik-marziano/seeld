@@ -43,7 +43,7 @@ export const InsbaseAnswer = ({ text, compact = false }: { text: string; compact
       {blocks.map((b, i) => {
         if (b.kind === "h") return <p key={i} className="mt-4 mb-1.5 font-bold" style={{ color: GREEN }}>{b.text}</p>;
         if (b.kind === "li") return (
-          <div key={i} className="flex gap-3 py-2 border-b last:border-b-0" style={{ borderColor: "#E1E8E1" }}>
+          <div key={i} className="flex gap-3 py-2 border-b last:border-b-0" style={{ borderColor: "#E8E6DE" }}>
             <span aria-hidden="true" className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: GREEN }} />
             <p className="leading-[1.6] tabular-nums"><Inline text={b.text} /></p>
           </div>

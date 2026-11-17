@@ -14,7 +14,7 @@ import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREE
 const ArticleTile = ({ article }: { article: Article }) => (
   <Link
     to={`/article/${article.id}`}
-    className="group dna-concept dna-hover flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+    className="group dna-concept dna-hover flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
   >
     <span className="text-[14px] font-bold" style={{ color: MUTED }}>{article.category}</span>
     <h3 className="mt-2 text-[18px] leading-snug" style={{ color: GREEN }}>{article.title}</h3>

@@ -111,7 +111,7 @@ const PersonalAreaDashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20" aria-busy="true" aria-live="polite">
-        <Loader2 className="w-8 h-8 animate-spin text-[#003D30]" aria-hidden="true" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#203957]" aria-hidden="true" />
         <span className="sr-only">טוען את התיק</span>
       </div>
     );
@@ -162,7 +162,7 @@ const PersonalAreaDashboard = () => {
               className={bottom
                 ? "flex min-h-[60px] flex-col items-center justify-center gap-1 text-[13px] font-bold"
                 : "flex min-h-[48px] items-center gap-2 px-2 pb-3 text-[16px] font-bold border-b-2 -mb-px transition-colors"}
-              style={active ? { color: GREEN, borderColor: GREEN } : { color: "#476356", borderColor: "transparent" }}
+              style={active ? { color: GREEN, borderColor: GREEN } : { color: "#55677C", borderColor: "transparent" }}
             >
               <BrandIcon name={item.icon} size={bottom ? 22 : 20} />
               {item.label}
@@ -224,7 +224,7 @@ const PersonalAreaDashboard = () => {
                 key={t.title}
                 type="button"
                 onClick={t.go}
-                className="group flex flex-col items-start rounded-2xl bg-white border p-4 text-start dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                className="group flex flex-col items-start rounded-2xl bg-white border p-4 text-start dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
                 style={{ borderColor: LINE }}
               >
                 <span className="flex h-11 w-11 items-center justify-center rounded-full" style={{ background: t.tint }}>

@@ -60,7 +60,7 @@ const RightsExtraction = () => {
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-12 sm:pb-16">
             <nav className="flex items-center gap-2 text-[14px] mb-10 sm:mb-14" style={{ color: MUTED }}>
-              <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
+              <Link to="/" className="hover:text-[#203957] transition-colors">דף הבית</Link>
               <span aria-hidden="true">←</span>
               <span className="font-medium" style={{ color: NAVY }}>מיצוי זכויות</span>
             </nav>
@@ -161,7 +161,7 @@ const RightsExtraction = () => {
             >
               נבדוק מה מגיע לכם
             </h2>
-            <p className="text-[17px] leading-[1.7] mb-9 max-w-xl" style={{ color: "#A9C4A5" }}>
+            <p className="text-[17px] leading-[1.7] mb-9 max-w-xl" style={{ color: "#C5D3E2" }}>
               הבדיקה ללא עלות וללא התחייבות. אם אין כלום, לפחות תדעו.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">

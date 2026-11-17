@@ -11,10 +11,10 @@ import { monthlyPensionFrom, PENSION_FACTOR_NOTE } from "@/lib/pension";
 // Frank Ruhl 900 turquoise standout stat, CSS bar chart with mono LTR values.
 
 const inputClass =
-  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]";
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#D9DEE4] rounded-lg text-[#203957] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#203957]";
 const sliderClass =
   "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#819B7D] [&_[role=slider]]:border-[#819B7D]";
-const labelClass = "flex items-center gap-2 text-base font-medium text-[#003D30]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#203957]";
 
 interface PensionResult {
   totalSavings: number;
@@ -204,7 +204,7 @@ const PensionCalculator = () => {
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="space-y-3">
-            <Label className="text-sm text-[#003D30]">הפקדת עובד (%)</Label>
+            <Label className="text-sm text-[#203957]">הפקדת עובד (%)</Label>
             <div className="flex items-center gap-3">
               <Slider thumbLabel="הפקדת עובד (%)"
                 value={[employeeDeposit]}
@@ -220,7 +220,7 @@ const PensionCalculator = () => {
             </div>
           </div>
           <div className="space-y-3">
-            <Label className="text-sm text-[#003D30]">הפקדת מעסיק (%)</Label>
+            <Label className="text-sm text-[#203957]">הפקדת מעסיק (%)</Label>
             <div className="flex items-center gap-3">
               <Slider thumbLabel="הפקדת מעסיק (%)"
                 value={[employerDeposit]}
@@ -236,7 +236,7 @@ const PensionCalculator = () => {
             </div>
           </div>
           <div className="space-y-3">
-            <Label className="text-sm text-[#003D30]">פיצויים (%)</Label>
+            <Label className="text-sm text-[#203957]">פיצויים (%)</Label>
             <div className="flex items-center gap-3">
               <Slider thumbLabel="פיצויים (%)"
                 value={[severanceDeposit]}
@@ -252,7 +252,7 @@ const PensionCalculator = () => {
             </div>
           </div>
           <div className="space-y-3">
-            <Label className="text-sm text-[#003D30]">תשואה שנתית צפויה (%)</Label>
+            <Label className="text-sm text-[#203957]">תשואה שנתית צפויה (%)</Label>
             <div className="flex items-center gap-3">
               <Slider thumbLabel="תשואה שנתית צפויה (%)"
                 value={[annualReturn]}

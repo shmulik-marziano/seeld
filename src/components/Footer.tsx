@@ -229,7 +229,7 @@ const Footer = () => {
                         href={row.href}
                         target={row.href.startsWith("http") ? "_blank" : undefined}
                         rel={row.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="inline-flex min-h-[44px] items-center text-base font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#003D30]/40 transition-colors"
+                        className="inline-flex min-h-[44px] items-center text-base font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#203957]/40 transition-colors"
                         style={{ color: GREEN }}
                         dir={row.ltr ? "ltr" : undefined}
                       >
@@ -249,7 +249,7 @@ const Footer = () => {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex min-h-[44px] items-center px-0.5 text-[14px] font-bold border-b border-transparent hover:border-[#003D30]/40 transition-colors"
+                    className="inline-flex min-h-[44px] items-center px-0.5 text-[14px] font-bold border-b border-transparent hover:border-[#203957]/40 transition-colors"
                     style={{ color: MUTED }}
                   >
                     {social.label}

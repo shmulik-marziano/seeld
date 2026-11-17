@@ -18,7 +18,7 @@ import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE, SAGE_ON_GREEN } from "@/l
 // questions carry the page.
 
 const tabTriggerClass =
-  "min-w-[44px] rounded-none bg-transparent px-0 pb-4 text-[16px] font-bold text-[#476356] border-b-2 border-transparent data-[state=active]:border-[#003D30] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+  "min-w-[44px] rounded-none bg-transparent px-0 pb-4 text-[16px] font-bold text-[#55677C] border-b-2 border-transparent data-[state=active]:border-[#203957] data-[state=active]:text-[#203957] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const FAQ = () => {
   return (

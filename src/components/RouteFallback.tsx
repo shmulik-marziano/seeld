@@ -34,7 +34,7 @@ export default function RouteFallback() {
 
       {/* Thin indeterminate progress bar, deep green on ivory */}
       <div className="fixed top-0 inset-x-0 h-0.5 overflow-hidden" aria-hidden="true">
-        <div className="seeld-route-bar h-full w-1/4" style={{ backgroundColor: "#003D30" }} />
+        <div className="seeld-route-bar h-full w-1/4" style={{ backgroundColor: "#203957" }} />
       </div>
 
       {/* The brand symbol, pulsing softly, centered */}

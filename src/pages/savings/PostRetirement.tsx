@@ -19,7 +19,7 @@ import { BrandIcon } from "@/components/brand/BrandIcon";
 const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
 
 const tabTriggerClass =
-  "rounded-none bg-transparent px-2.5 -mx-2.5 pb-4 text-base font-medium text-[#476356] hover:bg-[#E8EDE5]/35 hover:text-[#003D30] border-b-2 border-transparent data-[state=active]:border-[#819B7D] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
+  "rounded-none bg-transparent px-2.5 -mx-2.5 pb-4 text-base font-medium text-[#55677C] hover:bg-[#DFE9DC]/35 hover:text-[#203957] border-b-2 border-transparent data-[state=active]:border-[#819B7D] data-[state=active]:text-[#203957] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap";
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <h2 className="dna-display leading-tight" style={{ fontSize: "clamp(1.7rem, 3vw, 2.2rem)" }}>
@@ -174,7 +174,7 @@ const PostRetirement = () => {
         <section id="product-types" className="border-t scroll-mt-24" style={{ borderColor: LINE }}>
           <div className="max-w-5xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
             <Tabs defaultValue="guide" dir="rtl">
-              <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#CCD6CC] rounded-none overflow-x-auto scrollbar-hide">
+              <TabsList className="flex w-full justify-start gap-6 sm:gap-8 h-auto bg-transparent p-0 mb-10 border-b border-[#D9DEE4] rounded-none overflow-x-auto scrollbar-hide">
                 <TabsTrigger value="guide" className={tabTriggerClass}>
                   המדריך
                 </TabsTrigger>
@@ -194,7 +194,7 @@ const PostRetirement = () => {
                       <div className="mb-6">
                         <SectionTitle>{article.title}</SectionTitle>
                       </div>
-                      <div className="space-y-4 text-[#24483C] leading-[1.9] text-base">
+                      <div className="space-y-4 text-[#2D435D] leading-[1.9] text-base">
                         {article.paragraphs.map((p, pIdx) => (
                           <p key={pIdx}>{p}</p>
                         ))}
@@ -212,7 +212,7 @@ const PostRetirement = () => {
               <TabsContent value="types" className="mt-0">
                 <div className="mb-10">
                   <SectionTitle>שירותים לפנסיונרים</SectionTitle>
-                  <p className="text-[#476356] mt-2 text-base leading-relaxed max-w-xl">
+                  <p className="text-[#55677C] mt-2 text-base leading-relaxed max-w-xl">
                     ליווי מקיף לניהול חכם של הכספים אחרי הפרישה
                   </p>
                 </div>
@@ -222,7 +222,7 @@ const PostRetirement = () => {
                       <h3 className="text-[17px] mb-2" style={{ fontFamily: DISPLAY, fontWeight: 700, color: NAVY }}>
                         {type.title}
                       </h3>
-                      <p className="text-[#24483C] text-[14px] leading-[1.8] mb-4">{type.description}</p>
+                      <p className="text-[#2D435D] text-[14px] leading-[1.8] mb-4">{type.description}</p>
                       <ul className="space-y-2">
                         {type.features.map((feature, fIdx) => (
                           <li key={fIdx} className="dna-pill-item !py-1.5 text-[14px]">
@@ -243,12 +243,12 @@ const PostRetirement = () => {
                       <AccordionItem
                         key={idx}
                         value={`faq-${idx}`}
-                        className="border-b border-[#CCD6CC] rounded-none px-0"
+                        className="border-b border-[#D9DEE4] rounded-none px-0"
                       >
-                        <AccordionTrigger className="text-start text-base font-medium text-[#003D30] hover:no-underline py-5 px-3 -mx-3 rounded-md hover:bg-[#E8EDE5]/35 transition-colors duration-150">
+                        <AccordionTrigger className="text-start text-base font-medium text-[#203957] hover:no-underline py-5 px-3 -mx-3 rounded-md hover:bg-[#DFE9DC]/35 transition-colors duration-150">
                           {item.q}
                         </AccordionTrigger>
-                        <AccordionContent className="text-[#24483C] leading-[1.85] pb-6 text-[14px]">
+                        <AccordionContent className="text-[#2D435D] leading-[1.85] pb-6 text-[14px]">
                           {item.a}
                         </AccordionContent>
                       </AccordionItem>

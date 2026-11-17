@@ -38,7 +38,7 @@ const AccessibilityButton = () => {
   const optionClass = (active: boolean) =>
     cn(
       "mb-2 w-full rounded-lg border px-3 py-2.5 text-right text-[15px] font-bold transition-colors duration-150 min-h-[44px]",
-      active ? "border-[#003D30] bg-[#003D30] text-[#FAF7EF]" : "border-[#CCD6CC] bg-white text-[#003D30] hover:border-[#003D30]",
+      active ? "border-[#203957] bg-[#203957] text-[#FAF7EF]" : "border-[#D9DEE4] bg-white text-[#203957] hover:border-[#203957]",
     );
 
   return (
@@ -46,7 +46,7 @@ const AccessibilityButton = () => {
       {/* Quiet launcher — white circle, hairline ring, green glyph */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed right-4 sm:right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#476356] opacity-80 transition-all duration-200 hover:opacity-100 hover:text-[#003D30] focus-visible:opacity-100"
+        className="fixed right-4 sm:right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#55677C] opacity-80 transition-all duration-200 hover:opacity-100 hover:text-[#203957] focus-visible:opacity-100"
         style={{ boxShadow: RING, bottom: "calc(20px + var(--float-lift, 0px) + env(safe-area-inset-bottom, 0px))" }}
         aria-label="הגדרות נגישות"
         aria-expanded={isOpen}
@@ -73,14 +73,14 @@ const AccessibilityButton = () => {
               <button
                 onClick={() => updateFontSize(-10)}
                 aria-label="הקטנת גודל טקסט"
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#CCD6CC] bg-white text-[15px] font-bold text-[#003D30] transition-colors duration-150 hover:border-[#003D30]"
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#D9DEE4] bg-white text-[15px] font-bold text-[#203957] transition-colors duration-150 hover:border-[#203957]"
               >
                 א-
               </button>
               <button
                 onClick={() => updateFontSize(10)}
                 aria-label="הגדלת גודל טקסט"
-                className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#CCD6CC] bg-white text-[15px] font-bold text-[#003D30] transition-colors duration-150 hover:border-[#003D30]"
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#D9DEE4] bg-white text-[15px] font-bold text-[#203957] transition-colors duration-150 hover:border-[#203957]"
               >
                 א+
               </button>
@@ -101,7 +101,7 @@ const AccessibilityButton = () => {
           {/* Reset */}
           <button
             onClick={resetAll}
-            className="mt-1 w-full border-t pt-3 text-center text-[14px] font-bold transition-colors duration-150 hover:text-[#003D30] min-h-[40px]"
+            className="mt-1 w-full border-t pt-3 text-center text-[14px] font-bold transition-colors duration-150 hover:text-[#203957] min-h-[40px]"
             style={{ borderColor: LINE, color: MUTED }}
           >
             איפוס

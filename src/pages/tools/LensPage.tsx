@@ -16,9 +16,9 @@ const MOCK_DOCS = [
 ];
 
 const STATUS_COLORS: Record<string, { bg: string; text: string; icon: React.ElementType }> = {
-  "הושלם": { bg: "#E8EDE5", text: "#2F6B4E", icon: CheckCircle },
-  "בעיבוד": { bg: "#E8EDE5", text: "#476356", icon: Clock },
-  "דורש בדיקה": { bg: "#F5EEE0", text: "#8A6230", icon: AlertTriangle },
+  "הושלם": { bg: "#DFE9DC", text: "#2F6B4E", icon: CheckCircle },
+  "בעיבוד": { bg: "#DFE9DC", text: "#55677C", icon: Clock },
+  "דורש בדיקה": { bg: "#F5EEE0", text: "#7C5C22", icon: AlertTriangle },
 };
 
 export default function LensPage() {
@@ -35,7 +35,7 @@ export default function LensPage() {
   const stats = [
     { label: "מסמכים סרוקים היום", value: "18", change: "+7", icon: FileText, color: tool.color },
     { label: "שדות שחולצו", value: "342", change: "+86", icon: CheckCircle, color: "#2F6B4E" },
-    { label: "דיוק ממוצע", value: "96%", change: "+1%", icon: Eye, color: "#CBA064" },
+    { label: "דיוק ממוצע", value: "96%", change: "+1%", icon: Eye, color: "#AD833E" },
     { label: "ממתינים לבדיקה", value: "3", change: "-", icon: AlertTriangle, color: "#BD582D" },
   ];
 
@@ -43,15 +43,15 @@ export default function LensPage() {
     <ToolPage slug="lens">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {stats.map((s) => (
-          <div key={s.label} className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-5">
+          <div key={s.label} className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] p-5">
             <div className="flex items-center justify-between mb-3">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: s.color + "15" }}>
                 <s.icon className="w-5 h-5" style={{ color: s.color }} />
               </div>
               <span className="text-xs text-[#2F6B4E] font-medium">{s.change}</span>
             </div>
-            <p className="text-2xl font-bold text-[#003D30]">{s.value}</p>
-            <p className="text-sm text-[#476356] mt-0.5">{s.label}</p>
+            <p className="text-2xl font-bold text-[#203957]">{s.value}</p>
+            <p className="text-sm text-[#55677C] mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
@@ -59,25 +59,25 @@ export default function LensPage() {
       {/* Upload area */}
       <div className="bg-white rounded-2xl shadow-sm border-2 border-dashed border-[#819B7D]/30 p-8 mb-4 text-center hover:border-[#819B7D]/50 transition-colors cursor-pointer">
         <Upload className="w-10 h-10 mx-auto mb-3" style={{ color: tool.color }} />
-        <p className="font-medium text-[#24483C] mb-1">גרור מסמכים לכאן או לחץ להעלאה</p>
-        <p className="text-sm text-[#476356]">PDF, תמונות, Word — עד 20MB לקובץ</p>
+        <p className="font-medium text-[#2D435D] mb-1">גרור מסמכים לכאן או לחץ להעלאה</p>
+        <p className="text-sm text-[#55677C]">PDF, תמונות, Word — עד 20MB לקובץ</p>
       </div>
 
       {/* Toolbar */}
-      <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-4 mb-4">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] p-4 mb-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#476356]" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#55677C]" />
             <input
               type="text"
               placeholder="חיפוש מסמך לפי שם או לקוח..."
-              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#003D30]/20"
+              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#D9DEE4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#203957]/20"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <select
-            className="px-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none"
+            className="px-4 py-2.5 bg-[#F3F5F1] border border-[#D9DEE4] rounded-xl text-sm focus:outline-none"
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
           >
@@ -89,7 +89,7 @@ export default function LensPage() {
             <option value="אישור">אישור</option>
             <option value="דו״ח מסלקה">דו״ח מסלקה</option>
           </select>
-          <button className="flex items-center gap-2 px-5 py-2.5 bg-[#003D30] text-white rounded-full text-sm font-medium hover:bg-[#003D30]/90 transition-colors">
+          <button className="flex items-center gap-2 px-5 py-2.5 bg-[#203957] text-white rounded-full text-sm font-medium hover:bg-[#203957]/90 transition-colors">
             <Plus className="w-4 h-4" />
             העלאת מסמך
           </button>
@@ -97,19 +97,19 @@ export default function LensPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-16 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#E8EDE5] mx-auto mb-4 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-[#DFE9DC] mx-auto mb-4 flex items-center justify-center">
               <FileText className="w-8 h-8 text-[#8FA396]" />
             </div>
-            <p className="text-[#476356] font-medium mb-1">אין מסמכים להצגה</p>
-            <p className="text-sm text-[#476356]">העלה מסמך חדש או שנה את מסנני החיפוש</p>
+            <p className="text-[#55677C] font-medium mb-1">אין מסמכים להצגה</p>
+            <p className="text-sm text-[#55677C]">העלה מסמך חדש או שנה את מסנני החיפוש</p>
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-[#F3F5F1] text-[#476356]">
+              <tr className="bg-[#F3F5F1] text-[#55677C]">
                 <th className="text-right px-4 py-3 font-medium">מסמך</th>
                 <th className="text-right px-4 py-3 font-medium">לקוח</th>
                 <th className="text-right px-4 py-3 font-medium">סוג</th>
@@ -126,24 +126,24 @@ export default function LensPage() {
                 const statusInfo = STATUS_COLORS[doc.status] || STATUS_COLORS["הושלם"];
                 const StatusIcon = statusInfo.icon;
                 return (
-                  <tr key={doc.id} className="border-t border-[#E1E8E1] hover:bg-[#F3F5F1]/50 transition-colors">
+                  <tr key={doc.id} className="border-t border-[#E8E6DE] hover:bg-[#F3F5F1]/50 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-[#476356]" />
-                        <span className="font-medium text-[#003D30]">{doc.name}</span>
+                        <FileText className="w-4 h-4 text-[#55677C]" />
+                        <span className="font-medium text-[#203957]">{doc.name}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-[#476356]">{doc.client}</td>
-                    <td className="px-4 py-3 text-[#476356]">{doc.type}</td>
-                    <td className="px-4 py-3 text-center text-[#476356]">{doc.pages}</td>
-                    <td className="px-4 py-3 text-center text-[#476356]">{doc.fields}</td>
+                    <td className="px-4 py-3 text-[#55677C]">{doc.client}</td>
+                    <td className="px-4 py-3 text-[#55677C]">{doc.type}</td>
+                    <td className="px-4 py-3 text-center text-[#55677C]">{doc.pages}</td>
+                    <td className="px-4 py-3 text-center text-[#55677C]">{doc.fields}</td>
                     <td className="px-4 py-3 text-center">
                       {doc.accuracy > 0 ? (
-                        <span className={`text-xs font-bold ${doc.accuracy >= 90 ? "text-[#2F6B4E]" : doc.accuracy >= 75 ? "text-[#8A6230]" : "text-[#9A4520]"}`}>
+                        <span className={`text-xs font-bold ${doc.accuracy >= 90 ? "text-[#2F6B4E]" : doc.accuracy >= 75 ? "text-[#7C5C22]" : "text-[#9A4520]"}`}>
                           {doc.accuracy}%
                         </span>
                       ) : (
-                        <span className="text-xs text-[#476356]">—</span>
+                        <span className="text-xs text-[#55677C]">—</span>
                       )}
                     </td>
                     <td className="px-4 py-3 text-center">
@@ -152,10 +152,10 @@ export default function LensPage() {
                         {doc.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-center text-[#476356]">{doc.date}</td>
+                    <td className="px-4 py-3 text-center text-[#55677C]">{doc.date}</td>
                     <td className="px-4 py-3 text-center">
-                      <button className="p-1.5 hover:bg-[#E8EDE5] rounded-lg transition-colors">
-                        <MoreVertical className="w-4 h-4 text-[#476356]" />
+                      <button className="p-1.5 hover:bg-[#DFE9DC] rounded-lg transition-colors">
+                        <MoreVertical className="w-4 h-4 text-[#55677C]" />
                       </button>
                     </td>
                   </tr>

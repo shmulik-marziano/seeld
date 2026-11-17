@@ -16,10 +16,10 @@ const MOCK_ANALYSES = [
 ];
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  "ממצאים": { bg: "#F5EEE0", text: "#8A6230" },
-  "הושלם": { bg: "#E8EDE5", text: "#2F6B4E" },
-  "תקין": { bg: "#E8EDE5", text: "#476356" },
-  "בניתוח": { bg: "#DDE6DA", text: "#476356" },
+  "ממצאים": { bg: "#F5EEE0", text: "#7C5C22" },
+  "הושלם": { bg: "#DFE9DC", text: "#2F6B4E" },
+  "תקין": { bg: "#DFE9DC", text: "#55677C" },
+  "בניתוח": { bg: "#D6E3EF", text: "#55677C" },
 };
 
 export default function XRayPage() {
@@ -30,7 +30,7 @@ export default function XRayPage() {
 
   const stats = [
     { label: "תיקים שנותחו", value: "156", change: "+12", icon: BarChart3, color: tool.color },
-    { label: "פערים שזוהו", value: "89", change: "+23", icon: AlertTriangle, color: "#CBA064" },
+    { label: "פערים שזוהו", value: "89", change: "+23", icon: AlertTriangle, color: "#AD833E" },
     { label: "חיסכון פוטנציאלי", value: "₪45K", change: "+8%", icon: DollarSign, color: "#2F6B4E" },
     { label: "כפילויות", value: "14", change: "-3", icon: TrendingDown, color: "#BD582D" },
   ];
@@ -39,51 +39,51 @@ export default function XRayPage() {
     <ToolPage slug="x-ray">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {stats.map((s) => (
-          <div key={s.label} className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-5">
+          <div key={s.label} className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] p-5">
             <div className="flex items-center justify-between mb-3">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: s.color + "15" }}>
                 <s.icon className="w-5 h-5" style={{ color: s.color }} />
               </div>
               <span className="text-xs text-[#2F6B4E] font-medium">{s.change}</span>
             </div>
-            <p className="text-2xl font-bold text-[#003D30]">{s.value}</p>
-            <p className="text-sm text-[#476356] mt-0.5">{s.label}</p>
+            <p className="text-2xl font-bold text-[#203957]">{s.value}</p>
+            <p className="text-sm text-[#55677C] mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-4 mb-4">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] p-4 mb-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#476356]" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#55677C]" />
             <input
               type="text"
               placeholder="חיפוש לקוח לניתוח..."
-              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#003D30]/20"
+              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#D9DEE4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#203957]/20"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <button className="flex items-center gap-2 px-5 py-2.5 bg-[#003D30] text-white rounded-full text-sm font-medium hover:bg-[#003D30]/90 transition-colors">
+          <button className="flex items-center gap-2 px-5 py-2.5 bg-[#203957] text-white rounded-full text-sm font-medium hover:bg-[#203957]/90 transition-colors">
             <Plus className="w-4 h-4" />
             ניתוח חדש
           </button>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-16 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#E8EDE5] mx-auto mb-4 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-[#DFE9DC] mx-auto mb-4 flex items-center justify-center">
               <BarChart3 className="w-8 h-8 text-[#8FA396]" />
             </div>
-            <p className="text-[#476356] font-medium mb-1">אין ניתוחים להצגה</p>
-            <p className="text-sm text-[#476356]">הפעל ניתוח חדש על תיק לקוח</p>
+            <p className="text-[#55677C] font-medium mb-1">אין ניתוחים להצגה</p>
+            <p className="text-sm text-[#55677C]">הפעל ניתוח חדש על תיק לקוח</p>
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-[#F3F5F1] text-[#476356]">
+              <tr className="bg-[#F3F5F1] text-[#55677C]">
                 <th className="text-right px-4 py-3 font-medium">לקוח</th>
                 <th className="text-center px-4 py-3 font-medium">מוצרים</th>
                 <th className="text-center px-4 py-3 font-medium">פערים</th>
@@ -99,17 +99,17 @@ export default function XRayPage() {
               {filtered.map((a) => {
                 const statusColor = STATUS_COLORS[a.status] || STATUS_COLORS["הושלם"];
                 return (
-                  <tr key={a.id} className="border-t border-[#E1E8E1] hover:bg-[#F3F5F1]/50 transition-colors">
-                    <td className="px-4 py-3 font-medium text-[#003D30]">{a.client}</td>
-                    <td className="px-4 py-3 text-center text-[#476356]">{a.products}</td>
+                  <tr key={a.id} className="border-t border-[#E8E6DE] hover:bg-[#F3F5F1]/50 transition-colors">
+                    <td className="px-4 py-3 font-medium text-[#203957]">{a.client}</td>
+                    <td className="px-4 py-3 text-center text-[#55677C]">{a.products}</td>
                     <td className="px-4 py-3 text-center">
-                      <span className={a.gaps > 0 ? "text-[#8A6230] font-medium" : "text-[#476356]"}>{a.gaps}</span>
+                      <span className={a.gaps > 0 ? "text-[#7C5C22] font-medium" : "text-[#55677C]"}>{a.gaps}</span>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <span className={a.duplicates > 0 ? "text-[#9A4520] font-medium" : "text-[#476356]"}>{a.duplicates}</span>
+                      <span className={a.duplicates > 0 ? "text-[#9A4520] font-medium" : "text-[#55677C]"}>{a.duplicates}</span>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <span className={a.highFees > 0 ? "text-[#9A4520] font-medium" : "text-[#476356]"}>{a.highFees}</span>
+                      <span className={a.highFees > 0 ? "text-[#9A4520] font-medium" : "text-[#55677C]"}>{a.highFees}</span>
                     </td>
                     <td className="px-4 py-3 text-center font-medium text-[#2F6B4E]">{a.savings}</td>
                     <td className="px-4 py-3 text-center">
@@ -117,10 +117,10 @@ export default function XRayPage() {
                         {a.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-center text-[#476356]">{a.date}</td>
+                    <td className="px-4 py-3 text-center text-[#55677C]">{a.date}</td>
                     <td className="px-4 py-3 text-center">
-                      <button className="p-1.5 hover:bg-[#E8EDE5] rounded-lg transition-colors">
-                        <MoreVertical className="w-4 h-4 text-[#476356]" />
+                      <button className="p-1.5 hover:bg-[#DFE9DC] rounded-lg transition-colors">
+                        <MoreVertical className="w-4 h-4 text-[#55677C]" />
                       </button>
                     </td>
                   </tr>

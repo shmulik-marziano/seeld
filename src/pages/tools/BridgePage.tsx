@@ -30,10 +30,10 @@ const CHANNEL_COLORS: Record<string, string> = {
 };
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  "נענה": { bg: "#E8EDE5", text: "#2F6B4E" },
-  "נשלח": { bg: "#E8EDE5", text: "#476356" },
-  "נמסר": { bg: "#E8EDE5", text: "#476356" },
-  "ממתין": { bg: "#F5EEE0", text: "#8A6230" },
+  "נענה": { bg: "#DFE9DC", text: "#2F6B4E" },
+  "נשלח": { bg: "#DFE9DC", text: "#55677C" },
+  "נמסר": { bg: "#DFE9DC", text: "#55677C" },
+  "ממתין": { bg: "#F5EEE0", text: "#7C5C22" },
 };
 
 export default function BridgePage() {
@@ -49,7 +49,7 @@ export default function BridgePage() {
 
   const stats = [
     { label: "הודעות היום", value: "24", change: "+8", icon: MessageSquare, color: tool.color },
-    { label: "ממתינות למענה", value: "5", change: "+2", icon: Clock, color: "#CBA064" },
+    { label: "ממתינות למענה", value: "5", change: "+2", icon: Clock, color: "#AD833E" },
     { label: "שיחות נכנסות", value: "7", change: "+3", icon: Phone, color: "#2F6B4E" },
     { label: "נשלחו", value: "12", change: "+4", icon: Send, color: "#4f46e5" },
   ];
@@ -58,33 +58,33 @@ export default function BridgePage() {
     <ToolPage slug="bridge">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {stats.map((s) => (
-          <div key={s.label} className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-5">
+          <div key={s.label} className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] p-5">
             <div className="flex items-center justify-between mb-3">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: s.color + "15" }}>
                 <s.icon className="w-5 h-5" style={{ color: s.color }} />
               </div>
               <span className="text-xs text-[#2F6B4E] font-medium">{s.change}</span>
             </div>
-            <p className="text-2xl font-bold text-[#003D30]">{s.value}</p>
-            <p className="text-sm text-[#476356] mt-0.5">{s.label}</p>
+            <p className="text-2xl font-bold text-[#203957]">{s.value}</p>
+            <p className="text-sm text-[#55677C] mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] p-4 mb-4">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] p-4 mb-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#476356]" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#55677C]" />
             <input
               type="text"
               placeholder="חיפוש הודעה לפי לקוח או נושא..."
-              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#003D30]/20"
+              className="w-full pr-10 pl-4 py-2.5 bg-[#F3F5F1] border border-[#D9DEE4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#203957]/20"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <select
-            className="px-4 py-2.5 bg-[#F3F5F1] border border-[#CCD6CC] rounded-xl text-sm focus:outline-none"
+            className="px-4 py-2.5 bg-[#F3F5F1] border border-[#D9DEE4] rounded-xl text-sm focus:outline-none"
             value={channelFilter}
             onChange={(e) => setChannelFilter(e.target.value)}
           >
@@ -94,24 +94,24 @@ export default function BridgePage() {
             <option value="SMS">SMS</option>
             <option value="טלפון">טלפון</option>
           </select>
-          <button className="flex items-center gap-2 px-5 py-2.5 bg-[#003D30] text-white rounded-full text-sm font-medium hover:bg-[#003D30]/90 transition-colors">
+          <button className="flex items-center gap-2 px-5 py-2.5 bg-[#203957] text-white rounded-full text-sm font-medium hover:bg-[#203957]/90 transition-colors">
             <Plus className="w-4 h-4" />
             הודעה חדשה
           </button>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-[#003D30]/[0.06] overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-16 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#E8EDE5] mx-auto mb-4 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-[#DFE9DC] mx-auto mb-4 flex items-center justify-center">
               <MessageSquare className="w-8 h-8 text-[#8FA396]" />
             </div>
-            <p className="text-[#476356] font-medium mb-1">אין הודעות להצגה</p>
-            <p className="text-sm text-[#476356]">שלח הודעה חדשה או שנה את המסננים</p>
+            <p className="text-[#55677C] font-medium mb-1">אין הודעות להצגה</p>
+            <p className="text-sm text-[#55677C]">שלח הודעה חדשה או שנה את המסננים</p>
           </div>
         ) : (
-          <div className="divide-y divide-[#E1E8E1]">
+          <div className="divide-y divide-[#E8E6DE]">
             {filtered.map((m) => {
               const ChannelIcon = CHANNEL_ICONS[m.channel] || MessageSquare;
               const channelColor = CHANNEL_COLORS[m.channel] || "#819B7D";
@@ -123,21 +123,21 @@ export default function BridgePage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className="font-medium text-[#003D30]">{m.client}</span>
-                      <span className="text-xs text-[#476356]">{m.direction === "נכנס" ? "←" : "→"}</span>
-                      <span className="text-xs text-[#476356]">{m.channel}</span>
+                      <span className="font-medium text-[#203957]">{m.client}</span>
+                      <span className="text-xs text-[#55677C]">{m.direction === "נכנס" ? "←" : "→"}</span>
+                      <span className="text-xs text-[#55677C]">{m.channel}</span>
                     </div>
-                    <p className="text-sm text-[#24483C] font-medium mb-0.5">{m.subject}</p>
-                    <p className="text-xs text-[#476356] truncate">{m.preview}</p>
+                    <p className="text-sm text-[#2D435D] font-medium mb-0.5">{m.subject}</p>
+                    <p className="text-xs text-[#55677C] truncate">{m.preview}</p>
                   </div>
                   <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                    <span className="text-xs text-[#476356]">{m.date}</span>
+                    <span className="text-xs text-[#55677C]">{m.date}</span>
                     <span className="px-2.5 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: statusColor.bg, color: statusColor.text }}>
                       {m.status}
                     </span>
                   </div>
-                  <button className="p-1.5 hover:bg-[#E8EDE5] rounded-lg transition-colors flex-shrink-0">
-                    <MoreVertical className="w-4 h-4 text-[#476356]" />
+                  <button className="p-1.5 hover:bg-[#DFE9DC] rounded-lg transition-colors flex-shrink-0">
+                    <MoreVertical className="w-4 h-4 text-[#55677C]" />
                   </button>
                 </div>
               );

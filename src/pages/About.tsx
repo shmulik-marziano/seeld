@@ -72,7 +72,7 @@ const About = () => {
                 name="01-journey"
                 priority
                 sizes="(min-width: 1024px) 560px, 100vw"
-                className="shadow-[0_16px_40px_-24px_rgba(0,61,48,0.35)]"
+                className="shadow-[0_16px_40px_-24px_rgba(32, 57, 87,0.35)]"
               />
             </div>
           </div>

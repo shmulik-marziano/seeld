@@ -236,7 +236,7 @@ const Index = () => {
                     </span>
                   </>
                 );
-                const cls = "group flex h-full flex-col items-start rounded-2xl bg-white border p-6 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]";
+                const cls = "group flex h-full flex-col items-start rounded-2xl bg-white border p-6 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]";
                 return (
                   <ScrollReveal key={area.href} delay={i * 80}>
                     {area.href.startsWith("#") ? (
@@ -270,12 +270,12 @@ const Index = () => {
                       <h3 id={`home-${tier.key}-title`} className="text-[21px] leading-tight" style={{ color: GREEN }}>{tier.title}</h3>
                     </div>
                     <p className="mt-3 text-[15px] leading-[1.6]" style={{ color: MUTED }}>{tier.lede}</p>
-                    <ul className="mt-4 flex-1 divide-y divide-[#E1E8E1]">
+                    <ul className="mt-4 flex-1 divide-y divide-[#E8E6DE]">
                       {tier.items.slice(0, tier.homeCount).map((item) => (
                         <li key={item.href}>
                           <Link
                             to={item.href}
-                            className="group flex min-h-[48px] items-center justify-between gap-4 py-2 text-[16px] font-bold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                            className="group flex min-h-[48px] items-center justify-between gap-4 py-2 text-[16px] font-bold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
                             style={{ color: GREEN }}
                           >
                             <span>{item.title}</span>
@@ -403,7 +403,7 @@ const Index = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
               {knowledgeItems.map((item) => (
-                <Link key={item.title} to={item.href!} className="group block dna-concept dna-hover h-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]">
+                <Link key={item.title} to={item.href!} className="group block dna-concept dna-hover h-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]">
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex items-center gap-3">
                       <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full" style={{ background: PASTEL_SAGE }}>
@@ -608,7 +608,7 @@ const Index = () => {
                           href={row.href}
                           target={row.href.startsWith("http") ? "_blank" : undefined}
                           rel={row.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                          className="inline-flex min-h-[44px] items-center text-[16px] font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#003D30]/40 transition-colors"
+                          className="inline-flex min-h-[44px] items-center text-[16px] font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#203957]/40 transition-colors"
                           style={{ color: GREEN }}
                           dir={row.ltr ? "ltr" : undefined}
                         >

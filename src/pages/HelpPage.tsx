@@ -11,7 +11,7 @@ type FAQItem = { q: string; a: string; icon: React.ElementType };
 const FAQ_SECTIONS: { title: string; color: string; items: FAQItem[] }[] = [
   {
     title: 'תחילת עבודה',
-    color: '#003D30',
+    color: '#203957',
     items: [
       {
         q: 'איך מוסיפים לקוח חדש?',
@@ -32,7 +32,7 @@ const FAQ_SECTIONS: { title: string; color: string; items: FAQItem[] }[] = [
   },
   {
     title: 'ניהול לקוחות',
-    color: '#8A6230',
+    color: '#7C5C22',
     items: [
       {
         q: 'איך יוצרים המלצה ללקוח?',
@@ -53,7 +53,7 @@ const FAQ_SECTIONS: { title: string; color: string; items: FAQItem[] }[] = [
   },
   {
     title: 'הגדרות וחשבון',
-    color: '#003D30',
+    color: '#203957',
     items: [
       {
         q: 'איך משנים פרטי סוכנות?',
@@ -77,15 +77,15 @@ const FAQ_SECTIONS: { title: string; color: string; items: FAQItem[] }[] = [
 function FAQAccordion({ item, isOpen, onToggle }: { item: FAQItem; isOpen: boolean; onToggle: () => void }) {
   const Icon = item.icon;
   return (
-    <div className="border border-[#E1E8E1] rounded-2xl overflow-hidden bg-white hover:shadow-sm transition-shadow">
+    <div className="border border-[#E8E6DE] rounded-2xl overflow-hidden bg-white hover:shadow-sm transition-shadow">
       <button onClick={onToggle}
         className="w-full flex items-center gap-3 p-4 text-right transition-colors hover:bg-[#F3F5F1]/50">
-        <div className="w-9 h-9 rounded-full bg-[#003D30]/5 flex items-center justify-center flex-shrink-0">
-          <Icon className="w-4 h-4 text-[#003D30]" />
+        <div className="w-9 h-9 rounded-full bg-[#203957]/5 flex items-center justify-center flex-shrink-0">
+          <Icon className="w-4 h-4 text-[#203957]" />
         </div>
-        <span className="flex-1 text-sm font-bold text-[#003D30]">{item.q}</span>
+        <span className="flex-1 text-sm font-bold text-[#203957]">{item.q}</span>
         <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-          <ChevronDown className="w-4 h-4 text-[#476356]" />
+          <ChevronDown className="w-4 h-4 text-[#55677C]" />
         </motion.div>
       </button>
       <AnimatePresence>
@@ -93,7 +93,7 @@ function FAQAccordion({ item, isOpen, onToggle }: { item: FAQItem; isOpen: boole
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }}>
             <div className="px-4 pb-4 pr-16">
-              <p className="text-sm text-[#476356] leading-relaxed">{item.a}</p>
+              <p className="text-sm text-[#55677C] leading-relaxed">{item.a}</p>
             </div>
           </motion.div>
         )}
@@ -113,24 +113,24 @@ export default function HelpPage() {
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <button onClick={() => navigate('/app/dashboard')}
-          className="w-10 h-10 rounded-full bg-[#003D30] flex items-center justify-center hover:bg-[#003D30]/80 transition-colors">
+          className="w-10 h-10 rounded-full bg-[#203957] flex items-center justify-center hover:bg-[#203957]/80 transition-colors">
           <ArrowRight className="w-5 h-5 text-white" />
         </button>
-        <div className="w-12 h-12 rounded-full bg-[#003D30] flex items-center justify-center shadow-lg">
+        <div className="w-12 h-12 rounded-full bg-[#203957] flex items-center justify-center shadow-lg">
           <HelpCircle className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-[#003D30]">מרכז עזרה</h1>
-          <p className="text-sm text-[#476356]">שאלות נפוצות ותמיכה</p>
+          <h1 className="text-2xl font-bold text-[#203957]">מרכז עזרה</h1>
+          <p className="text-sm text-[#55677C]">שאלות נפוצות ותמיכה</p>
         </div>
       </div>
 
       {/* Hero */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
         className="rounded-2xl p-6 sm:p-8 mb-8 relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #003D30 0%, #003D30 100%)' }}>
-        <div className="absolute top-0 left-0 w-40 h-40 rounded-full bg-[#003D30]/10 -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-32 h-32 rounded-full bg-[#8A6230]/10 translate-x-1/3 translate-y-1/3" />
+        style={{ background: 'linear-gradient(135deg, #203957 0%, #203957 100%)' }}>
+        <div className="absolute top-0 left-0 w-40 h-40 rounded-full bg-[#203957]/10 -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-32 h-32 rounded-full bg-[#7C5C22]/10 translate-x-1/3 translate-y-1/3" />
         <div className="relative">
           <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">איך נוכל לעזור?</h2>
           <p className="text-sm text-white/70 max-w-lg">
@@ -146,7 +146,7 @@ export default function HelpPage() {
           transition={{ delay: si * 0.1 }} className="mb-8">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: section.color }} />
-            <h3 className="text-lg font-bold text-[#003D30]">{section.title}</h3>
+            <h3 className="text-lg font-bold text-[#203957]">{section.title}</h3>
           </div>
           <div className="space-y-2">
             {section.items.map((item, ii) => {
@@ -161,37 +161,37 @@ export default function HelpPage() {
 
       {/* Contact Section */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-        className="rounded-2xl bg-white border border-[#E1E8E1] shadow-sm p-6 sm:p-8">
-        <h3 className="text-lg font-bold text-[#003D30] mb-5">צריכים עזרה נוספת?</h3>
+        className="rounded-2xl bg-white border border-[#E8E6DE] shadow-sm p-6 sm:p-8">
+        <h3 className="text-lg font-bold text-[#203957] mb-5">צריכים עזרה נוספת?</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <a href="mailto:support@seeld.ai"
-            className="flex items-center gap-3 p-4 rounded-2xl border border-[#E1E8E1] hover:border-[#003D30] hover:shadow-md transition-all group">
-            <div className="w-10 h-10 rounded-full bg-[#E8EDE5] flex items-center justify-center group-hover:bg-[#003D30]/10 transition-colors">
-              <Mail className="w-5 h-5 text-[#476356] group-hover:text-[#003D30] transition-colors" />
+            className="flex items-center gap-3 p-4 rounded-2xl border border-[#E8E6DE] hover:border-[#203957] hover:shadow-md transition-all group">
+            <div className="w-10 h-10 rounded-full bg-[#DFE9DC] flex items-center justify-center group-hover:bg-[#203957]/10 transition-colors">
+              <Mail className="w-5 h-5 text-[#55677C] group-hover:text-[#203957] transition-colors" />
             </div>
             <div>
-              <p className="text-sm font-bold text-[#003D30]">מייל</p>
-              <p className="text-xs text-[#476356]">support@seeld.ai</p>
+              <p className="text-sm font-bold text-[#203957]">מייל</p>
+              <p className="text-xs text-[#55677C]">support@seeld.ai</p>
             </div>
           </a>
           <a href="tel:052-3097444"
-            className="flex items-center gap-3 p-4 rounded-2xl border border-[#E1E8E1] hover:border-[#003D30] hover:shadow-md transition-all group">
-            <div className="w-10 h-10 rounded-full bg-[#E8EDE5] flex items-center justify-center group-hover:bg-[#003D30]/10 transition-colors">
-              <Phone className="w-5 h-5 text-[#2F6B4E] group-hover:text-[#003D30] transition-colors" />
+            className="flex items-center gap-3 p-4 rounded-2xl border border-[#E8E6DE] hover:border-[#203957] hover:shadow-md transition-all group">
+            <div className="w-10 h-10 rounded-full bg-[#DFE9DC] flex items-center justify-center group-hover:bg-[#203957]/10 transition-colors">
+              <Phone className="w-5 h-5 text-[#2F6B4E] group-hover:text-[#203957] transition-colors" />
             </div>
             <div>
-              <p className="text-sm font-bold text-[#003D30]">טלפון</p>
-              <p className="text-xs text-[#476356]" dir="ltr">052-309-7444</p>
+              <p className="text-sm font-bold text-[#203957]">טלפון</p>
+              <p className="text-xs text-[#55677C]" dir="ltr">052-309-7444</p>
             </div>
           </a>
           <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-3 p-4 rounded-2xl border border-[#E1E8E1] hover:border-[#003D30] hover:shadow-md transition-all group">
-            <div className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center group-hover:bg-[#003D30]/10 transition-colors">
-              <MessageCircle className="w-5 h-5 text-[#25D366] group-hover:text-[#003D30] transition-colors" />
+            className="flex items-center gap-3 p-4 rounded-2xl border border-[#E8E6DE] hover:border-[#203957] hover:shadow-md transition-all group">
+            <div className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center group-hover:bg-[#203957]/10 transition-colors">
+              <MessageCircle className="w-5 h-5 text-[#25D366] group-hover:text-[#203957] transition-colors" />
             </div>
             <div>
-              <p className="text-sm font-bold text-[#003D30]">WhatsApp</p>
-              <p className="text-xs text-[#476356]">הודעה מהירה</p>
+              <p className="text-sm font-bold text-[#203957]">WhatsApp</p>
+              <p className="text-xs text-[#55677C]">הודעה מהירה</p>
             </div>
           </a>
         </div>
@@ -200,10 +200,10 @@ export default function HelpPage() {
       {/* Platform Info */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
         className="mt-6 rounded-2xl p-6 text-center border-2 border-dashed"
-        style={{ borderColor: '#003D3020', backgroundColor: '#003D3005' }}>
-        <p className="text-[14px] font-bold text-[#476356] mb-1"
+        style={{ borderColor: '#20395720', backgroundColor: '#20395705' }}>
+        <p className="text-[14px] font-bold text-[#55677C] mb-1"
           style={{ fontFamily: "sans-serif" }}>SEELD פלטפורמה</p>
-        <p className="text-xs text-[#476356]">
+        <p className="text-xs text-[#55677C]">
           פלטפורמת ניהול סוכנויות ביטוח מתקדמת &middot; גרסה 2.0
         </p>
       </motion.div>

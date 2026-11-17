@@ -18,12 +18,12 @@ type Recommendation = {
 // Decision states of a documented recommendation. A state is a record of what
 // was decided, not an approval of cover.
 const statusConfig: Record<string, { label: string; bg: string; text: string }> = {
-  draft: { label: "טיוטה", bg: "#E1E8E1", text: "#476356" },
-  sent: { label: "נשלחה אליכם", bg: "#E8EDE5", text: "#003D30" },
-  pending: { label: "ממתינה להחלטה", bg: "#F5EEE0", text: "#8A6230" },
-  approved: { label: "אושרה על ידכם", bg: "#E8EDE5", text: "#003D30" },
+  draft: { label: "טיוטה", bg: "#E8E6DE", text: "#55677C" },
+  sent: { label: "נשלחה אליכם", bg: "#DFE9DC", text: "#203957" },
+  pending: { label: "ממתינה להחלטה", bg: "#F5EEE0", text: "#7C5C22" },
+  approved: { label: "אושרה על ידכם", bg: "#DFE9DC", text: "#203957" },
   rejected: { label: "נדחתה", bg: "#F6E5DC", text: "#9A4520" },
-  implemented: { label: "בוצעה", bg: "#003D30", text: "#FAF7EF" },
+  implemented: { label: "בוצעה", bg: "#203957", text: "#FAF7EF" },
 };
 
 const RecommendationsTab = ({ customerId }: { customerId: string }) => {

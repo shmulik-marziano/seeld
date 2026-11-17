@@ -379,7 +379,7 @@ export default function Learn() {
                           <Link
                             key={p.id}
                             to={`/blog/${p.slug}`}
-                            className="group flex items-center gap-4 rounded-2xl bg-white border p-4 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                            className="group flex items-center gap-4 rounded-2xl bg-white border p-4 dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
                             style={{ borderColor: LINE }}
                           >
                             <div className="min-w-0 flex-1">

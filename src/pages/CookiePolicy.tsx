@@ -46,7 +46,7 @@ const CookiePolicy = () => {
         </section>
 
         <div className="max-w-3xl mx-auto px-5 sm:px-8 py-8 pb-16 sm:pb-24">
-          <div className="space-y-10 text-[17px] leading-[1.8] [&_strong]:font-bold [&_strong]:text-[#003D30]" style={{ color: BODY }}>
+          <div className="space-y-10 text-[17px] leading-[1.8] [&_strong]:font-bold [&_strong]:text-[#203957]" style={{ color: BODY }}>
             <LegalSection title="מה הן עוגיות?">
               <p>
                 עוגיות (Cookies) הן קבצי טקסט קטנים שנשמרים במכשיר שלכם בעת ביקור באתר.
@@ -87,7 +87,7 @@ const CookiePolicy = () => {
                   <span className="text-[14px]" style={{ color: MUTED }}>אימייל</span>
                   <a
                     href="mailto:info@seeld.co.il"
-                    className="inline-flex min-h-[44px] items-center text-[16px] font-bold border-b border-transparent hover:border-[#003D30]/40 transition-colors"
+                    className="inline-flex min-h-[44px] items-center text-[16px] font-bold border-b border-transparent hover:border-[#203957]/40 transition-colors"
                     style={{ color: GREEN }}
                     dir="ltr"
                   >
@@ -98,7 +98,7 @@ const CookiePolicy = () => {
                   <span className="text-[14px]" style={{ color: MUTED }}>טלפון</span>
                   <a
                     href="tel:0523097444"
-                    className="inline-flex min-h-[44px] items-center text-[16px] font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#003D30]/40 transition-colors"
+                    className="inline-flex min-h-[44px] items-center text-[16px] font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#203957]/40 transition-colors"
                     style={{ color: GREEN }}
                     dir="ltr"
                   >

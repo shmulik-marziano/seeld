@@ -1,9 +1,9 @@
 // The SEELD cast — editorial line figures redrawn for DNA v3:
 // full-figure people in navy ink on the white canvas, solid navy garments,
-// one turquoise accent per figure (gold #CBA064 stays available where the
+// one turquoise accent per figure (gold #AD833E stays available where the
 // accent must carry more warmth). They give bodies to the live chips' names.
 
-const INK = "#003D30";
+const INK = "#203957";
 const PAPER = "#ffffff";
 const ORANGE = "#819B7D";
 

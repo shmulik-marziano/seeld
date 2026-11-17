@@ -75,7 +75,7 @@ const HeroSection = () => {
         </div>
 
         {/* Base line under the hero */}
-        <div className="mt-12 sm:mt-16 pt-5 border-t flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 text-[14px]" style={{ borderColor: "#CCD6CC", color: MUTED }}>
+        <div className="mt-12 sm:mt-16 pt-5 border-t flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 text-[14px]" style={{ borderColor: "#D9DEE4", color: MUTED }}>
           <span style={{ color: GREEN }} className="font-bold">
             מיפוי התיק · פגישה והחלטות · ביצוע · מעקב ועדכון
           </span>

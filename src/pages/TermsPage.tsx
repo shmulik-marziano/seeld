@@ -31,7 +31,7 @@ export default function TermsPage() {
 
   const content = (
     <div
-      className="max-w-3xl mx-auto px-5 sm:px-8 py-8 space-y-10 text-[17px] leading-[1.8] [&_strong]:font-bold [&_strong]:text-[#003D30]"
+      className="max-w-3xl mx-auto px-5 sm:px-8 py-8 space-y-10 text-[17px] leading-[1.8] [&_strong]:font-bold [&_strong]:text-[#203957]"
       style={{ color: BODY }}
     >
       <LegalSection title="1. כללי">
@@ -142,7 +142,7 @@ export default function TermsPage() {
           לכל שאלה או פנייה בנוגע לתנאי שימוש אלו, ניתן לפנות אלינו בדוא״ל:{' '}
           <a
             href="mailto:info@seeld.co.il"
-            className="font-bold border-b border-[#003D30]/30 hover:border-[#003D30] transition-colors"
+            className="font-bold border-b border-[#203957]/30 hover:border-[#203957] transition-colors"
             style={{ color: GREEN }}
             dir="ltr"
           >

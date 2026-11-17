@@ -124,7 +124,7 @@ const FundFinder = () => {
                             id={t.id}
                             checked={t.checked}
                             onCheckedChange={(c) => t.onChange(!!c)}
-                            className="h-5 w-5 border-[#003D30] data-[state=checked]:bg-[#003D30] data-[state=checked]:border-[#003D30]"
+                            className="h-5 w-5 border-[#203957] data-[state=checked]:bg-[#203957] data-[state=checked]:border-[#203957]"
                           />
                           <label htmlFor={t.id} className="cursor-pointer text-[15px]" style={{ color: BODY }}>
                             {t.label}

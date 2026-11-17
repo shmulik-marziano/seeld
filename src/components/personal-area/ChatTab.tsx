@@ -243,7 +243,7 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
           <button
             type="submit"
             disabled={!newMessage.trim() || sending}
-            className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 transition-opacity disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+            className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 transition-opacity disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
             style={{ backgroundColor: GREEN, color: IVORY }}
             aria-label="שליחת ההודעה"
           >

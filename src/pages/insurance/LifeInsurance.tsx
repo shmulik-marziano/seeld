@@ -50,7 +50,7 @@ const keyPoints = [
     title: "הגנה על המשפחה",
     description: "הבטיחו שהמשפחה שלכם תוכל להמשיך את אורח החיים שלה גם בלעדיכם",
     icon: Users,
-    color: "#003D30",
+    color: "#203957",
   },
   {
     title: "כיסוי משכנתא",
@@ -92,7 +92,7 @@ const articles = [
 
 const LifeInsurance = () => {
   return (
-    <InsurancePageSd art={{ name: "02-family-protection", tint: "#DFE9DC" }}
+    <InsurancePageSd
       heroIcon={Heart}
       heroIconColor="#b91c1c"
       heroCategory="ביטוחי חיים"

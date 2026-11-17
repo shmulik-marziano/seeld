@@ -112,7 +112,7 @@ const articles = [
 
 const HealthInsurance = () => {
   return (
-    <InsurancePageSd art={{ name: "03-health-insurance", tint: "#F3DDD8", contactName: "11-claims-service" }}
+    <InsurancePageSd
       heroIcon={Heart}
       heroIconColor="#b91c1c"
       heroCategory="ביטוח בריאות"

@@ -10,6 +10,10 @@ const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
+    if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
+  }, []);
+
+  useEffect(() => {
     if (hash) {
       const id = decodeURIComponent(hash.slice(1));
       let tries = 0;
@@ -24,7 +28,7 @@ const ScrollToTop = () => {
       tick();
       return;
     }
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
   }, [pathname, hash]);
 
   return null;

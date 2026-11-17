@@ -27,23 +27,23 @@ export default function ActivityLogPage() {
     <div className="p-4 sm:p-6 max-w-5xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
-        <div className="w-12 h-12 rounded-full bg-[#003D30] flex items-center justify-center">
+        <div className="w-12 h-12 rounded-full bg-[#203957] flex items-center justify-center">
           <FileText className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-[#003D30]">יומן פעולות</h1>
-          <p className="text-sm text-[#476356]">{data.activityLog.length} רשומות</p>
+          <h1 className="text-2xl font-bold text-[#203957]">יומן פעולות</h1>
+          <p className="text-sm text-[#55677C]">{data.activityLog.length} רשומות</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-[#E1E8E1] shadow-sm overflow-hidden">
-        <div className="p-3 sm:p-4 border-b border-[#E1E8E1] flex flex-col sm:flex-row gap-3">
+      <div className="bg-white rounded-2xl border border-[#E8E6DE] shadow-sm overflow-hidden">
+        <div className="p-3 sm:p-4 border-b border-[#E8E6DE] flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#476356]" />
-            <Input placeholder="חיפוש..." value={search} onChange={e => setSearch(e.target.value)} className="pr-10 rounded-full border-[#CCD6CC] min-h-[44px]" />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#55677C]" />
+            <Input placeholder="חיפוש..." value={search} onChange={e => setSearch(e.target.value)} className="pr-10 rounded-full border-[#D9DEE4] min-h-[44px]" />
           </div>
           <Select value={levelFilter} onValueChange={setLevelFilter}>
-            <SelectTrigger className="w-full sm:w-36 rounded-full border-[#CCD6CC] min-h-[44px]">
+            <SelectTrigger className="w-full sm:w-36 rounded-full border-[#D9DEE4] min-h-[44px]">
               <SelectValue placeholder="סוג אירוע" />
             </SelectTrigger>
             <SelectContent>
@@ -55,22 +55,22 @@ export default function ActivityLogPage() {
           </Select>
         </div>
 
-        <div className="divide-y divide-[#E1E8E1] max-h-[calc(100vh-250px)] overflow-y-auto">
+        <div className="divide-y divide-[#E8E6DE] max-h-[calc(100vh-250px)] overflow-y-auto">
           {filtered.length === 0 ? (
-            <p className="p-8 text-center text-[#476356]">לא נמצאו רשומות</p>
+            <p className="p-8 text-center text-[#55677C]">לא נמצאו רשומות</p>
           ) : filtered.map(a => {
             const customerName = getCustomerName(a.customerId);
             return (
               <div key={a.id} className="flex items-start gap-3 p-4 hover:bg-[#FAF7EF] transition-colors">
                 <div className={`w-2.5 h-2.5 rounded-full mt-2 shrink-0 ${
-                  a.level === 'הצלחה' ? 'bg-[#2F6B4E]' : a.level === 'אזהרה' ? 'bg-[#8A6230]' : 'bg-[#003D30]'
+                  a.level === 'הצלחה' ? 'bg-[#2F6B4E]' : a.level === 'אזהרה' ? 'bg-[#7C5C22]' : 'bg-[#203957]'
                 }`} />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[#003D30]">{a.title}</p>
-                  {a.detail && <p className="text-xs text-[#476356] mt-0.5">{a.detail}</p>}
-                  {customerName && <p className="text-xs text-[#003D30] mt-0.5 font-medium">{customerName}</p>}
+                  <p className="text-sm font-medium text-[#203957]">{a.title}</p>
+                  {a.detail && <p className="text-xs text-[#55677C] mt-0.5">{a.detail}</p>}
+                  {customerName && <p className="text-xs text-[#203957] mt-0.5 font-medium">{customerName}</p>}
                 </div>
-                <span className="text-xs text-[#476356] shrink-0">
+                <span className="text-xs text-[#55677C] shrink-0">
                   {new Date(a.timestamp).toLocaleDateString('he-IL')} {new Date(a.timestamp).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>

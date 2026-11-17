@@ -12,11 +12,11 @@ import { DISPLAY, MONO, MUTED, NAVY, TURQ } from "@/lib/brand";
 // Frank Ruhl 900 turquoise standout stat, table.dna-data tier comparison.
 
 const inputClass =
-  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]";
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#D9DEE4] rounded-lg text-[#203957] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#203957]";
 const sliderClass =
   "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#819B7D] [&_[role=slider]]:border-[#819B7D]";
-const labelClass = "flex items-center gap-2 text-base font-medium text-[#003D30]";
-const radioItemClass = "border-[#003D30] text-[#003D30]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#203957]";
+const radioItemClass = "border-[#203957] text-[#203957]";
 
 // הערכה סטטיסטית לפי טווחי שוק מקובלים — לא הצעת מחיר.
 // Typical-market heuristics (annual, ILS); review yearly against market data.
@@ -195,15 +195,15 @@ const CarInsuranceEstimator = () => {
           >
             <div className="flex items-center gap-2">
               <RadioGroupItem value="0" id="carClaims0" className={radioItemClass} />
-              <Label htmlFor="carClaims0" className="font-normal cursor-pointer text-[#24483C]">ללא תביעות</Label>
+              <Label htmlFor="carClaims0" className="font-normal cursor-pointer text-[#2D435D]">ללא תביעות</Label>
             </div>
             <div className="flex items-center gap-2">
               <RadioGroupItem value="1" id="carClaims1" className={radioItemClass} />
-              <Label htmlFor="carClaims1" className="font-normal cursor-pointer text-[#24483C]">תביעה אחת</Label>
+              <Label htmlFor="carClaims1" className="font-normal cursor-pointer text-[#2D435D]">תביעה אחת</Label>
             </div>
             <div className="flex items-center gap-2">
               <RadioGroupItem value="2+" id="carClaims2" className={radioItemClass} />
-              <Label htmlFor="carClaims2" className="font-normal cursor-pointer text-[#24483C]">שתי תביעות או יותר</Label>
+              <Label htmlFor="carClaims2" className="font-normal cursor-pointer text-[#2D435D]">שתי תביעות או יותר</Label>
             </div>
           </RadioGroup>
         </div>
@@ -222,15 +222,15 @@ const CarInsuranceEstimator = () => {
           >
             <div className="flex items-center gap-2">
               <RadioGroupItem value="mandatory" id="carCovMandatory" className={radioItemClass} />
-              <Label htmlFor="carCovMandatory" className="font-normal cursor-pointer text-[#24483C]">חובה בלבד</Label>
+              <Label htmlFor="carCovMandatory" className="font-normal cursor-pointer text-[#2D435D]">חובה בלבד</Label>
             </div>
             <div className="flex items-center gap-2">
               <RadioGroupItem value="third-party" id="carCovThirdParty" className={radioItemClass} />
-              <Label htmlFor="carCovThirdParty" className="font-normal cursor-pointer text-[#24483C]">צד ג'</Label>
+              <Label htmlFor="carCovThirdParty" className="font-normal cursor-pointer text-[#2D435D]">צד ג'</Label>
             </div>
             <div className="flex items-center gap-2">
               <RadioGroupItem value="comprehensive" id="carCovComprehensive" className={radioItemClass} />
-              <Label htmlFor="carCovComprehensive" className="font-normal cursor-pointer text-[#24483C]">מקיף</Label>
+              <Label htmlFor="carCovComprehensive" className="font-normal cursor-pointer text-[#2D435D]">מקיף</Label>
             </div>
           </RadioGroup>
         </div>
@@ -288,7 +288,7 @@ const CarInsuranceEstimator = () => {
                     {coverageLabels[tier]}
                     {tier === coverage && " (נבחר)"}
                   </td>
-                  <td className="num" style={tier === coverage ? { color: "#476356", fontWeight: 700 } : undefined}>
+                  <td className="num" style={tier === coverage ? { color: "#55677C", fontWeight: 700 } : undefined}>
                     {`${formatCurrency(low)}–${formatCurrency(high)}`}
                   </td>
                 </tr>
@@ -305,14 +305,14 @@ const CarInsuranceEstimator = () => {
             <span dir="ltr" className="tabular-nums">48</span> שעות:{" "}
             <Link
               to="/contact"
-              className="font-medium text-[#003D30] border-b border-[#003D30]/30 pb-0.5 hover:border-[#003D30] transition-colors"
+              className="font-medium text-[#203957] border-b border-[#203957]/30 pb-0.5 hover:border-[#203957] transition-colors"
             >
               השאירו פרטים
             </Link>
             {" "}או קראו עוד על{" "}
             <Link
               to="/insurance/vehicle"
-              className="font-medium text-[#003D30] border-b border-[#003D30]/30 pb-0.5 hover:border-[#003D30] transition-colors"
+              className="font-medium text-[#203957] border-b border-[#203957]/30 pb-0.5 hover:border-[#203957] transition-colors"
             >
               ביטוח רכב
             </Link>

@@ -10,10 +10,10 @@ import { motion } from 'framer-motion';
 const FOLLOW_UP_STATUSES = ['טיוטה', 'נשלח', 'נצפה', 'רוצה לחשוב'];
 
 const statusConfig: Record<string, { color: string; bg: string; icon: string }> = {
-  'טיוטה': { color: 'text-[#003D30]', bg: 'bg-[#F3F5F1] dark:bg-slate-900/20', icon: '📝' },
-  'נשלח': { color: 'text-[#476356]', bg: 'bg-[#E8EDE5]/50 dark:bg-[#003D30]/10', icon: '📤' },
-  'נצפה': { color: 'text-[#8A6230]', bg: 'bg-[#F5EEE0]/50 dark:bg-[#8A6230]/10', icon: '👁' },
-  'רוצה לחשוב': { color: 'text-[#476356]', bg: 'bg-[#E8EDE5]/50 dark:bg-[#003D30]/10', icon: '🤔' },
+  'טיוטה': { color: 'text-[#203957]', bg: 'bg-[#F3F5F1] dark:bg-slate-900/20', icon: '📝' },
+  'נשלח': { color: 'text-[#55677C]', bg: 'bg-[#DFE9DC]/50 dark:bg-[#203957]/10', icon: '📤' },
+  'נצפה': { color: 'text-[#7C5C22]', bg: 'bg-[#F5EEE0]/50 dark:bg-[#7C5C22]/10', icon: '👁' },
+  'רוצה לחשוב': { color: 'text-[#55677C]', bg: 'bg-[#DFE9DC]/50 dark:bg-[#203957]/10', icon: '🤔' },
 };
 
 export default function FollowUpQueuePage() {
@@ -103,12 +103,12 @@ export default function FollowUpQueuePage() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.25, delay: i * 0.04 }}
                 >
-                  <Card className="rounded-2xl border-border/50 hover:shadow-lg hover:shadow-[#003D30]/5 transition-all duration-300 hover:-translate-y-0.5 group overflow-hidden">
+                  <Card className="rounded-2xl border-border/50 hover:shadow-lg hover:shadow-[#203957]/5 transition-all duration-300 hover:-translate-y-0.5 group overflow-hidden">
                     <CardContent className="p-0">
                       <div className="flex items-stretch">
                         {/* Priority indicator bar */}
                         <div className={`w-1 shrink-0 ${
-                          days >= 14 ? 'bg-destructive' : days >= 7 ? 'bg-amber-400' : 'bg-[#003D30]'
+                          days >= 14 ? 'bg-destructive' : days >= 7 ? 'bg-amber-400' : 'bg-[#203957]'
                         }`} />
 
                         <div className="flex items-center justify-between flex-1 p-3 md:p-4 gap-3">
@@ -117,9 +117,9 @@ export default function FollowUpQueuePage() {
                             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                               <button
                                 onClick={() => navigate(`/app/customers/${item.customerId}`)}
-                                className="font-bold text-sm hover:text-[#003D30] transition-colors flex items-center gap-1.5"
+                                className="font-bold text-sm hover:text-[#203957] transition-colors flex items-center gap-1.5"
                               >
-                                <div className="w-6 h-6 rounded-lg bg-[#003D30]/8 flex items-center justify-center text-[10px] font-bold text-[#003D30] shrink-0">
+                                <div className="w-6 h-6 rounded-lg bg-[#203957]/8 flex items-center justify-center text-[10px] font-bold text-[#203957] shrink-0">
                                   {item.customer?.firstName?.[0]}
                                 </div>
                                 {item.customer?.fullName}
@@ -154,7 +154,7 @@ export default function FollowUpQueuePage() {
                                 size="sm"
                                 variant="outline"
                                 onClick={() => updateRecommendation(item.id, { decisionStatus: 'נשלח' })}
-                                className="gap-1.5 rounded-xl text-xs h-9 min-h-[36px] border-[#003D30]/20 text-[#003D30] hover:bg-[#003D30] hover:text-white transition-all duration-200"
+                                className="gap-1.5 rounded-xl text-xs h-9 min-h-[36px] border-[#203957]/20 text-[#203957] hover:bg-[#203957] hover:text-white transition-all duration-200"
                               >
                                 <Send className="h-3 w-3" />
                                 <span className="hidden sm:inline">שלח</span>
@@ -164,7 +164,7 @@ export default function FollowUpQueuePage() {
                               size="sm"
                               variant="ghost"
                               onClick={() => navigate(`/app/customers/${item.customerId}`)}
-                              className="rounded-xl h-9 w-9 p-0 min-h-[36px] hover:bg-[#003D30]/10"
+                              className="rounded-xl h-9 w-9 p-0 min-h-[36px] hover:bg-[#203957]/10"
                             >
                               <ArrowLeft className="h-4 w-4" />
                             </Button>
@@ -186,8 +186,8 @@ export default function FollowUpQueuePage() {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center py-20"
         >
-          <div className="w-20 h-20 rounded-full bg-[#003D30]/10 flex items-center justify-center mx-auto mb-5">
-            <Clock className="h-10 w-10 text-[#476356]" />
+          <div className="w-20 h-20 rounded-full bg-[#203957]/10 flex items-center justify-center mx-auto mb-5">
+            <Clock className="h-10 w-10 text-[#55677C]" />
           </div>
           <p className="text-foreground/70 font-medium mb-1">אין המלצות בתור פולו־אפ</p>
           <p className="text-sm text-muted-foreground">המלצות שנשלחו ללקוחות יופיעו כאן</p>

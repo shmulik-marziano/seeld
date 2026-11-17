@@ -21,7 +21,7 @@ const SeeIDLogo = ({
   return (
     <Link
       to={to}
-      className={`inline-flex items-center shrink-0 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#003D30] ${className}`}
+      className={`inline-flex items-center shrink-0 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#203957] ${className}`}
       aria-label="שילד ביטוח ופיננסים, לדף הבית"
       style={{ padding: Math.round(h / 8) }}
     >

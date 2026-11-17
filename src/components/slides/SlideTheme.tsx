@@ -13,9 +13,9 @@ export interface SlideTheme {
 }
 
 export const DEFAULT_THEME: SlideTheme = {
-  primaryColor: '#003D30',
-  primaryColorLight: '#E8EDE5',
-  accentColor: '#CBA064',
+  primaryColor: '#203957',
+  primaryColorLight: '#DFE9DC',
+  accentColor: '#AD833E',
   agencyName: 'שילד ביטוח ופיננסים',
   showLogo: true,
   footerText: '',
@@ -40,6 +40,6 @@ export function lightenColor(hex: string): string {
     const mix = (c: number) => Math.round(c * 0.12 + 255 * 0.88);
     return `rgb(${mix(r)}, ${mix(g)}, ${mix(b)})`;
   } catch {
-    return '#E8EDE5';
+    return '#DFE9DC';
   }
 }

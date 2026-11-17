@@ -339,7 +339,7 @@ const InvestmentTracks = () => {
   const ariaSort = (key: SortKey) => (sortKey === key ? (sortDir === "asc" ? "ascending" : "descending") : "none") as "ascending" | "descending" | "none";
 
   const tabClass = (active: boolean) =>
-    `shrink-0 min-h-[44px] pt-1 pb-4 text-[15px] sm:text-[16px] font-bold border-b-2 -mb-px transition-colors whitespace-nowrap ${active ? "text-[#003D30] border-[#003D30]" : "text-[#476356] border-transparent hover:text-[#003D30]"}`;
+    `shrink-0 min-h-[44px] pt-1 pb-4 text-[15px] sm:text-[16px] font-bold border-b-2 -mb-px transition-colors whitespace-nowrap ${active ? "text-[#203957] border-[#203957]" : "text-[#55677C] border-transparent hover:text-[#203957]"}`;
 
   // The table shows PAGE rows at a time (571 rows at once made the phone page
   // sixty screens long). The count resets whenever the filters change.
@@ -587,7 +587,7 @@ const InvestmentTracks = () => {
                                     onClick={(e) => { e.stopPropagation(); setExpandedId(isExpanded ? null : fund.id); }}
                                     aria-expanded={isExpanded}
                                     aria-controls={detailId}
-                                    className="grid h-11 w-11 place-items-center rounded-[8px] transition-colors hover:bg-[#E8EDE5]"
+                                    className="grid h-11 w-11 place-items-center rounded-[8px] transition-colors hover:bg-[#DFE9DC]"
                                     style={{ color: GREEN }}
                                   >
                                     <BrandIcon

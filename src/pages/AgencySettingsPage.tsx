@@ -35,7 +35,7 @@ export default function AgencySettingsPage() {
     phone: '',
     email: '',
     primaryColor: '#2F6B4E',
-    secondaryColor: '#CBA064',
+    secondaryColor: '#AD833E',
     accentColor: '#BD582D',
     logoUrl: '',
   });
@@ -55,7 +55,7 @@ export default function AgencySettingsPage() {
         phone: agency.phone || '',
         email: agency.email || '',
         primaryColor: agency.primaryColor || '#2F6B4E',
-        secondaryColor: agency.secondaryColor || '#CBA064',
+        secondaryColor: agency.secondaryColor || '#AD833E',
         accentColor: agency.accentColor || '#BD582D',
         logoUrl: agency.logoUrl || '',
       });
@@ -146,12 +146,12 @@ export default function AgencySettingsPage() {
     <div className="max-w-3xl mx-auto space-y-6 px-4 sm:px-0" dir="rtl">
       {/* Header */}
       <div className="flex items-center gap-3 sm:gap-4 mb-2">
-        <div className="w-12 h-12 rounded-full bg-[#003D30] flex items-center justify-center">
+        <div className="w-12 h-12 rounded-full bg-[#203957] flex items-center justify-center">
           <Building2 className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-[#003D30]">הגדרות סוכנות</h1>
-          <p className="text-sm text-[#476356]">ניהול פרטי הסוכנות, מיתוג, צבעים ומסלולי השקעה</p>
+          <h1 className="text-2xl font-bold text-[#203957]">הגדרות סוכנות</h1>
+          <p className="text-sm text-[#55677C]">ניהול פרטי הסוכנות, מיתוג, צבעים ומסלולי השקעה</p>
         </div>
       </div>
 

@@ -11,10 +11,10 @@ import { balanceNeededFor, PENSION_FACTOR_NOTE } from "@/lib/pension";
 // Frank Ruhl 900 turquoise standout stat, kit CSS progress bar.
 
 const inputClass =
-  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]";
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#D9DEE4] rounded-lg text-[#203957] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#203957]";
 const sliderClass =
   "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#819B7D] [&_[role=slider]]:border-[#819B7D]";
-const labelClass = "flex items-center gap-2 text-base font-medium text-[#003D30]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#203957]";
 
 interface GoalResult {
   monthlyNeeded: number;
@@ -134,7 +134,7 @@ const GoalCalculator = () => {
             type="text"
             value={targetMonthlyPension.toLocaleString("he-IL")}
             onChange={(e) => handleAmountChange(e.target.value, setTargetMonthlyPension, 100000)}
-            className="h-20 text-center text-3xl md:text-4xl font-bold tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]"
+            className="h-20 text-center text-3xl md:text-4xl font-bold tabular-nums bg-white border-[#D9DEE4] rounded-lg text-[#203957] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#203957]"
             dir="ltr"
           />
           <span

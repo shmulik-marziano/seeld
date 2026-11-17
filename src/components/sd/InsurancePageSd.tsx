@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -9,42 +8,24 @@ import { BrandIcon } from "@/components/brand/BrandIcon";
 import { FigureText, type InsurancePageProps } from "@/components/InsurancePageTemplate";
 import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import { answerSummaries, ANSWER_REVIEWED } from "@/data/answerSummaries";
-import { REGULATORY_LINE } from "@/lib/brand";
-import { useActiveSection } from "@/components/inst/useActiveSection";
+import { stories } from "@/data/stories";
+import { SdBand, SdContact, SdCrumbs, SdIcon, SdPic, SdProcess, SdStory, SdSubnav, tintStyle, useSdFont } from "./primitives";
+import { art3Of, topicFor, type Topic } from "./topics";
 import "./sd.css";
-
-const FONT_HREF = "https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@700&display=swap";
-
-/** Illustration of the kit (public/art/<name>-768.webp and -1536.webp) and the stage tint for the page's topic. */
-export type SdArt = { name: string; tint: string; contactName?: string };
 
 const hebrewDate = (iso: string) => {
   const [y, m, d] = iso.split("-");
   return `${Number(d)}.${Number(m)}.${y}`;
 };
 
-const Pic = ({ name, sizes, priority }: { name: string; sizes: string; priority?: boolean }) => (
-  <img
-    src={`/art/${name}-768.webp`}
-    srcSet={`/art/${name}-768.webp 768w, /art/${name}-1536.webp 1536w`}
-    sizes={sizes}
-    width={768}
-    height={512}
-    alt=""
-    decoding="async"
-    loading={priority ? "eager" : "lazy"}
-    {...(priority ? { fetchPriority: "high" as const } : {})}
-  />
-);
-
 /**
- * Kit version of the insurance page: cream/navy/gold, pencil illustration in the hero, trust strip,
- * numbered key points, coverage as a real table, 3-step process, plain FAQ, navy contact block.
- * Same props as InsurancePageTemplate plus `art`. All content is real DOM (prerender carries it).
+ * Insurance product page in the kit design: hero with illustration, trust strip, sticky section nav,
+ * rotating pastel bands (emotional story, coverage, process), plain FAQ, navy closing block.
+ * Same props as InsurancePageTemplate; topic (illustrations + colours) comes from topics.ts by path,
+ * the emotional story from data/stories.ts. Everything is real DOM, so the prerendered HTML carries it all.
  */
-export default function InsurancePageSd(props: InsurancePageProps & { art: SdArt }) {
+export default function InsurancePageSd(props: InsurancePageProps & { topic?: Topic }) {
   const {
-    art,
     heroCategory,
     heroTitle,
     heroDescription,
@@ -66,24 +47,22 @@ export default function InsurancePageSd(props: InsurancePageProps & { art: SdArt
     extraContentAfterKeyPoints,
   } = props;
   const { pathname } = useLocation();
+  const path = pathname.replace(/\/$/, "");
+  const topic = props.topic ?? topicFor(path);
+  const story = stories[path];
+  const [p1, p2, p3] = topic.palette;
   useFaqJsonLd(faqItems);
-
-  useEffect(() => {
-    if (document.querySelector(`link[href="${FONT_HREF}"]`)) return;
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = FONT_HREF;
-    document.head.appendChild(link);
-  }, []);
+  useSdFont();
 
   const secondary = heroSecondaryCTA ?? { text: "בדיקת תיק 360", href: "/portfolio-review" };
   const hasPoints = !!keyPoints?.length;
   const hasGuide = !!articles?.length;
   const hasCoverage = !!coverageCategories?.length || !!coverageTypes?.length;
   const hasFaq = faqItems.length > 0;
-  const reviewed = answerSummaries[pathname.replace(/\/$/, "")] ? hebrewDate(ANSWER_REVIEWED) : null;
+  const reviewed = answerSummaries[path] ? hebrewDate(ANSWER_REVIEWED) : null;
 
   const sections = [
+    story && { id: "moment", label: "מה עומד מולכם" },
     hasPoints && { id: "overview", label: "עיקרי הדברים" },
     hasGuide && { id: "guide", label: "המדריך" },
     hasCoverage && { id: "coverage", label: coverageTitle },
@@ -91,7 +70,6 @@ export default function InsurancePageSd(props: InsurancePageProps & { art: SdArt
     hasFaq && { id: "faq", label: "שאלות נפוצות" },
     { id: enrollmentFormId, label: "יצירת קשר" },
   ].filter(Boolean) as { id: string; label: string }[];
-  const active = useActiveSection(sections.map((s) => s.id));
 
   const arrow = <BrandIcon name="arrow-left" size={18} />;
   const secondaryLink = secondary.href.startsWith("/") ? (
@@ -101,14 +79,14 @@ export default function InsurancePageSd(props: InsurancePageProps & { art: SdArt
   );
 
   const trust = [
-    { icon: "shield", t: "סוכן ברישיון 138666", s: "שמוליק מרציאנו" },
     { icon: "search", t: "השוואה בין החברות", s: "בכל חברות הביטוח בשוק" },
     { icon: "handshake", t: "פגישה ראשונה ללא עלות", s: "ואינה מחייבת" },
+    { icon: "shield", t: "צוות סוכנים מקצועי", s: "ליווי מההצעה ועד התביעה" },
     { icon: "phone", t: "מענה אישי", s: "רעננה וירושלים" },
   ];
 
   return (
-    <div className="sd min-h-screen" dir="rtl" style={{ ["--tint" as string]: art.tint }}>
+    <div className="sd min-h-screen" dir="rtl" style={tintStyle(p1)}>
       <Header />
 
       <main>
@@ -116,13 +94,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { art: SdArt
         <section className="sd-hero">
           <div className="sd-wrap sd-hero-grid">
             <div className="sd-hero-copy">
-              <nav aria-label="פירורי לחם" className="sd-crumbs mb-6">
-                <Link to="/">דף הבית</Link>
-                <BrandIcon name="arrow-left" size={12} />
-                <Link to="/insurances">כל הביטוחים</Link>
-                <BrandIcon name="arrow-left" size={12} />
-                <span aria-current="page" className="font-bold" style={{ color: "var(--ink)" }}>{breadcrumbLabel}</span>
-              </nav>
+              <SdCrumbs items={[{ label: "דף הבית", to: "/" }, { label: "כל הביטוחים", to: "/insurances" }, { label: breadcrumbLabel }]} />
               <span className="sd-eyebrow">{heroCategory}</span>
               <h1 className="sd-h1 mt-5">{heroTitle}</h1>
               <div className="sd-brief">
@@ -137,7 +109,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { art: SdArt
             </div>
 
             <div className="sd-stage" aria-hidden="true">
-              <Pic name={art.name} sizes="(min-width:1024px) 520px, 90vw" priority />
+              <SdPic name={topic.art} sizes="(min-width:1024px) 520px, 90vw" priority />
               {reviewed && <span className="sd-stage-tag"><i />תוכן נבדק {reviewed}</span>}
             </div>
           </div>
@@ -149,7 +121,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { art: SdArt
             <ul>
               {trust.map((x) => (
                 <li key={x.t}>
-                  <img src={`/art/icons/${x.icon}.svg`} alt="" width={40} height={40} loading="lazy" />
+                  <SdIcon name={x.icon} />
                   <div><b>{x.t}</b><span>{x.s}</span></div>
                 </li>
               ))}
@@ -157,35 +129,37 @@ export default function InsurancePageSd(props: InsurancePageProps & { art: SdArt
           </div>
         </section>
 
-        {/* BODY */}
-        <div className="sd-wrap sd-body">
-          <nav className="sd-index" aria-label="תוכן העמוד">
-            <b>בעמוד זה</b>
-            {sections.map((s) => (
-              <a key={s.id} href={`#${s.id}`} aria-current={active === s.id ? "true" : undefined}>{s.label}</a>
-            ))}
-          </nav>
+        <SdSubnav sections={sections} />
 
-          <div className="min-w-0">
-            {hasPoints && (
-              <section id="overview" className="sd-section scroll-mt-28">
-                <h2 className="sd-h2">עיקרי הדברים</h2>
-                <div className="sd-points">
-                  {keyPoints!.map((kp, i) => (
-                    <div key={kp.title} className="sd-point">
-                      <em>{String(i + 1).padStart(2, "0")}</em>
-                      <h3 className="sd-h3">{kp.title}</h3>
-                      <p>{kp.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
+        {/* STORY: the emotional moment */}
+        {story && (
+          <SdBand tone={p1} id="moment">
+            <SdStory story={story} art={topic.art2} />
+          </SdBand>
+        )}
 
-            {extraContentAfterKeyPoints && <div className="mt-12">{extraContentAfterKeyPoints}</div>}
+        {hasPoints && (
+          <SdBand tone="cream" id="overview">
+            <div className="sd-wrap">
+              <div className="sd-band-head"><h2 className="sd-h2">עיקרי הדברים</h2></div>
+              <div className="sd-points">
+                {keyPoints!.map((kp, i) => (
+                  <div key={kp.title} className="sd-point sd-reveal">
+                    <em>{String(i + 1).padStart(2, "0")}</em>
+                    <h3 className="sd-h3">{kp.title}</h3>
+                    <p>{kp.description}</p>
+                  </div>
+                ))}
+              </div>
+              {extraContentAfterKeyPoints && <div className="mt-12">{extraContentAfterKeyPoints}</div>}
+            </div>
+          </SdBand>
+        )}
 
-            {hasGuide && (
-              <section id="guide" className="sd-section scroll-mt-28">
+        {hasGuide && (
+          <SdBand tone="white" id="guide">
+            <div className="sd-wrap sd-guide-grid">
+              <div className="min-w-0">
                 {articles!.map((a, i) => (
                   <article key={a.title} className={i > 0 ? "mt-14" : ""}>
                     <h2 className="sd-h2" style={{ marginBottom: 20 }}>{a.title}</h2>
@@ -194,107 +168,84 @@ export default function InsurancePageSd(props: InsurancePageProps & { art: SdArt
                     </div>
                   </article>
                 ))}
-              </section>
-            )}
+              </div>
+              <aside className="sd-aside hidden lg:block" aria-hidden="true" style={{ ["--band" as string]: `var(--tint)` }}>
+                <SdPic name={art3Of(topic)} sizes="300px" />
+                {story && <p>{story.caption}</p>}
+              </aside>
+            </div>
+          </SdBand>
+        )}
 
-            {hasCoverage && (
-              <section id="coverage" className="sd-section scroll-mt-28">
-                <h2 className="sd-h2" style={{ marginBottom: coverageSubtitle ? 8 : 28 }}>{coverageTitle}</h2>
-                {coverageSubtitle && <p className="sd-small mb-6" style={{ fontSize: 16 }}>{coverageSubtitle}</p>}
-                <div className="sd-table-wrap">
-                  <table className="sd-table">
-                    <thead>
-                      <tr><th scope="col">הכיסוי</th><th scope="col">מה הוא כולל</th></tr>
-                    </thead>
-                    <tbody>
-                      {coverageCategories?.flatMap((cat) => [
-                        <tr key={`g-${cat.category}`} className="sd-group"><th colSpan={2} scope="colgroup">{cat.category}</th></tr>,
-                        ...cat.items.map((it) => (
-                          <tr key={`${cat.category}-${it.title}`}>
+        {hasCoverage && (
+          <SdBand tone={p2} id="coverage">
+            <div className="sd-wrap">
+              <div className="sd-band-head">
+                <h2 className="sd-h2">{coverageTitle}</h2>
+                {coverageSubtitle && <p className="sd-lead">{coverageSubtitle}</p>}
+              </div>
+              <div className="sd-table-wrap">
+                <table className="sd-table">
+                  <thead>
+                    <tr><th scope="col">הכיסוי</th><th scope="col">מה הוא כולל</th></tr>
+                  </thead>
+                  <tbody>
+                    {coverageCategories?.flatMap((cat) => [
+                      <tr key={`g-${cat.category}`} className="sd-group"><th colSpan={2} scope="colgroup">{cat.category}</th></tr>,
+                      ...cat.items.map((it) => (
+                        <tr key={`${cat.category}-${it.title}`}>
+                          <th scope="row"><FigureText text={it.title} /></th>
+                          <td><FigureText text={it.description} /></td>
+                        </tr>
+                      )),
+                    ])}
+                    {coverageTypes?.flatMap((c) => [
+                      <tr key={`g-${c.title}`} className="sd-group"><th colSpan={2} scope="colgroup"><FigureText text={c.title} /></th></tr>,
+                      ...c.items.map((it, k) =>
+                        typeof it === "string" ? (
+                          <tr key={`${c.title}-${k}`}><th scope="row" colSpan={2}><FigureText text={it} /></th></tr>
+                        ) : (
+                          <tr key={`${c.title}-${k}`}>
                             <th scope="row"><FigureText text={it.title} /></th>
                             <td><FigureText text={it.description} /></td>
                           </tr>
-                        )),
-                      ])}
-                      {coverageTypes?.flatMap((c) => [
-                        <tr key={`g-${c.title}`} className="sd-group"><th colSpan={2} scope="colgroup"><FigureText text={c.title} /></th></tr>,
-                        ...c.items.map((it, k) =>
-                          typeof it === "string" ? (
-                            <tr key={`${c.title}-${k}`}><th scope="row" colSpan={2}><FigureText text={it} /></th></tr>
-                          ) : (
-                            <tr key={`${c.title}-${k}`}>
-                              <th scope="row"><FigureText text={it.title} /></th>
-                              <td><FigureText text={it.description} /></td>
-                            </tr>
-                          ),
                         ),
-                      ])}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
-            )}
+                      ),
+                    ])}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </SdBand>
+        )}
 
-            <section id="process" className="sd-section scroll-mt-28">
-              <h2 className="sd-h2">איך זה עובד</h2>
-              <ol className="sd-steps">
-                {[
-                  { icon: "checklist", t: "משאירים פרטים", p: "ממלאים טופס קצר או מתקשרים. מספרים לנו מה יש היום ומה חשוב לכם." },
-                  { icon: "search", t: "אנחנו משווים", p: "בודקים את הכיסויים והמחירים בין החברות בשוק ומציגים לכם את ההבדלים בצורה ברורה." },
-                  { icon: "handshake", t: "מחליטים יחד", p: "הפגישה הראשונה ללא עלות ואינה מחייבת. ההחלטה תמיד שלכם." },
-                ].map((s, i) => (
-                  <li key={s.t} className="sd-step">
-                    <small>{String(i + 1).padStart(2, "0")}</small>
-                    <img src={`/art/icons/${s.icon}.svg`} alt="" width={52} height={52} loading="lazy" />
-                    <h3 className="sd-h3 mt-4">{s.t}</h3>
-                    <p>{s.p}</p>
-                  </li>
+        <SdBand tone={p3} id="process">
+          <SdProcess art={topic.art} />
+        </SdBand>
+
+        {hasFaq && (
+          <SdBand tone="cream" id="faq">
+            <div className="sd-wrap-narrow">
+              <div className="sd-band-head"><h2 className="sd-h2">שאלות נפוצות</h2></div>
+              <div className="sd-faq">
+                {faqItems.map((f, i) => (
+                  <details key={f.q} open={i === 0}>
+                    <summary>{f.q}</summary>
+                    <div>{f.a}</div>
+                  </details>
                 ))}
-              </ol>
-            </section>
-
-            {hasFaq && (
-              <section id="faq" className="sd-section scroll-mt-28">
-                <h2 className="sd-h2">שאלות נפוצות</h2>
-                <div className="sd-faq">
-                  {faqItems.map((f, i) => (
-                    <details key={f.q} open={i === 0}>
-                      <summary>{f.q}</summary>
-                      <div>{f.a}</div>
-                    </details>
-                  ))}
-                </div>
-              </section>
-            )}
-          </div>
-        </div>
+              </div>
+            </div>
+          </SdBand>
+        )}
 
         <section style={{ borderTop: "1px solid var(--line)" }}>
           <CompanyLogos variant="grid" />
         </section>
 
-        {/* CONTACT */}
-        <section id={enrollmentFormId} className="sd-contact scroll-mt-20">
-          <div className="sd-wrap sd-contact-grid">
-            <div>
-              <h2 className="sd-h2">נשמח להכיר את התיק שלכם</h2>
-              <p className="sd-text mt-4">
-                משאירים פרטים, ואנחנו חוזרים עם השוואה בין החברות בשוק. הפגישה הראשונה ללא עלות ואינה מחייבת.
-              </p>
-              <div className="sd-reach mt-6">
-                <a href="tel:0523097444" dir="ltr" style={{ justifyContent: "flex-end" }}>052-309-7444</a>
-                <a href="mailto:info@seeld.co.il" dir="ltr" style={{ justifyContent: "flex-end" }}>info@seeld.co.il</a>
-              </div>
-              <div className="sd-contact-art" aria-hidden="true">
-                <Pic name={art.contactName ?? "11-claims-service"} sizes="360px" />
-              </div>
-              <p className="sd-small mt-8">{REGULATORY_LINE}</p>
-            </div>
-            <div className="sd-form">
-              <InsuranceEnrollmentForm insuranceType={insuranceType} title={enrollmentTitle} description={enrollmentDescription} />
-            </div>
-          </div>
-        </section>
+        <SdContact id={enrollmentFormId} art={art3Of(topic)}>
+          <InsuranceEnrollmentForm insuranceType={insuranceType} title={enrollmentTitle} description={enrollmentDescription} />
+        </SdContact>
       </main>
 
       <Footer />

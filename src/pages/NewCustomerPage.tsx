@@ -206,8 +206,8 @@ export default function NewCustomerPage() {
   }) => (
     <div
       className={`border-2 border-dashed rounded-2xl p-6 md:p-8 text-center cursor-pointer transition-all duration-300 ${
-        dragging ? 'border-[#003D30] bg-[#003D30]/10 scale-[1.02]' :
-        fileList.length > 0 ? 'border-emerald-400/50 bg-[#E8EDE5]/30 dark:bg-[#003D30]/10' : 'border-border/60 hover:border-[#003D30]/50 hover:bg-[#003D30]/5'
+        dragging ? 'border-[#203957] bg-[#203957]/10 scale-[1.02]' :
+        fileList.length > 0 ? 'border-emerald-400/50 bg-[#DFE9DC]/30 dark:bg-[#203957]/10' : 'border-border/60 hover:border-[#203957]/50 hover:bg-[#203957]/5'
       }`}
       onClick={() => inputRef.current?.click()}
       onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
@@ -218,7 +218,7 @@ export default function NewCustomerPage() {
       {fileList.length > 0 ? (
         <div className="space-y-2">
           {fileList.map((file, i) => (
-            <div key={i} className="flex items-center justify-center gap-2 bg-[#E8EDE5]/50 dark:bg-[#003D30]/20 rounded-xl p-2">
+            <div key={i} className="flex items-center justify-center gap-2 bg-[#DFE9DC]/50 dark:bg-[#203957]/20 rounded-xl p-2">
               <CheckCircle2 className="h-5 w-5 text-[#2F6B4E]" />
               <span className="text-sm font-medium text-foreground">{file.name}</span>
               <span className="text-xs text-muted-foreground bg-muted rounded-lg px-2 py-0.5">({(file.size / 1024).toFixed(0)} KB)</span>
@@ -227,8 +227,8 @@ export default function NewCustomerPage() {
         </div>
       ) : (
         <>
-          <div className="w-14 h-14 rounded-2xl bg-[#003D30]/8 flex items-center justify-center mx-auto mb-3">
-            <Upload className="h-7 w-7 text-[#003D30]/60" />
+          <div className="w-14 h-14 rounded-2xl bg-[#203957]/8 flex items-center justify-center mx-auto mb-3">
+            <Upload className="h-7 w-7 text-[#203957]/60" />
           </div>
           <p className="font-bold text-foreground text-sm">{dragging ? 'שחרר כאן' : label}</p>
           <p className="text-xs text-muted-foreground mt-1.5">גרור קובץ לכאן או לחץ לבחירה</p>
@@ -252,7 +252,7 @@ export default function NewCustomerPage() {
             variant="ghost"
             size="sm"
             onClick={() => navigate('/app/customers')}
-            className="hover:bg-[#003D30]/10 rounded-xl h-10 w-10 p-0"
+            className="hover:bg-[#203957]/10 rounded-xl h-10 w-10 p-0"
           >
             <ArrowRight className="h-4 w-4" />
           </Button>
@@ -266,15 +266,15 @@ export default function NewCustomerPage() {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 flex-1">
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-              step >= 1 ? 'bg-[#003D30] text-white shadow-md shadow-[#003D30]/20' : 'bg-muted text-muted-foreground'
+              step >= 1 ? 'bg-[#203957] text-white shadow-md shadow-[#203957]/20' : 'bg-muted text-muted-foreground'
             }`}>1</div>
-            <span className={`text-xs font-medium hidden sm:inline ${step >= 1 ? 'text-[#003D30]' : 'text-muted-foreground'}`}>העלאת קבצים</span>
+            <span className={`text-xs font-medium hidden sm:inline ${step >= 1 ? 'text-[#203957]' : 'text-muted-foreground'}`}>העלאת קבצים</span>
           </div>
-          <div className={`h-[2px] flex-1 rounded-full transition-all duration-500 ${step >= 2 ? 'bg-[#003D30]' : 'bg-border'}`} />
+          <div className={`h-[2px] flex-1 rounded-full transition-all duration-500 ${step >= 2 ? 'bg-[#203957]' : 'bg-border'}`} />
           <div className="flex items-center gap-2 flex-1 justify-end">
-            <span className={`text-xs font-medium hidden sm:inline ${step >= 2 ? 'text-[#003D30]' : 'text-muted-foreground'}`}>פרטי לקוח</span>
+            <span className={`text-xs font-medium hidden sm:inline ${step >= 2 ? 'text-[#203957]' : 'text-muted-foreground'}`}>פרטי לקוח</span>
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-              step >= 2 ? 'bg-[#003D30] text-white shadow-md shadow-[#003D30]/20' : 'bg-muted text-muted-foreground'
+              step >= 2 ? 'bg-[#203957] text-white shadow-md shadow-[#203957]/20' : 'bg-muted text-muted-foreground'
             }`}>2</div>
           </div>
         </div>
@@ -288,10 +288,10 @@ export default function NewCustomerPage() {
           className="space-y-6"
         >
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
-            <CardHeader className="bg-gradient-to-b from-[#003D30]/3 to-transparent pb-4">
+            <CardHeader className="bg-gradient-to-b from-[#203957]/3 to-transparent pb-4">
               <CardTitle className="flex items-center gap-2.5 text-lg">
-                <div className="w-8 h-8 rounded-xl bg-[#003D30]/10 flex items-center justify-center">
-                  <FileText className="h-4 w-4 text-[#003D30]" />
+                <div className="w-8 h-8 rounded-xl bg-[#203957]/10 flex items-center justify-center">
+                  <FileText className="h-4 w-4 text-[#203957]" />
                 </div>
                 העלאת קבצי מקור
               </CardTitle>
@@ -310,7 +310,7 @@ export default function NewCustomerPage() {
               onClick={handleAnalyze}
               disabled={analyzing || (files.maslaqa.length === 0 && files.harBituah.length === 0)}
               size="lg"
-              className="gap-2 rounded-2xl bg-[#003D30] hover:bg-[#003D30]/90 shadow-lg shadow-[#003D30]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
+              className="gap-2 rounded-2xl bg-[#203957] hover:bg-[#203957]/90 shadow-lg shadow-[#203957]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
             >
               {analyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {analyzing ? 'מנתח קבצים...' : 'נתח והמשך'}
@@ -327,10 +327,10 @@ export default function NewCustomerPage() {
         >
           {/* Personal info */}
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
-            <CardHeader className="pb-3 bg-gradient-to-b from-[#003D30]/3 to-transparent">
+            <CardHeader className="pb-3 bg-gradient-to-b from-[#203957]/3 to-transparent">
               <CardTitle className="flex items-center gap-2.5 text-base">
-                <div className="w-7 h-7 rounded-lg bg-[#003D30]/10 flex items-center justify-center">
-                  <User className="h-3.5 w-3.5 text-[#003D30]" />
+                <div className="w-7 h-7 rounded-lg bg-[#203957]/10 flex items-center justify-center">
+                  <User className="h-3.5 w-3.5 text-[#203957]" />
                 </div>
                 פרטים אישיים
               </CardTitle>
@@ -339,17 +339,17 @@ export default function NewCustomerPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">שם פרטי *</Label>
-                  <Input value={form.firstName} onChange={e => updateField('firstName', e.target.value)} placeholder="שם פרטי" className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                  <Input value={form.firstName} onChange={e => updateField('firstName', e.target.value)} placeholder="שם פרטי" className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                   {errors.firstName && <p className="text-xs text-destructive mt-1">{errors.firstName}</p>}
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">שם משפחה *</Label>
-                  <Input value={form.lastName} onChange={e => updateField('lastName', e.target.value)} placeholder="שם משפחה" className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                  <Input value={form.lastName} onChange={e => updateField('lastName', e.target.value)} placeholder="שם משפחה" className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                   {errors.lastName && <p className="text-xs text-destructive mt-1">{errors.lastName}</p>}
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">תעודת זהות *</Label>
-                  <Input value={form.idNumber} onChange={e => updateField('idNumber', e.target.value)} placeholder="מספר ת.ז" className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                  <Input value={form.idNumber} onChange={e => updateField('idNumber', e.target.value)} placeholder="מספר ת.ז" className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                   {errors.idNumber && <p className="text-xs text-destructive mt-1">{errors.idNumber}</p>}
                 </div>
               </div>
@@ -366,7 +366,7 @@ export default function NewCustomerPage() {
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">תאריך לידה</Label>
-                  <Input type="date" value={form.birthDate} onChange={e => updateField('birthDate', e.target.value)} className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                  <Input type="date" value={form.birthDate} onChange={e => updateField('birthDate', e.target.value)} className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">מצב משפחתי</Label>
@@ -382,7 +382,7 @@ export default function NewCustomerPage() {
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">מספר ילדים</Label>
-                  <Input type="number" inputMode="numeric" min="0" value={form.numberOfChildren} onChange={e => updateField('numberOfChildren', e.target.value)} placeholder="0" className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                  <Input type="number" inputMode="numeric" min="0" value={form.numberOfChildren} onChange={e => updateField('numberOfChildren', e.target.value)} placeholder="0" className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                 </div>
               </div>
               {form.maritalStatus === 'נשוי/אה' && (
@@ -394,7 +394,7 @@ export default function NewCustomerPage() {
                 >
                   <div className="space-y-1.5">
                     <Label className="text-xs font-medium text-muted-foreground">שם בן/בת זוג</Label>
-                    <Input value={form.spouseName} onChange={e => updateField('spouseName', e.target.value)} placeholder="שם מלא" className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                    <Input value={form.spouseName} onChange={e => updateField('spouseName', e.target.value)} placeholder="שם מלא" className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                   </div>
                 </motion.div>
               )}
@@ -403,10 +403,10 @@ export default function NewCustomerPage() {
 
           {/* Contact info */}
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
-            <CardHeader className="pb-3 bg-gradient-to-b from-[#003D30]/5 to-transparent">
+            <CardHeader className="pb-3 bg-gradient-to-b from-[#203957]/5 to-transparent">
               <CardTitle className="flex items-center gap-2.5 text-base">
-                <div className="w-7 h-7 rounded-lg bg-[#003D30]/15 flex items-center justify-center">
-                  <Phone className="h-3.5 w-3.5 text-[#003D30]" />
+                <div className="w-7 h-7 rounded-lg bg-[#203957]/15 flex items-center justify-center">
+                  <Phone className="h-3.5 w-3.5 text-[#203957]" />
                 </div>
                 פרטי קשר
               </CardTitle>
@@ -415,12 +415,12 @@ export default function NewCustomerPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">טלפון נייד *</Label>
-                  <Input value={form.mobilePhone} onChange={e => updateField('mobilePhone', e.target.value)} placeholder="05XXXXXXXX" className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                  <Input value={form.mobilePhone} onChange={e => updateField('mobilePhone', e.target.value)} placeholder="05XXXXXXXX" className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                   {errors.mobilePhone && <p className="text-xs text-destructive mt-1">{errors.mobilePhone}</p>}
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">אימייל</Label>
-                  <Input value={form.email} onChange={e => updateField('email', e.target.value)} placeholder="email@example.com" type="email" className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                  <Input value={form.email} onChange={e => updateField('email', e.target.value)} placeholder="email@example.com" type="email" className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                 </div>
               </div>
             </CardContent>
@@ -430,8 +430,8 @@ export default function NewCustomerPage() {
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
             <CardHeader className="pb-3 bg-gradient-to-b from-blue-50/50 dark:from-blue-900/5 to-transparent">
               <CardTitle className="flex items-center gap-2.5 text-base">
-                <div className="w-7 h-7 rounded-lg bg-[#E8EDE5]/60 dark:bg-[#003D30]/20 flex items-center justify-center">
-                  <MapPin className="h-3.5 w-3.5 text-[#476356] dark:text-[#476356]" />
+                <div className="w-7 h-7 rounded-lg bg-[#DFE9DC]/60 dark:bg-[#203957]/20 flex items-center justify-center">
+                  <MapPin className="h-3.5 w-3.5 text-[#55677C] dark:text-[#55677C]" />
                 </div>
                 כתובת
               </CardTitle>
@@ -440,19 +440,19 @@ export default function NewCustomerPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">עיר</Label>
-                  <Input value={form.city} onChange={e => updateField('city', e.target.value)} placeholder="עיר" className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                  <Input value={form.city} onChange={e => updateField('city', e.target.value)} placeholder="עיר" className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">רחוב</Label>
-                  <Input value={form.street} onChange={e => updateField('street', e.target.value)} placeholder="שם רחוב" className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                  <Input value={form.street} onChange={e => updateField('street', e.target.value)} placeholder="שם רחוב" className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">מספר בית</Label>
-                  <Input value={form.houseNumber} onChange={e => updateField('houseNumber', e.target.value)} placeholder="מספר" className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                  <Input value={form.houseNumber} onChange={e => updateField('houseNumber', e.target.value)} placeholder="מספר" className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">דירה</Label>
-                  <Input value={form.apartmentNumber} onChange={e => updateField('apartmentNumber', e.target.value)} placeholder="מספר" className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                  <Input value={form.apartmentNumber} onChange={e => updateField('apartmentNumber', e.target.value)} placeholder="מספר" className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                 </div>
               </div>
             </CardContent>
@@ -462,8 +462,8 @@ export default function NewCustomerPage() {
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
             <CardHeader className="pb-3 bg-gradient-to-b from-amber-50/50 dark:from-amber-900/5 to-transparent">
               <CardTitle className="flex items-center gap-2.5 text-base">
-                <div className="w-7 h-7 rounded-lg bg-[#F5EEE0]/60 dark:bg-[#8A6230]/20 flex items-center justify-center">
-                  <Briefcase className="h-3.5 w-3.5 text-[#8A6230] dark:text-amber-400" />
+                <div className="w-7 h-7 rounded-lg bg-[#F5EEE0]/60 dark:bg-[#7C5C22]/20 flex items-center justify-center">
+                  <Briefcase className="h-3.5 w-3.5 text-[#7C5C22] dark:text-amber-400" />
                 </div>
                 תעסוקה ובריאות
               </CardTitle>
@@ -472,7 +472,7 @@ export default function NewCustomerPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">עיסוק</Label>
-                  <Input value={form.occupation} onChange={e => updateField('occupation', e.target.value)} placeholder="עיסוק" className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                  <Input value={form.occupation} onChange={e => updateField('occupation', e.target.value)} placeholder="עיסוק" className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">סטטוס תעסוקה</Label>
@@ -489,7 +489,7 @@ export default function NewCustomerPage() {
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">הכנסה חודשית</Label>
-                  <Input type="number" inputMode="decimal" value={form.monthlyIncome} onChange={e => updateField('monthlyIncome', e.target.value)} placeholder="₪" className="rounded-xl h-11 border-border/60 focus:border-[#003D30] transition-colors" />
+                  <Input type="number" inputMode="decimal" value={form.monthlyIncome} onChange={e => updateField('monthlyIncome', e.target.value)} placeholder="₪" className="rounded-xl h-11 border-border/60 focus:border-[#203957] transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">קופת חולים</Label>
@@ -519,7 +519,7 @@ export default function NewCustomerPage() {
             </CardHeader>
             <CardContent className="p-4 md:p-6">
               <Textarea value={form.internalNotes} onChange={e => updateField('internalNotes', e.target.value)}
-                placeholder="הערות פנימיות על הלקוח..." rows={3} className="rounded-xl border-border/60 focus:border-[#003D30] transition-colors resize-none" />
+                placeholder="הערות פנימיות על הלקוח..." rows={3} className="rounded-xl border-border/60 focus:border-[#203957] transition-colors resize-none" />
             </CardContent>
           </Card>
 
@@ -527,7 +527,7 @@ export default function NewCustomerPage() {
             <Button
               onClick={handleCreate}
               size="lg"
-              className="gap-2 rounded-2xl bg-[#003D30] hover:bg-[#003D30]/90 shadow-lg shadow-[#003D30]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
+              className="gap-2 rounded-2xl bg-[#203957] hover:bg-[#203957]/90 shadow-lg shadow-[#203957]/20 min-h-[48px] transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
               disabled={creating}
             >
               {creating && <Loader2 className="h-4 w-4 animate-spin" />}

@@ -12,11 +12,11 @@ import { DISPLAY, MONO, MUTED, NAVY, TURQ } from "@/lib/brand";
 // Frank Ruhl 900 turquoise standout stat, coral for the cost figure.
 
 const inputClass =
-  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]";
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#D9DEE4] rounded-lg text-[#203957] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#203957]";
 const sliderClass =
   "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#819B7D] [&_[role=slider]]:border-[#819B7D]";
-const labelClass = "flex items-center gap-2 text-base font-medium text-[#003D30]";
-const radioItemClass = "border-[#003D30] text-[#003D30]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#203957]";
+const radioItemClass = "border-[#203957] text-[#203957]";
 
 // Tax parameters: January 2026 (רשות המסים); update yearly.
 // Monthly brackets after the January 2026 reform: the 20% bracket widened to 19,000
@@ -140,13 +140,13 @@ const IncomeTaxCalculator = () => {
           >
             <div className="flex items-center gap-2">
               <RadioGroupItem value="male" id="taxGenderMale" className={radioItemClass} />
-              <Label htmlFor="taxGenderMale" className="font-normal cursor-pointer text-[#24483C]">
+              <Label htmlFor="taxGenderMale" className="font-normal cursor-pointer text-[#2D435D]">
                 גבר תושב ישראל (<span dir="ltr" className="tabular-nums">2.25</span> נקודות)
               </Label>
             </div>
             <div className="flex items-center gap-2">
               <RadioGroupItem value="female" id="taxGenderFemale" className={radioItemClass} />
-              <Label htmlFor="taxGenderFemale" className="font-normal cursor-pointer text-[#24483C]">
+              <Label htmlFor="taxGenderFemale" className="font-normal cursor-pointer text-[#2D435D]">
                 אישה תושבת ישראל (<span dir="ltr" className="tabular-nums">2.75</span> נקודות)
               </Label>
             </div>
@@ -235,7 +235,7 @@ const IncomeTaxCalculator = () => {
 
       {/* Scope + refund teaser */}
       <div className="dna-concept !p-6 space-y-4">
-        <p className="text-sm leading-[1.8]" style={{ color: "#24483C" }}>
+        <p className="text-sm leading-[1.8]" style={{ color: "#2D435D" }}>
           החישוב כולל מס הכנסה בלבד, ללא ביטוח לאומי ודמי בריאות. הנטו בפועל בתלוש יהיה נמוך
           יותר, כי הניכויים האלה מחושבים בנפרד.
         </p>
@@ -243,7 +243,7 @@ const IncomeTaxCalculator = () => {
           עבדתם חלק מהשנה או לא ניצלתם נקודות זיכוי? ייתכן שמגיע לכם החזר מס.{" "}
           <Link
             to="/rights-extraction"
-            className="font-medium text-[#003D30] border-b border-[#003D30]/30 pb-0.5 hover:border-[#003D30] transition-colors"
+            className="font-medium text-[#203957] border-b border-[#203957]/30 pb-0.5 hover:border-[#203957] transition-colors"
           >
             בדקו זכאות להחזר
           </Link>

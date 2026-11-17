@@ -183,11 +183,11 @@ export default function ExecutionSummaryPage() {
     <div className="p-4 md:p-6 max-w-7xl mx-auto space-y-5" dir="rtl">
       {/* Breadcrumbs */}
       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <button onClick={() => navigate('/')} className="hover:text-[#003D30] transition-colors">ראשי</button>
+        <button onClick={() => navigate('/')} className="hover:text-[#203957] transition-colors">ראשי</button>
         <span className="text-muted-foreground/50">‹</span>
-        <button onClick={() => navigate('/app/customers')} className="hover:text-[#003D30] transition-colors">לקוחות</button>
+        <button onClick={() => navigate('/app/customers')} className="hover:text-[#203957] transition-colors">לקוחות</button>
         <span className="text-muted-foreground/50">‹</span>
-        <button onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:text-[#003D30] transition-colors">{customer.fullName}</button>
+        <button onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:text-[#203957] transition-colors">{customer.fullName}</button>
         <span className="text-muted-foreground/50">‹</span>
         <span className="text-foreground font-medium">סיכום ביצועים</span>
       </div>
@@ -195,12 +195,12 @@ export default function ExecutionSummaryPage() {
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:bg-[#003D30]/10">
+          <Button variant="ghost" size="sm" onClick={() => navigate(`/app/customers/${customerId}`)} className="hover:bg-[#203957]/10">
             <ArrowRight className="h-4 w-4" />
           </Button>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-xl md:text-2xl font-bold text-[#003D30]">סיכום ביצועים</h1>
+              <h1 className="text-xl md:text-2xl font-bold text-[#203957]">סיכום ביצועים</h1>
               {activeSummary && (
                 <span className="text-xs px-2 py-1 rounded-full bg-muted font-medium">
                   #{activeSummary.summaryNumber} · {SUMMARY_STATUS_LABELS[activeSummary.status as ExecutionSummaryStatus] || activeSummary.status}
@@ -216,14 +216,14 @@ export default function ExecutionSummaryPage() {
               <Button variant="outline" size="sm" onClick={handleShareWhatsApp} className="gap-1.5 text-[#2F6B4E] border-[#2F6B4E]/30 hover:bg-[#2F6B4E]/5 rounded-full">
                 <MessageCircle className="h-3.5 w-3.5" />WhatsApp
               </Button>
-              <Button variant="outline" size="sm" onClick={handleShareLink} className="gap-1.5 rounded-full border-[#003D30]/30 hover:bg-[#003D30]/10">
-                <Share2 className="h-3.5 w-3.5 text-[#003D30]" />העתק לינק
+              <Button variant="outline" size="sm" onClick={handleShareLink} className="gap-1.5 rounded-full border-[#203957]/30 hover:bg-[#203957]/10">
+                <Share2 className="h-3.5 w-3.5 text-[#203957]" />העתק לינק
               </Button>
               <Button variant="outline" size="sm" onClick={handleExportPdf} className="gap-1.5 rounded-full">
                 <Download className="h-3.5 w-3.5" />PDF
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setShowPresentation(true)} className="gap-1.5 rounded-full border-[#8A6230]/30 hover:bg-[#8A6230]/10">
-                <Presentation className="h-3.5 w-3.5 text-[#8A6230]" />מצגת
+              <Button variant="outline" size="sm" onClick={() => setShowPresentation(true)} className="gap-1.5 rounded-full border-[#7C5C22]/30 hover:bg-[#7C5C22]/10">
+                <Presentation className="h-3.5 w-3.5 text-[#7C5C22]" />מצגת
               </Button>
               <Button variant="outline" size="sm" onClick={handleSave} disabled={saving} className="gap-1.5 rounded-full">
                 <Save className="h-3.5 w-3.5" />שמירה
@@ -231,7 +231,7 @@ export default function ExecutionSummaryPage() {
             </>
           )}
           {canCreate && (
-            <Button size="sm" onClick={handleCreate} className="gap-1.5 rounded-full bg-[#003D30] hover:bg-[#003D30]/90 shadow-md shadow-[#003D30]/15">
+            <Button size="sm" onClick={handleCreate} className="gap-1.5 rounded-full bg-[#203957] hover:bg-[#203957]/90 shadow-md shadow-[#203957]/15">
               <ClipboardCheck className="h-3.5 w-3.5" />סיכום חדש
             </Button>
           )}
@@ -289,7 +289,7 @@ export default function ExecutionSummaryPage() {
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">סטטוס</p>
-                  <p className="font-medium text-[#003D30]">{SUMMARY_STATUS_LABELS[activeSummary.status as ExecutionSummaryStatus]}</p>
+                  <p className="font-medium text-[#203957]">{SUMMARY_STATUS_LABELS[activeSummary.status as ExecutionSummaryStatus]}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">בוצע מלא</p>
@@ -297,7 +297,7 @@ export default function ExecutionSummaryPage() {
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">בוצע חלקית</p>
-                  <p className="font-medium text-[#8A6230]">{partialCount}</p>
+                  <p className="font-medium text-[#7C5C22]">{partialCount}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs">לא בוצע</p>
@@ -320,7 +320,7 @@ export default function ExecutionSummaryPage() {
 
               return (
                 <motion.div key={si.id} variants={item} initial="hidden" animate="show" transition={{ delay: idx * 0.05 }}>
-                  <Card className={`transition-all rounded-2xl border-border/50 shadow-sm ${si.executionStatus === 'fully_executed' ? 'border-[#2F6B4E]/30 bg-[#2F6B4E]/5' : si.executionStatus === 'partially_executed' ? 'border-[#8A6230]/30 bg-[#8A6230]/5' : ''}`}>
+                  <Card className={`transition-all rounded-2xl border-border/50 shadow-sm ${si.executionStatus === 'fully_executed' ? 'border-[#2F6B4E]/30 bg-[#2F6B4E]/5' : si.executionStatus === 'partially_executed' ? 'border-[#7C5C22]/30 bg-[#7C5C22]/5' : ''}`}>
                     <CardContent className="p-5 space-y-4">
                       {/* Header */}
                       <div className="flex items-start justify-between">
@@ -330,7 +330,7 @@ export default function ExecutionSummaryPage() {
                             {rec && <StatusBadge type="action" status={rec.actionType} />}
                             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                               si.executionStatus === 'fully_executed' ? 'bg-[#2F6B4E]/10 text-[#2F6B4E]' :
-                              si.executionStatus === 'partially_executed' ? 'bg-[#8A6230]/10 text-[#8A6230]' :
+                              si.executionStatus === 'partially_executed' ? 'bg-[#7C5C22]/10 text-[#7C5C22]' :
                               'bg-muted text-muted-foreground'
                             }`}>
                               {ITEM_STATUS_LABELS[si.executionStatus as ItemExecutionStatus]}
@@ -454,7 +454,7 @@ export default function ExecutionSummaryPage() {
               <Button variant="outline" onClick={handleExportPdf} className="gap-1.5 rounded-full">
                 <Download className="h-4 w-4" />שמירה + PDF
               </Button>
-              <Button onClick={handleComplete} disabled={saving} className="gap-1.5 rounded-full bg-[#003D30] hover:bg-[#003D30]/90 shadow-md shadow-[#003D30]/15">
+              <Button onClick={handleComplete} disabled={saving} className="gap-1.5 rounded-full bg-[#203957] hover:bg-[#203957]/90 shadow-md shadow-[#203957]/15">
                 <CheckCircle2 className="h-4 w-4" />סיום וסימון לקוח
               </Button>
             </div>

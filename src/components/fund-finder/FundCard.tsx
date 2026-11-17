@@ -100,7 +100,7 @@ export default function FundCard({ fund, onRemove, showMonthly = false, showDeep
           <button
             type="button"
             onClick={() => onRemove(fund.id)}
-            className="shrink-0 grid h-10 w-10 place-items-center rounded-[10px] transition-colors hover:bg-[#E8EDE5]"
+            className="shrink-0 grid h-10 w-10 place-items-center rounded-[10px] transition-colors hover:bg-[#DFE9DC]"
             style={{ color: MUTED }}
           >
             <BrandIcon name="close" size={18} label="הסרה מההשוואה" />

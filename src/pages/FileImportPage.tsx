@@ -571,20 +571,20 @@ export default function FileImportPage() {
       <PageHeader title="העלאת קבצים" subtitle="ייבוא קבצי לקוחות, הר ביטוח, דוחות ומסלקה" />
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2 rounded-full bg-[#003D30]/5 p-1">
-          <TabsTrigger value="upload" className="gap-2 rounded-full data-[state=active]:bg-[#003D30] data-[state=active]:text-white"><Upload className="h-4 w-4" />העלאה וייבוא</TabsTrigger>
-          <TabsTrigger value="history" className="gap-2 rounded-full data-[state=active]:bg-[#003D30] data-[state=active]:text-white"><History className="h-4 w-4" />היסטוריית ייבוא</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 rounded-full bg-[#203957]/5 p-1">
+          <TabsTrigger value="upload" className="gap-2 rounded-full data-[state=active]:bg-[#203957] data-[state=active]:text-white"><Upload className="h-4 w-4" />העלאה וייבוא</TabsTrigger>
+          <TabsTrigger value="history" className="gap-2 rounded-full data-[state=active]:bg-[#203957] data-[state=active]:text-white"><History className="h-4 w-4" />היסטוריית ייבוא</TabsTrigger>
         </TabsList>
 
         <TabsContent value="upload" className="space-y-6">
           {/* Upload Area */}
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
-            <CardHeader className="pb-3 bg-gradient-to-b from-[#003D30]/3 to-transparent">
+            <CardHeader className="pb-3 bg-gradient-to-b from-[#203957]/3 to-transparent">
               <div className="flex items-center justify-between flex-wrap gap-3">
                 <div>
                   <CardTitle className="text-base flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-[#003D30]/10 flex items-center justify-center">
-                      <Upload className="h-3.5 w-3.5 text-[#003D30]" />
+                    <div className="w-7 h-7 rounded-lg bg-[#203957]/10 flex items-center justify-center">
+                      <Upload className="h-3.5 w-3.5 text-[#203957]" />
                     </div>
                     העלאת קבצים
                   </CardTitle>
@@ -608,7 +608,7 @@ export default function FileImportPage() {
             <CardContent>
               <div
                 className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 ${
-                  dragging ? 'border-[#003D30] bg-[#003D30]/10 scale-[1.02]' : 'border-border/60 hover:border-[#003D30]/50 hover:bg-[#003D30]/5'
+                  dragging ? 'border-[#203957] bg-[#203957]/10 scale-[1.02]' : 'border-border/60 hover:border-[#203957]/50 hover:bg-[#203957]/5'
                 }`}
                 onClick={() => fileInputRef.current?.click()}
                 onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
@@ -620,8 +620,8 @@ export default function FileImportPage() {
                   if (e.dataTransfer.files.length > 0) handleFilesSelected(e.dataTransfer.files);
                 }}
               >
-                <div className="w-14 h-14 rounded-2xl bg-[#003D30]/8 flex items-center justify-center mx-auto mb-3">
-                  <Upload className="h-7 w-7 text-[#003D30]/60" />
+                <div className="w-14 h-14 rounded-2xl bg-[#203957]/8 flex items-center justify-center mx-auto mb-3">
+                  <Upload className="h-7 w-7 text-[#203957]/60" />
                 </div>
                 <p className="text-sm font-bold">{dragging ? 'שחרר כאן' : 'לחץ או גרור קבצים להעלאה'}</p>
                 <p className="text-xs text-muted-foreground mt-2">
@@ -641,10 +641,10 @@ export default function FileImportPage() {
 
           {/* File Type Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="border-[#003D30]/20 hover:border-[#003D30]/40 transition-colors cursor-pointer rounded-2xl" onClick={() => fileInputRef.current?.click()}>
+            <Card className="border-[#203957]/20 hover:border-[#203957]/40 transition-colors cursor-pointer rounded-2xl" onClick={() => fileInputRef.current?.click()}>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <Users className="h-4 w-4 text-[#003D30]" />
+                  <Users className="h-4 w-4 text-[#203957]" />
                   ייבוא מרובה לקוחות
                 </CardTitle>
               </CardHeader>
@@ -655,10 +655,10 @@ export default function FileImportPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-[#8A6230]/20 hover:border-[#8A6230]/40 transition-colors cursor-pointer rounded-2xl" onClick={() => fileInputRef.current?.click()}>
+            <Card className="border-[#7C5C22]/20 hover:border-[#7C5C22]/40 transition-colors cursor-pointer rounded-2xl" onClick={() => fileInputRef.current?.click()}>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <User className="h-4 w-4 text-[#8A6230]" />
+                  <User className="h-4 w-4 text-[#7C5C22]" />
                   קובץ ללקוח בודד
                 </CardTitle>
               </CardHeader>
@@ -689,7 +689,7 @@ export default function FileImportPage() {
             <Card className="rounded-2xl border-border/50 shadow-sm">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  {isProcessing ? <Loader2 className="h-4 w-4 animate-spin text-[#003D30]" /> : <FileSpreadsheet className="h-4 w-4 text-[#003D30]" />}
+                  {isProcessing ? <Loader2 className="h-4 w-4 animate-spin text-[#203957]" /> : <FileSpreadsheet className="h-4 w-4 text-[#203957]" />}
                   סטטוס עיבוד קבצים
                 </CardTitle>
               </CardHeader>
@@ -826,7 +826,7 @@ export default function FileImportPage() {
                           </TableCell>
                           <TableCell className="text-xs">
                             {item.productsCreated > 0 && <span className="text-[#2F6B4E]">+{item.productsCreated}</span>}
-                            {item.productsUpdated > 0 && <span className="text-[#476356] mr-1">↻{item.productsUpdated}</span>}
+                            {item.productsUpdated > 0 && <span className="text-[#55677C] mr-1">↻{item.productsUpdated}</span>}
                             {item.productsCreated === 0 && item.productsUpdated === 0 && '-'}
                           </TableCell>
                           <TableCell>
@@ -841,8 +841,8 @@ export default function FileImportPage() {
                             )}
                             {item.status === 'needs_review' && (
                               <div className="flex items-center gap-1">
-                                <AlertTriangle className="h-4 w-4 text-[#8A6230]" />
-                                <span className="text-xs text-[#8A6230] max-w-[120px] truncate" title={item.errorMessage}>
+                                <AlertTriangle className="h-4 w-4 text-[#7C5C22]" />
+                                <span className="text-xs text-[#7C5C22] max-w-[120px] truncate" title={item.errorMessage}>
                                   {item.errorMessage || 'דורש בדיקה'}
                                 </span>
                               </div>
@@ -879,7 +879,7 @@ export default function FileImportPage() {
 
           {/* Summary */}
           {uploads.some(u => u.state === 'done') && (
-            <Card className="border-[#819B7D] bg-[#E8EDE5]/50 dark:bg-green-950/20 dark:border-green-800">
+            <Card className="border-[#819B7D] bg-[#DFE9DC]/50 dark:bg-green-950/20 dark:border-green-800">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2 text-[#2F6B4E] dark:text-green-400">
                   <CheckCircle2 className="h-4 w-4" />
@@ -893,7 +893,7 @@ export default function FileImportPage() {
                     <p className="text-xs text-muted-foreground">לקוחות נוצרו</p>
                   </div>
                   <div className="text-center p-3 bg-background rounded-lg">
-                    <p className="text-2xl font-bold text-[#476356]">{summary.customersUpdated}</p>
+                    <p className="text-2xl font-bold text-[#55677C]">{summary.customersUpdated}</p>
                     <p className="text-xs text-muted-foreground">לקוחות עודכנו</p>
                   </div>
                   <div className="text-center p-3 bg-background rounded-lg">
@@ -901,7 +901,7 @@ export default function FileImportPage() {
                     <p className="text-xs text-muted-foreground">מוצרים ({summary.productsCreated} חדשים)</p>
                   </div>
                   <div className="text-center p-3 bg-background rounded-lg">
-                    <p className="text-2xl font-bold text-[#8A6230]">{summary.needsManualReview}</p>
+                    <p className="text-2xl font-bold text-[#7C5C22]">{summary.needsManualReview}</p>
                     <p className="text-xs text-muted-foreground">דורשים בדיקה</p>
                   </div>
                 </div>
@@ -971,7 +971,7 @@ export default function FileImportPage() {
                               <TableCell>
                                 {item.status === 'success' && <CheckCircle2 className="h-3.5 w-3.5 text-[#2F6B4E]" />}
                                 {item.status === 'error' && <XCircle className="h-3.5 w-3.5 text-destructive" />}
-                                {item.status === 'needs_review' && <AlertTriangle className="h-3.5 w-3.5 text-[#8A6230]" />}
+                                {item.status === 'needs_review' && <AlertTriangle className="h-3.5 w-3.5 text-[#7C5C22]" />}
                               </TableCell>
                               <TableCell>
                                 {item.customerId && (
@@ -1019,7 +1019,7 @@ export default function FileImportPage() {
               <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/40">
                 {detailItem.status === 'success' && <CheckCircle2 className="h-4 w-4 text-[#2F6B4E]" />}
                 {detailItem.status === 'error' && <XCircle className="h-4 w-4 text-destructive" />}
-                {detailItem.status === 'needs_review' && <AlertTriangle className="h-4 w-4 text-[#8A6230]" />}
+                {detailItem.status === 'needs_review' && <AlertTriangle className="h-4 w-4 text-[#7C5C22]" />}
                 <span className="text-sm font-medium">
                   {detailItem.status === 'success' ? 'הושלם בהצלחה' : detailItem.status === 'error' ? 'שגיאה' : 'דורש בדיקה'}
                 </span>
@@ -1209,7 +1209,7 @@ export default function FileImportPage() {
                           </TableCell>
                           <TableCell className="text-muted-foreground">{idx + 1}</TableCell>
                           <TableCell className={`font-medium text-sm ${entry.excluded ? 'line-through' : ''}`}>{name}</TableCell>
-                          <TableCell className="font-mono text-xs">{entry.customer.idNumber || <span className="text-[#8A6230]">חסר</span>}</TableCell>
+                          <TableCell className="font-mono text-xs">{entry.customer.idNumber || <span className="text-[#7C5C22]">חסר</span>}</TableCell>
                           <TableCell className="text-xs">{entry.customer.mobilePhone || '-'}</TableCell>
                           <TableCell className="text-xs max-w-[120px] truncate">{entry.sourceFile || '-'}</TableCell>
                           <TableCell>

@@ -78,7 +78,7 @@ const Sparkline = ({ fund }: { fund: BoardFund }) => {
   const d = pts.map((p, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)},${y(p.y).toFixed(1)}`).join(" ");
   return (
     <svg viewBox={`0 0 ${w} ${h}`} width={w} height={h} role="img" aria-label={`תשואה חודשית מ־${periodShort(pts[0].p)} עד ${periodShort(pts[pts.length - 1].p)}`} style={{ direction: "ltr" }}>
-      <line x1={pad} x2={w - pad} y1={y(0)} y2={y(0)} stroke="#CCD6CC" strokeWidth="1" />
+      <line x1={pad} x2={w - pad} y1={y(0)} y2={y(0)} stroke="#D9DEE4" strokeWidth="1" />
       <path d={d} fill="none" stroke={GREEN} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
       {pts.map((p, i) => (
         <circle key={p.p} cx={x(i)} cy={y(p.y)} r={p.y < 0 ? 2.5 : 2} fill={p.y < 0 ? RUST_TEXT : SAGE} />
@@ -223,7 +223,7 @@ const BoardTable = ({ funds, view, charted, onToggleChart, chartFull = false, ca
                                 checked={charted.has(id)}
                                 disabled={!charted.has(id) && chartFull}
                                 onChange={() => onToggleChart(f)}
-                                className="h-4 w-4 accent-[#003D30]"
+                                className="h-4 w-4 accent-[#203957]"
                               />
                               הצגה בגרף המסלול
                               {!charted.has(id) && chartFull && <span style={{ color: MUTED }}>(הגרף מלא, הסירו קופה אחרת)</span>}

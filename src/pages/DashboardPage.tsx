@@ -26,13 +26,13 @@ import doodleLightbulb from '@/assets/doodle-lightbulb.png';
 
 // ─── Palette ──────────────────────────────────────────────────────────────────
 const C = {
-  teal:   '#003D30',
-  orange: '#8A6230',
+  teal:   '#203957',
+  orange: '#7C5C22',
   coral:  '#9A4520',
   green:  '#2F6B4E',
-  yellow: '#8A6230',
-  purple: '#476356',
-  dark:   '#003D30',
+  yellow: '#7C5C22',
+  purple: '#55677C',
+  dark:   '#203957',
   gray:   '#8FA396',
 };
 
@@ -637,16 +637,16 @@ export default function DashboardPage() {
 
       {/* ── Background ── */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden select-none z-0">
-        <div className="absolute -top-48 -right-48 w-[560px] h-[560px] rounded-full blur-[100px] opacity-[0.08]" style={{ backgroundColor: '#003D30' }} />
-        <div className="absolute top-[40%] -left-52 w-[420px] h-[420px] rounded-full blur-[100px] opacity-[0.06]" style={{ backgroundColor: '#8A6230' }} />
-        <div className="absolute bottom-0 right-[35%] w-[360px] h-[360px] rounded-full blur-[100px] opacity-[0.05]" style={{ backgroundColor: '#003D30' }} />
+        <div className="absolute -top-48 -right-48 w-[560px] h-[560px] rounded-full blur-[100px] opacity-[0.08]" style={{ backgroundColor: '#203957' }} />
+        <div className="absolute top-[40%] -left-52 w-[420px] h-[420px] rounded-full blur-[100px] opacity-[0.06]" style={{ backgroundColor: '#7C5C22' }} />
+        <div className="absolute bottom-0 right-[35%] w-[360px] h-[360px] rounded-full blur-[100px] opacity-[0.05]" style={{ backgroundColor: '#203957' }} />
         <svg className="absolute top-0 right-[2%] w-[500px] h-[650px] opacity-[0.1]" viewBox="0 0 500 600" fill="none">
           <motion.path d="M450,30 C380,50 300,130 320,230 C340,330 220,380 160,450 C130,490 140,540 200,560"
-            stroke="#003D30" strokeWidth="2.5" strokeDasharray="10 8" strokeLinecap="round" fill="none"
+            stroke="#203957" strokeWidth="2.5" strokeDasharray="10 8" strokeLinecap="round" fill="none"
             initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 3.5, delay: 0.3, ease: 'easeInOut' }} />
         </svg>
         <div className="absolute inset-0 opacity-[0.016]"
-          style={{ backgroundImage: 'radial-gradient(circle, #003D30 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+          style={{ backgroundImage: 'radial-gradient(circle, #203957 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
         <img src={doodleShield}    alt="" className="absolute top-[4%]  left-[1%]   w-20 opacity-[0.06] rotate-[-14deg]" />
         <img src={doodleTarget}    alt="" className="absolute top-[35%] left-[0.5%] w-16 opacity-[0.05] rotate-[10deg]"  />
         <img src={doodleCharts}    alt="" className="absolute top-[65%] right-[1%]  w-20 opacity-[0.06] rotate-[7deg]"   />
@@ -654,16 +654,16 @@ export default function DashboardPage() {
         <img src={doodleLightbulb} alt="" className="absolute top-[50%] right-[1%]  w-14 opacity-[0.05] rotate-[5deg]"   />
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap"
           style={{ fontFamily: "sans-serif", fontSize: 160, fontWeight: 700,
-            color: '#003D30', opacity: 0.018, letterSpacing: '0.3em' }}>SEELD</div>
+            color: '#203957', opacity: 0.018, letterSpacing: '0.3em' }}>SEELD</div>
       </div>
 
       {/* ── Page layout: legend left | main right ── */}
       <div className="relative z-10 flex min-h-screen">
 
         {/* ══ LEFT LEGEND (desktop only, sticky) ══ */}
-        <aside className="hidden lg:flex flex-col gap-1.5 pt-6 pb-10 px-3 sticky top-0 h-screen overflow-y-auto flex-shrink-0 border-l border-[#E1E8E1]/80"
+        <aside className="hidden lg:flex flex-col gap-1.5 pt-6 pb-10 px-3 sticky top-0 h-screen overflow-y-auto flex-shrink-0 border-l border-[#E8E6DE]/80"
           style={{ width: 178, backgroundColor: 'rgba(250,247,239,0.85)', backdropFilter: 'blur(10px)' }}>
-          <p className="text-[14px] font-bold text-[#476356] px-1 mb-2">קטגוריות</p>
+          <p className="text-[14px] font-bold text-[#55677C] px-1 mb-2">קטגוריות</p>
           {SECTIONS.map(sec => {
             const isActive = activeSection === sec.title;
             return (
@@ -698,7 +698,7 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               onClick={() => setActiveSection(null)}
-              className="flex items-center justify-center gap-1.5 mt-3 px-3 py-2 rounded-full border-2 border-dashed border-[#CCD6CC] text-[#476356] hover:border-gray-400 hover:text-[#476356] transition-colors"
+              className="flex items-center justify-center gap-1.5 mt-3 px-3 py-2 rounded-full border-2 border-dashed border-[#D9DEE4] text-[#55677C] hover:border-gray-400 hover:text-[#55677C] transition-colors"
             >
               <RotateCcw className="w-3 h-3" />
               <span className="text-[10px] font-bold">הצג הכל</span>
@@ -714,9 +714,9 @@ export default function DashboardPage() {
             <button onClick={() => navigate('/app/dashboard')} className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
               <SeeIDLogo size={30} />
               <div>
-                <div className="text-sm font-bold text-[#003D30] leading-none"
+                <div className="text-sm font-bold text-[#203957] leading-none"
                   style={{ fontFamily: "sans-serif" }}>SEELD</div>
-                <div className="text-[14px] font-bold text-[#476356] uppercase">פלטפורמה</div>
+                <div className="text-[14px] font-bold text-[#55677C] uppercase">פלטפורמה</div>
               </div>
             </button>
 
@@ -726,9 +726,9 @@ export default function DashboardPage() {
                 <motion.button whileTap={{ scale: 0.9 }} onClick={() => setMenuOpen(v => !v)}
                   className="w-9 h-9 rounded-full flex items-center justify-center shadow-sm transition-all"
                   style={{
-                    backgroundColor: editMode || menuOpen ? '#003D30' : 'white',
+                    backgroundColor: editMode || menuOpen ? '#203957' : 'white',
                     color: editMode || menuOpen ? '#ffffff' : '#8FA396',
-                    border: editMode ? '2px solid #003D30' : '2px solid #e2e8f0',
+                    border: editMode ? '2px solid #203957' : '2px solid #e2e8f0',
                   }}>
                   <PenTool className="w-3.5 h-3.5" />
                 </motion.button>
@@ -742,42 +742,42 @@ export default function DashboardPage() {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.88, y: -10 }}
                         transition={{ type: 'spring', stiffness: 380, damping: 26 }}
-                        className="absolute left-0 top-11 z-50 w-52 rounded-2xl overflow-hidden border border-[#E1E8E1]"
+                        className="absolute left-0 top-11 z-50 w-52 rounded-2xl overflow-hidden border border-[#E8E6DE]"
                         style={{ backgroundColor: 'white', boxShadow: '0 12px 40px rgba(0,0,0,0.16)' }}
                       >
                         <div className="px-4 pt-3 pb-1.5">
-                          <p className="text-[14px] font-bold text-[#476356]">ניהול לוח</p>
+                          <p className="text-[14px] font-bold text-[#55677C]">ניהול לוח</p>
                         </div>
 
                         <button onClick={() => { setEditMode(v => !v); setMenuOpen(false); }}
                           className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#F3F5F1] transition-colors text-right">
                           <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-                            style={{ backgroundColor: editMode ? '#003D30' : '#EEF2EC' }}>
+                            style={{ backgroundColor: editMode ? '#203957' : '#EEF2EC' }}>
                             <PenTool className="w-4 h-4" style={{ color: editMode ? '#ffffff' : '#64748b' }} />
                           </div>
                           <div>
-                            <p className="text-sm font-bold text-[#003D30] leading-none mb-0.5">
+                            <p className="text-sm font-bold text-[#203957] leading-none mb-0.5">
                               {editMode ? 'סיום עריכה' : 'עריכת לוח'}
                             </p>
-                            <p className="text-[10px] text-[#476356]">הסתר ושחזר בועות</p>
+                            <p className="text-[10px] text-[#55677C]">הסתר ושחזר בועות</p>
                           </div>
                         </button>
 
                         {totalHidden > 0 && (
                           <button onClick={showAll}
-                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#E8EDE5] transition-colors text-right border-t border-[#E1E8E1]">
-                            <div className="w-8 h-8 rounded-xl bg-[#E8EDE5] flex items-center justify-center flex-shrink-0">
-                              <Eye className="w-4 h-4 text-[#476356]" />
+                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#DFE9DC] transition-colors text-right border-t border-[#E8E6DE]">
+                            <div className="w-8 h-8 rounded-xl bg-[#DFE9DC] flex items-center justify-center flex-shrink-0">
+                              <Eye className="w-4 h-4 text-[#55677C]" />
                             </div>
                             <div>
-                              <p className="text-sm font-bold text-[#476356] leading-none mb-0.5">הצג הכל</p>
-                              <p className="text-[10px] text-[#476356]">{totalHidden} בועות מוסתרות</p>
+                              <p className="text-sm font-bold text-[#55677C] leading-none mb-0.5">הצג הכל</p>
+                              <p className="text-[10px] text-[#55677C]">{totalHidden} בועות מוסתרות</p>
                             </div>
                           </button>
                         )}
 
                         <button onClick={resetAll}
-                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#F3E2D8] transition-colors text-right border-t border-[#E1E8E1]">
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#F3E2D8] transition-colors text-right border-t border-[#E8E6DE]">
                           <div className="w-8 h-8 rounded-xl bg-[#F3E2D8] flex items-center justify-center flex-shrink-0">
                             <RotateCcw className="w-4 h-4 text-[#9A4520]" />
                           </div>
@@ -794,7 +794,7 @@ export default function DashboardPage() {
 
               {/* Sign out */}
               <button onClick={signOutFn}
-                className="w-9 h-9 rounded-full flex items-center justify-center border-2 border-[#E1E8E1] text-[#8FA396] hover:text-[#9A4520] hover:border-red-100 hover:bg-[#F3E2D8] transition-all">
+                className="w-9 h-9 rounded-full flex items-center justify-center border-2 border-[#E8E6DE] text-[#8FA396] hover:text-[#9A4520] hover:border-red-100 hover:bg-[#F3E2D8] transition-all">
                 <LogOut className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -806,19 +806,19 @@ export default function DashboardPage() {
               <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }} className="overflow-hidden mb-5">
                 <div className="flex items-center justify-between px-5 py-3 rounded-2xl"
-                  style={{ backgroundColor: '#003D30', boxShadow: '0 4px 20px rgba(0,61,48,0.25)' }}>
+                  style={{ backgroundColor: '#203957', boxShadow: '0 4px 20px rgba(32, 57, 87,0.25)' }}>
                   <div className="flex items-center gap-2.5">
                     <div className="w-7 h-7 rounded-full bg-teal-400/20 flex items-center justify-center">
-                      <PenTool className="w-3.5 h-3.5 text-[#A9C4A5]" />
+                      <PenTool className="w-3.5 h-3.5 text-[#C5D3E2]" />
                     </div>
                     <div>
                       <p className="text-sm font-bold text-white leading-none">מצב עריכה פעיל</p>
-                      <p className="text-[10px] text-[#A9C4A5] mt-0.5">לחץ ✕ להסתרת בועה · לחץ + לשחזור</p>
+                      <p className="text-[10px] text-[#C5D3E2] mt-0.5">לחץ ✕ להסתרת בועה · לחץ + לשחזור</p>
                     </div>
                   </div>
                   <button onClick={() => setEditMode(false)}
                     className="flex items-center gap-1.5 px-3.5 py-2 rounded-full font-bold text-xs"
-                    style={{ backgroundColor: '#003D30', color: '#ffffff' }}>
+                    style={{ backgroundColor: '#203957', color: '#ffffff' }}>
                     <Check className="w-3.5 h-3.5" /> סיום
                   </button>
                 </div>
@@ -828,13 +828,13 @@ export default function DashboardPage() {
 
           {/* Greeting */}
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
-            <p className="text-[14px] font-bold text-[#476356] mb-0.5"
+            <p className="text-[14px] font-bold text-[#55677C] mb-0.5"
               style={{ fontFamily: "sans-serif" }}>SEELD • פלטפורמה</p>
-            <h1 className="text-3xl font-bold text-[#003D30] leading-none"
+            <h1 className="text-3xl font-bold text-[#203957] leading-none"
               style={{ fontFamily: "'Rubik', Arial, sans-serif" }}>{getGreeting()}</h1>
-            <p className="text-xs text-[#476356] mt-1">
+            <p className="text-xs text-[#55677C] mt-1">
               {activeSection
-                ? <><span className="text-[#003D30] font-bold">{activeSection}</span>{' · '}{displayBubbles.length} בועות</>
+                ? <><span className="text-[#203957] font-bold">{activeSection}</span>{' · '}{displayBubbles.length} בועות</>
                 : <>{totalBubbles - totalHidden} בועות פעילות
                     {totalHidden > 0 && <span className="text-orange-400"> · {totalHidden} מוסתרות</span>}
                   </>

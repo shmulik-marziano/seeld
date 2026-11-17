@@ -35,9 +35,9 @@ interface ItemData {
 // Execution states, as recorded by the agency. A state describes what was
 // carried out; it is not an approval of cover.
 const STATUS_STYLE: Record<string, { bg: string; text: string; border: string }> = {
-  fully_executed: { bg: '#E8EDE5', text: '#003D30', border: '#CCD6CC' },
-  partially_executed: { bg: '#F5EEE0', text: '#8A6230', border: '#E5D3B3' },
-  not_executed: { bg: '#E1E8E1', text: '#476356', border: '#CCD6CC' },
+  fully_executed: { bg: '#DFE9DC', text: '#203957', border: '#D9DEE4' },
+  partially_executed: { bg: '#F5EEE0', text: '#7C5C22', border: '#E5D3B3' },
+  not_executed: { bg: '#E8E6DE', text: '#55677C', border: '#D9DEE4' },
 };
 
 const LogoLine = () => (

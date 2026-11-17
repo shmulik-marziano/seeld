@@ -10,10 +10,10 @@ import { CORAL, CORAL_TEXT, DISPLAY, MONO, MUTED, NAVY, TURQ } from "@/lib/brand
 // Frank Ruhl 900 turquoise standout stat, CSS bar chart with mono LTR values.
 
 const inputClass =
-  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]";
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#D9DEE4] rounded-lg text-[#203957] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#203957]";
 const sliderClass =
   "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#819B7D] [&_[role=slider]]:border-[#819B7D]";
-const labelClass = "flex items-center gap-2 text-base font-medium text-[#003D30]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#203957]";
 
 interface MortgageResult {
   monthlyPayment: number;

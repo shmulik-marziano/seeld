@@ -3,14 +3,14 @@
    calm, exact, no ornament. Deep brand green on white, one hairline weight, a serif for
    headings only, real tables, a fixed index, and credentials stated plainly. */
 .inst {
-  --green: #003D30;
+  --green: #203957;
   --ink: #10241D;
   --body: #25372F;
   --muted: #4D6158;          /* 6.3:1 on white */
   --line: #D3DCD7;
   --wash: #F3F6F4;
   --white: #FFFFFF;
-  --sand: #CBA064;
+  --sand: #AD833E;
   --serif: "Frank Ruhl Libre", "David Libre", Georgia, serif;
   background: var(--white);
   color: var(--body);
@@ -28,9 +28,9 @@
 
 /* actions */
 .inst-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 28px; font-size: 17px; font-weight: 700; border-radius: 4px; border: 1.5px solid var(--green); background: var(--green); color: var(--white); transition: background-color .15s; }
-.inst-btn:hover { background: #002B22; }
+.inst-btn:hover { background: #162B45; }
 .inst-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; color: var(--green); border-bottom: 1.5px solid currentColor; }
-.inst-link:hover { color: #002B22; border-bottom-width: 2.5px; }
+.inst-link:hover { color: #162B45; border-bottom-width: 2.5px; }
 .inst a:focus-visible, .inst button:focus-visible, .inst summary:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 3px; }
 
 /* page header */

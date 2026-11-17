@@ -14,7 +14,7 @@ const PersonalArea = () => {
       <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
         <Header />
         <section className="flex items-center justify-center h-[60vh]" aria-busy="true" aria-live="polite">
-          <Loader2 className="w-8 h-8 animate-spin text-[#003D30]" aria-hidden="true" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#203957]" aria-hidden="true" />
           <span className="sr-only">טוען את האזור האישי</span>
         </section>
       </div>

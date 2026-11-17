@@ -63,24 +63,24 @@ export function AppLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen" dir="rtl" style={{ backgroundColor: '#FAF7EF' }}>
       {/* ── Sidebar (desktop only) ── */}
       <aside
-        className={`hidden md:flex flex-col flex-shrink-0 bg-white border-l border-[#003D30]/[0.06] transition-all duration-200 ease-in-out ${
+        className={`hidden md:flex flex-col flex-shrink-0 bg-white border-l border-[#203957]/[0.06] transition-all duration-200 ease-in-out ${
           sidebarCollapsed ? 'w-16' : 'w-60'
         }`}
         style={{ height: '100vh', position: 'sticky', top: 0 }}
       >
         {/* Brand */}
-        <div className="flex items-center justify-between h-14 px-3 border-b border-[#003D30]/[0.06]">
+        <div className="flex items-center justify-between h-14 px-3 border-b border-[#203957]/[0.06]">
           {!sidebarCollapsed && (
             <Link to="/app/dashboard" className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-[#003D30] flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-[#203957] flex items-center justify-center">
                 <span className="text-white text-xs font-bold">S</span>
               </div>
-              <span className="text-sm font-bold text-[#003D30] tracking-tight">SEELD</span>
+              <span className="text-sm font-bold text-[#203957] tracking-tight">SEELD</span>
             </Link>
           )}
           {sidebarCollapsed && (
             <Link to="/app/dashboard" className="mx-auto">
-              <div className="w-7 h-7 rounded-lg bg-[#003D30] flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-[#203957] flex items-center justify-center">
                 <span className="text-white text-xs font-bold">S</span>
               </div>
             </Link>
@@ -88,7 +88,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           {!sidebarCollapsed && (
             <button
               onClick={() => setSidebarCollapsed(true)}
-              className="p-1 rounded hover:bg-[#E8EDE5] text-[#476356] hover:text-[#476356] transition-colors"
+              className="p-1 rounded hover:bg-[#DFE9DC] text-[#55677C] hover:text-[#55677C] transition-colors"
             >
               <PanelLeftClose className="w-4 h-4" />
             </button>
@@ -102,15 +102,15 @@ export function AppLayout({ children }: { children: ReactNode }) {
             to="/app/dashboard"
             className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 mb-1 transition-colors ${
               isActive('/app/dashboard')
-                ? 'bg-[#003D30]/5 text-[#003D30] font-bold'
-                : 'text-[#476356] hover:bg-[#F3F5F1]'
+                ? 'bg-[#203957]/5 text-[#203957] font-bold'
+                : 'text-[#55677C] hover:bg-[#F3F5F1]'
             }`}
           >
             <LayoutDashboard className="w-4 h-4 flex-shrink-0" style={{ color: DECK.color }} />
             {!sidebarCollapsed && <span className="text-sm">{DECK.hebrewName}</span>}
           </Link>
 
-          <div className="h-px bg-[#E8EDE5] my-2" />
+          <div className="h-px bg-[#DFE9DC] my-2" />
 
           {/* Phase sections */}
           {PHASES.map((phase) => {
@@ -134,7 +134,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
                     />
                   ) : (
                     <>
-                      <span className="text-xs uppercase tracking-wide text-[#476356] font-medium">
+                      <span className="text-xs uppercase tracking-wide text-[#55677C] font-medium">
                         {phase.label}
                       </span>
                       <ChevronLeft
@@ -160,8 +160,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
                           title={sidebarCollapsed ? tool.hebrewName : undefined}
                           className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors ${
                             active
-                              ? 'bg-[#003D30]/5 text-[#003D30] font-bold'
-                              : 'text-[#476356] hover:bg-[#F3F5F1]'
+                              ? 'bg-[#203957]/5 text-[#203957] font-bold'
+                              : 'text-[#55677C] hover:bg-[#F3F5F1]'
                           } ${sidebarCollapsed ? 'justify-center w-10 mx-auto' : ''}`}
                         >
                           <Icon className="w-4 h-4 flex-shrink-0" style={{ color: tool.color }} />
@@ -185,17 +185,17 @@ export function AppLayout({ children }: { children: ReactNode }) {
         </nav>
 
         {/* Bottom section */}
-        <div className="border-t border-[#003D30]/[0.06] px-2 py-2">
+        <div className="border-t border-[#203957]/[0.06] px-2 py-2">
           {/* Settings */}
           <Link
             to="/app/settings"
             className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors ${
               isActive('/app/settings')
-                ? 'bg-[#003D30]/5 text-[#003D30] font-bold'
-                : 'text-[#476356] hover:bg-[#F3F5F1]'
+                ? 'bg-[#203957]/5 text-[#203957] font-bold'
+                : 'text-[#55677C] hover:bg-[#F3F5F1]'
             } ${sidebarCollapsed ? 'justify-center' : ''}`}
           >
-            <Settings className="w-4 h-4 flex-shrink-0 text-[#476356]" />
+            <Settings className="w-4 h-4 flex-shrink-0 text-[#55677C]" />
             {!sidebarCollapsed && <span className="text-sm">הגדרות</span>}
           </Link>
 
@@ -203,7 +203,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           {sidebarCollapsed && (
             <button
               onClick={() => setSidebarCollapsed(false)}
-              className="flex items-center justify-center w-full rounded-lg px-2.5 py-2 mt-1 text-[#476356] hover:bg-[#F3F5F1] hover:text-[#476356] transition-colors"
+              className="flex items-center justify-center w-full rounded-lg px-2.5 py-2 mt-1 text-[#55677C] hover:bg-[#F3F5F1] hover:text-[#55677C] transition-colors"
             >
               <PanelLeftOpen className="w-4 h-4" />
             </button>
@@ -216,12 +216,12 @@ export function AppLayout({ children }: { children: ReactNode }) {
         {/* Back bar for non-dashboard pages */}
         {!isDashboard && (
           <div
-            className="sticky top-0 z-40 flex items-center px-4 h-11 border-b border-[#E1E8E1]/70 md:hidden"
+            className="sticky top-0 z-40 flex items-center px-4 h-11 border-b border-[#E8E6DE]/70 md:hidden"
             style={{ backgroundColor: 'rgba(250,247,239,0.95)', backdropFilter: 'blur(12px)' }}
           >
             <button
               onClick={() => navigate('/app/dashboard')}
-              className="flex items-center gap-1.5 text-xs font-bold text-[#476356] hover:text-[#003D30] transition-colors"
+              className="flex items-center gap-1.5 text-xs font-bold text-[#55677C] hover:text-[#203957] transition-colors"
             >
               <ChevronRight className="w-3.5 h-3.5 rotate-180" />
               SEELD פלטפורמה
@@ -236,7 +236,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
       {/* ── Mobile bottom tab bar ── */}
       <div
-        className="fixed bottom-0 inset-x-0 z-50 flex md:hidden items-center justify-around bg-white border-t border-[#CCD6CC] h-14 px-1"
+        className="fixed bottom-0 inset-x-0 z-50 flex md:hidden items-center justify-around bg-white border-t border-[#D9DEE4] h-14 px-1"
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         {mobileBottomTabs.map((tab) => {
@@ -253,7 +253,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
               key={tab.path}
               to={tab.path}
               className={`flex flex-col items-center justify-center gap-0.5 flex-1 py-1 transition-colors ${
-                active ? 'text-[#003D30]' : 'text-[#476356]'
+                active ? 'text-[#203957]' : 'text-[#55677C]'
               }`}
             >
               <Icon className="w-5 h-5" />

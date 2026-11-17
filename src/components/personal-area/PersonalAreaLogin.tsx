@@ -19,7 +19,7 @@ const whatIsInside = [
 ];
 
 const socialButtonClass =
-  "w-full inline-flex items-center justify-center gap-3 min-h-[48px] rounded-xl border bg-white text-[16px] font-bold transition-colors hover:border-[#003D30] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30] disabled:opacity-60 disabled:pointer-events-none";
+  "w-full inline-flex items-center justify-center gap-3 min-h-[48px] rounded-xl border bg-white text-[16px] font-bold transition-colors hover:border-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957] disabled:opacity-60 disabled:pointer-events-none";
 
 const PersonalAreaLogin = () => {
   const [step, setStep] = useState<"choose" | "email" | "otp">("choose");
@@ -110,7 +110,7 @@ const PersonalAreaLogin = () => {
               <Link
                 to="/"
                 aria-label="שילד ביטוח ופיננסים, לדף הבית"
-                className="inline-flex rounded-md p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#003D30]"
+                className="inline-flex rounded-md p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#203957]"
               >
                 <img
                   src="/brand/logo.png"
@@ -315,9 +315,9 @@ const PersonalAreaLogin = () => {
             <p className="mt-3 text-[17px] leading-[1.7]" style={{ color: BODY }}>
               ממפים את התיק ומלווים את הדרך. מה מחכה באזור האישי:
             </p>
-            <ul className="mt-4 border-t" style={{ borderColor: "rgba(0,61,48,0.15)" }}>
+            <ul className="mt-4 border-t" style={{ borderColor: "rgba(32, 57, 87,0.15)" }}>
               {whatIsInside.map((line) => (
-                <li key={line} className="dna-pill-item !py-3 border-b text-[16px]" style={{ borderColor: "rgba(0,61,48,0.15)" }}>
+                <li key={line} className="dna-pill-item !py-3 border-b text-[16px]" style={{ borderColor: "rgba(32, 57, 87,0.15)" }}>
                   <span>{line}</span>
                 </li>
               ))}

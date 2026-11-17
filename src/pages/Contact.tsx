@@ -281,7 +281,7 @@ const Contact = () => {
                         <span className="text-[14px]" style={{ color: MUTED }}>טלפון</span>
                         <a
                           href="tel:0523097444"
-                          className="inline-flex min-h-[44px] items-center text-[16px] font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#003D30]/40 transition-colors"
+                          className="inline-flex min-h-[44px] items-center text-[16px] font-bold tabular-nums whitespace-nowrap border-b border-transparent hover:border-[#203957]/40 transition-colors"
                           style={{ color: GREEN }}
                           dir="ltr"
                         >
@@ -299,7 +299,7 @@ const Contact = () => {
                           href="https://wa.me/972523097444"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex min-h-[44px] items-center text-[16px] font-bold border-b border-transparent hover:border-[#003D30]/40 transition-colors"
+                          className="inline-flex min-h-[44px] items-center text-[16px] font-bold border-b border-transparent hover:border-[#203957]/40 transition-colors"
                           style={{ color: GREEN }}
                         >
                           שלחו הודעה
@@ -311,7 +311,7 @@ const Contact = () => {
                         <span className="text-[14px]" style={{ color: MUTED }}>אימייל</span>
                         <a
                           href="mailto:info@seeld.co.il"
-                          className="inline-flex min-h-[44px] items-center text-[16px] font-bold border-b border-transparent hover:border-[#003D30]/40 transition-colors"
+                          className="inline-flex min-h-[44px] items-center text-[16px] font-bold border-b border-transparent hover:border-[#203957]/40 transition-colors"
                           style={{ color: GREEN }}
                           dir="ltr"
                         >

@@ -76,11 +76,11 @@ function validateIsraeliId(id: string): { valid: boolean; message?: string } {
 // ─── Styled pieces (DNA v3) ─────────────────────────────────────────────
 // Consistent keyboard focus for buttons and selectable tiles (Snap: no ring animation)
 const FOCUS_RING =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]";
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]";
 
 // DNA v3 boxed input: white, hairline border, navy focus
 const inputClass =
-  "w-full px-4 py-3 bg-white border border-[#CCD6CC] rounded-lg text-[#003D30] placeholder:text-[#476356] text-base focus:outline-none focus:border-[#003D30] transition-colors min-h-[48px]";
+  "w-full px-4 py-3 bg-white border border-[#D9DEE4] rounded-lg text-[#203957] placeholder:text-[#55677C] text-base focus:outline-none focus:border-[#203957] transition-colors min-h-[48px]";
 
 function FieldLabel({ label, required, error }: { label: string; required?: boolean; error?: string }) {
   return (
@@ -336,7 +336,7 @@ export default function DirectDebit() {
             <div className="mt-10">
               <Link
                 to="/"
-                className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#003D30] border-b border-[#003D30]/25 pb-0.5 hover:border-[#003D30] transition-colors"
+                className="group inline-flex items-center gap-2 text-[14px] font-medium text-[#203957] border-b border-[#203957]/25 pb-0.5 hover:border-[#203957] transition-colors"
               >
                 חזרה לדף הבית
                 <span className="inline-block transition-transform group-hover:-translate-x-1">←</span>
@@ -371,7 +371,7 @@ export default function DirectDebit() {
           <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-10 sm:pb-12">
             <div className="mb-8 flex items-baseline justify-between gap-4">
               <nav className="flex items-center gap-2 text-[14px]" style={{ color: MUTED }}>
-                <Link to="/" className="hover:text-[#003D30] transition-colors">דף הבית</Link>
+                <Link to="/" className="hover:text-[#203957] transition-colors">דף הבית</Link>
                 <span aria-hidden="true">←</span>
                 <span className="font-medium" style={{ color: NAVY }}>הוראת קבע</span>
               </nav>
@@ -458,7 +458,7 @@ export default function DirectDebit() {
                         ) : (
                           <button
                             onClick={refreshBanks}
-                            className={cn("text-[11px] text-[#476356] flex items-center gap-1 hover:text-[#003D30] transition-colors", FOCUS_RING)}
+                            className={cn("text-[11px] text-[#55677C] flex items-center gap-1 hover:text-[#203957] transition-colors", FOCUS_RING)}
                           >
                             <RefreshCw className="w-3 h-3" />
                             נתוני גיבוי. לחצו לרענון
@@ -472,24 +472,24 @@ export default function DirectDebit() {
                       placeholder="חיפוש לפי שם בנק או מספר"
                       className="mb-4"
                     />
-                    <div className="max-h-56 overflow-y-auto rounded-lg bg-white border border-[#CCD6CC]">
+                    <div className="max-h-56 overflow-y-auto rounded-lg bg-white border border-[#D9DEE4]">
                       {filteredBanks.map(bank => (
                         <button
                           key={bank.code}
                           type="button"
                           onClick={() => { set("bankCode", bank.code); set("branchNumber", ""); set("branchName", ""); touch("bankCode"); setBankSearch(""); }}
                           className={cn(
-                            "w-full flex items-baseline justify-between gap-4 px-4 py-3 min-h-[44px] text-start border-b border-[#CCD6CC] last:border-0 transition-colors",
+                            "w-full flex items-baseline justify-between gap-4 px-4 py-3 min-h-[44px] text-start border-b border-[#D9DEE4] last:border-0 transition-colors",
                             FOCUS_RING,
                             "focus-visible:-outline-offset-2",
                             form.bankCode === bank.code
-                              ? "bg-[#003D30] text-white"
-                              : "text-[#003D30] hover:bg-[#E8EDE5]/35"
+                              ? "bg-[#203957] text-white"
+                              : "text-[#203957] hover:bg-[#DFE9DC]/35"
                           )}
                         >
                           <span className="text-[14px] font-medium">{bank.name}</span>
                           <span
-                            className={cn("text-[11px] tabular-nums shrink-0", form.bankCode === bank.code ? "text-white/70" : "text-[#476356]")}
+                            className={cn("text-[11px] tabular-nums shrink-0", form.bankCode === bank.code ? "text-white/70" : "text-[#55677C]")}
                             style={{ fontFamily: MONO }}
                             dir="ltr"
                           >
@@ -537,12 +537,12 @@ export default function DirectDebit() {
                                     "inline-flex items-baseline gap-1.5 px-3 py-2 min-h-[36px] rounded-md text-[14px] font-medium transition-colors",
                                     FOCUS_RING,
                                     form.branchNumber === num
-                                      ? "bg-[#003D30] text-white"
-                                      : "bg-white text-[#24483C] border border-[#CCD6CC] hover:bg-[#E8EDE5]/35 hover:text-[#003D30]"
+                                      ? "bg-[#203957] text-white"
+                                      : "bg-white text-[#2D435D] border border-[#D9DEE4] hover:bg-[#DFE9DC]/35 hover:text-[#203957]"
                                   )}
                                 >
                                   <span className="tabular-nums" style={{ fontFamily: MONO }} dir="ltr">{num}</span>
-                                  <span className={form.branchNumber === num ? "text-white/70" : "text-[#476356]"}>·</span>
+                                  <span className={form.branchNumber === num ? "text-white/70" : "text-[#55677C]"}>·</span>
                                   <span>{name}</span>
                                 </button>
                               ))}
@@ -594,8 +594,8 @@ export default function DirectDebit() {
                             "flex flex-col items-center py-4 px-3 rounded-lg transition-colors min-h-[44px]",
                             FOCUS_RING,
                             form.debitDay === opt.value
-                              ? "bg-[#003D30] text-white"
-                              : "bg-white text-[#003D30] border border-[#CCD6CC] hover:bg-[#E8EDE5]/35"
+                              ? "bg-[#203957] text-white"
+                              : "bg-white text-[#203957] border border-[#D9DEE4] hover:bg-[#DFE9DC]/35"
                           )}
                         >
                           <span
@@ -605,7 +605,7 @@ export default function DirectDebit() {
                           >
                             {opt.value}
                           </span>
-                          <span className={cn("text-[11px] mt-1.5", form.debitDay === opt.value ? "text-white/70" : "text-[#476356]")}>
+                          <span className={cn("text-[11px] mt-1.5", form.debitDay === opt.value ? "text-white/70" : "text-[#55677C]")}>
                             {opt.note}
                           </span>
                         </button>
@@ -620,7 +620,7 @@ export default function DirectDebit() {
                 <button
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className={cn("inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#003D30] text-white text-base font-medium tracking-wide hover:bg-[#002B22] transition-colors disabled:opacity-60 min-h-[52px] min-w-[200px]", FOCUS_RING)}
+                  className={cn("inline-flex items-center justify-center px-9 py-4 rounded-lg bg-[#203957] text-white text-base font-medium tracking-wide hover:bg-[#162B45] transition-colors disabled:opacity-60 min-h-[52px] min-w-[200px]", FOCUS_RING)}
                 >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "שליחת הוראת קבע"}
                 </button>

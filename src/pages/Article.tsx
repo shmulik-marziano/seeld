@@ -36,13 +36,13 @@ const ArticleCover = ({ article, priority = false, className = "" }: { article: 
 
 // Share buttons — 44px squares with the hairline outline
 const shareBtnClass =
-  "inline-flex h-11 w-11 items-center justify-center rounded-[12px] bg-white transition-colors hover:bg-[#EEF2EC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]";
+  "inline-flex h-11 w-11 items-center justify-center rounded-[12px] bg-white transition-colors hover:bg-[#EEF2EC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]";
 
 // The article card — .dna-concept tile, whole-tile link, quiet lift
 const ArticleTile = ({ article }: { article: ArticleData }) => (
   <Link
     to={`/article/${article.id}`}
-    className="dna-concept dna-hover group flex h-full flex-col overflow-hidden !p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+    className="dna-concept dna-hover group flex h-full flex-col overflow-hidden !p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
   >
     <div className={`${isStockPhoto(article.image) ? "aspect-[3/2]" : "aspect-[16/10]"} overflow-hidden border-b`} style={{ borderColor: LINE }}>
       <ArticleCover article={article} />

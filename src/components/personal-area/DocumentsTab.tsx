@@ -19,11 +19,11 @@ type SourceFile = {
 // Receipt states, as the brief distinguishes them: received, being checked,
 // checked. None of these is a professional approval of the document's content.
 const statusConfig: Record<string, { label: string; bg: string; text: string }> = {
-  uploaded: { label: "התקבל", bg: "#E8EDE5", text: "#003D30" },
-  processing: { label: "בבדיקה", bg: "#F5EEE0", text: "#8A6230" },
-  processed: { label: "נבדק", bg: "#E8EDE5", text: "#003D30" },
+  uploaded: { label: "התקבל", bg: "#DFE9DC", text: "#203957" },
+  processing: { label: "בבדיקה", bg: "#F5EEE0", text: "#7C5C22" },
+  processed: { label: "נבדק", bg: "#DFE9DC", text: "#203957" },
   error: { label: "שגיאה בקליטה", bg: "#F6E5DC", text: "#9A4520" },
-  pending: { label: "ממתין", bg: "#E1E8E1", text: "#476356" },
+  pending: { label: "ממתין", bg: "#E8E6DE", text: "#55677C" },
 };
 
 const fileTypeLabels: Record<string, string> = {
@@ -101,7 +101,7 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
             <li key={file.id} className="flex items-center gap-4 p-4" style={{ borderColor: LINE }}>
               <span
                 className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 text-[14px] font-bold"
-                style={{ backgroundColor: "#E8EDE5", color: GREEN }}
+                style={{ backgroundColor: "#DFE9DC", color: GREEN }}
                 dir="ltr"
                 aria-hidden="true"
               >
@@ -129,7 +129,7 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
                   href={file.file_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 w-11 h-11 rounded-full inline-flex items-center justify-center transition-colors hover:bg-[#EEF2EC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003D30]"
+                  className="shrink-0 w-11 h-11 rounded-full inline-flex items-center justify-center transition-colors hover:bg-[#EEF2EC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
                   style={{ color: GREEN }}
                   aria-label={`הורדה או צפייה: ${displayName}`}
                 >

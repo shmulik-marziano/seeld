@@ -11,10 +11,10 @@ import { DISPLAY, MONO, MUTED, NAVY, TURQ } from "@/lib/brand";
 // Frank Ruhl 900 turquoise standout stat, table.dna-data breakdown.
 
 const inputClass =
-  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#CCD6CC] rounded-lg text-[#003D30] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#003D30]";
+  "h-12 text-lg font-medium text-left tabular-nums bg-white border-[#D9DEE4] rounded-lg text-[#203957] focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#203957]";
 const sliderClass =
   "[&>span:first-child]:bg-[#EEF3F6] [&>span:first-child>span]:bg-[#819B7D] [&_[role=slider]]:border-[#819B7D]";
-const labelClass = "flex items-center gap-2 text-base font-medium text-[#003D30]";
+const labelClass = "flex items-center gap-2 text-base font-medium text-[#203957]";
 
 // Needs-based (DIME-style) planning assumptions; review yearly.
 const DISCOUNT_RATE = 0.03; // annual real discount rate on the income-replacement annuity
@@ -291,7 +291,7 @@ const LifeInsuranceCalculator = () => {
           נקבע מול חברת הביטוח לפי גיל, מצב בריאותי ותנאי הפוליסה.{" "}
           <Link
             to="/insurance/life"
-            className="font-medium text-[#003D30] border-b border-[#003D30]/30 pb-0.5 hover:border-[#003D30] transition-colors"
+            className="font-medium text-[#203957] border-b border-[#203957]/30 pb-0.5 hover:border-[#203957] transition-colors"
           >
             לפרטים על ביטוח חיים
           </Link>

@@ -45,7 +45,7 @@ export const InsbaseConnectCard = ({ compact = false }: { compact?: boolean }) =
   return (
     <div className="rounded-2xl bg-white border p-6 sm:p-7" style={{ borderColor: LINE }}>
       <div className="flex items-center gap-4">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ background: "#E8EDE5" }}>
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full" style={{ background: "#DFE9DC" }}>
           <BrandIcon name="folder" size={24} style={{ color: GREEN }} />
         </span>
         <h3 className="text-[22px] leading-tight" style={{ color: GREEN }}>חיבור התיק</h3>

@@ -142,7 +142,7 @@ const SectionTitle = ({ children }: { children: ReactNode }) => (
 );
 
 const tabTriggerClass =
-  'rounded-none bg-transparent px-2.5 -mx-2.5 pb-4 text-[16px] font-bold text-[#476356] hover:text-[#003D30] border-b-2 border-transparent data-[state=active]:border-[#003D30] data-[state=active]:text-[#003D30] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
+  'rounded-none bg-transparent px-2.5 -mx-2.5 pb-4 text-[16px] font-bold text-[#55677C] hover:text-[#203957] border-b-2 border-transparent data-[state=active]:border-[#203957] data-[state=active]:text-[#203957] data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors whitespace-nowrap';
 
 export default function InsurancePageTemplate(props: InsurancePageProps) {
   const {
@@ -245,7 +245,7 @@ export default function InsurancePageTemplate(props: InsurancePageProps) {
                 name={art}
                 priority
                 sizes="(min-width: 1024px) 560px, 100vw"
-                className="brand-hero-art shadow-[0_16px_40px_-24px_rgba(0,61,48,0.35)]"
+                className="brand-hero-art shadow-[0_16px_40px_-24px_rgba(32, 57, 87,0.35)]"
               />
             )}
           </div>
