@@ -18,7 +18,7 @@ const specialties: { icon: string; tone: Pastel; title: string; description: str
 ];
 
 const steps = [
-  { icon: "phone", t: "שיחה ראשונה", p: "מספרים לנו מה חשוב לכם. אנחנו מקשיבים לפני שמציעים. ללא עלות וללא התחייבות." },
+  { icon: "phone", t: "שיחה ראשונה", p: "מספרים לנו מה חשוב לכם. אנחנו מקשיבים לפני שמציעים. בלי התחייבות מצידכם." },
   { icon: "search", t: "בדיקה והשוואה", p: "הצוות בודק את התיק מול החברות בשוק ומסכם לכם בשפה פשוטה." },
   { icon: "shield", t: "ליווי לאורך הדרך", p: "אחרי שמחליטים אנחנו נשארים: חידושים, שינויים במשפחה ותביעות." },
 ];
@@ -29,7 +29,7 @@ export default function Authors() {
       <PubHero
         crumbs={[{ label: "דף הבית", to: "/" }, { label: "הצוות המקצועי" }]}
         eyebrow="הצוות המקצועי"
-        title="צוות סוכנים שמכיר את התחום לעומק"
+        title="צוות סוכנים בתחומי הביטוח, הפנסיה והפיננסים"
         lead="ליווי מקצועי ואישי בתחומי הביטוח, הפנסיה והפיננסים. כל פנייה מגיעה לצוות שלם של סוכנים, ולא תלויה באדם אחד."
         art="02-family-protection"
         actions={
@@ -45,7 +45,7 @@ export default function Authors() {
           <div className="sd-band-head">
             <span className="sd-eyebrow">תחומי התמחות</span>
             <h2 className="sd-h2">במה הצוות מתמחה</h2>
-            <p className="sd-lead">שישה תחומים שבהם אנחנו מלווים משפחות ועסקים כל יום.</p>
+            <p className="sd-lead">שישה תחומים שבהם אנחנו מלווים משפחות ועסקים.</p>
           </div>
           <ul className="sd-pub-values">
             {specialties.map((s) => (
@@ -88,7 +88,7 @@ export default function Authors() {
 
       <PubCta
         title="רוצים להתחיל?"
-        text="פגישת ייעוץ ראשונה ללא עלות וללא התחייבות. נכיר, נבדוק ונבנה יחד תוכנית שמתאימה לכם."
+        text="שיחת היכרות בלי התחייבות מצידכם. נכיר, נבדוק ונבנה יחד תוכנית שמתאימה לכם."
         art="12-childrens-savings"
         primary={{ label: "בדיקת תיק 360", to: "/portfolio-review" }}
         secondary={{ label: "תיאום פגישה", to: "/contact" }}

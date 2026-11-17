@@ -154,3 +154,27 @@ a.sd-pub-card:hover { transform: translateY(-4px); box-shadow: 0 1px 2px rgba(32
 .sd-hero-copy nav[aria-label="מוצרים"] { max-width: 100%; }
 .sd:has(.sd-pub-close) .sd-chrome-foot-top { display: none; }
 .sd:has(.sd-pub-close) .sd-chrome-foot-wrap { padding-top: clamp(32px, 4vw, 52px); }
+
+/* ══ Stream C (design pass): kit skin for the legacy tool classes (dna-*, field, btn-*) inside .sd pages ══ */
+.sd .dna-concept { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-sm); box-shadow: var(--shadow); }
+.sd .dna-callout { background: rgba(255,255,255,.72); border: 1px solid var(--line); border-inline-start: 3px solid var(--gold); border-radius: 14px; padding: 16px 20px; }
+.sd .dna-quote { background: rgba(244,231,195,.45); border-inline-start-color: var(--gold); }
+.sd .dna-quote.blue { background: rgba(214,227,239,.6); border-color: var(--ink); }
+.sd .dna-pill-item::before { background: var(--gold); }
+.sd .dna-gbar { background: var(--gold); }
+.sd .dna-display { font-family: var(--serif); letter-spacing: -.005em; }
+.sd table.dna-data { border-radius: 14px; overflow: hidden; }
+.sd table.dna-data thead th { background: var(--ink); }
+.sd table.dna-data tbody td { border-bottom-color: var(--line); }
+.sd table.dna-data tbody tr:nth-child(even) { background: #FBF6E8; }
+.sd table.dna-data tbody tr:hover { background: #F4E7C3; }
+.sd .field { border-radius: 12px; border-color: rgba(32,57,87,.22); min-height: 50px; }
+.sd .field::placeholder { color: #6A7A8D; }
+.sd .field:focus { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(231,201,139,.75); }
+.sd .field:disabled { background: #F3EEE0; color: #55677C; }
+.sd .btn-primary { min-height: 52px; padding: 0 28px; border-radius: 999px; box-shadow: 0 1px 0 rgba(255,255,255,.14) inset, 0 8px 18px -10px rgba(32,57,87,.6); transition: background-color .15s, transform .2s, box-shadow .2s; }
+.sd .btn-primary:hover { transform: translateY(-1px); }
+.sd .btn-secondary { min-height: 52px; padding: 0 26px; border-radius: 999px; background: rgba(255,255,255,.6); }
+.sd .btn-secondary:hover { background: #fff; }
+.sd .btn-primary:focus-visible, .sd .btn-secondary:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; box-shadow: 0 0 0 5px rgba(231,201,139,.7); }
+@media (prefers-reduced-motion: reduce) { .sd .btn-primary:hover { transform: none; } }

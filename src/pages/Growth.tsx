@@ -27,9 +27,9 @@ const Growth = () => {
   );
 
   const pillars: { title: string; description: string; href?: string }[] = [
-    { title: "חיסכון חכם", description: "אסטרטגיות חיסכון מותאמות אישית לכל שלב בחיים", href: "/savings" },
-    { title: "השקעות", description: "בחירת מסלולים ומעקב תשואות", href: "/savings/investment" },
-    { title: "תכנון מס", description: "ניצול מרבי של הטבות מס וחיסכון בתשלומים" },
+    { title: "חיסכון חכם", description: "חיסכון שמתאים לשלב שבו אתם נמצאים בחיים", href: "/savings" },
+    { title: "השקעות", description: "בחירת מסלולים ומעקב אחריהם", href: "/savings/investment" },
+    { title: "תכנון מס", description: "בדיקה אילו הטבות מס מתאימות לכם" },
     { title: "יעדים פיננסיים", description: "הגדרת יעדים ובחינה מחדש אחת לשנה", href: "/savings/financial-planning" },
   ];
 
@@ -83,7 +83,7 @@ const Growth = () => {
 
         <SdBand tone={p2} id="guides">
           <div className="sd-wrap">
-            <PubHead title="מאמרים ומדריכים" lede="כל מה שצריך לדעת על חיסכון, השקעות ותכנון פיננסי" />
+            <PubHead title="מאמרים ומדריכים" lede="הסברים על חיסכון, השקעות ותכנון פיננסי" />
             <div className="sd-pub-grid sd-pub-grid-3">
               {savingsArticles.map((article) => {
                 const a = artForText(article.category, article.title);
@@ -110,11 +110,11 @@ const Growth = () => {
             <div className="sd-pub-copy">
               <h2 className="sd-h2" style={{ marginBottom: 24 }}>תכנון פיננסי נכון</h2>
               <p className="sd-text">
-                תכנון פיננסי נכון הוא הבסיס לביטחון כלכלי. בין אם אתם רק מתחילים את הקריירה,
-                מתכננים רכישת דירה או מתקרבים לגיל הפרישה, ייעוץ מקצועי יכול לעשות את ההבדל.
+                תכנון פיננסי הוא בסיס לביטחון כלכלי. בין אם אתם רק מתחילים את הקריירה,
+                מתכננים רכישת דירה או מתקרבים לגיל הפרישה, כדאי לעצור ולסדר את התמונה.
               </p>
               <p className="sd-text">
-                הצוות של שילד בונה איתכם תוכנית פיננסית מותאמת: ניצול הטבות המס הזמינות
+                הצוות של שילד בונה איתכם תוכנית פיננסית מותאמת: בדיקת הטבות המס הזמינות
                 ובחירת אפיקי החיסכון וההשקעה שמתאימים לכם.
               </p>
             </div>
@@ -126,7 +126,7 @@ const Growth = () => {
 
         <PubClose
           title="מוכנים לתכנן את העתיד?"
-          text="הפגישה הראשונה ללא עלות וללא התחייבות. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
+          text="שיחת היכרות בלי התחייבות מצידכם. אפשר גם להתחיל בבדיקת תיק 360 מלאה."
           art="05-retirement"
         />
       </main>

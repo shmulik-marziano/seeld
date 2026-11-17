@@ -53,6 +53,8 @@ const ART_POOL: ArtName[] = [
 
 /** Three more illustrations for the guide aside, the process band and the closing block. Never repeats the hero or story art, nor each other. */
 function sparesFor(topic: Topic, path: string) {
+  // explicit per-topic choice (topics.ts) wins over the rotating pool
+  if (topic.art3 && topic.art4 && topic.art5) return { aside: topic.art3, process: topic.art4, close: topic.art5 };
   const used = new Set<ArtName>([topic.art, topic.art2]);
   let h = 0;
   for (const c of path) h = (h * 31 + c.charCodeAt(0)) >>> 0;
@@ -130,7 +132,7 @@ export default function SavingsPageSd(props: SavingsPageProps) {
 
   const trust = [
     { icon: "search", t: "השוואה בין הגופים", s: "דמי ניהול ומסלולי השקעה" },
-    { icon: "handshake", t: "פגישה ראשונה ללא עלות", s: "ואינה מחייבת" },
+    { icon: "handshake", t: "שיחת היכרות", s: "בלי התחייבות מצידכם" },
     { icon: "shield", t: "צוות מקצועי", s: "ליווי לאורך הדרך" },
     { icon: "phone", t: "מענה אישי", s: "רעננה וירושלים" },
   ];
@@ -138,7 +140,7 @@ export default function SavingsPageSd(props: SavingsPageProps) {
   const steps = [
     { icon: "checklist", t: "משאירים פרטים", p: "ממלאים טופס קצר או מתקשרים. מספרים לנו מה יש היום ומה חשוב לכם." },
     { icon: "search", t: "אנחנו בודקים", p: "עוברים על דמי הניהול, המסלולים וההפקדות ומציגים את התמונה בצורה ברורה." },
-    { icon: "handshake", t: "מחליטים יחד", p: "הפגישה הראשונה ללא עלות ואינה מחייבת. ההחלטה תמיד שלכם." },
+    { icon: "handshake", t: "מחליטים יחד", p: "שיחת היכרות בלי התחייבות מצידכם. ההחלטה נשארת שלכם." },
   ];
 
   return (
@@ -173,7 +175,7 @@ export default function SavingsPageSd(props: SavingsPageProps) {
             <div className="sd-stage" aria-hidden="true">
               <SdPic name={topic.art} sizes="(min-width:1024px) 520px, 90vw" priority />
               <SdStageSpot art={topic.art} />
-              {reviewed && <span className="sd-stage-tag"><i />תוכן נבדק {reviewed}</span>}
+              {reviewed && <span className="sd-stage-tag"><i />מידע כללי, לא ייעוץ אישי</span>}
             </div>
           </div>
         </section>

@@ -7,7 +7,7 @@ import { useInvestmentTracks } from "@/hooks/useInvestmentTracks";
 import { productTypeLabels, specializationLabels, companyLabels } from "@/types/fund";
 import type { Fund, ProductType, Specialization, ManagingCompany } from "@/types/fund";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { SdCrumbs, SdPic, tintStyle, useSdFont } from "@/components/sd/primitives";
+import { SdBand, SdCrumbs, SdPic, tintStyle, useSdFont } from "@/components/sd/primitives";
 import { topicFor } from "@/components/sd/topics";
 import "@/components/sd/sd.css";
 import "@/components/sd/SavingsPageSd.css";
@@ -459,13 +459,17 @@ const InvestmentTracks = () => {
         </section>
 
         {/* Tool body: checker + full table + educational content */}
-        <section className="sd-sav-tool">
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-12 sm:py-16 space-y-16 sm:space-y-20">
+        <SdBand tone="butter" id="checker">
+          <div className="sd-wrap">
             <PersonalTrackChecker trackData={trackData} />
+          </div>
+        </SdBand>
 
+        <SdBand tone="white" id="all-tracks">
+          <div className="sd-wrap">
             {/* All tracks: filters + table */}
             <section aria-labelledby="all-tracks-title">
-              <div className="mb-8 border-t pt-10" style={{ borderColor: LINE }}>
+              <div className="mb-8">
                 <h2 id="all-tracks-title" className="dna-display leading-tight" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>
                   כל המסלולים
                 </h2>
@@ -731,9 +735,13 @@ const InvestmentTracks = () => {
                 </div>
               )}
             </section>
+          </div>
+        </SdBand>
 
+        <SdBand tone="sage" id="learn">
+          <div className="sd-wrap">
             {/* Educational content */}
-            <section className="grid md:grid-cols-2 gap-x-16 gap-y-12 border-t pt-12" style={{ borderColor: LINE }}>
+            <section className="grid md:grid-cols-2 gap-x-16 gap-y-12">
               <div>
                 <h2 className="dna-display leading-tight mb-5" style={{ fontSize: "clamp(24px, 3vw, 30px)" }}>
                   מה זה מסלול השקעה?
@@ -763,11 +771,11 @@ const InvestmentTracks = () => {
               </div>
             </section>
           </div>
-        </section>
+        </SdBand>
 
         {/* Disclaimer */}
-        <section className="border-t" style={{ borderColor: LINE }}>
-          <div className="max-w-brand mx-auto px-5 sm:px-8 py-10 sm:py-14">
+        <SdBand tone="cream" id="disclaimer" className="!py-10 sm:!py-14">
+          <div className="sd-wrap">
             <div className="dna-callout max-w-3xl text-[15px]">
               <p className="font-bold mb-1" style={{ color: GREEN }}>הבהרה חשובה</p>
               <p>
@@ -777,7 +785,7 @@ const InvestmentTracks = () => {
               </p>
             </div>
           </div>
-        </section>
+        </SdBand>
 
         {/* Closing: navy block, the central path */}
         <section className="sd-contact">

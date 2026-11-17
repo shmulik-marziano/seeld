@@ -43,10 +43,10 @@ const Creativity = () => {
   const story = stories["/creativity"];
 
   const insuranceTypes: { title: string; description: string; features: string[]; href: string; art: ArtName }[] = [
-    { title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳. השוואה בין כל החברות", features: ["ביטוח חובה", "ביטוח מקיף", "צד ג'", "נזקי גוף"], href: "/insurance/vehicle", art: "07-car-insurance" },
+    { title: "ביטוח רכב", description: "חובה, מקיף וצד ג׳. השוואה בין כמה חברות", features: ["ביטוח חובה", "ביטוח מקיף", "צד ג'", "נזקי גוף"], href: "/insurance/vehicle", art: "07-car-insurance" },
     { title: "ביטוח דירה", description: "מבנה ותכולה, בלי הפתעות מאוחרות", features: ["ביטוח מבנה", "ביטוח תכולה", "צד ג'", "נזקי טבע"], href: "/insurance/home", art: "06-home-mortgage" },
     { title: "ביטוח עסק", description: "רכוש, אחריות מקצועית וצד ג׳ לעסק בכל גודל", features: ["אחריות מקצועית", "רכוש עסקי", "הפסד הכנסות", "חבות מעסיקים"], href: "/insurance/business", art: "08-business-insurance" },
-    { title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", features: ["הוצאות רפואיות", "ביטול טיסה", "אובדן מזוודות", "חירום 24/7"], href: "/insurance/travel", art: "09-travel-insurance" },
+    { title: "ביטוח נסיעות", description: "ביטול טיסה, אשפוז ומטען בחו״ל", features: ["הוצאות רפואיות", "ביטול טיסה", "אובדן מזוודות", "סיוע בחירום"], href: "/insurance/travel", art: "09-travel-insurance" },
   ];
 
   return (
@@ -58,7 +58,7 @@ const Creativity = () => {
           crumbs={[{ label: "דף הבית", to: "/" }, { label: "ביטוח רכוש ורכב" }]}
           eyebrow="רכב, דירה, עסק ונסיעות"
           title="ביטוח רכוש ורכב"
-          lead="רכב, דירה, עסק ונסיעות: השוואת הצעות מחיר מול כל החברות בשוק, ללא עלות."
+          lead="רכב, דירה, עסק ונסיעות: השוואת הצעות מחיר בין כמה חברות, ללא עלות."
           art={topic.art}
           tint={p1}
           actions={

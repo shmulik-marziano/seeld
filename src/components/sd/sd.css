@@ -238,3 +238,9 @@
 
 @media (prefers-reduced-motion: reduce) { .sd-reveal-pre { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .sd *, .sd *::before, .sd *::after { animation: none !important; transition: none !important; } }
+
+/* ── Stream C polish: "בקצרה" brief card breathing room (nursing and long briefs) ── */
+.sd-brief { padding: 22px 24px 24px; }
+.sd-brief b { margin-bottom: 12px; }
+.sd-brief p { text-wrap: pretty; }
+@media (max-width: 640px) { .sd-brief { padding: 20px 20px 22px; margin-top: 22px; } .sd-brief p { font-size: 17px; line-height: 1.7; } }

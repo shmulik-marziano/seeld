@@ -1,5 +1,6 @@
 # seeld.co.il: open to search engines and AI answer engines on purpose.
 # Private areas (agent CRM, admin, client portals) carry customer data and stay closed.
+# AI-readable summaries: /llms.txt (route map) and /llms-full.txt (summary of every page).
 # A bot-specific group replaces the * group, so the rules are repeated for each bot.
 
 User-agent: *
@@ -35,6 +36,12 @@ User-agent: MistralAI-User
 User-agent: CCBot
 User-agent: cohere-ai
 User-agent: YouBot
+User-agent: GoogleOther
+User-agent: Google-CloudVertexBot
+User-agent: FacebookBot
+User-agent: Diffbot
+User-agent: Bytespider
+User-agent: PetalBot
 Allow: /
 Disallow: /app/
 Disallow: /site-admin

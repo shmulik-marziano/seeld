@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Eye } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Eye, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import "@/components/sd/chrome.css";
 import { CARD_SHADOW, LINE, GREEN, BODY, MUTED } from "@/lib/brand";
@@ -11,6 +11,18 @@ const AccessibilityButton = () => {
     highContrast: false,
     reducedMotion: false,
   });
+
+  // Opened from the mobile drawer (the floating launcher is hidden on phones), closed with Escape.
+  useEffect(() => {
+    const open = () => setIsOpen(true);
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setIsOpen(false); };
+    window.addEventListener("seeld:open-a11y", open);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("seeld:open-a11y", open);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, []);
 
   const updateFontSize = (delta: number) => {
     const newSize = Math.max(80, Math.min(150, settings.fontSize + delta));
@@ -43,7 +55,7 @@ const AccessibilityButton = () => {
     );
 
   return (
-    <>
+    <aside aria-label="נגישות">
       {/* Quiet launcher — white circle, hairline ring, green glyph */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -63,8 +75,16 @@ const AccessibilityButton = () => {
           role="group"
           aria-label="הגדרות נגישות"
         >
-          <div className="mb-3">
+          <div className="mb-3 flex items-center justify-between">
             <h3 className="text-[16px]" style={{ color: GREEN }}>נגישות</h3>
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              aria-label="סגירת הגדרות נגישות"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-[#203957]"
+            >
+              <X className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
+            </button>
           </div>
 
           {/* Font size */}
@@ -72,14 +92,14 @@ const AccessibilityButton = () => {
             <div className="flex gap-1.5">
               <button
                 onClick={() => updateFontSize(-10)}
-                aria-label="הקטנת גודל טקסט"
+                aria-label="א-, הקטנת גודל טקסט"
                 className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#D9DEE4] bg-white text-[15px] font-bold text-[#203957] transition-colors duration-150 hover:border-[#203957]"
               >
                 א-
               </button>
               <button
                 onClick={() => updateFontSize(10)}
-                aria-label="הגדלת גודל טקסט"
+                aria-label="א+, הגדלת גודל טקסט"
                 className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#D9DEE4] bg-white text-[15px] font-bold text-[#203957] transition-colors duration-150 hover:border-[#203957]"
               >
                 א+
@@ -108,7 +128,7 @@ const AccessibilityButton = () => {
           </button>
         </div>
       )}
-    </>
+    </aside>
   );
 };
 

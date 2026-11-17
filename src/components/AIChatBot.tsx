@@ -257,6 +257,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
             transition={{ duration: 0.2, ease: "easeOut" }}
             onClick={() => setIsExpanded(true)}
             className="sd-chrome-fab sd-chrome-fab-chat"
+            data-prerender-skip
             aria-label="פתחו שיחה עם היועץ הדיגיטלי של SEELD"
           >
             <MessageCircle className="h-6 w-6 sm:hidden" strokeWidth={1.75} aria-hidden="true" />

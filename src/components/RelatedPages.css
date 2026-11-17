@@ -1,0 +1,10 @@
+/* Related-pages block (stream E, internal linking). Self-contained: own prefix, no sd.css edits. */
+.seo-related { background: #FCF8EF; color: #203957; border-top: 1px solid rgba(32, 57, 87, 0.14); }
+.seo-related-wrap { max-width: 1200px; margin: 0 auto; padding: 40px 20px 44px; }
+.seo-related-title { font-family: "Frank Ruhl Libre", serif; font-size: 22px; line-height: 1.3; margin: 0 0 18px; font-weight: 700; }
+.seo-related-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.seo-related-link { display: flex; flex-direction: column; justify-content: center; gap: 4px; min-height: 44px; padding: 14px 16px; border: 1px solid rgba(32, 57, 87, 0.18); border-radius: 12px; background: #fff; color: inherit; text-decoration: none; }
+.seo-related-link:hover { border-color: #203957; }
+.seo-related-link:focus-visible { outline: 3px solid #203957; outline-offset: 2px; }
+.seo-related-name { font-weight: 700; font-size: 16px; }
+.seo-related-note { font-size: 14px; line-height: 1.5; color: #4a5b70; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }

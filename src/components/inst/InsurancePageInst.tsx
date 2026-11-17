@@ -114,7 +114,7 @@ export default function InsurancePageInst(props: InsurancePageProps) {
               <dl>
                 <div><dt>סוג השירות</dt><dd>{heroCategory}</dd></div>
                 <div><dt>מי אנחנו</dt><dd>סוכנות ביטוח ופיננסים עצמאית</dd></div>
-                <div><dt>רישיון</dt><dd>שמוליק מרציאנו, סוכן ברישיון 138666</dd></div>
+                <div><dt>צוות</dt><dd>צוות הסוכנות</dd></div>
                 <div><dt>משרדים</dt><dd>רעננה וירושלים</dd></div>
                 <div><dt>השוואה</dt><dd>בין חברות הביטוח בשוק</dd></div>
                 <div><dt>פגישה ראשונה</dt><dd>ללא עלות</dd></div>

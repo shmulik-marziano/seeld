@@ -27,12 +27,13 @@ const SeeIDLogo = ({
     >
       <img
         src="/brand/logo.png"
+        srcSet="/brand/logo-204.png 204w, /brand/logo-306.png 306w, /brand/logo-480.png 480w, /brand/logo.png 720w"
+        sizes={`${w}px`}
         alt="שילד ביטוח ופיננסים"
         width={w}
         height={h}
         style={{ height: h, width: "auto" }}
         decoding="async"
-        fetchPriority="high"
         draggable={false}
       />
     </Link>

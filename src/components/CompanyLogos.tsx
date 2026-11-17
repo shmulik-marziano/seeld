@@ -18,12 +18,23 @@ interface Props {
   subtitle?: string;
 }
 
+/* Intrinsic pixel size of each file in public/logos. Gives the browser the aspect ratio up front
+   (no layout shift); the displayed height still comes from the CSS classes below. */
+const LOGO_SIZE: Record<string, [number, number]> = {
+  harel: [125, 47], menora: [150, 46], migdal: [500, 180], clal: [164, 60], ayalon: [509, 137],
+  phoenix: [387, 132], meitav: [500, 208], mor: [143, 32], yelin: [1301, 166], analyst: [1016, 120],
+  infinity: [212, 68], altshuler: [500, 418], passportcard: [500, 350], hachshara: [102, 32],
+};
+
 /* Official logo at uniform height; name stays available to screen readers */
 function CompanyLogo({ company, size = "md", eager = false }: { company: Company; size?: "sm" | "md"; eager?: boolean }) {
+  const dims = LOGO_SIZE[company.slug];
   return (
     <img
       src={company.logo}
       alt={company.name}
+      width={dims?.[0]}
+      height={dims?.[1]}
       loading={eager ? "eager" : "lazy"}
       draggable={false}
       className={`${size === "sm" ? "h-7 sm:h-8" : "h-8 sm:h-9"} w-auto max-w-[150px] object-contain shrink-0 select-none`}

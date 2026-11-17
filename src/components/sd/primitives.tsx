@@ -85,12 +85,12 @@ export function SdStageSpot({ art, index = 0, name }: { art: ArtName | string; i
 
 const hash = (str: string) => [...str].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
 
-/** Decorative kit illustration: public/art/<name>-768.webp and -1536.webp. alt is empty on purpose (kit README). */
+/** Decorative kit illustration: public/art/<name>-480.webp, -768.webp and -1536.webp. alt is empty on purpose (kit README). */
 export function SdPic({ name, sizes, priority, className, style }: { name: ArtName | string; sizes: string; priority?: boolean; className?: string; style?: CSSProperties }) {
   return (
     <img
       src={`/art/${name}-768.webp`}
-      srcSet={`/art/${name}-768.webp 768w, /art/${name}-1536.webp 1536w`}
+      srcSet={`/art/${name}-480.webp 480w, /art/${name}-768.webp 768w, /art/${name}-1536.webp 1536w`}
       sizes={sizes}
       width={768}
       height={512}
@@ -179,7 +179,7 @@ export function SdStory({ story, art, flip, spots }: { story: Story; art: ArtNam
 export const DEFAULT_STEPS = [
   { icon: "checklist", t: "משאירים פרטים", p: "ממלאים טופס קצר או מתקשרים. מספרים לנו מה יש היום ומה חשוב לכם." },
   { icon: "search", t: "אנחנו משווים", p: "בודקים את הכיסויים והמחירים בין החברות בשוק ומציגים את ההבדלים בצורה ברורה." },
-  { icon: "handshake", t: "מחליטים יחד", p: "הפגישה הראשונה ללא עלות ואינה מחייבת. ההחלטה תמיד שלכם." },
+  { icon: "handshake", t: "מחליטים יחד", p: "שיחת היכרות בלי התחייבות מצידכם. ההחלטה נשארת שלכם." },
 ];
 
 export function SdProcess({ art, steps = DEFAULT_STEPS, title = "איך זה עובד", spot }: { art: ArtName; steps?: typeof DEFAULT_STEPS; title?: string; spot?: SpotName }) {
@@ -212,7 +212,7 @@ export function SdContact({ id = "contact-form", title = "נשמח להכיר א
       <div className="sd-wrap sd-contact-grid">
         <div>
           <h2 className="sd-h2">{title}</h2>
-          <p className="sd-text mt-4">{text ?? "משאירים פרטים, ואנחנו חוזרים עם השוואה בין החברות בשוק. הפגישה הראשונה ללא עלות ואינה מחייבת."}</p>
+          <p className="sd-text mt-4">{text ?? "משאירים פרטים, ואנחנו חוזרים עם השוואה בין החברות בשוק. שיחת ההיכרות בלי התחייבות מצידכם."}</p>
           <div className="sd-reach mt-6">
             <a href="tel:0523097444" dir="ltr" style={{ justifyContent: "flex-end" }}>052-309-7444</a>
             <a href="mailto:info@seeld.co.il" dir="ltr" style={{ justifyContent: "flex-end" }}>info@seeld.co.il</a>

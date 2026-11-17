@@ -111,7 +111,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { topic?: To
 
   const trust = [
     { icon: "search", t: "השוואה בין החברות", s: "בין חברות הביטוח בשוק" },
-    { icon: "handshake", t: "פגישה ראשונה ללא עלות", s: "ואינה מחייבת" },
+    { icon: "handshake", t: "שיחת היכרות", s: "בלי התחייבות מצידכם" },
     { icon: "shield", t: "צוות סוכנים מקצועי", s: "ליווי מההצעה ועד התביעה" },
     { icon: "phone", t: "מענה אישי", s: "רעננה וירושלים" },
   ];
@@ -143,7 +143,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { topic?: To
             <div className="sd-stage" aria-hidden="true">
               <SdPic name={topic.art} sizes="(min-width:1024px) 520px, 90vw" priority />
               <SdStageSpot art={topic.art} name={ps?.hero} />
-              {reviewed && <span className="sd-stage-tag"><i />תוכן נבדק {reviewed}</span>}
+              {reviewed && <span className="sd-stage-tag"><i />מידע כללי, לא ייעוץ אישי</span>}
             </div>
           </div>
         </section>
@@ -296,7 +296,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { topic?: To
           <CompanyLogos variant="grid" />
         </section>
 
-        <SdContact id={enrollmentFormId} art={topic.art} spot={ps?.contact}>
+        <SdContact id={enrollmentFormId} art={topic.art5 ?? topic.art} spot={ps?.contact}>
           <InsuranceEnrollmentForm insuranceType={insuranceType} title={enrollmentTitle} description={enrollmentDescription} />
         </SdContact>
       </main>

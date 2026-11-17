@@ -1,9 +1,16 @@
+import { useEffect } from "react";
+import { clearSnapshot, getSnapshot } from "@/lib/prerenderSnapshot";
+
 /**
  * RouteFallback: quiet Suspense loader for lazy routes.
  * Cream canvas, a thin ink progress bar and the brand symbol pulsing.
  * Respects prefers-reduced-motion. No text, no emoji.
  */
 export default function RouteFallback() {
+  // First load of a prerendered route: keep showing the snapshot until the real page is ready.
+  const snap = getSnapshot();
+  useEffect(() => () => clearSnapshot(), []);
+  if (snap) return <div dangerouslySetInnerHTML={{ __html: snap }} />;
   return (
     <div
       role="status"
@@ -34,7 +41,7 @@ export default function RouteFallback() {
 
       <div className="flex min-h-screen items-center justify-center">
         <img
-          src="/brand/logo-icon.png"
+          src="/brand/logo-icon-96.png"
           alt=""
           width={44}
           height={64}

@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import NotFound from "@/pages/NotFound";
 import { getArticleById, getRelatedArticles } from "@/data/articles";
 import { usePageSeo } from "@/hooks/usePageSeo";
+import { buildArticleGraph } from "@/lib/structuredData";
 import { Facebook, Twitter, Linkedin, Link2 } from "lucide-react";
 import { toast } from "sonner";
 import { BrandIcon } from "@/components/brand/BrandIcon";
@@ -25,7 +26,7 @@ const Article = () => {
   const { id } = useParams<{ id: string }>();
   const article = id ? getArticleById(id) : undefined;
 
-  usePageSeo(article?.title, article?.subtitle);
+  usePageSeo(article?.title, article?.subtitle, article ? buildArticleGraph(article.id, article.title, article.subtitle) : null);
 
   if (!article) {
     // Rendered in place rather than redirected to "/404": there is no such

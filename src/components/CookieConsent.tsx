@@ -18,14 +18,15 @@ const CookieConsent = () => {
   // While the banner is up, lift the floating launchers above it (see chrome.css)
   useEffect(() => {
     const root = document.documentElement;
-    if (!visible) { root.style.removeProperty("--sd-cookie-lift"); return; }
+    if (!visible) { root.style.removeProperty("--sd-cookie-lift"); root.removeAttribute("data-sd-cookie"); return; }
+    root.setAttribute("data-sd-cookie", "1");
     const el = boxRef.current;
     if (!el) return;
     const apply = () => root.style.setProperty("--sd-cookie-lift", `${el.offsetHeight + 12}px`);
     apply();
     const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(apply) : null;
     ro?.observe(el);
-    return () => { ro?.disconnect(); root.style.removeProperty("--sd-cookie-lift"); };
+    return () => { ro?.disconnect(); root.style.removeProperty("--sd-cookie-lift"); root.removeAttribute("data-sd-cookie"); };
   }, [visible]);
 
   const accept = () => {

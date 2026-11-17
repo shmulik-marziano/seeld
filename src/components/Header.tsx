@@ -136,6 +136,11 @@ const Header = () => {
     window.dispatchEvent(new Event("seeld:open-chat"));
   };
 
+  const openA11y = () => {
+    setIsMenuOpen(false);
+    window.dispatchEvent(new Event("seeld:open-a11y"));
+  };
+
   const hubs: { id: MenuId; href: string; label: string }[] = [
     { id: "insurance", href: "/insurances", label: "ביטוח" },
     { id: "savings", href: "/savings", label: "פיננסים" },
@@ -144,7 +149,7 @@ const Header = () => {
   return (
     <header className="sd-chrome-header" data-scrolled={isScrolled ? "true" : "false"}>
       {/* Keep focused elements clear of the sticky header (WCAG 2.4.11) */}
-      <style>{"html{scroll-padding-top:96px}"}</style>
+      <style>{"html{scroll-padding-top:140px}"}</style>
 
       {/* Skip link: first focusable element, visually hidden until focused */}
       <a href="#main" onClick={handleSkipToMain} className="sd-chrome-skip">
@@ -283,6 +288,8 @@ const Header = () => {
                 <div className="sd-chrome-drawer-head">
                   <img
                     src="/brand/logo.png"
+                    srcSet="/brand/logo-204.png 204w, /brand/logo-306.png 306w, /brand/logo-480.png 480w"
+                    sizes="93px"
                     alt="שילד ביטוח ופיננסים"
                     width={93}
                     height={40}
@@ -373,6 +380,9 @@ const Header = () => {
                     <button type="button" onClick={openChat} className="sd-chrome-chatlink" aria-label="פתיחת שיחה עם היועץ">
                       <i aria-hidden="true" />
                       שיחה עם היועץ הדיגיטלי
+                    </button>
+                    <button type="button" onClick={openA11y} className="sd-chrome-chatlink">
+                      הגדרות נגישות
                     </button>
                   </div>
                 </nav>

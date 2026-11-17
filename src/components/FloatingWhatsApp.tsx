@@ -2,6 +2,7 @@ import "@/components/sd/chrome.css";
 
 /** Floating WhatsApp button, same family as the chat and accessibility launchers. */
 const FloatingWhatsApp = () => (
+  <aside aria-label="יצירת קשר מהיר">
   <a
     href="https://wa.me/972523097444"
     target="_blank"
@@ -14,6 +15,7 @@ const FloatingWhatsApp = () => (
       <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 01-4.243-1.214l-.252-.157-2.625.78.78-2.625-.157-.252A8 8 0 1112 20z" />
     </svg>
   </a>
+  </aside>
 );
 
 export default FloatingWhatsApp;

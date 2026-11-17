@@ -43,7 +43,7 @@
 .sd-chrome-header a:focus-visible, .sd-chrome-header button:focus-visible,
 .sd-chrome-root a:focus-visible, .sd-chrome-root button:focus-visible,
 .sd-chrome-footer a:focus-visible, .sd-chrome-footer button:focus-visible,
-.sd-chrome-fab:focus-visible, .sd-chrome-a11y-panel button:focus-visible, .sd-chrome-cookie a:focus-visible, .sd-chrome-cookie button:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 3px; border-radius: 8px; }
+.sd-chrome-fab:focus-visible, .sd-chrome-a11y-panel button:focus-visible, .sd-chrome-cookie a:focus-visible, .sd-chrome-cookie button:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 3px; }
 .sd-chrome-footer a:focus-visible, .sd-chrome-footer button:focus-visible { outline-color: var(--c-gold-l); }
 
 /* sub-menu */
@@ -135,10 +135,11 @@
 .sd-chrome-foot-row a:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
 
 /* ───────── floating launchers ───────── */
-.sd-chrome-fab, .sd-chrome-a11y-panel { --lift: var(--sd-cookie-lift, 0px); --base: calc(16px + var(--float-lift, 0px) + var(--lift) + env(safe-area-inset-bottom, 0px)); }
+/* The cookie banner lifts the launchers with a transform (not `bottom`), so its arrival is a paint-only move and never a layout shift. */
+.sd-chrome-fab, .sd-chrome-a11y-panel { --lift: var(--sd-cookie-lift, 0px); --base: calc(16px + var(--float-lift, 0px) + env(safe-area-inset-bottom, 0px)); }
 @media (min-width: 1100px) { .sd-chrome-fab, .sd-chrome-a11y-panel { --lift: 0px; } }
-.sd-chrome-fab { position: fixed; z-index: 40; display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 48px; height: 48px; border-radius: 999px; bottom: calc(var(--base) + var(--o, 0px)); transition: transform .2s ease, box-shadow .2s ease, background-color .2s, color .2s; }
-.sd-chrome-fab:hover { transform: translateY(-2px); }
+.sd-chrome-fab { position: fixed; z-index: 40; display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 48px; height: 48px; border-radius: 999px; bottom: calc(var(--base) + var(--o, 0px)); transform: translateY(calc(var(--lift) * -1)); transition: transform .2s ease, box-shadow .2s ease, background-color .2s, color .2s, opacity .2s; }
+.sd-chrome-fab:hover { transform: translateY(calc(var(--lift) * -1 - 2px)); }
 .sd-chrome-fab-chat { left: 16px; color: #fff; background: var(--c-ink); box-shadow: 0 12px 26px -10px rgba(32, 57, 87, .6), 0 0 0 1.5px rgba(231, 201, 139, .55); }
 .sd-chrome-fab-chat:hover { background: var(--c-ink-d); }
 .sd-chrome-fab-wa { left: 16px; --o: 60px; color: var(--c-ink); background: var(--c-cream); box-shadow: 0 10px 22px -12px rgba(32, 57, 87, .5), 0 0 0 1.5px var(--c-gold); }
@@ -152,8 +153,19 @@
   .sd-chrome-fab-chat { width: auto; padding-inline: 20px 22px; }
   .sd-chrome-fab-wa { --o: 64px; left: 24px; }
 }
-.sd-chrome-a11y-panel { position: fixed; z-index: 41; right: 16px; bottom: calc(var(--base) + 60px); width: 264px; max-width: calc(100vw - 32px); padding: 16px; color: var(--c-text); background: var(--c-paper); border: 1px solid var(--c-line); border-radius: 20px; }
+.sd-chrome-a11y-panel { position: fixed; z-index: 41; right: 16px; bottom: calc(var(--base) + var(--lift) + 60px); width: 264px; max-width: calc(100vw - 32px); padding: 16px; color: var(--c-text); background: var(--c-paper); border: 1px solid var(--c-line); border-radius: 20px; }
 @media (min-width: 640px) { .sd-chrome-a11y-panel { right: 24px; } }
+
+/* Phones: one compact launcher (chat). WhatsApp and accessibility live in the menu drawer, so the viewport stays clear.
+   The launcher steps aside while the cookie bar is up and while a form field has focus. */
+@media (max-width: 639px) {
+  .sd-chrome-fab-wa, .sd-chrome-fab-a11y { display: none; }
+  .sd-chrome-fab { width: 44px; height: 44px; --base: calc(12px + var(--float-lift, 0px) + env(safe-area-inset-bottom, 0px)); }
+  .sd-chrome-fab-chat { left: 12px; }
+  html[data-sd-cookie] .sd-chrome-fab { opacity: 0; visibility: hidden; pointer-events: none; }
+  body:has(input:focus, textarea:focus, select:focus) .sd-chrome-fab { opacity: 0; visibility: hidden; pointer-events: none; }
+  .sd-chrome-a11y-panel { right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+}
 
 /* cookie banner: bottom centre on wide screens, full-width sheet on phones; launchers lift above it */
 .sd-chrome-cookie { position: fixed; z-index: 55; inset-inline: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 10px; padding: 14px 16px; background: var(--c-paper); border: 1px solid var(--c-line); border-radius: 20px; box-shadow: 0 24px 50px -20px rgba(32, 57, 87, .45); direction: rtl; }
@@ -165,6 +177,12 @@
 .sd-chrome-cookie-ghost:hover { color: var(--c-ink); background: rgba(32, 57, 87, .05); }
 .sd-chrome-cookie-ok { color: #fff; background: var(--c-ink); }
 .sd-chrome-cookie-ok:hover { background: var(--c-ink-d); }
+@media (max-width: 719px) {
+  .sd-chrome-cookie { inset-inline: 0; bottom: 0; gap: 8px; padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px)); border-width: 1px 0 0; border-radius: 16px 16px 0 0; box-shadow: 0 -12px 30px -20px rgba(32, 57, 87, .5); }
+  .sd-chrome-cookie-text { font-size: 13px; line-height: 1.5; }
+  .sd-chrome-cookie-btns { gap: 8px; }
+  .sd-chrome-cookie-btns > button { flex: 1; padding-inline: 12px; }
+}
 @media (min-width: 720px) {
   .sd-chrome-cookie { inset-inline: 0; margin-inline: auto; width: min(720px, calc(100vw - 48px)); grid-template-columns: 1fr auto; align-items: center; gap: 20px; padding: 14px 20px; bottom: 20px; }
 }

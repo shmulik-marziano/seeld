@@ -8,6 +8,7 @@ import {
   SERVICE_LINKS,
   SOCIAL_LINKS,
 } from "@/components/sd/chromeData";
+import RelatedPages from "@/components/RelatedPages";
 import "@/components/sd/chrome.css";
 
 const insuranceLinks = [
@@ -17,6 +18,8 @@ const insuranceLinks = [
 
 const Footer = () => {
   return (
+    <>
+    <RelatedPages />
     <footer dir="rtl" className="sd-chrome-footer">
       {/* Faint pencil illustration, decorative only */}
       <img
@@ -138,6 +141,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    </>
   );
 };
 

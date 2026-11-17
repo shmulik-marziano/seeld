@@ -15,9 +15,10 @@ import { readFile, writeFile, mkdir, copyFile, stat } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { dirname, join, extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadData, buildSitemap, buildLlms, buildLlmsFull } from "./seo/lib.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const DIST = join(ROOT, "dist");
+const DIST = process.env.PRERENDER_DIST ? resolve(process.env.PRERENDER_DIST) : join(ROOT, "dist");
 const STRICT = process.env.PRERENDER_STRICT === "1";
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? "https://lvifatyksqizwcutfbqp.supabase.co";
 
@@ -55,27 +56,13 @@ async function blogPosts() {
   }
 }
 
-const xmlEscape = (v) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-// sitemap.xml: static routes as-is, plus every published post with its real updated_at.
+// sitemap.xml, llms.txt and llms-full.txt are generated from the route registry
+// (src/data/seo/routes.ts, via scripts/seo/lib.mjs) plus every published blog post.
 async function writeSitemapAndLlms(routes, posts) {
-  const postByPath = new Map(posts.map((p) => [`/blog/${p.slug}`, p]));
-  const urls = routes.filter((r) => r !== "/__not-found__").map((r) => {
-    const post = postByPath.get(r);
-    const lastmod = post?.updated_at ? `<lastmod>${post.updated_at.slice(0, 10)}</lastmod>` : "";
-    return `  <url><loc>https://seeld.co.il${r === "/" ? "/" : r}</loc>${lastmod}</url>`;
-  });
-  await writeFile(join(DIST, "sitemap.xml"),
-    ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', ...urls, "</urlset>", ""].join("\n"));
-
-  const llmsSrc = join(ROOT, "public/llms.txt");
-  if (existsSync(llmsSrc)) {
-    const list = posts.length
-      ? ["## מאמרים בבלוג", "", ...posts.map((p) =>
-          `- [${p.title}](https://seeld.co.il/blog/${p.slug})${p.excerpt ? `: ${p.excerpt.replace(/\s+/g, " ").trim()}` : ""}`)].join("\n")
-      : "";
-    await writeFile(join(DIST, "llms.txt"), (await readFile(llmsSrc, "utf8")).replace("{{BLOG_POSTS}}", list));
-  }
+  const d = await loadData();
+  await writeFile(join(DIST, "sitemap.xml"), buildSitemap(d, posts));
+  await writeFile(join(DIST, "llms.txt"), buildLlms(d, posts));
+  await writeFile(join(DIST, "llms-full.txt"), buildLlmsFull(d, posts));
 }
 
 async function readAnonKey() {
@@ -145,7 +132,9 @@ async function main() {
   const shell = await readFile(shellPath, "utf8");
 
   const posts = await blogPosts();
+  const registry = await loadData();
   let routes = [...new Set([
+    ...registry.ROUTES.map((e) => e.path),
     ...(await routesFromSitemap()),
     ...RETURN_TABLE_SLUGS.map((s) => `/return-tables/${s}`),
     ...posts.map((p) => `/blog/${p.slug}`),

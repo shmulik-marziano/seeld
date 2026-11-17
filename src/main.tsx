@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 import { Component, ErrorInfo, ReactNode } from "react";
 import App from "./App.tsx";
 import "./index.css";
+import { captureSnapshot } from "./lib/prerenderSnapshot";
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: string }> {
   constructor(props: { children: ReactNode }) {
@@ -31,7 +32,13 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
   }
 }
 
-createRoot(document.getElementById("root")!).render(
+const container = document.getElementById("root")!;
+
+// The prerendered markup cannot be hydrated (see lib/prerenderSnapshot.ts); keep a copy of the page
+// so the route Suspense fallback can show it while the lazy chunk loads, then render client-side.
+captureSnapshot(container);
+
+createRoot(container).render(
   <ErrorBoundary>
     <App />
   </ErrorBoundary>
