@@ -16,8 +16,17 @@ interface LeadNotificationRequest {
     email: string;
     insuranceType?: string;
     focusArea?: string;
+    // Optional context from specific forms (e.g. retirement planning): short key/value strings.
+    extra?: Record<string, string>;
   };
 }
+
+const extraLabels: Record<string, string> = {
+  source: 'מקור',
+  ageRange: 'טווח גיל',
+  situation: 'מצב',
+  concern: 'מה מטריד',
+};
 
 const insuranceTypeLabels: Record<string, string> = {
   vehicle: 'ביטוח רכב',
@@ -136,6 +145,18 @@ const handler = async (req: Request): Promise<Response> => {
       ? [previousRecipient]
       : undefined;
 
+    // Optional extra context (sanitised, whitelisted keys, length-capped).
+    const extraRows = leadData.extra && typeof leadData.extra === 'object'
+      ? Object.entries(extraLabels)
+          .map(([k, label]) => {
+            const v = (leadData.extra as Record<string, unknown>)[k];
+            return typeof v === 'string' && v.trim()
+              ? `<p><strong>${label}:</strong> ${sanitize(v.trim().slice(0, 200))}</p>`
+              : '';
+          })
+          .join('')
+      : '';
+
     const htmlContent = `
       <div dir="rtl" style="font-family: Arial, sans-serif; padding: 20px;">
         <h1 style="color: #1a1a2e;">ליד חדש התקבל ב-SeelD</h1>
@@ -149,6 +170,7 @@ const handler = async (req: Request): Promise<Response> => {
           ${type === 'pension' && leadData.focusArea ? `
             <p><strong>תחום:</strong> ${focusAreaLabels[leadData.focusArea] || leadData.focusArea}</p>
           ` : ''}
+          ${extraRows}
         </div>
         
         <div style="background: #e8f4f8; padding: 20px; border-radius: 8px;">
@@ -185,7 +207,7 @@ const handler = async (req: Request): Promise<Response> => {
           type === 'insurance'
             ? 'נציג ביטוח מומחה ייצור איתך קשר בהקדם עם הצעה מותאמת אישית.'
             : type === 'pension'
-              ? 'יועץ פנסיוני מוסמך ייצור איתך קשר בהקדם לניתוח מקיף של התיק הפנסיוני שלך.'
+              ? 'הצוות שלנו ייצור איתך קשר בהקדם לשיחת היכרות ראשונה ולתיאום המשך. השירות הוא שיווק פנסיוני ולא ייעוץ פנסיוני.'
               : 'נחזור אליך בהקדם האפשרי.'
         }</p>
         

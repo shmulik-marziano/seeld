@@ -125,7 +125,13 @@ export default function RetireForm({ idPrefix = "rp", source = "עמוד תכנ�
       if (error) throw error;
       try {
         await supabase.functions.invoke("send-lead-notification", {
-          body: { type: "pension", leadData: { fullName: name.trim(), phone: phone.trim(), email: email.trim(), focusArea: "retirement" } },
+          body: {
+            type: "pension",
+            leadData: {
+              fullName: name.trim(), phone: phone.trim(), email: email.trim(), focusArea: "retirement",
+              extra: { source, ageRange: labels.age ?? "", situation: labels.situation ?? "", concern: labels.concern ?? "" },
+            },
+          },
         });
       } catch { /* notification failure is non-blocking: the lead is saved */ }
       setSent(true);
