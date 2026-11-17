@@ -9,7 +9,7 @@ import "./client.css";
 
 /** Shared pieces of the client area (personal area, portals, login, loading/empty/error states). */
 
-export const LOGO_W = Math.round((44 * 118) / 51);
+export const LOGO_W = Math.round((44 * 382.39) / 150);
 
 /** Kit wrapper for standalone client pages, tinted by one pastel. */
 export function CaFrame({ tint, children, className = "" }: { tint: Pastel; children: ReactNode; className?: string }) {

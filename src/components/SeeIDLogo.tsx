@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
  * padding below). Sizes are the rendered height of the lockup.
  */
 const HEIGHTS = { sm: 34, md: 44, lg: 60 } as const;
-const RATIO = 1705 / 735; // asset width / height
+const RATIO = 382.39 / 150; // asset width / height
 
 const SeeIDLogo = ({
   className = "",

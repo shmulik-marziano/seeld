@@ -289,9 +289,9 @@ const Header = () => {
                   <img
                     src="/brand/logo.png"
                     srcSet="/brand/logo-204.png 204w, /brand/logo-306.png 306w, /brand/logo-480.png 480w"
-                    sizes="93px"
+                    sizes="102px"
                     alt="שילד ביטוח ופיננסים"
-                    width={93}
+                    width={102}
                     height={40}
                     style={{ height: 40, width: "auto" }}
                     draggable={false}
