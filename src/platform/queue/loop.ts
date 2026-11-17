@@ -63,9 +63,20 @@ export function canonicalJson(value: unknown): string {
   return JSON.stringify(value) ?? "null";
 }
 
-/** sha256 hex of the canonical form. Uses WebCrypto (Node 20+, Deno, browsers). */
-export async function contentHash(value: unknown): Promise<string> {
+/**
+ * Hex content hash of the canonical form. Uses WebCrypto (Node 20+, Deno, browsers).
+ * With `key` (the Vault secret 'event_hash_key', server side only) it is HMAC-SHA256, matching the keyed hash in
+ * supabase/proposed/06 (public.content_hash_jsonb). Without a key it is a plain SHA-256: fine for tests, NOT for values that
+ * can be low-entropy (phone, national id), because a leaked plain hash can be brute-forced.
+ */
+export async function contentHash(value: unknown, key?: string): Promise<string> {
   const bytes = new TextEncoder().encode(canonicalJson(value));
-  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  let digest: ArrayBuffer;
+  if (key) {
+    const k = await crypto.subtle.importKey("raw", new TextEncoder().encode(key), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+    digest = await crypto.subtle.sign("HMAC", k, bytes);
+  } else {
+    digest = await crypto.subtle.digest("SHA-256", bytes);
+  }
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }

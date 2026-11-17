@@ -20,7 +20,7 @@ export interface QueueEnvelope {
   /** Stable event id (uuid), also the idempotency anchor for the downstream call. */
   eventId: string;
   originSystem: OriginSystem;
-  /** sha256 hex of the canonical content (see loop.ts). Used for echo detection. */
+  /** HMAC-SHA256 hex (keyed, Vault secret event_hash_key) of the content; see loop.ts. Used for echo detection. */
   contentHash: string;
   destination: Destination;
   /** identity_links.internal_customer_id as text. Never a national id. */

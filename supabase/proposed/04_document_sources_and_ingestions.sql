@@ -76,6 +76,7 @@ create policy "owners start an ingestion for themselves"
   with check (owner_id = (select auth.uid()) and status = 'uploaded'
     -- FIX: path must be inside the caller's own folder, agency must be the caller's own (or null), source must be enabled and match source_type
     and storage_path like (select auth.uid())::text || '/%'
+    and position('..' in storage_path) = 0                                   -- FIX: no path traversal out of the caller's folder
     and (agency_id is null or agency_id = (select public.get_user_agency_id((select auth.uid()))))
     and exists (select 1 from public.document_sources s where s.id = source_id and s.enabled and s.source_type = document_ingestions.source_type));
 -- No update/delete policy: status changes are made by the processing worker (service role).

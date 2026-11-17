@@ -123,7 +123,15 @@
 
 ## 10. קבצים
 - SQL: `supabase/proposed/06_event_queue.sql`, `07_source_precedence.sql`, `08_dashboard_tables.sql` (שם הקובץ שונה מהמבוקש כי העיצוב עבר לשתי טבלאות לוח), `09_alerting_and_cron.sql`.
-- בדיקות pgTAP: `supabase/proposed/tests/06_ordering_idempotency.test.sql`, `07_source_precedence.test.sql`, `08_rls_roles.test.sql` (לא הורצו; דורשות branch עם 06 עד 09).
+- בדיקות pgTAP: `supabase/proposed/tests/06_ordering_idempotency.test.sql`, `07_source_precedence.test.sql`, `08_rls_roles.test.sql`, `09_regression_fixes.test.sql` (הורצו בקונטיינר Postgres מקומי מבודד, 164 בדיקות; ראו `C:	mp\infra\sql-verification.md`. עדיין לא הורצו על branch של Supabase).
 - TS: `src/platform/{systems,queue,sources,identity,assignment}`, בדיקות `src/test/event-platform.test.ts`, `src/test/queue-worker.test.ts`.
 - Worker: `supabase/functions/queue-worker/index.ts`, `supabase/functions/_shared/queueWorker.ts`, `_shared/alerts.ts`.
 - שום דבר מאלה לא מיובא מעמודי האתר הציבורי (נאכף בבדיקת הבידוד).
+
+## 11. שינויים אחרי הרצה אמיתית (2026-11-17)
+
+- שם התור של Surense הוא `surense_outbound` (לא `surense_events`, כדי לא להתבלבל עם הטבלה `public.surense_events`).
+- Vault דורש שלושה סודות: `national_id_hmac_key`, `national_id_enc_key`, `event_hash_key` (hash מפתחי ל-`content_hash`; ה-TS מקבל אותו כפרמטר `key` ב-`contentHash`).
+- תפקידים: רק `platform_user_roles`. שורת `profiles` (נוצרת לכל הרשמה, גם ללקוח קצה) כבר לא הופכת אף אחד ל-agent. מנהל מוגבל לסוכנות שבשורת התפקיד שלו; רק `super_admin` חוצה סוכנויות ורואה את שורת ה-system.
+- מדדים: `metrics_bump` כותב ל-`metrics_deltas` (הוספה בלבד), ו-`metrics_fold()` (cron כל דקה) מקפל ל-`management_metrics`. אין שורה חמה ואין deadlock; השהיה עד דקה.
+- worker שמת באמצע שליחה: `queue_claim` מזהה lease שפג על אותו seq, סופר כישלון, ואחרי `max_attempts` מחזיר `poison` והודעה עוברת ל-DLQ. (לא נעשה שימוש ב-`read_ct` כי הוא סופר גם קריאות דילוג תמימות.)

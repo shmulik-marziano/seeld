@@ -44,11 +44,11 @@ function makeDb(sb: any): QueueDb & AlertDb {
       const r = Array.isArray(rows) ? rows[0] : rows;
       return (d === "salesforce" ? r?.salesforce_id : r?.surense_id) ?? null;
     },
-    setExternalId: async (c, d, id) => void (await rpc("identity_set_external_id", { p_customer: c, p_system: d, p_external_id: id })),
+    setExternalId: async (c, d, id) => (await rpc("identity_set_external_id", { p_customer: c, p_system: d, p_external_id: id })) as "ok" | "conflict",
     complete: async (d, id, c, seq, w, e) => void (await rpc("queue_complete", { p_destination: d, p_msg_id: id, p_customer_key: c, p_seq: seq, p_worker: w, p_event_id: e })),
     recordFailure: (d, c, seq, id, e, code) => rpc("queue_record_failure", { p_destination: d, p_customer_key: c, p_seq: seq, p_msg_id: id, p_event_id: e, p_code: code }),
     scheduleRetry: async (d, id, c, delay) => void (await rpc("queue_schedule_retry", { p_destination: d, p_msg_id: id, p_customer_key: c, p_delay_sec: delay })),
-    release: async (d, id, delay) => void (await rpc("queue_release", { p_destination: d, p_msg_id: id, p_delay_sec: delay })),
+    release: async (d, id, delay, c, w) => void (await rpc("queue_release", { p_destination: d, p_msg_id: id, p_delay_sec: delay, p_customer_key: c ?? null, p_worker: w ?? null })),
     deadLetter: async (d, id, c, seq, msg, reason, code) =>
       void (await rpc("queue_dead_letter", { p_destination: d, p_msg_id: id, p_customer_key: c, p_seq: seq, p_message: msg, p_reason: reason, p_code: code })),
     claimPending: (limit) => rpc("alerts_claim_pending", { p_limit: limit }),

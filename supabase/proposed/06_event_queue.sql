@@ -374,7 +374,8 @@ begin
        select 1 from public.event_registry r
         where r.customer_key = p_customer_key and r.content_hash = p_content_hash and p_origin = any (r.sent_to)
           and r.first_seen_at > now() - interval '1 day') then   -- FIX: echo window (TODO(owner)); without it an old identical value is dropped forever
-    insert into public.event_registry (event_id, customer_key, origin_system, content_hash, sent_to) values (p_event_id, p_customer_key, p_origin, p_content_hash, '{}');
+    insert into public.event_registry (event_id, customer_key, origin_system, content_hash, sent_to) values (p_event_id, p_customer_key, p_origin, p_content_hash, '{}')
+    on conflict (event_id) do nothing;   -- FIX: race-safe like the main path
     insert into public.event_log (event_type, event_id, origin_system, customer_key, content_hash, code, request_id)
     values ('event.dropped', p_event_id, p_origin, p_customer_key, p_content_hash, 'echo', p_request_id);
     return jsonb_build_object('status', 'dropped', 'reason', 'echo');
@@ -448,7 +449,12 @@ begin
   if coalesce(auth.role() = 'service_role', false) then return true; end if;
   if exists (select 1 from public.identity_links il where il.internal_customer_id = p_customer and il.auth_user_id = v_uid) then return true; end if;
   v_role := public.current_platform_role();
-  if v_role in ('manager','super_admin') then return true; end if;
+  if v_role = 'super_admin' then return true; end if;
+  -- FIX (review 08-5): a manager writes only for customers of their own agency (null agency = nothing)
+  if v_role = 'manager' then
+    return exists (select 1 from public.identity_links il where il.internal_customer_id = p_customer
+                      and il.agency_id is not null and il.agency_id = public.current_platform_agency());
+  end if;
   if v_role = 'agent' then
     return exists (select 1 from public.identity_links il where il.internal_customer_id = p_customer
                       and il.agency_id is not null and il.agency_id = public.get_user_agency_id(v_uid))
@@ -561,6 +567,22 @@ $$;
 -- ---------------------------------------------------------------------------------------------------------------
 -- 6. Worker RPCs (service role only; pgmq itself is not exposed to the API). All take the destination.
 -- ---------------------------------------------------------------------------------------------------------------
+-- FIX (review 08-6, deadlock): the save path locks agent_workbench (trigger) and THEN customer_queue_state (enqueue). The worker path
+-- used to lock customer_queue_state and THEN agent_workbench (event_log trigger). Every worker function now takes the workbench row
+-- first, so both paths lock in the same order. No-op when 08 is not applied or the customer has no workbench row yet.
+create or replace function public.queue_lock_customer(p_customer uuid)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if to_regclass('public.agent_workbench') is not null then
+    perform 1 from public.agent_workbench where customer_key = p_customer for update;
+  end if;
+end;
+$$;
+
 create or replace function public.queue_read_batch(p_destination text)
 returns jsonb
 language plpgsql
@@ -578,7 +600,7 @@ begin
 end;
 $$;
 
--- Ordering gate. Returns 'process' | 'duplicate' | 'halted' | 'locked' | 'not_ready'. Skips are requeued here (no failure counted).
+-- Ordering gate. Returns 'process' | 'duplicate' | 'halted' | 'locked' | 'not_ready' | 'poison' (worker died max_attempts times on it: caller dead-letters). Skips are requeued here (no failure counted).
 create or replace function public.queue_claim(p_destination text, p_msg_id bigint, p_customer_key uuid, p_seq bigint, p_worker text)
 returns text
 language plpgsql
@@ -588,6 +610,10 @@ as $$
 declare d public.queue_destinations; st public.customer_queue_state;
 begin
   select * into d from public.queue_destinations where destination = p_destination;
+  if exists (select 1 from public.customer_queue_state where customer_key = p_customer_key and destination = p_destination
+                and claimed_by is not null and claimed_seq = p_seq and lease_until < now()) then
+    perform public.queue_lock_customer(p_customer_key);        -- crash-recovery path writes event_log: keep lock order workbench -> state
+  end if;
   select * into st from public.customer_queue_state where customer_key = p_customer_key and destination = p_destination for update skip locked;
   if not found then
     -- Row locked by another worker (claim/complete in flight) or missing: do not wait, requeue shortly. Blocks only this customer.
@@ -611,6 +637,15 @@ begin
     perform pgmq.set_vt(d.queue_name, p_msg_id, d.skip_requeue_sec);
     return 'not_ready';
   end if;
+  -- FIX (review 06-10): a stale claim of THIS seq (lease expired, never completed / failed / retried / released) means the previous
+  -- worker died mid-send (timeout, OOM). Count it as a failure so a message that always kills the worker reaches the DLQ.
+  -- (pgmq read_ct is NOT used: it also counts harmless skip/requeue reads, so a message waiting behind a retrying predecessor would be dead-lettered.)
+  if st.claimed_by is not null and st.claimed_seq = p_seq then
+    update public.customer_queue_state set failure_count = failure_count + 1, claimed_by = null, claimed_seq = null, lease_until = null, updated_at = now()
+     where customer_key = p_customer_key and destination = p_destination returning failure_count into st.failure_count;
+    insert into public.event_log (event_type, destination, customer_key, seq, msg_id, attempt, code) values ('message.failed', p_destination, p_customer_key, p_seq, p_msg_id, st.failure_count, 'worker_crash');
+    if st.failure_count >= d.max_attempts then return 'poison'; end if;
+  end if;
   update public.customer_queue_state
      set claimed_by = p_worker, claimed_seq = p_seq, lease_until = now() + make_interval(secs => d.visibility_timeout_sec), updated_at = now()
    where customer_key = p_customer_key and destination = p_destination;
@@ -626,6 +661,7 @@ set search_path = ''
 as $$
 declare d public.queue_destinations; n integer;
 begin
+  perform public.queue_lock_customer(p_customer_key);
   select * into d from public.queue_destinations where destination = p_destination;
   update public.customer_queue_state
      set last_completed_seq = p_seq, failure_count = 0, claimed_by = null, claimed_seq = null, lease_until = null, updated_at = now()
@@ -645,6 +681,7 @@ set search_path = ''
 as $$
 declare v_count integer;
 begin
+  perform public.queue_lock_customer(p_customer_key);
   update public.customer_queue_state set failure_count = failure_count + 1, updated_at = now()
    where customer_key = p_customer_key and destination = p_destination returning failure_count into v_count;
   insert into public.event_log (event_type, event_id, destination, customer_key, seq, msg_id, attempt, code) values ('message.failed', p_event_id, p_destination, p_customer_key, p_seq, p_msg_id, v_count, left(p_code, 60));
@@ -667,8 +704,10 @@ begin
 end;
 $$;
 
--- Return a message untouched (worker out of time budget).
-create or replace function public.queue_release(p_destination text, p_msg_id bigint, p_delay_sec integer default 1)
+-- Return a message untouched (worker out of time budget). FIX (review 06-9): optionally also frees the customer lease, otherwise the
+-- returned message is re-read after p_delay_sec, hits its own stale lease ('locked') and is bounced for up to a full visibility timeout.
+drop function if exists public.queue_release(text, bigint, integer);
+create or replace function public.queue_release(p_destination text, p_msg_id bigint, p_delay_sec integer default 1, p_customer_key uuid default null, p_worker text default null)
 returns void
 language plpgsql
 security definer
@@ -677,6 +716,10 @@ as $$
 declare d public.queue_destinations;
 begin
   select * into d from public.queue_destinations where destination = p_destination;
+  if p_customer_key is not null and p_worker is not null then
+    update public.customer_queue_state set claimed_by = null, claimed_seq = null, lease_until = null, updated_at = now()
+     where customer_key = p_customer_key and destination = p_destination and claimed_by = p_worker;
+  end if;
   perform pgmq.set_vt(d.queue_name, p_msg_id, greatest(0, p_delay_sec));
 end;
 $$;
@@ -690,6 +733,7 @@ set search_path = ''
 as $$
 declare d public.queue_destinations;
 begin
+  perform public.queue_lock_customer(p_customer_key);
   select * into d from public.queue_destinations where destination = p_destination;
   perform pgmq.send(d.dlq_name, coalesce(p_message, '{}'::jsonb) || jsonb_build_object('dlq', jsonb_build_object('reason', left(p_reason, 60), 'code', left(p_code, 60), 'at', now(), 'msgId', p_msg_id)));
   perform pgmq.archive(d.queue_name, p_msg_id);
@@ -736,11 +780,11 @@ begin
   foreach f in array array[
     'identity_hash_national_id(text)', 'identity_upsert_verified(text,text,uuid,uuid)', 'identity_create_pending(uuid)',
     'identity_set_external_id(uuid,text,text)', 'identity_get_external_ids(uuid)', 'queue_policy(text)',
-    'idempotency_begin(text,text,uuid)', 'idempotency_finish(text,text,jsonb)', 'content_hash_jsonb(jsonb)',
+    'idempotency_begin(text,text,uuid)', 'idempotency_finish(text,text,jsonb)', 'queue_lock_customer(uuid)', 'content_hash_jsonb(jsonb)',
     'queue_enqueue_event(text,uuid,text,uuid,text,text[],text,text)', 'save_lead(text,jsonb,text,text,uuid,text)',
     'queue_read_batch(text)', 'queue_claim(text,bigint,uuid,bigint,text)', 'queue_complete(text,bigint,uuid,bigint,text,uuid)',
     'queue_record_failure(text,uuid,bigint,bigint,uuid,text)', 'queue_schedule_retry(text,bigint,uuid,integer)',
-    'queue_release(text,bigint,integer)', 'queue_dead_letter(text,bigint,uuid,bigint,jsonb,text,text)', 'queue_resolve_halt(text,uuid,text,bigint)'
+    'queue_release(text,bigint,integer,uuid,text)', 'queue_dead_letter(text,bigint,uuid,bigint,jsonb,text,text)', 'queue_resolve_halt(text,uuid,text,bigint)'
   ] loop
     execute format('revoke execute on function public.%s from public, anon, authenticated', f);
     execute format('grant execute on function public.%s to service_role', f);

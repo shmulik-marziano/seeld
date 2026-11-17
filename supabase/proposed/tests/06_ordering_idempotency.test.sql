@@ -17,6 +17,7 @@ begin
   perform set_config('request.jwt.claims', '{"role":"service_role"}', true);
   perform vault.create_secret('test-hmac-key-do-not-use', 'national_id_hmac_key');
   perform vault.create_secret('test-enc-key-do-not-use', 'national_id_enc_key');
+  perform vault.create_secret('test-event-hash-key-do-not-use', 'event_hash_key');
   update public.queue_destinations set enabled = true;
 end $$;
 create temp table t as select public.identity_create_pending(null) as a, public.identity_create_pending(null) as b;

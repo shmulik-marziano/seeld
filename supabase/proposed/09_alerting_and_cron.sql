@@ -299,6 +299,7 @@ end $$;
 -- $cron$);   -- TODO(owner): slower drain for the slower system (placeholder)
 
 -- select cron.schedule('platform-metrics-refresh', '*/10 * * * *', $cron$ select public.metrics_refresh_daily(); $cron$);
+-- select cron.schedule('platform-metrics-fold', '* * * * *', $cron$ select public.metrics_fold(); $cron$);   -- folds the metrics_deltas buffer (08); dashboard lag <= 1 min
 -- select cron.schedule('platform-workbench-time-flags', '*/5 * * * *', $cron$ select public.workbench_refresh_time_flags(); $cron$);
 -- select cron.schedule('platform-queue-watchdog', '*/5 * * * *', $cron$ select public.queue_watchdog(); $cron$);
 -- select cron.schedule('platform-retention-purge', '17 * * * *', $cron$ select public.platform_retention_purge(); $cron$);

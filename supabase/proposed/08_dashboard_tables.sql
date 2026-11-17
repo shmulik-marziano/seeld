@@ -67,6 +67,18 @@ as $$
   end;
 $$;
 
+-- FIX (review 08-5): a manager is scoped to the agency of THEIR role row (platform_user_roles.agency_id). Only super_admin is cross-agency.
+-- A manager row without agency sees nothing until the owner scopes it.
+create or replace function public.current_platform_agency()
+returns uuid
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select r.agency_id from public.platform_user_roles r where r.user_id = (select auth.uid()) and r.active and r.role = 'manager' order by r.created_at limit 1;
+$$;
+
 create or replace function public.platform_visibility_mode()
 returns text language sql stable security definer set search_path = '' as $$
   select coalesce((select value from public.platform_settings where key = 'visibility_mode'), 'own_only');
@@ -315,7 +327,21 @@ create index if not exists management_metrics_agency_id_idx on public.management
 alter table public.management_metrics enable row level security;
 revoke all on public.management_metrics from anon, authenticated;
 
--- Counter bump (whitelisted columns). Used by triggers on save events and by the worker.
+-- FIX (review 08-6): the old bump upserted ONE shared daily row inside the caller's transaction, so every portal save serialised on that
+-- row until commit, and rows locked in different orders could deadlock. Now: bump = plain INSERT into an append-only buffer (no row
+-- shared between transactions, no lock wait); metrics_fold() (cron, every minute, and at the start of metrics_refresh_daily) folds the
+-- buffer into management_metrics under ONE advisory lock, in a fixed order. Dashboard numbers lag by at most the cron interval.
+create table if not exists public.metrics_deltas (
+  id bigint generated always as identity primary key,
+  metric_date date not null default current_date,
+  agent_id uuid,                                   -- null = system row
+  col text not null,
+  delta integer not null
+);
+comment on table public.metrics_deltas is 'Append-only counter buffer folded into management_metrics by metrics_fold(). Aggregates only, no PII.';
+alter table public.metrics_deltas enable row level security;
+revoke all on public.metrics_deltas from anon, authenticated;
+
 create or replace function public.metrics_bump(p_agent uuid, p_col text, p_delta integer default 1)
 returns void
 language plpgsql
@@ -327,13 +353,36 @@ begin
                    'har_habituach_ingested','ingested_rank_1','ingested_rank_2','ingested_rank_3','ingested_rank_4','ingested_rank_5','failed_three_times') then
     raise exception 'bad_metric_column';
   end if;
-  if p_agent is null then
-    execute format('insert into public.management_metrics as m (metric_date, scope, %1$I) values (current_date, ''system'', greatest(0, $1))
-                    on conflict (metric_date) where scope = ''system'' do update set %1$I = greatest(0, m.%1$I + $1), updated_at = now()', p_col) using p_delta;
-  else
-    execute format('insert into public.management_metrics as m (metric_date, scope, agent_id, %1$I) values (current_date, ''agent'', $2, greatest(0, $1))
-                    on conflict (metric_date, agent_id) where scope = ''agent'' do update set %1$I = greatest(0, m.%1$I + $1), updated_at = now()', p_col) using p_delta, p_agent;
-  end if;
+  insert into public.metrics_deltas (agent_id, col, delta) values (p_agent, p_col, p_delta);
+end;
+$$;
+
+create or replace function public.metrics_fold()
+returns integer
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare r record; n integer := 0;
+begin
+  perform pg_advisory_xact_lock(hashtext('metrics_fold'));          -- one folder at a time; writers never wait on it
+  for r in
+    with moved as (delete from public.metrics_deltas returning metric_date, agent_id, col, delta)
+    select metric_date, agent_id, col, sum(delta)::integer as delta from moved group by metric_date, agent_id, col
+     order by metric_date, agent_id nulls first, col                -- fixed lock order
+  loop
+    if r.agent_id is null then
+      execute format('insert into public.management_metrics as m (metric_date, scope, %1$I) values ($1, ''system'', greatest(0, $2))
+                      on conflict (metric_date) where scope = ''system'' do update set %1$I = greatest(0, m.%1$I + $2), updated_at = now()', r.col)
+        using r.metric_date, r.delta;
+    else
+      execute format('insert into public.management_metrics as m (metric_date, scope, agent_id, agency_id, %1$I) values ($1, ''agent'', $3, public.get_user_agency_id($3), greatest(0, $2))
+                      on conflict (metric_date, agent_id) where scope = ''agent'' do update set %1$I = greatest(0, m.%1$I + $2), agency_id = coalesce(m.agency_id, excluded.agency_id), updated_at = now()', r.col)
+        using r.metric_date, r.delta, r.agent_id;
+    end if;
+    n := n + 1;
+  end loop;
+  return n;
 end;
 $$;
 
@@ -378,6 +427,12 @@ set search_path = ''
 as $$
 declare v_pending_sf integer; v_pending_su integer;
 begin
+  perform public.metrics_fold();
+  -- FIX (review 08-8): create today's system row BEFORE the abandonment update below, otherwise the first run of the day finds no row.
+  select (select queue_length from pgmq.metrics('salesforce_events')), (select queue_length from pgmq.metrics('surense_outbound')) into v_pending_sf, v_pending_su;
+  insert into public.management_metrics as m (metric_date, scope, pending_salesforce, pending_surense) values (current_date, 'system', v_pending_sf, v_pending_su)
+  on conflict (metric_date) where scope = 'system' do update set pending_salesforce = excluded.pending_salesforce, pending_surense = excluded.pending_surense, updated_at = now();
+
   insert into public.management_metrics as m (metric_date, scope, agent_id, agency_id, active_customers, avg_lead_response_minutes, service_breaches,
                                               questionnaires_in_progress, questionnaires_completed)
   select current_date, 'agent', w.assigned_agent_id, max(w.agency_id::text)::uuid,
@@ -400,9 +455,6 @@ begin
                              where submitted_at is null and updated_at < now() - interval '7 days' group by 1) s)
    where m.metric_date = current_date and m.scope = 'system';
 
-  select (select queue_length from pgmq.metrics('salesforce_events')), (select queue_length from pgmq.metrics('surense_outbound')) into v_pending_sf, v_pending_su;
-  insert into public.management_metrics as m (metric_date, scope, pending_salesforce, pending_surense) values (current_date, 'system', v_pending_sf, v_pending_su)
-  on conflict (metric_date) where scope = 'system' do update set pending_salesforce = excluded.pending_salesforce, pending_surense = excluded.pending_surense, updated_at = now();
 end;
 $$;
 
@@ -515,9 +567,17 @@ declare v_role text := public.current_platform_role(); v_uid uuid := (select aut
 begin
   if v_role is null then raise exception 'forbidden' using errcode = '42501'; end if;
   p_limit := least(greatest(coalesce(p_limit, 50), 1), 200);
-  if v_role in ('manager','super_admin') then
+  if v_role = 'super_admin' then
     return query select * from public.agent_workbench w
       where (not p_only_hot or w.urgency_score >= 70) and (not p_only_sync_errors or w.last_sync_status in ('error','halted'))
+      order by w.urgency_score desc, w.customer_key limit p_limit offset p_offset;
+    return;
+  end if;
+  if v_role = 'manager' then   -- FIX (review 08-5): a manager sees only their own agency, never rows with a null agency
+    v_agency := public.current_platform_agency();
+    return query select * from public.agent_workbench w
+      where v_agency is not null and w.agency_id = v_agency
+        and (not p_only_hot or w.urgency_score >= 70) and (not p_only_sync_errors or w.last_sync_status in ('error','halted'))
       order by w.urgency_score desc, w.customer_key limit p_limit offset p_offset;
     return;
   end if;
@@ -539,11 +599,18 @@ stable
 security definer
 set search_path = ''
 as $$
-declare v_role text := public.current_platform_role(); v_uid uuid := (select auth.uid()); v_mode text;
+declare v_role text := public.current_platform_role(); v_uid uuid := (select auth.uid()); v_mode text; v_agency uuid;
 begin
   if v_role is null then raise exception 'forbidden' using errcode = '42501'; end if;
-  if v_role in ('manager','super_admin') then
+  if v_role = 'super_admin' then
     return query select * from public.management_metrics m where m.metric_date between p_from and p_to order by m.metric_date desc, m.scope, m.agent_id;
+    return;
+  end if;
+  if v_role = 'manager' then   -- FIX (review 08-5): own agency's agent rows only; the system row spans all agencies and stays super_admin only
+    v_agency := public.current_platform_agency();
+    return query select * from public.management_metrics m
+      where v_agency is not null and m.scope = 'agent' and m.agency_id = v_agency and m.metric_date between p_from and p_to
+      order by m.metric_date desc, m.agent_id;
     return;
   end if;
   v_mode := public.platform_visibility_mode();
@@ -560,9 +627,21 @@ language plpgsql
 security definer
 set search_path = ''
 as $$
-declare v_before uuid; v_res jsonb;
+declare v_before uuid; v_res jsonb; v_agency uuid;
 begin
   if coalesce(public.current_platform_role(), '') not in ('manager','super_admin') then raise exception 'forbidden' using errcode = '42501'; end if;
+  -- FIX (review 08-5/08-8): the target must be an active agent; a manager acts only inside their own agency (customer AND agent).
+  if not exists (select 1 from public.platform_user_roles r where r.user_id = p_agent and r.active and r.role in ('agent','insurance_lead','finance_lead')) then
+    raise exception 'target_not_an_active_agent' using errcode = '22023';
+  end if;
+  if public.current_platform_role() = 'manager' then
+    v_agency := public.current_platform_agency();
+    if v_agency is null
+       or not exists (select 1 from public.agent_workbench w where w.customer_key = p_customer and w.agency_id = v_agency)
+       or public.get_user_agency_id(p_agent) is distinct from v_agency then
+      raise exception 'forbidden' using errcode = '42501';
+    end if;
+  end if;
   select assigned_agent_id into v_before from public.agent_workbench where customer_key = p_customer;
   v_res := public.assign_lead(p_customer, coalesce((select line_of_business from public.agent_workbench where customer_key = p_customer), 'insurance'), p_agent, null);
   perform public.platform_audit('assignment.manual_override', 'agent_workbench', p_customer::text, jsonb_build_object('agent', v_before), jsonb_build_object('agent', p_agent, 'reason', left(p_reason, 80)));
@@ -605,6 +684,7 @@ begin
     insert into public.assignment_rules (priority, line_of_business, required_role, sticky, strategy, load_cap, enabled) values (p_priority, p_lob, p_required_role, p_sticky, p_strategy, p_load_cap, p_enabled) returning id into v_id;
   else
     update public.assignment_rules set priority = p_priority, line_of_business = p_lob, required_role = p_required_role, sticky = p_sticky, strategy = p_strategy, load_cap = p_load_cap, enabled = p_enabled, updated_at = now() where id = p_id returning id into v_id;
+    if v_id is null then raise exception 'rule_not_found' using errcode = 'P0002'; end if;   -- FIX: was a silent null
   end if;
   perform public.platform_audit('assignment_rule.changed', 'assignment_rules', v_id::text, v_before, (select to_jsonb(r) from public.assignment_rules r where id = v_id));
   return v_id;
@@ -616,7 +696,7 @@ do $$
 declare f text;
 begin
   foreach f in array array[
-    'current_platform_role()', 'platform_visibility_mode()', 'require_super_admin_fresh()',
+    'current_platform_role()', 'current_platform_agency()', 'platform_visibility_mode()', 'require_super_admin_fresh()',
     'get_agent_workbench(integer,integer,boolean,boolean)', 'get_management_metrics(date,date)',
     'assign_lead_manual(uuid,uuid,text)', 'admin_set_setting(text,text)',
     'admin_upsert_assignment_rule(bigint,integer,text,text,boolean,text,integer,boolean)'
@@ -626,7 +706,7 @@ begin
   end loop;
   foreach f in array array[
     'platform_audit(text,text,text,jsonb,jsonb)', 'workbench_set_case_state(uuid,text,text,text,numeric,smallint)', 'workbench_set_sf_status(uuid,text)',
-    'metrics_bump(uuid,text,integer)', 'metrics_refresh_daily()', 'workbench_refresh_time_flags()', 'assign_lead(uuid,text,uuid,uuid)'
+    'metrics_bump(uuid,text,integer)', 'metrics_fold()', 'metrics_refresh_daily()', 'workbench_refresh_time_flags()', 'assign_lead(uuid,text,uuid,uuid)'
   ] loop
     execute format('revoke execute on function public.%s from public, anon, authenticated', f);
     execute format('grant execute on function public.%s to service_role', f);

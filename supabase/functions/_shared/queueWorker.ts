@@ -15,7 +15,9 @@ export interface QueueMessage {
   message: unknown;
 }
 
-export type ClaimDecision = "process" | "duplicate" | "halted" | "locked" | "not_ready";
+/** "poison": the previous workers died on this message max_attempts times (counted in SQL from expired leases, NOT from pgmq read_ct,
+ *  which also counts harmless skip/requeue reads). The caller dead-letters it. */
+export type ClaimDecision = "process" | "duplicate" | "halted" | "locked" | "not_ready" | "poison";
 
 /** One method per SQL function in supabase/proposed/06..07 (service role RPC). */
 export interface QueueDb {
@@ -23,11 +25,13 @@ export interface QueueDb {
   claim(dest: Destination, msgId: number, customerKey: string, seq: number, workerId: string): Promise<ClaimDecision>;
   loadFields(customerKey: string, fieldKeys: string[]): Promise<FieldMap>;
   getExternalId(customerKey: string, dest: Destination): Promise<string | null>;
-  setExternalId(customerKey: string, dest: Destination, externalId: string): Promise<void>;
+  /** "conflict" = this external id is already linked to ANOTHER customer (identity_set_external_id). */
+  setExternalId(customerKey: string, dest: Destination, externalId: string): Promise<"ok" | "conflict" | void>;
   complete(dest: Destination, msgId: number, customerKey: string, seq: number, workerId: string, eventId: string): Promise<void>;
   recordFailure(dest: Destination, customerKey: string, seq: number, msgId: number, eventId: string, code: string): Promise<number>;
   scheduleRetry(dest: Destination, msgId: number, customerKey: string, delaySec: number): Promise<void>;
-  release(dest: Destination, msgId: number, delaySec: number): Promise<void>;
+  /** customerKey + workerId (optional) also free the customer lease so a returned message is not bounced by its own stale lease. */
+  release(dest: Destination, msgId: number, delaySec: number, customerKey?: string, workerId?: string): Promise<void>;
   deadLetter(dest: Destination, msgId: number, customerKey: string | null, seq: number | null, message: unknown, reason: string, code: string): Promise<void>;
 }
 
@@ -102,6 +106,13 @@ export async function runBatch(deps: WorkerDeps): Promise<BatchSummary> {
     const env = parsed.value;
 
     const decision = await db.claim(dest, m.msg_id, env.customerKey, env.seq, deps.workerId);
+    if (decision === "poison") {
+      // Workers kept dying on this message (timeout / OOM mid send). It never reported a failure, so SQL counted the expired leases.
+      await db.deadLetter(dest, m.msg_id, env.customerKey, env.seq, m.message, "poison", "worker_crash");
+      summary.deadLettered++;
+      log.error("crashing message dead-lettered", { destination: dest, seq: env.seq, msgId: m.msg_id });
+      continue;
+    }
     if (decision !== "process") {
       summary.skipped++;
       continue;
@@ -122,7 +133,16 @@ export async function runBatch(deps: WorkerDeps): Promise<BatchSummary> {
 
     if (result.ok) {
       const okData = (result as Extract<AdapterResult<{ externalId: string }>, { ok: true }>).data;
-      if (okData.externalId) await db.setExternalId(env.customerKey, dest, okData.externalId);
+      if (okData.externalId) {
+        const linked = await db.setExternalId(env.customerKey, dest, okData.externalId);
+        if (linked === "conflict") {
+          // The core system record already belongs to another customer here: completing would hide a broken link. Stop this customer.
+          await db.deadLetter(dest, m.msg_id, env.customerKey, env.seq, m.message, "permanent", "external_id_conflict");
+          summary.deadLettered++;
+          log.error("external id conflict, dead-lettered", { destination: dest, seq: env.seq });
+          continue;
+        }
+      }
       await db.complete(dest, m.msg_id, env.customerKey, env.seq, deps.workerId, env.eventId);
       summary.completed++;
       continue;

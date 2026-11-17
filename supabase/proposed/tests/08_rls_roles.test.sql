@@ -2,7 +2,7 @@
 -- Role matrix:  client: nothing | agent: own rows (visibility_mode) | manager: both tables + queue health | super_admin: operations
 -- Run only on a branch/preview database after 06..09 are applied. Fixed fake ids below, nothing real.
 begin;
-select plan(40);
+select plan(42);
 
 -- Fixtures (as the table owner). A1/A2 agents, M manager, S super admin, C client (no role at all).
 insert into auth.users (id, aud, role) values
@@ -26,8 +26,10 @@ insert into public.agent_workbench (customer_key, assigned_agent_id, assigned_at
 insert into public.agencies (id, name) values ('acacacac-0000-4000-8000-000000000001', 'Agency A'), ('acacacac-0000-4000-8000-000000000002', 'Agency B');
 update public.profiles set agency_id = 'acacacac-0000-4000-8000-000000000001' where user_id in ('11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222');
 update public.agent_workbench set agency_id = 'acacacac-0000-4000-8000-000000000001';
+update public.platform_user_roles set agency_id = 'acacacac-0000-4000-8000-000000000001' where role = 'manager';   -- FIX: managers are agency-scoped
 -- The workbench insert trigger already created the two agent metric rows; add the system row.
 insert into public.management_metrics (metric_date, scope) values (current_date, 'system') on conflict (metric_date) where scope = 'system' do nothing;
+select public.metrics_fold();   -- FIX: bump now writes an append-only buffer; fold it into the agent rows
 update public.platform_settings set value = 'own_only' where key = 'visibility_mode';
 
 -- 1. Structure: no client privilege, no policy, RLS on, for every platform table.
@@ -85,7 +87,8 @@ update public.platform_settings set value = 'own_only' where key = 'visibility_m
 do $$ begin perform set_config('request.jwt.claims', '{"sub":"33333333-3333-4333-8333-333333333333","role":"authenticated"}', true); end $$;
 set local role authenticated;
 select is((select count(*) from public.get_agent_workbench()), 3::bigint, 'manager reads the whole workbench');
-select is((select count(*) from public.get_management_metrics()), 3::bigint, 'manager reads all metrics incl. the system row');
+select is((select count(*) from public.get_management_metrics()), 2::bigint, 'manager reads the agent metric rows of their own agency');
+select is((select count(*) from public.get_management_metrics() where scope = 'system'), 0::bigint, 'manager never reads the cross-agency system row');
 select lives_ok($$select public.get_queue_health()$$, 'manager reads queue health');
 select throws_ok($$select public.admin_set_setting('visibility_mode', 'all_read_only')$$, '42501', null, 'manager cannot change system settings');
 select throws_ok($$select public.admin_purge_dlq('surense', 0)$$, '42501', null, 'manager cannot purge dead letters');
@@ -106,7 +109,8 @@ select lives_ok($$select public.admin_set_setting('visibility_mode', 'shared_poo
 select throws_ok($$select public.admin_set_setting('visibility_mode', 'everyone')$$, 'P0001', 'bad_visibility_mode', 'invalid value refused');
 select lives_ok($$select public.admin_purge_dlq('surense', 0)$$, 'super admin purges dead letters (archive, not delete)');
 select lives_ok($$select public.admin_upsert_alert_recipient(null, 'label', 'email', 'someone@example.invalid', 'critical', true)$$, 'super admin edits alert recipients');
-select is((select count(*) from public.get_agent_workbench()), 3::bigint, 'super admin has the same read access as a manager');
+select is((select count(*) from public.get_agent_workbench()), 3::bigint, 'super admin reads the whole workbench');
+select is((select count(*) from public.get_management_metrics()), 3::bigint, 'super admin reads all metrics incl. the system row');
 reset role;
 
 -- 6. Audit trail: who, what, when, before/after, and never the contact address.

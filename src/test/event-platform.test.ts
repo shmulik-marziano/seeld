@@ -188,6 +188,9 @@ describe("loop prevention", () => {
     expect(await contentHash({ a: 1, b: 2 })).toBe(await contentHash({ b: 2, a: 1 }));
     expect(await contentHash({ a: 1 })).toMatch(/^[0-9a-f]{64}$/);
     expect(await contentHash({ a: 1 })).not.toBe(await contentHash({ a: 2 }));
+    expect(await contentHash({ a: 1 }, "k1")).toMatch(/^[0-9a-f]{64}$/);
+    expect(await contentHash({ a: 1 }, "k1")).not.toBe(await contentHash({ a: 1 }));
+    expect(await contentHash({ a: 1 }, "k1")).not.toBe(await contentHash({ a: 1 }, "k2"));
   });
 });
 

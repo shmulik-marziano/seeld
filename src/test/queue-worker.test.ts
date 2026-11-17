@@ -113,6 +113,23 @@ describe("queue worker", () => {
     expect(r.log).toContain("dlq:-:poison");
   });
 
+  it("a message that crashed the worker max_attempts times is dead-lettered with its customer (SQL says 'poison')", async () => {
+    const f = fakeDb([msg(1, A, 1)]);
+    const db: QueueDb = { ...f.db, claim: async () => "poison" };
+    const s = await runBatch({ destination: "surense", adapter: adapter(() => ({ ok: true, data: { externalId: "x" } })), policy: { ...SURENSE_PROFILE.queue }, db, log, workerId: "w", now: () => 0, sleep: async () => {} });
+    expect(s).toMatchObject({ deadLettered: 1, completed: 0 });
+    expect(f.log).toContain("dlq:a:poison");
+  });
+
+  it("an external id already linked to another customer is dead-lettered, not completed", async () => {
+    const f = fakeDb([msg(1, A, 1)]);
+    const db: QueueDb = { ...f.db, setExternalId: async () => "conflict" };
+    const s = await runBatch({ destination: "surense", adapter: adapter(() => ({ ok: true, data: { externalId: "x" } })), policy: { ...SURENSE_PROFILE.queue }, db, log, workerId: "w", now: () => 0, sleep: async () => {} });
+    expect(s).toMatchObject({ deadLettered: 1, completed: 0 });
+    expect(f.log).toContain("dlq:a:permanent");
+    expect(f.log.some((l) => l.startsWith("complete"))).toBe(false);
+  });
+
   it("a message for the wrong destination is poison", async () => {
     const r = run([msg(1, A, 1, "salesforce")], adapter(() => ({ ok: true, data: { externalId: "x" } })));
     expect(await r.p).toMatchObject({ deadLettered: 1 });
