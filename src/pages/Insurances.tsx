@@ -16,21 +16,25 @@ const PATH = "/insurances";
  * six times (and never twice in a row): the least used candidate wins.
  */
 const CARD_ART: Record<string, ArtName> = (() => {
-  const used = new Map<ArtName, number>();
+  // the page's own bands (hero, emotional moment, closing) already use these, so cards lean away from them
+  const used = new Map<ArtName, number>([["01-hero", 1], ["02-family-protection", 1], ["11-claims-service", 1]]);
+  const ALL: ArtName[] = ["03-health-insurance", "05-retirement", "12-childrens-savings", "06-home-mortgage", "07-car-insurance", "08-business-insurance", "09-travel-insurance", "04-investments-growth", "10-financial-planning", "02-family-protection", "11-claims-service", "01-hero"];
   const out: Record<string, ArtName> = {};
-  let prev: ArtName | null = null;
+  const recent: ArtName[] = [];
   for (const item of [...LIFE_HEALTH, ...GENERAL_INSURANCE]) {
     const t = TOPICS[item.href];
-    const cands = t ? [t.art, t.art2, t.art3, t.art4].filter((a): a is ArtName => !!a) : ["01-hero" as ArtName];
+    const cands = [...(t ? [t.art, t.art2, t.art3, t.art4].filter((a): a is ArtName => !!a) : []), ...ALL];
     let best = cands[0];
     let bestScore = Infinity;
     cands.forEach((a, i) => {
-      const score = (used.get(a) ?? 0) * 10 + (a === prev ? 25 : 0) + i;
+      // never the same plate within the previous three cards (a row of three, or neighbours on phone)
+      const score = (used.get(a) ?? 0) * 10 + (recent.includes(a) ? 1000 : 0) + i;
       if (score < bestScore) { best = a; bestScore = score; }
     });
     used.set(best, (used.get(best) ?? 0) + 1);
     out[item.href] = best;
-    prev = best;
+    recent.push(best);
+    if (recent.length > 3) recent.shift();
   }
   return out;
 })();
@@ -120,7 +124,7 @@ export default function Insurances() {
 
       <PubCta
         title="לא חייבים לבחור לבד"
-        text="נבדוק מה יש לכם, מה כפול ומה חסר, ונחזור אליכם עם תמונה מסודרת. שיחה ראשונה ללא עלות וללא התחייבות."
+        text="נבדוק מה יש לכם, מה כפול ומה חסר, ונחזור אליכם עם תמונה מסודרת. שיחה ראשונה בלי התחייבות מצידכם."
         art="11-claims-service"
         primary={{ label: "בדיקת תיק 360", to: "/portfolio-review" }}
         secondary={{ label: "תיאום פגישה", to: "/contact" }}

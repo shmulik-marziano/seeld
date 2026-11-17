@@ -37,7 +37,7 @@ const repeatsSummary = (description: string, summary?: string) => {
 /** Generic "what to check in a policy" prompts for product pages that have no coverage table. Advice only, no facts or figures. */
 const CHECKS = [
   { icon: "checklist", t: "מה בדיוק מכוסה", p: "ההגדרות בפוליסה קובעות מה נחשב אירוע מבוטח, ולכן קוראים אותן לפני שחותמים." },
-  { icon: "lock", t: "מה לא מכוסה", p: "סייגים והחרגות הם החלק שהכי קל לפספס. שווה לשאול עליהם במפורש." },
+  { icon: "lock", t: "מה לא מכוסה", p: "סייגים והחרגות הם חלק שקל לפספס. כדאי לשאול עליהם במפורש." },
   { icon: "hourglass", t: "מתי הכיסוי מתחיל", p: "במוצרים מסוימים יש תקופת המתנה לפני שהכיסוי נכנס לתוקף. כדאי לדעת אותה מראש." },
   { icon: "search", t: "מה כבר יש לכם", p: "כיסוי דרך העבודה, הקופה או הבנק עלול לחפוף. בודקים מה קיים לפני שמוסיפים." },
 ];

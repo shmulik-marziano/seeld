@@ -244,7 +244,7 @@ const SavedCalculations = () => {
                   >
                     <span className="text-[15px] font-bold" style={{ color: NAVY }}>פתיחת מחשבון ←</span>
                     <span className="text-[14px]" style={{ color: MUTED }}>
-                      ללא רישום וללא עלות
+                      ללא רישום
                     </span>
                   </Link>
                 </div>
@@ -304,7 +304,7 @@ const SavedCalculations = () => {
               {/* Next action */}
               <div className="mt-14 border-t pt-6 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4" style={{ borderColor: LINE }}>
                 <p className="text-[14px] leading-[1.8] max-w-md" style={{ color: "#2D435D" }}>
-                  רוצים לעבור על התוצאות עם יועץ? נבחן את המספרים מול התיק האמיתי שלכם, ללא עלות.
+                  רוצים לעבור על התוצאות עם יועץ? נבחן את המספרים מול התיק האמיתי שלכם.
                 </p>
                 <Link
                   to="/contact"

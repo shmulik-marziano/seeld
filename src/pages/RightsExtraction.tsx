@@ -53,7 +53,7 @@ const RightsExtraction = () => {
         >
           <div className="sd-brief">
             <b>בדיקת זכאות</b>
-            <p>הבדיקה ללא עלות וללא התחייבות. אם אין כלום, לפחות תדעו.</p>
+            <p>הבדיקה אינה מחייבת. אם אין כלום, לפחות תדעו.</p>
           </div>
         </PubHero>
 
@@ -85,7 +85,7 @@ const RightsExtraction = () => {
 
         <PubClose
           title="נבדוק מה מגיע לכם"
-          text="הבדיקה ללא עלות וללא התחייבות. אם אין כלום, לפחות תדעו."
+          text="הבדיקה אינה מחייבת. אם אין כלום, לפחות תדעו."
           art={p3 === "butter" ? "10-financial-planning" : "01-hero"}
           primary={{ text: "בדיקת זכאות", to: "/portfolio-review#review-form" }}
           secondary={{ text: "תיאום שיחה", to: "/contact" }}

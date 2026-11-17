@@ -1,4 +1,4 @@
-import { Fragment, useState, useMemo, type CSSProperties } from "react";
+import { Fragment, useEffect, useState, useMemo, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpDown } from "lucide-react";
 import Header from "@/components/Header";
@@ -34,6 +34,7 @@ const n0 = (v: number | null | undefined) => (missing(v) ? 0 : (v as number));
 const sortLabel: Record<SortKey, string> = { name: "שם", year1: "תשואת 12 חודשים", year3: "תשואת 3 שנים", year5: "תשואת 5 שנים", fees: "דמי ניהול", assets: "היקף נכסים" };
 const TH: CSSProperties = { fontSize: 14 };
 const PAGE = 60;
+const PAGE_COMPACT = 15;
 
 type SortKey = "name" | "year1" | "year3" | "year5" | "fees" | "assets";
 type SortDir = "asc" | "desc";
@@ -404,10 +405,16 @@ const InvestmentTracks = () => {
   // The table shows PAGE rows at a time (571 rows at once made the phone page
   // sixty screens long). The count resets whenever the filters change.
   const filterKey = [productFilter, specFilter, companyFilter, search, sortKey, sortDir].join("|");
-  const [visibleFor, setVisibleFor] = useState<{ key: string; n: number }>({ key: "", n: PAGE });
-  const visible = visibleFor.key === filterKey ? visibleFor.n : PAGE;
+  // On phone and tablet (card list) the page is smaller still: 15 cards, then "show more". Set after mount so the
+  // prerendered HTML and the first client render stay identical.
+  const [pageSize, setPageSize] = useState(PAGE);
+  useEffect(() => {
+    if (window.matchMedia("(max-width: 1023px)").matches) setPageSize(PAGE_COMPACT);
+  }, []);
+  const [visibleFor, setVisibleFor] = useState<{ key: string; n: number }>({ key: "", n: pageSize });
+  const visible = visibleFor.key === filterKey ? visibleFor.n : pageSize;
   const shown = filtered.slice(0, visible);
-  const showMore = () => setVisibleFor({ key: filterKey, n: visible + PAGE });
+  const showMore = () => setVisibleFor({ key: filterKey, n: visible + pageSize });
 
   const topic = topicFor("/investment-tracks");
   const [p1] = topic.palette;
@@ -710,7 +717,7 @@ const InvestmentTracks = () => {
                   {filtered.length > shown.length && (
                     <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
                       <button type="button" onClick={showMore} className="btn-secondary">
-                        הצגת עוד {Math.min(PAGE, filtered.length - shown.length)} מסלולים
+                        הצגת עוד {Math.min(pageSize, filtered.length - shown.length)} מסלולים
                       </button>
                       <span className="text-[15px] tabular-nums" style={{ color: MUTED }}>
                         מוצגים {shown.length} מתוך {filtered.length}

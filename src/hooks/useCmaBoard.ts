@@ -83,7 +83,7 @@ export const TRACKS: Record<string, { label: string; description: string }> = {
   combined_tradable: { label: "משולב סחיר", description: "מסלול מעורב המשקיע בנכסים סחירים בלבד." },
   money_market: { label: "שקלי וכספי", description: "מסלול לטווח קצר, בפיקדונות ובאג״ח קצר, ברמת סיכון נמוכה." },
   halacha: { label: "הלכתי", description: "מסלול המנוהל לפי כללי ההלכה." },
-  sustainability: { label: "קיימות", description: "מסלול המשקיע לפי עקרונות סביבה, חברה וממשל תאגידי." },
+  sustainability: { label: "קיימות", description: "מסלול המשקיע לפי עקרונות סביבה, חברה וממשל." },
   foreign: { label: "חו״ל", description: "מסלול המשקיע בעיקר בנכסים מחוץ לישראל." },
   guaranteed: { label: "מבטיח תשואה", description: "מסלולים ותיקים עם תשואה מובטחת, סגורים למצטרפים חדשים." },
   age_under_50: { label: "תלוי גיל, עד 50", description: "מסלול לחוסכים עד גיל 50 במודל תלוי הגיל." },

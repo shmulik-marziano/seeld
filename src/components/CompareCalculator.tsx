@@ -186,7 +186,7 @@ const CompareCalculator = () => {
                   className="absolute top-3 left-3 px-2 py-0.5 rounded-full text-white text-[11px] font-medium"
                   style={{ backgroundColor: TURQ_TEXT }}
                 >
-                  הטוב ביותר
+                  תוצאה גבוהה
                 </span>
               )}
               <Icon className="w-6 h-6 mx-auto mt-1 mb-3" style={{ color: isBest ? TURQ : NAVY }} />
@@ -275,7 +275,7 @@ const CompareCalculator = () => {
         <div className="mt-4 space-y-3">
           {years >= 10 && (
             <div className="dna-callout text-sm">
-              <strong style={{ color: NAVY }}>אופק ארוך מצוין:</strong> עם {years} שנות השקעה, מסלול מניות יכול להניב תשואה גבוהה משמעותית
+              <strong style={{ color: NAVY }}>אופק ארוך:</strong> עם {years} שנות השקעה, מסלול מניות יכול להניב תשואה גבוהה משמעותית
               למרות התנודתיות הקצרת טווח.
             </div>
           )}

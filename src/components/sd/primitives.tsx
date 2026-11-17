@@ -126,7 +126,7 @@ export function SdBand({ tone, id, children, className = "", spot, divider }: {
   const h = hash(`${id ?? ""}${tone}`);
   const cornerName = spot || null; // corner spots are opt-in: a spot with no tie to the content looked orphaned
   const side = id ? DIVIDER_IDS[id] : undefined;
-  const divName = divider === false || (divider === undefined && !side) ? null : typeof divider === "string" ? divider : dividerFor(art, h);
+  const divName = divider === false || (divider === undefined && !side) ? null : typeof divider === "string" ? divider : dividerFor(art, side === "end" ? 0 : side === "start" ? 1 : h);
   return (
     <section id={id} className={`sd-band sd-band-${tone} scroll-mt-28 ${className}`}>
       {divName && (

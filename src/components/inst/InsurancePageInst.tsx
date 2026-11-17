@@ -117,7 +117,7 @@ export default function InsurancePageInst(props: InsurancePageProps) {
                 <div><dt>צוות</dt><dd>צוות הסוכנות</dd></div>
                 <div><dt>משרדים</dt><dd>רעננה וירושלים</dd></div>
                 <div><dt>השוואה</dt><dd>בין חברות הביטוח בשוק</dd></div>
-                <div><dt>פגישה ראשונה</dt><dd>ללא עלות</dd></div>
+                <div><dt>פגישה ראשונה</dt><dd>אינה מחייבת</dd></div>
                 {reviewed && <div><dt>תוכן נבדק</dt><dd>{reviewed}</dd></div>}
               </dl>
             </aside>
@@ -225,7 +225,7 @@ export default function InsurancePageInst(props: InsurancePageProps) {
             <div>
               <h2 className="inst-h2">נשמח להכיר את התיק שלכם</h2>
               <p className="inst-text mt-4">
-                משאירים פרטים, ואנחנו חוזרים עם השוואה בין החברות בשוק. הפגישה הראשונה ללא עלות ואינה מחייבת.
+                משאירים פרטים, ואנחנו חוזרים עם השוואה בין החברות בשוק. הפגישה הראשונה אינה מחייבת.
               </p>
               <div className="inst-reach mt-6">
                 <a href="tel:0523097444" dir="ltr" style={{ justifyContent: "flex-end" }}>052-309-7444</a>

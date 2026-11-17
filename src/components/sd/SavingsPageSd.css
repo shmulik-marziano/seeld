@@ -82,3 +82,11 @@
 }
 .sd:has(.sd-sav-close) .sd-chrome-foot-top { display: none; }
 .sd:has(.sd-sav-close) .sd-chrome-foot-wrap { padding-top: clamp(32px, 4vw, 52px); }
+
+/* ── QA fix: compact track cards on phone (4 figures in one row, tighter padding) ── */
+@media (max-width: 640px) {
+  .sd-trk-card { padding: 12px 14px 4px; }
+  .sd-trk-figs { grid-template-columns: repeat(4, 1fr); gap: 6px 8px; margin-top: 8px; padding-top: 8px; }
+  .sd-trk-figs dt { font-size: 12px; line-height: 1.25; }
+  .sd-trk-figs dd { font-size: 15px; }
+}

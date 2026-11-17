@@ -244,3 +244,6 @@
 .sd-brief b { margin-bottom: 12px; }
 .sd-brief p { text-wrap: pretty; }
 @media (max-width: 640px) { .sd-brief { padding: 20px 20px 22px; margin-top: 22px; } .sd-brief p { font-size: 17px; line-height: 1.7; } }
+
+/* ── QA fix: no two border dividers (olive branch / scroll / ribbon) on consecutive band borders on phone ── */
+@media (max-width: 640px) { .sd-band:has(> .sd-band-div) + .sd-band > .sd-band-div { display: none; } }

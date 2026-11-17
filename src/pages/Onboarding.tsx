@@ -788,7 +788,7 @@ export default function Onboarding() {
         />
 
         <SdBand tone="cream" id="form" className="!pt-8 sm:!pt-12">
-          <div className="max-w-2xl mx-auto px-4 sm:px-6">
+          <div className="sd-wrap" style={{ maxWidth: 720 }}>
             {/* ── Step Bar — plain-word wizard progress ── */}
             {step < 4 && !submitted && (
               <div className="mb-6">

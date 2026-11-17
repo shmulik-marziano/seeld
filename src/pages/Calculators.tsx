@@ -85,7 +85,7 @@ const Calculators = () => {
 
         {story && (
           <SdBand tone={p2} id="moment">
-            <SdStory story={story} art={topic.art2} flip />
+            <SdStory story={story} art={topic.art2} spots={["coins-stacks", "olive-sapling"]} flip />
           </SdBand>
         )}
 

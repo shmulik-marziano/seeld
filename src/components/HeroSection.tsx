@@ -10,7 +10,7 @@ import "@/components/sd/home.css";
 
 const trust = [
   { icon: "search", t: "השוואה בין החברות", s: "בכל חברות הביטוח בשוק" },
-  { icon: "handshake", t: "פגישה ראשונה ללא עלות", s: "ואינה מחייבת" },
+  { icon: "handshake", t: "שיחת היכרות", s: "בלי התחייבות מצידכם" },
   { icon: "shield", t: "צוות סוכנים מקצועי", s: "ליווי מההצעה ועד התביעה" },
   { icon: "phone", t: "מענה אישי", s: "רעננה וירושלים" },
 ];
@@ -32,7 +32,7 @@ const HeroSection = () => {
               <a href="#contact-form" className="sd-btn">קבלו הצעה{arrow}</a>
               <a href="#portfolio-review" className="sd-home-btn-ghost">בדיקת תיק 360{arrow}</a>
             </div>
-            <p className="sd-home-fine">השיחה הראשונה ללא עלות וללא התחייבות.</p>
+            <p className="sd-home-fine">שיחת היכרות בלי התחייבות מצידכם.</p>
           </div>
 
           <div className="sd-home-stage" aria-hidden="true">

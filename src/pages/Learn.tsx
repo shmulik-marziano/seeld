@@ -8,7 +8,7 @@ import { productTypeLabels, type ProductType } from "@/types/fund";
 import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
 import { stories } from "@/data/stories";
 import { SdBand, SdStory, tintStyle, useSdFont } from "@/components/sd/primitives";
-import { PUB_TOPICS, PubArticleCard, PubClose, PubHead, PubHero, artForText, toneAt } from "@/components/sd/pub";
+import { PUB_TOPICS, PubArticleCard, PubClose, PubHead, PubHero, spreadArts, toneAt } from "@/components/sd/pub";
 import { PASTELS } from "@/components/sd/topics";
 import { RUST_TEXT, SAND_TEXT } from "@/lib/brand";
 import "@/components/sd/sd.css";
@@ -85,7 +85,7 @@ const GLOSSARY: { term: string; body: string }[] = [
 ];
 
 const TOOLS: { to: string; title: string; body: string; icon: BrandIconName }[] = [
-  { to: "/calculators", title: "מחשבונים", body: "משכנתא, פנסיה, חיסכון ומס. בלי רישום ובלי עלות.", icon: "calculator" },
+  { to: "/calculators", title: "מחשבונים", body: "משכנתא, פנסיה, חיסכון ומס. בלי צורך ברישום.", icon: "calculator" },
   { to: "/fund-finder", title: "השוואת קופות", body: "חיפוש חופשי בכל הקופות בישראל, עם תשואות ודמי ניהול.", icon: "search" },
   { to: "/investment-tracks", title: "מסלולי השקעה", body: "השוואה בין מסלולים: מנייתי, כללי, סולידי ועוקבי מדד.", icon: "route" },
   { to: "/return-tables", title: "טבלאות תשואה", body: "התשואות המלאות לפי גוף מנהל ולפי מסלול.", icon: "chart" },
@@ -182,7 +182,7 @@ export default function Learn() {
 
         {story && (
           <SdBand tone={p1} id="moment">
-            <SdStory story={story} art={topic.art2} />
+            <SdStory story={story} art={topic.art2} spots={["coins-stacks", "olive-sapling"]} />
           </SdBand>
         )}
 
@@ -352,8 +352,8 @@ export default function Learn() {
                     }
                     return (
                       <div className="sd-pub-grid sd-pub-grid-2">
-                        {shown.map((p) => {
-                          const a = artForText(p.category, p.title);
+                        {(() => { const arts = spreadArts(shown, [topic.art2]); return shown.map((p, idx) => {
+                          const a = arts[idx];
                           return (
                             <PubArticleCard
                               key={p.id}
@@ -365,7 +365,7 @@ export default function Learn() {
                               tone={a.tone}
                             />
                           );
-                        })}
+                        }); })()}
                       </div>
                     );
                   })()}
@@ -405,7 +405,7 @@ export default function Learn() {
 
         <PubClose
           title="רוצים לדעת איפה אתם עומדים?"
-          text="בדיקת תיק 360 מסכמת את הביטוחים, הפנסיה והחיסכון שלכם בתמונה אחת. ללא עלות וללא התחייבות."
+          text="בדיקת תיק 360 מסכמת את הביטוחים, הפנסיה והחיסכון שלכם בתמונה אחת. שיחת היכרות בלי התחייבות מצידכם."
           art="11-claims-service"
         />
       </main>

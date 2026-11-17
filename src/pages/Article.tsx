@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { isStockPhoto } from "@/lib/coverArt";
 import { SdBand, tintStyle, useSdFont } from "@/components/sd/primitives";
-import { PubArticleCard, PubClose, PubHead, PubHero, PubTocAside, PubTocInline, artForText } from "@/components/sd/pub";
+import { PubArticleCard, PubClose, PubHead, PubHero, PubTocAside, PubTocInline, artForText, fullMonthDate } from "@/components/sd/pub";
 import "@/components/sd/sd.css";
 
 // Article in the kit design: hero with a contextual illustration (by topic), one reading column in serif
@@ -99,7 +99,7 @@ const Article = () => {
           tint={tone}
           meta={
             <>
-              <span className="tabular-nums whitespace-nowrap">{article.date}</span>
+              <span className="tabular-nums whitespace-nowrap">{fullMonthDate(article.date)}</span>
               <span aria-hidden="true">·</span>
               <span><span dir="ltr" className="tabular-nums whitespace-nowrap">{article.readTime}</span> קריאה</span>
             </>
@@ -174,7 +174,7 @@ const Article = () => {
                       to={`/article/${r.id}`}
                       title={r.title}
                       kicker={r.category}
-                      meta={<><span className="tabular-nums whitespace-nowrap">{r.date}</span> · <span dir="ltr" className="tabular-nums whitespace-nowrap">{r.readTime}</span></>}
+                      meta={<><span className="tabular-nums whitespace-nowrap">{fullMonthDate(r.date)}</span> · <span dir="ltr" className="tabular-nums whitespace-nowrap">{r.readTime}</span></>}
                       excerpt={r.subtitle}
                       art={a.art}
                       tone={a.tone}
@@ -191,7 +191,7 @@ const Article = () => {
 
         <PubClose
           title="נהניתם מהמאמר? בואו נדבר על התיק שלכם."
-          text="בדיקת תיק 360 מסכמת את הביטוחים, הפנסיה והחיסכון בתמונה אחת. ללא עלות וללא התחייבות."
+          text="בדיקת תיק 360 מסכמת את הביטוחים, הפנסיה והחיסכון בתמונה אחת. שיחת היכרות בלי התחייבות מצידכם."
           art="10-financial-planning"
         />
       </main>

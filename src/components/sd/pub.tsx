@@ -12,7 +12,7 @@ export const PUB_TOPICS = {
   blog: { art: "01-hero", art2: "10-financial-planning", palette: ["rose", "sage", "sky"] },
   wellness: { art: "03-health-insurance", art2: "05-retirement", palette: ["sage", "rose", "sky"] },
   growth: { art: "04-investments-growth", art2: "10-financial-planning", palette: ["butter", "sage", "lavender"] },
-  creativity: { art: "07-car-insurance", art2: "06-home-mortgage", palette: ["lavender", "butter", "sage"] },
+  creativity: { art: "07-car-insurance", art2: "02-family-protection", palette: ["lavender", "butter", "sage"] },
   calculators: { art: "10-financial-planning", art2: "04-investments-growth", palette: ["sky", "lavender", "butter"] },
   fundFinder: { art: "04-investments-growth", art2: "10-financial-planning", palette: ["sage", "butter", "sky"] },
   returnTables: { art: "04-investments-growth", art2: "05-retirement", palette: ["butter", "sky", "sage"] },
@@ -39,6 +39,38 @@ export function artForText(category: string | null | undefined, title = ""): { a
   if (/תקציב|תכנון|פיננס/.test(t)) return { art: "10-financial-planning", tone: "lavender" };
   if (/מסמכ|טפסים|שירות|זכויות|תביע|תלוש/.test(t)) return { art: "11-claims-service", tone: "sage" };
   return { art: "10-financial-planning", tone: "sky" };
+}
+
+/** Static article dates carry abbreviated months ("12 באפר׳ 2025"); blog dates are full ("17 במרץ 2026"). Same display for both. */
+const MONTHS_FULL: Record<string, string> = { "בינו׳": "בינואר", "בפבר׳": "בפברואר", "באפר׳": "באפריל", "ביוני׳": "ביוני", "ביולי׳": "ביולי", "באוג׳": "באוגוסט", "בספט׳": "בספטמבר", "באוק׳": "באוקטובר", "בנוב׳": "בנובמבר", "בדצמ׳": "בדצמבר" };
+export const fullMonthDate = (d: string) => d.replace(/\S+׳/, (m) => MONTHS_FULL[m] ?? m);
+
+const ART_TONE: Record<ArtName, Pastel> = {
+  "01-hero": "sky", "02-family-protection": "sage", "03-health-insurance": "rose", "04-investments-growth": "butter",
+  "05-retirement": "lavender", "06-home-mortgage": "sky", "07-car-insurance": "sky", "08-business-insurance": "butter",
+  "09-travel-insurance": "rose", "10-financial-planning": "lavender", "11-claims-service": "sage", "12-childrens-savings": "rose",
+};
+const ART_POOL: ArtName[] = [
+  "04-investments-growth", "10-financial-planning", "05-retirement", "02-family-protection", "03-health-insurance", "11-claims-service",
+  "12-childrens-savings", "06-home-mortgage", "08-business-insurance", "01-hero", "07-car-insurance", "09-travel-insurance",
+];
+
+/**
+ * Illustrations for a run of article cards: keeps each card's topical art, but no art repeats within the previous
+ * two cards (a 3-column row) and none matches the bands around the grid (`before` / `after`).
+ */
+export function spreadArts(items: { category?: string | null; title?: string }[], before: ArtName[] = [], after: ArtName[] = []): { art: ArtName; tone: Pastel }[] {
+  const out: { art: ArtName; tone: Pastel }[] = [];
+  items.forEach((it, i) => {
+    const pref = artForText(it.category, it.title ?? "");
+    const recent = [...before.slice(-1), ...out.slice(-2).map((o) => o.art)];
+    const last = i === items.length - 1;
+    const bad = (a: ArtName) => recent.includes(a) || (last && after.includes(a));
+    if (!bad(pref.art)) { out.push(pref); return; }
+    const alt = ART_POOL.find((a) => !bad(a) && a !== pref.art) ?? ART_POOL[i % ART_POOL.length];
+    out.push({ art: alt, tone: ART_TONE[alt] });
+  });
+  return out;
 }
 
 const arrow = <BrandIcon name="arrow-left" size={18} />;

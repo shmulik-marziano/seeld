@@ -29,7 +29,7 @@ const getSessionId = () => {
 /* ── Suggestion chips based on page context ── */
 const pageSuggestions: Record<string, { icon: typeof Shield; text: string }[]> = {
   "/": [
-    { icon: FileText, text: "מה כוללת בדיקת תיק ללא עלות?" },
+    { icon: FileText, text: "מה כוללת בדיקת תיק 360?" },
     { icon: Calculator, text: "איך בודקים אם אני משלם יותר מדי?" },
     { icon: Shield, text: "מה כולל ביטוח בריאות פרטי?" },
     { icon: PiggyBank, text: "איך בוחרים קרן פנסיה?" },

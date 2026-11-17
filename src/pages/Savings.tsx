@@ -16,7 +16,7 @@ const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
 
 const trust = [
   { icon: "search", t: "השוואה בין הגופים", s: "דמי ניהול ומסלולי השקעה" },
-  { icon: "handshake", t: "פגישה ראשונה ללא עלות", s: "ואינה מחייבת" },
+  { icon: "handshake", t: "שיחת היכרות", s: "בלי התחייבות מצידכם" },
   { icon: "shield", t: "צוות מקצועי", s: "ליווי לאורך הדרך" },
   { icon: "phone", t: "מענה אישי", s: "רעננה וירושלים" },
 ];
@@ -157,7 +157,7 @@ const Savings = () => {
             <div>
               <h2 className="sd-h2">רוצים ניתוח פנסיוני?</h2>
               <p className="sd-text mt-4">
-                נבדוק את הפנסיה, החיסכון ודמי הניהול שלכם, ונחזור אליכם עם תמונה מסודרת. ללא עלות וללא התחייבות.
+                נבדוק את הפנסיה, החיסכון ודמי הניהול שלכם, ונחזור אליכם עם תמונה מסודרת. שיחת היכרות בלי התחייבות מצידכם.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
                 <Link to="/#portfolio-review" className="sd-btn sd-btn-light">בדיקת תיק 360{arrow}</Link>

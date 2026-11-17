@@ -8,7 +8,7 @@ import { BrandIcon } from "@/components/brand/BrandIcon";
 import { isStockPhoto } from "@/lib/coverArt";
 import { stories } from "@/data/stories";
 import { SdBand, SdStory, tintStyle, useSdFont } from "@/components/sd/primitives";
-import { PUB_TOPICS, PubArticleCard, PubClose, PubHero, artForText } from "@/components/sd/pub";
+import { PUB_TOPICS, PubArticleCard, PubClose, PubHero, spreadArts } from "@/components/sd/pub";
 import "@/components/sd/sd.css";
 
 // Blog hub in the kit design: hero with illustration, search + category chips, article cards with a contextual
@@ -165,8 +165,8 @@ const Blog = () => {
               </div>
             ) : (
               <div className="sd-pub-grid sd-pub-grid-3">
-                {filtered.map((post) => {
-                  const a = artForText(post.category, post.title);
+                {(() => { const arts = spreadArts(filtered, [topic.art]); return filtered.map((post, idx) => {
+                  const a = arts[idx];
                   const photo = post.cover_image_url && !isStockPhoto(post.cover_image_url) ? post.cover_image_url : null;
                   return (
                     <PubArticleCard
@@ -182,7 +182,7 @@ const Blog = () => {
                       photo={photo}
                     />
                   );
-                })}
+                }); })()}
               </div>
             )}
           </div>

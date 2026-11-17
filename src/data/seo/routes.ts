@@ -41,7 +41,7 @@ export const ROUTES: RouteEntry[] = [
   r({
     path: "/", kind: "home", group: "about", changefreq: "weekly", priority: 1.0,
     title: "שילד ביטוח ופיננסים | הביטוח והכסף שלכם, בתמונה ברורה",
-    description: "שילד היא סוכנות ביטוח ופיננסים. ממפים את תיק הביטוח, הפנסיה והחיסכון, מבינים את האפשרויות ומלווים את הביצוע. בדיקת תיק 360 ופגישה ראשונה ללא עלות.",
+    description: "שילד היא סוכנות ביטוח ופיננסים. ממפים את תיק הביטוח, הפנסיה והחיסכון, מבינים את האפשרויות ומלווים את הביצוע. בדיקת תיק 360 ופגישת היכרות.",
     related: ["/portfolio-review", "/insurances", "/savings", "/return-tables"],
   }),
   r({
@@ -53,13 +53,13 @@ export const ROUTES: RouteEntry[] = [
   r({
     path: "/portfolio-review", kind: "service", group: "about", changefreq: "monthly", priority: 0.9,
     title: "בדיקת תיק 360 | תמונה מסודרת של הביטוחים והחסכונות | SEELD",
-    description: "בדיקת תיק 360 ללא עלות: מיפוי כל הביטוחים והחסכונות, בחינת הצרכים ומסמך החלטות עם המלצות מנומקות. משאירים פרטים וחוזרים אליכם.",
+    description: "בדיקת תיק 360: מיפוי כל הביטוחים והחסכונות, בחינת הצרכים ומסמך החלטות עם המלצות מנומקות. משאירים פרטים וחוזרים אליכם.",
     related: ["/rights-extraction", "/insurances", "/savings", "/contact"],
   }),
   r({
     path: "/contact", kind: "info", group: "about", changefreq: "monthly", priority: 0.8, pageType: "ContactPage",
     title: "צור קשר | SEELD",
-    description: "דברו איתנו: טלפון ווטסאפ 052-309-7444, מייל info@seeld.co.il או טופס פנייה. פגישת ייעוץ ראשונה ללא עלות וללא התחייבות.",
+    description: "דברו איתנו: טלפון ווטסאפ 052-309-7444, מייל info@seeld.co.il או טופס פנייה. פגישת ייעוץ ראשונה, בלי התחייבות מצידכם.",
     related: ["/portfolio-review", "/faq", "/about"],
   }),
   r({
@@ -89,13 +89,13 @@ export const ROUTES: RouteEntry[] = [
   r({
     path: "/rights-extraction", kind: "service", group: "about", changefreq: "monthly", priority: 0.7,
     title: "מיצוי זכויות | החזרי מס, קצבאות וכספים שנשכחו | SEELD",
-    description: "בדיקת זכויות וכספים שנשכחו: החזרי מס, קצבאות ביטוח לאומי, הטבות מס לעצמאים וקופות פנסיוניות. הבדיקה ללא עלות.",
+    description: "בדיקת זכויות וכספים שנשכחו: החזרי מס, קצבאות ביטוח לאומי, הטבות מס לעצמאים וקופות פנסיוניות. הבדיקה נעשית בשיחה אישית.",
     related: ["/portfolio-review", "/savings/pension-funds", "/contact"],
   }),
   r({
     path: "/onboarding", kind: "flow", group: "about", changefreq: "monthly", priority: 0.6,
     title: "הצטרפות לשילד | שאלון פתיחת תיק",
-    description: "שאלון הצטרפות לשילד: מילוי פרטים להתחלת התהליך. מיפוי התיק הביטוחי והפנסיוני וליווי אישי ללא התחייבות.",
+    description: "שאלון הצטרפות לשילד: מילוי פרטים להתחלת התהליך. מיפוי התיק הביטוחי והפנסיוני וליווי אישי, בלי התחייבות מצידכם.",
     related: ["/portfolio-review", "/contact", "/privacy"],
   }),
   r({
@@ -127,7 +127,7 @@ export const ROUTES: RouteEntry[] = [
   r({
     path: "/creativity", kind: "hub", group: "insurance", changefreq: "weekly", priority: 0.6,
     title: "ביטוח רכוש ורכב | רכב, דירה, עסק ונסיעות | SEELD",
-    description: "ביטוח רכב, דירה, עסק ונסיעות: השוואת הצעות לפי כיסוי, השתתפות עצמית וחריגים, ולא רק לפי מחיר. ללא עלות.",
+    description: "ביטוח רכב, דירה, עסק ונסיעות: השוואת הצעות לפי כיסוי, השתתפות עצמית וחריגים, ולא רק לפי מחיר.",
     related: ["/insurance/vehicle", "/insurance/home", "/insurance/business", "/insurance/travel"],
   }),
   r({
@@ -140,8 +140,8 @@ export const ROUTES: RouteEntry[] = [
   // ───────── Tools & data ─────────
   r({
     path: "/calculators", kind: "tool", group: "tools", changefreq: "monthly", priority: 0.9, pageType: "CollectionPage",
-    title: "מחשבונים פיננסיים חינם | משכנתא, פנסיה, חיסכון ומס | SEELD",
-    description: "מחשבונים פיננסיים חינמיים וללא רישום: החזר משכנתא, צבירת פנסיה, חיסכון, מס הכנסה, ביטוח חיים והשוואת מסלולים.",
+    title: "מחשבונים פיננסיים | משכנתא, פנסיה, חיסכון ומס | SEELD",
+    description: "מחשבונים פיננסיים לשימוש באתר, בלי צורך ברישום: החזר משכנתא, צבירת פנסיה, חיסכון, מס הכנסה, ביטוח חיים והשוואת מסלולים.",
     related: ["/insurance/mortgage", "/savings/pension-funds", "/return-tables", "/portfolio-review"],
   }),
   r({

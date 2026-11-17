@@ -52,7 +52,7 @@ export default function AgentLandingPage() {
         art="08-business-insurance"
         actions={
           <>
-            <Link to="/app/auth" className="sd-btn">להתחיל בחינם<Arrow /></Link>
+            <Link to="/app/auth" className="sd-btn">להתחיל<Arrow /></Link>
             <Link to="/app/auth" className="sd-link">כניסה למערכת<Arrow /></Link>
           </>
         }
@@ -87,7 +87,7 @@ export default function AgentLandingPage() {
             </p>
             <p className="sd-lead mt-3">בלי לקפוץ בין מערכות, בלי לשכוח ובלי להקליד פעמיים.</p>
             <div className="sd-pub-actions">
-              <Link to="/app/auth" className="sd-btn">להתחיל בחינם<Arrow /></Link>
+              <Link to="/app/auth" className="sd-btn">להתחיל<Arrow /></Link>
             </div>
           </div>
         </div>
@@ -168,7 +168,7 @@ export default function AgentLandingPage() {
             <div className="sd-ca-feature">
               <SdIcon name="briefcase" size={52} />
               <h3 className="sd-h3 mt-3">סוכנים עצמאיים</h3>
-              <p>עובדים לבד? המערכת היא הצוות שלכם. היא לא שוכחת, לא צריכה חופש, ומאפשרת להתמקד במה שאתם הכי טובים בו.</p>
+              <p>עובדים לבד? המערכת היא הצוות שלכם. היא לא שוכחת, לא צריכה חופש, ומאפשרת להתמקד במה שחשוב לכם.</p>
             </div>
             <div className="sd-ca-feature">
               <SdIcon name="dashboard" size={52} />
@@ -200,7 +200,7 @@ export default function AgentLandingPage() {
         title="מספיק עם הניירת"
         text="נשמח להראות איך זה עובד בסוכנות שלכם. ההקמה פשוטה, בעברית, ובלי התקנה."
         art="11-claims-service"
-        primary={{ label: "להתחיל בחינם", to: "/app/auth" }}
+        primary={{ label: "להתחיל", to: "/app/auth" }}
         secondary={{ label: "יש שאלות? דברו איתנו", to: "/contact" }}
       />
 

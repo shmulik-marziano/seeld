@@ -71,7 +71,7 @@ const PensionLifeInsurance = () => {  const productTypes = [
       breadcrumbLabel="ביטוח חיים פנסיוני"
       heroTitle="ביטוח חיים פנסיוני"
       heroDescription="שילוב בין חיסכון פנסיוני לביטוח חיים שנותן למשפחה גב כלכלי: ביטוח מנהלים עם כיסויים שמותאמים לכם."
-      heroCTAText="בדיקת ביטוח מנהלים ללא עלות"
+      heroCTAText="בדיקת ביטוח מנהלים"
       typesLabel="מרכיבי הפוליסה"
       typesTitle="מרכיבי ביטוח מנהלים"
       typesSubtitle="חיסכון וביטוח במוצר אחד"

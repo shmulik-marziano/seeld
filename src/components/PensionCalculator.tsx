@@ -380,7 +380,7 @@ const PensionCalculator = () => {
           {result.yearsToRetirement > 25 && (
             <div className="dna-callout text-sm">
               <strong style={{ color: NAVY }}>יתרון הזמן:</strong> עוד {result.yearsToRetirement} שנים עד הפרישה.
-              זה הזמן המושלם להגדיל סיכון במסלול ההשקעות ולהניב תשואות גבוהות יותר.
+              אופק ארוך מאפשר לבחון מסלולי השקעה בעלי רמות סיכון שונות. סיכון גבוה יותר עשוי להניב תשואה גבוהה יותר, וגם הפסדים.
             </div>
           )}
 

@@ -71,7 +71,7 @@ const Investment = () => {  const productTypes = [
       breadcrumbLabel="השקעות"
       heroTitle="השקעות"
       heroDescription="פתרונות השקעה שמותאמים אישית, לבניית תיק שמתאים לפרופיל הסיכון וליעדים שלכם."
-      heroCTAText="ייעוץ השקעות ללא עלות"
+      heroCTAText="ייעוץ השקעות"
       typesLabel="פתרונות ההשקעה"
       typesTitle="סוגי פתרונות השקעה"
       typesSubtitle="בחרו את הפתרון שמתאים ליעדים הכלכליים שלכם"

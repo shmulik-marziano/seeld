@@ -5,7 +5,7 @@ import { stories } from "@/data/stories";
 import { Link } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { SdBand, SdPic, SdStory, tintStyle, useSdFont } from "@/components/sd/primitives";
-import { PUB_TOPICS, PubArticleCard, PubClose, PubHead, PubHero, artForText } from "@/components/sd/pub";
+import { PUB_TOPICS, PubArticleCard, PubClose, PubHead, PubHero, fullMonthDate, spreadArts } from "@/components/sd/pub";
 import "@/components/sd/sd.css";
 
 // Health, life and nursing overview in the kit design: hero with illustration, story band,
@@ -24,6 +24,8 @@ const Wellness = () => {
     article.category.includes("ביטוח בריאות") ||
     article.category.includes("ביטוח חיים")
   );
+
+  const cardArts = spreadArts(healthInsuranceArticles, [topic.art2], ["02-family-protection"]);
 
   const services: { title: string; description: string; href?: string }[] = [
     { title: "ביטוח בריאות פרטי", description: "כיסוי רפואי מקיף לטיפולים, ניתוחים ותרופות", href: "/insurance/health" },
@@ -86,15 +88,15 @@ const Wellness = () => {
           <div className="sd-wrap">
             <PubHead title="מאמרים ומדריכים" lede="כל מה שצריך לדעת על ביטוח בריאות וביטוח חיים" />
             <div className="sd-pub-grid sd-pub-grid-3">
-              {healthInsuranceArticles.map((article) => {
-                const a = artForText(article.category, article.title);
+              {healthInsuranceArticles.map((article, idx) => {
+                const a = cardArts[idx];
                 return (
                   <PubArticleCard
                     key={article.id}
                     to={`/article/${article.id}`}
                     title={article.title}
                     kicker={article.category}
-                    meta={<>{article.date} · {article.readTime}</>}
+                    meta={<>{fullMonthDate(article.date)} · {article.readTime}</>}
                     excerpt={article.subtitle}
                     art={a.art}
                     tone={a.tone}
@@ -116,7 +118,7 @@ const Wellness = () => {
               </p>
               <p className="sd-text">
                 ביטוח בריאות, חיים, רכב או דירה: משווים בין כמה חברות
-                וחוזרים אליכם עם המלצה מנומקת, ללא עלות.
+                וחוזרים אליכם עם המלצה מנומקת.
               </p>
             </div>
             <div className="sd-story-art sd-reveal" aria-hidden="true">
@@ -127,7 +129,7 @@ const Wellness = () => {
 
         <PubClose
           title="רוצים לשמוע עוד?"
-          text="השאירו פרטים ונחזור אליכם עם השוואה מסודרת. ללא עלות וללא התחייבות."
+          text="השאירו פרטים ונחזור אליכם עם השוואה מסודרת. שיחת היכרות בלי התחייבות מצידכם."
           art="01-hero"
         />
       </main>

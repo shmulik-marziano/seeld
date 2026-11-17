@@ -5,7 +5,7 @@ import { stories } from "@/data/stories";
 import { Link } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { SdBand, SdPic, SdStory, tintStyle, useSdFont } from "@/components/sd/primitives";
-import { PUB_TOPICS, PubArticleCard, PubClose, PubHead, PubHero, artForText } from "@/components/sd/pub";
+import { PUB_TOPICS, PubArticleCard, PubClose, PubHead, PubHero, fullMonthDate, spreadArts } from "@/components/sd/pub";
 import "@/components/sd/sd.css";
 
 // Savings and finance overview in the kit design: hero with illustration, story band,
@@ -25,6 +25,8 @@ const Growth = () => {
     article.category.includes("השקעות") ||
     article.category.includes("תקציב")
   );
+
+  const cardArts = spreadArts(savingsArticles, [topic.art2], ["06-home-mortgage"]);
 
   const pillars: { title: string; description: string; href?: string }[] = [
     { title: "חיסכון חכם", description: "חיסכון שמתאים לשלב שבו אתם נמצאים בחיים", href: "/savings" },
@@ -85,15 +87,15 @@ const Growth = () => {
           <div className="sd-wrap">
             <PubHead title="מאמרים ומדריכים" lede="הסברים על חיסכון, השקעות ותכנון פיננסי" />
             <div className="sd-pub-grid sd-pub-grid-3">
-              {savingsArticles.map((article) => {
-                const a = artForText(article.category, article.title);
+              {savingsArticles.map((article, idx) => {
+                const a = cardArts[idx];
                 return (
                   <PubArticleCard
                     key={article.id}
                     to={`/article/${article.id}`}
                     title={article.title}
                     kicker={article.category}
-                    meta={<>{article.date} · {article.readTime}</>}
+                    meta={<>{fullMonthDate(article.date)} · {article.readTime}</>}
                     excerpt={article.subtitle}
                     art={a.art}
                     tone={a.tone}
@@ -119,7 +121,7 @@ const Growth = () => {
               </p>
             </div>
             <div className="sd-story-art sd-reveal" aria-hidden="true">
-              <SdPic name="10-financial-planning" sizes="(min-width:1024px) 440px, 90vw" />
+              <SdPic name="06-home-mortgage" sizes="(min-width:1024px) 440px, 90vw" />
             </div>
           </div>
         </SdBand>
