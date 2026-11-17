@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, Lightbulb, CheckCircle, Clock, Send,
   MoreVertical, FileText, Users, TrendingUp,
@@ -29,7 +28,6 @@ const PRIORITY_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function WisePage() {
-  const tool = getToolBySlug("wise")!;
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
@@ -40,10 +38,10 @@ export default function WisePage() {
   });
 
   const stats = [
-    { label: "המלצות פעילות", value: "34", change: "+6", icon: Lightbulb, color: tool.color },
+    { label: "המלצות פעילות", value: "34", change: "+6", icon: Lightbulb, color: "#203957" },
     { label: "אושרו החודש", value: "18", change: "+4", icon: CheckCircle, color: "#2F6B4E" },
     { label: "חיסכון מצטבר", value: "₪128K", change: "+15%", icon: TrendingUp, color: "#819B7D" },
-    { label: "ממתינות ללקוח", value: "8", change: "-2", icon: Clock, color: "#BD582D" },
+    { label: "ממתינות ללקוח", value: "8", change: "-2", icon: Clock, color: "#9A4520" },
   ];
 
   return (

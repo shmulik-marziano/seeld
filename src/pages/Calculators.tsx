@@ -23,7 +23,7 @@ const tabTriggerClass =
 
 const tabDefs = [
   { value: "mortgage", label: "משכנתא", title: "מחשבון משכנתא", lede: "חשבו החזר חודשי ועלות כוללת של המשכנתא", Component: MortgageCalculator },
-  { value: "pension", label: "פנסיה", title: "מחשבון פנסיה", lede: "חשבו כמה תקבלו בפנסיה לפי ההפקדות הנוכחיות", Component: PensionCalculator },
+  { value: "pension", label: "פנסיה", title: "מחשבון פנסיה", lede: "הערכה לפנסיה החודשית לפי ההפקדות הנוכחיות", Component: PensionCalculator },
   { value: "savings", label: "חיסכון", title: "מחשבון חיסכון", lede: "חשבו כמה תצברו עם ריבית דריבית", Component: SavingsCalculator },
   { value: "goal", label: "יעד", title: "מחשבון יעד כלכלי", lede: "כמה להפקיד כדי להגיע ליעד הפנסיוני שלכם?", Component: GoalCalculator },
   { value: "compare", label: "השוואה", title: "השוואת מסלולי השקעה", lede: "ראו איך הכסף שלכם גדל בכל מסלול", Component: CompareCalculator },

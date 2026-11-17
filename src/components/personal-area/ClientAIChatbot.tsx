@@ -275,7 +275,7 @@ const ClientAIChatbot = () => {
                   <div className="bg-[#f5f5f5] rounded-full px-4 py-1.5 flex items-center gap-2">
                     <AlertTriangle className="w-3 h-3 text-[#203957]/60" />
                     <span className="text-[10px] text-[#203957]/70 font-medium">
-                      לפני ביצוע פעולה, מומלץ להתייעץ עם הסוכן שלך
+                      לפני ביצוע פעולה, מומלץ להתייעץ עם הצוות שלנו
                     </span>
                   </div>
                 </div>

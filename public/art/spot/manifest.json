@@ -1,0 +1,372 @@
+[
+  {
+    "name": "key-brass",
+    "source": "01-hero.png",
+    "w": 227,
+    "h": 100,
+    "tags": [
+      "key",
+      "home",
+      "access",
+      "ownership"
+    ],
+    "mood": "secure"
+  },
+  {
+    "name": "olive-branch",
+    "source": "02-family-protection.png",
+    "w": 512,
+    "h": 297,
+    "tags": [
+      "olive",
+      "branch",
+      "peace",
+      "calm",
+      "divider"
+    ],
+    "mood": "calm"
+  },
+  {
+    "name": "shield-blue",
+    "source": "02-family-protection.png",
+    "w": 322,
+    "h": 383,
+    "tags": [
+      "shield",
+      "protection",
+      "safety",
+      "insurance"
+    ],
+    "mood": "secure"
+  },
+  {
+    "name": "heart-pink",
+    "source": "03-health-insurance.png",
+    "w": 247,
+    "h": 209,
+    "tags": [
+      "heart",
+      "health",
+      "care",
+      "love"
+    ],
+    "mood": "warm"
+  },
+  {
+    "name": "coins-stacks",
+    "source": "04-investments-growth.png",
+    "w": 424,
+    "h": 247,
+    "tags": [
+      "coins",
+      "savings",
+      "investment",
+      "growth",
+      "money"
+    ],
+    "mood": "growth"
+  },
+  {
+    "name": "olive-sapling",
+    "source": "04-investments-growth.png",
+    "w": 512,
+    "h": 301,
+    "tags": [
+      "olive",
+      "plant",
+      "sapling",
+      "growth",
+      "savings"
+    ],
+    "mood": "growth"
+  },
+  {
+    "name": "olive-canopy",
+    "source": "05-retirement.png",
+    "w": 512,
+    "h": 188,
+    "tags": [
+      "olive",
+      "tree",
+      "canopy",
+      "retirement",
+      "calm",
+      "divider"
+    ],
+    "mood": "calm"
+  },
+  {
+    "name": "tea-hourglass",
+    "source": "05-retirement.png",
+    "w": 260,
+    "h": 211,
+    "tags": [
+      "tea",
+      "hourglass",
+      "time",
+      "retirement",
+      "pause"
+    ],
+    "mood": "calm"
+  },
+  {
+    "name": "scroll-ribbon",
+    "source": "06-home-mortgage.png",
+    "w": 512,
+    "h": 219,
+    "tags": [
+      "scroll",
+      "document",
+      "ribbon",
+      "agreement",
+      "mortgage"
+    ],
+    "mood": "secure"
+  },
+  {
+    "name": "stone-house",
+    "source": "06-home-mortgage.png",
+    "w": 512,
+    "h": 433,
+    "tags": [
+      "house",
+      "home",
+      "mortgage",
+      "stone"
+    ],
+    "mood": "secure"
+  },
+  {
+    "name": "shield-navy",
+    "source": "07-car-insurance.png",
+    "w": 283,
+    "h": 350,
+    "tags": [
+      "shield",
+      "protection",
+      "insurance",
+      "safety"
+    ],
+    "mood": "secure"
+  },
+  {
+    "name": "car-key",
+    "source": "07-car-insurance.png",
+    "w": 369,
+    "h": 160,
+    "tags": [
+      "car",
+      "key",
+      "auto",
+      "vehicle"
+    ],
+    "mood": "secure"
+  },
+  {
+    "name": "scales",
+    "source": "08-business-insurance.png",
+    "w": 296,
+    "h": 290,
+    "tags": [
+      "scales",
+      "justice",
+      "legal",
+      "business",
+      "balance"
+    ],
+    "mood": "secure"
+  },
+  {
+    "name": "briefcase",
+    "source": "08-business-insurance.png",
+    "w": 290,
+    "h": 257,
+    "tags": [
+      "briefcase",
+      "business",
+      "work",
+      "professional"
+    ],
+    "mood": "secure"
+  },
+  {
+    "name": "passport",
+    "source": "09-travel-insurance.png",
+    "w": 374,
+    "h": 363,
+    "tags": [
+      "passport",
+      "travel",
+      "document",
+      "trip"
+    ],
+    "mood": "calm"
+  },
+  {
+    "name": "compass",
+    "source": "09-travel-insurance.png",
+    "w": 302,
+    "h": 399,
+    "tags": [
+      "compass",
+      "travel",
+      "direction",
+      "guidance"
+    ],
+    "mood": "guide"
+  },
+  {
+    "name": "suitcase",
+    "source": "09-travel-insurance.png",
+    "w": 512,
+    "h": 293,
+    "tags": [
+      "suitcase",
+      "travel",
+      "luggage",
+      "trip"
+    ],
+    "mood": "calm"
+  },
+  {
+    "name": "magnifier",
+    "source": "11-claims-service.png",
+    "w": 512,
+    "h": 323,
+    "tags": [
+      "magnifier",
+      "search",
+      "review",
+      "claims",
+      "inspect"
+    ],
+    "mood": "guide"
+  },
+  {
+    "name": "seal-check",
+    "source": "11-claims-service.png",
+    "w": 225,
+    "h": 222,
+    "tags": [
+      "seal",
+      "approved",
+      "checkmark",
+      "claims",
+      "stamp"
+    ],
+    "mood": "secure"
+  },
+  {
+    "name": "pen",
+    "source": "10-financial-planning.png",
+    "w": 512,
+    "h": 124,
+    "tags": [
+      "pen",
+      "signature",
+      "planning",
+      "writing"
+    ],
+    "mood": "calm"
+  },
+  {
+    "name": "family-figures",
+    "source": "02-family-protection.png",
+    "w": 512,
+    "h": 418,
+    "tags": [
+      "family",
+      "figures",
+      "protection",
+      "parents",
+      "children"
+    ],
+    "mood": "warm"
+  },
+  {
+    "name": "pillows",
+    "source": "05-retirement.png",
+    "w": 295,
+    "h": 190,
+    "tags": [
+      "pillows",
+      "cushions",
+      "comfort",
+      "home",
+      "rest"
+    ],
+    "mood": "calm"
+  },
+  {
+    "name": "plane-toy",
+    "source": "09-travel-insurance.png",
+    "w": 412,
+    "h": 264,
+    "tags": [
+      "plane",
+      "airplane",
+      "travel",
+      "toy",
+      "trip"
+    ],
+    "mood": "calm"
+  },
+  {
+    "name": "sailboat",
+    "source": "12-childrens-savings.png",
+    "w": 431,
+    "h": 449,
+    "tags": [
+      "boat",
+      "sailboat",
+      "child",
+      "future",
+      "toy",
+      "journey"
+    ],
+    "mood": "growth"
+  },
+  {
+    "name": "ribbon-pink",
+    "source": "12-childrens-savings.png",
+    "w": 512,
+    "h": 114,
+    "tags": [
+      "ribbon",
+      "bow",
+      "gift",
+      "children",
+      "celebration",
+      "divider"
+    ],
+    "mood": "warm"
+  },
+  {
+    "name": "treasure-chest",
+    "source": "12-childrens-savings.png",
+    "w": 512,
+    "h": 497,
+    "tags": [
+      "chest",
+      "treasure",
+      "savings",
+      "coins",
+      "children"
+    ],
+    "mood": "growth"
+  },
+  {
+    "name": "olive-sapling-b",
+    "source": "12-childrens-savings.png",
+    "w": 512,
+    "h": 402,
+    "tags": [
+      "olive",
+      "plant",
+      "sapling",
+      "children",
+      "growth"
+    ],
+    "mood": "growth"
+  }
+]

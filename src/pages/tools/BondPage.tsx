@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, HeartHandshake, CheckCircle, Clock, Gift,
   MoreVertical, Calendar, Bell, Users, Cake,
@@ -30,16 +29,15 @@ const TYPE_ICONS: Record<string, React.ElementType> = {
 };
 
 export default function BondPage() {
-  const tool = getToolBySlug("bond")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_RETENTION.filter((r) => r.client.includes(search) || r.event.includes(search));
 
   const stats = [
-    { label: "אירועים קרובים", value: "23", change: "+5", icon: HeartHandshake, color: tool.color },
+    { label: "אירועים קרובים", value: "23", change: "+5", icon: HeartHandshake, color: "#203957" },
     { label: "חידושים החודש", value: "8", change: "+2", icon: Calendar, color: "#2F6B4E" },
-    { label: "ימי הולדת השבוע", value: "4", change: "-", icon: Cake, color: "#AD833E" },
-    { label: "דורשים תשומת לב", value: "6", change: "+3", icon: Bell, color: "#BD582D" },
+    { label: "ימי הולדת השבוע", value: "4", change: "-", icon: Cake, color: "#7C5C22" },
+    { label: "דורשים תשומת לב", value: "6", change: "+3", icon: Bell, color: "#9A4520" },
   ];
 
   return (

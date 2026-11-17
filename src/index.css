@@ -325,14 +325,14 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
 
 body {
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* Dashed decorative connector */
@@ -654,7 +654,7 @@ body {
 html {
   -webkit-text-size-adjust: 100%;   /* iOS: no surprise text inflation in landscape */
   text-size-adjust: 100%;
-  scroll-padding-top: 88px;         /* anchors land below the sticky header */
+  scroll-padding-top: 140px;         /* anchors land below the sticky header */
 }
 a, button, [role="button"], input, select, textarea, summary, label {
   -webkit-tap-highlight-color: transparent;  /* our own focus/active styles, not the grey flash */

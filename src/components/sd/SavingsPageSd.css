@@ -7,15 +7,16 @@
 
 .sd-sav-types { display: grid; gap: 16px; }
 @media (min-width: 768px) { .sd-sav-types { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
-.sd-sav-type { background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: 26px 24px 24px; box-shadow: var(--shadow); }
-.sd-sav-type:nth-child(2) { margin-top: 0; }
-@media (min-width: 768px) { .sd-sav-type:nth-child(2) { transform: translateY(18px); } }
+.sd-sav-type { background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: 26px 24px 24px; box-shadow: var(--shadow); transition: transform .25s ease, box-shadow .25s ease; }
+.sd-sav-type:hover { box-shadow: var(--shadow-lg); }
+.sd-sav-type { display: flex; flex-direction: column; }
+.sd-sav-type ul { margin-top: auto; }
 .sd-sav-type p { margin-top: 8px; font-size: 16px; line-height: 1.75; color: var(--text); }
-.sd-sav-type ul { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+.sd-sav-type ul { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
 .sd-sav-type li { position: relative; padding-inline-start: 22px; font-size: 15px; line-height: 1.6; color: var(--ink); font-weight: 500; }
 .sd-sav-type li::before { content: ""; position: absolute; inset-inline-start: 0; top: .55em; width: 9px; height: 9px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 3px rgba(173,131,62,.18); }
 
-.sd-sav-after { margin-top: 44px; display: grid; gap: 20px; max-width: 560px; }
+.sd-sav-after { margin-top: 44px; display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); align-items: start; }
 @media (min-width: 768px) { .sd-sav-after { margin-top: 56px; } }
 .sd-sav-table .sd-table tbody th[scope="row"] { width: auto; }
 .sd-sav-table .sd-table td { font-weight: 700; color: var(--ink); }
@@ -55,3 +56,29 @@
 .sd-sav-stats dd { font-family: var(--serif); font-weight: 700; color: var(--ink); font-size: clamp(30px, 3.5vw, 44px); line-height: 1.1; }
 .sd-sav-stats dt { margin-top: 6px; font-size: 15px; color: var(--muted); }
 .sd-sav-tool { background: var(--paper); border-top: 1px solid var(--line); }
+
+/* pages that hold the navy form already end on a call to action: the footer's own invitation would repeat it */
+.sd-sav-page .sd-chrome-foot-top { display: none; }
+.sd-sav-page .sd-chrome-foot-wrap { padding-top: clamp(32px, 4vw, 52px); }
+
+/* investment tracks on phones: one card per track instead of a 900px table */
+.sd-trk-card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px 8px; box-shadow: var(--shadow); }
+.sd-trk-figs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 16px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.sd-trk-figs dt { font-size: 13px; color: var(--muted); }
+.sd-trk-figs dd { margin-top: 2px; text-align: right; }
+
+/* hub: group header with its own small illustration */
+.sd-sav-group-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+.sd-sav-group-head .sd-band-head { margin-bottom: 0; }
+.sd-sav-group-art { display: none; flex: none; width: 190px; }
+@media (min-width: 768px) { .sd-sav-group-art { display: block; } }
+.sd-sav-group-art img { width: 100%; height: auto; filter: drop-shadow(0 10px 14px rgba(32,57,87,.16)); }
+.sd-sav-group-head + .sd-sav-index { margin-top: 28px; }
+
+/* partner logos on phones: even three-column grid, one height, contained */
+@media (max-width: 639px) {
+  .sd-sav-logos .flex-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px 12px; justify-items: center; align-items: center; }
+  .sd-sav-logos img { height: 32px; width: 100%; max-width: 104px; object-fit: contain; }
+}
+.sd:has(.sd-sav-close) .sd-chrome-foot-top { display: none; }
+.sd:has(.sd-sav-close) .sd-chrome-foot-wrap { padding-top: clamp(32px, 4vw, 52px); }

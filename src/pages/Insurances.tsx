@@ -3,18 +3,41 @@ import { BrandIcon } from "@/components/brand/BrandIcon";
 import { GENERAL_INSURANCE, LIFE_HEALTH, type ProductLink } from "@/data/productDirectory";
 import { stories } from "@/data/stories";
 import { SdBand, SdPic, SdStory, SdSubnav } from "@/components/sd/primitives";
-import { PASTELS, TOPICS, topicFor } from "@/components/sd/topics";
+import { PASTELS, TOPICS, topicFor, type ArtName } from "@/components/sd/topics";
 import { Arrow, PubCta, PubHero, PubPage } from "@/components/sd/pubParts";
 
 // Insurance hub (kit design): hero, emotional moment, then one illustrated card per insurance line
 // (all 16 keep their link), grouped as life and health, and general insurance.
 
 const PATH = "/insurances";
-const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
+
+/**
+ * One illustration per card, spread over the topic's own pictures so the same plate does not repeat
+ * six times (and never twice in a row): the least used candidate wins.
+ */
+const CARD_ART: Record<string, ArtName> = (() => {
+  const used = new Map<ArtName, number>();
+  const out: Record<string, ArtName> = {};
+  let prev: ArtName | null = null;
+  for (const item of [...LIFE_HEALTH, ...GENERAL_INSURANCE]) {
+    const t = TOPICS[item.href];
+    const cands = t ? [t.art, t.art2, t.art3, t.art4].filter((a): a is ArtName => !!a) : ["01-hero" as ArtName];
+    let best = cands[0];
+    let bestScore = Infinity;
+    cands.forEach((a, i) => {
+      const score = (used.get(a) ?? 0) * 10 + (a === prev ? 25 : 0) + i;
+      if (score < bestScore) { best = a; bestScore = score; }
+    });
+    used.set(best, (used.get(best) ?? 0) + 1);
+    out[item.href] = best;
+    prev = best;
+  }
+  return out;
+})();
 
 function Cards({ items }: { items: ProductLink[] }) {
   return (
-    <div className="sd-pub-cards">
+    <div className="sd-pub-cards sd-pub-cards-compact">
       {items.map((item) => {
         const t = TOPICS[item.href];
         return (
@@ -25,7 +48,7 @@ function Cards({ items }: { items: ProductLink[] }) {
             style={{ ["--card-tint" as string]: PASTELS[t?.palette[0] ?? "sage"].bg }}
           >
             <div className="sd-pub-card-art" aria-hidden="true">
-              <SdPic name={t?.art ?? "01-hero"} sizes="(min-width:480px) 190px, 90vw" />
+              <SdPic name={CARD_ART[item.href] ?? "01-hero"} sizes="(min-width:480px) 190px, 96px" />
             </div>
             <div className="sd-pub-card-body">
               <h3>{item.title}</h3>
@@ -41,13 +64,12 @@ function Cards({ items }: { items: ProductLink[] }) {
 
 export default function Insurances() {
   const topic = topicFor(PATH);
-  const [p1, p2, p3] = topic.palette;
+  const [p1, p2] = topic.palette;
   const story = stories[PATH];
   const sections = [
     ...(story ? [{ id: "moment", label: "מה עומד מולכם" }] : []),
     { id: "life", label: "חיים ובריאות" },
     { id: "general", label: "ביטוח כללי" },
-    { id: "help", label: "לא בטוחים?" },
   ];
 
   return (
@@ -56,7 +78,7 @@ export default function Insurances() {
         crumbs={[{ label: "דף הבית", to: "/" }, { label: "כל הביטוחים" }]}
         eyebrow="כל תחומי הביטוח"
         title="כל הביטוחים במקום אחד"
-        lead="שישה עשר תחומי ביטוח, מול כל החברות בישראל. בוחרים תחום, ואנחנו מסדרים את התמונה המלאה: מה יש, מה חסר ומה כפול."
+        lead="שישה עשר תחומי ביטוח, מול חברות הביטוח המובילות. בוחרים תחום, ואנחנו מסדרים את התמונה המלאה: מה יש, מה חסר ומה כפול."
         art={topic.art}
         actions={
           <>
@@ -96,32 +118,12 @@ export default function Insurances() {
         </SdBand>
       </div>
 
-      <SdBand tone={p3} id="help">
-        <div className="sd-wrap sd-pub-split is-wide-copy">
-          <div>
-            <span className="sd-eyebrow">לא בטוחים מה חסר לכם?</span>
-            <h2 className="sd-h2 mt-4">לא חייבים לבחור לבד</h2>
-            <p className="sd-lead mt-5">נבדוק מה יש לכם, מה כפול ומה חסר, ונחזור אליכם עם תמונה מסודרת. ללא עלות וללא התחייבות.</p>
-            <div className="sd-pub-actions">
-              <Link to="/portfolio-review" className="sd-btn">בדיקת תיק 360<Arrow /></Link>
-              <button type="button" className="sd-link sd-pub-linkbtn" onClick={openChat}>
-                <BrandIcon name="message" size={18} />
-                שאלו את היועץ הדיגיטלי
-              </button>
-            </div>
-          </div>
-          <div className="sd-pub-art" aria-hidden="true">
-            <SdPic name="11-claims-service" sizes="(min-width:1024px) 420px, 90vw" />
-          </div>
-        </div>
-      </SdBand>
-
       <PubCta
-        title="נשמח לעזור לסדר את זה"
-        text="שיחה ראשונה ללא עלות וללא התחייבות. מספרים לנו על המצב, ואנחנו חוזרים עם השוואה ברורה."
-        art="12-childrens-savings"
-        primary={{ label: "תיאום פגישה", to: "/contact" }}
-        secondary={{ label: "שאלות נפוצות", to: "/faq" }}
+        title="לא חייבים לבחור לבד"
+        text="נבדוק מה יש לכם, מה כפול ומה חסר, ונחזור אליכם עם תמונה מסודרת. שיחה ראשונה ללא עלות וללא התחייבות."
+        art="11-claims-service"
+        primary={{ label: "בדיקת תיק 360", to: "/portfolio-review" }}
+        secondary={{ label: "תיאום פגישה", to: "/contact" }}
       />
     </PubPage>
   );

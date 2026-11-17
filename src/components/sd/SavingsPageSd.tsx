@@ -10,8 +10,10 @@ import { FigureText } from "@/components/InsurancePageTemplate";
 import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import { answerSummaries, ANSWER_REVIEWED } from "@/data/answerSummaries";
 import { stories } from "@/data/stories";
-import { SdBand, SdContact, SdCrumbs, SdIcon, SdPic, SdProcess, SdStory, SdSubnav, tintStyle, useSdFont } from "./primitives";
-import { art3Of, topicFor } from "./topics";
+import { SdBand, SdContact, SdCrumbs, SdIcon, SdPic, SdProcess, SdProgress, SdStageSpot, SdStory, SdSubnav, tintStyle, useSdFont } from "./primitives";
+import { SdSpot } from "./SdSpot";
+import { spotAt } from "./spots";
+import { topicFor, type ArtName, type Topic } from "./topics";
 import "./sd.css";
 import "./SavingsPageSd.css";
 
@@ -42,6 +44,24 @@ export type SavingsPageProps = {
   closingText: string;
   form: { focusArea: "pension" | "savings" | "investment" | "retirement" | "general"; title: string; description: string };
 };
+
+/** Illustrations the savings pages may borrow for their secondary slots. */
+const ART_POOL: ArtName[] = [
+  "10-financial-planning", "02-family-protection", "05-retirement", "04-investments-growth",
+  "12-childrens-savings", "06-home-mortgage", "03-health-insurance", "01-hero", "11-claims-service",
+];
+
+/** Three more illustrations for the guide aside, the process band and the closing block. Never repeats the hero or story art, nor each other. */
+function sparesFor(topic: Topic, path: string) {
+  const used = new Set<ArtName>([topic.art, topic.art2]);
+  let h = 0;
+  for (const c of path) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  const rest = ART_POOL.filter((a) => !used.has(a) && a !== "11-claims-service");
+  const rot = rest.map((_, i) => rest[(i + h) % rest.length]);
+  const close: ArtName = used.has("11-claims-service") ? rot[2] : "11-claims-service";
+  const [aside, process] = rot.filter((a) => a !== close);
+  return { aside, process, close };
+}
 
 const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
 
@@ -89,6 +109,7 @@ export default function SavingsPageSd(props: SavingsPageProps) {
   const topic = topicFor(path);
   const story = stories[path];
   const [p1, p2, p3] = topic.palette;
+  const spare = sparesFor(topic, path);
   useFaqJsonLd(faqItems);
   useSdFont();
 
@@ -121,8 +142,9 @@ export default function SavingsPageSd(props: SavingsPageProps) {
   ];
 
   return (
-    <div className="sd min-h-screen" dir="rtl" style={tintStyle(p1)}>
+    <div className="sd sd-sav-page min-h-screen" dir="rtl" style={tintStyle(p1)}>
       <Header />
+      <SdProgress />
 
       <main>
         {/* HERO */}
@@ -150,6 +172,7 @@ export default function SavingsPageSd(props: SavingsPageProps) {
 
             <div className="sd-stage" aria-hidden="true">
               <SdPic name={topic.art} sizes="(min-width:1024px) 520px, 90vw" priority />
+              <SdStageSpot art={topic.art} />
               {reviewed && <span className="sd-stage-tag"><i />תוכן נבדק {reviewed}</span>}
             </div>
           </div>
@@ -184,6 +207,7 @@ export default function SavingsPageSd(props: SavingsPageProps) {
               <div className="sd-points sd-sav-benefits">
                 {benefits!.map((b, i) => (
                   <div key={b.title} className="sd-point sd-reveal">
+                    <SdSpot name={spotAt(topic.art, i)} size={64} className="sd-point-spot" />
                     <em>{String(i + 1).padStart(2, "0")}</em>
                     <h3 className="sd-h3">{b.title}</h3>
                     <p><FigureText text={b.desc} /></p>
@@ -211,7 +235,7 @@ export default function SavingsPageSd(props: SavingsPageProps) {
               </div>
             </div>
             <aside className="sd-aside hidden lg:block" aria-hidden="true" style={{ ["--band" as string]: `var(--tint)` }}>
-              <SdPic name={art3Of(topic)} sizes="300px" />
+              <SdPic name={spare.aside} sizes="300px" />
               {story && <p>{story.caption}</p>}
             </aside>
           </div>
@@ -239,7 +263,7 @@ export default function SavingsPageSd(props: SavingsPageProps) {
         </SdBand>
 
         <SdBand tone={p3} id="process">
-          <SdProcess art={topic.art} steps={steps} />
+          <SdProcess art={spare.process} steps={steps} />
         </SdBand>
 
         <SdBand tone="cream" id="faq">
@@ -256,11 +280,11 @@ export default function SavingsPageSd(props: SavingsPageProps) {
           </div>
         </SdBand>
 
-        <section style={{ borderTop: "1px solid var(--line)" }}>
+        <section className="sd-sav-logos" style={{ borderTop: "1px solid var(--line)" }}>
           <CompanyLogos variant="grid" />
         </section>
 
-        <SdContact id="analysis-form" title={closingTitle} text={closingText} art={art3Of(topic)}>
+        <SdContact id="analysis-form" title={closingTitle} text={closingText} art={spare.close}>
           <PensionAnalysisForm focusArea={form.focusArea} title={form.title} description={form.description} />
           <div className="sd-sav-links">
             <Link to="/#portfolio-review" className="sd-link">בדיקת תיק 360{arrow}</Link>

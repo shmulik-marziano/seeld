@@ -1,47 +1,59 @@
 import { ReactNode } from "react";
 import { getToolBySlug, type Tool } from "@/config/tools";
 import { Clock, Sparkles } from "lucide-react";
+import { SdPic, useSdFont } from "@/components/sd/primitives";
+import "./tool-kit.css";
 
 interface ToolPageProps {
   slug: string;
   children?: ReactNode;
 }
 
+/** Kit skin per phase: pastel tone + illustration (decorative). */
+const PHASE_SKIN: Record<number, { tone: string; art: string }> = {
+  1: { tone: "sky", art: "01-hero" },
+  2: { tone: "butter", art: "10-financial-planning" },
+  3: { tone: "sage", art: "11-claims-service" },
+  4: { tone: "rose", art: "02-family-protection" },
+  5: { tone: "lavender", art: "04-investments-growth" },
+};
+
+function skinOf(tool?: Tool) {
+  return PHASE_SKIN[tool?.phase ?? 3] ?? PHASE_SKIN[3];
+}
+
 export default function ToolPage({ slug, children }: ToolPageProps) {
+  useSdFont();
   const tool = getToolBySlug(slug);
 
   if (!tool) {
     return (
-      <div className="min-h-screen bg-[#FAF7EF] flex items-center justify-center" dir="rtl">
-        <div className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] p-12 text-center">
-          <p className="text-[#55677C] text-lg">הכלי לא נמצא</p>
+      <div className="sd-tool sd-tool-sage" dir="rtl">
+        <div className="sd-tool-empty">
+          <SdPic name="11-claims-service" sizes="320px" className="sd-tool-empty-art" />
+          <h2>הכלי לא נמצא</h2>
+          <p>בדקו את הקישור או חזרו לרשימת הכלים.</p>
         </div>
       </div>
     );
   }
 
+  const skin = skinOf(tool);
+
   if (tool.status === "planned") {
     return (
-      <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+      <div className={`sd-tool sd-tool-${skin.tone}`} dir="rtl">
         <ToolHeader tool={tool} />
-        <div className="max-w-3xl mx-auto px-6 py-20">
-          <div className="bg-white rounded-2xl shadow-sm border border-[#203957]/[0.06] p-16 text-center">
-            <div
-              className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center"
-              style={{ background: `linear-gradient(135deg, ${tool.gradient[0]}20, ${tool.gradient[1]}20)` }}
-            >
-              <Clock className="w-10 h-10" style={{ color: tool.color }} />
-            </div>
-            <h2 className="text-2xl font-bold text-[#203957] mb-3">בקרוב...</h2>
-            <p className="text-[#55677C] text-lg mb-2">{tool.description}</p>
-            <p className="text-sm text-[#55677C]">הכלי בפיתוח ויושק בקרוב. הישארו מעודכנים!</p>
-            <div
-              className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white text-sm font-medium"
-              style={{ background: `linear-gradient(135deg, ${tool.gradient[0]}, ${tool.gradient[1]})` }}
-            >
-              <Clock className="w-4 h-4" />
+        <div className="sd-tool-body">
+          <div className="sd-tool-empty">
+            <SdPic name={skin.art} sizes="320px" className="sd-tool-empty-art" />
+            <h2>בקרוב</h2>
+            <p>{tool.description}</p>
+            <p style={{ fontSize: 15 }}>הכלי בפיתוח ויושק בקרוב.</p>
+            <span className="sd-tool-soon">
+              <Clock className="w-4 h-4" aria-hidden="true" />
               מתוכנן לשחרור
-            </div>
+            </span>
           </div>
         </div>
       </div>
@@ -49,45 +61,39 @@ export default function ToolPage({ slug, children }: ToolPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7EF]" dir="rtl">
+    <div className={`sd-tool sd-tool-${skin.tone}`} dir="rtl">
       <ToolHeader tool={tool} />
-      <div className="max-w-7xl mx-auto px-6 py-6">{children}</div>
+      <div className="sd-tool-body">{children}</div>
     </div>
   );
 }
 
 function ToolHeader({ tool }: { tool: Tool }) {
   const Icon = tool.icon;
+  const skin = skinOf(tool);
   return (
-    <div
-      className="relative overflow-hidden"
-      style={{ background: `linear-gradient(135deg, ${tool.gradient[0]}, ${tool.gradient[1]})` }}
-    >
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute -top-10 -left-10 w-40 h-40 rounded-full bg-white/20" />
-        <div className="absolute -bottom-10 -right-10 w-60 h-60 rounded-full bg-white/10" />
-      </div>
-      <div className="relative max-w-7xl mx-auto px-6 py-8">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-            <Icon className="w-7 h-7 text-white" />
-          </div>
-          <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-white">{tool.hebrewName}</h1>
-              <span className="text-white/60 text-sm font-medium">{tool.name}</span>
-              {tool.status === "new" && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/20 text-white text-xs font-medium backdrop-blur-sm">
-                  <Sparkles className="w-3 h-3" />
-                  Beta
-                </span>
-              )}
-            </div>
-            <p className="text-white/80 text-sm mt-1">{tool.description}</p>
-          </div>
+    <header className="sd-tool-head">
+      <div className="sd-tool-head-in">
+        <div className="sd-tool-icon">
+          <Icon className="w-7 h-7" aria-hidden="true" />
+        </div>
+        <div>
+          <span className="sd-tool-eyebrow">{tool.phaseLabel}</span>
+          <h1 className="sd-tool-title">
+            {tool.hebrewName}
+            <small>{tool.name}</small>
+            {tool.status === "new" && (
+              <span className="sd-tool-badge">
+                <Sparkles className="w-3 h-3" aria-hidden="true" />
+                Beta
+              </span>
+            )}
+          </h1>
+          <p className="sd-tool-desc">{tool.description}</p>
         </div>
       </div>
-    </div>
+      <SdPic name={skin.art} sizes="200px" className="sd-tool-art" />
+    </header>
   );
 }
 

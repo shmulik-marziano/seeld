@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { CaEmpty, CaLoading } from "@/components/sd/client";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
@@ -154,7 +155,7 @@ const RequestsPanel = ({ initialSubject, onSubjectConsumed, link }: { initialSub
           </div>
           <div className="mt-4 rounded-2xl border border-dashed p-4 text-[14px] leading-[1.6]" style={{ borderColor: LINE, color: MUTED }}>
             <span className="font-bold" style={{ color: GREEN }}>צירוף מסמך: </span>
-            עד שהחיבור לתיק יושלם, קבצים נשלחים ליועץ ב
+            עד שהחיבור לתיק יושלם, קבצים נשלחים לצוות שלנו ב
             <a href="https://wa.me/972523097444" target="_blank" rel="noopener noreferrer" className="font-bold underline underline-offset-4" style={{ color: GREEN }} dir="ltr">WhatsApp</a>
             . ציינו כאן מה שלחתם.
           </div>
@@ -187,16 +188,10 @@ const RequestsPanel = ({ initialSubject, onSubjectConsumed, link }: { initialSub
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-10" aria-busy="true"><Loader2 className="w-6 h-6 animate-spin" style={{ color: GREEN }} aria-hidden="true" /></div>
+          <CaLoading label="טוען פניות" tone="sage" />
         ) : shown.length === 0 ? (
-          <div className="rounded-2xl p-6" style={{ background: TINT_SAGE }}>
-            <p className="text-[17px] font-bold" style={{ color: GREEN }}>
-              {requests.length === 0 ? "עדיין אין פניות" : "אין פניות בסינון הזה"}
-            </p>
-            <p className="mt-1 text-[15px] leading-[1.6]" style={{ color: BODY }}>
-              {requests.length === 0 ? "כל פנייה שתשלחו מכאן תופיע ברשימה עם מצב הטיפול שלה." : "נסו סינון אחר."}
-            </p>
-          </div>
+          <CaEmpty art="11-claims-service" tone="sage" title={requests.length === 0 ? "עדיין אין פניות" : "אין פניות בסינון הזה"}
+            text={requests.length === 0 ? "כל פנייה שתשלחו מכאן תופיע ברשימה עם מצב הטיפול שלה." : "נסו סינון אחר."} />
         ) : (
           <ul className="space-y-3">
             {shown.map((r) => {

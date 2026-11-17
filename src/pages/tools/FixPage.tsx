@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, Wrench, CheckCircle, Clock, AlertTriangle,
   MoreVertical, FileText, RotateCcw, XCircle,
@@ -28,16 +27,15 @@ const SEVERITY_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function FixPage() {
-  const tool = getToolBySlug("fix")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_DEFICIENCIES.filter((d) => d.client.includes(search) || d.deficiency.includes(search));
 
   const stats = [
-    { label: "ליקויים שזוהו", value: "48", change: "+6", icon: Wrench, color: tool.color },
+    { label: "ליקויים שזוהו", value: "48", change: "+6", icon: Wrench, color: "#203957" },
     { label: "תוקנו", value: "38", change: "+8", icon: CheckCircle, color: "#2F6B4E" },
-    { label: "בטיפול", value: "7", change: "-2", icon: RotateCcw, color: "#AD833E" },
-    { label: "קריטיים", value: "3", change: "+1", icon: AlertTriangle, color: "#BD582D" },
+    { label: "בטיפול", value: "7", change: "-2", icon: RotateCcw, color: "#7C5C22" },
+    { label: "קריטיים", value: "3", change: "+1", icon: AlertTriangle, color: "#9A4520" },
   ];
 
   return (

@@ -26,6 +26,10 @@ export type Topic = {
   art: ArtName;
   /** second illustration (process / closing band) */
   art2: ArtName;
+  /** optional: guide aside illustration (distinct from art and art2) */
+  art3?: ArtName;
+  /** optional: "how it works" band illustration (distinct from art, art2 and art3) */
+  art4?: ArtName;
   /** colour of the hero stage and the first band; the rest rotate in this order */
   palette: [Pastel, Pastel, Pastel];
 };
@@ -35,34 +39,34 @@ export const DEFAULT_TOPIC: Topic = { art: "01-hero", art2: "11-claims-service",
 
 /** Path (no trailing slash) to topic. Rotation rule: neighbouring topics never share the first colour. */
 export const TOPICS: Record<string, Topic> = {
-  "/insurance/life": { art: "02-family-protection", art2: "12-childrens-savings", palette: ["sage", "sky", "butter"] },
-  "/insurance/health": { art: "03-health-insurance", art2: "11-claims-service", palette: ["rose", "butter", "sage"] },
-  "/insurance/vehicle": { art: "07-car-insurance", art2: "11-claims-service", palette: ["sky", "sage", "butter"] },
-  "/insurance/home": { art: "01-hero", art2: "06-home-mortgage", palette: ["butter", "sky", "rose"] },
-  "/insurance/mortgage": { art: "06-home-mortgage", art2: "01-hero", palette: ["sky", "lavender", "butter"] },
-  "/insurance/renters": { art: "06-home-mortgage", art2: "11-claims-service", palette: ["lavender", "sage", "butter"] },
-  "/insurance/business": { art: "08-business-insurance", art2: "10-financial-planning", palette: ["butter", "sage", "sky"] },
-  "/insurance/partners": { art: "08-business-insurance", art2: "02-family-protection", palette: ["sage", "butter", "lavender"] },
-  "/insurance/travel": { art: "09-travel-insurance", art2: "11-claims-service", palette: ["rose", "sky", "butter"] },
-  "/insurance/nursing": { art: "05-retirement", art2: "03-health-insurance", palette: ["lavender", "sage", "butter"] },
-  "/insurance/nursing-clalit": { art: "05-retirement", art2: "03-health-insurance", palette: ["sage", "lavender", "butter"] },
-  "/insurance/critical-illness": { art: "03-health-insurance", art2: "02-family-protection", palette: ["rose", "sage", "sky"] },
-  "/insurance/disability": { art: "02-family-protection", art2: "11-claims-service", palette: ["sky", "rose", "butter"] },
-  "/insurance/dental": { art: "03-health-insurance", art2: "11-claims-service", palette: ["sky", "butter", "sage"] },
-  "/insurance/accidents": { art: "02-family-protection", art2: "03-health-insurance", palette: ["butter", "rose", "sky"] },
-  "/insurance/foreign-workers": { art: "02-family-protection", art2: "11-claims-service", palette: ["sage", "sky", "lavender"] },
+  "/insurance/life": { art: "02-family-protection", art2: "12-childrens-savings", art3: "10-financial-planning", art4: "11-claims-service", palette: ["sage", "sky", "butter"] },
+  "/insurance/health": { art: "03-health-insurance", art2: "11-claims-service", art3: "05-retirement", art4: "10-financial-planning", palette: ["rose", "butter", "sage"] },
+  "/insurance/vehicle": { art: "07-car-insurance", art2: "10-financial-planning", art3: "01-hero", art4: "11-claims-service", palette: ["sky", "sage", "butter"] },
+  "/insurance/home": { art: "01-hero", art2: "06-home-mortgage", art3: "10-financial-planning", art4: "11-claims-service", palette: ["butter", "sky", "rose"] },
+  "/insurance/mortgage": { art: "06-home-mortgage", art2: "02-family-protection", art3: "10-financial-planning", art4: "11-claims-service", palette: ["sky", "lavender", "butter"] },
+  "/insurance/renters": { art: "11-claims-service", art2: "06-home-mortgage", art3: "10-financial-planning", art4: "01-hero", palette: ["lavender", "sage", "butter"] },
+  "/insurance/business": { art: "08-business-insurance", art2: "10-financial-planning", art3: "01-hero", art4: "11-claims-service", palette: ["butter", "sage", "sky"] },
+  "/insurance/partners": { art: "10-financial-planning", art2: "08-business-insurance", art3: "02-family-protection", art4: "11-claims-service", palette: ["sage", "butter", "lavender"] },
+  "/insurance/travel": { art: "09-travel-insurance", art2: "10-financial-planning", art3: "01-hero", art4: "11-claims-service", palette: ["rose", "sky", "butter"] },
+  "/insurance/nursing": { art: "05-retirement", art2: "02-family-protection", art3: "10-financial-planning", art4: "11-claims-service", palette: ["lavender", "sage", "butter"] },
+  "/insurance/nursing-clalit": { art: "03-health-insurance", art2: "05-retirement", art3: "10-financial-planning", art4: "11-claims-service", palette: ["sage", "lavender", "butter"] },
+  "/insurance/critical-illness": { art: "03-health-insurance", art2: "02-family-protection", art3: "10-financial-planning", art4: "11-claims-service", palette: ["rose", "sage", "sky"] },
+  "/insurance/disability": { art: "04-investments-growth", art2: "02-family-protection", art3: "10-financial-planning", art4: "11-claims-service", palette: ["sky", "rose", "butter"] },
+  "/insurance/dental": { art: "03-health-insurance", art2: "11-claims-service", art3: "10-financial-planning", art4: "01-hero", palette: ["sky", "butter", "sage"] },
+  "/insurance/accidents": { art: "11-claims-service", art2: "03-health-insurance", art3: "10-financial-planning", art4: "01-hero", palette: ["butter", "rose", "sky"] },
+  "/insurance/foreign-workers": { art: "09-travel-insurance", art2: "03-health-insurance", art3: "10-financial-planning", art4: "11-claims-service", palette: ["sage", "sky", "lavender"] },
 
   // savings
   "/savings/pension-funds": { art: "05-retirement", art2: "10-financial-planning", palette: ["sage", "butter", "sky"] },
   "/savings/pension-life-insurance": { art: "05-retirement", art2: "02-family-protection", palette: ["lavender", "sky", "butter"] },
   "/savings/gemel-funds": { art: "04-investments-growth", art2: "12-childrens-savings", palette: ["butter", "sage", "sky"] },
   "/savings/gemel-investment": { art: "04-investments-growth", art2: "10-financial-planning", palette: ["sky", "butter", "lavender"] },
-  "/savings/training-funds": { art: "04-investments-growth", art2: "10-financial-planning", palette: ["sage", "lavender", "butter"] },
+  "/savings/training-funds": { art: "10-financial-planning", art2: "09-travel-insurance", palette: ["sage", "lavender", "butter"] },
   "/savings/child-savings": { art: "12-childrens-savings", art2: "02-family-protection", palette: ["rose", "sage", "butter"] },
-  "/savings/investment": { art: "04-investments-growth", art2: "10-financial-planning", palette: ["sky", "sage", "rose"] },
+  "/savings/investment": { art: "04-investments-growth", art2: "06-home-mortgage", palette: ["sky", "sage", "rose"] },
   "/savings/employer-funds": { art: "08-business-insurance", art2: "05-retirement", palette: ["butter", "sky", "sage"] },
-  "/savings/pre-retirement": { art: "05-retirement", art2: "10-financial-planning", palette: ["lavender", "butter", "sage"] },
-  "/savings/post-retirement": { art: "05-retirement", art2: "02-family-protection", palette: ["sage", "rose", "sky"] },
+  "/savings/pre-retirement": { art: "05-retirement", art2: "06-home-mortgage", palette: ["lavender", "butter", "sage"] },
+  "/savings/post-retirement": { art: "05-retirement", art2: "03-health-insurance", palette: ["sage", "rose", "sky"] },
   "/savings/financial-planning": { art: "10-financial-planning", art2: "04-investments-growth", palette: ["lavender", "sky", "butter"] },
   // other public pages
   "/": { art: "01-hero", art2: "10-financial-planning", palette: ["sage", "sky", "butter"] },
@@ -84,4 +88,6 @@ export const topicFor = (pathname: string): Topic =>
 
 /** A third illustration that differs from art and art2 (used by the guide aside and the story band). */
 const SPARE: ArtName[] = ["10-financial-planning", "11-claims-service", "01-hero", "02-family-protection", "04-investments-growth", "05-retirement"];
-export const art3Of = (t: Topic): ArtName => SPARE.find((a) => a !== t.art && a !== t.art2) ?? "01-hero";
+export const art3Of = (t: Topic): ArtName => t.art3 ?? SPARE.find((a) => a !== t.art && a !== t.art2) ?? "01-hero";
+/** A fourth illustration for the "how it works" band: never the hero, the story or the guide aside illustration. */
+export const art4Of = (t: Topic): ArtName => t.art4 ?? SPARE.find((a) => a !== t.art && a !== t.art2 && a !== art3Of(t)) ?? "11-claims-service";

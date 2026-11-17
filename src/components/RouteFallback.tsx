@@ -1,6 +1,6 @@
 /**
- * RouteFallback — quiet Suspense loader for lazy routes.
- * Ivory canvas, a thin green progress bar and the brand symbol pulsing.
+ * RouteFallback: quiet Suspense loader for lazy routes.
+ * Cream canvas, a thin ink progress bar and the brand symbol pulsing.
  * Respects prefers-reduced-motion. No text, no emoji.
  */
 export default function RouteFallback() {
@@ -9,7 +9,7 @@ export default function RouteFallback() {
       role="status"
       aria-live="polite"
       aria-label="טוען עמוד"
-      className="min-h-screen bg-[#FAF7EF]"
+      className="min-h-screen bg-[#FCF8EF]"
     >
       <style>{`
         @keyframes seeld-route-bar {
@@ -20,24 +20,18 @@ export default function RouteFallback() {
           0%, 100% { opacity: 0.35; }
           50%      { opacity: 1; }
         }
-        .seeld-route-bar {
-          animation: seeld-route-bar 1.1s ease-out infinite;
-        }
-        .seeld-route-mark {
-          animation: seeld-route-pulse 1.4s ease-in-out infinite;
-        }
+        .seeld-route-bar { animation: seeld-route-bar 1.1s ease-out infinite; }
+        .seeld-route-mark { animation: seeld-route-pulse 1.4s ease-in-out infinite; }
         @media (prefers-reduced-motion: reduce) {
           .seeld-route-bar { animation: none; transform: translateX(0); width: 100%; }
           .seeld-route-mark { animation: none; opacity: 0.8; }
         }
       `}</style>
 
-      {/* Thin indeterminate progress bar, deep green on ivory */}
       <div className="fixed top-0 inset-x-0 h-0.5 overflow-hidden" aria-hidden="true">
         <div className="seeld-route-bar h-full w-1/4" style={{ backgroundColor: "#203957" }} />
       </div>
 
-      {/* The brand symbol, pulsing softly, centered */}
       <div className="flex min-h-screen items-center justify-center">
         <img
           src="/brand/logo-icon.png"

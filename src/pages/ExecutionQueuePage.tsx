@@ -4,6 +4,7 @@ import { StatusBadge } from '@/components/status/StatusBadge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Zap, ArrowLeft, AlertTriangle, CheckCircle2, Clock, RotateCcw } from 'lucide-react';
+import { AppEmpty } from '@/components/layout/AppEmpty';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { motion } from 'framer-motion';
 
@@ -176,11 +177,7 @@ export default function ExecutionQueuePage() {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center py-20"
         >
-          <div className="w-20 h-20 rounded-full bg-[#203957]/10 flex items-center justify-center mx-auto mb-5">
-            <Zap className="h-10 w-10 text-[#55677C]" />
-          </div>
-          <p className="text-foreground/70 font-medium mb-1">אין המלצות בתור ביצוע</p>
-          <p className="text-sm text-muted-foreground">המלצות שאושרו על ידי לקוחות יופיעו כאן</p>
+          <AppEmpty art="10-financial-planning" tone="sage" title="אין המלצות בתור ביצוע" text="המלצות שאושרו על ידי לקוחות יופיעו כאן" />
         </motion.div>
       )}
     </div>

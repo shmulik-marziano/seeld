@@ -25,7 +25,7 @@ interface PensionResult {
 }
 
 const PensionCalculator = () => {
-  const [currentAge, setCurrentAge] = useState(30);
+  const [currentAge, setCurrentAge] = useState(40);
   const [retirementAge, setRetirementAge] = useState(67);
   const [monthlySalary, setMonthlySalary] = useState(15000);
   const [employeeDeposit, setEmployeeDeposit] = useState(6);
@@ -281,7 +281,7 @@ const PensionCalculator = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Monthly Pension - standout stat */}
         <div className="dna-concept col-span-1 md:col-span-2 lg:col-span-1">
-          <p className="text-[14px] mb-2" style={{ color: MUTED }}>פנסיה חודשית צפויה</p>
+          <p className="text-[14px] mb-2" style={{ color: MUTED }}>הערכה לפנסיה חודשית</p>
           <p
             className="tabular-nums"
             dir="ltr"
@@ -292,7 +292,7 @@ const PensionCalculator = () => {
           <p className="text-[14px] mt-1" style={{ color: MUTED }}>
             {((result.monthlyPension / monthlySalary) * 100).toFixed(0)}% מהשכר הנוכחי
           </p>
-          <p className="text-[11.5px] mt-2 leading-[1.7]" style={{ color: MUTED }}>
+          <p className="text-[13px] mt-2 leading-[1.7]" style={{ color: MUTED }}>
             {PENSION_FACTOR_NOTE}
           </p>
         </div>

@@ -1,3 +1,4 @@
+import { AppEmpty } from '@/components/layout/AppEmpty';
 import { useState } from 'react';
 import { useApp } from '@/contexts/AppContext';
 import { Input } from '@/components/ui/input';
@@ -57,7 +58,7 @@ export default function ActivityLogPage() {
 
         <div className="divide-y divide-[#E8E6DE] max-h-[calc(100vh-250px)] overflow-y-auto">
           {filtered.length === 0 ? (
-            <p className="p-8 text-center text-[#55677C]">לא נמצאו רשומות</p>
+            <AppEmpty art="11-claims-service" tone="sage" title="לא נמצאו רשומות" />
           ) : filtered.map(a => {
             const customerName = getCustomerName(a.customerId);
             return (

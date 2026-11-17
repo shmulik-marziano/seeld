@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, AlertTriangle, CheckCircle, TrendingDown,
   BarChart3, MoreVertical, Eye, FileText, DollarSign,
@@ -23,16 +22,15 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function XRayPage() {
-  const tool = getToolBySlug("x-ray")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_ANALYSES.filter((a) => a.client.includes(search));
 
   const stats = [
-    { label: "תיקים שנותחו", value: "156", change: "+12", icon: BarChart3, color: tool.color },
-    { label: "פערים שזוהו", value: "89", change: "+23", icon: AlertTriangle, color: "#AD833E" },
+    { label: "תיקים שנותחו", value: "156", change: "+12", icon: BarChart3, color: "#203957" },
+    { label: "פערים שזוהו", value: "89", change: "+23", icon: AlertTriangle, color: "#7C5C22" },
     { label: "חיסכון פוטנציאלי", value: "₪45K", change: "+8%", icon: DollarSign, color: "#2F6B4E" },
-    { label: "כפילויות", value: "14", change: "-3", icon: TrendingDown, color: "#BD582D" },
+    { label: "כפילויות", value: "14", change: "-3", icon: TrendingDown, color: "#9A4520" },
   ];
 
   return (

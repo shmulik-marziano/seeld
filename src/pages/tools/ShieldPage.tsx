@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, Shield, CheckCircle, Clock, AlertTriangle,
   MoreVertical, FileText, DollarSign, Calendar,
@@ -23,16 +22,15 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function ShieldPage() {
-  const tool = getToolBySlug("shield")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_CLAIMS.filter((c) => c.client.includes(search) || c.type.includes(search) || c.id.includes(search));
 
   const stats = [
-    { label: "תביעות פעילות", value: "18", change: "+3", icon: Shield, color: tool.color },
+    { label: "תביעות פעילות", value: "18", change: "+3", icon: Shield, color: "#203957" },
     { label: "אושרו", value: "12", change: "+2", icon: CheckCircle, color: "#2F6B4E" },
-    { label: "סכום מצטבר", value: "₪1.2M", change: "+15%", icon: DollarSign, color: "#AD833E" },
-    { label: "חסרות מסמכים", value: "4", change: "+1", icon: AlertTriangle, color: "#BD582D" },
+    { label: "סכום מצטבר", value: "₪1.2M", change: "+15%", icon: DollarSign, color: "#7C5C22" },
+    { label: "חסרות מסמכים", value: "4", change: "+1", icon: AlertTriangle, color: "#9A4520" },
   ];
 
   return (

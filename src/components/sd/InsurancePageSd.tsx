@@ -9,14 +9,38 @@ import { FigureText, type InsurancePageProps } from "@/components/InsurancePageT
 import { useFaqJsonLd } from "@/hooks/useFaqJsonLd";
 import { answerSummaries, ANSWER_REVIEWED } from "@/data/answerSummaries";
 import { stories } from "@/data/stories";
-import { SdBand, SdContact, SdCrumbs, SdIcon, SdPic, SdProcess, SdStory, SdSubnav, tintStyle, useSdFont } from "./primitives";
-import { art3Of, topicFor, type Topic } from "./topics";
+import { SdBand, SdContact, SdCrumbs, SdIcon, SdPic, SdProcess, SdProgress, SdStageSpot, SdStory, SdSubnav, tintStyle, useSdFont } from "./primitives";
+import { SdSpot } from "./SdSpot";
+import { PAGE_SPOTS, spotForCard, type SpotName } from "./spots";
+import { art3Of, art4Of, topicFor, type Topic } from "./topics";
 import "./sd.css";
 
 const hebrewDate = (iso: string) => {
   const [y, m, d] = iso.split("-");
   return `${Number(d)}.${Number(m)}.${y}`;
 };
+
+/** Word stems (leading prefix letter dropped, filler words removed) used to compare two short Hebrew texts. */
+const STOP_WORDS = new Set(["ביטוח", "שלכם", "לכם", "אתכם", "עליכם"]);
+const stems = (text: string) =>
+  text.split(/[^֐-׿a-zA-Z0-9]+/).filter(Boolean)
+    .map((w) => (w.length > 3 && /^[בלהוכמש]/.test(w) ? w.slice(1) : w))
+    .filter((w) => w.length >= 3 && !STOP_WORDS.has(w));
+/** True when the hero description mostly repeats the "בקצרה" answer shown right above it. */
+const repeatsSummary = (description: string, summary?: string) => {
+  if (!summary) return false;
+  const d = stems(description);
+  const s = new Set(stems(summary));
+  return d.length > 0 && d.filter((w) => s.has(w)).length / d.length >= 0.38;
+};
+
+/** Generic "what to check in a policy" prompts for product pages that have no coverage table. Advice only, no facts or figures. */
+const CHECKS = [
+  { icon: "checklist", t: "מה בדיוק מכוסה", p: "ההגדרות בפוליסה קובעות מה נחשב אירוע מבוטח, ולכן קוראים אותן לפני שחותמים." },
+  { icon: "lock", t: "מה לא מכוסה", p: "סייגים והחרגות הם החלק שהכי קל לפספס. שווה לשאול עליהם במפורש." },
+  { icon: "hourglass", t: "מתי הכיסוי מתחיל", p: "במוצרים מסוימים יש תקופת המתנה לפני שהכיסוי נכנס לתוקף. כדאי לדעת אותה מראש." },
+  { icon: "search", t: "מה כבר יש לכם", p: "כיסוי דרך העבודה, הקופה או הבנק עלול לחפוף. בודקים מה קיים לפני שמוסיפים." },
+];
 
 /**
  * Insurance product page in the kit design: hero with illustration, trust strip, sticky section nav,
@@ -60,11 +84,18 @@ export default function InsurancePageSd(props: InsurancePageProps & { topic?: To
   const hasCoverage = !!coverageCategories?.length || !!coverageTypes?.length;
   const hasFaq = faqItems.length > 0;
   const reviewed = answerSummaries[path] ? hebrewDate(ANSWER_REVIEWED) : null;
+  const showHeroDesc = !!heroDescription && !repeatsSummary(heroDescription, answerSummaries[path]);
+
+  // spots: per topic, never the same spot twice on a page; cards get a spot that matches their own text
+  const ps = PAGE_SPOTS[path];
+  const usedSpots = new Set<SpotName>(ps ? [ps.hero, ps.story[0], ps.story[1], ps.process, ps.contact] : []);
+  const cardSpots = (keyPoints ?? []).map((kp) => spotForCard(`${kp.title} ${kp.description}`, usedSpots));
 
   const sections = [
     story && { id: "moment", label: "מה עומד מולכם" },
     hasPoints && { id: "overview", label: "עיקרי הדברים" },
     hasGuide && { id: "guide", label: "המדריך" },
+    !hasCoverage && { id: "checks", label: "מה בודקים בפוליסה" },
     hasCoverage && { id: "coverage", label: coverageTitle },
     { id: "process", label: "איך זה עובד" },
     hasFaq && { id: "faq", label: "שאלות נפוצות" },
@@ -79,7 +110,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { topic?: To
   );
 
   const trust = [
-    { icon: "search", t: "השוואה בין החברות", s: "בכל חברות הביטוח בשוק" },
+    { icon: "search", t: "השוואה בין החברות", s: "בין חברות הביטוח בשוק" },
     { icon: "handshake", t: "פגישה ראשונה ללא עלות", s: "ואינה מחייבת" },
     { icon: "shield", t: "צוות סוכנים מקצועי", s: "ליווי מההצעה ועד התביעה" },
     { icon: "phone", t: "מענה אישי", s: "רעננה וירושלים" },
@@ -88,6 +119,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { topic?: To
   return (
     <div className="sd min-h-screen" dir="rtl" style={tintStyle(p1)}>
       <Header />
+      <SdProgress />
 
       <main>
         {/* HERO */}
@@ -101,7 +133,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { topic?: To
                 <b>בקצרה</b>
                 <AnswerSummary className="m-0 text-[18px] leading-[1.75]" />
               </div>
-              <p className="sd-text mt-6" style={{ color: "var(--muted)" }}>{heroDescription}</p>
+              {showHeroDesc && <p className="sd-text mt-6" style={{ color: "var(--muted)" }}>{heroDescription}</p>}
               <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
                 <a href={heroCTAHref} className="sd-btn">{heroCTAText}{arrow}</a>
                 {secondaryLink}
@@ -110,6 +142,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { topic?: To
 
             <div className="sd-stage" aria-hidden="true">
               <SdPic name={topic.art} sizes="(min-width:1024px) 520px, 90vw" priority />
+              <SdStageSpot art={topic.art} name={ps?.hero} />
               {reviewed && <span className="sd-stage-tag"><i />תוכן נבדק {reviewed}</span>}
             </div>
           </div>
@@ -134,7 +167,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { topic?: To
         {/* STORY: the emotional moment */}
         {story && (
           <SdBand tone={p1} id="moment">
-            <SdStory story={story} art={topic.art2} />
+            <SdStory story={story} art={topic.art2} spots={ps?.story} />
           </SdBand>
         )}
 
@@ -145,6 +178,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { topic?: To
               <div className="sd-points">
                 {keyPoints!.map((kp, i) => (
                   <div key={kp.title} className="sd-point sd-reveal">
+                    {cardSpots[i] && <SdSpot name={cardSpots[i]!} size={64} className="sd-point-spot" />}
                     <em>{String(i + 1).padStart(2, "0")}</em>
                     <h3 className="sd-h3">{kp.title}</h3>
                     <p>{kp.description}</p>
@@ -173,6 +207,25 @@ export default function InsurancePageSd(props: InsurancePageProps & { topic?: To
                 <SdPic name={art3Of(topic)} sizes="300px" />
                 {story && <p>{story.caption}</p>}
               </aside>
+            </div>
+          </SdBand>
+        )}
+
+        {!hasCoverage && (
+          <SdBand tone={p2} id="checks">
+            <div className="sd-wrap">
+              <div className="sd-band-head">
+                <h2 className="sd-h2">מה בודקים בפוליסה</h2>
+                <p className="sd-lead">לפני שבוחרים, שווה לעבור על ארבעה דברים. אנחנו עוברים עליהם יחד איתכם, מול כל הצעה.</p>
+              </div>
+              <ul className="sd-checks">
+                {CHECKS.map((c, i) => (
+                  <li key={c.t} className="sd-check sd-reveal">
+                    <SdIcon name={c.icon} size={52} />
+                    <div><em>{String(i + 1).padStart(2, "0")}</em><h3 className="sd-h3">{c.t}</h3><p>{c.p}</p></div>
+                  </li>
+                ))}
+              </ul>
             </div>
           </SdBand>
         )}
@@ -220,7 +273,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { topic?: To
         )}
 
         <SdBand tone={p3} id="process">
-          <SdProcess art={topic.art} />
+          <SdProcess art={art4Of(topic)} spot={ps?.process} />
         </SdBand>
 
         {hasFaq && (
@@ -243,7 +296,7 @@ export default function InsurancePageSd(props: InsurancePageProps & { topic?: To
           <CompanyLogos variant="grid" />
         </section>
 
-        <SdContact id={enrollmentFormId} art={art3Of(topic)}>
+        <SdContact id={enrollmentFormId} art={topic.art} spot={ps?.contact}>
           <InsuranceEnrollmentForm insuranceType={insuranceType} title={enrollmentTitle} description={enrollmentDescription} />
         </SdContact>
       </main>

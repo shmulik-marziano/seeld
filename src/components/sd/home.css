@@ -11,7 +11,9 @@
 .sd-home-fine { margin-top: 18px; font-size: 15px; color: var(--muted); }
 
 .sd-home-stage { position: relative; padding-block-end: 34px; }
-.sd-home-stage-main { position: relative; aspect-ratio: 4 / 3.35; border-radius: 30px; background: radial-gradient(120% 90% at 50% 100%, var(--tint-deep) 0%, var(--tint) 58%, rgba(255,255,255,.4) 100%); border: 1px solid var(--line); box-shadow: var(--shadow); display: grid; place-items: center; }
+.sd-home-stage-main { position: relative; isolation: isolate; aspect-ratio: 4 / 3.35; border-radius: 40% 40% 30px 30px / 34% 34% 30px 30px; background: radial-gradient(120% 90% at 50% 100%, var(--tint-deep) 0%, var(--tint) 58%, rgba(255,255,255,.4) 100%); border: 1px solid var(--line); box-shadow: var(--shadow); display: grid; place-items: center; }
+.sd-home-stage-main::before { content: ""; position: absolute; z-index: -1; inset: 14px 16px -14px -16px; border-radius: inherit; background: var(--tint-deep); opacity: .5; }
+.sd-home-stage-main::after { content: ""; position: absolute; inset: 6% 12% 0; border-radius: 50% 50% 0 0; border: 1px solid rgba(173,131,62,.4); border-bottom: 0; pointer-events: none; }
 .sd-home-stage-main img { width: 96%; height: auto; max-height: 94%; object-fit: contain; filter: drop-shadow(0 18px 24px rgba(32,57,87,.18)); animation: sd-float 7s ease-in-out infinite; }
 .sd-home-mini { position: absolute; width: 36%; padding: 8px 8px 10px; background: #fff; border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); }
 .sd-home-mini img { display: block; width: 100%; height: auto; border-radius: 12px; }

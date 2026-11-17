@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { motion, useReducedMotion } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
 import { ITEM_STATUS_LABELS, ItemExecutionStatus } from '@/types/execution-summary';
-import { Illustration } from '@/components/brand/Illustration';
 import { BrandIcon } from '@/components/brand/BrandIcon';
-import { BODY, GREEN, IVORY, LINE, MUTED, SAGE_ON_GREEN } from '@/lib/brand';
+import { BODY, GREEN, LINE, MUTED } from '@/lib/brand';
+import { CaFrame, CaLoadingPage, CaScreen, CaStatus, LOGO_W } from '@/components/sd/client';
+import { SdPic } from '@/components/sd/primitives';
+import { Link } from 'react-router-dom';
 
 type PortalState = 'loading' | 'verify' | 'portal' | 'expired' | 'invalid';
 
@@ -41,20 +41,11 @@ const STATUS_STYLE: Record<string, { bg: string; text: string; border: string }>
 };
 
 const LogoLine = () => (
-  <img
-    src="/brand/logo.png"
-    alt="שילד ביטוח ופיננסים"
-    width={118}
-    height={51}
-    style={{ height: 51, width: 'auto' }}
-    decoding="async"
-    draggable={false}
-  />
+  <img src="/brand/logo.png" alt="שילד ביטוח ופיננסים" width={LOGO_W} height={44} style={{ height: 44, width: 'auto' }} decoding="async" draggable={false} />
 );
 
 export default function ExecutionSummaryPortalPage() {
   const { token } = useParams<{ token: string }>();
-  const reduced = useReducedMotion();
   const [state, setState] = useState<PortalState>('loading');
   const [summary, setSummary] = useState<SummaryData | null>(null);
   const [items, setItems] = useState<ItemData[]>([]);
@@ -107,73 +98,53 @@ export default function ExecutionSummaryPortalPage() {
     }
   };
 
-  const fade = reduced ? {} : { initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.25, ease: 'easeOut' as const } };
-
-  if (state === 'loading') {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: IVORY }} aria-busy="true" aria-live="polite">
-        <Loader2 className="h-8 w-8 animate-spin" style={{ color: GREEN }} aria-hidden="true" />
-        <span className="sr-only">טוען את הסיכום</span>
-      </div>
-    );
-  }
+  if (state === 'loading') return <CaLoadingPage label="טוענים את הסיכום" tint="sky" art="11-claims-service" />;
 
   if (state === 'invalid' || state === 'expired') {
     return (
-      <div className="min-h-screen flex items-center justify-center p-5" dir="rtl" style={{ backgroundColor: IVORY }}>
-        <motion.div {...fade} className="dna-concept !p-8 max-w-md w-full text-center">
-          <div className="flex justify-center mb-5"><LogoLine /></div>
-          <BrandIcon name="close" size={36} className="mx-auto mb-3" style={{ color: '#9A4520' }} />
-          <h1 className="text-[22px] mb-2" style={{ color: GREEN }}>הקישור אינו תקף</h1>
-          <p className="text-[16px] leading-[1.6]" style={{ color: BODY }}>
-            הקישור פג תוקף או אינו קיים. פנו ליועץ לקבלת קישור חדש.
-          </p>
-        </motion.div>
-      </div>
+      <CaStatus
+        tint="butter" art="11-claims-service" icon="hourglass"
+        title="הקישור אינו תקף"
+        text="הקישור פג תוקף או אינו קיים. כתבו לנו או התקשרו, ונשלח קישור חדש."
+      />
     );
   }
 
   if (state === 'verify') {
     return (
-      <div className="min-h-screen flex items-center justify-center p-5" dir="rtl" style={{ backgroundColor: IVORY }}>
-        <motion.div {...fade} className="w-full max-w-md">
-          <div className="dna-concept !p-6 sm:!p-8">
-            <div className="flex justify-center mb-6"><LogoLine /></div>
-            <h1 className="text-[24px] leading-tight" style={{ color: GREEN }}>סיכום ביצוע</h1>
-            <p className="mt-2 text-[16px] leading-[1.6]" style={{ color: BODY }}>
-              {customerName ? `שלום ${customerName}. ` : ''}
-              כדי לצפות בסיכום, הזינו את ארבע הספרות האחרונות של תעודת הזהות.
-            </p>
-            <form onSubmit={handleVerify} className="mt-6 space-y-4" noValidate>
-              <div>
-                <label htmlFor="exec-id4" className="block text-[14px] font-bold mb-1.5" style={{ color: GREEN }}>
-                  ארבע ספרות אחרונות של תעודת הזהות <span aria-hidden="true" style={{ color: '#BD582D' }}>*</span>
-                </label>
-                <input
-                  id="exec-id4"
-                  value={idInput}
-                  onChange={e => { setIdInput(e.target.value.replace(/\D/g, '').slice(0, 4)); setVerifyError(''); }}
-                  className="field text-center text-[22px] font-bold tabular-nums tracking-[0.3em]"
-                  maxLength={4}
-                  inputMode="numeric"
-                  autoComplete="off"
-                  dir="ltr"
-                  aria-invalid={verifyError ? 'true' : undefined}
-                  aria-describedby={verifyError ? 'exec-id4-err' : undefined}
-                />
-                {verifyError && <p id="exec-id4-err" className="mt-1.5 text-[14px]" style={{ color: '#9A4520' }}>{verifyError}</p>}
-              </div>
-              <button type="submit" className="btn-primary w-full" disabled={idInput.length < 4}>
-                <BrandIcon name="check" size={20} />
-                אימות וצפייה
-              </button>
-            </form>
-            <p className="mt-4 text-[14px] leading-[1.6]" style={{ color: MUTED }}>
-              הזיהוי נועד להגן על הפרטים שלכם. הסיכום מוצג רק למי שמכיר את המספר.
-            </p>
+      <CaScreen tint="sky" art="11-claims-service">
+        <span className="sd-eyebrow">סיכום ביצוע</span>
+        <h1 className="mt-3">רגע קטן לפני שנכנסים</h1>
+        <p>
+          {customerName ? `שלום ${customerName}. ` : ''}
+          כדי לצפות בסיכום, הזינו את ארבע הספרות האחרונות של תעודת הזהות.
+        </p>
+        <form onSubmit={handleVerify} className="mt-6 space-y-4" noValidate>
+          <div>
+            <label htmlFor="exec-id4" className="sd-ca-field-label">
+              ארבע ספרות אחרונות של תעודת הזהות <span aria-hidden="true" style={{ color: '#BD582D' }}>*</span>
+            </label>
+            <input
+              id="exec-id4"
+              value={idInput}
+              onChange={e => { setIdInput(e.target.value.replace(/\D/g, '').slice(0, 4)); setVerifyError(''); }}
+              className="field text-center text-[22px] font-bold tabular-nums tracking-[0.3em]"
+              maxLength={4}
+              inputMode="numeric"
+              autoComplete="off"
+              dir="ltr"
+              aria-invalid={verifyError ? 'true' : undefined}
+              aria-describedby={verifyError ? 'exec-id4-err' : undefined}
+            />
+            {verifyError && <p id="exec-id4-err" role="alert" className="mt-1.5 text-[14px] text-start" style={{ color: '#9A4520' }}>{verifyError}</p>}
           </div>
-        </motion.div>
-      </div>
+          <button type="submit" className="btn-primary w-full" disabled={idInput.length < 4}>
+            <BrandIcon name="check" size={20} />
+            אימות וצפייה
+          </button>
+        </form>
+        <p className="sd-ca-fine">הזיהוי נועד להגן על הפרטים שלכם. הסיכום מוצג רק למי שמכיר את המספר.</p>
+      </CaScreen>
     );
   }
 
@@ -189,16 +160,13 @@ export default function ExecutionSummaryPortalPage() {
   ];
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
-      {/* Header band */}
-      <header className="dna-navy-band">
-        <div className="relative max-w-3xl mx-auto px-5 sm:px-8 py-8 sm:py-10 flex flex-col sm:flex-row sm:items-center gap-5">
-          <div className="inline-flex items-center rounded-2xl px-4 py-2.5 self-start" style={{ backgroundColor: IVORY }}>
-            <LogoLine />
-          </div>
+    <CaFrame tint="sky">
+      <header className="sd-ca-portalhead">
+        <div className="sd-wrap sd-ca-portalhead-in has-art" style={{ maxWidth: 900 }}>
           <div>
-            <h1 className="text-[26px] sm:text-[30px] leading-tight" style={{ color: IVORY }}>סיכום ביצוע</h1>
-            <p className="mt-1 text-[15px]" style={{ color: SAGE_ON_GREEN }}>
+            <Link to="/" aria-label="שילד ביטוח ופיננסים, לדף הבית" className="inline-flex"><LogoLine /></Link>
+            <h1>סיכום ביצוע</h1>
+            <p>
               {customerName && <span>{customerName} · </span>}
               סיכום מספר <span dir="ltr" className="tabular-nums">{summary?.summary_number}</span>
               {summary?.created_at && (
@@ -206,15 +174,16 @@ export default function ExecutionSummaryPortalPage() {
               )}
             </p>
           </div>
+          <div className="sd-ca-portalhead-art" aria-hidden="true"><SdPic name="11-claims-service" sizes="180px" priority /></div>
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-5 sm:px-8 py-8 sm:py-10 space-y-8">
+      <main className="sd-ca-portalmain">
         {/* What this page is */}
-        <section className="dna-concept">
-          <div className="grid gap-6 md:grid-cols-[1fr_220px] items-center">
+        <section className="sd-ca-panel has-stripe sd-ca-tone-sage">
+          <div>
             <div>
-              <h2 className="text-[20px] mb-2" style={{ color: GREEN }}>מה יש בסיכום הזה</h2>
+              <h2 className="sd-h3 mb-2" style={{ fontSize: 22 }}>מה יש בסיכום הזה</h2>
               <p className="text-[16px] leading-[1.7]" style={{ color: BODY }}>
                 הפעולות שבוצעו בעקבות ההמלצות שסוכמו איתכם, מה בוצע חלקית ומה עדיין במעקב.
                 לכל פעולה מופיע מצב הביצוע, תאריך ומי ביצע, כפי שתועדו בסוכנות.
@@ -228,12 +197,11 @@ export default function ExecutionSummaryPortalPage() {
                 ))}
               </dl>
             </div>
-            <Illustration name="05-clarity-decisions" sizes="220px" className="max-w-[220px] mx-auto" />
           </div>
         </section>
 
         {items.length === 0 && (
-          <p className="text-[16px]" style={{ color: MUTED }}>אין עדיין פעולות מתועדות בסיכום הזה.</p>
+          <p className="text-[16px]" style={{ color: MUTED }}>עוד אין פעולות מתועדות בסיכום הזה.</p>
         )}
 
         {groups.filter(g => g.items.length > 0).map(g => (
@@ -250,18 +218,18 @@ export default function ExecutionSummaryPortalPage() {
 
         {/* Agent notes */}
         {summary?.general_notes && (
-          <section className="dna-quote">
-            <p className="dna-ql">הערות היועץ</p>
-            <p className="dna-qt whitespace-pre-wrap">{summary.general_notes}</p>
+          <section className="sd-ca-soft sd-ca-tone-butter">
+            <h2 className="sd-h3" style={{ fontSize: 20 }}>הערות הצוות שלנו</h2>
+            <p className="sd-quote whitespace-pre-wrap">{summary.general_notes}</p>
           </section>
         )}
 
         <footer className="pt-6 border-t text-[14px] leading-[1.6]" style={{ borderColor: LINE, color: MUTED }}>
           <p>הופק על ידי שילד ביטוח ופיננסים. מצב הביצוע משקף את תיעוד הסוכנות ואינו אישור כיסוי.</p>
-          <p className="mt-1">שאלות על אחת הפעולות? פנו ליועץ.</p>
+          <p className="mt-1">שאלות על אחת הפעולות? אפשר להתקשר 052-309-7444 או לכתוב ל-info@seeld.co.il.</p>
         </footer>
       </main>
-    </div>
+    </CaFrame>
   );
 }
 
@@ -270,7 +238,7 @@ function SummaryItemCard({ item }: { item: ItemData }) {
   const label = ITEM_STATUS_LABELS[item.execution_status as ItemExecutionStatus] || item.execution_status;
 
   return (
-    <li className="dna-concept">
+    <li className="sd-ca-panel has-stripe" style={{ ["--stripe" as string]: style.bg }}>
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <p className="text-[16px] font-bold leading-snug flex-1" style={{ color: GREEN }}>
           {item.actual_execution_text || item.recommended_text_snapshot?.split('\n')[0] || 'פעולה'}

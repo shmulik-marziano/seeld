@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, Coins, TrendingUp, TrendingDown, AlertTriangle,
   MoreVertical, DollarSign, BarChart3, Calendar,
@@ -22,7 +21,6 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function CoinPage() {
-  const tool = getToolBySlug("coin")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_COMMISSIONS.filter((c) => c.client.includes(search) || c.company.includes(search));
@@ -32,10 +30,10 @@ export default function CoinPage() {
   const totalGap = totalExpected - totalReceived;
 
   const stats = [
-    { label: "עמלות צפויות", value: `₪${totalExpected.toLocaleString()}`, change: "+12%", icon: Coins, color: tool.color },
+    { label: "עמלות צפויות", value: `₪${totalExpected.toLocaleString()}`, change: "+12%", icon: Coins, color: "#203957" },
     { label: "התקבלו בפועל", value: `₪${totalReceived.toLocaleString()}`, change: "+8%", icon: TrendingUp, color: "#2F6B4E" },
-    { label: "פערים", value: `₪${totalGap.toLocaleString()}`, change: "-₪350", icon: TrendingDown, color: "#BD582D" },
-    { label: "שיעור גבייה", value: `${Math.round((totalReceived / totalExpected) * 100)}%`, change: "+2%", icon: BarChart3, color: "#AD833E" },
+    { label: "פערים", value: `₪${totalGap.toLocaleString()}`, change: "-₪350", icon: TrendingDown, color: "#9A4520" },
+    { label: "שיעור גבייה", value: `${Math.round((totalReceived / totalExpected) * 100)}%`, change: "+2%", icon: BarChart3, color: "#7C5C22" },
   ];
 
   return (

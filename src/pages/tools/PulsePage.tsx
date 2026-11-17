@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, Activity, CheckCircle, Clock, AlertTriangle,
   MoreVertical, ArrowRight, Flag, Calendar,
@@ -22,16 +21,15 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function PulsePage() {
-  const tool = getToolBySlug("pulse")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_TRACKING.filter((t) => t.client.includes(search) || t.recommendation.includes(search));
 
   const stats = [
-    { label: "תהליכים פעילים", value: "28", change: "+4", icon: Activity, color: tool.color },
+    { label: "תהליכים פעילים", value: "28", change: "+4", icon: Activity, color: "#203957" },
     { label: "הושלמו החודש", value: "15", change: "+6", icon: CheckCircle, color: "#2F6B4E" },
-    { label: "חסומים", value: "4", change: "+1", icon: AlertTriangle, color: "#BD582D" },
-    { label: "תזכורות להיום", value: "6", change: "-", icon: Calendar, color: "#AD833E" },
+    { label: "חסומים", value: "4", change: "+1", icon: AlertTriangle, color: "#9A4520" },
+    { label: "תזכורות להיום", value: "6", change: "-", icon: Calendar, color: "#7C5C22" },
   ];
 
   return (
@@ -108,7 +106,7 @@ export default function PulsePage() {
                             className="h-full rounded-full transition-all"
                             style={{
                               width: `${t.progress}%`,
-                              backgroundColor: t.progress === 100 ? "#2F6B4E" : t.status === "חסום" ? "#BD582D" : "#3b82f6",
+                              backgroundColor: t.progress === 100 ? "#2F6B4E" : t.status === "חסום" ? "#9A4520" : "#3b82f6",
                             }}
                           />
                         </div>

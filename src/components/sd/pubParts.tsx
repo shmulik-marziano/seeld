@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { SdCrumbs, SdPic, tintStyle, useSdFont } from "./primitives";
+import { SdCrumbs, SdPic, SdStageSpot, tintStyle, useSdFont } from "./primitives";
 import type { ArtName, Pastel } from "./topics";
 import "./sd.css";
 import "./sd-pub.css";
@@ -45,6 +45,7 @@ export function PubHero({ crumbs, eyebrow, title, lead, art, actions, extra }: {
         </div>
         <div className="sd-stage" aria-hidden="true">
           <SdPic name={art} sizes="(min-width:1024px) 520px, 90vw" priority />
+          <SdStageSpot art={art} />
         </div>
       </div>
     </section>

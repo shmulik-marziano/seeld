@@ -1,3 +1,4 @@
+import { AppEmpty } from '@/components/layout/AppEmpty';
 import { useState, useMemo, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useApp } from '@/contexts/AppContext';
@@ -148,9 +149,8 @@ export default function ReasoningBankPage() {
         <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
       ) : filteredEntries.length === 0 ? (
         <Card>
-          <CardContent className="p-12 text-center">
-            <BookOpen className="h-12 w-12 mx-auto mb-4 text-muted-foreground/30" />
-            <p className="text-muted-foreground">אין נימוקים עדיין. הוסף את הנימוק הראשון!</p>
+          <CardContent className="p-6 text-center">
+            <AppEmpty art="05-retirement" tone="lavender" title="אין נימוקים עדיין" text="הוסף את הנימוק הראשון" />
           </CardContent>
         </Card>
       ) : (

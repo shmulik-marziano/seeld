@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useApp } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 import { Loader2, Mail, Lock, ArrowLeft, User, Phone, Building2, FileCheck, Shield, CheckCircle2, Sparkles, Users, BarChart3 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import { SeeIDLogo } from '@/components/brand/SeeIDLogo';
+import { LOGO_W } from '@/components/sd/client';
+import { SdPic } from '@/components/sd/primitives';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const entityTypes = [
@@ -246,92 +247,36 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row" dir="rtl">
-      {/* Right side -- branding hero (hidden on mobile, shown on lg+) */}
+      {/* Branding panel (lg+): pastel sky, illustration, what the system gives */}
       <div className="hidden lg:flex lg:w-[48%] relative items-center justify-center overflow-hidden"
-        style={{
-          background: 'linear-gradient(165deg, #203957 0%, #262626 60%, #203957 100%)',
-        }}
-      >
-        {/* Ambient glow effects */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-[0.07]"
-            style={{ background: 'radial-gradient(circle, #ffffff 0%, transparent 70%)' }} />
-          <div className="absolute bottom-[-15%] left-[-5%] w-[400px] h-[400px] rounded-full opacity-[0.05]"
-            style={{ background: 'radial-gradient(circle, #a3a3a3 0%, transparent 70%)' }} />
-
-          {/* Floating orbs */}
-          <motion.div animate={{ y: [0, -20, 0], opacity: [0.15, 0.25, 0.15] }} transition={{ duration: 8, repeat: Infinity }}
-            className="absolute top-[12%] right-[18%] w-24 h-24 rounded-full bg-white/20 opacity-15 blur-sm" />
-          <motion.div animate={{ y: [0, 15, 0], opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 10, repeat: Infinity, delay: 2 }}
-            className="absolute top-[55%] left-[12%] w-16 h-16 rounded-full bg-white/10 opacity-10 blur-sm" />
-          <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 7, repeat: Infinity, delay: 1 }}
-            className="absolute bottom-[20%] right-[25%] w-10 h-10 rounded-full bg-white/15 opacity-15 blur-sm" />
-
-          {/* Grid pattern overlay */}
-          <div className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-              backgroundSize: '40px 40px',
-            }} />
-
-          {/* Dashed decorative lines */}
-          <svg className="absolute bottom-16 left-0 w-full h-20 opacity-[0.08] pointer-events-none" viewBox="0 0 400 60" fill="none">
-            <path d="M0 45 Q100 10 200 35 T400 20" stroke="#ffffff" strokeWidth="1.5" strokeDasharray="8 6" />
-          </svg>
-          <svg className="absolute top-20 right-0 w-full h-16 opacity-[0.06] pointer-events-none" viewBox="0 0 400 50" fill="none">
-            <path d="M400 40 Q300 5 200 25 T0 15" stroke="#ffffff" strokeWidth="1" strokeDasharray="6 5" />
-          </svg>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="relative z-10 px-14 space-y-10 max-w-[480px]"
-        >
-          {/* Logo + title */}
-          <div className="flex flex-col items-center text-center space-y-5">
-            <div className="w-20 h-20 rounded-2xl flex items-center justify-center bg-white/[0.08] backdrop-blur-sm border border-white/[0.08] shadow-lg">
-              <SeeIDLogo size={48} />
-            </div>
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold text-white tracking-tight">SEELD</h2>
-              <p className="text-base text-white/50 font-light">הפלטפורמה המתקדמת לסוכני ביטוח</p>
-            </div>
+        style={{ background: '#D6E3EF', borderInlineStart: '1px solid rgba(32,57,87,.14)' }}>
+        <div className="relative z-10 px-14 py-10 max-w-[520px] w-full">
+          <div className="flex items-center gap-3">
+            <Link to="/" aria-label="שילד ביטוח ופיננסים, לדף הבית">
+              <img src="/brand/logo.png" alt="שילד ביטוח ופיננסים" width={LOGO_W} height={44} style={{ height: 44, width: 'auto' }} decoding="async" />
+            </Link>
           </div>
-
-          {/* Feature cards */}
-          <div className="space-y-3">
-            {features.map((feat, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 + i * 0.15, duration: 0.5 }}
-                className="flex items-center gap-4 rounded-xl px-5 py-4 bg-white/[0.06] backdrop-blur-sm border border-white/[0.06] hover:bg-white/[0.09] transition-colors"
-              >
-                <div className="w-10 h-10 rounded-lg bg-white/[0.1] flex items-center justify-center shrink-0">
-                  <feat.icon className="w-5 h-5 text-white/80" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-white/90">{feat.text}</p>
-                  <p className="text-xs text-white/60 mt-0.5">{feat.desc}</p>
-                </div>
-              </motion.div>
+          <div className="mt-8" aria-hidden="true"><SdPic name="08-business-insurance" sizes="480px" priority /></div>
+          <h2 className="mt-6 text-[30px] leading-tight font-bold" style={{ fontFamily: '"Frank Ruhl Libre", Georgia, serif', color: '#203957' }}>
+            הפלטפורמה לסוכנויות ביטוח
+          </h2>
+          <ul className="mt-5 space-y-3">
+            {features.map((feat) => (
+              <li key={feat.text} className="flex items-center gap-4 rounded-2xl px-4 py-3 bg-white/70 border border-[#203957]/15">
+                <span className="w-10 h-10 rounded-full bg-[#203957] flex items-center justify-center shrink-0" aria-hidden="true">
+                  <feat.icon className="w-5 h-5 text-[#E7C98B]" />
+                </span>
+                <span>
+                  <span className="block text-[16px] font-bold text-[#203957]">{feat.text}</span>
+                  <span className="block text-[14px] text-[#55677C]">{feat.desc}</span>
+                </span>
+              </li>
             ))}
-          </div>
-
-          {/* Social proof / trust */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-            className="flex items-center justify-center gap-2 pt-2"
-          >
-            <Shield className="w-3.5 h-3.5 text-white/50" />
-            <span className="text-xs text-white/50">מאובטח בתקן SSL | נתונים מוצפנים</span>
-          </motion.div>
-        </motion.div>
+          </ul>
+          <p className="mt-6 flex items-center gap-2 text-[14px] text-[#55677C]">
+            <Shield className="w-4 h-4" aria-hidden="true" /> הנתונים מוצפנים והגישה מאובטחת
+          </p>
+        </div>
       </div>
 
       {/* Left side -- form */}
@@ -342,32 +287,11 @@ export default function AuthPage() {
           transition={{ duration: 0.5 }}
           className={`w-full ${mode === 'signup' ? 'max-w-[480px]' : 'max-w-[420px]'}`}
         >
-          {/* Mobile hero header */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="lg:hidden mb-8"
-          >
-            <div className="rounded-2xl p-6 text-center relative overflow-hidden"
-              style={{
-                background: 'linear-gradient(165deg, #203957 0%, #262626 100%)',
-              }}
-            >
-              {/* Mobile ambient glow */}
-              <div className="absolute top-[-30%] right-[-20%] w-[200px] h-[200px] rounded-full opacity-[0.08]"
-                style={{ background: 'radial-gradient(circle, #ffffff 0%, transparent 70%)' }} />
-              <div className="flex flex-col items-center gap-3 relative z-10">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white/[0.1] backdrop-blur-sm border border-white/[0.08]">
-                  <SeeIDLogo size={38} />
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-white">SEELD</h2>
-                  <p className="text-xs text-white/50 mt-0.5">הפלטפורמה המתקדמת לסוכני ביטוח</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+          {/* Mobile header: pastel sky with the illustration */}
+          <div className="lg:hidden mb-6 rounded-3xl px-5 pt-4 text-center border border-[#203957]/15" style={{ background: '#D6E3EF' }}>
+            <img src="/brand/logo.png" alt="שילד ביטוח ופיננסים" width={LOGO_W} height={44} style={{ height: 40, width: 'auto', margin: '0 auto' }} decoding="async" />
+            <div className="mt-2 mx-auto max-w-[240px]" aria-hidden="true"><SdPic name="08-business-insurance" sizes="240px" priority /></div>
+          </div>
 
           {/* Form card */}
           <div className="bg-card rounded-2xl border border-border/60 shadow-sm p-6 sm:p-8 space-y-5 sm:space-y-6">

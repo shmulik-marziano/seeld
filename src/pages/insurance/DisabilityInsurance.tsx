@@ -6,7 +6,7 @@ const DisabilityInsurance = () => {
     <InsurancePageSd
       heroIcon={Briefcase}
       heroIconColor="#b91c1c"
-      heroCategory="ביטוח אובדן כושר עבודה"
+      heroCategory="הגנה על ההכנסה"
       heroTitle="ביטוח אובדן כושר עבודה"
       heroDescription="הגנה על ההכנסה שלכם במקרה של אובדן יכולת לעבוד. פיצוי חודשי שמאפשר לכם להמשיך לחיות בכבוד."
       breadcrumbLabel="ביטוח אובדן כושר עבודה"

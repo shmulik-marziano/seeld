@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { fmtMillions, PRODUCTS, type CompanyMapRow } from "@/hooks/useCmaBoard";
 import { BODY, GREEN, MUTED, RUST_TEXT } from "@/lib/brand";
+import ScrollX from "./ScrollX";
 
 /**
  * The market map: managed assets per company and product (₪ millions), the
@@ -28,14 +29,14 @@ const MarketMap = ({ rows }: { rows: CompanyMapRow[] }) => {
   const grand = companies.reduce((s, c) => s + c.total, 0);
 
   return (
-    <div className="board-card dna-concept !p-0 overflow-hidden">
+    <div className="board-card dna-concept sd-mm min-w-0 !p-0 overflow-hidden">
       <div className="px-5 sm:px-6 pt-5 pb-3 flex flex-wrap items-baseline justify-between gap-3">
         <p className="text-[14px]" style={{ color: MUTED }}>כל הסכומים במיליוני ₪. גיוסים: הפקדות פחות משיכות והעברות ב־12 החודשים האחרונים.</p>
         <p className="text-[14px] tabular-nums" style={{ color: MUTED }}>סך השוק: <span className="font-bold" style={{ color: GREEN }}>{fmtMillions(grand)}</span></p>
       </div>
       <div className="p-3 sm:p-4 pt-0">
-        <div className="overflow-x-auto rounded-[10px]">
-          <table className="dna-data board-table" style={{ fontSize: 15 }}>
+        <ScrollX>
+          <table className="dna-data board-table" style={{ fontSize: 14 }}>
             <caption className="sr-only">נכסים מנוהלים לפי חברה ומוצר, במיליוני שקלים, וגיוסים נטו ב־12 החודשים האחרונים</caption>
             <thead>
               <tr>
@@ -75,7 +76,7 @@ const MarketMap = ({ rows }: { rows: CompanyMapRow[] }) => {
               ))}
             </tbody>
           </table>
-        </div>
+        </ScrollX>
         {companies.length > 12 && (
           <button type="button" onClick={() => setShowAll((v) => !v)} className="link-rule mt-4 text-[15px]">
             {showAll ? "הצגת החברות הגדולות בלבד" : `הצגת כל ${companies.length} החברות`}

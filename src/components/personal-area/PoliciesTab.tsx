@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, FileText, Shield, Wallet, Trash2, Calendar, Building2 } from "lucide-react";
+import { CaEmpty, CaLoading } from "@/components/sd/client";
+import { Plus, Shield, Wallet, Trash2, Calendar, Building2 } from "lucide-react";
 import AddPolicyDialog from "./AddPolicyDialog";
 
 export type UserPolicy = {
@@ -81,9 +82,7 @@ const PoliciesTab = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-12">
-        <Loader2 className="w-6 h-6 animate-spin text-primary" />
-      </div>
+      <CaLoading label="טוען את המוצרים" tone="butter" />
     );
   }
 
@@ -98,19 +97,9 @@ const PoliciesTab = () => {
       </div>
 
       {policies.length === 0 ? (
-        <Card>
-          <CardContent className="py-16 text-center">
-            <FileText className="w-14 h-14 mx-auto text-muted-foreground/50 mb-4" />
-            <p className="text-lg font-medium mb-2">אין פוליסות עדיין</p>
-            <p className="text-muted-foreground mb-6">
-              הוסף את הפוליסות שלך כדי לנהל אותן במקום אחד
-            </p>
-            <Button onClick={() => setShowAddDialog(true)} className="gap-2">
-              <Plus className="w-4 h-4" />
-              הוסף פוליסה ראשונה
-            </Button>
-          </CardContent>
-        </Card>
+        <CaEmpty art="10-financial-planning" tone="butter" title="עוד אין כאן מוצרים" text="הוסיפו את הפוליסות שלכם כדי לראות אותן במקום אחד.">
+          <button type="button" onClick={() => setShowAddDialog(true)} className="btn-primary"><Plus className="w-4 h-4" aria-hidden="true" />הוספת מוצר ראשון</button>
+        </CaEmpty>
       ) : (
         <div className="grid gap-4">
           {policies.map((policy) => {

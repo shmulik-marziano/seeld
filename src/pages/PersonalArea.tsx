@@ -1,24 +1,18 @@
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Loader2 } from "lucide-react";
 import PersonalAreaLogin from "@/components/personal-area/PersonalAreaLogin";
 import PersonalAreaDashboard from "@/components/personal-area/PersonalAreaDashboard";
-import { IVORY, SAGE_ON_GREEN } from "@/lib/brand";
+import { SdPic, tintStyle, useSdFont } from "@/components/sd/primitives";
+import { CaLoadingPage } from "@/components/sd/client";
+import "@/components/sd/client.css";
 
 const PersonalArea = () => {
   const { user, loading } = useAuth();
+  useSdFont();
 
   if (loading) {
-    return (
-      <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
-        <Header />
-        <section className="flex items-center justify-center h-[60vh]" aria-busy="true" aria-live="polite">
-          <Loader2 className="w-8 h-8 animate-spin text-[#203957]" aria-hidden="true" />
-          <span className="sr-only">טוען את האזור האישי</span>
-        </section>
-      </div>
-    );
+    return <CaLoadingPage label="טוען את האזור האישי" tint="sky" art="02-family-protection" />;
   }
 
   // Not signed in: the entry screen carries its own chrome
@@ -26,24 +20,24 @@ const PersonalArea = () => {
     return <PersonalAreaLogin />;
   }
 
-  // Signed in: site chrome, a deep-green title band, the dashboard on ivory
+  // Signed in: site chrome, a pastel title band with an illustration, the dashboard on cream
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
+    <div className="sd min-h-screen" dir="rtl" style={tintStyle("sky")}>
       <Header />
 
-      <section className="dna-navy-band">
-        <div className="relative max-w-brand mx-auto px-5 sm:px-8 py-10 sm:py-12">
-          <h1 className="leading-tight" style={{ color: IVORY, fontSize: "clamp(28px, 3.4vw, 36px)" }}>
-            האזור האישי
-          </h1>
-          <p className="mt-2 text-[17px] leading-[1.6] max-w-xl" style={{ color: SAGE_ON_GREEN }}>
-            הפוליסות, החיסכון, המסמכים והפניות שלכם, במקום אחד.
-          </p>
+      <section className="sd-ca-hero">
+        <div className="sd-wrap sd-ca-hero-in">
+          <div>
+            <span className="sd-eyebrow">האזור האישי</span>
+            <h1>הכול שלכם, במקום אחד.</h1>
+            <p>הפוליסות, החיסכון, המסמכים והפניות שלכם, ומי שמלווה אתכם בדרך.</p>
+          </div>
+          <div className="sd-ca-hero-art" aria-hidden="true"><SdPic name="10-financial-planning" sizes="240px" priority /></div>
         </div>
       </section>
 
       <main>
-        <div className="max-w-brand mx-auto px-5 sm:px-8 py-8 sm:py-10">
+        <div className="sd-wrap sd-ca-body">
           <PersonalAreaDashboard />
         </div>
       </main>

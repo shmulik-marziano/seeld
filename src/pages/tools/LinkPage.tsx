@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, Building2, Users, FileText, CheckCircle,
   MoreVertical, Calendar, Briefcase, DollarSign,
@@ -9,7 +8,7 @@ import {
 const MOCK_EMPLOYERS = [
   { id: 1, name: "טק סולושנס בע״מ", contact: "דני אלון", phone: "03-9876543", employees: 45, activeProducts: 3, agreement: "שירות מלא", renewal: "2026-12-01", status: "פעיל" },
   { id: 2, name: "מזון ישראלי בע״מ", contact: "יעל שרון", phone: "04-1234567", employees: 120, activeProducts: 5, agreement: "שירות מלא", renewal: "2026-08-15", status: "פעיל" },
-  { id: 3, name: "בוני הצפון", contact: "משה כהן", phone: "04-5551234", employees: 28, activeProducts: 2, agreement: "פנסיה בלבד", renewal: "2026-06-30", status: "פעיל" },
+  { id: 3, name: "בוני הצפון", contact: "רונן כהן", phone: "04-5551234", employees: 28, activeProducts: 2, agreement: "פנסיה בלבד", renewal: "2026-06-30", status: "פעיל" },
   { id: 4, name: "רשת אופנה פלוס", contact: "רונית לוי", phone: "02-7778899", employees: 85, activeProducts: 4, agreement: "שירות מלא", renewal: "2026-03-31", status: "לחידוש" },
   { id: 5, name: "סטארט-אפ AI", contact: "אורן גל", phone: "03-3334455", employees: 15, activeProducts: 2, agreement: "פנסיה + ביטוח", renewal: "2027-01-01", status: "פעיל" },
   { id: 6, name: "קליניקת שלום", contact: "ד״ר שלום", phone: "09-6667788", employees: 8, activeProducts: 1, agreement: "פנסיה בלבד", renewal: "2026-11-01", status: "פעיל" },
@@ -22,7 +21,6 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function LinkPage() {
-  const tool = getToolBySlug("link")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_EMPLOYERS.filter((e) => e.name.includes(search) || e.contact.includes(search));
@@ -30,9 +28,9 @@ export default function LinkPage() {
   const totalEmployees = MOCK_EMPLOYERS.reduce((sum, e) => sum + e.employees, 0);
 
   const stats = [
-    { label: "מעסיקים פעילים", value: "6", change: "+1", icon: Building2, color: tool.color },
+    { label: "מעסיקים פעילים", value: "6", change: "+1", icon: Building2, color: "#203957" },
     { label: "סה״כ עובדים", value: totalEmployees.toString(), change: "+12", icon: Users, color: "#2F6B4E" },
-    { label: "הסכמים לחידוש", value: "1", change: "-", icon: Calendar, color: "#AD833E" },
+    { label: "הסכמים לחידוש", value: "1", change: "-", icon: Calendar, color: "#7C5C22" },
     { label: "הכנסה חודשית", value: "₪18,500", change: "+5%", icon: DollarSign, color: "#819B7D" },
   ];
 

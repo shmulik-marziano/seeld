@@ -6,7 +6,7 @@ const DentalInsurance = () => {
     <InsurancePageSd
       heroIcon={Smile}
       heroIconColor="#b91c1c"
-      heroCategory="ביטוח שיניים"
+      heroCategory="בריאות ומשפחה"
       heroTitle="ביטוח שיניים"
       heroDescription="כיסוי מקיף לטיפולי שיניים: משמרים, שיקומיים וקוסמטיים. חסכו אלפי שקלים על שתלים, כתרים ויישור שיניים."
       heroCTAText="קבלו הצעה מותאמת"

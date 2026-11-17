@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AppEmpty } from '@/components/layout/AppEmpty';
 import { PageHeader } from '@/components/layout/PageHeader';
 import {
   Search, FileText, Copy, Eye, MoreHorizontal,
@@ -213,9 +214,8 @@ export default function RecommendationBankPage() {
       {/* List */}
       {filtered.length === 0 ? (
         <Card>
-          <CardContent className="p-12 text-center">
-            <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground/30" />
-            <p className="text-muted-foreground">אין המלצות להצגה בתור הנבחר</p>
+          <CardContent className="p-6 text-center">
+            <AppEmpty art="02-family-protection" tone="rose" title="אין המלצות להצגה בתור הנבחר" />
           </CardContent>
         </Card>
       ) : (

@@ -111,3 +111,18 @@
 .sd-pub-legal-sheet > div { margin-inline: auto; }
 .sd-pub-legal-sheet h2 { font-family: var(--serif); font-weight: 700; }
 .sd-pub-legal-sheet a { text-underline-offset: 3px; }
+
+/* insurance hub on phones: compact horizontal cards (small illustration + text) instead of 16 tall plates */
+@media (max-width: 479px) {
+  .sd-pub-cards-compact .sd-pub-card { grid-template-columns: 96px 1fr; border-radius: 18px; }
+  .sd-pub-cards-compact .sd-pub-card-art { min-height: 0; padding: 8px; }
+  .sd-pub-cards-compact .sd-pub-card-art img { max-width: 80px; }
+  .sd-pub-cards-compact .sd-pub-card-body { padding: 14px 16px; }
+  .sd-pub-cards-compact .sd-pub-card-body h3 { font-size: 19px; }
+  .sd-pub-cards-compact .sd-pub-card-body p { margin-top: 3px; font-size: 14px; line-height: 1.55; }
+  .sd-pub-cards-compact .sd-pub-card-go { margin-top: 6px; font-size: 14px; }
+}
+.sd-pub-hero .sd-hero-copy { min-width: 0; }
+/* a page that already ends on a navy call to action does not repeat it in the footer */
+.sd:has(.sd-pub-cta) .sd-chrome-foot-top { display: none; }
+.sd:has(.sd-pub-cta) .sd-chrome-foot-wrap { padding-top: clamp(32px, 4vw, 52px); }

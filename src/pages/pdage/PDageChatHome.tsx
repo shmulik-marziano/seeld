@@ -103,10 +103,10 @@ export default function PDageChatHome() {
   };
 
   const statusColors: Record<string, string> = {
-    pending: 'bg-amber-500/10 text-amber-600 border-amber-200',
-    processing: 'bg-blue-500/10 text-blue-600 border-blue-200',
-    review: 'bg-violet-500/10 text-violet-600 border-violet-200',
-    done: 'bg-emerald-500/10 text-emerald-600 border-emerald-200',
+    pending: 'bg-[#F4E7C3] text-[#7C5C22] border-[#EAD59B]',
+    processing: 'bg-[#D6E3EF] text-[#203957] border-[#BFD2E4]',
+    review: 'bg-[#E5E0ED] text-[#3B3358] border-[#D2CADF]',
+    done: 'bg-[#DFE9DC] text-[#2F6B4E] border-[#C9DBC4]',
   };
 
   const hasMessages = messages.length > 0;
@@ -208,7 +208,7 @@ export default function PDageChatHome() {
                   <div className="w-18 h-18 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/15">
                     <Sparkles className="h-9 w-9 text-primary-foreground" />
                   </div>
-                  <div className="absolute -bottom-1 -left-1 w-5 h-5 rounded-full bg-emerald-400 border-2 border-background flex items-center justify-center">
+                  <div className="absolute -bottom-1 -left-1 w-5 h-5 rounded-full bg-[#2F6B4E] border-2 border-background flex items-center justify-center">
                     <Zap className="h-2.5 w-2.5 text-white" />
                   </div>
                 </div>

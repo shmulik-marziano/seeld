@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { CaError, CaLoading } from "@/components/sd/client";
+import { SdIcon } from "@/components/sd/primitives";
 import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
 import { InsbaseAnswer } from "./InsbaseAnswer";
 import { InsbaseConnectCard } from "./InsbaseConnectCard";
 import PoliciesTab from "./PoliciesTab";
 import { callTool, type InsbaseLink, type InsbaseProduct, type InsbaseTool } from "@/lib/insbase";
 import { ProductCards } from "./ProductCards";
-import { BODY, GREEN, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, TINT_SAGE } from "@/lib/brand";
+import { BODY, GREEN, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND } from "@/lib/brand";
 
 /**
  * "התיק שלי" — the file tab. When the InsBase link exists, the sections are
@@ -25,7 +26,7 @@ const SECTIONS: Section[] = [
     { title: "הפקדה אחרונה", tool: "last_deposit" },
   ] },
   { key: "cover", label: "הביטוחים שלי", icon: "heart", tint: PASTEL_SAND, tools: [{ title: "כיסויים ביטוחיים", tool: "coverages" }] },
-  { key: "advice", label: "המלצות הסוכנות", icon: "message", tint: PASTEL_MINT, tools: [{ title: "ההמלצות המקצועיות שקיבלתם", tool: "agency_recommendations" }] },
+  { key: "advice", label: "ההמלצות שלנו", icon: "message", tint: PASTEL_MINT, tools: [{ title: "ההמלצות המקצועיות שקיבלתם", tool: "agency_recommendations" }] },
   { key: "changes", label: "מה השתנה", icon: "route", tint: PASTEL_MINT, tools: [{ title: "בין שתי הטעינות האחרונות", tool: "whats_changed" }] },
   { key: "products", label: "רשימת המוצרים", icon: "document", tint: PASTEL_SAND, tools: [{ title: "כל המוצרים", tool: "list_products", cards: "all" }] },
 ];
@@ -50,12 +51,12 @@ const AnswerCard = ({ link, title, tool, args, onLink, cards }: { link: InsbaseL
   }, [tool, JSON.stringify(args ?? {})]); // eslint-disable-line react-hooks/exhaustive-deps
   const showCards = cards && products && products.length > 0;
   return (
-    <section className="rounded-2xl bg-white border p-5 sm:p-6" style={{ borderColor: LINE }} aria-busy={text === null && !error}>
-      <h3 className="text-[18px] leading-tight mb-3" style={{ color: GREEN }}>{title}</h3>
+    <section className="sd-ca-panel has-stripe sd-ca-tone-sky" aria-busy={text === null && !error}>
+      <h3 className="mb-3">{title}</h3>
       {error ? (
-        <p className="text-[15px]" style={{ color: "#9A4520" }}>{error}</p>
+        <CaError title="התשובה לא נטענה" text={error} />
       ) : text === null ? (
-        <div className="flex items-center gap-3 py-4" style={{ color: MUTED }}><Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /><span className="text-[15px]">מביאים מהתיק</span></div>
+        <CaLoading label="מביאים מהתיק" tone="sky" />
       ) : showCards ? (
         // Structured data from the server: one card per product (app mock). The text stays available below it.
         <>
@@ -76,8 +77,8 @@ const TermExplainer = ({ link, onLink }: { link: InsbaseLink; onLink: (l: Insbas
   const [term, setTerm] = useState("");
   const [asked, setAsked] = useState<string | null>(null);
   return (
-    <section className="rounded-2xl p-5 sm:p-6" style={{ background: TINT_SAGE }}>
-      <h3 className="text-[18px] leading-tight" style={{ color: GREEN }}>מרכז הידע: מה זה אומר?</h3>
+    <section className="sd-ca-soft sd-ca-tone-lavender">
+      <h3>מרכז הידע: מה זה אומר?</h3>
       <p className="mt-1 text-[14px]" style={{ color: MUTED }}>הסבר כללי למונח מהתיק. לא נתון אישי ולא ייעוץ.</p>
       <form className="mt-4 flex flex-col sm:flex-row gap-3" onSubmit={(e) => { e.preventDefault(); if (term.trim()) setAsked(term.trim()); }}>
         <label htmlFor="term-q" className="sr-only">מונח</label>
@@ -124,12 +125,10 @@ export const FileTab = ({ link, onLink }: { link: InsbaseLink | null; onLink: (l
       )}
 
       {/* Self-added products, always available */}
-      <section className="rounded-2xl bg-white border p-5 sm:p-6" style={{ borderColor: LINE }}>
-        <div className="flex items-center gap-3 mb-1">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full" style={{ background: PASTEL_SAND }}>
-            <BrandIcon name="folder" size={22} style={{ color: GREEN }} />
-          </span>
-          <h3 className="text-[20px] leading-tight" style={{ color: GREEN }}>מוצרים שהוספתם בעצמכם</h3>
+      <section className="sd-ca-panel has-stripe sd-ca-tone-butter">
+        <div className="sd-ca-panel-head mb-1">
+          <SdIcon name="briefcase" size={44} />
+          <h3>מוצרים שהוספתם בעצמכם</h3>
         </div>
         <p className="mb-4 text-[15px] leading-[1.6]" style={{ color: BODY }}>
           פוליסות וחסכונות שרשמתם כאן ידנית. אלה לא מגיעים ממקור רשמי, ולכן מוצגים בנפרד מהתיק המחובר.

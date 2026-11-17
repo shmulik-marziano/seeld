@@ -17,8 +17,8 @@ const rights = [
 
 // Plain-word steps, with kit icons
 const steps = [
-  { icon: "checklist", t: "מלאו פרטים", p: "כמה שאלות קצרות. שתי דקות, לא יותר." },
-  { icon: "search", t: "נבדוק עבורכם", p: "סריקה של כל הזכויות המגיעות לכם מהמדינה, מביטוח לאומי ומרשויות המס." },
+  { icon: "checklist", t: "מלאו פרטים", p: "טופס קצר עם הפרטים הבסיסיים, ואנחנו ממשיכים משם." },
+  { icon: "search", t: "נבדוק עבורכם", p: "בדיקה של הזכויות האפשריות מול המדינה, ביטוח לאומי ורשויות המס." },
   { icon: "handshake", t: "קבלו דוח", p: "רשימת זכויות מסודרת והמלצות לפעולה. בלי אותיות קטנות." },
 ];
 
@@ -37,13 +37,13 @@ const RightsExtraction = () => {
         <PubHero
           crumbs={[{ label: "דף הבית", to: "/" }, { label: "מיצוי זכויות" }]}
           eyebrow="בדיקת זכאות"
-          title="כסף שמגיע לכם. באמת."
-          lead="החזרי מס, קצבאות וקופות שנשכחו. נבדוק מה מגיע לכם מהמדינה, ונדאג שתקבלו את זה."
+          title="בודקים מה מגיע לכם"
+          lead="החזרי מס, קצבאות וקופות שנשכחו. נבדוק מה אפשר לממש מול המדינה, ונלווה אתכם בבקשה."
           art={topic.art}
           tint={p1}
           actions={
             <>
-              <Link to="/contact" className="sd-btn">בדיקת זכאות{arrow}</Link>
+              <Link to="/portfolio-review#review-form" className="sd-btn">בדיקת זכאות{arrow}</Link>
               <button type="button" className="sd-link" onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}>
                 <BrandIcon name="message" size={18} />
                 שאלו את היועץ הדיגיטלי
@@ -59,7 +59,7 @@ const RightsExtraction = () => {
 
         <SdBand tone="cream" id="check">
           <div className="sd-wrap">
-            <PubHead title="מה בודקים" lede="ארבעה ערוצים שבהם רוב הישראלים משאירים כסף על השולחן." />
+            <PubHead title="מה בודקים" lede="ארבעה ערוצים נפוצים שבהם אנשים מגלים כספים וזכויות שנשכחו." />
             <div className="sd-pub-pillars">
               {rights.map((right, i) => (
                 <div key={right.title} className="sd-pub-pillar sd-reveal">
@@ -87,8 +87,8 @@ const RightsExtraction = () => {
           title="נבדוק מה מגיע לכם"
           text="הבדיקה ללא עלות וללא התחייבות. אם אין כלום, לפחות תדעו."
           art={p3 === "butter" ? "10-financial-planning" : "01-hero"}
-          primary={{ text: "בדיקת זכאות", to: "/contact" }}
-          secondary={{ text: "בדיקת תיק 360", to: "/#portfolio-review" }}
+          primary={{ text: "בדיקת זכאות", to: "/portfolio-review#review-form" }}
+          secondary={{ text: "תיאום שיחה", to: "/contact" }}
         />
       </main>
 

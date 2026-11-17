@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, Upload, FileText, CheckCircle, AlertTriangle,
   Clock, Eye, MoreVertical, Download, Trash2,
@@ -22,7 +21,6 @@ const STATUS_COLORS: Record<string, { bg: string; text: string; icon: React.Elem
 };
 
 export default function LensPage() {
-  const tool = getToolBySlug("lens")!;
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
 
@@ -33,10 +31,10 @@ export default function LensPage() {
   });
 
   const stats = [
-    { label: "מסמכים סרוקים היום", value: "18", change: "+7", icon: FileText, color: tool.color },
+    { label: "מסמכים סרוקים היום", value: "18", change: "+7", icon: FileText, color: "#203957" },
     { label: "שדות שחולצו", value: "342", change: "+86", icon: CheckCircle, color: "#2F6B4E" },
-    { label: "דיוק ממוצע", value: "96%", change: "+1%", icon: Eye, color: "#AD833E" },
-    { label: "ממתינים לבדיקה", value: "3", change: "-", icon: AlertTriangle, color: "#BD582D" },
+    { label: "דיוק ממוצע", value: "96%", change: "+1%", icon: Eye, color: "#7C5C22" },
+    { label: "ממתינים לבדיקה", value: "3", change: "-", icon: AlertTriangle, color: "#9A4520" },
   ];
 
   return (
@@ -58,7 +56,7 @@ export default function LensPage() {
 
       {/* Upload area */}
       <div className="bg-white rounded-2xl shadow-sm border-2 border-dashed border-[#819B7D]/30 p-8 mb-4 text-center hover:border-[#819B7D]/50 transition-colors cursor-pointer">
-        <Upload className="w-10 h-10 mx-auto mb-3" style={{ color: tool.color }} />
+        <Upload className="w-10 h-10 mx-auto mb-3" style={{ color: "#203957" }} />
         <p className="font-medium text-[#2D435D] mb-1">גרור מסמכים לכאן או לחץ להעלאה</p>
         <p className="text-sm text-[#55677C]">PDF, תמונות, Word — עד 20MB לקובץ</p>
       </div>

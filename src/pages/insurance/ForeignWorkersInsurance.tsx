@@ -6,7 +6,7 @@ const ForeignWorkersInsurance = () => {
     <InsurancePageSd
       heroIcon={Globe}
       heroIconColor="#b91c1c"
-      heroCategory="ביטוח עובדים זרים ותיירים"
+      heroCategory="למעסיקים ולמארחים"
       heroTitle="ביטוח עובדים זרים ותיירים"
       heroDescription="ביטוח בריאות לעובדים זרים ותיירים בישראל, כנדרש בחוק."
       breadcrumbLabel="ביטוח עובדים זרים ותיירים"

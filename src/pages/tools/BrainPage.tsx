@@ -1,31 +1,29 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, Brain, FileText, Folder, Download,
   MoreVertical, BookOpen, File, Clock, Eye, Tag,
 } from "lucide-react";
 
 const MOCK_KNOWLEDGE = [
-  { id: 1, title: "תבנית מכתב גילוי נאות", category: "תבניות", type: "מסמך", tags: ["רגולציה", "גילוי"], views: 45, updated: "2026-03-20", author: "שמוליק" },
-  { id: 2, title: "נוהל קליטת לקוח חדש", category: "נהלים", type: "נוהל", tags: ["קליטה", "תהליך"], views: 128, updated: "2026-03-18", author: "מירב" },
-  { id: 3, title: "טופס 17 — ייפוי כוח מסלקה", category: "טפסים", type: "טופס", tags: ["מסלקה", "ייפוי כוח"], views: 89, updated: "2026-03-15", author: "שמוליק" },
-  { id: 4, title: "מדריך חיתום — שאלון בריאות", category: "מדריכים", type: "מדריך", tags: ["חיתום", "בריאות"], views: 67, updated: "2026-03-12", author: "שמוליק" },
-  { id: 5, title: "טבלת השוואת דמי ניהול 2026", category: "כלים", type: "טבלה", tags: ["דמי ניהול", "השוואה"], views: 234, updated: "2026-03-10", author: "מירב" },
-  { id: 6, title: "נוהל טיפול בתביעה", category: "נהלים", type: "נוהל", tags: ["תביעות", "תהליך"], views: 56, updated: "2026-03-08", author: "שמוליק" },
-  { id: 7, title: "תבנית סיכום פגישת ייעוץ", category: "תבניות", type: "מסמך", tags: ["פגישה", "סיכום"], views: 178, updated: "2026-03-05", author: "מירב" },
+  { id: 1, title: "תבנית מכתב גילוי נאות", category: "תבניות", type: "מסמך", tags: ["רגולציה", "גילוי"], views: 45, updated: "2026-03-20", author: "דנה לוי" },
+  { id: 2, title: "נוהל קליטת לקוח חדש", category: "נהלים", type: "נוהל", tags: ["קליטה", "תהליך"], views: 128, updated: "2026-03-18", author: "נועה ברק" },
+  { id: 3, title: "טופס 17 — ייפוי כוח מסלקה", category: "טפסים", type: "טופס", tags: ["מסלקה", "ייפוי כוח"], views: 89, updated: "2026-03-15", author: "דנה לוי" },
+  { id: 4, title: "מדריך חיתום — שאלון בריאות", category: "מדריכים", type: "מדריך", tags: ["חיתום", "בריאות"], views: 67, updated: "2026-03-12", author: "דנה לוי" },
+  { id: 5, title: "טבלת השוואת דמי ניהול 2026", category: "כלים", type: "טבלה", tags: ["דמי ניהול", "השוואה"], views: 234, updated: "2026-03-10", author: "נועה ברק" },
+  { id: 6, title: "נוהל טיפול בתביעה", category: "נהלים", type: "נוהל", tags: ["תביעות", "תהליך"], views: 56, updated: "2026-03-08", author: "דנה לוי" },
+  { id: 7, title: "תבנית סיכום פגישת ייעוץ", category: "תבניות", type: "מסמך", tags: ["פגישה", "סיכום"], views: 178, updated: "2026-03-05", author: "נועה ברק" },
 ];
 
 const CATEGORY_COLORS: Record<string, string> = {
   "תבניות": "#55677C",
   "נהלים": "#2F6B4E",
-  "טפסים": "#2563eb",
-  "מדריכים": "#AD833E",
-  "כלים": "#BD582D",
+  "טפסים": "#203957",
+  "מדריכים": "#7C5C22",
+  "כלים": "#9A4520",
 };
 
 export default function BrainPage() {
-  const tool = getToolBySlug("brain")!;
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
 
@@ -36,10 +34,10 @@ export default function BrainPage() {
   });
 
   const stats = [
-    { label: "פריטי ידע", value: "87", change: "+4", icon: Brain, color: tool.color },
+    { label: "פריטי ידע", value: "87", change: "+4", icon: Brain, color: "#203957" },
     { label: "תבניות פעילות", value: "23", change: "+2", icon: FileText, color: "#55677C" },
     { label: "צפיות החודש", value: "1,240", change: "+18%", icon: Eye, color: "#2F6B4E" },
-    { label: "עודכנו השבוע", value: "6", change: "+3", icon: Clock, color: "#AD833E" },
+    { label: "עודכנו השבוע", value: "6", change: "+3", icon: Clock, color: "#7C5C22" },
   ];
 
   return (

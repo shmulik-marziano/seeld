@@ -27,8 +27,11 @@ const fmt = (n: number | null | undefined) => (missing(n) ? NONE : `${(n as numb
 const feeText = (v: number | null | undefined) => (missing(v) ? "לא פורסם" : `${v}%`);
 const fmtAssets = (m: number | null | undefined) =>
   missing(m) ? NONE : (m as number) >= 1000 ? `${((m as number) / 1000).toFixed(1)} מיליארד` : `${(m as number).toLocaleString("he-IL")} מיליון`;
+// Periods a new track has not lived through come as 0 in the source; that is "no data", not a 0.00% return.
+const ret = (v: number | null | undefined) => (v === 0 ? null : v);
 const n0 = (v: number | null | undefined) => (missing(v) ? 0 : (v as number));
 
+const sortLabel: Record<SortKey, string> = { name: "שם", year1: "תשואת 12 חודשים", year3: "תשואת 3 שנים", year5: "תשואת 5 שנים", fees: "דמי ניהול", assets: "היקף נכסים" };
 const TH: CSSProperties = { fontSize: 14 };
 const PAGE = 60;
 
@@ -256,14 +259,69 @@ function PersonalTrackChecker({ trackData }: { trackData: Fund[] }) {
 
 const sortValue = (f: Fund, key: SortKey): number | null => {
   switch (key) {
-    case "year1": return f.returns.year1;
-    case "year3": return f.returns.year3;
-    case "year5": return f.returns.year5;
+    case "year1": return ret(f.returns.year1) ?? null;
+    case "year3": return ret(f.returns.year3) ?? null;
+    case "year5": return ret(f.returns.year5) ?? null;
     case "fees": return f.fees.savingsFeePercent;
     case "assets": return f.totalAssets;
     default: return null;
   }
 };
+
+// Expanded detail of a track: shared by the table row (desktop) and the card (phone).
+const TrackDetail = ({ fund }: { fund: Fund }) => (
+  <>
+    <dl className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-8 gap-y-5">
+      {[
+        { label: "תשואת חודש", value: fmt(fund.returns.month), ltr: true },
+        { label: "חשיפת מניות", value: missing(fund.stockExposure) ? NONE : `${fund.stockExposure}%`, ltr: true },
+        { label: "דמי ניהול מהפקדה", value: feeText(fund.fees.depositFeePercent), ltr: true },
+        { label: "היקף נכסים", value: fmtAssets(fund.totalAssets), ltr: false },
+        { label: "מדד שארפ", value: missing(fund.deepDrill.sharpeRatio) ? NONE : (fund.deepDrill.sharpeRatio as number).toFixed(2), ltr: true },
+      ].map((cell) => (
+        <div key={cell.label} className="border-t pt-2.5" style={{ borderColor: LINE }}>
+          <dt className="text-[14px] mb-1 font-normal" style={{ color: MUTED }}>{cell.label}</dt>
+          <dd
+            className="text-[18px] font-bold tabular-nums"
+            dir={cell.ltr ? "ltr" : undefined}
+            style={{ color: cell.value === NONE || cell.value === "לא פורסם" ? MUTED : GREEN, textAlign: cell.ltr ? "right" : undefined }}
+          >
+            {cell.value}
+          </dd>
+        </div>
+      ))}
+    </dl>
+
+    {/* Asset allocation: one hue, a labelled row per asset class */}
+    <div className="dna-concept mt-6 !p-5 sm:!p-6">
+      <h4 className="text-[16px] mb-4" style={{ color: GREEN }}>הרכב נכסים וחשיפות</h4>
+      <div className="grid md:grid-cols-[1.2fr_1fr] gap-8">
+        <AllocationBars rows={allocationRows(fund.deepDrill, true)} />
+        <dl className="space-y-2 text-[15px] md:border-s md:ps-8" style={{ borderColor: LINE }}>
+          <div className="flex justify-between gap-4">
+            <dt style={{ color: MUTED }}>חשיפה לחו״ל</dt>
+            <dd dir="ltr" className="tabular-nums font-bold" style={{ color: GREEN }}>
+              {missing(fund.deepDrill.foreignExposure) ? NONE : `${fund.deepDrill.foreignExposure}%`}
+            </dd>
+          </div>
+          <div className="flex justify-between gap-4">
+            <dt style={{ color: MUTED }}>חשיפת מט״ח</dt>
+            <dd dir="ltr" className="tabular-nums font-bold" style={{ color: GREEN }}>
+              {missing(fund.deepDrill.currencyExposure) ? NONE : `${fund.deepDrill.currencyExposure}%`}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div className="mt-5">
+      <Link to="/#portfolio-review" className="link-rule text-[15px]">
+        איך המסלול הזה משתלב בתיק שלכם? בדיקת תיק 360
+        <BrandIcon name="arrow-left" size={16} />
+      </Link>
+    </div>
+  </>
+);
 
 const InvestmentTracks = () => {
   const { funds: trackData, isLive, loading: tracksLoading } = useInvestmentTracks();
@@ -307,7 +365,6 @@ const InvestmentTracks = () => {
 
   // Stats
   const avgReturn = filtered.length > 0 ? filtered.reduce((s, f) => s + f.returns.year1, 0) / filtered.length : null;
-  const bestFund = filtered.length > 0 ? filtered.reduce((b, f) => f.returns.year1 > b.returns.year1 ? f : b) : null;
   const uniqueCompanies = new Set(filtered.map(f => f.company)).size;
 
   // Active product types for tabs
@@ -382,6 +439,7 @@ const InvestmentTracks = () => {
               <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
                 <a href="#checker-title" className="sd-btn">בדקו את המסלול שלכם<BrandIcon name="arrow-left" size={18} /></a>
                 <a href="#all-tracks-title" className="sd-link">לכל המסלולים<BrandIcon name="arrow-left" size={18} /></a>
+                <Link to="/contact" className="sd-link">רוצים עזרה בבחירה? תיאום שיחה<BrandIcon name="arrow-left" size={18} /></Link>
               </div>
             </div>
             <div className="sd-stage" aria-hidden="true">
@@ -520,18 +578,62 @@ const InvestmentTracks = () => {
                     </>
                   )}
                 </span>
-                {bestFund && (
-                  <span className="hidden sm:inline truncate">
-                    מוביל: {bestFund.name}{" "}
-                    <span className="tabular-nums font-bold" dir="ltr" style={{ color: GREEN }}>({fmt(bestFund.returns.year1)})</span>
-                  </span>
-                )}
+                <span>
+                  ממוין לפי {sortLabel[sortKey]}. המיון אינו המלצה.
+                </span>
               </div>
 
               {/* Table: green header, zebra rows, LTR tabular numbers */}
               {filtered.length > 0 ? (
                 <>
-                  <div className="overflow-x-auto rounded-[10px]">
+                  <ul className="lg:hidden space-y-3" aria-label="מסלולי ההשקעה">
+                    {shown.map((fund) => {
+                      const isExpanded = expandedId === fund.id;
+                      const detailId = `track-card-detail-${fund.id}`;
+                      const figs = [
+                        { l: "12 חודשים", v: ret(fund.returns.year1), strong: true },
+                        { l: "3 שנים", v: ret(fund.returns.year3), strong: false },
+                        { l: "5 שנים", v: ret(fund.returns.year5), strong: false },
+                      ];
+                      return (
+                        <li key={fund.id} className="sd-trk-card">
+                          <h3 className="text-[17px] leading-[1.4]" style={{ color: GREEN }}>{fund.name}</h3>
+                          <p className="mt-1 text-[14px]" style={{ color: MUTED }}>
+                            {companyLabels[fund.company]} · {specializationLabels[fund.specialization]} · קופה <span dir="ltr" className="tabular-nums">{fund.fundNumber}</span>
+                          </p>
+                          <dl className="sd-trk-figs">
+                            {figs.map((c) => (
+                              <div key={c.l}>
+                                <dt>{c.l}</dt>
+                                <dd dir="ltr" className={`tabular-nums ${c.strong ? "text-[20px] font-bold" : "text-[16px] font-bold"}`} style={missing(c.v) ? { color: MUTED, fontWeight: 400, fontSize: 14 } : returnStyle(c.v)}>{fmt(c.v)}</dd>
+                              </div>
+                            ))}
+                            <div>
+                              <dt>דמי ניהול מצבירה</dt>
+                              <dd dir="ltr" className="tabular-nums text-[16px] font-bold" style={missing(fund.fees.savingsFeePercent) ? { color: MUTED, fontWeight: 400, fontSize: 14 } : undefined}>{feeText(fund.fees.savingsFeePercent)}</dd>
+                            </div>
+                          </dl>
+                          <button
+                            type="button"
+                            onClick={() => setExpandedId(isExpanded ? null : fund.id)}
+                            aria-expanded={isExpanded}
+                            aria-controls={detailId}
+                            className="mt-2 inline-flex min-h-[44px] items-center gap-2 text-[15px] font-bold"
+                            style={{ color: GREEN }}
+                          >
+                            {isExpanded ? "סגירת הפירוט" : "פירוט"}
+                            <BrandIcon name="chevron-down" size={18} className="transition-transform duration-150" style={{ transform: isExpanded ? "rotate(180deg)" : undefined }} />
+                          </button>
+                          {isExpanded && (
+                            <div id={detailId} className="mb-3 mt-1 rounded-[12px] p-4" style={{ backgroundColor: TINT_SAGE }}>
+                              <TrackDetail fund={fund} />
+                            </div>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <div className="hidden lg:block overflow-x-auto rounded-[10px]">
                     <table className="dna-data min-w-[900px]" style={{ fontSize: 15 }}>
                       <caption className="sr-only">כל מסלולי ההשקעה לפי הסינון הנוכחי</caption>
                       <thead>
@@ -565,9 +667,9 @@ const InvestmentTracks = () => {
                                 </td>
                                 <td className="whitespace-nowrap">{companyLabels[fund.company]}</td>
                                 <td className="whitespace-nowrap">{specializationLabels[fund.specialization]}</td>
-                                <td className="num font-bold" style={returnStyle(fund.returns.year1)}>{fmt(fund.returns.year1)}</td>
-                                <td className="num" style={returnStyle(fund.returns.year3)}>{fmt(fund.returns.year3)}</td>
-                                <td className="num" style={returnStyle(fund.returns.year5)}>{fmt(fund.returns.year5)}</td>
+                                <td className="num font-bold" style={returnStyle(ret(fund.returns.year1))}>{fmt(ret(fund.returns.year1))}</td>
+                                <td className="num" style={returnStyle(ret(fund.returns.year3))}>{fmt(ret(fund.returns.year3))}</td>
+                                <td className="num" style={returnStyle(ret(fund.returns.year5))}>{fmt(ret(fund.returns.year5))}</td>
                                 <td className="num" style={missing(fund.fees.savingsFeePercent) ? { color: MUTED } : undefined}>{feeText(fund.fees.savingsFeePercent)}</td>
                                 <td>
                                   <button
@@ -591,55 +693,7 @@ const InvestmentTracks = () => {
                               {isExpanded && (
                                 <tr id={detailId}>
                                   <td colSpan={8} className="!px-5 !py-6" style={{ backgroundColor: TINT_SAGE }}>
-                                    <dl className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-8 gap-y-5">
-                                      {[
-                                        { label: "תשואת חודש", value: fmt(fund.returns.month), ltr: true },
-                                        { label: "חשיפת מניות", value: missing(fund.stockExposure) ? NONE : `${fund.stockExposure}%`, ltr: true },
-                                        { label: "דמי ניהול מהפקדה", value: feeText(fund.fees.depositFeePercent), ltr: true },
-                                        { label: "היקף נכסים", value: fmtAssets(fund.totalAssets), ltr: false },
-                                        { label: "מדד שארפ", value: missing(fund.deepDrill.sharpeRatio) ? NONE : (fund.deepDrill.sharpeRatio as number).toFixed(2), ltr: true },
-                                      ].map((cell) => (
-                                        <div key={cell.label} className="border-t pt-2.5" style={{ borderColor: LINE }}>
-                                          <dt className="text-[14px] mb-1 font-normal" style={{ color: MUTED }}>{cell.label}</dt>
-                                          <dd
-                                            className="text-[18px] font-bold tabular-nums"
-                                            dir={cell.ltr ? "ltr" : undefined}
-                                            style={{ color: cell.value === NONE || cell.value === "לא פורסם" ? MUTED : GREEN, textAlign: cell.ltr ? "right" : undefined }}
-                                          >
-                                            {cell.value}
-                                          </dd>
-                                        </div>
-                                      ))}
-                                    </dl>
-
-                                    {/* Asset allocation: one hue, a labelled row per asset class */}
-                                    <div className="dna-concept mt-6 !p-5 sm:!p-6">
-                                      <h4 className="text-[16px] mb-4" style={{ color: GREEN }}>הרכב נכסים וחשיפות</h4>
-                                      <div className="grid md:grid-cols-[1.2fr_1fr] gap-8">
-                                        <AllocationBars rows={allocationRows(fund.deepDrill, true)} />
-                                        <dl className="space-y-2 text-[15px] md:border-s md:ps-8" style={{ borderColor: LINE }}>
-                                          <div className="flex justify-between gap-4">
-                                            <dt style={{ color: MUTED }}>חשיפה לחו״ל</dt>
-                                            <dd dir="ltr" className="tabular-nums font-bold" style={{ color: GREEN }}>
-                                              {missing(fund.deepDrill.foreignExposure) ? NONE : `${fund.deepDrill.foreignExposure}%`}
-                                            </dd>
-                                          </div>
-                                          <div className="flex justify-between gap-4">
-                                            <dt style={{ color: MUTED }}>חשיפת מט״ח</dt>
-                                            <dd dir="ltr" className="tabular-nums font-bold" style={{ color: GREEN }}>
-                                              {missing(fund.deepDrill.currencyExposure) ? NONE : `${fund.deepDrill.currencyExposure}%`}
-                                            </dd>
-                                          </div>
-                                        </dl>
-                                      </div>
-                                    </div>
-
-                                    <div className="mt-5">
-                                      <Link to="/#portfolio-review" className="link-rule text-[15px]">
-                                        איך המסלול הזה משתלב בתיק שלכם? בדיקת תיק 360
-                                        <BrandIcon name="arrow-left" size={16} />
-                                      </Link>
-                                    </div>
+                                    <TrackDetail fund={fund} />
                                   </td>
                                 </tr>
                               )}
@@ -649,9 +703,6 @@ const InvestmentTracks = () => {
                       </tbody>
                     </table>
                   </div>
-                  <p className="mt-2 text-[14px] lg:hidden" style={{ color: MUTED }}>
-                    אפשר לגלול את הטבלה לצדדים כדי לראות את כל העמודות.
-                  </p>
                   {filtered.length > shown.length && (
                     <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
                       <button type="button" onClick={showMore} className="btn-secondary">

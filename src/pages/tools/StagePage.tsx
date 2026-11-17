@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, Presentation, CheckCircle, Clock, Eye,
   MoreVertical, ThumbsUp, ThumbsDown, Send, Users,
@@ -23,16 +22,15 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function StagePage() {
-  const tool = getToolBySlug("stage")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_PRESENTATIONS.filter((p) => p.client.includes(search) || p.title.includes(search));
 
   const stats = [
-    { label: "מצגות החודש", value: "24", change: "+5", icon: Presentation, color: tool.color },
+    { label: "מצגות החודש", value: "24", change: "+5", icon: Presentation, color: "#203957" },
     { label: "אושרו", value: "18", change: "+3", icon: ThumbsUp, color: "#2F6B4E" },
-    { label: "שיעור אישור", value: "75%", change: "+8%", icon: CheckCircle, color: "#AD833E" },
-    { label: "ממתינים להצגה", value: "6", change: "-", icon: Clock, color: "#BD582D" },
+    { label: "שיעור אישור", value: "75%", change: "+8%", icon: CheckCircle, color: "#7C5C22" },
+    { label: "ממתינים להצגה", value: "6", change: "-", icon: Clock, color: "#9A4520" },
   ];
 
   return (

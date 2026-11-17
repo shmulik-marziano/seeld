@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { SdBand, SdCrumbs, SdPic, tintStyle } from "./primitives";
+import { SdBand, SdCrumbs, SdPic, SdProgress, SdStageSpot, tintStyle } from "./primitives";
 import { PASTELS, type ArtName, type Pastel, type Topic } from "./topics";
 import "./sd.css";
 import "./pub.css";
@@ -72,6 +72,7 @@ export function PubHero({
         </div>
         <div className="sd-stage" aria-hidden="true">
           <SdPic name={art} sizes="(min-width:1024px) 520px, 90vw" priority />
+          <SdStageSpot art={art} />
         </div>
       </div>
     </section>
@@ -178,12 +179,15 @@ export function withHeadingIds(html: string): { html: string; toc: { id: string;
 export function PubTocInline({ items }: { items: { id: string; label: string }[] }) {
   if (items.length < 2) return null;
   return (
-    <details className="sd-toc-inline">
-      <summary>תוכן העניינים</summary>
-      <nav aria-label="תוכן העניינים">
-        {items.map((s) => <a key={s.id} href={`#${s.id}`}>{s.label}</a>)}
-      </nav>
-    </details>
+    <>
+      <SdProgress />
+      <details className="sd-toc-inline">
+        <summary>תוכן העניינים</summary>
+        <nav aria-label="תוכן העניינים">
+          {items.map((s) => <a key={s.id} href={`#${s.id}`}>{s.label}</a>)}
+        </nav>
+      </details>
+    </>
   );
 }
 

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, FileEdit, CheckCircle, Clock, Download,
   MoreVertical, FileText, AlertCircle, Printer,
@@ -22,16 +21,15 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function FillPage() {
-  const tool = getToolBySlug("fill")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_FORMS.filter((f) => f.client.includes(search) || f.form.includes(search));
 
   const stats = [
-    { label: "טפסים שהופקו", value: "234", change: "+18", icon: FileEdit, color: tool.color },
+    { label: "טפסים שהופקו", value: "234", change: "+18", icon: FileEdit, color: "#203957" },
     { label: "מוכנים לשיגור", value: "12", change: "+4", icon: CheckCircle, color: "#2F6B4E" },
-    { label: "שדות שמולאו", value: "8,421", change: "+342", icon: FileText, color: "#AD833E" },
-    { label: "חסרים השלמה", value: "5", change: "-1", icon: AlertCircle, color: "#BD582D" },
+    { label: "שדות שמולאו", value: "8,421", change: "+342", icon: FileText, color: "#7C5C22" },
+    { label: "חסרים השלמה", value: "5", change: "-1", icon: AlertCircle, color: "#9A4520" },
   ];
 
   return (
@@ -106,7 +104,7 @@ export default function FillPage() {
                     <td className="px-4 py-3 text-center">
                       <div className="flex items-center justify-center gap-2">
                         <div className="w-16 h-1.5 bg-[#D9DEE4] rounded-full overflow-hidden">
-                          <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: pct === 100 ? "#2F6B4E" : "#AD833E" }} />
+                          <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: pct === 100 ? "#2F6B4E" : "#7C5C22" }} />
                         </div>
                         <span className="text-xs text-[#55677C]">{pct}%</span>
                       </div>

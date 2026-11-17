@@ -1,0 +1,47 @@
+/* app-tools: Kit skin for the agent tools. Scoped under .sd-tool (wraps ToolPage). */
+.sd-tool {
+  --ink: #203957;
+  --muted: #55677C;
+  --gold: #AD833E;
+  --gold-d: #7C5C22;
+  --cream: #FCF8EF;
+  --line: rgba(32, 57, 87, .14);
+  --serif: "Frank Ruhl Libre", "Noto Serif Hebrew", Georgia, serif;
+  --tone: #DFE9DC;
+  --tone-deep: #C9DBC4;
+  min-height: 100vh;
+  background: var(--cream);
+  color: #2D435D;
+}
+.sd-tool-sage { --tone: #DFE9DC; --tone-deep: #C9DBC4; }
+.sd-tool-sky { --tone: #D6E3EF; --tone-deep: #BFD2E4; }
+.sd-tool-butter { --tone: #F4E7C3; --tone-deep: #EAD59B; }
+.sd-tool-rose { --tone: #F3DDD8; --tone-deep: #E8C5BD; }
+.sd-tool-lavender { --tone: #E5E0ED; --tone-deep: #D2CADF; }
+
+.sd-tool-head { position: relative; overflow: hidden; background: var(--tone); border-bottom: 1px solid var(--line); }
+.sd-tool-head::after { content: ""; position: absolute; inset-inline: 0; bottom: 0; height: 3px; background: linear-gradient(90deg, var(--gold), transparent 60%); opacity: .55; }
+.sd-tool-head-in { position: relative; display: flex; align-items: center; gap: 20px; max-width: 80rem; margin-inline: auto; padding: 28px 24px 30px; }
+.sd-tool-icon { flex: none; width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center; background: #fff; color: var(--ink); border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(32,57,87,.06), 0 10px 24px -12px rgba(32,57,87,.25); }
+.sd-tool-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .08em; color: var(--gold-d); }
+.sd-tool-eyebrow::before { content: ""; width: 24px; height: 1.5px; background: var(--gold); }
+.sd-tool-title { font-family: var(--serif); font-weight: 700; color: var(--ink); font-size: clamp(28px, 3.4vw, 40px); line-height: 1.12; margin-top: 4px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+.sd-tool-title small { font-family: inherit; font-size: 14px; font-weight: 500; color: var(--muted); letter-spacing: .04em; }
+.sd-tool-badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px; border-radius: 999px; background: #fff; border: 1px solid var(--line); color: var(--ink); font-family: "Rubik", system-ui, sans-serif; font-size: 12px; font-weight: 700; }
+.sd-tool-desc { margin-top: 8px; font-size: 16px; line-height: 1.7; color: var(--ink); max-width: 62ch; }
+.sd-tool-art { display: none; position: absolute; inset-inline-end: 24px; bottom: -6px; width: 200px; opacity: .92; pointer-events: none; }
+@media (min-width: 900px) { .sd-tool-art { display: block; } .sd-tool-head-in { padding-inline-end: 240px; } }
+.sd-tool-body { max-width: 80rem; margin-inline: auto; padding: 28px 24px 56px; }
+@media (max-width: 640px) { .sd-tool-head-in { padding: 22px 16px 24px; gap: 14px; } .sd-tool-icon { width: 46px; height: 46px; } .sd-tool-body { padding-inline: 16px; } }
+
+.sd-tool-empty { max-width: 46rem; margin: 40px auto 0; padding: 40px 28px 36px; text-align: center; background: #fff; border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 1px 2px rgba(32,57,87,.06), 0 12px 32px -12px rgba(32,57,87,.18); }
+.sd-tool-empty-art { width: min(100%, 320px); height: auto; margin: 0 auto 8px; border-radius: 20px; background: radial-gradient(120% 90% at 50% 100%, var(--tone-deep), var(--tone) 60%, transparent); }
+.sd-tool-empty h2 { font-family: var(--serif); font-weight: 700; color: var(--ink); font-size: 30px; margin-top: 12px; }
+.sd-tool-empty p { color: var(--muted); font-size: 17px; line-height: 1.75; margin-top: 8px; }
+.sd-tool-soon { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; padding: 8px 18px; border-radius: 999px; background: var(--tone); color: var(--ink); font-size: 14px; font-weight: 700; border: 1px solid var(--line); }
+
+/* shared polish for every tool body (cards, inputs, focus) */
+.sd-tool-body input:focus-visible, .sd-tool-body select:focus-visible, .sd-tool-body textarea:focus-visible, .sd-tool-body button:focus-visible, .sd-tool-body a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.sd-tool-body .bg-white.rounded-2xl { box-shadow: 0 1px 2px rgba(32,57,87,.06), 0 10px 28px -14px rgba(32,57,87,.16); border-color: var(--line); }
+.sd-tool-body table th { font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { .sd-tool * { animation: none !important; transition: none !important; } }

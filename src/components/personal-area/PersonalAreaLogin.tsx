@@ -5,17 +5,18 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import { toast } from "sonner";
 import { Loader2, Mail } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Illustration } from "@/components/brand/Illustration";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_SAGE } from "@/lib/brand";
+import { GREEN, LINE, MUTED } from "@/lib/brand";
+import { CaFrame, LOGO_W } from "@/components/sd/client";
+import { SdIcon, SdPic } from "@/components/sd/primitives";
 
-// Personal-area entry (kit p.06): ivory canvas, white card with the logo and a
-// labelled form; the journey illustration keeps the statement panel on desktop.
+// Personal-area entry: calm and warm. A sage field with the family illustration
+// beside a white form card; on a phone the illustration sits above the form.
 
 const whatIsInside = [
-  "הפוליסות, החיסכון והמסמכים שלכם במקום אחד.",
-  "המלצות שהיועץ תיעד בתיק, עם ההסבר שלצידן.",
-  "פנייה ליועץ ומעקב אחרי מה שסוכם.",
+  { icon: "document", t: "הפוליסות, החיסכון והמסמכים שלכם במקום אחד." },
+  { icon: "checklist", t: "המלצות שהצוות שלנו תיעד בתיק, עם ההסבר שלצידן." },
+  { icon: "handshake", t: "פנייה אלינו ומעקב אחרי מה שסוכם." },
 ];
 
 const socialButtonClass =
@@ -89,23 +90,16 @@ const PersonalAreaLogin = () => {
   };
 
   return (
-    <div className="min-h-screen" dir="rtl" style={{ backgroundColor: IVORY }}>
-      <div className="min-h-screen grid lg:grid-cols-2">
-        {/* ── Entry column: logo + the white card ── */}
-        <div className="dna-page flex flex-col items-center justify-center px-5 sm:px-8 py-8 sm:py-12">
-          <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 300, height: 300, top: -140, left: -120, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
-            />
-          </div>
-
+    <CaFrame tint="sage" className="sd-ca-login-frame">
+      <div className="sd-ca-login">
+        <div className="sd-ca-login-form">
           <motion.div
             initial={reduced ? undefined : { opacity: 0, y: 10 }}
             animate={reduced ? undefined : { opacity: 1, y: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="relative z-10 w-full max-w-[440px]"
+            className="w-full max-w-[440px]"
           >
+            <div className="sd-ca-login-mobile" aria-hidden="true"><SdPic name="02-family-protection" sizes="260px" priority /></div>
             <div className="mb-6 flex items-center justify-between gap-4">
               <Link
                 to="/"
@@ -115,11 +109,10 @@ const PersonalAreaLogin = () => {
                 <img
                   src="/brand/logo.png"
                   alt="שילד ביטוח ופיננסים"
-                  width={118}
-                  height={51}
-                  style={{ height: 51, width: "auto" }}
+                  width={LOGO_W}
+                  height={44}
+                  style={{ height: 44, width: "auto" }}
                   decoding="async"
-                  fetchPriority="high"
                   draggable={false}
                 />
               </Link>
@@ -128,13 +121,14 @@ const PersonalAreaLogin = () => {
               </Link>
             </div>
 
-            <div className="dna-concept !p-6 sm:!p-8">
-              <h1 className="text-[26px] sm:text-[28px] leading-tight" style={{ color: GREEN }}>
+            <div className="sd-ca-formcard">
+              <span className="sd-eyebrow">האזור האישי שלכם</span>
+              <h1 className="mt-3">
                 {step === "choose" && "כניסה לאזור האישי"}
                 {step === "email" && "כניסה עם קוד לאימייל"}
                 {step === "otp" && "הזנת הקוד"}
               </h1>
-              <p className="mt-2 text-[16px] leading-[1.6]" style={{ color: MUTED }}>
+              <p className="sd-ca-sub">
                 {step === "choose" && "בחרו איך להיכנס. הפרטים משמשים לזיהוי בלבד."}
                 {step === "email" && "נשלח לכתובת שתזינו קוד חד-פעמי בן שש ספרות."}
                 {step === "otp" && (
@@ -302,30 +296,21 @@ const PersonalAreaLogin = () => {
           </motion.div>
         </div>
 
-        {/* ── Statement column (desktop): the journey, and what waits inside ── */}
-        <div
-          className="hidden lg:flex items-center justify-center px-12 py-16 border-r"
-          style={{ backgroundColor: PASTEL_SAGE, borderColor: LINE }}
-        >
-          <div className="w-full max-w-[520px]">
-            <Illustration name="01-journey" priority sizes="(min-width: 1024px) 520px, 100vw" />
-            <h2 className="mt-8 text-[30px] leading-tight" style={{ color: GREEN }}>
-              תמונה ברורה. צעד הבא ברור.
-            </h2>
-            <p className="mt-3 text-[17px] leading-[1.7]" style={{ color: BODY }}>
-              ממפים את התיק ומלווים את הדרך. מה מחכה באזור האישי:
-            </p>
-            <ul className="mt-4 border-t" style={{ borderColor: "rgba(32, 57, 87,0.15)" }}>
-              {whatIsInside.map((line) => (
-                <li key={line} className="dna-pill-item !py-3 border-b text-[16px]" style={{ borderColor: "rgba(32, 57, 87,0.15)" }}>
-                  <span>{line}</span>
-                </li>
+        {/* Statement column (desktop): what waits inside */}
+        <div className="sd-ca-login-panel">
+          <div className="sd-ca-login-panel-in">
+            <div className="sd-ca-login-art" aria-hidden="true"><SdPic name="02-family-protection" sizes="(min-width: 1024px) 500px, 100vw" priority /></div>
+            <h2 className="sd-h2 mt-8">הכול שלכם, במקום אחד ושקט.</h2>
+            <p className="sd-text mt-3">אנחנו ממפים את התיק ומלווים את הדרך. מה מחכה באזור האישי:</p>
+            <ul className="sd-ca-ticks">
+              {whatIsInside.map((it) => (
+                <li key={it.t}><SdIcon name={it.icon} size={40} /><span>{it.t}</span></li>
               ))}
             </ul>
           </div>
         </div>
       </div>
-    </div>
+    </CaFrame>
   );
 };
 

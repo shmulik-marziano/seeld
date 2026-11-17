@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { Illustration } from "@/components/brand/Illustration";
+import { CaEmpty, CaLoading } from "@/components/sd/client";
 import { BrandIcon } from "@/components/brand/BrandIcon";
-import { BODY, GREEN, LINE, MUTED } from "@/lib/brand";
+import { GREEN, MUTED } from "@/lib/brand";
 
 type SourceFile = {
   id: string;
@@ -58,28 +57,11 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center py-16" aria-busy="true" aria-live="polite">
-        <Loader2 className="w-7 h-7 animate-spin" style={{ color: GREEN }} aria-hidden="true" />
-        <span className="sr-only">טוען מסמכים</span>
-      </div>
-    );
-  }
+  if (loading) return <CaLoading label="טוען מסמכים" tone="sky" />;
 
   if (files.length === 0) {
     return (
-      <div className="dna-concept !p-8 sm:!p-10 text-center">
-        <Illustration
-          name="06-documents-service"
-          sizes="240px"
-          className="max-w-[240px] mx-auto mb-5"
-        />
-        <h3 className="text-[20px] mb-2" style={{ color: GREEN }}>אין עדיין מסמכים להצגה</h3>
-        <p className="text-[16px] leading-[1.6] max-w-md mx-auto" style={{ color: BODY }}>
-          לאחר שיועלו מסמכים לתיק, הם יופיעו כאן עם תאריך הקליטה ומצב הבדיקה.
-        </p>
-      </div>
+      <CaEmpty art="11-claims-service" tone="sky" title="עוד אין מסמכים להצגה" text="כשיועלו מסמכים לתיק, הם יופיעו כאן עם תאריך הקליטה ומצב הבדיקה. אפשר גם לשלוח לנו מסמך דרך הפניות." />
     );
   }
 
@@ -91,14 +73,14 @@ const DocumentsTab = ({ customerId }: { customerId: string }) => {
           <span dir="ltr" className="tabular-nums">{files.length}</span> מסמכים
         </span>
       </div>
-      <ul className="dna-concept !p-0 overflow-hidden divide-y" style={{ borderColor: LINE }}>
+      <ul className="sd-ca-list">
         {files.map((file) => {
           const status = statusConfig[file.status || "pending"] || statusConfig.pending;
           const displayName = file.original_name || file.file_name || "מסמך";
           const typeLabel = fileTypeLabels[file.file_type || ""] || file.file_type?.toUpperCase() || "קובץ";
 
           return (
-            <li key={file.id} className="flex items-center gap-4 p-4" style={{ borderColor: LINE }}>
+            <li key={file.id}>
               <span
                 className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 text-[14px] font-bold"
                 style={{ backgroundColor: "#DFE9DC", color: GREEN }}

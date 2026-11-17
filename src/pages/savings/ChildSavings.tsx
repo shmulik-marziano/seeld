@@ -50,7 +50,7 @@ const ChildSavings = () => {  const productTypes = [
   ];
 
   const bottomLine =
-    "ב-SEELD אנחנו עוזרים להורים לקבל החלטה מושכלת. נשווה עבורכם את כל הגופים המנהלים, נבדוק ביצועים היסטוריים ודמי ניהול, ונחזור עם המלצה מנומקת על מסלול שמתאים לילדיכם.";
+    "בשילד אנחנו עוזרים להורים לקבל החלטה מושכלת. נשווה עבורכם את כל הגופים המנהלים, נבדוק ביצועים היסטוריים ודמי ניהול, ונחזור עם המלצה מנומקת על מסלול שמתאים לילדיכם.";
 
   const faqItems = [
     {
@@ -72,7 +72,7 @@ const ChildSavings = () => {  const productTypes = [
       heroTitle="חיסכון לכל ילד"
       heroDescription={<>תוכנית חיסכון ממשלתית המבטיחה קרן פתיחה לכל ילד בישראל בהגיעו לגיל <span dir="ltr" className="tabular-nums whitespace-nowrap">18</span>. בחרו את המסלול הנכון והגדילו את הסכום.</>}
       heroCTAText="ייעוץ לחיסכון לכל ילד"
-      typesLabel="איך זה עובד"
+      typesLabel="איך התוכנית עובדת"
       typesTitle="איך התוכנית עובדת"
       typesSubtitle="כל מה שצריך לדעת על חיסכון לכל ילד"
       types={productTypes}

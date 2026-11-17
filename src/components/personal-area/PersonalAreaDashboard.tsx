@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { siteSupabase } from "@/integrations/supabase/site-client";
-import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import ChatTab from "./ChatTab";
 import ClientAIChatbot from "./ClientAIChatbot";
@@ -12,8 +11,11 @@ import FileTab from "./FileTab";
 import { InsbaseConnectCard } from "./InsbaseConnectCard";
 import { LegalFooterDisclaimer } from "./DisclaimerBanner";
 import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
+import { SdIcon, SdPic } from "@/components/sd/primitives";
+import { CaLoading } from "@/components/sd/client";
+import type { Pastel } from "@/components/sd/topics";
 import { callTool, disconnect, finishConnect, loadLink, snapshotSummary, type InsbaseLink } from "@/lib/insbase";
-import { BODY, GREEN, IVORY, LINE, MUTED, PASTEL_MINT, PASTEL_SAGE, PASTEL_SAND, SAGE_ON_GREEN, TINT_SAGE } from "@/lib/brand";
+import { BODY, GREEN, LINE, MUTED } from "@/lib/brand";
 
 /**
  * The personal area in the app-mock structure: בית · תיק · פניות · פרופיל,
@@ -105,16 +107,11 @@ const PersonalAreaDashboard = () => {
     if (!user) return;
     await disconnect(user.id);
     setLink(null);
-    toast.success("התיק נותק מהאזור האישי. הגישה מאינסבייס לא נמחקה; הסוכנות יכולה לבטלה לבקשתכם.");
+    toast.success("התיק נותק מהאזור האישי. הגישה מאינסבייס לא נמחקה; אנחנו יכולים לבטלה לבקשתכם.");
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20" aria-busy="true" aria-live="polite">
-        <Loader2 className="w-8 h-8 animate-spin text-[#203957]" aria-hidden="true" />
-        <span className="sr-only">טוען את התיק</span>
-      </div>
-    );
+    return <CaLoading label="טוען את התיק" tone="sky" />;
   }
 
   const displayName =
@@ -123,15 +120,15 @@ const PersonalAreaDashboard = () => {
     (user?.user_metadata?.full_name as string | undefined) ||
     user?.email?.split("@")[0] || "";
 
-  const tiles: { title: string; desc: string; icon: BrandIconName; tint: string; go: () => void }[] = [
-    { title: "הביטוחים שלי", desc: link ? "כיסויים, סכומים ותשלומים" : "יופיעו אחרי חיבור התיק", icon: "shield", tint: PASTEL_SAND, go: () => setTab("file") },
-    { title: "הכסף שלי", desc: link ? "צבירות, דמי ניהול ונזילות" : "יופיעו אחרי חיבור התיק", icon: "leaf", tint: PASTEL_SAGE, go: () => setTab("file") },
-    { title: "מסמכים", desc: customer ? "הקבצים שנקלטו לתיק" : "שליחת מסמכים ליועץ", icon: "document", tint: PASTEL_MINT, go: () => { setRequestSubject("שליחת מסמך"); setTab("requests"); } },
-    { title: "פניות", desc: "שאלה, עדכון פרטים או בקשה", icon: "message", tint: PASTEL_SAGE, go: () => setTab("requests") },
+  const tiles: { title: string; desc: string; icon: string; tone: Pastel; go: () => void }[] = [
+    { title: "הביטוחים שלי", desc: link ? "כיסויים, סכומים ותשלומים" : "יופיעו אחרי חיבור התיק", icon: "shield", tone: "butter", go: () => setTab("file") },
+    { title: "הכסף שלי", desc: link ? "צבירות, דמי ניהול ונזילות" : "יופיעו אחרי חיבור התיק", icon: "wallet", tone: "sage", go: () => setTab("file") },
+    { title: "מסמכים", desc: customer ? "הקבצים שנקלטו לתיק" : "שליחת מסמכים לצוות", icon: "document", tone: "sky", go: () => { setRequestSubject("שליחת מסמך"); setTab("requests"); } },
+    { title: "פניות", desc: "שאלה, עדכון פרטים או בקשה", icon: "support", tone: "rose", go: () => setTab("requests") },
   ];
 
   const nextAction = !link
-    ? { title: "חיבור התיק", body: "כדי לראות כאן את הפוליסות, הצבירות והכיסויים, חברו את התיק עם תעודת הזהות והקוד האישי מהסוכנות.", cta: "חיבור התיק", go: () => setTab("file") }
+    ? { title: "חיבור התיק", body: "כדי לראות כאן את הפוליסות, הצבירות והכיסויים, חברו את התיק עם תעודת הזהות והקוד האישי שקיבלתם מאיתנו.", cta: "חיבור התיק", go: () => setTab("file") }
     : { title: "עדכון מסמכים", body: "כדי שנוכל להמשיך לקדם את התיק, שלחו לנו מסמכים חדשים או עדכונים ברגע שיש.", cta: "שליחת מסמך", go: () => { setRequestSubject("שליחת מסמך"); setTab("requests"); } };
 
   const profileRows: { label: string; value: string | null | undefined; ltr?: boolean }[] = [
@@ -143,32 +140,14 @@ const PersonalAreaDashboard = () => {
   ];
 
   const TabBar = ({ bottom }: { bottom?: boolean }) => (
-    <nav
-      aria-label="ניווט האזור האישי"
-      className={bottom
-        ? "fixed inset-x-0 bottom-0 z-40 border-t bg-white sm:hidden"
-        : "hidden sm:flex items-center gap-2 border-b mb-8"}
-      style={bottom ? { borderColor: LINE, paddingBottom: "env(safe-area-inset-bottom, 0px)" } : { borderColor: LINE }}
-    >
-      <div className={bottom ? "grid grid-cols-4" : "flex gap-2"}>
-        {MAIN_NAV.map((item) => {
-          const active = tab === item.value;
-          return (
-            <button
-              key={item.value}
-              type="button"
-              onClick={() => setTab(item.value)}
-              aria-current={active ? "page" : undefined}
-              className={bottom
-                ? "flex min-h-[60px] flex-col items-center justify-center gap-1 text-[13px] font-bold"
-                : "flex min-h-[48px] items-center gap-2 px-2 pb-3 text-[16px] font-bold border-b-2 -mb-px transition-colors"}
-              style={active ? { color: GREEN, borderColor: GREEN } : { color: "#55677C", borderColor: "transparent" }}
-            >
-              <BrandIcon name={item.icon} size={bottom ? 22 : 20} />
-              {item.label}
-            </button>
-          );
-        })}
+    <nav aria-label="ניווט האזור האישי" className={bottom ? "sd-ca-bottombar" : "sd-ca-tabs"}>
+      <div style={bottom ? undefined : { display: "contents" }}>
+        {MAIN_NAV.map((item) => (
+          <button key={item.value} type="button" onClick={() => setTab(item.value)} aria-current={tab === item.value ? "page" : undefined}>
+            <BrandIcon name={item.icon} size={bottom ? 22 : 20} />
+            {item.label}
+          </button>
+        ))}
       </div>
     </nav>
   );
@@ -176,12 +155,12 @@ const PersonalAreaDashboard = () => {
   return (
     <div dir="rtl" className="pb-20 sm:pb-0">
       {/* Greeting */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
+      <div className="sd-ca-greet">
         <div>
-          <h2 className="text-[26px] sm:text-[30px] leading-tight" style={{ color: GREEN }}>
+          <h2>
             {tab === "home" ? "התיק שלי" : tab === "file" ? "התיק שלי" : tab === "requests" ? "הפניות שלי" : "הפרופיל שלי"}
           </h2>
-          <p className="mt-1 text-[16px]" style={{ color: MUTED }}>{displayName ? `שלום, ${displayName}` : "ברוכים הבאים לאזור האישי"}</p>
+          <p>{displayName ? `שלום, ${displayName}` : "ברוכים הבאים לאזור האישי"}</p>
         </div>
         <button type="button" onClick={handleSignOut} className="link-rule text-[15px] self-start sm:self-auto">
           <BrandIcon name="close" size={16} />
@@ -194,70 +173,52 @@ const PersonalAreaDashboard = () => {
       {/* ── בית ── */}
       {tab === "home" && (
         <div className="space-y-5">
-          {/* The overview card (mock "מבט כללי") */}
           {link ? (
-            <div className="dna-navy-band relative overflow-hidden rounded-2xl p-5 sm:p-6">
-              <div className="flex items-center gap-3">
-                <BrandIcon name="chart" size={22} style={{ color: SAGE_ON_GREEN }} />
-                <h3 className="text-[20px] leading-tight" style={{ color: IVORY }}>מבט כללי</h3>
+            <section className="sd-ca-panel has-stripe sd-ca-tone-sky">
+              <div className="sd-ca-panel-head">
+                <SdIcon name="chart" size={44} />
+                <h3>מבט כללי</h3>
               </div>
               {snapshot === null ? (
-                <p className="mt-3 text-[15px]" style={{ color: SAGE_ON_GREEN }}>מביאים את תמונת המצב מהתיק.</p>
+                <div className="mt-4"><CaLoading label="מביאים את תמונת המצב מהתיק" tone="sky" /></div>
               ) : snapshot === "" ? (
-                <p className="mt-3 text-[15px]" style={{ color: SAGE_ON_GREEN }}>תמונת המצב לא נטענה. נסו לרענן.</p>
+                <p className="mt-3 text-[16px]" style={{ color: MUTED }}>תמונת המצב לא נטענה. נסו לרענן.</p>
               ) : (
-                <p className="mt-3 text-[16px] leading-[1.7] tabular-nums" style={{ color: IVORY }}>{snapshotSummary(snapshot).summary}</p>
+                <p className="mt-3 text-[17px] leading-[1.75] tabular-nums" style={{ color: BODY }}>{snapshotSummary(snapshot).summary}</p>
               )}
-              <button type="button" onClick={() => setTab("file")} className="btn-on-green-outline mt-5 w-full sm:w-auto">
+              <button type="button" onClick={() => setTab("file")} className="btn-primary mt-5 w-full sm:w-auto">
                 לתמונת המצב המלאה
                 <BrandIcon name="arrow-left" size={18} />
               </button>
-            </div>
+            </section>
           ) : (
             <InsbaseConnectCard compact />
           )}
 
-          {/* Four tiles */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          <div className="sd-ca-tiles">
             {tiles.map((t) => (
-              <button
-                key={t.title}
-                type="button"
-                onClick={t.go}
-                className="group flex flex-col items-start rounded-2xl bg-white border p-4 text-start dna-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#203957]"
-                style={{ borderColor: LINE }}
-              >
-                <span className="flex h-11 w-11 items-center justify-center rounded-full" style={{ background: t.tint }}>
-                  <BrandIcon name={t.icon} size={22} style={{ color: GREEN }} />
-                </span>
-                <span className="mt-3 text-[17px] font-bold leading-tight" style={{ color: GREEN }}>{t.title}</span>
-                <span className="mt-1 text-[14px] leading-[1.5]" style={{ color: MUTED }}>{t.desc}</span>
-                <span className="mt-2 inline-flex items-center gap-1 text-[14px] font-bold" style={{ color: GREEN }}>
-                  <BrandIcon name="arrow-left" size={16} className="transition-transform group-hover:-translate-x-1" />
-                </span>
+              <button key={t.title} type="button" onClick={t.go} className={`sd-ca-tile sd-ca-tone-${t.tone}`}>
+                <span className="sd-ca-tile-ic" aria-hidden="true"><SdIcon name={t.icon} size={32} /></span>
+                <b>{t.title}</b>
+                <span className="d">{t.desc}</span>
+                <span className="go" aria-hidden="true"><BrandIcon name="arrow-left" size={18} /></span>
               </button>
             ))}
           </div>
 
-          {/* Next action */}
-          <div>
-            <h3 className="text-[18px] mb-3" style={{ color: GREEN }}>הפעולה הבאה</h3>
-            <div className="rounded-2xl p-5" style={{ background: TINT_SAGE }}>
-              <div className="flex items-start gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white" style={{ boxShadow: `inset 0 0 0 1px ${LINE}` }}>
-                  <BrandIcon name="upload" size={20} style={{ color: GREEN }} />
-                </span>
-                <div className="min-w-0">
-                  <p className="text-[17px] font-bold" style={{ color: GREEN }}>{nextAction.title}</p>
-                  <p className="mt-1 text-[15px] leading-[1.6]" style={{ color: BODY }}>{nextAction.body}</p>
-                </div>
+          <section className="sd-ca-soft sd-ca-tone-butter">
+            <div className="sd-ca-split has-art">
+              <div>
+                <h3>הצעד הבא: {nextAction.title}</h3>
+                <p className="mt-2 text-[16px] leading-[1.75]">{nextAction.body}</p>
+                <button type="button" onClick={nextAction.go} className="btn-primary mt-4 w-full sm:w-auto">{nextAction.cta}</button>
               </div>
-              <button type="button" onClick={nextAction.go} className="btn-primary mt-4 w-full sm:w-auto">{nextAction.cta}</button>
+              <div className="sd-ca-split-art" aria-hidden="true"><SdPic name="11-claims-service" sizes="190px" /></div>
             </div>
-          </div>
+          </section>
 
           <p className="text-[14px] leading-[1.6]" style={{ color: MUTED }}>
-            המידע באזור האישי מוצג כפי שהוא רשום במקורות, עם מקור ותאריך. הוא אינו ייעוץ. החלטות מקבלים יחד עם הסוכנות.
+            המידע באזור האישי מוצג כפי שהוא רשום במקורות, עם מקור ותאריך. הוא אינו ייעוץ. החלטות מקבלים יחד איתנו.
           </p>
         </div>
       )}
@@ -279,10 +240,10 @@ const PersonalAreaDashboard = () => {
       {tab === "requests" && (
         <div className="space-y-8">
           <RequestsPanel initialSubject={requestSubject} onSubjectConsumed={() => setRequestSubject(null)} link={link} />
-          <section className="rounded-2xl bg-white border p-5 sm:p-6" style={{ borderColor: LINE }}>
+          <section className="sd-ca-panel has-stripe sd-ca-tone-lavender">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
-                <h3 className="text-[18px] leading-tight" style={{ color: GREEN }}>היועץ הדיגיטלי</h3>
+                <h3>העוזר הדיגיטלי</h3>
                 <p className="mt-1 text-[14px]" style={{ color: MUTED }}>שאלות כלליות על ביטוח, פנסיה וחיסכון. לא נתון אישי ולא ייעוץ.</p>
               </div>
               <button type="button" onClick={() => setAssistant((v) => !v)} className="btn-secondary w-full sm:w-auto" aria-expanded={assistant}>
@@ -293,7 +254,7 @@ const PersonalAreaDashboard = () => {
           </section>
           {customer && (
             <section>
-              <h3 className="text-[18px] mb-3" style={{ color: GREEN }}>הודעות עם היועץ</h3>
+              <h3 className="text-[20px] mb-3" style={{ color: GREEN }}>הודעות לצוות שלנו</h3>
               <ChatTab customerId={customer.id} customerName={displayName || "לקוח"} />
             </section>
           )}
@@ -303,7 +264,7 @@ const PersonalAreaDashboard = () => {
       {/* ── פרופיל ── */}
       {tab === "profile" && (
         <div className="space-y-5">
-          <div className="rounded-2xl bg-white border p-5 sm:p-6" style={{ borderColor: LINE }}>
+          <div className="sd-ca-panel has-stripe sd-ca-tone-sage">
             <dl className="border-t" style={{ borderColor: LINE }}>
               {profileRows.map((row) => (
                 <div key={row.label} className="flex items-baseline justify-between gap-4 py-3 border-b" style={{ borderColor: LINE }}>
@@ -317,18 +278,18 @@ const PersonalAreaDashboard = () => {
             <p className="mt-4 text-[14px]" style={{ color: MUTED }}>עדכון פרטים נעשה דרך פנייה, כדי שהתיק והפוליסות יישארו תואמים.</p>
           </div>
 
-          <div className="rounded-2xl p-5 sm:p-6" style={{ background: TINT_SAGE }}>
-            <h3 className="text-[18px]" style={{ color: GREEN }}>החיבור לאינסבייס</h3>
+          <div className="sd-ca-soft sd-ca-tone-sky">
+            <h3>החיבור לאינסבייס</h3>
             {link ? (
               <>
                 <p className="mt-1 text-[15px] leading-[1.6]" style={{ color: BODY }}>
-                  התיק מחובר מ-{formatDate(link.connected_at)}. הניתוק מוחק את מפתחות הגישה מהאזור האישי; כדי לבטל את הגישה גם באינסבייס, פנו לסוכנות.
+                  התיק מחובר מ-{formatDate(link.connected_at)}. הניתוק מוחק את מפתחות הגישה מהאזור האישי; כדי לבטל את הגישה גם באינסבייס, פנו אלינו.
                 </p>
                 <button type="button" onClick={handleDisconnect} className="btn-secondary mt-4 w-full sm:w-auto">ניתוק התיק</button>
               </>
             ) : (
               <>
-                <p className="mt-1 text-[15px] leading-[1.6]" style={{ color: BODY }}>התיק עדיין לא מחובר. החיבור נעשה עם תעודת זהות והקוד האישי מהסוכנות.</p>
+                <p className="mt-1 text-[15px] leading-[1.6]" style={{ color: BODY }}>התיק עדיין לא מחובר. החיבור נעשה עם תעודת זהות והקוד האישי שקיבלתם מאיתנו.</p>
                 <button type="button" onClick={() => setTab("file")} className="btn-primary mt-4 w-full sm:w-auto">חיבור התיק</button>
               </>
             )}

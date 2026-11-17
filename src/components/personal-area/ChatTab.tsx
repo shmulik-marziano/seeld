@@ -2,7 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { untypedSupabase } from "@/integrations/supabase/site-client";
 import { Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { Illustration } from "@/components/brand/Illustration";
+import { SdPic } from "@/components/sd/primitives";
+import { CaLoading } from "@/components/sd/client";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { BODY, GREEN, IVORY, LINE, MUTED, SAGE_ON_GREEN } from "@/lib/brand";
 
@@ -133,18 +134,11 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
     }
   });
 
-  if (loading) {
-    return (
-      <div className="flex justify-center py-16" aria-busy="true" aria-live="polite">
-        <Loader2 className="w-7 h-7 animate-spin" style={{ color: GREEN }} aria-hidden="true" />
-        <span className="sr-only">טוען הודעות</span>
-      </div>
-    );
-  }
+  if (loading) return <CaLoading label="טוען הודעות" tone="lavender" />;
 
   return (
     <div
-      className="dna-concept !p-0 overflow-hidden flex flex-col relative"
+      className="sd-ca-list flex flex-col relative"
       style={{ height: "calc(100dvh - 220px)", minHeight: 420 }}
     >
       {/* Header */}
@@ -153,9 +147,9 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
           <BrandIcon name="message" size={20} style={{ color: GREEN }} />
         </div>
         <div>
-          <h3 className="text-[16px]" style={{ color: IVORY }}>הודעה ליועץ</h3>
+          <h3 className="text-[16px]" style={{ color: IVORY }}>הודעה לצוות שלנו</h3>
           <p className="text-[14px]" style={{ color: SAGE_ON_GREEN }}>
-            {customerName ? `${customerName}, ` : ""}כתבו כאן והיועץ יענה באותה שיחה.
+            {customerName ? `${customerName}, ` : ""}כתבו כאן ואנחנו נענה באותה שיחה.
           </p>
         </div>
       </div>
@@ -169,13 +163,9 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
       >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-4">
-            <Illustration
-              name="06-documents-service"
-              sizes="200px"
-              className="max-w-[200px] mb-4"
-            />
+            <div className="max-w-[220px] mb-4" aria-hidden="true"><SdPic name="11-claims-service" sizes="220px" /></div>
             <p className="text-[16px] leading-[1.6] max-w-sm" style={{ color: BODY }}>
-              אין עדיין פניות. כתבו ליועץ, והתשובה תישמר כאן.
+              עוד לא כתבתם לנו. כתבו כאן, והתשובה תישמר באותה שיחה.
             </p>
           </div>
         ) : (
@@ -228,7 +218,7 @@ const ChatTab = ({ customerId, customerName }: { customerId: string; customerNam
           className="flex items-center gap-2"
           onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
         >
-          <label htmlFor="pa-chat-input" className="sr-only">ההודעה ליועץ</label>
+          <label htmlFor="pa-chat-input" className="sr-only">ההודעה לצוות שלנו</label>
           <input
             id="pa-chat-input"
             type="text"

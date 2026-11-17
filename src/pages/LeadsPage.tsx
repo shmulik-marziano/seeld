@@ -1,3 +1,4 @@
+import { AppEmpty } from '@/components/layout/AppEmpty';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { siteSupabase } from '@/integrations/supabase/site-client';
@@ -313,17 +314,12 @@ export default function LeadsPage() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="bg-white rounded-2xl border border-[#E8E6DE] p-12 text-center">
-          <div className="w-16 h-16 rounded-full bg-[#7C5C22]/10 flex items-center justify-center mx-auto mb-4">
-            <Target className="w-8 h-8 text-[#7C5C22]" />
-          </div>
-          <p className="text-lg font-bold text-[#203957] mb-2">
-            {leads.length === 0 ? 'אין לידים עדיין' : 'לא נמצאו תוצאות'}
-          </p>
-          <p className="text-sm text-[#55677C]">
-            {leads.length === 0
-              ? 'לידים שנכנסים מהאתר יופיעו כאן אוטומטית'
-              : 'נסה לשנות את מסנני החיפוש'}
-          </p>
+          <AppEmpty
+            art="01-hero"
+            tone="sky"
+            title={leads.length === 0 ? 'אין לידים עדיין' : 'לא נמצאו תוצאות'}
+            text={leads.length === 0 ? 'לידים שנכנסים מהאתר יופיעו כאן אוטומטית' : 'נסה לשנות את מסנני החיפוש'}
+          />
         </div>
       ) : (
         <div className="space-y-3">

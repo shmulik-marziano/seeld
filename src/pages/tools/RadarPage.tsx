@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, Radar, CheckCircle, AlertTriangle, Eye,
   MoreVertical, Shield, BarChart3, Clock, FileText,
@@ -10,7 +9,7 @@ const MOCK_COMPLIANCE = [
   { id: 1, category: "הסכמת לקוח", item: "חתימה על טופס 17 — יוסי כהן", regulation: "חוזר רגולציה 2024-01", dueDate: "2026-03-28", status: "תקין", risk: "נמוך" },
   { id: 2, category: "תיעוד פגישות", item: "פגישת ייעוץ — מיכל לוי", regulation: "חובת תיעוד", dueDate: "2026-03-25", status: "חסר", risk: "גבוה" },
   { id: 3, category: "גילוי נאות", item: "מכתב גילוי — דוד ישראלי", regulation: "חוזר גילוי 2023-05", dueDate: "2026-03-30", status: "תקין", risk: "נמוך" },
-  { id: 4, category: "הכשרה", item: "השתלמות שנתית — שמוליק", regulation: "חובת הכשרה 12 שעות", dueDate: "2026-06-30", status: "בתהליך", risk: "בינוני" },
+  { id: 4, category: "הכשרה", item: "השתלמות שנתית — צוות הסוכנות", regulation: "חובת הכשרה 12 שעות", dueDate: "2026-06-30", status: "בתהליך", risk: "בינוני" },
   { id: 5, category: "דו״ח שנתי", item: "דו״ח ציות רבעון 1", regulation: "דיווח רגולטורי", dueDate: "2026-04-15", status: "בהכנה", risk: "בינוני" },
   { id: 6, category: "ביטוח מקצועי", item: "חידוש ביטוח אחריות מקצועית", regulation: "חובת ביטוח", dueDate: "2026-05-01", status: "תקין", risk: "נמוך" },
 ];
@@ -29,16 +28,15 @@ const RISK_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function RadarPage() {
-  const tool = getToolBySlug("radar")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_COMPLIANCE.filter((c) => c.item.includes(search) || c.category.includes(search));
 
   const stats = [
-    { label: "פריטי בקרה", value: "42", change: "+3", icon: Radar, color: tool.color },
+    { label: "פריטי בקרה", value: "42", change: "+3", icon: Radar, color: "#203957" },
     { label: "תקינים", value: "35", change: "+2", icon: CheckCircle, color: "#2F6B4E" },
-    { label: "דורשים טיפול", value: "4", change: "+1", icon: AlertTriangle, color: "#AD833E" },
-    { label: "סיכון גבוה", value: "1", change: "-", icon: Shield, color: "#BD582D" },
+    { label: "דורשים טיפול", value: "4", change: "+1", icon: AlertTriangle, color: "#7C5C22" },
+    { label: "סיכון גבוה", value: "1", change: "-", icon: Shield, color: "#9A4520" },
   ];
 
   return (

@@ -139,3 +139,18 @@ a.sd-pub-card:hover { transform: translateY(-4px); box-shadow: 0 1px 2px rgba(32
 .sd .sd-pub-scroll { overflow-x: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); }
 
 @media print { .sd-pub-close, .sd-subnav, .sd-hero .sd-stage { display: none !important; } }
+
+/* wide tables: own scroller with an edge fade and a hint (components/returns/ScrollX) */
+.sd-scrollx { max-width: 100%; }
+.sd-scrollx-box { position: relative; }
+.sd-scrollx-scroll { overflow-x: auto; max-width: 100%; border-radius: 10px; overscroll-behavior-x: contain; }
+.sd-scrollx-scroll:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.sd-scrollx-fade { position: absolute; inset-block: 0; inset-inline-end: auto; left: 0; width: 44px; pointer-events: none; border-radius: 10px 0 0 10px; background: linear-gradient(to right, rgba(32,57,87,.16), rgba(32,57,87,0)); }
+.sd-scrollx-hint { margin-top: 8px; font-size: 13px; color: var(--muted); }
+.sd-mm .dna-data th, .sd-mm .dna-data td { padding-inline: 10px; }
+
+/* hero grids: the text column may shrink below its content (chip rows scroll inside, never widen the page) */
+.sd-hero-copy { min-width: 0; }
+.sd-hero-copy nav[aria-label="מוצרים"] { max-width: 100%; }
+.sd:has(.sd-pub-close) .sd-chrome-foot-top { display: none; }
+.sd:has(.sd-pub-close) .sd-chrome-foot-wrap { padding-top: clamp(32px, 4vw, 52px); }

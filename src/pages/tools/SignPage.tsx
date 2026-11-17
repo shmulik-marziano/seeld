@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, PenTool, CheckCircle, Clock, Send,
   MoreVertical, FileText, AlertTriangle, Shield,
@@ -23,16 +22,15 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function SignPage() {
-  const tool = getToolBySlug("sign")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_SIGNATURES.filter((s) => s.client.includes(search) || s.document.includes(search));
 
   const stats = [
-    { label: "מסמכים שנחתמו", value: "89", change: "+12", icon: PenTool, color: tool.color },
-    { label: "ממתינים לחתימה", value: "7", change: "-2", icon: Clock, color: "#AD833E" },
+    { label: "מסמכים שנחתמו", value: "89", change: "+12", icon: PenTool, color: "#203957" },
+    { label: "ממתינים לחתימה", value: "7", change: "-2", icon: Clock, color: "#7C5C22" },
     { label: "שיעור חתימה", value: "92%", change: "+3%", icon: CheckCircle, color: "#2F6B4E" },
-    { label: "פגי תוקף", value: "3", change: "+1", icon: AlertTriangle, color: "#BD582D" },
+    { label: "פגי תוקף", value: "3", change: "+1", icon: AlertTriangle, color: "#9A4520" },
   ];
 
   return (

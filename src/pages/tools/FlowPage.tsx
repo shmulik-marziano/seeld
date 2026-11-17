@@ -1,19 +1,18 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, CheckSquare, CheckCircle, Clock, Calendar,
   MoreVertical, User, AlertTriangle, Flag, Circle,
 } from "lucide-react";
 
 const MOCK_TASKS = [
-  { id: 1, title: "להתקשר ליוסי כהן — אישור המלצות", assignee: "שמוליק", client: "יוסי כהן", priority: "גבוהה", dueDate: "2026-03-25", status: "פתוח", category: "טלפון" },
-  { id: 2, title: "לשלוח סיכום פגישה למיכל לוי", assignee: "שמוליק", client: "מיכל לוי", priority: "רגילה", dueDate: "2026-03-25", status: "פתוח", category: "מייל" },
-  { id: 3, title: "להגיש טופס העברה — דוד ישראלי", assignee: "מירב", client: "דוד ישראלי", priority: "דחופה", dueDate: "2026-03-25", status: "בתהליך", category: "טופס" },
-  { id: 4, title: "לבדוק סטטוס חיתום — שרה אברהם", assignee: "שמוליק", client: "שרה אברהם", priority: "רגילה", dueDate: "2026-03-26", status: "פתוח", category: "בדיקה" },
-  { id: 5, title: "לתאם פגישה עם אבי מזרחי", assignee: "שמוליק", client: "אבי מזרחי", priority: "רגילה", dueDate: "2026-03-27", status: "הושלם", category: "פגישה" },
-  { id: 6, title: "לעדכן מוטבים — רחל גולן", assignee: "מירב", client: "רחל גולן", priority: "גבוהה", dueDate: "2026-03-26", status: "בתהליך", category: "טופס" },
-  { id: 7, title: "חידוש ביטוח רכב — רשת אופנה פלוס", assignee: "שמוליק", client: "רשת אופנה פלוס", priority: "דחופה", dueDate: "2026-03-25", status: "פתוח", category: "חידוש" },
+  { id: 1, title: "להתקשר ליוסי כהן — אישור המלצות", assignee: "דנה לוי", client: "יוסי כהן", priority: "גבוהה", dueDate: "2026-03-25", status: "פתוח", category: "טלפון" },
+  { id: 2, title: "לשלוח סיכום פגישה למיכל לוי", assignee: "דנה לוי", client: "מיכל לוי", priority: "רגילה", dueDate: "2026-03-25", status: "פתוח", category: "מייל" },
+  { id: 3, title: "להגיש טופס העברה — דוד ישראלי", assignee: "נועה ברק", client: "דוד ישראלי", priority: "דחופה", dueDate: "2026-03-25", status: "בתהליך", category: "טופס" },
+  { id: 4, title: "לבדוק סטטוס חיתום — שרה אברהם", assignee: "דנה לוי", client: "שרה אברהם", priority: "רגילה", dueDate: "2026-03-26", status: "פתוח", category: "בדיקה" },
+  { id: 5, title: "לתאם פגישה עם אבי מזרחי", assignee: "דנה לוי", client: "אבי מזרחי", priority: "רגילה", dueDate: "2026-03-27", status: "הושלם", category: "פגישה" },
+  { id: 6, title: "לעדכן מוטבים — רחל גולן", assignee: "נועה ברק", client: "רחל גולן", priority: "גבוהה", dueDate: "2026-03-26", status: "בתהליך", category: "טופס" },
+  { id: 7, title: "חידוש ביטוח רכב — רשת אופנה פלוס", assignee: "דנה לוי", client: "רשת אופנה פלוס", priority: "דחופה", dueDate: "2026-03-25", status: "פתוח", category: "חידוש" },
 ];
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
@@ -35,7 +34,6 @@ const STATUS_ICONS: Record<string, React.ElementType> = {
 };
 
 export default function FlowPage() {
-  const tool = getToolBySlug("flow")!;
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
@@ -49,10 +47,10 @@ export default function FlowPage() {
   const openTasks = MOCK_TASKS.filter((t) => t.status !== "הושלם");
 
   const stats = [
-    { label: "משימות להיום", value: todayTasks.length.toString(), change: "-", icon: Calendar, color: tool.color },
-    { label: "פתוחות", value: openTasks.length.toString(), change: "+2", icon: CheckSquare, color: "#AD833E" },
+    { label: "משימות להיום", value: todayTasks.length.toString(), change: "-", icon: Calendar, color: "#203957" },
+    { label: "פתוחות", value: openTasks.length.toString(), change: "+2", icon: CheckSquare, color: "#7C5C22" },
     { label: "הושלמו השבוע", value: "14", change: "+5", icon: CheckCircle, color: "#2F6B4E" },
-    { label: "דחופות", value: MOCK_TASKS.filter((t) => t.priority === "דחופה" && t.status !== "הושלם").length.toString(), change: "+1", icon: AlertTriangle, color: "#BD582D" },
+    { label: "דחופות", value: MOCK_TASKS.filter((t) => t.priority === "דחופה" && t.status !== "הושלם").length.toString(), change: "+1", icon: AlertTriangle, color: "#9A4520" },
   ];
 
   return (

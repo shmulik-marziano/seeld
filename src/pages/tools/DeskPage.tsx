@@ -1,18 +1,17 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, Headphones, CheckCircle, Clock, AlertTriangle,
   MoreVertical, MessageSquare, User, Tag,
 } from "lucide-react";
 
 const MOCK_TICKETS = [
-  { id: "T-1024", client: "יוסי כהן", subject: "שינוי מוטבים — פנסיה מגדל", category: "שינוי מוטבים", priority: "רגילה", status: "פתוח", assignee: "שמוליק", date: "2026-03-24" },
-  { id: "T-1023", client: "מיכל לוי", subject: "הנפקת אישור ביטוח לבנק", category: "אישורים", priority: "דחוף", status: "בטיפול", assignee: "שמוליק", date: "2026-03-23" },
-  { id: "T-1022", client: "דוד ישראלי", subject: "עדכון כתובת בכל הפוליסות", category: "עדכון פרטים", priority: "רגילה", status: "הושלם", assignee: "מירב", date: "2026-03-22" },
-  { id: "T-1021", client: "שרה אברהם", subject: "בירור חיוב כפול בביטוח רכב", category: "בירור חיוב", priority: "גבוהה", status: "בטיפול", assignee: "שמוליק", date: "2026-03-21" },
-  { id: "T-1020", client: "אבי מזרחי", subject: "בקשה לקבלת דו״ח שנתי", category: "אישורים", priority: "רגילה", status: "הושלם", assignee: "מירב", date: "2026-03-20" },
-  { id: "T-1019", client: "רחל גולן", subject: "שינוי אמצעי תשלום", category: "עדכון פרטים", priority: "רגילה", status: "פתוח", assignee: "שמוליק", date: "2026-03-19" },
+  { id: "T-1024", client: "יוסי כהן", subject: "שינוי מוטבים — פנסיה מגדל", category: "שינוי מוטבים", priority: "רגילה", status: "פתוח", assignee: "דנה לוי", date: "2026-03-24" },
+  { id: "T-1023", client: "מיכל לוי", subject: "הנפקת אישור ביטוח לבנק", category: "אישורים", priority: "דחוף", status: "בטיפול", assignee: "דנה לוי", date: "2026-03-23" },
+  { id: "T-1022", client: "דוד ישראלי", subject: "עדכון כתובת בכל הפוליסות", category: "עדכון פרטים", priority: "רגילה", status: "הושלם", assignee: "נועה ברק", date: "2026-03-22" },
+  { id: "T-1021", client: "שרה אברהם", subject: "בירור חיוב כפול בביטוח רכב", category: "בירור חיוב", priority: "גבוהה", status: "בטיפול", assignee: "דנה לוי", date: "2026-03-21" },
+  { id: "T-1020", client: "אבי מזרחי", subject: "בקשה לקבלת דו״ח שנתי", category: "אישורים", priority: "רגילה", status: "הושלם", assignee: "נועה ברק", date: "2026-03-20" },
+  { id: "T-1019", client: "רחל גולן", subject: "שינוי אמצעי תשלום", category: "עדכון פרטים", priority: "רגילה", status: "פתוח", assignee: "דנה לוי", date: "2026-03-19" },
 ];
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
@@ -28,16 +27,15 @@ const PRIORITY_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function DeskPage() {
-  const tool = getToolBySlug("desk")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_TICKETS.filter((t) => t.client.includes(search) || t.subject.includes(search) || t.id.includes(search));
 
   const stats = [
-    { label: "פניות פתוחות", value: "14", change: "+3", icon: Headphones, color: tool.color },
+    { label: "פניות פתוחות", value: "14", change: "+3", icon: Headphones, color: "#203957" },
     { label: "טופלו היום", value: "6", change: "+2", icon: CheckCircle, color: "#2F6B4E" },
-    { label: "זמן טיפול ממוצע", value: "2.4 שע׳", change: "-0.3", icon: Clock, color: "#AD833E" },
-    { label: "דחופים", value: "2", change: "+1", icon: AlertTriangle, color: "#BD582D" },
+    { label: "זמן טיפול ממוצע", value: "2.4 שע׳", change: "-0.3", icon: Clock, color: "#7C5C22" },
+    { label: "דחופים", value: "2", change: "+1", icon: AlertTriangle, color: "#9A4520" },
   ];
 
   return (

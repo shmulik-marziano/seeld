@@ -6,7 +6,7 @@ const RentersInsurance = () => {
     <InsurancePageSd
       heroIcon={Package}
       heroIconColor="#b91c1c"
-      heroCategory="ביטוח תכולה לשוכרים"
+      heroCategory="לדיירים בשכירות"
       heroTitle="ביטוח תכולה לשוכרים"
       heroDescription="הגנה על הרכוש האישי שלכם בדירה שכורה: רהיטים, מכשירי חשמל ופריטים אישיים מכוסים מפני נזק, גניבה והצפה."
       breadcrumbLabel="ביטוח תכולה לשוכרים"

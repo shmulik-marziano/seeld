@@ -12,7 +12,9 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
-import { SeeIDLogo } from '@/components/brand/SeeIDLogo';
+import { CaFrame, CaLoadingPage, CaScreen, LOGO_W } from '@/components/sd/client';
+import { SdIcon, SdPic } from '@/components/sd/primitives';
+import type { ArtName, Pastel } from '@/components/sd/topics';
 
 // ==================== TYPES ====================
 type PortalState =
@@ -325,17 +327,7 @@ export default function ClientPortalPage() {
   // ==================== RENDER STATE SCREENS ====================
 
   // --- LOADING ---
-  if (state === 'loading') {
-    return (
-      <div className="min-h-screen flex items-center justify-center" dir="rtl"
-        style={{ background: 'linear-gradient(165deg, hsl(38,30%,96%) 0%, hsl(35,22%,88%) 100%)' }}>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center space-y-4">
-          <Loader2 className="h-10 w-10 animate-spin mx-auto text-primary" />
-          <p className="text-sm text-muted-foreground">טוען...</p>
-        </motion.div>
-      </div>
-    );
-  }
+  if (state === 'loading') return <CaLoadingPage label="טוענים את ההמלצות שלכם" tint="sky" art="10-financial-planning" />;
 
   // --- INVALID TOKEN ---
   if (state === 'invalid') {
@@ -343,7 +335,7 @@ export default function ClientPortalPage() {
       <StatusScreen
         icon={<AlertTriangle className="h-16 w-16 text-destructive" />}
         title="הקישור אינו תקף"
-        description="ייתכן שהקישור שגוי או שאינו קיים יותר. פנה לסוכן שלך לקבלת קישור חדש."
+        description="ייתכן שהקישור שגוי או שאינו קיים יותר. כתבו לנו או התקשרו, ונשלח קישור חדש."
       />
     );
   }
@@ -354,7 +346,7 @@ export default function ClientPortalPage() {
       <StatusScreen
         icon={<Clock className="h-16 w-16 text-[hsl(var(--accent))]" />}
         title="הקישור פג תוקף"
-        description="הקישור שקיבלת כבר אינו בתוקף. פנה לסוכן שלך לקבלת קישור מעודכן."
+        description="הקישור שקיבלת כבר אינו בתוקף. כתבו לנו או התקשרו, ונשלח קישור מעודכן."
       />
     );
   }
@@ -365,7 +357,7 @@ export default function ClientPortalPage() {
       <StatusScreen
         icon={<Lock className="h-16 w-16 text-muted-foreground" />}
         title="הסיכום אינו זמין"
-        description="סיכום ההמלצות הועבר לארכיון. פנה לסוכן שלך לפרטים נוספים."
+        description="סיכום ההמלצות הועבר לארכיון. כתבו לנו או התקשרו לפרטים נוספים."
       />
     );
   }
@@ -376,7 +368,7 @@ export default function ClientPortalPage() {
       <StatusScreen
         icon={<RefreshCw className="h-16 w-16 text-[hsl(var(--accent))]" />}
         title="קיימת גרסה חדשה"
-        description="הסוכן שלך שלח לך גרסה מעודכנת של ההמלצות. בדוק את ההודעות שלך לקישור החדש."
+        description="שלחנו לכם גרסה מעודכנת של ההמלצות. אפשר לבדוק בהודעות את הקישור החדש."
       />
     );
   }
@@ -387,7 +379,7 @@ export default function ClientPortalPage() {
       <StatusScreen
         icon={<Shield className="h-16 w-16 text-destructive" />}
         title="הגישה נחסמה זמנית"
-        description="בוצעו יותר מדי ניסיונות הזדהות שגויים. נסה שוב בעוד 15 דקות, או פנה לסוכן שלך."
+        description="בוצעו יותר מדי ניסיונות הזדהות שגויים. אפשר לנסות שוב בעוד 15 דקות, או לפנות אלינו."
       />
     );
   }
@@ -396,9 +388,10 @@ export default function ClientPortalPage() {
   if (state === 'submitted') {
     return (
       <StatusScreen
+        tint="sage" art="02-family-protection"
         icon={<CheckCircle2 className="h-20 w-20 text-[hsl(var(--success))]" />}
-        title="ההחלטות נשלחו בהצלחה!"
-        description={`תודה ${displayName}! הסוכן שלך יקבל את הבחירות ויחזור אליך בהקדם.`}
+        title="ההחלטות נשלחו. תודה."
+        description={`תודה ${displayName}. קיבלנו את הבחירות ונחזור אליכם בהקדם.`}
         showStats
         stats={{ approved: approvedCount, thinking: thinkingCount, declined: declinedCount }}
       />
@@ -409,9 +402,10 @@ export default function ClientPortalPage() {
   if (state === 'already_submitted') {
     return (
       <StatusScreen
+        tint="sage" art="02-family-protection"
         icon={<FileCheck className="h-16 w-16 text-[hsl(var(--success))]" />}
-        title="כבר שלחת את הבחירות שלך"
-        description="ההחלטות שלך כבר נשמרו ונשלחו לסוכן. אם ברצונך לעדכן, פנה לסוכן שלך."
+        title="כבר שלחתם את הבחירות"
+        description="ההחלטות שלכם כבר נשמרו ונשלחו אלינו. אם תרצו לעדכן, כתבו לנו."
       />
     );
   }
@@ -419,145 +413,65 @@ export default function ClientPortalPage() {
   // ==================== WELCOME SCREEN ====================
   if (state === 'welcome') {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" dir="rtl"
-        style={{ background: 'linear-gradient(165deg, hsl(38,30%,96%) 0%, hsl(35,22%,88%) 100%)' }}>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="max-w-[400px] w-full text-center space-y-8"
-        >
-          <div className="space-y-4">
-            <SeeIDLogo size={80} showText showSubtitle />
-          </div>
-
-          <div className="space-y-3">
-            <h1 className="text-2xl font-bold text-foreground leading-tight">
-              ריכזנו עבורך את ההמלצות<br />בצורה פשוטה וברורה
-            </h1>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-[300px] mx-auto">
-              כאן תוכל/י לראות את המצב הקיים, את ההמלצות שלנו, ולסמן מה נכון לך.
-            </p>
-          </div>
-
-          <div className="flex justify-center gap-6">
-            {[
-              { icon: Eye, label: 'צפייה במוצרים' },
-              { icon: Star, label: 'המלצות מקצועיות' },
-              { icon: CheckCircle2, label: 'בחירה קלה' },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + i * 0.1 }}
-                className="flex flex-col items-center gap-1.5"
-              >
-                <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <item.icon className="h-5 w-5 text-primary" />
-                </div>
-                <span className="text-[10px] font-medium text-muted-foreground">{item.label}</span>
-              </motion.div>
-            ))}
-          </div>
-
-          <motion.button
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5 }}
-            onClick={() => setState('verify')}
-            className="w-full h-14 rounded-2xl text-lg font-bold text-primary-foreground flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg"
-            style={{ background: 'linear-gradient(135deg, hsl(var(--accent)), hsl(28,45%,42%))' }}
-          >
-            <Sparkles className="h-5 w-5" />
-            התחל/י לצפות
-          </motion.button>
-
-          <div className="flex items-center justify-center gap-2 text-[11px] text-muted-foreground">
-            <Lock className="h-3 w-3" />
-            <span>מאובטח ומוצפן · פרטיותך שמורה</span>
-          </div>
-        </motion.div>
-      </div>
+      <CaScreen tint="sky" art="10-financial-planning">
+        <span className="sd-eyebrow">ההמלצות שלכם</span>
+        <h1 className="mt-3">ריכזנו עבורכם את ההמלצות, בצורה פשוטה וברורה</h1>
+        <p>כאן אפשר לראות את המצב הקיים, את ההמלצות שלנו, ולסמן מה נכון לכם. בלי לחץ ובלי למהר.</p>
+        <ul className="sd-ca-ticks">
+          {[
+            { icon: 'search', label: 'צפייה במוצרים הקיימים' },
+            { icon: 'checklist', label: 'ההמלצות שלנו, עם ההסבר' },
+            { icon: 'handshake', label: 'בחירה קלה, וההחלטה תמיד שלכם' },
+          ].map((item) => (
+            <li key={item.label}><SdIcon name={item.icon} size={40} /><span>{item.label}</span></li>
+          ))}
+        </ul>
+        <div className="sd-ca-actions">
+          <button type="button" onClick={() => setState('verify')} className="sd-btn">התחלה<ArrowLeft className="h-5 w-5" aria-hidden="true" /></button>
+        </div>
+        <p className="sd-ca-fine"><Lock className="inline h-3.5 w-3.5 align-[-2px]" aria-hidden="true" /> מאובטח ומוצפן. הפרטיות שלכם שמורה.</p>
+      </CaScreen>
     );
   }
 
   // ==================== VERIFY SCREEN ====================
   if (state === 'verify') {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" dir="rtl"
-        style={{ background: 'linear-gradient(165deg, hsl(38,30%,96%) 0%, hsl(35,22%,88%) 100%)' }}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="max-w-[380px] w-full"
+      <CaScreen tint="sky" art="01-hero">
+        <h1>רגע קטן לפני שנכנסים</h1>
+        <p>לשמירה על הפרטיות שלכם, הזינו את 4 הספרות האחרונות של תעודת הזהות.</p>
+        <div className="mt-6">
+          <label htmlFor="id-verify-input" className="sd-ca-field-label">4 ספרות אחרונות של ת״ז</label>
+          <input
+            id="id-verify-input"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={9}
+            autoComplete="off"
+            value={idInput}
+            onChange={e => {
+              const v = e.target.value.replace(/\D/g, '').slice(0, 9);
+              setIdInput(v);
+            }}
+            className="field text-center text-[22px] font-bold tracking-[0.3em]"
+            dir="ltr"
+            aria-invalid={idError ? 'true' : undefined}
+            aria-describedby={idError ? 'id-verify-err' : undefined}
+          />
+          {idError && <p id="id-verify-err" role="alert" className="mt-2 text-[14px] text-start" style={{ color: '#9A4520' }}>{idError}</p>}
+        </div>
+        <button
+          type="button"
+          onClick={handleVerify}
+          disabled={verifyLoading || idInput.length < 4}
+          className="btn-primary w-full mt-5"
         >
-          <div className="rounded-3xl overflow-hidden shadow-2xl border border-border/60 bg-card">
-            <div className="h-1.5 bg-gradient-to-l from-primary via-[hsl(var(--accent))] to-[hsl(var(--gold))]" />
-            <div className="p-6 sm:p-8 space-y-5">
-              <div className="text-center space-y-2">
-                <SeeIDLogo size={60} showText />
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  לצורך שמירה על פרטיותך, הזן את 4 הספרות האחרונות של תעודת הזהות
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="id-verify-input" className="text-sm font-bold block text-right text-foreground">
-                  4 ספרות אחרונות של ת״ז
-                </label>
-                <input
-                  id="id-verify-input"
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  maxLength={9}
-                  autoComplete="off"
-                  value={idInput}
-                  onChange={e => {
-                    const v = e.target.value.replace(/\D/g, '').slice(0, 9);
-                    setIdInput(v);
-                  }}
-                  className="w-full h-14 text-center text-2xl font-bold tracking-[0.3em] rounded-2xl border-2 border-border bg-card text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                  dir="ltr"
-                  placeholder="• • • •"
-                />
-                <AnimatePresence>
-                  {idError && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="text-sm text-center font-medium text-destructive"
-                    >
-                      {idError}
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <button
-                onClick={handleVerify}
-                disabled={verifyLoading || idInput.length < 4}
-                className="w-full h-12 text-base font-bold rounded-2xl gap-2 transition-all duration-200 flex items-center justify-center text-primary-foreground disabled:opacity-50"
-                style={{
-                  background: idInput.length >= 4
-                    ? 'linear-gradient(135deg, hsl(var(--accent)), hsl(28,45%,42%))'
-                    : 'hsl(var(--muted))',
-                }}
-              >
-                {verifyLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <ArrowLeft className="h-5 w-5" />}
-                כניסה מאובטחת
-              </button>
-
-              <p className="text-[11px] text-center leading-relaxed text-muted-foreground">
-                הנתונים שלך מוגנים ומוצפנים בהתאם לתקנות הפרטיות.
-              </p>
-            </div>
-          </div>
-        </motion.div>
-      </div>
+          {verifyLoading ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> : <ArrowLeft className="h-5 w-5" aria-hidden="true" />}
+          כניסה מאובטחת
+        </button>
+        <p className="sd-ca-fine">הנתונים שלכם מוגנים ומוצפנים בהתאם לתקנות הפרטיות.</p>
+      </CaScreen>
     );
   }
 
@@ -655,7 +569,7 @@ export default function ClientPortalPage() {
                 </span>
                 {completed && (
                   <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-[hsl(var(--success))]/20 text-[hsl(var(--success))] border border-[hsl(var(--success))]/30">
-                    ✓ בוצע
+                    בוצע
                   </span>
                 )}
               </div>
@@ -732,7 +646,7 @@ export default function ClientPortalPage() {
                 {/* Agent Recommendation */}
                 {rec.problem_gap && (
                   <div className="rounded-xl p-3 bg-primary/5 border border-primary/10">
-                    <h4 className="text-[11px] font-bold mb-1 text-primary">המלצת סוכן</h4>
+                    <h4 className="text-[11px] font-bold mb-1 text-primary">המלצה שלנו</h4>
                     <p className="text-sm text-foreground">{rec.problem_gap}</p>
                   </div>
                 )}
@@ -821,7 +735,7 @@ export default function ClientPortalPage() {
                     {/* Note field */}
                     <div className="space-y-2">
                       <Textarea
-                        placeholder="רוצה להוסיף הערה לסוכן? (לא חובה)"
+                        placeholder="רוצה להוסיף הערה לצוות שלנו? (לא חובה)"
                         value={decision?.note || ''}
                         onChange={e => setNote(rec.id, e.target.value)}
                         className="text-sm min-h-[50px] resize-none rounded-xl border-border bg-card"
@@ -847,32 +761,19 @@ export default function ClientPortalPage() {
 
   // ==================== PORTAL MAIN ====================
   return (
-    <div className="min-h-screen pb-28" dir="rtl" style={{ background: 'linear-gradient(180deg, hsl(38,30%,96%) 0%, hsl(35,22%,88%) 100%)' }}>
-      {/* Header */}
-      <header className="relative overflow-hidden bg-gradient-to-br from-[hsl(30,15%,18%)] via-[hsl(30,12%,25%)] to-[hsl(30,10%,30%)]">
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.3) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-        <div className="max-w-lg mx-auto px-4 py-6 relative">
-          <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-sm">
-              <SeeIDLogo size={36} />
-            </div>
-            <div>
-              <p className="text-[11px] font-bold tracking-widest uppercase text-[hsl(var(--accent))]">SEELD</p>
-              <h1 className="text-xl font-bold text-white">שלום, {customer?.first_name} 👋</h1>
-              <p className="text-xs mt-0.5 text-white/50">הנה סקירת המצב וההמלצות שלך</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 mt-4">
+    <CaFrame tint="sky" className="pb-28">
+      <header className="sd-ca-portalhead">
+        <div className="max-w-lg mx-auto px-4 sd-ca-portalhead-in" style={{ display: 'block' }}>
+          <img src="/brand/logo.png" alt="שילד ביטוח ופיננסים" width={LOGO_W} height={44} style={{ height: 40, width: 'auto' }} decoding="async" />
+          <h1>שלום, {customer?.first_name}</h1>
+          <p>הנה סקירת המצב וההמלצות שלכם.</p>
+          <div className="sd-ca-kpis">
             {[
               { label: 'מוצרים', value: products.length },
               { label: 'צבירה כוללת', value: `₪${totalAccumulation > 999 ? `${(totalAccumulation / 1000).toFixed(0)}K` : totalAccumulation.toLocaleString()}` },
               { label: 'המלצות', value: totalRecs },
-            ].map((stat, i) => (
-              <div key={i} className="rounded-xl p-2.5 text-center bg-white/10 backdrop-blur-sm">
-                <p className="text-[10px] text-white/50">{stat.label}</p>
-                <p className="text-lg font-bold text-white">{stat.value}</p>
-              </div>
+            ].map((stat) => (
+              <div key={stat.label} className="sd-ca-kpi"><span>{stat.label}</span><b>{stat.value}</b></div>
             ))}
           </div>
         </div>
@@ -881,11 +782,11 @@ export default function ClientPortalPage() {
       {/* Tabs - sticky */}
       <div className="max-w-lg mx-auto px-4 -mt-3 relative z-10 sticky top-0">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full grid grid-cols-3 h-12 rounded-2xl shadow-lg border border-border bg-card">
-            <TabsTrigger value="overview" className="gap-1.5 text-xs rounded-xl data-[state=active]:shadow-md data-[state=active]:bg-secondary">
+          <TabsList className="w-full grid grid-cols-3 h-12 rounded-full shadow-lg border border-border bg-card">
+            <TabsTrigger value="overview" className="gap-1.5 text-xs rounded-xl data-[state=active]:shadow-md data-[state=active]:bg-[#203957] data-[state=active]:text-white">
               <BarChart3 className="h-3.5 w-3.5" />מצב קיים
             </TabsTrigger>
-            <TabsTrigger value="recommendations" className="gap-1.5 text-xs rounded-xl data-[state=active]:shadow-md data-[state=active]:bg-secondary">
+            <TabsTrigger value="recommendations" className="gap-1.5 text-xs rounded-xl data-[state=active]:shadow-md data-[state=active]:bg-[#203957] data-[state=active]:text-white">
               <Star className="h-3.5 w-3.5" />המלצות
               {totalRecs > 0 && (
                 <span className="h-4 min-w-4 px-1 text-[10px] leading-none rounded-full flex items-center justify-center font-bold bg-[hsl(var(--accent))] text-white">
@@ -893,7 +794,7 @@ export default function ClientPortalPage() {
                 </span>
               )}
             </TabsTrigger>
-            <TabsTrigger value="my-choices" className="gap-1.5 text-xs rounded-xl data-[state=active]:shadow-md data-[state=active]:bg-secondary">
+            <TabsTrigger value="my-choices" className="gap-1.5 text-xs rounded-xl data-[state=active]:shadow-md data-[state=active]:bg-[#203957] data-[state=active]:text-white">
               <ListChecks className="h-3.5 w-3.5" />בחירות
               {decidedCount > 0 && (
                 <span className="h-4 min-w-4 px-1 text-[10px] leading-none rounded-full flex items-center justify-center font-bold bg-primary text-primary-foreground">
@@ -924,8 +825,10 @@ export default function ClientPortalPage() {
               </div>
             )}
             {products.length === 0 && (
-              <div className="rounded-2xl p-8 text-center border border-border bg-card">
-                <p className="text-sm text-muted-foreground">אין מוצרים להצגה כרגע.</p>
+              <div className="sd-ca-empty sd-ca-tone-sage">
+                <div className="sd-ca-empty-art" aria-hidden="true"><SdPic name="10-financial-planning" sizes="220px" /></div>
+                <h3>עוד אין מוצרים להצגה</h3>
+                <p>כשנוסיף מוצרים לתיק שלכם, הם יופיעו כאן.</p>
               </div>
             )}
           </TabsContent>
@@ -942,7 +845,7 @@ export default function ClientPortalPage() {
                 <div className="h-2 rounded-full overflow-hidden bg-muted">
                   <motion.div
                     className="h-full rounded-full"
-                    style={{ background: 'linear-gradient(90deg, hsl(var(--accent)), hsl(var(--success)))' }}
+                    style={{ background: '#203957' }}
                     initial={{ width: 0 }}
                     animate={{ width: `${progressPercent}%` }}
                     transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -950,7 +853,7 @@ export default function ClientPortalPage() {
                 </div>
                 {progressPercent === 100 && (
                   <p className="text-xs font-bold mt-2 flex items-center gap-1 text-[hsl(var(--success))]">
-                    <CheckCircle2 className="h-4 w-4" />מעולה! סיימת לבחור — לחץ ״שלח לסוכן״
+                    <CheckCircle2 className="h-4 w-4" />סיימתם לבחור. אפשר ללחוץ ״שלחו לנו״
                   </p>
                 )}
               </div>
@@ -1079,75 +982,51 @@ export default function ClientPortalPage() {
             <button
               onClick={handleSubmitAll}
               disabled={submitting}
-              className="w-full h-14 rounded-2xl text-base font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-xl text-primary-foreground disabled:opacity-70"
-              style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(152,42%,25%))' }}
+              className="w-full h-14 rounded-full text-base font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-xl text-primary-foreground disabled:opacity-70"
+              style={{ background: '#203957' }}
             >
               {submitting ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
                 <>
                   <Send className="h-5 w-5" />
-                  שלח {decidedCount} החלטות לסוכן
+                  שלחו לנו {decidedCount} החלטות
                 </>
               )}
             </button>
           </div>
         </div>
       )}
-    </div>
+    </CaFrame>
   );
 }
 
 // ==================== STATUS SCREEN COMPONENT ====================
-function StatusScreen({ icon, title, description, showStats, stats }: {
+function StatusScreen({ icon, title, description, showStats, stats, tint = 'butter', art = '11-claims-service' }: {
   icon: React.ReactNode;
   title: string;
   description: string;
   showStats?: boolean;
   stats?: { approved: number; thinking: number; declined: number };
+  tint?: Pastel;
+  art?: ArtName;
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" dir="rtl"
-      style={{ background: 'linear-gradient(165deg, hsl(38,30%,96%) 0%, hsl(35,22%,88%) 100%)' }}>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-[400px] w-full text-center space-y-6"
-      >
-        <div className="flex justify-center">{icon}</div>
-        <div className="space-y-2">
-          <h1 className="text-2xl font-bold text-foreground">{title}</h1>
-          <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+    <CaScreen tint={tint} art={art}>
+      <span className="sd-ca-badge [&_svg]:!h-7 [&_svg]:!w-7" aria-hidden="true">{icon}</span>
+      <h1>{title}</h1>
+      <p>{description}</p>
+      {showStats && stats && (
+        <div className="sd-ca-stats">
+          <div className="sd-ca-stat sd-ca-tone-sage"><b>{stats.approved}</b><span>אושרו</span></div>
+          <div className="sd-ca-stat sd-ca-tone-butter"><b>{stats.thinking}</b><span>בחשיבה</span></div>
+          <div className="sd-ca-stat sd-ca-tone-rose"><b>{stats.declined}</b><span>נדחו</span></div>
         </div>
-        {showStats && stats && (
-          <div className="grid grid-cols-3 gap-2 pt-2">
-            <div className="rounded-2xl p-3 text-center bg-[hsl(var(--success))]/10 border border-[hsl(var(--success))]/20">
-              <CheckCircle2 className="h-5 w-5 mx-auto mb-1 text-[hsl(var(--success))]" />
-              <p className="text-lg font-bold text-[hsl(var(--success))]">{stats.approved}</p>
-              <p className="text-[10px] font-medium text-[hsl(var(--success))]/70">אושרו</p>
-            </div>
-            <div className="rounded-2xl p-3 text-center bg-[hsl(var(--warning))]/10 border border-[hsl(var(--warning))]/20">
-              <Clock className="h-5 w-5 mx-auto mb-1 text-[hsl(var(--warning))]" />
-              <p className="text-lg font-bold text-[hsl(var(--warning))]">{stats.thinking}</p>
-              <p className="text-[10px] font-medium text-[hsl(var(--warning))]/70">בחשיבה</p>
-            </div>
-            <div className="rounded-2xl p-3 text-center bg-destructive/10 border border-destructive/20">
-              <XCircle className="h-5 w-5 mx-auto mb-1 text-destructive" />
-              <p className="text-lg font-bold text-destructive">{stats.declined}</p>
-              <p className="text-[10px] font-medium text-destructive/70">נדחו</p>
-            </div>
-          </div>
-        )}
-        <div className="pt-4 space-y-2 text-center">
-          <SeeIDLogo size={40} showText />
-          <div className="flex justify-center gap-3 text-[10px] text-muted-foreground/60">
-            <a href="/terms" target="_blank" className="hover:text-foreground transition-colors">תנאי שימוש</a>
-            <span>·</span>
-            <a href="/privacy" target="_blank" className="hover:text-foreground transition-colors">מדיניות פרטיות</a>
-          </div>
-        </div>
-      </motion.div>
-    </div>
+      )}
+      <p className="sd-ca-fine">שאלה? <a href="tel:0523097444" dir="ltr">052-309-7444</a> או <a href="mailto:info@seeld.co.il" dir="ltr">info@seeld.co.il</a></p>
+      <p className="sd-ca-fine" style={{ marginTop: 6 }}>
+        <a href="/terms" target="_blank" rel="noopener noreferrer">תנאי שימוש</a> · <a href="/privacy" target="_blank" rel="noopener noreferrer">מדיניות פרטיות</a>
+      </p>
+    </CaScreen>
   );
 }

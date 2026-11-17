@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { fmtMillions, fmtNum, fmtPct, fmtPlainPct, periodLabel, periodShort, type BoardFund } from "@/hooks/useCmaBoard";
 import { BODY, GREEN, LINE, MUTED, RUST_TEXT, SAGE } from "@/lib/brand";
+import ScrollX from "./ScrollX";
 
 /**
  * The returns table for one track: sortable columns, group average, an
@@ -142,7 +143,7 @@ const BoardTable = ({ funds, view, charted, onToggleChart, chartFull = false, ca
   const totalCols = cols.length + 1;
 
   return (
-    <div className="overflow-x-auto rounded-[10px]">
+    <ScrollX>
       <table className="dna-data board-table" style={{ fontSize: 15 }}>
         <caption className="sr-only">{caption}</caption>
         <thead>
@@ -253,7 +254,7 @@ const BoardTable = ({ funds, view, charted, onToggleChart, chartFull = false, ca
           </tr>
         </tfoot>
       </table>
-    </div>
+    </ScrollX>
   );
 };
 

@@ -1,3 +1,4 @@
+import { AppEmpty } from '@/components/layout/AppEmpty';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
@@ -168,16 +169,7 @@ export default function CustomerListPage() {
             animate={{ opacity: 1, scale: 1 }}
             className="flex flex-col items-center justify-center py-28 text-center"
           >
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-              className="w-24 h-24 rounded-full flex items-center justify-center mb-5 shadow-xl"
-              style={{ backgroundColor: '#203957', boxShadow: '0 12px 32px rgba(129,155,125,0.35)' }}
-            >
-              <UserPlus className="w-10 h-10 text-white" />
-            </motion.div>
-            <p className="text-[#55677C] font-bold mb-1">לא נמצאו לקוחות</p>
-            <p className="text-xs text-[#55677C] mb-4">נסה לשנות את החיפוש או המסנן</p>
+            <AppEmpty art="02-family-protection" tone="sky" title="לא נמצאו לקוחות" text="נסה לשנות את החיפוש או המסנן" />
             <button
               onClick={() => { setSearch(''); setActiveFilter('all'); }}
               className="px-5 py-2 rounded-full text-xs font-bold text-white"

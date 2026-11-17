@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, Filter, Phone, Mail, Calendar, ArrowUpDown,
   MoreVertical, UserPlus, Globe, MessageSquare, ChevronDown,
@@ -33,7 +32,6 @@ const SOURCE_ICONS: Record<string, React.ElementType> = {
 };
 
 export default function CatchPage() {
-  const tool = getToolBySlug("catch")!;
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
@@ -44,10 +42,10 @@ export default function CatchPage() {
   });
 
   const stats = [
-    { label: "לידים חדשים היום", value: "12", change: "+3", icon: UserPlus, color: tool.color },
+    { label: "לידים חדשים היום", value: "12", change: "+3", icon: UserPlus, color: "#203957" },
     { label: "ממוצע ניקוד", value: "82", change: "+5%", icon: ArrowUpDown, color: "#2F6B4E" },
-    { label: "שיעור המרה", value: "34%", change: "+2%", icon: Phone, color: "#AD833E" },
-    { label: "לידים פעילים", value: "47", change: "-", icon: Filter, color: "#BD582D" },
+    { label: "שיעור המרה", value: "34%", change: "+2%", icon: Phone, color: "#7C5C22" },
+    { label: "לידים פעילים", value: "47", change: "-", icon: Filter, color: "#9A4520" },
   ];
 
   return (

@@ -1,12 +1,17 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { Illustration } from "@/components/brand/Illustration";
-import { BrandIcon } from "@/components/brand/BrandIcon";
-import { GREEN, IVORY, MUTED, PASTEL_SAGE } from "@/lib/brand";
+import { PubPage, Arrow } from "@/components/sd/pubParts";
+import { SdBand, SdIcon, SdPic } from "@/components/sd/primitives";
+import "@/components/sd/client.css";
 
-// 404: a small journey illustration and the way home. No ghost numerals.
+// 404: airy, one illustration, the way home and four ways on.
+
+const WAYS = [
+  { to: "/insurances", icon: "shield", t: "ביטוח", p: "חיים, בריאות, רכב, דירה ועוד" },
+  { to: "/savings", icon: "wallet", t: "חיסכון ופנסיה", p: "קרנות, קופות ותכנון לטווח ארוך" },
+  { to: "/calculators", icon: "checklist", t: "מחשבונים", p: "בדיקה מהירה לפני שמדברים" },
+  { to: "/learn", icon: "search", t: "מידע ולמידה", p: "מדריכים בשפה פשוטה" },
+];
 
 const NotFound = () => {
   const location = useLocation();
@@ -16,56 +21,45 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col" dir="rtl" style={{ backgroundColor: IVORY }}>
-      <Header />
-
-      <main className="flex-1 flex">
-        <section className="dna-page flex-1 flex items-center overflow-hidden">
-          <div className="dna-circles" aria-hidden="true">
-            <div
-              className="dna-circ hidden md:block"
-              style={{ width: 300, height: 300, top: -140, left: -110, backgroundColor: PASTEL_SAGE, opacity: 0.8 }}
-            />
-          </div>
-
-          <div className="relative z-10 max-w-brand mx-auto px-5 sm:px-8 w-full py-16 sm:py-24">
-            <div className="grid gap-10 lg:gap-16 lg:grid-cols-[1.1fr_0.9fr] items-center">
-              <div>
-                <p className="text-[15px] font-bold mb-3" style={{ color: MUTED }}>
-                  שגיאה <span dir="ltr" className="tabular-nums">404</span>
-                </p>
-                <h1 className="dna-display leading-[1.15] max-w-xl" style={{ fontSize: "clamp(30px, 4vw, 44px)" }}>
-                  העמוד הזה לא קיים. רוב הדברים החשובים אצלנו דווקא מכוסים.
-                </h1>
-                <p className="mt-5 text-[17px] leading-[1.7] max-w-lg" style={{ color: MUTED }}>
-                  ייתכן שהקישור השתנה או שהכתובת הוקלדה בטעות. השביל הביתה קצר.
-                </p>
-                <div className="mt-9 flex flex-col sm:flex-row gap-3">
-                  <Link to="/" className="btn-primary sm:min-w-[200px]">לדף הבית</Link>
-                  <Link to="/contact" className="btn-secondary sm:min-w-[200px]">דברו איתנו</Link>
-                </div>
-                <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[15px]">
-                  <Link to="/insurances" className="link-rule">ביטוח <BrandIcon name="arrow-left" size={16} /></Link>
-                  <Link to="/savings" className="link-rule">חיסכון ופנסיה <BrandIcon name="arrow-left" size={16} /></Link>
-                  <Link to="/calculators" className="link-rule">מחשבונים <BrandIcon name="arrow-left" size={16} /></Link>
-                  <Link to="/learn" className="link-rule">מידע ולמידה <BrandIcon name="arrow-left" size={16} /></Link>
-                </div>
-              </div>
-
-              <Illustration
-                name="01-journey"
-                priority
-                sizes="(min-width: 1024px) 480px, 100vw"
-                className="max-w-md mx-auto lg:max-w-none"
-              />
+    <PubPage tint="butter">
+      <section className="sd-hero">
+        <div className="sd-wrap sd-hero-grid">
+          <div className="sd-hero-copy">
+            <span className="sd-eyebrow">שגיאה <span dir="ltr">404</span></span>
+            <h1 className="sd-h1 mt-5">העמוד הזה לא נמצא, אבל אנחנו כאן.</h1>
+            <p className="sd-pub-lede">
+              ייתכן שהקישור השתנה או שהכתובת הוקלדה בטעות. אפשר לחזור לדף הבית, או לכתוב לנו ונעזור למצוא את מה שחיפשתם.
+            </p>
+            <div className="sd-pub-actions">
+              <Link to="/" className="sd-btn">לדף הבית<Arrow /></Link>
+              <Link to="/contact" className="sd-link">דברו איתנו<Arrow /></Link>
             </div>
           </div>
-        </section>
-      </main>
+          <div className="sd-stage" aria-hidden="true">
+            <SdPic name="01-hero" sizes="(min-width:1024px) 520px, 90vw" priority />
+          </div>
+        </div>
+      </section>
 
-      <Footer />
-      <span className="sr-only" style={{ color: GREEN }} aria-hidden="true" />
-    </div>
+      <SdBand tone="sage">
+        <div className="sd-wrap">
+          <div className="sd-band-head">
+            <h2 className="sd-h2">אולי חיפשתם את אחד מאלה</h2>
+          </div>
+          <ul className="sd-ca-agents-grid c4">
+            {WAYS.map((w) => (
+              <li key={w.to}>
+                <Link to={w.to} className="sd-ca-feature block h-full">
+                  <SdIcon name={w.icon} size={52} />
+                  <h3 className="sd-h3 mt-3">{w.t}</h3>
+                  <p>{w.p}</p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </SdBand>
+    </PubPage>
   );
 };
 

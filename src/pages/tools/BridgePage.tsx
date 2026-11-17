@@ -1,18 +1,17 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, MessageSquare, Mail, Phone, CheckCircle,
   MoreVertical, Clock, Send, User, Smartphone,
 } from "lucide-react";
 
 const MOCK_MESSAGES = [
-  { id: 1, client: "יוסי כהן", channel: "WhatsApp", direction: "נכנס", subject: "שאלה על פוליסת חיים", preview: "היי שמוליק, רציתי לשאול על הפוליסה שדיברנו עליה...", status: "נענה", date: "2026-03-24 15:30" },
+  { id: 1, client: "יוסי כהן", channel: "WhatsApp", direction: "נכנס", subject: "שאלה על פוליסת חיים", preview: "שלום, רציתי לשאול על הפוליסה שדיברנו עליה...", status: "נענה", date: "2026-03-24 15:30" },
   { id: 2, client: "מיכל לוי", channel: "מייל", direction: "יוצא", subject: "סיכום פגישה + המלצות", preview: "מיכל שלום, מצורף סיכום הפגישה שלנו מהיום...", status: "נשלח", date: "2026-03-24 14:00" },
   { id: 3, client: "דוד ישראלי", channel: "SMS", direction: "יוצא", subject: "תזכורת פגישה", preview: "היי דוד, תזכורת לפגישה שלנו מחר ב-10:00", status: "נמסר", date: "2026-03-24 12:00" },
   { id: 4, client: "שרה אברהם", channel: "טלפון", direction: "נכנס", subject: "בירור תביעה", preview: "שיחה נכנסת — 8 דקות — סיכום: שאלה על סטטוס תביעה", status: "נענה", date: "2026-03-24 10:15" },
   { id: 5, client: "אבי מזרחי", channel: "WhatsApp", direction: "נכנס", subject: "בקשה לאישור ביטוח", preview: "שלום, אני צריך אישור ביטוח רכב לחברת הליסינג", status: "ממתין", date: "2026-03-24 09:00" },
-  { id: 6, client: "רחל גולן", channel: "מייל", direction: "נכנס", subject: "חידוש ביטוח דירה", preview: "שמוליק, קיבלתי הודעה על חידוש. מה את ממליצה?", status: "ממתין", date: "2026-03-23 18:30" },
+  { id: 6, client: "רחל גולן", channel: "מייל", direction: "נכנס", subject: "חידוש ביטוח דירה", preview: "שלום, קיבלתי הודעה על חידוש. מה אתם ממליצים?", status: "ממתין", date: "2026-03-23 18:30" },
 ];
 
 const CHANNEL_ICONS: Record<string, React.ElementType> = {
@@ -23,9 +22,9 @@ const CHANNEL_ICONS: Record<string, React.ElementType> = {
 };
 
 const CHANNEL_COLORS: Record<string, string> = {
-  "WhatsApp": "#25D366",
-  "מייל": "#4F46E5",
-  "SMS": "#0EA5E9",
+  "WhatsApp": "#2F6B4E",
+  "מייל": "#203957",
+  "SMS": "#55677C",
   "טלפון": "#2F6B4E",
 };
 
@@ -37,7 +36,6 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function BridgePage() {
-  const tool = getToolBySlug("bridge")!;
   const [search, setSearch] = useState("");
   const [channelFilter, setChannelFilter] = useState("all");
 
@@ -48,8 +46,8 @@ export default function BridgePage() {
   });
 
   const stats = [
-    { label: "הודעות היום", value: "24", change: "+8", icon: MessageSquare, color: tool.color },
-    { label: "ממתינות למענה", value: "5", change: "+2", icon: Clock, color: "#AD833E" },
+    { label: "הודעות היום", value: "24", change: "+8", icon: MessageSquare, color: "#203957" },
+    { label: "ממתינות למענה", value: "5", change: "+2", icon: Clock, color: "#7C5C22" },
     { label: "שיחות נכנסות", value: "7", change: "+3", icon: Phone, color: "#2F6B4E" },
     { label: "נשלחו", value: "12", change: "+4", icon: Send, color: "#4f46e5" },
   ];

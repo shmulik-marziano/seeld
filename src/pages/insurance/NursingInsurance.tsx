@@ -6,7 +6,7 @@ const NursingInsurance = () => {
     <InsurancePageSd
       heroIcon={Heart}
       heroIconColor="#b91c1c"
-      heroCategory="ביטוח סיעודי"
+      heroCategory="תכנון לגיל מבוגר"
       heroTitle="ביטוח סיעודי"
       heroDescription="הגנה כלכלית במקרה של הפיכה לסיעודי, לכם ולמשפחתכם. שמרו על הכבוד ואיכות החיים."
       breadcrumbLabel="ביטוח סיעודי"

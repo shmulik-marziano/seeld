@@ -26,14 +26,15 @@ import doodleLightbulb from '@/assets/doodle-lightbulb.png';
 
 // ─── Palette ──────────────────────────────────────────────────────────────────
 const C = {
-  teal:   '#203957',
+  // Kit palette, deep tones (white text >= AA on each)
+  teal:   '#2F5476',
   orange: '#7C5C22',
-  coral:  '#9A4520',
-  green:  '#2F6B4E',
-  yellow: '#7C5C22',
-  purple: '#55677C',
+  coral:  '#8A4A3F',
+  green:  '#4A6650',
+  yellow: '#6B5420',
+  purple: '#5E5278',
   dark:   '#203957',
-  gray:   '#8FA396',
+  gray:   '#55677C',
 };
 
 type BubbleType = { label: string; icon: React.ElementType; path: string | null; e: boolean };
@@ -72,7 +73,7 @@ const SECTIONS: SectionType[] = [
       { label: 'ימי הולדת',          icon: Cake,        path: null,                    e: false },
       { label: 'המשימות שלי',        icon: CheckSquare, path: '/app/follow-up',        e: true  },
       { label: 'התראות',             icon: Bell,        path: '/app/follow-up',        e: true  },
-      { label: 'שמוליק מרציאנו',     icon: User,        path: '/app/settings',         e: true  },
+      { label: 'צוות הסוכנות',        icon: User,        path: '/app/settings',         e: true  },
     ],
   },
   {
@@ -447,11 +448,11 @@ function HoneycombCanvas({ bubbles, hiddenMap, editMode, onToggleBubble, onBubbl
                 className="w-full h-full rounded-full flex flex-col items-center justify-center focus:outline-none relative"
                 style={{
                   backgroundColor: hidden ? 'transparent'
-                    : b.e ? b.color : b.color + '92',
+                    : b.e ? b.color : b.color + 'CC',
                   boxShadow: hidden ? 'none'
                     : b.e
-                      ? `0 10px 32px ${b.color}70, 0 4px 12px ${b.color}45, inset 0 1px 0 rgba(255,255,255,0.25)`
-                      : `0 5px 18px ${b.color}38, inset 0 1px 0 rgba(255,255,255,0.18)`,
+                      ? `0 1px 2px rgba(32,57,87,0.10), 0 10px 22px -12px ${b.color}99`
+                      : `0 1px 2px rgba(32,57,87,0.06), 0 6px 16px -12px ${b.color}66`,
                   border: hidden ? `2px dashed ${b.color}70`
                     : b.e ? '2px solid rgba(255,255,255,0.22)' : '1.5px solid rgba(255,255,255,0.14)',
                   animation: editMode && !hidden
@@ -479,7 +480,7 @@ function HoneycombCanvas({ bubbles, hiddenMap, editMode, onToggleBubble, onBubbl
                       className="text-white"
                       style={{
                         width: IS, height: IS, marginBottom: 5,
-                        filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.22))',
+                        filter: 'none',
                       }}
                     />
                     {/* Label — crisp, bold, shadowed */}
@@ -493,7 +494,7 @@ function HoneycombCanvas({ bubbles, hiddenMap, editMode, onToggleBubble, onBubbl
                         lineHeight: 1.22,
                         maxWidth: SZ - 14,
                         padding: '0 6px',
-                        textShadow: '0 1px 4px rgba(0,0,0,0.28)',
+                        textShadow: 'none',
                         display: '-webkit-box',
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: 'vertical',
@@ -624,7 +625,7 @@ export default function DashboardPage() {
   const totalBubbles = SECTIONS.reduce((s, sec) => s + sec.bubbles.length, 0);
 
   return (
-    <div className="-m-3 sm:-m-4 md:-m-6 relative" style={{ backgroundColor: '#FAF7EF' }} dir="rtl">
+    <div className="-m-3 sm:-m-4 md:-m-6 relative" style={{ backgroundColor: '#FCF8EF' }} dir="rtl">
 
       {/* Wiggle keyframe */}
       <style>{`
@@ -675,7 +676,7 @@ export default function DashboardPage() {
                 whileTap={{ scale: 0.95 }}
                 transition={{ delay: SECTIONS.indexOf(sec) * 0.03 }}
                 onClick={() => toggleSection(sec.title)}
-                className="flex items-center gap-2 px-3 py-2.5 rounded-full text-right transition-all duration-200"
+                className="flex items-center gap-2 px-3 py-2.5 min-h-[44px] rounded-full text-right transition-all duration-200"
                 style={{
                   backgroundColor: isActive ? sec.color : sec.color + '18',
                   border: isActive ? `2px solid ${sec.color}` : `1.5px solid ${sec.color}45`,
@@ -684,7 +685,7 @@ export default function DashboardPage() {
               >
                 <span className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                   style={{ backgroundColor: isActive ? 'white' : sec.color }} />
-                <span className="text-[10.5px] font-bold leading-tight"
+                <span className="text-[12px] font-bold leading-tight"
                   style={{ color: isActive ? 'white' : sec.color }}>
                   {sec.title}
                 </span>
@@ -828,15 +829,13 @@ export default function DashboardPage() {
 
           {/* Greeting */}
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
-            <p className="text-[14px] font-bold text-[#55677C] mb-0.5"
-              style={{ fontFamily: "sans-serif" }}>SEELD • פלטפורמה</p>
-            <h1 className="text-3xl font-bold text-[#203957] leading-none"
-              style={{ fontFamily: "'Rubik', Arial, sans-serif" }}>{getGreeting()}</h1>
-            <p className="text-xs text-[#55677C] mt-1">
+            <p className="text-[14px] font-bold text-[#7C5C22] mb-1">צוות הסוכנות</p>
+            <h1 className="text-3xl font-bold text-[#203957] leading-tight">{getGreeting()}</h1>
+            <p className="text-xs text-[#55677C] mt-1.5">
               {activeSection
                 ? <><span className="text-[#203957] font-bold">{activeSection}</span>{' · '}{displayBubbles.length} בועות</>
                 : <>{totalBubbles - totalHidden} בועות פעילות
-                    {totalHidden > 0 && <span className="text-orange-400"> · {totalHidden} מוסתרות</span>}
+                    {totalHidden > 0 && <span className="text-[#7C5C22]"> · {totalHidden} מוסתרות</span>}
                   </>
               }
             </p>
@@ -853,15 +852,15 @@ export default function DashboardPage() {
                   onClick={() => toggleSection(sec.title)}
                   className="flex items-center gap-1.5 px-4 py-2 rounded-full flex-shrink-0 transition-all duration-200"
                   style={{
-                    backgroundColor: isActive ? sec.color : sec.color + 'dd',
+                    backgroundColor: sec.color,
                     boxShadow: isActive
-                      ? `0 0 0 3px white, 0 0 0 5px ${sec.color}, 0 6px 20px ${sec.color}70`
-                      : `0 3px 10px ${sec.color}40`,
+                      ? `0 0 0 2px #FCF8EF, 0 0 0 4px ${sec.color}`
+                      : 'none',
                     transform: isActive ? 'scale(1.08)' : 'scale(1)',
                   }}
                 >
                   <span className="text-white text-[11px] font-bold whitespace-nowrap"
-                    style={{ textShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>{sec.title}</span>
+                    style={{ textShadow: 'none' }}>{sec.title}</span>
                   {isActive && <X className="w-3 h-3 text-white/80 ml-1" />}
                 </motion.button>
               );

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, ShieldCheck, CheckCircle, Clock, AlertTriangle,
   MoreVertical, FileText, Heart, ClipboardList,
@@ -24,16 +23,15 @@ const APPROVAL_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export default function GatePage() {
-  const tool = getToolBySlug("gate")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_UNDERWRITING.filter((u) => u.client.includes(search) || u.product.includes(search));
 
   const stats = [
-    { label: "תהליכי חיתום", value: "42", change: "+8", icon: ShieldCheck, color: tool.color },
+    { label: "תהליכי חיתום", value: "42", change: "+8", icon: ShieldCheck, color: "#203957" },
     { label: "אושרו", value: "31", change: "+5", icon: CheckCircle, color: "#2F6B4E" },
-    { label: "עם תנאים", value: "7", change: "+2", icon: AlertTriangle, color: "#AD833E" },
-    { label: "ממתינים להשלמה", value: "4", change: "-1", icon: Clock, color: "#BD582D" },
+    { label: "עם תנאים", value: "7", change: "+2", icon: AlertTriangle, color: "#7C5C22" },
+    { label: "ממתינים להשלמה", value: "4", change: "-1", icon: Clock, color: "#9A4520" },
   ];
 
   return (

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPage from "./ToolPage";
-import { getToolBySlug } from "@/config/tools";
 import {
   Search, Plus, Send, CheckCircle, Clock, AlertTriangle,
   MoreVertical, Mail, Globe, Bot, ExternalLink,
@@ -29,16 +28,15 @@ const METHOD_ICONS: Record<string, React.ElementType> = {
 };
 
 export default function LaunchPage() {
-  const tool = getToolBySlug("launch")!;
   const [search, setSearch] = useState("");
 
   const filtered = MOCK_SUBMISSIONS.filter((s) => s.client.includes(search) || s.company.includes(search));
 
   const stats = [
-    { label: "שיגורים החודש", value: "67", change: "+14", icon: Send, color: tool.color },
+    { label: "שיגורים החודש", value: "67", change: "+14", icon: Send, color: "#203957" },
     { label: "התקבלו בהצלחה", value: "58", change: "+11", icon: CheckCircle, color: "#2F6B4E" },
-    { label: "ממתינים לאישור", value: "6", change: "-2", icon: Clock, color: "#AD833E" },
-    { label: "נכשלו", value: "3", change: "+1", icon: AlertTriangle, color: "#BD582D" },
+    { label: "ממתינים לאישור", value: "6", change: "-2", icon: Clock, color: "#7C5C22" },
+    { label: "נכשלו", value: "3", change: "+1", icon: AlertTriangle, color: "#9A4520" },
   ];
 
   return (

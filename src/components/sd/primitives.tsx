@@ -1,9 +1,11 @@
-import { useEffect, type CSSProperties, type ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { useActiveSection } from "@/components/inst/useActiveSection";
 import { REGULATORY_LINE } from "@/lib/brand";
-import { PASTELS, type ArtName, type Pastel } from "./topics";
+import { PASTELS, topicFor, type ArtName, type Pastel } from "./topics";
+import { SdSpot } from "./SdSpot";
+import { dividerFor, spotAt, type SpotName } from "./spots";
 import type { Story } from "@/data/stories";
 import "./sd.css";
 
@@ -11,13 +13,77 @@ import "./sd.css";
 const FONT_HREF = "https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@700&display=swap";
 export function useSdFont() {
   useEffect(() => {
-    if (document.querySelector(`link[href="${FONT_HREF}"]`)) return;
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = FONT_HREF;
-    document.head.appendChild(link);
+    if (!document.querySelector(`link[href="${FONT_HREF}"]`)) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = FONT_HREF;
+      document.head.appendChild(link);
+    }
+    return startRevealFallback();
   }, []);
 }
+
+/**
+ * Reveal fallback for browsers without CSS scroll-driven animations. Only elements that are below the fold
+ * when the page mounts get hidden (class sd-reveal-pre) and are shown by an IntersectionObserver, so nothing
+ * is hidden without JS, in the prerendered HTML, or in browsers that already animate through CSS.
+ */
+function startRevealFallback() {
+  if (typeof window === "undefined" || typeof IntersectionObserver === "undefined") return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (typeof CSS !== "undefined" && CSS.supports?.("animation-timeline: view()")) return;
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      (e.target as HTMLElement).classList.add("is-in");
+      io.unobserve(e.target);
+    }
+  }, { rootMargin: "0px 0px -8% 0px" });
+  let raf = 0;
+  const scan = () => {
+    raf = 0;
+    document.querySelectorAll<HTMLElement>(".sd-reveal:not([data-r])").forEach((el) => {
+      el.dataset.r = "1";
+      if (el.getBoundingClientRect().top > window.innerHeight * 0.92) {
+        el.classList.add("sd-reveal-pre");
+        io.observe(el);
+      }
+    });
+  };
+  const queue = () => { if (!raf) raf = requestAnimationFrame(scan); };
+  queue();
+  const mo = new MutationObserver(queue);
+  mo.observe(document.body, { childList: true, subtree: true });
+  return () => { mo.disconnect(); io.disconnect(); if (raf) cancelAnimationFrame(raf); };
+}
+
+/** Thin reading-progress line at the top of long content pages. Decorative; scaleX follows the scroll position. */
+export function SdProgress() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      el.style.transform = `scaleX(${max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0})`;
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); if (raf) cancelAnimationFrame(raf); };
+  }, []);
+  return <div className="sd-progress" aria-hidden="true"><div ref={ref} /></div>;
+}
+
+/** Spot that floats on a hero stage (gives the illustration a second layer). Place inside .sd-stage. */
+export function SdStageSpot({ art, index = 0, name }: { art: ArtName | string; index?: number; name?: SpotName }) {
+  return <SdSpot name={name ?? spotAt(art, index)} size={120} className="sd-stage-spot" />;
+}
+
+const hash = (str: string) => [...str].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
 
 /** Decorative kit illustration: public/art/<name>-768.webp and -1536.webp. alt is empty on purpose (kit README). */
 export function SdPic({ name, sizes, priority, className, style }: { name: ArtName | string; sizes: string; priority?: boolean; className?: string; style?: CSSProperties }) {
@@ -43,10 +109,30 @@ export const SdIcon = ({ name, size = 40 }: { name: string; size?: number }) => 
   <img src={`/art/icons/${name}.svg`} alt="" width={size} height={size} loading="lazy" />
 );
 
-/** Full-bleed colour strip. `tone` is one of the kit pastels, "cream" or "white". */
-export function SdBand({ tone, id, children, className = "" }: { tone: Pastel | "cream" | "white"; id?: string; children: ReactNode; className?: string }) {
+/** Bands whose border to the previous band gets a divider spot by default, and the side it sits on. */
+const DIVIDER_IDS: Record<string, "start" | "end"> = { guide: "start", process: "end", faq: "start" };
+
+/**
+ * Full-bleed colour strip. `tone` is one of the kit pastels, "cream" or "white".
+ * Optional: `spot` (corner spot, off unless given), `divider` (spot that crosses the top border; true/false or a name).
+ * The divider defaults from the page topic (by path).
+ */
+export function SdBand({ tone, id, children, className = "", spot, divider }: {
+  tone: Pastel | "cream" | "white"; id?: string; children: ReactNode; className?: string;
+  spot?: SpotName | false; divider?: boolean | SpotName;
+}) {
+  const { pathname } = useLocation();
+  const art = topicFor(pathname).art;
+  const h = hash(`${id ?? ""}${tone}`);
+  const cornerName = spot || null; // corner spots are opt-in: a spot with no tie to the content looked orphaned
+  const side = id ? DIVIDER_IDS[id] : undefined;
+  const divName = divider === false || (divider === undefined && !side) ? null : typeof divider === "string" ? divider : dividerFor(art, h);
   return (
     <section id={id} className={`sd-band sd-band-${tone} scroll-mt-28 ${className}`}>
+      {divName && (
+        <span className={`sd-band-div ${side === "end" ? "is-end" : ""}`} aria-hidden="true"><SdSpot name={divName} size={170} /></span>
+      )}
+      {cornerName && <span className="sd-band-corner" aria-hidden="true"><SdSpot name={cornerName} size={72} /></span>}
       {children}
     </section>
   );
@@ -67,11 +153,13 @@ export function SdSubnav({ sections }: { sections: { id: string; label: string }
 }
 
 /** The emotional moment: illustration + what stands in front of the reader. Goes inside an SdBand. */
-export function SdStory({ story, art, flip }: { story: Story; art: ArtName; flip?: boolean }) {
+export function SdStory({ story, art, flip, spots }: { story: Story; art: ArtName; flip?: boolean; spots?: readonly [SpotName, SpotName] }) {
   return (
     <div className="sd-wrap sd-story-grid">
       <div className={`sd-story-art sd-reveal ${flip ? "lg:order-2" : ""}`} aria-hidden="true">
         <SdPic name={art} sizes="(min-width:1024px) 480px, 90vw" />
+        <SdSpot name={spots?.[0] ?? spotAt(art, 1)} size={96} className="sd-float sd-float-a" />
+        <SdSpot name={spots?.[1] ?? spotAt(art, 2)} size={80} className="sd-float sd-float-b" />
       </div>
       <div>
         <span className="sd-eyebrow">{story.kicker}</span>
@@ -94,7 +182,7 @@ export const DEFAULT_STEPS = [
   { icon: "handshake", t: "מחליטים יחד", p: "הפגישה הראשונה ללא עלות ואינה מחייבת. ההחלטה תמיד שלכם." },
 ];
 
-export function SdProcess({ art, steps = DEFAULT_STEPS, title = "איך זה עובד" }: { art: ArtName; steps?: typeof DEFAULT_STEPS; title?: string }) {
+export function SdProcess({ art, steps = DEFAULT_STEPS, title = "איך זה עובד", spot }: { art: ArtName; steps?: typeof DEFAULT_STEPS; title?: string; spot?: SpotName }) {
   return (
     <div className="sd-wrap sd-process-grid">
       <div>
@@ -111,13 +199,14 @@ export function SdProcess({ art, steps = DEFAULT_STEPS, title = "איך זה ע�
       </div>
       <div className="sd-story-art sd-reveal" aria-hidden="true">
         <SdPic name={art} sizes="(min-width:1024px) 440px, 90vw" />
+        <SdSpot name={spot ?? spotAt(art, 3)} size={88} className="sd-float sd-float-a" />
       </div>
     </div>
   );
 }
 
 /** Closing navy block: invitation, direct contact, illustration, and the form (children). */
-export function SdContact({ id = "contact-form", title = "נשמח להכיר את התיק שלכם", text, art, children }: { id?: string; title?: string; text?: string; art: ArtName; children: ReactNode }) {
+export function SdContact({ id = "contact-form", title = "נשמח להכיר את התיק שלכם", text, art, spot, children }: { id?: string; title?: string; text?: string; art: ArtName; spot?: SpotName; children: ReactNode }) {
   return (
     <section id={id} className="sd-contact scroll-mt-20">
       <div className="sd-wrap sd-contact-grid">
@@ -128,7 +217,7 @@ export function SdContact({ id = "contact-form", title = "נשמח להכיר א
             <a href="tel:0523097444" dir="ltr" style={{ justifyContent: "flex-end" }}>052-309-7444</a>
             <a href="mailto:info@seeld.co.il" dir="ltr" style={{ justifyContent: "flex-end" }}>info@seeld.co.il</a>
           </div>
-          <div className="sd-contact-art" aria-hidden="true"><SdPic name={art} sizes="360px" /></div>
+          <div className="sd-contact-art" aria-hidden="true"><SdPic name={art} sizes="360px" /><SdSpot name={spot ?? spotAt(art, 2)} size={72} className="sd-float sd-float-b" /></div>
           <p className="sd-small mt-8">{REGULATORY_LINE}</p>
         </div>
         <div className="sd-form">{children}</div>
