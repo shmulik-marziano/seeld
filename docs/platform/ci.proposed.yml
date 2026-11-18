@@ -1,0 +1,117 @@
+# PROPOSED replacement for .github/workflows/ci.yml (not applied). See docs/platform/FOUNDATION.md section 12.
+# Changes vs the current file:
+#  - one aggregate job `ci-ok` = the single required status check for branch protection on main
+#  - database job: replays migrations from scratch + pgTAP + db lint + generated-types drift
+#  - supply chain job: npm audit (prod deps), secret scan
+#  - least-privilege permissions, timeouts, pinned runtime versions
+#  - actions are pinned by major here for readability; pin by commit SHA when the file is adopted (Dependabot keeps them fresh)
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Typecheck
+        run: npx tsc --noEmit -p tsconfig.app.json
+      - name: Lint
+        run: npx eslint .
+      - name: Unit tests
+        run: npx vitest run
+      - name: Install browser for prerender
+        run: npx playwright install --with-deps chromium
+      - name: Build with strict prerender (writes dist/health.json)
+        run: npm run build:seo
+        env:
+          PRERENDER_STRICT: "1"
+          # per-environment: preview CI builds against the STAGING Supabase (publishable key only, never a secret key)
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+      - name: AEO check
+        run: npm run check:aeo
+      - name: Bundle size budget
+        run: npm run size:check
+      - name: Upload dist for the preview smoke job
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 3
+
+  database:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest   # TODO pin to the exact CLI version after the first green run
+      - name: Start local Supabase (db only)
+        run: supabase start -x gotrue,realtime,storage-api,imgproxy,kong,mailpit,postgrest,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
+      - name: Migrations replay from scratch
+        run: supabase db reset
+      - name: pgTAP
+        run: supabase test db
+      - name: Lint SQL (plpgsql_check)
+        run: supabase db lint --level warning --fail-on error
+      - name: Migration naming and ordering
+        run: |
+          ls supabase/migrations | grep -Ev '^[0-9]{14}_[a-z0-9_]+\.sql$' && { echo "bad migration file name"; exit 1; } || true
+      - name: Generated types are up to date
+        run: |
+          supabase gen types typescript --local --schema api > /tmp/types.generated.ts
+          diff -u src/integrations/supabase/types.generated.ts /tmp/types.generated.ts
+
+  supply-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+      - name: Secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  ci-ok:
+    if: always()
+    needs: [verify, database, supply-chain]
+    runs-on: ubuntu-latest
+    steps:
+      - name: All required jobs green
+        run: |
+          [ "${{ needs.verify.result }}" = "success" ] && [ "${{ needs.database.result }}" = "success" ] && [ "${{ needs.supply-chain.result }}" = "success" ]
+
+# Separate workflow (preview-smoke.yml, trigger: deployment_status where state == success and environment == Preview):
+#   run playwright smoke (npm run smoke / e2e) against github.event.deployment_status.target_url using the
+#   Vercel protection-bypass secret as the x-vercel-protection-bypass header. Not in this file on purpose.
+#
+# Deploy path (decision ADR-12): Vercel Git integration deploys main. Delete .github/workflows/deploy-vercel.yml
+# (or keep it workflow_dispatch-only) so there is exactly one production deploy path.

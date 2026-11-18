@@ -1,0 +1,59 @@
+# PROPOSED supabase/config.toml for the new project (not applied; the current file points at the Tokyo project).
+# Applied to hosted projects by the branching integration (persistent branches need a [remotes.<name>] block)
+# and to the local stack by `supabase start`. Keep every verify_jwt flag here: Tokyo drifted from the deployed flags.
+project_id = "seeld-site"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["api"]          # ONLY api is exposed. public/graphql_public are not.
+extra_search_path = ["extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 17
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[auth]
+enabled = true
+site_url = "https://seeld.co.il"
+additional_redirect_urls = ["https://seeld.co.il/**"]
+enable_signup = false                  # invite-only: users are created by the invite-agent / invite-client functions
+enable_anonymous_sign_ins = false
+minimum_password_length = 12
+password_requirements = "lower_upper_letters_digits_symbols"
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+
+[auth.email]
+enable_signup = false
+enable_confirmations = true
+double_confirm_changes = true
+otp_length = 6
+otp_expiry = 600                       # 10 minutes
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
+[auth.rate_limit]
+email_sent = 30                        # per hour; only meaningful with custom SMTP
+sign_in_sign_ups = 30                  # per 5 minutes per IP
+
+# Edge functions: flags are code, reviewed in PRs.
+[functions.lead-intake]                # public, verifies Turnstile + origin allowlist itself
+verify_jwt = false
+[functions.notify-worker]              # called by pg_cron/pg_net with the secret key
+verify_jwt = false
+[functions.fetch-cma-data]             # called by pg_cron with the secret key
+verify_jwt = false
+[functions.sync-tracks]
+verify_jwt = false
+[functions.invite-agent]               # admin only
+verify_jwt = true
+[functions.chat-bot]                   # public chat, rate limited per session in the function
+verify_jwt = false

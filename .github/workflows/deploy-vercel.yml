@@ -1,8 +1,9 @@
 name: Deploy to Vercel
 
+# Manual only. Vercel's Git integration already deploys every push to main; running
+# `vercel deploy --prod` here as well produced two production deployments per commit
+# (same SHA twice in the deployment list) and the 2026-11-17 chunk-hash mismatch.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
     inputs:
       vercel_token:
