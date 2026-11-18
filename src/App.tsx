@@ -291,6 +291,7 @@ const RetirementCase = lazy(() => import("@/pages/savings/retirement/FieldStory"
 const RetirementFaq = lazy(() => import("@/pages/savings/retirement/RetirementFaq"));
 const RetirementContact = lazy(() => import("@/pages/savings/retirement/RetirementContact"));
 const RetirementChecklist = lazy(() => import("@/pages/savings/retirement/RetirementChecklist"));
+const RiskProfile = lazy(() => import("@/pages/savings/RiskProfile"));
 
 // Shared pages (lazy)
 const TermsPage = lazy(() => import("@/pages/TermsPage"));
@@ -448,6 +449,7 @@ const App = () => (
                 <Route path="/savings/retirement-planning/faq" element={<RetirementFaq />} />
                 <Route path="/savings/retirement-planning/contact" element={<RetirementContact />} />
                 <Route path="/savings/retirement-planning/checklist" element={<RetirementChecklist />} />
+                <Route path="/savings/risk-profile" element={<RiskProfile />} />
 
                 {/* Shared */}
                 <Route path="/terms" element={<TermsPage />} />
