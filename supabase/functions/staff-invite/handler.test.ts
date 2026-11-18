@@ -66,8 +66,8 @@ function fakePorts(over: Partial<Ports> = {}, claims: Claims | null = freshAdmin
   };
   const ports: Ports = { ...base };
   for (const [k, fn] of Object.entries(over)) {
-    // deno-lint-ignore no-explicit-any
-    (ports as any)[k] = async (...a: unknown[]) => rec(k, a, await (fn as (...x: unknown[]) => Promise<unknown>)(...a));
+    (ports as unknown as Record<string, unknown>)[k] = async (...a: unknown[]) =>
+      rec(k, a, await (fn as (...x: unknown[]) => Promise<unknown>)(...a));
   }
   return { ports, calls };
 }
