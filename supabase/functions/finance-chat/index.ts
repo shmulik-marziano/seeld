@@ -10,7 +10,9 @@ const corsHeaders = {
 // Model fallback chain: the primary alias tracks the current flash tier; when Google answers
 // 503 "high demand" / 429 / 5xx (seen in production on 2026-11-17 and 2026-11-18) we try the next
 // one instead of leaving the visitor hanging. Override without a redeploy: GEMINI_MODELS="a,b,c".
-const DEFAULT_MODELS = ["gemini-flash-latest", "gemini-2.5-flash-lite", "gemini-2.0-flash-lite"];
+// 2026-11-18: Google retired gemini-2.x and the 2.5 lite tier for new users and points to
+// gemini-3.5-flash-lite; the "latest" alias was timing out under load, so the light model leads.
+const DEFAULT_MODELS = ["gemini-3.5-flash-lite", "gemini-3.5-flash", "gemini-flash-latest"];
 const MODELS = (Deno.env.get("GEMINI_MODELS") ?? "").split(",").map((s) => s.trim()).filter(Boolean);
 const MODEL_CHAIN = MODELS.length ? MODELS : DEFAULT_MODELS;
 const UPSTREAM_TIMEOUT_MS = 12_000; // per attempt; the whole chain stays well under the widget's patience
