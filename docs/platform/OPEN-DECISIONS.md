@@ -41,3 +41,17 @@
 25. **pg_trgm בסכמת public** (הזזה לסכמת extensions): לא בוצע, דורש בדיקה של כל השימושים.
 26. **3 מדיניות על storage.objects** לא עטופות (סכמה מנוהלת): לא נגעתי.
 27. **עותק קבצים ישנים/אזור SEELD (טוקיו) והעברת סכמות מוצרים אחרים**: ממתין, כפי שרשום בסעיף ב.
+
+## ו. הבסיס החדש (seeld-site, פרנקפורט): מה בוצע ב-18.11.2026 ואילו ברירות מחדל נבחרו
+בוצע: מסמך הבסיס גרסה 2.2 (`FOUNDATION.md`), תוכנית יישום (`IMPLEMENTATION-PLAN.md`), יומן ביקורת (`FOUNDATION-REVIEW-LOG.md`); 8 מיגרציות יסוד + 17 מיגרציות v2.2 הוחלו על seeld-site ואומתו (353 בדיקות pgTAP בקונטיינר נקי, וגם ב-CI של GitHub); נתוני האתר הציבוריים נטענו ואומתו שורה בשורה מול טוקיו (7/7 אובייקטים); לוח הבקרה: חשיפת API לסכמות `api` ו-`staff` בלבד (200 שורות), hook שחוסם יצירת משתמש בלי הזמנה (`private.hook_before_user_created`), הרשמה כבויה, TOTP, מדיניות סיסמאות.
+ברירות מחדל שבחרתי (אפשר לשנות בכל רגע):
+28. **נמען התראות תפעול** (`ops.alert_recipients`): `Shmulik@seeld.info`. להוסיף נמענים: שורה נוספת בטבלה.
+29. **חיבור Vercel לריפו**: נמצא מנותק (ארבעה קומיטים לא נפרסו, האתר החי נשאר על הקוד הקודם ללא שינוי). חיברתי מחדש את `shmulik-marziano/seeld` לפרויקט `seeld`. פריסה ידנית דרך ה-API נחסמה בהרשאות: הקומיט הבא לענף הראשי ייפרס אוטומטית.
+30. **רצי CI**: מוצמדים ל-`ubuntu-24.04` (הגרסה הצפה עברה ל-26.04 ושברה את התקנת הדפדפן של ה-prerender).
+31. **CSP בתקופת המעבר**: כולל גם את טוקיו וגם את פרנקפורט עד ה-cutover; שער CI (`check-csp-bundle`) מכשיל אם הבאנדל והרשימה לא תואמים, ואחרי ה-cutover `CUTOVER_DONE=1` אוסר כל אזכור של טוקיו.
+32. **`[auth.email] enable_signup = true` בתצורה המקומית**: זה מתג ספק האימייל (חובה להתחברות), ההרשמה עצמה כבויה ב-`[auth] enable_signup = false`. המסמכים שאמרו אחרת יתוקנו.
+להחלטת הבעלים:
+33. **הריפו `seeld` ציבורי ב-GitHub**: קלט ל-`workflow_dispatch` (כמו הטוקן ב-`deploy-vercel.yml`) נראה בהיסטוריית הריצות. המלצה: להסיר את הקלט ולהשתמש רק ב-secret, ולשקול להפוך את הריפו לפרטי.
+34. **סודות שרק הבעלים יכול ליצור** (שמות בלבד, הערכים לא עוברים דרכי): מפתח API סודי (`sb_secret`) בשם `SEELD_SECRET_KEY` לפונקציות; Vault: `project_url`, `edge_cron_secret` (ואותו ערך כ-`EDGE_CRON_SECRET` בפונקציות), `pii_enc_key`, `national_id_hmac_key` לפני ייבוא הלקוחות; `RESEND_API_KEY`; `TURNSTILE_SECRET_KEY` + מפתח אתר; מפתח Gemini לצ'אט; ב-GitHub: Environment `production` עם `SUPABASE_DB_URL`, Environment `backup` עם `CONTENT_DUMP_DB_URL`, משתנים `PROD_MIGRATORS`, `SMOKE_SUPABASE_PUBLISHABLE_KEY`, secret `VERCEL_AUTOMATION_BYPASS_SECRET`. הרשימה המדויקת והסדר: `docs/platform/RUNBOOK.md`.
+35. **`api-v1` ו-`queue-worker`** (שלדי קוד מוקדמים עם בדיקות): להשאיר או להעביר ל-`supabase/_parked/`. בינתיים נשארים, עם שם הסוד המעודכן.
+36. **שימור לידים**: 36 חודשים (ברירת המחדל במיגרציה). לשנות: `ops.config`.
