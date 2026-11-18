@@ -130,7 +130,7 @@ const Footer = () => {
           </p>
           <div className="sd-chrome-foot-row">
             <p>
-              &copy; {new Date().getFullYear()} שילד ביטוח ופיננסים · סוכנות ביטוח מבית עמיתים הון · מספר רישיון{" "}
+              &copy; 2025&ndash;{new Date().getFullYear()} שילד ביטוח ופיננסים · סוכנות ביטוח הפועלת מאז 2025, מבית עמיתים הון · מספר רישיון{" "}
               <bdi className="tabular-nums">138666</bdi>
             </p>
             <ul>
