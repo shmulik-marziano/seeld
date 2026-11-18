@@ -1,484 +1,615 @@
 # יסודות הפלטפורמה של SEELD: אתר, Supabase, Vercel, CI
 
-מצב: 18.11.2026. מסמך ההחלטות והתכנון הקובע. נבנה על `ARCHITECTURE.md`, `EVENT-ARCHITECTURE.md`, `RUNBOOK.md` ו-`OPEN-DECISIONS.md` ולא חוזר עליהם. מחקרי העומק של הסוכנים המקבילים נמצאים ב-`docs/platform/research/` (`SUPABASE.md`, `VERCEL-CICD.md`, `SECURITY-PRIVACY.md`), והמסמך הזה מפנה אליהם ולא משכפל אותם.
+מצב: 18.11.2026, **גרסה 2.2** (אחרי שתי סקירות עוינות ושני סבבי תיקון). זה המסמך הקובע. הוא נשען על `ARCHITECTURE.md`, `EVENT-ARCHITECTURE.md`, `RUNBOOK.md` ו-`OPEN-DECISIONS.md`. המחקרים נמצאים ב-`docs/platform/research/`, וסינתזת הפאנל ב-`DESIGN-PANEL.md`.
 
-מה כבר קיים ומאומת (לא הצעה): פרויקט `seeld-site` (Frankfurt, `qxhpolktdfgcbxtfxgov`) נבנה מאפס עם 8 מיגרציות שנמצאות ב-`supabase/migrations/20261118*`, 82 בדיקות pgTAP שעוברות גם בקונטיינר נקי וגם על הפרויקט עצמו, ו-advisors נקיים (פירוט בנספח א).
+**מה קיים ומאומת:** הפרויקט `seeld-site` (Frankfurt, `qxhpolktdfgcbxtfxgov`) עם 8 מיגרציות `20261118*` שהוחלו, ו-82 בדיקות pgTAP ירוקות. גרסה 2.2 מוסיפה **15 מיגרציות קדימה** (`20261119090000`..`20261119091400`), וטרם הוחלה אף אחת מהן על פרויקט מתארח. את 8 המיגרציות שהוחלו לא עורכים לעולם. 14 הראשונות הוחלו בקונטיינר נקי אחרי ה-8, ו-`00_policy_lint` (21/21) ובדיקת העשן ההתנהגותית (26/26) עברו (נספח א). `20261119091400` (תיקוני סבב 2) עוד לא הורצה בקונטיינר. את זה מאמת T0.
 
----
+**מצב המאגר (`origin/main`, אומת 18.11 22:03):** הקומיט `cb5af5e` כבר ביצע את הארכוב באישור הבעלים. 42 מיגרציות Tokyo, 17 תיקיות פונקציות (כולל `pdage-chat`) ו-`config.tokyo.toml` נמצאים עכשיו ב-`supabase/_archive_tokyo/`. ב-`supabase/migrations` נשארו רק 8 קבצי היסוד. ב-`supabase/functions` נשארו `_shared`, `api-v1` ו-`queue-worker`. אלה שלדי הפלטפורמה החדשה ולא קוד Tokyo, ויש להם בדיקות ב-`src/test`. `supabase/config.toml` הוחלף בקובץ ביניים, שעדיין לא תואם למסמך הזה (§4).
 
-## 1. עקרונות (מה "יסוד בטון" אומר כאן)
+**הגדרות שהמתאם כבר ביצע בדשבורד של `seeld-site`:**
+- Exposed schemas = `api` בלבד, עם `max_rows=200`.
+- הרשמה כבויה.
+- סיסמה של 12 תווים לפחות, עם אותיות קטנות וגדולות, ספרות וסימנים, והגנת סיסמאות שדלפו.
+- TOTP פעיל.
+- Site URL = `https://seeld.co.il`.
+- כתובות Redirect: `https://seeld.co.il/**` ו-`https://www.seeld.co.il/**`.
 
-1. **שום דבר לא חשוף כברירת מחדל.** מה שהדפדפן יכול לגעת בו הוא רשימה סגורה של views ופונקציות בסכמה אחת (`api`). הטבלאות עצמן בסכמות שאינן חשופות.
-2. **ההרשאה נקבעת במסד, לא בקוד הלקוח וגם לא ב-claims מיושנים.** תפקיד נקרא מטבלה (`core.staff`), ביטול הרשאה נכנס לתוקף מיידית.
-3. **כל שינוי הוא מיגרציה מתוארכת שעוברת הרצה מאפס.** אין שינוי ידני בדשבורד שלא מתועד כקובץ. אין עריכה של מיגרציה שכבר הורצה.
-4. **הכול נבדק אוטומטית.** כל הבטחת אבטחה כתובה כבדיקת pgTAP ורצה ב-CI.
-5. **משעמם לתפעול.** פחות חלקים נעים: פרויקט Supabase אחד לאתר, פרויקט Vercel אחד, מסלול פריסה אחד, שלושה cron jobs.
-6. **הרחבה בלי עבודה מחדש.** מוצר חדש מוסיף סכמה ו-views, לא משנה את הבסיס.
+**החלטות בעלים (18.11):**
+- 191 הלקוחות של Tokyo מועתקים מוצפנים: HMAC לת.ז. ועמודה מוצפנת.
+- אפליקציית הסוכנים נבנית מחדש בהמשך.
+- מודול PDage נמחק מהמאגר.
+- ל-`investment_tracks` יש מנגנון רענון אוטומטי אמיתי.
+- לבעלים יש חשבון Cloudflare ל-Turnstile.
 
----
-
-## 2. עשרה דברים שלמדתי ושמשנים את הנוהג הנוכחי
-
-מקורות בסוף הסעיף. "נקרא" = נקרא בעומק ביום זה; "חיפוש" = נמצא בחיפוש התיעוד, נקרא ברמת כותרת בלבד.
-
-1. **סכמה חשופה אחת (`api`) במקום טבלאות ב-`public`.** ב-Tokyo 257 טבלאות, ל-`anon` ול-`authenticated` יש ALL (כולל TRUNCATE) והכול נשען על RLS בלבד. התיעוד (RLS guide, נקרא) מסביר ש"מדיניות לא מסירה grants". ההחלטה: ADR-1.
-2. **grants מפורשים, ובדיקה שחוזרת על עצמה.** התיעוד מציין ש"לא כל פרויקט מעניק grants אוטומטית" ושצריך לתת לכל תפקיד רק מה שנחוץ. הבדיקה `01_structure_and_grants` נכשלת אם מישהו מעניק TRUNCATE/REFERENCES/TRIGGER ל-API roles.
-3. **RLS בצורה שמתאימה למנוע.** `(select auth.uid())` ו-`(select private.is_staff())` יוצרים initPlan שמחושב פעם אחת לשאילתה (ההפרש בתיעוד: מ-179ms ל-9ms, ובפונקציית תפקידים מ-178,000ms ל-12ms), תמיד `TO role`, ואינדקס על כל עמודה במדיניות. ב-Tokyo נמצאו 92 מדיניות בלי עטיפה ו-103 מפתחות זרים בלי אינדקס (יומן שלב א׳).
-3א. **אחת-לכל-תפקיד-לכל-פעולה:** מדיניות SELECT נפרדת ל-`anon` ול-`authenticated` מונעת את אזהרת multiple_permissive_policies (ב-Tokyo 31 מקרים).
-4. **MFA נאכף במסד.** `auth.jwt()->>'aal'` שווה `aal2` הוא חלק מ-`private.is_staff()`. סוכן בלי TOTP רואה אפס נתונים פרטיים (בדיקה 22 בקובץ 02). זה מתועד ב-RLS guide (סעיף MFA, נקרא).
-5. **תקציב Disk IO הוא מגבלה אמיתית ולא "תקלה".** לפי `compute-and-disk` (נקרא): Micro מקבל 11 MB/s ו-500 IOPS בקצב קבוע, Small 22 MB/s ו-1,000 IOPS, וכולם יכולים לפרוץ ל-261 MB/s ו-11,800 IOPS רק למשך קצר ביום (התקציב). אחרי שהתקציב נגמר המופע מוגבל, התגובות מאטות, ה-autovacuum וגיבוי יומי נפגעים (`exhaust-disk-io`, נקרא). הגורמים הנפוצים לפי התיעוד: זיכרון גבוה ו-swap, cache hit נמוך, שאילתות ארוכות, עומס. מדד "Disk IO Balance" אינו חשוף ב-Metrics API ולכן אי אפשר להגדיר עליו התראה אוטומטית. בנוסף, הגורמים הסבירים ב-Tokyo (השערה מבוססת יומן שלב א׳, לא מדידה): 122,876 שורות `cron.job_run_details`, 103 FK בלי אינדקס (סריקות), 192 אינדקסים שלא בשימוש (הגברת כתיבה), upsert של 39,614 שורות עם `raw_data` jsonb שלוש פעמים בשבוע, שני cron כל 5 דקות של מערכת אחרת, והכול על מופע אחד ל-257 טבלאות. התיקון המבני: פרויקט נפרד לאתר, שמירת נתונים (`ops.cleanup` כולל `cron.job_run_details`), בלי `raw_data`, cron אחד לכל מטרה.
-6. **ענפי Supabase בונים את הסכמה ממיגרציות ולא משכפלים אותה** (`github-integration`, נקרא). לכן שחזור מאפס הוא תנאי להכול, ולכן הוכחתי אותו בקונטיינר.
-7. **Edge Functions: מפתחות חדשים (publishable / secret) ומעטפת `withSupabase`** עם מצבי auth (`user`, `secret`, `publishable`, `none`). `verify_jwt` חייב להיות מוגדר ב-`config.toml` ולהישמר בגיט (ב-Tokyo הקובץ סטה ממה שפרוס). קריאת cron ל-function בעזרת מפתח secret מ-Vault ולא כתובת קשיחה (`functions/auth` ו-`schedule-functions`, הראשון נקרא).
-8. **Vercel: אזור ברירת מחדל `iad1` (וושינגטון)** לפונקציות (`configuring-functions/region`, נקרא). האתר פונה ל-Frankfurt ולכן `fra1`. עוד ממצא מהפריסות בפועל: דחיפה ל-`main` מפרסמת לפרודקשן בלי להמתין ל-CI (8 פריסות פרודקשן ב-21 השעות האחרונות לפי `list_deployments`, חמש מהן בשעה וחצי האחרונות, כל אחת ישירות מ-commit). ההגנה: חוק הגנת ענף שדורש `ci-ok`, ומסלול פריסה יחיד. Deployment Protection ברמת Standard מגנה על כל מה שאינו דומיין פרודקשן (`deployment-protection`, נקרא).
-9. **מגבלות Auth שמשפיעות על התכנון** (`auth/rate-limits`, נקרא): ספק האימייל המובנה שולח 2 הודעות לשעה בלבד, לכן OTP לאימייל מחייב SMTP מותאם. SMS ברירת מחדל 30 לשעה. הרשמה/כניסה 30 בקשות ל-5 דקות לכל IP. OTP לאותו משתמש: חלון 60 שניות.
-10. **טופס ליד ציבורי הוא וקטור התעללות.** ב-Tokyo `send-lead-notification` פתוחה (`verify_jwt=false`) ושולחת אימייל. הפתרון: כתיבה רק דרך RPC עם ולידציה, honeypot, הגבלת קצב במסד, idempotency, ובשלב הבא Turnstile בקצה. שגיאות `PT400`/`PT429` ב-PostgREST הופכות ישירות לסטטוס HTTP (מתועד ב-PostgREST, נוסיף למדריך הלקוח).
-
-מקורות (Supabase): https://supabase.com/docs/guides/database/postgres/row-level-security (נקרא), https://supabase.com/docs/guides/platform/compute-and-disk (נקרא), https://supabase.com/docs/guides/troubleshooting/exhaust-disk-io (נקרא), https://supabase.com/docs/guides/auth/rate-limits (נקרא), https://supabase.com/docs/guides/deployment/branching/github-integration (נקרא), https://supabase.com/docs/guides/functions/auth (נקרא), https://supabase.com/docs/guides/api/securing-your-api (חיפוש), https://supabase.com/docs/guides/api/using-custom-schemas (חיפוש), https://supabase.com/docs/guides/functions/schedule-functions (חיפוש), https://supabase.com/docs/guides/local-development/declarative-database-schemas (חיפוש), https://supabase.com/docs/guides/local-development/testing/pgtap-extended (חיפוש), https://supabase.com/docs/guides/platform/backups (חיפוש), https://supabase.com/docs/guides/database/connecting-to-postgres (חיפוש). מקורות (Vercel): https://vercel.com/docs/functions/configuring-functions/region, https://vercel.com/docs/project-configuration, https://vercel.com/docs/deployment-protection (נקראו). מחקרים נוספים: `research/SUPABASE.md`, `research/VERCEL-CICD.md`, `research/SECURITY-PRIVACY.md`.
+**חוקים קשיחים:** אין התחברות חברתית לעולם; אין מידע אישי תועה; המערכת משעממת לתפעול.
 
 ---
 
-## 3. סביבות ותהליך קידום
+## שינויים בגרסה 2
 
-| סביבה | מה זה | מסד | מי נוגע | מתי נוצרת |
-|---|---|---|---|---|
-| local | `supabase start` או הקונטיינר ב-`supabase/tests/replay-local.sh` | מקומי, נבנה ממיגרציות | מפתח/סוכן | תמיד |
-| preview | Vercel preview לכל PR | ענף Supabase זמני (רק ל-PR שנוגע ב-`supabase/`), אחרת מצביע ל-staging | CI | לפי PR |
-| staging | ענף עמיד `staging` של `seeld-site` | ענף | חזרות cutover, בדיקות עומס | **רק** בימים 4-5 ואז נמחק (ADR-11) |
-| production | `seeld-site` + הפרויקט `seeld` ב-Vercel | `qxhpolktdfgcbxtfxgov` | מיגרציות דרך PR בלבד | קיים |
+| # | מה | איפה |
+|---|---|---|
+| 1 | הארכוב **בוצע** (`cb5af5e`). נשארו החלטה על `api-v1` ו-`queue-worker`, והחלפת `config.toml` הביניים בקובץ המוצע ב-PR הראשון של v2 | §4, §12, ADR-38 |
+| 2 | **חוסם:** `api.submit_lead(p_payload, p_idem_key, p_client_ip)` ל-`service_role` בלבד. `p_client_ip` חובה. `api.lead_replay` (קריאה בלבד) רץ לפני Turnstile. מפתחות ה-payload סגורים לפי `kind` | §7, ADR-21 |
+| 3 | **חוסם:** 14 RPC שירות ב-`api`, ל-`service_role` בלבד | §5.1, ADR-22 |
+| 4 | **חוסם:** `ops.call_function`/`ops.http_invoke` עם Vault (`project_url`, `edge_cron_secret`), timeout של 5 שניות, חוזה 202, ומתג `edge_cron_enabled` | §9, ADR-25 |
+| 5 | **חוסם:** outbox v2 עם נעילה, backoff של 1/5/30 דק' ו-2 ש', ומצב `dead` אחרי 5 ניסיונות. התראה שלא נמסרה עוברת ל-`undeliverable` | ADR-26 |
+| 6 | `staff-invite` מחליפה את `invite-agent`: הזמנה, שליחה חוזרת, השבתה עם חסימה, והפעלה מחדש עם ביטול החסימה | §7 |
+| 7 | PII של לידים נקרא **רק** דרך `staff.leads_list`/`staff.lead_get`, שכותבים ל-`audit.access_log`. כתיבה עוברת דרך `staff.lead_*` | ADR-23, ADR-34 |
+| 8 | אין DELETE לתפקידי API על תוכן | ADR-23 |
+| 9 | `agency_id` משמש גבול בכל policy | ADR-24 |
+| 10 | עזרים: `private.flag`, `kill_switch`, `assert_staff`, `assert_admin_fresh`, `log_access`, `caller_ip` | §5.1 |
+| 11 | hook `before_user_created` (סגל בלבד) + `core.invitations` | ADR-29 |
+| 12 | watchdog עם צעדים מבודדים. `api.health.degraded` משמש ערוץ עוקף | §13, ADR-27 |
+| 13 | 5 משימות cron במקום 7. הרענון רץ בצעד `cma_refresh` | ADR-28 |
+| 14 | שימור | §9, ADR-34 |
+| 15 | IP של הלקוח | ADR-35 |
+| 16 | `investment_tracks` אוטומטי מ-data.gov.il | ADR-36 |
+| 17 | `public` אטום | ADR-39 |
+| 18 | `00_policy_lint` קטלוגי | §15 |
+| 19 | מחשוב Small | ADR-33 |
+| 20 | סשנים: 12 ש' לסשן, שעה של חוסר פעילות, JWT של 15 דק' | ADR-32 |
+| 21 | `crm.customers` מוצפן | ADR-41 |
+| 22 | PDage נמחק. טפסים שאוספים ת.ז. או חשבון בנק כבויים | ADR-42 |
+| 23 | `max_rows=200` | ADR-43 |
+| 24 | סודות מסד ב-GitHub רק ב-Environment מוגבל, בלי repository secrets | §10, §12, ADR-44 |
 
-תהליך: ענף קצר, PR, CI (`ci-ok` חובה), preview אוטומטי, מיזוג ל-`main`, Vercel פורס, המיגרציות מוחלות על פרודקשן על ידי הוצאה מבוקרת (`supabase db push` מ-CI ידני עם אישור, או חיבור GitHub של Supabase). מיגרציה הרסנית (drop/rename) דורשת שני שלבים (expand, ואחרי יום contract). Rollback של קוד: Vercel Instant Rollback. Rollback של מסד: מיגרציה קדימה שמתקנת, לעולם לא עריכה.
+### תיקוני סקירה (סבב 1)
+
+סקירת תפעול (O) וסקירת אבטחה (S). הפירוט המלא נמצא ב-`changes_applied`.
+
+- **timeouts ו-cron (O-B1/F1, O-F16):** timeout של 5 שניות; תשובת 202 ועבודה ב-`waitUntil`; סיום רק ב-`api.job_finish`; `cron_http_audit` סופר רק סטטוס `>=400` או שגיאת חיבור; `job_continue`.
+- **outbox (O-B2/F2):** אזעקה רק על שורה באיחור.
+- **watchdog (O-B3/F3, S-F9):** בלוק חריגה לכל צעד; שורת `ops-watchdog`; `degraded`; `site-watch`.
+- **intake (O-B4/F4, S-F16):** `intake_rejects` ו-`intake_near_cap`.
+- **סוכנות (O-B5/F5, S-F1):** `staff_select` ו-`client_accounts_select`.
+- **נעילה (O-B6/F6, S-B8, S-F2, S-F10, O-F18):** אדמין לא ננעל; נעילה רק מ-2 מקורות IP; מופעלת רק אחרי אימות; break-glass.
+- **חוקי בעלים (O-B7/F7, S-B3, S-B9, S-B10):** אין Google; §18.4; אין dump פרטי; allowlist ל-payload.
+- **רישום גישה (O-B8/F8, S-B5, S-F17):** RPC שרושם גישה; projection מצומצם.
+- **max_rows (O-B9/F9, S-F4):** 200, וספירות ב-`count=exact`.
+- **CI (O-B10/F10, S-B1, S-B2, S-B4):** סדר בלי נעילה הדדית (בסבב 2 הוחלף, כי הארכוב כבר בוצע).
+- **הזמנות (O-B11/F11, S-F18):** תוקף 24 ש' ושליחה חוזרת.
+- **idempotency (O-B12/F12):** replay לפני Turnstile.
+- **בדיקות (O-F13, O-F14, S-F6, O-F20, S-F12, S-F15):** 02, 03, lint, 07, `replay-local.sh`.
+- **Vercel (O-F15, S-F14, S-F13):** Node; CSP; Preview.
+- **עמידות ועובדות (O-F17, O-F19, S-B6, S-B7, S-B11, S-B12, S-F3, S-F5, S-F7, S-F8, S-F11, S-F19, S-F20):** תוקנו כמתואר בגרסה 2.1.
+
+### תיקוני סקירה (סבב 2)
+
+- **מצב המאגר (A-B1, B-B1):** הארכוב בוצע ב-`cb5af5e`, ולכן §4, §12, §21, ADR-38 ונספח ד נכתבו מחדש לפי המצב בפועל.
+  - **`api-v1`/`queue-worker`:** נדרשת החלטת בעלים פרטנית. ההמלצה היא להעביר אותם ל-`supabase/_parked/` יחד עם הבדיקות שלהם.
+  - **`_shared`:** נשאר ומורחב.
+  - **בדיקת allowlist:** "אין תיקייה מחוץ לרשימה" (הכלה ולא שוויון).
+  - **`config.toml`:** הביניים מוחלף בקובץ המוצע ב-PR הראשון.
+  - **CI:** בלי שלבים. השערים מלאים מה-PR הראשון של v2, והגנת ענף מופעלת אחרי שהוא ממוזג ירוק.
+  - **מחיקת `pdage-chat` מהארכיון:** דורשת אישור נפרד.
+- **סודות GitHub (A-B2):**
+  - `SUPABASE_DB_URL` נמצא רק ב-Environment `production` (ענף `main`, `workflow_dispatch`, בדיקת שחקן).
+  - `SUPABASE_ACCESS_TOKEN` בוטל.
+  - טיפוסים נוצרים מהמסד המקומי.
+  - ה-dump השבועי רץ כתפקיד `content_dump` עם הרשאת קריאה ל-`content` בלבד.
+  - בדיקת CI חוסמת שימוש בסוד DB מחוץ ל-job עם `environment`.
+- **התראה תקועה (B-B2):**
+  - שורת outbox של התראה שמגיעה ל-`dead` מעבירה את ההתראה ל-`undeliverable`. זה משחרר את מפתח ה-dedupe ומוציא אותה מהתנאי `pending > 30 דק'`.
+  - `staff.admin_alert_resolve` ושורת SQL ב-runbook.
+  - התראת `outbox_dead` על עצמה לא נוצרת שוב (אין לולאה).
+- **שאר התיקונים (F1-F19):**
+  - שומר `last_admin` הוסר, כי שומר העצמי מבטיח אדמין פעיל.
+  - break-glass כולל ביטול חסימה.
+  - נוסף `staff.admin_staff_enable`.
+  - דחיות לפני Turnstile לא כותבות למסד.
+  - `lead-intake` מחזירה לדפדפן רק `{ok:true}`.
+  - ייבוא לקוחות מסנן שורות פסולות בלי חריגה שמדליפה PII ללוג.
+  - אין קבצי CSV של לידים.
+  - ה-hook מקבל רק הזמנות סגל.
+  - סימן המים של `copy_auth_events` הוא `(created_at, id)`.
+  - שם אחיד: `fund_id`.
+  - חפיפת `notify-worker` בטוחה.
+  - `site-watch.yml` נערך ולא נוצר מחדש.
+  - הסימון ב-§15 תוקן.
+  - cron לא קורא לפונקציות לפני שנפרסו (`edge_cron_enabled`).
+  - רצפת הגרסה ב-`replay-local.sh` נבדקת על עותק זמני.
+
+**סתירות שהוכרעו:**
+- (א) סשן 12 ש', חוסר פעילות 60 דק', JWT של 15 דק'.
+- (ב) Small.
+- (ג) חשיפת `api`, ואחרי V2-04 גם `staff`.
+- (ד) `log_op_check`.
+- (ה) `max_rows=200`.
+- (ו) `degraded` מייצג רק תקינות מסירה.
+- (ז) חריגי advisor הם רשימה מתועדת.
+- (ח) קובץ `config.toml` שמותקן היום אינו הקובץ המוצע. הקובץ המוצע גובר.
 
 ---
+
+## 1. עקרונות
+
+1. **שום דבר לא חשוף כברירת מחדל:** רק views ופונקציות ב-`api` וב-`staff`.
+2. **ההרשאה נקבעת במסד** (`core.staff`), וביטול שלה מיידי.
+3. **כל שינוי הוא מיגרציה קדימה** שעוברת הרצה מאפס.
+4. **כל הבטחה מגובה בבדיקת pgTAP ב-CI.**
+5. **משעמם לתפעול:** פרויקט אחד, מסלול פריסה אחד, חמש משימות cron, ודגל אחד לכל יכולת.
+6. **הרחבה בלי עבודה מחדש.**
+
+## 2. מה למדנו (תמצית)
+
+- סכמה חשופה אחת במקום `public`, ו-grants מפורשים.
+- RLS עם `(select ...)` ו-`TO role`.
+- MFA נאכף במסד (`aal2`), ו-TOTP טרי לאדמין.
+- Disk IO הוא תקציב.
+- ענפים נבנים ממיגרציות.
+- `verify_jwt` אינו אימות.
+- Vercel רץ ב-`fra1`.
+- SMTP דרך Resend.
+- טופס ציבורי מוגן ב-Turnstile, בבדיקת Origin וב-RPC שירות.
+- **סוד מסד ב-repository secret זמין לכל ענף.**
+
+## 3. סביבות
+
+| סביבה | מסד | הערה |
+|---|---|---|
+| local | `replay-local.sh` / `supabase start` | נבנה ממיגרציות |
+| preview | ענף Supabase ל-PR שנוגע ב-`supabase/` | ענף נבנה מ-`supabase/config.toml`, ולכן קובץ הביניים מוחלף ב-PR הראשון. **אחרי מחיקת staging:** `VITE_FORMS_ENABLED=false`, `VITE_STAFF_APP_ENABLED=false`, ו-Deployment Protection חובה |
+| staging | ענף עמיד, ימים 4-5 בלבד | נמחק אחרי cutover |
+| production | `seeld-site` | מיגרציות רק דרך PR ו-`migrate.yml` (§12) |
+
+לכל ענף סודות Vault משלו: `project_url` של הענף בלבד, ו-`edge_cron_secret`. Rollback של קוד: Instant Rollback. Rollback של מסד: מיגרציה קדימה.
 
 ## 4. מבנה המאגר
 
 ```text
 supabase/
-  config.toml                 # הצעה: docs/platform/config.proposed.toml (הקובץ הקיים מצביע ל-Tokyo)
-  migrations/                 # <14 ספרות>_<snake_case>.sql, קדימה בלבד
-  tests/                      # pgTAP: NN_name.test.sql, local_bootstrap.sql, replay-local.sh
-  seed.sql                    # נתוני פיתוח בלבד (לא קיים עדיין, הבדיקות מניחות טבלאות ריקות)
-  functions/
-    _shared/                  # cors.ts, auth.ts, errors.ts, log.ts, env.ts
-    lead-intake/ notify-worker/ chat-bot/ fetch-cma-data/ sync-tracks/ invite-agent/ health/
-  proposed/                   # מערכת האירועים (06-09), לא נוגעים, מאומצת בנפרד
-api/                          # פונקציות Vercel: קריאה בלבד, מטמון
-docs/platform/                # FOUNDATION.md, research/, *.proposed.*
-src/integrations/supabase/types.generated.ts   # נוצר מסכמת api, נבדק ב-CI
+  config.toml            # היום: קובץ ביניים (max_rows 1000, jwt 3600, sync-tracks, invite-agent); מוחלף בקובץ המוצע ב-PR הראשון של v2
+  migrations/            # 8 קבצי היסוד (+15 של v2); אף גרסה < 20261118162452
+  _archive_tokyo/        # בוצע ב-cb5af5e: migrations/ (42), functions/ (17 כולל pdage-chat), config.tokyo.toml, README.md
+  _parked/functions/     # רק אם הבעלים בוחר: api-v1, queue-worker (לא נפרסים, לא נמחקים)
+  tests/                 # 00_policy_lint, 01-09, replay-local.sh; local_bootstrap.sql מחוץ לתבנית *.test.sql
+  functions/             # allowlist: _shared lead-intake notify-worker chat-bot fetch-cma-data staff-invite health
+api/                     # פונקציות Vercel, Node runtime, קריאה בלבד
+scripts/load/            # load-content.sql, verify-manifest.mjs, copy-customers.mjs (בלי קבצי נתונים)
 ```
 
-קונבנציות: שם מיגרציה מתאר מה בוצע (`add_questionnaire_tables`), קובץ אחד לשינוי לוגי אחד, כל טבלה חדשה כוללת בקובץ עצמו: RLS, grants, מדיניות, אינדקסי FK, טריגר `updated_at`, ובדיקה בתיקיית `tests/`. **אזהרה חשובה:** התיקייה `supabase/migrations/` מכילה גם 40 מיגרציות היסטוריות של Tokyo (עד 20260917). הן שייכות לפרויקט הישן ולא לבסיס החדש. אל תריצו `supabase db push` או `db reset` לפני שבעלים מאשר העברת הקבצים הישנים לארכיון (צעד ידני 9). `replay-local.sh` מדלג עליהן במכוון.
+**מצב והחלטות שנותרו:**
+1. ב-`supabase/functions` יש היום `_shared`, `api-v1` ו-`queue-worker`. `queue-worker/index.ts:75` קורא ל-`SUPABASE_SERVICE_ROLE_KEY`, ש-§7 אוסר.
+   - **החלטת בעלים פרטנית:** (א) **מומלץ:** להעביר את `api-v1` ואת `queue-worker` ל-`supabase/_parked/functions/` ואת `src/test/queue-worker.test.ts` ל-`supabase/_parked/tests/`, כי ה-outbox ו-`notify-worker` מחליפים אותם עד שלב ב'. (ב) לחלופין להשאיר אותם, להוסיף אותם ל-allowlist ול-`config.toml` (`verify_jwt=true`), ולהחליף את המפתח ב-`SEELD_SECRET_KEY`.
+   - `_shared` נשאר בכל מקרה (`src/test/edge-shared.test.ts` ו-`src/platform/queue/policy.ts` תלויים בו) ומורחב.
+2. `supabase/config.toml` מוחלף בתוכן `docs/platform/config.proposed.toml` ב-PR הראשון של v2. זה שינוי קוד רגיל שהבעלים סוקר, לא מחיקה. עד אז ענף או `config push` יחזירו `max_rows=1000` ו-JWT של שעה.
+3. בדיקת CI: `comm -23 <(ls supabase/functions) <(allowlist)` חייבת להיות ריקה (הכלה). פונקציה חדשה שעוד לא קיימת לא מפילה את הבדיקה.
 
----
+## 5. מסד הנתונים
 
-## 5. פריסת מסד הנתונים
+### 5.1 סכמות
 
-### 5.1 סכמות ובעלות
-
-| סכמה | תוכן | חשופה ל-API | מי קורא |
-|---|---|---|---|
-| `api` | views (security_invoker) ופונקציות RPC. הדבר היחיד ש-PostgREST רואה | כן (היחידה) | anon, authenticated |
-| `content` | תוכן ציבורי: `blog_posts`, `travel_companies`, `investment_tracks`, `cma_funds`, matviews | לא | דרך views בלבד |
-| `crm` | נתונים פרטיים: `leads` (ובהמשך לקוחות, שאלונים, דוחות) | לא | צוות (aal2) דרך views |
-| `core` | זהות: `staff`, `client_accounts` | לא | המשתמש עצמו, מנהלים |
-| `ops` | `config`, `rate_limits`, `outbox` | לא | service_role ופונקציות definer |
-| `audit` | `log` (append-only) | לא | service_role |
-| `private` | פונקציות עזר (`is_staff`, `has_role`, `check_rate_limit`) | לא | policies בלבד |
-| `public` | ריק במכוון (נבדק) | לא | כלום |
+| סכמה | תוכן | חשופה |
+|---|---|---|
+| `api` | views invoker; `me`, `health`; RPC שירות (`service_role`): `submit_lead`, `lead_replay`, `intake_note_reject`, `outbox_claim`, `outbox_complete`, `job_finish`, `job_continue`, `cma_upsert_batch`, `cma_finish_sync`, `chat_session_touch`, `chat_append`, `invitation_create`, `invitation_resend`, `staff_provision` | כן |
+| `staff` | view `members`; RPC: `leads_list`, `lead_get`, `lead_set_status`, `lead_assign`, `lead_note_add`, `lead_soft_delete`, `admin_assert_fresh`, `admin_config_set`, `admin_staff_disable`, `admin_staff_enable`, `admin_staff_unlock`, `admin_alert_resolve`, `ops_health` | כן, אחרי V2-04 |
+| `content` | בלוג, נסיעות, `investment_tracks` (+`source`, `source_period`), `cma_*`, matviews | לא; `content_dump` קורא בלבד |
+| `crm` | `leads`, `chat_*`, `customers` (מוצפן) | לא |
+| `core` | `agencies`, `staff`, `client_accounts`, `invitations` | לא |
+| `ops` | `config`, `rate_limits`, `outbox`, `idempotency_keys`, `intake_payload_keys`, `job_runs`, `alerts`, `alert_recipients` | לא |
+| `audit` | `log`, `access_log`, `auth_events` | לא |
+| `private` | עזרים ו-hook | לא |
+| `public` | ריק ואטום | לא |
 
 ### 5.2 קונבנציות
 
-- **מזהים:** `uuid` עם `gen_random_uuid()`. (uuidv7 קיים רק מ-Postgres 18, ADR-7.) טבלאות נתוני עזר שמגיעות ממקור חיצוני (`investment_tracks`) שומרות מזהה זהות עם מפתח עסקי ייחודי (`fund_number`).
-- **זמנים:** `created_at`, `updated_at` מסוג `timestamptz not null default now()`, טריגר `private.set_updated_at`.
-- **שמות:** snake_case, טבלאות ברבים, FK בשם `<entity>_id`, אילוצי `check` במקום enum (קל לשינוי, ADR-8).
-- **מחיקה רכה:** רק במקום שיש בו ערך עסקי (`crm.leads.deleted_at`). הצוות מוחק רך דרך עדכון עמודה בלבד, מחיקה קשה רק service_role.
-- **Audit:** טריגר `audit.log_change()` על כל טבלה עם ערך משפטי או עסקי. לטבלאות עם PII הארגומנט `'no_values'` שומר שמות עמודות שהשתנו, מי ומתי, אך לא ערכים. הטבלה append-only (טריגר חוסם), שימור 400 יום.
-- **תקן RLS לכל טבלה חדשה:** (1) `enable row level security` (ויש גם event trigger שעושה זאת אוטומטית בסכמות המנוהלות), (2) grants מפורשים לכל תפקיד ורק מה שצריך (בלי TRUNCATE), (3) מדיניות לכל פעולה וכל תפקיד, `to <role>` תמיד, `(select ...)` סביב כל פונקציית auth/private, (4) אינדקס על עמודות המדיניות ועל כל FK, (5) בדיקת pgTAP שמוכיחה מה anon, לקוח, סוכן ללא TOTP, סוכן עם TOTP, מנהל יכולים ואינם יכולים.
-- **security definer:** רק כשחייבים (קריאת `core.staff` מתוך מדיניות, כתיבה ל-`audit`/`ops`), תמיד עם `set search_path = ''`, שמות מלאים, ו-`revoke ... from public`. בדיקה אוטומטית נכשלת על פונקציה שלא נעל את ה-search_path.
-- **security invoker:** כל view ב-`api`. כך המדיניות של הטבלה הבסיסית חלה על המשתמש (נבדק).
+- מזהים `uuid` (v4); `created_at`/`updated_at` עם טריגר; `text` עם `check`.
+- RPC בשם `<schema>.<object>_<verb>`.
+- מחיקה רכה רק ב-`crm.leads`.
+- audit עם `no_values` לטבלאות PII, ושורת `ACTION` לכל RPC של צוות.
+- לכל טבלה חדשה: RLS, grants בלי DELETE/TRUNCATE לתפקידי API, policy עם `TO`, אינדקסים ובדיקה.
+- `security definer` רק כשחייבים, ותמיד עם `set search_path = ''`.
+- **מתגים:** `private.flag(key)`. מפתח חסר נקרא כסגור, חוץ מ-`intake_enabled`/`chat_enabled`.
+- **PII מוצפן:** ת.ז. נשמרת כ-HMAC וגם כ-`pgp_sym_encrypt`. המפתחות נמצאים ב-Vault ובנאמנות לא מקוונת.
 
-### 5.3 מודל תפקידים
+### 5.3 תפקידים
 
-| תפקיד | איך מזוהה | יכול |
+| תפקיד | יכול |
+|---|---|
+| `anon` | תוכן ציבורי ו-`api.health()` |
+| `authenticated` (לקוח) | + `api.me()`; רק השורה שלו |
+| `agent` (`aal2`) | עריכת תוכן בלי מחיקה; לידים של הסוכנות שלו דרך RPC שנרשם |
+| `manager`/`admin` | + צוות של אותה סוכנות; פעולות אדמין עם TOTP טרי (≤900 שניות) |
+| `service_role` | RPC שירות; אין גישה ל-`crm.customers` |
+| `content_dump` (לא API) | `select` על `content` בלבד, ל-dump השבועי |
+
+### 5.4 סיווג מידע
+
+| רמה | דוגמאות | חשיפה |
 |---|---|---|
-| `anon` | מפתח publishable, ללא התחברות | קריאת תוכן ציבורי (פוסטים שפורסמו, חברות נסיעות פעילות, מסלולים, לוח תשואות), הרצת `api.submit_lead` בלבד |
-| `authenticated` (לקוח) | `core.client_accounts.status='active'` | כרגע כמו anon + `api.me()`. נתוני הלקוח עצמו יתווספו עם מערכת הלקוחות (ראו 5.5) |
-| `agent` | שורה פעילה ב-`core.staff` + `aal2` | קריאה ועדכון תוכן, קריאת לידים ושינוי `status`, `assigned_to`, `notes`, `deleted_at` בלבד |
-| `manager` / `admin` | `core.staff.role` | כל מה שסוכן + מחיקת תוכן, קריאת כל רשומות הצוות |
-| `service_role` | מפתח secret, בשרת בלבד | כתיבה ל-`content` (טוענים), `ops`, ניהול `core.staff`, מחיקה קשה |
+| ציבורי | תוכן, לוח, מסלולים | anon דרך `api` |
+| פנימי | `ops`, `audit`, `core.staff` | service_role / עצמי |
+| PII | `crm.leads` (בלי ת.ז., בלי מידע רפואי ובלי חשבון בנק), `core.invitations` | צוות `aal2` של אותה סוכנות, דרך RPC שנרשם |
+| PII מוצפן | `crm.customers` | אף תפקיד API |
 
-הרשאה אינה נשענת על claims. כדי שה-UI ידע מה להציג יש `api.me()` שמחזיר תפקיד ורמת אימות. Custom Access Token Hook לא מופעל (ADR-2).
+### 5.5 מערכת האירועים (שלב ב')
 
-### 5.4 ציבורי מול פרטי (סיווג מידע)
+- `identity_links` מתמזג עם `crm.customers.national_id_hmac`.
+- `event_log`/`queue_*` עוברים ל-`ops`.
+- ה-outbox עובר ל-pgmq.
+- `api-v1`/`queue-worker` (אם חנו) נבחנים מחדש בשלב הזה.
 
-| רמה | דוגמאות | איפה | חשיפה |
-|---|---|---|---|
-| ציבורי | פוסטים שפורסמו, חברות נסיעות, לוח תשואות, מסלולי השקעה | `content` | `anon` דרך `api` |
-| פנימי | `ops.*`, `audit.log`, `core.staff` | `ops`, `audit`, `core` | service_role / עצמי |
-| אישי רגיש (PII) | `crm.leads` (שם, טלפון, אימייל, ת.ז. בתוך payload אם נשלחה), `client_accounts` | `crm`, `core` | צוות עם TOTP בלבד, ללא ערכים ביומן |
-| אישי כלכלי (בעתיד) | שאלונים, דוחות, מסמכי לקוח | `crm` + Storage פרטי | צוות עם TOTP + הלקוח עצמו, כתיבה דרך RPC בלבד |
+## 6. אימות
 
-כלל: מידע שאינו נחוץ לתפעול האתר לא נכנס. הבסיס לא מכיל נתוני CRM ישנים של הסוכנות (ראו סעיף 18.4).
+| קהל | שיטה |
+|---|---|
+| צוות | אימייל + סיסמה + TOTP חובה. `enable_signup=false`, ו-hook שמקבל רק הזמנת **סגל** פתוחה. סשן 12 ש', חוסר פעילות שעה, JWT של 15 דק'. CAPTCHA של Turnstile |
+| לקוחות | מחוץ לתחום (§17). ה-hook דוחה הזמנות `client` עד שהפורטל ייבנה |
+| אנונימי | publishable key; לידים רק דרך `lead-intake` |
 
-### 5.5 איך מערכת האירועים (`supabase/proposed/01-09`) משתלבת
+**התחברות חברתית: אף פעם.** כל ספק חיצוני כבוי, ובדיקת ה-smoke מוודאת `external.*=false`.
 
-היא מאומצת בשלב ב׳, אחרי שהבסיס יציב, ובלי לשנות אותו:
-- `identity_links` (HMAC של ת.ז.) הופך להיות `crm.customer_identities` ו-`core.client_accounts.customer_id` מצביע עליו.
-- `event_log`, `queue_*`, `idempotency_keys`, `alerts` עוברים מ-`public` ל-`ops` (שינוי שם סכמה ב-SQL המוצע, הבדיקות שבודקות את התקשורת נשארות).
-- `ops.outbox` של הבסיס הוא גרסה פשוטה שמתחלפת: ה-trigger על `crm.leads` כבר כותב אליה, וה-worker מהמערכת המוצעת יקרא ממנה (או שייכתב מחדש ל-pgmq). עד אז `notify-worker` קטן מספיק.
-- `platform_user_roles` (08) מוחלף ב-`core.staff` (תפקידים: `agent`, `manager`, `admin`; `super_admin` של 08 הופך ל-`admin`). המדיניות החזקה ב-08 (`require_super_admin_fresh`) נשמרת כפונקציה נוספת.
-- `rate_limit_counters` ו-`audit_log` (02/03) מוחלפים ב-`ops.rate_limits` ו-`audit.log` הקיימים.
+הערות:
+- (א) SMTP של Resend.
+- (ב) SMS כבוי.
+- (ג) שלושת המשתמשים הקודמים מוקמים מחדש.
+- (ד) `otp_expiry=600`: קישור ההזמנה תקף 10 דקות, וההזמנה עצמה 24 ש'. שליחה חוזרת: `staff-invite` `resend`.
+- (ה) **נעילה:** כבויה עד האימות ביום 3. אדמין לא ננעל לעולם. נעילה רק מ-2 מקורות IP לפחות (ADR-30).
+- (ו) **השבתה:** `staff.admin_staff_disable` (מסרבת להשבית את עצמך, ולכן תמיד נשאר אדמין פעיל), ואחריה `staff-invite` `disable` מריצה `auth.admin.updateUserById(id, { ban_duration: '876000h' })`. `auth.admin.signOut` מקבל JWT ולא user id, ולכן לא מתאים.
+- (ז) **הפעלה מחדש:** `staff.admin_staff_enable` (אדמין, TOTP טרי, אותה סוכנות, שורת ACTION), ואחריה `staff-invite` `enable` מריצה `updateUserById(id, { ban_duration: 'none' })`.
+- (ח) **Break-glass (אדמין יחיד נעול או מושבת):**
+  1. ב-SQL Editor:
+     ```sql
+     update core.staff set locked_until = null, active = true where user_id = '<uid>';
+     insert into audit.log (actor_role, table_name, op, pk, new_data) values ('owner_sql', 'core.staff', 'ACTION', '<uid>', '{"action":"break_glass_unlock"}');
+     ```
+  2. ביטול החסימה ב-GoTrue: Dashboard > Authentication > Users > המשתמש > Unban. חלופה ב-SQL:
+     ```sql
+     update auth.users set banned_until = null where id = '<uid>';
+     ```
+  3. יום 3 כולל תרגיל על אדמין בדיקה. הקבלה: הכניסה מצליחה.
 
----
+## 7. Edge Functions
 
-## 6. מודל אימות
+**חוזה cron:** בדיקת `x-cron-secret` (`timingSafeEqual`), תשובת `202`, עבודה ב-`EdgeRuntime.waitUntil`, וסיום ב-`api.job_finish`.
 
-| קהל | שיטה | פרטים |
-|---|---|---|
-| סוכנים, מנהלים | אימייל + סיסמה (12+ תווים) + TOTP חובה | `enable_signup=false`. המשתמש נוצר בהזמנה (`invite-agent`, service_role) ושורה ב-`core.staff`. בלי TOTP מגיעים ל-`aal1` ורואים אפס נתונים פרטיים. הרשמת TOTP פתוחה ל-aal1 |
-| לקוחות | הזמנה בלבד, תעודת זהות + אימות (SMS בשלב מאוחר) | קוד חד-פעמי לאימייל לחשבונות קיימים בלבד: `signInWithOtp({ options: { shouldCreateUser: false } })`. אין התחברות חברתית (הוסרה כבר ב-commit f55dfad) |
-| אנונימי | מפתח publishable | קריאה ציבורית ו-`submit_lead` |
+| פונקציה | חוזה |
+|---|---|
+| `lead-intake` | (1) Origin מ-allowlist, אחרת 403. (2) payload קנוני בלבד, גוף עד 32KB, ו-`Idempotency-Key` תקין. (3) `api.lead_replay` (**קריאה אחת באינדקס, בלי כתיבה**): אם נמצא, 200; גוף שונה, 409. (4) Turnstile. (5) `api.submit_lead(payload, key, cf-connecting-ip)`. (6) `api.intake_note_reject` **רק לדחיות אחרי ש-Turnstile עבר** (400/409/423/429). דחיות Origin, צורה ו-Turnstile נספרות בזיכרון של ה-isolate (best effort, לכל IP) ונרשמות בלוג בלי PII. אין כתיבה למסד לפני Turnstile. **תשובה לדפדפן: `{ok:true}` בלבד**, בלי `id` ובלי `duplicate`, כדי שלא אפשר יהיה לאשר שליד קיים |
+| `notify-worker` | cron כל דקה; 202; `api.outbox_claim(20)`, ואז Resend עם `Idempotency-Key: outbox-<id>`, ואז `api.outbox_complete`; עוצרת אחרי 72 שניות. הפעלות חופפות בטוחות: `outbox_claim` משתמשת ב-`for update skip locked` ובנעילה של 2 דק', כך ששורה נלקחת פעם אחת |
+| `fetch-cma-data` | cron שבועי; 202; פרוסות של עד 60 שניות; `api.job_continue`; בסוף `api.cma_finish_sync` ו-`api.job_finish` |
+| `chat-bot` | `api.chat_session_touch(key, cf-connecting-ip)` ואחריה `api.chat_append` |
+| `staff-invite` | `verify_jwt=true` + `getClaims` + `staff.admin_assert_fresh()`. פעולות: `invite`, `resend`, `disable` (RPC ואחריו ban), `enable` (`staff.admin_staff_enable` ואחריו `ban_duration:'none'`). CORS מ-`ALLOWED_ORIGINS` |
+| `health` | `GET`, מחזירה `{ok, degraded, cma_age_bucket}` |
 
-הערות: (א) OTP לאימייל דורש SMTP מותאם (Resend) כי הספק המובנה מגביל ל-2 הודעות בשעה. (ב) SMS: בחירת ספק (ספק ישראלי מול Twilio) מוצגת לבעלים בסעיף 21, ההחלטה נדחית לשלב לקוחות. (ג) שלושת המשתמשים שנכנסו ב-Google ב-Tokyo לא יועתקו: מקימים מחדש עם אימייל וסיסמה.
-
----
-
-## 7. Edge Functions: רשימה, חוזים ותקנים
-
-| פונקציה | מטרה | `verify_jwt` | קורא | חוזה (תמצית) |
-|---|---|---|---|---|
-| `lead-intake` | חזית ציבורית ללידים: מאמתת Turnstile, מקור מורשה (Origin), מעבירה ל-`api.submit_lead` עם כתובת הלקוח | false | דפדפן | `POST {kind, full_name, phone?, email?, message?, payload?, consent:true, turnstile_token}` מחזיר `200 {ok,id}` / `400 invalid_input:<field>` / `403 origin` / `429`. כותרת `Idempotency-Key` אופציונלית |
-| `notify-worker` | מרוקנת את `ops.outbox`: שולחת אימייל לצוות (Resend), מסמנת `sent`, ניסיון חוזר עם backoff | false (secret בכותרת) | `pg_cron` כל דקה | `auth: 'secret'`. אידמפוטנטית לפי `outbox.id`. מחזירה `{processed, failed}` |
-| `chat-bot` | בוט צ'אט ציבורי (הקיימים `finance-chat`, `noa-onboarding` מתמזגים) | false | דפדפן | `POST {session_id, message}`. הגבלה לפי session ו-IP בפונקציה, תקרת אורך הודעה, שרשרת fallback למודלים, זמן מקסימום 12 שניות |
-| `fetch-cma-data` | טעינת נתוני רשות שוק ההון (data.gov.il) | false (secret) | `pg_cron` שבועי | upsert ל-`content.cma_funds`, כתיבה ל-`cma_sync_log`, קריאה ל-`content.refresh_fund_views()`. **כרון אחד** (לא שלושה) |
-| `sync-tracks` | רענון `investment_tracks` | false (secret) | `pg_cron` שבועי | upsert לפי `fund_number` |
-| `invite-agent` | יצירת משתמש צוות מוזמן | true + בדיקת `admin` בתוך הפונקציה | אפליקציית הסוכן | יוצרת משתמש, שורה ב-`core.staff`, שולחת הזמנה |
-| `health` | בדיקת חיים: גרסה, בדיקת מסד, גיל נתוני התשואות | false | `site-watch` ו-Vercel | `GET` מחזיר `{ok, version, db, cma_age_days}` ללא סודות |
-| `queue-worker` | (שלב ב׳, מערכת האירועים) | true/secret | cron | לפי `EVENT-ARCHITECTURE.md` |
-
-תקנים לכל פונקציה:
-- קוד משותף ב-`_shared`: `cors.ts` עם **רשימת מקורות מפורשת** (`https://seeld.co.il`, `https://www.seeld.co.il`, ופריוויו של הפרויקט בלבד), לא `*`; `errors.ts` (קודי שגיאה יציבים); `log.ts` (JSON מובנה עם `request_id`, בלי PII); `env.ts` (קריאת סודות עם בדיקת zod, נכשל בעלייה אם חסר).
-- אימות לפי מצב `withSupabase`: `user` לפונקציות של צוות, `secret` לקריאות cron/worker, `none` רק ל-webhook חתום (svix/HMAC). `verify_jwt` מוגדר לכל פונקציה ב-`config.toml` ונבדק ב-CI שלא סטה.
-- סודות בשמות רשמיים בלבד (סעיף 10). אסור `VITE_*` בשרת (תקלת `parse-import-file` ב-Tokyo).
-- הגבלת קצב: במסד (`private.check_rate_limit`) ולא בזיכרון הפונקציה.
-- אידמפוטנטיות: כל פעולה שיש לה תוצאת לוואי מקבלת מפתח (`Idempotency-Key` או `outbox.id`).
-- גרסאות: imports נעולים (`npm:pkg@x.y.z`), Deno של Supabase Edge Runtime כפי שפורסם בתיעוד.
-- אין פונקציות זמניות בפרוס (למשל `tmp-tiny-upload` ב-Tokyo) ו-CI בודק שרשימת הפרוס שווה לרשימת המאגר.
-
----
+**תקנים:**
+- `_shared` הקיים (`auth.ts`, `cors.ts`, `errors.ts`, `logger.ts`, `request.ts`, `rateLimit.ts`, `alerts.ts`) נשאר, ומתווספים לו `env.ts` (zod), `turnstile.ts` ו-`resend.ts`. הלוג נכתב בלי PII.
+- `SEELD_SECRET_KEY` נשלח בכותרת `apikey`.
+- אסור `SUPABASE_SERVICE_ROLE_KEY`/`VITE_*` בפונקציות.
+- רשימת הפונקציות הפרוסות זהה לרשימה במאגר.
 
 ## 8. Storage
 
-- **בעת ההקמה: אין buckets.** ב-Tokyo שני ה-buckets של האתר ריקים. פותחים רק כשיש תכונה.
-- `client-documents` (פרטי, מגבלת 10MB, mime: pdf/jpg/png/heic): נתיב `<customer_id>/<uuid>.<ext>`. קריאה לצוות עם aal2 ולהלקוח לתיקיה שלו (`core.client_accounts.customer_id`). העלאה דרך signed upload URL שמונפק מ-RPC או function. הורדה רק ב-signed URL קצר (60 שניות).
-- `site-assets` (ציבורי): רק תמונות בלוג אם נבחר להזיז אותן מ-`public/` של Vercel. עד אז לא נוצר.
-- מדיניות storage נכתבות בקובץ מיגרציה, עם אינדקס על `bucket_id` ו-`name` אם צריך (תיעוד Storage Optimizations).
+אין buckets בהקמה.
 
----
+## 9. תזמון
 
-## 9. תזמון (`pg_cron`)
-
-| שם | לוח | פעולה |
+| שם | לוח (UTC) | פעולה |
 |---|---|---|
-| `ops-cleanup` | כל שעה :17 | `ops.cleanup()`: מוחק `rate_limits` מעל יומיים, `outbox` שנשלח מעל 14 יום, `audit` מעל 400 יום, `cron.job_run_details` מעל 7 ימים (הלקח מ-Tokyo) |
-| `cma-refresh-views-daily` | 03:15 UTC | `content.refresh_fund_views()` (רשת ביטחון, הטוען קורא לה גם אחרי סנכרון) |
-| `cma-freshness-monthly` | 12 בחודש 04:30 UTC | `content.cma_check_freshness()` (תוקן: הערך `stale` מותר באילוץ) |
-| `notify-worker-tick` (להוסיף עם הפונקציה) | כל דקה | `net.http_post` ל-`notify-worker` |
-| `cma-sync-weekly`, `tracks-sync-weekly` (להוסיף) | ראשון 03:00 / 06:00 UTC | `net.http_post` |
+| `ops-cleanup` | כל שעה ב-:17 | `ops.cleanup()` לפי מדיניות השימור (ADR-34). התראות לא-pending, כולל `undeliverable`, נמחקות אחרי 90 יום |
+| `cma-freshness-monthly` | 12 בחודש, 04:30 | `content.cma_check_freshness()` |
+| `notify-worker-tick` | כל דקה | `select ops.call_function('notify-worker')` |
+| `cma-sync-weekly` | ראשון, 03:00 | `select ops.call_function('fetch-cma-data')` |
+| `ops-watchdog` | כל 10 דקות | `select ops.watchdog()` |
 
-קריאה ל-function מתוך cron: כתובת הפרויקט ומפתח secret נשמרים ב-**Vault** (`project_url`, `cron_secret_key`) והקריאה בונה את הכתובת והכותרת מהם. כך אין כתובת קשיחה ואין קריאה בלי הרשאה (תיקון פגמים 4 ו-3).
+`ops.http_invoke` היא המקום היחיד שבונה כתובת: Vault `project_url` + `/functions/v1/<fn>?forceFunctionRegion=eu-central-1`, עם timeout של 5000ms.
 
----
+**`edge_cron_enabled` (ברירת מחדל `false`):** כל עוד הוא כבוי, `ops.call_function` חוזרת בלי שורה ב-`job_runs` ובלי קריאת HTTP. הבעלים מדליק אותו ביום 2 אחרי פריסת `notify-worker`, `fetch-cma-data` ו-`health`. עד אז `degraded=true` צפוי, כי התראות מצטברות ואין מי שימסור אותן. `site-watch` בודק את הדגל רק מה-cutover.
 
-## 10. מצאי סודות (שמות בלבד)
+## 10. סודות (שמות בלבד)
 
-| שם | איפה נשמר | מי משתמש | הערה |
-|---|---|---|---|
-| `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` | אוטומטי ב-Edge Functions | הפונקציות | עוברים בהדרגה למפתחות החדשים `publishable` / `secret` |
-| `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID` | Vercel (per environment) | בניית האתר | ציבוריים. **לא** ערכים בקוד כברירת מחדל |
-| `SUPABASE_SECRET_KEY` (שם לוגי: `default`) | Supabase API keys + Vault (`cron_secret_key`) | cron, פונקציות worker | לעולם לא בדפדפן |
-| `TURNSTILE_SECRET_KEY`, `VITE_TURNSTILE_SITE_KEY` | Edge secrets / Vercel | `lead-intake` | ממתין להחלטת בעלים |
-| `RESEND_API_KEY`, `LEAD_NOTIFY_TO` | Edge secrets | `notify-worker` | `LEAD_CC_TRANSITION` ב-Tokyo לא מועבר |
-| `GOOGLE_AI_API_KEY` | Edge secrets | `chat-bot` | תקרת הוצאה בצד הספק |
-| `ALLOWED_ORIGINS` | Edge secrets | `_shared/cors.ts` | רשימה מופרדת בפסיקים |
-| `VERCEL_TOKEN` | GitHub secret | רק אם משאירים פריסה מ-CI (לא מומלץ) | ADR-12 |
-| `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_URL` (session pooler) | GitHub secrets | CI: types, dump שבועי | ה-pooler כי GitHub Actions ללא IPv6 |
-| `VERCEL_AUTOMATION_BYPASS_SECRET` | GitHub secret | smoke על פריוויו מוגן | |
-| `rate_limit_pepper` | `ops.config` (נוצר אקראית במיגרציה, ייחודי לכל סביבה) | `check_rate_limit`, `ip_hash` | לא בגיט |
+| שם | איפה | מי |
+|---|---|---|
+| `SEELD_SECRET_KEY` | Edge secret | פונקציות |
+| `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID`, `VITE_TURNSTILE_SITE_KEY`, `VITE_FORMS_ENABLED`, `VITE_STAFF_APP_ENABLED` | Vercel | בנייה |
+| `project_url`, `edge_cron_secret` | Vault, לכל סביבה | `ops.http_invoke` |
+| `pii_enc_key`, `national_id_hmac_key` | Vault + נאמנות לא מקוונת | `private.pii_*` |
+| `EDGE_CRON_SECRET`, `TURNSTILE_SECRET_KEY`, `RESEND_API_KEY`, `LEAD_NOTIFY_TO`, `GOOGLE_AI_API_KEY`, `ALLOWED_ORIGINS` | Edge secrets | לפי פונקציה |
+| `RESEND_SMTP_PASSWORD` | `supabase/.env` מקומי + דשבורד | SMTP |
+| `SUPABASE_DB_URL` | **GitHub Environment `production` בלבד** (ענף `main`, מאשר: הבעלים) | רק `migrate.yml` (`workflow_dispatch`) |
+| `CONTENT_DUMP_DB_URL` | GitHub Environment `backup` (ענף `main`) | `content-dump.yml`, תפקיד `content_dump` |
+| `VERCEL_AUTOMATION_BYPASS_SECRET` | GitHub repository secret | smoke ב-preview |
+| `rate_limit_pepper` | `ops.config` | hashing |
 
-כללים: סוד שנחשף מסתובב מיד; אין סודות ביומנים; אין קבצי `.env` בגיט; משתני Vercel מסוג Sensitive לכל מה שאינו `VITE_`.
+**אין** `SUPABASE_ACCESS_TOKEN` ו**אין** כתובת מסד כ-repository secret. כתובת `postgres` מאפשרת לקרוא את `vault.decrypted_secrets`, ולכן גם לפענח את `crm.customers`. סודות Vault אינם חלק מ-pg_dump, ולכן אחרי שחזור יוצרים אותם מחדש.
 
----
+## 11. Vercel
 
-## 11. תצורת Vercel
-
-קובץ מוצע מלא: `docs/platform/vercel.proposed.json` (לא הוחל). שינויים מול הקובץ הקיים וההצדקה:
-- `regions: ["fra1"]` ופונקציות `api/*.ts` עם `maxDuration: 10`: ליד Supabase Frankfurt (ברירת המחדל של Vercel היא `iad1`).
-- כותרות Cache-Control: נכסי `/assets/*` immutable שנה (קיים). HTML: `max-age=0, must-revalidate`. תמונות וגופנים: יום עם stale-while-revalidate. `/api/*`: `s-maxage=300, stale-while-revalidate=3600`. הנתונים משתנים פעם בשבוע, ולכן מטמון CDN מוריד קריאות למסד.
-- CSP: `connect-src` מצביע על הפרויקט החדש (כולל `wss`) ומוסיף `challenges.cloudflare.com` ל-`script-src` ו-`frame-src` עבור Turnstile. `'unsafe-inline'` נשאר (ADR-19). `permissions-policy` הורחב.
-- `git.deploymentEnabled`: רק `main` מפורסם לפרודקשן.
-- משתני סביבה לכל סביבה: Production, Preview (מצביע ל-staging או לענף), Development. משתני הלקוח `VITE_*` שונים בין Preview ל-Production.
-- **צעדי דשבורד (בעלים):** Deployment Protection ב-Standard (מגן על פריוויו, לא על הדומיין), Web Analytics ו-Speed Insights, Firewall rate limit ל-`/api/*` (למשל 100 בדקה ל-IP), התראת Spend, `Instant Rollback` מוכן (כל deployment הוא Rollback candidate).
-- **מסלול פריסה יחיד:** חיבור Git של Vercel. `deploy-vercel.yml` (פריסה מ-GitHub Actions ל-`--prod`) מוחלף או מוגבל ל-`workflow_dispatch` כדי למנוע פריסה כפולה (ADR-12).
-
----
+- `docs/platform/vercel.proposed.json`: `regions:["fra1"]`, `api/*.ts` על Node עם `maxDuration:10`.
+- **אין** `git.deploymentEnabled`. Production Branch = `main`.
+- CSP: `connect-src 'self' https://qxhpolktdfgcbxtfxgov.supabase.co https://challenges.cloudflare.com`. Turnstile מופיע ב-`script-src` וב-`frame-src`.
+- מסלול פריסה יחיד (Git integration). `deploy-vercel.yml` רץ רק ב-`workflow_dispatch`.
 
 ## 12. CI/CD
 
-קובץ מוצע: `docs/platform/ci.proposed.yml`.
+| Job | בודק |
+|---|---|
+| `verify` | typecheck, lint, vitest, prerender, AEO, גודל חבילה, `grep -rEn 'sb_secret_\|service_role\|SUPABASE_SERVICE_ROLE_KEY' dist/ src/ api/` (קובץ הטיפוסים מוחרג) |
+| `database` | רצפת גרסה (`ls supabase/migrations \| awk '$0 < "20261118162452"'` ריק), `replay-local.sh` (00-09), `supabase db reset` + `supabase test db`, טיפוסים `--schema api,staff` **מהמסד המקומי** והשוואה לקובץ במאגר |
+| `functions` | grep אסורים על כל `supabase/functions`, והכלה ב-allowlist |
+| `supply-chain` | npm audit, סריקת סודות, ובדיקה שאף job לא מפנה ל-`secrets.SUPABASE_DB_URL`/`CONTENT_DUMP_DB_URL` בלי `environment:` (`scripts/ci/check-secret-scope.mjs`) |
+| `ci-ok` | needs: כל הארבעה |
 
-| Job | מה בודק | מתי נכשל |
-|---|---|---|
-| `verify` | typecheck, lint, vitest, בניית prerender קשיח, בדיקת AEO, תקציב גודל חבילה | כל כישלון |
-| `database` | `supabase db reset` (הרצה מאפס), `supabase test db`, `supabase db lint`, שם קובץ מיגרציה, סטיית טיפוסים | מיגרציה שלא עוברת מאפס, בדיקת pgTAP שנכשלה, טיפוסים לא מעודכנים |
-| `supply-chain` | `npm audit` על תלויות פרודקשן, סריקת סודות | חולשה high ומעלה, סוד בגיט |
-| `ci-ok` | אגרגציה: הבדיקה היחידה שחובה בהגנת הענף | אחד מהשלושה נכשל |
-| `preview-smoke` (קובץ נפרד, `deployment_status`) | smoke על כתובת הפריוויו עם bypass | נתיב קריטי מחזיר שגיאה |
+**סדר בלי נעילה הדדית:** הארכוב כבר בוצע, ולכן אין שלבים.
+1. **PR ראשון של v2 (T5):** מיישם את החלטת הבעלים על `api-v1`/`queue-worker`, מחליף את `config.toml`, ומאמץ את `ci.yml` עם שערים מלאים.
+2. אחרי שה-PR ממוזג ירוק, הבעלים מפעיל הגנת ענף שדורשת `ci-ok`.
 
-עוד: advisors (`security` ו-`performance`) מורצים אחרי כל מיגרציה בסביבת ההרצה הראשונה ומתועדים ב-PR. `dependabot` שבועי ל-actions ול-npm. בדיקה ידנית אחת לפני cutover: סריקת הכותרות (`securityheaders`) על הפריוויו.
+**`migrate.yml`:** רץ ב-`workflow_dispatch` בלבד, עם `environment: production` ובדיקה ש-`github.actor` נמצא ב-`vars.PROD_MIGRATORS`. מריץ `supabase db push --db-url "$SUPABASE_DB_URL"` אחרי `ci-ok` ירוק על `main`.
 
----
+**`content-dump.yml`:** רץ פעם בשבוע עם `environment: backup`. מריץ `pg_dump --schema=content` כ-`content_dump`, מצפין במפתח הציבורי של הבעלים, ושומר כ-artifact ל-30 יום.
+
+**`preview-smoke`:** מוודא שאין ספקים חיצוניים, שהרשמה נדחית, ש-`rpc('health')` עובד, ו-`exp-iat=900`.
 
 ## 13. תצפית והתראות
 
-- **יומנים:** Supabase Logs (שימור לפי התוכנית), Vercel runtime logs. בדיקה שבועית של שגיאות 4xx/5xx של PostgREST.
-- **בריאות פעילה:** `site-watch.yml` הקיים (כל 30 דקות, פותח issue) ממשיך, ומתעדכן להצביע גם על `health`.
-- **התראות לבעלים:** `ops.outbox` עם `topic='alert'` ו-`notify-worker` שולח אימייל. מקורות התראה: כישלון cron (`cron.job_run_details` שאינו `succeeded`), `cma_sync_log.status in ('error','stale')`, יותר מ-5 הודעות `rate_limited` בשעה, outbox `pending` ישן מ-15 דקות. מסך סטטוס פנימי לצוות הוא תכונה עתידית בתוך אפליקציית הסוכן (`OPS-CONSOLE.md`), לא פרויקט נפרד.
-- **Disk IO:** המדד אינו חשוף ל-API, ולכן בדיקה ידנית שבועית ב-Observability, והתראה על CPU/זיכרון בדשבורד. כלל: עומס כתיבה חדש (טעינה גדולה) רץ בלילה ובקבוצות.
-- **עלות:** Spend Cap פעיל, התראות חשבון.
-
----
+- **מקור האמת:** `ops.job_runs`.
+- **`ops.watchdog()`:** כל צעד רץ בבלוק חריגה משלו. הצעדים:
+  - `cron_http_audit`
+  - `copy_auth_events` (סימן מים `(created_at, id)`)
+  - outbox
+  - jobs
+  - `cma_refresh`
+  - intake
+  - auth
+- **מסירה:** `ops.raise_alert`, ואז outbox, ואז `notify-worker`, ואז Resend. התראה ששורת ה-outbox שלה הגיעה ל-`dead` עוברת ל-`undeliverable`: מפתח ה-dedupe משתחרר, ו-`outbox_dead` מותרע. התראת `outbox_dead` שבעצמה מתה לא מייצרת התראה נוספת.
+- **פתרון ידני:** `staff.admin_alert_resolve(id)`, או ב-SQL:
+  ```sql
+  update ops.alerts set status = 'resolved' where id = <id> and status = 'pending';
+  ```
+- **ערוץ עוקף:** `api.health().degraded` דולק כשה-outbox תקוע, כשיש `dead` ב-24 השעות האחרונות, כשהתראה ב-`pending` יותר מ-30 דק', או כשאין ריצת watchdog שהסתיימה ב-30 הדקות האחרונות. ה-workflow הקיים `.github/workflows/site-watch.yml` **נערך** כך ש-`scripts/health-check.mjs` נכשל כש-`degraded=true`. הבדיקה פעילה כשמשתנה הריפו `HEALTH_URL` מוגדר, מה-cutover.
+- **Disk IO:** נבדק שבועית.
 
 ## 14. גיבוי ושחזור
 
-- Pro כולל גיבוי יומי. **PITR לא מופעל עכשיו** (ADR-14): נתוני ה-hot הם אלפי שורות ומקור התשואות ניתן לטעינה מחדש.
-- **dump שבועי** (`pg_dump` דרך GitHub Action ידנית/מתוזמנת, חיבור session pooler), מוצפן, נשמר באחסון פרטי של הבעלים. תוכן: `crm`, `core`, `content` (ללא matviews).
-- **תרגיל שחזור חודשי (30 דקות):** יצירת ענף זמני, טעינת ה-dump, הרצת `supabase/tests` ובדיקת ספירות מול `MANIFEST`. קריטריון: כל הבדיקות ירוקות. נרשם ב-`RUNBOOK.md`.
-- שחזור לפרודקשן: החלטת בעלים בלבד; רשומה ב-`audit` על מי הוציא.
-
----
+- גיבוי יומי של Pro, בלי PITR.
+- dump שבועי מוצפן של `content` בלבד, כתפקיד `content_dump` (§12).
+- תרגיל חודשי: טעינה, בדיקות, יצירת Vault מחדש, ובדיקה של `private.pii_decrypt`.
 
 ## 15. רשימת בדיקה לאבטחה
 
-מסומן כשהוא מכוסה בבדיקה אוטומטית (קובץ:בדיקה).
+פריט מסומן רק כשבדיקה אוטומטית ירוקה רצה על הקוד הנוכחי (8+15).
 
-- [x] RLS פעיל בכל טבלה בסכמות מנוהלות (01:1)
-- [x] אין TRUNCATE/REFERENCES/TRIGGER ל-anon/authenticated (01:2)
-- [x] anon בלי גישה לסכמות פרטיות (01:3), לא יכול לקרוא leads/staff/audit (02)
-- [x] אין `USING (true)` בנתונים פרטיים (01:4)
-- [x] כל מדיניות עם `TO` מפורש (01:5)
-- [x] עטיפת `(select ...)` בכל קריאת helper (01:6)
-- [x] כל definer נעול ב-search_path (01:7)
-- [x] anon מריץ רק `api.submit_lead` (01:8)
-- [x] `api` מכילה views ופונקציות בלבד, כולם invoker (01:9, 01:10)
-- [x] סוכן ללא TOTP לא רואה לידים (02:22), סוכן מושבת מאבד גישה מיד (02:38)
-- [x] סוכן לא יכול לשכתב זהות/הסכמה/מחיקה קשה (02:28-30)
-- [x] ולידציה, honeypot, idempotency והגבלת קצב ל-`submit_lead` (03)
-- [x] audit ללא PII ו-append-only (03)
-- [ ] הרשמה כבויה, מינימום סיסמה, MFA (דשבורד, סעיף 21)
-- [ ] `api` ברשימת Exposed schemas בלבד (דשבורד)
-- [ ] Turnstile ו-Origin allowlist ב-`lead-intake` (יום 2)
-- [ ] Deployment Protection, firewall, חוק הגנת ענף (דשבורד)
-- [ ] סיבוב מפתחות ותרגיל שחזור ראשון (יום 5)
-- [ ] עדכון CSP (נפרס עם ה-cutover)
+- [ ] RLS בכל טבלה (01:1); אין TRUNCATE/REFERENCES/TRIGGER (01:2). סומן בעבר על 8 המיגרציות. יסומן שוב אחרי עריכות 01 (כולל `staff`)
+- [ ] אין DELETE (00)
+- [ ] anon מריץ רק את `api.health`; 14 RPC שירות (00)
+- [ ] חריגי advisor 0028/0029 = הרשימה המדויקת (00, ADR-22)
+- [ ] authenticated בלי usage על `crm` (00); `content_dump` עם `select` על `content` בלבד (00)
+- [ ] קריאת לידים נרשמת (05); היקף סוכנות (05); step-up (05)
+- [ ] `submit_lead` (03); `lead-intake` מחזירה `{ok:true}` בלבד (Deno)
+- [ ] hook: בלי הזמנה, 403; הזמנת `client`, 403 (07)
+- [ ] נעילה: לא נטען כיסוי עד יום 3
+- [ ] השבתה והפעלה: `admin_staff_enable`; ביטול חסימה ב-break-glass (07, יום 3)
+- [ ] watchdog שורד צעד שבור; התראה `undeliverable` משחררת dedupe ומכבה `degraded` אחרי 24 ש' (06)
+- [ ] cron: חמש משימות; `edge_cron_enabled=false` לא יוצר `job_runs` (00, 06)
+- [ ] `public` אטום (00); `crm.customers` (09); ייבוא בלי חריגה על שורה פסולה (09)
+- [ ] שימור (08)
+- [ ] סודות DB רק ב-Environment (`supply-chain`)
+- [x] הרשמה כבויה, מדיניות סיסמה, HIBP, TOTP, URL (בוצע על ידי המתאם)
+- [ ] Turnstile + Origin; Deployment Protection; הגנת ענף; MFA לארגון
+- [ ] סיבוב מפתחות, תרגיל שחזור, CSP
 
----
+## 16. עלויות
 
-## 16. מודל עלויות (הערכה חודשית)
+Supabase Pro $25 + Small $15 (נטו $5); Vercel Pro $20; Resend ו-Turnstile חינם. בסך הכול כ-$50-80 לחודש.
 
-מחירי מחשוב מתוך `compute-and-disk` (נקרא): Micro כ-$10, Small כ-$15, Large כ-$110 לחודש. מחירים אחרים מסומנים "לאימות".
+## 17. מה לא בונים עכשיו
 
-| פריט | הערכה | הערות |
-|---|---|---|
-| Supabase Pro (ארגון) | $25 | כולל קרדיט מחשוב $10 (לאימות מול החשבון) |
-| מחשוב `seeld-site` | Micro $10 מכוסה בקרדיט, Small $15 (נטו $5 מעבר לקרדיט) | להתחיל ב-Micro. מעבר ל-Small אם Disk IO או זיכרון בלחץ (פי 2 בקצב קבוע) |
-| ענף staging | כ-$0.01/שעה לכל ענף Micro (כ-$10 לחודש אם עמיד) | רק בימי ה-cutover, ואז נמחק |
-| Vercel Pro | $20 למושב (לאימות מספר מושבים) | Hobby אינו מיועד לשימוש מסחרי |
-| Resend | חינם עד מכסה נמוכה | מספיק ללידים והתראות |
-| Cloudflare Turnstile | חינם | |
-| SMS ללקוחות | לפי הודעה, ספק ישראלי | רק בשלב לקוחות |
-| PITR (לא מופעל) | כ-$100 לחודש (לאימות) | נדחה |
-| **סה״כ צפוי** | **כ-$45 עד $75 לחודש** | Supabase $25-30, Vercel $20-40, ענפים לפי שימוש |
-
-לאן הכסף הולך: מחשוב מסד קבוע (לא יורד), מושבי Vercel, ובמידה כלשהי תעבורה (Egress) שמטופלת ע"י מטמון CDN. מה שמעלה עלות בלי הודעה: ענף עמיד שנשכח, ענפי preview פתוחים, הגדלת דיסק. לכן ההתראה והכלל "ענף נמחק אחרי cutover".
-
----
-
-## 17. מה לא בונים עכשיו (רשימה מפורשת)
-
-1. פורטל לקוחות מלא, שאלונים, דוחות (`CLIENT-PORTAL-PLAN.md`, `QUESTIONNAIRES.md` נשארים הצעות).
-2. מערכת האירועים המלאה (pgmq, `queue_*`, workbench, metrics). ה-outbox הקטן מספיק עד לשלב ב׳.
-3. PITR, read replica, מופע גדול מ-Small.
-4. GraphQL, Realtime לתוכן, Presence.
-5. התחברות חברתית.
-6. הצפנת עמודות ברמת מפתח לכל לקוח (ה-HMAC לת.ז. ב-06 יאומץ בשלב ב׳).
-7. Schema declarative (ADR-15).
-8. אנליטיקה בבסיס נתונים (`page_views`): משתמשים ב-Vercel Web Analytics.
-9. מיגרציה של נתוני CRM ו-Surense (סעיף 18.4).
-10. סביבת staging עמידה.
-11. ויטרינה של A/B, feature flags מורכבים.
-12. אוטומציות Make/n8n חדשות.
-
----
+1. פורטל לקוחות.
+2. אפליקציית סוכנים מלאה.
+3. מערכת האירועים (כולל `api-v1`/`queue-worker`).
+4. PITR.
+5. GraphQL, Realtime.
+6. התחברות חברתית (לעולם לא).
+7. Schema declarative.
+8. `page_views`.
+9. נתוני CRM מעבר ל-191 הלקוחות.
+10. staging עמיד.
+11. hooks נעילה של Team.
 
 ## 18. מעבר מ-Tokyo
 
-### 18.1 טבלה: מה עובר, נבנה מחדש, נארכב או נמחק (36 טבלאות האתר)
+### 18.1 טבלאות
 
-| טבלה (שורות ב-Tokyo) | החלטה | יעד / שיטה | המלצה |
-|---|---|---|---|
-| `blog_posts` (22) | **עובר** | `content.blog_posts`, מ-`data/` (יש `MANIFEST`), רק `status=published` עם `published_at` | טעינה בסקריפט, בדיקת ספירה ו-md5 |
-| `investment_tracks` (571) | **נבנה מחדש** | `sync-tracks` טוען מהמקור. ייצוא ב-`data/` כגיבוי | טעינה ראשונית מהייצוא |
-| `cma_funds` (39,614) | **נבנה מחדש** | `fetch-cma-data` מ-data.gov.il (`raw_data` לא מועבר) | טעינה מהמקור, לא מ-dump |
-| `cma_sync_log` (133) | **מתחילים נקי** | יומן חדש. הישן נשמר כ-JSON | |
-| `cma_funds_latest`, `cma_board`, `cma_company_map` | **נבנה מחדש** | matviews ב-`content` | `refresh_fund_views()` |
-| `insurance_leads` (2), `pension_analysis_leads` (0), `contact_submissions` (0), `onboarding_submissions` (0) | **עובר (רק 2 לידים)** | `crm.leads` (`consent_at=created_at`, `consent_version='legacy-v0'`) | dump חד-פעמי ע"י הבעלים, פלט CSV, ללא העברה דרך הצ'אט |
-| `page_views` (3,359) | **נמחק (לאחר ארכוב)** | Vercel Web Analytics. ארכיון פרטי של הבעלים | נתוני גולשים, ערכם נמוך |
-| `chat_conversations` (6), `chat_messages` (8) | **נמחק** | צ'אט חדש עם שימור 90 יום כשייבנה | שיחות ניסיון, אישי |
-| `profiles` (6), `agencies` (0), `agency_invitations` (0) | **נבנה מחדש** | `core.staff` בהזמנה. אין העתקה של `auth.users` | שלושה משתמשים בלבד (בעלים וסוכנים), שאר החשבונות לא יועברו |
-| `customers` (191), `products`, `recommendations`, `recommendation_summaries`, `execution_*`, `customer_messages`, `client_access_links`, `source_files`, `import_*`, `activity_log`, `reasoning_bank` | **נבנה מחדש בשלב ב׳** | מערכת הלקוחות ומערכת האירועים. הרשומות נטענות מהמקור (לא מ-dump של טבלת האתר) | אין העתקה של PII ישן. dump פרטי בארכיון הבעלים עד שהמערכת החדשה עולה |
-| `saved_calculations`, `user_policies`, `insbase_links` (טוקנים!) | **נמחק / נבנה כשיש תכונה** | טוקני OAuth לא מועברים לעולם, חיבור מחדש | |
-| `correction_*`, `deficiency_*`, `pdage_*` (0) | **נמחק** | כלי תיקון (תכונה עתידית, אם תחזור) | |
-| enum `pension_product_type`, ייחוס ל-`pdage_customers`, פונקציית `tmp-tiny-upload` | **נמחק** | לא מועברים | |
-| Cron של האתר (7) | **נבנה מחדש** | `cma-refresh-views-daily`, `cma-freshness-monthly` (הוקמו), `cma-sync-weekly`, `tracks-sync-weekly` (עם הפונקציות). שלושת הסנכרונים הכפולים הופכים לאחד | |
+| טבלה | החלטה |
+|---|---|
+| `blog_posts` (22) | מועבר מ-`data/` (MANIFEST, md5) |
+| `investment_tracks` (571) | נבנה אוטומטית ב-`content.refresh_investment_tracks()` (ADR-36). לא מועתק |
+| `cma_funds` | נטען דרך `fetch-cma-data` |
+| `cma_sync_log`, matviews | מתחילים מאפס, או נבנים |
+| לידים (2) | הבעלים מקליד אותם ב-SQL Editor (`insert into crm.leads ... source='legacy-v0'`). **בלי קובץ** |
+| `customers` (191) | מועתק מוצפן דרך `scripts/load/copy-customers.mjs`, בזרם, עם bind parameter, בלי קובץ |
+| טבלאות לקוח נלוות | נבנות מחדש עם אפליקציית הסוכנים |
+| `page_views`, `chat_*` | לא מועברים |
+| `onboarding_submissions`, דפי הוראת קבע/Onboarding | כבויים ב-cutover |
+| `profiles`, `agencies`, `agency_invitations` | נבנים מחדש |
+| `insbase_links`, `saved_calculations`, `user_policies` | לא מועברים |
+| `pdage_*`, `correction_*`, `deficiency_*` | נמחקים. מודול PDage נמחק מ-`src`. מחיקת `supabase/_archive_tokyo/functions/pdage-chat` דורשת אישור נפרד |
+| Cron (7) | 5 |
 
-### 18.2 נקודות מגע בקוד וב-Vercel (לריצת ה-cutover)
+### 18.2 נקודות מגע
 
-`src/integrations/supabase/config.ts` (הסרת ברירות המחדל והצבעה על `db.schema='api'`), `api/board.ts`, `api/company-map.ts`, `api/fund-status.ts`, `api/funds.ts`, `api/tracks.ts`, `scripts/prerender.mjs` (כתובת הפרויקט החדשה, קריאה מ-`api.blog_posts`), `vercel.json` (CSP כולל `wss`, `regions`), כתובות `net.http_post` בקרונים (מוחלפות ב-Vault), `supabase/config.toml` (`project_id`), משתני Vercel `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID`. מערכות חיצוניות: הקוד של האתר יפסיק לקרוא ל-Tokyo לגמרי. Surense/Make ורכיבים אחרים שייכים למוצרים אחרים ולא נוגעים בהם בהליך הזה.
+- `src/integrations/supabase/config.ts`
+- `src/lib/leadIntake.ts`
+- מסלולים לפי `source_period`
+- `api/*.ts` (Node, עימוד של 200)
+- `prerender.mjs`
+- `vercel.json`
+- `/app`, `/portal`, `/client`, `/personal-area` כבויים
+- הסרת PDage (`src/components/pdage`, `usePdageChat` וכו')
+- הסרת `api/geo.ts` (באישור)
 
-### 18.3 Runbook: cutover ו-rollback
+### 18.3 Runbook
 
 **לפני (יום 4):**
-1. מיגרציות על `seeld-site` ירוקות, 82 בדיקות עוברות, advisors נקי.
-2. טעינת נתונים: `blog_posts` (22), `investment_tracks` (571), `cma_funds` דרך `fetch-cma-data` או מהייצוא. אימות: ספירות שוות ל-`MANIFEST_public.json` (22, 571, 39,614), `select content.refresh_fund_views()`, ו-`api.cma_board` = 1,257 ו-`api.cma_company_map` = 120 כמו ב-Tokyo.
-3. צעדי דשבורד 1-8 הושלמו (סעיף 21), Turnstile פעיל.
-4. פריוויו עם `VITE_*` חדשים: smoke מלא (דף בית, בלוג, לוח תשואות, כל הטפסים, מסלולים, נסיעות). שליחת ליד בדיקה ומעקב עד אימייל התראה.
-5. הכנת ה-PR של cutover (כל נקודות המגע בסעיף 18.2) ללא מיזוג.
+0. `ci.yml` ירוק על `main`; `ls supabase/functions` מוכל ב-allowlist; הגנת ענף פעילה; `config.toml` = הקובץ המוצע.
+1. 8 + 15 המיגרציות ירוקות; advisors רק עם החריגים המתועדים.
+2. טעינה בלילה: blog 22; `cma`; צעד `cma_refresh` רץ פעם אחת. הספירות (ב-`count=exact`):
+   - `api.cma_board` = 1,257
+   - `api.cma_company_map` = 120
+   - tracks פעילים מתועדים
+3. העתקת לקוחות: `received=191`, `inserted+skipped=191`, `invalid_ids` נבדק, ובדיקת פענוח אחת.
+4. §21 הושלם; `edge_cron_enabled=true`; `degraded=false`; smoke ב-preview כולל ליד כפול.
 
-**ביצוע (יום 5, מחוץ לשעות עומס):**
-1. עדכון משתני Production ב-Vercel, מיזוג ה-PR (Vercel פורס אוטומטית).
-2. בדיקות עשן על `seeld.co.il`: `health`, ליד בדיקה, בלוג, לוח.
-3. הפעלת cron של הסנכרון בפרויקט החדש. ב-Tokyo **לא** נוגעים (נשאר כמות שהוא).
-4. ניטור 60 דקות: Vercel runtime errors, `ops.outbox` ללא `pending` ישן, Supabase logs.
+**ביצוע (יום 5):**
+1. משתני Production.
+2. מיזוג.
+3. `migrate.yml`, אם יש מיגרציה חדשה.
+4. smoke.
+5. `ops.job_runs` מתמלא.
+6. `HEALTH_URL` מוגדר.
+7. ניטור במשך 60 דק'.
 
-**Rollback (אם משהו נכשל עד 24 שעות):**
-1. `Instant Rollback` ב-Vercel לפריסה הקודמת (שניות). שינוי משתני הסביבה חזרה (שמורים בשורת מעקב).
-2. הלידים שנקלטו ב-`crm.leads` בחלון: ייצוא ל-CSV והזנה ידנית לזרימה הישנה. אין איבוד נתונים כי המסד החדש נשאר.
-3. Tokyo נשאר פעיל ובלתי משתנה עד 30 יום אחרי cutover יציב. רק אז החלטת בעלים על כיבוי.
+**Rollback (24 ש'):** Instant Rollback + משתנים. לידים שהגיעו בחלון נשארים ב-`seeld-site` ונקראים דרך `staff.leads_list`, **בלי יצוא לקובץ**. Tokyo נשאר 30 יום.
+
+**עצירת חירום:** `staff.admin_config_set('intake_enabled','false')`, או `update ops.config set value='false' where key in ('intake_enabled','chat_enabled');`.
 
 ### 18.4 מה לא עובר
 
-נתוני CRM וניהול תיק של הסוכנות שנמצאים ב-Tokyo (הטבלאות הפרטיות של הסוכנות ומערכות אחרות): ארכוב פרטי על ידי הבעלים לפני מחיקת Tokyo; לא מועברים לשום מערכת חדשה.
+`seeld-ops` והטבלאות הפרטיות של הסוכנות מחוץ לתחום לתמיד: הפרויקט הזה לא מאחסן, לא קורא, לא מארכב ולא מזכיר אותם בקוד, בבדיקות, ב-seed או במסמכים מעבר למשפט הזה.
 
----
+## 19. תוכנית ימים
 
-## 19. תוכנית ימים: חלוקה בעלים וסוכנים, עם בדיקות קבלה
-
-| יום | משימה | מבצע | בדיקת קבלה |
+| יום | משימה | מבצע | קבלה |
 |---|---|---|---|
-| 1 (בוצע) | יסוד מסד: 8 מיגרציות, 82 בדיקות, advisors, מסמך זה, קבצי Vercel/CI מוצעים | סוכן-ארכיטקט | `bash supabase/tests/replay-local.sh` יוצא 0 עם 82 ok; `get_advisors` ריק |
-| 1 | צעדי דשבורד 1-6 (סעיף 21) | בעלים | `select api.me()` עובד עם מפתח publishable על `schema api`; הרשמה חדשה נדחית |
-| 2 | שכבת נתונים באתר: לקוח אחד עם `db.schema='api'`, `api/*.ts`, `prerender.mjs`, טיפוסים | סוכן-פרונט | ספירות ב-preview שוות ל-18.3 (22/571/1,257/120); `tsc` נקי; prerender חזר עם 87 נתיבים |
-| 2 | `lead-intake`, `notify-worker`, Turnstile, `_shared` | סוכן-Edge | ליד אמיתי מגיע לאימייל פעם אחת; בקשה מקור זר = 403; 9 בקשות רצופות = 429; בדיקת Deno |
-| 2 | הפעלת CI המוצע, הגנת ענף, Deployment Protection | סוכן-CI + בעלים | PR שמפיל בדיקת pgTAP נחסם; פריוויו מחייב כניסה |
-| 3 | טעינת נתונים (`blog`, `tracks`, `cma`) וסקריפט אימות מול MANIFEST | סוכן-נתונים | ספירות ו-md5 תואמים; `cma_check_freshness()` רץ בלי שגיאת אילוץ |
-| 3 | הזמנת סוכנים, TOTP, בדיקת תפקידים בפועל | בעלים + סוכן-Edge | סוכן ללא TOTP רואה 0 לידים; עם TOTP רואה |
-| 4 | חזרת cutover על staging, תרגיל שחזור, סריקת כותרות | כולם | רשימת 18.3 "לפני" מסומנת |
-| 5 | Cutover + ניטור + סגירת staging | בעלים + סוכן-CI | `site-watch` ירוק 24 שעות; אפס `pending` ישן ב-outbox |
-| 6+ | שלב ב׳: מערכת לקוחות ואירועים (`proposed/06-09`) | לפי החלטה | ראו 5.5 |
-
----
+| 1 (בוצע) | יסוד, 8 מיגרציות; ארכוב (`cb5af5e`) | ארכיטקט + בעלים | replay 0 |
+| 1 | 15 מיגרציות + בדיקות 00-09 | סוכן-מסד | `replay-local.sh` יוצא 0 |
+| 1 | החלטה על `api-v1`/`queue-worker`; PR ראשון: `config.toml` + `ci.yml` | בעלים + CI | `ci-ok` ירוק; אחריו הגנת ענף |
+| 2 | Edge (202, replay, `{ok:true}`); אחרי פריסה: `edge_cron_enabled=true` | סוכן-Edge + בעלים | ליד כפול = ליד אחד; `job_runs` מתמלא |
+| 3 | Small, טעינה, tracks, לקוחות | בעלים + נתונים | ספירות |
+| 3 | `staff-invite` עם hook; השבתה/הפעלה; break-glass; כניסה כושלת אמיתית | בעלים + זהות | רענון אחרי השבתה נכשל; unban עובד |
+| 4 | חזרת cutover על staging | כולם | 18.3 "לפני" |
+| 5 | cutover | בעלים + CI | `site-watch` ירוק 24 ש' |
 
 ## 20. החלטות (ADR)
 
-**ADR-1 סכמה חשופה אחת (`api`).** הקשר: ב-Tokyo הכול ב-`public` עם ALL לתפקידי API. נבחר: טבלאות בסכמות לא חשופות, views ו-RPC ב-`api`. חלופות: טבלאות ב-`public` עם RLS (המוסכמה הרגילה), סכמה לכל מוצר חשופה. נימוק: משטח התקיפה הוא הרשימה הסגורה, הוספת טבלה בטעות לא חושפת אותה, ושמות ה-views זהים לישנים (חילוף הלקוח הוא הגדרה אחת). מחיר: צריך להגדיר Exposed schemas בדשבורד, ופקודות כמו `supabase.schema('api')` בלקוח. Advisor בודק רק סכמות חשופות, לכן אחרי החשיפה תופיע אזהרת `submit_lead` (חריג מתועד).
+- **ADR-1** `api` היא הסכמה הציבורית.
+- **ADR-2** הרשאות מטבלה.
+- **ADR-3** `aal2` נאכף.
+- **ADR-4** טבלת לידים אחת.
+- **ADR-5** הוחלף ב-ADR-21.
+- **ADR-6** outbox עסקתי.
+- **ADR-7** uuid v4.
+- **ADR-8** text+check.
+- **ADR-9** מחיקה רכה ו-audit בלי ערכים.
+- **ADR-10** matviews ב-`content`.
+- **ADR-11** staging זמני.
+- **ADR-12** מסלול פריסה יחיד + `ci-ok`.
+- **ADR-13** `fra1`.
+- **ADR-14** בלי PITR.
+- **ADR-15** מיגרציות קדימה.
+- **ADR-16** `api/*.ts` על Node.
+- **ADR-17** הוחלף ב-ADR-33.
+- **ADR-18** הוכחה בקונטיינר.
+- **ADR-19** CSP.
+- **ADR-20** טיפוסים `api`,`staff` מהמסד המקומי.
+- **ADR-21** אפס RPC כתיבה ל-anon. `lead-intake` היא הכניסה היחידה. `p_client_ip` חובה. `api.lead_replay` (קריאה בלבד) לפני Turnstile. **לפני Turnstile אין כתיבה למסד:** `intake_note_reject` רק אחרי Turnstile, ודחיות מוקדמות נספרות בזיכרון ובלוג. payload קנוני ו-allowlist סגור. התשובה לדפדפן היא `{ok:true}` בלבד.
+- **ADR-22** חשיפה: `api` ו-`staff`. חריג 0028 = `api.health`. חריגי 0029:
+  - `api.health`, `api.me`
+  - `staff.leads_list`, `staff.lead_get`, `staff.lead_set_status`, `staff.lead_assign`, `staff.lead_note_add`, `staff.lead_soft_delete`
+  - `staff.admin_assert_fresh`, `staff.admin_config_set`, `staff.admin_staff_disable`, `staff.admin_staff_enable`, `staff.admin_staff_unlock`, `staff.admin_alert_resolve`
+  - `staff.ops_health`
 
-**ADR-2 הרשאות מטבלה ולא מ-JWT hook.** חלופה: Custom Access Token Hook שמכניס `user_role`. נימוק: שני משתמשי צוות, ביטול מיידי חשוב יותר מחיסכון בשאילתה אחת (שמבוצעת פעם בשאילתה בזכות initPlan), ו-hook הוא עוד חלק נע בדשבורד. מחיר: שאילתה קטנה לכל בקשה.
+  כל ממצא אחר הוא כשל.
+- **ADR-23** PII רק דרך RPC; אין DELETE.
+- **ADR-24** `agency_id` הוא גבול.
+- **ADR-25** wrapper יחיד, timeout של 5 שניות, חוזה 202, `job_continue`. `edge_cron_enabled` חוסם קריאות עד שהפונקציות נפרסו.
+- **ADR-26** outbox v2: 1/5/30 דק' ו-2 ש'; `dead` אחרי 5 ניסיונות. התראה שמתה עוברת ל-`undeliverable` (מצב סופי). `admin_alert_resolve`.
+- **ADR-27** בריאות = `job_runs` + watchdog; `degraded` הוא הערוץ העוקף.
+- **ADR-28** חמש משימות; רענון ב-`cma_refresh`.
+- **ADR-29** hook `before_user_created` מקבל רק `kind='staff'` (לקוחות: עם הפורטל, במיגרציה נפרדת). הזמנה נושאת `role`/`agency_id`, תקפה 24 ש', וניתנת לשליחה חוזרת.
+- **ADR-30** נעילה בקוד שלנו, אחרי אימות. אדמין לא ננעל. נדרשים 2 מקורות IP לפחות. השבתה = `active=false` + `ban_duration`. הפעלה = `admin_staff_enable` + `ban_duration:'none'`. שומר העצמי מבטיח אדמין פעיל, ולכן אין צורך ב-`last_admin`. סיכון DoS מתועד.
+- **ADR-31** step-up 900 שניות.
+- **ADR-32** סשנים: 12 ש', שעה, 15 דק'.
+- **ADR-33** Small.
+- **ADR-34** שימור 25 חודשים; `access_log` נכתב.
+- **ADR-35** IP חובה מהקורא; ההופ הציבורי האחרון.
+- **ADR-36** `investment_tracks` נגזר מ-`content.cma_board` בכל טעינה מוצלחת:
+  - upsert לפי `fund_id`
+  - הסתרה (`is_active=false`) במקום מחיקה
+  - `tracks_shrink` אם נגעו בפחות מחצי מהשורות
+  - `tracks_stale` אחרי 9 ימים
+  - מתג `tracks_sync_enabled`
+- **ADR-37** מפתחות חדשים.
+- **ADR-38** `supabase/migrations` מכילה רק את הבסיס. הארכוב בוצע (`cb5af5e`). `supabase/functions` מוכלת ב-allowlist. שלדים שלא בתוכנית חונים ב-`_parked` באישור.
+- **ADR-39** `public` אטום.
+- **ADR-40** Auth כקוד + דשבורד. `config.toml` = הקובץ המוצע.
+- **ADR-41** `crm.customers` מוצפן. ייבוא אידמפוטנטי שמסנן שורות פסולות בלי חריגה (בלי DETAIL עם PII בלוג), ו-`p_rows` נשלח כ-bind parameter.
+- **ADR-42** PDage נמחק; טפסי ת.ז./בנק כבויים.
+- **ADR-43** `max_rows=200`.
+- **ADR-44 (חדש)** סודות מסד ב-GitHub רק ב-Environments מוגבלים ל-`main`. `production` מיועד ל-`migrate.yml` (`workflow_dispatch` ובדיקת שחקן), ו-`backup` ל-`content_dump` (קריאה בלבד ל-`content`). אין `SUPABASE_ACCESS_TOKEN`. אין קבצי נתונים אישיים (CSV) בשום שלב.
 
-**ADR-3 `aal2` נאכף ב-RLS.** חלופה: אכיפה בלקוח בלבד. נימוק: פרטיות לקוחות פיננסיים; הגנה גם נגד סיסמה שדלפה. מחיר: סוכן חייב להירשם ל-TOTP לפני העבודה הראשונה.
+## 21. צעדי בעלים
 
-**ADR-4 טבלת לידים אחת (`crm.leads`).** חלופה: טבלה לכל טופס כמו ב-Tokyo (3). נימוק: תיבת נכנסים אחת, חוק ולידציה אחד, ואין עמודות מיותרות; ייחודיות הטופס שמורה ב-`payload` מוגבל גודל. מחיר: סכמת payload נבדקת באפליקציה.
-
-**ADR-5 קליטת לידים: RPC עכשיו, Turnstile בקצה אחרי.** חלופה: רק דרך Edge Function מההתחלה. נימוק: ה-RPC מפעיל את כל ההגנות במסד (ולידציה, rate limit, idempotency, honeypot) ועובד בלי תלות ב-Deno; Turnstile נוסף כחזית ובאותו רגע מבטלים הרצה ל-anon בשורת SQL אחת. מחיר: בחלון קצר ההגנה מבוססת IP ו-honeypot בלבד.
-
-**ADR-6 outbox עסקתי במקום pgmq כרגע.** נימוק: טבלה אחת שנכתבת באותה עסקה, worker של עשרות שורות, ואין תלות בהרחבה. מחיר: כשיגיעו תורי ההזמנה/סדר לפי לקוח (06), מחליפים.
-
-**ADR-7 `uuid` v4.** חלופות: uuidv7 (Postgres 18), `bigint`. נימוק: Postgres 17, אלפי שורות, בלי צורך במיון לפי זמן במפתח.
-
-**ADR-8 `text`+`check` במקום enum.** שינוי ערך ב-enum דורש מיגרציה מורכבת ו-Tokyo נשאר עם enum שאינו בשימוש. אילוץ check מוחלף בשורה.
-
-**ADR-9 מחיקה רכה ו-audit בלי ערכי PII.** נימוק: אפשר לדעת מי שינה מה ומתי בלי לשכפל תעודות זהות ליומן.
-
-**ADR-10 matviews פרטיים עם פונקציית רענון.** matview אינו תומך ב-RLS ו-Advisor מזהיר על חשיפה, לכן הם ב-`content` וה-view ב-`api` קורא אותם. ריענון: פונקציה אחת שהטוען קורא לה, ועוד cron יומי.
-
-**ADR-11 staging.** חלופות: פרויקט שני קבוע, ענף עמיד, בלי staging. נבחר: ענפים זמניים ל-PR, ענף staging עמיד רק לחזרת cutover. נימוק: שני אנשים, עלות ($10) ותחזוקה של סביבה שלישית שאיש לא מסתכל עליה.
-
-**ADR-12 מסלול פריסה יחיד + CI חובה.** נימוק: פריסות פרודקשן יוצאות מ-`main` בלי לחכות ל-CI; ובנוסף קיים workflow שגם מפרסם ל-`--prod`. נבחר: חיבור Git של Vercel + הגנת ענף שדורשת `ci-ok`. חלופה: פריסה רק מ-GitHub Actions אחרי CI (שליטה מלאה, אך אובדן preview אוטומטי).
-
-**ADR-13 אזור `fra1`.** הפונקציות קרובות ל-Frankfurt; השהיית משתמשים בישראל נקבעת ב-CDN (סטטי).
-
-**ADR-14 בלי PITR.** נימוק: עלות כ-$100 לחודש מול נתוני hot קטנים, גיבוי יומי, dump שבועי ותרגיל שחזור. מתי לשנות: כשמתחילים לשמור מסמכי לקוח ושאלונים.
-
-**ADR-15 מיגרציות קדימה ולא declarative.** נימוק: הצוות והסוכנים כותבים SQL ישיר, ל-declarative יש עקומת למידה והמיגרציות כבר מוכחות.
-
-**ADR-16 פונקציות Vercel לקריאה ציבורית בלבד.** `api/*.ts` נשארות כמטמון CDN מול PostgREST (מסתירות את המקור ומורידות עומס), בלי כתיבה.
-
-**ADR-17 Micro כנקודת פתיחה.** כי הנתונים קטנים, והעומס הכבד (טעינת 39k שורות) רץ בלילה. נקודת החלטה: Small כש-Disk IO או זיכרון בלחץ.
-
-**ADR-18 הוכחת הרצה בקונטיינר ולא רק ב-CLI.** תמונת `supabase/postgres` נעולה גרסה, מאפשרת בדיקה בלי תלות בשירותי Auth, ושוחזרה בפועל (נספח א).
-
-**ADR-19 CSP עם `'unsafe-inline'`.** נשאר כי prerender מזריק סקריפטים ו-JSON-LD. עתידי: nonce/hash.
-
-**ADR-20 טיפוסים מסכמת `api`** נבדקים ב-CI מול `gen types` כדי למנוע סטייה.
-
----
-
-## 21. צעדים ידניים של הבעלים (דשבורד; אני לא משנה הגדרות אבטחה)
-
-פרויקט `seeld-site` (Supabase):
-1. Settings > API > **Exposed schemas**: להשאיר `api` בלבד (להסיר `public` ו-`graphql_public`). `Extra search path`: `extensions`.
-2. Authentication > Providers: לכבות הרשמות (Allow new users to sign up = off), לכבות Google ו-Facebook, Email: Confirm email = on, אורך סיסמה 12 ומעלה, סיסמאות דליפות (HIBP) = on.
-3. Authentication > MFA: TOTP = enabled.
-4. Authentication > SMTP: חיבור Resend (אחרת 2 הודעות לשעה). תבנית אימייל של OTP בעברית.
-5. Authentication > URL Configuration: `Site URL=https://seeld.co.il`, Redirect: `https://seeld.co.il/**`.
-6. Authentication > Rate limits: לאשר ברירות מחדל (30 לשעה ל-SMS, 30 ל-5 דקות להרשמה/כניסה).
-7. Settings > API Keys: ליצור מפתח secret בשם `default`, לשמור ב-Vault את `project_url` ו-`cron_secret_key` (SQL: `vault.create_secret`). לא לשלוח אלי את הערכים.
-8. Settings > Infrastructure: לאשר Micro, להגדיר התראות על שימוש. Auth: מעבר ל-"percentage" לחיבורי DB (המלצת advisor).
-9. אישור להעביר לארכיון את `supabase/migrations/2026020*`..`20260917*` (מיגרציות Tokyo) כך ש-`supabase db reset` ירוץ רק על הבסיס החדש.
-
-Vercel (פרויקט `seeld`):
-10. Settings > Deployment Protection: Standard Protection.
-11. Settings > Firewall: Rate limit ל-`/api/*`.
-12. Analytics ו-Speed Insights: להפעיל.
-13. Git: לוודא שרק Git integration מפרסם; להסיר/להגביל את `deploy-vercel.yml`.
-14. Environment Variables (בזמן cutover, לא קודם): `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID` ל-Production ול-Preview (Preview על staging).
-
-GitHub:
-15. Branch protection על `main`: דרישת `ci-ok`, אין push ישיר, סקירה. Secrets: `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_URL`, `VERCEL_AUTOMATION_BYPASS_SECRET`.
-
-החלטות לבעלים: (א) האם האפליקציה/הפורטל של הסוכנים (`/app`, `/portal`, `/client`, `/personal-area`) ממשיכים לרוץ מול Tokyo עד שייבנו מחדש (ההמלצה: ממשיכים, עם תאריך סיום מוגדר) או מושבתים עד אז. (ב) ספק SMS. (ג) האם לשמור Google לשלושה משתמשים (ההמלצה: לא). (ד) תוכנית Vercel ומספר מושבים.
+ראו `owner_steps` (מסודרים, עם סימון [בוצע]). אין בהם אפשרות של התחברות חברתית.
 
 ---
 
-## נספח א: ראיות ההרצה (18.11.2026)
+## נספח א: ראיות
 
-- מיגרציות שהוחלו על `seeld-site` לפי הסדר: `20261118162452_foundation_extensions_schemas`, `162507_foundation_identity_audit`, `162614_foundation_ops`, `162630_foundation_content`, `162656_foundation_fund_views`, `162717_foundation_crm_leads`, `162719_foundation_api_layer`, `162856_foundation_explicit_deny`. אותם קבצים ב-`supabase/migrations/`.
-- הרצה מאפס בקונטיינר `supabase/postgres:17.6.1.178` (`supabase/tests/replay-local.sh`): 8 מיגרציות עברו, 82 בדיקות `ok`, 0 `not ok`, קוד יציאה 0. פלט שמור: `C:/tmp/infra/foundation/replay-result.txt`.
-- אותן 82 בדיקות הורצו על `seeld-site` (הרחבת pgTAP זמנית ונמחקה, כל הבדיקות בעסקה שבוטלה): 12/12, 38/38, 32/32. לא נשארו שורות (`auth.users`, `crm.leads`, `audit.log`, `ops.outbox` = 0).
-- `get_advisors`: security ריק (לפני הוספת מדיניות deny מפורשת: 4 הערות INFO על טבלאות ללא מדיניות), health ריק, performance: 10 הערות `unused_index` (טבלאות חדשות ללא תעבורה, צפוי) והערת `auth_db_connections_absolute` (הגדרת דשבורד).
-- cron בפרויקט: `ops-cleanup`, `cma-refresh-views-daily`, `cma-freshness-monthly`.
-- טיפוסים: `docs/platform/types.generated.ts` (המחולל מייצר רק `public`, ריק בכוונה; פקודת היצירה האמיתית כתובה בקובץ).
-- איפוס `seeld-site` לפני הבנייה: נמחקו 36 טבלאות סקראץ׳, 2 matviews ו-view אחד, 11 פונקציות, 2 enums, 81 מדיניות, ו-7 רשומות היסטוריית מיגרציות. הפרויקט היה ריק מנתונים.
+- 8 המיגרציות על `seeld-site`: 82/82.
+- סבב 1: 14 המיגרציות נקיות בקונטיינר `supabase/postgres:17.6.1.178`; `00_policy_lint` 21/21; עשן 26/26. 07 רץ כ-`supabase_admin`.
+- סבב 2: `cb5af5e` אומת על `origin/main`:
+  - `supabase/migrations`: 8 קבצים.
+  - `_archive_tokyo/migrations`: 42 קבצים, זהים לרשימה בנספח ד (md5 של רשימת השמות).
+  - `_archive_tokyo/functions`: 17 תיקיות.
+  - `supabase/functions`: `_shared`, `api-v1`, `queue-worker`.
+- `20261119091400` טרם הורצה. T0 מאמת אותה, וייתכן שמשהו בה ייכשל עד אז (`content_dump` עם `bypassrls`).
 
-## נספח ב: תיקון פגמי Tokyo (כל סעיף הוא בדיקה)
+## נספח ב: פגמי Tokyo
 
-| פגם | תיקון בבסיס | הוכחה |
-|---|---|---|
-| 1. `USING (true)` חושף סיכומי ביצוע והגשות onboarding | אין טבלאות כאלה ב-`crm`/`core`. מדיניות `true` מותרת רק לתוכן ציבורי (`cma_sync_log`) | 01:4 |
-| 2. ALL privileges ל-anon/authenticated | grants מפורשים, ללא TRUNCATE/REFERENCES/TRIGGER, default privileges מבוטלים | 01:2 |
-| 3. `send-lead-notification` פתוחה ושולחת אימייל | כתיבה דרך RPC עם הגבלות; `notify-worker` מופעלת רק עם secret; Turnstile ב-`lead-intake` | 03 |
-| 4. cron עם כתובת קשיחה ובלי אימות, שלושה סנכרונים זהים | Vault, מפתח secret, cron אחד | סעיף 9 |
-| 5. `stale` נדחה ע"י ה-CHECK | `stale` מותר | 01:12 |
-| 6. `VITE_*` כסודות שרת | שמות סודות רשמיים ובדיקת `env.ts` | סעיף 7, 10 |
-| 7. סטיית `config.toml` | `verify_jwt` לכל פונקציה בקובץ ונבדק ב-CI | `config.proposed.toml` |
-| 8. FK כפולים, enum לא בשימוש, `pdage_customers`, פונקציה זמנית | לא הועברו; מדיניות "אין פונקציה בפרוס שאינה במאגר" | סעיף 18.1 |
+1. `USING(true)`.
+2. ALL ל-API roles.
+3. `send-lead-notification` פתוחה.
+4. cron קשיח.
+5. `stale`.
+6. `VITE_*` בשרת.
+7. סטיית `config.toml`.
+8. שאריות.
+9. cron "הצליח" על פונקציה מתה.
+
+## נספח ג: backlog (אחרי cutover)
+
+1. `api.me` invoker.
+2. נוהל Vault ושחזור.
+3. pgmq, והחלטה על `api-v1`/`queue-worker`.
+4. סקירת אינדקסים.
+5. ביטול מפתחות legacy.
+6. איפוס factor.
+7. DMARC.
+8. זהות לקוח ו-SMS.
+9. smoke Auth.
+10. `lead_email` קצב.
+12. ניתוב אימיילים.
+13. פרטיות צ'אט.
+14. מסלול חלופי לכשלונות.
+15. `request_id` ב-`log_change`.
+16. `deno check`/`deno test` ב-CI.
+17. CORS.
+18. CSP.
+19. Vercel.
+21. `local_bootstrap.sql`.
+23. זיהוי שיבוש audit.
+25. RPC צוות ל-`crm.customers`.
+26. Storage.
+27. `api/geo.ts`.
+28. תרגיל רבעוני.
+29. runbook תקרית.
+30. `undeliverable` + פונקציית resend להתראות.
+
+## נספח ד: ארכוב (בוצע ב-`cb5af5e`)
+
+**בדיקה:**
+- `ls supabase/migrations | awk '$0 < "20261118162452"' | wc -l` = 0
+- `ls supabase/_archive_tokyo/migrations | wc -l` = 42
+- `ls supabase/_archive_tokyo/functions | wc -l` = 17
+
+**מיגרציות בארכיון (42):** `20260202220230_1d2c3bd3-ae59-47e9-9882-bdb09e50ea3a.sql`, `20260203142604_94c03991-28d7-4934-9df8-1dab0248b89e.sql`, `20260204174201_cbd16082-cae4-4ba2-9c33-17be527fd639.sql`, `20260218074052_a7ee32a5-e159-4c7e-828d-65c023e30c65.sql`, `20260218235734_1c718191-ba00-40ca-8b7e-5b7648e1e8b7.sql`, `20260309193912_b6a3e1ff-c2c9-45d1-9ae4-44fdf0c219f9.sql`, `20260309200917_2fac1a8d-fc7e-47ed-97d3-eefb6d14cd57.sql`, `20260309233455_45fc8333-9a0b-463c-ad96-4930c7ca0b33.sql`, `20260309235036_fcc4a412-2c50-43c8-aea5-45f60f58d5d3.sql`, `20260311225544_3ce3ccf1-f125-4be1-87b9-579ed2df7064.sql`, `20260311230319_58acbb07-5f4e-4e89-8e31-7765dece6624.sql`, `20260311230924_56dfccac-7f7b-42fe-9afb-866b66d56abb.sql`, `20260311230931_9abd5f9a-0b2d-4f28-9a6a-b3b555b89a23.sql`, `20260311231613_c9f8aad8-1abe-46c5-9c0e-f5f799d6c8e3.sql`, `20260311231639_165d79a9-3cc8-48cc-b0b4-c08804fb3f25.sql`, `20260311234123_9d71522d-54b8-4242-a7b3-8662ea2e47fd.sql`, `20260311235825_a148958a-f929-4b48-a699-764c77703b61.sql`, `20260312074549_f9d5d030-3cbe-41fa-81dc-36ec63a737a2.sql`, `20260312074619_9dae8de5-e221-4760-a73a-8b0069f91c15.sql`, `20260312095707_bd4f1c4f-6ea7-4fca-b762-d327c65cf189.sql`, `20260312154044_432d6011-506a-4d18-921f-008f530f0215.sql`, `20260312171352_3a08b010-9c0a-47e1-b035-a1b40c79730b.sql`, `20260312171449_5efa4afa-9ac4-4611-a124-e38cb6201d01.sql`, `20260312172936_9a61d8e6-7adc-44ed-b592-33aa66350eb8.sql`, `20260314113709_3911b762-91dd-4aab-b2cb-429672bb69b8.sql`, `20260314125843_3ea6523d-ceb9-4b7e-8e57-708f48faa97a.sql`, `20260314133911_3087e841-f64d-4f8c-b4ff-a087f3e5cd4a.sql`, `20260314142046_cc4aba67-486a-4cc8-964b-edd74877c5ec.sql`, `20260314144750_93cd8ecd-5f8c-453f-add6-0fee4a6eb599.sql`, `20260314152804_32530c96-799b-4156-85cb-5a6e547c3727.sql`, `20260314153051_e36b5125-ed5d-4117-a530-e204dc1b4f0c.sql`, `20260319100000_create_cma_funds.sql`, `20260319100001_cma_cron_schedule.sql`, `20260323000000_page_views.sql`, `20260325000000_page_views_v2.sql`, `20260706120000_lock_down_public_read_policies.sql`, `20260810000000_agents_read_update_site_leads.sql`, `20260821000000_reconcile_schema_with_production.sql`, `20260822000000_rls_initplan_and_anon_grants.sql`, `20260917100000_cma_board.sql`, `20260917200000_contact_submissions_status.sql`, `20260917210000_insbase_links.sql`.
+
+**תיקיות פונקציות בארכיון (17):** `admin-verify`, `fetch-bank-branches`, `fetch-cma-data`, `finance-chat`, `generate-recommendation`, `invite-agent`, `noa-onboarding`, `parse-import-file`, `parse-insurance-file`, `parse-pdf-policy`, `pdage-chat`, `process-correction`, `send-calculation-email`, `send-lead-notification`, `send-onboarding-summary`, `sync-tracks`, `validate-correction`.
+- `pdage-chat` נמחק סופית רק באישור פרטני (ADR-42).
+- `fetch-cma-data` נכתבת מחדש ב-`supabase/functions`.
+
+**נשארו ב-`supabase/functions` (קוד הפלטפורמה החדשה, לא Tokyo):**
+- `_shared`: נשאר ומורחב.
+- `api-v1`, `queue-worker`: החלטת בעלים (§4).
