@@ -614,3 +614,32 @@ Supabase Pro $25 + Small $15 (נטו $5); Vercel Pro $20; Resend ו-Turnstile ח
 **נשארו ב-`supabase/functions` (קוד הפלטפורמה החדשה, לא Tokyo):**
 - `_shared`: נשאר ומורחב.
 - `api-v1`, `queue-worker`: החלטת בעלים (§4).
+
+---
+
+## סטיות ומצב בפועל (19.11.2026)
+
+הסעיף הזה מתעד את מה שיושם בפועל לעומת הטקסט שלמעלה, שלא נערך. אם יש סתירה, הסעיף הזה וה-SQL במיגרציות גוברים. ההפעלה השוטפת: `RUNBOOK.md`; צעדי הבעלים: `OWNER-STEPS.md`; רשימת ה-cutover: `CUTOVER-CHECKLIST.md`.
+
+**מצב seeld-site:** 29 מיגרציות הוחלו (8 יסוד, 17 של v2.2 עד `20261119091600`, ו-4 של נתונים: `095000`, `095100`, `095200`, `095300`). פונקציות פרוסות: `staff-invite` גרסה 2 (`verify_jwt=true`), `lead-intake`, `notify-worker`, `chat-bot`, `health` בגרסה 2, ו-`fetch-cma-data` בגרסה 1 (כולן `verify_jwt=false`). ב-Vault קיימים `project_url`, `edge_cron_secret`, `pii_enc_key`, `national_id_hmac_key` (נוצרו על ידי הסוכנים בזמן ההקמה, בלי להדפיס ערכים; הנאמנות הלא מקוונת עדיין אצל הבעלים), וגם הסוד המת `customers_transport_key`. `edge_cron_enabled=false`. האתר החי עדיין על טוקיו.
+
+**מסד (§5, §9, §13):**
+1. שער `edge_cron_enabled` נבנה כבר ב-`20261119090700` ולא ב-`091400` כפי שתוכנן.
+2. `ops.copy_auth_events` מקבלת `p_limit integer`.
+3. התפקיד `content_dump` נוצר ב-`20261119091500` (ולא ב-`091400`). בדיקת `00_policy_lint` מכשילה CI אם תתווסף טבלת תוכן בלי מדיניות `content_dump_select`.
+4. התראות של צעדי ה-watchdog נושאות SQLSTATE בלבד, בלי טקסט השגיאה.
+5. `20261119091600`: נמעני התראה נקבעים מ-`ops.alert_recipients` ברגע ש-`notify-worker` לוקח את השורה, ולא ביצירת ההתראה. רשימה ריקה מסתיימת ב-`no_recipients`, בניסיונות חוזרים, ולבסוף `undeliverable`.
+6. משימת `cma-refresh-views-daily` מהיסוד הוסרה ב-`091100`; פועלות בדיוק חמש המשימות של §9.
+7. הצעד "להחיל קודם על ענף" לא בוצע; המיגרציות הוחלו ישירות על seeld-site אחרי replay מלא בקונטיינר.
+
+**בדיקות (נספח א, §15):** כל `supabase/tests/*.test.sql` רצים כ-`postgres`, כולל `07`. בדיקה `supabase/tests/replay_only/10_hook_as_auth_admin.test.sql` רצה רק ב-`replay-local.sh` כ-`supabase_admin` (מדלגת אם אין אפשרות להחליף תפקיד). ה-CI רץ על `ubuntu-24.04` (לא `ubuntu-latest`).
+
+**אימות (§6):** ב-`supabase/config.toml` הערך `[auth.email] enable_signup = true` הוא מתג ספק האימייל, וחייב להיות דלוק כדי שהצוות יוכל להתחבר. ההרשמה עצמה כבויה ב-`[auth] enable_signup = false`. `scripts/ci/check-supabase-config.mjs` אוכף את זה. `staff-invite` כוללת גם פעולת `accept`, וכל הלוגיקה שלה נשארה בתוך הפונקציה: `_shared/auth.ts` לא הורחב.
+
+**פונקציות (§7):** `lead-intake` מחזירה 423 `feature_disabled` כשהטופס סגור (במקום 503), ושתי תשובות 403 נושאות `details.field` (`origin` או `turnstile`). `chat-bot` נכשלת סגור: אם בדיקת המסד לא זמינה, הצ'אט מחזיר 503 ו-Gemini לא נקרא. אין Turnstile בצ'אט. מייל הליד לצוות לא כולל פרטים אישיים עד שתיווצר `api.lead_notify_details` ויוגדר `NOTIFY_INCLUDE_PII=true`.
+
+**Vercel ו-CSP (§11):** עד ה-cutover ה-CSP כולל גם את `https://` וגם את `wss://` של טוקיו, בכוונה. `scripts/ci/check-csp-bundle.mjs` ו-`preview-smoke` מכשילים אם ה-CSP לא תואם לפרויקטים שהבאנדל קורא אליהם; שני מקורות טוקיו יוצאים באותו PR שמעביר את `VITE_SUPABASE_URL`; אחריו `CUTOVER_DONE=1` אוסר כל אזכור של טוקיו. `api/*.ts` עברו ל-Node. במצב legacy הבאנדל עדיין כולל את קוד v2 כקוד מת (כ-1.26KB gzip). `preview-smoke` אוכף גם עימוד: היום הייצור מחזיר 1,000 מתוך 1,442 קרנות ב-`/api/funds`.
+
+**CI (§12):** `preview-smoke` בודק את חסימת ההרשמה מתוך `GET /auth/v1/settings` ולא מהרשמה שנדחתה (כש-CAPTCHA פעיל, CAPTCHA דוחה לפני כן). קוד ה-smoke נלקח מהענף הראשי. `migrate.yml` מריץ לפני כל דחיפה את `scripts/ci/check-migration-history.mjs`.
+
+**מעבר (§18):** PDage הוסר מהנתב ומהבאנדל, אבל קבצי המודול עדיין במאגר עד אישור פרטני של הבעלים. מסלולי ההשקעה: 1,040 פעילים (`source_period=202609`) במקום 571; גוף הפונקציה התקף הוא של `095300`. העתקת הלקוחות בוצעה בסטייה מ-ADR-41 ומשלב 24, וכללה אירוע פרטיות (מפתח ההעברה והבלוקים עברו דרך תמליל הסוכן); פירוט ב-`DATA-MIGRATION.md` סעיף 2א, והנתיב הוצא משימוש ב-`095300`. `HEALTH_URL` מוגדר רק אחרי שה-outbox התרוקן בהצלחה בפעם הראשונה.

@@ -116,7 +116,7 @@ uri = "pg-functions://postgres/private/hook_before_user_created"
 verify_jwt = false
 [functions.notify-worker]      # pg_cron via ops.http_invoke with the cron secret
 verify_jwt = false
-[functions.chat-bot]           # public chat; Turnstile + per-session limits in the function
+[functions.chat-bot]           # public chat; Origin allowlist, per-ip limits and the ops.config gate in the function (no Turnstile)
 verify_jwt = false
 [functions.fetch-cma-data]     # pg_cron via ops.http_invoke with the cron secret
 verify_jwt = false

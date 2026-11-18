@@ -36,7 +36,7 @@ Vite מחליף את `import.meta.env.*` בערכים קבועים, ולכן ה�
 - טיפוסים: `src/integrations/supabase/api-types.ts` מפנה ל-`docs/platform/types.generated.ts` (api + staff).
 - `api.blog_posts`, `api.cma_board`, `api.cma_company_map`, `api.cma_funds_latest`, `api.cma_sync_log`, `api.investment_tracks`.
 - כל רשימה שעלולה לעבור 200 שורות נקראת בדפים של 200 עם `Range` ו-`count=exact` (`src/lib/apiPaging.ts`), והלולאה עוצרת לפי הספירה של השרת, לא לפי אורך הדף.
-- מסלולי השקעה: גם `source_period` (YYYYMM של דיווח data.gov.il). כל מסלול מקבל אותו כ-`lastUpdate` (`2026-09`), ושורת הסטטוס בדף מציגה "נכון לספטמבר 2026". ב-seeld-site יש היום 1,039 מסלולים פעילים (ב-Tokyo היו 571).
+- מסלולי השקעה: גם `source_period` (YYYYMM של דיווח data.gov.il). כל מסלול מקבל אותו כ-`lastUpdate` (`2026-09`), ושורת הסטטוס בדף מציגה "נכון לספטמבר 2026". ב-seeld-site יש היום 1,040 מסלולים פעילים (ב-Tokyo היו 571).
 - `api.travel_companies` קיים, אבל האתר לא קורא ממנו היום (דף הנסיעות סטטי). אין מה לחבר.
 
 ### `api/*.ts` (Vercel, Node)
@@ -77,10 +77,10 @@ Vite מחליף את `import.meta.env.*` בערכים קבועים, ולכן ה�
 ### תנאים מוקדמים (כולם חייבים להתקיים לפני `VITE_SEELD_BACKEND=v2` ב-Production)
 - [ ] Turnstile: ווידג׳ט ב-Cloudflare ל-`seeld.co.il` ו-`www`; Edge secret `TURNSTILE_SECRET_KEY` ב-seeld-site; Vercel `VITE_TURNSTILE_SITE_KEY` (Production). בלי שניהם `lead-intake` עונה 503 לכל ליד (הטופס ממתין 8 שניות לטוקן, שולח בלעדיו, והשרת דוחה).
 - [ ] Edge secret `ALLOWED_ORIGINS` = `https://seeld.co.il`, `https://www.seeld.co.il` (ואם רוצים טפסים ב-Preview, גם כתובת ה-Preview; אחרת `VITE_FORMS_ENABLED=false` ב-Preview).
-- [ ] מסלולי השקעה: ב-seeld-site יש 1,039 מסלולים פעילים מול 571 ב-Tokyo (מיפוי של T4/T0). דף `/investment-tracks` ישתנה ב-cutover; נדרש אישור בעלים.
+- [ ] מסלולי השקעה: ב-seeld-site יש 1,040 מסלולים פעילים מול 571 ב-Tokyo (מיפוי של T4/T0, אחרי 095300). דף `/investment-tracks` ישתנה ב-cutover; נדרש אישור בעלים.
 - [ ] הסכמה: החלטת בעלים אם כל טופס מקבל תיבת סימון מפורשת (היום רק `RetireForm`; השאר שולחים `consent=true` מתחת להערת הפרטיות).
 - [ ] סביבת הריצה של `api/*.ts` עברה מ-Edge ל-Node (`export default { fetch }`, `fra1`, `maxDuration` מ-`vercel.json`; פריט 22 בתוכנית). לפני merge ל-main (push = פריסה לייצור) לוודא על פריסת Preview במצב legacy ש-`/api/board`, `/api/funds`, `/api/tracks`, `/api/company-map`, `/api/fund-status` עונים 200 עם נתונים.
-- [ ] CSP ב-`vercel.json` כבר מתיר `qxhpolktdfgcbxtfxgov.supabase.co` ו-`challenges.cloudflare.com`; אין צורך בשינוי.
+- [ ] CSP ב-`vercel.json` כבר מתיר `qxhpolktdfgcbxtfxgov.supabase.co` ו-`challenges.cloudflare.com`. ב-PR של ה-cutover עצמו מסירים את שני מקורות טוקיו (`https://` ו-`wss://lvifatyksqizwcutfbqp.supabase.co`) מה-CSP באותו PR של החלפת משתני ה-VITE, אחרת שער `check-csp-bundle` ב-CI נכשל; אחרי המיזוג מגדירים `vars.CUTOVER_DONE=1` (ראו RUNBOOK.md סעיף ה).
 
 ### צעדים
 1. Vercel > Production env: `VITE_SEELD_BACKEND=v2`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_TURNSTILE_SITE_KEY`. לוודא שאין משתנה סודי.
