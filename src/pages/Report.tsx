@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { loadSiteSupabase } from "@/integrations/supabase/lazy";
+import { IS_V2 } from "@/integrations/supabase/config";
+import { useLeadIntake } from "@/hooks/useLeadIntake";
 import { FormSuccess } from "@/components/brand/FormSuccess";
 import AnswerSummary from "@/components/AnswerSummary";
 import { SdBand } from "@/components/sd/primitives";
@@ -25,6 +27,7 @@ const Report = () => {
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const intake = useLeadIntake();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +39,25 @@ const Report = () => {
     setErrors(next);
     if (Object.keys(next).length) return;
     setSubmitting(true);
+    if (IS_V2) {
+      const result = await intake.submit({
+        kind: "report",
+        name: form.name,
+        phone: form.phone,
+        email: form.email,
+        topic: SUBJECT,
+        consent: true,
+        sourcePage: "/report",
+      });
+      setSubmitting(false);
+      if (result.ok) {
+        setSent(true);
+        setForm({ name: "", phone: "", email: "" });
+      } else {
+        toast.error(result.message);
+      }
+      return;
+    }
     const email = form.email.trim() || `${form.phone.trim()}@lead.seeld.co.il`;
     try {
       const supabase = await loadSiteSupabase();
@@ -129,6 +151,7 @@ const Report = () => {
                   {field("phone", "טלפון", { req: true, type: "tel", ltr: true, auto: "tel" })}
                   {field("email", "אימייל (לא חובה)", { type: "email", ltr: true, auto: "email" })}
                 </div>
+                {IS_V2 && intake.guard}
                 <button type="submit" disabled={submitting} className="btn-primary w-full sm:w-auto sm:min-w-[180px]">
                   {submitting ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : <>שלחו לי עדכון <Arrow /></>}
                 </button>

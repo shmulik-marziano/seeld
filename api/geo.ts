@@ -4,9 +4,10 @@
 // CORS error on every page). Under `vite preview` the route does not exist and
 // the caller records nulls.
 
-export const config = { runtime: "edge", regions: ["fra1"] };
+// Node.js runtime (Fluid), region fra1 and maxDuration 10 come from vercel.json (Vercel recommends Node over
+// Edge; IMPLEMENTATION-PLAN item 22). Web signature: the default export is an object with fetch(Request).
 
-export default function handler(req: Request): Response {
+function handler(req: Request): Response {
   const h = req.headers;
   const country = h.get("x-vercel-ip-country");
   const city = h.get("x-vercel-ip-city");
@@ -23,3 +24,5 @@ export default function handler(req: Request): Response {
     },
   );
 }
+
+export default { fetch: handler };

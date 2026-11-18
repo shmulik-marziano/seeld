@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { loadSiteSupabase } from "@/integrations/supabase/lazy";
+import { IS_V2 } from "@/integrations/supabase/config";
+import { useLeadIntake } from "@/hooks/useLeadIntake";
 import { toast } from "sonner";
 import { CheckCircle, Send, Car, Home, Briefcase, Plane, Heart, Shield } from "lucide-react";
 import type { Database } from "@/integrations/supabase/site-types";
@@ -29,6 +31,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [step, setStep] = useState(1);
+  const intake = useLeadIntake();
   
   // Common fields
   const [fullName, setFullName] = useState("");
@@ -119,15 +122,17 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                 />
               </div>
             </div>
+            {!IS_V2 && (
             <div>
               <Label htmlFor="licensePlate">מספר רישוי</Label>
-              <Input 
-                id="licensePlate" 
-                value={licensePlate} 
+              <Input
+                id="licensePlate"
+                value={licensePlate}
                 onChange={(e) => setLicensePlate(e.target.value)}
                 placeholder="12-345-67"
               />
             </div>
+            )}
           </div>
         );
       
@@ -160,26 +165,30 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                   placeholder="100"
                 />
               </div>
+              {!IS_V2 && (
               <div>
                 <Label htmlFor="propertyValue">שווי מוערך (₪)</Label>
-                <Input 
-                  id="propertyValue" 
-                  type="number" 
-                  value={propertyValue} 
+                <Input
+                  id="propertyValue"
+                  type="number"
+                  value={propertyValue}
                   onChange={(e) => setPropertyValue(e.target.value)}
                   placeholder="2,000,000"
                 />
               </div>
+              )}
             </div>
+            {!IS_V2 && (
             <div>
               <Label htmlFor="propertyAddress">כתובת הנכס</Label>
-              <Input 
-                id="propertyAddress" 
-                value={propertyAddress} 
+              <Input
+                id="propertyAddress"
+                value={propertyAddress}
                 onChange={(e) => setPropertyAddress(e.target.value)}
                 placeholder="רחוב, מספר, עיר"
               />
             </div>
+            )}
           </div>
         );
       
@@ -213,16 +222,18 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                   placeholder="10"
                 />
               </div>
+              {!IS_V2 && (
               <div>
                 <Label htmlFor="annualRevenue">מחזור שנתי (₪)</Label>
-                <Input 
-                  id="annualRevenue" 
-                  type="number" 
-                  value={annualRevenue} 
+                <Input
+                  id="annualRevenue"
+                  type="number"
+                  value={annualRevenue}
                   onChange={(e) => setAnnualRevenue(e.target.value)}
                   placeholder="1,000,000"
                 />
               </div>
+              )}
             </div>
           </div>
         );
@@ -276,6 +287,8 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
       case 'life':
       case 'critical_illness':
       case 'disability':
+        // v2: no health data in public forms (ADR-42); the adviser asks in the call.
+        if (IS_V2) return null;
         return (
           <div className="space-y-4">
             <div>
@@ -335,7 +348,45 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
     }
     
     setIsSubmitting(true);
-    
+
+    if (IS_V2) {
+      // Canonical v2 lead: only ops.intake_payload_keys('insurance') go in payload; the few free-text extras
+      // that are not keys (maker, model, current insurer) travel in the message. No id, plate, value or health.
+      const extras = [
+        vehicleManufacturer && `יצרן: ${vehicleManufacturer}`,
+        vehicleModel && `דגם: ${vehicleModel}`,
+        currentInsurer && `מבטח נוכחי: ${currentInsurer}`,
+        additionalNotes,
+      ].filter(Boolean).join("\n");
+      const result = await intake.submit({
+        kind: "insurance",
+        name: fullName,
+        phone,
+        email,
+        topic: insuranceType,
+        message: extras,
+        consent: true,
+        sourcePage: typeof window !== "undefined" ? window.location.pathname : "/insurances",
+        details: {
+          preferred_contact_time: preferredContactTime,
+          ...(insuranceType === "vehicle" ? { vehicle_type: vehicleType, vehicle_year: vehicleYear } : {}),
+          ...(insuranceType === "home" || insuranceType === "renters" ? { property_type: propertyType, property_size_sqm: propertySizeSqm } : {}),
+          ...(insuranceType === "business" ? { business_type: businessType, business_employees: businessEmployees } : {}),
+          ...(insuranceType === "travel"
+            ? { destination, travel_start_date: travelStartDate, travel_end_date: travelEndDate, travelers_count: travelersCount }
+            : {}),
+        },
+      });
+      setIsSubmitting(false);
+      if (result.ok) {
+        setIsSubmitted(true);
+        toast.success("הפרטים אצלנו. יועץ יחזור אליכם תוך 24 שעות.");
+      } else {
+        toast.error(result.message);
+      }
+      return;
+    }
+
     try {
       const leadData: Record<string, unknown> = {
         full_name: fullName,
@@ -464,14 +515,16 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                     required
                   />
                 </div>
+                {!IS_V2 && (
                 <div>
                   <Label htmlFor="idNumber">תעודת זהות</Label>
-                  <Input 
-                    id="idNumber" 
-                    value={idNumber} 
+                  <Input
+                    id="idNumber"
+                    value={idNumber}
                     onChange={(e) => setIdNumber(e.target.value)}
                   />
                 </div>
+                )}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -567,6 +620,7 @@ const InsuranceEnrollmentForm = ({ insuranceType, title, description }: Insuranc
                   placeholder="האם יש משהו נוסף שחשוב לנו לדעת?"
                 />
               </div>
+              {IS_V2 && intake.guard}
               <div className="flex gap-2">
                 <Button
                   type="button"

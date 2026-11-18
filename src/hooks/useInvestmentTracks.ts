@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { cleanFundName } from "@/lib/utils";
 import { siteSupabase } from "@/integrations/supabase/site-client";
+import { apiSupabase } from "@/integrations/supabase/v2-client";
+import { IS_V2 } from "@/integrations/supabase/config";
+import { readAllPages, type PageResult } from "@/lib/apiPaging";
 import { allFunds as staticFunds } from "@/data/cmaFundsData";
 import type { Fund } from "@/types/fund";
 import type { ManagingCompany, ProductType, Specialization } from "@/types/fund";
@@ -42,7 +45,20 @@ interface DBTrack {
   other_pct: number;
 }
 
-function dbToFund(row: DBTrack, idx: number): Fund {
+// v2 (seeld-site) rows also carry source_period: YYYYMM of the data.gov.il report the row was refreshed from
+// (content.refresh_investment_tracks, ADR-36). The page shows it as the as-of date.
+interface DBTrackV2 extends DBTrack {
+  source_period?: number | null;
+}
+
+/** 202609 -> "2026-09" (the lastUpdate format the tracks page already shows); null when absent or malformed. */
+export function sourcePeriodToYm(p: number | null | undefined): string | null {
+  if (typeof p !== "number" || !Number.isInteger(p) || p < 200001 || p > 210012) return null;
+  const s = String(p);
+  return `${s.slice(0, 4)}-${s.slice(4, 6)}`;
+}
+
+function dbToFund(row: DBTrackV2, idx: number): Fund {
   return {
     id: String(idx + 1),
     fundNumber: row.fund_number,
@@ -87,7 +103,7 @@ function dbToFund(row: DBTrack, idx: number): Fund {
       sharpeRatio: row.sharpe_ratio,
     },
     totalAssets: Math.round(row.total_assets),
-    lastUpdate: row.report_period || "2026-02",
+    lastUpdate: (IS_V2 ? sourcePeriodToYm(row.source_period) : null) || row.report_period || "2026-02",
     isActive: true,
   };
 }
@@ -102,6 +118,21 @@ const TRACK_COLUMNS = [
   'gov_bonds_pct', 'corp_bonds_pct', 'cash_pct', 'other_pct',
 ].join(',');
 
+// v2 asks for source_period as well (the column exists only on seeld-site). Same list in api/tracks.ts.
+const TRACK_COLUMNS_V2 = TRACK_COLUMNS + ',source_period';
+
+/** seeld-site: api.investment_tracks (active rows) in 200-row Range pages with count=exact. */
+async function readTracksV2(): Promise<DBTrackV2[]> {
+  return readAllPages<DBTrackV2>((from, to) =>
+    apiSupabase
+      .from("investment_tracks")
+      .select(TRACK_COLUMNS_V2, { count: "exact" })
+      .eq("is_active", true)
+      .order("return_year1", { ascending: false, nullsFirst: false })
+      .order("fund_number", { ascending: true })
+      .range(from, to) as unknown as PromiseLike<PageResult<DBTrackV2>>);
+}
+
 export function useInvestmentTracks() {
   const [funds, setFunds] = useState<Fund[]>(staticFunds);
   const [isLive, setIsLive] = useState(false);
@@ -113,7 +144,7 @@ export function useInvestmentTracks() {
         // /api/tracks is cached at Vercel's Frankfurt edge; the direct query
         // below is the fallback for `vite dev` and `vite preview`, which serve
         // no /api routes.
-        let rows: DBTrack[] | null = null;
+        let rows: DBTrackV2[] | null = null;
 
         try {
           const res = await fetch("/api/tracks");
@@ -125,7 +156,10 @@ export function useInvestmentTracks() {
           // fall through to the direct query
         }
 
-        if (!rows) {
+        if (!rows && IS_V2) {
+          const v2 = await readTracksV2();
+          if (v2.length > 0) rows = v2;
+        } else if (!rows) {
           const { data, error } = await (siteSupabase as unknown as UntypedTracksClient)
             .from("investment_tracks")
             .select(TRACK_COLUMNS)

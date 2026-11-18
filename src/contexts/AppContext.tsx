@@ -3,8 +3,8 @@ import type { AppContextType } from './AppProviderImpl';
 import type { AppData } from '../types';
 
 // The agent-app data layer (and supabase-js with it) is a separate chunk. It is
-// mounted the first time any component calls useApp() — i.e. only on /app/* and
-// the PDage screens — so public pages never download it. Children are never
+// mounted the first time any component calls useApp() — i.e. only on /app/* —
+// so public pages never download it. Children are never
 // remounted: this shell keeps one stable Provider and the lazy implementation
 // publishes its value into it.
 const AppProviderImpl = lazy(() => import('./AppProviderImpl'));

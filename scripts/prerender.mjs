@@ -20,7 +20,12 @@ import { loadData, buildSitemap, buildLlms, buildLlmsFull } from "./seo/lib.mjs"
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = process.env.PRERENDER_DIST ? resolve(process.env.PRERENDER_DIST) : join(ROOT, "dist");
 const STRICT = process.env.PRERENDER_STRICT === "1";
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? "https://lvifatyksqizwcutfbqp.supabase.co";
+// Same build-time switch as the app (docs/platform/FRONTEND-BACKEND-V2.md): v2 reads seeld-site through the
+// `api` schema with the publishable key in `apikey` only, and never falls back to the Tokyo project.
+const V2 = process.env.VITE_SEELD_BACKEND === "v2";
+const SUPABASE_URL = V2
+  ? (process.env.VITE_SUPABASE_URL ?? "")
+  : (process.env.VITE_SUPABASE_URL ?? "https://lvifatyksqizwcutfbqp.supabase.co");
 
 const MIME = {
   ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css",
@@ -43,10 +48,17 @@ async function routesFromSitemap() {
 
 async function blogPosts() {
   try {
+    if (V2 && (!SUPABASE_URL || !process.env.VITE_SUPABASE_PUBLISHABLE_KEY)) {
+      throw new Error("VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY missing for the v2 backend");
+    }
     const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? (await readAnonKey());
+    // v2: api.blog_posts, 200 rows max per response (seeld-site max_rows); the blog is far below that.
+    const headers = V2
+      ? { apikey: key, "Accept-Profile": "api", Range: "0-199", "Range-Unit": "items" }
+      : { apikey: key, Authorization: `Bearer ${key}` };
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/blog_posts?select=slug,title,excerpt,updated_at,published_at&status=eq.published&order=published_at.desc`,
-      { headers: { apikey: key, Authorization: `Bearer ${key}` } },
+      { headers },
     );
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();

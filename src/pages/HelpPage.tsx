@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   HelpCircle, ArrowRight, ChevronDown, Mail, Phone,
-  MessageCircle, BookOpen, Shield, Zap, Users, Settings, Target, FileText,
+  MessageCircle, BookOpen, Shield, Users, Settings, Target, FileText,
 } from 'lucide-react';
 
 type FAQItem = { q: string; a: string; icon: React.ElementType };
@@ -23,11 +23,6 @@ const FAQ_SECTIONS: { title: string; color: string; items: FAQItem[] }[] = [
         q: 'איך מעלים קבצי מסלקה?',
         a: 'גשו ל״טעינת קבצים" מהתפריט הראשי. גררו את קבצי ה-XML מהמסלקה לאזור ההעלאה, או לחצו לבחור קבצים. המערכת תעבד את הקבצים אוטומטית ותעדכן את מוצרי הלקוחות.',
         icon: FileText,
-      },
-      {
-        q: 'מה זה PDage?',
-        a: 'PDage הוא כלי חכם לניתוח מסמכי PDF של חברות ביטוח. הוא מזהה חוסרים בכיסוי, מציג את הנתונים בצורה ברורה, ומאפשר לכם לייצר המלצות מדויקות ללקוחות.',
-        icon: Zap,
       },
     ],
   },

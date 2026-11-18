@@ -4,11 +4,14 @@
 // (~45kB gzip) just to render. Anything that only needs the client at an interaction
 // point (form submit, analytics, chat history) awaits one of these instead of
 // importing site-client statically. The dynamic import is memoised by the module system.
+import { IS_V2 } from "./config";
+
 export const loadSiteSupabase = () => import("./site-client").then((m) => m.siteSupabase);
 export const loadSupabase = () => import("./client").then((m) => m.supabase);
 
-/** True when a persisted Supabase session exists (a returning, logged-in visitor). */
+/** True when a persisted Supabase session exists (a returning, logged-in visitor). Never in v2: no sessions. */
 export function hasStoredSession(): boolean {
+  if (IS_V2) return false;
   try {
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);

@@ -16,6 +16,10 @@ regexTarget = "match"
 regexes = [
   '''eyJ[A-Za-z0-9_-]*\.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6I[A-Za-z0-9_-]{27}Iiwicm9sZSI6ImFub24i[A-Za-z0-9_-]*\.[A-Za-z0-9_-]+''',
   '''sb_secret_\.\.\.''',
+  # Synthetic test fixtures (reviewed 2026-11-19): the idempotency key used by src/test/lead-intake.test.ts and the
+  # unsigned test JWT (payload {"sub":"test"}) used by supabase/functions/health/test.ts.
+  '''key-12345678''',
+  '''eyJhbGciOiJFUzI1NiJ9\.eyJzdWIiOiJ0ZXN0In0\.[A-Za-z0-9_-]+''',
 ]
 paths = [
   '''^src/data/questionnaires/[^/]+\.json$''',

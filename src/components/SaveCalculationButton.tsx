@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useSaveCalculation } from "@/hooks/useSaveCalculation";
 import AuthModal from "@/components/AuthModal";
 import { Json } from "@/integrations/supabase/site-types";
-import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/config";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, IS_V2 } from "@/integrations/supabase/config";
 import {
   Dialog,
   DialogContent,
@@ -209,4 +209,8 @@ const SaveCalculationButton = ({
   );
 };
 
-export default SaveCalculationButton;
+// v2 (seeld-site): saving needs a personal-area session and the e-mail goes through send-calculation-email,
+// neither of which exists on the new backend yet (phase 2). The calculators work as before, without the button.
+const SaveCalculationOff: React.FC<SaveCalculationButtonProps> = () => null;
+
+export default IS_V2 ? SaveCalculationOff : SaveCalculationButton;

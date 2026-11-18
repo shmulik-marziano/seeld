@@ -11,9 +11,9 @@ export function parseAllowedOrigins(raw: string | undefined | null): string[] {
 
 export function corsHeaders(origin: string | null, allowed: string[]): Record<string, string> {
   const headers: Record<string, string> = {
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-api-key, x-request-id, idempotency-key",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-api-key, x-request-id, idempotency-key, x-chat-session",
     "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-    "Access-Control-Expose-Headers": "x-request-id, retry-after, ratelimit-remaining",
+    "Access-Control-Expose-Headers": "x-request-id, retry-after, ratelimit-remaining, x-chat-session",
     "Access-Control-Max-Age": "600",
     Vary: "Origin",
   };

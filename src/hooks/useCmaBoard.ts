@@ -9,6 +9,8 @@
  */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { IS_V2 } from "@/integrations/supabase/config";
+import { readAllPages, type PageResult } from "@/lib/apiPaging";
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -120,6 +122,21 @@ async function fetchBoard(): Promise<BoardFund[]> {
   } catch {
     // fall through to the direct query
   }
+  if (IS_V2) {
+    // seeld-site: api.cma_board in 200-row Range pages with count=exact.
+    const rows = await readAllPages<BoardFund>((from, to) =>
+      supabase
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .from("cma_board" as any)
+        .select(BOARD_COLUMNS, { count: "exact" })
+        .order("total_assets", { ascending: false, nullsFirst: false })
+        .order("fund_id", { ascending: true })
+        // final tiebreaker, same as api/board.ts: Range paging needs a total order
+        .order("source", { ascending: true })
+        .range(from, to) as unknown as PromiseLike<PageResult<BoardFund>>);
+    if (rows.length === 0) throw new Error("No records in cma_board");
+    return rows;
+  }
   // Supabase returns at most 1,000 rows per request; the board has more.
   const PAGE = 1000;
   const rows: BoardFund[] = [];
@@ -149,6 +166,17 @@ async function fetchCompanyMap(): Promise<CompanyMapRow[]> {
     }
   } catch {
     // fall through
+  }
+  if (IS_V2) {
+    return readAllPages<CompanyMapRow>((from, to) =>
+      supabase
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .from("cma_company_map" as any)
+        .select("company,board_product,funds,assets,inflow_12m,inflow_complete,report_period", { count: "exact" })
+        .order("assets", { ascending: false, nullsFirst: false })
+        .order("company", { ascending: true })
+        .order("board_product", { ascending: true })
+        .range(from, to) as unknown as PromiseLike<PageResult<CompanyMapRow>>);
   }
   const { data, error } = await supabase
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

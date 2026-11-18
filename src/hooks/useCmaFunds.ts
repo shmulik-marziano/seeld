@@ -5,6 +5,8 @@
 import { cleanFundName } from "@/lib/utils";
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { IS_V2 } from '@/integrations/supabase/config';
+import { readAllPages, type PageResult } from '@/lib/apiPaging';
 import { allFunds as staticFunds } from '@/data/cmaFundsData';
 import type { Fund, ProductType, ManagingCompany, Specialization } from '@/types/fund';
 import { companyLabels } from '@/types/fund';
@@ -205,6 +207,17 @@ async function fetchFundRows(): Promise<CmaFundRow[]> {
     // fall through to the direct query
   }
 
+  if (IS_V2) {
+    // seeld-site: api.cma_funds_latest (~1,450 rows) in 200-row Range pages with count=exact.
+    return readAllPages<CmaFundRow>((from, to) =>
+      supabase
+        .from('cma_funds_latest' as never)
+        .select(FUND_COLUMNS, { count: 'exact' })
+        .order('total_assets', { ascending: false, nullsFirst: false })
+        .order('id', { ascending: true })
+        .range(from, to) as unknown as PromiseLike<PageResult<CmaFundRow>>);
+  }
+
   const { data, error } = await supabase
     .from('cma_funds_latest' as never)
     .select(FUND_COLUMNS)
@@ -263,6 +276,8 @@ async function fetchSyncStatus(): Promise<SyncStatus> {
 // ─── Trigger manual sync ────────────────────────────────────────────
 
 async function triggerSync(source?: string): Promise<unknown> {
+  // v2: fetch-cma-data runs from cron only (x-cron-secret); there is no browser trigger.
+  if (IS_V2) throw new Error('manual sync is not available on this backend');
   const { data, error } = await supabase.functions.invoke('fetch-cma-data', {
     body: source ? { source } : {},
   });

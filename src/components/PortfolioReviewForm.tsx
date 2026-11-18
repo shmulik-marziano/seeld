@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { loadSiteSupabase } from "@/integrations/supabase/lazy";
+import { IS_V2 } from "@/integrations/supabase/config";
+import { useLeadIntake } from "@/hooks/useLeadIntake";
 import { FormSuccess } from "@/components/brand/FormSuccess";
 import { GREEN, MUTED } from "@/lib/brand";
 
@@ -52,6 +54,7 @@ export const PortfolioReviewForm = ({ className = "", idPrefix = "lead", source 
   const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const intake = useLeadIntake();
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,6 +65,25 @@ export const PortfolioReviewForm = ({ className = "", idPrefix = "lead", source 
     setErrors(errs);
     if (Object.keys(errs).length) return;
     setSubmitting(true);
+    if (IS_V2) {
+      const result = await intake.submit({
+        kind: "portfolio_review",
+        name: form.name,
+        phone: form.phone,
+        topic: form.subject || "אפיון צרכים",
+        message: `[${source}]`,
+        consent: true,
+        sourcePage: typeof window !== "undefined" ? window.location.pathname : "/portfolio-review",
+      });
+      setSubmitting(false);
+      if (result.ok) {
+        setSent(true);
+        setForm({ name: "", phone: "", subject: "" });
+      } else {
+        toast.error(result.message);
+      }
+      return;
+    }
     try {
       const email = `${form.phone.trim()}@lead.seeld.co.il`;
       const supabase = await loadSiteSupabase();
@@ -148,6 +170,7 @@ export const PortfolioReviewForm = ({ className = "", idPrefix = "lead", source 
           </select>
         </div>
       </div>
+      {IS_V2 && intake.guard}
       {/* Phone: the button spans the form like the fields above it */}
       <div className="mt-6 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-4 sm:gap-5">
         <button type="submit" disabled={submitting} className="btn-primary w-full sm:w-auto sm:min-w-[200px]">

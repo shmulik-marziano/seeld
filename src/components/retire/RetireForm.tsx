@@ -3,6 +3,8 @@ import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { loadSiteSupabase } from "@/integrations/supabase/lazy";
+import { IS_V2 } from "@/integrations/supabase/config";
+import { useLeadIntake } from "@/hooks/useLeadIntake";
 import { CONTACTS } from "@/lib/contacts";
 import {
   AGES, CHECKLIST_HREF, CHECKLIST_PDF_URL, CONCERNS, NEXT_STEPS, SITUATIONS,
@@ -74,6 +76,7 @@ export default function RetireForm({ idPrefix = "rp", source = "עמוד תכנ�
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const intake = useLeadIntake();
 
   // Presets from the entry cards (?concern=tax&situation=parents): values only, no personal data in URLs.
   useEffect(() => {
@@ -106,6 +109,23 @@ export default function RetireForm({ idPrefix = "rp", source = "עמוד תכנ�
     if (Object.keys(errs).length) return;
 
     setSubmitting(true);
+    if (IS_V2) {
+      const result = await intake.submit({
+        kind: "pension",
+        name,
+        phone,
+        email,
+        topic: "retirement",
+        message: `מקור: ${source}`,
+        consent,
+        sourcePage: typeof window !== "undefined" ? window.location.pathname : "/savings/retirement-planning",
+        details: { age_range: labels.age, situation: labels.situation, concern: labels.concern },
+      });
+      setSubmitting(false);
+      if (result.ok) setSent(true);
+      else toast.error(result.message);
+      return;
+    }
     try {
       const supabase = await loadSiteSupabase();
       const notes = [
@@ -190,6 +210,7 @@ export default function RetireForm({ idPrefix = "rp", source = "עמוד תכנ�
         {errors.consent && <p id={id("consent-err")} className="sd-rp-err">{errors.consent}</p>}
       </div>
 
+      {IS_V2 && intake.guard}
       <button type="submit" className="sd-btn sd-rp-submit" disabled={submitting}>
         {submitting && <Loader2 size={18} className="animate-spin" aria-hidden="true" />}
         {submitting ? "שולחים" : "לתיאום שיחת היכרות"}

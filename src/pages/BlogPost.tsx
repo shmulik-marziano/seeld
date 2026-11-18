@@ -5,6 +5,8 @@ import { Copy, Loader2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteSupabase } from "@/integrations/supabase/site-client";
+import { IS_V2 } from "@/integrations/supabase/config";
+import { useLeadIntake } from "@/hooks/useLeadIntake";
 import { buildBlogPostingGraph } from "@/lib/structuredData";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { toast } from "sonner";
@@ -62,6 +64,7 @@ const BlogPost = () => {
   const [leadErrors, setLeadErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
   const [leadSubmitting, setLeadSubmitting] = useState(false);
   const [leadSubmitted, setLeadSubmitted] = useState(false);
+  const intake = useLeadIntake();
   const leadFormRef = useRef<HTMLDivElement>(null);
 
   const postJsonLd = useMemo(() => {
@@ -129,6 +132,28 @@ const BlogPost = () => {
     setLeadErrors(errs);
     if (Object.keys(errs).length) return;
     setLeadSubmitting(true);
+
+    if (IS_V2) {
+      const result = await intake.submit({
+        kind: "contact",
+        name: leadForm.name,
+        phone: leadForm.phone,
+        email: leadForm.email,
+        topic: `ליד מבלוג: ${post?.title || ""}`,
+        consent: true,
+        sourcePage: `/blog/${slug ?? ""}`,
+      });
+      setLeadSubmitting(false);
+      if (result.ok) {
+        setLeadSubmitted(true);
+        setLeadForm({ name: "", phone: "", email: "" });
+        setLeadErrors({});
+        toast.success("הפרטים התקבלו. נחזור אליכם בהקדם.");
+      } else {
+        toast.error(result.message);
+      }
+      return;
+    }
 
     try {
       const subject = post?.category || "בלוג";
@@ -503,6 +528,7 @@ const BlogPost = () => {
                       <FieldError id="blog-lead-email-err">{leadErrors.email}</FieldError>
                     </div>
                   </div>
+                  {IS_V2 && intake.guard}
                   <div className="mt-6 flex flex-wrap items-center gap-5">
                     <button type="submit" disabled={leadSubmitting} className="btn-primary min-w-[200px]">
                       {leadSubmitting ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : leadFormText.cta}

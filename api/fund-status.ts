@@ -4,20 +4,32 @@
 // and an exact-count HEAD against cma_funds_latest, together ~750ms — to render
 // one line of text that changes when the daily 03:15 cron runs. Same edge cache
 // as api/funds.ts.
+//
+// Backend switch (docs/platform/FRONTEND-BACKEND-V2.md): VITE_SEELD_BACKEND=v2 reads seeld-site through the
+// `api` schema (Accept-Profile: api), with no Tokyo fallback. Both queries are one row / a count.
 
-export const config = { runtime: "edge", regions: ["fra1"] };
+// Node.js runtime (Fluid), region fra1 and maxDuration 10 come from vercel.json (Vercel recommends Node over
+// Edge; IMPLEMENTATION-PLAN item 22). Web signature: the default export is an object with fetch(Request).
 
-const SUPABASE_URL =
-  process.env.VITE_SUPABASE_URL ?? "https://lvifatyksqizwcutfbqp.supabase.co";
+const V2 = process.env.VITE_SEELD_BACKEND === "v2";
+
+const SUPABASE_URL = V2
+  ? (process.env.VITE_SUPABASE_URL ?? "")
+  : (process.env.VITE_SUPABASE_URL ?? "https://lvifatyksqizwcutfbqp.supabase.co");
 
 // Publishable (anon) key — the same value the browser bundle already carries.
-const SUPABASE_KEY =
-  process.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2aWZhdHlrc3FpendjdXRmYnFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MDg3NTIsImV4cCI6MjA4OTE4NDc1Mn0.a1ECWY9SDwMveRvi1zj7bA2b7U6BvRv0Mh0rMysg40E";
+const SUPABASE_KEY = V2
+  ? (process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? "")
+  : (process.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2aWZhdHlrc3FpendjdXRmYnFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MDg3NTIsImV4cCI6MjA4OTE4NDc1Mn0.a1ECWY9SDwMveRvi1zj7bA2b7U6BvRv0Mh0rMysg40E");
 
-const HEADERS = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
+// v2: the publishable key goes in `apikey` only (it is not a JWT), and every read names the api schema.
+const HEADERS: Record<string, string> = V2
+  ? { apikey: SUPABASE_KEY, "Accept-Profile": "api" }
+  : { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
 
-export default async function handler(): Promise<Response> {
+async function handler(): Promise<Response> {
+  if (V2 && (!SUPABASE_URL || !SUPABASE_KEY)) return fail("not configured");
   try {
     const [logRes, countRes] = await Promise.all([
       fetch(
@@ -60,8 +72,11 @@ export default async function handler(): Promise<Response> {
   }
 }
 
+// The reason goes to the function log only; the public body stays generic so it never reveals
+// configuration state ("not configured") or the upstream status.
 function fail(reason: string): Response {
-  return new Response(JSON.stringify({ error: reason }), {
+  console.error(`[api] upstream read failed: ${reason}`);
+  return new Response(JSON.stringify({ error: "unavailable" }), {
     status: 502,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
@@ -69,3 +84,5 @@ function fail(reason: string): Response {
     },
   });
 }
+
+export default { fetch: handler };
