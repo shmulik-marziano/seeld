@@ -5,6 +5,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { loadSiteSupabase } from "@/integrations/supabase/lazy";
+import { IS_V2 } from "@/integrations/supabase/config";
+import { useLeadIntake } from "@/hooks/useLeadIntake";
 import { useAuth } from "@/hooks/useAuth";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { FormSuccess } from "@/components/brand/FormSuccess";
@@ -56,6 +58,8 @@ const Contact = () => {
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const intake = useLeadIntake();
   const { user } = useAuth();
 
   const validate = () => {
@@ -75,6 +79,30 @@ const Contact = () => {
     setSubmitting(true);
 
     const subjectLabel = subjects.find((s) => s.value === formData.subject)?.label ?? formData.subject;
+
+    if (IS_V2) {
+      setServerError(null);
+      const result = await intake.submit({
+        kind: "contact",
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        topic: subjectLabel,
+        message: formData.message,
+        consent: true,
+        sourcePage: PATH,
+      });
+      setSubmitting(false);
+      if (result.ok) {
+        setSent(true);
+        setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+        setErrors({});
+      } else {
+        setServerError(result.message);
+      }
+      return;
+    }
+
     const email = formData.email.trim() || `${formData.phone.trim()}@lead.seeld.co.il`;
 
     try {
@@ -259,6 +287,10 @@ const Contact = () => {
                     className="field resize-none"
                   />
                 </div>
+                {IS_V2 && intake.guard}
+                {IS_V2 && serverError && (
+                  <p role="alert" className="sd-pub-err" id="contact-server-err">{serverError}</p>
+                )}
                 <div className="pt-2 flex flex-wrap items-center gap-x-6 gap-y-3">
                   <button type="submit" disabled={submitting} className="sd-btn sd-pub-submit" style={{ minWidth: 190 }}>
                     {submitting ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : "שלחו פנייה"}

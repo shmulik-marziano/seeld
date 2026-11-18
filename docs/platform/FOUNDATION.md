@@ -166,7 +166,8 @@ supabase/
   tests/                 # 00_policy_lint, 01-09, replay-local.sh; local_bootstrap.sql מחוץ לתבנית *.test.sql
   functions/             # allowlist: _shared lead-intake notify-worker chat-bot fetch-cma-data staff-invite health
 api/                     # פונקציות Vercel, Node runtime, קריאה בלבד
-scripts/load/            # load-content.sql, verify-manifest.mjs, copy-customers.mjs (בלי קבצי נתונים)
+scripts/load/            # load-content.sql, verify-manifest.mjs (בלי קבצי נתונים)
+scripts/migrate/         # copy-customers.sql (בוצע 18.11.2026, הוצא משימוש; מחליף את copy-customers.mjs), verify-migration.sql
 ```
 
 **מצב והחלטות שנותרו:**
@@ -418,7 +419,7 @@ Supabase Pro $25 + Small $15 (נטו $5); Vercel Pro $20; Resend ו-Turnstile ח
 | `cma_funds` | נטען דרך `fetch-cma-data` |
 | `cma_sync_log`, matviews | מתחילים מאפס, או נבנים |
 | לידים (2) | הבעלים מקליד אותם ב-SQL Editor (`insert into crm.leads ... source='legacy-v0'`). **בלי קובץ** |
-| `customers` (191) | מועתק מוצפן דרך `scripts/load/copy-customers.mjs`, בזרם, עם bind parameter, בלי קובץ |
+| `customers` (191) | מועתק מוצפן דרך `scripts/load/copy-customers.mjs`, בזרם, עם bind parameter, בלי קובץ. **בפועל (18.11.2026):** הועתק דרך `scripts/migrate/copy-customers.sql` (בלוק pgp חתום דרך MCP), לפני אישור שלב 24. זו סטייה מהחוזה, והיא מתועדת ב-DATA-MIGRATION.md סעיף 2א. הנתיב הוצא משימוש במיגרציה 095300 |
 | טבלאות לקוח נלוות | נבנות מחדש עם אפליקציית הסוכנים |
 | `page_views`, `chat_*` | לא מועברים |
 | `onboarding_submissions`, דפי הוראת קבע/Onboarding | כבויים ב-cutover |
@@ -534,7 +535,7 @@ Supabase Pro $25 + Small $15 (נטו $5); Vercel Pro $20; Resend ו-Turnstile ח
 - **ADR-38** `supabase/migrations` מכילה רק את הבסיס. הארכוב בוצע (`cb5af5e`). `supabase/functions` מוכלת ב-allowlist. שלדים שלא בתוכנית חונים ב-`_parked` באישור.
 - **ADR-39** `public` אטום.
 - **ADR-40** Auth כקוד + דשבורד. `config.toml` = הקובץ המוצע.
-- **ADR-41** `crm.customers` מוצפן. ייבוא אידמפוטנטי שמסנן שורות פסולות בלי חריגה (בלי DETAIL עם PII בלוג), ו-`p_rows` נשלח כ-bind parameter.
+- **ADR-41** `crm.customers` מוצפן. ייבוא אידמפוטנטי שמסנן שורות פסולות בלי חריגה (בלי DETAIL עם PII בלוג), ו-`p_rows` נשלח כ-bind parameter. (ביצוע בפועל: סטייה מתועדת ב-DATA-MIGRATION.md סעיף 2א וביומן הביקורת, בסעיף T4.)
 - **ADR-42** PDage נמחק; טפסי ת.ז./בנק כבויים.
 - **ADR-43** `max_rows=200`.
 - **ADR-44 (חדש)** סודות מסד ב-GitHub רק ב-Environments מוגבלים ל-`main`. `production` מיועד ל-`migrate.yml` (`workflow_dispatch` ובדיקת שחקן), ו-`backup` ל-`content_dump` (קריאה בלבד ל-`content`). אין `SUPABASE_ACCESS_TOKEN`. אין קבצי נתונים אישיים (CSV) בשום שלב.

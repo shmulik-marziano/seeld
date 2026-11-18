@@ -66,4 +66,11 @@ describe("column selection", () => {
     const client = readFileSync(join(ROOT, "src", "hooks", hook), "utf8");
     expect(columnList(edge, constant)).toEqual(columnList(client, constant));
   });
+
+  // v2 (seeld-site) adds source_period to the tracks read, in both copies, and only there.
+  it("api/tracks and the hook add exactly source_period for v2", () => {
+    const re = /const TRACK_COLUMNS_V2 = TRACK_COLUMNS \+ ['"],source_period['"];/;
+    expect(readFileSync(join(ROOT, "api", "tracks.ts"), "utf8")).toMatch(re);
+    expect(readFileSync(join(ROOT, "src", "hooks", "useInvestmentTracks.ts"), "utf8")).toMatch(re);
+  });
 });

@@ -68,3 +68,23 @@
 - Supabase GitHub branching integration: if it is enabled on main, it also applies migrations to production on merge. That gives a second deploy path next to migrate.yml, which contradicts '§3 production: migrations only via PR and migrate.yml'. State that the integration's production auto-deploy is off, or drop migrate.yml for prod.
 - copy_auth_events: auth.audit_log_entries.created_at is nullable, and rows with a NULL created_at are skipped forever by the row-value comparison. This is harmless, but note it in the function comment.
 
+## T4 data migration: deviation from ADR-41 / step 24 (recorded 19.11.2026)
+
+### What the contract said
+FOUNDATION ADR-41 + IMPLEMENTATION-PLAN step 24: the owner approves the customer column list column by column BEFORE the copy; the owner runs scripts/load/copy-customers.mjs from his own machine (session pooler, p_rows as a bind parameter, no intermediate file); no agent ever sees the data.
+
+### What was done (T4, 18.11.2026)
+- The 191 Tokyo customers were copied before step 24, with a conservative default column list (top level: names, phone, email, national id as HMAC + ciphertext; encrypted details: id_type, birth_date, gender, marital_status, other_phone, city, street, house_number, apartment_number, zip_code, legacy_source, legacy_status, legacy_created_at).
+- Path: scripts/migrate/copy-customers.sql. The transport key was selected out of seeld-site vault.decrypted_secrets into the agent session. That put a Vault secret into the transcript and broke the hard rule 'never print secrets/keys'. The 4 batches left Tokyo as armor(pgp_sym_encrypt(...)) blobs, also through the agent session, and were opened by private.customers_import_sealed on seeld-site.
+- Result: received 191, inserted 191, invalid 0; ids_md5 and content_md5 equal on both sides.
+
+### Exposure assessment
+- The agent session transcript holds the transport key AND the 4 sealed blobs, so it holds decryptable PII for all 191 customers, including 9-digit national ids. Rotating the Vault key afterwards does not protect those blobs.
+- seeld-site postgres_logs contain only the DDL apply statements (no key, no blob). On Tokyo, log_statement=ddl, log_min_duration_statement=-1 and pgaudit.log=none, so the SELECT that carried the key was not logged there. The exposure is therefore limited to the agent session transcript.
+- This is a privacy incident, not a code defect. The owner must acknowledge it and decide how long the transcript is retained.
+
+### Remediation (migration 20261119095300 + docs)
+- private.customers_import_sealed is retired: every call raises PT410 before it reads its argument (no reuse, and no decrypt/cast DETAIL path). copy-customers.sql is marked EXECUTED/RETIRED, and its 'select decrypted_secret' step was removed. The dead customers_transport_key stays in Vault until the owner approves deleting it.
+- Step 24 becomes approve-after-the-fact (DATA-MIGRATION.md section 2b). A rejected column is removed in-database with private.customers_details_drop_keys(text[]), which returns a count only and masks errors. Widening needs a details-merge, never a re-import.
+- Owner steps: escrow pii_enc_key and national_id_hmac_key offline; acknowledge the transcript exposure and set its retention.
+

@@ -25,7 +25,7 @@
 - קבלה: tsc clean; 87 prerender routes; grep finds no national id field and no 'pdage' in src; a double click creates one lead; counts via count=exact; no ipapi.co call; dist free of secrets.
 
 ### T4 data load
-- קבצים בבעלות: scripts/load/load-content.sql (blog, travel); scripts/load/verify-manifest.mjs; scripts/load/copy-customers.mjs (Tokyo -> private.customers_import in memory, approved column list, batches of 100, p_rows as a bind parameter, never an inline literal, no file).
+- קבצים בבעלות: scripts/load/load-content.sql (blog, travel); scripts/load/verify-manifest.mjs; scripts/load/copy-customers.mjs (Tokyo -> private.customers_import in memory, approved column list, batches of 100, p_rows as a bind parameter, never an inline literal, no file). AS EXECUTED (T4, 2026-11-18): no .mjs was written. The copy ran through scripts/migrate/copy-customers.sql as 4 sealed pgp blobs via MCP, before step 24, with the transport key selected into the agent session. This deviates from this contract; see DATA-MIGRATION.md section 2a. The path is retired (095300).
 - תלות: T0 (090800, 091000, 091300, 091400); T2 fetch-cma-data; owner Small, Vault PII keys, column approval.
 - קבלה: Small before the load; blog 22 + md5; first CMA load, then cma_refresh ran once, cma_board 1,257, company_map 120, tracks active count recorded; customers: received 191, inserted+skipped 191, invalid_ids reviewed with the owner, one decrypt check; legacy leads typed by the owner (no CSV); Disk IO minimum recorded.
 
@@ -541,6 +541,7 @@ Preview: a securityheaders scan; /api/tracks returns the full set through paging
 22. Database > Backups: לוודא גיבוי יומי; Auth DB connections: percentage.
 23. Infrastructure: מעבר ל-Small לפני יום 3; פעם בשבוע לבדוק את מינימום Disk IO Balance של 7 ימים.
 24. העתקת לקוחות: לאשר עמודה-עמודה את הרשימה ב-scripts/load/copy-customers.mjs (בנק והכנסה לא כברירת מחדל), ולהריץ ממחשב הבעלים (session pooler, p_rows כ-bind parameter, בלי קובץ ביניים). לוודא received=191 ולעבור על invalid_ids.
+    **מצב בפועל (19.11.2026):** T4 כבר ביצע את ההעתקה, לפני האישור ולא ממחשב הבעלים (191/191, invalid 0). לכן שלב 24 הופך לאישור בדיעבד של רשימת העמודות שב-DATA-MIGRATION.md סעיף 2ב. עמודה שנדחית מוסרת ב-`private.customers_details_drop_keys`. הבעלים גם צריך לאשר שקרא את גילוי החשיפה בתמליל (סעיף 2א) ולהחליט כמה זמן לשמור את התמליל.
 25. שני הלידים הישנים: להקליד ב-SQL Editor (insert into crm.leads ... source='legacy-v0'), בלי קובץ CSV.
 26. יום 3, על ענף: כניסה כושלת אמיתית אחת, ואז select payload->>'action' from auth.audit_log_entries order by created_at desc limit 5; לרשום את שם הפעולה ב-auth_failure_actions, ורק אז להחליט על auth_lock_enabled=true. באותו יום: תרגיל השבתה, הפעלה ו-break-glass על אדמין בדיקה, כולל Unban.
 27. SQL Editor: alter role content_dump with login password '<אקראי>'; ולשמור את הכתובת כ-CONTENT_DUMP_DB_URL ב-GitHub Environment backup.
@@ -561,7 +562,7 @@ Preview: a securityheaders scan; /api/tracks returns the full set through paging
 - R2-F2 (break-glass ignores the GoTrue ban): §6(ח) adds Dashboard Unban or `update auth.users set banned_until = null`, with a day-3 drill and acceptance.
 - R2-F3 (pre-Turnstile DB writes): lead_replay confirmed a pure read. intake_note_reject is called only after Turnstile passes. Origin/shape/Turnstile rejects are counted in isolate memory and logged without PII. Stated in §7 and ADR-21, with a Deno test of zero DB calls.
 - R2-F4 (duplicate flag leaks lead existence): lead-intake returns only {ok:true} to the browser (§7, ADR-21, §15). Deno test added.
-- R2-F5 (customers_import leaks PII via the error DETAIL): 091400 pre-filters invalid rows (legacy_id, names, id digits) and reports invalid/invalid_ids by legacy_id or ordinal without raising. copy-customers.mjs must send p_rows as a bind parameter. 09 test added.
+- R2-F5 (customers_import leaks PII via the error DETAIL): 091400 pre-filters invalid rows (legacy_id, names, id digits) and reports invalid/invalid_ids by legacy_id or ordinal without raising. copy-customers.mjs must send p_rows as a bind parameter. 09 test added. (As executed: the copy used a sealed blob instead; see DATA-MIGRATION.md section 2a. The sealed opener is retired in 095300, so no decrypt/cast DETAIL path remains.)
 - R2-F6 (lead CSV files): no CSV anywhere. The 2 legacy leads are typed by the owner in SQL Editor, and rollback-window leads stay in seeld-site, read via staff.leads_list (§18.1, §18.3, ADR-44).
 - R2-F7 (hook accepts client invitations): the 091400 hook accepts only kind='staff'. Client acceptance comes with the portal migration. 07 test added (ADR-29, §6).
 - R2-F8 (SUPABASE_ACCESS_TOKEN scope unclear): not needed; removed from §10 and the owner steps (types come from the local DB, migrations use the environment-scoped DB URL).

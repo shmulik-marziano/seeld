@@ -14,6 +14,8 @@ import { SdBand, SdContact, SdIcon, SdPic, SdProcess, SdSubnav, DEFAULT_STEPS } 
 import { PASTELS } from "@/components/sd/topics";
 import { toast } from "sonner";
 import { loadSiteSupabase } from "@/integrations/supabase/lazy";
+import { IS_V2 } from "@/integrations/supabase/config";
+import { useLeadIntake } from "@/hooks/useLeadIntake";
 import "@/components/sd/sd.css";
 import "@/components/sd/home.css";
 import "@/components/sd/home-entry.css";
@@ -178,6 +180,7 @@ const Index = () => {
   const [contactErrors, setContactErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
   const [contactSubmitting, setContactSubmitting] = useState(false);
   const [contactSent, setContactSent] = useState(false);
+  const intake = useLeadIntake();
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -189,6 +192,26 @@ const Index = () => {
     setContactErrors(errs);
     if (Object.keys(errs).length) return;
     setContactSubmitting(true);
+    if (IS_V2) {
+      const result = await intake.submit({
+        kind: "contact",
+        name: contactForm.name,
+        phone: contactForm.phone,
+        email: contactForm.email,
+        topic: "תיאום פגישה",
+        message: contactForm.message,
+        consent: true,
+        sourcePage: "/",
+      });
+      setContactSubmitting(false);
+      if (result.ok) {
+        setContactSent(true);
+        setContactForm({ name: "", phone: "", email: "", message: "" });
+      } else {
+        toast.error(result.message);
+      }
+      return;
+    }
     try {
       const supabase = await loadSiteSupabase();
       const { error } = await supabase.from("contact_submissions").insert([{
@@ -505,6 +528,7 @@ const Index = () => {
                   className="field resize-none"
                 />
               </div>
+              {IS_V2 && intake.guard}
               <div className="pt-2">
                 <button type="submit" disabled={contactSubmitting} className="btn-primary w-full sm:w-auto sm:min-w-[180px]">
                   {contactSubmitting ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : "שלחו לתיאום"}

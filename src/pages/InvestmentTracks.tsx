@@ -4,6 +4,11 @@ import { ArrowUpDown } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useInvestmentTracks } from "@/hooks/useInvestmentTracks";
+import { formatPeriod } from "@/hooks/useCmaFunds";
+import { IS_V2 } from "@/integrations/supabase/config";
+
+// v2 refreshes the tracks automatically from the CMA's data.gov.il feed (ADR-36); legacy came from gemelnet.
+const TRACKS_SOURCE = IS_V2 ? "רשות שוק ההון, ביטוח וחיסכון (data.gov.il)" : "גמלנט, רשות שוק ההון, משרד האוצר";
 import { productTypeLabels, specializationLabels, companyLabels } from "@/types/fund";
 import type { Fund, ProductType, Specialization, ManagingCompany } from "@/types/fund";
 import { BrandIcon } from "@/components/brand/BrandIcon";
@@ -385,10 +390,14 @@ const InvestmentTracks = () => {
     { value: productTypes.length, label: "סוגי מוצרים" },
   ];
 
+  // v2: every live row carries its data.gov.il report period (source_period -> lastUpdate "YYYY-MM").
+  const asOf = IS_V2 && isLive
+    ? trackData.reduce((m, f) => (/^\d{4}-\d{2}$/.test(f.lastUpdate) && f.lastUpdate > m ? f.lastUpdate : m), "")
+    : "";
   const dataStatus = tracksLoading
     ? "טוען נתונים עדכניים מהמאגר. בינתיים מוצגים נתונים מקומיים."
     : isLive
-      ? "הנתונים נטענו מהמאגר העדכני."
+      ? (asOf ? `הנתונים נטענו מהמאגר העדכני, נכון ל${formatPeriod(Number(asOf.replace("-", "")))}.` : "הנתונים נטענו מהמאגר העדכני.")
       : "המאגר העדכני לא זמין כרגע. מוצגים נתונים מקומיים מהעדכון האחרון שנשמר.";
 
   const sortButton = (key: SortKey, label: string) => (
@@ -439,7 +448,7 @@ const InvestmentTracks = () => {
               <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-[15px]" style={{ color: "var(--muted)" }}>
                 <div className="flex gap-2">
                   <dt>מקור הנתונים:</dt>
-                  <dd className="font-bold" style={{ color: "var(--ink)" }}>גמלנט, רשות שוק ההון, משרד האוצר</dd>
+                  <dd className="font-bold" style={{ color: "var(--ink)" }}>{TRACKS_SOURCE}</dd>
                 </div>
               </dl>
               <p className="mt-2 text-[14px]" style={{ color: "var(--muted)" }} role="status">{dataStatus}</p>
@@ -787,7 +796,7 @@ const InvestmentTracks = () => {
               <p className="font-bold mb-1" style={{ color: GREEN }}>הבהרה חשובה</p>
               <p>
                 הנתונים המוצגים הם למטרות מידע בלבד ואינם מהווים המלצה לרכישה, מכירה או פדיון של מוצר פיננסי.
-                תשואות עבר אינן מבטיחות תשואות עתידיות. המקור: גמלנט, רשות שוק ההון, משרד האוצר.
+                תשואות עבר אינן מבטיחות תשואות עתידיות. המקור: {TRACKS_SOURCE}.
                 לקבלת החלטות השקעה יש לפנות לסוכן מורשה.
               </p>
             </div>

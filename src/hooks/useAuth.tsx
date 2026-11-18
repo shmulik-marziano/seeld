@@ -1,6 +1,7 @@
 import { createContext, lazy, Suspense, useCallback, useContext, useMemo, useRef, useState, ReactNode } from "react";
 import type { AuthContextType } from "./AuthProviderImpl";
 import { hasStoredSession } from "@/integrations/supabase/lazy";
+import { IS_V2 } from "@/integrations/supabase/config";
 
 // The real provider (supabase session, sign-in/out) lives in AuthProviderImpl and
 // pulls supabase-js (~45kB gzip). Public pages never need it unless the visitor
@@ -17,6 +18,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const EAGER_PREFIXES = ["/app", "/personal-area", "/site-admin", "/saved-calculations"];
 
 function needsAuthAtStart(): boolean {
+  // v2: no sessions on the public site (the staff app is rebuilt in phase 2), so the auth chunk never loads.
+  if (IS_V2) return false;
   if (typeof window === "undefined") return false;
   const { pathname, hash, search } = window.location;
   if (EAGER_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + "/"))) return true;
@@ -40,6 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const stub = useMemo<AuthContextType>(() => {
     const whenReady = (): Promise<AuthContextType> => {
+      if (IS_V2) return Promise.reject(new Error("sign-in is not available on this backend yet"));
       setActive(true);
       if (implRef.current) return Promise.resolve(implRef.current);
       return new Promise((resolve) => waiters.current.push(resolve));

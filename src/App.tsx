@@ -20,7 +20,7 @@ import FloatingShapes from "@/components/FloatingShapes";
 import RouteFallback from "@/components/RouteFallback";
 import RouteSeo from "@/components/RouteSeo";
 import { lazy, Suspense, useEffect, useRef } from "react";
-import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/config";
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, IS_V2 } from "@/integrations/supabase/config";
 import { hasStoredSession, loadSiteSupabase } from "@/integrations/supabase/lazy";
 
 // ── Page View Tracker ──
@@ -161,9 +161,6 @@ function PageViewTracker() {
 // ── Homepage stays eager: it must render instantly with no fallback flash ──
 import Index from "@/pages/Index";
 
-// PDage layout (used directly by the auth guard, named export — stays eager)
-import { PDageLayout } from "@/components/pdage/PDageLayout";
-
 // ── Agent App Pages (lazy) ──
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
 const CustomerListPage = lazy(() => import("@/pages/CustomerListPage"));
@@ -214,15 +211,8 @@ const BridgePage = lazy(() => import("@/pages/tools/BridgePage"));
 const FlowPage = lazy(() => import("@/pages/tools/FlowPage"));
 const BrainPage = lazy(() => import("@/pages/tools/BrainPage"));
 
-// PDage pages (lazy)
-const PDageDashboard = lazy(() => import("@/pages/pdage/PDageDashboard"));
-const PDageChatHome = lazy(() => import("@/pages/pdage/PDageChatHome"));
-const PDageUpload = lazy(() => import("@/pages/pdage/PDageUpload"));
-const PDageDeficiency = lazy(() => import("@/pages/pdage/PDageDeficiency"));
-const PDageJobView = lazy(() => import("@/pages/pdage/PDageJobView"));
-const PDageHistory = lazy(() => import("@/pages/pdage/PDageHistory"));
-const PDageDeficiencyBank = lazy(() => import("@/pages/pdage/PDageDeficiencyBank"));
-const PDageCorrectionRoom = lazy(() => import("@/pages/pdage/PDageCorrectionRoom"));
+// v2 holding screen for the areas rebuilt in phase 2 (lazy; never loaded by a legacy build)
+const ComingSoon = lazy(() => import("@/pages/ComingSoon"));
 
 // ── Public Site Pages (lazy) ──
 const About = lazy(() => import("@/pages/About"));
@@ -330,20 +320,10 @@ function AgentAuthGuard() {
   );
 }
 
-function PDageAuthGuard() {
-  const { session, loading } = useApp();
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Loader2 className="h-8 w-8 animate-spin text-primary" />
-    </div>
-  );
-  if (!session) return <Navigate to="/app/auth" replace />;
-  return (
-    <PDageLayout>
-      <Outlet />
-    </PDageLayout>
-  );
-}
+// v2 (VITE_SEELD_BACKEND=v2): the personal area, client portal, agents app, site admin and the two forms
+// that collect national id / bank details are not served; a calm holding screen replaces them.
+// Legacy builds render `el` unchanged.
+const hold = (el: JSX.Element, variant: "area" | "form" = "area") => (IS_V2 ? <ComingSoon variant={variant} /> : el);
 
 function AgentAuthRoute() {
   const { session, loading, needsOnboarding } = useApp();
@@ -365,7 +345,8 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <PageViewTracker />
+            {/* v2 has no page_views table (FOUNDATION §17): the page-view log is legacy-only */}
+            {!IS_V2 && <PageViewTracker />}
             <RouteSeo />
             <GridBackdrop />
             <ScrollProgress />
@@ -385,18 +366,18 @@ const App = () => (
                 <Route path="/authors" element={<Authors />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/portfolio-review" element={<PortfolioReview />} />
-                <Route path="/onboarding" element={<Onboarding />} />
+                <Route path="/onboarding" element={hold(<Onboarding />, "form")} />
                 {/* Legacy password-based admin removed — SiteAdmin (Supabase auth) replaces it */}
                 <Route path="/admin" element={<Navigate to="/site-admin" replace />} />
-                <Route path="/site-admin" element={<SiteAdmin />} />
-                <Route path="/direct-debit" element={<DirectDebit />} />
+                <Route path="/site-admin" element={hold(<SiteAdmin />)} />
+                <Route path="/direct-debit" element={hold(<DirectDebit />, "form")} />
                 <Route path="/article/:id" element={<Article />} />
                 <Route path="/calculators" element={<Calculators />} />
                 <Route path="/return-tables" element={<ReturnTables />} />
                 <Route path="/return-tables/:product" element={<ReturnTables />} />
                 <Route path="/fund-finder" element={<FundFinder />} />
-                <Route path="/saved-calculations" element={<SavedCalculations />} />
-                <Route path="/personal-area" element={<PersonalArea />} />
+                <Route path="/saved-calculations" element={hold(<SavedCalculations />)} />
+                <Route path="/personal-area" element={hold(<PersonalArea />)} />
                 <Route path="/style-guide" element={<StyleGuide />} />
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/accessibility" element={<Accessibility />} />
@@ -460,6 +441,17 @@ const App = () => (
                 <Route path="/report" element={<ReportPublic />} />
 
                 {/* ═══ AGENT APP ROUTES (/app/*) ═══ */}
+                {IS_V2 ? (
+                  <>
+                    <Route path="/q/:token" element={<ComingSoon />} />
+                    <Route path="/portal/*" element={<ComingSoon />} />
+                    <Route path="/execution-portal/*" element={<ComingSoon />} />
+                    <Route path="/client/*" element={<ComingSoon />} />
+                    <Route path="/app/*" element={<ComingSoon />} />
+                    <Route path="/app" element={<ComingSoon />} />
+                  </>
+                ) : (
+                <>
                 <Route path="/q/:token" element={<QuestionnaireClient />} />
                 <Route path="/portal/:token" element={<ClientPortalPage />} />
                 <Route path="/execution-portal/:token" element={<ExecutionSummaryPortalPage />} />
@@ -518,16 +510,8 @@ const App = () => (
                   <Route path="/app/tools/brain" element={<BrainPage />} />
                 </Route>
 
-                <Route element={<PDageAuthGuard />}>
-                  <Route path="/app/pdage" element={<PDageChatHome />} />
-                  <Route path="/app/pdage/overview" element={<PDageDashboard />} />
-                  <Route path="/app/pdage/upload" element={<PDageUpload />} />
-                  <Route path="/app/pdage/job/:jobId/deficiency" element={<PDageDeficiency />} />
-                  <Route path="/app/pdage/job/:jobId" element={<PDageJobView />} />
-                  <Route path="/app/pdage/job/:jobId/room" element={<PDageCorrectionRoom />} />
-                  <Route path="/app/pdage/history" element={<PDageHistory />} />
-                  <Route path="/app/pdage/deficiency-bank" element={<PDageDeficiencyBank />} />
-                </Route>
+                </>
+                )}
 
                 <Route path="*" element={<NotFound />} />
               </Routes>

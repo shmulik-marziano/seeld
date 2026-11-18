@@ -1,9 +1,12 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { MessageCircle } from "lucide-react";
 import { LiveDot } from "@/components/brand/Live";
+import { IS_V2 } from "@/integrations/supabase/config";
 import "@/components/sd/chrome.css";
 
-const loadChat = () => import("@/components/AIChatBot");
+// v2 (seeld-site): the AI chat is not wired to the new chat-bot function yet, so the launcher opens a calm
+// contact panel instead (no Supabase call). Legacy keeps the full chat.
+const loadChat = IS_V2 ? () => import("@/components/ChatUnavailable") : () => import("@/components/AIChatBot");
 const AIChatBot = lazy(loadChat);
 
 /**

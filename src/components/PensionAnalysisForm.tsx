@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { loadSiteSupabase } from "@/integrations/supabase/lazy";
+import { IS_V2 } from "@/integrations/supabase/config";
+import { useLeadIntake } from "@/hooks/useLeadIntake";
 import { toast } from "sonner";
 import { CheckCircle, Send, Plus, Trash2, TrendingUp, PiggyBank, Target, Shield } from "lucide-react";
 
@@ -29,6 +31,7 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [step, setStep] = useState(1);
+  const intake = useLeadIntake();
   
   // Contact info
   const [fullName, setFullName] = useState("");
@@ -109,7 +112,36 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
     }
     
     setIsSubmitting(true);
-    
+
+    if (IS_V2) {
+      const result = await intake.submit({
+        kind: "pension",
+        name: fullName,
+        phone,
+        email,
+        topic: focusArea,
+        message: [spouseEmployed ? "בן/בת הזוג עובד/ת" : "", additionalNotes].filter(Boolean).join("\n"),
+        consent: true,
+        sourcePage: typeof window !== "undefined" ? window.location.pathname : "/savings",
+        details: {
+          employment_status: employmentStatus,
+          retirement_age: retirementAge,
+          risk_tolerance: riskTolerance,
+          primary_goals: primaryGoals.join(","),
+          children_count: childrenCount,
+          preferred_contact_time: preferredContactTime,
+        },
+      });
+      setIsSubmitting(false);
+      if (result.ok) {
+        setIsSubmitted(true);
+        toast.success("הפרטים נשלחו בהצלחה! ניצור איתך קשר בהקדם");
+      } else {
+        toast.error(result.message);
+      }
+      return;
+    }
+
     try {
       const formattedProducts = existingProducts.map(p => ({
         type: p.type,
@@ -221,14 +253,16 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                     required
                   />
                 </div>
+                {!IS_V2 && (
                 <div>
                   <Label htmlFor="idNumber">תעודת זהות</Label>
-                  <Input 
-                    id="idNumber" 
-                    value={idNumber} 
+                  <Input
+                    id="idNumber"
+                    value={idNumber}
                     onChange={(e) => setIdNumber(e.target.value)}
                   />
                 </div>
+                )}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -252,15 +286,17 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                   />
                 </div>
               </div>
+              {!IS_V2 && (
               <div>
                 <Label htmlFor="birthDate">תאריך לידה</Label>
-                <Input 
-                  id="birthDate" 
-                  type="date" 
-                  value={birthDate} 
+                <Input
+                  id="birthDate"
+                  type="date"
+                  value={birthDate}
                   onChange={(e) => setBirthDate(e.target.value)}
                 />
               </div>
+              )}
               <Button
                 type="button"
                 onClick={() => setStep(2)}
@@ -291,6 +327,8 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                   </SelectContent>
                 </Select>
               </div>
+              {/* v2: no salary, employer or product balances in public forms (ADR-42); the adviser asks in the call */}
+              {!IS_V2 && (<>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="monthlySalary">שכר ברוטו חודשי (₪)</Label>
@@ -316,10 +354,11 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                 <Input 
                   id="employmentStartDate" 
                   type="date" 
-                  value={employmentStartDate} 
+                  value={employmentStartDate}
                   onChange={(e) => setEmploymentStartDate(e.target.value)}
                 />
               </div>
+              </>)}
               <div className="flex gap-2">
                 <Button 
                   type="button" 
@@ -329,9 +368,9 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                 >
                   חזרה
                 </Button>
-                <Button 
-                  type="button" 
-                  onClick={() => setStep(3)}
+                <Button
+                  type="button"
+                  onClick={() => setStep(IS_V2 ? 4 : 3)}
                   className="flex-1 min-h-[48px] text-base"
                 >
                   המשך
@@ -456,16 +495,18 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                     max="75"
                   />
                 </div>
+                {!IS_V2 && (
                 <div>
                   <Label htmlFor="desiredMonthlyPension">קצבה חודשית רצויה (₪)</Label>
-                  <Input 
-                    id="desiredMonthlyPension" 
-                    type="number" 
-                    value={desiredMonthlyPension} 
+                  <Input
+                    id="desiredMonthlyPension"
+                    type="number"
+                    value={desiredMonthlyPension}
                     onChange={(e) => setDesiredMonthlyPension(e.target.value)}
                     placeholder="15,000"
                   />
                 </div>
+                )}
               </div>
               
               <div>
@@ -511,7 +552,7 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                 <Button 
                   type="button" 
                   variant="outline"
-                  onClick={() => setStep(3)}
+                  onClick={() => setStep(IS_V2 ? 2 : 3)}
                   className="flex-1 min-h-[48px] text-base"
                 >
                   חזרה
@@ -578,9 +619,10 @@ const PensionAnalysisForm = ({ title, description, focusArea = 'general' }: Pens
                 />
               </div>
               
+              {IS_V2 && intake.guard}
               <div className="flex gap-2">
-                <Button 
-                  type="button" 
+                <Button
+                  type="button"
                   variant="outline"
                   onClick={() => setStep(4)}
                   className="flex-1 min-h-[48px] text-base"

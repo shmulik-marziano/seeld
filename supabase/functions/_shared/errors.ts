@@ -9,6 +9,8 @@ export type ErrorCode =
   | "method_not_allowed"
   | "conflict"
   | "validation_failed"
+  | "payload_too_large"
+  | "feature_disabled"
   | "rate_limited"
   | "internal"
   | "unavailable";
@@ -21,6 +23,8 @@ const STATUS: Record<ErrorCode, number> = {
   method_not_allowed: 405,
   conflict: 409,
   validation_failed: 422,
+  payload_too_large: 413,
+  feature_disabled: 423, // a kill switch in ops.config is off (DB PT423); lead-intake clients show their "form closed" text
   rate_limited: 429,
   internal: 500,
   unavailable: 503,
