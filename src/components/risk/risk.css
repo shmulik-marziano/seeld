@@ -99,6 +99,7 @@
   .sd-rk-tablewrap { display: block; }
   .sd-rk-cards { display: none; }
 }
+.sd-rk-footnote { margin: 10px 0 0; font-size: 14px; line-height: 1.7; color: var(--q-muted); }
 .sd-rk-more { margin: 14px 0 0; }
 .sd-rk-agenote { margin-top: 18px; padding: 14px 16px; border-radius: 12px; background: #eef3f9; border: 1px dashed #bfd3e5; }
 .sd-rk-agenote h4 { margin: 0 0 6px; font-size: 16px; font-weight: 700; color: var(--q-navy); }

@@ -1,4 +1,4 @@
-// "מסלולים מתאימים": tracks of the returns board that fall in the characterised level, per product.
+// "מסלולים מלוח התשואות ברמת הסיכון הזו": tracks of the returns board that fall in the characterised level, per product.
 // Same data path as /return-tables (useCmaBoard: /api/board, with its own fallback), classified in the
 // browser by the spec rules (src/lib/riskProfile.ts). Ordered by assets, never by return.
 import { useEffect, useMemo, useState } from "react";
@@ -52,12 +52,14 @@ export default function RiskTracks({ level }: { level: RiskLevel }) {
   const cols = level === "high" ? [BASE_COLS[0], FOREIGN_COL, ...BASE_COLS.slice(1)] : BASE_COLS;
   const levelCopy = RISK_LEVEL_COPY[level];
   const ageCount = ageCounts[product] ?? 0;
+  // Some index trackers reach their exposure through derivatives and report a low stock share.
+  const lowReportedStocks = level === "high" && rows.some((r) => typeof r.stock_pct === "number" && r.stock_pct <= 60);
 
   return (
     <section className="sd-rk-tracks" aria-labelledby="rk-tracks-h">
-      <h3 id="rk-tracks-h" className="sd-rk-tracks-h">מסלולים מתאימים</h3>
+      <h3 id="rk-tracks-h" className="sd-rk-tracks-h">מסלולים מלוח התשואות ברמת הסיכון הזו</h3>
       <p className="sd-rk-tracks-lede">
-        מסלולים מלוח התשואות שהחשיפה שלהם מתאימה ל{levelCopy.title}. הם מוצגים לפי גודל הנכסים המנוהלים ולא לפי תשואה, והרשימה אינה המלצה על מסלול או על גוף.
+        מסלולים מלוח התשואות שהחשיפה שלהם נמצאת ב{levelCopy.title}. הם מוצגים לפי גודל הנכסים המנוהלים ולא לפי תשואה, והרשימה אינה המלצה על מסלול או על גוף.
       </p>
 
       {isLoading && <p className="sd-rk-loading" role="status">טוענים את נתוני המסלולים…</p>}
@@ -125,6 +127,7 @@ export default function RiskTracks({ level }: { level: RiskLevel }) {
                   </li>
                 ))}
               </ul>
+              {lowReportedStocks && <p className="sd-rk-footnote">{RISK_COPY.derivativesNote}</p>}
             </>
           )}
 

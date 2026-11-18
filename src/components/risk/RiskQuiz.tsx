@@ -127,7 +127,7 @@ export default function RiskQuiz({ onResult }: { onResult?: (r: RiskResult | nul
           </div>
 
           <div className="sd-rk-actions">
-            <a href="#form" className="sd-q-btn">לקבל את האפיון ולתאם שיחת היכרות<BrandIcon name="arrow-left" size={18} /></a>
+            <a href="#form" className="sd-q-btn">לבחון את האפיון בשיחת היכרות<BrandIcon name="arrow-left" size={18} /></a>
             <button type="button" className="sd-q-btn is-quiet" onClick={back}>חזרה לשאלה האחרונה</button>
             <button type="button" className="sd-q-linkbtn" onClick={restart}>לענות מחדש</button>
           </div>
@@ -178,6 +178,7 @@ export default function RiskQuiz({ onResult }: { onResult?: (r: RiskResult | nul
                   onPointerDown={() => { pointerPick.current = true; }}>
                   <input id={id} type="radio" name={`rk-${q.id}`} value={o.score} checked={on}
                     onChange={() => pick(o.score)}
+                    onClick={() => { if (on && pointerPick.current) pick(o.score); }}
                     onKeyDown={() => { pointerPick.current = false; }} />
                   <span>{o.label}</span>
                 </label>

@@ -163,7 +163,7 @@ describe("risk profile track matching", () => {
 
 describe("risk profile copy and registry", () => {
   const all = [
-    RISK_COPY.intro, RISK_COPY.resultIntro, RISK_COPY.guardrail, RISK_COPY.disclaimer, RISK_COPY.cta, RISK_COPY.ageNote,
+    RISK_COPY.intro, RISK_COPY.resultIntro, RISK_COPY.guardrail, RISK_COPY.disclaimer, RISK_COPY.cta, RISK_COPY.ageNote, RISK_COPY.derivativesNote,
     ...RISK_FAQ.flatMap((f) => [f.q, f.a]),
     ...Object.values(RISK_LEVEL_COPY).flatMap((l) => [l.title, l.profile, l.policy, l.assetMix]),
     ...RISK_QUESTIONS.flatMap((q) => [q.text, q.help, ...q.options.map((o) => o.label)]),
@@ -171,6 +171,11 @@ describe("risk profile copy and registry", () => {
 
   it("has none of the forbidden words", () => {
     for (const re of [/תאגיד/u, /ייעוץ|יועץ|מתייעץ/u, /ללא עלות|בחינם/u, /מובטח|מבטיח/u, /בטוח/u, /ביותר/u]) expect(all).not.toMatch(re);
+  });
+
+  it("describes levels without suitability wording", () => {
+    expect(all).not.toMatch(/שלושה חמישים/u);
+    for (const l of Object.values(RISK_LEVEL_COPY)) expect(l.profile).not.toMatch(/מתאימ(ים|ה|ות)? לאופי הזה/u);
   });
 
   it("is registered as a digit-free tool route with a summary", () => {

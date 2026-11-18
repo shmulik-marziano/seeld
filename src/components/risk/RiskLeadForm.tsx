@@ -93,7 +93,7 @@ export default function RiskLeadForm({ level, idPrefix = "rk" }: { level: RiskLe
 
   return (
     <form onSubmit={submit} noValidate className="sd-rp-form" aria-label="טופס שיחת היכרות אחרי אפיון רמת הסיכון">
-      <h3 className="sd-rp-form-title">לקבל את האפיון ולתאם שיחת היכרות</h3>
+      <h3 className="sd-rp-form-title">לבחון את האפיון בשיחת היכרות</h3>
       <p className="sd-rp-form-sub">כמה פרטים, ומישהו מהצוות חוזר אליכם לתיאום. השיחה הראשונה אינה מחייבת.</p>
 
       <div className="sd-rp-grid">
