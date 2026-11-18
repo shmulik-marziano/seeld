@@ -1,0 +1,61 @@
+name: Weekly content dump
+
+# Encrypted weekly logical dump of the `content` schema only (blog, travel, tracks, CMA tables), as the
+# select-only role content_dump (FOUNDATION v2.2 §12/§14, ADR-44). No personal data lives in `content`.
+# The connection string is in GitHub Environment `backup` (deployment branch main only) as CONTENT_DUMP_DB_URL.
+# The dump is encrypted with the owner's age PUBLIC key (repository variable BACKUP_AGE_RECIPIENT, "age1...");
+# only the owner's offline private key can open it. Artifact retention: 30 days.
+# Restore: age -d -i <key> content-<date>.dump.age > content.dump && pg_restore --schema=content ... (runbook).
+
+on:
+  schedule:
+    - cron: "30 2 * * 0"   # Sundays 02:30 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: content-dump
+  cancel-in-progress: false
+
+jobs:
+  dump:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: backup
+    steps:
+      - name: Tools (pg_dump 17 from PGDG, age)
+        run: |
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl -sSfL -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \
+            | sudo tee /etc/apt/sources.list.d/pgdg.list >/dev/null
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-client-17 age
+          /usr/lib/postgresql/17/bin/pg_dump --version
+
+      - name: Dump content (as content_dump) and encrypt
+        env:
+          CONTENT_DUMP_DB_URL: ${{ secrets.CONTENT_DUMP_DB_URL }}
+          AGE_RECIPIENT: ${{ vars.BACKUP_AGE_RECIPIENT }}
+        run: |
+          [ -n "$CONTENT_DUMP_DB_URL" ] || { echo "::error::CONTENT_DUMP_DB_URL is not set in Environment backup"; exit 1; }
+          case "$AGE_RECIPIENT" in age1*) ;; *) echo "::error::repository variable BACKUP_AGE_RECIPIENT (age public key) is missing"; exit 1;; esac
+          umask 077
+          out="$RUNNER_TEMP/content-$(date -u +%Y%m%d).dump"
+          # --enable-row-security: works whether content_dump has BYPASSRLS or only select policies (T0 fallback).
+          /usr/lib/postgresql/17/bin/pg_dump "$CONTENT_DUMP_DB_URL" --schema=content --no-owner --no-privileges \
+            --enable-row-security -Fc -f "$out"
+          age -r "$AGE_RECIPIENT" -o "$out.age" "$out"
+          shred -u "$out"
+          ls -l "$RUNNER_TEMP"/content-*.dump.age
+          echo "DUMP_FILE=$out.age" >> "$GITHUB_ENV"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: content-dump-${{ github.run_id }}
+          path: ${{ env.DUMP_FILE }}
+          retention-days: 30
+          if-no-files-found: error

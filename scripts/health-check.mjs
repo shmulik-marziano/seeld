@@ -99,6 +99,23 @@ try {
   console.log(`INFO  /health.json check skipped: ${e.message}`);
 }
 
+// Backend health (FOUNDATION v2.2 §13, IMPLEMENTATION-PLAN item 21). Only when HEALTH_URL is set (repository
+// variable, set at cutover to https://qxhpolktdfgcbxtfxgov.supabase.co/functions/v1/health); unset = no change.
+// FAILS unless the endpoint answers 200 with degraded === false (stuck outbox, dead rows in 24 h, alert pending
+// > 30 min, no finished watchdog run in 30 min, or no answer). HEALTH_APIKEY (optional) = the publishable key.
+if (process.env.HEALTH_URL) {
+  try {
+    const res = await fetch(process.env.HEALTH_URL, {
+      headers: { "user-agent": "seeld-site-watch/1.0", ...(process.env.HEALTH_APIKEY ? { apikey: process.env.HEALTH_APIKEY } : {}) },
+      signal: AbortSignal.timeout(20_000),
+    });
+    const body = await res.json().catch(() => null);
+    record(res.status === 200 && body !== null && body.degraded === false, "backend health degraded=false", `status ${res.status}, degraded=${JSON.stringify(body?.degraded)}`);
+  } catch (e) {
+    record(false, "backend health degraded=false", e.message);
+  }
+}
+
 // TLS expiry
 await new Promise((resolveP) => {
   const u = new URL(BASE);

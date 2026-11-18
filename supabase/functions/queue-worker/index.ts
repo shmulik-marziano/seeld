@@ -2,7 +2,8 @@
 // Triggered by pg_cron + pg_net (supabase/proposed/09_alerting_and_cron.sql): POST { "destination": "salesforce" | "surense" }.
 // verify_jwt = false for this function when deployed; the request is authenticated with the shared secret header instead.
 // Configuration, all from env / edge function secrets (never in the repo):
-//   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY   injected by Supabase
+//   SUPABASE_URL                              injected by Supabase
+//   SEELD_SECRET_KEY                          secret API key (sb_secret_*), set as an edge function secret
 //   WORKER_SHARED_SECRET                      must equal Vault secret 'queue_worker_secret'
 //   SYSTEMS_MODE                              unconfigured | surense_only | salesforce_only | both_parallel
 // Before deploy: the imports below reach into src/platform (pure TS). Bundle them with an import map or copy them into
@@ -72,7 +73,7 @@ Deno.serve(async (req) => {
     if (!enabledDestinations(mode).includes(dest)) return jsonResponse({ destination: dest, skipped: "destination_disabled" }, requestId);
     const adapter = adaptersFor(mode)[dest]!;
 
-    const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
+    const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SEELD_SECRET_KEY")!, { auth: { persistSession: false } });
     const db = makeDb(sb);
     const l = log.child({ requestId, destination: dest });
     const summary = await runBatch({

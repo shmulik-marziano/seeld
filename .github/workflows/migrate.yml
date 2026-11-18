@@ -1,0 +1,97 @@
+name: Migrate production database
+
+# The ONLY path that applies migrations to seeld-site (FOUNDATION v2.2 §12, ADR-44). Manual dispatch from main.
+# Controls, in order:
+#  1. workflow_dispatch only (never on push/PR), and only from refs/heads/main;
+#  2. the actor must be listed in the repository variable PROD_MIGRATORS, a JSON array of GitHub logins
+#     (exact match via fromJSON; a plain `contains` on a string would let 'shmul' match 'shmulik-marziano');
+#  3. GitHub Environment `production` (deployment branch main only, required reviewer = the owner) holds
+#     SUPABASE_DB_URL; the job waits for the reviewer's approval before any secret is released;
+#  4. the typed confirmation must equal the project ref;
+#  5. ci-ok must be green on the exact commit being migrated;
+#  6. the production history must be consistent with supabase/migrations (scripts/ci/check-migration-history.mjs:
+#     no production version missing from the repo, nothing pending that is older than production's newest);
+#  7. a dry run is always printed first; dry_run=true (the default) stops there.
+# Preconditions (runbook): Vault secrets project_url / edge_cron_secret exist before the first push of
+# 20261119091100+, and the Supabase GitHub integration's production auto-deploy is OFF (single deploy path).
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type the project ref (qxhpolktdfgcbxtfxgov) to confirm"
+        required: true
+        type: string
+      dry_run:
+        description: "Only print the pending migrations"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+  checks: read
+
+concurrency:
+  group: migrate-production
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    if: github.ref == 'refs/heads/main' && contains(fromJSON(vars.PROD_MIGRATORS || '[]'), github.actor)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    env:
+      SUPABASE_CLI_VERSION: 2.122.1
+      PROJECT_REF: qxhpolktdfgcbxtfxgov
+    steps:
+      - name: Confirmation matches the project
+        env:
+          CONFIRM: ${{ inputs.confirm }}
+        run: |
+          if [ "$CONFIRM" != "$PROJECT_REF" ]; then
+            echo "::error::confirmation does not match the project ref"; exit 1
+          fi
+
+      - uses: actions/checkout@v4
+
+      - name: ci-ok is green on this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          conclusion="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/check-runs?check_name=ci-ok" \
+            --jq '[.check_runs[] | select(.name=="ci-ok")] | sort_by(.completed_at) | last | .conclusion')"
+          echo "ci-ok on ${GITHUB_SHA}: ${conclusion:-none}"
+          [ "$conclusion" = "success" ] || { echo "::error::ci-ok is not green on this commit"; exit 1; }
+
+      - name: Migration floor
+        run: |
+          old="$(ls supabase/migrations | LC_ALL=C awk '$0 < "20261118162452"')"
+          [ -z "$old" ] || { echo "::error::migrations older than the foundation floor:"; echo "$old"; exit 1; }
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: ${{ env.SUPABASE_CLI_VERSION }}
+
+      # psql ships with the ubuntu runner image. Reads supabase_migrations.schema_migrations only.
+      - name: Production history matches the repo
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          [ -n "$SUPABASE_DB_URL" ] || { echo "::error::SUPABASE_DB_URL is not set in Environment production"; exit 1; }
+          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -X -At -F '|'             -c "select version, coalesce(name, '') from supabase_migrations.schema_migrations order by version"             > "$RUNNER_TEMP/remote-migrations.txt"
+          node scripts/ci/check-migration-history.mjs "$RUNNER_TEMP/remote-migrations.txt"
+
+      - name: Pending migrations (dry run)
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          [ -n "$SUPABASE_DB_URL" ] || { echo "::error::SUPABASE_DB_URL is not set in Environment production"; exit 1; }
+          supabase db push --db-url "$SUPABASE_DB_URL" --dry-run
+
+      - name: Apply migrations
+        if: ${{ !inputs.dry_run }}
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: supabase db push --db-url "$SUPABASE_DB_URL"

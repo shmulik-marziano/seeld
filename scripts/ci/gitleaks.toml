@@ -1,0 +1,24 @@
+# gitleaks config for CI (supply-chain job). Default rules + a narrow allowlist of reviewed false positives.
+# Reviewed 2026-11-18 on the full history (106 findings, none a secret):
+#  - jwt: every JWT in history is a Supabase *anon* key (role "anon"; public by design, shipped in the browser
+#    bundle): Tokyo lvifatyksqizwcutfbqp, the older xddeqljarsswwsslhaoj, and seeld-site. Only JWTs whose payload
+#    starts with {"iss":"supabase","ref":"<20 chars>","role":"anon" are allowed. A service_role or any other JWT
+#    still fails.
+#  - generic-api-key in src/data/questionnaires/*.json: form field ids named "key".
+#  - curl-auth-*: a placeholder ('sb_secret_...') in the research doc and a commented-out curl in an archived
+#    Tokyo migration.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Reviewed false positives (public anon JWTs, questionnaire field keys, documented placeholders)"
+regexTarget = "match"
+regexes = [
+  '''eyJ[A-Za-z0-9_-]*\.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6I[A-Za-z0-9_-]{27}Iiwicm9sZSI6ImFub24i[A-Za-z0-9_-]*\.[A-Za-z0-9_-]+''',
+  '''sb_secret_\.\.\.''',
+]
+paths = [
+  '''^src/data/questionnaires/[^/]+\.json$''',
+  '''^supabase/migrations/20260319100001_cma_cron_schedule\.sql$''',
+  '''^supabase/_archive_tokyo/migrations/20260319100001_cma_cron_schedule\.sql$''',
+]

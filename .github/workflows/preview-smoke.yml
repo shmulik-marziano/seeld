@@ -1,0 +1,78 @@
+name: Preview smoke
+
+# Runs when Vercel reports a successful Preview deployment (FOUNDATION v2.2 §12 `preview-smoke`).
+# Not a required check (previews can lag); a red run is a review signal on the PR.
+#  - site: headers/CSP, immutable hits vs non-cacheable asset 404s, app shell, 404, /api/* (scripts/ci/preview-smoke.mjs),
+#    through Vercel Deployment Protection with the repository secret VERCEL_AUTOMATION_BYPASS_SECRET;
+#  - Supabase: GET /auth/v1/settings must say disable_signup=true with no external provider besides email
+#    (asserted from settings, not from a rejected signup: with CAPTCHA on, a signup is rejected by CAPTCHA
+#    before enable_signup is ever evaluated), the api max_rows cap (200) on a view with more rows, and api.health.
+#    Target = repository variables SMOKE_SUPABASE_URL / SMOKE_SUPABASE_PUBLISHABLE_KEY (publishable key only;
+#    public by design). Defaults to seeld-site. SMOKE_CHECK_HEALTH=1 once api.health is deployed (T0 091100).
+# Access-token lifetime (exp-iat = 900) needs a real login and is verified in the CI database job against the
+# local stack and by the owner on the dashboard; no test credentials are stored in GitHub.
+# Also asserts the /api/* lists are not truncated (funds = fund-status totalFunds, no list at a 200/1000 cap):
+# the paging precondition of the VITE_SUPABASE_URL cutover.
+#
+# Trust: deployment_status runs with repository secrets. The smoke code that receives
+# VERCEL_AUTOMATION_BYPASS_SECRET is checked out from the DEFAULT BRANCH, never from the deployed commit, so a PR
+# cannot change the code that sees the secret. Keep Vercel's fork protection on (fork PRs need authorization
+# before they deploy). Consequence: changes to scripts/ci/preview-smoke.mjs take effect after they reach main.
+
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: preview-smoke-${{ github.event.deployment_status.target_url }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      startsWith(github.event.deployment_status.environment, 'Preview')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+          sparse-checkout: scripts/ci
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Site (headers, CSP vs bundle, cache, routes, API completeness)
+        env:
+          TARGET_URL: ${{ github.event.deployment_status.target_url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          CUTOVER_DONE: ${{ vars.CUTOVER_DONE }}
+        run: |
+          if [ ! -f scripts/ci/preview-smoke.mjs ]; then
+            echo "::warning::scripts/ci/preview-smoke.mjs is not on the default branch yet; the site smoke starts after the first v2 PR merges"
+            exit 0
+          fi
+          node scripts/ci/preview-smoke.mjs "$TARGET_URL"
+
+      - name: Supabase auth/API surface
+        if: always()
+        env:
+          SUPABASE_URL: ${{ vars.SMOKE_SUPABASE_URL || 'https://qxhpolktdfgcbxtfxgov.supabase.co' }}
+          SUPABASE_KEY: ${{ vars.SMOKE_SUPABASE_PUBLISHABLE_KEY }}
+          MAX_ROWS_PROBE: investment_tracks
+          MAX_ROWS_MIN_TOTAL: "200"
+          CHECK_HEALTH_RPC: ${{ vars.SMOKE_CHECK_HEALTH }}
+        run: |
+          if [ ! -f scripts/ci/check-auth-settings.mjs ]; then
+            echo "::warning::scripts/ci/check-auth-settings.mjs is not on the default branch yet"; exit 0
+          fi
+          if [ -z "$SUPABASE_KEY" ]; then
+            echo "::error::repository variable SMOKE_SUPABASE_PUBLISHABLE_KEY is not set (publishable key of the target project)"
+            exit 1
+          fi
+          node scripts/ci/check-auth-settings.mjs

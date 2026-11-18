@@ -1,11 +1,13 @@
-# PROPOSED replacement for .github/workflows/ci.yml (not applied). See docs/platform/FOUNDATION.md section 12.
-# Changes vs the current file:
-#  - one aggregate job `ci-ok` = the single required status check for branch protection on main
-#  - database job: replays migrations from scratch + pgTAP + db lint + generated-types drift
-#  - supply chain job: npm audit (prod deps), secret scan
-#  - least-privilege permissions, timeouts, pinned runtime versions
-#  - actions are pinned by major here for readability; pin by commit SHA when the file is adopted (Dependabot keeps them fresh)
 name: CI
+
+# FOUNDATION v2.2 §12 / IMPLEMENTATION-PLAN items 18-21. Full gates from the first v2 PR on (no phases).
+# `ci-ok` is the single required status check for branch protection on main (owner step, after this
+# workflow is green on main).
+#
+# No database URL, no Supabase access token and no secret key is used here. Everything database-related runs
+# against a throwaway local stack. Production migrations go only through migrate.yml (environment production).
+#
+# Actions are pinned by major version for readability; pin them by commit SHA when Dependabot is enabled.
 
 on:
   pull_request:
@@ -20,66 +22,189 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  # Pinned Supabase CLI: the version every local result below was verified with (2026-11-18).
+  # Types are generated with this exact version; bump it together with the committed types file.
+  SUPABASE_CLI_VERSION: 2.122.1
+  TYPES_FILE: src/integrations/supabase/types.generated.ts
+
 jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+
+      - name: Install
+        run: npm ci
+
       - name: Typecheck
         run: npx tsc --noEmit -p tsconfig.app.json
+
       - name: Lint
         run: npx eslint .
+
       - name: Unit tests
         run: npx vitest run
+
       - name: Install browser for prerender
         run: npx playwright install --with-deps chromium
+
+      # VITE_* are deliberately NOT set here: the site keeps its built-in (Tokyo) defaults until the cutover.
+      # An empty repository variable would override them with "" and break the build.
       - name: Build with strict prerender (writes dist/health.json)
         run: npm run build:seo
         env:
           PRERENDER_STRICT: "1"
-          # per-environment: preview CI builds against the STAGING Supabase (publishable key only, never a secret key)
-          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+
       - name: AEO check
         run: npm run check:aeo
-      - name: Bundle size budget
+
+      # Cutover gate (IMPLEMENTATION-PLAN item 22): the CSP's Supabase origins must match the projects the built
+      # bundle calls. Tokyo (https + wss) has to leave vercel.json in the same PR that moves VITE_* off Tokyo;
+      # the repository variable CUTOVER_DONE=1 (owner, after cutover) forbids any Tokyo reference at all.
+      - name: CSP matches the bundle (cutover gate)
+        env:
+          CUTOVER_DONE: ${{ vars.CUTOVER_DONE }}
+        run: node scripts/ci/check-csp-bundle.mjs
+
+      - name: Bundle size budget (main entry, +8% over baseline)
         run: npm run size:check
-      - name: Upload dist for the preview smoke job
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist
-          retention-days: 3
+
+      - name: No secret key in the bundle, the app or the Vercel functions
+        run: |
+          if grep -rEn 'sb_secret_|service_role|SUPABASE_SERVICE_ROLE_KEY' dist/ src/ api/ --exclude=types.generated.ts; then
+            echo "::error::secret-key material or a service_role reference found (see lines above)"
+            exit 1
+          fi
 
   database:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
+    env:
+      # config.toml reads these with env(...). supabase/.env is not in git, so CI provides harmless values:
+      # Cloudflare's documented always-pass Turnstile TEST secret (public) and a dummy SMTP password
+      # (no CI step sends mail). Never put a real value here.
+      TURNSTILE_SECRET_KEY: 1x0000000000000000000000000000000AA
+      RESEND_SMTP_PASSWORD: ci-dummy-not-a-secret
     steps:
       - uses: actions/checkout@v4
+
+      - name: Migration floor (nothing older than the seeld-site foundation)
+        run: |
+          old="$(ls supabase/migrations | LC_ALL=C awk '$0 < "20261118162452"')"
+          if [ -n "$old" ]; then
+            echo "::error::migrations older than the 20261118162452 floor (Tokyo history belongs in supabase/_archive_tokyo):"
+            echo "$old"
+            exit 1
+          fi
+
+      - name: Migration file naming
+        run: |
+          bad="$(ls supabase/migrations | grep -Ev '^[0-9]{14}_[a-z0-9_]+\.sql$' || true)"
+          if [ -n "$bad" ]; then echo "::error::bad migration file name(s):"; echo "$bad"; exit 1; fi
+
+      - name: config.toml holds the reviewed values
+        run: node scripts/ci/check-supabase-config.mjs
+
+      # Primary gate: fresh supabase/postgres container, foundation floor, every migration, then each pgTAP
+      # file as the user it needs (07 as supabase_admin). Owned by T0; see the script header.
+      - name: Replay migrations + pgTAP in a bare container (replay-local.sh)
+        run: bash supabase/tests/replay-local.sh
+
       - uses: supabase/setup-cli@v1
         with:
-          version: latest   # TODO pin to the exact CLI version after the first green run
-      - name: Start local Supabase (db only)
-        run: supabase start -x gotrue,realtime,storage-api,imgproxy,kong,mailpit,postgrest,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
-      - name: Migrations replay from scratch
+          version: ${{ env.SUPABASE_CLI_VERSION }}
+
+      # The real stack proves config.toml loads (PostgREST fails to start if an exposed schema is missing,
+      # GoTrue gets the auth settings) and that the migrations apply through the CLI path.
+      - name: Start local Supabase (db, auth, rest, gateway)
+        run: supabase start -x realtime,storage-api,imgproxy,mailpit,studio,edge-runtime,logflare,vector,supavisor,postgres-meta
+
+      - name: Reset from scratch (migrations + seed)
         run: supabase db reset
-      - name: pgTAP
-        run: supabase test db
-      - name: Lint SQL (plpgsql_check)
+
+      # Explicit *.test.sql list: a bare `supabase test db` would also run supabase/tests/local_bootstrap.sql
+      # (not a test, "No plan found") and fail. Verified locally: all ten files pass this way.
+      - name: pgTAP through the CLI
+        run: supabase test db supabase/tests/*.test.sql
+
+      - name: plpgsql lint (errors fail; warnings are printed)
         run: supabase db lint --level warning --fail-on error
-      - name: Migration naming and ordering
+
+      - name: Live auth/API surface of the local stack
         run: |
-          ls supabase/migrations | grep -Ev '^[0-9]{14}_[a-z0-9_]+\.sql$' && { echo "bad migration file name"; exit 1; } || true
-      - name: Generated types are up to date
+          eval "$(supabase status -o env | grep -E '^(API_URL|PUBLISHABLE_KEY|ANON_KEY)=')"
+          SUPABASE_URL="$API_URL" SUPABASE_KEY="${PUBLISHABLE_KEY:-$ANON_KEY}" \
+          CHECK_SIGNUP_REJECTED=1 MAX_ROWS_PROBE=investment_tracks CHECK_HEALTH_RPC=1 \
+            node scripts/ci/check-auth-settings.mjs
+
+      - name: Generated types (api, staff) match the committed file
         run: |
-          supabase gen types typescript --local --schema api > /tmp/types.generated.ts
-          diff -u src/integrations/supabase/types.generated.ts /tmp/types.generated.ts
+          supabase gen types typescript --local --schema api,staff > "$RUNNER_TEMP/types.generated.ts"
+          if [ -f "$TYPES_FILE" ]; then
+            diff -u "$TYPES_FILE" "$RUNNER_TEMP/types.generated.ts" || {
+              echo "::error::$TYPES_FILE is stale. Regenerate with: supabase gen types typescript --local --schema api,staff > $TYPES_FILE (CLI $SUPABASE_CLI_VERSION)"
+              exit 1
+            }
+          else
+            echo "::warning::$TYPES_FILE is not committed yet (T3). The generated file is attached as the 'types-generated' artifact; the diff becomes binding once the file exists."
+          fi
+
+      - name: Upload generated types
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: types-generated
+          path: ${{ runner.temp }}/types.generated.ts
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Stop local Supabase
+        if: always()
+        run: supabase stop --no-backup
+
+  functions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Forbidden patterns in Edge Functions
+        run: |
+          fail=0
+          if grep -rEn 'SUPABASE_SERVICE_ROLE_KEY|sb_secret_[A-Za-z0-9]' supabase/functions; then
+            echo "::error::legacy service-role key or a literal secret key in supabase/functions (use SEELD_SECRET_KEY)"; fail=1
+          fi
+          if grep -rEn "Access-Control-Allow-Origin['\"]?[[:space:]]*[:,=][[:space:]]*['\"]\*['\"]" supabase/functions; then
+            echo "::error::wildcard CORS (Access-Control-Allow-Origin: *) in supabase/functions; use _shared/cors.ts"; fail=1
+          fi
+          exit $fail
+
+      - name: Function folders are a subset of the allowlist
+        run: |
+          extra="$(comm -23 \
+            <(ls -1 supabase/functions | LC_ALL=C sort) \
+            <(grep -Ev '^[[:space:]]*(#|$)' scripts/ci/functions-allowlist.txt | LC_ALL=C sort))"
+          if [ -n "$extra" ]; then
+            echo "::error::folders in supabase/functions that are not in scripts/ci/functions-allowlist.txt:"
+            echo "$extra"
+            exit 1
+          fi
+          echo "supabase/functions: $(ls -1 supabase/functions | tr '\n' ' ')"
+
+      # The docs copies are what reviewers and the owner read (review R3-B1: the cited proposal had drifted
+      # from the reviewed values). They must stay byte-identical to the live files.
+      - name: docs/platform proposals match the live files
+        run: |
+          cmp supabase/config.toml docs/platform/config.proposed.toml
+          cmp vercel.json docs/platform/vercel.proposed.json
+          cmp .github/workflows/ci.yml docs/platform/ci.proposed.yml
 
   supply-chain:
     runs-on: ubuntu-latest
@@ -88,30 +213,43 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+
       - run: npm ci --ignore-scripts
-      - name: Audit production dependencies
-        run: npm audit --omit=dev --audit-level=high
-      - name: Secret scan
-        uses: gitleaks/gitleaks-action@v2
+
+      - name: No new high/critical advisory in production dependencies (ratchet)
+        run: node scripts/ci/audit-gate.mjs
+
+      # Pinned gitleaks binary with a checksum (no third-party action, no licence key). Full history with the
+      # reviewed allowlist in scripts/ci/gitleaks.toml; a non-anon JWT or any other secret still fails.
+      - name: Secret scan (full history, reviewed allowlist)
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_VERSION: 8.28.0
+          GITLEAKS_SHA256: a65b5253807a68ac0cafa4414031fd740aeb55f54fb7e55f386acb52e6a840eb
+        run: |
+          tgz="$RUNNER_TEMP/gitleaks.tar.gz"
+          curl -sSfL -o "$tgz" "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  $tgz" | sha256sum -c -
+          tar -xzf "$tgz" -C "$RUNNER_TEMP" gitleaks
+          "$RUNNER_TEMP/gitleaks" git . --config scripts/ci/gitleaks.toml --no-banner --redact -v
+
+      - name: Database secrets only in environment-scoped jobs
+        run: node scripts/ci/check-secret-scope.mjs
+
+      - name: Self-test of the CI checkers
+        run: node scripts/ci/self-test.mjs
 
   ci-ok:
     if: always()
-    needs: [verify, database, supply-chain]
+    needs: [verify, database, functions, supply-chain]
     runs-on: ubuntu-latest
     steps:
       - name: All required jobs green
         run: |
-          [ "${{ needs.verify.result }}" = "success" ] && [ "${{ needs.database.result }}" = "success" ] && [ "${{ needs.supply-chain.result }}" = "success" ]
-
-# Separate workflow (preview-smoke.yml, trigger: deployment_status where state == success and environment == Preview):
-#   run playwright smoke (npm run smoke / e2e) against github.event.deployment_status.target_url using the
-#   Vercel protection-bypass secret as the x-vercel-protection-bypass header. Not in this file on purpose.
-#
-# Deploy path (decision ADR-12): Vercel Git integration deploys main. Delete .github/workflows/deploy-vercel.yml
-# (or keep it workflow_dispatch-only) so there is exactly one production deploy path.
+          echo "verify=${{ needs.verify.result }} database=${{ needs.database.result }} functions=${{ needs.functions.result }} supply-chain=${{ needs.supply-chain.result }}"
+          [ "${{ needs.verify.result }}" = "success" ] && [ "${{ needs.database.result }}" = "success" ] \
+            && [ "${{ needs.functions.result }}" = "success" ] && [ "${{ needs.supply-chain.result }}" = "success" ]

@@ -62,5 +62,8 @@ select is((select count(*) from api.cma_sync_log), current_setting('smoke.synclo
 select throws_ok($$select count(*) from content.cma_funds$$, '42501', null, 'anon cannot read the 39k-row base table content.cma_funds');
 reset role;
 
+-- 5. v2 (091000): the site shows the as-of period of every track
+select has_column('api', 'investment_tracks', 'source_period', 'api.investment_tracks exposes source_period');
+
 select * from finish();
 rollback;

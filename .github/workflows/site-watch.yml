@@ -28,6 +28,12 @@ jobs:
       issues: write
     env:
       BASE_URL: ${{ inputs.base_url || 'https://seeld.co.il' }}
+      # Backend health (FOUNDATION v2.2 §13), checked by scripts/health-check.mjs (fails unless 200 with
+      # degraded === false). Set the repository variable at cutover to
+      # https://qxhpolktdfgcbxtfxgov.supabase.co/functions/v1/health ; while it is unset the script behaves
+      # exactly as before. HEALTH_APIKEY (optional) = the publishable key, public by design.
+      HEALTH_URL: ${{ vars.HEALTH_URL }}
+      HEALTH_APIKEY: ${{ vars.HEALTH_APIKEY }}
     steps:
       - uses: actions/checkout@v4
 

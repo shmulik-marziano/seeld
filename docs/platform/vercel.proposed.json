@@ -4,9 +4,6 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "regions": ["fra1"],
-  "git": {
-    "deploymentEnabled": { "main": true }
-  },
   "functions": {
     "api/*.ts": { "maxDuration": 10 }
   },
@@ -18,12 +15,12 @@
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()" },
         { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
         { "key": "X-Permitted-Cross-Domain-Policies", "value": "none" },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://qxhpolktdfgcbxtfxgov.supabase.co wss://qxhpolktdfgcbxtfxgov.supabase.co https://ipapi.co; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://qxhpolktdfgcbxtfxgov.supabase.co https://challenges.cloudflare.com https://lvifatyksqizwcutfbqp.supabase.co wss://lvifatyksqizwcutfbqp.supabase.co; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
         }
       ]
     },
@@ -32,19 +29,16 @@
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {
-      "source": "/(.*)\\.(?:png|jpg|jpeg|webp|avif|svg|ico|woff2)",
+      "source": "/fonts/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=2592000" }]
+    },
+    {
+      "source": "/(art|brand|logos)/(.*)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }]
-    },
-    {
-      "source": "/((?!assets/).*)\\.html",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
-    },
-    {
-      "source": "/api/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, s-maxage=300, stale-while-revalidate=3600" }]
     }
   ],
   "rewrites": [
+    { "source": "/assets/:path*", "destination": "/api/asset-miss" },
     { "source": "/app/:path*", "destination": "/_shell.html" },
     { "source": "/portal/:path*", "destination": "/_shell.html" },
     { "source": "/client/:path*", "destination": "/_shell.html" },
