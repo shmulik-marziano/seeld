@@ -39,6 +39,7 @@ export const SAVINGS_LINKS: ChromeLink[] = [
   { href: "/savings/retirement-planning", icon: "umbrella", label: "תכנון פרישה" },
   { href: "/savings/pre-retirement", icon: "retirement", label: "לקראת פרישה" },
   { href: "/savings/financial-planning", icon: "compass", label: "תכנון פיננסי" },
+  { href: "/savings/risk-profile", icon: "chart", label: "אפיון רמת סיכון" },
 ];
 
 export const KNOWLEDGE_LINKS: ChromeLink[] = [

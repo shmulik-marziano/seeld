@@ -162,7 +162,7 @@ export const ROUTES: RouteEntry[] = [
     path: "/investment-tracks", kind: "data", group: "tools", changefreq: "weekly", priority: 0.7,
     title: "מסלולי השקעה | השוואת מסלולים בפנסיה וגמל | SEELD",
     description: "השוואת מסלולי השקעה, כמו מנייתי, S&P 500, כללי וסולידי, בקרנות פנסיה, גמל והשתלמות.",
-    related: ["/return-tables", "/savings/pension-funds", "/savings/training-funds", "/fund-finder"],
+    related: ["/return-tables", "/savings/pension-funds", "/savings/training-funds", "/fund-finder", "/savings/risk-profile"],
   }),
   r({
     path: "/return-tables", kind: "data", group: "tools", changefreq: "weekly", priority: 0.7, pageType: "CollectionPage",
@@ -383,6 +383,12 @@ export const ROUTES: RouteEntry[] = [
     title: "תכנון פיננסי אישי | SEELD",
     description: "תכנון פיננסי אישי: מיפוי הכנסות, הוצאות, ביטוחים וחסכונות, והגדרת מטרות כלכליות לטווח קצר וארוך.",
     related: ["/portfolio-review", "/calculators", "/savings/pre-retirement"],
+  }),
+  r({
+    path: "/savings/risk-profile", kind: "tool", group: "tools", changefreq: "monthly", priority: 0.7, parent: "/savings",
+    title: "אפיון רמת סיכון למשקיע | ארבע שאלות על האופי שלכם | SEELD",
+    description: "ארבע שאלות קצרות על האופי שלכם כמשקיעים: איך אתם מגיבים לירידות, לתנודות ולהחמצה. התוצאה היא אפיון של רמת סיכון נמוכה, בינונית או גבוהה, ולצידה משפחות מסלולי ההשקעה ומדיניות ההשקעה שלהן. זה אפיון ולא המלצה.",
+    related: ["/investment-tracks", "/return-tables", "/savings/gemel-investment", "/savings/pension-funds"],
   }),
 
   // ───────── Retirement planning section (landing + four step pages) ─────────

@@ -146,6 +146,12 @@ const Savings = () => {
                     </button>
                   </div>
                 )}
+                {gi === GROUPS.length - 1 && (
+                  <div className="mt-4 flex flex-wrap items-center gap-x-8 gap-y-3">
+                    <p className="sd-text" style={{ fontSize: 17 }}>איזו רמת סיכון מתאימה לאופי שלכם כמשקיעים?</p>
+                    <Link to="/savings/risk-profile" className="sd-link">לאפיון רמת סיכון בארבע שאלות{arrow}</Link>
+                  </div>
+                )}
               </div>
             </SdBand>
           ))}
