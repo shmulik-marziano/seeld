@@ -71,6 +71,19 @@ async function getGeoData(): Promise<{ country: string | null; city: string | nu
   }
 }
 
+// The cookie banner writes "accepted" / "declined"; nothing until the visitor decides.
+// Privacy rule for the page-view log: a declined visitor is not logged at all; an undecided
+// visitor is logged without any identifier (no session id, no city); only an accepting
+// visitor gets the session id that lets the ops console count sessions.
+function analyticsConsent(): "accepted" | "declined" | null {
+  try {
+    const v = localStorage.getItem("cookie-consent");
+    return v === "accepted" || v === "declined" ? v : null;
+  } catch {
+    return null;
+  }
+}
+
 function PageViewTracker() {
   const location = useLocation();
   const lastPath = useRef<string>("");
@@ -82,11 +95,13 @@ function PageViewTracker() {
     // Skip admin paths to avoid self-tracking
     if (slug.startsWith("/site-admin") || slug.startsWith("/admin")) return;
 
-    // Analytics is never worth a millisecond of the first paint: the ipapi.co
-    // lookup and the Supabase insert both open a fresh connection, and on the
-    // landing view they were competing with the fonts and the entry chunk for
-    // bandwidth. Wait for the browser to go idle first.
+    // Analytics is never worth a millisecond of the first paint: the geo lookup
+    // and the Supabase insert both open a fresh connection, and on the landing
+    // view they were competing with the fonts and the entry chunk for bandwidth.
+    // Wait for the browser to go idle first.
     const send = async () => {
+      const consent = analyticsConsent();
+      if (consent === "declined") return;
       const ua = navigator.userAgent;
       const geo = await getGeoData();
       const row = {
@@ -94,9 +109,9 @@ function PageViewTracker() {
         device: detectDevice(ua),
         browser: detectBrowser(ua),
         referrer: document.referrer || null,
-        session_id: getSessionId(),
+        session_id: consent === "accepted" ? getSessionId() : null,
         country: geo.country,
-        city: geo.city,
+        city: consent === "accepted" ? geo.city : null,
       };
       if (hasStoredSession()) {
         // Logged-in visitor: keep going through the SDK so the insert carries
