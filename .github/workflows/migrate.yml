@@ -39,7 +39,7 @@ concurrency:
 jobs:
   migrate:
     if: github.ref == 'refs/heads/main' && contains(fromJSON(vars.PROD_MIGRATORS || '[]'), github.actor)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     environment: production
     env:

@@ -30,7 +30,7 @@ env:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
@@ -84,7 +84,7 @@ jobs:
           fi
 
   database:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
       # config.toml reads these with env(...). supabase/.env is not in git, so CI provides harmless values:
@@ -113,7 +113,8 @@ jobs:
         run: node scripts/ci/check-supabase-config.mjs
 
       # Primary gate: fresh supabase/postgres container, foundation floor, every migration, then each pgTAP
-      # file as the user it needs (07 as supabase_admin). Owned by T0; see the script header.
+      # file: supabase/tests/*.test.sql run as postgres, supabase/tests/replay_only/*.test.sql run as
+      # supabase_admin (REPLAY_ADMIN_USER). Owned by T0; see the script header.
       - name: Replay migrations + pgTAP in a bare container (replay-local.sh)
         run: bash supabase/tests/replay-local.sh
 
@@ -170,7 +171,7 @@ jobs:
         run: supabase stop --no-backup
 
   functions:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
@@ -207,7 +208,7 @@ jobs:
           cmp .github/workflows/ci.yml docs/platform/ci.proposed.yml
 
   supply-chain:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -246,7 +247,7 @@ jobs:
   ci-ok:
     if: always()
     needs: [verify, database, functions, supply-chain]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: All required jobs green
         run: |

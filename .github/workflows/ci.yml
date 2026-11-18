@@ -30,7 +30,7 @@ env:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
@@ -84,7 +84,7 @@ jobs:
           fi
 
   database:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
       # config.toml reads these with env(...). supabase/.env is not in git, so CI provides harmless values:
@@ -171,7 +171,7 @@ jobs:
         run: supabase stop --no-backup
 
   functions:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
@@ -208,7 +208,7 @@ jobs:
           cmp .github/workflows/ci.yml docs/platform/ci.proposed.yml
 
   supply-chain:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -247,7 +247,7 @@ jobs:
   ci-ok:
     if: always()
     needs: [verify, database, functions, supply-chain]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: All required jobs green
         run: |
