@@ -7,7 +7,14 @@ const corsHeaders = {
 
 // Token discipline: the model never needs more than a short, focused answer,
 // and it never needs more than the recent turns to give one.
-const MODEL = "gemini-flash-latest"; // 2.0-flash lost free-tier quota (429s); alias tracks the current flash // no thinking tokens — cheapest capable tier
+// Model fallback chain: the primary alias tracks the current flash tier; when Google answers
+// 503 "high demand" / 429 / 5xx (seen in production on 2026-11-17 and 2026-11-18) we try the next
+// one instead of leaving the visitor hanging. Override without a redeploy: GEMINI_MODELS="a,b,c".
+const DEFAULT_MODELS = ["gemini-flash-latest", "gemini-2.5-flash-lite", "gemini-2.0-flash-lite"];
+const MODELS = (Deno.env.get("GEMINI_MODELS") ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+const MODEL_CHAIN = MODELS.length ? MODELS : DEFAULT_MODELS;
+const UPSTREAM_TIMEOUT_MS = 12_000; // per attempt; the whole chain stays well under the widget's patience
+const RETRYABLE = new Set([404, 408, 429, 500, 502, 503, 504]);
 const MAX_OUTPUT_TOKENS = 700;
 const HISTORY_WINDOW = 12; // last N turns sent to the model
 const MAX_CONTENT_CHARS = 2000;
@@ -96,36 +103,56 @@ serve(async (req) => {
 
     console.log("Gemini request:", windowed.length, "of", messages.length, "messages");
 
-    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${GOOGLE_AI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        messages: [...contextMessages, ...windowed],
-        max_tokens: MAX_OUTPUT_TOKENS,
-        temperature: 0.4,
-        stream: true,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Gemini API error:", response.status, errorText);
-
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "יותר מדי בקשות, נסה שוב בעוד מספר שניות" }), {
-          status: 429,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+    let response: Response | null = null;
+    let lastStatus = 0;
+    for (const model of MODEL_CHAIN) {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), UPSTREAM_TIMEOUT_MS);
+      try {
+        const r = await fetch("https://generativelanguage.googleapis.com/v1beta/openai/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${GOOGLE_AI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model,
+            messages: [...contextMessages, ...windowed],
+            max_tokens: MAX_OUTPUT_TOKENS,
+            temperature: 0.4,
+            stream: true,
+          }),
+          signal: ctrl.signal,
         });
+        clearTimeout(timer);
+        if (r.ok) {
+          response = r;
+          break;
+        }
+        lastStatus = r.status;
+        const errorText = await r.text();
+        console.error("Gemini API error:", model, r.status, errorText.slice(0, 300));
+        if (!RETRYABLE.has(r.status)) break; // auth/validation problems will not improve on another model
+      } catch (e) {
+        clearTimeout(timer);
+        lastStatus = 0;
+        console.error("Gemini request failed:", model, e instanceof Error ? e.message : String(e));
       }
+    }
 
-      return new Response(JSON.stringify({ error: "שגיאה בשירות הבינה המלאכותית" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    if (!response) {
+      const busy = lastStatus === 429 || lastStatus === 503 || lastStatus === 0;
+      return new Response(
+        JSON.stringify({
+          error: busy
+            ? "העוזר הדיגיטלי עמוס כרגע. אפשר לנסות שוב בעוד רגע, או לפנות אלינו בוואטסאפ."
+            : "שגיאה בשירות הבינה המלאכותית. אפשר לפנות אלינו ישירות דרך עמוד צור קשר.",
+        }),
+        {
+          status: busy ? 503 : 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "20" },
+        },
+      );
     }
 
     return new Response(response.body, {
