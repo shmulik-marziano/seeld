@@ -53,8 +53,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       signIn: async (...a) => (await whenReady()).signIn(...a),
       signInWithOtp: async (...a) => (await whenReady()).signInWithOtp(...a),
       verifyOtp: async (...a) => (await whenReady()).verifyOtp(...a),
-      signInWithGoogle: async (...a) => (await whenReady()).signInWithGoogle(...a),
-      signInWithFacebook: async () => (await whenReady()).signInWithFacebook(),
       signOut: async () => (await whenReady()).signOut(),
     };
   }, [activatedAtStart]);

@@ -2,7 +2,7 @@
 // Nothing here is wired into the UI. The existing useAuth hook stays the source of truth until
 // the owner approves a migration.
 
-export type AuthMethod = "password" | "google" | "sms_otp" | "email_otp" | "magic_link" | "passkey";
+export type AuthMethod = "password" | "sms_otp" | "email_otp" | "magic_link" | "passkey";
 
 export interface AuthUser {
   id: string;
@@ -40,12 +40,6 @@ export interface AuthProvider {
 export interface EmailPasswordProvider extends AuthProvider {
   readonly method: "password";
   signIn(input: PasswordCredentials): Promise<AuthResult>;
-}
-
-export interface GoogleProvider extends AuthProvider {
-  readonly method: "google";
-  /** Starts an OAuth redirect. Resolves ok:true with no session; the session arrives after redirect. */
-  signIn(input: { redirectTo: string }): Promise<AuthResult<null>>;
 }
 
 /**
@@ -111,7 +105,7 @@ export const DEFAULT_AGENT_SECURITY: AgentSecuritySettings = {
   requireTotp: true,
   mfaReverifyDays: 30,
   idleTimeoutMinutes: 60,
-  allowedMethods: ["password", "google"],
+  allowedMethods: ["password"],
   trustedDeviceDays: 0,
 };
 

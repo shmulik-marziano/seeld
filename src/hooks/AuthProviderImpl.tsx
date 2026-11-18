@@ -10,8 +10,6 @@ export type AuthContextType = {
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signInWithOtp: (email: string) => Promise<{ error: Error | null }>;
   verifyOtp: (email: string, token: string) => Promise<{ error: Error | null }>;
-  signInWithGoogle: (redirectPath?: string) => Promise<{ error: Error | null }>;
-  signInWithFacebook: () => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 };
 
@@ -64,7 +62,8 @@ const AuthProviderImpl = ({ onValue, initialLoading }: { onValue: (v: AuthContex
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        shouldCreateUser: true,
+        // Entry is only for existing accounts (clients we invited); nobody can self-register here.
+        shouldCreateUser: false,
       },
     });
     return { error: error as Error | null };
@@ -79,27 +78,11 @@ const AuthProviderImpl = ({ onValue, initialLoading }: { onValue: (v: AuthContex
     return { error: error as Error | null };
   };
 
-  const signInWithGoogle = async (redirectPath?: string) => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.origin + (redirectPath || '/personal-area') },
-    });
-    return { error: error as Error | null };
-  };
-
-  const signInWithFacebook = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'facebook',
-      options: { redirectTo: window.location.origin + '/personal-area' },
-    });
-    return { error: error as Error | null };
-  };
-
   const signOut = async () => {
     await supabase.auth.signOut();
   };
 
-  const value: AuthContextType = { user, session, loading, signUp, signIn, signInWithOtp, verifyOtp, signInWithGoogle, signInWithFacebook, signOut };
+  const value: AuthContextType = { user, session, loading, signUp, signIn, signInWithOtp, verifyOtp, signOut };
   // Keep the shell in sync with every state change (signOut/signIn closures are stable enough:
   // they only touch the singleton client).
   useLayoutEffect(() => { onValue(value); });

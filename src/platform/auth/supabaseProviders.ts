@@ -6,7 +6,6 @@ import type {
   AuthResult,
   AuthSession,
   EmailPasswordProvider,
-  GoogleProvider,
   MfaFactor,
   MfaService,
   PasswordCredentials,
@@ -41,20 +40,6 @@ export function createEmailPasswordProvider(client: SupabaseClient): EmailPasswo
       const { data, error } = await client.auth.signInWithPassword({ email, password });
       if (error || !data.session) return { ok: false, error: toFailure(error) };
       return { ok: true, value: toSession(data.session) };
-    },
-    async signOut() {
-      await client.auth.signOut();
-    },
-  };
-}
-
-export function createGoogleProvider(client: SupabaseClient): GoogleProvider {
-  return {
-    method: "google",
-    available: true,
-    async signIn({ redirectTo }): Promise<AuthResult<null>> {
-      const { error } = await client.auth.signInWithOAuth({ provider: "google", options: { redirectTo } });
-      return error ? { ok: false, error: toFailure(error) } : { ok: true, value: null };
     },
     async signOut() {
       await client.auth.signOut();
