@@ -76,22 +76,38 @@ async function handler(): Promise<Response> {
     }
   }
 
+  // `id.asc` is the tiebreaker that keeps the pages below disjoint and complete.
   const url =
     `${SUPABASE_URL}/rest/v1/cma_funds_latest` +
-    `?select=${FUND_COLUMNS}&order=total_assets.desc`;
+    `?select=${FUND_COLUMNS}&order=total_assets.desc,id.asc`;
 
-  let upstream: Response;
-  try {
-    upstream = await fetch(url, {
-      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
-    });
-  } catch {
-    return fail("upstream unreachable");
+  // PostgREST caps one response at 1,000 rows (Supabase max_rows) and the view
+  // holds more than that (1,442 funds), so the rows are read in pages and
+  // joined here — the same loop as api/board.ts. Before this, the fund finder
+  // and the return tables saw only the 1,000 largest funds.
+  const PAGE = 1000;
+  const rows: unknown[] = [];
+  for (let from = 0; from < 20000; from += PAGE) {
+    let upstream: Response;
+    try {
+      upstream = await fetch(url, {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          Range: `${from}-${from + PAGE - 1}`,
+          "Range-Unit": "items",
+        },
+      });
+    } catch {
+      return fail("upstream unreachable");
+    }
+    if (!upstream.ok && upstream.status !== 206) return fail(`upstream ${upstream.status}`);
+    const page = (await upstream.json()) as unknown[];
+    rows.push(...page);
+    if (page.length < PAGE) break;
   }
 
-  if (!upstream.ok) return fail(`upstream ${upstream.status}`);
-
-  return new Response(upstream.body, { headers: CACHED });
+  return new Response(JSON.stringify(rows), { headers: CACHED });
 }
 
 const CACHED = {
