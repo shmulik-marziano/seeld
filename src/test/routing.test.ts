@@ -26,6 +26,9 @@ describe("sitemap", () => {
   const EXCLUDED = new Set([
     "/admin",
     "/install",
+    // report engine: a tool reached from /report, not a content page
+    "/report/start",
+    "/report/start/*",
     "/site-admin",
     "/style-guide",
     "/personal-area",
