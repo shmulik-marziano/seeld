@@ -7,6 +7,7 @@ import { assembleReportData } from "@/reports/parsers";
 import type { ParseResult } from "@/reports/parsers/types";
 import { Uploader, type UploadKind } from "./Uploader";
 import { setUploadedReport } from "./store";
+import { useReportsBase } from "./base";
 
 function GuideBlock({ guide }: { guide: Guide }) {
   return (
@@ -41,9 +42,10 @@ export default function Hub() {
   const onMas = useCallback((r: ParseResult | null) => setMas(r), []);
   const ready = !!(har || mas);
 
+  const base = useReportsBase();
   const open = () => {
     setUploadedReport(assembleReportData({ har, maslaka: mas }));
-    nav(`/app/reports/view?src=upload&mode=${har && mas ? "unified" : har ? "insurance" : "financial"}`);
+    nav(`${base}/view?src=upload&mode=${har && mas ? "unified" : har ? "insurance" : "financial"}`);
   };
 
   const card = (kind: UploadKind, title: string, text: string, guide: Guide, onParsed: (r: ParseResult | null) => void, tone: string) => (
@@ -79,7 +81,7 @@ export default function Hub() {
 
       <div className="rpx-actions">
         <button type="button" className="rpx-btn rpx-btn-main" disabled={!ready} onClick={open}>הצגת הדוח מהקבצים שהועלו</button>
-        <button type="button" className="rpx-btn" onClick={() => nav("/app/reports/view?mode=unified")}>צפייה בדוח לדוגמה</button>
+        <button type="button" className="rpx-btn" onClick={() => nav(`${base}/view?mode=unified`)}>צפייה בדוח לדוגמה</button>
       </div>
       {!ready && <p className="rpx-quiet">הדוח לדוגמה מציג נתונים בדויים בלבד.</p>}
     </div>

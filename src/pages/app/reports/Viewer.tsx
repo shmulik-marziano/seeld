@@ -7,6 +7,7 @@ import { demoReportData } from "@/reports/parsers";
 import { ENTITLEMENTS, type LockReason, type ReportMode, type Tier } from "@/reports/types";
 import { getUploadedReport } from "./store";
 import { InfoOrderPanel } from "./InfoOrderPanel";
+import { useReportsBase } from "./base";
 
 const MODES: { id: ReportMode; label: string }[] = [
   { id: "insurance", label: "ביטוח" },
@@ -26,6 +27,7 @@ export default function Viewer() {
   const DEV = import.meta.env.DEV;
   const tier = (DEV && TIERS.some((t) => t.id === sp.get("tier")) ? sp.get("tier") : "visitor") as Tier;
   const [lock, setLock] = useState<{ id: string; reason: LockReason } | null>(null);
+  const base = useReportsBase();
 
   const uploaded = sp.get("src") === "upload" ? getUploadedReport() : null;
   const data = uploaded ?? demoReportData(demo === "family");
@@ -43,13 +45,18 @@ export default function Viewer() {
     <div className="sd rpx-viewer" dir="rtl">
       <div className="rpx-toolbar rp-noprint" data-rp-chrome>
         <div className="rpx-toolbar-main">
-          <Link to="/app/reports" className="rpx-back">חזרה להפקת דוח</Link>
+          <Link to={base} className="rpx-back">חזרה להפקת דוח</Link>
           <div role="tablist" aria-label="סוג הדוח" className="rpx-seg">
             {MODES.map((m) => (
               <button key={m.id} role="tab" type="button" aria-selected={mode === m.id} className={mode === m.id ? "is-on" : ""} onClick={() => set("mode", m.id)}>{m.label}</button>
             ))}
           </div>
           <button type="button" className="rpx-btn" onClick={() => window.print()}>הדפסה או שמירה כ-PDF</button>
+          {!isDemo && (
+            <button type="button" className="rpx-btn rpx-btn-main" onClick={() => setLock({ id: "full-report", reason: "needs_client_authorisation" })}>
+              מעבר על הדוח עם הצוות
+            </button>
+          )}
         </div>
         {isDemo && <p className="rpx-demo" role="note">דוח לדוגמה: כל הנתונים בדויים ונועדו להדגמת העיצוב בלבד.</p>}
         {DEV && (

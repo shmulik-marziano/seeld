@@ -1,5 +1,6 @@
 import { CONTACTS } from "@/lib/contacts";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { loadSiteSupabase } from "@/integrations/supabase/lazy";
@@ -18,7 +19,7 @@ import { ReportDropZone, ReportNextCards, ReportNote, ReportStepper, REPORT_DISC
 
 const PHONE_RE = /^0\d{1,2}-?\d{7}$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const SUBJECT = "דוח אישי: עדכון כשהתהליך נפתח";
+const SUBJECT = "דוח אישי: בקשה לשיחה על הדוח";
 
 type Errors = Partial<Record<"name" | "phone" | "email", string>>;
 
@@ -121,9 +122,13 @@ const Report = () => {
             <h2 className="sd-h2">חמישה שלבים, ואתם מחליטים עד איפה להמשיך</h2>
             <p className="sd-lead">שני השלבים הראשונים הם הדוח. השלבים האחרים הם בחירה, ואפשר לעצור אחרי הדוח.</p>
           </div>
-          <ReportNote>התהליך בהכנה וטרם נפתח. {REPORT_DISCLAIMER} השאירו פרטים למטה ונעדכן כשיפתח.</ReportNote>
+          <ReportNote>הפקת הדוח מתבצעת במכשיר שלכם: הקבצים לא נשלחים לשום מקום. {REPORT_DISCLAIMER}</ReportNote>
           <ReportStepper active={0} />
           <ReportDropZone />
+          <div className="flex flex-wrap items-center gap-4">
+            <Link to="/report/start" className="sd-btn sd-btn-main">הפקת הדוח מהקבצים שלי</Link>
+            <span className="sd-text">קובץ מסלקה, קובץ הר הביטוח, או שניהם. הדוח מוכן לצפייה ולשמירה כ-PDF.</span>
+          </div>
         </div>
       </SdBand>
 
@@ -140,10 +145,10 @@ const Report = () => {
       <SdBand tone="white" id="contact-form">
         <div className="sd-wrap sd-pub-formgrid">
           <div className="sd-pub-formcard">
-            <h2 className="sd-h2" style={{ fontSize: "clamp(26px, 2.6vw, 34px)", marginBottom: 12 }}>עדכנו אותי כשהתהליך נפתח</h2>
-            <p className="sd-text" style={{ marginBottom: 20 }}>שם וטלפון מספיקים. נחזור אליכם כשאפשר יהיה להפיק דוח, או נענה לכל שאלה בינתיים.</p>
+            <h2 className="sd-h2" style={{ fontSize: "clamp(26px, 2.6vw, 34px)", marginBottom: 12 }}>רוצים שנעבור על הדוח איתכם?</h2>
+            <p className="sd-text" style={{ marginBottom: 20 }}>שם וטלפון מספיקים. הצוות חוזר אליכם לשיחת היכרות על הדוח, או עונה על כל שאלה בדרך.</p>
             {sent ? (
-              <FormSuccess next="קיבלנו. נעדכן אתכם כשהתהליך ייפתח." onReset={() => setSent(false)} />
+              <FormSuccess next="קיבלנו. הצוות יחזור אליכם בהקדם." onReset={() => setSent(false)} />
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4" noValidate>
                 {field("name", "שם מלא", { req: true, auto: "name" })}

@@ -441,6 +441,9 @@ const App = () => (
                 {/* Agent Landing Page */}
                 <Route path="/agents" element={<AgentLandingPage />} />
                 <Route path="/report" element={<ReportPublic />} />
+                {/* Public report engine: files are parsed in the browser only; no login (held in v2 until the new backend takes over). */}
+                <Route path="/report/start" element={hold(<ReportsRoutes />)} />
+                <Route path="/report/start/*" element={hold(<ReportsRoutes />)} />
 
                 {/* ═══ AGENT APP ROUTES (/app/*) ═══ */}
                 {IS_V2 ? (
