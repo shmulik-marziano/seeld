@@ -1,0 +1,28 @@
+// POA wizard switch and constants (docs/product/POA-WIZARD-SPEC.md §5 "מתגים" and §3).
+// Imported by App.tsx, which is the main entry: keep this file free of any other import than the backend switch.
+import { IS_V2 } from "@/integrations/supabase/config";
+
+/** Browser switch (spec §5): POA_ENABLED = IS_V2 && VITE_POA_FLOW === "on". Unset = off. */
+export const POA_ENABLED: boolean = IS_V2 && import.meta.env.VITE_POA_FLOW === "on";
+
+export const POA_ROUTE = "/report/start/order";
+
+/** The three documents, in display order (spec §1, §2). Functional names only, never the annex letters. */
+export const POA_KINDS = ["maslaka", "harbit", "policies"] as const;
+export type PoaKind = (typeof POA_KINDS)[number];
+
+export const POA_LIMITS = {
+  /** total session lifetime from the start call (spec §3) */
+  sessionMinutes: 60,
+  /** the time warning shows this long before expires_at (spec ס8) */
+  warnBeforeMinutes: 2,
+  /** the client copy can be downloaded for this long after the approval (spec ס7, §5) */
+  downloadMinutes: 30,
+  /** signature: at least this many strokes, at most this many points in all (spec §3) */
+  signatureMinStrokes: 2,
+  signatureMaxPoints: 2000,
+  /** national ID only, minimum age (spec §7 item 12) */
+  minAge: 18,
+  /** birth date plausibility (the house validator's limit) */
+  maxAge: 120,
+} as const;

@@ -1,0 +1,59 @@
+/* POA wizard (/report/start/order). Prefix .sd-poa-*. Builds on questionnaires.css (.sd-q-*) and risk.css
+   (.sd-rk-wrap / .sd-rk-bar / .sd-rk-actions / .sd-rk-points). Light only: the site's dark mode is parked, so every
+   surface sets its own background and ink. Logical properties only (RTL). */
+
+/* Print: questionnaires.css hides everything but .sd-q-print when printing. Here only the h1 eyebrow stays visible; the
+   site header and footer sit outside .sd-poa-page and stay hidden (they still take their space, so the printout is an
+   almost blank page). Accepted: the goal is that the wizard itself never prints, since it holds name, ID, phone and
+   dates (PII). */
+@media print {
+  .sd-poa-page, .sd-poa-page * { visibility: visible !important; }
+  .sd-poa-page .sd-poa-q, .sd-poa-bar, .sd-poa-warn { display: none !important; }
+}
+
+.sd-poa-wrap { padding-block: clamp(20px, 4vw, 48px); }
+.sd-poa-h1 { margin: 0 0 12px; font-size: 15px; font-weight: 600; letter-spacing: .01em; color: var(--q-muted, #55677c); }
+
+/* the engine's .sd-q is a full-screen app shell; here it is a block inside the page */
+.sd-q.sd-poa-q { min-height: 0; display: block; background: transparent; color: var(--q-ink); scroll-margin-top: 132px; }
+.sd-poa-q .sd-q-progress { margin: 0 0 12px; }
+.sd-poa-q .sd-q-progress-text { font-size: 14px; color: var(--q-muted); }
+.sd-poa-q .sd-q-segs li.is-done i { width: 100% !important; }
+.sd-poa-card { margin-bottom: 0; }
+.sd-poa-card .sd-q-qtitle { padding-inline-end: 0; }
+.sd-poa-h3 { margin: 18px 0 6px; font-size: 17px; font-weight: 700; color: var(--q-navy); }
+
+/* check fields */
+.sd-poa-check { margin: 14px 0 0; }
+.sd-poa-check .sd-q-choice { justify-content: flex-start; text-align: start; line-height: 1.55; min-height: 52px; padding: 10px 14px; }
+.sd-poa-check a { color: var(--q-navy); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--q-gold); }
+/* a ticked choice is navy: the links inside it turn white so they stay readable */
+.sd-poa-check .sd-q-choice.is-on a { color: #fff; text-decoration-color: var(--q-gold); }
+
+/* document card */
+.sd-poa-doc { margin: 16px 0; padding: 16px 18px; border-radius: 14px; background: var(--q-cream); border: 1px solid var(--q-line); }
+.sd-poa-doc-title { margin: 0 0 8px; font-size: 17px; font-weight: 700; color: var(--q-navy); }
+.sd-poa-rows { margin: 0; display: grid; gap: 8px; }
+.sd-poa-rows > div { display: grid; grid-template-columns: minmax(96px, 30%) 1fr; gap: 12px; align-items: baseline; }
+.sd-poa-rows dt { font-size: 14px; color: var(--q-muted); }
+.sd-poa-rows dd { margin: 0; font-size: 16px; color: #2d435d; }
+.sd-poa-rows dd[dir="ltr"] { text-align: right; }
+.sd-poa-fixed { margin: 12px 0 0; font-size: 14.5px; color: #2d435d; }
+.sd-poa-view { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 12px; }
+.sd-poa-review { margin: 4px 0 12px; }
+.sd-poa-declaration { margin: 14px 0 4px; font-size: 16.5px; line-height: 1.7; color: #2d435d; font-weight: 500; }
+.sd-poa-alt { margin-top: 10px; }
+
+/* summary */
+.sd-poa-done { list-style: none; margin: 12px 0; padding: 0; display: grid; gap: 12px; }
+.sd-poa-done li { padding: 14px 16px; border-radius: 14px; background: #fff; border: 1px solid var(--q-line); display: grid; gap: 10px; }
+.sd-poa-done .sd-q-btn { justify-self: start; gap: 8px; }
+
+/* time warning */
+.sd-poa-warn { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin: 0 0 12px;
+  padding: 12px 16px; border-radius: 12px; background: var(--q-butter); color: #4a3a17; }
+.sd-poa-warn p { margin: 0; font-size: 15.5px; font-weight: 500; }
+
+@media (max-width: 480px) {
+  .sd-poa-rows > div { grid-template-columns: 1fr; gap: 2px; }
+}

@@ -2,8 +2,12 @@
 // handled by the sign step (a tab next to this pad).
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export interface SignaturePadProps { onChange: (png: string | null) => void; label: string }
-export function SignaturePad({ onChange, label }: SignaturePadProps) {
+export interface SignaturePadProps {
+  onChange: (png: string | null) => void; label: string;
+  /** optional wording overrides (the POA wizard passes its own copy); defaults are the questionnaires' strings */
+  hint?: string; undoLabel?: string; clearLabel?: string;
+}
+export function SignaturePad({ onChange, label, hint = "חותמים כאן באצבע או בעכבר", undoLabel = "ביטול הקו האחרון", clearLabel = "ניקוי החתימה" }: SignaturePadProps) {
   const ref = useRef<HTMLCanvasElement>(null);
   const strokes = useRef<{ x: number; y: number }[][]>([]);
   const drawing = useRef(false);
@@ -45,10 +49,10 @@ export function SignaturePad({ onChange, label }: SignaturePadProps) {
         onPointerMove={(e) => { if (!drawing.current) return; strokes.current[strokes.current.length - 1].push(pos(e)); paint(); }}
         onPointerUp={() => { if (!drawing.current) return; drawing.current = false; emit(); }}
         onPointerCancel={() => { drawing.current = false; emit(); }} />
-      {count === 0 && <span className="sd-q-sig-hint" aria-hidden="true">חותמים כאן באצבע או בעכבר</span>}
+      {count === 0 && <span className="sd-q-sig-hint" aria-hidden="true">{hint}</span>}
       <div className="sd-q-sig-actions">
-        <button type="button" className="sd-q-linkbtn" disabled={!count} onClick={() => { strokes.current.pop(); paint(); emit(); }}>ביטול הקו האחרון</button>
-        <button type="button" className="sd-q-linkbtn" disabled={!count} onClick={() => { strokes.current = []; paint(); emit(); }}>ניקוי החתימה</button>
+        <button type="button" className="sd-q-linkbtn" disabled={!count} onClick={() => { strokes.current.pop(); paint(); emit(); }}>{undoLabel}</button>
+        <button type="button" className="sd-q-linkbtn" disabled={!count} onClick={() => { strokes.current = []; paint(); emit(); }}>{clearLabel}</button>
       </div>
     </div>
   );

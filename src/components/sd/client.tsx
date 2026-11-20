@@ -1,5 +1,5 @@
 import { CONTACTS, telHref } from "@/lib/contacts";
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, ReactNode, Ref } from "react";
 import { Link } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { SdIcon, SdPic, tintStyle, useSdFont } from "./primitives";
@@ -106,13 +106,27 @@ export function CaEmpty({ art, tone = "sage", title, text, children, compact }: 
 }
 
 /** Quiet error block: says what happened and offers a way on. */
-export function CaError({ title = "משהו לא נטען", text, onRetry }: { title?: string; text: string; onRetry?: () => void }) {
+export function CaError({ title = "משהו לא נטען", text, onRetry, actionLabel, children, headingRef, headingLevel = 3, headingId }: {
+  title?: string;
+  text?: string;
+  onRetry?: () => void;
+  /** button label (default "לנסות שוב") */
+  actionLabel?: string;
+  /** extra action content, e.g. contact buttons */
+  children?: ReactNode;
+  /** focus target on screen change (the heading gets tabIndex -1) */
+  headingRef?: Ref<HTMLHeadingElement>;
+  headingLevel?: 2 | 3;
+  headingId?: string;
+}) {
+  const H = headingLevel === 2 ? "h2" : "h3";
   return (
     <div className="sd-ca-empty is-error" role="alert">
       <span className="sd-ca-badge" aria-hidden="true" style={{ background: "#fff" }}><SdIcon name="hourglass" size={28} /></span>
-      <h3 style={{ marginTop: 0 }}>{title}</h3>
-      <p>{text}</p>
-      {onRetry && <div className="sd-ca-actions"><button type="button" className="btn-secondary" onClick={onRetry}>לנסות שוב</button></div>}
+      <H id={headingId} ref={headingRef} tabIndex={headingRef ? -1 : undefined} style={{ marginTop: 0 }}>{title}</H>
+      {text && <p>{text}</p>}
+      {onRetry && <div className="sd-ca-actions"><button type="button" className="btn-secondary" onClick={onRetry}>{actionLabel ?? "לנסות שוב"}</button></div>}
+      {children}
     </div>
   );
 }

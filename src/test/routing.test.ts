@@ -29,6 +29,7 @@ describe("sitemap", () => {
     // report engine: a tool reached from /report, not a content page
     "/report/start",
     "/report/start/*",
+    "/report/start/order", // POA wizard: personal-data flow, noindex, never in the sitemap
     "/site-admin",
     "/style-guide",
     "/personal-area",
