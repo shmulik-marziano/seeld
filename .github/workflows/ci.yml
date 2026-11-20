@@ -172,7 +172,8 @@ jobs:
 
   functions:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    # 10, not 5: the Deno step pulls the image and the esm.sh types of the platform scaffolds
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
@@ -198,6 +199,17 @@ jobs:
             exit 1
           fi
           echo "supabase/functions: $(ls -1 supabase/functions | tr '\n' ' ')"
+
+      # Deno gate (playbook 3.1): type-check every entrypoint and run every Deno test under supabase/functions, in the
+      # pinned image documented in docs/platform/EDGE-FUNCTIONS.md (Tests). The repo root is mounted at /w because
+      # _shared/queueWorker.ts imports ../../../src/platform/...; the working directory is supabase/functions.
+      # No secret, no service, no new action: the tests use injected fakes only.
+      - name: Deno check (every entrypoint) + deno test (supabase/functions)
+        run: |
+          entries="$(cd supabase/functions && ls -1 */index.ts | LC_ALL=C sort | tr '\n' ' ')"
+          echo "deno check: $entries"
+          docker run --rm -v "$PWD:/w" -w /w/supabase/functions denoland/deno:alpine-2.1.4 \
+            sh -c "deno check $entries && deno test --no-prompt"
 
       # The docs copies are what reviewers and the owner read (review R3-B1: the cited proposal had drifted
       # from the reviewed values). They must stay byte-identical to the live files.

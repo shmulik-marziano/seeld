@@ -25,6 +25,12 @@ export interface Env {
   geminiModels: string[];
   region: string | null;
   version: string | null;
+  /** Surense OAuth client (client_credentials) and the Svix endpoint secret (whsec_...). Names only in logs. */
+  surenseClientId: string | null;
+  surenseClientSecret: string | null;
+  surenseWebhookSecret: string | null;
+  /** Optional second Svix secret (SURENSE_WEBHOOK_SECRET_NEXT) for rotation without downtime: either one verifies. */
+  surenseWebhookSecretNext?: string | null;
 }
 
 export type EnvSource = (name: string) => string | undefined;
@@ -107,6 +113,10 @@ export function loadEnv(get: EnvSource): Env {
     geminiModels: models.length ? models : DEFAULT_GEMINI_MODELS,
     region: clean(get("SB_REGION")),
     version: clean(get("GIT_COMMIT")) ?? clean(get("DENO_DEPLOYMENT_ID")),
+    surenseClientId: clean(get("SURENSE_CLIENT_ID")),
+    surenseClientSecret: clean(get("SURENSE_CLIENT_SECRET")),
+    surenseWebhookSecret: clean(get("SURENSE_WEBHOOK_SECRET")),
+    surenseWebhookSecretNext: clean(get("SURENSE_WEBHOOK_SECRET_NEXT")),
   };
 }
 
@@ -123,6 +133,10 @@ export function envPresence(env: Env): Record<string, unknown> {
     RESEND_API_KEY: !!env.resendApiKey,
     GOOGLE_AI_API_KEY: !!env.googleAiKey,
     NOTIFY_INCLUDE_PII: env.notifyIncludePii,
+    SURENSE_CLIENT_ID: !!env.surenseClientId,
+    SURENSE_CLIENT_SECRET: !!env.surenseClientSecret,
+    SURENSE_WEBHOOK_SECRET: !!env.surenseWebhookSecret,
+    SURENSE_WEBHOOK_SECRET_NEXT: !!env.surenseWebhookSecretNext,
   };
 }
 

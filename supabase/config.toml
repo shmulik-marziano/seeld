@@ -124,6 +124,14 @@ verify_jwt = false
 verify_jwt = false
 [functions.staff-invite]       # admin only; fresh session + TOTP checked in the function
 verify_jwt = true
+[functions.surense-webhook]    # Surense via Svix; signature + ops.config switch checked in the function
+verify_jwt = false
+[functions.surense-worker]     # surense queue; x-cron-secret (manual now, pg_cron after owner approval)
+verify_jwt = false
+[functions.surense-sync]       # admin only; fresh session + TOTP checked in the DB (staff.admin_assert_fresh)
+verify_jwt = true
+[functions.surense-health]     # staff probe of the Surense credentials (read only, no token returned); deployed v1
+verify_jwt = true
 # Platform scaffolds kept until the owner decides (park them, or keep and fix). Never public.
 [functions.api-v1]
 verify_jwt = true

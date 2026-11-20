@@ -30,8 +30,12 @@ select set_eq(
         and not has_function_privilege('authenticated', p.oid, 'execute') and not has_function_privilege('anon', p.oid, 'execute') $$,
   $$ values ('submit_lead'), ('lead_replay'), ('intake_note_reject'), ('outbox_claim'), ('outbox_complete'), ('job_finish'),
             ('job_continue'), ('cma_upsert_batch'), ('cma_finish_sync'), ('chat_session_touch'), ('chat_append'),
-            ('invitation_create'), ('invitation_resend'), ('staff_provision') $$,
-  'service-only RPCs in api (14)');
+            ('invitation_create'), ('invitation_resend'), ('staff_provision'),
+            ('surense_gate'), ('surense_event_ingest'), ('surense_job_enqueue'), ('surense_job_claim'), ('surense_job_complete'),
+            ('surense_sync_state_get'), ('surense_sync_state_set'), ('surense_customers_upsert'), ('surense_customer_mark_deleted'),
+            ('surense_documents_upsert'), ('surense_document_mark_deleted'), ('surense_file_record'), ('surense_portfolio_store'),
+            ('surense_audit') $$,
+  'service-only RPCs in api (28)');
 
 -- the documented advisor exceptions (lints 0028/0029): exactly these SECURITY DEFINER functions are callable by API roles
 select set_eq(

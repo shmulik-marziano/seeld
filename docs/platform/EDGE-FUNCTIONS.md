@@ -10,6 +10,10 @@ for the five functions T2 owns. `staff-invite` belongs to T1 and is documented t
 | `chat-bot` | website chat widget (browser) | false | Origin allowlist + memory limit + DB limits | `chat_session_touch`, `chat_append` |
 | `fetch-cma-data` | pg_cron `cma-sync-weekly` (Sun 03:00 UTC) | false | `x-cron-secret` | `cma_upsert_batch`, `cma_finish_sync`, `job_continue`, `job_finish` |
 | `health` | site-watch / anyone | false | none (coarse); `x-cron-secret` or staff JWT for detail | `api.health` (anon-granted); `staff.ops_health` with a staff JWT |
+| `surense-webhook` | Surense via Svix | false | Svix signature + memory limit | `surense_event_ingest` |
+| `surense-worker` | manual now; pg_cron after owner approval | false | `x-cron-secret` | `surense_job_claim`, `surense_job_complete`, `surense_job_enqueue`, mirror RPCs, `job_finish` |
+| `surense-sync` | staff app (admin) | true | staff JWT -> `staff.admin_assert_fresh` (admin + fresh TOTP) | `surense_gate`, mirror RPCs, `surense_audit` |
+| `surense-health` | owner / staff, by hand | true | platform JWT check only (read-only probe) | none (calls Surense only) |
 
 `verify_jwt=false` everywhere here on purpose: the platform JWT check also accepts the publishable and secret API keys,
 so it authenticates nothing for these callers (research/SUPABASE.md, "Securing Edge Functions"). Each function does its
@@ -30,6 +34,9 @@ supabase/functions/
                   resend.ts     Resend send with Idempotency-Key; retryable = 429/5xx/network
                   background.ts EdgeRuntime.waitUntil wrapper, x-job-run parsing
                   test.ts, test_helpers.ts   Deno tests + doubles (never imported by an index.ts)
+  _shared/surense/ Surense connector: env (presence), auth (OAuth token, memory only), client (host lock, retry,
+                  timeout, error codes, audit sink), api (typed wrappers), svix, mirror (non-PII columns), storage
+                  (client-docs, hash-named objects), sync (operations), jobs (queue handlers), connector (wiring)
   <fn>/index.ts    entrypoint: reads the env once, builds the RPC client, Deno.serve(handler)
   <fn>/handler.ts  all logic, dependencies injected (env, rpc, fetch, defer, clock)
   <fn>/test.ts     Deno tests for that handler
@@ -165,6 +172,73 @@ header supplied the client address plus the x-forwarded-for hop count; never val
 or failed staff call only drops the `staff` view (warning in the log) and the public body is answered as usual, so a
 monitor that sends a stray Authorization header never sees the probe as down.
 
+## Surense connector (V3-01; migration 20261120200000; NOT deployed)
+
+Direct API integration with Surense (`https://api.surense.com/api/v1`, OAuth2 client_credentials) plus Svix webhooks,
+instead of Make/Zapier. Knowledge base: `C:/HQ/02_ידע/שורנס-API/` (README section 4 is the plan). Everything is behind
+four `ops.config` switches, all `false` by default (missing key = closed): `surense_enabled` (every call and the
+queue), `surense_write_enabled` (writes to Surense: proxies invite, E9100 submit, uploads), `surense_webhook_enabled`
+(inbox), `surense_retention_enabled` (`ops.cleanup` purges mirror tombstones after 30 days and keeps the latest 3
+portfolio snapshots per customer and mode). Admin flips them with `staff.admin_config_set`.
+
+Rules in code: the only outbound host is `api.surense.com` (`_shared/surense/client.ts` `ALLOWED_HOSTS`; pre-signed
+upload/download links on another host are refused and counted until the owner approves that host). The OAuth token lives
+in memory per isolate (refreshed 60 s before `expires_in`, single flight, dropped on 401). Retries: 3 attempts, backoff
+500 ms / 2 s, on 429/502/503/504 and network/timeout for idempotent calls; writes retry only on 429. Errors keep the HTTP
+status and the numeric Surense code (40000, 40001, 40204, 40205) and drop the server text. Logs: method, path template,
+status, duration. Writes leave one `audit.log` ACTION row through `api.surense_audit` (op, Surense id, status; no values).
+
+- **surense-webhook** (`verify_jwt=false`): POST only -> 503 `disabled` without `SURENSE_WEBHOOK_SECRET`/DB or while
+  `surense_webhook_enabled` is off -> memory limit 300/min per sender tag -> body <= 256 KB -> Svix signature over the raw
+  body (HMAC-SHA256 of `id.timestamp.body`, any `v1,` entry, 5-minute window) BEFORE any DB call -> `api.surense_event_ingest`
+  (DB limit 600/min, idempotent by `svix-id`, payload encrypted with `pii_enc_key`, one `surense.event` job queued) -> 200.
+  Duplicates answer 200 (Svix retries non-2xx for about a day). Switch off (PT423) -> 503 `disabled` with
+  `retry-after: 300` (a hint; Svix keeps its own schedule, nothing is stored). Key rotation: the signature is checked
+  against `SURENSE_WEBHOOK_SECRET` and, when set, `SURENSE_WEBHOOK_SECRET_NEXT`; either verifies, and the log line names
+  the slot that matched (`slot`) or a malformed one (`badSlots`), never a value.
+- **surense-worker** (`verify_jwt=false`, cron contract as notify-worker): `api.surense_job_claim(5)` -> handler by kind ->
+  `api.surense_job_complete(done|skipped|failed)`. Queue is `ops.surense_jobs`, not `ops.outbox` (notify-worker dead-letters
+  unknown topics). Kinds: `surense.event` (by type: `dataproxy.*.approved`, `harb.uploaded`, `document.uploaded` -> pull
+  that customer's documents; `swiftness.e9100.completed` -> E9100 download; `customer.created/updated` -> pull the
+  customer; `customer.deleted`/`document.deleted` -> mark deleted; `lead.*` -> the lead's customer when named; anything
+  else `skipped no_handler`), `surense.pull_customers` (cursor pass; an unfinished pass re-queues itself),
+  `surense.pull_documents`, `surense.e9100_download`. Failed jobs back off 1m/5m/30m/2h; attempt 5 -> dead + critical
+  alert `surense_job_dead`. Without `SURENSE_CLIENT_ID`/`SURENSE_CLIENT_SECRET`: nothing claimed,
+  `job_finish(false,'surense_not_configured')`. No cron job yet (owner decision 6.18).
+- **surense-sync** (`verify_jwt=true`): POST `{action, ...}` with an admin JWT; `staff.admin_assert_fresh` must pass, then
+  `api.surense_gate`. Actions: `health`, `pull-customers`, `pull-documents`, `invite-proxies` (returns the approval url
+  only; Surense's message text is dropped and nothing is sent to the customer), `e9100-submit`, `e9100-download` (files to
+  bucket `client-docs` at `surense/{customer}/e9100/{event}/{sha256}{.ext}`; the original name, which can contain an ID
+  number, is stored only encrypted), `portfolio` (encrypted snapshot + product rows).
+- **Mirror** (`crm.surense_customers`, `_documents`, `_products`, `_portfolios`): indexable columns hold Surense ids,
+  status/class/source names, manager ids, dates, booleans, counts; everything personal is in `details_enc`
+  (`private.pii_encrypt`); the national id is stored as `private.national_id_hmac` only. An older copy never overwrites a
+  newer one (`surense_modified_at`).
+- **Scopes**: after each token fetch `_shared/surense/auth.ts` splits the space-delimited `scope` string and compares it
+  with `REQUIRED_SCOPES` (the exact OpenAPI names the `api.ts` wrappers need: `customers:read`, `customers:create`,
+  `leads:create`, `leads:read`, `licensees:list`, `swiftness:accounts:list`, `swiftness:phishing:request`,
+  `data_import:import`, `global:user`). Missing scopes and any `*:delete` scope are logged as warnings (scope names only);
+  nothing is thrown.
+- **Logs**: `_shared/logger.ts` also redacts the Surense field names (`cellNumber`, `idNumber`, `email1`/`email2`,
+  `partnerCellNumber`, `partnerEmail`, `partnerIdNumber`, `firstName`, `lastName`, `fullName`, `birthDate`),
+  `client_secret`, `svix-signature`, `url`/`href` (pre-signed links), and any value starting with `whsec_`,
+  `sb_secret_` or `cid_` (replaced whole).
+
+### surense-health (deployed v1, 2026-11-20)
+
+`GET|POST /functions/v1/surense-health` (`verify_jwt=true`). Read-only probe of the Surense credentials: reports whether
+`SURENSE_CLIENT_ID`/`SURENSE_CLIENT_SECRET` are set (booleans, length, 4-character id prefix), requests an OAuth token
+(form body, then HTTP Basic, then JSON, so one call shows which mode Surense accepts) and calls four read-only endpoints
+(`/user/info`, `/licensees`, `/swiftness/accounts/list`, `/documents/types`), returning statuses, counts, key lists and
+the token response WITHOUT `access_token`/`refresh_token`/`id_token`. It writes nothing and touches no DB. It is
+already deployed on seeld-site as version 1 (the repo file is that source); it is superseded later by the
+`surense-sync` action `health` (admin + fresh TOTP), after which it can be parked with the owner's approval.
+- **Unknowns to verify with the live key** (marked `TODO(real API)` in code): webhook payload shape (only `type` and
+  uuid-shaped ids are read), sortable/filterable field names for the customer cursor pass and the document search, the
+  download/upload hosts, rate limits.
+- **Deployment gate:** apply the migration through `migrate.yml`; deploy the three functions; then OWNER-STEPS 1.10 in
+  order (secrets, Vault keys, bucket, `surense_enabled`, Svix endpoint + `surense_webhook_enabled`, writes last).
+
 ## Environment (Edge Function secrets; NAMES only)
 
 | Name | Used by | Required | Notes |
@@ -182,6 +256,9 @@ monitor that sends a stray Authorization header never sees the probe as down.
 | `STAFF_APP_URL` | notify-worker | optional | default `https://seeld.co.il` |
 | `GOOGLE_AI_API_KEY` | chat-bot | yes for chat | |
 | `GEMINI_MODELS` | chat-bot | optional | comma list overrides the model chain |
+| `SURENSE_CLIENT_ID`, `SURENSE_CLIENT_SECRET` | surense-sync, surense-worker | yes for Surense | OAuth client from Surense > Settings > API/Webhooks; never in git, Vercel or chat |
+| `SURENSE_WEBHOOK_SECRET` | surense-webhook | yes for webhooks | the Svix endpoint signing secret (`whsec_...`) |
+| `SURENSE_WEBHOOK_SECRET_NEXT` | surense-webhook | optional | second Svix secret during a rotation; either slot verifies; `health` shows a boolean only |
 | injected: `SUPABASE_URL`, `SUPABASE_SECRET_KEYS`, `SUPABASE_PUBLISHABLE_KEYS`, `SB_REGION`, `DENO_DEPLOYMENT_ID` | all | platform | never set by hand |
 
 ## Cron wiring
@@ -221,14 +298,28 @@ grant execute on function api.lead_notify_details(uuid) to service_role;
 
 ## Tests
 
+CI (`.github/workflows/ci.yml`, job `functions`) runs the whole Deno suite in the same image, with the repo root
+mounted (so `_shared/queueWorker.ts` resolves `../../../src/platform/...`):
+
+```bash
+entries="$(cd supabase/functions && ls -1 */index.ts | LC_ALL=C sort | tr '\n' ' ')"
+docker run --rm -v "$PWD:/w" -w /w/supabase/functions denoland/deno:alpine-2.1.4 \
+  sh -c "deno check $entries && deno test --no-prompt"
+```
+
+Per-folder runs:
+
 ```bash
 # Deno (no local install needed; image used in CI-like runs)
 docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4 \
   deno test --no-prompt _shared/test.ts lead-intake/ notify-worker/ chat-bot/ fetch-cma-data/ health/
 docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4 \
-  deno check lead-intake/index.ts notify-worker/index.ts chat-bot/index.ts fetch-cma-data/index.ts health/index.ts
+  deno test --no-prompt _shared/surense/ surense-webhook/ surense-worker/ surense-sync/
+docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4 \
+  deno check lead-intake/index.ts notify-worker/index.ts chat-bot/index.ts fetch-cma-data/index.ts health/index.ts \
+    surense-webhook/index.ts surense-worker/index.ts surense-sync/index.ts
 # vitest keeps covering the shared modules from the web side
-npx vitest run src/test/edge-shared.test.ts
+npx vitest run src/test/edge-shared.test.ts src/test/surense-shared.test.ts
 npx eslint supabase/functions
 ```
 
