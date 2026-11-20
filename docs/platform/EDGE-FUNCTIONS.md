@@ -304,8 +304,12 @@ mounted (so `_shared/queueWorker.ts` resolves `../../../src/platform/...`):
 ```bash
 entries="$(cd supabase/functions && ls -1 */index.ts | LC_ALL=C sort | tr '\n' ' ')"
 docker run --rm -v "$PWD:/w" -w /w/supabase/functions denoland/deno:alpine-2.1.4 \
-  sh -c "deno check $entries && deno test --no-prompt"
+  sh -c "deno check --node-modules-dir=none $entries && deno test --no-prompt --node-modules-dir=none"
 ```
+
+`--node-modules-dir=none` matters: the repo root has a `package.json`, so without the flag Deno expects a
+`node_modules` folder for `npm:` imports (`staff-invite`) and fails on a fresh checkout
+("Did you forget to run `deno install`?"). Locally it passes only because `npm ci` was run.
 
 Per-folder runs:
 

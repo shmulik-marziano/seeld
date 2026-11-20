@@ -209,7 +209,7 @@ jobs:
           entries="$(cd supabase/functions && ls -1 */index.ts | LC_ALL=C sort | tr '\n' ' ')"
           echo "deno check: $entries"
           docker run --rm -v "$PWD:/w" -w /w/supabase/functions denoland/deno:alpine-2.1.4 \
-            sh -c "deno check $entries && deno test --no-prompt"
+            sh -c "deno check --node-modules-dir=none $entries && deno test --no-prompt --node-modules-dir=none"
 
       # The docs copies are what reviewers and the owner read (review R3-B1: the cited proposal had drifted
       # from the reviewed values). They must stay byte-identical to the live files.
