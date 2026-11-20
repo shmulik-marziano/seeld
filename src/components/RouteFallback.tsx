@@ -1,9 +1,13 @@
 import { useEffect } from "react";
 import { clearSnapshot, getSnapshot } from "@/lib/prerenderSnapshot";
+import { LOGO_DOTS_TRANSITION } from "@/lib/flags/logoDots";
+import LogoDots from "@/components/brand/LogoDots";
 
 /**
  * RouteFallback: quiet Suspense loader for lazy routes.
- * Cream canvas, a thin ink progress bar and the brand symbol pulsing.
+ * Switch on (src/lib/flags/logoDots.ts, default): the five logo dots on the cream canvas, same as
+ * RouteTransitionDots, no progress bar. Switch off (VITE_LOGO_DOTS=off): the previous loader, unchanged:
+ * cream canvas, a thin ink progress bar and the brand symbol pulsing.
  * Respects prefers-reduced-motion. No text, no emoji.
  */
 export default function RouteFallback() {
@@ -11,6 +15,13 @@ export default function RouteFallback() {
   const snap = getSnapshot();
   useEffect(() => () => clearSnapshot(), []);
   if (snap) return <div dangerouslySetInnerHTML={{ __html: snap }} />;
+  if (LOGO_DOTS_TRANSITION) {
+    return (
+      <div role="status" aria-live="polite" aria-label="העמוד נטען" className="seeld-dots-stage min-h-screen bg-[#FCF8EF]">
+        <LogoDots />
+      </div>
+    );
+  }
   return (
     <div
       role="status"

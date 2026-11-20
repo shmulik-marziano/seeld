@@ -1,0 +1,48 @@
+/* Logo-dots loader (src/lib/flags/logoDots.ts): the five logo dots only, a staggered "thinking" wave.
+   Shared by RouteTransitionDots (overlay) and RouteFallback (Suspense fallback). Keep outside any .sd element:
+   sd.css kills every animation under .sd for reduced motion. */
+.seeld-dots { display: block; height: auto; overflow: visible; }
+.seeld-dot { transform-box: fill-box; transform-origin: center; }
+.seeld-dots--anim .seeld-dot {
+  animation: seeld-dot-think 0.9s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.11s - 0.9s); /* negative: every dot is mid-wave on frame one */
+}
+.seeld-dots--static .seeld-dot {
+  animation: seeld-dot-breathe 1.8s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.15s - 1.8s);
+}
+@keyframes seeld-dot-think {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-14px) scale(1.08); }
+}
+@keyframes seeld-dot-breathe {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.6; }
+}
+
+/* Full-viewport cream canvas. z-index 90: above header (50), cookie bar (55), chat (60), drawer/progress (70)
+   and the questionnaire send-sheet backdrop (80); below the Radix toaster (100) and Sonner, so toasts stay visible.
+   Fade-in is short (80ms) so the exiting page under PageTransition is covered almost at once (a brief cross-fade,
+   intended). The fade-out duration must equal FADE_MS (src/lib/flags/logoDots.ts); a test ties the two. */
+.seeld-dots-overlay {
+  position: fixed; inset: 0; z-index: 90;
+  display: flex; align-items: center; justify-content: center;
+  background: #FCF8EF;
+  opacity: 1;
+  animation: seeld-dots-in 80ms ease-out;
+  transition: opacity 180ms ease-out;
+}
+.seeld-dots-overlay[data-leaving] { opacity: 0; pointer-events: none; }
+@keyframes seeld-dots-in { from { opacity: 0; } to { opacity: 1; } }
+
+.seeld-dots-stage { display: flex; min-height: 100vh; align-items: center; justify-content: center; background: #FCF8EF; }
+
+/* Reduced motion: no movement at all, only a soft opacity change. */
+@media (prefers-reduced-motion: reduce) {
+  .seeld-dots--anim .seeld-dot {
+    animation: seeld-dot-breathe 1.8s ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * 0.15s - 1.8s);
+    transform: none;
+  }
+  .seeld-dots-overlay { animation: none; transition: none; }
+}

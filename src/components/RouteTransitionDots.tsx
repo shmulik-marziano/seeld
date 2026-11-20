@@ -1,0 +1,60 @@
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigationType } from "react-router-dom";
+import LogoDots from "@/components/brand/LogoDots";
+import { FADE_MS, LOGO_DOTS_TRANSITION, MIN_SHOW_MS } from "@/lib/flags/logoDots";
+
+// Playwright (prerender, e2e) sets navigator.webdriver: the overlay must never exist in a snapshot.
+const automated = () => typeof navigator !== "undefined" && navigator.webdriver === true;
+
+/**
+ * RouteTransitionDots: a full-viewport cream canvas with the five logo dots, shown on client-side navigations only.
+ * Switch: src/lib/flags/logoDots.ts (VITE_LOGO_DOTS=off disables it).
+ * - Never on the first location (first load is the prerendered page / snapshot), never on REPLACE navigations
+ *   (<Navigate replace> redirects), never under automation, and marked data-prerender-skip as a last guard.
+ * - Visible at least MIN_SHOW_MS, then fades FADE_MS and is removed from the DOM. If the lazy route is still
+ *   loading, RouteFallback shows the same dots underneath, so the overlay only needs the minimum time.
+ * - Must render inside BrowserRouter but outside Suspense / PageTransition (never inside [data-seeld-route]).
+ * - No focus moves, nothing focusable, no visible text.
+ */
+export default function RouteTransitionDots() {
+  const { pathname } = useLocation();
+  const navType = useNavigationType();
+  const prev = useRef(pathname);
+  const timers = useRef<number[]>([]);
+  const [phase, setPhase] = useState<"hidden" | "shown" | "leaving">("hidden");
+
+  useEffect(() => () => {
+    timers.current.forEach((t) => window.clearTimeout(t));
+    timers.current = [];
+  }, []);
+
+  useEffect(() => {
+    if (pathname === prev.current) return; // first render, or a hash/search-only change
+    prev.current = pathname;
+    // A redirect keeps any running cycle's timers (a fresh one is never started by it).
+    if (!LOGO_DOTS_TRANSITION || navType === "REPLACE" || automated()) return;
+    timers.current.forEach((t) => window.clearTimeout(t)); // rapid navigations: restart the cycle
+    setPhase("shown");
+    timers.current = [
+      window.setTimeout(() => {
+        setPhase("leaving");
+        timers.current = [window.setTimeout(() => setPhase("hidden"), FADE_MS)];
+      }, MIN_SHOW_MS),
+    ];
+  }, [pathname, navType]);
+
+  if (!LOGO_DOTS_TRANSITION || phase === "hidden") return null;
+  return (
+    <div
+      className="seeld-dots-overlay"
+      data-seeld-dots-overlay=""
+      data-prerender-skip=""
+      {...(phase === "leaving" ? { "data-leaving": "" } : {})}
+      role="status"
+      aria-live="polite"
+      aria-label="העמוד נטען"
+    >
+      <LogoDots />
+    </div>
+  );
+}
