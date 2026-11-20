@@ -4,7 +4,8 @@ import { ROUTE_ATTR } from "@/lib/prerenderSnapshot";
 
 /**
  * Snap page transition (STYLESEED.md): a single quick fade-and-settle.
- * No overlays, no decoration — navigation should feel instant.
+ * No overlays, no decoration here. The switchable logo-dots overlay is a separate sibling,
+ * RouteTransitionDots (src/lib/flags/logoDots.ts), outside this wrapper.
  */
 const PageTransition = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();

@@ -18,6 +18,8 @@ import ScrollProgress from "@/components/ScrollProgress";
 import GridBackdrop from "@/components/brand/GridBackdrop";
 import FloatingShapes from "@/components/FloatingShapes";
 import RouteFallback from "@/components/RouteFallback";
+import RouteTransitionDots from "@/components/RouteTransitionDots";
+import { LOGO_DOTS_TRANSITION } from "@/lib/flags/logoDots";
 import RouteSeo from "@/components/RouteSeo";
 import { lazy, Suspense, useEffect, useRef } from "react";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, IS_V2 } from "@/integrations/supabase/config";
@@ -354,6 +356,9 @@ const App = () => (
             <GridBackdrop />
             <ScrollProgress />
             <ScrollToTop />
+            {/* Logo-dots overlay on client-side navigations only (switch: src/lib/flags/logoDots.ts, VITE_LOGO_DOTS=off).
+                Outside Suspense and PageTransition: never inside [data-seeld-route], never in a prerender snapshot. */}
+            {LOGO_DOTS_TRANSITION && <RouteTransitionDots />}
             {/* Suspense sits ABOVE the transition on purpose: keyed on pathname,
                 AnimatePresence tore the boundary down and rebuilt it on every
                 navigation, so each lazy chunk remounted its fallback mid-fade. */}
