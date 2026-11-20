@@ -45,6 +45,9 @@
 | `health` | 2 | false | `site-watch` וכל אחד |
 | `fetch-cma-data` | 1 | false | `pg_cron`, יום ראשון 03:00 UTC |
 | `staff-invite` | 2 | true | אדמין עם TOTP (אפליקציית הסוכנים, שלב ב') |
+| `surense-webhook` | לא נפרסה | false | שורנס דרך Svix (חתימה + מתג `surense_webhook_enabled`) |
+| `surense-worker` | לא נפרסה | false | ידני עם סוד ה-cron; `pg_cron` רק אחרי אישור הבעלים |
+| `surense-sync` | לא נפרסה | true | אדמין עם TOTP טרי (פעולות מול שורנס) |
 
 הקוד הפרוס הוא באנדל esbuild שהועבר דרך MCP. אחרי שיהיה טוקן פריסה, פורסים מחדש מהמאגר (סעיף ז, פריט 2.3).
 
@@ -163,11 +166,37 @@ update ops.alerts set status = 'resolved' where id = <id> and status = 'pending'
 | `tracks_sync_enabled` | `true` | רענון המסלולים האוטומטי לא רץ |
 | `auth_lock_enabled` | `false` | נעילה אוטומטית אחרי כשלונות כניסה כבויה (עד יום 3) |
 | `lead_retention_enabled` | `false` | מחיקת לידים ישנים כבויה |
+| `surense_enabled` | `false` | מחבר שורנס כבוי: `surense-sync` מחזירה 423, `surense-worker` לא לוקחת עבודות |
+| `surense_write_enabled` | `false` | אין כתיבה לשורנס (הזמנת ייפוי כוח, שליחת E9100); קריאות ממשיכות אם `surense_enabled` דלוק |
+| `surense_e9100_enabled` | `false` | אין שליחת E9100 (`e9100-submit` מחזירה 423) גם כש-`surense_write_enabled` דלוק; שליחה דורשת את שני המתגים. הזמנת ייפוי כוח לא תלויה בו |
+| `surense_webhook_enabled` | `false` | `surense-webhook` מחזירה 503 ו-Svix מנסה שוב עד כיום; אירועים לא נשמרים |
+| `surense_retention_enabled` | `false` | `ops.cleanup` לא מוחק שום דבר של שורנס: לא אירועים (`ops.surense_events`), לא עבודות (`ops.surense_jobs`) ולא את המראה `crm.surense_*` (הנתונים האישיים של לקוח או מסמך שנמחקו בשורנס מתאפסים בכל מקרה) |
 
 עצירת חירום של הטפסים והצ'אט:
 ```sql
 update ops.config set value = 'false', updated_at = now() where key in ('intake_enabled', 'chat_enabled');
 ```
+עצירת חירום של מחבר שורנס: `update ops.config set value = 'false', updated_at = now() where key like 'surense%';`. שמירת אירועי שורנס, רק כש-`surense_retention_enabled` דלוק: 90 יום (אירוע שיש לו עבודה פתוחה נשמר), עבודות שהסתיימו 30 יום, עבודות מתות 90 יום. מחיקת אירוע לא מוחקת את העבודה שלו: `event_id` מתאפס (`on delete set null`), כך שעבודה מתה נשארת לתחקיר (`ops.cleanup`; TODO(owner): לאשר את החלונות ולקבוע שמירה למראה `crm.surense_*`).
+
+**ניסיון חוזר בעבודות שורנס:** שכבה אחת בלבד. `surense-worker` מבצע קריאת HTTP אחת לכל פנייה לשורנס (`maxAttempts` 1), ובכשל זמני מחזיר ל-`api.surense_job_complete` את סוג הכשל ואת `Retry-After`. המסד קובע `next_attempt_at` לפי הגדול מבין ה-backoff (1, 5, 30 דק', 2 ש') וה-`Retry-After`, עם jitter של 50% עד 100%, ולעולם לא לפני ה-`Retry-After`. בניסיון החמישי העבודה עוברת ל-`dead` עם התראה קריטית. `surense-sync` (פעולות צוות) נשאר עם עד 3 ניסיונות לקריאות בלבד, והמתנה פנימית של עד 5 שניות.
+
+**כתיבה סינכרונית לשורנס** (הזמנת ייפוי כוח, שליחת E9100, יצירת לקוח): שורת audit בשלב `pending` נכתבת לפני הבקשה (אם היא נכשלת, הבקשה לא נשלחת), ושורת `result` עם סטטוס ה-HTTP אחריה. כתיבה לא נשלחת שוב אוטומטית אחרי timeout. timeout, כשל רשת, 502 או 504 מחזירים 409 עם `details.reason = "ambiguous_check_surense"` ושורת audit בשלב `ambiguous`: **לבדוק בשורנס אם הפעולה בוצעה לפני שמנסים שוב** (כפילות מגיעה ללקוח או לגוף המוסדי). איתור:
+```sql
+select at, pk, new_data ->> 'op' as op, new_data ->> 'status' as status from audit.log
+ where table_name = 'surense.api' and new_data ->> 'phase' = 'ambiguous' order by at desc limit 20;
+```
+
+**התראות שורנס ב-`ops.watchdog`** (צעד `surense`, מזהים וספירות בלבד):
+
+| kind | מתי | מה עושים |
+|---|---|---|
+| `surense_backlog` (critical) | עבודה ב-`pending` שמועד הניסיון שלה עבר לפני יותר מ-15 דק' | ה-worker לא רץ או נכשל: `ops.job_runs` של `surense-worker`, מתג `surense_enabled`, סוד ה-cron |
+| `surense_job_stuck` (critical) | עבודה ב-`processing` שה-lock שלה פג לפני יותר מ-10 דק' | ריצה שמתה באמצע; הריצה הבאה לוקחת אותה מחדש (או מעבירה ל-`dead` בניסיון 5) |
+| `surense_dead_24h` (warning, פעם ביום) | עבודות `dead` ב-24 השעות האחרונות | `select id, kind, last_error, last_error_kind from ops.surense_jobs where status = 'dead' order by id desc;` |
+| `surense_events_silent` (warning, פעם ביום) | `surense_webhook_enabled` דלוק יותר מ-24 ש' ואין אירוע ב-24 ש' | נקודת הקצה ב-Svix מושבתת, או סוד החתימה לא תואם |
+| `surense_webhook_off` (warning, פעם ביום) | `surense_enabled` דלוק ו-`surense_webhook_enabled` כבוי יותר מ-24 ש' | להדליק את הקליטה, או לכבות את המחבר כולו |
+
+
 או, כאדמין טרי: `staff.admin_config_set('intake_enabled', 'false')`. מפתח `intake_enabled` או `chat_enabled` שחסר בטבלה נחשב פתוח; כל מפתח אחר שחסר נחשב סגור.
 
 ### ב.6 מגבלות קצב

@@ -183,12 +183,12 @@ scripts/migrate/         # copy-customers.sql (בוצע 18.11.2026, הוצא מ�
 
 | סכמה | תוכן | חשופה |
 |---|---|---|
-| `api` | views invoker; `me`, `health`; RPC שירות (`service_role`): `submit_lead`, `lead_replay`, `intake_note_reject`, `outbox_claim`, `outbox_complete`, `job_finish`, `job_continue`, `cma_upsert_batch`, `cma_finish_sync`, `chat_session_touch`, `chat_append`, `invitation_create`, `invitation_resend`, `staff_provision` | כן |
+| `api` | views invoker; `me`, `health`; RPC שירות (`service_role`): `submit_lead`, `lead_replay`, `intake_note_reject`, `outbox_claim`, `outbox_complete`, `job_finish`, `job_continue`, `cma_upsert_batch`, `cma_finish_sync`, `chat_session_touch`, `chat_append`, `invitation_create`, `invitation_resend`, `staff_provision`; מחבר שורנס (V3-01): `surense_gate`, `surense_event_ingest`, `surense_job_enqueue`, `surense_job_claim`, `surense_job_complete`, `surense_sync_state_get`, `surense_sync_state_set`, `surense_customers_upsert`, `surense_customer_mark_deleted`, `surense_documents_upsert`, `surense_document_mark_deleted`, `surense_file_record`, `surense_portfolio_store`, `surense_audit` | כן |
 | `staff` | view `members`; RPC: `leads_list`, `lead_get`, `lead_set_status`, `lead_assign`, `lead_note_add`, `lead_soft_delete`, `admin_assert_fresh`, `admin_config_set`, `admin_staff_disable`, `admin_staff_enable`, `admin_staff_unlock`, `admin_alert_resolve`, `ops_health` | כן, אחרי V2-04 |
 | `content` | בלוג, נסיעות, `investment_tracks` (+`source`, `source_period`), `cma_*`, matviews | לא; `content_dump` קורא בלבד |
-| `crm` | `leads`, `chat_*`, `customers` (מוצפן) | לא |
+| `crm` | `leads`, `chat_*`, `customers` (מוצפן), מראת שורנס: `surense_customers`, `surense_documents`, `surense_products`, `surense_portfolios` (עמודות בלי מידע אישי; השאר ב-`*_enc`) | לא |
 | `core` | `agencies`, `staff`, `client_accounts`, `invitations` | לא |
-| `ops` | `config`, `rate_limits`, `outbox`, `idempotency_keys`, `intake_payload_keys`, `job_runs`, `alerts`, `alert_recipients` | לא |
+| `ops` | `config`, `rate_limits`, `outbox`, `idempotency_keys`, `intake_payload_keys`, `job_runs`, `alerts`, `alert_recipients`, `surense_events`, `surense_jobs`, `surense_sync_state` | לא |
 | `audit` | `log`, `access_log`, `auth_events` | לא |
 | `private` | עזרים ו-hook | לא |
 | `public` | ריק ואטום | לא |
@@ -353,6 +353,7 @@ scripts/migrate/         # copy-customers.sql (בוצע 18.11.2026, הוצא מ�
   - `cma_refresh`
   - intake
   - auth
+  - `surense` (V3-01): עבודות `pending` באיחור של 15 דק', `processing` עם lock שפג לפני 10 דק', `dead` ב-24 ש', שקט של 24 ש' כשהקליטה דלוקה, קליטה כבויה יותר מ-24 ש' כשהמחבר דלוק. מזהים וספירות בלבד
 - **מסירה:** `ops.raise_alert`, ואז outbox, ואז `notify-worker`, ואז Resend. התראה ששורת ה-outbox שלה הגיעה ל-`dead` עוברת ל-`undeliverable`: מפתח ה-dedupe משתחרר, ו-`outbox_dead` מותרע. התראת `outbox_dead` שבעצמה מתה לא מייצרת התראה נוספת.
 - **פתרון ידני:** `staff.admin_alert_resolve(id)`, או ב-SQL:
   ```sql

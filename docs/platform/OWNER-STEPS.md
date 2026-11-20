@@ -78,6 +78,19 @@
 - **למה:** הגיבוי השבועי קורא רק את סכמת `content`.
 - **בדיקה:** ריצה ידנית של `content-dump.yml` מצליחה.
 
+### 1.10 מחבר שורנס (V3-01, אחרי שהמיגרציה `20261120200000` הוחלה והפונקציות נפרסו)
+כל המתגים כבויים בברירת המחדל. סדר ההדלקה:
+1. **סודות (Edge Functions → Secrets, שמות בלבד):** `SURENSE_CLIENT_ID`, `SURENSE_CLIENT_SECRET` (מהמפתח במסך API/Webhooks בשורנס), `SURENSE_WEBHOOK_SECRET` (סוד ה-`whsec_` של נקודת הקצה ב-Svix, שלב 4). לעולם לא בריפו, ב-Vercel או בצ'אט.
+2. **Vault:** `pii_enc_key` ו-`national_id_hmac_key` קיימים (כבר נוצרו לייבוא הלקוחות). בלעדיהם כל שמירה נכשלת ב-`55000 vault_secret_missing`.
+3. **מאגר `client-docs`:** Storage → Buckets: קיים ופרטי (המיגרציה יוצרת אותו כשאפשר; אם לא, ליצור ידנית, Private, בלי policies).
+4. **קריאה בלבד:** `staff.admin_config_set('surense_enabled', 'true')` (אדמין טרי), ואז `POST /functions/v1/surense-sync` עם `{"action":"health"}` מחזיר מזהי משתמש, בעלי רישיון, חשבון מסלקה וסוגי מסמכים.
+5. **Webhooks:** בפורטל Svix (כפתור "ממשק ניהול Webhooks" בשורנס) נקודת קצה `https://<project-ref>.supabase.co/functions/v1/surense-webhook` (ה-ref בכותרת סעיף 1) עם כל האירועים; להעתיק את סוד החתימה לשלב 1; ואז `staff.admin_config_set('surense_webhook_enabled', 'true')`. בדיקה: "Send example" בפורטל, ואז `select event_type, received_at from ops.surense_events order by id desc limit 3;`.
+6. **עיבוד התור:** בינתיים ידני: `curl -X POST -H "x-cron-secret: <הערך>" .../functions/v1/surense-worker`. תזמון `pg_cron` כל דקה דורש אישור (החלטה 6.18).
+7. **כתיבה לשורנס** (הזמנת ייפוי כוח): רק אחרי בדיקה על לקוח בדיקה: `staff.admin_config_set('surense_write_enabled', 'true')`.
+8. **שליחת E9100** (בקשה לגוף מוסדי דרך המסלקה): החלטה נפרדת, אחרי שלב 7 ובדיקה על לקוח בדיקה: `staff.admin_config_set('surense_e9100_enabled', 'true')`. שליחה דורשת את שני המתגים; כיבוי `surense_e9100_enabled` עוצר רק את E9100.
+- **תגובה לכתיבה עמומה:** 409 עם `ambiguous_check_surense` פירושו שלא ידוע אם הפעולה בוצעה. לבדוק בשורנס לפני ניסיון חוזר (RUNBOOK, מחבר שורנס).
+- **עצירה:** `update ops.config set value = 'false', updated_at = now() where key like 'surense%';`
+
 ---
 
 ## 2. Cloudflare ו-Resend
@@ -182,6 +195,11 @@
 | 6.15 | הזזת `supabase/tests/local_bootstrap.sql` | לאשר | סוכן ב-PR |
 | 6.16 | הריפו `seeld` ציבורי: להפוך לפרטי? | לשקול | הבעלים ב-GitHub |
 | 6.17 | איש קשר וטלפון לתקלות דחופות | למלא | נכנס ל-`RUNBOOK.md` |
+| 6.18 | תזמון `surense-worker` כל דקה ב-`pg_cron` | לאשר אחרי בדיקת הסנכרון הראשון | סוכן מוסיף `cron.schedule('surense-worker-tick', ...)` ומעדכן את בדיקת 00 |
+| 6.19 | מארחי הורדה/העלאה של שורנס (קישורים חתומים לקובצי E9100, מסמכים וייבוא; כנראה S3, לא `api.surense.com`) | לאשר רק את המארח המדויק שמופיע בתשובה הראשונה | סוכן מוסיף ל-`ALLOWED_HOSTS` ב-`_shared/surense/client.ts`; עד אז ההורדה נרשמת `download_host_not_allowed` |
+| 6.20 | חלונות שמירה: אירועי שורנס 90 יום, עבודות 30/90 יום; במראה `crm.surense_*` (מתג `surense_retention_enabled`, כבוי): רשומה שנמחקה בשורנס נמחקת אחרי 30 יום, ו-3 תמונות תיק אחרונות לכל לקוח | לאשר או לקבוע אחרת, ואז להדליק את המתג | סוכן משנה את `ops.cleanup` |
+| 6.21 | שמות סטטוס/סיווג/מקור של שורנס כעמודות גלויות (`status_name`, `class_name`, `source_name`) | לבדוק שאין בהם שמות של אנשים (למשל "הפניה מ...") | אם יש: סוכן מעביר אותם ל-`details_enc` |
+| 6.22 | נפטר, קטין ורגיש נשמרים רק מוצפנים ב-`details_enc`, לא כעמודות לסינון | לאשר; אם צריך סינון לפיהם, להחליט במפורש | סוכן מוסיף עמודה רק אחרי החלטה |
 
 ---
 

@@ -9,6 +9,10 @@ health
 lead-intake
 notify-worker
 staff-invite
+surense-health
+surense-sync
+surense-webhook
+surense-worker
 # Platform scaffolds kept until the owner decides (option A: move to supabase/_parked and drop these two lines;
 # option B: keep, with SUPABASE_SERVICE_ROLE_KEY replaced by SEELD_SECRET_KEY in queue-worker/index.ts).
 api-v1

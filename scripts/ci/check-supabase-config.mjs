@@ -106,6 +106,7 @@ const allow = readFileSync(allowlistPath, "utf8")
 const expectedJwt = {
   "lead-intake": false, "notify-worker": false, "chat-bot": false, "fetch-cma-data": false, health: false,
   "staff-invite": true, "api-v1": true, "queue-worker": true,
+  "surense-webhook": false, "surense-worker": false, "surense-sync": true,
 };
 const fns = get("functions") ?? {};
 for (const forbidden of ["sync-tracks", "invite-agent"]) {
