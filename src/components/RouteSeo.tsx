@@ -28,6 +28,7 @@ const NOINDEX_PREFIXES = [
   "/personal-area",
   "/saved-calculations",
   "/savings/retirement-planning/checklist",
+  "/report/start/order", // POA wizard: personal-data flow
 ];
 
 function setMeta(selector: string, attr: "content" | "href", value: string) {

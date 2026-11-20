@@ -21,6 +21,7 @@ import RouteFallback from "@/components/RouteFallback";
 import RouteSeo from "@/components/RouteSeo";
 import { lazy, Suspense, useEffect, useRef } from "react";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, IS_V2 } from "@/integrations/supabase/config";
+import { POA_ENABLED } from "@/lib/poa/config";
 import { hasStoredSession, loadSiteSupabase } from "@/integrations/supabase/lazy";
 
 // ── Page View Tracker ──
@@ -184,6 +185,7 @@ const ReportApp = lazy(() => import("@/pages/app/ReportApp"));
 const OpsRoutes = lazy(() => import("@/pages/app/ops/OpsRoutes"));
 const QuestionnairesRoutes = lazy(() => import("@/pages/app/questionnaires/QuestionnairesRoutes"));
 const ReportsRoutes = lazy(() => import("@/pages/app/reports/ReportsRoutes"));
+const PoaFlow = lazy(() => import("@/pages/report-order/PoaFlow"));
 const QuestionnaireClient = lazy(() => import("@/pages/QuestionnaireClient"));
 const ReportPublic = lazy(() => import("@/pages/Report"));
 const AuthPage = lazy(() => import("@/pages/AuthPage"));
@@ -444,6 +446,8 @@ const App = () => (
                 {/* Public report engine: files are parsed in the browser only; no login (held in v2 until the new backend takes over). */}
                 <Route path="/report/start" element={hold(<ReportsRoutes />)} />
                 <Route path="/report/start/*" element={hold(<ReportsRoutes />)} />
+                {/* POA wizard (docs/product/POA-WIZARD-SPEC.md §2): outside hold(); a static path outranks /report/start/* in React Router 6. Off by default. */}
+                <Route path="/report/start/order" element={POA_ENABLED ? <PoaFlow /> : <Navigate to="/report/start" replace />} />
 
                 {/* ═══ AGENT APP ROUTES (/app/*) ═══ */}
                 {IS_V2 ? (
