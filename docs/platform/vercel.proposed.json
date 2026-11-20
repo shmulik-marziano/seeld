@@ -40,6 +40,8 @@
   "rewrites": [
     { "source": "/assets/:path*", "destination": "/api/asset-miss" },
     { "source": "/app/:path*", "destination": "/_shell.html" },
+    { "source": "/report/start", "destination": "/_shell.html" },
+    { "source": "/report/start/:path*", "destination": "/_shell.html" },
     { "source": "/portal/:path*", "destination": "/_shell.html" },
     { "source": "/client/:path*", "destination": "/_shell.html" },
     { "source": "/execution-portal/:path*", "destination": "/_shell.html" },
