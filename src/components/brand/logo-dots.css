@@ -1,23 +1,42 @@
-/* Logo-dots loader (src/lib/flags/logoDots.ts): the five logo dots only, a staggered "thinking" wave.
+/* Logo-dots loader (src/lib/flags/logoDots.ts): the five logo dots only.
+   Animated: the dots start hollow and fill up one after another, right to left (reading direction), each with a
+   small pop; then they drain and the cycle restarts (DOTS_CYCLE_MS). With MIN_SHOW_MS = 500 the five fills complete
+   inside the forced window of RouteTransitionDots, so a navigation reads as "fill up, then the page". RouteFallback
+   keeps the loop running while a lazy route is still loading; --seeld-phase (LogoDots.tsx) keeps a later-mounted
+   instance in step with the overlay's cycle so the hand-over does not jump.
    Shared by RouteTransitionDots (overlay) and RouteFallback (Suspense fallback). Keep outside any .sd element:
    sd.css kills every animation under .sd for reduced motion. */
 .seeld-dots { display: block; height: auto; overflow: visible; }
 .seeld-dot { transform-box: fill-box; transform-origin: center; }
 .seeld-dots--anim .seeld-dot {
-  animation: seeld-dot-think 0.9s ease-in-out infinite;
-  animation-delay: calc(var(--i, 0) * 0.11s - 0.9s); /* negative: every dot is mid-wave on frame one */
+  fill-opacity: 0.16;
+  stroke-opacity: 0.55;
+  stroke-width: 5;
+  animation: seeld-dot-fill 1.25s cubic-bezier(0.3, 0.8, 0.3, 1) infinite;
+  /* (4 - i): the rightmost dot fills first. --seeld-phase (<= 0) aligns the cycle with the overlay's clock. */
+  animation-delay: calc((4 - var(--i, 0)) * 0.1s + var(--seeld-phase, 0ms));
 }
 .seeld-dots--static .seeld-dot {
   animation: seeld-dot-breathe 1.8s ease-in-out infinite;
   animation-delay: calc(var(--i, 0) * 0.15s - 1.8s);
 }
-@keyframes seeld-dot-think {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50%      { transform: translateY(-14px) scale(1.08); }
+@keyframes seeld-dot-fill {
+  0%        { fill-opacity: 0.16; stroke-opacity: 0.55; transform: scale(1); }
+  9%        { fill-opacity: 1;    stroke-opacity: 0;    transform: scale(1.22); }
+  16%       { transform: scale(1); }
+  58%       { fill-opacity: 1;    stroke-opacity: 0;    transform: scale(1); }
+  70%, 100% { fill-opacity: 0.16; stroke-opacity: 0.55; transform: scale(1); }
 }
 @keyframes seeld-dot-breathe {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.6; }
+}
+
+/* Arrival: the dots scale in briefly when the overlay appears. Not in RouteFallback, which may follow the overlay. */
+.seeld-dots-overlay .seeld-dots { animation: seeld-dots-arrive 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes seeld-dots-arrive {
+  from { transform: scale(0.9); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
 }
 
 /* Full-viewport cream canvas. z-index 90: above header (50), cookie bar (55), chat (60), drawer/progress (70)
@@ -37,12 +56,15 @@
 
 .seeld-dots-stage { display: flex; min-height: 100vh; align-items: center; justify-content: center; background: #FCF8EF; }
 
-/* Reduced motion: no movement at all, only a soft opacity change. */
+/* Reduced motion: no movement at all, only a soft opacity change; the dots stay solid. */
 @media (prefers-reduced-motion: reduce) {
   .seeld-dots--anim .seeld-dot {
     animation: seeld-dot-breathe 1.8s ease-in-out infinite;
     animation-delay: calc(var(--i, 0) * 0.15s - 1.8s);
     transform: none;
+    fill-opacity: 1;
+    stroke-opacity: 0;
   }
+  .seeld-dots-overlay .seeld-dots { animation: none; }
   .seeld-dots-overlay { animation: none; transition: none; }
 }

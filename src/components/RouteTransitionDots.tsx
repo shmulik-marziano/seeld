@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 import LogoDots from "@/components/brand/LogoDots";
-import { FADE_MS, LOGO_DOTS_TRANSITION, MIN_SHOW_MS } from "@/lib/flags/logoDots";
+import { FADE_MS, LOGO_DOTS_TRANSITION, MIN_SHOW_MS, dotsClock } from "@/lib/flags/logoDots";
 
 // Playwright (prerender, e2e) sets navigator.webdriver: the overlay must never exist in a snapshot.
 const automated = () => typeof navigator !== "undefined" && navigator.webdriver === true;
@@ -34,6 +34,8 @@ export default function RouteTransitionDots() {
     // A redirect keeps any running cycle's timers (a fresh one is never started by it).
     if (!LOGO_DOTS_TRANSITION || navType === "REPLACE" || automated()) return;
     timers.current.forEach((t) => window.clearTimeout(t)); // rapid navigations: restart the cycle
+    // Clock for the fill cycle: this overlay starts at phase 0; a RouteFallback mounted later aligns to it.
+    dotsClock.t0 = typeof performance !== "undefined" ? performance.now() : 0;
     setPhase("shown");
     timers.current = [
       window.setTimeout(() => {

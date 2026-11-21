@@ -5,7 +5,7 @@ import { render, screen, act, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Routes, Route, useNavigate } from "react-router-dom";
 import LogoDots from "@/components/brand/LogoDots";
 import RouteTransitionDots from "@/components/RouteTransitionDots";
-import { FADE_MS, MIN_SHOW_MS } from "@/lib/flags/logoDots";
+import { DOTS_CYCLE_MS, FADE_MS, MIN_SHOW_MS, dotsClock } from "@/lib/flags/logoDots";
 
 const ROOT = join(__dirname, "..", "..");
 const read = (...p: string[]) => readFileSync(join(ROOT, ...p), "utf8");
@@ -120,6 +120,49 @@ describe("LogoDots", () => {
     const overlayRule = /\.seeld-dots-overlay \{([^}]*)\}/.exec(css)?.[1] ?? "";
     expect(overlayRule).toContain(`transition: opacity ${FADE_MS}ms`);
     expect(css).toMatch(/\.seeld-dots-overlay \{[^}]*z-index: 90;[^}]*background: #FCF8EF;/);
+  });
+});
+
+describe("fill cycle: CSS and clock", () => {
+  afterEach(() => { dotsClock.t0 = 0; });
+  it("the animated class fills right to left with the cycle length of DOTS_CYCLE_MS and a hollow resting state", () => {
+    const css = read("src", "components", "brand", "logo-dots.css");
+    const anim = /\.seeld-dots--anim \.seeld-dot \{([^}]*)\}/.exec(css)?.[1] ?? "";
+    expect(anim).toContain(`animation: seeld-dot-fill ${DOTS_CYCLE_MS / 1000}s`);
+    expect(anim).toContain("animation-delay: calc((4 - var(--i, 0)) * 0.1s + var(--seeld-phase, 0ms))");
+    expect(anim).toMatch(/fill-opacity: 0\.\d+;/);
+    const fill = /@keyframes seeld-dot-fill\s*\{([^@]*?)\n\}/.exec(css)?.[1] ?? "";
+    expect(fill).toContain("fill-opacity: 1");
+    expect(fill).toContain("scale(1.22)");
+    // Five staggers of 0.1s end inside the forced overlay window, so the fill-up completes before the page shows.
+    expect(4 * 100 + 0.09 * DOTS_CYCLE_MS).toBeLessThanOrEqual(MIN_SHOW_MS + 20);
+    // Reduced motion keeps the dots solid and still.
+    const reduce = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
+    expect(reduce).toMatch(/\.seeld-dots--anim \.seeld-dot \{[^}]*fill-opacity: 1;[^}]*stroke-opacity: 0;/);
+  });
+  it("every dot's outline uses its own colour (the hollow state is the dot's own ring)", () => {
+    const { container } = render(<LogoDots />);
+    [...container.querySelectorAll("circle")].forEach((c) => expect(c.getAttribute("stroke")).toBe(c.getAttribute("fill")));
+  });
+  it("no phase before any overlay; an instance mounted mid-cycle gets a negative phase inside one cycle", () => {
+    dotsClock.t0 = 0;
+    const a = render(<LogoDots />).container.querySelector("svg")!;
+    expect(a.style.getPropertyValue("--seeld-phase")).toBe("");
+    dotsClock.t0 = performance.now() - 300;
+    const b = render(<LogoDots />).container.querySelector("svg")!;
+    const phase = parseFloat(b.style.getPropertyValue("--seeld-phase"));
+    expect(b.style.getPropertyValue("--seeld-phase")).toMatch(/^-\d+(\.\d+)?ms$/);
+    expect(phase).toBeLessThan(0);
+    expect(phase).toBeGreaterThan(-DOTS_CYCLE_MS);
+    const still = render(<LogoDots animated={false} />).container.querySelector("svg")!;
+    expect(still.style.getPropertyValue("--seeld-phase")).toBe("");
+  });
+  it("the overlay starts the clock when it shows", () => {
+    dotsClock.t0 = 0;
+    harness();
+    click();
+    expect(dotsClock.t0).toBeGreaterThan(0);
+    expect(overlay()).not.toBeNull();
   });
 });
 
