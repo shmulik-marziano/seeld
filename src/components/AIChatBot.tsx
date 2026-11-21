@@ -53,8 +53,39 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const reduced = useReducedMotion();
+  const panelRef = useRef<HTMLDivElement>(null);
+  // Live mark: where the thread from the launcher mark meets the card (px from the card's left edge).
+  const [threadX, setThreadX] = useState(26);
 
   const suggestions = suggestionsFor(location.pathname);
+
+  // Live mark: a click anywhere outside the card folds it back onto the launcher (the conversation is kept).
+  useEffect(() => {
+    if (!LIVE_MARK || !isExpanded) return;
+    const onDown = (e: PointerEvent) => {
+      const t = e.target instanceof Element ? e.target : null;
+      if (!t || panelRef.current?.contains(t) || t.closest(".sd-chrome-fab-chat, .sd-nudge")) return;
+      setIsExpanded(false);
+    };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [isExpanded]);
+
+  // Live mark: measure the launcher mark so the thread starts from it.
+  useEffect(() => {
+    if (!LIVE_MARK || !isExpanded) return;
+    const raf = requestAnimationFrame(() => {
+      const m = document.querySelector<SVGSVGElement>(".sd-chrome-fab-chat--live svg.seeld-lm");
+      const card = panelRef.current;
+      if (!m || !card) return;
+      const r = m.getBoundingClientRect();
+      const c = card.getBoundingClientRect();
+      // The card may still be scaling in (transform-origin bottom left), so use its untransformed left edge.
+      const cardLeft = card.offsetLeft || c.left;
+      if (r.width > 0 && c.width > 0) setThreadX(Math.round(Math.min(Math.max(r.left + r.width / 2 - cardLeft, 10), c.width - 10)));
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [isExpanded]);
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -270,7 +301,7 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
     <button
       type="button"
       onClick={openLead}
-      className="mx-auto block min-h-[44px] px-3 text-[13.5px] font-medium text-[#55677C] underline underline-offset-4 transition-colors duration-150 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+      className="mx-auto block min-h-[36px] px-3 text-[12.5px] font-medium text-[#55677C] underline underline-offset-4 transition-colors duration-150 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
     >
       להשאיר פרטים לחזרה
     </button>
@@ -288,144 +319,127 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
           ? "listening"
           : "idle";
     const statusLabel = { idle: "זמין", listening: "מקשיב", thinking: "חושב", speaking: "עונה" }[markState];
+    const inFlight = markState === "thinking" || markState === "speaking";
+    const iconBtn =
+      "flex h-10 w-10 items-center justify-center rounded-full text-[#55677C] transition-colors duration-150 hover:bg-[#203957]/5 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#203957]";
 
     return (
       <>
-        {!isExpanded && <ChatLauncher onClick={() => setIsExpanded(true)} />}
+        {/* The launcher stays: the postcard hangs above it on a thread, and a click on it folds the card back. */}
+        <ChatLauncher onClick={() => setIsExpanded((v) => !v)} aria-expanded={isExpanded} />
 
         <AnimatePresence>
           {isExpanded && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={{ duration: reduced ? 0 : 0.2, ease: "easeOut" }}
-              className="fixed z-[60] flex flex-col inset-x-2 top-16 sm:inset-auto sm:bottom-4 sm:left-6 sm:h-[min(700px,calc(100dvh-3rem))] sm:w-[440px] lg:w-[500px]"
-              style={{ bottom: "calc(8px + env(safe-area-inset-bottom, 0px))" }}
+              ref={panelRef}
+              initial={reduced ? false : { opacity: 0, y: 10, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.98, transition: { duration: reduced ? 0 : 0.14 } }}
+              transition={{ duration: reduced ? 0 : 0.22, delay: reduced ? 0 : 0.14, ease: "easeOut" }}
+              style={{ transformOrigin: "bottom left" }}
+              className="sd-chat-card fixed z-[60]"
               role="dialog"
               aria-label="שיחה עם היועץ הדיגיטלי של SEELD"
             >
-              <div
-                className="flex h-full flex-col overflow-hidden"
-                style={{ backgroundColor: PANEL_BG, borderRadius: 16, border: `1px solid ${LINE}`, boxShadow: "0 24px 60px -18px rgba(32, 57, 87,.35)" }}
-              >
-                {/* Header: three symmetric columns, no band */}
-                <div className="grid shrink-0 grid-cols-[44px_1fr_44px] items-center px-4 pb-1 pt-3">
+              {/* A thread drawn live from the launcher mark up to the card */}
+              <motion.span
+                aria-hidden="true"
+                className="sd-chat-thread"
+                style={{ left: threadX }}
+                initial={reduced ? false : { scaleY: 0 }}
+                animate={{ scaleY: 1 }}
+                exit={{ scaleY: 0, transition: { duration: reduced ? 0 : 0.1 } }}
+                transition={{ duration: reduced ? 0 : 0.16, ease: "easeOut" }}
+              />
+
+              <div className="sd-chat-card-inner">
+                {/* Header: close / mark + status / new chat */}
+                <div className="grid shrink-0 grid-cols-[40px_1fr_40px] items-center px-2 pb-1 pt-2">
                   {messages.length > 0 ? (
-                    <button
-                      onClick={clearConversation}
-                      aria-label="שיחה חדשה"
-                      title="שיחה חדשה"
-                      className="flex h-11 w-11 items-center justify-center rounded-full text-[#55677C] transition-colors duration-150 hover:bg-[#203957]/5 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#203957]"
-                    >
-                      <RotateCcw className="h-4 w-4" />
+                    <button type="button" onClick={clearConversation} aria-label="שיחה חדשה" title="שיחה חדשה" className={iconBtn}>
+                      <RotateCcw className="h-3.5 w-3.5" />
                     </button>
                   ) : (
                     <span aria-hidden="true" />
                   )}
-                  <div className="flex flex-col items-center gap-1">
-                    {/* One live mark per view: the welcome hero carries the animation before the first message, and the
-                        avatar beside the reply carries it while the assistant thinks or answers. The header only listens. */}
-                    <LogoMark
-                      state={messages.length === 0 || markState === "thinking" || markState === "speaking" ? "idle" : markState}
-                      breathe={messages.length > 0}
-                      size="44px"
-                    />
-                    <span className="sr-only" role="status" aria-live="polite">{markState === "thinking" || markState === "speaking" ? statusLabel : ""}</span>
-                    <span
-                      data-chat-status={markState}
-                      aria-hidden="true"
-                      className="text-[10.5px] tracking-[0.14em]"
-                      style={{ fontFamily: MONO, color: MUTED }}
-                    >
+                  <div className="flex items-center justify-center gap-2">
+                    {/* One live mark per view: the welcome mark before the first message, the reply avatar while in flight. */}
+                    <LogoMark state={messages.length === 0 || inFlight ? "idle" : markState} breathe={messages.length > 0} size="26px" />
+                    <span className="sr-only" role="status" aria-live="polite">{inFlight ? statusLabel : ""}</span>
+                    <span data-chat-status={markState} aria-hidden="true" className="text-[10.5px] tracking-[0.14em]" style={{ fontFamily: MONO, color: MUTED }}>
                       {statusLabel}
                     </span>
                   </div>
-                  <button
-                    onClick={() => setIsExpanded(false)}
-                    aria-label="סגירת הצ'אט"
-                    className="flex h-11 w-11 items-center justify-center rounded-full text-[#55677C] transition-colors duration-150 hover:bg-[#203957]/5 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#203957]"
-                  >
+                  <button type="button" onClick={() => setIsExpanded(false)} aria-label="סגירת הצ'אט" className={iconBtn}>
                     <X className="h-4 w-4" />
                   </button>
                 </div>
 
-                {/* Messages */}
-                <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+                {/* Body */}
+                <div className="flex-1 overflow-y-auto px-4 py-3">
                   {messages.length === 0 ? (
-                    <div className="flex h-full flex-col justify-between gap-6 py-2">
-                      <div className="space-y-5 text-center">
-                        <div className="flex flex-col items-center">
-                          <LogoMark state={markState} breathe size="72px" />
-                          <h4
-                            className="mt-3 text-[22px] leading-snug text-[#203957]"
-                            style={{ fontFamily: "'Rubik', Arial, sans-serif", fontWeight: 700 }}
-                          >
-                            שלום, כאן היועץ הדיגיטלי.
-                          </h4>
-                          <p className="mt-2 max-w-sm text-[15px] leading-relaxed text-[#2D435D]">
-                            ביטוח, פנסיה, חיסכון או מס: שאלו כל דבר. עונה מיד, ומחבר אתכם ליועץ אנושי כשצריך.
-                          </p>
-                        </div>
-                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                          {suggestions.map((s, i) => (
+                    <div className="flex h-full flex-col justify-between gap-5 py-2">
+                      <div className="flex flex-col items-center text-center">
+                        <LogoMark state={markState} breathe size="44px" />
+                        <h4 className="mt-3 text-[16px] font-bold leading-snug text-[#203957]" style={{ fontFamily: "'Rubik', Arial, sans-serif" }}>
+                          שלום. במה אפשר לעזור?
+                        </h4>
+                        <p className="mt-1 text-[13.5px] leading-relaxed text-[#55677C]">ביטוח, פנסיה, חיסכון ומס. שאלו בחופשיות.</p>
+                        <div className="mt-4 flex flex-wrap justify-center gap-1.5">
+                          {suggestions.slice(0, 2).map((s, i) => (
                             <button
                               key={i}
+                              type="button"
                               onClick={() => streamChat(s.text)}
-                              className="flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-white px-3 py-3 text-center text-[14px] font-medium text-[#203957] transition-colors duration-150 hover:bg-[#EEF2EC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
-                              style={{ boxShadow: RING }}
+                              className="inline-flex min-h-[36px] items-center rounded-full bg-white px-3.5 py-1.5 text-[13.5px] font-medium text-[#203957] transition-colors duration-150 hover:bg-[#F3F5F7] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                              style={{ boxShadow: HAIRLINE }}
                             >
-                              <s.icon className="h-4 w-4 shrink-0 text-[#55677C]" strokeWidth={1.75} />
                               {s.text}
                             </button>
                           ))}
                         </div>
                       </div>
-                      <div className="space-y-1">
-                      {leadNode}
-                      {leadLink}
-                      <a
-                        href={waHref(CONTACTS[contactFor(location.pathname)])}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 py-2 text-[14px] font-medium text-[#55677C] underline-offset-4 transition-colors duration-150 hover:text-[#203957] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
-                      >
-                        <Phone className="h-3.5 w-3.5" strokeWidth={1.75} />
-                        מעדיפים בן אדם? שיחה בוואטסאפ
-                      </a>
+                      <div className="space-y-0.5">
+                        {leadNode}
+                        {leadLink}
+                        <a
+                          href={waHref(CONTACTS[contactFor(location.pathname)])}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex min-h-[36px] items-center justify-center gap-1.5 text-[12.5px] font-medium text-[#55677C] underline-offset-4 transition-colors duration-150 hover:text-[#203957] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                        >
+                          <Phone className="h-3 w-3" strokeWidth={1.75} />
+                          מעדיפים אדם? שיחה בוואטסאפ
+                        </a>
                       </div>
                     </div>
                   ) : (
-                    <>
+                    <div className="space-y-4">
                       {messages.map((msg, i) =>
                         msg.role === "user" ? (
                           <div key={i} className="flex justify-start">
-                            <div className="max-w-[88%] rounded-[14px] bg-[#203957] px-4 py-3 text-[14.5px] leading-relaxed text-white">
+                            <div className="max-w-[85%] rounded-[14px] rounded-br-[4px] bg-[#203957] px-3.5 py-2 text-[14.5px] leading-[1.55] text-white">
                               {msg.content}
                             </div>
                           </div>
                         ) : (
-                          <div
-                            key={i}
-                            className="flex items-start gap-3"
-                            data-chat-reply={i === messages.length - 1 && isLoading ? markState : "idle"}
-                          >
+                          <div key={i} className="flex items-start gap-2.5" data-chat-reply={i === messages.length - 1 && isLoading ? markState : "idle"}>
                             {/* The avatar beside the reply is the live mark: the dots orbit while thinking, sway while answering. */}
-                            <span className="-mt-1 shrink-0" aria-hidden="true">
+                            <span className="-mt-0.5 shrink-0" aria-hidden="true">
                               <LogoMark
                                 state={i === messages.length - 1 && isLoading ? markState : "idle"}
                                 instant={i === messages.length - 1 && isLoading}
-                                size="40px"
+                                size="32px"
                               />
                             </span>
-                            <div className="min-w-0 flex-1 pt-2 text-[14.5px] leading-relaxed text-[#203957]">
+                            <div className="min-w-0 flex-1 pt-1 text-[14.5px] leading-[1.65] text-[#203957]">
                               {msg.content === "" && isLoading && i === messages.length - 1 && (
-                                <span className="inline-block text-[11px] tracking-[0.14em] text-[#55677C]" style={{ fontFamily: MONO }}>
+                                <span className="inline-block text-[10.5px] tracking-[0.14em] text-[#55677C]" style={{ fontFamily: MONO }}>
                                   חושב
                                 </span>
                               )}
                               {msg.content !== "" && (
-                                <div className="prose prose-sm max-w-none [&_p]:mb-1.5 [&_p:last-child]:mb-0 [&_ul]:mt-1 [&_li]:text-[14.5px] [&_p]:text-[14.5px] [&_a]:text-[#203957] [&_a]:underline">
+                                <div className="[&_p]:mb-2 [&_p:last-child]:mb-0 [&_h1]:mb-1 [&_h1]:mt-2 [&_h1]:text-[14.5px] [&_h1]:font-bold [&_h2]:mb-1 [&_h2]:mt-2 [&_h2]:text-[14.5px] [&_h2]:font-bold [&_h3]:mb-1 [&_h3]:mt-2 [&_h3]:text-[14.5px] [&_h3]:font-bold [&_ul]:my-1.5 [&_ul]:list-disc [&_ul]:pr-4 [&_ol]:my-1.5 [&_ol]:list-decimal [&_ol]:pr-4 [&_li]:mb-1 [&_strong]:font-semibold [&_a]:underline [&_a]:underline-offset-2">
                                   <ReactMarkdown>{msg.content}</ReactMarkdown>
                                 </div>
                               )}
@@ -434,28 +448,28 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
                         ),
                       )}
                       {!isLoading && messages.length < 6 && (
-                        <div className="flex flex-wrap gap-1.5 pt-1">
+                        <div className="flex flex-wrap gap-1.5 pr-[42px]">
                           {suggestions.slice(0, 2).map((s, i) => (
                             <button
                               key={i}
+                              type="button"
                               onClick={() => streamChat(s.text)}
-                              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[14px] font-medium text-[#55677C] transition-colors duration-150 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                              className="inline-flex min-h-[32px] items-center rounded-full bg-white px-3 py-1 text-[13px] font-medium text-[#55677C] transition-colors duration-150 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
                               style={{ boxShadow: HAIRLINE }}
                             >
-                              <s.icon className="h-3 w-3" strokeWidth={1.75} />
                               {s.text}
                             </button>
                           ))}
                         </div>
                       )}
                       {leadNode}
-                    <div ref={messagesEndRef} />
-                    </>
+                      <div ref={messagesEndRef} />
+                    </div>
                   )}
                 </div>
 
                 {/* Input */}
-                <form onSubmit={handleSubmit} className="shrink-0 border-t border-[#D9DEE4] px-4 py-3">
+                <form onSubmit={handleSubmit} className="shrink-0 border-t border-[#EEF1F4] px-3 pb-2 pt-2.5">
                   <div className="flex items-end gap-2">
                     <textarea
                       ref={inputRef}
@@ -464,14 +478,14 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
                       onChange={(e) => {
                         setInput(e.target.value);
                         e.target.style.height = "auto";
-                        e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`;
+                        e.target.style.height = `${Math.min(e.target.scrollHeight, 110)}px`;
                       }}
                       onFocus={() => setInputFocused(true)}
                       onBlur={() => setInputFocused(false)}
                       onKeyDown={handleInputKeyDown}
-                      placeholder="כתבו שאלה, Enter לשליחה"
+                      placeholder="כתבו שאלה"
                       aria-label="הודעה ליועץ הדיגיטלי"
-                      className="min-h-[48px] max-h-[120px] min-w-0 flex-1 resize-none rounded-[24px] bg-white px-5 py-3 text-right text-[14.5px] leading-snug text-[#203957] transition-shadow duration-150 placeholder:text-[#55677C] focus:outline-none shadow-[0_0_0_1px_#D9DEE4] focus:shadow-[0_0_0_1px_#203957]"
+                      className="min-h-[42px] max-h-[110px] min-w-0 flex-1 resize-none rounded-[21px] bg-[#F4F6F8] px-4 py-2.5 text-right text-[14.5px] leading-snug text-[#203957] transition-shadow duration-150 placeholder:text-[#8795A5] focus:bg-white focus:outline-none focus:shadow-[0_0_0_1px_#203957]"
                       disabled={isLoading}
                     />
                     <button
@@ -479,14 +493,14 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
                       disabled={isLoading || !input.trim()}
                       aria-label="שליחת הודעה"
                       className={cn(
-                        "flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]",
-                        input.trim() ? "bg-[#203957] text-white hover:bg-[#162B45]" : "bg-[#203957]/10 text-[#55677C]",
+                        "flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-full transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]",
+                        input.trim() ? "bg-[#203957] text-white hover:bg-[#162B45]" : "bg-[#203957]/8 text-[#8795A5]",
                       )}
                     >
                       {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                     </button>
                   </div>
-                  <p className="mt-2 text-center text-[10.5px] tracking-[0.14em] text-[#55677C]" style={{ fontFamily: MONO }} dir="ltr">
+                  <p className="mt-1.5 text-center text-[10px] tracking-[0.14em] text-[#8795A5]" style={{ fontFamily: MONO }} dir="ltr">
                     מידע כללי בלבד. לא ייעוץ אישי.
                   </p>
                 </form>
