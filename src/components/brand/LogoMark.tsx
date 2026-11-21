@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, type CSSProperties, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from "react";
 import { DOTS, DROP_D, DROP_FILL, LEAF_D, LEAF_FILL } from "./logoMarkPaths";
 import "./logo-mark.css";
 
@@ -10,6 +10,8 @@ export interface LogoMarkProps {
   breathe?: boolean;
   onDark?: boolean;
   instant?: boolean;
+  /** instant only: ms to advance the orbit by, or a function read once at mount (aligns two marks to one clock). */
+  phaseMs?: number | (() => number);
   className?: string;
   label?: string;
 }
@@ -122,11 +124,13 @@ export default function LogoMark({
   breathe = false,
   onDark = false,
   instant = false,
+  phaseMs,
   className,
   label,
 }: LogoMarkProps) {
   const ref = useRef<SVGSVGElement>(null);
   const thinking = state === "thinking";
+  const [phase] = useState(() => (instant && phaseMs !== undefined ? (typeof phaseMs === "function" ? phaseMs() : phaseMs) : 0));
   useLogoMarkSettle(ref, thinking);
 
   const cls = [
@@ -145,7 +149,7 @@ export default function LogoMark({
       className={cls}
       viewBox="0 0 512 512"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ "--lg-size": size } as CSSProperties}
+      style={{ "--lg-size": size, ...(phase ? { "--lg-phase": `${Math.round(phase)}ms` } : {}) } as CSSProperties}
       data-logo-state={state}
       aria-busy={thinking ? "true" : undefined}
       role={label ? "img" : undefined}

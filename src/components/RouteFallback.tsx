@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { clearSnapshot, getSnapshot } from "@/lib/prerenderSnapshot";
-import { LOGO_DOTS_TRANSITION } from "@/lib/flags/logoDots";
+import { LOGO_DOTS_TRANSITION, markPhaseMs } from "@/lib/flags/logoDots";
 import LogoDots from "@/components/brand/LogoDots";
-import LogoMark from "@/components/brand/LogoMark";
+import LogoMark from "@/components/brand/LogoMarkLazy";
 import { LIVE_MARK } from "@/lib/flags/liveMark";
 
 /**
@@ -22,7 +22,7 @@ export default function RouteFallback() {
       <div role="status" aria-live="polite" aria-label="העמוד נטען" className="seeld-dots-stage min-h-screen bg-[#FCF8EF]">
         {LIVE_MARK ? (
           <div className="seeld-dots-mark">
-            <LogoMark state="thinking" instant size="clamp(120px, 26vw, 176px)" />
+            <LogoMark state="thinking" instant phaseMs={markPhaseMs} size="clamp(120px, 26vw, 176px)" />
           </div>
         ) : (
           <LogoDots />

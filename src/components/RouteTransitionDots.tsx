@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 import LogoDots from "@/components/brand/LogoDots";
-import LogoMark from "@/components/brand/LogoMark";
+import LogoMark from "@/components/brand/LogoMarkLazy";
 import { LIVE_MARK } from "@/lib/flags/liveMark";
-import { FADE_MS, LOGO_DOTS_TRANSITION, MIN_SHOW_MS, dotsClock } from "@/lib/flags/logoDots";
+import { FADE_MS, LOGO_DOTS_TRANSITION, MIN_SHOW_MS, dotsClock, markPhaseMs } from "@/lib/flags/logoDots";
 
 // Playwright (prerender, e2e) sets navigator.webdriver: the overlay must never exist in a snapshot.
 const automated = () => typeof navigator !== "undefined" && navigator.webdriver === true;
@@ -61,7 +61,7 @@ export default function RouteTransitionDots() {
     >
       {LIVE_MARK ? (
         <div className="seeld-dots-mark">
-          <LogoMark state="thinking" instant size="clamp(120px, 26vw, 176px)" />
+          <LogoMark state="thinking" instant phaseMs={markPhaseMs} size="clamp(120px, 26vw, 176px)" />
         </div>
       ) : (
         <LogoDots />

@@ -109,6 +109,30 @@ describe("lead card in the chat", () => {
     expect(screen.getByText(CARD_TITLE)).toBeInTheDocument();
   });
 
+  it("keeps the thanks, and no empty form, when the view flips from welcome to messages", async () => {
+    renderBot();
+    fireEvent.click(screen.getByRole("button", { name: "להשאיר פרטים לחזרה" }));
+    fireEvent.change(screen.getByLabelText("שם"), { target: { value: "דנה" } });
+    fireEvent.change(screen.getByLabelText("טלפון"), { target: { value: "0501234567" } });
+    fireEvent.click(screen.getByRole("checkbox"));
+    await act(async () => { fireEvent.click(screen.getByRole("button", { name: "השאירו פרטים" })); });
+    await screen.findByText("קיבלנו. הצוות יחזור אליכם בשעות הפעילות.");
+    await say("שאלה כללית");
+    expect(screen.queryByText(CARD_TITLE)).toBeNull();
+    expect(screen.getByText("קיבלנו. הצוות יחזור אליכם בשעות הפעילות.")).toBeInTheDocument();
+  });
+
+  it("keeps a half-typed form when a suggestion chip flips the view", async () => {
+    renderBot();
+    fireEvent.click(screen.getByRole("button", { name: "להשאיר פרטים לחזרה" }));
+    fireEvent.change(screen.getByLabelText("שם"), { target: { value: "דנה" } });
+    fireEvent.change(screen.getByLabelText("טלפון"), { target: { value: "0501234567" } });
+    fireEvent.click(screen.getByText("איזה ביטוח מתאים לי?"));
+    await waitFor(() => expect(screen.queryByRole("button", { name: "שליחת הודעה" })).not.toBeNull());
+    expect((screen.getByLabelText("שם") as HTMLInputElement).value).toBe("דנה");
+    expect((screen.getByLabelText("טלפון") as HTMLInputElement).value).toBe("0501234567");
+  });
+
   it("validates name, Israeli phone and consent before sending", async () => {
     renderBot();
     fireEvent.click(screen.getByRole("button", { name: "להשאיר פרטים לחזרה" }));

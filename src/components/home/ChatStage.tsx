@@ -1,6 +1,7 @@
 import { SdBand } from "@/components/sd/primitives";
-import LogoMark from "@/components/brand/LogoMark";
+import LogoMark from "@/components/brand/LogoMarkLazy";
 import { CHAT_NUDGE } from "@/lib/flags/chatNudge";
+import { IS_V2 } from "@/integrations/supabase/config";
 import { pageSuggestions } from "@/lib/chatSuggestions";
 
 // Home page stage for the chat, right after the hero. Pure markup (prerender-safe): the only behaviour is
@@ -10,7 +11,8 @@ const open = (prefill?: string) =>
   window.dispatchEvent(new CustomEvent("seeld:open-chat", { detail: prefill ? { prefill } : {} }));
 
 const ChatStage = () => {
-  if (!CHAT_NUDGE) return null;
+  // v2 has no text chat yet (the launcher opens the contact panel), so the stage would be a dead end there.
+  if (!CHAT_NUDGE || IS_V2) return null;
   const chips = pageSuggestions["/"].slice(0, 3);
   return (
     <SdBand tone="cream" id="ask">

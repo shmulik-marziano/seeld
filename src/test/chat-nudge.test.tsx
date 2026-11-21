@@ -72,6 +72,17 @@ describe("chat nudge", () => {
     Object.defineProperty(window, "scrollY", { value: 0, configurable: true });
   });
 
+  it("a short page does not trigger the scroll rule, not even at scrollY 0", async () => {
+    Object.defineProperty(document.documentElement, "scrollHeight", { value: 800, configurable: true });
+    Object.defineProperty(window, "innerHeight", { value: 800, configurable: true });
+    Object.defineProperty(window, "scrollY", { value: 0, configurable: true });
+    renderNudge("/");
+    await act(async () => { window.dispatchEvent(new Event("scroll")); });
+    expect(screen.queryByRole("status")).toBeNull();
+    await wait(36_000);
+    expect(screen.getByRole("status")).toBeInTheDocument();
+  });
+
   it("at most once per browser session", async () => {
     const first = renderNudge("/");
     await wait(36_000);

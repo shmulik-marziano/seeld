@@ -151,14 +151,14 @@
   --lg-enter: 0ms;
 }
 .seeld-lm.seeld-lm--instant.is-thinking .seeld-lm-spin {
-  animation-delay: calc(var(--lg-step) * -2 + var(--i) * var(--lg-stagger));
+  animation-delay: calc(var(--lg-step) * -2 + var(--i) * var(--lg-stagger) - var(--lg-phase, 0ms));
 }
 .seeld-lm.seeld-lm--instant.is-thinking .seeld-lm-hop,
 .seeld-lm.seeld-lm--instant.is-thinking .seeld-lm-dot {
-  animation-delay: calc(var(--lg-step) * -1 + var(--i) * var(--lg-stagger));
+  animation-delay: calc(var(--lg-step) * -1 + var(--i) * var(--lg-stagger) - var(--lg-phase, 0ms));
 }
 .seeld-lm.seeld-lm--instant.is-thinking .seeld-lm-leaf {
-  animation-delay: calc(var(--lg-step) * -1);
+  animation-delay: calc(var(--lg-step) * -1 - var(--lg-phase, 0ms));
 }
 
 /* reduced motion: the block above already disables every .seeld-lm-anim animation

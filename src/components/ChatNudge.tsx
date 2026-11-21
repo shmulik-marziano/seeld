@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import LogoMark from "@/components/brand/LogoMark";
+import LogoMark from "@/components/brand/LogoMarkLazy";
 import { CHAT_NUDGE } from "@/lib/flags/chatNudge";
+import { LIVE_MARK } from "@/lib/flags/liveMark";
+import { IS_V2 } from "@/integrations/supabase/config";
 import { suggestionsFor } from "@/lib/chatSuggestions";
 import "@/components/sd/chrome.css";
 
@@ -9,6 +11,9 @@ const SHOWN_KEY = "seeld_nudge_shown";
 const DISMISSED_KEY = "seeld_nudge_dismissed_at";
 const WAIT_MS = 35_000;
 const SCROLL_RATIO = 0.6;
+// Real scrolling is required before the ratio counts: a short page (or ScrollToTop's scrollTo(0,0)) must not fire it.
+const MIN_SCROLL_Y = 200;
+const MIN_SCROLLABLE = 400;
 const QUIET_MS = 7 * 24 * 60 * 60 * 1000;
 const EXCLUDED = ["/app", "/q/", "/report", "/contact", "/privacy", "/terms", "/accessibility", "/auth", "/admin"];
 
@@ -42,7 +47,7 @@ const ChatNudge = () => {
 
   useEffect(() => {
     setVisible(false);
-    if (!CHAT_NUDGE || !allowed(pathname)) return;
+    if (!CHAT_NUDGE || IS_V2 || !allowed(pathname)) return;
     let done = false;
     const show = () => {
       if (done || !allowed(pathname)) return;
@@ -53,7 +58,7 @@ const ChatNudge = () => {
     const timer = window.setTimeout(show, WAIT_MS);
     const onScroll = () => {
       const doc = document.documentElement;
-      if (doc.scrollHeight <= 0) return;
+      if (window.scrollY < MIN_SCROLL_Y || doc.scrollHeight - window.innerHeight < MIN_SCROLLABLE) return;
       if ((window.scrollY + window.innerHeight) / doc.scrollHeight > SCROLL_RATIO) show();
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -70,7 +75,8 @@ const ChatNudge = () => {
     return () => window.removeEventListener("seeld:open-chat", hide);
   }, []);
 
-  if (!CHAT_NUDGE || !visible) return null;
+  // v2: the chat is the contact panel (no text field), so there is nothing to invite a question to.
+  if (!CHAT_NUDGE || IS_V2 || !visible) return null;
 
   const ask = () => {
     setVisible(false);
@@ -82,7 +88,7 @@ const ChatNudge = () => {
   };
 
   return (
-    <div className="sd-nudge" role="status" aria-live="polite" data-prerender-skip>
+    <div className={LIVE_MARK ? "sd-nudge sd-nudge--live" : "sd-nudge"} role="status" aria-live="polite" data-prerender-skip>
       <span className="sd-nudge-mark" aria-hidden="true"><LogoMark state="listening" size="28px" /></span>
       <p className="sd-nudge-q">{question}</p>
       <div className="sd-nudge-actions">

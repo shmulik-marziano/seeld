@@ -14,7 +14,7 @@ import LogoMark, { type LogoMarkState } from "@/components/brand/LogoMark";
 import { LIVE_MARK } from "@/lib/flags/liveMark";
 import { CHAT_NUDGE } from "@/lib/flags/chatNudge";
 import { suggestionsFor } from "@/lib/chatSuggestions";
-import ChatLeadCard from "@/components/ChatLeadCard";
+import ChatLeadCard, { ChatLeadThanks, type LeadDraft } from "@/components/ChatLeadCard";
 import "@/components/sd/chrome.css";
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -42,6 +42,7 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
   const [input, setInput] = useState(initialPrefill);
   const [leadState, setLeadState] = useState<"hidden" | "open" | "done">("hidden");
   const leadShown = useRef(false);
+  const leadDraft = useRef<LeadDraft>({ name: "", phone: "", consent: false });
   const touched = useRef(false);
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
@@ -251,14 +252,18 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
     setConversationId(null);
     setLeadState("hidden");
     leadShown.current = false;
+    leadDraft.current = { name: "", phone: "", consent: false };
     touched.current = false;
     localStorage.removeItem("seeld_chat_session");
     inputRef.current?.focus();
   };
 
-  const leadNode = CHAT_NUDGE && leadState !== "hidden" ? (
-    <ChatLeadCard pathname={location.pathname} onDismiss={() => setLeadState("hidden")} onSent={() => setLeadState("done")} />
-  ) : null;
+  // The card remounts when the panel flips between welcome and messages, so "sent" and the typed draft live here.
+  const leadNode = !CHAT_NUDGE || leadState === "hidden" ? null : leadState === "done" ? (
+    <ChatLeadThanks />
+  ) : (
+    <ChatLeadCard pathname={location.pathname} draft={leadDraft.current} onDismiss={() => setLeadState("hidden")} onSent={() => setLeadState("done")} />
+  );
   const leadLink = CHAT_NUDGE && leadState === "hidden" ? (
     <button
       type="button"
@@ -281,7 +286,6 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
           ? "listening"
           : "idle";
     const statusLabel = { idle: "זמין", listening: "מקשיב", thinking: "חושב", speaking: "עונה" }[markState];
-    const lastIdx = messages.length - 1;
 
     return (
       <>
@@ -318,10 +322,12 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
                     <span aria-hidden="true" />
                   )}
                   <div className="flex flex-col items-center gap-1">
-                    <LogoMark state={markState} breathe size="44px" />
+                    {/* One live mark per view: while the welcome hero is up it carries the animation, the header stays still. */}
+                    <LogoMark state={messages.length === 0 ? "idle" : markState} breathe={messages.length > 0} size="44px" />
+                    <span className="sr-only" role="status" aria-live="polite">{markState === "thinking" || markState === "speaking" ? statusLabel : ""}</span>
                     <span
                       data-chat-status={markState}
-                      aria-live="polite"
+                      aria-hidden="true"
                       className="text-[10.5px] tracking-[0.14em]"
                       style={{ fontFamily: MONO, color: MUTED }}
                     >
@@ -395,7 +401,7 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
                           <div key={i} className="flex items-start gap-2.5">
                             <span className="mt-0.5 shrink-0">
                               <LogoMark
-                                state={msg.content === "" ? "thinking" : i === lastIdx && isLoading ? "speaking" : "idle"}
+                                state="idle"
                                 size="22px"
                               />
                             </span>

@@ -204,10 +204,12 @@ describe("RouteTransitionDots overlay", () => {
     expect(overlay()).toBeNull();
   });
 
-  it("switch on (default): the overlay holds the live mark, thinking and instant, no text, no dots", () => {
+  it("switch on (default): the overlay holds the live mark, thinking and instant, no text, no dots", async () => {
+    await import("@/components/brand/LogoMark"); // warm the lazy chunk while timers are real
     vi.useFakeTimers();
     harness();
     click();
+    for (let i = 0; i < 5; i++) await act(async () => { await Promise.resolve(); });
     const o = overlay()!;
     expect(o.querySelectorAll("svg.seeld-lm")).toHaveLength(1);
     expect(o.querySelectorAll("svg")).toHaveLength(1);

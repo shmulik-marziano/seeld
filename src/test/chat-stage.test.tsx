@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import ChatStage from "@/components/home/ChatStage";
 import { pageSuggestions } from "@/lib/chatSuggestions";
@@ -16,11 +16,11 @@ const spy = () => {
 afterEach(() => vi.resetModules());
 
 describe("home chat stage", () => {
-  it("renders the headline, the lead line and the mark", () => {
+  it("renders the headline, the lead line and the mark", async () => {
     const { container } = renderStage();
     expect(screen.getByRole("heading", { name: "שאלו את היועץ הדיגיטלי" })).toBeInTheDocument();
     expect(screen.getByText("שאלה על ביטוח, פנסיה או חיסכון? כתבו אותה וקבלו הסבר כללי, ואם צריך נחבר אתכם לצוות.")).toBeInTheDocument();
-    expect(container.querySelector("svg.seeld-lm")).not.toBeNull();
+    await waitFor(() => expect(container.querySelector("svg.seeld-lm")).not.toBeNull());
     expect(container.querySelector("#ask")).not.toBeNull();
   });
 
@@ -46,9 +46,16 @@ describe("home chat stage", () => {
   it("copy rules: no forbidden words, no person names, no slash-t forms", () => {
     const { container } = renderStage();
     const text = container.textContent ?? "";
-    for (const w of ["תאגיד", "ללא עלות", "בחינם", "ביותר", "מובטח", "מבטיח", "/ת", "שמוליק", "מרזיאנו", "רישיון"]) {
-      expect(text).not.toContain(w);
-    }
+    const FORBIDDEN = [/תאגיד/u, /ללא עלות|בחינם/u, /מובטח|מבטיח/u, /ביותר/u, /[֐-׿]\/[֐-׿]/u, /שמוליק|מרזיאנו/u, /רישיון/u, /\p{Extended_Pictographic}/u];
+    for (const re of FORBIDDEN) expect(text).not.toMatch(re);
+  });
+
+  it("renders nothing on the v2 build (the chat there has no text field)", async () => {
+    vi.doMock("@/integrations/supabase/config", async (orig) => ({ ...(await orig<typeof import("@/integrations/supabase/config")>()), IS_V2: true }));
+    const { default: V2 } = await import("@/components/home/ChatStage");
+    const { container } = render(<MemoryRouter><V2 /></MemoryRouter>);
+    expect(container.innerHTML).toBe("");
+    vi.doUnmock("@/integrations/supabase/config");
   });
 
   it("renders nothing when the switch is off", async () => {

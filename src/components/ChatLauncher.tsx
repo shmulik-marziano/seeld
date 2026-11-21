@@ -1,5 +1,5 @@
 import { useState, type ButtonHTMLAttributes } from "react";
-import LogoMark from "@/components/brand/LogoMark";
+import LogoMark from "@/components/brand/LogoMarkLazy";
 import "@/components/sd/chrome.css";
 
 /**

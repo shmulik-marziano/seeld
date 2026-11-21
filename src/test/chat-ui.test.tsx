@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import AIChatBot from "@/components/AIChatBot";
 import ChatLauncher from "@/components/ChatLauncher";
@@ -47,7 +47,7 @@ describe("chat launcher", () => {
     const btn = screen.getByRole("button", { name: "פתחו שיחה עם היועץ הדיגיטלי של SEELD" });
     expect(btn).toHaveClass("sd-chrome-fab", "sd-chrome-fab-chat", "sd-chrome-fab-chat--live");
     expect(btn).toHaveAttribute("data-prerender-skip");
-    expect(container.querySelector("svg.seeld-lm")).not.toBeNull();
+    await waitFor(() => expect(container.querySelector("svg.seeld-lm")).not.toBeNull());
     expect(btn.textContent).toBe("היועץ הדיגיטלי");
   });
 
@@ -130,13 +130,21 @@ describe("chat ui copy rules", () => {
   const from = bot.indexOf("  if (LIVE_MARK) {");
   const liveBlock = bot.slice(from, bot.indexOf("{/* ── Launcher", from));
   const css = read("src", "components", "sd", "chrome.css");
+  const leadLinkAt = bot.indexOf("const leadLink =");
+  const leadLink = bot.slice(leadLinkAt, bot.indexOf(": null;", leadLinkAt));
   const RAW = [
     read("src", "components", "ChatLauncher.tsx"),
+    read("src", "components", "ChatLeadCard.tsx"),
+    read("src", "components", "ChatNudge.tsx"),
+    read("src", "lib", "chatSuggestions.ts"),
+    read("src", "components", "ChatUnavailable.tsx"),
+    leadLink,
     liveBlock,
     css.slice(css.indexOf("Live-mark chat launcher")),
   ].join("\n");
 
   it("the live block was found", () => expect(liveBlock.length).toBeGreaterThan(1000));
+  it("the lead link was found", () => expect(leadLink).toContain("להשאיר פרטים לחזרה"));
   for (const [name, re] of FORBIDDEN) {
     it(`no ${name}`, () => expect(RAW).not.toMatch(re));
   }

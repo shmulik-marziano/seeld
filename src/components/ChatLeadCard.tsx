@@ -15,29 +15,36 @@ const PHONE_RE = /^0\d{1,2}-?\d{7}$/; // same rule as the Contact page
 const CHAT_TOPIC = "צ'אט";
 const CHAT_SOURCE_NOTE = "מקור: צ'אט";
 
+export interface LeadDraft { name: string; phone: string; consent: boolean }
+
 type Errors = Partial<Record<"name" | "phone" | "consent", string>>;
 
 const inputCls =
   "min-h-[44px] w-full rounded-lg bg-white px-3 py-2 text-[14.5px] text-[#203957] shadow-[0_0_0_1px_#D9DEE4] focus:shadow-[0_0_0_1px_#203957] focus:outline-none";
 
-const ChatLeadCard = ({ pathname, onDismiss, onSent }: { pathname: string; onDismiss: () => void; onSent?: () => void }) => {
+// `draft` is an optional mutable holder owned by the parent: the card is remounted when the chat flips between its
+// welcome and message views, so what was typed is written there and read back on mount.
+export const ChatLeadThanks = () => (
+  <div role="status" className="rounded-xl bg-[#EEF2EC] px-4 py-3 text-[14.5px] leading-relaxed text-[#203957]" data-chat-lead="sent">
+    קיבלנו. הצוות יחזור אליכם בשעות הפעילות.
+  </div>
+);
+
+const ChatLeadCard = ({ pathname, onDismiss, onSent, draft }: { pathname: string; onDismiss: () => void; onSent?: () => void; draft?: LeadDraft }) => {
   const uid = useId().replace(/:/g, "");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [consent, setConsent] = useState(false);
+  const [name, setNameState] = useState(draft?.name ?? "");
+  const [phone, setPhoneState] = useState(draft?.phone ?? "");
+  const [consent, setConsentState] = useState(draft?.consent ?? false);
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
   const intake = useLeadIntake();
+  const setName = (v: string) => { if (draft) draft.name = v; setNameState(v); };
+  const setPhone = (v: string) => { if (draft) draft.phone = v; setPhoneState(v); };
+  const setConsent = (v: boolean) => { if (draft) draft.consent = v; setConsentState(v); };
 
-  if (sent) {
-    return (
-      <div role="status" className="rounded-xl bg-[#EEF2EC] px-4 py-3 text-[14.5px] leading-relaxed text-[#203957]" data-chat-lead="sent">
-        קיבלנו. הצוות יחזור אליכם בשעות הפעילות.
-      </div>
-    );
-  }
+  if (sent) return <ChatLeadThanks />;
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
