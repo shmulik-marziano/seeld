@@ -47,3 +47,6 @@ playwright-report/
 # is a public repo — keep the export out until those secrets are rotated.
 supabase/functions-export/
 dist-*
+
+# Deno lockfile written by local Docker test runs (CI runs deno with --no-lock semantics via fresh containers)
+deno.lock
