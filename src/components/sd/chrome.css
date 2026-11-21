@@ -225,3 +225,16 @@
 @media (min-width: 640px) {
   .sd-chrome-fab.sd-chrome-fab-chat--live { width: auto; height: 52px; padding-inline: 12px 20px; }
 }
+
+/* ───────── chat nudge: a quiet speech bubble above the launcher (ChatNudge.tsx) ───────── */
+.sd-nudge { position: fixed; z-index: 39; left: 12px; bottom: calc(12px + 44px + 10px + var(--float-lift, 0px) + env(safe-area-inset-bottom, 0px)); transform: translateY(calc(var(--sd-cookie-lift, 0px) * -1)); width: min(300px, calc(100vw - 24px)); display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; align-items: center; padding: 12px 14px; color: var(--c-ink); background: #fff; border: 1px solid #D9DEE4; border-radius: 16px; box-shadow: 0 14px 32px -14px rgba(32, 57, 87, .4); }
+.sd-nudge-q { margin: 0; font-size: 14.5px; line-height: 1.45; font-weight: 500; }
+.sd-nudge-actions { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.sd-nudge-ask { min-height: 44px; padding-inline: 18px; font-size: 14px; font-weight: 700; color: #fff; background: var(--c-ink); border-radius: 999px; }
+.sd-nudge-ask:hover { background: var(--c-ink-d); }
+.sd-nudge-x { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; font-size: 22px; line-height: 1; color: #55677C; border-radius: 999px; }
+.sd-nudge-x:hover { color: var(--c-ink); background: rgba(32, 57, 87, .06); }
+.sd-nudge button:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 2px; }
+@media (min-width: 640px) { .sd-nudge { left: 24px; bottom: calc(16px + 52px + 12px + var(--float-lift, 0px) + env(safe-area-inset-bottom, 0px)); } }
+@media (prefers-reduced-motion: no-preference) { .sd-nudge { animation: sd-nudge-in 220ms ease-out both; } }
+@keyframes sd-nudge-in { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: 0 0; } }

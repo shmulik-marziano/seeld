@@ -14,7 +14,8 @@ import "@/components/sd/chrome.css";
 
 const DEPTS: ContactDept[] = ["insurance", "general"];
 
-const ChatUnavailable = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
+// initialPrefill is accepted for parity with AIChatBot (the loader passes both); this panel has no text field.
+const ChatUnavailable = ({ defaultOpen = false }: { defaultOpen?: boolean; initialPrefill?: string }) => {
   const [open, setOpen] = useState(defaultOpen);
   const closeBtn = useRef<HTMLButtonElement>(null);
 

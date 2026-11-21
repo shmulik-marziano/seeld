@@ -1,6 +1,6 @@
 import { CONTACTS, contactFor, waHref } from "@/lib/contacts";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, Loader2, X, FileText, Calculator, Shield, PiggyBank, Phone, RotateCcw, MessageCircle } from "lucide-react";
+import { Send, Loader2, X, Phone, RotateCcw, MessageCircle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
@@ -12,6 +12,9 @@ import { LiveDot, LiveTag } from "@/components/brand/Live";
 import ChatLauncher from "@/components/ChatLauncher";
 import LogoMark, { type LogoMarkState } from "@/components/brand/LogoMark";
 import { LIVE_MARK } from "@/lib/flags/liveMark";
+import { CHAT_NUDGE } from "@/lib/flags/chatNudge";
+import { suggestionsFor } from "@/lib/chatSuggestions";
+import ChatLeadCard from "@/components/ChatLeadCard";
 import "@/components/sd/chrome.css";
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -30,41 +33,16 @@ const getSessionId = () => {
   return sessionId;
 };
 
-/* ── Suggestion chips based on page context ── */
-const pageSuggestions: Record<string, { icon: typeof Shield; text: string }[]> = {
-  "/": [
-    { icon: FileText, text: "מה כולל אפיון צרכים?" },
-    { icon: Calculator, text: "איך בודקים אם אני משלם יותר מדי?" },
-    { icon: Shield, text: "מה כולל ביטוח בריאות פרטי?" },
-    { icon: PiggyBank, text: "איך בוחרים קרן פנסיה?" },
-  ],
-  "/insurances": [
-    { icon: Shield, text: "איזה ביטוח מתאים לי?" },
-    { icon: FileText, text: "מה ההבדל בין ביטוח פרטי לקופת חולים?" },
-    { icon: Calculator, text: "ממה מורכב מחיר של ביטוח בריאות?" },
-  ],
-  "/savings": [
-    { icon: PiggyBank, text: "קרן השתלמות או גמל להשקעה?" },
-    { icon: Calculator, text: "כמה כדאי להפקיד לפנסיה?" },
-    { icon: FileText, text: "מה זה דמי ניהול ולמה זה חשוב?" },
-  ],
-  "/calculators": [
-    { icon: Calculator, text: "איזה מחשבון מתאים לשאלה שלי?" },
-    { icon: PiggyBank, text: "איך קוראים את תוצאות מחשבון הפנסיה?" },
-  ],
-};
+/** Visitor / assistant text that signals a wish to talk to a person or to get a quote. */
+const LEAD_INTENT = /פגישה|להתקשר|טלפון|נציג|לחזור אלי|שיחה עם|הצעת מחיר|כמה זה עולה/;
 
-const defaultSuggestions = [
-  { icon: FileText, text: "איך מתחיל תהליך הייעוץ?" },
-  { icon: Shield, text: "מה כולל הייעוץ ומה זה עולה?" },
-  { icon: Calculator, text: "מה בודקים באפיון צרכים?" },
-  { icon: PiggyBank, text: "רוצה לקבוע פגישה" },
-];
-
-const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
+const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?: boolean; initialPrefill?: string }) => {
   const [isExpanded, setIsExpanded] = useState(defaultOpen);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(initialPrefill);
+  const [leadState, setLeadState] = useState<"hidden" | "open" | "done">("hidden");
+  const leadShown = useRef(false);
+  const touched = useRef(false);
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [inputFocused, setInputFocused] = useState(false);
@@ -73,7 +51,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
   const location = useLocation();
   const reduced = useReducedMotion();
 
-  const suggestions = pageSuggestions[location.pathname] || defaultSuggestions;
+  const suggestions = suggestionsFor(location.pathname);
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -87,7 +65,12 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
 
   // Allow other parts of the site (e.g. homepage capability cards) to open the chat
   useEffect(() => {
-    const open = () => setIsExpanded(true);
+    const open = (e: Event) => {
+      setIsExpanded(true);
+      const prefill = (e as CustomEvent<{ prefill?: string } | undefined>).detail?.prefill;
+      if (typeof prefill === "string" && prefill) setInput(prefill);
+      inputRef.current?.focus();
+    };
     window.addEventListener("seeld:open-chat", open);
     return () => window.removeEventListener("seeld:open-chat", open);
   }, []);
@@ -101,6 +84,25 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [isExpanded]);
+
+  // Lead card: once per conversation, on intent in the latest exchange or after the third visitor message
+  useEffect(() => {
+    if (!CHAT_NUDGE || leadShown.current || !touched.current || isLoading) return;
+    const users = messages.filter((m) => m.role === "user");
+    const last = messages[messages.length - 1];
+    const intent =
+      (users.length > 0 && LEAD_INTENT.test(users[users.length - 1].content)) ||
+      (last?.role === "assistant" && last.content !== "" && LEAD_INTENT.test(last.content));
+    if (intent || users.length >= 3) {
+      leadShown.current = true;
+      setLeadState("open");
+    }
+  }, [messages, isLoading]);
+
+  const openLead = () => {
+    leadShown.current = true;
+    setLeadState("open");
+  };
 
   // Load previous conversation (best effort — the chat works without it)
   useEffect(() => {
@@ -153,6 +155,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
   };
 
   const streamChat = useCallback(async (userMessage: string) => {
+    touched.current = true;
     const userMsg: Message = { role: "user", content: userMessage };
     const outgoing = [...messages, userMsg];
     setMessages([...outgoing, { role: "assistant", content: "" }]);
@@ -246,9 +249,25 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
   const clearConversation = () => {
     setMessages([]);
     setConversationId(null);
+    setLeadState("hidden");
+    leadShown.current = false;
+    touched.current = false;
     localStorage.removeItem("seeld_chat_session");
     inputRef.current?.focus();
   };
+
+  const leadNode = CHAT_NUDGE && leadState !== "hidden" ? (
+    <ChatLeadCard pathname={location.pathname} onDismiss={() => setLeadState("hidden")} onSent={() => setLeadState("done")} />
+  ) : null;
+  const leadLink = CHAT_NUDGE && leadState === "hidden" ? (
+    <button
+      type="button"
+      onClick={openLead}
+      className="mx-auto block min-h-[44px] px-3 text-[13.5px] font-medium text-[#55677C] underline underline-offset-4 transition-colors duration-150 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+    >
+      להשאיר פרטים לחזרה
+    </button>
+  ) : null;
 
   if (LIVE_MARK) {
     const lastMsg = messages[messages.length - 1];
@@ -349,6 +368,9 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
                           ))}
                         </div>
                       </div>
+                      <div className="space-y-1">
+                      {leadNode}
+                      {leadLink}
                       <a
                         href={waHref(CONTACTS[contactFor(location.pathname)])}
                         target="_blank"
@@ -358,6 +380,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
                         <Phone className="h-3.5 w-3.5" strokeWidth={1.75} />
                         מעדיפים בן אדם? שיחה בוואטסאפ
                       </a>
+                      </div>
                     </div>
                   ) : (
                     <>
@@ -401,7 +424,8 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
                           ))}
                         </div>
                       )}
-                      <div ref={messagesEndRef} />
+                      {leadNode}
+                    <div ref={messagesEndRef} />
                     </>
                   )}
                 </div>
@@ -557,6 +581,9 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
                       </div>
                     </div>
                     {/* Human handoff */}
+                    <div className="space-y-1">
+                    {leadNode}
+                    {leadLink}
                     <a
                       href={waHref(CONTACTS[contactFor(location.pathname)])}
                       target="_blank"
@@ -567,6 +594,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
                       <Phone className="h-3.5 w-3.5" strokeWidth={1.75} />
                       מעדיפים בן אדם? שיחה בוואטסאפ
                     </a>
+                    </div>
                   </div>
                 ) : (
                   /* Chat messages */
@@ -623,6 +651,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
                         ))}
                       </div>
                     )}
+                    {leadNode}
                     <div ref={messagesEndRef} />
                   </>
                 )}

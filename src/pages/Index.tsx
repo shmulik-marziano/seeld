@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
+import ChatStage from "@/components/home/ChatStage";
 import CompanyLogos from "@/components/CompanyLogos";
 import { TIERS } from "@/data/productDirectory";
 import { BrandIcon } from "@/components/brand/BrandIcon";
@@ -250,6 +251,8 @@ const Index = () => {
 
       <main>
         <HeroSection />
+
+        <ChatStage />
 
         <SdSubnav sections={sections} />
 
