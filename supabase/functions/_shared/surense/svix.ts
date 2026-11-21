@@ -36,9 +36,11 @@ export async function verifyWebhook(
   nowSec: number = Math.floor(Date.now() / 1000),
 ): Promise<SvixResult> {
   if (!secret || !secret.startsWith("whsec_") || secret.length < 20) return { ok: false, reason: "secret" };
-  const id = headers.get("svix-id") ?? "";
-  const tsRaw = headers.get("svix-timestamp") ?? "";
-  const sig = headers.get("svix-signature") ?? "";
+  // Surense's Svix app delivers the Standard Webhooks header names (webhook-*); svix-* are the same values under
+  // the older names. Accept either family (verified live 2026-11-21: only webhook-* arrived).
+  const id = headers.get("svix-id") ?? headers.get("webhook-id") ?? "";
+  const tsRaw = headers.get("svix-timestamp") ?? headers.get("webhook-timestamp") ?? "";
+  const sig = headers.get("svix-signature") ?? headers.get("webhook-signature") ?? "";
   if (!ID.test(id) || !/^\d{1,12}$/.test(tsRaw) || !sig || sig.length > 4096) return { ok: false, reason: "headers" };
   const ts = Number(tsRaw);
   if (Math.abs(nowSec - ts) > SVIX_TOLERANCE_SEC) return { ok: false, reason: "timestamp" };

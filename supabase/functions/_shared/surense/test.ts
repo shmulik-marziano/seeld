@@ -262,6 +262,21 @@ Deno.test("svix: valid signature passes, including one of several (rotation)", a
   assert.equal((await verifyWebhook(svixHeaders("msg_test1", now, `v1,${other} v1,${sig}`), body, secret, now)).ok, true);
 });
 
+// Surense's Svix app sends the Standard Webhooks names (webhook-id / webhook-timestamp / webhook-signature), not svix-*
+// (seen live on the first test delivery, 2026-11-21). Both families verify identically; svix-* wins when both exist.
+Deno.test("svix: Standard Webhooks header names (webhook-*) verify like svix-*", async () => {
+  const secret = randomSecret();
+  const now = 1_763_600_000;
+  const body = '{"type":"customer.created","data":{"id":"x"}}';
+  const sig = await sign(secret, "msg_std1", now, body);
+  const std = new Headers({ "webhook-id": "msg_std1", "webhook-timestamp": String(now), "webhook-signature": `v1,${sig}`, "webhook-test": "true" });
+  assert.deepEqual(await verifyWebhook(std, body, secret, now), { ok: true, id: "msg_std1", ts: now });
+  const bad = new Headers({ "webhook-id": "msg_std1", "webhook-timestamp": String(now), "webhook-signature": `v1,${await sign(randomSecret(), "msg_std1", now, body)}` });
+  assert.deepEqual(await verifyWebhook(bad, body, secret, now), { ok: false, reason: "signature" });
+  const onlyId = new Headers({ "webhook-id": "msg_std1" });
+  assert.deepEqual(await verifyWebhook(onlyId, body, secret, now), { ok: false, reason: "headers" });
+});
+
 // replay of the same svix-id is deduped by the DB (unique svix_id): asserted in supabase/tests/11_surense_connector.test.sql
 Deno.test("svix: tampered body, id/signature mismatch, wrong secret and wrong version fail", async () => {
   const secret = randomSecret();
