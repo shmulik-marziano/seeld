@@ -1,6 +1,6 @@
 import { CONTACTS, contactFor, waHref } from "@/lib/contacts";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, Loader2, X, FileText, Calculator, Shield, PiggyBank, Phone, RotateCcw, MessageCircle } from "lucide-react";
+import { Send, Loader2, X, Phone, RotateCcw, MessageCircle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 import { siteSupabase as supabase } from "@/integrations/supabase/site-client";
@@ -9,6 +9,12 @@ import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { LINE, MONO, MUTED, NAVY, RING } from "@/lib/brand";
 import { LiveDot, LiveTag } from "@/components/brand/Live";
+import ChatLauncher from "@/components/ChatLauncher";
+import LogoMark, { type LogoMarkState } from "@/components/brand/LogoMark";
+import { LIVE_MARK } from "@/lib/flags/liveMark";
+import { CHAT_NUDGE } from "@/lib/flags/chatNudge";
+import { suggestionsFor } from "@/lib/chatSuggestions";
+import ChatLeadCard, { ChatLeadThanks, type LeadDraft } from "@/components/ChatLeadCard";
 import "@/components/sd/chrome.css";
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -27,49 +33,28 @@ const getSessionId = () => {
   return sessionId;
 };
 
-/* ── Suggestion chips based on page context ── */
-const pageSuggestions: Record<string, { icon: typeof Shield; text: string }[]> = {
-  "/": [
-    { icon: FileText, text: "מה כולל אפיון צרכים?" },
-    { icon: Calculator, text: "איך בודקים אם אני משלם יותר מדי?" },
-    { icon: Shield, text: "מה כולל ביטוח בריאות פרטי?" },
-    { icon: PiggyBank, text: "איך בוחרים קרן פנסיה?" },
-  ],
-  "/insurances": [
-    { icon: Shield, text: "איזה ביטוח מתאים לי?" },
-    { icon: FileText, text: "מה ההבדל בין ביטוח פרטי לקופת חולים?" },
-    { icon: Calculator, text: "ממה מורכב מחיר של ביטוח בריאות?" },
-  ],
-  "/savings": [
-    { icon: PiggyBank, text: "קרן השתלמות או גמל להשקעה?" },
-    { icon: Calculator, text: "כמה כדאי להפקיד לפנסיה?" },
-    { icon: FileText, text: "מה זה דמי ניהול ולמה זה חשוב?" },
-  ],
-  "/calculators": [
-    { icon: Calculator, text: "איזה מחשבון מתאים לשאלה שלי?" },
-    { icon: PiggyBank, text: "איך קוראים את תוצאות מחשבון הפנסיה?" },
-  ],
-};
+/** Visitor / assistant text that signals a wish to talk to a person or to get a quote. */
+const LEAD_INTENT = /פגישה|להתקשר|טלפון|נציג|לחזור אלי|שיחה עם|הצעת מחיר|כמה זה עולה/;
 
-const defaultSuggestions = [
-  { icon: FileText, text: "איך מתחיל תהליך הייעוץ?" },
-  { icon: Shield, text: "מה כולל הייעוץ ומה זה עולה?" },
-  { icon: Calculator, text: "מה בודקים באפיון צרכים?" },
-  { icon: PiggyBank, text: "רוצה לקבוע פגישה" },
-];
-
-const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
+const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?: boolean; initialPrefill?: string }) => {
   const [isExpanded, setIsExpanded] = useState(defaultOpen);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(initialPrefill);
+  const inputValueRef = useRef(input);
+  inputValueRef.current = input;
+  const [leadState, setLeadState] = useState<"hidden" | "open" | "done">("hidden");
+  const leadShown = useRef(false);
+  const leadDraft = useRef<LeadDraft>({ name: "", phone: "", consent: false });
+  const touched = useRef(false);
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [inputFocused, setInputFocused] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const reduced = useReducedMotion();
 
-  const suggestions = pageSuggestions[location.pathname] || defaultSuggestions;
+  const suggestions = suggestionsFor(location.pathname);
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -83,7 +68,12 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
 
   // Allow other parts of the site (e.g. homepage capability cards) to open the chat
   useEffect(() => {
-    const open = () => setIsExpanded(true);
+    const open = (e: Event) => {
+      setIsExpanded(true);
+      const prefill = (e as CustomEvent<{ prefill?: string } | undefined>).detail?.prefill;
+      if (typeof prefill === "string" && prefill && !inputValueRef.current.trim()) setInput(prefill);
+      inputRef.current?.focus();
+    };
     window.addEventListener("seeld:open-chat", open);
     return () => window.removeEventListener("seeld:open-chat", open);
   }, []);
@@ -97,6 +87,25 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [isExpanded]);
+
+  // Lead card: once per conversation, on intent in the latest exchange or after the third visitor message
+  useEffect(() => {
+    if (!CHAT_NUDGE || leadShown.current || !touched.current || isLoading) return;
+    const users = messages.filter((m) => m.role === "user");
+    const last = messages[messages.length - 1];
+    const intent =
+      (users.length > 0 && LEAD_INTENT.test(users[users.length - 1].content)) ||
+      (last?.role === "assistant" && last.content !== "" && LEAD_INTENT.test(last.content));
+    if (intent || users.length >= 3) {
+      leadShown.current = true;
+      setLeadState("open");
+    }
+  }, [messages, isLoading]);
+
+  const openLead = () => {
+    leadShown.current = true;
+    setLeadState("open");
+  };
 
   // Load previous conversation (best effort — the chat works without it)
   useEffect(() => {
@@ -149,6 +158,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
   };
 
   const streamChat = useCallback(async (userMessage: string) => {
+    touched.current = true;
     const userMsg: Message = { role: "user", content: userMessage };
     const outgoing = [...messages, userMsg];
     setMessages([...outgoing, { role: "assistant", content: "" }]);
@@ -242,9 +252,235 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
   const clearConversation = () => {
     setMessages([]);
     setConversationId(null);
+    setLeadState("hidden");
+    leadShown.current = false;
+    leadDraft.current = { name: "", phone: "", consent: false };
+    touched.current = false;
     localStorage.removeItem("seeld_chat_session");
     inputRef.current?.focus();
   };
+
+  // The card remounts when the panel flips between welcome and messages, so "sent" and the typed draft live here.
+  const leadNode = !CHAT_NUDGE || leadState === "hidden" ? null : leadState === "done" ? (
+    <ChatLeadThanks />
+  ) : (
+    <ChatLeadCard pathname={location.pathname} draft={leadDraft.current} onDismiss={() => setLeadState("hidden")} onSent={() => setLeadState("done")} />
+  );
+  const leadLink = CHAT_NUDGE && leadState === "hidden" ? (
+    <button
+      type="button"
+      onClick={openLead}
+      className="mx-auto block min-h-[44px] px-3 text-[13.5px] font-medium text-[#55677C] underline underline-offset-4 transition-colors duration-150 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+    >
+      להשאיר פרטים לחזרה
+    </button>
+  ) : null;
+
+  if (LIVE_MARK) {
+    const lastMsg = messages[messages.length - 1];
+    const waiting = isLoading && lastMsg?.role === "assistant" && lastMsg.content === "";
+    const streaming = isLoading && !waiting && lastMsg?.role === "assistant";
+    const markState: LogoMarkState = waiting
+      ? "thinking"
+      : streaming
+        ? "speaking"
+        : inputFocused || input.length > 0
+          ? "listening"
+          : "idle";
+    const statusLabel = { idle: "זמין", listening: "מקשיב", thinking: "חושב", speaking: "עונה" }[markState];
+
+    return (
+      <>
+        {!isExpanded && <ChatLauncher onClick={() => setIsExpanded(true)} />}
+
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: reduced ? 0 : 0.2, ease: "easeOut" }}
+              className="fixed z-[60] flex flex-col inset-x-2 top-16 sm:inset-auto sm:bottom-4 sm:left-6 sm:h-[min(700px,calc(100dvh-3rem))] sm:w-[440px] lg:w-[500px]"
+              style={{ bottom: "calc(8px + env(safe-area-inset-bottom, 0px))" }}
+              role="dialog"
+              aria-label="שיחה עם היועץ הדיגיטלי של SEELD"
+            >
+              <div
+                className="flex h-full flex-col overflow-hidden"
+                style={{ backgroundColor: PANEL_BG, borderRadius: 16, border: `1px solid ${LINE}`, boxShadow: "0 24px 60px -18px rgba(32, 57, 87,.35)" }}
+              >
+                {/* Header: three symmetric columns, no band */}
+                <div className="grid shrink-0 grid-cols-[44px_1fr_44px] items-center px-4 pb-1 pt-3">
+                  {messages.length > 0 ? (
+                    <button
+                      onClick={clearConversation}
+                      aria-label="שיחה חדשה"
+                      title="שיחה חדשה"
+                      className="flex h-11 w-11 items-center justify-center rounded-full text-[#55677C] transition-colors duration-150 hover:bg-[#203957]/5 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#203957]"
+                    >
+                      <RotateCcw className="h-4 w-4" />
+                    </button>
+                  ) : (
+                    <span aria-hidden="true" />
+                  )}
+                  <div className="flex flex-col items-center gap-1">
+                    {/* One live mark per view: while the welcome hero is up it carries the animation, the header stays still. */}
+                    <LogoMark state={messages.length === 0 ? "idle" : markState} breathe={messages.length > 0} size="44px" />
+                    <span className="sr-only" role="status" aria-live="polite">{markState === "thinking" || markState === "speaking" ? statusLabel : ""}</span>
+                    <span
+                      data-chat-status={markState}
+                      aria-hidden="true"
+                      className="text-[10.5px] tracking-[0.14em]"
+                      style={{ fontFamily: MONO, color: MUTED }}
+                    >
+                      {statusLabel}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setIsExpanded(false)}
+                    aria-label="סגירת הצ'אט"
+                    className="flex h-11 w-11 items-center justify-center rounded-full text-[#55677C] transition-colors duration-150 hover:bg-[#203957]/5 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#203957]"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+
+                {/* Messages */}
+                <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+                  {messages.length === 0 ? (
+                    <div className="flex h-full flex-col justify-between gap-6 py-2">
+                      <div className="space-y-5 text-center">
+                        <div className="flex flex-col items-center">
+                          <LogoMark state={markState} breathe size="72px" />
+                          <h4
+                            className="mt-3 text-[22px] leading-snug text-[#203957]"
+                            style={{ fontFamily: "'Rubik', Arial, sans-serif", fontWeight: 700 }}
+                          >
+                            שלום, כאן היועץ הדיגיטלי.
+                          </h4>
+                          <p className="mt-2 max-w-sm text-[15px] leading-relaxed text-[#2D435D]">
+                            ביטוח, פנסיה, חיסכון או מס: שאלו כל דבר. עונה מיד, ומחבר אתכם ליועץ אנושי כשצריך.
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                          {suggestions.map((s, i) => (
+                            <button
+                              key={i}
+                              onClick={() => streamChat(s.text)}
+                              className="flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-white px-3 py-3 text-center text-[14px] font-medium text-[#203957] transition-colors duration-150 hover:bg-[#EEF2EC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                              style={{ boxShadow: RING }}
+                            >
+                              <s.icon className="h-4 w-4 shrink-0 text-[#55677C]" strokeWidth={1.75} />
+                              {s.text}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                      {leadNode}
+                      {leadLink}
+                      <a
+                        href={waHref(CONTACTS[contactFor(location.pathname)])}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 py-2 text-[14px] font-medium text-[#55677C] underline-offset-4 transition-colors duration-150 hover:text-[#203957] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                      >
+                        <Phone className="h-3.5 w-3.5" strokeWidth={1.75} />
+                        מעדיפים בן אדם? שיחה בוואטסאפ
+                      </a>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {messages.map((msg, i) =>
+                        msg.role === "user" ? (
+                          <div key={i} className="flex justify-start">
+                            <div className="max-w-[88%] rounded-[14px] bg-[#203957] px-4 py-3 text-[14.5px] leading-relaxed text-white">
+                              {msg.content}
+                            </div>
+                          </div>
+                        ) : (
+                          <div key={i} className="flex items-start gap-2.5">
+                            <span className="mt-0.5 shrink-0">
+                              <LogoMark
+                                state="idle"
+                                size="22px"
+                              />
+                            </span>
+                            <div className="min-w-0 flex-1 text-[14.5px] leading-relaxed text-[#203957]">
+                              {msg.content !== "" && (
+                                <div className="prose prose-sm max-w-none [&_p]:mb-1.5 [&_p:last-child]:mb-0 [&_ul]:mt-1 [&_li]:text-[14.5px] [&_p]:text-[14.5px] [&_a]:text-[#203957] [&_a]:underline">
+                                  <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ),
+                      )}
+                      {!isLoading && messages.length < 6 && (
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {suggestions.slice(0, 2).map((s, i) => (
+                            <button
+                              key={i}
+                              onClick={() => streamChat(s.text)}
+                              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[14px] font-medium text-[#55677C] transition-colors duration-150 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                              style={{ boxShadow: HAIRLINE }}
+                            >
+                              <s.icon className="h-3 w-3" strokeWidth={1.75} />
+                              {s.text}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                      {leadNode}
+                    <div ref={messagesEndRef} />
+                    </>
+                  )}
+                </div>
+
+                {/* Input */}
+                <form onSubmit={handleSubmit} className="shrink-0 border-t border-[#D9DEE4] px-4 py-3">
+                  <div className="flex items-end gap-2">
+                    <textarea
+                      ref={inputRef}
+                      rows={1}
+                      value={input}
+                      onChange={(e) => {
+                        setInput(e.target.value);
+                        e.target.style.height = "auto";
+                        e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`;
+                      }}
+                      onFocus={() => setInputFocused(true)}
+                      onBlur={() => setInputFocused(false)}
+                      onKeyDown={handleInputKeyDown}
+                      placeholder="כתבו שאלה, Enter לשליחה"
+                      aria-label="הודעה ליועץ הדיגיטלי"
+                      className="min-h-[48px] max-h-[120px] min-w-0 flex-1 resize-none rounded-[24px] bg-white px-5 py-3 text-right text-[14.5px] leading-snug text-[#203957] transition-shadow duration-150 placeholder:text-[#55677C] focus:outline-none shadow-[0_0_0_1px_#D9DEE4] focus:shadow-[0_0_0_1px_#203957]"
+                      disabled={isLoading}
+                    />
+                    <button
+                      type="submit"
+                      disabled={isLoading || !input.trim()}
+                      aria-label="שליחת הודעה"
+                      className={cn(
+                        "flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]",
+                        input.trim() ? "bg-[#203957] text-white hover:bg-[#162B45]" : "bg-[#203957]/10 text-[#55677C]",
+                      )}
+                    >
+                      {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                    </button>
+                  </div>
+                  <p className="mt-2 text-center text-[10.5px] tracking-[0.14em] text-[#55677C]" style={{ fontFamily: MONO }} dir="ltr">
+                    מידע כללי בלבד. לא ייעוץ אישי.
+                  </p>
+                </form>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </>
+    );
+  }
 
   return (
     <>
@@ -353,6 +589,9 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
                       </div>
                     </div>
                     {/* Human handoff */}
+                    <div className="space-y-1">
+                    {leadNode}
+                    {leadLink}
                     <a
                       href={waHref(CONTACTS[contactFor(location.pathname)])}
                       target="_blank"
@@ -363,6 +602,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
                       <Phone className="h-3.5 w-3.5" strokeWidth={1.75} />
                       מעדיפים בן אדם? שיחה בוואטסאפ
                     </a>
+                    </div>
                   </div>
                 ) : (
                   /* Chat messages */
@@ -419,6 +659,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
                         ))}
                       </div>
                     )}
+                    {leadNode}
                     <div ref={messagesEndRef} />
                   </>
                 )}

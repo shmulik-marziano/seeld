@@ -1,6 +1,9 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { MessageCircle } from "lucide-react";
 import { LiveDot } from "@/components/brand/Live";
+import ChatLauncher from "@/components/ChatLauncher";
+import ChatNudge from "@/components/ChatNudge";
+import { LIVE_MARK } from "@/lib/flags/liveMark";
 import { IS_V2 } from "@/integrations/supabase/config";
 import "@/components/sd/chrome.css";
 
@@ -22,9 +25,12 @@ const AIChatBot = lazy(loadChat);
 const AIChatBotLoader = () => {
   const [mounted, setMounted] = useState(false);
   const openOnMount = useRef(false);
+  const prefill = useRef("");
 
   useEffect(() => {
-    const openEarly = () => {
+    const openEarly = (e: Event) => {
+      const p = (e as CustomEvent<{ prefill?: string } | undefined>).detail?.prefill;
+      if (typeof p === "string") prefill.current = p;
       openOnMount.current = true;
       setMounted(true);
     };
@@ -35,12 +41,31 @@ const AIChatBotLoader = () => {
   if (mounted) {
     return (
       <Suspense fallback={null}>
-        <AIChatBot defaultOpen={openOnMount.current} />
+        <AIChatBot defaultOpen={openOnMount.current} initialPrefill={prefill.current} />
       </Suspense>
     );
   }
 
+  if (LIVE_MARK) {
+    return (
+      <>
+        <ChatNudge />
+        <ChatLauncher
+          onClick={() => {
+            openOnMount.current = true;
+            setMounted(true);
+          }}
+          onPointerEnter={() => { void loadChat(); }}
+          onFocus={() => { void loadChat(); }}
+          onTouchStart={() => { void loadChat(); }}
+        />
+      </>
+    );
+  }
+
   return (
+    <>
+    <ChatNudge />
     <button
       type="button"
       onClick={() => {
@@ -58,6 +83,7 @@ const AIChatBotLoader = () => {
       <span className="hidden sm:inline-flex"><LiveDot size={8} /></span>
       <span className="hidden sm:inline text-[14px] font-bold tracking-[0.02em]">שיחה עם היועץ הדיגיטלי</span>
     </button>
+    </>
   );
 };
 

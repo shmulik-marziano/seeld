@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { MessageCircle, X } from "lucide-react";
+import ChatLauncher from "@/components/ChatLauncher";
+import LogoMark from "@/components/brand/LogoMark";
+import { LIVE_MARK } from "@/lib/flags/liveMark";
 import { LiveDot } from "@/components/brand/Live";
 import { ContactIcons } from "@/components/sd/ContactIcons";
 import { CONTACTS, DEPT_LABEL, type ContactDept } from "@/lib/contacts";
@@ -11,7 +14,8 @@ import "@/components/sd/chrome.css";
 
 const DEPTS: ContactDept[] = ["insurance", "general"];
 
-const ChatUnavailable = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
+// initialPrefill is accepted for parity with AIChatBot (the loader passes both); this panel has no text field.
+const ChatUnavailable = ({ defaultOpen = false }: { defaultOpen?: boolean; initialPrefill?: string }) => {
   const [open, setOpen] = useState(defaultOpen);
   const closeBtn = useRef<HTMLButtonElement>(null);
 
@@ -28,6 +32,8 @@ const ChatUnavailable = ({ defaultOpen = false }: { defaultOpen?: boolean }) => 
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
+
+  if (!open && LIVE_MARK) return <ChatLauncher onClick={() => setOpen(true)} />;
 
   if (!open) {
     return (
@@ -58,6 +64,17 @@ const ChatUnavailable = ({ defaultOpen = false }: { defaultOpen?: boolean }) => 
         overflow: "hidden",
       }}
     >
+      {LIVE_MARK ? (
+        <div style={{ display: "grid", gridTemplateColumns: "44px 1fr 44px", alignItems: "center", padding: "12px 16px 0" }}>
+          <span aria-hidden="true" />
+          <div style={{ display: "flex", justifyContent: "center" }}><LogoMark state="idle" breathe size="44px" /></div>
+          <button ref={closeBtn} type="button" onClick={() => setOpen(false)} aria-label="סגירה"
+            style={{ width: 44, height: 44, display: "inline-flex", alignItems: "center", justifyContent: "center", borderRadius: 999, color: NAVY }}>
+            <X size={20} aria-hidden="true" />
+          </button>
+          <h2 id="sd-chat-soon-title" style={{ gridColumn: "1 / -1", textAlign: "center", fontSize: 16, fontWeight: 700, margin: "6px 0 0", color: NAVY }}>היועץ הדיגיטלי יחזור בקרוב</h2>
+        </div>
+      ) : (
       <div style={{ background: NAVY, color: "#fff", padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
         <h2 id="sd-chat-soon-title" style={{ fontSize: 16, fontWeight: 700, margin: 0 }}>היועץ הדיגיטלי יחזור בקרוב</h2>
         <button ref={closeBtn} type="button" onClick={() => setOpen(false)} aria-label="סגירה"
@@ -65,6 +82,7 @@ const ChatUnavailable = ({ defaultOpen = false }: { defaultOpen?: boolean }) => 
           <X size={20} aria-hidden="true" />
         </button>
       </div>
+      )}
       <div style={{ padding: "14px 16px 16px" }}>
         <p style={{ margin: "0 0 12px", fontSize: 15, lineHeight: 1.6 }}>בינתיים אנחנו כאן בשבילכם, בטלפון, בוואטסאפ או במייל:</p>
         <div style={{ display: "grid", gap: 12 }}>

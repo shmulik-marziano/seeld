@@ -1,18 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 import LogoDots from "@/components/brand/LogoDots";
-import { FADE_MS, LOGO_DOTS_TRANSITION, MIN_SHOW_MS, dotsClock } from "@/lib/flags/logoDots";
+import LogoMark from "@/components/brand/LogoMarkLazy";
+import { LIVE_MARK } from "@/lib/flags/liveMark";
+import { FADE_MS, LOGO_DOTS_TRANSITION, MIN_SHOW_MS, dotsClock, markPhaseMs } from "@/lib/flags/logoDots";
 
 // Playwright (prerender, e2e) sets navigator.webdriver: the overlay must never exist in a snapshot.
 const automated = () => typeof navigator !== "undefined" && navigator.webdriver === true;
 
 /**
- * RouteTransitionDots: a full-viewport cream canvas with the five logo dots, shown on client-side navigations only.
+ * RouteTransitionDots: a full-viewport cream canvas with the live mark (LogoMark, thinking), or the five logo dots
+ * when VITE_LIVE_MARK=off (src/lib/flags/liveMark.ts), shown on client-side navigations only.
  * Switch: src/lib/flags/logoDots.ts (VITE_LOGO_DOTS=off disables it).
  * - Never on the first location (first load is the prerendered page / snapshot), never on REPLACE navigations
  *   (<Navigate replace> redirects), never under automation, and marked data-prerender-skip as a last guard.
  * - Visible at least MIN_SHOW_MS, then fades FADE_MS and is removed from the DOM. If the lazy route is still
- *   loading, RouteFallback shows the same dots underneath, so the overlay only needs the minimum time.
+ *   loading, RouteFallback shows the same mark (or dots) underneath, so the overlay only needs the minimum time.
  * - Must render inside BrowserRouter but outside Suspense / PageTransition (never inside [data-seeld-route]).
  * - No focus moves, nothing focusable, no visible text.
  */
@@ -56,7 +59,13 @@ export default function RouteTransitionDots() {
       aria-live="polite"
       aria-label="העמוד נטען"
     >
-      <LogoDots />
+      {LIVE_MARK ? (
+        <div className="seeld-dots-mark">
+          <LogoMark state="thinking" instant phaseMs={markPhaseMs} size="clamp(120px, 26vw, 176px)" />
+        </div>
+      ) : (
+        <LogoDots />
+      )}
     </div>
   );
 }

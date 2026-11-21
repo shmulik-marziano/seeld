@@ -166,7 +166,7 @@ describe("public forms never send national id, bank, salary or health fields", (
   it("there are v2 callers for every public lead form", () => {
     const names = callers.map((f) => f.replace(/\\/g, "/").split("/src/")[1]).sort();
     expect(names).toEqual([
-      "components/InsuranceEnrollmentForm.tsx", "components/PensionAnalysisForm.tsx",
+      "components/ChatLeadCard.tsx", "components/InsuranceEnrollmentForm.tsx", "components/PensionAnalysisForm.tsx",
       "components/PortfolioReviewForm.tsx", "components/retire/RetireForm.tsx",
       "pages/BlogPost.tsx", "pages/Contact.tsx", "pages/Index.tsx", "pages/Report.tsx",
     ]);

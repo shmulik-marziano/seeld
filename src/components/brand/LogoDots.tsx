@@ -37,7 +37,7 @@ interface LogoDotsProps {
   animated?: boolean;
 }
 
-/** Inline SVG of the five logo dots only (decorative: the container carries the label). */
+/** Inline SVG of the five logo dots only (the VITE_LIVE_MARK=off transition; the live mark replaces it by default) (decorative: the container carries the label). */
 export default function LogoDots({ className, size = "clamp(200px, 70vw, 336px)", animated = true }: LogoDotsProps) {
   const motion = animated ? (reducedMotion() ? " seeld-dots--static" : " seeld-dots--anim") : "";
   const phase = animated ? phaseMs() : 0;
