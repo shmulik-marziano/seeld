@@ -1,4 +1,5 @@
 import "./logo-dots.css";
+import { DOTS_CYCLE_MS, dotsClock } from "@/lib/flags/logoDots";
 
 // The five dots of public/brand/logo-icon.svg (viewBox "90 30 440 625", r=35), left to right. Nothing else from the logo.
 const DOTS = [
@@ -17,22 +18,35 @@ const reducedMotion = () => {
   }
 };
 
+/** Negative delay (ms) that puts this instance's fill cycle in step with the overlay that started at dotsClock.t0. */
+const phaseMs = () => {
+  try {
+    if (!dotsClock.t0 || typeof performance === "undefined") return 0;
+    const elapsed = performance.now() - dotsClock.t0;
+    return elapsed > 0 ? -(elapsed % DOTS_CYCLE_MS) : 0;
+  } catch {
+    return 0;
+  }
+};
+
 interface LogoDotsProps {
   className?: string;
   /** CSS width; height follows the viewBox. Default: large, 200px..336px (70% of min(100vw, 480px)). */
   size?: string;
-  /** Staggered wave; under prefers-reduced-motion a soft opacity change only. */
+  /** Fill-up cycle (logo-dots.css); under prefers-reduced-motion a soft opacity change only. */
   animated?: boolean;
 }
 
 /** Inline SVG of the five logo dots only (decorative: the container carries the label). */
 export default function LogoDots({ className, size = "clamp(200px, 70vw, 336px)", animated = true }: LogoDotsProps) {
   const motion = animated ? (reducedMotion() ? " seeld-dots--static" : " seeld-dots--anim") : "";
+  const phase = animated ? phaseMs() : 0;
   return (
     <svg
       className={`seeld-dots${motion}${className ? ` ${className}` : ""}`}
-      style={{ width: size }}
-      // Cropped to the dots (x 111.4..484.6, y 55..212.5) with room for the 14-unit rise and 1.08 scale.
+      style={{ width: size, ...(phase ? { "--seeld-phase": `${phase}ms` } : {}) } as React.CSSProperties}
+      // Cropped to the dots (x 111.4..484.6, y 55..212.5); the 1.22 pop and the hollow stroke draw past the edge
+      // (overflow visible). The stroke uses the dot's own colour: the hollow state is the dot's outline.
       viewBox="104 34 392 186"
       aria-hidden="true"
       focusable="false"
@@ -45,6 +59,7 @@ export default function LogoDots({ className, size = "clamp(200px, 70vw, 336px)"
           cy={d.cy}
           r={35}
           fill={d.fill}
+          stroke={d.fill}
           style={{ "--i": i } as React.CSSProperties}
         />
       ))}
