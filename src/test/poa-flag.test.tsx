@@ -40,12 +40,32 @@ describe("POA switch (build time)", () => {
     vi.stubEnv("VITE_POA_FLOW", "on");
     expect(await load()).toBe(false);
   });
+  it("is off with VITE_POA_FLOW=on on the legacy backend and an empty intake URL", async () => {
+    vi.stubEnv("VITE_SEELD_BACKEND", "legacy");
+    vi.stubEnv("VITE_POA_FLOW", "on");
+    vi.stubEnv("VITE_POA_INTAKE_URL", "  ");
+    expect(await load()).toBe(false);
+  });
+  it("fast path: on with VITE_POA_FLOW=on on the legacy backend when VITE_POA_INTAKE_URL is set", async () => {
+    vi.stubEnv("VITE_SEELD_BACKEND", "legacy");
+    vi.stubEnv("VITE_POA_FLOW", "on");
+    vi.stubEnv("VITE_POA_INTAKE_URL", "https://intake.example.test/functions/v1/poa-intake/");
+    expect(await load()).toBe(true);
+    const real = await vi.importActual<typeof import("@/lib/poa/config")>("@/lib/poa/config");
+    expect(real.POA_INTAKE_URL).toBe("https://intake.example.test/functions/v1/poa-intake");
+  });
+  it("is off without VITE_POA_FLOW even when the intake URL is set", async () => {
+    vi.stubEnv("VITE_SEELD_BACKEND", "legacy");
+    vi.stubEnv("VITE_POA_FLOW", undefined as unknown as string);
+    vi.stubEnv("VITE_POA_INTAKE_URL", "https://intake.example.test/x");
+    expect(await load()).toBe(false);
+  });
   it("is off for any value but \"on\"", async () => {
     vi.stubEnv("VITE_SEELD_BACKEND", "v2");
     vi.stubEnv("VITE_POA_FLOW", "true");
     expect(await load()).toBe(false);
   });
-  it("is on only with v2 and VITE_POA_FLOW=on", async () => {
+  it("is on in v2 with VITE_POA_FLOW=on (the intake URL is optional there)", async () => {
     vi.stubEnv("VITE_SEELD_BACKEND", "v2");
     vi.stubEnv("VITE_POA_FLOW", "on");
     expect(await load()).toBe(true);

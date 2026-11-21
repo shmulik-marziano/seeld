@@ -2,13 +2,15 @@
 // the host-locked client -> pure mapping (mirror.ts) -> api.surense_* RPC (which encrypts). Return values hold ids,
 // counts and codes only; nothing personal ever leaves these functions except the proxies invite url, which the staff
 // caller asked for. Flags are enforced in SQL (every RPC calls private.kill_switch) and by api.surense_gate up front.
-import type { Rpc } from "../db.ts";
+import { type Rpc, RpcError } from "../db.ts";
 import type { Logger } from "../logger.ts";
 import { isUuid, type SurenseApi } from "./api.ts";
 import { assertAllowedUrl, type SurenseClient } from "./client.ts";
 import { InputError, SurenseError } from "./errors.ts";
 import { mapCustomer, mapDocument, mapProduct } from "./mirror.ts";
 import { extOf, objectPath, sha256Hex, type Storage } from "./storage.ts";
+import type { PoaKind } from "../poa/engine/types.ts";
+import { poaStoragePath } from "../poa/storage.ts";
 import type { E9100SubmitRequest, ProxiesInviteRequest, SearchFilter, SurenseDocument } from "./types.ts";
 
 export interface SyncDeps {
@@ -132,7 +134,7 @@ export async function pullCustomer(d: SyncDeps, customerId: string): Promise<{ u
  *  need a check against GET /documents/fields. */
 export async function pullDocuments(
   d: SyncDeps,
-  o: { customerId?: string; since?: string; startRow?: number; deadline: number },
+  o: { customerId?: string; since?: string; startRow?: number; deadline: number; onRows?: (rows: SurenseDocument[]) => void },
 ): Promise<DocPullStats> {
   const now = d.now ?? Date.now;
   const filters: SearchFilter[] = [];
@@ -149,6 +151,7 @@ export async function pullDocuments(
     }
     const page = await d.api.documents.search({ filters, startRow: start, endRow: start + PAGE_SIZE });
     stats.pages++;
+    if (o.onRows && page?.results?.length) o.onRows(page.results);
     const { rows, bad } = mapAll<SurenseDocument, ReturnType<typeof mapDocument>>(page?.results, mapDocument);
     stats.rows += rows.length;
     stats.bad += bad;
@@ -159,6 +162,112 @@ export async function pullDocuments(
     }
   }
   return stats;
+}
+
+// ---------------------------------------------------------------- POA documents (wizard)
+export interface PoaLinkStats {
+  /** the POA session took the document (false: no session for this customer, switch off, RPC missing, or nothing found) */
+  linked: boolean;
+  /** all enabled modules of the session now have a linked document */
+  complete: boolean;
+  /** the file bytes were fetched and hashed (false while the download host is not allowed) */
+  hashed: boolean;
+  /** the bytes are in the private bucket at the path the database mandates */
+  stored: boolean;
+}
+
+const NO_LINK: PoaLinkStats = { linked: false, complete: false, hashed: false, stored: false };
+
+interface LinkResult {
+  linked?: boolean;
+  complete?: boolean;
+  session_id?: string;
+  document_id?: string;
+  /** the migration answers agency_id on a link (the path is built from it); storage_path is accepted too */
+  storage_path?: string;
+  agency_id?: string;
+  /** linked=false with reason 'already_linked': this Surense document already backs another kind of the session */
+  reason?: string;
+}
+
+/** at most this many of the newest documents are offered to the session, newest first (one per kind is all it can take) */
+const MAX_LINK_CANDIDATES = 3;
+
+const POA_PATH = /^poa\/[0-9a-f-]{36}\/[0-9a-f-]{36}\/(maslaka|harbit|policies)-[0-9a-f-]{36}\.pdf$/;
+
+/** After a dataproxy.aleph|hei|bet.approved pull: link the customer's newest document to the POA session as `kind`
+ *  (api.poa_document_link; Surense document id; it never raises for a customer without a wizard session).
+ *  TODO(owner-full-run): the document type ids of the three proxies are unknown, so "newest" stands in for "the one that
+ *  was just approved" (events arrive one module at a time). When the events are processed late (worker lag, a retried job)
+ *  the newest document may already back another kind of the session: the database answers linked=false/already_linked and
+ *  the next newest document is offered instead, so one file is never linked to two kinds.
+ *  Order: link first without a hash (cheap, and tells whether a session exists at all), then, only for a session, fetch the
+ *  bytes, hash them and link again with the hash. The bytes are stored at poa/{agency}/{session}/{kind}-{document}.pdf and
+ *  recorded with api.poa_document_stored ONLY when the download host is allowed (client.ts ALLOWED_HOSTS) and the link
+ *  result names the path (or the agency id to build it); until then the document stays metadata-only and the client's
+ *  download answers document_not_ready. A closed poa_docs_enabled switch (423) or a database without the RPC (404) is not
+ *  a failure: nothing is linked. Ids and booleans only. */
+export async function linkPoaDocument(d: SyncDeps, o: { customerId: string; kind: PoaKind; docs: SurenseDocument[] }): Promise<PoaLinkStats> {
+  if (!isUuid(o.customerId)) throw new InputError("bad_id");
+  const candidates = o.docs.filter((x) => isUuid(x?.id)).sort((a, b) => String(b.createdDate ?? "").localeCompare(String(a.createdDate ?? "")))
+    .slice(0, MAX_LINK_CANDIDATES);
+  if (candidates.length === 0) return NO_LINK;
+  const customerId = o.customerId.toLowerCase();
+  let docId = "";
+  const link = async (sha: string | null): Promise<LinkResult | null> => {
+    try {
+      return await d.rpc.call<LinkResult | null>("poa_document_link", { p_customer: customerId, p_kind: o.kind, p_document_id: docId, p_sha256: sha });
+    } catch (e) {
+      if (e instanceof RpcError && (e.status === 423 || e.status === 404)) return null;
+      throw e;
+    }
+  };
+  let first: LinkResult | null = null;
+  for (const c of candidates) {
+    docId = c.id.toLowerCase();
+    const r = await link(null);
+    if (r?.linked === true) {
+      first = r;
+      break;
+    }
+    if (r?.linked === false && r.reason === "already_linked") continue; // taken by another kind: try the next newest
+    return NO_LINK;
+  }
+  if (!first) return NO_LINK;
+
+  let sha: string | null = null;
+  let bytes: Uint8Array | null = null;
+  if (d.storage) {
+    const urls = await d.api.documents.urls({ documents: [{ docId, inline: false, shorten: false }] });
+    const entry = urls?.entries?.find((e) => e?.documentId?.toLowerCase() === docId) ?? urls?.entries?.[0];
+    if (typeof entry?.url === "string") {
+      let allowed = true;
+      try {
+        assertAllowedUrl(entry.url);
+      } catch {
+        allowed = false;
+      }
+      if (allowed) {
+        bytes = (await d.client.downloadFile(entry.url)).bytes;
+        sha = await sha256Hex(bytes);
+      }
+    }
+  }
+  if (!sha || !bytes) return { linked: true, complete: first.complete === true, hashed: false, stored: false };
+
+  const second = (await link(sha)) ?? first;
+  const path = typeof second.storage_path === "string" && POA_PATH.test(second.storage_path)
+    ? second.storage_path
+    : isUuid(second.agency_id) && isUuid(second.session_id) && isUuid(second.document_id)
+    ? poaStoragePath(second.agency_id, second.session_id, o.kind, second.document_id)
+    : null;
+  let stored = false;
+  if (path && d.storage && isUuid(second.document_id)) {
+    await d.storage.put(path, bytes, "application/pdf");
+    await d.rpc.call("poa_document_stored", { p_document: second.document_id, p_path: path, p_sha256: sha });
+    stored = true;
+  }
+  return { linked: true, complete: second.complete === true, hashed: true, stored };
 }
 
 // ---------------------------------------------------------------- E9100 (clearing house)
@@ -262,10 +371,12 @@ export function eventRefs(payload: unknown): { id: string | null; customerId: st
   };
 }
 
+const POA_KIND_OF: Record<string, PoaKind> = { aleph: "maslaka", hei: "harbit", bet: "policies" };
+
 export type EventPlan =
   | { action: "pull_customer"; customerId: string }
   | { action: "mark_customer_deleted"; customerId: string }
-  | { action: "pull_documents"; customerId: string }
+  | { action: "pull_documents"; customerId: string; poaKind?: PoaKind }
   | { action: "mark_document_deleted"; documentId: string }
   | { action: "e9100_download"; customerId: string; eventId: string }
   | { action: "skip"; reason: string };
@@ -273,9 +384,12 @@ export type EventPlan =
 /** Pure routing from (event type, payload) to the work to do. */
 export function planEvent(type: string, payload: unknown): EventPlan {
   const r = eventRefs(payload);
-  if (/^dataproxy\.(aleph|hei|bet)\.approved$/.test(type) || type === "harb.uploaded" || type === "document.uploaded") {
+  const proxy = /^dataproxy\.(aleph|hei|bet)\.approved$/.exec(type);
+  if (proxy || type === "harb.uploaded" || type === "document.uploaded") {
     const customerId = r.customerId ?? (type.startsWith("dataproxy.") ? r.id : null);
-    return customerId ? { action: "pull_documents", customerId } : { action: "skip", reason: "no_customer_ref" };
+    if (!customerId) return { action: "skip", reason: "no_customer_ref" };
+    // aleph = maslaka, hei = harbit, bet = policies: tells the POA wizard which of its three documents just arrived
+    return proxy ? { action: "pull_documents", customerId, poaKind: POA_KIND_OF[proxy[1]] } : { action: "pull_documents", customerId };
   }
   if (type === "document.deleted") {
     const documentId = r.documentId ?? r.id;

@@ -34,8 +34,10 @@ select set_eq(
             ('surense_gate'), ('surense_event_ingest'), ('surense_job_enqueue'), ('surense_job_claim'), ('surense_job_complete'),
             ('surense_sync_state_get'), ('surense_sync_state_set'), ('surense_customers_upsert'), ('surense_customer_mark_deleted'),
             ('surense_documents_upsert'), ('surense_document_mark_deleted'), ('surense_file_record'), ('surense_portfolio_store'),
-            ('surense_audit') $$,
-  'service-only RPCs in api (28)');
+            ('surense_audit'),
+            ('poa_session_start'), ('poa_session_get'), ('poa_engine_ref_set'), ('poa_preview_set'), ('poa_consent_record'),
+            ('poa_session_fail'), ('poa_session_complete'), ('poa_document_link'), ('poa_document_stored'), ('poa_doc_get'), ('poa_doc_claim'), ('poa_config') $$,
+  'service-only RPCs in api (40)');
 
 -- the documented advisor exceptions (lints 0028/0029): exactly these SECURITY DEFINER functions are callable by API roles
 select set_eq(
@@ -49,8 +51,9 @@ select set_eq(
   $$ values ('api.health'), ('api.me'), ('staff.leads_list'), ('staff.lead_get'), ('staff.lead_set_status'), ('staff.lead_assign'),
             ('staff.lead_note_add'), ('staff.lead_soft_delete'), ('staff.admin_assert_fresh'), ('staff.admin_config_set'),
             ('staff.admin_staff_disable'), ('staff.admin_staff_unlock'), ('staff.ops_health'),
-            ('staff.admin_staff_enable'), ('staff.admin_alert_resolve') $$,
-  'lint 0029 exception list (authenticated, 15 entries)');
+            ('staff.admin_staff_enable'), ('staff.admin_alert_resolve'),
+            ('staff.poa_session_list'), ('staff.poa_session_verify'), ('staff.client_doc_get') $$,
+  'lint 0029 exception list (authenticated, 18 entries)');
 
 select is_empty($$ select jobname from cron.job where command ~* 'http|secret|bearer|apikey' $$, 'cron commands carry no URL or secret');
 select set_eq($$ select jobname from cron.job $$,

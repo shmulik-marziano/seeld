@@ -2,12 +2,14 @@
 // answers the start call; after that the link is gone (changing details means starting again, spec ס2א).
 import type { FormEvent } from "react";
 import { formatPhone } from "@/questionnaires/validators";
+import { TurnstileWidget } from "@/components/forms/TurnstileWidget";
 import { POA_COPY as C } from "@/lib/poa/copy";
 import type { Contact, Identity } from "@/lib/poa/machine";
 import { Bar, StepCard, type ScreenBase } from "../parts";
+import type { TurnstileProps } from "../useTurnstileToken";
 
-export function Review({ headingRef, dir, prog, busy, identity, contact, started, onConfirm, onEdit, onBack }: ScreenBase & {
-  identity: Identity; contact: Contact; started: boolean; onConfirm: () => void; onEdit: () => void; onBack?: () => void;
+export function Review({ headingRef, dir, prog, busy, identity, contact, started, turnstile, onConfirm, onEdit, onBack }: ScreenBase & {
+  identity: Identity; contact: Contact; started: boolean; turnstile?: TurnstileProps; onConfirm: () => void; onEdit: () => void; onBack?: () => void;
 }) {
   const submit = (e: FormEvent) => { e.preventDefault(); onConfirm(); };
   return (
@@ -18,6 +20,7 @@ export function Review({ headingRef, dir, prog, busy, identity, contact, started
           <div><dt>{C.s2a.labelId}</dt><dd dir="ltr">{identity.id}</dd></div>
           <div><dt>{C.s2a.labelPhone}</dt><dd dir="ltr">{formatPhone(contact.phone)}</dd></div>
         </dl>
+        {turnstile && !started && <TurnstileWidget ref={turnstile.handle} siteKey={turnstile.siteKey} onToken={turnstile.onToken} onError={turnstile.onError} />}
         {!started && <button type="button" className="sd-q-linkbtn" onClick={onEdit} disabled={busy}>{C.s2a.fix}</button>}
       </StepCard>
       <Bar onBack={onBack} cta={C.s2a.cta} busy={busy} />

@@ -14,6 +14,8 @@ for the five functions T2 owns. `staff-invite` belongs to T1 and is documented t
 | `surense-worker` | manual now; pg_cron after owner approval | false | `x-cron-secret` | `surense_job_claim`, `surense_job_complete`, `surense_job_enqueue`, mirror RPCs, `job_finish` |
 | `surense-sync` | staff app (admin) | true | staff JWT -> `staff.admin_assert_fresh` (admin + fresh TOTP) | `surense_gate`, mirror RPCs, `surense_audit` |
 | `surense-health` | owner / staff, by hand | true | platform JWT check only (read-only probe) | none (calls Surense only) |
+| `poa-intake` | POA wizard (browser) | false | Origin allowlist + Turnstile + session token (SHA-256 only to the DB) + `poa_*` switches | `poa_config` (optional), `poa_session_*`, `poa_engine_ref_set`, `poa_preview_set`, `poa_consent_record`, `poa_doc_get`, `poa_doc_claim`, `surense_gate`, `surense_job_enqueue`, `surense_audit` |
+| `client-docs` | staff app | true | staff JWT -> `staff.client_doc_get` (staff aal2 + fresh MFA + access log) | none with the service key (storage read only) |
 
 `verify_jwt=false` everywhere here on purpose: the platform JWT check also accepts the publishable and secret API keys,
 so it authenticates nothing for these callers (research/SUPABASE.md, "Securing Edge Functions"). Each function does its
@@ -37,6 +39,9 @@ supabase/functions/
   _shared/surense/ Surense connector: env (presence), auth (OAuth token, memory only), client (host lock, retry,
                   timeout, error codes, audit sink), api (typed wrappers), svix, mirror (non-PII columns), storage
                   (client-docs, hash-named objects), sync (operations), jobs (queue handlers), connector (wiring)
+  _shared/poa/    POA wizard backend: formatters (all value formats, one place), dp (public page API client), engine/
+                  (PoaEngine interface + the "surense" engine), errors (six screen-8 kinds), rpc (typed api.poa_* wrappers),
+                  session (token + SHA-256), storage (read side of client-docs), config (SURENSE_DP_HOST/_BASE/MANAGER_ID)
   <fn>/index.ts    entrypoint: reads the env once, builds the RPC client, Deno.serve(handler)
   <fn>/handler.ts  all logic, dependencies injected (env, rpc, fetch, defer, clock)
   <fn>/test.ts     Deno tests for that handler
@@ -239,15 +244,51 @@ already deployed on seeld-site as version 1 (the repo file is that source); it i
 - **Deployment gate:** apply the migration through `migrate.yml`; deploy the three functions; then OWNER-STEPS 1.10 in
   order (secrets, Vault keys, bucket, `surense_enabled`, Svix endpoint + `surense_webhook_enabled`, writes last).
 
+## POA wizard backend (`poa-intake`, `client-docs`; contract: `docs/product/POA-WIZARD.md`; NOT deployed, all switches off)
+
+Backend of the browser wizard (`src/lib/poa`). Switches in `ops.config`, all off by default: `poa_enabled`,
+`poa_docs_enabled`, `poa_engine` (`surense`), `poa_native_shadow`, `poa_surense_url_id`, `poa_module_maslaka/harbit/policies`,
+`poa_turnstile_required` (default true). Launch also needs the Surense switches (`surense_enabled`,
+`surense_write_enabled`, and `surense_e9100_enabled` for the E9100 request).
+
+- **poa-intake** (`verify_jwt=false`): routes `POST /start`, `POST /maslaka|/harbit|/policies`, `GET /state`,
+  `GET /preview/:kind`, `GET /doc/:kind`. Order: preflight -> Origin allowlist (403) -> per-isolate reject counter (429) ->
+  route + body cap (8 KB; 2 KB per consent; ~300 KB for the signature) with a key whitelist per route -> `/start`: `api.poa_config` when the database has it
+  (switch off -> 503 `{"error":"inactive"}` before anything is spent; without it the kill switches inside `api.poa_session_start` answer the same) -> Turnstile when `poa_turnstile_required` (token in body
+  `turnstile_token`; missing or rejected -> 400) -> identity validation (id check digit, Israeli mobile only, names) ->
+  `api.poa_session_start` (token generated here, only its SHA-256 sent as bytea) -> `api.surense_gate(write, invite-proxies)` -> engine
+  -> `api.poa_engine_ref_set`; the same body shape and a padded duration for every identity (>= `POA_START_MIN_MS`, default 6000, overruns rounded up to a multiple of `POA_START_BUCKET_MS`, default 3000). Later routes read
+  the token from `x-poa-session`, load the session with `api.poa_session_get` and refuse unless it is open. Errors are
+  `{"error": "inactive|unavailable|generic|expired|locked|completed"}` only. Logs: route, kind, code, session id; never
+  a value. The Surense duplicate paths (40204/40205) are absorbed by the engine and never shown.
+- **Engine "surense"** (`_shared/poa/engine/surense.ts`): official API `customers.create` (needs `SURENSE_MANAGER_ID`; fails
+  closed with `unavailable` without it) -> `licensees.list` (first active, cached in memory) -> `swiftness.accountsList`
+  (first active) -> `proxies.invite` (only `url` is used; the message is dropped) -> the public page API
+  (`SURENSE_DP_HOST`, default `dp.surense.com`; path prefix `SURENSE_DP_BASE`, default `/api`, a TODO until the owner's
+  full run): `proxies/load`, `proxies/start`, then `proxies/swiftness`, `proxies/hb`, `proxies/policies` and
+  `proxies_preview` (`sw|hb|p`). Host allowlist exactly `api.surense.com` + the dp host, https only, redirects refused, 15 s
+  per call, no Authorization header; every call is audited (`poa.dp.*`, status and phase only) before it leaves.
+- **Final documents and launch**: the webhook events `dataproxy.aleph|hei|bet.approved` plan a document pull
+  (`planEvent` now carries `poaKind` = maslaka|harbit|policies); afterwards `linkPoaDocument` calls `api.poa_document_link`
+  with the newest document, first without a hash; for a customer that has a wizard session the bytes are then fetched, hashed,
+  linked again and stored at `poa/{agency}/{session}/{kind}-{document}.pdf` (`api.poa_document_stored`) only when the download
+  host is allowed and the link result names the agency; otherwise the document stays metadata-only. After the last module, `poa-intake` queues `surense.e9100_submit`
+  (`customer_id`, `proxy_approval_date`, dedupe `e9100:<id>`; skipped for a customer that already existed); the worker
+  handler runs it only when `surense_write_enabled` and `surense_e9100_enabled` are on, otherwise it completes `skipped`
+  with code `e9100_switch_off`. The completed E9100 then follows the existing `e9100_download` path.
+- **client-docs** (`verify_jwt=true`): `GET ?document_id=<uuid>` with a staff JWT; `staff.client_doc_get` as the caller
+  (staff aal2, fresh MFA, access log), then the object streams from the private bucket with `content-disposition: attachment`,
+  `cache-control: no-store`, `referrer-policy: no-referrer`. No signed URL.
+
 ## Environment (Edge Function secrets; NAMES only)
 
 | Name | Used by | Required | Notes |
 |---|---|---|---|
 | `SEELD_SECRET_KEY` | lead-intake, notify-worker, chat-bot, fetch-cma-data | recommended | dedicated `sb_secret_*` (name it `automations`); falls back to the injected `SUPABASE_SECRET_KEYS` |
 | `EDGE_CRON_SECRET` | notify-worker, fetch-cma-data, health (detail) | yes for cron | must equal Vault `edge_cron_secret` |
-| `ALLOWED_ORIGINS` | lead-intake, chat-bot, health | optional | comma list; default seeld.co.il + www; staging adds its preview origin |
+| `ALLOWED_ORIGINS` | lead-intake, chat-bot, health, poa-intake, client-docs | optional | comma list; default seeld.co.il + www; staging adds its preview origin |
 | `ENV` | all | recommended | `production` / `staging` / `development`; unset = production (fail closed) |
-| `TURNSTILE_SECRET_KEY` | lead-intake | yes in production | test secret on branches |
+| `TURNSTILE_SECRET_KEY` | lead-intake, poa-intake | yes in production | test secret on branches |
 | `RESEND_API_KEY` | notify-worker | yes | |
 | `NOTIFY_FROM` | notify-worker | optional | default `SEELD <no-reply@seeld.co.il>` (domain must be verified in Resend) |
 | `NOTIFY_TO_INSURANCE`, `NOTIFY_TO_FINANCE`, `NOTIFY_TO_GENERAL` | notify-worker | optional | defaults Moshe@ / Shmulik@ / Shmulik@seeld.info |
@@ -256,9 +297,14 @@ already deployed on seeld-site as version 1 (the repo file is that source); it i
 | `STAFF_APP_URL` | notify-worker | optional | default `https://seeld.co.il` |
 | `GOOGLE_AI_API_KEY` | chat-bot | yes for chat | |
 | `GEMINI_MODELS` | chat-bot | optional | comma list overrides the model chain |
-| `SURENSE_CLIENT_ID`, `SURENSE_CLIENT_SECRET` | surense-sync, surense-worker | yes for Surense | OAuth client from Surense > Settings > API/Webhooks; never in git, Vercel or chat |
+| `SURENSE_CLIENT_ID`, `SURENSE_CLIENT_SECRET` | surense-sync, surense-worker, poa-intake | yes for Surense | OAuth client from Surense > Settings > API/Webhooks; never in git, Vercel or chat |
 | `SURENSE_WEBHOOK_SECRET` | surense-webhook | yes for webhooks | the Svix endpoint signing secret (`whsec_...`) |
 | `SURENSE_WEBHOOK_SECRET_NEXT` | surense-webhook | optional | second Svix secret during a rotation; either slot verifies; `health` shows a boolean only |
+| `SURENSE_MANAGER_ID` | poa-intake | yes for the wizard | uuid of the Surense user that owns customers the wizard creates (`POST /customers` requires `managerId`); without it `/start` answers `unavailable` |
+| `SURENSE_DP_HOST` | poa-intake | optional | bare hostname of the public page API, default `dp.surense.com`; the only host besides `api.surense.com` the engine may reach |
+| `SURENSE_DP_BASE` | poa-intake | optional | path prefix of the public page API, default `/api` (unverified; locked after the owner's full run) |
+| `POA_START_MIN_MS` | poa-intake | optional | floor of the `/start` duration in ms (0..20000, default 6000); tune after the full run |
+| `POA_START_BUCKET_MS` | poa-intake | optional | an overrunning `/start` is rounded up to a multiple of this (500..20000, default 3000) |
 | injected: `SUPABASE_URL`, `SUPABASE_SECRET_KEYS`, `SUPABASE_PUBLISHABLE_KEYS`, `SB_REGION`, `DENO_DEPLOYMENT_ID` | all | platform | never set by hand |
 
 ## Cron wiring
@@ -319,9 +365,10 @@ docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4
   deno test --no-prompt _shared/test.ts lead-intake/ notify-worker/ chat-bot/ fetch-cma-data/ health/
 docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4 \
   deno test --no-prompt _shared/surense/ surense-webhook/ surense-worker/ surense-sync/
+docker run --rm -v "$PWD:/w" -w /w/supabase/functions denoland/deno:alpine-2.1.4   deno test --no-prompt --node-modules-dir=none _shared/poa/ poa-intake/ client-docs/
 docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4 \
   deno check lead-intake/index.ts notify-worker/index.ts chat-bot/index.ts fetch-cma-data/index.ts health/index.ts \
-    surense-webhook/index.ts surense-worker/index.ts surense-sync/index.ts
+    surense-webhook/index.ts surense-worker/index.ts surense-sync/index.ts poa-intake/index.ts client-docs/index.ts
 # vitest keeps covering the shared modules from the web side
 npx vitest run src/test/edge-shared.test.ts src/test/surense-shared.test.ts
 npx eslint supabase/functions

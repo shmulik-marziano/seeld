@@ -7,10 +7,12 @@ import { RpcError } from "../db.ts";
 import { InputError, SurenseError, type SurenseFailureKind } from "./errors.ts";
 import { StorageError } from "./storage.ts";
 import {
-  type DocPullStats, type DownloadStats, e9100Download, MAX_OFFSET, PAGE_SIZE, planEvent, pullCustomer, pullCustomers, pullDocuments,
-  type SyncDeps,
+  type DocPullStats, type DownloadStats, e9100Download, e9100Submit, linkPoaDocument, MAX_OFFSET, PAGE_SIZE, planEvent, pullCustomer,
+  pullCustomers, pullDocuments, type SyncDeps,
 } from "./sync.ts";
 import { isUuid } from "./api.ts";
+import { pickSwiftnessAccount } from "../poa/engine/surense.ts";
+import type { SurenseDocument } from "./types.ts";
 
 export interface JobRow {
   id: number;
@@ -79,8 +81,15 @@ export const HANDLERS: Record<string, JobHandler> = {
       case "mark_document_deleted":
         await d.rpc.call("surense_document_mark_deleted", { p_surense_id: plan.documentId });
         return { result: "done" };
-      case "pull_documents":
-        return docsOutcome(await pullDocuments(d, { customerId: plan.customerId, deadline }), plan.customerId, undefined);
+      case "pull_documents": {
+        if (!plan.poaKind) return docsOutcome(await pullDocuments(d, { customerId: plan.customerId, deadline }), plan.customerId, undefined);
+        // a POA wizard approval (dataproxy.aleph|hei|bet): after the pull, link the document to the session
+        const seen: SurenseDocument[] = [];
+        const pulled = await pullDocuments(d, { customerId: plan.customerId, deadline, onRows: (rows) => seen.push(...rows) });
+        const link = await linkPoaDocument(d, { customerId: plan.customerId, kind: plan.poaKind, docs: seen });
+        const out = docsOutcome(pulled, plan.customerId, undefined);
+        return { ...out, stats: { ...(out.stats ?? {}), poaLinked: link.linked, poaComplete: link.complete, poaHashed: link.hashed } };
+      }
       case "e9100_download":
         return e9100Outcome(await e9100Download(d, { customerId: plan.customerId, eventId: plan.eventId, deadline }));
     }
@@ -104,6 +113,24 @@ export const HANDLERS: Record<string, JobHandler> = {
       return { result: "skipped", code: "bad_input" };
     }
     return docsOutcome(await pullDocuments(d, { customerId, since, startRow, deadline }), customerId?.toLowerCase(), since);
+  },
+  // POA "launch": queued by poa-intake once every enabled module is approved. Runs only with BOTH switches on
+  // (surense_write_enabled + surense_e9100_enabled, api.surense_gate); otherwise it completes skipped, nothing is sent.
+  "surense.e9100_submit": async (d, job) => {
+    const customerId = str(job.params, "customer_id");
+    const date = str(job.params, "proxy_approval_date");
+    if (!isUuid(customerId) || !date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return { result: "skipped", code: "bad_input" };
+    try {
+      await d.rpc.call("surense_gate", { p_write: true, p_action: "e9100-submit" });
+    } catch (e) {
+      if (e instanceof RpcError && e.status === 423) return { result: "skipped", code: "e9100_switch_off" };
+      throw e;
+    }
+    const registrationId = pickSwiftnessAccount(await d.api.swiftness.accountsList());
+    if (!registrationId) return { result: "failed", code: "no_swiftness_account", kind: "config" };
+    const r = await e9100Submit(d, { customerId, registrationId, proxyApprovalDate: date });
+    // a rejected request is final (a retry would ask the clearing house twice): done, with the flag in the stats
+    return { result: "done", stats: { rejected: r.rejected, progress: r.progress ?? -1 } };
   },
   "surense.e9100_download": async (d, job, deadline) => {
     const customerId = str(job.params, "customer_id");

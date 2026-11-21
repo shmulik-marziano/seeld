@@ -2,8 +2,18 @@
 // Imported by App.tsx, which is the main entry: keep this file free of any other import than the backend switch.
 import { IS_V2 } from "@/integrations/supabase/config";
 
-/** Browser switch (spec §5): POA_ENABLED = IS_V2 && VITE_POA_FLOW === "on". Unset = off. */
-export const POA_ENABLED: boolean = IS_V2 && import.meta.env.VITE_POA_FLOW === "on";
+/**
+ * Base URL of the poa-intake Edge Function, when it is not the default of the build's own backend
+ * (`<SUPABASE_URL>/functions/v1/poa-intake`). Trailing slashes are dropped. Empty = not set.
+ */
+export const POA_INTAKE_URL: string = (import.meta.env.VITE_POA_INTAKE_URL ?? "").trim().replace(/\/+$/, "");
+
+/**
+ * Browser switch (spec §5): POA_ENABLED = VITE_POA_FLOW === "on" && (IS_V2 || VITE_POA_INTAKE_URL is set). Unset = off.
+ * The second operand is the fast path: a legacy build has no backend of its own for the wizard, but it may run the
+ * wizard against explicitly configured poa-intake functions.
+ */
+export const POA_ENABLED: boolean = import.meta.env.VITE_POA_FLOW === "on" && (IS_V2 || POA_INTAKE_URL !== "");
 
 export const POA_ROUTE = "/report/start/order";
 
