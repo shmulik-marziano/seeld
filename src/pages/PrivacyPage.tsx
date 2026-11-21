@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { BODY, GREEN, LINE, MUTED } from '@/lib/brand';
+import { BRAND_YEAR } from '@/lib/brandYear';
 import { LegalFrame } from '@/components/sd/pubParts';
 
 // Legal page: one quiet reading column, typography only (STYLESEED.md).
@@ -170,7 +171,7 @@ export default function PrivacyPage() {
       </LegalSection>
 
       <p className="border-t pt-5 text-[14px] leading-relaxed" style={{ color: MUTED, borderColor: LINE }}>
-        &copy; <span dir="ltr" className="tabular-nums">{new Date().getFullYear()}</span> שילד ביטוח ופיננסים. כל הזכויות שמורות.
+        &copy; <span dir="ltr" className="tabular-nums">{BRAND_YEAR}</span> שילד ביטוח ופיננסים. כל הזכויות שמורות.
       </p>
     </div>
   );

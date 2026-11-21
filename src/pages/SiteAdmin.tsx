@@ -1,4 +1,5 @@
 import { CONTACTS } from "@/lib/contacts";
+import { BRAND_YEAR } from "@/lib/brandYear";
 import { useState, useEffect, useCallback, Component, type ReactNode } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { siteSupabase, SITE_SUPABASE_URL } from "@/integrations/supabase/site-client";
@@ -463,7 +464,7 @@ function SiteAdminInner() {
             <Lock className="w-3 h-3" />
             <span className="text-[10px]">גישה מורשית בלבד</span>
             <div className="w-1 h-1 rounded-full bg-[#8FA396]" />
-            <span className="text-[10px]">SEELD &copy; {new Date().getFullYear()}</span>
+            <span className="text-[10px]">SEELD &copy; {BRAND_YEAR}</span>
           </div>
         </motion.div>
       </div>

@@ -3,6 +3,7 @@ import { MapPin } from "lucide-react";
 import { ContactIcons } from "@/components/sd/ContactIcons";
 import { DEPT_LABEL } from "@/lib/contacts";
 import { REGULATORY_LINE } from "@/lib/brand";
+import { BRAND_YEAR } from "@/lib/brandYear";
 import {
   INSURANCE_GROUPS,
   KNOWLEDGE_LINKS,
@@ -130,7 +131,7 @@ const Footer = () => {
           </p>
           <div className="sd-chrome-foot-row">
             <p>
-              &copy; 2025&ndash;{new Date().getFullYear()} שילד ביטוח ופיננסים · סוכנות ביטוח הפועלת מאז 2025, מבית עמיתים הון · מספר רישיון{" "}
+              &copy; {BRAND_YEAR} שילד ביטוח ופיננסים · סוכנות ביטוח הפועלת מאז 2025, מבית עמיתים הון · מספר רישיון{" "}
               <bdi className="tabular-nums">138666</bdi>
             </p>
             <ul>

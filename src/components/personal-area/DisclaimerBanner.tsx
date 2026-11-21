@@ -1,4 +1,5 @@
 import { AlertTriangle, Info, Shield } from "lucide-react";
+import { BRAND_YEAR } from "@/lib/brandYear";
 
 type DisclaimerVariant = "info" | "warning" | "legal";
 
@@ -70,7 +71,7 @@ export const LegalFooterDisclaimer = () => (
         תנאי הפוליסה המקוריים. למידע מעודכן, פנו אלינו.
       </p>
       <p className="font-bold" style={{ color: "#203957" }}>
-        שילד ביטוח ופיננסים &copy; {new Date().getFullYear()}. כל הזכויות שמורות.
+        שילד ביטוח ופיננסים &copy; {BRAND_YEAR}. כל הזכויות שמורות.
       </p>
     </div>
   </div>
