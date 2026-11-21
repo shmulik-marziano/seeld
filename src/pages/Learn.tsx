@@ -7,6 +7,9 @@ import { useCmaFunds, useCmaSyncStatus, formatPeriod } from "@/hooks/useCmaFunds
 import { productTypeLabels, type ProductType } from "@/types/fund";
 import { BrandIcon, type BrandIconName } from "@/components/brand/BrandIcon";
 import { stories } from "@/data/stories";
+import { GLOSSARY_TERMS } from "@/data/glossary";
+import { ROUTE_BY_PATH, labelFromTitle } from "@/data/seo/routes";
+import { GUIDE_CATALOG, categoryFor, pathOf } from "@/data/knowledge";
 import { SdBand, SdStory, tintStyle, useSdFont } from "@/components/sd/primitives";
 import { PUB_TOPICS, PubArticleCard, PubClose, PubHead, PubHero, spreadArts, toneAt } from "@/components/sd/pub";
 import { PASTELS } from "@/components/sd/topics";
@@ -41,7 +44,7 @@ function median(values: number[]): number | null {
   return clean.length % 2 ? clean[mid] : (clean[mid - 1] + clean[mid]) / 2;
 }
 
-const GLOSSARY: { term: string; body: string }[] = [
+const INLINE_GLOSSARY: { term: string; body: string; more?: string }[] = [
   {
     term: "דמי ניהול מצבירה",
     body: "אחוז שנגבה בכל שנה מכל הכסף שצברתם, לא רק מההפקדות החדשות. זה הרכיב שמצטבר לאורך שנים, ולכן גם פער קטן בין שני שיעורים משמעותי יותר משהוא נשמע.",
@@ -83,6 +86,16 @@ const GLOSSARY: { term: string; body: string }[] = [
     body: "המספר שבו מחלקים את הצבירה בפנסיה כדי לקבל את הקצבה החודשית. ככל שהוא נמוך יותר, הקצבה גבוהה יותר. הוא מושפע מהגיל, ממין החוסך ומתנאי המסלול.",
   },
 ];
+
+// The ten inline terms stay as they are; the shared glossary (src/data/glossary.ts) is appended.
+const GLOSSARY = [...INLINE_GLOSSARY, ...GLOSSARY_TERMS];
+
+// First four guides of the collection, shown as a band that leads to the guides hub.
+const FEATURED_GUIDES = GUIDE_CATALOG.slice(0, 4).map((entry) => {
+  const path = pathOf("guides", entry.slug);
+  const reg = ROUTE_BY_PATH[path];
+  return { entry, path, title: reg ? labelFromTitle(reg.title) : entry.slug, excerpt: reg?.description, cat: categoryFor(entry.category) };
+});
 
 const TOOLS: { to: string; title: string; body: string; icon: BrandIconName }[] = [
   { to: "/calculators", title: "מחשבונים", body: "משכנתא, פנסיה, חיסכון ומס. בלי צורך ברישום.", icon: "calculator" },
@@ -147,6 +160,7 @@ export default function Learn() {
   const sections = [
     { id: "market", label: "מה קורה בשוק" },
     { id: "glossary", label: "המונחים" },
+    { id: "kn-guides", label: "מדריכי שילד" },
     { id: "guides", label: "מדריכים" },
     { id: "tools", label: "כלים" },
   ];
@@ -257,7 +271,7 @@ export default function Learn() {
         {/* GLOSSARY — searchable */}
         <SdBand tone={p2} id="glossary">
           <div className="sd-wrap">
-            <PubHead title="המונחים שפוגשים בדוח" lede="עשרה מונחים שחוזרים כמעט בכל דוח שנתי, בלי שפה משפטית." />
+            <PubHead title="המונחים שפוגשים בדוח" lede="המונחים שחוזרים כמעט בכל דוח שנתי, בלי שפה משפטית." />
 
             <div className="max-w-md mb-8">
               <label htmlFor="glossary-search" className="block text-[14px] font-bold mb-1.5" style={{ color: "var(--ink)" }}>
@@ -294,11 +308,37 @@ export default function Learn() {
                 {glossary.map((g) => (
                   <div key={g.term} className="sd-gloss-row">
                     <dt>{g.term}</dt>
-                    <dd>{g.body}</dd>
+                    <dd>
+                      {g.body}
+                      {g.more && <> <Link to={g.more} className="sd-link">להרחבה</Link></>}
+                    </dd>
                   </div>
                 ))}
               </dl>
             )}
+          </div>
+        </SdBand>
+
+        {/* SEELD GUIDES — static knowledge section */}
+        <SdBand tone="white" id="kn-guides">
+          <div className="sd-wrap">
+            <PubHead title="מדריכי שילד" lede="מדריכים קצרים על פנסיה, פרישה והכסף של המשפחה, כל אחד עונה על שאלה אחת." />
+            <div className="sd-pub-grid sd-pub-grid-2">
+              {FEATURED_GUIDES.map((g) => (
+                <PubArticleCard
+                  key={g.entry.slug}
+                  to={g.path}
+                  title={g.title}
+                  kicker={g.cat.title}
+                  excerpt={g.excerpt}
+                  art={g.cat.art}
+                  tone={g.cat.tone}
+                />
+              ))}
+            </div>
+            <div className="mt-8">
+              <Link to="/learn/guides" className="sd-link">לכל מדריכי שילד{arrow}</Link>
+            </div>
           </div>
         </SdBand>
 

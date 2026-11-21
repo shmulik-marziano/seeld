@@ -44,6 +44,7 @@ export const SAVINGS_LINKS: ChromeLink[] = [
 
 export const KNOWLEDGE_LINKS: ChromeLink[] = [
   { href: "/learn", label: "ידע וכלים" },
+  { href: "/learn/guides", label: "מדריכים" },
   { href: "/blog", label: "בלוג" },
   { href: "/calculators", label: "מחשבונים" },
   { href: "/return-tables", label: "לוח התשואות" },

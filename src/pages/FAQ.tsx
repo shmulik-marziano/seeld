@@ -15,6 +15,10 @@ const CAT_ART: Record<string, ArtName> = {
   pension: "05-retirement",
   savings: "04-investments-growth",
   general: "02-family-protection",
+  "self-employed": "08-business-insurance",
+  "training-funds": "23-training-desk",
+  retirement: "26-pre-retirement-path",
+  "pension-tax": "24-pension-family-umbrella",
 };
 const CAT_TONES = ["cream", "sage", "white", "butter"] as const;
 

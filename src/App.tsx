@@ -221,6 +221,9 @@ const ComingSoon = lazy(() => import("@/pages/ComingSoon"));
 // ── Public Site Pages (lazy) ──
 const About = lazy(() => import("@/pages/About"));
 const Learn = lazy(() => import("@/pages/Learn"));
+const GuidesHub = lazy(() => import("@/pages/learn/GuidesHub"));
+const PensionTaxHub = lazy(() => import("@/pages/learn/PensionTaxHub"));
+const GuideArticle = lazy(() => import("@/pages/learn/GuideArticle"));
 const Authors = lazy(() => import("@/pages/Authors"));
 const Contact = lazy(() => import("@/pages/Contact"));
 const PortfolioReview = lazy(() => import("@/pages/PortfolioReview"));
@@ -371,6 +374,10 @@ const App = () => (
                     a main-nav destination — מידע ולמידה took that slot. */}
                 <Route path="/about" element={<About />} />
                 <Route path="/learn" element={<Learn />} />
+                <Route path="/learn/guides" element={<GuidesHub />} />
+                <Route path="/learn/guides/:slug" element={<GuideArticle />} />
+                <Route path="/learn/pension-tax" element={<PensionTaxHub />} />
+                <Route path="/learn/pension-tax/:slug" element={<GuideArticle />} />
                 <Route path="/authors" element={<Authors />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/portfolio-review" element={<PortfolioReview />} />

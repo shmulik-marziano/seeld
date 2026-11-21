@@ -7,3 +7,5 @@ Adding a public page:
 4. `PRERENDER_STRICT=1 npm run build:seo && npm run check:aeo`.
 
 Single source: `routes.ts` feeds RouteSeo, JSON-LD (`src/lib/structuredData.ts`), the related-pages block, sitemap and llms files.
+
+Knowledge guides: a page of `kind: "article"` and `group: "guides"` (under `/learn/guides/` or `/learn/pension-tax/`) also gets an `Article` node in its JSON-LD (`#article`, referenced as `mainEntity`), `og:type=article`, and must not call `usePageSeo`. Every `group` used in `ROUTES` needs a row in `GROUPS` in `scripts/seo/lib.mjs` (`src/test/knowledge.test.ts` checks it). See `docs/product/KNOWLEDGE-GUIDES.md`.

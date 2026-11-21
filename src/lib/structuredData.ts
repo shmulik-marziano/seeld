@@ -6,11 +6,13 @@
 //   <url>#breadcrumb                    BreadcrumbList
 //   <url>#service                       Service (insurance, savings, portfolio review, rights check)
 //   <url>#faq                           FAQPage from the visible FAQ items (useFaqJsonLd)
-//   <url>#article                       BlogPosting / Article
+//   <url>#article                       BlogPosting / Article (knowledge guides: kind "article")
+//   <url>#glossary                      DefinedTermSet (/learn, from src/data/glossary.ts)
 // Everything here references the Organization and WebSite by @id. No personal names anywhere:
 // content is authored by the agency (the Organization), never by an individual.
 import { faqCategories } from "@/data/faq";
 import { answerSummaries, ANSWER_REVIEWED } from "@/data/answerSummaries";
+import { GLOSSARY_TERMS } from "@/data/glossary";
 import {
   CONTENT_REVIEWED, ROUTE_BY_PATH, SITE_URL, labelFromTitle, relatedFor, urlFor,
   type RouteEntry,
@@ -56,6 +58,8 @@ const HUB_LISTS: Record<string, (e: RouteEntry) => boolean> = {
   "/insurances": (e) => e.kind === "insurance",
   "/savings": (e) => e.kind === "savings",
   "/return-tables": (e) => e.path.startsWith("/return-tables/"),
+  "/learn/guides": (e) => e.kind === "article" && e.path.startsWith("/learn/guides/"),
+  "/learn/pension-tax": (e) => e.path.startsWith("/learn/pension-tax/"),
 };
 
 const itemList = (id: string, entries: RouteEntry[]): Node => ({
@@ -123,6 +127,24 @@ export function buildRouteGraph({ path, title, description }: PageInfo): Node {
     page.mainEntity = { "@id": `${url}#service` };
   }
 
+  // Knowledge guides: the page is about one Article node (same @id family, all references resolve).
+  if (entry?.kind === "article") {
+    graph.push({
+      "@type": "Article",
+      "@id": `${url}#article`,
+      mainEntityOfPage: { "@id": `${url}#webpage` },
+      headline: label,
+      description,
+      ...(summary ? { abstract: summary } : {}),
+      inLanguage: "he-IL",
+      author: { "@id": ORG_ID },
+      publisher: { "@id": ORG_ID },
+      isPartOf: { "@id": SITE_ID },
+      dateModified: CONTENT_REVIEWED,
+    });
+    page.mainEntity = { "@id": `${url}#article` };
+  }
+
   const hub = HUB_LISTS[path];
   if (hub) {
     const children = Object.values(ROUTE_BY_PATH).filter(hub);
@@ -137,6 +159,23 @@ export function buildRouteGraph({ path, title, description }: PageInfo): Node {
       .map((p) => ROUTE_BY_PATH[p]).filter(Boolean);
     graph.push(itemList(`${url}#services`, top));
     page.mainEntity = { "@id": ORG_ID };
+  }
+
+  if (path === "/learn" && GLOSSARY_TERMS.length) {
+    graph.push({
+      "@type": "DefinedTermSet",
+      "@id": `${url}#glossary`,
+      name: "מונחון שילד",
+      inLanguage: "he-IL",
+      url,
+      hasDefinedTerm: GLOSSARY_TERMS.map((g) => ({
+        "@type": "DefinedTerm",
+        name: g.term,
+        description: g.body,
+        inDefinedTermSet: { "@id": `${url}#glossary` },
+      })),
+    });
+    page.about = [{ "@id": ORG_ID }, { "@id": `${url}#glossary` }];
   }
 
   if (path === "/calculators") {

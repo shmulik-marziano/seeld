@@ -86,7 +86,7 @@ export default function RouteSeo() {
     const title = meta.title;
     const description = meta.description ?? DEFAULT_DESCRIPTION;
     const canonical = `${SITE_URL}${path === "/" ? "" : path}`;
-    const isPost = path.startsWith("/blog/") || path.startsWith("/article/");
+    const isPost = path.startsWith("/blog/") || path.startsWith("/article/") || ROUTE_BY_PATH[path]?.kind === "article";
 
     document.title = title;
     setMeta('meta[name="description"]', "content", description);
