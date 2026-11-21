@@ -13,12 +13,12 @@ import { CONTACTS, GENERAL_MAILBOX } from "../../lib/contacts";
 
 export const SITE_URL = "https://seeld.co.il";
 /** Bump when page content changes materially; feeds sitemap lastmod and schema dateModified. */
-export const CONTENT_REVIEWED = "2026-11-17";
+export const CONTENT_REVIEWED = "2026-11-21";
 
 export type RouteKind =
-  | "home" | "hub" | "insurance" | "savings" | "tool" | "data" | "info" | "legal" | "service" | "b2b" | "flow" | "blog-index";
+  | "home" | "hub" | "insurance" | "savings" | "tool" | "data" | "info" | "legal" | "service" | "b2b" | "flow" | "blog-index" | "article";
 
-export type LlmsGroup = "about" | "insurance" | "savings" | "tools" | "info" | "legal";
+export type LlmsGroup = "about" | "insurance" | "savings" | "tools" | "info" | "legal" | "guides";
 
 export interface RouteEntry {
   path: string;
@@ -93,6 +93,242 @@ export const ROUTES: RouteEntry[] = [
     title: "בלוג | מדריכים פיננסיים בגובה העיניים | SEELD",
     description: "מדריכים, טיפים והסברים על ביטוח, פנסיה, חיסכון והשקעות, כתובים בעברית פשוטה ובגובה העיניים.",
     related: ["/learn", "/faq", "/insurances", "/savings"],
+  }),
+  // ───────── Knowledge: guides and pension-tax chapters ─────────
+  r({
+    path: "/learn/guides", kind: "hub", group: "guides", changefreq: "weekly", priority: 0.7, pageType: "CollectionPage", parent: "/learn",
+    title: "מדריכי שילד | פנסיה, פרישה והכסף בבית | SEELD",
+    description: "מדריכים קצרים וברורים על פנסיה לשכירים ולעצמאים, קרנות השתלמות, תכנון פרישה, ניהול הון משפחתי וביטוח, עם דוגמאות להמחשה ומקורות.",
+    related: ["/learn", "/faq", "/savings/retirement-planning", "/blog"],
+  }),
+  r({
+    path: "/learn/pension-tax", kind: "info", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "מיסוי החיסכון הפנסיוני | מדריכי שילד | SEELD",
+    description: "איך מתנהל המס על חיסכון פנסיוני בשלוש תחנות: בהפקדה, בצבירה ובמשיכה. פרקים על גמל, השתלמות, פנסיה וקיבוע זכויות, ולוח מספרים מעודכן.",
+    related: ["/learn/guides", "/savings/retirement-planning", "/faq"],
+  }),
+  // knowledge: guide pages (assembled)
+  r({
+    path: "/learn/guides/pension-fund-what-you-buy", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "מה קונים כשמפקידים לקרן פנסיה מקיפה | SEELD",
+    description: "הסבר על ההבדל בין היתרה בקרן פנסיה מקיפה לבין קצבאות הנכות והשאירים בדוח, ועל מה כדאי לבדוק אחרי שינוי במשפחה או החלפת מסלול. לשכירים שמקבלים דוח פנסיה.",
+    related: ["/learn/guides/employee-pension-contributions", "/learn/guides/pension-start-new-job", "/learn/guides", "/savings/pension-funds"],
+  }),
+  r({
+    path: "/learn/guides/employee-pension-contributions", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "הפקדה לפנסיה של שכיר: שיעורים ושכר מבוטח | SEELD",
+    description: "איך מחושבת ההפקדה לפנסיה של שכיר: אילו שיעורים משלמים העובד והמעסיק, מאיזה שכר מחשבים, ולמה הסכום שמנוכה בתלוש אינו כל ההפקדה. למי שמשווה בין התלוש לדוח הקרן.",
+    related: ["/learn/guides/pension-start-new-job", "/learn/guides/section-14-severance-deposits", "/learn/guides", "/savings/employer-funds"],
+  }),
+  r({
+    path: "/learn/guides/pension-start-new-job", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "מתי מתחילה הפנסיה במקום עבודה חדש | SEELD",
+    description: "מתי המעסיק החדש מתחיל להפקיד לפנסיה, מה משתנה כשאין ביטוח פנסיוני פעיל, ואיך שומרים על רצף הכיסוי בקרן בזמן ההמתנה. לשכירים שהחליפו עבודה.",
+    related: ["/learn/guides/section-14-severance-deposits", "/learn/guides/pension-deducted-missing-in-fund", "/learn/guides", "/savings/pension-funds"],
+  }),
+  r({
+    path: "/learn/guides/section-14-severance-deposits", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "מה סעיף ארבע־עשרה מכסה בהפקדות לפיצויים | SEELD",
+    description: "הסבר לשכירים על מה שסעיף ארבע־עשרה מחליף בפועל כשהמעסיק מפקיד לפיצויים, מה לבדוק בדוח ובחוזה, ומה לבקש לפני גמר חשבון או התפטרות.",
+    related: ["/learn/guides/pension-deducted-missing-in-fund", "/learn/guides/why-projected-pension-looks-low", "/learn/guides", "/savings/pension-funds"],
+  }),
+  r({
+    path: "/learn/guides/pension-deducted-missing-in-fund", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "הפנסיה ירדה בתלוש והכסף לא נראה בקרן | SEELD",
+    description: "מדריך לשכירים שרואים ניכוי פנסיה בתלוש ולא מוצאים הפקדה בקרן: איך בודקים לפי חודש השכר, מתי ההעברה מתבצעת ואיך פונים לקרן.",
+    related: ["/learn/guides/why-projected-pension-looks-low", "/learn/guides/pension-fund-what-you-buy", "/learn/guides", "/savings/employer-funds"],
+  }),
+  r({
+    path: "/learn/guides/why-projected-pension-looks-low", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "למה הקצבה הצפויה בדוח הפנסיה נראית נמוכה | SEELD",
+    description: "הסבר לבעלי קרן פנסיה על הפער בין תחזית הקצבה בדוח השנתי לבין מחשבון, ומה כדאי לוודא לפני שמסיקים שחסר כסף.",
+    related: ["/learn/guides/pension-fund-what-you-buy", "/learn/guides/employee-pension-contributions", "/learn/guides", "/calculators"],
+  }),
+  r({
+    path: "/learn/guides/self-employed-mandatory-pension", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "כמה עצמאי חייב להפקיד לפנסיה ולפי איזה חישוב | SEELD",
+    description: "הסבר על חובת ההפקדה לפנסיה של עצמאי: שתי מדרגות לפי ההכנסה השנתית ולא לפי המחזור, תנאי הגיל והרישום, ודוגמה מחושבת לעצמאים שרוצים להבין את הסכום.",
+    related: ["/learn/guides/employee-and-self-employed-pension-top-up", "/learn/guides/pension-tax-saving-deduction-vs-credit", "/learn/guides", "/savings/pension-funds"],
+  }),
+  r({
+    path: "/learn/guides/employee-and-self-employed-pension-top-up", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "שכיר ועצמאי: כמה להשלים לפנסיה בכל שנה | SEELD",
+    description: "איך מחשבים השלמת פנסיה למי שעובד גם כשכיר וגם כעצמאי: חובת העצמאי, הפחתת הפקדות השכר, ומה נספר ומה לא. מתאים למי שיש לו משכורת והכנסה מעסק.",
+    related: ["/learn/guides/pension-tax-saving-deduction-vs-credit", "/learn/guides/seasonal-business-pension", "/learn/guides", "/savings/pension-funds"],
+  }),
+  r({
+    path: "/learn/guides/pension-tax-saving-deduction-vs-credit", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "ניכוי או זיכוי בהפקדה עצמאית לפנסיה | SEELD",
+    description: "מה ההבדל בין ניכוי לזיכוי בהפקדה עצמאית לפנסיה, למה אסור לחבר את שתי התוצאות, ואיך מתרגמים הודעה על הטבת מס לסכום שנשאר בפועל בכיס.",
+    related: ["/learn/guides/seasonal-business-pension", "/learn/guides/self-employed-mandatory-pension", "/learn/guides", "/savings/pension-funds"],
+  }),
+  r({
+    path: "/learn/guides/seasonal-business-pension", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "פנסיה בעסק עונתי: חובת הפקדה מול כיסוי ביטוחי | SEELD",
+    description: "מדריך לעצמאי שההכנסה שלו מתרכזת בכמה חודשים בשנה: איך חובת ההפקדה נקבעת, מה קורה לכיסוי הביטוחי בחודשי ההפסקה ואיזו שאלה כדאי לשלוח לקרן.",
+    related: ["/learn/guides/self-employed-mandatory-pension", "/learn/guides/employee-and-self-employed-pension-top-up", "/learn/guides", "/savings/pension-funds"],
+  }),
+  r({
+    path: "/learn/guides/training-fund-value-in-job-offer", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "כמה שווה קרן השתלמות בהצעת עבודה לשכיר | SEELD",
+    description: "איך קוראים הצעת עבודה שכוללת קרן השתלמות: על איזה שכר מפקידים, כמה מוסיף המעסיק וכמה יורד מהנטו, ומה לבקש כדי להשוות בין שתי הצעות.",
+    related: ["/learn/guides/self-employed-training-fund-two-ceilings", "/learn/guides/training-fund-partial-withdrawal", "/learn/guides", "/savings/training-funds"],
+  }),
+  r({
+    path: "/learn/guides/self-employed-training-fund-two-ceilings", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "שתי תקרות המס בקרן השתלמות של עצמאי | SEELD",
+    description: "הסבר לעצמאי שמפקיד לקרן השתלמות: מה ההבדל בין תקרת הניכוי לתקרת ההפקדה המוטבת, איך זה נראה בדוגמה מספרית ומה קורה כשמפקידים בשתי קרנות.",
+    related: ["/learn/guides/training-fund-partial-withdrawal", "/learn/guides/training-fund-tax-salary-and-business", "/learn/guides", "/savings/training-funds"],
+  }),
+  r({
+    path: "/learn/guides/training-fund-partial-withdrawal", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "מה קורה בקרן השתלמות נזילה אחרי משיכה חלקית | SEELD",
+    description: "מה נשאר נזיל בקרן ההשתלמות אחרי משיכה חלקית, מה קורה להפקדות החדשות ולוותק, ומה כדאי לבקש מהקרן לפני הגשת בקשה. למי שקיבל הודעה שהקרן נזילה.",
+    related: ["/learn/guides/training-fund-tax-salary-and-business", "/learn/guides/training-fund-value-in-job-offer", "/learn/guides", "/savings/training-funds"],
+  }),
+  r({
+    path: "/learn/guides/training-fund-tax-salary-and-business", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "הטבת מס בקרן השתלמות כשיש משכורת וגם עסק | SEELD",
+    description: "איך מחשבים את ניכוי קרן ההשתלמות לעסק כששכיר מפעיל גם עסק, במה שונה הפטור על הרווחים, ואילו נתונים כדאי להביא ממחשבות השכר ומרואה החשבון.",
+    related: ["/learn/guides/training-fund-value-in-job-offer", "/learn/guides/self-employed-training-fund-two-ceilings", "/learn/guides", "/savings/training-funds"],
+  }),
+  r({
+    path: "/learn/guides/first-month-after-retirement-income", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "מי ישלם את המשכורת בחודש הראשון לפרישה | SEELD",
+    description: "איך בונים יומן הכנסות והוצאות לשנה הראשונה אחרי הפרישה ומזהים פער בין חודש המעבר לחודשים הרגילים. למי שמתכנן את המעבר מעבודה לקצבה.",
+    related: ["/learn/guides/form-161-before-severance-decision", "/learn/guides/pension-tax-exemption-after-fixing-rights", "/learn/guides", "/savings/pre-retirement"],
+  }),
+  r({
+    path: "/learn/guides/form-161-before-severance-decision", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "מה בודקים בטופס עזיבת העבודה לפני בחירה בפיצויים | SEELD",
+    description: "מה כל חלק בטופס עזיבת העבודה מכיל, איך בחירה בין רצף קצבה, משיכה ורצף פיצויים משפיעה על הכסף, ומה כדאי לבדוק ולשמור לפני שמסמנים. למי שעוזב מקום עבודה.",
+    related: ["/learn/guides/pension-tax-exemption-after-fixing-rights", "/learn/guides/survivors-pension-vs-guaranteed-payments", "/learn/guides", "/savings/retirement-planning"],
+  }),
+  r({
+    path: "/learn/guides/pension-tax-exemption-after-fixing-rights", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "כמה מהפנסיה פטור ממס אחרי קיבוע זכויות | SEELD",
+    description: "איך קיבוע זכויות מחלק את סל הפטור בין קצבה חודשית להיוון, איך נחשב הפטור המרבי בקצבה מזכה, ולמה מענקים שנמשכו בעבר משנים את התוצאה. למי שמתקרב לגיל הזכאות.",
+    related: ["/learn/guides/survivors-pension-vs-guaranteed-payments", "/learn/guides/old-age-pension-while-working", "/learn/guides", "/savings/retirement-planning"],
+  }),
+  r({
+    path: "/learn/guides/survivors-pension-vs-guaranteed-payments", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "קצבת שאירים או תקופת תשלומים מובטחים בפרישה | SEELD",
+    description: "מה ההבדל בין קצבת שאירים לבן או לבת הזוג לבין תקופת תשלומים מובטחים, איך כל בחירה משפיעה על הקצבה ההתחלתית, ואילו השוואות כדאי לבקש מהקרן לפני תחילת הקצבה.",
+    related: ["/learn/guides/old-age-pension-while-working", "/learn/guides/withdrawing-severance-between-jobs", "/learn/guides", "/savings/retirement-planning"],
+  }),
+  r({
+    path: "/learn/guides/old-age-pension-while-working", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "קצבת אזרח ותיק והמשך עבודה אחרי גיל הפרישה | SEELD",
+    description: "מה קורה לקצבת אזרח ותיק מביטוח לאומי כשממשיכים לעבוד: מבחן הכנסות לפי גיל, מה נחשב הכנסה, דחיית קצבה ומתי כדאי להגיש תביעה. לעובדים בגיל הפרישה.",
+    related: ["/learn/guides/withdrawing-severance-between-jobs", "/learn/guides/first-month-after-retirement-income", "/learn/guides", "/savings/pre-retirement"],
+  }),
+  r({
+    path: "/learn/guides/withdrawing-severance-between-jobs", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "מה עולה משיכת פיצויים בין שתי עבודות | SEELD",
+    description: "המחיר של משיכת פיצויים מהחיסכון הפנסיוני בין שתי עבודות: ירידה ביתרה ובקצבה העתידית, ההשפעה על הפטור במס, ודרך להשוות חלופות לפני שמחליטים כמה למשוך.",
+    related: ["/learn/guides/first-month-after-retirement-income", "/learn/guides/form-161-before-severance-decision", "/learn/guides", "/savings/retirement-planning"],
+  }),
+  r({
+    path: "/learn/guides/family-wealth-how-much-available", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "שווי נקי מול כסף זמין בהון המשפחתי | SEELD",
+    description: "ההבדל בין שווי נקי לנזילות בהון משפחתי, איך בונים טבלה של חמש שורות, איך נמנעים מכפל בספירה ולמה משפחה עם נכסים רבים יכולה להיתקע בתשלום קרוב.",
+    related: ["/learn/guides/cash-reserve-when-income-varies", "/learn/guides/investment-provident-fund-ceiling-two-accounts", "/learn/guides", "/savings/financial-planning"],
+  }),
+  r({
+    path: "/learn/guides/cash-reserve-when-income-varies", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "כמה כסף להשאיר נזיל כשהכנסה משתנה | SEELD",
+    description: "איך מחשבים כרית חירום למשפחה שבה אחת ההכנסות משתנה: פער חודשי, תרחיש סביר, כסף שזמין בפועל, ומה לעשות עם מסגרת אשראי. למשפחות עם הכנסה עצמאית.",
+    related: ["/learn/guides/investment-provident-fund-ceiling-two-accounts", "/learn/guides/deposit-or-money-market-fund-for-home", "/learn/guides", "/savings/financial-planning"],
+  }),
+  r({
+    path: "/learn/guides/investment-provident-fund-ceiling-two-accounts", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "תקרת הפקדה לשתי קופות גמל להשקעה | SEELD",
+    description: "תקרת ההפקדה לקופת גמל להשקעה נקבעת לאדם ולא לקופה. מה נספר במהלך השנה, במה היא שונה מהטבת מס, ומה כדאי לבדוק בדצמבר. למי שמחזיק קופות בכמה חברות.",
+    related: ["/learn/guides/deposit-or-money-market-fund-for-home", "/learn/guides/savings-concentrated-same-stocks", "/learn/guides", "/savings/gemel-investment"],
+  }),
+  r({
+    path: "/learn/guides/deposit-or-money-market-fund-for-home", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "פיקדון או קרן כספית לכסף שצריך לדירה | SEELD",
+    description: "השוואה בין פיקדון בנקאי לקרן כספית שקלית יומית כשצריך את הכסף לתשלום על דירה: מועד הנגישות, מיסוי, סליקה ומה לשאול לפני שמחליטים. למי שמתכנן רכישה.",
+    related: ["/learn/guides/savings-concentrated-same-stocks", "/learn/guides/sequence-of-returns-retirement-withdrawals", "/learn/guides", "/savings/financial-planning"],
+  }),
+  r({
+    path: "/learn/guides/savings-concentrated-same-stocks", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "האם החסכונות מושקעים באותן מניות? | SEELD",
+    description: "איך מחשבים כמה מהכסף המשפחתי חשוף לאותו מדד מניות בכל החשבונות יחד, ומה עושים עם המספר, למי שמחזיק קרנות ומסלולים אצל כמה גופים.",
+    related: ["/learn/guides/sequence-of-returns-retirement-withdrawals", "/learn/guides/family-wealth-how-much-available", "/learn/guides", "/savings/investment"],
+  }),
+  r({
+    path: "/learn/guides/sequence-of-returns-retirement-withdrawals", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "למה סדר התשואות משנה למי שמושך כסף בפרישה | SEELD",
+    description: "דוגמה מספרית לשתי משפחות עם אותן תשואות בסדר הפוך ויתרות שונות, ומה כדאי לבדוק לפני שמתחילים למשוך כסף מתיק השקעות בפרישה.",
+    related: ["/learn/guides/family-wealth-how-much-available", "/learn/guides/cash-reserve-when-income-varies", "/learn/guides", "/savings/risk-profile"],
+  }),
+  r({
+    path: "/learn/guides/disability-pension-fund-or-private-insurance", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "נכות מקרן פנסיה או מפוליסת אובדן כושר עבודה | SEELD",
+    description: "איך בודקים מי משלם כשאי אפשר להמשיך במקצוע: הגדרת העיסוק, השכר המבוטח, כללי קיזוז ותיאום, ומה לרכז לפני הגשת תביעה לשני הגופים.",
+    related: ["/learn/guides/life-insurance-after-mortgage-paid", "/learn/guides/two-health-policies-one-receipt", "/learn/guides", "/insurance/disability"],
+  }),
+  r({
+    path: "/learn/guides/life-insurance-after-mortgage-paid", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "מה נשאר למשפחה אחרי שביטוח החיים סילק את המשכנתה | SEELD",
+    description: "הסבר לבעלי משכנתה ולמשפחות: למי משולם הכסף בביטוח חיים למשכנתה, איך מחשבים את הפער החודשי שנשאר אחרי סילוק החוב ואילו פרטים בפוליסה כדאי לבדוק.",
+    related: ["/learn/guides/two-health-policies-one-receipt", "/learn/guides/critical-illness-diagnosis-payout", "/learn/guides", "/insurance/life"],
+  }),
+  r({
+    path: "/learn/guides/two-health-policies-one-receipt", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "שתי פוליסות בריאות וקבלה אחת: כמה מקבלים בחזרה | SEELD",
+    description: "הסבר למי שמחזיק יותר מפוליסת בריאות אחת: ההבדל בין שיפוי לפיצוי, איך מחושב החזר כשיש כפל כיסוי ומה בודקים לפני שמבטלים כיסוי קיים.",
+    related: ["/learn/guides/critical-illness-diagnosis-payout", "/learn/guides/disability-pension-fund-or-private-insurance", "/learn/guides", "/insurance/health"],
+  }),
+  r({
+    path: "/learn/guides/critical-illness-diagnosis-payout", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/guides",
+    title: "מתי אבחנה רפואית מזכה בפיצוי במחלות קשות | SEELD",
+    description: "הסבר למבוטחים ולבני משפחתם: איך בודקים בפוליסה אם אבחנה עומדת בהגדרה, איזה דף לפתוח קודם ואיזה מידע לבקש מהרופא לפני הגשת תביעה.",
+    related: ["/learn/guides/disability-pension-fund-or-private-insurance", "/learn/guides/life-insurance-after-mortgage-paid", "/learn/guides", "/insurance/critical-illness"],
+  }),
+  r({
+    path: "/learn/pension-tax/three-tax-stations", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/pension-tax",
+    title: "שלוש תחנות המס של החיסכון הפנסיוני | SEELD",
+    description: "איך כל מוצר פנסיוני ממוסה בהפקדה, בצבירה ובמימוש, ואיך שנת ההפקדה משנה את הכללים. הסבר לחוסכים שרוצים להבין איפה ההטבה ואיפה המס.",
+    related: ["/learn/pension-tax/provident-funds", "/learn/pension-tax/training-funds", "/learn/pension-tax", "/savings/retirement-planning"],
+  }),
+  r({
+    path: "/learn/pension-tax/provident-funds", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/pension-tax",
+    title: "קופת גמל וגמל להשקעה: מה פטור ממס ומה חייב | SEELD",
+    description: "איך ממוסות קופות גמל לפי שכבות ההפקדה, מה ההטבה בהפקדה לשכיר ולעצמאי, ומה היתרון של גמל להשקעה. לחוסכים שרוצים להבין את התיק לפני משיכה או ניוד.",
+    related: ["/learn/pension-tax/three-tax-stations", "/learn/pension-tax/training-funds", "/learn/pension-tax", "/savings/gemel-funds"],
+  }),
+  r({
+    path: "/learn/pension-tax/training-funds", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/pension-tax",
+    title: "קרן השתלמות: הפקדה, פטור ומשיכה מוקדמת | SEELD",
+    description: "מה התקרות והפטורים בקרן השתלמות לשכיר ולעצמאי, מתי אפשר למשוך בפטור ומה קורה במשיכה לפני תום הוותק. למי שמחזיק קרן ורוצה להבין את הכללים.",
+    related: ["/learn/pension-tax/provident-funds", "/learn/pension-tax/pension-funds", "/learn/pension-tax", "/savings/training-funds"],
+  }),
+  r({
+    path: "/learn/pension-tax/managers-insurance", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/pension-tax",
+    title: "ביטוח מנהלים: למה הדור של הפוליסה קובע את ערכה | SEELD",
+    description: "מה ההבדל בין דורות של פוליסות ביטוח מנהלים, איך מתנהלים שכבות המס ומרכיב הפיצויים, ומה כדאי לבדוק לפני פדיון או ניוד. למי שמחזיק פוליסה ישנה.",
+    related: ["/learn/pension-tax/pension-funds", "/learn/pension-tax/three-tax-stations", "/learn/pension-tax", "/savings/pension-life-insurance"],
+  }),
+  r({
+    path: "/learn/pension-tax/pension-funds", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/pension-tax",
+    title: "קרן פנסיה חדשה או ותיקה: מה שונה ביניהן | SEELD",
+    description: "השוואה בין קרן פנסיה חדשה לקרן ותיקה: איך נבנות הזכויות, מה תקרת ההפקדה, איך בוחרים מסלול פרישה ומה בודקים בקרן ותיקה. למי שמחזיק קרן פנסיה ורוצה להבין אותה.",
+    related: ["/learn/pension-tax/managers-insurance", "/learn/pension-tax/realization-fixing-rights-190", "/learn/pension-tax", "/savings/pension-funds"],
+  }),
+  r({
+    path: "/learn/pension-tax/realization-fixing-rights-190", kind: "article", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/pension-tax",
+    title: "קיבוע זכויות, היוון ותיקון מאה תשעים בפרישה | SEELD",
+    description: "איך הופכים חיסכון פנסיוני לקצבה או להון: קיבוע זכויות, נוסחת הקיזוז של מענקים, היוון, תיקון מאה תשעים והחזר מס רטרואקטיבי. למי שמתקרב לפרישה ורוצה להבין מה פטור ממס.",
+    related: ["/learn/pension-tax/pension-funds", "/learn/pension-tax/numbers", "/learn/pension-tax", "/savings/post-retirement"],
+  }),
+  r({
+    path: "/learn/pension-tax/numbers", kind: "data", group: "guides", changefreq: "monthly", priority: 0.6, parent: "/learn/pension-tax",
+    title: "לוח המספרים של החיסכון הפנסיוני | SEELD",
+    description: "כל התקרות, הסכומים והשיעורים של מדור המס בחיסכון הפנסיוני בלוח אחד, עם יחידת המידה והבסיס החוקי של כל נתון, לשימוש מי שבודק או משווה.",
+    related: ["/learn/pension-tax/three-tax-stations", "/learn/pension-tax/realization-fixing-rights-190", "/learn/pension-tax", "/savings/retirement-planning"],
   }),
   r({
     path: "/rights-extraction", kind: "service", group: "about", changefreq: "monthly", priority: 0.7,

@@ -25,17 +25,19 @@ async function loadTs(relPath) {
 }
 
 export async function loadData() {
-  const [routes, summaries, faq, contacts] = await Promise.all([
+  const [routes, summaries, faq, contacts, glossary] = await Promise.all([
     loadTs("src/data/seo/routes.ts"),
     loadTs("src/data/answerSummaries.ts"),
     loadTs("src/data/faq.ts"),
     loadTs("src/lib/contacts.ts"),
+    loadTs("src/data/glossary.ts"),
   ]);
   return {
     SITE_URL: routes.SITE_URL, CONTENT_REVIEWED: routes.CONTENT_REVIEWED,
     ROUTES: routes.ROUTES, ROUTE_BY_PATH: routes.ROUTE_BY_PATH, labelFromTitle: routes.labelFromTitle,
     summaries: summaries.answerSummaries, faqCategories: faq.faqCategories,
     CONTACTS: contacts.CONTACTS, GENERAL_MAILBOX: contacts.GENERAL_MAILBOX,
+    glossary: glossary.GLOSSARY_TERMS,
   };
 }
 
@@ -72,6 +74,8 @@ const GROUPS = [
   ["savings", "חיסכון והשקעות"],
   ["tools", "כלים וידע"],
   ["about", "על שילד ושירותי ליווי"],
+  ["guides", "מדריכים"],
+  ["info", "מידע נוסף"],
   ["legal", "מידע משפטי"],
 ];
 
@@ -147,6 +151,10 @@ export function buildLlmsFull(d, posts = []) {
   for (const c of d.faqCategories) {
     L.push(`### ${c.title}`, "");
     for (const q of c.questions) L.push(`**${oneLine(q.q)}**`, oneLine(q.a), "");
+  }
+  if (d.glossary?.length) {
+    L.push("## מונחון", "", `מקור: ${url(d, "/learn")}`, "");
+    for (const g of d.glossary) L.push(`**${oneLine(g.term)}**: ${oneLine(g.body)}`, "");
   }
   if (posts.length) {
     L.push("## מאמרים בבלוג", "");
