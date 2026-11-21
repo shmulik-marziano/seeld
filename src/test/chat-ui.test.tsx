@@ -82,8 +82,26 @@ describe("chat panel", () => {
     fireEvent.blur(screen.getByLabelText("הודעה ליועץ הדיגיטלי"));
     expect(screen.getByText("זמין")).toBeInTheDocument();
     expect(screen.getByText("מידע כללי בלבד. לא ייעוץ אישי.")).toBeInTheDocument();
-    expect(screen.getByText("שלום, כאן היועץ הדיגיטלי.")).toBeInTheDocument();
-    expect(container.querySelector(".sd-chrome-fab")).toBeNull();
+    expect(screen.getByText("שלום. במה אפשר לעזור?")).toBeInTheDocument();
+    // The launcher stays under the postcard and reports the open state.
+    expect(container.querySelector(".sd-chrome-fab")).toHaveAttribute("aria-expanded", "true");
+    expect(container.querySelector(".sd-chat-thread")).not.toBeNull();
+  });
+
+  it("a click outside the card folds it back; a click inside keeps it", async () => {
+    renderBot();
+    await openChat();
+    fireEvent.pointerDown(screen.getByLabelText("הודעה ליועץ הדיגיטלי"));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    fireEvent.pointerDown(document.body);
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+  });
+
+  it("the launcher toggles the card", async () => {
+    renderBot();
+    await openChat();
+    fireEvent.click(screen.getByRole("button", { name: "פתחו שיחה עם היועץ הדיגיטלי של SEELD" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
   });
 
   it("the header has exactly one close button", async () => {
