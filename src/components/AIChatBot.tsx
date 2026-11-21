@@ -40,6 +40,8 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
   const [isExpanded, setIsExpanded] = useState(defaultOpen);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState(initialPrefill);
+  const inputValueRef = useRef(input);
+  inputValueRef.current = input;
   const [leadState, setLeadState] = useState<"hidden" | "open" | "done">("hidden");
   const leadShown = useRef(false);
   const leadDraft = useRef<LeadDraft>({ name: "", phone: "", consent: false });
@@ -69,7 +71,7 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
     const open = (e: Event) => {
       setIsExpanded(true);
       const prefill = (e as CustomEvent<{ prefill?: string } | undefined>).detail?.prefill;
-      if (typeof prefill === "string" && prefill) setInput(prefill);
+      if (typeof prefill === "string" && prefill && !inputValueRef.current.trim()) setInput(prefill);
       inputRef.current?.focus();
     };
     window.addEventListener("seeld:open-chat", open);

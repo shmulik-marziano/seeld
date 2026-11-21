@@ -3,6 +3,7 @@ import { render, screen, fireEvent, act, waitFor } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom";
 import AIChatBot from "@/components/AIChatBot";
 
+vi.mock("@/hooks/useAuth", () => ({ useAuth: () => ({ user: null }) }));
 vi.mock("@/integrations/supabase/config", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/integrations/supabase/config")>()),
   IS_V2: true,

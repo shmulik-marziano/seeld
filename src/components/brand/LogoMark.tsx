@@ -26,7 +26,8 @@ function angleOf(matrix: string): number {
   const m = /matrix\(([^)]+)\)/.exec(matrix);
   if (!m) return 0;
   const [a, b] = m[1].split(",").map((v) => parseFloat(v));
-  return (Math.atan2(b, a) * 180) / Math.PI;
+  const deg = (Math.atan2(b, a) * 180) / Math.PI;
+  return ((deg % 360) + 360) % 360;
 }
 
 function clearSettle(el: SVGSVGElement) {
@@ -76,10 +77,14 @@ export function useLogoMarkSettle(ref: RefObject<SVGSVGElement>, isThinking: boo
       return;
     }
     const nodes = Array.from(el.querySelectorAll<SVGElement>(ANIM));
-    const frozen = nodes.map((n) => {
+    const frozenDeg = nodes.map((n) => {
+      const t = getComputedStyle(n).transform;
+      return t && t !== "none" && n.classList.contains("seeld-lm-spin") ? angleOf(t) : 0;
+    });
+    const frozen = nodes.map((n, i) => {
       const t = getComputedStyle(n).transform;
       if (!t || t === "none") return "none";
-      return n.classList.contains("seeld-lm-spin") ? `rotate(${angleOf(t).toFixed(3)}deg)` : t;
+      return n.classList.contains("seeld-lm-spin") ? `rotate(${frozenDeg[i].toFixed(3)}deg)` : t;
     });
     nodes.forEach((n, i) => {
       n.style.animation = "none";
@@ -89,10 +94,10 @@ export function useLogoMarkSettle(ref: RefObject<SVGSVGElement>, isThinking: boo
     el.classList.remove("is-thinking");
     el.classList.add("is-settling");
     void el.getBoundingClientRect(); // commit the frozen pose
-    nodes.forEach((n) => {
+    nodes.forEach((n, i) => {
       n.style.transition = `transform ${SETTLE_MS}ms ${EASE}`;
       n.style.transform = n.classList.contains("seeld-lm-spin")
-        ? "rotate(0deg)"
+        ? `rotate(${frozenDeg[i] > 180 ? 360 : 0}deg)`
         : n.classList.contains("seeld-lm-hop")
           ? "translate(0px, 0px)"
           : "none";

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { IS_V2 } from "@/integrations/supabase/config";
 import { loadSiteSupabase } from "@/integrations/supabase/lazy";
+import { useAuth } from "@/hooks/useAuth";
 import { useLeadIntake } from "@/hooks/useLeadIntake";
 import { leadErrorMessage } from "@/lib/leadIntake";
 import { RING } from "@/lib/brand";
@@ -39,6 +40,7 @@ const ChatLeadCard = ({ pathname, onDismiss, onSent, draft }: { pathname: string
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
+  const { user } = useAuth();
   const intake = useLeadIntake();
   const setName = (v: string) => { if (draft) draft.name = v; setNameState(v); };
   const setPhone = (v: string) => { if (draft) draft.phone = v; setPhoneState(v); };
@@ -77,7 +79,7 @@ const ChatLeadCard = ({ pathname, onDismiss, onSent, draft }: { pathname: string
         const supabase = await loadSiteSupabase();
         const email = `${phone.trim()}@lead.seeld.co.il`;
         const { error } = await supabase.from("contact_submissions").insert([{
-          user_id: null,
+          user_id: user?.id || null,
           name: name.trim(),
           email,
           subject: "פנייה מהצ'אט",
