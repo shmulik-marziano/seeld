@@ -7,12 +7,19 @@ import LogoDots from "@/components/brand/LogoDots";
 import RouteTransitionDots from "@/components/RouteTransitionDots";
 import { DOTS_CYCLE_MS, FADE_MS, MIN_SHOW_MS, dotsClock } from "@/lib/flags/logoDots";
 
+// LIVE_MARK is read at render time; a getter lets a test flip it (same pattern as logo-dots-flag.test.tsx).
+const live = vi.hoisted(() => ({ on: true }));
+vi.mock("@/lib/flags/liveMark", () => ({
+  get LIVE_MARK() { return live.on; },
+}));
+
 const ROOT = join(__dirname, "..", "..");
 const read = (...p: string[]) => readFileSync(join(ROOT, ...p), "utf8");
 const APP = read("src", "App.tsx");
 
 const realMatchMedia = window.matchMedia;
 afterEach(() => {
+  live.on = true;
   vi.useRealTimers();
   vi.unstubAllEnvs();
   vi.unstubAllGlobals();
@@ -184,7 +191,6 @@ describe("RouteTransitionDots overlay", () => {
     expect(screen.getByRole("status", { name: "העמוד נטען" })).toBe(o);
     expect(o).toHaveAttribute("aria-live", "polite");
     expect(o).toHaveAttribute("data-prerender-skip", "");
-    expect(o!.querySelectorAll("circle")).toHaveLength(5);
     expect(o!.textContent).toBe("");
     expect(o!.querySelector("a, button, input, [tabindex]")).toBeNull();
     expect(document.activeElement).not.toBe(o);
@@ -196,6 +202,34 @@ describe("RouteTransitionDots overlay", () => {
     expect(overlay()).not.toBeNull();
     tick(1);
     expect(overlay()).toBeNull();
+  });
+
+  it("switch on (default): the overlay holds the live mark, thinking and instant, no text, no dots", () => {
+    vi.useFakeTimers();
+    harness();
+    click();
+    const o = overlay()!;
+    expect(o.querySelectorAll("svg.seeld-lm")).toHaveLength(1);
+    expect(o.querySelectorAll("svg")).toHaveLength(1);
+    const mark = o.querySelector("svg.seeld-lm")!;
+    expect(mark).toHaveAttribute("data-logo-state", "thinking");
+    expect(mark).toHaveClass("seeld-lm--instant");
+    expect(mark.getAttribute("style")).toContain("clamp(120px, 26vw, 176px)");
+    expect(mark.closest(".seeld-dots-mark")).not.toBeNull();
+    expect(o.querySelector(".seeld-dots")).toBeNull();
+    expect(o.textContent).toBe("");
+  });
+
+  it("LIVE_MARK off: the five logo dots exactly as before, no mark", () => {
+    live.on = false;
+    vi.useFakeTimers();
+    harness();
+    click();
+    const o = overlay()!;
+    expect(o.querySelectorAll("circle")).toHaveLength(5);
+    expect(o.querySelector("svg")).toHaveClass("seeld-dots--anim");
+    expect(o.querySelector(".seeld-lm")).toBeNull();
+    expect(o.textContent).toBe("");
   });
 
   it("rapid double navigation restarts the cycle and never leaves it stuck", () => {
@@ -304,6 +338,9 @@ describe("logo-dots copy rules", () => {
   const fallbackOn = fallback.slice(onAt, fallback.indexOf("\n  }\n", onAt));
   const RAW = [
     read("src", "lib", "flags", "logoDots.ts"),
+    read("src", "lib", "flags", "liveMark.ts"),
+    read("src", "components", "brand", "LogoMark.tsx"),
+    read("src", "components", "brand", "logo-mark.css"),
     read("src", "components", "brand", "LogoDots.tsx"),
     read("src", "components", "brand", "logo-dots.css"),
     read("src", "components", "RouteTransitionDots.tsx"),

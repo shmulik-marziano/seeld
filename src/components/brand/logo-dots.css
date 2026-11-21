@@ -1,4 +1,6 @@
-/* Logo-dots loader (src/lib/flags/logoDots.ts): the five logo dots only.
+/* Logo-dots loader (src/lib/flags/logoDots.ts): the five logo dots only. With the live mark on (default,
+   src/lib/flags/liveMark.ts) the overlay and RouteFallback show LogoMark inside .seeld-dots-mark instead; the dots
+   below are what VITE_LIVE_MARK=off renders.
    Animated: the dots start hollow and fill up one after another, right to left (reading direction), each with a
    small pop; then they drain and the cycle restarts (DOTS_CYCLE_MS). With MIN_SHOW_MS = 500 the five fills complete
    inside the forced window of RouteTransitionDots, so a navigation reads as "fill up, then the page". RouteFallback
@@ -32,8 +34,12 @@
   50%      { opacity: 0.6; }
 }
 
-/* Arrival: the dots scale in briefly when the overlay appears. Not in RouteFallback, which may follow the overlay. */
-.seeld-dots-overlay .seeld-dots { animation: seeld-dots-arrive 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+/* Centred, symmetric box for the live mark (line-height 0: no baseline gap under the inline svg). */
+.seeld-dots-mark { display: flex; align-items: center; justify-content: center; line-height: 0; }
+
+/* Arrival: the dots (or the mark wrapper) scale in briefly when the overlay appears. Not in RouteFallback, which may follow the overlay. */
+.seeld-dots-overlay .seeld-dots,
+.seeld-dots-overlay .seeld-dots-mark { animation: seeld-dots-arrive 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 @keyframes seeld-dots-arrive {
   from { transform: scale(0.9); opacity: 0; }
   to   { transform: scale(1);   opacity: 1; }
@@ -65,6 +71,7 @@
     fill-opacity: 1;
     stroke-opacity: 0;
   }
-  .seeld-dots-overlay .seeld-dots { animation: none; }
+  .seeld-dots-overlay .seeld-dots,
+  .seeld-dots-overlay .seeld-dots-mark { animation: none; }
   .seeld-dots-overlay { animation: none; transition: none; }
 }

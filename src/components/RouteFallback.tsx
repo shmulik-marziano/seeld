@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { clearSnapshot, getSnapshot } from "@/lib/prerenderSnapshot";
 import { LOGO_DOTS_TRANSITION } from "@/lib/flags/logoDots";
 import LogoDots from "@/components/brand/LogoDots";
+import LogoMark from "@/components/brand/LogoMark";
+import { LIVE_MARK } from "@/lib/flags/liveMark";
 
 /**
  * RouteFallback: quiet Suspense loader for lazy routes.
- * Switch on (src/lib/flags/logoDots.ts, default): the five logo dots on the cream canvas, same as
- * RouteTransitionDots, no progress bar. Switch off (VITE_LOGO_DOTS=off): the previous loader, unchanged:
+ * Switch on (src/lib/flags/logoDots.ts, default): the live mark (thinking) on the cream canvas, or the five
+ * logo dots with VITE_LIVE_MARK=off, same as RouteTransitionDots, no progress bar. Switch off (VITE_LOGO_DOTS=off): the previous loader, unchanged:
  * cream canvas, a thin ink progress bar and the brand symbol pulsing.
  * Respects prefers-reduced-motion. No text, no emoji.
  */
@@ -18,7 +20,13 @@ export default function RouteFallback() {
   if (LOGO_DOTS_TRANSITION) {
     return (
       <div role="status" aria-live="polite" aria-label="העמוד נטען" className="seeld-dots-stage min-h-screen bg-[#FCF8EF]">
-        <LogoDots />
+        {LIVE_MARK ? (
+          <div className="seeld-dots-mark">
+            <LogoMark state="thinking" instant size="clamp(120px, 26vw, 176px)" />
+          </div>
+        ) : (
+          <LogoDots />
+        )}
       </div>
     );
   }
