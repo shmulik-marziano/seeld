@@ -52,9 +52,11 @@ export class PoaToolError extends Error {
   }
 }
 
-/** Public page API HTTP status -> kind. TODO(owner-full-run): the tool's error bodies are unobserved; status only.
+/** Public page API HTTP status -> kind (the ONE mapping; used by dp.ts for every route). Status only.
  *  404 = link invalid or replaced, 410 = session ended, 409 = already completed, 423/429 = blocked or too many,
- *  5xx / network = service down, any other 4xx = generic. */
+ *  5xx / network = service down, any other 4xx (400 included) = generic.
+ *  TODO(owner-full-run): proxies/start answered 400 once for an existing customer (2026-11-22) and the body was not
+ *  captured; until it is known a 400 maps to "generic". Map it here (one place) once the body says what it means. */
 export function kindFromToolStatus(status: number): PoaErrorKind {
   if (status === 404) return "inactive";
   if (status === 410) return "expired";

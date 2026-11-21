@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { json, mockFetch, mockRpc, silentLog, testEnv } from "../test_helpers.ts";
 import { createTokenSource, TOKEN_URL } from "./auth.ts";
-import { apiUrl, assertAllowedUrl, createSurenseClient, pathLabel, SURENSE_API } from "./client.ts";
+import { ALLOWED_HOSTS, apiUrl, assertAllowedUrl, createSurenseClient, pathLabel, SURENSE_API } from "./client.ts";
 import { SurenseError } from "./errors.ts";
 import { surenseApi } from "./api.ts";
 import { verifyWebhook } from "./svix.ts";
@@ -236,6 +236,26 @@ Deno.test("client: downloads and uploads are host-locked", async () => {
   const ok = await c.downloadFile("https://api.surense.com/files/1");
   assert.equal(ok.bytes.byteLength, 3);
   assert.equal(ok.mime, "application/pdf");
+});
+
+Deno.test("client: the approved S3 docs host is downloadable without Authorization; uploads there and redirects are refused", async () => {
+  const S3 = "https://surense-accounts-docs.s3.eu-west-1.amazonaws.com/0f0f0f0f?X-Amz-Signature=x";
+  assert.ok(ALLOWED_HOSTS.includes("surense-accounts-docs.s3.eu-west-1.amazonaws.com"));
+  const seen: (Headers | undefined)[] = [];
+  const f = mockFetch((_url, _b, init) => {
+    seen.push(new Headers(init?.headers));
+    return new Response(new Uint8Array([1, 2, 3]), { headers: { "content-type": "application/pdf" } });
+  });
+  const c = createSurenseClient({ tokens: tokens(mockFetch(() => tokenOk()).fetch), log: silentLog(), fetch: f.fetch, sleep: noSleep });
+  assert.equal((await c.downloadFile(S3)).bytes.byteLength, 3);
+  assert.equal(seen[0]?.get("authorization"), null, "no bearer token to the S3 host");
+  await c.downloadFile("https://api.surense.com/files/1");
+  assert.ok(seen[1]?.get("authorization")?.startsWith("Bearer "), "the bearer still goes to api.surense.com");
+  await assert.rejects(c.putUpload(S3, new Uint8Array(1), "application/pdf"), (e) => e instanceof SurenseError && e.code === "host_not_allowed");
+  const r = mockFetch(() => new Response(null, { status: 302, headers: { location: "https://evil.example.test/x" } }));
+  const c2 = createSurenseClient({ tokens: tokens(mockFetch(() => tokenOk()).fetch), log: silentLog(), fetch: r.fetch, sleep: noSleep });
+  await assert.rejects(c2.downloadFile(S3), (e) => e instanceof SurenseError && e.code === "redirect_refused");
+  assert.equal(r.calls.length, 1, "the redirect target is never requested");
 });
 
 // ---------------------------------------------------------------- svix

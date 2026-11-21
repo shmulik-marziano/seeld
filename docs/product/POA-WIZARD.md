@@ -71,11 +71,29 @@ The wizard never talks to Surense; `poa-intake` does (`_shared/poa/engine/surens
 2. `POST /customers/proxies/invite` (`proxies.invite`) with `customerId`, `licenseeId` (first active licensee, cached in
    memory), `swiftnessAccountId` (first active account, only when `maslaka` is enabled) and the `nispah*` flags of the
    enabled modules. Only `url` is used: the urlId is the last path segment of `/app/p/<urlId>`; the message is dropped.
-3. The public page API (`dp.surense.com`, server to server only): `proxies/load`, `proxies/start`, then per module
-   `proxies/swiftness`, `proxies/hb`, `proxies/policies`; `proxies_preview` (flag `sw|hb|p`) returns the PDF.
-   Host allowlist is exactly `api.surense.com` plus the dp host; HTTPS only, redirects refused, 15 s timeout per call,
-   no `Authorization` header to the dp host. Every call is audited through `api.surense_audit` (op, status, phase; no values).
-4. Final documents arrive through the connector: the webhook events `dataproxy.aleph|hei|bet.approved` plan a document
+3. The public page API (`dp.surense.com`, server to server only; base path `/api/v1/ifs/public`, verified in the owner's
+   full run of 2026-11-22, overridable with `SURENSE_DP_BASE`): `proxies/load`, `proxies/start`, then per module
+   `proxies/swiftness`, `proxies/hb`, `proxies/policies`; `GET proxies_preview?sw=true|hb=true|p=true&sid=<sid>` returns the
+   (unsigned) PDF. Host allowlist is exactly `api.surense.com` plus the dp host; HTTPS only, redirects refused, 15 s timeout per
+   call, no `Authorization` header to the dp host. Every call is audited through `api.surense_audit` (op, status, phase; no values).
+   Locked wire formats (verified 2026-11-22): every answer is `{nextStep, sid}`; `swiftness` sends `{sid}` only; `hb` sends
+   `birthDate` and `nationalIdCardIssuingDate` as ISO `YYYY-MM-DD`; `policies` sends `signature` as the full PNG data URL
+   (`data:image/png;base64,...`). Not yet verified: the `cellNumber` format of `proxies/start` (E.164 is the guess) and the body
+   of the 400 that `proxies/start` answered once for an existing customer (a 400 maps to the `generic` kind, one mapping in
+   `_shared/poa/errors.ts`).
+4. Final documents, primary path: the `policies` answer is `{nextStep: 7, swiftnessProxyUrl?, hbProxyUrl, policiesProxyUrl}`,
+   pre-signed S3 links to the three final PDFs. `engine.consent("policies")` returns them (`{swiftness?, hb?, policies?}`) and
+   `poa-intake`, right after recording the consent, stores each one (`_shared/poa/finaldocs.ts`): fetch (HTTPS and exactly the
+   download host `surense-accounts-docs.s3.eu-west-1.amazonaws.com`, approved by the owner 2026-11-22, downloads only; no
+   `Authorization` header and no cookies, redirects refused, 15 s timeout, max 2 MB, `application/pdf` or
+   `application/octet-stream` and a `%PDF-` start) -> SHA-256 -> `api.poa_document_from_url(session, kind, sha256)` (creates or
+   refreshes the `crm.documents` row, returns `{document_id, agency_id, stored}`; needs `poa_docs_enabled`) -> private
+   `client-docs` bucket at `poa/{agency}/{session}/{kind}-{document}.pdf` -> `api.poa_document_stored`. A failure here never
+   fails the consent response: it is logged by code and recorded with `api.poa_session_fail(session, 'docs_<reason>')` (accepted
+   on an open or completed session), and the webhook path below fills in whatever is missing. A closed `poa_docs_enabled` (423)
+   skips the step silently. When the webhook path later links a Surense document to a row that already holds a file stored
+   here, `api.poa_document_link` keeps the stored path and hash and answers `stored: true`, and the worker skips its own download.
+   Final documents, fallback path through the connector: the webhook events `dataproxy.aleph|hei|bet.approved` plan a document
    pull; afterwards `api.poa_document_link(p_customer, p_kind, p_document_id, p_sha256)` links the newest document to the
    session (`aleph`=`maslaka`, `hei`=`harbit`, `bet`=`policies`). The link never raises for a customer that has no session.
    Bytes are fetched, hashed and stored only for a customer that has a session and only from an allowed download host.
@@ -136,11 +154,16 @@ Job kind `surense.e9100_submit` (params `customer_id`, `proxy_approval_date`; de
 
 All of these live in one place each and are covered by contract tests on synthetic values only:
 
-- the public-page API path prefix and exact route spelling (`SURENSE_DP_BASE`, `_shared/poa/dp.ts`), and the HTTP shape of `proxies_preview`;
-- value formats: dates for `proxies/hb`, the cell number format, the signature encoding (`_shared/poa/formatters.ts`, each with `TODO(owner-full-run)`);
-- response shapes of `proxies/load` and `proxies/start` (only `sid` is read, defensively);
-- which Surense document is the aleph/hei/bet one (the newest is linked; document type ids are unknown);
-- the download host of the final documents (pre-signed links; refused until the owner approves a host, so documents stay metadata-only meanwhile);
+Locked by the owner's full run of 2026-11-22 (no longer open): the base path `/api/v1/ifs/public` and the route spelling, the
+shape of `proxies_preview`, ISO dates for `proxies/hb`, the signature as a full PNG data URL, `{sid}` only for `swiftness`,
+`{nextStep, sid}` answers, the pre-signed links of the `policies` answer and their download host.
+
+Still open:
+
+- the cell number format of `proxies/start` (`cellForTool` in `_shared/poa/formatters.ts`, `TODO(owner-full-run)`; E.164 assumed);
+- the body of the 400 that `proxies/start` returned once for an existing customer (`kindFromToolStatus`, `_shared/poa/errors.ts`);
+- response shape of `proxies/load` (only `sid` is read, defensively);
+- which Surense document is the aleph/hei/bet one on the webhook fallback path (the newest is linked; document type ids are unknown);
 - whether `proxies/invite` accepts `nispahBet` without a policies list;
 - the customer search field used to resolve a duplicate (`idNumber`).
 
@@ -167,9 +190,10 @@ Migration `20261121150000_poa_flow.sql`, pgTAP `supabase/tests/12_poa_flow.test.
 | `poa_engine_ref_set(p_session uuid, p_ref jsonb)` | `poa_enabled` | flat snake_case object; `customer_id` (uuid) also fills `surense_customer_id` |
 | `poa_preview_set(p_session uuid, p_kind text, p_sha256 text)` | `poa_enabled` | the file shown last; consent is accepted only for this exact hash |
 | `poa_consent_record(p_session uuid, p_kind text, p_method text, p_preview_sha256 text, p_signature text, p_ip text, p_user_agent text, p_extra jsonb)` | `poa_enabled` | method `check|signature|typed`; harbit needs `p_extra {birth_date, issue_date}` (ISO); `signature` needs a PNG data url. Idempotent per module. The last enabled module completes the session. Returns `{kind, method, approved_at, valid_until (null), modules, next, complete}` |
-| `poa_session_fail(p_session uuid, p_code text)` | `poa_enabled` | code only; `locked` also closes the session |
+| `poa_session_fail(p_session uuid, p_code text)` | `poa_enabled` | code only; `locked` also closes the session; `launch_*` (completed sessions) and `docs_*` (open or completed) are recorded without changing the status |
 | `poa_session_complete(p_session uuid)` | `poa_enabled` | idempotent; `{complete, status, completed_at, customer_id}` |
 | `poa_document_link(p_customer uuid, p_kind text, p_document_id uuid, p_sha256 text)` | none | never raises a switch error and never for an unknown customer (`{linked:false}`); upserts `documents` as `pending_staff_verification`; `{linked, session_id, agency_id, document_id, complete}` (`complete` = every enabled module has a document, which stamps `docs_complete_at`) |
+| `poa_document_from_url(p_session uuid, p_kind text, p_sha256 text)` | `poa_docs_enabled` | a final document that arrived as a pre-signed link: creates or refreshes the `crm.documents` row of a live session for a performed module (no Surense document id) and returns `{document_id, agency_id, stored, complete}`; a row that already holds a stored file is left untouched |
 | `poa_document_stored(p_document uuid, p_path text, p_sha256 text)` | none | records the object path (must equal the pattern exactly) and the hash after the worker stored the bytes |
 | `poa_config()` | none | read only: `{poa_enabled, engine, turnstile_required, modules{maslaka,harbit,policies}}` |
 | `poa_doc_get(p_token_hash bytea, p_kind text)` | `poa_docs_enabled` | peek: `{storage_path, sha256}`; module must be enabled for the session; within 30 minutes of completion; refused once downloaded. Claims nothing. |

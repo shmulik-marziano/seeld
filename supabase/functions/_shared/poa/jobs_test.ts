@@ -197,3 +197,17 @@ Deno.test("document link: no session / switch off / RPC missing is not a failure
   const boom = deps(() => json({ entries: [] }), () => { throw new RpcError(500, "XX000", "x"); });
   await assert.rejects(linkPoaDocument(boom.d, { customerId: CID, kind: "policies", docs }));
 });
+
+Deno.test("document link: a row that already holds a stored file (stored=true) is not downloaded, put or re-recorded", async () => {
+  const docs = [{ id: DOC1, createdDate: "2026-11-21T10:00:00Z" }];
+  const puts: string[] = [];
+  const t = deps(docsRoute("api.surense.com"), () => ({ linked: true, session_id: SESSION, agency_id: SESSION, document_id: DOC1, complete: true, stored: true }), {
+    put: async (p: string) => (puts.push(p), "stored" as const),
+  });
+  const r = await linkPoaDocument(t.d, { customerId: CID, kind: "policies", docs });
+  assert.deepEqual(r, { linked: true, complete: true, hashed: false, stored: true });
+  assert.equal(t.f.calls.length, 0, "no bytes fetched");
+  assert.deepEqual(puts, []);
+  assert.equal(t.rpc.calls.filter((c) => c.fn === "poa_document_link").length, 1, "no second link with a hash");
+  assert.ok(!t.rpc.calls.some((c) => c.fn === "poa_document_stored"));
+});

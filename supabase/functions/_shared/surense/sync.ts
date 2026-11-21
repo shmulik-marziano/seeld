@@ -188,6 +188,8 @@ interface LinkResult {
   agency_id?: string;
   /** linked=false with reason 'already_linked': this Surense document already backs another kind of the session */
   reason?: string;
+  /** the session's row already holds a stored file (e.g. from the policies-step links): bytes and hash are left alone */
+  stored?: boolean;
 }
 
 /** at most this many of the newest documents are offered to the session, newest first (one per kind is all it can take) */
@@ -234,6 +236,8 @@ export async function linkPoaDocument(d: SyncDeps, o: { customerId: string; kind
     return NO_LINK;
   }
   if (!first) return NO_LINK;
+  // a file was already stored for this row (the policies-step links): never download or overwrite its hash
+  if (first.stored === true) return { linked: true, complete: first.complete === true, hashed: false, stored: true };
 
   let sha: string | null = null;
   let bytes: Uint8Array | null = null;

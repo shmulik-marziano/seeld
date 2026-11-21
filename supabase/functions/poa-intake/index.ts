@@ -12,6 +12,8 @@ import { loadPoaEnv, poaEnvPresence } from "../_shared/poa/config.ts";
 import { createSurenseEngine } from "../_shared/poa/engine/surense.ts";
 import type { PoaEngine } from "../_shared/poa/engine/types.ts";
 import { createObjectReader } from "../_shared/poa/storage.ts";
+import { createFinalDocFetcher } from "../_shared/poa/finaldocs.ts";
+import { createStorage } from "../_shared/surense/storage.ts";
 
 declare const Deno: { serve(h: (req: Request) => Response | Promise<Response>): unknown; env: { get(name: string): string | undefined } };
 
@@ -39,4 +41,9 @@ if (rpc && tokens) {
 }
 const storage = env.supabaseUrl && env.secretKey ? createObjectReader({ url: env.supabaseUrl, apikey: env.secretKey }) : null;
 
-Deno.serve(createPoaHandler({ env, rpc, log, engine, storage, startMinMs: poaEnv.startMinMs, startBucketMs: poaEnv.startBucketMs }));
+// final documents: pre-signed links fetched without credentials (host-locked), written with the service key
+const finalDocs = env.supabaseUrl && env.secretKey
+  ? { fetcher: createFinalDocFetcher({ log }), storage: createStorage({ url: env.supabaseUrl, apikey: env.secretKey }), log }
+  : null;
+
+Deno.serve(createPoaHandler({ env, rpc, log, engine, storage, finalDocs, startMinMs: poaEnv.startMinMs, startBucketMs: poaEnv.startBucketMs }));

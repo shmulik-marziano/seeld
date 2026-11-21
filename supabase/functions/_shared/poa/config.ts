@@ -3,9 +3,9 @@
 import { isUuid } from "../surense/api.ts";
 
 export const DEFAULT_DP_HOST = "dp.surense.com";
-// TODO(owner-full-run): the path prefix of the public page API is not documented anywhere ("proxies/load" is all the
-// reference gives). One constant, overridable by SURENSE_DP_BASE; fixtures in the tests use whatever is configured.
-export const DEFAULT_DP_BASE = "/api";
+// verified 2026-11-22 (owner's full run): the public page API lives under /api/v1/ifs/public. One constant,
+// overridable by SURENSE_DP_BASE.
+export const DEFAULT_DP_BASE = "/api/v1/ifs/public";
 
 /** /start answers no sooner than this (ms), then in steps of START_BUCKET_MS: the real chain is 6-7 upstream calls, so a fixed
  *  small floor would be a no-op and a duplicate-customer path (one more round trip) would be visible in the timing. */

@@ -186,8 +186,9 @@ queue), `surense_write_enabled` (writes to Surense: proxies invite, E9100 submit
 (inbox), `surense_retention_enabled` (`ops.cleanup` purges mirror tombstones after 30 days and keeps the latest 3
 portfolio snapshots per customer and mode). Admin flips them with `staff.admin_config_set`.
 
-Rules in code: the only outbound host is `api.surense.com` (`_shared/surense/client.ts` `ALLOWED_HOSTS`; pre-signed
-upload/download links on another host are refused and counted until the owner approves that host). The OAuth token lives
+Rules in code: the outbound hosts are `api.surense.com` and, for pre-signed document DOWNLOADS only (never the bearer
+token, never uploads), `surense-accounts-docs.s3.eu-west-1.amazonaws.com` (`_shared/surense/client.ts` `ALLOWED_HOSTS`;
+approved by the owner 2026-11-22). Pre-signed links on any other host are refused and counted until the owner approves that host. The OAuth token lives
 in memory per isolate (refreshed 60 s before `expires_in`, single flight, dropped on 401). Retries: 3 attempts, backoff
 500 ms / 2 s, on 429/502/503/504 and network/timeout for idempotent calls; writes retry only on 429. Errors keep the HTTP
 status and the numeric Surense code (40000, 40001, 40204, 40205) and drop the server text. Logs: method, path template,
