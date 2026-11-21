@@ -132,6 +132,10 @@ verify_jwt = false
 verify_jwt = true
 [functions.surense-health]     # staff probe of the Surense credentials (read only, no token returned); deployed v1
 verify_jwt = true
+[functions.poa-intake]         # public POA wizard backend; Origin + Turnstile + session token + ops.config switches (poa_*) in the function and DB
+verify_jwt = false
+[functions.client-docs]        # staff download of stored client documents; JWT + staff aal2/fresh MFA checked in the DB (staff.client_doc_get)
+verify_jwt = true
 # Platform scaffolds kept until the owner decides (park them, or keep and fix). Never public.
 [functions.api-v1]
 verify_jwt = true

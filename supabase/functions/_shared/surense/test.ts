@@ -331,7 +331,7 @@ Deno.test("mirror: document and product rows keep names, notes and policy number
 // ---------------------------------------------------------------- event routing
 Deno.test("events: refs and plans by type (payload schema unknown: ids only)", () => {
   assert.deepEqual(eventRefs({ type: "x", data: { customerId: CID.toUpperCase(), name: "Zz" } }).customerId, CID);
-  assert.deepEqual(planEvent("dataproxy.hei.approved", { data: { customerId: CID } }), { action: "pull_documents", customerId: CID });
+  assert.deepEqual(planEvent("dataproxy.hei.approved", { data: { customerId: CID } }), { action: "pull_documents", customerId: CID, poaKind: "harbit" });
   assert.deepEqual(planEvent("swiftness.e9100.completed", { data: { customerId: CID, eventId: EVT } }), { action: "e9100_download", customerId: CID, eventId: EVT });
   assert.deepEqual(planEvent("swiftness.e9100.completed", { data: { customerId: CID, id: EVT } }).action, "e9100_download", "id doubles as event id");
   assert.deepEqual(planEvent("swiftness.e9100.completed", { data: { customerId: CID } }), { action: "skip", reason: "no_e9100_ref" });

@@ -4,10 +4,12 @@
 # [functions.<name>] block in supabase/config.toml (scripts/ci/check-supabase-config.mjs).
 _shared
 chat-bot
+client-docs
 fetch-cma-data
 health
 lead-intake
 notify-worker
+poa-intake
 staff-invite
 surense-health
 surense-sync

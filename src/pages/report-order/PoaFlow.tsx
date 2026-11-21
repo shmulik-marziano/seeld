@@ -1,12 +1,13 @@
 // POA wizard page (/report/start/order, docs/product/POA-WIZARD-SPEC.md §2). Lazy-loaded, off by default:
-// with POA_ENABLED false it only redirects to /report/start. PR 2 runs on the in-memory mock adapter only.
+// with POA_ENABLED false it only redirects to /report/start. The adapter is the poa-intake HTTP adapter; the in-memory
+// mock is used only when VITE_POA_ADAPTER is "mock" (development) or when a test injects one.
 // Personal details stay in component state: no storage, no analytics. noindex (RouteSeo + this page's own tag).
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { PubPage } from "@/components/sd/pubParts";
 import { POA_ENABLED, type PoaKind } from "@/lib/poa/config";
 import { POA_COPY as C, poaStep } from "@/lib/poa/copy";
-import { createMockPoaApi, errorKindOf, ERROR_KINDS, type ErrorKind, type PoaApi } from "@/lib/poa/api";
+import { createHttpPoaApi, createMockPoaApi, errorKindOf, ERROR_KINDS, type ErrorKind, type PoaApi } from "@/lib/poa/api";
 import { backOf, initialState, progress, reduce, shouldWarn, steps, type PoaEvent } from "@/lib/poa/machine";
 import { Welcome } from "./screens/Welcome";
 import { Identity } from "./screens/Identity";
@@ -18,6 +19,7 @@ import { Policies } from "./screens/Policies";
 import { Done } from "./screens/Done";
 import { ErrorScreen } from "./screens/ErrorScreen";
 import type { Dir } from "./parts";
+import { useTurnstileToken } from "./useTurnstileToken";
 import "@/questionnaires/questionnaires.css";
 import "@/components/risk/risk.css";
 import "./poa.css";
@@ -49,9 +51,11 @@ export function PoaWizard({ api: injected }: { api?: PoaApi }) {
   useNoIndex();
   const api = useMemo<PoaApi>(() => {
     if (injected) return injected;
+    if (import.meta.env.VITE_POA_ADAPTER !== "mock") return createHttpPoaApi();
     const code = devFail();
     return createMockPoaApi({ delayMs: 250, ...(code ? { fail: { code } } : {}) });
   }, [injected]);
+  const turnstile = useTurnstileToken();
   const [state, dispatchRaw] = useReducer(reduce, undefined, initialState);
   const [dir, setDir] = useState<Dir>("fwd");
   const [busy, setBusy] = useState(false);
@@ -111,13 +115,20 @@ export function PoaWizard({ api: injected }: { api?: PoaApi }) {
   const confirm = () => {
     if (state.started) return dispatch({ type: "FORWARD" });
     const { identity: i, contact: c } = state;
-    return run(async () => ({
-      type: "STARTED",
-      res: await api.start({
-        first_name: i.first, last_name: i.last, national_id: i.id, phone: c.phone,
-        email: c.email || null, terms_privacy_approved: true, marketing_approved: c.marketing,
-      }),
-    }));
+    return run(async () => {
+      try {
+        const turnstile_token = await turnstile.waitForToken();
+        return {
+          type: "STARTED",
+          res: await api.start({
+            first_name: i.first, last_name: i.last, national_id: i.id, phone: c.phone,
+            email: c.email || null, terms_privacy_approved: true, marketing_approved: c.marketing, turnstile_token,
+          }),
+        };
+      } finally {
+        turnstile.reset(); // a Turnstile token works once, also when the call failed
+      }
+    });
   };
 
   const prog = progress(state);
@@ -133,7 +144,7 @@ export function PoaWizard({ api: injected }: { api?: PoaApi }) {
     case "s2": body = <Contact {...base} initial={state.contact} onSubmit={(contact) => dispatch({ type: "CONTACT", contact })} onBack={back!} />; break;
     case "s2a": body = (
       <Review {...base} identity={state.identity} contact={state.contact} started={state.started}
-        onConfirm={confirm} onEdit={() => dispatch({ type: "EDIT" }, "back")} onBack={back} />
+        turnstile={turnstile.widget} onConfirm={confirm} onEdit={() => dispatch({ type: "EDIT" }, "back")} onBack={back} />
     ); break;
     case "maslaka": body = <Maslaka {...base} pdf={previews.maslaka?.pdf ?? null} onSubmit={() => consent("maslaka")} onBack={back} />; break;
     case "harbit": body = <Harbit {...base} pdf={previews.harbit?.pdf ?? null} initial={harbitDraft} onDraft={setHarbitDraft} onSubmit={(v) => consent("harbit", v)} onBack={back} />; break;

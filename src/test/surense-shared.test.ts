@@ -53,7 +53,7 @@ describe("surense mirror mapping", () => {
     for (const v of ["Zzfirst", "Zzlast", "012345678", "zz@example.test", "+972500000000"]) expect(index).not.toContain(v);
   });
   it("routes webhook events by type", () => {
-    expect(planEvent("dataproxy.bet.approved", { data: { customerId: CID } })).toEqual({ action: "pull_documents", customerId: CID });
+    expect(planEvent("dataproxy.bet.approved", { data: { customerId: CID } })).toEqual({ action: "pull_documents", customerId: CID, poaKind: "policies" });
     expect(planEvent("activity.created", {})).toEqual({ action: "skip", reason: "no_handler" });
   });
 });
