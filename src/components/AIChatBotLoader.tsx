@@ -1,6 +1,8 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { MessageCircle } from "lucide-react";
 import { LiveDot } from "@/components/brand/Live";
+import ChatLauncher from "@/components/ChatLauncher";
+import { LIVE_MARK } from "@/lib/flags/liveMark";
 import { IS_V2 } from "@/integrations/supabase/config";
 import "@/components/sd/chrome.css";
 
@@ -37,6 +39,20 @@ const AIChatBotLoader = () => {
       <Suspense fallback={null}>
         <AIChatBot defaultOpen={openOnMount.current} />
       </Suspense>
+    );
+  }
+
+  if (LIVE_MARK) {
+    return (
+      <ChatLauncher
+        onClick={() => {
+          openOnMount.current = true;
+          setMounted(true);
+        }}
+        onPointerEnter={() => { void loadChat(); }}
+        onFocus={() => { void loadChat(); }}
+        onTouchStart={() => { void loadChat(); }}
+      />
     );
   }
 

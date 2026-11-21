@@ -9,6 +9,9 @@ import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { LINE, MONO, MUTED, NAVY, RING } from "@/lib/brand";
 import { LiveDot, LiveTag } from "@/components/brand/Live";
+import ChatLauncher from "@/components/ChatLauncher";
+import LogoMark, { type LogoMarkState } from "@/components/brand/LogoMark";
+import { LIVE_MARK } from "@/lib/flags/liveMark";
 import "@/components/sd/chrome.css";
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -64,6 +67,7 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [inputFocused, setInputFocused] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
@@ -245,6 +249,206 @@ const AIChatBot = ({ defaultOpen = false }: { defaultOpen?: boolean }) => {
     localStorage.removeItem("seeld_chat_session");
     inputRef.current?.focus();
   };
+
+  if (LIVE_MARK) {
+    const lastMsg = messages[messages.length - 1];
+    const waiting = isLoading && lastMsg?.role === "assistant" && lastMsg.content === "";
+    const streaming = isLoading && !waiting && lastMsg?.role === "assistant";
+    const markState: LogoMarkState = waiting
+      ? "thinking"
+      : streaming
+        ? "speaking"
+        : inputFocused || input.length > 0
+          ? "listening"
+          : "idle";
+    const statusLabel = { idle: "זמין", listening: "מקשיב", thinking: "חושב", speaking: "עונה" }[markState];
+    const lastIdx = messages.length - 1;
+
+    return (
+      <>
+        {!isExpanded && <ChatLauncher onClick={() => setIsExpanded(true)} />}
+
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: reduced ? 0 : 0.2, ease: "easeOut" }}
+              className="fixed z-[60] flex flex-col inset-x-2 top-16 sm:inset-auto sm:bottom-4 sm:left-6 sm:h-[min(700px,calc(100dvh-3rem))] sm:w-[440px] lg:w-[500px]"
+              style={{ bottom: "calc(8px + env(safe-area-inset-bottom, 0px))" }}
+              role="dialog"
+              aria-label="שיחה עם היועץ הדיגיטלי של SEELD"
+            >
+              <div
+                className="flex h-full flex-col overflow-hidden"
+                style={{ backgroundColor: PANEL_BG, borderRadius: 16, border: `1px solid ${LINE}`, boxShadow: "0 24px 60px -18px rgba(32, 57, 87,.35)" }}
+              >
+                {/* Header: three symmetric columns, no band */}
+                <div className="grid shrink-0 grid-cols-[44px_1fr_44px] items-center px-4 pb-1 pt-3">
+                  {messages.length > 0 ? (
+                    <button
+                      onClick={clearConversation}
+                      aria-label="שיחה חדשה"
+                      title="שיחה חדשה"
+                      className="flex h-11 w-11 items-center justify-center rounded-full text-[#55677C] transition-colors duration-150 hover:bg-[#203957]/5 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#203957]"
+                    >
+                      <RotateCcw className="h-4 w-4" />
+                    </button>
+                  ) : (
+                    <span aria-hidden="true" />
+                  )}
+                  <div className="flex flex-col items-center gap-1">
+                    <LogoMark state={markState} breathe size="44px" />
+                    <span
+                      data-chat-status={markState}
+                      aria-live="polite"
+                      className="text-[10.5px] tracking-[0.14em]"
+                      style={{ fontFamily: MONO, color: MUTED }}
+                    >
+                      {statusLabel}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setIsExpanded(false)}
+                    aria-label="סגירת הצ'אט"
+                    className="flex h-11 w-11 items-center justify-center rounded-full text-[#55677C] transition-colors duration-150 hover:bg-[#203957]/5 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#203957]"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+
+                {/* Messages */}
+                <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+                  {messages.length === 0 ? (
+                    <div className="flex h-full flex-col justify-between gap-6 py-2">
+                      <div className="space-y-5 text-center">
+                        <div className="flex flex-col items-center">
+                          <LogoMark state={markState} breathe size="72px" />
+                          <h4
+                            className="mt-3 text-[22px] leading-snug text-[#203957]"
+                            style={{ fontFamily: "'Rubik', Arial, sans-serif", fontWeight: 700 }}
+                          >
+                            שלום, כאן היועץ הדיגיטלי.
+                          </h4>
+                          <p className="mt-2 max-w-sm text-[15px] leading-relaxed text-[#2D435D]">
+                            ביטוח, פנסיה, חיסכון או מס: שאלו כל דבר. עונה מיד, ומחבר אתכם ליועץ אנושי כשצריך.
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                          {suggestions.map((s, i) => (
+                            <button
+                              key={i}
+                              onClick={() => streamChat(s.text)}
+                              className="flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-white px-3 py-3 text-center text-[14px] font-medium text-[#203957] transition-colors duration-150 hover:bg-[#EEF2EC] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                              style={{ boxShadow: RING }}
+                            >
+                              <s.icon className="h-4 w-4 shrink-0 text-[#55677C]" strokeWidth={1.75} />
+                              {s.text}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <a
+                        href={waHref(CONTACTS[contactFor(location.pathname)])}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 py-2 text-[14px] font-medium text-[#55677C] underline-offset-4 transition-colors duration-150 hover:text-[#203957] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                      >
+                        <Phone className="h-3.5 w-3.5" strokeWidth={1.75} />
+                        מעדיפים בן אדם? שיחה בוואטסאפ
+                      </a>
+                    </div>
+                  ) : (
+                    <>
+                      {messages.map((msg, i) =>
+                        msg.role === "user" ? (
+                          <div key={i} className="flex justify-start">
+                            <div className="max-w-[88%] rounded-[14px] bg-[#203957] px-4 py-3 text-[14.5px] leading-relaxed text-white">
+                              {msg.content}
+                            </div>
+                          </div>
+                        ) : (
+                          <div key={i} className="flex items-start gap-2.5">
+                            <span className="mt-0.5 shrink-0">
+                              <LogoMark
+                                state={msg.content === "" ? "thinking" : i === lastIdx && isLoading ? "speaking" : "idle"}
+                                size="22px"
+                              />
+                            </span>
+                            <div className="min-w-0 flex-1 text-[14.5px] leading-relaxed text-[#203957]">
+                              {msg.content !== "" && (
+                                <div className="prose prose-sm max-w-none [&_p]:mb-1.5 [&_p:last-child]:mb-0 [&_ul]:mt-1 [&_li]:text-[14.5px] [&_p]:text-[14.5px] [&_a]:text-[#203957] [&_a]:underline">
+                                  <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ),
+                      )}
+                      {!isLoading && messages.length < 6 && (
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {suggestions.slice(0, 2).map((s, i) => (
+                            <button
+                              key={i}
+                              onClick={() => streamChat(s.text)}
+                              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[14px] font-medium text-[#55677C] transition-colors duration-150 hover:text-[#203957] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--ring))]"
+                              style={{ boxShadow: HAIRLINE }}
+                            >
+                              <s.icon className="h-3 w-3" strokeWidth={1.75} />
+                              {s.text}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                      <div ref={messagesEndRef} />
+                    </>
+                  )}
+                </div>
+
+                {/* Input */}
+                <form onSubmit={handleSubmit} className="shrink-0 border-t border-[#D9DEE4] px-4 py-3">
+                  <div className="flex items-end gap-2">
+                    <textarea
+                      ref={inputRef}
+                      rows={1}
+                      value={input}
+                      onChange={(e) => {
+                        setInput(e.target.value);
+                        e.target.style.height = "auto";
+                        e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`;
+                      }}
+                      onFocus={() => setInputFocused(true)}
+                      onBlur={() => setInputFocused(false)}
+                      onKeyDown={handleInputKeyDown}
+                      placeholder="כתבו שאלה, Enter לשליחה"
+                      aria-label="הודעה ליועץ הדיגיטלי"
+                      className="min-h-[48px] max-h-[120px] min-w-0 flex-1 resize-none rounded-[24px] bg-white px-5 py-3 text-right text-[14.5px] leading-snug text-[#203957] transition-shadow duration-150 placeholder:text-[#55677C] focus:outline-none shadow-[0_0_0_1px_#D9DEE4] focus:shadow-[0_0_0_1px_#203957]"
+                      disabled={isLoading}
+                    />
+                    <button
+                      type="submit"
+                      disabled={isLoading || !input.trim()}
+                      aria-label="שליחת הודעה"
+                      className={cn(
+                        "flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--ring))]",
+                        input.trim() ? "bg-[#203957] text-white hover:bg-[#162B45]" : "bg-[#203957]/10 text-[#55677C]",
+                      )}
+                    >
+                      {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                    </button>
+                  </div>
+                  <p className="mt-2 text-center text-[10.5px] tracking-[0.14em] text-[#55677C]" style={{ fontFamily: MONO }} dir="ltr">
+                    מידע כללי בלבד. לא ייעוץ אישי.
+                  </p>
+                </form>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </>
+    );
+  }
 
   return (
     <>

@@ -217,3 +217,11 @@
 .sd-chrome-foot-col .sd-ci a { width: 44px; height: 44px; min-height: 44px; border-radius: 999px; color: #fff; text-decoration: none; }
 .sd-chrome-foot-col .sd-ci a:hover { color: #203957; text-decoration: none; }
 .sd-chrome-foot-col .sd-ci a svg { color: currentColor; }
+
+/* Live-mark chat launcher (LIVE_MARK on): white hairline pill, ink text. Added beside the old rules, which stay for LIVE_MARK off. */
+.sd-chrome-fab.sd-chrome-fab-chat--live { color: var(--c-ink); background: #fff; border: 1px solid #D9DEE4; gap: 10px; box-shadow: 0 10px 28px -12px rgba(32, 57, 87, .35); }
+.sd-chrome-fab.sd-chrome-fab-chat--live:hover { background: #fff; box-shadow: 0 14px 30px -12px rgba(32, 57, 87, .45); }
+.sd-chrome-fab.sd-chrome-fab-chat--live { width: 52px; height: 52px; padding: 0; }
+@media (min-width: 640px) {
+  .sd-chrome-fab.sd-chrome-fab-chat--live { width: auto; height: 52px; padding-inline: 12px 20px; }
+}
