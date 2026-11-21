@@ -324,8 +324,13 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
                     <span aria-hidden="true" />
                   )}
                   <div className="flex flex-col items-center gap-1">
-                    {/* One live mark per view: while the welcome hero is up it carries the animation, the header stays still. */}
-                    <LogoMark state={messages.length === 0 ? "idle" : markState} breathe={messages.length > 0} size="44px" />
+                    {/* One live mark per view: the welcome hero carries the animation before the first message, and the
+                        avatar beside the reply carries it while the assistant thinks or answers. The header only listens. */}
+                    <LogoMark
+                      state={messages.length === 0 || markState === "thinking" || markState === "speaking" ? "idle" : markState}
+                      breathe={messages.length > 0}
+                      size="44px"
+                    />
                     <span className="sr-only" role="status" aria-live="polite">{markState === "thinking" || markState === "speaking" ? statusLabel : ""}</span>
                     <span
                       data-chat-status={markState}
@@ -400,14 +405,25 @@ const AIChatBot = ({ defaultOpen = false, initialPrefill = "" }: { defaultOpen?:
                             </div>
                           </div>
                         ) : (
-                          <div key={i} className="flex items-start gap-2.5">
-                            <span className="mt-0.5 shrink-0">
+                          <div
+                            key={i}
+                            className="flex items-start gap-3"
+                            data-chat-reply={i === messages.length - 1 && isLoading ? markState : "idle"}
+                          >
+                            {/* The avatar beside the reply is the live mark: the dots orbit while thinking, sway while answering. */}
+                            <span className="-mt-1 shrink-0" aria-hidden="true">
                               <LogoMark
-                                state="idle"
-                                size="22px"
+                                state={i === messages.length - 1 && isLoading ? markState : "idle"}
+                                instant={i === messages.length - 1 && isLoading}
+                                size="40px"
                               />
                             </span>
-                            <div className="min-w-0 flex-1 text-[14.5px] leading-relaxed text-[#203957]">
+                            <div className="min-w-0 flex-1 pt-2 text-[14.5px] leading-relaxed text-[#203957]">
+                              {msg.content === "" && isLoading && i === messages.length - 1 && (
+                                <span className="inline-block text-[11px] tracking-[0.14em] text-[#55677C]" style={{ fontFamily: MONO }}>
+                                  חושב
+                                </span>
+                              )}
                               {msg.content !== "" && (
                                 <div className="prose prose-sm max-w-none [&_p]:mb-1.5 [&_p:last-child]:mb-0 [&_ul]:mt-1 [&_li]:text-[14.5px] [&_p]:text-[14.5px] [&_a]:text-[#203957] [&_a]:underline">
                                   <ReactMarkdown>{msg.content}</ReactMarkdown>
