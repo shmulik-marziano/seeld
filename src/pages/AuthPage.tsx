@@ -12,6 +12,7 @@ import { Loader2, Mail, Lock, ArrowLeft, User, Phone, Building2, FileCheck, Shie
 import { Separator } from '@/components/ui/separator';
 import { LOGO_W } from '@/components/sd/client';
 import { SdPic } from '@/components/sd/primitives';
+import { BRAND_YEAR } from '@/lib/brandYear';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const entityTypes = [
@@ -587,7 +588,7 @@ export default function AuthPage() {
               <span className="text-[10px]">מאובטח</span>
             </div>
             <div className="w-1 h-1 rounded-full bg-muted-foreground/20" />
-            <span className="text-[10px]">SEELD &copy; {new Date().getFullYear()}</span>
+            <span className="text-[10px]">SEELD &copy; {BRAND_YEAR}</span>
           </motion.div>
         </motion.div>
       </div>
