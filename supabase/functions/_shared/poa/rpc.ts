@@ -163,18 +163,18 @@ export function createPoaRpc(rpc: Rpc) {
         engine: r.engine === "native" ? "native" : "surense",
         customerId,
         engineRef: ref && refCustomer && typeof ref.sid === "string" && typeof ref.url_id === "string"
-          ? { customerId: refCustomer, sid: ref.sid, urlId: ref.url_id, existing: ref.existing === true }
+          ? { customerId: refCustomer, sid: ref.sid, urlId: ref.url_id, existing: ref.existing === true, ...(typeof ref.cookie === "string" && ref.cookie ? { cookie: ref.cookie } : {}) }
           : null,
         previewSha256,
         completedAt: strOrNull(r.completed_at),
       };
     },
 
-    /** flat snake_case object, stored encrypted whole; customer_id also fills the indexed column */
+    /** flat snake_case object, stored encrypted whole; customer_id also fills the indexed column; cookie = the tool's page session */
     async engineRefSet(sessionId: string, ref: EngineRef): Promise<void> {
       await rpc.call("poa_engine_ref_set", {
         p_session: sessionId,
-        p_ref: { customer_id: ref.customerId, sid: ref.sid, url_id: ref.urlId, existing: ref.existing },
+        p_ref: { customer_id: ref.customerId, sid: ref.sid, url_id: ref.urlId, existing: ref.existing, ...(ref.cookie ? { cookie: ref.cookie.slice(0, 1200) } : {}) },
       });
     },
 

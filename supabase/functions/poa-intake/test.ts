@@ -39,7 +39,7 @@ function session(over: Record<string, unknown> = {}) {
   };
 }
 
-function mockEngine(o: { existing?: boolean; startError?: unknown; consentError?: unknown; beforeStart?: () => void; finalUrls?: FinalUrls } = {}) {
+function mockEngine(o: { existing?: boolean; startError?: unknown; consentError?: unknown; beforeStart?: () => void; finalUrls?: FinalUrls; refreshCookie?: string } = {}) {
   const calls: { name: string; args: unknown[] }[] = [];
   const engine: PoaEngine = {
     name: "surense",
@@ -51,6 +51,7 @@ function mockEngine(o: { existing?: boolean; startError?: unknown; consentError?
     },
     async consent(ref: EngineRef, kind, data) {
       calls.push({ name: "consent", args: [ref, kind, data] });
+      if (o.refreshCookie) ref.cookie = o.refreshCookie;
       if (o.consentError) throw o.consentError;
       return kind === "policies" ? o.finalUrls ?? {} : {};
     },
@@ -558,6 +559,19 @@ Deno.test("launch: the last module queues surense.e9100_submit with today's date
   const existing = setup({ script: { ...last, poa_session_get: session({ engine_ref: { customer_id: CID, sid: ENGINE_SID, url_id: URLID, existing: true } }) } });
   assert.equal((await existing.handler(post("policies", { preview_sha256: HASH, signature_png: PNG_URL }, withSession))).status, 200);
   assert.ok(!existing.rpc.calls.some((c) => c.fn === "surense_job_enqueue"), "a pre-existing customer is not launched automatically");
+
+  // the tool's page-session cookies ride inside the engine reference: read back from the session, handed to the engine,
+  // and stored again when the tool refreshed them (never when unchanged)
+  const jarRef = { customer_id: CID, sid: ENGINE_SID, url_id: URLID, existing: false, cookie: "connect.sid=abc; XSRF-TOKEN=t1" };
+  const refreshed = setup({ engine: mockEngine({ refreshCookie: "connect.sid=abc; XSRF-TOKEN=t2" }), script: { ...last, poa_session_get: session({ engine_ref: jarRef }) } });
+  assert.equal((await refreshed.handler(post("maslaka", { preview_sha256: HASH }, withSession))).status, 200);
+  assert.equal((refreshed.eng.calls.find((c) => c.name === "consent")!.args[0] as { cookie?: string }).cookie, "connect.sid=abc; XSRF-TOKEN=t2");
+  const setAgain = refreshed.rpc.calls.filter((c) => c.fn === "poa_engine_ref_set");
+  assert.equal(setAgain.length, 1, "a refreshed jar is stored once");
+  assert.deepEqual(setAgain[0].args.p_ref, { customer_id: CID, sid: ENGINE_SID, url_id: URLID, existing: false, cookie: "connect.sid=abc; XSRF-TOKEN=t2" });
+  const same = setup({ engine: mockEngine({ refreshCookie: "connect.sid=abc; XSRF-TOKEN=t1" }), script: { ...last, poa_session_get: session({ engine_ref: jarRef }) } });
+  assert.equal((await same.handler(post("maslaka", { preview_sha256: HASH }, withSession))).status, 200);
+  assert.ok(!same.rpc.calls.some((c) => c.fn === "poa_engine_ref_set"), "an unchanged jar is not stored again");
 
   const closed = setup({ script: { ...last, surense_job_enqueue: rpcError(423, "PT423", "feature_disabled:surense_enabled") } });
   assert.equal((await closed.handler(post("policies", { preview_sha256: HASH, signature_png: PNG_URL }, withSession))).status, 200);

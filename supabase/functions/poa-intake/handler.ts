@@ -437,17 +437,25 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
       if (!engine || session.engine !== "surense") throw new PoaHttpError("unavailable", "engine_not_available");
       const ref = session.engineRef;
       if (!ref) throw new PoaHttpError("unavailable", "no_engine_ref");
+      // the tool may refresh its page-session cookies on any call: a changed reference is stored again (never fails the request)
+      const keepRef = async (cookieBefore: string | undefined) => {
+        if (ref.cookie === cookieBefore) return;
+        await poa.engineRefSet(session.sessionId, ref).catch(() => log.warn("poa engine ref refresh failed", { session: session.sessionId }));
+      };
 
       if (route.name === "preview") {
         if (previews.hit(tokenHash.slice(0, 16)) > PREVIEW_LIMIT) {
           throw new PoaHttpError("locked", "preview_rate_limited", { status: 429, headers: { "retry-after": "60" } });
         }
         let bytes: Uint8Array;
+        const cookieBefore = ref.cookie;
         try {
           bytes = await engine.preview(ref, kind);
         } catch (e) {
           await poa.sessionFail(session.sessionId, toPoaError(e).code).catch(() => {});
           throw e;
+        } finally {
+          await keepRef(cookieBefore);
         }
         const sha = await sha256Hex(bytes);
         await poa.previewSet(session.sessionId, kind, sha);
@@ -487,6 +495,7 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
       if (!ip) throw bad("no_client_ip");
 
       let finalUrls: FinalUrls = {};
+      const cookieBefore = ref.cookie;
       try {
         finalUrls = (await engine.consent(ref, kind, { birthDate: birth ?? undefined, issueDate: issue ?? undefined, signaturePng: signature ?? undefined })) ?? {};
       } catch (e) {
@@ -498,6 +507,8 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
           await poa.sessionFail(session.sessionId, toPoaError(e).code).catch(() => {});
           throw e;
         }
+      } finally {
+        await keepRef(cookieBefore);
       }
       let rec: Awaited<ReturnType<PoaRpc["consentRecord"]>>;
       try {

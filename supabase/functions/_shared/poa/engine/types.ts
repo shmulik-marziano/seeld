@@ -26,6 +26,8 @@ export interface EngineRef {
   sid: string;
   /** the Surense customer existed before this session (the wizard never shows this; it blocks the automatic launch) */
   existing: boolean;
+  /** the tool's page-session cookies ("a=1; b=2"), set by load/start and refreshed by every later call; kept encrypted, never logged */
+  cookie?: string;
 }
 
 export interface ConsentData {
