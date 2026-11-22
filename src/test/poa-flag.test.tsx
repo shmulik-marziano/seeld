@@ -120,8 +120,8 @@ describe("POA page", () => {
     const f = vi.fn();
     vi.stubGlobal("fetch", f);
     await renderFlow();
-    expect(screen.getAllByRole("heading", { level: 1 }).map((h) => h.textContent)).toContain("ייפויי כוח לאיסוף מידע");
-    expect(screen.getByRole("heading", { level: 2, name: "מאשרים לנו לבקש את המידע בשמכם" })).toBeInTheDocument();
+    expect(screen.getAllByRole("heading", { level: 1 }).map((h) => h.textContent)).toContain("פתיחת תיק בשילד");
+    expect(screen.getByRole("heading", { level: 2, name: "כמה פרטים, שלושה אישורים, והמידע מגיע אלינו" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /מתחילים/ })).toBeInTheDocument();
     expect(document.head.querySelector('meta[name="robots"][content="noindex, nofollow"]')).not.toBeNull();
     expect(f).not.toHaveBeenCalled();

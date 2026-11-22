@@ -5,13 +5,21 @@
 // Strings marked "not in spec" have no wording in the spec (field labels, back button, loading, aria labels,
 // placeholder template values); they are listed in the PR description for the owner.
 // The browser never holds legal text: the document itself is the PDF the adapter returns.
-import type { PoaKind } from "./config";
+import type { PoaEntry, PoaKind } from "./config";
 
 export const POA_COPY = {
   s0: {
-    eyebrow: "ייפויי כוח לאיסוף מידע",
-    title: "מאשרים לנו לבקש את המידע בשמכם",
-    body: "שלושה אישורים, ואנחנו פונים בשמכם למסלקה הפנסיונית, להר הביטוח ולחברות הביטוח כדי לקבל את המידע לדוח.",
+    eyebrow: "פתיחת תיק בשילד",
+    title: "כמה פרטים, שלושה אישורים, והמידע מגיע אלינו",
+    /** First line, by the entry context (`?from=`, spec ס0 "נקודות כניסה"). */
+    lead: {
+      default: "כדי לבדוק את התיק שלכם כמו שצריך, אנחנו צריכים את המידע מהגופים עצמם. זה מה שקורה כאן.",
+      insurance: "ביקשתם שנבדוק את הביטוחים שלכם. כדי לעשות את זה כמו שצריך, אנחנו צריכים את המידע מהגופים עצמם. זה מה שקורה כאן.",
+      finance: "ביקשתם שנבדוק את הפנסיה והחיסכון שלכם. כדי לעשות את זה כמו שצריך, אנחנו צריכים את המידע מהגופים עצמם. זה מה שקורה כאן.",
+      portfolio: "ביקשתם שנבדוק את התיק שלכם. כדי לעשות את זה כמו שצריך, אנחנו צריכים את המידע מהגופים עצמם. זה מה שקורה כאן.",
+      join: "ברוכים הבאים לשילד. כדי שנוכל לטפל בתיק שלכם, אנחנו צריכים את המידע מהגופים עצמם. זה מה שקורה כאן.",
+    } satisfies Record<PoaEntry, string>,
+    body: "המסלקה הפנסיונית, הר הביטוח וחברות הביטוח מוסרים מידע רק עם ייפוי כוח חתום שלכם. ממלאים כאן כמה פרטים ומאשרים שלושה מסמכים, וזה לוקח כמה דקות.",
     prepareTitle: "מה צריך להכין",
     prepareLine: "תעודת הזהות עצמה, כי נבקש את תאריך ההנפקה",
     note: "בשלב האחרון חותמים באצבע או בעכבר. אם זה לא מתאים לכם, אפשר לחתום יחד איתנו.",
@@ -135,7 +143,7 @@ export const POA_COPY = {
     loading: "טוענים…",
     progressLabel: "התקדמות בתהליך",
     navLabel: "ניווט בתהליך",
-    pageTitle: "ייפויי כוח לאיסוף מידע · שילד",
+    pageTitle: "פתיחת תיק · שילד",
     datePlaceholder: "dd/mm/yyyy",
   },
   /** Display title of each document (spec §1 wording). The server template will own it (spec §1, §4). */

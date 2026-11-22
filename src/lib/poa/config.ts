@@ -17,6 +17,17 @@ export const POA_ENABLED: boolean = import.meta.env.VITE_POA_FLOW === "on" && (I
 
 export const POA_ROUTE = "/report/start/order";
 
+/**
+ * Entry contexts (spec §2 ס0 "נקודות כניסה"): the wizard is the one conversion step every marketing page leads to
+ * (`?from=<key>`); only the first line of ס0 changes with it. Unknown or missing = "default". Never stored, never sent.
+ */
+export const POA_ENTRIES = ["default", "insurance", "finance", "portfolio", "join"] as const;
+export type PoaEntry = (typeof POA_ENTRIES)[number];
+export function poaEntryOf(search: string): PoaEntry {
+  const v = new URLSearchParams(search).get("from") ?? "";
+  return (POA_ENTRIES as readonly string[]).includes(v) ? (v as PoaEntry) : "default";
+}
+
 /** The three documents, in display order (spec §1, §2). Functional names only, never the annex letters. */
 export const POA_KINDS = ["maslaka", "harbit", "policies"] as const;
 export type PoaKind = (typeof POA_KINDS)[number];

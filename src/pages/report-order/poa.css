@@ -22,6 +22,8 @@
 .sd-poa-card { margin-bottom: 0; }
 .sd-poa-card .sd-q-qtitle { padding-inline-end: 0; }
 .sd-poa-h3 { margin: 18px 0 6px; font-size: 17px; font-weight: 700; color: var(--q-navy); }
+/* ס0: the entry-context line reads as the opening sentence, the body as the explanation under it */
+.sd-poa-lead { font-weight: 600; color: var(--q-navy); }
 
 /* check fields */
 .sd-poa-check { margin: 14px 0 0; }

@@ -5,7 +5,7 @@
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { PubPage } from "@/components/sd/pubParts";
-import { POA_ENABLED, type PoaKind } from "@/lib/poa/config";
+import { POA_ENABLED, poaEntryOf, type PoaEntry, type PoaKind } from "@/lib/poa/config";
 import { POA_COPY as C, poaStep } from "@/lib/poa/copy";
 import { createHttpPoaApi, createMockPoaApi, errorKindOf, ERROR_KINDS, type ErrorKind, type PoaApi } from "@/lib/poa/api";
 import { backOf, initialState, progress, reduce, shouldWarn, steps, type PoaEvent } from "@/lib/poa/machine";
@@ -47,8 +47,13 @@ export default function PoaFlow({ api }: { api?: PoaApi }) {
   return <PoaWizard api={api} />;
 }
 
-export function PoaWizard({ api: injected }: { api?: PoaApi }) {
+export function PoaWizard({ api: injected, entry: injectedEntry }: { api?: PoaApi; entry?: PoaEntry }) {
   useNoIndex();
+  // The entry context is read once from `?from=` (spec ס0); it changes the first line of ס0 only.
+  const entry = useMemo<PoaEntry>(
+    () => injectedEntry ?? poaEntryOf(typeof window === "undefined" ? "" : window.location.search),
+    [injectedEntry],
+  );
   const api = useMemo<PoaApi>(() => {
     if (injected) return injected;
     if (import.meta.env.VITE_POA_ADAPTER !== "mock") return createHttpPoaApi();
@@ -139,7 +144,7 @@ export function PoaWizard({ api: injected }: { api?: PoaApi }) {
 
   let body: JSX.Element;
   switch (state.screen) {
-    case "s0": body = <Welcome {...base} onStart={() => dispatch({ type: "START" })} />; break;
+    case "s0": body = <Welcome {...base} entry={entry} onStart={() => dispatch({ type: "START" })} />; break;
     case "s1": body = <Identity {...base} initial={state.identity} onSubmit={(identity) => dispatch({ type: "IDENTITY", identity })} onBack={back!} />; break;
     case "s2": body = <Contact {...base} initial={state.contact} onSubmit={(contact) => dispatch({ type: "CONTACT", contact })} onBack={back!} />; break;
     case "s2a": body = (
