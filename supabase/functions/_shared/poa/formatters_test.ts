@@ -2,11 +2,15 @@
 // when the owner's full run locks a format, the expectation here changes together with formatters.ts)
 import assert from "node:assert/strict";
 import {
-  cellForTool, cleanAddress, cleanEmail, cleanName, dateForTool, harbitDates, isValidIsraeliId, MAX_SIGNATURE_CHARS, nationalIdForTool, parseIsoDate, pastIsoDate,
+  cellForTool, cleanAddress, cleanEmail, cleanName, cleanZip, dateForTool, harbitDates, isValidIsraeliId, MAX_SIGNATURE_CHARS, nationalIdForTool, parseIsoDate, pastIsoDate,
   pngBase64, signatureForTool, splitStreet, todayIsrael, toE164IsraeliMobile, toLocalMobile,
 } from "./formatters.ts";
 
 Deno.test("formatters: address lines and the street split for the tool", () => {
+  assert.equal(cleanZip("6473912"), "6473912");
+  assert.equal(cleanZip(" 647-3912 "), "6473912");
+  assert.equal(cleanZip("64739"), null, "7 digits exactly");
+  assert.equal(cleanZip(6473912), null);
   assert.equal(cleanAddress("  הרצל   12 "), "הרצל 12");
   assert.equal(cleanAddress("Tel Aviv-Yafo"), "Tel Aviv-Yafo");
   assert.equal(cleanAddress("א"), null, "two characters at least");

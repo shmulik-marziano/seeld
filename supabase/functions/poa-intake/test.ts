@@ -1,7 +1,7 @@
 // deno test supabase/functions/poa-intake/  (synthetic data only; no network: engine, RPC, storage and fetch are mocks)
 import assert from "node:assert/strict";
 import { json, mockFetch, mockRpc, rpcError, silentLog, testEnv } from "../_shared/test_helpers.ts";
-import { createPoaHandler, parseRoute, parseStart, poaCors, type PoaIntakeDeps, START_BUCKET_MS, START_MIN_MS } from "./handler.ts";
+import { createPoaHandler, parseRoute, parseStart, poaCors, type PoaIntakeDeps, START_BUCKET_MS, START_MIN_MS, ZIP_LIMIT } from "./handler.ts";
 import { PoaToolError } from "../_shared/poa/errors.ts";
 import type { EngineRef, FinalUrls, PoaEngine } from "../_shared/poa/engine/types.ts";
 import { createFinalDocFetcher } from "../_shared/poa/finaldocs.ts";
@@ -28,7 +28,7 @@ const MODS = (performed: Partial<Record<string, boolean>> = {}) => Object.fromEn
 
 const IDENTITY = {
   first_name: "Dana", last_name: "Testov", national_id: SYNTH_ID, phone: "050-123-4567", email: "dana.testov@example.com",
-  street: "Herzl 12", city: "Tel Aviv", terms_privacy_approved: true, marketing_approved: false, turnstile_token: "ts-token-secret-1",
+  street: "Herzl 12", city: "Tel Aviv", zip: "6473912", terms_privacy_approved: true, marketing_approved: false, turnstile_token: "ts-token-secret-1",
 };
 
 function session(over: Record<string, unknown> = {}) {
@@ -64,7 +64,7 @@ function mockEngine(o: { existing?: boolean; startError?: unknown; consentError?
 
 type Script = Record<string, unknown | ((args: Record<string, unknown>) => unknown)>;
 
-function setup(o: { script?: Script; engine?: ReturnType<typeof mockEngine>; env?: Record<string, string>; storage?: PoaIntakeDeps["storage"]; engineNull?: boolean; finalDocs?: PoaIntakeDeps["finalDocs"] } = {}) {
+function setup(o: { script?: Script; engine?: ReturnType<typeof mockEngine>; env?: Record<string, string>; storage?: PoaIntakeDeps["storage"]; engineNull?: boolean; finalDocs?: PoaIntakeDeps["finalDocs"]; zip?: PoaIntakeDeps["zip"] } = {}) {
   const lines: string[] = [];
   let clock = NOW;
   const waits: number[] = [];
@@ -98,6 +98,7 @@ function setup(o: { script?: Script; engine?: ReturnType<typeof mockEngine>; env
     engine: o.engineNull ? null : eng.engine,
     storage: o.storage ?? null,
     finalDocs: o.finalDocs ?? null,
+    zip: o.zip ?? null,
     fetch: f.fetch,
     now: () => clock,
     wait: async (ms) => {
@@ -132,7 +133,7 @@ Deno.test("start: response keys are exactly the contract; the token is returned 
   assert.ok(!JSON.stringify(s.rpc.calls).includes(body.session_token), "the token itself never reaches the database");
   assert.equal(start.args.p_phone, "+972501234567", "local form converted before the DB");
   assert.equal(start.args.p_national_id, SYNTH_ID);
-  assert.deepEqual(start.args.p_identity, { first_name: "Dana", last_name: "Testov", email: "dana.testov@example.com", street: "Herzl 12", city: "Tel Aviv" });
+  assert.deepEqual(start.args.p_identity, { first_name: "Dana", last_name: "Testov", email: "dana.testov@example.com", street: "Herzl 12", city: "Tel Aviv", zip: "6473912" });
   assert.equal(start.args.p_marketing, false);
   assert.equal(start.args.p_ip, IP);
   assert.equal(start.args.p_ua_hash, bytea(await sha256Hex("test-agent")), "the user agent is stored as a hash only");
@@ -276,6 +277,37 @@ Deno.test("start: Origin allowlist, preflight headers, unknown routes and method
   assert.equal((await s.handler(get("preview/other"))).status, 404);
   assert.deepEqual(parseRoute("GET", "/functions/v1/poa-intake/doc/policies"), { name: "doc", kind: "policies" });
   assert.deepEqual(parseRoute("POST", "/harbit"), { name: "consent", kind: "harbit" });
+  assert.deepEqual(parseRoute("GET", "/functions/v1/poa-intake/zip"), { name: "zip" });
+  assert.equal(parseRoute("POST", "/zip"), "method");
+});
+
+Deno.test("zip: GET /zip answers the lookup's zip (or null), needs street + city, no session, origin-gated, rate-limited", async () => {
+  const asked: unknown[] = [];
+  const zip = { lookup: (q: unknown) => { asked.push(q); return Promise.resolve("6473912"); } };
+  const s = setup({ zip });
+  const ok = await s.handler(get("zip?street=" + encodeURIComponent("Herzl 12") + "&city=" + encodeURIComponent("Tel Aviv")));
+  assert.equal(ok.status, 200);
+  assert.deepEqual(await ok.json(), { zip: "6473912" });
+  assert.deepEqual(asked, [{ city: "Tel Aviv", street: "Herzl", house: "12" }], "house number split off, nothing else sent");
+  assert.ok(!s.rpc.calls.some((c) => c.fn !== "poa_config"), "no database call for a zip lookup");
+  // no house number: nothing to look up
+  const noHouse = await s.handler(get("zip?street=Herzl&city=Tel%20Aviv"));
+  assert.deepEqual(await noHouse.json(), { zip: null });
+  assert.equal(asked.length, 1);
+  // missing / bad params are refused early
+  assert.equal((await s.handler(get("zip?street=Herzl%2012"))).status, 400);
+  assert.equal((await s.handler(get("zip?street=%3Cx%3E&city=Tel%20Aviv"))).status, 400);
+  // wrong origin
+  const foreign = new Request(`${BASE}/zip?street=Herzl%2012&city=Tel%20Aviv`, { headers: { origin: "https://evil.example", "cf-connecting-ip": IP } });
+  assert.equal((await s.handler(foreign)).status, 403);
+  // without a lookup the route still answers
+  const none = setup();
+  assert.deepEqual(await (await none.handler(get("zip?street=Herzl%2012&city=Tel%20Aviv"))).json(), { zip: null });
+  // the per-address limit
+  const limited = setup({ zip });
+  let last = 200;
+  for (let i = 0; i < ZIP_LIMIT + 1; i++) last = (await limited.handler(get("zip?street=Herzl%2012&city=Tel%20Aviv"))).status;
+  assert.equal(last, 429);
 });
 
 Deno.test("start: validation rejects unknown keys, bad ids, landlines, missing terms", async () => {
@@ -283,7 +315,7 @@ Deno.test("start: validation rejects unknown keys, bad ids, landlines, missing t
   assert.ok(parseStart(IDENTITY));
   for (const patch of [{ extra: 1 }, { national_id: "000000019" }, { national_id: 5 }, { phone: "0212345678" }, { phone: "+14155550123" }, { terms_privacy_approved: false },
     { terms_privacy_approved: undefined }, { first_name: "" }, { last_name: "<x>" }, { email: "nope" }, { marketing_approved: "yes" }, { turnstile_token: 5 },
-    { street: "" }, { street: undefined }, { street: "<x>" }, { city: "x".repeat(81) }, { city: 7 }]) {
+    { street: "" }, { street: undefined }, { street: "<x>" }, { city: "x".repeat(81) }, { city: 7 }, { zip: "" }, { zip: undefined }, { zip: "12345" }, { zip: "abcdefg" }, { zip: 6473912 }]) {
     assert.throws(() => bad(patch), (e) => (e as { kind?: string }).kind === "generic", JSON.stringify(patch));
   }
   assert.equal(parseStart({ ...IDENTITY, email: null }).identity.email, null);

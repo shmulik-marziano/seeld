@@ -25,13 +25,14 @@ import { hostnamesFromOrigins, verifyTurnstile } from "../_shared/turnstile.ts";
 import { POA_KINDS, type EngineRef, type FinalUrls, type ModuleFlags, type PoaEngine, type PoaKind } from "../_shared/poa/engine/types.ts";
 import { PoaHttpError, PoaToolError, poaErrorResponse, toPoaError } from "../_shared/poa/errors.ts";
 import {
-  cleanAddress, cleanEmail, cleanName, harbitDates, isValidIsraeliId, MAX_SIGNATURE_CHARS, pngBase64, todayIsrael, toE164IsraeliMobile,
+  cleanAddress, cleanEmail, cleanName, cleanZip, harbitDates, splitStreet, isValidIsraeliId, MAX_SIGNATURE_CHARS, pngBase64, todayIsrael, toE164IsraeliMobile,
 } from "../_shared/poa/formatters.ts";
 import { DEFAULT_START_BUCKET_MS, DEFAULT_START_MIN_MS } from "../_shared/poa/config.ts";
 import { createPoaRpc, type PoaModules, type PoaRpc, type PoaSession } from "../_shared/poa/rpc.ts";
 import { generateToken, hashToken, HASH_RE, sha256Hex, TOKEN_RE } from "../_shared/poa/session.ts";
 import { downloadHeaders, type ObjectReader } from "../_shared/poa/storage.ts";
 import { type FinalDocsDeps, storeFinalDocuments } from "../_shared/poa/finaldocs.ts";
+import type { ZipLookup } from "../_shared/poa/zip.ts";
 
 export const MAX_START_BYTES = 8 * 1024;
 export const MAX_CONSENT_BYTES = 2 * 1024;
@@ -45,7 +46,9 @@ export const REJECT_WINDOW_SEC = 600;
 export const PREVIEW_LIMIT = 20;
 export const PREVIEW_WINDOW_SEC = 600;
 
-const START_KEYS = ["first_name", "last_name", "national_id", "phone", "email", "street", "city", "terms_privacy_approved", "marketing_approved", "turnstile_token"];
+const START_KEYS = ["first_name", "last_name", "national_id", "phone", "email", "street", "city", "zip", "terms_privacy_approved", "marketing_approved", "turnstile_token"];
+export const ZIP_LIMIT = 30;
+export const ZIP_WINDOW_SEC = 600;
 const CONSENT_KEYS: Record<PoaKind, string[]> = {
   maslaka: ["preview_sha256"],
   harbit: ["preview_sha256", "birth_date", "issue_date"],
@@ -65,6 +68,8 @@ export interface PoaIntakeDeps {
   storage: ObjectReader | null;
   /** fetch + store the three final documents right after the policies step; null/absent = skipped (the webhook path stays) */
   finalDocs?: FinalDocsDeps | null;
+  /** zip (מיקוד) lookup for GET /zip; null/absent = the route answers {zip:null} and the visitor types it */
+  zip?: ZipLookup | null;
   fetch?: FetchFn;
   now?: () => number;
   /** pause used to pad /start (tests inject a spy) */
@@ -107,6 +112,7 @@ export function poaCors(origin: string | null, allowed: string[]): Record<string
 
 type Route =
   | { name: "start" }
+  | { name: "zip" }
   | { name: "state" }
   | { name: "consent" | "preview" | "doc"; kind: PoaKind };
 
@@ -117,6 +123,7 @@ export function parseRoute(method: string, pathname: string): Route | "method" |
   const rest = i >= 0 ? segs.slice(i + 1) : segs;
   const isKind = (s: string | undefined): s is PoaKind => (POA_KINDS as readonly string[]).includes(s ?? "");
   if (rest.length === 1 && rest[0] === "start") return method === "POST" ? { name: "start" } : "method";
+  if (rest.length === 1 && rest[0] === "zip") return method === "GET" ? { name: "zip" } : "method";
   if (rest.length === 1 && rest[0] === "state") return method === "GET" ? { name: "state" } : "method";
   if (rest.length === 1 && isKind(rest[0])) return method === "POST" ? { name: "consent", kind: rest[0] } : "method";
   if (rest.length === 2 && (rest[0] === "preview" || rest[0] === "doc") && isKind(rest[1])) {
@@ -147,7 +154,7 @@ function onlyKeys(b: Record<string, unknown>, allowed: string[]) {
 }
 
 export interface ParsedStart {
-  identity: { firstName: string; lastName: string; nationalId: string; phone: string; email: string | null; street: string; city: string; marketingApproved: boolean };
+  identity: { firstName: string; lastName: string; nationalId: string; phone: string; email: string | null; street: string; city: string; zip: string; marketingApproved: boolean };
   turnstileToken: string | null;
 }
 
@@ -169,12 +176,14 @@ export function parseStart(b: Record<string, unknown>): ParsedStart {
   if (!street) throw bad("invalid_street");
   const city = cleanAddress(b.city);
   if (!city) throw bad("invalid_city");
+  const zip = cleanZip(b.zip);
+  if (!zip) throw bad("invalid_zip");
   if (b.terms_privacy_approved !== true) throw bad("terms_required");
   if (typeof b.marketing_approved !== "boolean") throw bad("invalid_marketing");
   const t = b.turnstile_token;
   if (t !== undefined && t !== null && (typeof t !== "string" || t.length > 2048)) throw bad("invalid_turnstile_token");
   return {
-    identity: { firstName, lastName, nationalId: nid, phone, email, street, city, marketingApproved: b.marketing_approved },
+    identity: { firstName, lastName, nationalId: nid, phone, email, street, city, zip, marketingApproved: b.marketing_approved },
     turnstileToken: typeof t === "string" && t ? t : null,
   };
 }
@@ -195,6 +204,7 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
   const turnstileHosts = hostnamesFromOrigins(d.env.allowedOrigins);
   const rejects = createCounter(now);
   const previews = createCounter(now, PREVIEW_WINDOW_SEC);
+  const zips = createCounter(now, ZIP_WINDOW_SEC);
   const poa: PoaRpc | null = d.rpc ? createPoaRpc(d.rpc) : null;
 
   return async (req) => {
@@ -242,6 +252,19 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
         throw new PoaHttpError("unavailable", "not_configured");
       }
       const ua = (req.headers.get("user-agent") ?? "").slice(0, 200);
+
+      // ------------------------------------------------------------------ /zip (no session: the address question runs before /start)
+      if (route.name === "zip") {
+        const street = cleanAddress(url.searchParams.get("street") ?? "");
+        const city = cleanAddress(url.searchParams.get("city") ?? "");
+        if (!street || !city) return rejectEarly("zip", bad("invalid_address"));
+        if (zips.hit(ipTag) > ZIP_LIMIT) {
+          return poaErrorResponse(new PoaHttpError("locked", "rate_limited_memory", { status: 429, headers: { "retry-after": "600" } }), rid, cors);
+        }
+        const { street: name, streetNumber } = splitStreet(street);
+        const zip = d.zip && streetNumber ? await d.zip.lookup({ city, street: name, house: streetNumber }) : null;
+        return json({ zip });
+      }
 
       // ------------------------------------------------------------------ /start
       if (route.name === "start") {
@@ -299,6 +322,7 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
             email: parsed.identity.email,
             street: parsed.identity.street,
             city: parsed.identity.city,
+            zip: parsed.identity.zip,
             nationalId: parsed.identity.nationalId,
             phone: parsed.identity.phone,
             marketing: parsed.identity.marketingApproved,

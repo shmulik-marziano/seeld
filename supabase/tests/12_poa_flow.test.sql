@@ -106,8 +106,10 @@ select throws_ok($$select api.poa_session_start(decode(current_setting('t.tha'),
   'PT400', 'invalid_input:street', 'street over 80 chars refused');
 select throws_ok($$select api.poa_session_start(decode(current_setting('t.tha'), 'hex'), ('{"first_name":"Zz","last_name":"Test","city":"' || repeat('c', 81) || '"}')::jsonb, '000000018', '+972501234567', null, '203.0.113.7', false)$$,
   'PT400', 'invalid_input:city', 'city over 80 chars refused');
+select throws_ok($$select api.poa_session_start(decode(current_setting('t.tha'), 'hex'), '{"first_name":"Zz","last_name":"Test","zip":"12345"}'::jsonb, '000000018', '+972501234567', null, '203.0.113.7', false)$$,
+  'PT400', 'invalid_input:zip', 'a zip that is not 7 digits is refused');
 select set_config('t.ra', (api.poa_session_start(decode(current_setting('t.tha'), 'hex'),
-  '{"first_name":"Zz-First","last_name":"Zz-Last","email":"zz.test@example.invalid","street":"Zz-Street 12","city":"Zz-City"}'::jsonb, '000000018', '+972501234567',
+  '{"first_name":"Zz-First","last_name":"Zz-Last","email":"zz.test@example.invalid","street":"Zz-Street 12","city":"Zz-City","zip":"6473912"}'::jsonb, '000000018', '+972501234567',
   decode(repeat('ab', 32), 'hex'), '203.0.113.7', true))::text, true);
 select set_config('t.rb', (api.poa_session_start(decode(current_setting('t.thb'), 'hex'),
   '{"first_name":"Zz-Other","last_name":"Zz-Last","email":null}'::jsonb, '000000026', '+972508888888', null, '203.0.113.8', false))::text, true);
@@ -208,6 +210,7 @@ reset role;
 select is((select private.pii_decrypt(identity_enc)::jsonb ->> 'birth_date' from crm.poa_sessions where id = current_setting('t.sa')::uuid), '1980-05-17', 'birth date kept inside the encrypted identity');
 select is((select private.pii_decrypt(identity_enc)::jsonb ->> 'street' from crm.poa_sessions where id = current_setting('t.sa')::uuid), 'Zz-Street 12', 'street kept inside the encrypted identity');
 select is((select private.pii_decrypt(identity_enc)::jsonb ->> 'city' from crm.poa_sessions where id = current_setting('t.sa')::uuid), 'Zz-City', 'city kept inside the encrypted identity');
+select is((select private.pii_decrypt(identity_enc)::jsonb ->> 'zip' from crm.poa_sessions where id = current_setting('t.sa')::uuid), '6473912', 'zip kept inside the encrypted identity');
 set local role service_role;
 select is((api.poa_session_complete(current_setting('t.sa')::uuid)) ->> 'complete', 'false', 'not complete with a module left');
 select lives_ok($$select api.poa_preview_set(current_setting('t.sa')::uuid, 'policies', repeat('d', 64))$$, 'policies preview recorded');

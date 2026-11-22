@@ -125,7 +125,7 @@ export function PoaWizard({ api: injected, entry: injectedEntry }: { api?: PoaAp
           type: "STARTED",
           res: await api.start({
             first_name: d.first, last_name: d.last, national_id: d.id, phone: d.phone, email: d.email || null,
-            street: d.street, city: d.city, terms_privacy_approved: true, marketing_approved: d.marketing, turnstile_token,
+            street: d.street, city: d.city, zip: d.zip, terms_privacy_approved: true, marketing_approved: d.marketing, turnstile_token,
           }),
         };
       } finally {
@@ -143,7 +143,7 @@ export function PoaWizard({ api: injected, entry: injectedEntry }: { api?: PoaAp
   let body: JSX.Element;
   switch (state.screen) {
     case "s0": body = <Welcome {...base} entry={entry} onStart={() => dispatch({ type: "START" })} />; break;
-    case "q": body = <Questions {...base} q={state.q} details={state.details} onAnswer={(patch) => dispatch({ type: "ANSWER", patch })} onBack={back!} />; break;
+    case "q": body = <Questions {...base} q={state.q} details={state.details} api={api} onAnswer={(patch) => dispatch({ type: "ANSWER", patch })} onBack={back!} />; break;
     case "s2a": body = (
       <Review {...base} details={state.details} started={state.started}
         turnstile={turnstile.widget} onConfirm={confirm} onEdit={() => dispatch({ type: "EDIT" }, "back")} onBack={back} />

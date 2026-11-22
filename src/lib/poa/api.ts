@@ -23,6 +23,8 @@ export interface StartReq {
   /** street and house number, as on the ID card's slip (owner decision 2026-11-22: required) */
   street: string;
   city: string;
+  /** 7 digits (filled in by the zip lookup when the address is known; always confirmed by the visitor) */
+  zip: string;
   terms_privacy_approved: true;
   marketing_approved: boolean;
   /** Cloudflare Turnstile token (single use); absent or null when the widget is not configured. */
@@ -69,6 +71,8 @@ export function errorKindOf(e: unknown): ErrorKind {
 }
 
 export interface PoaApi {
+  /** zip (מיקוד) for a street + house number and a city; null when unknown (the visitor types it). Never throws. */
+  zip(q: { street: string; city: string }): Promise<string | null>;
   start(r: StartReq): Promise<StartRes>;
   preview(kind: PoaKind): Promise<PreviewRes>;
   consent(kind: PoaKind, r: ConsentReq): Promise<ConsentRes>;
@@ -138,10 +142,16 @@ export function createMockPoaApi(opts: MockOpts = {}): PoaApi {
   };
 
   return {
+    async zip(q) {
+      await wait();
+      // the mock "knows" every address with a house number: a synthetic zip made of its digits (never a real lookup)
+      const digits = q.street.replace(/\D/g, "");
+      return digits && q.city.trim() ? (digits + "0".repeat(7)).slice(0, 7) : null;
+    },
     async start(r) {
       await wait();
       guard("start");
-      if (!r.terms_privacy_approved || !r.first_name || !r.last_name || !/^\d{9}$/.test(r.national_id) || !/^05\d{8}$/.test(r.phone) || !r.street?.trim() || !r.city?.trim()) {
+      if (!r.terms_privacy_approved || !r.first_name || !r.last_name || !/^\d{9}$/.test(r.national_id) || !/^05\d{8}$/.test(r.phone) || !r.street?.trim() || !r.city?.trim() || !/^\d{7}$/.test(r.zip ?? "")) {
         throw new PoaApiError("generic");
       }
       const modules = Object.fromEntries(POA_KINDS.map((k) => [k, { enabled: true, required: true, performed: false, ...opts.modules?.[k] }])) as PoaModules;
@@ -283,6 +293,15 @@ export function createHttpPoaApi(opts: HttpOpts = {}): PoaApi {
   };
 
   return {
+    async zip(q) {
+      try {
+        const p = new URLSearchParams({ street: q.street, city: q.city });
+        const res = await json<{ zip?: unknown }>(await send(`zip?${p.toString()}`, { method: "GET" }));
+        return typeof res?.zip === "string" && /^\d{7}$/.test(res.zip) ? res.zip : null;
+      } catch {
+        return null; // best effort: the visitor types the zip
+      }
+    },
     async start(r) {
       const res = await json<StartRes>(await send("start", { method: "POST", body: r }));
       if (typeof res?.session_token !== "string" || !res.session_token || typeof res.modules !== "object") throw new PoaApiError("generic");
