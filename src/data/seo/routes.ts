@@ -336,12 +336,7 @@ export const ROUTES: RouteEntry[] = [
     description: "בדיקת זכויות וכספים שנשכחו: החזרי מס, קצבאות ביטוח לאומי, הטבות מס לעצמאים וקופות פנסיוניות. הבדיקה נעשית בשיחה אישית.",
     related: ["/portfolio-review", "/savings/pension-funds", "/contact"],
   }),
-  r({
-    path: "/onboarding", kind: "flow", group: "about", changefreq: "monthly", priority: 0.6,
-    title: "הצטרפות לשילד | שאלון פתיחת תיק",
-    description: "שאלון הצטרפות לשילד: מילוי פרטים להתחלת התהליך. מיפוי התיק הביטוחי והפנסיוני וליווי אישי, בלי התחייבות מצידכם.",
-    related: ["/portfolio-review", "/contact", "/privacy"],
-  }),
+  // /onboarding is a redirect to the POA wizard (/report/start/order?from=join, noindex) since 2026-11-22: not a page.
   r({
     path: "/direct-debit", kind: "flow", group: "about", changefreq: "monthly", priority: 0.5,
     title: "הוראת קבע | הסדר תשלום לפוליסות וחסכונות | SEELD",

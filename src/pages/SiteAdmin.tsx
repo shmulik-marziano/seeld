@@ -2139,7 +2139,7 @@ function SettingsModule() {
             <LinkButton label="אזור אישי ללקוחות" href="/personal-area" />
             <LinkButton label="מערכת סוכנים" href="/app/auth" />
             <LinkButton label="בלוג" href="/blog" />
-            <LinkButton label="שאלון הצטרפות" href="/onboarding" />
+            <LinkButton label="להצטרפות" href="/report/start/order?from=join" />
             <LinkButton label="צור קשר" href="/contact" />
           </div>
         </div>

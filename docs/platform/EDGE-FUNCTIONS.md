@@ -267,7 +267,7 @@ Backend of the browser wizard (`src/lib/poa`). Switches in `ops.config`, all off
   (first active) -> `proxies.invite` (only `url` is used; the message is dropped) -> the public page API
   (`SURENSE_DP_HOST`, default `dp.surense.com`; path prefix `SURENSE_DP_BASE`, default `/api`, a TODO until the owner's
   full run): `proxies/load`, `proxies/start`, then `proxies/swiftness`, `proxies/hb`, `proxies/policies` and
-  `proxies_preview` (`sw|hb|p`). Host allowlist exactly `api.surense.com` + the dp host, https only, redirects refused, 15 s
+  `proxies/proxies_preview` (`sw|hb|p`). Host allowlist exactly `api.surense.com` + the dp host, https only, redirects refused, 15 s
   per call, no Authorization header; every call is audited (`poa.dp.*`, status and phase only) before it leaves.
 - **Final documents and launch**: the webhook events `dataproxy.aleph|hei|bet.approved` plan a document pull
   (`planEvent` now carries `poaKind` = maslaka|harbit|policies); afterwards `linkPoaDocument` calls `api.poa_document_link`

@@ -77,7 +77,7 @@ describe("POA route in App.tsx", () => {
     expect(APP).toContain('const PoaFlow = lazy(() => import("@/pages/report-order/PoaFlow"));');
     expect(APP).toContain('<Route path="/report/start/order" element={POA_ENABLED ? <PoaFlow /> : <Navigate to="/report/start" replace />} />');
     expect(APP).not.toMatch(/hold\(<PoaFlow/);
-    expect(APP).toContain('import { POA_ENABLED } from "@/lib/poa/config";');
+    expect(APP).toContain('import { POA_ENABLED, POA_ROUTE } from "@/lib/poa/config";');
     // nothing else of the wizard joins the main entry
     expect(APP).not.toMatch(/from "@\/lib\/poa\/(api|copy|machine|draftPdf)"/);
     expect(APP).not.toMatch(/from "@\/pages\/report-order\//);

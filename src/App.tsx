@@ -23,7 +23,7 @@ import { LOGO_DOTS_TRANSITION } from "@/lib/flags/logoDots";
 import RouteSeo from "@/components/RouteSeo";
 import { lazy, Suspense, useEffect, useRef } from "react";
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, IS_V2 } from "@/integrations/supabase/config";
-import { POA_ENABLED } from "@/lib/poa/config";
+import { POA_ENABLED, POA_ROUTE } from "@/lib/poa/config";
 import { hasStoredSession, loadSiteSupabase } from "@/integrations/supabase/lazy";
 
 // ── Page View Tracker ──
@@ -236,7 +236,6 @@ const Insurances = lazy(() => import("@/pages/Insurances"));
 const Savings = lazy(() => import("@/pages/Savings"));
 const InvestmentTracks = lazy(() => import("@/pages/InvestmentTracks"));
 const Article = lazy(() => import("@/pages/Article"));
-const Onboarding = lazy(() => import("@/pages/Onboarding"));
 const SiteAdmin = lazy(() => import("@/pages/SiteAdmin"));
 const DirectDebit = lazy(() => import("@/pages/DirectDebit"));
 const StyleGuide = lazy(() => import("@/pages/StyleGuide"));
@@ -381,7 +380,10 @@ const App = () => (
                 <Route path="/authors" element={<Authors />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/portfolio-review" element={<PortfolioReview />} />
-                <Route path="/onboarding" element={hold(<Onboarding />, "form")} />
+                {/* "להצטרפות" (footer, admin, old links): the POA wizard is the one joining step (POA-WIZARD-SPEC §2 ס0 "join").
+                    vercel.json redirects the same path server-side; this covers client-side navigations. The old
+                    src/pages/Onboarding form is no longer routed (owner decision 2026-11-22). */}
+                <Route path="/onboarding" element={<Navigate to={`${POA_ROUTE}?from=join`} replace />} />
                 {/* Legacy password-based admin removed — SiteAdmin (Supabase auth) replaces it */}
                 <Route path="/admin" element={<Navigate to="/site-admin" replace />} />
                 <Route path="/site-admin" element={hold(<SiteAdmin />)} />

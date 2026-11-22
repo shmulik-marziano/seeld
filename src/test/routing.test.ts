@@ -26,6 +26,7 @@ describe("sitemap", () => {
   const EXCLUDED = new Set([
     "/admin",
     "/install",
+    "/onboarding", // redirect to the POA wizard (the joining entry), since 2026-11-22
     // report engine: a tool reached from /report, not a content page
     "/report/start",
     "/report/start/*",
