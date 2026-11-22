@@ -10,7 +10,7 @@ import type { Logger } from "../../logger.ts";
 import { isUuid, type SurenseApi } from "../../surense/api.ts";
 import { SurenseError } from "../../surense/errors.ts";
 import type { CodeValue, Customer, Licensee, SwiftnessAccount } from "../../surense/types.ts";
-import { type DpClient, type PreviewFlag } from "../dp.ts";
+import { type DpClient, type DpJar, type PreviewFlag } from "../dp.ts";
 import { PoaToolError } from "../errors.ts";
 import { cellForTool, dateForTool, nationalIdForTool, signatureForTool, splitStreet } from "../formatters.ts";
 import type { ConsentData, EngineRef, FinalUrls, ModuleFlags, PoaEngine, PoaIdentity, PoaKind } from "./types.ts";
@@ -167,50 +167,76 @@ export function createSurenseEngine(d: SurenseEngineDeps): PoaEngine {
       if (!urlId) throw new PoaToolError("generic", "bad_invite_url");
 
       // Verified 2026-11-22 against the page's own code: `load` is sent with sid null (sessionStorage is empty on a first
-      // visit) and null names; the SERVER mints the sid and every later call carries it. A client-minted sid made the
-      // next call fail with 400 (the first real client, 2026-11-22), so the server's sid is required here.
-      const loaded = await d.dp.post("load", { sid: null, urlId, firstName: null, lastName: null }, customer.id);
-      const sid = typeof loaded.sid === "string" && SID.test(loaded.sid) ? loaded.sid : null;
-      if (!sid) throw new PoaToolError("unavailable", "dp_no_sid");
-      await d.dp.post("start", {
-        sid,
-        firstName: who.firstName,
-        lastName: who.lastName,
-        idType: 1,
-        idNumber: nationalIdForTool(who.nationalId),
-        email: who.email,
-        cellNumber: cellForTool(who.phone),
-        employerName: null,
-        notes: null,
-        termsPrivacyApproved: true,
-        marketingApproved: who.marketingApproved,
-      }, customer.id);
+      // visit) and null names; the SERVER mints the sid and every later call carries it, and the page session itself
+      // lives in COOKIES that `load`/`start` set (axios withCredentials + XSRF-TOKEN). The jar collects them here and
+      // travels with the engine reference; without it `start` answered 400 "אין session" (first real client, 2026-11-22).
+      const openPage = async (): Promise<{ sid: string; jar: DpJar }> => {
+        const jar: DpJar = { cookie: "" };
+        const loaded = await d.dp.post("load", { sid: null, urlId, firstName: null, lastName: null }, customer.id, jar);
+        const sid = typeof loaded.sid === "string" && SID.test(loaded.sid) ? loaded.sid : null;
+        if (!sid) throw new PoaToolError("unavailable", "dp_no_sid");
+        await d.dp.post("start", {
+          sid,
+          firstName: who.firstName,
+          lastName: who.lastName,
+          idType: 1,
+          idNumber: nationalIdForTool(who.nationalId),
+          email: who.email,
+          cellNumber: cellForTool(who.phone),
+          employerName: null,
+          notes: null,
+          termsPrivacyApproved: true,
+          marketingApproved: who.marketingApproved,
+        }, customer.id, jar);
+        return { sid, jar };
+      };
+      let page: { sid: string; jar: DpJar };
+      try {
+        page = await openPage();
+      } catch (e) {
+        // the tool's page session is short-lived: a "no session" refusal of start gets exactly one fresh load + start
+        if (!(e instanceof PoaToolError) || !/session/i.test(e.code)) throw e;
+        d.log.warn("poa dp start refused for the session; opening the page again once", { code: e.code });
+        page = await openPage();
+      }
       d.log.info("poa engine started", { engine: "surense", existing: customer.existing, modules: Object.keys(modules).filter((k) => modules[k as PoaKind]).length });
-      return { customerId: customer.id, urlId, sid, existing: customer.existing, modules: { ...modules } as ModuleFlags };
+      return { customerId: customer.id, urlId, sid: page.sid, existing: customer.existing, cookie: page.jar.cookie, modules: { ...modules } as ModuleFlags };
     },
 
+    // consent and preview carry the session cookies of the reference and write back whatever the tool refreshed
+    // (the handler persists the reference when it changed)
     async consent(ref: EngineRef, kind: PoaKind, data: ConsentData): Promise<FinalUrls> {
       const bad = () => new PoaToolError("generic", "bad_consent_data");
-      if (kind === "maslaka") {
-        await d.dp.post("swiftness", { sid: ref.sid }, ref.customerId); // verified 2026-11-22: {sid} only
-      } else if (kind === "harbit") {
-        if (!data.birthDate || !data.issueDate) throw bad();
-        await d.dp.post("hb", { sid: ref.sid, birthDate: dateForTool(data.birthDate), nationalIdCardIssuingDate: dateForTool(data.issueDate) }, ref.customerId);
-      } else {
-        if (!data.signaturePng) throw bad();
-        let signature: string;
-        try {
-          signature = signatureForTool(data.signaturePng);
-        } catch {
-          throw bad();
+      const jar: DpJar = { cookie: ref.cookie ?? "" };
+      try {
+        if (kind === "maslaka") {
+          await d.dp.post("swiftness", { sid: ref.sid }, ref.customerId, jar); // verified 2026-11-22: {sid} only
+        } else if (kind === "harbit") {
+          if (!data.birthDate || !data.issueDate) throw bad();
+          await d.dp.post("hb", { sid: ref.sid, birthDate: dateForTool(data.birthDate), nationalIdCardIssuingDate: dateForTool(data.issueDate) }, ref.customerId, jar);
+        } else {
+          if (!data.signaturePng) throw bad();
+          let signature: string;
+          try {
+            signature = signatureForTool(data.signaturePng);
+          } catch {
+            throw bad();
+          }
+          return finalUrlsOf(await d.dp.post("policies", { sid: ref.sid, signature }, ref.customerId, jar));
         }
-        return finalUrlsOf(await d.dp.post("policies", { sid: ref.sid, signature }, ref.customerId));
+        return {};
+      } finally {
+        ref.cookie = jar.cookie;
       }
-      return {};
     },
 
-    preview(ref, kind) {
-      return d.dp.preview(ref.sid, FLAGS[kind], ref.customerId);
+    async preview(ref, kind) {
+      const jar: DpJar = { cookie: ref.cookie ?? "" };
+      try {
+        return await d.dp.preview(ref.sid, FLAGS[kind], ref.customerId, jar);
+      } finally {
+        ref.cookie = jar.cookie;
+      }
     },
   };
 }

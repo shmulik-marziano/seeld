@@ -5,7 +5,7 @@ import { RpcError } from "../db.ts";
 import { SurenseError } from "../surense/errors.ts";
 import { assertAllowedUrl } from "../surense/client.ts";
 import type { SurenseApi } from "../surense/api.ts";
-import { createDpClient, isBareHost, PREVIEW_OP } from "./dp.ts";
+import { createDpClient, isBareHost, jarHeaders, mergeSetCookies, PREVIEW_OP } from "./dp.ts";
 import { DEFAULT_DP_BASE } from "./config.ts";
 import { PoaHttpError, PoaToolError, kindFromToolStatus, toPoaError } from "./errors.ts";
 import { createSurenseEngine, finalUrlsOf, isActiveStatus, parseUrlId, pickLicensee, pickSwiftnessAccount } from "./engine/surense.ts";
@@ -57,10 +57,12 @@ function fakeApi(over: { create?: (r: Record<string, unknown>) => unknown; searc
   return { api, calls };
 }
 
+/** the page session lives in cookies: load sets them (as the tool does), start refreshes the XSRF token */
+const COOKIE_LOAD = new Headers([["content-type", "application/json"], ["set-cookie", "connect.sid=s%3Aabc.def; Path=/; HttpOnly; Secure; SameSite=None"], ["set-cookie", "XSRF-TOKEN=tok%2D1; Path=/; Secure"]]);
 function dpFetch(over: Partial<{ load: Response; start: Response }> = {}) {
   return mockFetch((url) => {
-    if (url.includes("proxies/load")) return over.load ?? json({ sid: SID });
-    if (url.includes("proxies/start")) return over.start ?? json({ ok: true });
+    if (url.includes("proxies/load")) return over.load ?? new Response(JSON.stringify({ sid: SID }), { status: 200, headers: COOKIE_LOAD });
+    if (url.includes("proxies/start")) return over.start ?? json({ ok: true }, 200, { "set-cookie": "XSRF-TOKEN=tok%2D2; Path=/; Secure" });
     if (url.includes("proxies_preview")) return new Response(PDF, { status: 200, headers: { "content-type": "application/pdf" } });
     return json({ ok: true });
   });
@@ -78,7 +80,7 @@ Deno.test("engine start: customer -> licensee -> account -> invite (url only) ->
   const { engine, f, audit } = engineWith(api);
   const out = await engine.start(WHO, ALL);
   assert.deepEqual(calls.map((c) => c.name), ["create", "licensees", "accounts", "invite"]);
-  assert.deepEqual(out, { customerId: CID, urlId: URLID, sid: SID, existing: false, modules: ALL });
+  assert.deepEqual(out, { customerId: CID, urlId: URLID, sid: SID, existing: false, cookie: "connect.sid=s%3Aabc.def; XSRF-TOKEN=tok%2D2", modules: ALL });
   const create = calls[0].arg as Record<string, unknown>;
   assert.equal(create.managerId, "b0000000-0000-4000-8000-000000000001");
   assert.equal(create.idNumber, SYNTH_ID);
@@ -100,7 +102,13 @@ Deno.test("engine start: customer -> licensee -> account -> invite (url only) ->
     sid: SID, firstName: "Dana", lastName: "Test", idType: 1, idNumber: SYNTH_ID, email: "dana@example.com", cellNumber: "+972501234567",
     employerName: null, notes: null, termsPrivacyApproved: true, marketingApproved: false,
   });
-  // the tool's message text is never forwarded anywhere
+  // the page session is cookies (verified 2026-11-22): nothing on load, then everything the tool set, plus X-XSRF-TOKEN
+  const hdr = (i: number) => f.calls[i].init?.headers as Record<string, string>;
+  assert.equal(hdr(0).cookie, undefined, "load carries no cookie");
+  assert.equal(hdr(0).origin, "https://surense.com");
+  assert.equal(hdr(1).cookie, "connect.sid=s%3Aabc.def; XSRF-TOKEN=tok%2D1");
+  assert.equal(hdr(1)["x-xsrf-token"], "tok-1", "axios decodes the XSRF cookie into the header");
+  assert.equal(out.cookie, "connect.sid=s%3Aabc.def; XSRF-TOKEN=tok%2D2", "the reference keeps the jar as refreshed by start");
   assert.ok(!f.calls.some((c) => c.body.includes("do not forward")));
   // every dp call is audited: pending then result, ref = the customer id, no values
   assert.deepEqual(audit, [
@@ -151,11 +159,14 @@ Deno.test("engine start: duplicate phone/e-mail (40204) retries with forceCreati
   await assert.rejects(engineWith(d.api).engine.start(WHO, ALL), (e) => e instanceof PoaToolError && e.code === "customer_conflict");
 });
 
-Deno.test("engine consent: swiftness {sid}, hb {sid,dates}, policies {sid,signature}; preview flags sw|hb|p", async () => {
+Deno.test("engine consent: swiftness {sid}, hb {sid,dates}, policies {sid,signature}; preview flags sw|hb|p; cookies travel with the reference", async () => {
   const { engine, f } = engineWith(fakeApi().api);
-  await engine.consent(REF, "maslaka", {});
-  await engine.consent(REF, "harbit", { birthDate: "1990-05-17", issueDate: "2015-01-02" });
-  await engine.consent(REF, "policies", { signaturePng: PNG_URL });
+  const ref = { ...REF, cookie: "connect.sid=s%3Aabc.def; XSRF-TOKEN=tok%2D2" };
+  await engine.consent(ref, "maslaka", {});
+  assert.equal((f.calls[0].init?.headers as Record<string, string>).cookie, "connect.sid=s%3Aabc.def; XSRF-TOKEN=tok%2D2");
+  assert.equal((f.calls[0].init?.headers as Record<string, string>)["x-xsrf-token"], "tok-2");
+  await engine.consent(ref, "harbit", { birthDate: "1990-05-17", issueDate: "2015-01-02" });
+  await engine.consent(ref, "policies", { signaturePng: PNG_URL });
   assert.ok(f.calls[0].url.includes("/proxies/swiftness"));
   assert.deepEqual(JSON.parse(f.calls[0].body), { sid: SID });
   assert.deepEqual(JSON.parse(f.calls[1].body), { sid: SID, birthDate: "1990-05-17", nationalIdCardIssuingDate: "2015-01-02" });
@@ -163,7 +174,8 @@ Deno.test("engine consent: swiftness {sid}, hb {sid,dates}, policies {sid,signat
   await assert.rejects(engine.consent(REF, "harbit", { birthDate: "1990-05-17" }), (e) => e instanceof PoaToolError && e.code === "bad_consent_data");
   await assert.rejects(engine.consent(REF, "policies", { signaturePng: "data:text/plain;base64,AAAA" }), (e) => e instanceof PoaToolError && e.code === "bad_consent_data");
   for (const [kind, flag] of [["maslaka", "sw"], ["harbit", "hb"], ["policies", "p"]] as const) {
-    const bytes = await engine.preview(REF, kind);
+    const bytes = await engine.preview(ref, kind);
+    assert.equal((f.calls[f.calls.length - 1].init?.headers as Record<string, string>).cookie, ref.cookie, "preview carries the jar too");
     assert.equal(new TextDecoder().decode(bytes.subarray(0, 5)), "%PDF-");
     const u = new URL(f.calls[f.calls.length - 1].url);
     assert.equal(u.searchParams.get(flag), "true", "verified 2026-11-22: ?sw=true | hb=true | p=true");
@@ -191,6 +203,28 @@ Deno.test("engine consent policies: returns the pre-signed links (swiftness opti
   assert.deepEqual(finalUrlsOf({ nextStep: 7, policiesProxyUrl: `${S3}/b` }), { policies: `${S3}/b` });
 });
 
+Deno.test("dp jar: Set-Cookie merge (repeat, expire, oversize), Cookie + X-XSRF-TOKEN headers, a refreshed jar is written back to the reference", async () => {
+  const jar = { cookie: "" };
+  mergeSetCookies(jar, new Response("", { headers: new Headers([["set-cookie", "a=1; Path=/"], ["set-cookie", "XSRF-TOKEN=x%3Dy; Secure"]]) }));
+  assert.equal(jar.cookie, "a=1; XSRF-TOKEN=x%3Dy");
+  assert.deepEqual(jarHeaders(jar), { cookie: "a=1; XSRF-TOKEN=x%3Dy", "x-xsrf-token": "x=y" });
+  mergeSetCookies(jar, new Response("", { headers: new Headers([["set-cookie", "a=2"], ["set-cookie", "b=3; Max-Age=0"], ["set-cookie", "c=4; Expires=Thu, 01 Jan 1970 00:00:00 GMT"]]) }));
+  assert.equal(jar.cookie, "a=2; XSRF-TOKEN=x%3Dy", "a replaced; expired b and c never kept");
+  mergeSetCookies(jar, new Response("", { headers: new Headers([["set-cookie", "a=; Path=/"]]) }));
+  assert.equal(jar.cookie, "XSRF-TOKEN=x%3Dy", "an empty value removes the cookie");
+  const before = jar.cookie;
+  mergeSetCookies(jar, new Response("", { headers: new Headers([["set-cookie", `huge=${"z".repeat(1500)}`]]) }));
+  assert.equal(jar.cookie, before, "a jar past the reference's size keeps the previous jar");
+  assert.deepEqual(jarHeaders(undefined), {});
+  assert.deepEqual(jarHeaders({ cookie: "" }), {});
+  // the engine writes the refreshed jar back to the reference it was given, also when the call fails
+  const f = mockFetch((url) => url.includes("proxies/swiftness") ? json({ error: { code: "X" } }, 400, { "set-cookie": "XSRF-TOKEN=fresh" }) : json({}));
+  const { engine } = engineWith(fakeApi().api, f);
+  const ref = { ...REF, cookie: "XSRF-TOKEN=old" };
+  await assert.rejects(engine.consent(ref, "maslaka", {}));
+  assert.equal(ref.cookie, "XSRF-TOKEN=fresh");
+});
+
 Deno.test("dp client: the default base path is /api/v1/ifs/public", async () => {
   assert.equal(DEFAULT_DP_BASE, "/api/v1/ifs/public");
   const f = dpFetch();
@@ -213,6 +247,28 @@ Deno.test("dp client: a 400 maps to the generic kind (one mapping, kindFromToolS
   const f4 = mockFetch(() => new Response("<html>nope</html>", { status: 400 }));
   const dp4 = createDpClient({ host: "dp.example.test", basePath: "/api", log: silentLog(), fetch: f4.fetch });
   await assert.rejects(dp4.post("start", { sid: SID }, null), (e) => e instanceof PoaToolError && e.code === "dp_http_400");
+});
+
+Deno.test("engine start: a 'no session' refusal of start opens the page again exactly once; other refusals do not", async () => {
+  let starts = 0;
+  const f = mockFetch((url) => {
+    if (url.includes("proxies/load")) return json({ sid: SID }, 200, { "set-cookie": "connect.sid=fresh" });
+    if (url.includes("proxies/start")) return ++starts === 1 ? json({ error: { displayMessage: "אין session או session פג תוקף" } }, 400) : json({ nextStep: 4, sid: SID });
+    return json({});
+  });
+  const { engine } = engineWith(fakeApi().api, f);
+  const out = await engine.start(WHO, ALL);
+  assert.equal(starts, 2);
+  assert.equal(f.calls.filter((c) => c.url.includes("proxies/load")).length, 2, "load, start (refused), load, start");
+  assert.equal(out.cookie, "connect.sid=fresh");
+  let n = 0;
+  const g = mockFetch((url) => url.includes("proxies/load") ? json({ sid: SID }) : (n++, json({ error: { displayMessage: "מספר סלולרי לא חוקי" } }, 400)));
+  await assert.rejects(engineWith(fakeApi().api, g).engine.start(WHO, ALL), (e) => e instanceof PoaToolError && e.code === "dp_http_400_מספר_סלולרי_לא_חוקי");
+  assert.equal(n, 1, "a validation refusal is not retried");
+  let m = 0;
+  const h = mockFetch((url) => url.includes("proxies/load") ? json({ sid: SID }) : (m++, json({ error: { displayMessage: "אין session" } }, 400)));
+  await assert.rejects(engineWith(fakeApi().api, h).engine.start(WHO, ALL), (e) => e instanceof PoaToolError && /session/.test(e.code));
+  assert.equal(m, 2, "one retry, then the refusal surfaces");
 });
 
 Deno.test("engine start: a load answer without the server's sid stops before start (dp_no_sid)", async () => {
@@ -364,6 +420,8 @@ Deno.test("rpc: argument names follow the migration, bytea literals, answers par
   assert.equal(g.customerId, CID);
   await p.engineRefSet(SID, { customerId: CID, sid: "s-1234567", urlId: URLID, existing: false });
   assert.deepEqual(rpc.calls[rpc.calls.length - 1].args, { p_session: SID, p_ref: { customer_id: CID, sid: "s-1234567", url_id: URLID, existing: false } });
+  await p.engineRefSet(SID, { customerId: CID, sid: "s-1234567", urlId: URLID, existing: false, cookie: "a=1; XSRF-TOKEN=t" });
+  assert.deepEqual(rpc.calls[rpc.calls.length - 1].args, { p_session: SID, p_ref: { customer_id: CID, sid: "s-1234567", url_id: URLID, existing: false, cookie: "a=1; XSRF-TOKEN=t" } });
   const c = await p.consentRecord({ sessionId: SID, kind: "harbit", previewSha256: hash, birthDate: "1990-05-17", issueDate: "2015-01-02", signature: null, clientIp: "203.0.113.5", userAgent: "ua" });
   assert.equal(c.validUntil, null);
   assert.deepEqual(rpc.calls[rpc.calls.length - 1].args.p_extra, { birth_date: "1990-05-17", issue_date: "2015-01-02" });

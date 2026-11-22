@@ -81,7 +81,12 @@ The wizard never talks to Surense; `poa-intake` does (`_shared/poa/engine/surens
    `birthDate` and `nationalIdCardIssuingDate` as ISO `YYYY-MM-DD`; `policies` sends `signature` as the full PNG data URL
    (`data:image/png;base64,...`). Verified 2026-11-22 in the page's own bundle (`/app/static/js/main.*.js`): `load` is sent
    with `sid: null` (the page's sessionStorage is empty on a first visit) and null names, the SERVER mints the `sid` and every
-   later call carries it (our engine requires it: `dp_no_sid` otherwise); `cellNumber` is E.164 (`+972…`, the page masks the
+   later call carries it (our engine requires it: `dp_no_sid` otherwise). **The page session lives in cookies** (the page's
+   axios client runs with `withCredentials: true` and echoes the `XSRF-TOKEN` cookie as `X-XSRF-TOKEN`; without them `start`
+   answers 400 "אין session או session פג תוקף", the first real client's failure of 2026-11-22): the engine keeps an explicit
+   cookie jar per wizard session (`DpJar`, merged from every Set-Cookie, sent as `Cookie` + `X-XSRF-TOKEN`, `Origin` =
+   the page's origin), stores it inside the encrypted engine reference (`cookie`, at most 1200 chars) and refreshes it after
+   every consent/preview call. A "no session" refusal of `start` gets exactly one fresh load + start. `cellNumber` is E.164 (`+972…`, the page masks the
    last digits with `substring(11)`); `email`, `employerName`, `notes` are `null` when empty. A refused dp call carries the
    tool's reason in the code (`dp_http_400_<error.code or displayMessage, values stripped>`; a 400 maps to the `generic` kind, one mapping in
    `_shared/poa/errors.ts`).

@@ -1,7 +1,12 @@
 // Client for the tool's public page API (the calls its own /app/p/<urlId> page makes). Server to server only: that host
 // blocks foreign browsers by CORS, and the wizard never talks to it (spec 1א).
 // Rules (mirrors _shared/surense/client.ts): HTTPS only, host allowlist = api.surense.com + the dp host (a bare hostname,
-// validated), no redirects followed (any 3xx refused), 15 s timeout per call, no Authorization header, no cookies.
+// validated), no redirects followed (any 3xx refused), 15 s timeout per call, no Authorization header.
+// Cookies: the tool keeps the page session in COOKIES (verified 2026-11-22 in the page bundle: axios `withCredentials: true`
+// with the XSRF-TOKEN cookie echoed as X-XSRF-TOKEN; without them `start` answers 400 "אין session או session פג תוקף").
+// The browser's automatic cookie jar is replaced by an explicit one per wizard session (`DpJar`): Set-Cookie headers of
+// every answer are merged into it, it is sent back as `Cookie` (+ `X-XSRF-TOKEN`) on every later call, and the engine
+// keeps it inside the encrypted engine reference between poa-intake requests. Never logged.
 // Every call leaves audit rows through the injected sink (op + Surense customer id or null + status; phases pending ->
 // result | ambiguous), written BEFORE the request leaves (no audit, no call). Logs: op, status, duration; never a body,
 // a url or an id.
@@ -42,13 +47,72 @@ export interface DpClientOptions {
   timeoutMs?: number;
 }
 
+/** The tool's page-session cookies for one wizard session, as one `Cookie` header value ("a=1; b=2"); mutated by every call. */
+export interface DpJar {
+  cookie: string;
+}
+/** the jar never grows past what the encrypted engine reference may hold (api.poa_engine_ref_set: 2000 bytes in all) */
+export const MAX_JAR_CHARS = 1200;
+/** the origin of the tool's own page: the page API checks it for cookie-bearing calls as a browser would send it */
+export const DP_PAGE_ORIGIN = "https://surense.com";
+
 export interface DpClient {
-  /** POST JSON; resolves to the parsed JSON object (or {} for an empty / non-object body) */
-  post(route: DpRoute, body: Record<string, unknown>, ref: string | null): Promise<Record<string, unknown>>;
+  /** POST JSON; resolves to the parsed JSON object (or {} for an empty / non-object body). `jar` sends and collects cookies. */
+  post(route: DpRoute, body: Record<string, unknown>, ref: string | null, jar?: DpJar): Promise<Record<string, unknown>>;
   /** the preview PDF for one module */
-  preview(sid: string, flag: PreviewFlag, ref: string | null): Promise<Uint8Array>;
+  preview(sid: string, flag: PreviewFlag, ref: string | null, jar?: DpJar): Promise<Uint8Array>;
   /** the exact hosts this client may reach */
   readonly allowedHosts: readonly string[];
+}
+
+/** "a=1; b=2" -> Map; keeps the first value of a repeated name */
+export function parseJar(cookie: string): Map<string, string> {
+  const m = new Map<string, string>();
+  for (const part of (cookie ?? "").split(";")) {
+    const i = part.indexOf("=");
+    if (i <= 0) continue;
+    const name = part.slice(0, i).trim();
+    const value = part.slice(i + 1).trim();
+    if (name && !m.has(name)) m.set(name, value);
+  }
+  return m;
+}
+
+/** merges every Set-Cookie of an answer into the jar (a Max-Age<=0 or past Expires removes the cookie); attributes are dropped */
+export function mergeSetCookies(jar: DpJar, res: Response, now: number = Date.now()): void {
+  const h = res.headers as Headers & { getSetCookie?: () => string[] };
+  const lines = typeof h.getSetCookie === "function" ? h.getSetCookie() : (res.headers.get("set-cookie") ? [res.headers.get("set-cookie") as string] : []);
+  if (!lines.length) return;
+  const m = parseJar(jar.cookie);
+  for (const line of lines) {
+    const [pair, ...attrs] = line.split(";");
+    const i = pair.indexOf("=");
+    if (i <= 0) continue;
+    const name = pair.slice(0, i).trim();
+    const value = pair.slice(i + 1).trim();
+    if (!name) continue;
+    let expired = false;
+    for (const a of attrs) {
+      const [k, v = ""] = a.split("=").map((s) => s.trim());
+      if (/^max-age$/i.test(k) && Number(v) <= 0) expired = true;
+      if (/^expires$/i.test(k)) { const t = Date.parse(v); if (!Number.isNaN(t) && t <= now) expired = true; }
+    }
+    if (expired || value === "") m.delete(name);
+    else m.set(name, value);
+  }
+  const joined = [...m].map(([k, v]) => `${k}=${v}`).join("; ");
+  jar.cookie = joined.length > MAX_JAR_CHARS ? jar.cookie : joined;
+}
+
+/** request headers a browser would add for this jar: Cookie, and X-XSRF-TOKEN from the XSRF-TOKEN cookie (axios behaviour) */
+export function jarHeaders(jar: DpJar | undefined): Record<string, string> {
+  if (!jar || !jar.cookie) return {};
+  const out: Record<string, string> = { cookie: jar.cookie };
+  const xsrf = parseJar(jar.cookie).get("XSRF-TOKEN");
+  if (xsrf) {
+    try { out["x-xsrf-token"] = decodeURIComponent(xsrf); } catch { out["x-xsrf-token"] = xsrf; }
+  }
+  return out;
 }
 
 /**
@@ -95,7 +159,7 @@ export function createDpClient(o: DpClientOptions): DpClient {
     return u.href;
   }
 
-  async function call(op: string, ref: string | null, init: RequestInit, url: string, write: boolean): Promise<Response> {
+  async function call(op: string, ref: string | null, init: RequestInit, url: string, write: boolean, jar?: DpJar): Promise<Response> {
     if (o.audit) {
       try {
         await o.audit(op, ref, null, "pending");
@@ -112,13 +176,16 @@ export function createDpClient(o: DpClientOptions): DpClient {
     try {
       let res: Response;
       try {
-        res = await doFetch(url, { redirect: "manual", credentials: "omit", ...init, signal: ctrl.signal });
+        // the jar replaces the browser's cookie store: credentials stay "omit" so nothing is sent or kept implicitly
+        const headers = { ...(init.headers as Record<string, string>), origin: DP_PAGE_ORIGIN, ...jarHeaders(jar) };
+        res = await doFetch(url, { redirect: "manual", credentials: "omit", ...init, headers, signal: ctrl.signal });
       } catch {
         ambiguous = write;
         throw new PoaToolError("unavailable", ctrl.signal.aborted ? "dp_timeout" : "dp_network", write);
       }
       status = res.status;
-      o.log.info("poa dp call", { op, status, ms: Date.now() - started });
+      if (jar) mergeSetCookies(jar, res);
+      o.log.info("poa dp call", { op, status, ms: Date.now() - started, cookies: jar ? parseJar(jar.cookie).size : 0 });
       if (isRedirect(res)) {
         await res.body?.cancel();
         throw new PoaToolError("unavailable", "dp_redirect_refused");
@@ -143,13 +210,13 @@ export function createDpClient(o: DpClientOptions): DpClient {
 
   return {
     allowedHosts: allowed,
-    async post(route, body, ref) {
+    async post(route, body, ref, jar) {
       const r = DP_ROUTES[route];
       const res = await call(r.op, ref, {
         method: "POST",
         headers: { "content-type": "application/json", accept: "application/json" },
         body: JSON.stringify(body),
-      }, urlFor(r.path), true);
+      }, urlFor(r.path), true, jar);
       const text = await res.text();
       try {
         const j = text ? JSON.parse(text) : {};
@@ -158,8 +225,8 @@ export function createDpClient(o: DpClientOptions): DpClient {
         return {};
       }
     },
-    async preview(sid, flag, ref) {
-      const res = await call(PREVIEW_OP, ref, { method: "GET", headers: { accept: "application/pdf" } }, urlFor(PREVIEW_PATH, { [flag]: "true", sid }), false);
+    async preview(sid, flag, ref, jar) {
+      const res = await call(PREVIEW_OP, ref, { method: "GET", headers: { accept: "application/pdf" } }, urlFor(PREVIEW_PATH, { [flag]: "true", sid }), false, jar);
       const declared = Number(res.headers.get("content-length") ?? "0");
       if (declared > MAX_PREVIEW_BYTES) {
         await res.body?.cancel();
