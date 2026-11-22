@@ -73,7 +73,7 @@ describe("poa copy: verbatim from the spec", () => {
   const SPEC = existsSync(SPEC_PATH) ? readFileSync(SPEC_PATH, "utf8") : "";
   const c = POA_COPY;
   const verbatim = [
-    c.s0.eyebrow, c.s0.title, c.s0.body, c.s0.prepareTitle, c.s0.prepareLine, c.s0.note, c.s0.cta,
+    c.s0.eyebrow, c.s0.title, ...Object.values(c.s0.lead), c.s0.body, c.s0.prepareTitle, c.s0.prepareLine, c.s0.note, c.s0.cta,
     c.s1.title, c.s1.lead, c.s1.why, c.s1.errFirst, c.s1.errLast, c.s1.errId, c.s1.cta,
     c.s2.title, c.s2.lead, c.s2.labelPhone, c.s2.labelEmail, c.s2.termsParts.join(""), c.s2.marketing, c.s2.errPhone, c.s2.errTerms, c.s2.cta,
     c.s2a.title, c.s2a.fix, c.s2a.cta,
@@ -90,7 +90,7 @@ describe("poa copy: verbatim from the spec", () => {
   it.each(verbatim.map((s) => [s]))("%s", (s) => expect(SPEC).toContain(s));
 
   it("a few exact equalities", () => {
-    expect(c.s0.title).toBe("מאשרים לנו לבקש את המידע בשמכם");
+    expect(c.s0.title).toBe("כמה פרטים, שלושה אישורים, והמידע מגיע אלינו");
     expect(c.s2.errPhone).toBe("צריך מספר נייד שמתחיל ב־05");
     expect(poaStep(2, 6)).toBe("שלב 2 מתוך 6");
     expect(SPEC).toContain("שלב N מתוך M");
