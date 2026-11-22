@@ -3,7 +3,7 @@
 import assert from "node:assert/strict";
 import {
   cellForTool, cleanEmail, cleanName, dateForTool, harbitDates, isValidIsraeliId, MAX_SIGNATURE_CHARS, nationalIdForTool, parseIsoDate, pastIsoDate,
-  pngBase64, SIGNATURE_ENCODING, signatureForTool, todayIsrael, toE164IsraeliMobile, toLocalMobile,
+  pngBase64, signatureForTool, todayIsrael, toE164IsraeliMobile, toLocalMobile,
 } from "./formatters.ts";
 import { PNG_B64, PNG_URL, SYNTH_ID } from "./fixtures.ts";
 
@@ -72,7 +72,7 @@ Deno.test("formatters: harbit dates follow the database rule (issue strictly aft
   assert.deepEqual(harbitDates("nope", "2015-01-02", now), { error: "invalid_birth_date" });
 });
 
-Deno.test("formatters: signature is a PNG data URL; one switch decides the wire encoding", () => {
+Deno.test("formatters: signature is a PNG data URL and travels as the full data URL (verified 2026-11-22)", () => {
   assert.equal(pngBase64(PNG_URL), PNG_B64);
   assert.equal(pngBase64("data:image/jpeg;base64," + PNG_B64), null);
   assert.equal(pngBase64("data:image/png;base64,AAAA"), null, "too short / not a PNG");
@@ -80,7 +80,7 @@ Deno.test("formatters: signature is a PNG data URL; one switch decides the wire 
   assert.equal(pngBase64(PNG_URL + "!"), null);
   assert.equal(pngBase64("data:image/png;base64," + PNG_B64.repeat(MAX_SIGNATURE_CHARS)), null, "size cap");
   assert.equal(pngBase64(null), null);
-  assert.equal(SIGNATURE_ENCODING, "data_url");
   assert.equal(signatureForTool(PNG_URL), PNG_URL);
+  assert.ok(signatureForTool(PNG_URL).startsWith("data:image/png;base64,"), "the wire value keeps the data-URL prefix");
   assert.throws(() => signatureForTool("data:text/html;base64,AAAA"), /bad_signature/);
 });

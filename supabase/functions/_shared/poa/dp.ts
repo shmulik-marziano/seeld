@@ -5,8 +5,9 @@
 // Every call leaves audit rows through the injected sink (op + Surense customer id or null + status; phases pending ->
 // result | ambiguous), written BEFORE the request leaves (no audit, no call). Logs: op, status, duration; never a body,
 // a url or an id.
-// TODO(owner-full-run): the path prefix, the exact route spelling and the preview's HTTP shape are not documented; they
-// are single constants below. Response bodies are read defensively (only `sid` and the PDF bytes are used).
+// Routes, base path and the preview shape verified 2026-11-22 (owner's full run); they are single constants below.
+// Responses are {nextStep, sid}; the policies answer also carries the pre-signed final-document links. Bodies are read
+// defensively (only `sid`, the three links and the PDF bytes are used).
 import type { FetchFn } from "../db.ts";
 import type { Logger } from "../logger.ts";
 import { assertAllowedUrl, type AuditSink, isRedirect, SURENSE_HOST, TIMEOUT_MS } from "../surense/client.ts";
@@ -21,8 +22,7 @@ export const DP_ROUTES = {
 } as const;
 export type DpRoute = keyof typeof DP_ROUTES;
 
-/** TODO(owner-full-run): `proxies_preview` is a link the tool's page opens in a new tab, so a GET with the session id
- *  and the flag in the query is assumed. */
+/** verified 2026-11-22: GET proxies_preview?sw=true|hb=true|p=true&sid=<sid> answers the (unsigned) preview PDF. */
 export const PREVIEW_PATH = "proxies_preview";
 export const PREVIEW_OP = "poa.dp.preview";
 export type PreviewFlag = "sw" | "hb" | "p";
@@ -133,7 +133,7 @@ export function createDpClient(o: DpClientOptions): DpClient {
       }
     },
     async preview(sid, flag, ref) {
-      const res = await call(PREVIEW_OP, ref, { method: "GET", headers: { accept: "application/pdf" } }, urlFor(PREVIEW_PATH, { sid, flag }), false);
+      const res = await call(PREVIEW_OP, ref, { method: "GET", headers: { accept: "application/pdf" } }, urlFor(PREVIEW_PATH, { [flag]: "true", sid }), false);
       const declared = Number(res.headers.get("content-length") ?? "0");
       if (declared > MAX_PREVIEW_BYTES) {
         await res.body?.cancel();

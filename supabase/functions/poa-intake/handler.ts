@@ -22,7 +22,7 @@ import { clientIp } from "../_shared/ip.ts";
 import { requestIdFor } from "../_shared/request.ts";
 import { shortHash } from "../_shared/secret.ts";
 import { hostnamesFromOrigins, verifyTurnstile } from "../_shared/turnstile.ts";
-import { POA_KINDS, type EngineRef, type ModuleFlags, type PoaEngine, type PoaKind } from "../_shared/poa/engine/types.ts";
+import { POA_KINDS, type EngineRef, type FinalUrls, type ModuleFlags, type PoaEngine, type PoaKind } from "../_shared/poa/engine/types.ts";
 import { PoaHttpError, PoaToolError, poaErrorResponse, toPoaError } from "../_shared/poa/errors.ts";
 import {
   cleanEmail, cleanName, harbitDates, isValidIsraeliId, MAX_SIGNATURE_CHARS, pngBase64, todayIsrael, toE164IsraeliMobile,
@@ -31,6 +31,7 @@ import { DEFAULT_START_BUCKET_MS, DEFAULT_START_MIN_MS } from "../_shared/poa/co
 import { createPoaRpc, type PoaModules, type PoaRpc, type PoaSession } from "../_shared/poa/rpc.ts";
 import { generateToken, hashToken, HASH_RE, sha256Hex, TOKEN_RE } from "../_shared/poa/session.ts";
 import { downloadHeaders, type ObjectReader } from "../_shared/poa/storage.ts";
+import { type FinalDocsDeps, storeFinalDocuments } from "../_shared/poa/finaldocs.ts";
 
 export const MAX_START_BYTES = 8 * 1024;
 export const MAX_CONSENT_BYTES = 2 * 1024;
@@ -62,6 +63,8 @@ export interface PoaIntakeDeps {
   engine: PoaEngine | null;
   /** final documents; null when storage is not configured */
   storage: ObjectReader | null;
+  /** fetch + store the three final documents right after the policies step; null/absent = skipped (the webhook path stays) */
+  finalDocs?: FinalDocsDeps | null;
   fetch?: FetchFn;
   now?: () => number;
   /** pause used to pad /start (tests inject a spy) */
@@ -452,8 +455,9 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
       }
       if (!ip) throw bad("no_client_ip");
 
+      let finalUrls: FinalUrls = {};
       try {
-        await engine.consent(ref, kind, { birthDate: birth ?? undefined, issueDate: issue ?? undefined, signaturePng: signature ?? undefined });
+        finalUrls = (await engine.consent(ref, kind, { birthDate: birth ?? undefined, issueDate: issue ?? undefined, signaturePng: signature ?? undefined })) ?? {};
       } catch (e) {
         if (e instanceof PoaToolError && e.kind === "completed") {
           // the module is open in OUR session but the tool already holds the approval (an earlier attempt reached it and our
@@ -487,6 +491,19 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
             // leave a trace staff can see (engine_last_error on the completed session, listed by staff.poa_session_list)
             await poa.sessionFail(session.sessionId, `launch_${e instanceof RpcError ? e.status : "unknown"}`).catch(() => {});
           }
+        }
+      }
+      // the tool's policies answer carries pre-signed links to the three final documents: store them now. Nothing in this step
+      // may fail the consent response (the webhook path stays the fallback); a failure leaves a docs_* code on the session.
+      if (kind === "policies" && d.finalDocs && Object.keys(finalUrls).length > 0) {
+        try {
+          const stored = await storeFinalDocuments(d.finalDocs, poa, session.sessionId, finalUrls);
+          const first = Object.values(stored.failed)[0];
+          if (first) await poa.sessionFail(session.sessionId, first).catch(() => {});
+          log.info("poa final docs", { session: session.sessionId, stored: stored.stored.length, failed: Object.keys(stored.failed).length });
+        } catch (e) {
+          log.warn("poa final docs failed", { code: e instanceof RpcError ? e.code : "unknown" });
+          await poa.sessionFail(session.sessionId, "docs_error").catch(() => {});
         }
       }
       return json({

@@ -214,6 +214,18 @@ export function createPoaRpc(rpc: Rpc) {
       return { complete: r.complete === true };
     },
 
+    /** a final document that arrived as a link (the policies step): creates / refreshes its crm.documents row (no Surense
+     *  document id is known) and answers what the storage path needs. `stored`: the row already holds a stored file. */
+    async documentFromUrl(sessionId: string, kind: PoaKind, sha256: string): Promise<{ documentId: string; agencyId: string; stored: boolean }> {
+      const r = obj(await rpc.call("poa_document_from_url", { p_session: sessionId, p_kind: kind, p_sha256: sha256 }));
+      return { documentId: uuid(r.document_id), agencyId: uuid(r.agency_id), stored: r.stored === true };
+    },
+
+    /** the bytes are in the bucket: record the path (poa/{agency}/{session}/{kind}-{document}.pdf, checked by the database) and the hash */
+    async documentStored(documentId: string, path: string, sha256: string): Promise<void> {
+      await rpc.call("poa_document_stored", { p_document: documentId, p_path: path, p_sha256: sha256 });
+    },
+
     /** PEEK at the single download of a final document (switch, module, 30 minutes from completion, not yet downloaded). Claims nothing. */
     async docGet(tokenHash: string, kind: PoaKind): Promise<{ storagePath: string; sha256: string | null }> {
       const r = obj(await rpc.call("poa_doc_get", { p_token_hash: hash(tokenHash), p_kind: kind }));

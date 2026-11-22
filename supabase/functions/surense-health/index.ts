@@ -80,7 +80,7 @@ Deno.serve(async (req) => {
     if (token) {
       await call(token, "/user/info", steps, (b) => {
         const o = (b ?? {}) as Record<string, unknown>;
-        return { keys: Object.keys(o), tenantId: o.tenantId, agencyId: o.agencyId, scopes_count: Array.isArray(o.scopes) ? o.scopes.length : undefined };
+        return { keys: Object.keys(o), tenantId: o.tenantId, agencyId: o.agencyId, userId: o.userId, scopes_count: Array.isArray(o.scopes) ? o.scopes.length : undefined };
       });
       await call(token, "/licensees", steps, (b) => Array.isArray(b) ? { count: b.length, names: b.map((x) => (x as Record<string, unknown>).name ?? null), accessible: b.map((x) => (x as Record<string, unknown>).accessible) } : { type: typeof b });
       await call(token, "/swiftness/accounts/list", steps, (b) => Array.isArray(b) ? { count: b.length, accounts: b.map((x) => ({ accountName: (x as Record<string, unknown>).accountName, status: (x as Record<string, unknown>).status, defaultAccount: (x as Record<string, unknown>).defaultAccount })) } : b);

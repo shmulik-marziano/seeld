@@ -333,6 +333,67 @@ select is((api.poa_document_link('c3000000-0000-4000-8000-0000000000c6', 'maslak
   'an open session takes no document for a module the visitor has not performed');
 reset role;
 
+-- ---------------------------------------------------------------- final documents from the policies step (20261122090000)
+select ok(has_function_privilege('service_role', 'api.poa_document_from_url(uuid, text, text)', 'execute')
+          and not has_function_privilege('authenticated', 'api.poa_document_from_url(uuid, text, text)', 'execute')
+          and not has_function_privilege('anon', 'api.poa_document_from_url(uuid, text, text)', 'execute'), 'poa_document_from_url: service_role only');
+insert into crm.poa_sessions (id, agency_id, token_hash, status, modules, national_id_hmac, phone_hmac, phone_tail, identity_enc, expires_at, completed_at)
+values ('c3000000-0000-4000-8000-0000000000e5', '5eed0000-0000-4000-8000-000000000001', extensions.digest('fd-1', 'sha256'), 'completed',
+        '{"maslaka":{"enabled":true,"required":true,"performed":true},"harbit":{"enabled":true,"required":true,"performed":true},"policies":{"enabled":true,"required":true,"performed":true}}',
+        extensions.digest('fd-n', 'sha256'), extensions.digest('fd-p', 'sha256'), '00', private.pii_encrypt('{"first_name":"Zz-Fd"}'), now() + interval '30 minutes', now() - interval '5 minutes'),
+       ('c3000000-0000-4000-8000-0000000000e6', '5eed0000-0000-4000-8000-000000000001', extensions.digest('fd-2', 'sha256'), 'open',
+        '{"maslaka":{"enabled":true,"required":true,"performed":false},"harbit":{"enabled":false,"required":false,"performed":false},"policies":{"enabled":false,"required":false,"performed":false}}',
+        extensions.digest('fd-n2', 'sha256'), extensions.digest('fd-p2', 'sha256'), '00', private.pii_encrypt('{"first_name":"Zz-Fd"}'), now() + interval '30 minutes', null),
+       ('c3000000-0000-4000-8000-0000000000e7', '5eed0000-0000-4000-8000-000000000001', extensions.digest('fd-3', 'sha256'), 'completed',
+        '{"maslaka":{"enabled":true,"required":true,"performed":true},"harbit":{"enabled":false,"required":false,"performed":false},"policies":{"enabled":false,"required":false,"performed":false}}',
+        extensions.digest('fd-n3', 'sha256'), extensions.digest('fd-p3', 'sha256'), '00', private.pii_encrypt('{"first_name":"Zz-Fd"}'), now() - interval '3 days', now() - interval '2 days');
+set local role service_role;
+select throws_ok($$select api.poa_document_from_url(null, 'maslaka', repeat('1', 64))$$, 'PT400', 'invalid_input:session', 'from_url: session required');
+select throws_ok($$select api.poa_document_from_url('c3000000-0000-4000-8000-0000000000e5', 'bad', repeat('1', 64))$$, 'PT400', 'invalid_input:kind', 'from_url: kind');
+select throws_ok($$select api.poa_document_from_url('c3000000-0000-4000-8000-0000000000e5', 'maslaka', 'xyz')$$, 'PT400', 'invalid_input:sha256', 'from_url: sha256 shape');
+select throws_ok($$select api.poa_document_from_url('c3999999-0000-4000-8000-0000000000e5', 'maslaka', repeat('1', 64))$$, 'PT401', 'session_inactive', 'from_url: unknown session');
+select throws_ok($$select api.poa_document_from_url('c3000000-0000-4000-8000-0000000000e6', 'maslaka', repeat('1', 64))$$, 'PT400', 'invalid_input:kind', 'from_url: a module not performed takes no document');
+select throws_ok($$select api.poa_document_from_url('c3000000-0000-4000-8000-0000000000e6', 'harbit', repeat('1', 64))$$, 'PT400', 'invalid_input:kind', 'from_url: a module not enabled takes no document');
+select throws_ok($$select api.poa_document_from_url('c3000000-0000-4000-8000-0000000000e7', 'maslaka', repeat('1', 64))$$, 'PT410', 'session_expired', 'from_url: a session completed 2 days ago takes no document');
+select is((api.poa_document_from_url('c3000000-0000-4000-8000-0000000000e5', 'maslaka', repeat('1', 64))) ->> 'complete', 'false', 'from_url 1 of 3');
+select is((api.poa_document_from_url('c3000000-0000-4000-8000-0000000000e5', 'maslaka', repeat('1', 64))) ->> 'stored', 'false', 'from_url: nothing stored yet');
+select is((api.poa_document_from_url('c3000000-0000-4000-8000-0000000000e5', 'maslaka', repeat('2', 64))) ->> 'agency_id', '5eed0000-0000-4000-8000-000000000001',
+  'from_url answers the agency id (for the storage path); repeating is idempotent');
+select is((api.poa_document_from_url('c3000000-0000-4000-8000-0000000000e5', 'harbit', repeat('3', 64))) ->> 'complete', 'false', 'from_url 2 of 3');
+select is((api.poa_document_from_url('c3000000-0000-4000-8000-0000000000e5', 'policies', repeat('4', 64))) ->> 'complete', 'true', 'from_url 3 of 3 completes the documents');
+reset role;
+select is((select count(*)::int from crm.documents where session_id = 'c3000000-0000-4000-8000-0000000000e5' and status = 'pending_staff_verification'
+            and source = 'surense' and surense_document_id is null), 3, 'three pending documents without a Surense document id');
+select is((select encode(sha256, 'hex') from crm.documents where session_id = 'c3000000-0000-4000-8000-0000000000e5' and kind = 'maslaka'), repeat('2', 64), 'a repeat refreshes the hash while nothing is stored');
+select ok((select docs_complete_at is not null from crm.poa_sessions where id = 'c3000000-0000-4000-8000-0000000000e5'), 'docs_complete_at stamped');
+select set_config('t.fd_doc', (select id::text from crm.documents where session_id = 'c3000000-0000-4000-8000-0000000000e5' and kind = 'maslaka'), true);
+set local role service_role;
+select lives_ok($$select api.poa_document_stored(current_setting('t.fd_doc')::uuid,
+  'poa/5eed0000-0000-4000-8000-000000000001/c3000000-0000-4000-8000-0000000000e5/maslaka-' || current_setting('t.fd_doc') || '.pdf', repeat('2', 64))$$, 'the stored path of a link-less document is recorded as usual');
+select is((api.poa_document_from_url('c3000000-0000-4000-8000-0000000000e5', 'maslaka', repeat('9', 64))) ->> 'stored', 'true', 'from_url on a stored document: stored=true');
+reset role;
+select is((select encode(sha256, 'hex') from crm.documents where id = current_setting('t.fd_doc')::uuid), repeat('2', 64), 'and its hash is left untouched');
+update crm.poa_sessions set surense_customer_id = 'c3000000-0000-4000-8000-0000000000c9' where id = 'c3000000-0000-4000-8000-0000000000e5';
+set local role service_role;
+select is((api.poa_document_link('c3000000-0000-4000-8000-0000000000c9', 'maslaka', 'd3000000-0000-4000-8000-0000000000b9', repeat('7', 64))) ->> 'stored', 'true',
+  'link after from_url + stored answers stored=true');
+reset role;
+select is((select encode(sha256, 'hex') from crm.documents where id = current_setting('t.fd_doc')::uuid), repeat('2', 64), 'and the link keeps the stored hash');
+select ok((select surense_document_id is null from crm.documents where id = current_setting('t.fd_doc')::uuid), 'and does not touch the row');
+update ops.config set value = 'false' where key = 'poa_docs_enabled';
+set local role service_role;
+select throws_ok($$select api.poa_document_from_url('c3000000-0000-4000-8000-0000000000e5', 'maslaka', repeat('1', 64))$$, 'PT423', 'feature_disabled:poa_docs_enabled', 'from_url: closed with poa_docs_enabled off');
+reset role;
+update ops.config set value = 'true' where key = 'poa_docs_enabled';
+-- a docs_ failure code is recorded on a completed (or open) session; other codes still need an open one
+set local role service_role;
+select lives_ok($$select api.poa_session_fail('c3000000-0000-4000-8000-0000000000e5', 'docs_host')$$, 'a completed session records that a document was not stored');
+select throws_ok($$select api.poa_session_fail('c3000000-0000-4000-8000-0000000000e5', 'dp_http_500')$$, 'PT409', 'session_completed', 'other codes are still refused on a completed session');
+select lives_ok($$select api.poa_session_fail('c3000000-0000-4000-8000-0000000000e6', 'docs_http_403')$$, 'an open session takes a docs_ code too');
+select throws_ok($$select api.poa_session_fail('c3000000-0000-4000-8000-0000000000e5', 'docs_Bad Code')$$, 'PT400', 'invalid_input:code', 'docs_ codes stay codes');
+reset role;
+select is((select engine_last_error from crm.poa_sessions where id = 'c3000000-0000-4000-8000-0000000000e5'), 'docs_host', 'engine_last_error carries the docs_ code');
+
 -- ---------------------------------------------------------------- job kind: launch of the E9100 submission
 select lives_ok($$insert into ops.surense_jobs (kind, params) values ('surense.e9100_submit', '{}')$$, 'the kind check accepts surense.e9100_submit');
 update ops.config set value = 'true' where key = 'surense_enabled';

@@ -1,7 +1,7 @@
 // The ONE place where values are shaped for the outside world (the official Surense API and the public page API).
-// Pure functions, no I/O. The exact formats the tool accepts are locked only after the owner's full run (spec section 4,
-// "מה עוד חייב אימות"): every guess below carries a TODO(owner-full-run) and a contract test with synthetic values, so
-// changing a format is a one-line edit here plus one expectation in formatters_test.ts.
+// Pure functions, no I/O. Formats verified in the owner's full run of 2026-11-22 are locked (dates, signature); the one
+// still unverified guess (the cell number) carries a TODO(owner-full-run). Each has a contract test with synthetic
+// values, so changing a format is a one-line edit here plus one expectation in formatters_test.ts.
 
 // ---- national id -------------------------------------------------------------------------------------------------
 /** Israeli id check digit (Luhn-like): 9 digits, weights 1,2,1,2..., digit sums, total divisible by 10. */
@@ -40,8 +40,8 @@ export function toLocalMobile(e164: string): string | null {
   return m ? `0${m[1]}` : null;
 }
 
-/** TODO(owner-full-run): the cell number format of proxies/invite, proxies/start and POST /customers
- *  (international "+972..." assumed; the tool's own page showed a country-code picker, so "+972..." is the likely form). */
+/** TODO(owner-full-run): the cell number format of proxies/start is NOT verified (the page showed "052-309-xxxx" with a
+ *  country flag); E.164 "+972..." stays the current guess, also for proxies/invite and POST /customers. */
 export function cellForTool(e164: string): string {
   return e164;
 }
@@ -100,8 +100,7 @@ export function harbitDates(birthRaw: unknown, issueRaw: unknown, nowMs: number)
   return { birth, issue };
 }
 
-/** TODO(owner-full-run): the date format of proxies/hb (birthDate, nationalIdCardIssuingDate). ISO yyyy-mm-dd assumed,
- *  which is what a date picker field produces in the tool's own page. */
+/** verified 2026-11-22: proxies/hb takes birthDate and nationalIdCardIssuingDate as ISO YYYY-MM-DD. */
 export function dateForTool(iso: string): string {
   return iso;
 }
@@ -119,11 +118,9 @@ export function pngBase64(dataUrl: unknown): string | null {
   return b64;
 }
 
-/** TODO(owner-full-run): the encoding of proxies/policies `signature`. The tool's own page sends the cropped canvas PNG;
- *  whether that is a data URL or bare base64 is not verified. This is the single switch: change SIGNATURE_ENCODING. */
-export const SIGNATURE_ENCODING: "data_url" | "base64" = "data_url";
+/** verified 2026-11-22: proxies/policies `signature` is the full PNG data URL ("data:image/png;base64,..."). */
 export function signatureForTool(dataUrl: string): string {
   const b64 = pngBase64(dataUrl);
   if (!b64) throw new TypeError("bad_signature");
-  return SIGNATURE_ENCODING === "data_url" ? `${PNG_PREFIX}${b64}` : b64;
+  return `${PNG_PREFIX}${b64}`;
 }

@@ -3,7 +3,9 @@ import assert from "node:assert/strict";
 import { json, mockFetch, mockRpc, rpcError, silentLog, testEnv } from "../_shared/test_helpers.ts";
 import { createPoaHandler, parseRoute, parseStart, poaCors, type PoaIntakeDeps, START_BUCKET_MS, START_MIN_MS } from "./handler.ts";
 import { PoaToolError } from "../_shared/poa/errors.ts";
-import type { EngineRef, PoaEngine } from "../_shared/poa/engine/types.ts";
+import type { EngineRef, FinalUrls, PoaEngine } from "../_shared/poa/engine/types.ts";
+import { createFinalDocFetcher } from "../_shared/poa/finaldocs.ts";
+import { type Storage, StorageError } from "../_shared/surense/storage.ts";
 import { POA_KINDS } from "../_shared/poa/engine/types.ts";
 import { sha256Hex, TOKEN_RE } from "../_shared/poa/session.ts";
 import { PNG_URL, SYNTH_ID } from "../_shared/poa/fixtures.ts";
@@ -37,7 +39,7 @@ function session(over: Record<string, unknown> = {}) {
   };
 }
 
-function mockEngine(o: { existing?: boolean; startError?: unknown; consentError?: unknown; beforeStart?: () => void } = {}) {
+function mockEngine(o: { existing?: boolean; startError?: unknown; consentError?: unknown; beforeStart?: () => void; finalUrls?: FinalUrls } = {}) {
   const calls: { name: string; args: unknown[] }[] = [];
   const engine: PoaEngine = {
     name: "surense",
@@ -50,6 +52,7 @@ function mockEngine(o: { existing?: boolean; startError?: unknown; consentError?
     async consent(ref: EngineRef, kind, data) {
       calls.push({ name: "consent", args: [ref, kind, data] });
       if (o.consentError) throw o.consentError;
+      return kind === "policies" ? o.finalUrls ?? {} : {};
     },
     async preview(ref, kind) {
       calls.push({ name: "preview", args: [ref, kind] });
@@ -61,7 +64,7 @@ function mockEngine(o: { existing?: boolean; startError?: unknown; consentError?
 
 type Script = Record<string, unknown | ((args: Record<string, unknown>) => unknown)>;
 
-function setup(o: { script?: Script; engine?: ReturnType<typeof mockEngine>; env?: Record<string, string>; storage?: PoaIntakeDeps["storage"]; engineNull?: boolean } = {}) {
+function setup(o: { script?: Script; engine?: ReturnType<typeof mockEngine>; env?: Record<string, string>; storage?: PoaIntakeDeps["storage"]; engineNull?: boolean; finalDocs?: PoaIntakeDeps["finalDocs"] } = {}) {
   const lines: string[] = [];
   let clock = NOW;
   const waits: number[] = [];
@@ -94,6 +97,7 @@ function setup(o: { script?: Script; engine?: ReturnType<typeof mockEngine>; env
     log: silentLog(lines),
     engine: o.engineNull ? null : eng.engine,
     storage: o.storage ?? null,
+    finalDocs: o.finalDocs ?? null,
     fetch: f.fetch,
     now: () => clock,
     wait: async (ms) => {
@@ -673,4 +677,143 @@ Deno.test("logs: no personal value, token, link id, session id of the tool or si
     ENGINE_SID, PNG_URL.slice(30, 80), HASH, IP, "test-agent"]) {
     assert.ok(!all.includes(secret), `a log line contains a value: ${secret.slice(0, 12)}`);
   }
+});
+
+// ---------------------------------------------------------------- final documents (policies step)
+const S3 = "https://surense-accounts-docs.s3.eu-west-1.amazonaws.com";
+const AGENCY = "5eed0000-0000-4000-8000-000000000001";
+const DOC = (n: number) => `d3000000-0000-4000-8000-00000000000${n}`;
+const LAST = { poa_consent_record: { approved_at: "2026-11-21T12:00:01Z", valid_until: null, modules: MODS({ maslaka: true, harbit: true, policies: true }), next: "done" } };
+
+function docsKit(route: (url: string, init?: RequestInit) => Response | Promise<Response> = () => new Response(PDF, { headers: { "content-type": "application/pdf" } })) {
+  const fetched = mockFetch((url, _b, init) => route(url, init));
+  const puts: { path: string; bytes: Uint8Array; type: string }[] = [];
+  const storage: Storage = {
+    async put(path, bytes, type) {
+      puts.push({ path, bytes, type });
+      return "stored";
+    },
+  };
+  const log = silentLog();
+  return { fetched, puts, deps: { fetcher: createFinalDocFetcher({ fetch: fetched.fetch, log }), storage, log } };
+}
+const fromUrlScript = (over: Record<string, unknown> = {}) => (a: Record<string, unknown>) => ({
+  linked: true, session_id: a.p_session, agency_id: AGENCY, document_id: DOC(a.p_kind === "maslaka" ? 1 : a.p_kind === "harbit" ? 2 : 3), stored: false, complete: false, ...over,
+});
+const policiesReq = () => post("policies", { preview_sha256: HASH, signature_png: PNG_URL }, withSession);
+
+Deno.test("final docs: after the policies step each link is fetched (no Authorization), hashed, uploaded to poa/{agency}/{session}/{kind}-{doc}.pdf and recorded", async () => {
+  const kit = docsKit();
+  const urls = { swiftness: `${S3}/aaaaaaaa?X-Amz-Signature=1`, hb: `${S3}/bbbbbbbb?X-Amz-Signature=2`, policies: `${S3}/cccccccc?X-Amz-Signature=3` };
+  const s = setup({
+    engine: mockEngine({ finalUrls: urls }), finalDocs: kit.deps,
+    script: { ...LAST, poa_document_from_url: fromUrlScript(), poa_document_stored: { ok: true } },
+  });
+  const res = await s.handler(policiesReq());
+  assert.equal(res.status, 200);
+  assert.deepEqual(keys(await res.json()), ["approved_at", "kind", "method", "modules", "next", "valid_until"], "the response shape is unchanged");
+  const sha = await sha256Hex(PDF);
+  assert.deepEqual(kit.fetched.calls.map((c) => c.url), [urls.swiftness, urls.hb, urls.policies]);
+  for (const c of kit.fetched.calls) {
+    const h = new Headers(c.init?.headers);
+    assert.equal(h.get("authorization"), null, "pre-signed link: no Authorization header");
+    assert.equal(c.init?.redirect, "manual");
+    assert.equal(c.init?.credentials, "omit");
+  }
+  assert.deepEqual(s.rpc.calls.filter((c) => c.fn === "poa_document_from_url").map((c) => c.args), [
+    { p_session: SID, p_kind: "maslaka", p_sha256: sha }, { p_session: SID, p_kind: "harbit", p_sha256: sha }, { p_session: SID, p_kind: "policies", p_sha256: sha },
+  ]);
+  assert.deepEqual(kit.puts.map((p) => p.path), [
+    `poa/${AGENCY}/${SID}/maslaka-${DOC(1)}.pdf`, `poa/${AGENCY}/${SID}/harbit-${DOC(2)}.pdf`, `poa/${AGENCY}/${SID}/policies-${DOC(3)}.pdf`,
+  ]);
+  assert.ok(kit.puts.every((p) => p.type === "application/pdf" && p.bytes.byteLength === PDF.byteLength));
+  assert.deepEqual(s.rpc.calls.filter((c) => c.fn === "poa_document_stored").map((c) => c.args), [
+    { p_document: DOC(1), p_path: `poa/${AGENCY}/${SID}/maslaka-${DOC(1)}.pdf`, p_sha256: sha },
+    { p_document: DOC(2), p_path: `poa/${AGENCY}/${SID}/harbit-${DOC(2)}.pdf`, p_sha256: sha },
+    { p_document: DOC(3), p_path: `poa/${AGENCY}/${SID}/policies-${DOC(3)}.pdf`, p_sha256: sha },
+  ]);
+  assert.ok(!s.rpc.calls.some((c) => c.fn === "poa_session_fail"), "nothing failed");
+  assert.ok(!s.lines.join("\n").includes("X-Amz"), "no link in the logs");
+});
+
+Deno.test("final docs: only the kinds that came with a link are stored; a non-policies step never fetches", async () => {
+  const kit = docsKit();
+  const s = setup({
+    engine: mockEngine({ finalUrls: { policies: `${S3}/cccccccc?X-Amz-Signature=3` } }), finalDocs: kit.deps,
+    script: { ...LAST, poa_document_from_url: fromUrlScript(), poa_document_stored: { ok: true } },
+  });
+  await s.handler(policiesReq());
+  assert.equal(kit.fetched.calls.length, 1);
+  assert.deepEqual(kit.puts.map((p) => p.path), [`poa/${AGENCY}/${SID}/policies-${DOC(3)}.pdf`]);
+  const m = setup({ finalDocs: kit.deps, engine: mockEngine({ finalUrls: { policies: `${S3}/x` } }) });
+  await m.handler(post("maslaka", { preview_sha256: HASH }, withSession));
+  assert.equal(kit.fetched.calls.length, 1, "maslaka consent starts no download");
+});
+
+Deno.test("final docs: another host, http, an oversize file, a wrong type, a redirect, a non-PDF: refused; consent still 200 and a docs_ code is recorded", async () => {
+  const pdfOk = () => new Response(PDF, { headers: { "content-type": "application/pdf" } });
+  const cases: [string, (url: string) => Response | Promise<Response>, string, string][] = [
+    ["other host", pdfOk, "https://evil.example.test/a?X-Amz-Signature=1", "docs_host"],
+    ["http, not https", pdfOk, "http://surense-accounts-docs.s3.eu-west-1.amazonaws.com/a", "docs_host"],
+    ["api host", pdfOk, "https://api.surense.com/files/1", "docs_host"],
+    ["declared oversize", () => new Response(PDF, { headers: { "content-type": "application/pdf", "content-length": String(2 * 1024 * 1024 + 1) } }), `${S3}/a`, "docs_too_large"],
+    ["streamed oversize", () => new Response(new Uint8Array(2 * 1024 * 1024 + 1).fill(37), { headers: { "content-type": "application/pdf" } }), `${S3}/a`, "docs_too_large"],
+    ["wrong type", () => new Response(PDF, { headers: { "content-type": "text/html" } }), `${S3}/a`, "docs_type"],
+    ["not a pdf", () => new Response(new TextEncoder().encode("<html>not a pdf</html>"), { headers: { "content-type": "application/pdf" } }), `${S3}/a`, "docs_not_pdf"],
+    ["redirect", () => new Response(null, { status: 302, headers: { location: "https://evil.example.test/x" } }), `${S3}/a`, "docs_redirect"],
+    ["403 (expired link)", () => new Response("denied", { status: 403 }), `${S3}/a`, "docs_http_403"],
+  ];
+  for (const [name, route, url, code] of cases) {
+    const kit = docsKit(route);
+    const s = setup({
+      engine: mockEngine({ finalUrls: { policies: url } }), finalDocs: kit.deps,
+      script: { ...LAST, poa_document_from_url: fromUrlScript(), poa_document_stored: { ok: true } },
+    });
+    const res = await s.handler(policiesReq());
+    assert.equal(res.status, 200, `${name}: the consent response is not failed by the storage step`);
+    assert.deepEqual(kit.puts, [], `${name}: nothing stored`);
+    assert.ok(!s.rpc.calls.some((c) => c.fn === "poa_document_from_url" || c.fn === "poa_document_stored"), `${name}: nothing recorded`);
+    assert.deepEqual(s.rpc.calls.filter((c) => c.fn === "poa_session_fail").map((c) => c.args), [{ p_session: SID, p_code: code }], name);
+    if (name === "other host" || name === "http, not https" || name === "api host") assert.equal(kit.fetched.calls.length, 0, `${name}: nothing left the process`);
+    if (name === "redirect") assert.equal(kit.fetched.calls.length, 1, "the redirect target is never requested");
+  }
+});
+
+Deno.test("final docs: storage / database failures never fail the consent; a closed docs switch is not a failure; one bad kind does not stop the others", async () => {
+  const urls = { swiftness: `${S3}/a`, hb: `${S3}/b`, policies: `${S3}/c` };
+  const ok = { ...LAST, poa_document_from_url: fromUrlScript(), poa_document_stored: { ok: true } };
+  // the bucket write fails for every kind
+  const bad = docsKit();
+  bad.deps.storage = { put() { throw new StorageError(500); } };
+  const s1 = setup({ engine: mockEngine({ finalUrls: urls }), finalDocs: bad.deps, script: ok });
+  assert.equal((await s1.handler(policiesReq())).status, 200);
+  assert.ok(!s1.rpc.calls.some((c) => c.fn === "poa_document_stored"), "nothing is recorded as stored when the upload failed");
+  assert.deepEqual(s1.rpc.calls.filter((c) => c.fn === "poa_session_fail").map((c) => c.args), [{ p_session: SID, p_code: "docs_storage_500" }]);
+  // the database refuses the row
+  const k2 = docsKit();
+  const s2 = setup({ engine: mockEngine({ finalUrls: urls }), finalDocs: k2.deps, script: { ...ok, poa_document_from_url: rpcError(500, "XX000") } });
+  assert.equal((await s2.handler(policiesReq())).status, 200);
+  assert.deepEqual(s2.rpc.calls.filter((c) => c.fn === "poa_session_fail").map((c) => c.args), [{ p_session: SID, p_code: "docs_db_500" }]);
+  // switch off (423): not a failure, nothing further is attempted
+  const k3 = docsKit();
+  const s3 = setup({ engine: mockEngine({ finalUrls: urls }), finalDocs: k3.deps, script: { ...ok, poa_document_from_url: rpcError(423, "PT423") } });
+  assert.equal((await s3.handler(policiesReq())).status, 200);
+  assert.ok(!s3.rpc.calls.some((c) => c.fn === "poa_session_fail"));
+  assert.equal(s3.rpc.calls.filter((c) => c.fn === "poa_document_from_url").length, 1, "the first 423 ends the attempt");
+  // the first kind is on a bad host, the others are stored
+  const k4 = docsKit();
+  const s4 = setup({ engine: mockEngine({ finalUrls: { ...urls, swiftness: "https://evil.example.test/a" } }), finalDocs: k4.deps, script: ok });
+  assert.equal((await s4.handler(policiesReq())).status, 200);
+  assert.equal(k4.puts.length, 2, "harbit and policies are still stored");
+  assert.deepEqual(s4.rpc.calls.filter((c) => c.fn === "poa_session_fail").map((c) => c.args), [{ p_session: SID, p_code: "docs_host" }]);
+  // a row that already holds a stored file is left alone
+  const k5 = docsKit();
+  const s5 = setup({ engine: mockEngine({ finalUrls: { policies: `${S3}/c` } }), finalDocs: k5.deps, script: { ...ok, poa_document_from_url: fromUrlScript({ stored: true }) } });
+  await s5.handler(policiesReq());
+  assert.deepEqual(k5.puts, []);
+  assert.ok(!s5.rpc.calls.some((c) => c.fn === "poa_document_stored"));
+  // no finalDocs dependency (storage not configured): skipped silently
+  const s6 = setup({ engine: mockEngine({ finalUrls: urls }), script: LAST });
+  assert.equal((await s6.handler(policiesReq())).status, 200);
+  assert.ok(!s6.rpc.calls.some((c) => c.fn === "poa_document_from_url"));
 });

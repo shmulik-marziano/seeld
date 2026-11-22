@@ -6,8 +6,9 @@ import { SurenseError } from "../surense/errors.ts";
 import { assertAllowedUrl } from "../surense/client.ts";
 import type { SurenseApi } from "../surense/api.ts";
 import { createDpClient, isBareHost, PREVIEW_OP } from "./dp.ts";
+import { DEFAULT_DP_BASE } from "./config.ts";
 import { PoaHttpError, PoaToolError, kindFromToolStatus, toPoaError } from "./errors.ts";
-import { createSurenseEngine, isActiveStatus, parseUrlId, pickLicensee, pickSwiftnessAccount } from "./engine/surense.ts";
+import { createSurenseEngine, finalUrlsOf, isActiveStatus, parseUrlId, pickLicensee, pickSwiftnessAccount } from "./engine/surense.ts";
 import type { PoaIdentity } from "./engine/types.ts";
 import { createPoaRpc, failCode, nextOf, parseModules } from "./rpc.ts";
 import { loadPoaEnv } from "./config.ts";
@@ -158,9 +159,44 @@ Deno.test("engine consent: swiftness {sid}, hb {sid,dates}, policies {sid,signat
     const bytes = await engine.preview(REF, kind);
     assert.equal(new TextDecoder().decode(bytes.subarray(0, 5)), "%PDF-");
     const u = new URL(f.calls[f.calls.length - 1].url);
-    assert.equal(u.searchParams.get("flag"), flag);
+    assert.equal(u.searchParams.get(flag), "true", "verified 2026-11-22: ?sw=true | hb=true | p=true");
+    assert.equal(u.searchParams.get("flag"), null);
     assert.equal(u.searchParams.get("sid"), SID);
+    assert.equal(u.searchParams.size, 2);
   }
+});
+
+const S3 = "https://surense-accounts-docs.s3.eu-west-1.amazonaws.com";
+Deno.test("engine consent policies: returns the pre-signed links (swiftness optional); other kinds return {}", async () => {
+  const f = mockFetch((url) => {
+    if (url.includes("proxies/policies")) {
+      return json({ nextStep: 7, hbProxyUrl: `${S3}/aaaa?X-Amz-Signature=x`, policiesProxyUrl: `${S3}/bbbb?X-Amz-Signature=y`, swiftnessProxyUrl: `${S3}/cccc?X-Amz-Signature=z` });
+    }
+    return json({ nextStep: 5, sid: SID });
+  });
+  const { engine } = engineWith(fakeApi().api, f);
+  assert.deepEqual(await engine.consent(REF, "maslaka", {}), {});
+  assert.deepEqual(await engine.consent(REF, "harbit", { birthDate: "1990-05-17", issueDate: "2015-01-02" }), {});
+  assert.deepEqual(await engine.consent(REF, "policies", { signaturePng: PNG_URL }), {
+    hb: `${S3}/aaaa?X-Amz-Signature=x`, policies: `${S3}/bbbb?X-Amz-Signature=y`, swiftness: `${S3}/cccc?X-Amz-Signature=z`,
+  });
+  assert.deepEqual(finalUrlsOf({ hbProxyUrl: 5, policiesProxyUrl: "", swiftnessProxyUrl: null }), {}, "non-strings and empty values are dropped");
+  assert.deepEqual(finalUrlsOf({ nextStep: 7, policiesProxyUrl: `${S3}/b` }), { policies: `${S3}/b` });
+});
+
+Deno.test("dp client: the default base path is /api/v1/ifs/public", async () => {
+  assert.equal(DEFAULT_DP_BASE, "/api/v1/ifs/public");
+  const f = dpFetch();
+  const dp = createDpClient({ host: "dp.example.test", basePath: DEFAULT_DP_BASE, log: silentLog(), fetch: f.fetch });
+  await dp.post("swiftness", { sid: SID }, null);
+  assert.equal(f.calls[0].url, "https://dp.example.test/api/v1/ifs/public/proxies/swiftness");
+});
+
+Deno.test("dp client: a 400 maps to the generic kind (one mapping, kindFromToolStatus)", async () => {
+  const f = mockFetch(() => json({ message: "x" }, 400));
+  const dp = createDpClient({ host: "dp.example.test", basePath: "/api", log: silentLog(), fetch: f.fetch });
+  await assert.rejects(dp.post("start", { sid: SID }, null), (e) => e instanceof PoaToolError && e.kind === "generic" && e.code === "dp_http_400");
+  assert.equal(kindFromToolStatus(400), "generic");
 });
 
 Deno.test("engine helpers: link id, licensee and account picking, status shapes", () => {
@@ -339,7 +375,7 @@ Deno.test("session token: 32 random bytes, base64url, only the hash is stored; e
   assert.notEqual(a, b);
   assert.match(await hashToken(a), /^[0-9a-f]{64}$/);
   assert.equal(await hashToken("abc"), "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
-  assert.deepEqual(loadPoaEnv(() => undefined), { dpHost: "dp.surense.com", dpBase: "/api", startMinMs: 6000, startBucketMs: 3000, managerId: null });
+  assert.deepEqual(loadPoaEnv(() => undefined), { dpHost: "dp.surense.com", dpBase: "/api/v1/ifs/public", startMinMs: 6000, startBucketMs: 3000, managerId: null });
   const e = loadPoaEnv((n) => ({ SURENSE_DP_HOST: " DP.Example.Test ", SURENSE_DP_BASE: "/v2", SURENSE_MANAGER_ID: CID.toUpperCase() } as Record<string, string>)[n]);
   assert.deepEqual(e, { dpHost: "dp.example.test", dpBase: "/v2", startMinMs: 6000, startBucketMs: 3000, managerId: CID });
   const t = loadPoaEnv((n) => ({ POA_START_MIN_MS: "8000", POA_START_BUCKET_MS: "2000" } as Record<string, string>)[n]);

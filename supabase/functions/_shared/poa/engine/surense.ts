@@ -13,12 +13,12 @@ import type { CodeValue, Customer, Licensee, SwiftnessAccount } from "../../sure
 import { type DpClient, type PreviewFlag } from "../dp.ts";
 import { PoaToolError } from "../errors.ts";
 import { cellForTool, dateForTool, nationalIdForTool, signatureForTool } from "../formatters.ts";
-import type { ConsentData, EngineRef, ModuleFlags, PoaEngine, PoaIdentity, PoaKind } from "./types.ts";
+import type { ConsentData, EngineRef, FinalUrls, ModuleFlags, PoaEngine, PoaIdentity, PoaKind } from "./types.ts";
 
 const URL_ID = /^[A-Za-z0-9_-]{4,40}$/;
 const SID = /^[A-Za-z0-9_-]{8,128}$/;
 export const LICENSEE_TTL_MS = 60 * 60 * 1000;
-/** TODO(owner-full-run): enumerated values travel as {code}; 1 = national id (the page's own `idType: 1`). */
+/** enumerated values of the official API travel as {code}; 1 = national id (the public page sends `idType: 1`, verified 2026-11-22). */
 const ID_TYPE_NATIONAL: CodeValue = { code: 1 };
 const FLAGS: Record<PoaKind, PreviewFlag> = { maslaka: "sw", harbit: "hb", policies: "p" };
 
@@ -30,6 +30,20 @@ export interface SurenseEngineDeps {
   log: Logger;
   now?: () => number;
   newSid?: () => string;
+}
+
+/** the policies answer's links (verified 2026-11-22: {nextStep: 7, swiftnessProxyUrl?, hbProxyUrl, policiesProxyUrl},
+ *  pre-signed S3 URLs). Only non-empty strings are kept; the host is checked where the link is fetched. */
+export function finalUrlsOf(r: Record<string, unknown>): FinalUrls {
+  const out: FinalUrls = {};
+  const pick = (v: unknown) => (typeof v === "string" && v.length > 0 && v.length <= 4096 ? v : undefined);
+  const sw = pick(r.swiftnessProxyUrl);
+  const hb = pick(r.hbProxyUrl);
+  const p = pick(r.policiesProxyUrl);
+  if (sw) out.swiftness = sw;
+  if (hb) out.hb = hb;
+  if (p) out.policies = p;
+  return out;
 }
 
 /** active unless it says otherwise: status is a Hebrew/English string or {code, description}; unknown shapes count as active */
@@ -168,10 +182,10 @@ export function createSurenseEngine(d: SurenseEngineDeps): PoaEngine {
       return { customerId: customer.id, urlId, sid, existing: customer.existing, modules: { ...modules } as ModuleFlags };
     },
 
-    async consent(ref: EngineRef, kind: PoaKind, data: ConsentData) {
+    async consent(ref: EngineRef, kind: PoaKind, data: ConsentData): Promise<FinalUrls> {
       const bad = () => new PoaToolError("generic", "bad_consent_data");
       if (kind === "maslaka") {
-        await d.dp.post("swiftness", { sid: ref.sid }, ref.customerId);
+        await d.dp.post("swiftness", { sid: ref.sid }, ref.customerId); // verified 2026-11-22: {sid} only
       } else if (kind === "harbit") {
         if (!data.birthDate || !data.issueDate) throw bad();
         await d.dp.post("hb", { sid: ref.sid, birthDate: dateForTool(data.birthDate), nationalIdCardIssuingDate: dateForTool(data.issueDate) }, ref.customerId);
@@ -183,8 +197,9 @@ export function createSurenseEngine(d: SurenseEngineDeps): PoaEngine {
         } catch {
           throw bad();
         }
-        await d.dp.post("policies", { sid: ref.sid, signature }, ref.customerId);
+        return finalUrlsOf(await d.dp.post("policies", { sid: ref.sid, signature }, ref.customerId));
       }
+      return {};
     },
 
     preview(ref, kind) {

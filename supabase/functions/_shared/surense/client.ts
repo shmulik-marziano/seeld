@@ -21,10 +21,13 @@ import { SurenseError, fromResponse } from "./errors.ts";
 export const SURENSE_HOST = "api.surense.com";
 export const SURENSE_ORIGIN = `https://${SURENSE_HOST}`;
 export const SURENSE_API = `${SURENSE_ORIGIN}/api/v1`;
-// TODO(owner): pre-signed upload/download URLs (documents/upload/initiate, data-import/initiate, e9100/download files,
-// documents/urls) are probably on another host (S3/CDN; UNKNOWN until the first real response). They stay refused until
-// the owner approves the exact host(s) and they are added here.
-export const ALLOWED_HOSTS: readonly string[] = [SURENSE_HOST];
+// Pre-signed document links (documents/urls, the POA final documents) are on this S3 bucket host: DOWNLOADS only, never
+// sent the bearer token (downloadFile attaches it to SURENSE_HOST alone). Owner approved 2026-11-22.
+// Other pre-signed hosts (uploads, data-import, e9100 files) stay refused until the owner approves them.
+export const DOCS_HOST = "surense-accounts-docs.s3.eu-west-1.amazonaws.com";
+export const ALLOWED_HOSTS: readonly string[] = [SURENSE_HOST, DOCS_HOST];
+/** pre-signed UPLOAD links: the S3 download host is not approved for uploads */
+export const UPLOAD_HOSTS: readonly string[] = [SURENSE_HOST];
 export const RETRY_STATUSES: readonly number[] = [429, 502, 503, 504];
 export const TIMEOUT_MS = 15_000;
 export const MAX_ATTEMPTS = 3;
@@ -259,7 +262,7 @@ export function createSurenseClient(o: ClientOptions): SurenseClient {
       }
     },
     async putUpload(url: string, bytes: Uint8Array, contentType: string): Promise<number> {
-      const u = assertAllowedUrl(url, o.allowedHosts ?? ALLOWED_HOSTS);
+      const u = assertAllowedUrl(url, o.allowedHosts ?? UPLOAD_HOSTS);
       const started = now();
       const res = await once(u.href, { method: "PUT", headers: { "content-type": contentType }, body: bytes });
       await res.body?.cancel();

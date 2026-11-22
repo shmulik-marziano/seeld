@@ -31,12 +31,20 @@ export interface ConsentData {
   signaturePng?: string;
 }
 
+/** Pre-signed links to the three final documents, as the policies step returns them (keyed by our kind names). Secrets of
+ *  a kind: never logged. */
+export interface FinalUrls {
+  swiftness?: string;
+  hb?: string;
+  policies?: string;
+}
+
 export interface PoaEngine {
   readonly name: "surense";
   /** creates the customer, the personal link and the tool-side session; returns the reference to keep */
   start(identity: PoaIdentity, modules: ModuleFlags): Promise<EngineRef & { modules: ModuleFlags }>;
-  /** approves one module in the tool */
-  consent(ref: EngineRef, kind: PoaKind, data: ConsentData): Promise<void>;
+  /** approves one module in the tool; the policies step (the last) answers the links of the final documents */
+  consent(ref: EngineRef, kind: PoaKind, data: ConsentData): Promise<FinalUrls | void>;
   /** the preview PDF of one module */
   preview(ref: EngineRef, kind: PoaKind): Promise<Uint8Array>;
 }
