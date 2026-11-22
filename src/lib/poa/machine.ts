@@ -6,19 +6,20 @@
 import { POA_KINDS, POA_LIMITS, type PoaKind } from "./config";
 import { POA_COPY as C } from "./copy";
 import { nextOf, type ConsentRes, type ErrorKind, type PoaModules, type PoaNext, type StartRes } from "./api";
-import { ageFromBirth, isMobile, validateDate, validateEmail, validateIsraeliId, validateIsraeliPhone, validatePersonName, validateText } from "@/questionnaires/validators";
+import { ageFromBirth, isMobile, validateDate, validateEmail, validateIsraeliId, validateIsraeliPhone, validatePersonName, validateText, validateZip } from "@/questionnaires/validators";
 
 export type Screen = "s0" | "q" | "s2a" | PoaKind | "s7" | "error";
 
 /** The questions of ס1, in order. E-mail is the one optional answer; `consent` is the terms (+ marketing) screen. */
-export const Q_KEYS = ["first", "last", "id", "birth", "issue", "street", "city", "phone", "email", "consent"] as const;
+export const Q_KEYS = ["first", "last", "id", "birth", "issue", "street", "city", "zip", "phone", "email", "consent"] as const;
 export type QKey = (typeof Q_KEYS)[number];
 
 export interface Details {
   first: string; last: string; id: string;
   /** ISO yyyy-mm-dd (the date picker's value) */
   birth: string; issue: string;
-  street: string; city: string;
+  /** street + house number, city, 7-digit zip (looked up from the first two when the server can) */
+  street: string; city: string; zip: string;
   phone: string; email: string;
   terms: boolean; marketing: boolean;
 }
@@ -60,7 +61,7 @@ export type PoaEvent =
   | { type: "TICK"; now: Date };
 
 export const emptyDetails = (): Details => ({
-  first: "", last: "", id: "", birth: "", issue: "", street: "", city: "", phone: "", email: "", terms: false, marketing: false,
+  first: "", last: "", id: "", birth: "", issue: "", street: "", city: "", zip: "", phone: "", email: "", terms: false, marketing: false,
 });
 
 export const initialState = (): PoaState => ({
@@ -222,6 +223,11 @@ export function validateAnswer(key: QKey, d: Details, now: Date = new Date()): {
       if (blank(d.id)) return { err: C.q.id.err };
       const r = validateIsraeliId(d.id);
       return r.ok ? { patch: { id: r.value! } } : { err: r.message };
+    }
+    case "zip": {
+      if (blank(d.zip)) return { err: C.q.zip.err };
+      const r = validateZip(d.zip);
+      return r.ok ? { patch: { zip: r.value! } } : { err: r.message };
     }
     case "birth": {
       if (blank(d.birth)) return { err: C.q.birth.err };

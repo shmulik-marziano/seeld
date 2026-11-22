@@ -12,7 +12,7 @@ const ID = fakeId();
 const wrongId = ID.slice(0, 8) + String((Number(ID[8]) + 1) % 10);
 const NOW = new Date("2026-06-15T12:00:00Z");
 const OK: Details = {
-  first: "ישראל", last: "ישראלי", id: ID, birth: "1980-02-01", issue: "2015-03-15", street: "הרצל 1", city: "תל אביב",
+  first: "ישראל", last: "ישראלי", id: ID, birth: "1980-02-01", issue: "2015-03-15", street: "הרצל 1", city: "תל אביב", zip: "6473912",
   phone: "0501234567", email: "", terms: true, marketing: false,
 };
 const at = (patch: Partial<Details>): Details => ({ ...OK, ...patch });
@@ -103,6 +103,14 @@ describe("poa validation: address (ס1 questions 6-7)", () => {
   it("rejects a one-letter or over-long answer with the validator message", () => {
     expect(validateAnswer("street", at({ street: "א" })).err).toBeTruthy();
     expect(validateAnswer("city", at({ city: "א".repeat(81) })).err).toBeTruthy();
+  });
+
+  it("zip: required, 7 digits, separators dropped", () => {
+    expect(validateAnswer("zip", at({ zip: "" })).err).toBe(C.q.zip.err);
+    expect(validateAnswer("zip", OK)).toEqual({ patch: { zip: "6473912" } });
+    expect(validateAnswer("zip", at({ zip: "647-3912" }))).toEqual({ patch: { zip: "6473912" } });
+    expect(validateAnswer("zip", at({ zip: "64739" })).err).toMatch(/7 ספרות/);
+    expect(validateAnswer("zip", at({ zip: "abcdefg" })).err).toBeTruthy();
   });
 });
 

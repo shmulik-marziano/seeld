@@ -1,20 +1,24 @@
 // ס1: one question per screen (owner decision 2026-11-22). The question is the heading, one field under it, the
-// keyboard matches the answer (digits for the ID and the phone, the date picker for dates, the e-mail keyboard for
-// the address), Enter or "המשך" validates and opens the next question. Nothing advances on an invalid answer.
+// keyboard matches the answer (digits for the ID, the zip and the phone, the date picker for dates, the e-mail keyboard
+// for the address), Enter or "המשך" validates and opens the next question. Nothing advances on an invalid answer.
+// The zip question asks the adapter for the zip of the street + city given before and fills it in (the visitor can fix it).
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { BrandIcon } from "@/components/brand/BrandIcon";
+import { ZIP_LOOKUP_URL } from "@/questionnaires/validators";
+import type { PoaApi } from "@/lib/poa/api";
 import { POA_COPY as C } from "@/lib/poa/copy";
 import { Q_KEYS, validateAnswer, type Details, type QKey } from "@/lib/poa/machine";
 import { DateField } from "../DateField";
 import { CheckField, StepCard, TextField, type ScreenBase } from "../parts";
 
-export function Questions({ headingRef, dir, busy, q, details, onAnswer, onBack }: ScreenBase & {
-  q: number; details: Details; onAnswer: (patch: Partial<Details>) => void; onBack: () => void;
+export function Questions({ headingRef, dir, busy, q, details, api, onAnswer, onBack }: ScreenBase & {
+  q: number; details: Details; api: Pick<PoaApi, "zip">; onAnswer: (patch: Partial<Details>) => void; onBack: () => void;
 }) {
   const key: QKey = Q_KEYS[q];
   const copy = C.q[key];
   const [d, setD] = useState<Details>(details);
   const [err, setErr] = useState<string | undefined>(undefined);
+  const [zipState, setZipState] = useState<"idle" | "searching" | "found">("idle");
   const fieldRef = useRef<HTMLDivElement>(null);
   useEffect(() => { setD(details); setErr(undefined); }, [key, details]);
   // the field takes focus right after the heading announced the question (the page focuses the heading first)
@@ -22,6 +26,17 @@ export function Questions({ headingRef, dir, busy, q, details, onAnswer, onBack 
     const t = window.setTimeout(() => fieldRef.current?.querySelector<HTMLElement>("input")?.focus({ preventScroll: true }), 120);
     return () => window.clearTimeout(t);
   }, [key]);
+  // zip: look it up once from the street and the city already answered; an empty answer stays empty
+  useEffect(() => {
+    if (key !== "zip" || details.zip || !details.street || !details.city) { setZipState("idle"); return; }
+    let live = true;
+    setZipState("searching");
+    api.zip({ street: details.street, city: details.city }).then((zip) => {
+      if (!live) return;
+      if (zip) { setD((cur) => ({ ...cur, zip })); setZipState("found"); } else setZipState("idle");
+    });
+    return () => { live = false; };
+  }, [key, details.zip, details.street, details.city, api]);
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -42,6 +57,14 @@ export function Questions({ headingRef, dir, busy, q, details, onAnswer, onBack 
     case "issue": field = <DateField id="issue" label={C.q.issue.label} value={d.issue} onChange={(issue) => set({ issue })} err={err} min={d.birth || undefined} max="today" />; break;
     case "street": field = <TextField id="street" label={C.q.street.label} value={d.street} onChange={(street) => set({ street })} err={err} autoComplete="street-address" />; break;
     case "city": field = <TextField id="city" label={C.q.city.label} value={d.city} onChange={(city) => set({ city })} err={err} autoComplete="address-level2" />; break;
+    case "zip": field = (
+      <>
+        <TextField id="zip" label={C.q.zip.label} value={d.zip} onChange={(zip) => { set({ zip }); setZipState("idle"); }} err={err} ltr inputMode="numeric" autoComplete="postal-code" />
+        {zipState === "searching" && <p className="sd-q-fine" role="status">{C.q.zipSearching}</p>}
+        {zipState === "found" && <p className="sd-q-fine" role="status">{C.q.zipFound}</p>}
+        <p className="sd-q-fine"><a href={ZIP_LOOKUP_URL} target="_blank" rel="noopener noreferrer">{C.q.zipLookup}</a></p>
+      </>
+    ); break;
     case "phone": field = <TextField id="phone" label={C.q.phone.label} value={d.phone} onChange={(phone) => set({ phone })} err={err} ltr type="tel" inputMode="numeric" autoComplete="tel" />; break;
     case "email": field = <TextField id="email" label={C.q.email.label} value={d.email} onChange={(email) => set({ email })} err={err} ltr type="email" inputMode="email" autoComplete="email" />; break;
     case "consent": {

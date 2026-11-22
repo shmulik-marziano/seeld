@@ -74,8 +74,9 @@ describe("poa copy: verbatim from the spec", () => {
   const c = POA_COPY;
   const verbatim = [
     c.s0.eyebrow, c.s0.title, ...Object.values(c.s0.lead), c.s0.body, c.s0.prepareTitle, c.s0.prepareLine, c.s0.note, c.s0.cta,
-    ...(["first", "last", "id", "birth", "issue", "street", "city", "phone", "email"] as const).flatMap((k) => [c.q[k].title, c.q[k].label, c.q[k].err]),
-    ...(["first", "last", "id", "issue", "street", "phone", "email"] as const).map((k) => c.q[k].hint),
+    ...(["first", "last", "id", "birth", "issue", "street", "city", "zip", "phone", "email"] as const).flatMap((k) => [c.q[k].title, c.q[k].label, c.q[k].err]),
+    ...(["first", "last", "id", "issue", "street", "zip", "phone", "email"] as const).map((k) => c.q[k].hint),
+    c.q.zipSearching, c.q.zipFound, c.q.zipLookup,
     c.q.consent.title, c.q.consent.termsParts.join(""), c.q.consent.marketing, c.q.consent.err,
     c.q.errDate, c.q.errFuture, c.q.errAge, c.q.errOrder, c.q.cta, c.q.skip,
     c.s2a.title, c.s2a.fix, c.s2a.cta,
@@ -95,7 +96,7 @@ describe("poa copy: verbatim from the spec", () => {
     expect(c.s0.title).toBe("כמה פרטים, שלושה אישורים, והמידע מגיע אלינו");
     expect(c.q.phone.err).toBe("צריך מספר נייד שמתחיל ב־05");
     expect(poaStep(2, 6)).toBe("שלב 2 מתוך 6");
-    expect(c.q.counter(3, 10)).toBe("שאלה 3 מתוך 10");
+    expect(c.q.counter(3, 11)).toBe("שאלה 3 מתוך 11");
     expect(SPEC).toContain("שאלה N מתוך M");
     expect(SPEC).toContain("שלב N מתוך M");
   });

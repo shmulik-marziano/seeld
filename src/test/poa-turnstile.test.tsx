@@ -7,7 +7,7 @@ afterEach(() => { vi.useRealTimers(); });
 
 const base = { headingRef: { current: null }, dir: "fwd" as const, prog: null, busy: false };
 const details = {
-  first: "ישראל", last: "ישראלי", id: "000000000", birth: "1980-02-01", issue: "2015-03-15", street: "הרצל 1", city: "תל אביב",
+  first: "ישראל", last: "ישראלי", id: "000000000", birth: "1980-02-01", issue: "2015-03-15", street: "הרצל 1", city: "תל אביב", zip: "6473912",
   phone: "0501234567", email: "", terms: true, marketing: false,
 };
 

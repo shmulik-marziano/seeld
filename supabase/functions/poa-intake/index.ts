@@ -14,6 +14,7 @@ import type { PoaEngine } from "../_shared/poa/engine/types.ts";
 import { createObjectReader } from "../_shared/poa/storage.ts";
 import { createFinalDocFetcher } from "../_shared/poa/finaldocs.ts";
 import { createStorage } from "../_shared/surense/storage.ts";
+import { createZipLookup } from "../_shared/poa/zip.ts";
 
 declare const Deno: { serve(h: (req: Request) => Response | Promise<Response>): unknown; env: { get(name: string): string | undefined } };
 
@@ -46,4 +47,8 @@ const finalDocs = env.supabaseUrl && env.secretKey
   ? { fetcher: createFinalDocFetcher({ log }), storage: createStorage({ url: env.supabaseUrl, apikey: env.secretKey }), log }
   : null;
 
-Deno.serve(createPoaHandler({ env, rpc, log, engine, storage, finalDocs, startMinMs: poaEnv.startMinMs, startBucketMs: poaEnv.startBucketMs }));
+// zip (מיקוד) lookup for the address question: Israel Post's public-page backend, public key by default (ISRAEL_POST_KEY
+// overrides when the site rotates it); POA_ZIP_LOOKUP=off disables the lookup and the visitor types the zip
+const zip = (Deno.env.get("POA_ZIP_LOOKUP") ?? "").trim().toLowerCase() === "off" ? null : createZipLookup({ log, key: Deno.env.get("ISRAEL_POST_KEY") });
+
+Deno.serve(createPoaHandler({ env, rpc, log, engine, storage, finalDocs, zip, startMinMs: poaEnv.startMinMs, startBucketMs: poaEnv.startBucketMs }));

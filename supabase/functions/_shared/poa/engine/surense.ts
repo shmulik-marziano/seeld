@@ -115,6 +115,7 @@ export function createSurenseEngine(d: SurenseEngineDeps): PoaEngine {
       // address as the tool's customer record keeps it (CreateCustomerRequest: street, streetNumber, city)
       ...splitStreet(who.street),
       city: who.city,
+      ...(/^[0-9]{7}$/.test(who.zip) ? { postalCode: Number(who.zip) } : {}),
     };
     const created = async (r: typeof req & { forceCreation?: boolean }): Promise<string> => {
       const c: Customer = await d.api.customers.create(r);

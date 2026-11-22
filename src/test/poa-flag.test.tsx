@@ -137,7 +137,7 @@ describe("POA page", () => {
     fireEvent.click(screen.getByRole("button", { name: /מתחילים/ }));
     // ס1: one question per screen. Before the start call the modules are unknown: no "שלב" indicator (spec §2)
     expect(h2()).toBe("מה השם הפרטי שלכם?");
-    expect(screen.getByText("שאלה 1 מתוך 10")).toBeInTheDocument();
+    expect(screen.getByText("שאלה 1 מתוך 11")).toBeInTheDocument();
     expect(screen.queryByText(/שלב \d+ מתוך/)).toBeNull();
     await waitFor(() => expect(document.activeElement).toBe(h2El()));
     // an empty answer does not advance
@@ -164,13 +164,20 @@ describe("POA page", () => {
     expect(await screen.findByText("תאריך ההנפקה מוקדם מתאריך הלידה, כדאי לבדוק שוב.")).toBeInTheDocument();
     await answer("תאריך הנפקה", "2015-03-15", "מה הכתובת? רחוב ומספר בית");
     await answer("רחוב ומספר בית", "הרצל 1", "ובאיזה יישוב?");
-    await answer("יישוב", "תל אביב", "מה מספר הנייד?");
+    await answer("יישוב", "תל אביב", "ומה המיקוד?");
+    // the mock adapter "knows" the address: the zip is filled in and announced, and still confirmed by the visitor
+    const zip = screen.getByLabelText("מיקוד");
+    expect(zip).toHaveAttribute("inputmode", "numeric");
+    await waitFor(() => expect(zip).toHaveValue("1000000"));
+    expect(screen.getByText("המיקוד נמצא לפי הכתובת. אפשר לתקן אם צריך.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "חיפוש מיקוד באתר דואר ישראל" })).toHaveAttribute("target", "_blank");
+    await answer("מיקוד", "6473912", "מה מספר הנייד?");
     expect(screen.getByLabelText("טלפון נייד")).toHaveAttribute("inputmode", "numeric");
     await answer("טלפון נייד", "0501234567", "ודוא\"ל?");
     expect(screen.getByLabelText("דוא\"ל (לא חובה)")).toHaveAttribute("type", "email");
     fireEvent.click(screen.getByRole("button", { name: "דילוג" }));
     await waitFor(() => expect(h2()).toBe("עוד רגע ומתחילים"));
-    expect(screen.getByText("שאלה 10 מתוך 10")).toBeInTheDocument();
+    expect(screen.getByText("שאלה 11 מתוך 11")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /המשך/ }));
     expect(await screen.findByText("כדי להמשיך צריך לאשר את תנאי השימוש ומדיניות הפרטיות.")).toBeInTheDocument();
     const terms = screen.getByRole("checkbox", { name: /קראתי ואישרתי את/ });
@@ -182,7 +189,8 @@ describe("POA page", () => {
 
     await waitFor(() => expect(h2()).toContain("הפרטים שיופיעו במסמכים"));
     expect(screen.getByText(fakeId())).toBeInTheDocument();
-    expect(screen.getByText("הרצל 1, תל אביב")).toBeInTheDocument();
+    expect(screen.getByText(/הרצל 1, תל אביב/)).toBeInTheDocument();
+    expect(screen.getByText("6473912")).toBeInTheDocument();
     expect(screen.getByText("01/02/1980")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "תיקון" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /אישור הפרטים והמשך/ }));
@@ -223,7 +231,7 @@ describe("POA page", () => {
     fireEvent.click(screen.getByRole("button", { name: /מתחילים/ }));
     const next = () => fireEvent.click(screen.getByRole("button", { name: /המשך/ }));
     for (const [label, value] of [["שם פרטי", "ישראל"], ["שם משפחה", "ישראלי"], ["מספר תעודת זהות", fakeId()], ["תאריך לידה", "1980-02-01"],
-      ["תאריך הנפקה", "2015-03-15"], ["רחוב ומספר בית", "הרצל 1"], ["יישוב", "תל אביב"], ["טלפון נייד", "0501234567"]]) {
+      ["תאריך הנפקה", "2015-03-15"], ["רחוב ומספר בית", "הרצל 1"], ["יישוב", "תל אביב"], ["מיקוד", "6473912"], ["טלפון נייד", "0501234567"]]) {
       fireEvent.change(await screen.findByLabelText(label), { target: { value } });
       next();
     }

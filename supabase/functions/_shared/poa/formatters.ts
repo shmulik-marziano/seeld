@@ -71,6 +71,13 @@ export function cleanAddress(raw: unknown): string | null {
   return ADDRESS.test(t) ? t : null;
 }
 
+/** 7 digits (Israel Post zip) or null */
+export function cleanZip(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const t = raw.replace(/[\s-]/g, "");
+  return /^[0-9]{7}$/.test(t) ? t : null;
+}
+
 /** "הרצל 12" -> {street: "הרצל", streetNumber: "12"}; a line with no trailing house number keeps the whole text as the street */
 export function splitStreet(line: string): { street: string; streetNumber?: string } {
   const m = /^(.*\S)\s+(\d{1,5}[\p{L}]?(?:\/\d{1,4})?)$/u.exec(line);

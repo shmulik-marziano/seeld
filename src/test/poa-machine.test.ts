@@ -16,7 +16,7 @@ const consentRes = (kind: PoaKind, m: PoaModules, next: PoaNext = nextOf(m)): Co
 const run = (events: PoaEvent[], s: PoaState = initialState()) => events.reduce(reduce, s);
 const fakeId = () => { for (let d = 0; d <= 9; d++) if (israeliIdCheckDigitOk(`12345678${d}`)) return `12345678${d}`; throw new Error("no check digit"); };
 const DETAILS: Details = {
-  first: "ישראל", last: "ישראלי", id: fakeId(), birth: "1980-02-01", issue: "2015-03-15", street: "הרצל 1", city: "תל אביב",
+  first: "ישראל", last: "ישראלי", id: fakeId(), birth: "1980-02-01", issue: "2015-03-15", street: "הרצל 1", city: "תל אביב", zip: "6473912",
   phone: "0501234567", email: "", terms: true, marketing: false,
 };
 /** one ANSWER per question, in order (the component validates before dispatching) */

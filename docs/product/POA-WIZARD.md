@@ -33,7 +33,8 @@ All calls need an `Origin` in `ALLOWED_ORIGINS` (403 otherwise). The session tok
 
 | route | request body keys | success body keys |
 |---|---|---|
-| `POST /start` | `first_name`, `last_name`, `national_id` (9 digits, check digit), `phone` (`05XXXXXXXX` or `+9725XXXXXXXX`), `email` (string or null), `street` (street + house number, 2-80 chars, required), `city` (2-80 chars, required), `terms_privacy_approved` (must be `true`), `marketing_approved` (bool), `turnstile_token` | `session_token`, `expires_at`, `modules`, `next` |
+| `POST /start` | `first_name`, `last_name`, `national_id` (9 digits, check digit), `phone` (`05XXXXXXXX` or `+9725XXXXXXXX`), `email` (string or null), `street` (street + house number, 2-80 chars, required), `city` (2-80 chars, required), `zip` (7 digits, required), `terms_privacy_approved` (must be `true`), `marketing_approved` (bool), `turnstile_token` | `session_token`, `expires_at`, `modules`, `next` |
+| `GET /zip?street=&city=` | query only, no session (the address question runs before `/start`); Origin-gated, 30 lookups per client address per 10 minutes | `{"zip": "1234567"}` or `{"zip": null}`. Server-side lookup against Israel Post's locate-zip backend (`_shared/poa/zip.ts`; `POA_ZIP_LOOKUP=off` disables, `ISRAEL_POST_KEY` overrides the public key). Best effort: null means the visitor types it. |
 | `POST /maslaka` | `preview_sha256` | `kind`, `method` (`check`), `approved_at`, `valid_until`, `modules`, `next` |
 | `POST /harbit` | `preview_sha256`, `birth_date`, `issue_date` (ISO `YYYY-MM-DD`, not in the future) | same as above |
 | `POST /policies` | `preview_sha256`, `signature_png` (PNG data URL, up to 300 KB) | same as above, `method` is `signature` |

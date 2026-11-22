@@ -20,7 +20,7 @@ export function Review({ headingRef, dir, prog, busy, details: d, started, turns
           <div><dt>{C.s2a.labelId}</dt><dd dir="ltr">{d.id}</dd></div>
           <div><dt>{C.s2a.labelBirth}</dt><dd dir="ltr">{formatDateHe(d.birth)}</dd></div>
           <div><dt>{C.s2a.labelIssue}</dt><dd dir="ltr">{formatDateHe(d.issue)}</dd></div>
-          <div><dt>{C.s2a.labelAddress}</dt><dd>{d.street}, {d.city}</dd></div>
+          <div><dt>{C.s2a.labelAddress}</dt><dd>{d.street}, {d.city} <span dir="ltr">{d.zip}</span></dd></div>
           <div><dt>{C.s2a.labelPhone}</dt><dd dir="ltr">{formatPhone(d.phone)}</dd></div>
           {d.email && <div><dt>{C.s2a.labelEmail}</dt><dd dir="ltr">{d.email}</dd></div>}
         </dl>
