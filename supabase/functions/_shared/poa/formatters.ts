@@ -63,7 +63,7 @@ export function cleanName(raw: unknown): string | null {
   return NAME.test(t) ? t : null;
 }
 
-const ADDRESS = /^[\p{L}\p{N}][\p{L}\p{M}\p{N}'" .,/\-]{1,79}$/u;
+const ADDRESS = /^[\p{L}\p{N}][\p{L}\p{M}\p{N}'" .,/-]{1,79}$/u;
 /** trimmed address line (street + house number, or the city) or null: letters, digits, marks, spaces and . , ' " / - ; 2 to 80 chars */
 export function cleanAddress(raw: unknown): string | null {
   if (typeof raw !== "string") return null;
