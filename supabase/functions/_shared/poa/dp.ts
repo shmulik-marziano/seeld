@@ -51,6 +51,30 @@ export interface DpClient {
   readonly allowedHosts: readonly string[];
 }
 
+/**
+ * Short, value-free reason of a refused dp call: `error.code`, else `error.displayMessage`, else `message`, with e-mails,
+ * digit runs and anything but letters/digits/underscores dropped, at most 60 chars. Empty when the body has none.
+ */
+export async function dpReason(res: Response): Promise<string> {
+  let text = "";
+  try {
+    text = (await res.text()).slice(0, 4096);
+  } catch {
+    return "";
+  }
+  let j: unknown;
+  try {
+    j = JSON.parse(text);
+  } catch {
+    return "";
+  }
+  const o = j && typeof j === "object" ? j as Record<string, unknown> : {};
+  const err = o.error && typeof o.error === "object" ? o.error as Record<string, unknown> : {};
+  const raw = [err.code, err.displayMessage, err.message, o.message].find((v) => typeof v === "string" && v.trim());
+  if (typeof raw !== "string") return "";
+  return raw.replace(/\S+@\S+/g, "").replace(/\d{4,}/g, "").replace(/[^\p{L}\p{N}_]+/gu, "_").replace(/^_+|_+$/g, "").slice(0, 60);
+}
+
 /** a bare hostname with at least one dot: no scheme, port, path, credentials or IP-literal tricks */
 export function isBareHost(h: string): boolean {
   return HOST.test(h) && !/^[0-9.]+$/.test(h);
@@ -100,9 +124,11 @@ export function createDpClient(o: DpClientOptions): DpClient {
         throw new PoaToolError("unavailable", "dp_redirect_refused");
       }
       if (!res.ok) {
-        await res.body?.cancel();
+        // the tool answers {error: {code, displayMessage}} (its own page shows displayMessage); the reason joins the
+        // code so a refusal is diagnosable from the log, after stripping anything that could be a value
+        const reason = await dpReason(res);
         if (write && AMBIGUOUS_STATUSES.includes(res.status)) ambiguous = true;
-        throw new PoaToolError(kindFromToolStatus(res.status), `dp_http_${res.status}`, ambiguous);
+        throw new PoaToolError(kindFromToolStatus(res.status), `dp_http_${res.status}${reason ? `_${reason}` : ""}`, ambiguous);
       }
       return res;
     } finally {
