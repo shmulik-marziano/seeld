@@ -21,7 +21,9 @@ const LIC = "10000000-0000-4000-8000-000000000001";
 const ACC = "a0000000-0000-4000-8000-000000000001";
 const URLID = "AbCd1234Ef";
 const SID = "11111111-1111-4111-8111-111111111111";
-const WHO: PoaIdentity = { firstName: "Dana", lastName: "Test", nationalId: SYNTH_ID, phone: "+972501234567", email: "dana@example.com", marketingApproved: false };
+const WHO: PoaIdentity = {
+  firstName: "Dana", lastName: "Test", nationalId: SYNTH_ID, phone: "+972501234567", email: "dana@example.com", street: "Herzl 12", city: "Tel Aviv", marketingApproved: false,
+};
 const ALL = { maslaka: true, harbit: true, policies: true };
 const REF = { customerId: CID, urlId: URLID, sid: SID, existing: false };
 const PDF = new TextEncoder().encode("%PDF-1.4\nsynthetic");
@@ -81,6 +83,9 @@ Deno.test("engine start: customer -> licensee -> account -> invite (url only) ->
   assert.equal(create.managerId, "b0000000-0000-4000-8000-000000000001");
   assert.equal(create.idNumber, SYNTH_ID);
   assert.equal(create.phoneNumber1, "+972501234567");
+  assert.equal(create.street, "Herzl", "street without the house number");
+  assert.equal(create.streetNumber, "12");
+  assert.equal(create.city, "Tel Aviv");
   const inv = calls[3].arg as Record<string, unknown>;
   assert.deepEqual(inv, {
     customerId: CID, licenseeId: LIC, cellNumber: "+972501234567", email: "dana@example.com",
@@ -325,12 +330,12 @@ Deno.test("rpc: argument names follow the migration, bytea literals, answers par
   });
   const p = createPoaRpc(rpc);
   const s = await p.sessionStart({
-    tokenHash: hash, uaHash: hash, firstName: "Dana", lastName: "Test", email: null, nationalId: SYNTH_ID, phone: "+972501234567", marketing: true, clientIp: "203.0.113.5",
+    tokenHash: hash, uaHash: hash, firstName: "Dana", lastName: "Test", email: null, street: "Herzl 12", city: "Tel Aviv", nationalId: SYNTH_ID, phone: "+972501234567", marketing: true, clientIp: "203.0.113.5",
   });
   assert.equal(s.next, "maslaka", "derived from the modules when the database does not say");
   assert.equal(s.existingCustomer, true);
   assert.deepEqual(rpc.calls[0].args, {
-    p_token_hash: bytea, p_identity: { first_name: "Dana", last_name: "Test", email: null }, p_national_id: SYNTH_ID, p_phone: "+972501234567",
+    p_token_hash: bytea, p_identity: { first_name: "Dana", last_name: "Test", email: null, street: "Herzl 12", city: "Tel Aviv" }, p_national_id: SYNTH_ID, p_phone: "+972501234567",
     p_ua_hash: bytea, p_ip: "203.0.113.5", p_marketing: true,
   });
   const g = await p.sessionGet(hash);

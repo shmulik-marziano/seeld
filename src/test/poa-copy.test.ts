@@ -74,12 +74,14 @@ describe("poa copy: verbatim from the spec", () => {
   const c = POA_COPY;
   const verbatim = [
     c.s0.eyebrow, c.s0.title, ...Object.values(c.s0.lead), c.s0.body, c.s0.prepareTitle, c.s0.prepareLine, c.s0.note, c.s0.cta,
-    c.s1.title, c.s1.lead, c.s1.why, c.s1.errFirst, c.s1.errLast, c.s1.errId, c.s1.cta,
-    c.s2.title, c.s2.lead, c.s2.labelPhone, c.s2.labelEmail, c.s2.termsParts.join(""), c.s2.marketing, c.s2.errPhone, c.s2.errTerms, c.s2.cta,
+    ...(["first", "last", "id", "birth", "issue", "street", "city", "phone", "email"] as const).flatMap((k) => [c.q[k].title, c.q[k].label, c.q[k].err]),
+    ...(["first", "last", "id", "issue", "street", "phone", "email"] as const).map((k) => c.q[k].hint),
+    c.q.consent.title, c.q.consent.termsParts.join(""), c.q.consent.marketing, c.q.consent.err,
+    c.q.errDate, c.q.errFuture, c.q.errAge, c.q.errOrder, c.q.cta, c.q.skip,
     c.s2a.title, c.s2a.fix, c.s2a.cta,
     ...Object.values(c.card.labels), c.card.fixedLine, c.card.view,
     c.s4.title, c.s4.lead, c.s4.check, c.s4.err, c.s4.cta,
-    c.s5.title, c.s5.lead, c.s5.why, c.s5.check, c.s5.errBirth, c.s5.errIssue, c.s5.errOrder, c.s5.errCheck, c.s5.cta,
+    c.s5.title, c.s5.lead, c.s5.datesLine, c.s5.check, c.s5.errCheck, c.s5.cta,
     c.s6.title, c.s6.lead, c.s6.declaration, c.s6.minorsLine, c.s6.sigLabel, c.s6.altSign, c.s6.err, c.s6.cta,
     c.s7.title, c.s7.methodCheck, c.s7.methodSign, c.s7.download, c.s7.downloadNote, c.s7.nextTitle, c.s7.next1, c.s7.next2, c.s7.keptLine, c.s7.afterReload,
     c.s8.inactive, c.s8.unavailable, c.s8.unavailableText, c.s8.generic, c.s8.genericAction,
@@ -91,8 +93,10 @@ describe("poa copy: verbatim from the spec", () => {
 
   it("a few exact equalities", () => {
     expect(c.s0.title).toBe("כמה פרטים, שלושה אישורים, והמידע מגיע אלינו");
-    expect(c.s2.errPhone).toBe("צריך מספר נייד שמתחיל ב־05");
+    expect(c.q.phone.err).toBe("צריך מספר נייד שמתחיל ב־05");
     expect(poaStep(2, 6)).toBe("שלב 2 מתוך 6");
+    expect(c.q.counter(3, 10)).toBe("שאלה 3 מתוך 10");
+    expect(SPEC).toContain("שאלה N מתוך M");
     expect(SPEC).toContain("שלב N מתוך M");
   });
 });

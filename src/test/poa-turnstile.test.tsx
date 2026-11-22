@@ -6,22 +6,24 @@ import { useTurnstileToken } from "@/pages/report-order/useTurnstileToken";
 afterEach(() => { vi.useRealTimers(); });
 
 const base = { headingRef: { current: null }, dir: "fwd" as const, prog: null, busy: false };
-const identity = { first: "ישראל", last: "ישראלי", id: "000000000" };
-const contact = { phone: "0501234567", email: "", terms: true, marketing: false };
+const details = {
+  first: "ישראל", last: "ישראלי", id: "000000000", birth: "1980-02-01", issue: "2015-03-15", street: "הרצל 1", city: "תל אביב",
+  phone: "0501234567", email: "", terms: true, marketing: false,
+};
 
 describe("POA Turnstile on the first submitting screen", () => {
   it("renders nothing without a widget config, and the widget slot when one is given", () => {
-    const { container, rerender } = render(<Review {...base} identity={identity} contact={contact} started={false} onConfirm={() => {}} onEdit={() => {}} />);
+    const { container, rerender } = render(<Review {...base} details={details} started={false} onConfirm={() => {}} onEdit={() => {}} />);
     expect(container.querySelector(".sd-turnstile")).toBeNull();
     rerender(
-      <Review {...base} identity={identity} contact={contact} started={false}
+      <Review {...base} details={details} started={false}
         turnstile={{ siteKey: "k", handle: { current: null }, onToken: () => {}, onError: () => {} }}
         onConfirm={() => {}} onEdit={() => {}} />,
     );
     expect(container.querySelector(".sd-turnstile")).not.toBeNull();
     // after the start call the screen no longer asks for a token
     rerender(
-      <Review {...base} identity={identity} contact={contact} started
+      <Review {...base} details={details} started
         turnstile={{ siteKey: "k", handle: { current: null }, onToken: () => {}, onError: () => {} }}
         onConfirm={() => {}} onEdit={() => {}} />,
     );

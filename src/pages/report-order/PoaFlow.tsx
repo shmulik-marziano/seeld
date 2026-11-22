@@ -10,11 +10,10 @@ import { POA_COPY as C, poaStep } from "@/lib/poa/copy";
 import { createHttpPoaApi, createMockPoaApi, errorKindOf, ERROR_KINDS, type ErrorKind, type PoaApi } from "@/lib/poa/api";
 import { backOf, initialState, progress, reduce, shouldWarn, steps, type PoaEvent } from "@/lib/poa/machine";
 import { Welcome } from "./screens/Welcome";
-import { Identity } from "./screens/Identity";
-import { Contact } from "./screens/Contact";
+import { Questions } from "./screens/Questions";
 import { Review } from "./screens/Review";
 import { Maslaka } from "./screens/Maslaka";
-import { Harbit, type HarbitDraft } from "./screens/Harbit";
+import { Harbit } from "./screens/Harbit";
 import { Policies } from "./screens/Policies";
 import { Done } from "./screens/Done";
 import { ErrorScreen } from "./screens/ErrorScreen";
@@ -66,7 +65,6 @@ export function PoaWizard({ api: injected, entry: injectedEntry }: { api?: PoaAp
   const [busy, setBusy] = useState(false);
   const [previews, setPreviews] = useState<Partial<Record<PoaKind, { pdf: Blob; sha: string }>>>({});
   const [now, setNow] = useState(() => new Date());
-  const [harbitDraft, setHarbitDraft] = useState<HarbitDraft>({ birth: "", issue: "" });
   const headingRef = useRef<HTMLHeadingElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const interacted = useRef(false);
@@ -83,7 +81,7 @@ export function PoaWizard({ api: injected, entry: injectedEntry }: { api?: PoaAp
       const top = card.getBoundingClientRect().top;
       if (top < 64 || top > window.innerHeight * 0.4) card.scrollIntoView?.({ behavior: "smooth", block: "start" });
     }
-  }, [state.screen]);
+  }, [state.screen, state.q]);
 
   // Session clock: the 2-minute warning and the expiry screen lean on expires_at from the server.
   useEffect(() => {
@@ -106,7 +104,7 @@ export function PoaWizard({ api: injected, entry: injectedEntry }: { api?: PoaAp
   }, [screen, api]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // A restart (expiry, editing after start) forgets the previews of the old session.
-  useEffect(() => { if (!state.session) { setPreviews({}); setHarbitDraft({ birth: "", issue: "" }); } }, [state.session]);
+  useEffect(() => { if (!state.session) setPreviews({}); }, [state.session]);
 
   const run = async (fn: () => Promise<PoaEvent>) => {
     setBusy(true);
@@ -119,15 +117,15 @@ export function PoaWizard({ api: injected, entry: injectedEntry }: { api?: PoaAp
   });
   const confirm = () => {
     if (state.started) return dispatch({ type: "FORWARD" });
-    const { identity: i, contact: c } = state;
+    const d = state.details;
     return run(async () => {
       try {
         const turnstile_token = await turnstile.waitForToken();
         return {
           type: "STARTED",
           res: await api.start({
-            first_name: i.first, last_name: i.last, national_id: i.id, phone: c.phone,
-            email: c.email || null, terms_privacy_approved: true, marketing_approved: c.marketing, turnstile_token,
+            first_name: d.first, last_name: d.last, national_id: d.id, phone: d.phone, email: d.email || null,
+            street: d.street, city: d.city, terms_privacy_approved: true, marketing_approved: d.marketing, turnstile_token,
           }),
         };
       } finally {
@@ -145,14 +143,13 @@ export function PoaWizard({ api: injected, entry: injectedEntry }: { api?: PoaAp
   let body: JSX.Element;
   switch (state.screen) {
     case "s0": body = <Welcome {...base} entry={entry} onStart={() => dispatch({ type: "START" })} />; break;
-    case "s1": body = <Identity {...base} initial={state.identity} onSubmit={(identity) => dispatch({ type: "IDENTITY", identity })} onBack={back!} />; break;
-    case "s2": body = <Contact {...base} initial={state.contact} onSubmit={(contact) => dispatch({ type: "CONTACT", contact })} onBack={back!} />; break;
+    case "q": body = <Questions {...base} q={state.q} details={state.details} onAnswer={(patch) => dispatch({ type: "ANSWER", patch })} onBack={back!} />; break;
     case "s2a": body = (
-      <Review {...base} identity={state.identity} contact={state.contact} started={state.started}
+      <Review {...base} details={state.details} started={state.started}
         turnstile={turnstile.widget} onConfirm={confirm} onEdit={() => dispatch({ type: "EDIT" }, "back")} onBack={back} />
     ); break;
     case "maslaka": body = <Maslaka {...base} pdf={previews.maslaka?.pdf ?? null} onSubmit={() => consent("maslaka")} onBack={back} />; break;
-    case "harbit": body = <Harbit {...base} pdf={previews.harbit?.pdf ?? null} initial={harbitDraft} onDraft={setHarbitDraft} onSubmit={(v) => consent("harbit", v)} onBack={back} />; break;
+    case "harbit": body = <Harbit {...base} pdf={previews.harbit?.pdf ?? null} onSubmit={() => consent("harbit", { birth_date: state.details.birth, issue_date: state.details.issue })} onBack={back} />; break;
     case "policies": body = <Policies {...base} pdf={previews.policies?.pdf ?? null} onSubmit={(png) => consent("policies", { signature_png: png })} onBack={back} />; break;
     case "s7": body = <Done {...base} done={state.done} preDone={state.preDone} api={api} />; break;
     default: body = (
@@ -185,7 +182,7 @@ export function PoaWizard({ api: injected, entry: injectedEntry }: { api?: PoaAp
                 <button type="button" className="sd-q-btn is-quiet" onClick={() => dispatchRaw({ type: "DISMISS_WARN" })}>{C.s8.warnAction}</button>
               </div>
             )}
-            <div key={state.screen}>{body}</div>
+            <div key={state.screen === "q" ? `q${state.q}` : state.screen}>{body}</div>
           </div>
         </div>
       </div>

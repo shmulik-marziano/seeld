@@ -25,6 +25,15 @@
 /* ס0: the entry-context line reads as the opening sentence, the body as the explanation under it */
 .sd-poa-lead { font-weight: 600; color: var(--q-navy); }
 
+/* ס1: one question per screen. The counter sits under the question; the one field is larger than a form field. */
+.sd-poa-counter { margin: -4px 0 14px; font-size: 13.5px; font-weight: 600; letter-spacing: .02em; color: var(--q-muted); }
+.sd-poa-field { margin-top: 4px; }
+.sd-poa-field .sd-q-subfield { margin-bottom: 8px; }
+.sd-poa-field .sd-q-input { min-height: 60px; font-size: 20px; }
+.sd-poa-field .sd-q-sublabel { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.sd-poa-date { font-family: inherit; }
+.sd-poa-date::-webkit-calendar-picker-indicator { cursor: pointer; opacity: .7; }
+
 /* check fields */
 .sd-poa-check { margin: 14px 0 0; }
 .sd-poa-check .sd-q-choice { justify-content: flex-start; text-align: start; line-height: 1.55; min-height: 52px; padding: 10px 14px; }

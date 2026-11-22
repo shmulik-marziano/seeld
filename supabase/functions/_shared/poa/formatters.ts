@@ -63,6 +63,20 @@ export function cleanName(raw: unknown): string | null {
   return NAME.test(t) ? t : null;
 }
 
+const ADDRESS = /^[\p{L}\p{N}][\p{L}\p{M}\p{N}'" .,/\-]{1,79}$/u;
+/** trimmed address line (street + house number, or the city) or null: letters, digits, marks, spaces and . , ' " / - ; 2 to 80 chars */
+export function cleanAddress(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const t = raw.trim().replace(/\s+/g, " ");
+  return ADDRESS.test(t) ? t : null;
+}
+
+/** "הרצל 12" -> {street: "הרצל", streetNumber: "12"}; a line with no trailing house number keeps the whole text as the street */
+export function splitStreet(line: string): { street: string; streetNumber?: string } {
+  const m = /^(.*\S)\s+(\d{1,5}[\p{L}]?(?:\/\d{1,4})?)$/u.exec(line);
+  return m ? { street: m[1], streetNumber: m[2] } : { street: line };
+}
+
 // ---- dates -------------------------------------------------------------------------------------------------------
 const ISO = /^(\d{4})-(\d{2})-(\d{2})$/;
 

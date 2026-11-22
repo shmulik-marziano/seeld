@@ -20,6 +20,9 @@ export interface StartReq {
   national_id: string;
   phone: string;
   email: string | null;
+  /** street and house number, as on the ID card's slip (owner decision 2026-11-22: required) */
+  street: string;
+  city: string;
   terms_privacy_approved: true;
   marketing_approved: boolean;
   /** Cloudflare Turnstile token (single use); absent or null when the widget is not configured. */
@@ -138,7 +141,7 @@ export function createMockPoaApi(opts: MockOpts = {}): PoaApi {
     async start(r) {
       await wait();
       guard("start");
-      if (!r.terms_privacy_approved || !r.first_name || !r.last_name || !/^\d{9}$/.test(r.national_id) || !/^05\d{8}$/.test(r.phone)) {
+      if (!r.terms_privacy_approved || !r.first_name || !r.last_name || !/^\d{9}$/.test(r.national_id) || !/^05\d{8}$/.test(r.phone) || !r.street?.trim() || !r.city?.trim()) {
         throw new PoaApiError("generic");
       }
       const modules = Object.fromEntries(POA_KINDS.map((k) => [k, { enabled: true, required: true, performed: false, ...opts.modules?.[k] }])) as PoaModules;

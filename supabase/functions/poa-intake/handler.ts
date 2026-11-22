@@ -25,7 +25,7 @@ import { hostnamesFromOrigins, verifyTurnstile } from "../_shared/turnstile.ts";
 import { POA_KINDS, type EngineRef, type FinalUrls, type ModuleFlags, type PoaEngine, type PoaKind } from "../_shared/poa/engine/types.ts";
 import { PoaHttpError, PoaToolError, poaErrorResponse, toPoaError } from "../_shared/poa/errors.ts";
 import {
-  cleanEmail, cleanName, harbitDates, isValidIsraeliId, MAX_SIGNATURE_CHARS, pngBase64, todayIsrael, toE164IsraeliMobile,
+  cleanAddress, cleanEmail, cleanName, harbitDates, isValidIsraeliId, MAX_SIGNATURE_CHARS, pngBase64, todayIsrael, toE164IsraeliMobile,
 } from "../_shared/poa/formatters.ts";
 import { DEFAULT_START_BUCKET_MS, DEFAULT_START_MIN_MS } from "../_shared/poa/config.ts";
 import { createPoaRpc, type PoaModules, type PoaRpc, type PoaSession } from "../_shared/poa/rpc.ts";
@@ -45,7 +45,7 @@ export const REJECT_WINDOW_SEC = 600;
 export const PREVIEW_LIMIT = 20;
 export const PREVIEW_WINDOW_SEC = 600;
 
-const START_KEYS = ["first_name", "last_name", "national_id", "phone", "email", "terms_privacy_approved", "marketing_approved", "turnstile_token"];
+const START_KEYS = ["first_name", "last_name", "national_id", "phone", "email", "street", "city", "terms_privacy_approved", "marketing_approved", "turnstile_token"];
 const CONSENT_KEYS: Record<PoaKind, string[]> = {
   maslaka: ["preview_sha256"],
   harbit: ["preview_sha256", "birth_date", "issue_date"],
@@ -147,7 +147,7 @@ function onlyKeys(b: Record<string, unknown>, allowed: string[]) {
 }
 
 export interface ParsedStart {
-  identity: { firstName: string; lastName: string; nationalId: string; phone: string; email: string | null; marketingApproved: boolean };
+  identity: { firstName: string; lastName: string; nationalId: string; phone: string; email: string | null; street: string; city: string; marketingApproved: boolean };
   turnstileToken: string | null;
 }
 
@@ -164,12 +164,17 @@ export function parseStart(b: Record<string, unknown>): ParsedStart {
   if (!phone) throw bad("invalid_phone");
   const email = cleanEmail(b.email);
   if (email === undefined) throw bad("invalid_email");
+  // street + house number and the city are required (owner decision 2026-11-22)
+  const street = cleanAddress(b.street);
+  if (!street) throw bad("invalid_street");
+  const city = cleanAddress(b.city);
+  if (!city) throw bad("invalid_city");
   if (b.terms_privacy_approved !== true) throw bad("terms_required");
   if (typeof b.marketing_approved !== "boolean") throw bad("invalid_marketing");
   const t = b.turnstile_token;
   if (t !== undefined && t !== null && (typeof t !== "string" || t.length > 2048)) throw bad("invalid_turnstile_token");
   return {
-    identity: { firstName, lastName, nationalId: nid, phone, email, marketingApproved: b.marketing_approved },
+    identity: { firstName, lastName, nationalId: nid, phone, email, street, city, marketingApproved: b.marketing_approved },
     turnstileToken: typeof t === "string" && t ? t : null,
   };
 }
@@ -292,6 +297,8 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
             firstName: parsed.identity.firstName,
             lastName: parsed.identity.lastName,
             email: parsed.identity.email,
+            street: parsed.identity.street,
+            city: parsed.identity.city,
             nationalId: parsed.identity.nationalId,
             phone: parsed.identity.phone,
             marketing: parsed.identity.marketingApproved,

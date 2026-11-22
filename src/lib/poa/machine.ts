@@ -1,22 +1,34 @@
 // POA wizard state machine: pure, no React, no DOM, no network. The server (adapter) drives the next document
 // through `next` and `modules`; this file only resolves it to a screen, skips disabled / performed modules both ways,
 // derives "שלב N מתוך M" from the modules, and decides the time warning and expiry (spec §2, §3, ס8).
-// Personal details live in this state only (component memory): nothing is written to any storage.
+// ס1 is one question per screen (owner decision 2026-11-22): `q` is the index into Q_KEYS, every answer is validated
+// before the next question opens. Personal details live in this state only (component memory): no storage.
 import { POA_KINDS, POA_LIMITS, type PoaKind } from "./config";
 import { POA_COPY as C } from "./copy";
 import { nextOf, type ConsentRes, type ErrorKind, type PoaModules, type PoaNext, type StartRes } from "./api";
-import { ageFromBirth, isMobile, validateDate, validateEmail, validateIsraeliId, validateIsraeliPhone, validatePersonName } from "@/questionnaires/validators";
+import { ageFromBirth, isMobile, validateDate, validateEmail, validateIsraeliId, validateIsraeliPhone, validatePersonName, validateText } from "@/questionnaires/validators";
 
-export type Screen = "s0" | "s1" | "s2" | "s2a" | PoaKind | "s7" | "error";
+export type Screen = "s0" | "q" | "s2a" | PoaKind | "s7" | "error";
 
-export interface Identity { first: string; last: string; id: string }
-export interface Contact { phone: string; email: string; terms: boolean; marketing: boolean }
+/** The questions of ס1, in order. E-mail is the one optional answer; `consent` is the terms (+ marketing) screen. */
+export const Q_KEYS = ["first", "last", "id", "birth", "issue", "street", "city", "phone", "email", "consent"] as const;
+export type QKey = (typeof Q_KEYS)[number];
+
+export interface Details {
+  first: string; last: string; id: string;
+  /** ISO yyyy-mm-dd (the date picker's value) */
+  birth: string; issue: string;
+  street: string; city: string;
+  phone: string; email: string;
+  terms: boolean; marketing: boolean;
+}
 export interface DoneDoc { method: "check" | "signature"; approved_at: string; valid_until: string | null }
 
 export interface PoaState {
   screen: Screen;
-  identity: Identity;
-  contact: Contact;
+  /** index into Q_KEYS while screen is "q" */
+  q: number;
+  details: Details;
   /** the server answered the start call: details can no longer be edited without starting again (spec ס2א) */
   started: boolean;
   session: { token: string; expires_at: string } | null;
@@ -33,8 +45,8 @@ export interface PoaState {
 
 export type PoaEvent =
   | { type: "START" }
-  | { type: "IDENTITY"; identity: Identity }
-  | { type: "CONTACT"; contact: Contact }
+  /** a validated answer to the current question (the component validates with validateAnswer first) */
+  | { type: "ANSWER"; patch: Partial<Details> }
   | { type: "EDIT" }
   | { type: "STARTED"; res: StartRes }
   | { type: "CONSENTED"; res: ConsentRes }
@@ -47,10 +59,14 @@ export type PoaEvent =
   | { type: "DISMISS_WARN" }
   | { type: "TICK"; now: Date };
 
+export const emptyDetails = (): Details => ({
+  first: "", last: "", id: "", birth: "", issue: "", street: "", city: "", phone: "", email: "", terms: false, marketing: false,
+});
+
 export const initialState = (): PoaState => ({
   screen: "s0",
-  identity: { first: "", last: "", id: "" },
-  contact: { phone: "", email: "", terms: false, marketing: false },
+  q: 0,
+  details: emptyDetails(),
   started: false,
   session: null,
   modules: null,
@@ -72,12 +88,11 @@ export function resolveNext(modules: PoaModules, next: PoaNext): Screen {
   return n === "done" ? "s7" : n;
 }
 
-/** Screen BACK goes to, or null when there is no way back. Disabled / performed modules are skipped. */
+/** Screen BACK goes to, or null when there is no way back. On "q" with q > 0 it is the previous question. */
 export function backOf(s: PoaState): Screen | null {
   switch (s.screen) {
-    case "s1": return "s0";
-    case "s2": return "s1";
-    case "s2a": return s.started ? null : "s2";
+    case "q": return s.q > 0 ? "q" : "s0";
+    case "s2a": return s.started ? null : "q";
     case "maslaka": case "harbit": case "policies": {
       const i = POA_KINDS.indexOf(s.screen);
       for (let j = i - 1; j >= 0; j--) if (s.modules && open(s.modules, POA_KINDS[j])) return POA_KINDS[j];
@@ -89,13 +104,17 @@ export function backOf(s: PoaState): Screen | null {
 
 export function reduce(s: PoaState, e: PoaEvent): PoaState {
   switch (e.type) {
-    case "START": return s.screen === "s0" ? { ...s, screen: "s1" } : s;
-    case "IDENTITY": return s.screen === "s1" ? { ...s, identity: e.identity, screen: "s2" } : s;
-    case "CONTACT": return s.screen === "s2" ? { ...s, contact: e.contact, screen: "s2a" } : s;
+    case "START": return s.screen === "s0" ? { ...s, screen: "q", q: 0 } : s;
+    case "ANSWER": {
+      if (s.screen !== "q") return s;
+      const details = { ...s.details, ...e.patch };
+      const last = s.q >= Q_KEYS.length - 1;
+      return last ? { ...s, details, screen: "s2a" } : { ...s, details, q: s.q + 1 };
+    }
     case "EDIT":
       if (s.screen !== "s2a") return s;
       // after the start call, changing details means starting again (spec ס2א)
-      return s.started ? initialState() : { ...s, screen: "s1" };
+      return s.started ? initialState() : { ...s, screen: "q", q: 0 };
     case "STARTED": {
       // a late answer never pulls the user off another screen (e.g. the error screen)
       if (s.screen !== "s2a" || s.started) return s;
@@ -123,7 +142,10 @@ export function reduce(s: PoaState, e: PoaEvent): PoaState {
     }
     case "BACK": {
       const b = backOf(s);
-      return b ? { ...s, screen: b } : s;
+      if (!b) return s;
+      if (s.screen === "q" && b === "q") return { ...s, q: s.q - 1 };
+      if (b === "q") return { ...s, screen: "q", q: Q_KEYS.length - 1 };
+      return { ...s, screen: b };
     }
     case "FORWARD":
       if (s.screen !== "s2a" || !s.started || !s.modules) return s;
@@ -154,17 +176,16 @@ export function shouldWarn(s: PoaState, now: Date): boolean {
   return left > 0 && left <= POA_LIMITS.warnBeforeMinutes * 60_000;
 }
 
-/** Steps inside the indicator: s1, s2, s2a and every enabled module not already performed at start (s0, s7 outside). */
+/** Steps inside the indicator: the questions (as one step), s2a and every enabled module not already performed at start. */
 export function steps(s: PoaState): Screen[] {
   // before the start call the modules are unknown: the list assumes all three (only used once modules are known)
   const kinds = POA_KINDS.filter((k) => (s.modules ? s.modules[k].enabled : true) && !s.preDone.includes(k));
-  return ["s1", "s2", "s2a", ...kinds];
+  return ["q", "s2a", ...kinds];
 }
 
 /**
  * "שלב N מתוך M", or null. Until the start call answers, `modules` is unknown and M could still change, so the
- * indicator is not shown (spec §2: M is always exact). Showing it on s1–s2a needs the module config before s1
- * (owner decision).
+ * indicator is not shown (spec §2: M is always exact). The questions have their own counter (ס1).
  */
 export function progress(s: PoaState): { n: number; m: number } | null {
   if (!s.modules) return null;
@@ -175,55 +196,79 @@ export function progress(s: PoaState): { n: number; m: number } | null {
 
 // ───────── validation (spec strings first for blank fields, then the validator's own message)
 
-type Errs<K extends string> = Partial<Record<K, string>>;
 const blank = (v: string) => !v.trim();
+const ADDRESS_MAX = 80;
 
-export function validateIdentity(i: Identity): { errors: Errs<"first" | "last" | "id">; value?: Identity } {
-  const errors: Errs<"first" | "last" | "id"> = {};
-  const out: Identity = { first: "", last: "", id: "" };
-  if (blank(i.first)) errors.first = C.s1.errFirst; else { const r = validatePersonName(i.first); if (r.ok) out.first = r.value!; else errors.first = r.message; }
-  if (blank(i.last)) errors.last = C.s1.errLast; else { const r = validatePersonName(i.last); if (r.ok) out.last = r.value!; else errors.last = r.message; }
-  if (blank(i.id)) errors.id = C.s1.errId; else { const r = validateIsraeliId(i.id); if (r.ok) out.id = r.value!; else errors.id = r.message; }
-  return Object.keys(errors).length ? { errors } : { errors, value: out };
-}
-
-export function validateContact(c: Contact): { errors: Errs<"phone" | "email" | "terms">; value?: Contact } {
-  const errors: Errs<"phone" | "email" | "terms"> = {};
-  const out: Contact = { ...c, email: "" };
-  const p = validateIsraeliPhone(c.phone);
-  if (!p.ok || !isMobile(p.value!)) errors.phone = C.s2.errPhone; else out.phone = p.value!;
-  if (!blank(c.email)) { const r = validateEmail(c.email); if (r.ok) out.email = r.value!; else errors.email = r.message; }
-  if (!c.terms) errors.terms = C.s2.errTerms;
-  return Object.keys(errors).length ? { errors } : { errors, value: out };
-}
-
-export function validateHarbit(d: { birth: string; issue: string; check: boolean }, now: Date = new Date()):
-  { errors: Errs<"birth" | "issue" | "check">; value?: { birth_date: string; issue_date: string } } {
-  const errors: Errs<"birth" | "issue" | "check"> = {};
-  let birth = "", issue = "";
-  if (blank(d.birth)) errors.birth = C.s5.errBirth;
-  else {
-    const r = dateOf(d.birth, now);
-    if (typeof r !== "string") errors.birth = r.err;
-    else {
-      const age = ageFromBirth(r, now);
-      if (age === null || age > POA_LIMITS.maxAge) errors.birth = C.s5.errDate;
-      else if (age < POA_LIMITS.minAge) errors.birth = C.s5.errAge;
-      else birth = r;
-    }
-  }
-  if (blank(d.issue)) errors.issue = C.s5.errIssue;
-  else { const r = dateOf(d.issue, now); if (typeof r === "string") issue = r; else errors.issue = r.err; }
-  if (birth && issue && issue < birth) errors.issue = C.s5.errOrder; // ISO strings compare lexically
-  if (!d.check) errors.check = C.s5.errCheck;
-  return Object.keys(errors).length ? { errors } : { errors, value: { birth_date: birth, issue_date: issue } };
-}
-
-/** dd/mm/yyyy to ISO, or the ס5 copy string for the failure (every visible string lives in copy.ts). */
+/** ISO date or the ס1 copy string for the failure (every visible string lives in copy.ts). */
 function dateOf(input: string, now: Date): string | { err: string } {
   const r = validateDate(input, { now });
   if (r.ok) return r.value!;
-  return validateDate(input, { now, allowFuture: true }).ok ? { err: C.s5.errFuture } : { err: C.s5.errDate };
+  return validateDate(input, { now, allowFuture: true }).ok ? { err: C.q.errFuture } : { err: C.q.errDate };
+}
+
+/**
+ * Validate one answer against the details so far. Returns the error to show, or the normalised patch to dispatch.
+ * `consent` validates the terms check (the marketing check is free).
+ */
+export function validateAnswer(key: QKey, d: Details, now: Date = new Date()): { err?: string; patch?: Partial<Details> } {
+  switch (key) {
+    case "first": case "last": {
+      const v = d[key];
+      if (blank(v)) return { err: C.q[key].err };
+      const r = validatePersonName(v);
+      return r.ok ? { patch: { [key]: r.value! } } : { err: r.message };
+    }
+    case "id": {
+      if (blank(d.id)) return { err: C.q.id.err };
+      const r = validateIsraeliId(d.id);
+      return r.ok ? { patch: { id: r.value! } } : { err: r.message };
+    }
+    case "birth": {
+      if (blank(d.birth)) return { err: C.q.birth.err };
+      const r = dateOf(d.birth, now);
+      if (typeof r !== "string") return { err: r.err };
+      const age = ageFromBirth(r, now);
+      if (age === null || age > POA_LIMITS.maxAge) return { err: C.q.errDate };
+      if (age < POA_LIMITS.minAge) return { err: C.q.errAge };
+      return { patch: { birth: r } };
+    }
+    case "issue": {
+      if (blank(d.issue)) return { err: C.q.issue.err };
+      const r = dateOf(d.issue, now);
+      if (typeof r !== "string") return { err: r.err };
+      if (d.birth && r < d.birth) return { err: C.q.errOrder }; // ISO strings compare lexically
+      return { patch: { issue: r } };
+    }
+    case "street": case "city": {
+      const v = d[key];
+      if (blank(v)) return { err: C.q[key].err };
+      const r = validateText(v, { max: ADDRESS_MAX, min: 2 });
+      return r.ok ? { patch: { [key]: r.value!.replace(/\s+/g, " ") } } : { err: r.message };
+    }
+    case "phone": {
+      const p = validateIsraeliPhone(d.phone);
+      if (!p.ok || !isMobile(p.value!)) return { err: C.q.phone.err };
+      return { patch: { phone: p.value! } };
+    }
+    case "email": {
+      if (blank(d.email)) return { patch: { email: "" } };
+      const r = validateEmail(d.email);
+      return r.ok ? { patch: { email: r.value! } } : { err: r.message };
+    }
+    case "consent":
+      return d.terms ? { patch: { terms: true, marketing: d.marketing } } : { err: C.q.consent.err };
+  }
+}
+
+/** Every answer valid (the review screen and the start call rely on it). */
+export function validateDetails(d: Details, now: Date = new Date()): boolean {
+  let acc = d;
+  for (const k of Q_KEYS) {
+    const r = validateAnswer(k, acc, now);
+    if (r.err) return false;
+    acc = { ...acc, ...r.patch };
+  }
+  return true;
 }
 
 export const validateCheck = (checked: boolean): string | undefined => (checked ? undefined : C.s4.err);

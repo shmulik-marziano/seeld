@@ -10,7 +10,7 @@ const fonts = { regular: font("Rubik-Regular.ttf"), bold: font("Rubik-Bold.ttf")
 const FAKE_ID = (() => { for (let d = 0; d <= 9; d++) if (israeliIdCheckDigitOk(`12345678${d}`)) return `12345678${d}`; throw new Error("no check digit"); })();
 const REQ: StartReq = {
   first_name: "ישראל", last_name: "ישראלי", national_id: FAKE_ID, phone: "0501234567",
-  email: "test@example.com", terms_privacy_approved: true, marketing_approved: false,
+  email: "test@example.com", street: "הרצל 1", city: "תל אביב", terms_privacy_approved: true, marketing_approved: false,
 };
 const latin1 = async (b: Blob) => Buffer.from(await blobBytes(b)).toString("latin1");
 const keys = (o: object) => Object.keys(o).sort();
@@ -161,7 +161,7 @@ describe("poa http adapter", () => {
     expect(hdr(calls[0], "content-type")).toBe("application/json");
     expect(hdr(calls[0], "x-poa-session")).toBeNull();
     const body = JSON.parse(String(calls[0].init.body));
-    expect(keys(body)).toEqual(["email", "first_name", "last_name", "marketing_approved", "national_id", "phone", "terms_privacy_approved", "turnstile_token"]);
+    expect(keys(body)).toEqual(["city", "email", "first_name", "last_name", "marketing_approved", "national_id", "phone", "street", "terms_privacy_approved", "turnstile_token"]);
     expect(body.turnstile_token).toBe("ts-token");
   });
 

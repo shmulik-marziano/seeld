@@ -116,12 +116,12 @@ export function createPoaRpc(rpc: Rpc) {
     },
 
     async sessionStart(a: {
-      tokenHash: string; uaHash: string | null; firstName: string; lastName: string; email: string | null; nationalId: string; phone: string;
-      marketing: boolean; clientIp: string;
+      tokenHash: string; uaHash: string | null; firstName: string; lastName: string; email: string | null; street?: string; city?: string;
+      nationalId: string; phone: string; marketing: boolean; clientIp: string;
     }): Promise<PoaStart> {
       const r = obj(await rpc.call("poa_session_start", {
         p_token_hash: hash(a.tokenHash),
-        p_identity: { first_name: a.firstName, last_name: a.lastName, email: a.email },
+        p_identity: { first_name: a.firstName, last_name: a.lastName, email: a.email, ...(a.street ? { street: a.street } : {}), ...(a.city ? { city: a.city } : {}) },
         p_national_id: a.nationalId,
         p_phone: a.phone,
         p_ua_hash: a.uaHash ? hash(a.uaHash) : null,

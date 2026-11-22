@@ -12,7 +12,7 @@ import { SurenseError } from "../../surense/errors.ts";
 import type { CodeValue, Customer, Licensee, SwiftnessAccount } from "../../surense/types.ts";
 import { type DpClient, type PreviewFlag } from "../dp.ts";
 import { PoaToolError } from "../errors.ts";
-import { cellForTool, dateForTool, nationalIdForTool, signatureForTool } from "../formatters.ts";
+import { cellForTool, dateForTool, nationalIdForTool, signatureForTool, splitStreet } from "../formatters.ts";
 import type { ConsentData, EngineRef, FinalUrls, ModuleFlags, PoaEngine, PoaIdentity, PoaKind } from "./types.ts";
 
 const URL_ID = /^[A-Za-z0-9_-]{4,40}$/;
@@ -112,6 +112,9 @@ export function createSurenseEngine(d: SurenseEngineDeps): PoaEngine {
       lastName: who.lastName,
       phoneNumber1: cellForTool(who.phone),
       ...(who.email ? { email1: who.email } : {}),
+      // address as the tool's customer record keeps it (CreateCustomerRequest: street, streetNumber, city)
+      ...splitStreet(who.street),
+      city: who.city,
     };
     const created = async (r: typeof req & { forceCreation?: boolean }): Promise<string> => {
       const c: Customer = await d.api.customers.create(r);
