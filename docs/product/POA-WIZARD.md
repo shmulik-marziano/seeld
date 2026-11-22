@@ -79,8 +79,11 @@ The wizard never talks to Surense; `poa-intake` does (`_shared/poa/engine/surens
    call, no `Authorization` header to the dp host. Every call is audited through `api.surense_audit` (op, status, phase; no values).
    Locked wire formats (verified 2026-11-22): every answer is `{nextStep, sid}`; `swiftness` sends `{sid}` only; `hb` sends
    `birthDate` and `nationalIdCardIssuingDate` as ISO `YYYY-MM-DD`; `policies` sends `signature` as the full PNG data URL
-   (`data:image/png;base64,...`). Not yet verified: the `cellNumber` format of `proxies/start` (E.164 is the guess) and the body
-   of the 400 that `proxies/start` answered once for an existing customer (a 400 maps to the `generic` kind, one mapping in
+   (`data:image/png;base64,...`). Verified 2026-11-22 in the page's own bundle (`/app/static/js/main.*.js`): `load` is sent
+   with `sid: null` (the page's sessionStorage is empty on a first visit) and null names, the SERVER mints the `sid` and every
+   later call carries it (our engine requires it: `dp_no_sid` otherwise); `cellNumber` is E.164 (`+972…`, the page masks the
+   last digits with `substring(11)`); `email`, `employerName`, `notes` are `null` when empty. A refused dp call carries the
+   tool's reason in the code (`dp_http_400_<error.code or displayMessage, values stripped>`; a 400 maps to the `generic` kind, one mapping in
    `_shared/poa/errors.ts`).
 4. Final documents, primary path: the `policies` answer is `{nextStep: 7, swiftnessProxyUrl?, hbProxyUrl, policiesProxyUrl}`,
    pre-signed S3 links to the three final PDFs. `engine.consent("policies")` returns them (`{swiftness?, hb?, policies?}`) and

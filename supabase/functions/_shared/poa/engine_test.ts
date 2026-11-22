@@ -94,7 +94,8 @@ Deno.test("engine start: customer -> licensee -> account -> invite (url only) ->
   });
   assert.equal(f.calls.length, 2);
   assert.ok(f.calls[0].url.startsWith("https://dp.example.test/api/proxies/load"));
-  assert.deepEqual(JSON.parse(f.calls[0].body), { sid: SID, urlId: URLID, firstName: "Dana", lastName: "Test" });
+  // as the page itself: sid and names null on load, the server mints the sid (verified 2026-11-22 in the page bundle)
+  assert.deepEqual(JSON.parse(f.calls[0].body), { sid: null, urlId: URLID, firstName: null, lastName: null });
   assert.deepEqual(JSON.parse(f.calls[1].body), {
     sid: SID, firstName: "Dana", lastName: "Test", idType: 1, idNumber: SYNTH_ID, email: "dana@example.com", cellNumber: "+972501234567",
     employerName: null, notes: null, termsPrivacyApproved: true, marketingApproved: false,
@@ -198,11 +199,29 @@ Deno.test("dp client: the default base path is /api/v1/ifs/public", async () => 
   assert.equal(f.calls[0].url, "https://dp.example.test/api/v1/ifs/public/proxies/swiftness");
 });
 
-Deno.test("dp client: a 400 maps to the generic kind (one mapping, kindFromToolStatus)", async () => {
+Deno.test("dp client: a 400 maps to the generic kind (one mapping, kindFromToolStatus); the tool's reason joins the code, values stripped", async () => {
   const f = mockFetch(() => json({ message: "x" }, 400));
   const dp = createDpClient({ host: "dp.example.test", basePath: "/api", log: silentLog(), fetch: f.fetch });
-  await assert.rejects(dp.post("start", { sid: SID }, null), (e) => e instanceof PoaToolError && e.kind === "generic" && e.code === "dp_http_400");
+  await assert.rejects(dp.post("start", { sid: SID }, null), (e) => e instanceof PoaToolError && e.kind === "generic" && e.code === "dp_http_400_x");
   assert.equal(kindFromToolStatus(400), "generic");
+  const f2 = mockFetch(() => json({ error: { code: "SESSION_NOT_FOUND", displayMessage: "התהליך לא נמצא" } }, 400));
+  const dp2 = createDpClient({ host: "dp.example.test", basePath: "/api", log: silentLog(), fetch: f2.fetch });
+  await assert.rejects(dp2.post("start", { sid: SID }, null), (e) => e instanceof PoaToolError && e.code === "dp_http_400_SESSION_NOT_FOUND");
+  const f3 = mockFetch(() => json({ error: { displayMessage: `מספר סלולרי לא חוקי ${SYNTH_ID} dana@example.com` } }, 400));
+  const dp3 = createDpClient({ host: "dp.example.test", basePath: "/api", log: silentLog(), fetch: f3.fetch });
+  await assert.rejects(dp3.post("start", { sid: SID }, null), (e) => e instanceof PoaToolError && e.code === "dp_http_400_מספר_סלולרי_לא_חוקי");
+  const f4 = mockFetch(() => new Response("<html>nope</html>", { status: 400 }));
+  const dp4 = createDpClient({ host: "dp.example.test", basePath: "/api", log: silentLog(), fetch: f4.fetch });
+  await assert.rejects(dp4.post("start", { sid: SID }, null), (e) => e instanceof PoaToolError && e.code === "dp_http_400");
+});
+
+Deno.test("engine start: a load answer without the server's sid stops before start (dp_no_sid)", async () => {
+  const { api, calls } = fakeApi();
+  const f = dpFetch({ load: json({ skipWelcomeStep: true }) });
+  const { engine } = engineWith(api, f);
+  await assert.rejects(engine.start(WHO, ALL), (e) => e instanceof PoaToolError && e.code === "dp_no_sid");
+  assert.equal(f.calls.length, 1, "start was never sent");
+  assert.ok(calls.some((c) => c.name === "invite"));
 });
 
 Deno.test("engine helpers: link id, licensee and account picking, status shapes", () => {

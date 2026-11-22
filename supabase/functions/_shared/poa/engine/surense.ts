@@ -166,9 +166,12 @@ export function createSurenseEngine(d: SurenseEngineDeps): PoaEngine {
       const urlId = parseUrlId(invite?.url);
       if (!urlId) throw new PoaToolError("generic", "bad_invite_url");
 
-      const wanted = newSid();
-      const loaded = await d.dp.post("load", { sid: wanted, urlId, firstName: who.firstName, lastName: who.lastName }, customer.id);
-      const sid = typeof loaded.sid === "string" && SID.test(loaded.sid) ? loaded.sid : wanted;
+      // Verified 2026-11-22 against the page's own code: `load` is sent with sid null (sessionStorage is empty on a first
+      // visit) and null names; the SERVER mints the sid and every later call carries it. A client-minted sid made the
+      // next call fail with 400 (the first real client, 2026-11-22), so the server's sid is required here.
+      const loaded = await d.dp.post("load", { sid: null, urlId, firstName: null, lastName: null }, customer.id);
+      const sid = typeof loaded.sid === "string" && SID.test(loaded.sid) ? loaded.sid : null;
+      if (!sid) throw new PoaToolError("unavailable", "dp_no_sid");
       await d.dp.post("start", {
         sid,
         firstName: who.firstName,
