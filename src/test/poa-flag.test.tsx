@@ -135,24 +135,44 @@ describe("POA page", () => {
     await renderFlow(api);
 
     fireEvent.click(screen.getByRole("button", { name: /מתחילים/ }));
-    // before the start call the modules are unknown: no indicator, so M never changes once shown (spec §2)
-    expect(h2()).toBe("כמה פרטים מזהים");
-    expect(screen.queryByText(/מתוך/)).toBeNull();
+    // ס1: one question per screen. Before the start call the modules are unknown: no "שלב" indicator (spec §2)
+    expect(h2()).toBe("מה השם הפרטי שלכם?");
+    expect(screen.getByText("שאלה 1 מתוך 10")).toBeInTheDocument();
+    expect(screen.queryByText(/שלב \d+ מתוך/)).toBeNull();
     await waitFor(() => expect(document.activeElement).toBe(h2El()));
+    // an empty answer does not advance
     fireEvent.click(screen.getByRole("button", { name: /המשך/ }));
     expect(await screen.findByText("צריך למלא שם פרטי")).toBeInTheDocument();
+    expect(h2()).toBe("מה השם הפרטי שלכם?");
     await waitFor(() => expect(document.activeElement?.id).toBe("poa-first"));
-    fireEvent.change(screen.getByLabelText("שם פרטי"), { target: { value: "ישראל" } });
-    fireEvent.change(screen.getByLabelText("שם משפחה"), { target: { value: "ישראלי" } });
+    const answer = async (label: string, value: string, next: string) => {
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+      fireEvent.click(screen.getByRole("button", { name: /המשך/ }));
+      await waitFor(() => expect(h2()).toBe(next));
+    };
+    await answer("שם פרטי", "ישראל", "ושם המשפחה?");
+    await answer("שם משפחה", "ישראלי", "מה מספר תעודת הזהות?");
     const id = screen.getByLabelText("מספר תעודת זהות");
     expect(id).toHaveAttribute("dir", "ltr");
     expect(id).toHaveAttribute("inputmode", "numeric");
-    fireEvent.change(id, { target: { value: fakeId() } });
+    await answer("מספר תעודת זהות", fakeId(), "מה תאריך הלידה שלכם?");
+    expect(screen.getByLabelText("תאריך לידה")).toHaveAttribute("type", "date");
+    await answer("תאריך לידה", "1980-02-01", "מתי הונפקה תעודת הזהות?");
+    // an issue date before the birth date does not advance
+    fireEvent.change(screen.getByLabelText("תאריך הנפקה"), { target: { value: "1979-01-01" } });
     fireEvent.click(screen.getByRole("button", { name: /המשך/ }));
-
-    expect(h2()).toContain("איך ליצור איתכם קשר");
-    await waitFor(() => expect(document.activeElement).toBe(h2El()));
-    fireEvent.change(screen.getByLabelText("טלפון נייד"), { target: { value: "0501234567" } });
+    expect(await screen.findByText("תאריך ההנפקה מוקדם מתאריך הלידה, כדאי לבדוק שוב.")).toBeInTheDocument();
+    await answer("תאריך הנפקה", "2015-03-15", "מה הכתובת? רחוב ומספר בית");
+    await answer("רחוב ומספר בית", "הרצל 1", "ובאיזה יישוב?");
+    await answer("יישוב", "תל אביב", "מה מספר הנייד?");
+    expect(screen.getByLabelText("טלפון נייד")).toHaveAttribute("inputmode", "numeric");
+    await answer("טלפון נייד", "0501234567", "ודוא\"ל?");
+    expect(screen.getByLabelText("דוא\"ל (לא חובה)")).toHaveAttribute("type", "email");
+    fireEvent.click(screen.getByRole("button", { name: "דילוג" }));
+    await waitFor(() => expect(h2()).toBe("עוד רגע ומתחילים"));
+    expect(screen.getByText("שאלה 10 מתוך 10")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /המשך/ }));
+    expect(await screen.findByText("כדי להמשיך צריך לאשר את תנאי השימוש ומדיניות הפרטיות.")).toBeInTheDocument();
     const terms = screen.getByRole("checkbox", { name: /קראתי ואישרתי את/ });
     expect(terms.closest("label")?.textContent).toBe("קראתי ואישרתי את תנאי השימוש ומדיניות הפרטיות");
     expect(screen.getByRole("checkbox", { name: /שיווקי/ })).not.toBeChecked();
@@ -160,12 +180,14 @@ describe("POA page", () => {
     expect(screen.getByRole("link", { name: "תנאי השימוש" })).toHaveAttribute("target", "_blank");
     fireEvent.click(screen.getByRole("button", { name: /המשך/ }));
 
-    expect(h2()).toContain("הפרטים שיופיעו במסמכים");
+    await waitFor(() => expect(h2()).toContain("הפרטים שיופיעו במסמכים"));
     expect(screen.getByText(fakeId())).toBeInTheDocument();
+    expect(screen.getByText("הרצל 1, תל אביב")).toBeInTheDocument();
+    expect(screen.getByText("01/02/1980")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "תיקון" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /אישור הפרטים והמשך/ }));
 
-    await waitFor(() => expect(h2()).toBe("שלב 4 מתוך 5: המסלקה הפנסיונית"));
+    await waitFor(() => expect(h2()).toBe("שלב 3 מתוך 4: המסלקה הפנסיונית"));
     await waitFor(() => expect(document.activeElement).toBe(h2El()));
     expect(screen.getByText("במסמך מופיע בעל הרישיון שמטפל בתיק שלכם.")).toBeInTheDocument();
     expect(screen.getByText("למי פונים")).toBeInTheDocument();
@@ -176,18 +198,13 @@ describe("POA page", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: /למסלקה הפנסיונית בשמי/ }));
     fireEvent.click(screen.getByRole("button", { name: /אישור והמשך/ }));
 
-    await waitFor(() => expect(h2()).toBe("שלב 5 מתוך 5: הר הביטוח"));
-    const birth = screen.getByLabelText("תאריך לידה");
-    expect(birth).toHaveAttribute("dir", "ltr");
-    expect(birth).toHaveAttribute("inputmode", "numeric");
-    fireEvent.change(birth, { target: { value: "01/02/1980" } });
-    fireEvent.change(screen.getByLabelText("תאריך הנפקה"), { target: { value: "01/01/1979" } });
-    fireEvent.click(screen.getByRole("checkbox", { name: /הר הביטוח בשמי/ }));
+    await waitFor(() => expect(h2()).toBe("שלב 4 מתוך 4: הר הביטוח"));
+    expect(screen.queryByLabelText("תאריך לידה")).toBeNull(); // the dates were answered in ס1
+    expect(screen.getByText("במסמך מופיעים תאריך הלידה ותאריך ההנפקה שמסרתם.")).toBeInTheDocument();
     await waitFor(() => expect(screen.getByRole("button", { name: /אישור והמשך/ })).toBeEnabled(), { timeout: 5000 }); // the mock builds a real PDF: slow under a full parallel run
     fireEvent.click(screen.getByRole("button", { name: /אישור והמשך/ }));
-    expect(await screen.findByText("תאריך ההנפקה מוקדם מתאריך הלידה, כדאי לבדוק שוב.")).toBeInTheDocument();
-    await waitFor(() => expect(document.activeElement?.id).toBe("poa-issue"));
-    fireEvent.change(screen.getByLabelText("תאריך הנפקה"), { target: { value: "15/03/2015" } });
+    expect(await screen.findByText("כדי להמשיך צריך לסמן את האישור.")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("checkbox", { name: /הר הביטוח בשמי/ }));
     fireEvent.click(screen.getByRole("button", { name: /אישור והמשך/ }));
 
     await waitFor(() => expect(h2()).toBe("קיבלנו את האישורים"));
@@ -204,14 +221,16 @@ describe("POA page", () => {
     const { createMockPoaApi } = await import("@/lib/poa/api");
     await renderFlow(createMockPoaApi({ fail: { code: "unavailable" } }));
     fireEvent.click(screen.getByRole("button", { name: /מתחילים/ }));
-    fireEvent.change(screen.getByLabelText("שם פרטי"), { target: { value: "ישראל" } });
-    fireEvent.change(screen.getByLabelText("שם משפחה"), { target: { value: "ישראלי" } });
-    fireEvent.change(screen.getByLabelText("מספר תעודת זהות"), { target: { value: fakeId() } });
-    fireEvent.click(screen.getByRole("button", { name: /המשך/ }));
-    fireEvent.change(screen.getByLabelText("טלפון נייד"), { target: { value: "0501234567" } });
-    fireEvent.click(screen.getByRole("checkbox", { name: /תנאי השימוש/ }));
-    fireEvent.click(screen.getByRole("button", { name: /המשך/ }));
-    fireEvent.click(screen.getByRole("button", { name: /אישור הפרטים והמשך/ }));
+    const next = () => fireEvent.click(screen.getByRole("button", { name: /המשך/ }));
+    for (const [label, value] of [["שם פרטי", "ישראל"], ["שם משפחה", "ישראלי"], ["מספר תעודת זהות", fakeId()], ["תאריך לידה", "1980-02-01"],
+      ["תאריך הנפקה", "2015-03-15"], ["רחוב ומספר בית", "הרצל 1"], ["יישוב", "תל אביב"], ["טלפון נייד", "0501234567"]]) {
+      fireEvent.change(await screen.findByLabelText(label), { target: { value } });
+      next();
+    }
+    fireEvent.click(await screen.findByRole("button", { name: "דילוג" }));
+    fireEvent.click(await screen.findByRole("checkbox", { name: /תנאי השימוש/ }));
+    next();
+    fireEvent.click(await screen.findByRole("button", { name: /אישור הפרטים והמשך/ }));
     await waitFor(() => expect(h2()).toBe("השירות אינו זמין כרגע"));
     expect(screen.getByText("נסו שוב בעוד כמה רגעים")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "נסו שוב" }));

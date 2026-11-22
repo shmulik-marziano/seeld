@@ -102,8 +102,12 @@ values ('5eed0000-0000-4000-8000-000000000001', 'Zz-Existing', 'Test', '05099999
 select set_config('t.cust_before', (select md5(string_agg(c.id::text || coalesce(c.mobile_phone, '') || c.updated_at::text, ',' order by c.id)) from crm.customers c), true);
 
 set local role service_role;
+select throws_ok($$select api.poa_session_start(decode(current_setting('t.tha'), 'hex'), ('{"first_name":"Zz","last_name":"Test","street":"' || repeat('s', 81) || '"}')::jsonb, '000000018', '+972501234567', null, '203.0.113.7', false)$$,
+  'PT400', 'invalid_input:street', 'street over 80 chars refused');
+select throws_ok($$select api.poa_session_start(decode(current_setting('t.tha'), 'hex'), ('{"first_name":"Zz","last_name":"Test","city":"' || repeat('c', 81) || '"}')::jsonb, '000000018', '+972501234567', null, '203.0.113.7', false)$$,
+  'PT400', 'invalid_input:city', 'city over 80 chars refused');
 select set_config('t.ra', (api.poa_session_start(decode(current_setting('t.tha'), 'hex'),
-  '{"first_name":"Zz-First","last_name":"Zz-Last","email":"zz.test@example.invalid"}'::jsonb, '000000018', '+972501234567',
+  '{"first_name":"Zz-First","last_name":"Zz-Last","email":"zz.test@example.invalid","street":"Zz-Street 12","city":"Zz-City"}'::jsonb, '000000018', '+972501234567',
   decode(repeat('ab', 32), 'hex'), '203.0.113.7', true))::text, true);
 select set_config('t.rb', (api.poa_session_start(decode(current_setting('t.thb'), 'hex'),
   '{"first_name":"Zz-Other","last_name":"Zz-Last","email":null}'::jsonb, '000000026', '+972508888888', null, '203.0.113.8', false))::text, true);
@@ -130,6 +134,7 @@ select ok((select octet_length(national_id_hmac) = 32 and octet_length(phone_hma
                   and position(convert_to('000000018', 'utf8') in identity_enc) = 0
                   and position(convert_to('Zz-First', 'utf8') in identity_enc) = 0
                   and position(convert_to('501234567', 'utf8') in identity_enc) = 0
+                  and position(convert_to('Zz-Street', 'utf8') in identity_enc) = 0
                   and status = 'open' and engine = 'surense' and expires_at between now() + interval '59 minutes' and now() + interval '61 minutes'
              from crm.poa_sessions where id = current_setting('t.sa')::uuid), 'hmacs 32 bytes, tail 67, identity encrypted, 60 minute expiry');
 select is((select array_agg(kind order by kind) from crm.poa_consents where session_id = current_setting('t.sa')::uuid), array['marketing', 'terms_privacy'],
@@ -201,6 +206,8 @@ select is((api.poa_consent_record(current_setting('t.sa')::uuid, 'harbit', 'chec
   jsonb_build_object('birth_date', '1980-05-17', 'issue_date', ((now() at time zone 'Asia/Jerusalem')::date)::text))) ->> 'next', 'policies', 'harbit approved with an issue date of Israel-today, policies next');
 reset role;
 select is((select private.pii_decrypt(identity_enc)::jsonb ->> 'birth_date' from crm.poa_sessions where id = current_setting('t.sa')::uuid), '1980-05-17', 'birth date kept inside the encrypted identity');
+select is((select private.pii_decrypt(identity_enc)::jsonb ->> 'street' from crm.poa_sessions where id = current_setting('t.sa')::uuid), 'Zz-Street 12', 'street kept inside the encrypted identity');
+select is((select private.pii_decrypt(identity_enc)::jsonb ->> 'city' from crm.poa_sessions where id = current_setting('t.sa')::uuid), 'Zz-City', 'city kept inside the encrypted identity');
 set local role service_role;
 select is((api.poa_session_complete(current_setting('t.sa')::uuid)) ->> 'complete', 'false', 'not complete with a module left');
 select lives_ok($$select api.poa_preview_set(current_setting('t.sa')::uuid, 'policies', repeat('d', 64))$$, 'policies preview recorded');

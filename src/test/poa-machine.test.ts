@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { POA_KINDS, type PoaKind } from "@/lib/poa/config";
 import { errorKindOf, nextOf, PoaApiError, type ConsentRes, type PoaModules, type PoaNext, type StartRes } from "@/lib/poa/api";
 import { israeliIdCheckDigitOk } from "@/questionnaires/validators";
-import { backOf, initialState, progress, reduce, resolveNext, shouldWarn, steps, type PoaEvent, type PoaState } from "@/lib/poa/machine";
+import { backOf, initialState, progress, Q_KEYS, reduce, resolveNext, shouldWarn, steps, type Details, type PoaEvent, type PoaState } from "@/lib/poa/machine";
 
 const T0 = new Date("2026-01-10T10:00:00Z");
 const mods = (over: Partial<Record<PoaKind, Partial<PoaModules[PoaKind]>>> = {}): PoaModules =>
@@ -15,14 +15,26 @@ const consentRes = (kind: PoaKind, m: PoaModules, next: PoaNext = nextOf(m)): Co
 });
 const run = (events: PoaEvent[], s: PoaState = initialState()) => events.reduce(reduce, s);
 const fakeId = () => { for (let d = 0; d <= 9; d++) if (israeliIdCheckDigitOk(`12345678${d}`)) return `12345678${d}`; throw new Error("no check digit"); };
-const ID = { first: "ישראל", last: "ישראלי", id: fakeId() };
-const CONTACT = { phone: "0501234567", email: "", terms: true, marketing: false };
-const toReview = (): PoaEvent[] => [{ type: "START" }, { type: "IDENTITY", identity: ID }, { type: "CONTACT", contact: CONTACT }];
+const DETAILS: Details = {
+  first: "ישראל", last: "ישראלי", id: fakeId(), birth: "1980-02-01", issue: "2015-03-15", street: "הרצל 1", city: "תל אביב",
+  phone: "0501234567", email: "", terms: true, marketing: false,
+};
+/** one ANSWER per question, in order (the component validates before dispatching) */
+const answers = (): PoaEvent[] => Q_KEYS.map((k) => ({
+  type: "ANSWER", patch: k === "consent" ? { terms: DETAILS.terms, marketing: DETAILS.marketing } : { [k]: DETAILS[k] },
+}));
+const toReview = (): PoaEvent[] => [{ type: "START" }, ...answers()];
 
 describe("poa machine: transitions", () => {
-  it("walks s0 → s1 → s2 → s2a → maslaka → harbit → policies → s7", () => {
-    let s = run(toReview());
+  it("walks s0 → q (10 questions) → s2a → maslaka → harbit → policies → s7", () => {
+    let s = run([{ type: "START" }]);
+    expect(s.screen).toBe("q"); expect(s.q).toBe(0);
+    s = run(answers().slice(0, 3), s);
+    expect(s.screen).toBe("q"); expect(s.q).toBe(3);
+    expect(s.details.first).toBe("ישראל"); expect(s.details.id).toBe(DETAILS.id);
+    s = run(answers().slice(3), s);
     expect(s.screen).toBe("s2a");
+    expect(s.details).toEqual(DETAILS);
     s = reduce(s, { type: "STARTED", res: startRes() });
     expect(s.screen).toBe("maslaka");
     expect(s.started).toBe(true);
@@ -37,15 +49,15 @@ describe("poa machine: transitions", () => {
   });
 
   it("ignores events that do not belong to the current screen", () => {
-    expect(reduce(initialState(), { type: "IDENTITY", identity: ID }).screen).toBe("s0");
+    expect(reduce(initialState(), { type: "ANSWER", patch: { first: "x" } }).screen).toBe("s0");
     expect(reduce(initialState(), { type: "EDIT" }).screen).toBe("s0");
     expect(reduce(initialState(), { type: "FORWARD" }).screen).toBe("s0");
   });
 
-  it("EDIT before the start call goes back to s1 keeping the details", () => {
+  it("EDIT before the start call goes back to the first question keeping the details", () => {
     const s = run([...toReview(), { type: "EDIT" }]);
-    expect(s.screen).toBe("s1");
-    expect(s.identity).toEqual(ID);
+    expect(s.screen).toBe("q"); expect(s.q).toBe(0);
+    expect(s.details).toEqual(DETAILS);
   });
 
   it("EDIT after the start call starts again (no edit on the old session)", () => {
@@ -64,12 +76,13 @@ describe("poa machine: transitions", () => {
     expect(s.screen).toBe("harbit");
   });
 
-  it("BACK steps s2a → s2 → s1 → s0 before the start call", () => {
+  it("BACK steps s2a → last question → … → first question → s0 before the start call", () => {
     let s = run(toReview());
-    s = reduce(s, { type: "BACK" }); expect(s.screen).toBe("s2");
-    s = reduce(s, { type: "BACK" }); expect(s.screen).toBe("s1");
+    s = reduce(s, { type: "BACK" }); expect(s.screen).toBe("q"); expect(s.q).toBe(Q_KEYS.length - 1);
+    for (let i = Q_KEYS.length - 2; i >= 0; i--) { s = reduce(s, { type: "BACK" }); expect(s.screen).toBe("q"); expect(s.q).toBe(i); }
     s = reduce(s, { type: "BACK" }); expect(s.screen).toBe("s0");
     s = reduce(s, { type: "BACK" }); expect(s.screen).toBe("s0");
+    expect(s.details).toEqual(DETAILS); // answers survive going back
   });
 });
 
@@ -108,21 +121,21 @@ describe("poa machine: progress", () => {
   it("M never changes once shown", () => {
     const m = mods({ policies: { enabled: false } });
     let s = run([...toReview(), { type: "STARTED", res: startRes(m) }]);
-    expect(progress(s)).toEqual({ n: 4, m: 5 });
+    expect(progress(s)).toEqual({ n: 3, m: 4 });
     s = reduce(s, { type: "BACK" });
-    expect(progress(s)).toEqual({ n: 3, m: 5 });
+    expect(progress(s)).toEqual({ n: 2, m: 4 });
   });
 
   it("derives M from the modules: disabled and already-performed modules drop out", () => {
     const m = mods({ maslaka: { performed: true }, policies: { enabled: false } });
     const s = run([...toReview(), { type: "STARTED", res: startRes(m) }]);
-    expect(steps(s)).toEqual(["s1", "s2", "s2a", "harbit"]);
-    expect(progress(s)).toEqual({ n: 4, m: 4 });
+    expect(steps(s)).toEqual(["q", "s2a", "harbit"]);
+    expect(progress(s)).toEqual({ n: 3, m: 3 });
   });
 
   it("keeps a module performed during the flow in the count", () => {
     const s = run([...toReview(), { type: "STARTED", res: startRes() }, { type: "CONSENTED", res: consentRes("maslaka", mods({ maslaka: { performed: true } })) }]);
-    expect(progress(s)).toEqual({ n: 5, m: 6 });
+    expect(progress(s)).toEqual({ n: 4, m: 5 });
   });
 });
 
@@ -192,7 +205,7 @@ describe("poa machine: errors", () => {
     const r = reduce(s, { type: "RETRY" });
     expect(r.screen).toBe("s2a");
     expect(r.error).toBeNull();
-    expect(r.identity).toEqual(ID);
+    expect(r.details).toEqual(DETAILS);
   });
 
   it("a second FAIL keeps the first screen to return to", () => {

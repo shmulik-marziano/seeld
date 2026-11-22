@@ -2,9 +2,22 @@
 // when the owner's full run locks a format, the expectation here changes together with formatters.ts)
 import assert from "node:assert/strict";
 import {
-  cellForTool, cleanEmail, cleanName, dateForTool, harbitDates, isValidIsraeliId, MAX_SIGNATURE_CHARS, nationalIdForTool, parseIsoDate, pastIsoDate,
-  pngBase64, signatureForTool, todayIsrael, toE164IsraeliMobile, toLocalMobile,
+  cellForTool, cleanAddress, cleanEmail, cleanName, dateForTool, harbitDates, isValidIsraeliId, MAX_SIGNATURE_CHARS, nationalIdForTool, parseIsoDate, pastIsoDate,
+  pngBase64, signatureForTool, splitStreet, todayIsrael, toE164IsraeliMobile, toLocalMobile,
 } from "./formatters.ts";
+
+Deno.test("formatters: address lines and the street split for the tool", () => {
+  assert.equal(cleanAddress("  הרצל   12 "), "הרצל 12");
+  assert.equal(cleanAddress("Tel Aviv-Yafo"), "Tel Aviv-Yafo");
+  assert.equal(cleanAddress("א"), null, "two characters at least");
+  assert.equal(cleanAddress("x".repeat(81)), null, "80 at most");
+  assert.equal(cleanAddress("<script>"), null);
+  assert.equal(cleanAddress(7), null);
+  assert.deepEqual(splitStreet("הרצל 12"), { street: "הרצל", streetNumber: "12" });
+  assert.deepEqual(splitStreet("Herzl 12a/3"), { street: "Herzl", streetNumber: "12a/3" });
+  assert.deepEqual(splitStreet("שדרות רוטשילד 101"), { street: "שדרות רוטשילד", streetNumber: "101" });
+  assert.deepEqual(splitStreet("קיבוץ דגניה"), { street: "קיבוץ דגניה" });
+});
 import { PNG_B64, PNG_URL, SYNTH_ID } from "./fixtures.ts";
 
 Deno.test("formatters: national id check digit", () => {

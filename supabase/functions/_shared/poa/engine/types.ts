@@ -11,6 +11,9 @@ export interface PoaIdentity {
   nationalId: string;
   phone: string;
   email: string | null;
+  /** street + house number and the city, as validated by the handler (goes to the tool's customer record) */
+  street: string;
+  city: string;
   marketingApproved: boolean;
 }
 

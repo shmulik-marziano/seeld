@@ -28,7 +28,7 @@ const MODS = (performed: Partial<Record<string, boolean>> = {}) => Object.fromEn
 
 const IDENTITY = {
   first_name: "Dana", last_name: "Testov", national_id: SYNTH_ID, phone: "050-123-4567", email: "dana.testov@example.com",
-  terms_privacy_approved: true, marketing_approved: false, turnstile_token: "ts-token-secret-1",
+  street: "Herzl 12", city: "Tel Aviv", terms_privacy_approved: true, marketing_approved: false, turnstile_token: "ts-token-secret-1",
 };
 
 function session(over: Record<string, unknown> = {}) {
@@ -132,7 +132,7 @@ Deno.test("start: response keys are exactly the contract; the token is returned 
   assert.ok(!JSON.stringify(s.rpc.calls).includes(body.session_token), "the token itself never reaches the database");
   assert.equal(start.args.p_phone, "+972501234567", "local form converted before the DB");
   assert.equal(start.args.p_national_id, SYNTH_ID);
-  assert.deepEqual(start.args.p_identity, { first_name: "Dana", last_name: "Testov", email: "dana.testov@example.com" });
+  assert.deepEqual(start.args.p_identity, { first_name: "Dana", last_name: "Testov", email: "dana.testov@example.com", street: "Herzl 12", city: "Tel Aviv" });
   assert.equal(start.args.p_marketing, false);
   assert.equal(start.args.p_ip, IP);
   assert.equal(start.args.p_ua_hash, bytea(await sha256Hex("test-agent")), "the user agent is stored as a hash only");
@@ -282,7 +282,8 @@ Deno.test("start: validation rejects unknown keys, bad ids, landlines, missing t
   const bad = (patch: Record<string, unknown>) => parseStart({ ...IDENTITY, ...patch });
   assert.ok(parseStart(IDENTITY));
   for (const patch of [{ extra: 1 }, { national_id: "000000019" }, { national_id: 5 }, { phone: "0212345678" }, { phone: "+14155550123" }, { terms_privacy_approved: false },
-    { terms_privacy_approved: undefined }, { first_name: "" }, { last_name: "<x>" }, { email: "nope" }, { marketing_approved: "yes" }, { turnstile_token: 5 }]) {
+    { terms_privacy_approved: undefined }, { first_name: "" }, { last_name: "<x>" }, { email: "nope" }, { marketing_approved: "yes" }, { turnstile_token: 5 },
+    { street: "" }, { street: undefined }, { street: "<x>" }, { city: "x".repeat(81) }, { city: 7 }]) {
     assert.throws(() => bad(patch), (e) => (e as { kind?: string }).kind === "generic", JSON.stringify(patch));
   }
   assert.equal(parseStart({ ...IDENTITY, email: null }).identity.email, null);

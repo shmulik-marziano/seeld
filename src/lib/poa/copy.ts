@@ -25,38 +25,55 @@ export const POA_COPY = {
     note: "בשלב האחרון חותמים באצבע או בעכבר. אם זה לא מתאים לכם, אפשר לחתום יחד איתנו.",
     cta: "מתחילים",
   },
-  s1: {
-    title: "כמה פרטים מזהים",
-    lead: "הפרטים יופיעו בייפויי הכוח כפי שהם רשומים בתעודת הזהות.",
-    why: "כל אחד מהגופים מזהה אתכם לפי מספר הזהות. המספר נשמר אצלנו מוצפן, ומופיע רק בתוך ייפויי הכוח עצמם.",
-    // labels: not in spec (the words come from the spec's own error strings)
-    labelFirst: "שם פרטי",
-    labelLast: "שם משפחה",
-    labelId: "מספר תעודת זהות",
-    errFirst: "צריך למלא שם פרטי",
-    errLast: "צריך למלא שם משפחה",
-    errId: "צריך למלא מספר תעודת זהות",
+  /**
+   * ס1: one question per screen (owner decision 2026-11-22: "שאלה, לא כרטיס עם סדרה של שאלות מעייפות"). Every answer
+   * is required and validated before the next question opens; e-mail is the one optional answer.
+   */
+  q: {
+    counter: (n: number, m: number) => `שאלה ${n} מתוך ${m}`,
+    first: { title: "מה השם הפרטי שלכם?", hint: "כפי שרשום בתעודת הזהות.", label: "שם פרטי", err: "צריך למלא שם פרטי" },
+    last: { title: "ושם המשפחה?", hint: "כפי שרשום בתעודת הזהות.", label: "שם משפחה", err: "צריך למלא שם משפחה" },
+    id: {
+      title: "מה מספר תעודת הזהות?",
+      hint: "כל אחד מהגופים מזהה אתכם לפי מספר הזהות. המספר נשמר אצלנו מוצפן, ומופיע רק בתוך ייפויי הכוח עצמם.",
+      label: "מספר תעודת זהות", err: "צריך למלא מספר תעודת זהות",
+    },
+    birth: { title: "מה תאריך הלידה שלכם?", hint: "", label: "תאריך לידה", err: "צריך להזין תאריך לידה" },
+    issue: {
+      title: "מתי הונפקה תעודת הזהות?",
+      hint: "הר הביטוח מבקש את תאריך ההנפקה כדי לזהות אתכם. התאריך מודפס על תעודת הזהות.",
+      label: "תאריך הנפקה", err: "צריך להזין את תאריך ההנפקה",
+    },
+    street: { title: "מה הכתובת? רחוב ומספר בית", hint: "כפי שרשום בספח תעודת הזהות.", label: "רחוב ומספר בית", err: "צריך למלא רחוב ומספר בית" },
+    city: { title: "ובאיזה יישוב?", hint: "", label: "יישוב", err: "צריך למלא יישוב" },
+    phone: { title: "מה מספר הנייד?", hint: "לנייד נחזור אליכם לפני הפנייה לגופים.", label: "טלפון נייד", err: "צריך מספר נייד שמתחיל ב־05" },
+    email: { title: "ודוא\"ל?", hint: "לא חובה. אפשר לדלג.", label: "דוא\"ל (לא חובה)", err: "" },
+    consent: {
+      title: "עוד רגע ומתחילים",
+      hint: "",
+      /** "קראתי ואישרתי את תנאי השימוש ומדיניות הפרטיות", split so the two links open in a new tab */
+      termsParts: ["קראתי ואישרתי את ", "תנאי השימוש", " ו", "מדיניות הפרטיות"],
+      marketing: "אשמח לקבל עדכונים ומידע שיווקי",
+      err: "כדי להמשיך צריך לאשר את תנאי השימוש ומדיניות הפרטיות.",
+    },
+    // date validator failures (ס5 wording kept)
+    errDate: "התאריך לא נראה תקין, כדאי לבדוק שוב",
+    errFuture: "התאריך הזה עוד לא הגיע, כדאי לבדוק שוב",
+    errAge: "נדרש גיל 18 ומעלה",
+    errOrder: "תאריך ההנפקה מוקדם מתאריך הלידה, כדאי לבדוק שוב.",
     cta: "המשך",
-  },
-  s2: {
-    title: "איך ליצור איתכם קשר",
-    lead: "לנייד נחזור אליכם לפני הפנייה לגופים.",
-    labelPhone: "טלפון נייד",
-    labelEmail: "דוא\"ל (לא חובה)",
-    /** "קראתי ואישרתי את תנאי השימוש ומדיניות הפרטיות", split so the two links open in a new tab */
-    termsParts: ["קראתי ואישרתי את ", "תנאי השימוש", " ו", "מדיניות הפרטיות"],
-    marketing: "אשמח לקבל עדכונים ומידע שיווקי",
-    errPhone: "צריך מספר נייד שמתחיל ב־05",
-    errTerms: "כדי להמשיך צריך לאשר את תנאי השימוש ומדיניות הפרטיות.",
-    // not in spec: the spec gives ס2 no button wording; reuses ס1's "המשך" (owner sign-off)
-    cta: "המשך",
+    skip: "דילוג",
   },
   s2a: {
     title: "הפרטים שיופיעו במסמכים",
     // row labels: not in spec as labels (the spec says "מוצגים שם, ת"ז ונייד")
     labelName: "שם",
     labelId: "ת\"ז",
+    labelBirth: "תאריך לידה",
+    labelIssue: "תאריך הנפקה",
+    labelAddress: "כתובת",
     labelPhone: "נייד",
+    labelEmail: "דוא\"ל",
     fix: "תיקון",
     cta: "אישור הפרטים והמשך",
   },
@@ -75,18 +92,9 @@ export const POA_COPY = {
   s5: {
     title: "הר הביטוח",
     lead: "מכאן מגיע המידע על הביטוחים שלכם בכל החברות.",
-    why: "הר הביטוח מבקש את תאריך ההנפקה כדי לזהות אתכם. התאריך מודפס על תעודת הזהות.",
-    // labels: not in spec (the words come from the spec's own error strings)
-    labelBirth: "תאריך לידה",
-    labelIssue: "תאריך הנפקה",
+    /** the dates themselves are asked in ס1 (questions birth, issue); this screen shows which ones go on the document */
+    datesLine: "במסמך מופיעים תאריך הלידה ותאריך ההנפקה שמסרתם.",
     check: "קראתי את המסמך ואישרתי את הפנייה להר הביטוח בשמי",
-    errBirth: "צריך להזין תאריך לידה",
-    errIssue: "צריך להזין את תאריך ההנפקה",
-    errOrder: "תאריך ההנפקה מוקדם מתאריך הלידה, כדאי לבדוק שוב.",
-    // not in spec (owner sign-off): the date validator's failures, mapped here so every visible string lives in this file
-    errDate: "התאריך לא נראה תקין, כדאי לבדוק שוב",
-    errFuture: "התאריך הזה עוד לא הגיע, כדאי לבדוק שוב",
-    errAge: "נדרש גיל 18 ומעלה",
     // not in spec (owner sign-off): the spec gives ס5 no button or missing-check wording; both reuse ס4's
     errCheck: "כדי להמשיך צריך לסמן את האישור.",
     cta: "אישור והמשך",
@@ -144,7 +152,6 @@ export const POA_COPY = {
     progressLabel: "התקדמות בתהליך",
     navLabel: "ניווט בתהליך",
     pageTitle: "פתיחת תיק · שילד",
-    datePlaceholder: "dd/mm/yyyy",
   },
   /** Display title of each document (spec §1 wording). The server template will own it (spec §1, §4). */
   docTitle: {
