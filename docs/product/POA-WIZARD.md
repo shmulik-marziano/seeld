@@ -74,7 +74,7 @@ The wizard never talks to Surense; `poa-intake` does (`_shared/poa/engine/surens
    enabled modules. Only `url` is used: the urlId is the last path segment of `/app/p/<urlId>`; the message is dropped.
 3. The public page API (`dp.surense.com`, server to server only; base path `/api/v1/ifs/public`, verified in the owner's
    full run of 2026-11-22, overridable with `SURENSE_DP_BASE`): `proxies/load`, `proxies/start`, then per module
-   `proxies/swiftness`, `proxies/hb`, `proxies/policies`; `GET proxies_preview?sw=true|hb=true|p=true&sid=<sid>` returns the
+   `proxies/swiftness`, `proxies/hb`, `proxies/policies`; `GET proxies/proxies_preview?sw=true|hb=true|p=true&sid=<sid>` returns the
    (unsigned) PDF. Host allowlist is exactly `api.surense.com` plus the dp host; HTTPS only, redirects refused, 15 s timeout per
    call, no `Authorization` header to the dp host. Every call is audited through `api.surense_audit` (op, status, phase; no values).
    Locked wire formats (verified 2026-11-22): every answer is `{nextStep, sid}`; `swiftness` sends `{sid}` only; `hb` sends

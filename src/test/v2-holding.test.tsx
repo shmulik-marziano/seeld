@@ -33,9 +33,12 @@ describe("App routes", () => {
     for (const p of ["/q/:token", "/portal/*", "/execution-portal/*", "/client/*", "/app/*", "/app"]) {
       expect(v2).toContain(`<Route path="${p}" element={<ComingSoon />} />`);
     }
-    for (const el of ["Onboarding />, \"form\"", "SiteAdmin />", "DirectDebit />, \"form\"", "SavedCalculations />", "PersonalArea />"]) {
+    for (const el of ["SiteAdmin />", "DirectDebit />, \"form\"", "SavedCalculations />", "PersonalArea />"]) {
       expect(APP).toContain(`hold(<${el})`);
     }
+    // /onboarding is the joining entry of the POA wizard, never the old form (owner decision 2026-11-22)
+    expect(APP).toContain('<Route path="/onboarding" element={<Navigate to={`${POA_ROUTE}?from=join`} replace />} />');
+    expect(APP).not.toContain('import("@/pages/Onboarding")');
   });
 
   it("the page-view log is legacy-only and the PDage module is gone from the router", () => {

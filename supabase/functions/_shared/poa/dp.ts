@@ -27,8 +27,10 @@ export const DP_ROUTES = {
 } as const;
 export type DpRoute = keyof typeof DP_ROUTES;
 
-/** verified 2026-11-22: GET proxies_preview?sw=true|hb=true|p=true&sid=<sid> answers the (unsigned) preview PDF. */
-export const PREVIEW_PATH = "proxies_preview";
+/** verified 2026-11-22 in the page bundle: GET proxies/proxies_preview?sw=true|hb=true|p=true&sid=<sid> answers the
+ *  (unsigned) preview PDF. Without the `proxies/` segment the gateway answers 403 "Missing Authentication Token"
+ *  (first real client, attempt 4). */
+export const PREVIEW_PATH = "proxies/proxies_preview";
 export const PREVIEW_OP = "poa.dp.preview";
 export type PreviewFlag = "sw" | "hb" | "p";
 
