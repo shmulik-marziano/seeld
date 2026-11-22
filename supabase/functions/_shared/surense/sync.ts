@@ -9,7 +9,7 @@ import { assertAllowedUrl, type SurenseClient } from "./client.ts";
 import { InputError, SurenseError } from "./errors.ts";
 import { mapCustomer, mapDocument, mapProduct } from "./mirror.ts";
 import { extOf, objectPath, sha256Hex, type Storage } from "./storage.ts";
-import type { PoaKind } from "../poa/engine/types.ts";
+import type { PoaEngine, PoaKind } from "../poa/engine/types.ts";
 import { poaStoragePath } from "../poa/storage.ts";
 import type { E9100SubmitRequest, ProxiesInviteRequest, SearchFilter, SurenseDocument } from "./types.ts";
 
@@ -20,6 +20,8 @@ export interface SyncDeps {
   log: Logger;
   storage: Storage | null;
   now?: () => number;
+  /** the engine that feeds the tool for the ship job (surense.poa_ship); null/absent = that job fails with engine_not_configured */
+  poaEngine?: PoaEngine | null;
 }
 
 export const PAGE_SIZE = 100;

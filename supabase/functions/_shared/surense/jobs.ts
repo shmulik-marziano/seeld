@@ -12,6 +12,10 @@ import {
 } from "./sync.ts";
 import { isUuid } from "./api.ts";
 import { pickSwiftnessAccount } from "../poa/engine/surense.ts";
+import { type ModuleFlags, POA_KINDS, type PoaKind } from "../poa/engine/types.ts";
+import { PoaToolError } from "../poa/errors.ts";
+import { createPoaRpc } from "../poa/rpc.ts";
+import { todayIsrael } from "../poa/formatters.ts";
 import type { SurenseDocument } from "./types.ts";
 
 export interface JobRow {
@@ -51,6 +55,12 @@ export function failureOutcome(e: unknown): JobOutcome {
     }
     // permanent 4xx (e.g. 40000 not found / no access) and config refusals do not improve with retries
     return { result: "skipped", code: safe(`surense_${e.status}_${e.code}`), kind: e.kind };
+  }
+  if (e instanceof PoaToolError) {
+    // the tool's page refused (ship job): a permanent refusal of the page (invalid link, ended session, bad data) does not
+    // improve with retries; everything else (unavailable, locked) is retried by the queue
+    const permanent = e.kind === "generic" || e.kind === "inactive" || e.kind === "expired" || e.kind === "completed";
+    return permanent ? { result: "skipped", code: safe(`dp_${e.code}`), kind: "permanent" } : { result: "failed", code: safe(`dp_${e.code}`), kind: "unavailable" };
   }
   if (e instanceof RpcError) return { result: "failed", code: safe(`db_${e.code}`), kind: "db" };
   if (e instanceof StorageError) return { result: "failed", code: `storage_${e.status}`, kind: "storage" };
@@ -131,6 +141,54 @@ export const HANDLERS: Record<string, JobHandler> = {
     const r = await e9100Submit(d, { customerId, registrationId, proxyApprovalDate: date });
     // a rejected request is final (a retry would ask the clearing house twice): done, with the flag in the stats
     return { result: "done", stats: { rejected: r.rejected, progress: r.progress ?? -1 } };
+  },
+  // POA "ship" (owner decision 2026-11-22): a session completed on our side (native engine) is replayed into the tool:
+  // customer -> invite -> load/start -> swiftness/hb/policies with the stored dates and signature. Nothing of this touches
+  // the client. Runs only with surense_write_enabled (api.surense_gate 'invite-proxies'); a closed switch leaves the session
+  // pending with a code (staff see it; "ship again" re-queues). A failure records ship_status = failed + code and the queue
+  // retries with backoff; the E9100 launch is queued after a successful ship (not for a customer that already existed).
+  "surense.poa_ship": async (d, job) => {
+    const sessionId = str(job.params, "session_id");
+    if (!isUuid(sessionId)) return { result: "skipped", code: "bad_input" };
+    const poa = createPoaRpc(d.rpc);
+    const engine = d.poaEngine;
+    if (!engine) return { result: "failed", code: "engine_not_configured", kind: "config" };
+    try {
+      await d.rpc.call("surense_gate", { p_write: true, p_action: "invite-proxies" });
+    } catch (e) {
+      if (e instanceof RpcError && e.status === 423) {
+        await poa.shipSet(sessionId, "failed", "write_switch_off", null).catch(() => {});
+        return { result: "skipped", code: "write_switch_off" };
+      }
+      throw e;
+    }
+    const data = await poa.shipGet(sessionId);
+    if (data.shipStatus === "shipped") return { result: "skipped", code: "already_shipped" };
+    const flags = {} as ModuleFlags;
+    let n = 0;
+    for (const k of POA_KINDS) {
+      flags[k] = data.modules[k].enabled && data.modules[k].performed && !!data.consents[k];
+      if (flags[k]) n++;
+    }
+    if (!n) return { result: "skipped", code: "nothing_to_ship" };
+    try {
+      const ref = await engine.start(data.identity, flags);
+      for (const k of POA_KINDS) {
+        if (!flags[k]) continue;
+        const c = data.consents[k]!;
+        await engine.consent(ref, k, { birthDate: c.birthDate ?? undefined, issueDate: c.issueDate ?? undefined, signaturePng: c.signature ?? undefined });
+      }
+      await poa.shipSet(sessionId, "shipped", null, ref.customerId);
+      d.log.info("poa shipped", { session: sessionId, modules: n, existing: ref.existing });
+      const launch = !ref.existing && ref.customerId
+        ? { next: { kind: "surense.e9100_submit", params: { customer_id: ref.customerId, proxy_approval_date: todayIsrael(d.now ? d.now() : Date.now()) }, dedupe: `e9100:${ref.customerId}` } }
+        : {};
+      return { result: "done", stats: { modules: n, existing: ref.existing }, ...launch };
+    } catch (e) {
+      const out = failureOutcome(e);
+      await poa.shipSet(sessionId, "failed", out.code ?? "error", null).catch(() => {});
+      throw e;
+    }
   },
   "surense.e9100_download": async (d, job, deadline) => {
     const customerId = str(job.params, "customer_id");

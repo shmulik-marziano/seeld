@@ -131,6 +131,28 @@ export interface FinalDocsResult {
   switchOff: boolean;
 }
 
+/** The native engine's final document: bytes already in hand (rendered here). sha256 -> api.poa_document_from_url(..., 'native')
+ *  -> put -> api.poa_document_stored. Answers the docs_* code of a failure (never throws); null when stored (or already stored). */
+export async function storeRenderedDocument(d: FinalDocsDeps, poa: PoaRpc, sessionId: string, kind: PoaKind, bytes: Uint8Array): Promise<string | null> {
+  try {
+    const sha = await sha256Hex(bytes);
+    const row = await poa.documentFromUrl(sessionId, kind, sha, "native");
+    if (row.stored) {
+      d.log.info("poa native doc already stored", { kind });
+      return null;
+    }
+    const path = poaStoragePath(row.agencyId, sessionId, kind, row.documentId);
+    await d.storage.put(path, bytes, "application/pdf");
+    await poa.documentStored(row.documentId, path, sha);
+    d.log.info("poa native doc stored", { kind, bytes: bytes.byteLength });
+    return null;
+  } catch (e) {
+    const code = e instanceof RpcError ? `docs_db_${e.status || "x"}` : e instanceof StorageError ? `docs_storage_${e.status}` : "docs_error";
+    d.log.warn("poa native doc not stored", { kind, code });
+    return code;
+  }
+}
+
 /** Stores every kind that came with a link. Sequential per kind (3 small files); one kind failing never stops the others.
  *  Per kind: fetch -> sha256 -> api.poa_document_from_url (row + document id + agency) -> put poa/{agency}/{session}/{kind}-{doc}.pdf
  *  -> api.poa_document_stored. A row that already holds a stored file is left alone. Never throws. */

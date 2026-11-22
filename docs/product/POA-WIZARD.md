@@ -1,6 +1,6 @@
 # POA wizard: the ratified contract (browser <-> `poa-intake`)
 
-Status: implemented behind switches that are all OFF. Nothing here is deployed or enabled by the build.
+Status: live in production since 2026-11-22 (`poa_enabled`, `poa_docs_enabled`, the Surense switches on). Engine of record: `native` (section 3ב).
 Spec: `POA-WIZARD-SPEC.md` (sections 1א, 3, 5). Reference flow: `ONBOARDING-POA-FLOW.md` (sections 1-3, 5א).
 Browser side of the contract: `src/lib/poa/api.ts` (types `StartReq`, `StartRes`, `ConsentReq`, `ConsentRes`,
 `StateRes`, `POA_RESPONSE_KEYS`, `ErrorKind`). Server side: `supabase/functions/poa-intake`, `supabase/functions/client-docs`,
@@ -12,7 +12,7 @@ Browser side of the contract: `src/lib/poa/api.ts` (types `StartReq`, `StartRes`
 |---|---|---|
 | `poa_enabled` | `false` | master switch: every `poa-intake` route and every `api.poa_*` RPC (except the document link) |
 | `poa_docs_enabled` | `false` | final-document download (`GET /doc/:kind`) and the webhook document link |
-| `poa_engine` | `surense` | `surense` (primary) or `native` (not implemented by `poa-intake`: answers `unavailable`) |
+| `poa_engine` | `surense` | `native` = the package first (own rendering, the tool fed afterwards by the ship job; section 3ב); `surense` = the live chain against the tool's page (section 3) |
 | `poa_native_shadow` | `false` | parallel native render (not implemented here) |
 | `poa_surense_url_id` | empty | kept per spec; unused by the official-API path (the personal link comes from `proxies/invite`) |
 | `poa_module_maslaka` / `poa_module_harbit` / `poa_module_policies` | `true` | which of the three modules exist for a session |
@@ -24,7 +24,8 @@ E9100 request, `surense_e9100_enabled`. The browser switch (`VITE_POA_FLOW`) sta
 Server environment (names only): `ALLOWED_ORIGINS`, `TURNSTILE_SECRET_KEY`, `SURENSE_CLIENT_ID`, `SURENSE_CLIENT_SECRET`,
 `SURENSE_MANAGER_ID` (the Surense user that owns created customers; required, fail closed with `unavailable` when missing),
 `SURENSE_DP_HOST` (default `dp.surense.com`, bare hostname only), `SURENSE_DP_BASE` (path prefix of the public-page API,
-default `/api`, see section 6).
+default `/api/v1/ifs/public`), and for the native engine `POA_LICENSEE_NAME`, `POA_LICENSEE_LICENSE`, `POA_LICENSEE_PHONE`,
+`POA_LICENSEE_EMAIL` (the licence holder printed in the documents; all four or the native engine answers `unavailable`).
 
 ## 2. Routes (JSON, snake_case; base `/functions/v1/poa-intake`, `verify_jwt=false`)
 
@@ -112,6 +113,31 @@ The wizard never talks to Surense; `poa-intake` does (`_shared/poa/engine/surens
    otherwise it completes `skipped` with code `e9100_switch_off`. The completed E9100 then follows the existing
    `swiftness.e9100.completed` -> `e9100_download` path.
 
+## 3ב. Engine "native" (the package first; owner decision 2026-11-22)
+
+With `poa_engine = native` nothing reaches the tool while the client is in the wizard (`_shared/poa/engine/native.ts`):
+
+1. `/start` takes no network call: the engine reference is a snapshot of the validated identity and of the licence holder
+   (`POA_LICENSEE_*`), stored encrypted by `api.poa_engine_ref_set` as flat `i_*` / `l_*` keys (`customer_id` absent, `url_id = native`).
+   `api.surense_gate` is not consulted (nothing is written to the tool).
+2. `GET /preview/:kind` renders the unsigned document from the approved templates (`_shared/poa/templates.ts`, the tool's wording
+   letter for letter; `_shared/poa/render.ts`, A4, Rubik embedded from `_shared/pdfkit/fonts.ts`) with a visible "תצוגה מקדימה,
+   טרם אושר" mark; the hash is recorded exactly like the tool's preview.
+3. `POST /maslaka|/harbit|/policies`: the engine validates like the tool would (dates, PNG signature), `api.poa_consent_record`
+   records the approval, then the FINAL document is rendered with the evidence block (name, Israel date and time, client address;
+   the drawn signature on policies) and stored at once: `api.poa_document_from_url(session, kind, sha256, 'native')` ->
+   `poa/{agency}/{session}/{kind}-{document}.pdf` -> `api.poa_document_stored`. A render or storage failure never fails the
+   consent: a `docs_*` code lands on the session (staff see it).
+4. The last module completes the session and queues the ship: `api.poa_ship_enqueue(session)` (`ship_status = pending`, one
+   `surense.poa_ship` job, dedupe `poa_ship:<session>`). A refusal (queue switch off) leaves `ship_<status>` on the session; the
+   client is done either way. The E9100 launch is queued by the ship job, not here.
+5. The ship job (`surense-worker`, `_shared/surense/jobs.ts` `surense.poa_ship`): `api.surense_gate(write, invite-proxies)` (off ->
+   `skipped write_switch_off`, `ship_status = failed`) -> `api.poa_ship_get(session)` (identity, dates, signature, decrypted for this
+   call; audit row) -> the surense engine's `start` (customer, invite, load/start) and `consent` per performed module, in order ->
+   `api.poa_ship_set(session, shipped, null, customer id)` and `next` = `surense.e9100_submit` (not for a customer that already
+   existed). A tool failure: `poa_ship_set(failed, code)` and the queue retries with backoff (dead + critical alert at attempt 5);
+   a permanent refusal of the page is `skipped` with the code. Staff re-queue with `staff.poa_ship_retry(session)`.
+
 ## 4. Staff download: `client-docs` (`verify_jwt=true`)
 
 `GET /functions/v1/client-docs?document_id=<uuid>` with `Authorization: Bearer <staff JWT>`. The function calls
@@ -131,8 +157,9 @@ The signatures are those of migration `20261121150000_poa_flow.sql` (section "Da
 - `poa_session_start` answers `existing_customer`: kept server side; together with the engine's own duplicate detection it
   marks the engine reference `existing`, which blocks the automatic E9100 launch (staff confirm the match first). The daily-cap
   answer `{ok:false}` is shown as `locked`.
-- `poa_engine_ref_set` stores `{customer_id, sid, url_id, existing}` (flat, snake_case, encrypted whole); `poa_session_get`
-  returns it decrypted, only while the session is open. The identity is never returned (no route needs it).
+- `poa_engine_ref_set` stores `{customer_id?, sid, url_id, existing, cookie?}` plus, for the native engine, the `i_*` / `l_*` snapshot
+  (flat, snake_case, encrypted whole); `poa_session_get` returns it decrypted, only while the session is open. The identity is
+  never returned by itself (the native renderer reads the snapshot inside the reference).
 - `poa_preview_set(session, kind, sha256)` after every preview; `poa_consent_record(session, kind, method, preview sha, signature
   data URL, ip, user agent, {birth_date, issue_date})` after the tool accepted the approval (method `check`, `signature` for
   `policies`); the last enabled module completes the session; `poa_session_complete` is called afterwards (idempotent). If the
@@ -157,7 +184,8 @@ The signatures are those of migration `20261121150000_poa_flow.sql` (section "Da
   fresh MFA step, document of the caller's agency, one `audit.access_log` row with ids only; `PT403` / `PT404`).
 
 Job kind `surense.e9100_submit` (params `customer_id`, `proxy_approval_date`; dedupe `e9100:<customer id>`) goes through
-`api.surense_job_enqueue`.
+`api.surense_job_enqueue`. Job kind `surense.poa_ship` (params `session_id`; dedupe `poa_ship:<session>`) is queued only by
+`api.poa_ship_enqueue` / `staff.poa_ship_retry`; the worker reads with `api.poa_ship_get` and records with `api.poa_ship_set`.
 
 ## 6. Locked only after the owner's full run (spec section 4, "מה עוד חייב אימות")
 
@@ -199,24 +227,27 @@ Migration `20261121150000_poa_flow.sql`, pgTAP `supabase/tests/12_poa_flow.test.
 | `poa_engine_ref_set(p_session uuid, p_ref jsonb)` | `poa_enabled` | flat snake_case object; `customer_id` (uuid) also fills `surense_customer_id` |
 | `poa_preview_set(p_session uuid, p_kind text, p_sha256 text)` | `poa_enabled` | the file shown last; consent is accepted only for this exact hash |
 | `poa_consent_record(p_session uuid, p_kind text, p_method text, p_preview_sha256 text, p_signature text, p_ip text, p_user_agent text, p_extra jsonb)` | `poa_enabled` | method `check|signature|typed`; harbit needs `p_extra {birth_date, issue_date}` (ISO); `signature` needs a PNG data url. Idempotent per module. The last enabled module completes the session. Returns `{kind, method, approved_at, valid_until (null), modules, next, complete}` |
-| `poa_session_fail(p_session uuid, p_code text)` | `poa_enabled` | code only; `locked` also closes the session; `launch_*` (completed sessions) and `docs_*` (open or completed) are recorded without changing the status |
+| `poa_session_fail(p_session uuid, p_code text)` | `poa_enabled` | code only; `locked` also closes the session; `launch_*` / `ship_*` (completed sessions) and `docs_*` (open or completed) are recorded without changing the status |
 | `poa_session_complete(p_session uuid)` | `poa_enabled` | idempotent; `{complete, status, completed_at, customer_id}` |
 | `poa_document_link(p_customer uuid, p_kind text, p_document_id uuid, p_sha256 text)` | none | never raises a switch error and never for an unknown customer (`{linked:false}`); upserts `documents` as `pending_staff_verification`; `{linked, session_id, agency_id, document_id, complete}` (`complete` = every enabled module has a document, which stamps `docs_complete_at`) |
-| `poa_document_from_url(p_session uuid, p_kind text, p_sha256 text)` | `poa_docs_enabled` | a final document that arrived as a pre-signed link: creates or refreshes the `crm.documents` row of a live session for a performed module (no Surense document id) and returns `{document_id, agency_id, stored, complete}`; a row that already holds a stored file is left untouched |
+| `poa_document_from_url(p_session uuid, p_kind text, p_sha256 text, p_source text default 'surense')` | `poa_docs_enabled` | a final document in hand (a pre-signed link of the tool, or `native` = rendered by us): creates or refreshes the `crm.documents` row of a live session for a performed module (no Surense document id) and returns `{document_id, agency_id, stored, complete}`; a row that already holds a stored file is left untouched |
 | `poa_document_stored(p_document uuid, p_path text, p_sha256 text)` | none | records the object path (must equal the pattern exactly) and the hash after the worker stored the bytes |
 | `poa_config()` | none | read only: `{poa_enabled, engine, turnstile_required, modules{maslaka,harbit,policies}}` |
 | `poa_doc_get(p_token_hash bytea, p_kind text)` | `poa_docs_enabled` | peek: `{storage_path, sha256}`; module must be enabled for the session; within 30 minutes of completion; refused once downloaded. Claims nothing. |
 | `poa_doc_claim(p_token_hash bytea, p_kind text)` | `poa_docs_enabled` | the single use, same checks; `{ok:true}`, then `PT410 document_gone` |
+| `poa_ship_enqueue(p_session uuid)` | `surense_enabled` (inside the enqueue) | a COMPLETED native session: `ship_status = pending`, one `surense.poa_ship` job (dedupe); `PT409 session_not_completed | already_shipped`, `PT400 invalid_input:engine` for a surense session |
+| `poa_ship_get(p_session uuid)` | `surense_write_enabled` | the ship job's read: `{session_id, ship_status, surense_customer_id, modules, identity{first_name,last_name,email,national_id,phone,street,city,zip,marketing_approved}, consents{kind: {approved_at, birth_date, issue_date, signature}}}`, decrypted for this call; one audit row |
+| `poa_ship_set(p_session uuid, p_status text, p_code text, p_customer uuid)` | none | `pending | shipped | failed`; `shipped` stamps `shipped_at` and the tool's customer id; `failed` keeps the code in `ship_error` and `engine_last_error`; counts attempts |
 
 Staff (`authenticated`, admin with fresh TOTP, access log): `staff.poa_session_list(p_limit, p_offset)` (names, id masked to the last four digits, phone
-tail, modules, documents, match flag) and `staff.poa_session_verify(p_session, p_note)` (records `staff_identity_check`, activates pending documents).
+tail, modules, documents with their `source`, match flag, `engine`, `ship_status`, `ship_error`, `shipped_at`), `staff.poa_ship_retry(p_session)` ("שגר שוב": re-queues a failed or pending native session of the caller's agency) and `staff.poa_session_verify(p_session, p_note)` (records `staff_identity_check`, activates pending documents).
 `staff.client_doc_get(p_document_id)` (any staff, fresh MFA step; one access-log row; `{storage_path, sha256}` for the `client-docs` function).
 `staff.admin_config_set` accepts the nine `poa_*` keys (`poa_engine`: `surense|native`; `poa_surense_url_id`: up to 32 of `[A-Za-z0-9_-]`; the rest `true|false`).
 
 Error codes: `PT400 invalid_input:<field>`, `PT423 feature_disabled:<key>`, `PT429 rate_limited`, `PT401 session_inactive`, `PT403 session_locked`,
 `PT409 session_completed`, `PT410 session_expired | download_expired | document_gone`, `PT404 document_not_ready | document_not_found`.
 
-Job kind `surense.e9100_submit` is accepted by `ops.surense_jobs` and `api.surense_job_enqueue` (params `customer_id`, `proxy_approval_date`; dedupe `e9100:<id>`).
+Job kinds `surense.e9100_submit` (params `customer_id`, `proxy_approval_date`; dedupe `e9100:<id>`) and `surense.poa_ship` (params `session_id`; dedupe `poa_ship:<session>`) are accepted by `ops.surense_jobs` and `api.surense_job_enqueue`. `crm.poa_sessions` carries `ship_status`, `ship_error`, `ship_attempts`, `shipped_at` (migration `20261122180000_poa_native.sql`, pgTAP `13_poa_native.test.sql`); the same migration schedules `surense-worker-tick` (every minute through `ops.call_function`, a no-op while `edge_cron_enabled` is false).
 `ops.watchdog` has a `poa` step: a completed session older than one hour that lacks a document for an enabled module raises `poa_docs_missing` (count and first id, once per 24 h).
 
 ## Browser switches

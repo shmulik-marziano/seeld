@@ -458,9 +458,9 @@ Deno.test("session token: 32 random bytes, base64url, only the hash is stored; e
   assert.notEqual(a, b);
   assert.match(await hashToken(a), /^[0-9a-f]{64}$/);
   assert.equal(await hashToken("abc"), "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
-  assert.deepEqual(loadPoaEnv(() => undefined), { dpHost: "dp.surense.com", dpBase: "/api/v1/ifs/public", startMinMs: 6000, startBucketMs: 3000, managerId: null });
+  assert.deepEqual(loadPoaEnv(() => undefined), { dpHost: "dp.surense.com", dpBase: "/api/v1/ifs/public", startMinMs: 6000, startBucketMs: 3000, managerId: null, licensee: null });
   const e = loadPoaEnv((n) => ({ SURENSE_DP_HOST: " DP.Example.Test ", SURENSE_DP_BASE: "/v2", SURENSE_MANAGER_ID: CID.toUpperCase() } as Record<string, string>)[n]);
-  assert.deepEqual(e, { dpHost: "dp.example.test", dpBase: "/v2", startMinMs: 6000, startBucketMs: 3000, managerId: CID });
+  assert.deepEqual(e, { dpHost: "dp.example.test", dpBase: "/v2", startMinMs: 6000, startBucketMs: 3000, managerId: CID, licensee: null });
   const t = loadPoaEnv((n) => ({ POA_START_MIN_MS: "8000", POA_START_BUCKET_MS: "2000" } as Record<string, string>)[n]);
   assert.equal(t.startMinMs, 8000);
   assert.equal(t.startBucketMs, 2000);
@@ -468,4 +468,9 @@ Deno.test("session token: 32 random bytes, base64url, only the hash is stored; e
   assert.equal(junk.startMinMs, 6000, "out of range or not a number: the default");
   assert.equal(junk.startBucketMs, 3000);
   assert.equal(loadPoaEnv((n) => (n === "SURENSE_MANAGER_ID" ? "not-a-uuid" : undefined)).managerId, null);
+  // the licence holder of the native engine: all four or nothing
+  const lic = { POA_LICENSEE_NAME: " Zz Agent ", POA_LICENSEE_LICENSE: "L-00000000", POA_LICENSEE_PHONE: "050-000-0000", POA_LICENSEE_EMAIL: "agent@example.com" } as Record<string, string>;
+  assert.deepEqual(loadPoaEnv((n) => lic[n]).licensee, { name: "Zz Agent", license: "L-00000000", phone: "050-000-0000", email: "agent@example.com" });
+  assert.equal(loadPoaEnv((n) => ({ ...lic, POA_LICENSEE_EMAIL: "" } as Record<string, string>)[n]).licensee, null);
+  assert.equal(loadPoaEnv((n) => ({ ...lic, POA_LICENSEE_LICENSE: "no spaces allowed" } as Record<string, string>)[n]).licensee, null);
 });

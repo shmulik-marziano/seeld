@@ -22,7 +22,7 @@ import { clientIp } from "../_shared/ip.ts";
 import { requestIdFor } from "../_shared/request.ts";
 import { shortHash } from "../_shared/secret.ts";
 import { hostnamesFromOrigins, verifyTurnstile } from "../_shared/turnstile.ts";
-import { POA_KINDS, type EngineRef, type FinalUrls, type ModuleFlags, type PoaEngine, type PoaKind } from "../_shared/poa/engine/types.ts";
+import { POA_KINDS, type EngineName, type EngineRef, type FinalUrls, type ModuleFlags, type PoaEngine, type PoaKind } from "../_shared/poa/engine/types.ts";
 import { PoaHttpError, PoaToolError, poaErrorResponse, toPoaError } from "../_shared/poa/errors.ts";
 import {
   cleanAddress, cleanEmail, cleanName, cleanZip, harbitDates, splitStreet, isValidIsraeliId, MAX_SIGNATURE_CHARS, pngBase64, todayIsrael, toE164IsraeliMobile,
@@ -31,7 +31,7 @@ import { DEFAULT_START_BUCKET_MS, DEFAULT_START_MIN_MS } from "../_shared/poa/co
 import { createPoaRpc, type PoaModules, type PoaRpc, type PoaSession } from "../_shared/poa/rpc.ts";
 import { generateToken, hashToken, HASH_RE, sha256Hex, TOKEN_RE } from "../_shared/poa/session.ts";
 import { downloadHeaders, type ObjectReader } from "../_shared/poa/storage.ts";
-import { type FinalDocsDeps, storeFinalDocuments } from "../_shared/poa/finaldocs.ts";
+import { type FinalDocsDeps, storeFinalDocuments, storeRenderedDocument } from "../_shared/poa/finaldocs.ts";
 import type { ZipLookup } from "../_shared/poa/zip.ts";
 
 export const MAX_START_BYTES = 8 * 1024;
@@ -62,8 +62,10 @@ export interface PoaIntakeDeps {
   /** service RPC client; null when the function is not configured */
   rpc: Rpc | null;
   log: Logger;
-  /** null while Surense is not configured: every route that needs the tool answers `unavailable` */
+  /** the "surense" engine; null while Surense is not configured: every route that needs the tool answers `unavailable` */
   engine: PoaEngine | null;
+  /** the "native" engine (own rendering, the tool fed afterwards by the ship job); null/absent = not configured */
+  native?: PoaEngine | null;
   /** final documents; null when storage is not configured */
   storage: ObjectReader | null;
   /** fetch + store the three final documents right after the policies step; null/absent = skipped (the webhook path stays) */
@@ -206,6 +208,8 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
   const previews = createCounter(now, PREVIEW_WINDOW_SEC);
   const zips = createCounter(now, ZIP_WINDOW_SEC);
   const poa: PoaRpc | null = d.rpc ? createPoaRpc(d.rpc) : null;
+  // the engine the owner chose (ops.config poa_engine, frozen per session in crm.poa_sessions.engine)
+  const engineFor = (name: EngineName): PoaEngine | null => (name === "native" ? d.native ?? null : d.engine);
 
   return async (req) => {
     const rid = requestIdFor(req);
@@ -278,9 +282,8 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
         // optional switch snapshot: without api.poa_config the SQL kill switches (PT423) and Turnstile-required apply
         const cfg = await poa.config();
         if (cfg && !cfg.poaEnabled) throw new PoaHttpError("inactive", "switch_off", { status: 503 });
-        if (cfg && cfg.engine !== "surense") throw new PoaHttpError("unavailable", "engine_not_available");
-        const engine = d.engine;
-        if (!engine) throw new PoaHttpError("unavailable", "engine_not_configured");
+        let engine = cfg ? engineFor(cfg.engine) : null;
+        if (cfg && !engine) throw new PoaHttpError("unavailable", "engine_not_configured");
 
         // a request that will be refused anyway must not spend the visitor's single-use Turnstile token
         if (!ip) {
@@ -331,18 +334,23 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
           if (!cfg) {
             // no switch snapshot: the session row says which engine the owner chose
             const fresh = await poa.sessionGet(tokenHash);
-            if (fresh.engine !== "surense") {
-              await poa.sessionFail(started.sessionId, "engine_not_available").catch(() => {});
-              throw new PoaHttpError("unavailable", "engine_not_available");
+            engine = engineFor(fresh.engine);
+            if (!engine) {
+              await poa.sessionFail(started.sessionId, "engine_not_configured").catch(() => {});
+              throw new PoaHttpError("unavailable", "engine_not_configured");
             }
           }
+          if (!engine) throw new PoaHttpError("unavailable", "engine_not_configured");
           const flags = {} as ModuleFlags;
           for (const k of POA_KINDS) flags[k] = started.modules[k].enabled;
-          try {
-            await d.rpc.call("surense_gate", { p_write: true, p_action: "invite-proxies" });
-          } catch (e) {
-            if (e instanceof RpcError && e.status === 423) throw new PoaHttpError("unavailable", "surense_switch_off");
-            throw e;
+          if (engine.name === "surense") {
+            // the live chain writes to the tool from the first call: the write switch is checked before anything leaves
+            try {
+              await d.rpc.call("surense_gate", { p_write: true, p_action: "invite-proxies" });
+            } catch (e) {
+              if (e instanceof RpcError && e.status === 423) throw new PoaHttpError("unavailable", "surense_switch_off");
+              throw e;
+            }
           }
           let ref: EngineRef;
           try {
@@ -353,7 +361,7 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
           }
           // a customer known to the database OR to Surense blocks the automatic launch (staff confirm the match first)
           await poa.engineRefSet(started.sessionId, { ...ref, existing: ref.existing || started.existingCustomer });
-          log.info("poa started", { session: started.sessionId });
+          log.info("poa started", { session: started.sessionId, engine: engine.name });
           await pad();
           return json({ session_token: token, expires_at: started.expiresAt, modules: modulesView(started.modules), next: started.next });
         } catch (e) {
@@ -433,8 +441,8 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
         return json({ kind, method: METHOD[kind], approved_at: again.approvedAt, valid_until: again.validUntil, modules: modulesView(again.modules), next: again.next });
       }
 
-      const engine = d.engine;
-      if (!engine || session.engine !== "surense") throw new PoaHttpError("unavailable", "engine_not_available");
+      const engine = engineFor(session.engine);
+      if (!engine) throw new PoaHttpError("unavailable", "engine_not_configured");
       const ref = session.engineRef;
       if (!ref) throw new PoaHttpError("unavailable", "no_engine_ref");
       // the tool may refresh its page-session cookies on any call: a changed reference is stored again (never fails the request)
@@ -518,13 +526,41 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
         await poa.sessionFail(session.sessionId, `consent_record_${e instanceof RpcError ? e.code : "unknown"}`).catch(() => {});
         throw e;
       }
-      log.info("poa consent", { session: session.sessionId, kind, next: rec.next });
+      log.info("poa consent", { session: session.sessionId, kind, next: rec.next, engine: engine.name });
+
+      // native engine: the signed document is rendered from the reference's snapshot with the evidence of this approval and
+      // stored now. Nothing here may fail the consent response: a failure leaves a docs_* code on the session for staff.
+      if (engine.name === "native" && engine.final) {
+        if (!d.finalDocs) {
+          await poa.sessionFail(session.sessionId, "docs_not_configured").catch(() => {});
+        } else {
+          let code: string | null;
+          try {
+            const bytes = await engine.final(ref, kind, { atMs: Date.parse(rec.approvedAt) || now(), ip, ...(signature ? { signaturePng: signature } : {}) });
+            code = await storeRenderedDocument(d.finalDocs, poa, session.sessionId, kind, bytes);
+          } catch (e) {
+            code = `docs_render_${toPoaError(e).code}`;
+            log.warn("poa native render failed", { session: session.sessionId, kind, code });
+          }
+          if (code) await poa.sessionFail(session.sessionId, code).catch(() => {});
+        }
+      }
 
       if (rec.next === "done") {
         await poa.sessionComplete(session.sessionId).catch((e) => log.warn("poa complete failed", { code: e instanceof RpcError ? e.code : "unknown" }));
-        // launch ("הזנקה"): a customer that already existed waits for staff to confirm the match; a closed Surense
-        // switch (423) simply means nothing is queued
-        if (!ref.existing) {
+        if (engine.name === "native") {
+          // the package is complete on our side: the tool is fed by the ship job (surense-worker). A refusal (switch off,
+          // queue error) leaves a ship_* trace for staff; the client is done either way.
+          try {
+            await poa.enqueueShip(session.sessionId);
+            log.info("poa ship queued", { session: session.sessionId });
+          } catch (e) {
+            log.warn("poa ship not queued", { code: e instanceof RpcError ? e.code : "unknown", status: e instanceof RpcError ? e.status : 0 });
+            await poa.sessionFail(session.sessionId, `ship_${e instanceof RpcError ? e.status : "unknown"}`).catch(() => {});
+          }
+        } else if (!ref.existing && ref.customerId) {
+          // launch ("הזנקה"): a customer that already existed waits for staff to confirm the match; a closed Surense
+          // switch (423) simply means nothing is queued
           try {
             await poa.enqueueLaunch(ref.customerId, todayIsrael(now()));
             log.info("poa launch queued", { session: session.sessionId });
@@ -537,7 +573,7 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
       }
       // the tool's policies answer carries pre-signed links to the three final documents: store them now. Nothing in this step
       // may fail the consent response (the webhook path stays the fallback); a failure leaves a docs_* code on the session.
-      if (kind === "policies" && d.finalDocs && Object.keys(finalUrls).length > 0) {
+      if (kind === "policies" && engine.name === "surense" && d.finalDocs && Object.keys(finalUrls).length > 0) {
         try {
           const stored = await storeFinalDocuments(d.finalDocs, poa, session.sessionId, finalUrls);
           const first = Object.values(stored.failed)[0];
