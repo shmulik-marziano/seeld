@@ -15,6 +15,8 @@ import { createObjectReader } from "../_shared/poa/storage.ts";
 import { createFinalDocFetcher } from "../_shared/poa/finaldocs.ts";
 import { createStorage } from "../_shared/surense/storage.ts";
 import { createZipLookup } from "../_shared/poa/zip.ts";
+import { createNativeEngine } from "../_shared/poa/engine/native.ts";
+import { rubikFonts } from "../_shared/pdfkit/fonts.ts";
 
 declare const Deno: { serve(h: (req: Request) => Response | Promise<Response>): unknown; env: { get(name: string): string | undefined } };
 
@@ -40,6 +42,8 @@ if (rpc && tokens) {
     log.error("poa engine not built", { reason: "bad_dp_settings" });
   }
 }
+// the native engine (own rendering; the tool is fed by the ship job): needs only the licence holder's details
+const native = createNativeEngine({ licensee: poaEnv.licensee, fonts: rubikFonts, log });
 const storage = env.supabaseUrl && env.secretKey ? createObjectReader({ url: env.supabaseUrl, apikey: env.secretKey }) : null;
 
 // final documents: pre-signed links fetched without credentials (host-locked), written with the service key
@@ -51,4 +55,4 @@ const finalDocs = env.supabaseUrl && env.secretKey
 // overrides when the site rotates it); POA_ZIP_LOOKUP=off disables the lookup and the visitor types the zip
 const zip = (Deno.env.get("POA_ZIP_LOOKUP") ?? "").trim().toLowerCase() === "off" ? null : createZipLookup({ log, key: Deno.env.get("ISRAEL_POST_KEY") });
 
-Deno.serve(createPoaHandler({ env, rpc, log, engine, storage, finalDocs, zip, startMinMs: poaEnv.startMinMs, startBucketMs: poaEnv.startBucketMs }));
+Deno.serve(createPoaHandler({ env, rpc, log, engine, native, storage, finalDocs, zip, startMinMs: poaEnv.startMinMs, startBucketMs: poaEnv.startBucketMs }));

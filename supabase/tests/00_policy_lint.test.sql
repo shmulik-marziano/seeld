@@ -36,8 +36,9 @@ select set_eq(
             ('surense_documents_upsert'), ('surense_document_mark_deleted'), ('surense_file_record'), ('surense_portfolio_store'),
             ('surense_audit'),
             ('poa_session_start'), ('poa_session_get'), ('poa_engine_ref_set'), ('poa_preview_set'), ('poa_consent_record'),
-            ('poa_session_fail'), ('poa_session_complete'), ('poa_document_link'), ('poa_document_stored'), ('poa_document_from_url'), ('poa_doc_get'), ('poa_doc_claim'), ('poa_config') $$,
-  'service-only RPCs in api (41)');
+            ('poa_session_fail'), ('poa_session_complete'), ('poa_document_link'), ('poa_document_stored'), ('poa_document_from_url'), ('poa_doc_get'), ('poa_doc_claim'), ('poa_config'),
+            ('poa_ship_enqueue'), ('poa_ship_get'), ('poa_ship_set') $$,
+  'service-only RPCs in api (44)');
 
 -- the documented advisor exceptions (lints 0028/0029): exactly these SECURITY DEFINER functions are callable by API roles
 select set_eq(
@@ -52,13 +53,13 @@ select set_eq(
             ('staff.lead_note_add'), ('staff.lead_soft_delete'), ('staff.admin_assert_fresh'), ('staff.admin_config_set'),
             ('staff.admin_staff_disable'), ('staff.admin_staff_unlock'), ('staff.ops_health'),
             ('staff.admin_staff_enable'), ('staff.admin_alert_resolve'),
-            ('staff.poa_session_list'), ('staff.poa_session_verify'), ('staff.client_doc_get') $$,
-  'lint 0029 exception list (authenticated, 18 entries)');
+            ('staff.poa_session_list'), ('staff.poa_session_verify'), ('staff.client_doc_get'), ('staff.poa_ship_retry') $$,
+  'lint 0029 exception list (authenticated, 19 entries)');
 
 select is_empty($$ select jobname from cron.job where command ~* 'http|secret|bearer|apikey' $$, 'cron commands carry no URL or secret');
 select set_eq($$ select jobname from cron.job $$,
-  $$ values ('ops-cleanup'), ('cma-freshness-monthly'), ('notify-worker-tick'), ('cma-sync-weekly'), ('ops-watchdog') $$,
-  'exactly five cron jobs');
+  $$ values ('ops-cleanup'), ('cma-freshness-monthly'), ('notify-worker-tick'), ('cma-sync-weekly'), ('ops-watchdog'), ('surense-worker-tick') $$,
+  'exactly six cron jobs');
 
 select is_empty($$ select schemaname || '.' || tablename || ':' || policyname from pg_policies
                     where schemaname in ('crm', 'core') and 'anon' = any (roles) and qual is distinct from 'false' $$,

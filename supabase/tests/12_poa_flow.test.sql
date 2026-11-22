@@ -344,9 +344,9 @@ select is((api.poa_document_link('c3000000-0000-4000-8000-0000000000c6', 'maslak
 reset role;
 
 -- ---------------------------------------------------------------- final documents from the policies step (20261122090000)
-select ok(has_function_privilege('service_role', 'api.poa_document_from_url(uuid, text, text)', 'execute')
-          and not has_function_privilege('authenticated', 'api.poa_document_from_url(uuid, text, text)', 'execute')
-          and not has_function_privilege('anon', 'api.poa_document_from_url(uuid, text, text)', 'execute'), 'poa_document_from_url: service_role only');
+select ok(has_function_privilege('service_role', 'api.poa_document_from_url(uuid, text, text, text)', 'execute')
+          and not has_function_privilege('authenticated', 'api.poa_document_from_url(uuid, text, text, text)', 'execute')
+          and not has_function_privilege('anon', 'api.poa_document_from_url(uuid, text, text, text)', 'execute'), 'poa_document_from_url: service_role only');
 insert into crm.poa_sessions (id, agency_id, token_hash, status, modules, national_id_hmac, phone_hmac, phone_tail, identity_enc, expires_at, completed_at)
 values ('c3000000-0000-4000-8000-0000000000e5', '5eed0000-0000-4000-8000-000000000001', extensions.digest('fd-1', 'sha256'), 'completed',
         '{"maslaka":{"enabled":true,"required":true,"performed":true},"harbit":{"enabled":true,"required":true,"performed":true},"policies":{"enabled":true,"required":true,"performed":true}}',

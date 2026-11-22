@@ -11,10 +11,10 @@ for the five functions T2 owns. `staff-invite` belongs to T1 and is documented t
 | `fetch-cma-data` | pg_cron `cma-sync-weekly` (Sun 03:00 UTC) | false | `x-cron-secret` | `cma_upsert_batch`, `cma_finish_sync`, `job_continue`, `job_finish` |
 | `health` | site-watch / anyone | false | none (coarse); `x-cron-secret` or staff JWT for detail | `api.health` (anon-granted); `staff.ops_health` with a staff JWT |
 | `surense-webhook` | Surense via Svix | false | Svix signature + memory limit | `surense_event_ingest` |
-| `surense-worker` | manual now; pg_cron after owner approval | false | `x-cron-secret` | `surense_job_claim`, `surense_job_complete`, `surense_job_enqueue`, mirror RPCs, `job_finish` |
+| `surense-worker` | pg_cron `surense-worker-tick` (every minute, since 20261122180000) | false | `x-cron-secret` | `surense_job_claim`, `surense_job_complete`, `surense_job_enqueue`, mirror RPCs, `poa_ship_get`, `poa_ship_set`, `surense_gate`, `surense_audit`, `job_finish` |
 | `surense-sync` | staff app (admin) | true | staff JWT -> `staff.admin_assert_fresh` (admin + fresh TOTP) | `surense_gate`, mirror RPCs, `surense_audit` |
 | `surense-health` | owner / staff, by hand | true | platform JWT check only (read-only probe) | none (calls Surense only) |
-| `poa-intake` | POA wizard (browser) | false | Origin allowlist + Turnstile + session token (SHA-256 only to the DB) + `poa_*` switches | `poa_config` (optional), `poa_session_*`, `poa_engine_ref_set`, `poa_preview_set`, `poa_consent_record`, `poa_doc_get`, `poa_doc_claim`, `surense_gate`, `surense_job_enqueue`, `surense_audit` |
+| `poa-intake` | POA wizard (browser) | false | Origin allowlist + Turnstile + session token (SHA-256 only to the DB) + `poa_*` switches | `poa_config` (optional), `poa_session_*`, `poa_engine_ref_set`, `poa_preview_set`, `poa_consent_record`, `poa_document_from_url`, `poa_document_stored`, `poa_doc_get`, `poa_doc_claim`, `poa_ship_enqueue`, `surense_gate`, `surense_job_enqueue`, `surense_audit` |
 | `client-docs` | staff app | true | staff JWT -> `staff.client_doc_get` (staff aal2 + fresh MFA + access log) | none with the service key (storage read only) |
 
 `verify_jwt=false` everywhere here on purpose: the platform JWT check also accepts the publishable and secret API keys,
@@ -208,7 +208,8 @@ status, duration. Writes leave one `audit.log` ACTION row through `api.surense_a
   that customer's documents; `swiftness.e9100.completed` -> E9100 download; `customer.created/updated` -> pull the
   customer; `customer.deleted`/`document.deleted` -> mark deleted; `lead.*` -> the lead's customer when named; anything
   else `skipped no_handler`), `surense.pull_customers` (cursor pass; an unfinished pass re-queues itself),
-  `surense.pull_documents`, `surense.e9100_download`. Failed jobs back off 1m/5m/30m/2h; attempt 5 -> dead + critical
+  `surense.pull_documents`, `surense.e9100_download`, `surense.e9100_submit`, `surense.poa_ship` (a POA session completed on our
+  side replayed into the tool: gate -> `poa_ship_get` -> engine start + consents -> `poa_ship_set`; then the E9100 launch). Failed jobs back off 1m/5m/30m/2h; attempt 5 -> dead + critical
   alert `surense_job_dead`. Without `SURENSE_CLIENT_ID`/`SURENSE_CLIENT_SECRET`: nothing claimed,
   `job_finish(false,'surense_not_configured')`. No cron job yet (owner decision 6.18).
 - **surense-sync** (`verify_jwt=true`): POST `{action, ...}` with an admin JWT; `staff.admin_assert_fresh` must pass, then
@@ -245,7 +246,7 @@ already deployed on seeld-site as version 1 (the repo file is that source); it i
 - **Deployment gate:** apply the migration through `migrate.yml`; deploy the three functions; then OWNER-STEPS 1.10 in
   order (secrets, Vault keys, bucket, `surense_enabled`, Svix endpoint + `surense_webhook_enabled`, writes last).
 
-## POA wizard backend (`poa-intake`, `client-docs`; contract: `docs/product/POA-WIZARD.md`; NOT deployed, all switches off)
+## POA wizard backend (`poa-intake`, `client-docs`; contract: `docs/product/POA-WIZARD.md`; live since 2026-11-22)
 
 Backend of the browser wizard (`src/lib/poa`). Switches in `ops.config`, all off by default: `poa_enabled`,
 `poa_docs_enabled`, `poa_engine` (`surense`), `poa_native_shadow`, `poa_surense_url_id`, `poa_module_maslaka/harbit/policies`,
@@ -269,7 +270,14 @@ Backend of the browser wizard (`src/lib/poa`). Switches in `ops.config`, all off
   full run): `proxies/load`, `proxies/start`, then `proxies/swiftness`, `proxies/hb`, `proxies/policies` and
   `proxies/proxies_preview` (`sw|hb|p`). Host allowlist exactly `api.surense.com` + the dp host, https only, redirects refused, 15 s
   per call, no Authorization header; every call is audited (`poa.dp.*`, status and phase only) before it leaves.
-- **Final documents and launch**: the webhook events `dataproxy.aleph|hei|bet.approved` plan a document pull
+- **Engine "native"** (`_shared/poa/engine/native.ts`, `poa_engine = native`, the engine of record since 2026-11-22): no call to
+  the tool while the client is in the wizard. `/start` keeps a snapshot of the identity and the licence holder (`POA_LICENSEE_*`)
+  inside the encrypted engine reference; previews and the signed final documents are rendered by `_shared/poa/render.ts` from
+  `_shared/poa/templates.ts` (the tool's wording letter for letter; A4, Rubik from `_shared/pdfkit/fonts.ts`, the signature PNG
+  decoded by `_shared/pdfkit/png.ts`) and stored right after each consent (`api.poa_document_from_url(..., 'native')`). The last
+  consent queues `surense.poa_ship`; the worker replays the session into the tool with the surense engine and then queues the
+  E9100 launch. Staff: `staff.poa_session_list` (ship columns) and `staff.poa_ship_retry`.
+- **Final documents and launch** (surense engine): the webhook events `dataproxy.aleph|hei|bet.approved` plan a document pull
   (`planEvent` now carries `poaKind` = maslaka|harbit|policies); afterwards `linkPoaDocument` calls `api.poa_document_link`
   with the newest document, first without a hash; for a customer that has a wizard session the bytes are then fetched, hashed,
   linked again and stored at `poa/{agency}/{session}/{kind}-{document}.pdf` (`api.poa_document_stored`) only when the download
@@ -301,9 +309,10 @@ Backend of the browser wizard (`src/lib/poa`). Switches in `ops.config`, all off
 | `SURENSE_CLIENT_ID`, `SURENSE_CLIENT_SECRET` | surense-sync, surense-worker, poa-intake | yes for Surense | OAuth client from Surense > Settings > API/Webhooks; never in git, Vercel or chat |
 | `SURENSE_WEBHOOK_SECRET` | surense-webhook | yes for webhooks | the Svix endpoint signing secret (`whsec_...`) |
 | `SURENSE_WEBHOOK_SECRET_NEXT` | surense-webhook | optional | second Svix secret during a rotation; either slot verifies; `health` shows a boolean only |
-| `SURENSE_MANAGER_ID` | poa-intake | yes for the wizard | uuid of the Surense user that owns customers the wizard creates (`POST /customers` requires `managerId`); without it `/start` answers `unavailable` |
-| `SURENSE_DP_HOST` | poa-intake | optional | bare hostname of the public page API, default `dp.surense.com`; the only host besides `api.surense.com` the engine may reach |
-| `SURENSE_DP_BASE` | poa-intake | optional | path prefix of the public page API, default `/api` (unverified; locked after the owner's full run) |
+| `SURENSE_MANAGER_ID` | poa-intake, surense-worker | yes for the wizard and the ship job | uuid of the Surense user that owns customers the wizard creates (`POST /customers` requires `managerId`); without it `/start` answers `unavailable` |
+| `SURENSE_DP_HOST` | poa-intake, surense-worker | optional | bare hostname of the public page API, default `dp.surense.com`; the only host besides `api.surense.com` the engine may reach |
+| `SURENSE_DP_BASE` | poa-intake, surense-worker | optional | path prefix of the public page API, default `/api/v1/ifs/public` (verified 2026-11-22) |
+| `POA_LICENSEE_NAME`, `POA_LICENSEE_LICENSE`, `POA_LICENSEE_PHONE`, `POA_LICENSEE_EMAIL` | poa-intake | yes for the native engine | the licence holder printed in the documents (name 2-80 chars, licence `[A-Za-z0-9-]{3,20}`, phone, e-mail); all four or the native engine answers `unavailable` at `/start` |
 | `POA_START_MIN_MS` | poa-intake | optional | floor of the `/start` duration in ms (0..20000, default 6000); tune after the full run |
 | `POA_START_BUCKET_MS` | poa-intake | optional | an overrunning `/start` is rounded up to a multiple of this (500..20000, default 3000) |
 | injected: `SUPABASE_URL`, `SUPABASE_SECRET_KEYS`, `SUPABASE_PUBLISHABLE_KEYS`, `SB_REGION`, `DENO_DEPLOYMENT_ID` | all | platform | never set by hand |

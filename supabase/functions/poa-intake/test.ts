@@ -768,7 +768,7 @@ Deno.test("final docs: after the policies step each link is fetched (no Authoriz
     assert.equal(c.init?.credentials, "omit");
   }
   assert.deepEqual(s.rpc.calls.filter((c) => c.fn === "poa_document_from_url").map((c) => c.args), [
-    { p_session: SID, p_kind: "maslaka", p_sha256: sha }, { p_session: SID, p_kind: "harbit", p_sha256: sha }, { p_session: SID, p_kind: "policies", p_sha256: sha },
+    { p_session: SID, p_kind: "maslaka", p_sha256: sha, p_source: "surense" }, { p_session: SID, p_kind: "harbit", p_sha256: sha, p_source: "surense" }, { p_session: SID, p_kind: "policies", p_sha256: sha, p_source: "surense" },
   ]);
   assert.deepEqual(kit.puts.map((p) => p.path), [
     `poa/${AGENCY}/${SID}/maslaka-${DOC(1)}.pdf`, `poa/${AGENCY}/${SID}/harbit-${DOC(2)}.pdf`, `poa/${AGENCY}/${SID}/policies-${DOC(3)}.pdf`,
@@ -863,4 +863,108 @@ Deno.test("final docs: storage / database failures never fail the consent; a clo
   const s6 = setup({ engine: mockEngine({ finalUrls: urls }), script: LAST });
   assert.equal((await s6.handler(policiesReq())).status, 200);
   assert.ok(!s6.rpc.calls.some((c) => c.fn === "poa_document_from_url"));
+});
+
+// ---------------------------------------------------------------- the native engine (own rendering; the tool fed afterwards by the ship job)
+import { createNativeEngine } from "../_shared/poa/engine/native.ts";
+import { rubikFonts } from "../_shared/pdfkit/fonts.ts";
+
+const LICENSEE = { name: "Zz Agent", license: "L-00000000", phone: "050-000-0000", email: "agent@example.com" };
+const NATIVE_CFG = { poa_config: { poa_enabled: true, poa_docs_enabled: true, engine: "native", native_shadow: false, turnstile_required: true, modules: { maslaka: true, harbit: true, policies: true } } };
+const NATIVE_REF = {
+  sid: "sid-native-1", url_id: "native", existing: false,
+  i_first_name: "Dana", i_last_name: "Testov", i_national_id: SYNTH_ID, i_phone: "+972501234567", i_street: "Herzl 12", i_city: "Tel Aviv", i_zip: "6473912", i_marketing: false,
+  l_name: LICENSEE.name, l_license: LICENSEE.license, l_phone: LICENSEE.phone, l_email: LICENSEE.email,
+};
+const nativeEngine = (licensee: typeof LICENSEE | null = LICENSEE) => createNativeEngine({ licensee, fonts: rubikFonts, log: silentLog(), now: () => NOW, newSid: () => "sid-native-1" });
+
+function nativeSetup(o: { script?: Script; storagePut?: (p: string) => Promise<"stored" | "exists">; licensee?: typeof LICENSEE | null } = {}) {
+  const puts: string[] = [];
+  const base = setup({ script: {
+    ...NATIVE_CFG,
+    poa_session_get: session({ engine: "native", surense_customer_id: null, engine_ref: NATIVE_REF }),
+    poa_document_from_url: { linked: true, session_id: SID, agency_id: "5eed0000-0000-4000-8000-000000000001", document_id: "d0000000-0000-4000-8000-0000000000d1", stored: false, complete: false },
+    poa_document_stored: { ok: true }, poa_ship_enqueue: { ok: true, duplicate: false },
+    ...(o.script ?? {}),
+  } });
+  const storage: Storage = { put: o.storagePut ?? (async (p) => (puts.push(p), "stored" as const)) };
+  const handler = createPoaHandler({
+    env: testEnv({ TURNSTILE_SECRET_KEY: "ts-secret" }), rpc: base.rpc, log: silentLog(base.lines), engine: null, native: nativeEngine(o.licensee), storage: null,
+    finalDocs: { fetcher: createFinalDocFetcher({ log: silentLog() }), storage, log: silentLog() }, fetch: base.f.fetch, now: () => NOW, wait: async () => {},
+  });
+  return { ...base, handler, puts };
+}
+
+Deno.test("native start: no Surense gate, no tool call; the reference stored holds the identity and licensee snapshot; refused without a licensee", async () => {
+  const s = nativeSetup();
+  const res = await s.handler(post("start", IDENTITY));
+  assert.equal(res.status, 200);
+  assert.deepEqual(keys(await res.json()), ["expires_at", "modules", "next", "session_token"]);
+  assert.ok(!s.rpc.calls.some((c) => c.fn === "surense_gate"), "the write switch of the tool is not consulted: nothing is sent");
+  assert.equal(s.f.calls.filter((c) => !c.url.includes("siteverify")).length, 0, "no network call besides Turnstile");
+  const ref = s.rpc.calls.find((c) => c.fn === "poa_engine_ref_set")!.args.p_ref as Record<string, unknown>;
+  assert.equal(ref.url_id, "native");
+  assert.ok(!("customer_id" in ref));
+  assert.equal(ref.i_national_id, SYNTH_ID);
+  assert.equal(ref.i_zip, "6473912");
+  assert.equal(ref.l_license, LICENSEE.license);
+  const none = nativeSetup({ licensee: null });
+  const r2 = await none.handler(post("start", IDENTITY));
+  assert.equal(r2.status, 503);
+  assert.deepEqual(await r2.json(), { error: "unavailable" });
+  assert.deepEqual(none.rpc.calls.find((c) => c.fn === "poa_session_fail")!.args, { p_session: SID, p_code: "licensee_not_configured" });
+});
+
+Deno.test("native preview: a rendered PDF from the snapshot, hashed and recorded like the tool preview", async () => {
+  const s = nativeSetup();
+  const res = await s.handler(get("preview/maslaka", withSession));
+  assert.equal(res.status, 200);
+  const bytes = new Uint8Array(await res.arrayBuffer());
+  assert.equal(new TextDecoder().decode(bytes.subarray(0, 5)), "%PDF-");
+  assert.equal(res.headers.get("x-poa-preview-sha256"), await sha256Hex(bytes));
+  assert.deepEqual(s.rpc.calls.find((c) => c.fn === "poa_preview_set")!.args, { p_session: SID, p_kind: "maslaka", p_sha256: await sha256Hex(bytes) });
+  assert.equal(s.f.calls.length, 0, "no network call");
+});
+
+Deno.test("native consent: records the approval, renders the final file with the evidence and stores it as source native under the mandated path", async () => {
+  const s = nativeSetup();
+  const res = await s.handler(post("harbit", { preview_sha256: HASH, birth_date: "1990-05-17", issue_date: "2015-01-01" }, withSession));
+  assert.equal(res.status, 200);
+  assert.equal((await res.json()).next, "harbit");
+  const rec = s.rpc.calls.find((c) => c.fn === "poa_consent_record")!;
+  assert.deepEqual(rec.args.p_extra, { birth_date: "1990-05-17", issue_date: "2015-01-01" });
+  const from = s.rpc.calls.find((c) => c.fn === "poa_document_from_url")!;
+  assert.equal(from.args.p_kind, "harbit");
+  assert.equal(from.args.p_source, "native");
+  assert.match(from.args.p_sha256 as string, /^[0-9a-f]{64}$/);
+  assert.deepEqual(s.puts, ["poa/5eed0000-0000-4000-8000-000000000001/" + SID + "/harbit-d0000000-0000-4000-8000-0000000000d1.pdf"]);
+  assert.equal(s.rpc.calls.find((c) => c.fn === "poa_document_stored")!.args.p_path, s.puts[0]);
+  assert.ok(!s.rpc.calls.some((c) => c.fn === "poa_session_fail"));
+  assert.equal(s.f.calls.length, 0, "no network call");
+});
+
+Deno.test("native consent: the last module completes the session and queues the ship (not the launch); a closed queue leaves a ship_ code; a storage failure leaves a docs_ code", async () => {
+  const last = { poa_consent_record: { kind: "policies", method: "signature", approved_at: "2026-11-21T12:00:01Z", valid_until: null, modules: MODS({ maslaka: true, harbit: true, policies: true }), next: "done" } };
+  const s = nativeSetup({ script: last });
+  const res = await s.handler(post("policies", { preview_sha256: HASH, signature_png: PNG_URL }, withSession));
+  assert.equal(res.status, 200);
+  assert.equal((await res.json()).next, "done");
+  assert.ok(s.rpc.calls.some((c) => c.fn === "poa_session_complete"));
+  assert.deepEqual(s.rpc.calls.find((c) => c.fn === "poa_ship_enqueue")!.args, { p_session: SID });
+  assert.ok(!s.rpc.calls.some((c) => c.fn === "surense_job_enqueue"), "the launch is queued by the ship job, not here");
+  assert.equal(s.puts.length, 1, "the signed policies file is stored");
+  const closed = nativeSetup({ script: { ...last, poa_ship_enqueue: rpcError(423, "PT423", "feature_disabled:surense_enabled") } });
+  assert.equal((await closed.handler(post("policies", { preview_sha256: HASH, signature_png: PNG_URL }, withSession))).status, 200);
+  assert.deepEqual(closed.rpc.calls.find((c) => c.fn === "poa_session_fail")!.args, { p_session: SID, p_code: "ship_423" });
+  const broken = nativeSetup({ storagePut: async () => { throw new StorageError(500); } });
+  assert.equal((await broken.handler(post("maslaka", { preview_sha256: HASH }, withSession))).status, 200, "a storage failure never fails the consent");
+  assert.deepEqual(broken.rpc.calls.find((c) => c.fn === "poa_session_fail")!.args, { p_session: SID, p_code: "docs_storage_500" });
+});
+
+Deno.test("native: a native session with no native engine configured is unavailable and the surense engine is never asked", async () => {
+  const s = setup({ script: { poa_session_get: session({ engine: "native", engine_ref: NATIVE_REF }) } });
+  const r = await s.handler(get("preview/maslaka", withSession));
+  assert.equal(r.status, 503);
+  assert.deepEqual(await r.json(), { error: "unavailable" });
+  assert.equal(s.eng.calls.length, 0);
 });

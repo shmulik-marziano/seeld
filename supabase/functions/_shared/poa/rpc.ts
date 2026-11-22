@@ -4,7 +4,7 @@
 // The token never leaves the function: the database gets its SHA-256 as a bytea literal (\x<hex>). Session-scoped RPCs
 // take the session uuid that api.poa_session_get returned. api.poa_session_get no longer returns the identity (nothing reads it).
 import { type Rpc, RpcError } from "../db.ts";
-import { type EngineRef, type ModuleFlags, POA_KINDS, type PoaKind } from "./engine/types.ts";
+import { type EngineRef, type ModuleFlags, POA_KINDS, type PoaIdentity, type PoaKind, type PoaLicensee } from "./engine/types.ts";
 import { HASH_RE } from "./session.ts";
 
 export interface PoaModuleState { enabled: boolean; required: boolean; performed: boolean }
@@ -85,6 +85,31 @@ function parseNext(v: unknown, modules: PoaModules): PoaNext {
 /** bytea literal for PostgREST: backslash, x, hex */
 export const byteaHex = (hex: string): string => `\\x${hex}`;
 
+/** native engine: the identity and the licensee inside the reference, as flat i_* / l_* string keys (api.poa_engine_ref_set takes
+ *  scalars only); null email is left out */
+export function flattenRef(ref: Pick<EngineRef, "identity" | "licensee">): Record<string, string | boolean> {
+  const out: Record<string, string | boolean> = {};
+  const i = ref.identity, l = ref.licensee;
+  if (i) {
+    Object.assign(out, { i_first_name: i.firstName, i_last_name: i.lastName, i_national_id: i.nationalId, i_phone: i.phone, i_street: i.street, i_city: i.city, i_zip: i.zip, i_marketing: i.marketingApproved });
+    if (i.email) out.i_email = i.email;
+  }
+  if (l) Object.assign(out, { l_name: l.name, l_license: l.license, l_phone: l.phone, l_email: l.email });
+  return out;
+}
+
+export function unflattenRef(o: Record<string, unknown>): { identity?: PoaIdentity; licensee?: PoaLicensee } {
+  const s = (k: string) => (typeof o[k] === "string" ? (o[k] as string) : null);
+  const out: { identity?: PoaIdentity; licensee?: PoaLicensee } = {};
+  const first = s("i_first_name"), last = s("i_last_name"), nid = s("i_national_id"), phone = s("i_phone"), street = s("i_street"), city = s("i_city"), zip = s("i_zip");
+  if (first && last && nid && phone && street && city && zip) {
+    out.identity = { firstName: first, lastName: last, nationalId: nid, phone, email: s("i_email"), street, city, zip, marketingApproved: o.i_marketing === true };
+  }
+  const name = s("l_name"), license = s("l_license"), lphone = s("l_phone"), lemail = s("l_email");
+  if (name && license && lphone && lemail) out.licensee = { name, license, phone: lphone, email: lemail };
+  return out;
+}
+
 /** the short code a session failure may carry (database check: ^[a-z0-9_.:-]{1,80}$) */
 export function failCode(code: string): string {
   return code.toLowerCase().replace(/[^a-z0-9_.:-]/g, "_").slice(0, 80) || "error";
@@ -162,19 +187,29 @@ export function createPoaRpc(rpc: Rpc) {
         next: parseNext(r.next, modules),
         engine: r.engine === "native" ? "native" : "surense",
         customerId,
-        engineRef: ref && refCustomer && typeof ref.sid === "string" && typeof ref.url_id === "string"
-          ? { customerId: refCustomer, sid: ref.sid, urlId: ref.url_id, existing: ref.existing === true, ...(typeof ref.cookie === "string" && ref.cookie ? { cookie: ref.cookie } : {}) }
+        engineRef: ref && typeof ref.sid === "string" && typeof ref.url_id === "string"
+          ? {
+            customerId: refCustomer, sid: ref.sid, urlId: ref.url_id, existing: ref.existing === true,
+            ...(typeof ref.cookie === "string" && ref.cookie ? { cookie: ref.cookie } : {}),
+            ...unflattenRef(ref),
+          }
           : null,
         previewSha256,
         completedAt: strOrNull(r.completed_at),
       };
     },
 
-    /** flat snake_case object, stored encrypted whole; customer_id also fills the indexed column; cookie = the tool's page session */
+    /** flat snake_case object, stored encrypted whole; customer_id also fills the indexed column; cookie = the tool's page session;
+     *  the native engine's identity / licensee snapshot travels as i_* / l_* keys */
     async engineRefSet(sessionId: string, ref: EngineRef): Promise<void> {
       await rpc.call("poa_engine_ref_set", {
         p_session: sessionId,
-        p_ref: { customer_id: ref.customerId, sid: ref.sid, url_id: ref.urlId, existing: ref.existing, ...(ref.cookie ? { cookie: ref.cookie.slice(0, 1200) } : {}) },
+        p_ref: {
+          ...(ref.customerId ? { customer_id: ref.customerId } : {}),
+          sid: ref.sid, url_id: ref.urlId, existing: ref.existing,
+          ...(ref.cookie ? { cookie: ref.cookie.slice(0, 1200) } : {}),
+          ...flattenRef(ref),
+        },
       });
     },
 
@@ -219,8 +254,8 @@ export function createPoaRpc(rpc: Rpc) {
 
     /** a final document that arrived as a link (the policies step): creates / refreshes its crm.documents row (no Surense
      *  document id is known) and answers what the storage path needs. `stored`: the row already holds a stored file. */
-    async documentFromUrl(sessionId: string, kind: PoaKind, sha256: string): Promise<{ documentId: string; agencyId: string; stored: boolean }> {
-      const r = obj(await rpc.call("poa_document_from_url", { p_session: sessionId, p_kind: kind, p_sha256: sha256 }));
+    async documentFromUrl(sessionId: string, kind: PoaKind, sha256: string, source: "surense" | "native" = "surense"): Promise<{ documentId: string; agencyId: string; stored: boolean }> {
+      const r = obj(await rpc.call("poa_document_from_url", { p_session: sessionId, p_kind: kind, p_sha256: sha256, p_source: source }));
       return { documentId: uuid(r.document_id), agencyId: uuid(r.agency_id), stored: r.stored === true };
     },
 
@@ -249,7 +284,51 @@ export function createPoaRpc(rpc: Rpc) {
         p_dedupe: `e9100:${customerId}`,
       });
     },
+
+    /** native engine: the completed session is queued for the tool (api.poa_ship_enqueue marks it pending + one surense.poa_ship job) */
+    async enqueueShip(sessionId: string): Promise<void> {
+      await rpc.call("poa_ship_enqueue", { p_session: sessionId });
+    },
+
+    // ---- the ship job's side (surense-worker) ----
+    /** everything the tool needs, decrypted for this call only (an access-log row is written by the database). Never logged. */
+    async shipGet(sessionId: string): Promise<ShipData> {
+      const r = obj(await rpc.call("poa_ship_get", { p_session: sessionId }));
+      const i = obj(r.identity);
+      const c = r.consents && typeof r.consents === "object" ? r.consents as Record<string, Record<string, unknown> | null> : {};
+      const consents = {} as ShipData["consents"];
+      for (const k of POA_KINDS) {
+        const x = c[k];
+        if (!x || typeof x !== "object") continue;
+        consents[k] = { approvedAt: str(x.approved_at), birthDate: strOrNull(x.birth_date), issueDate: strOrNull(x.issue_date), signature: strOrNull(x.signature) };
+      }
+      return {
+        sessionId: uuid(r.session_id),
+        shipStatus: typeof r.ship_status === "string" ? r.ship_status : null,
+        customerId: strOrNull(r.surense_customer_id),
+        modules: parseModules(r.modules),
+        identity: {
+          firstName: str(i.first_name), lastName: str(i.last_name), nationalId: str(i.national_id), phone: str(i.phone), email: strOrNull(i.email),
+          street: str(i.street), city: str(i.city), zip: str(i.zip), marketingApproved: i.marketing_approved === true,
+        },
+        consents,
+      };
+    },
+
+    /** records the outcome of a ship attempt on the session (status, a code, the tool's customer id); ids and codes only */
+    async shipSet(sessionId: string, status: "pending" | "shipped" | "failed", code: string | null, customerId: string | null): Promise<void> {
+      await rpc.call("poa_ship_set", { p_session: sessionId, p_status: status, p_code: code ? failCode(code) : null, p_customer: customerId });
+    },
   };
+}
+
+export interface ShipData {
+  sessionId: string;
+  shipStatus: string | null;
+  customerId: string | null;
+  modules: PoaModules;
+  identity: PoaIdentity;
+  consents: Partial<Record<PoaKind, { approvedAt: string; birthDate: string | null; issueDate: string | null; signature: string | null }>>;
 }
 
 export type PoaRpc = ReturnType<typeof createPoaRpc>;

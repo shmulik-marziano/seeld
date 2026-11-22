@@ -17,6 +17,8 @@ import { requireCronSecret } from "../_shared/secret.ts";
 import type { TokenSource } from "../_shared/surense/auth.ts";
 import { buildSyncDeps } from "../_shared/surense/connector.ts";
 import { type JobRow, runJob } from "../_shared/surense/jobs.ts";
+import type { DpClient } from "../_shared/poa/dp.ts";
+import { createSurenseEngine } from "../_shared/poa/engine/surense.ts";
 
 export const BUDGET_MS = 72_000;
 export const MIN_CLAIM_HEADROOM_MS = 20_000;
@@ -30,6 +32,8 @@ export interface SurenseWorkerDeps {
   log: Logger;
   defer: Defer;
   tokens: TokenSource | null;
+  /** the tool's public-page client + the manager id for the POA ship job; absent = that job fails with engine_not_configured */
+  poa?: { dp: DpClient; managerId: string | null } | null;
   fetch?: FetchFn;
   sleep?: (ms: number) => Promise<void>;
   now?: () => number;
@@ -53,6 +57,8 @@ export async function drainJobs(d: SurenseWorkerDeps, rpc: Rpc, tokens: TokenSou
   const sync = buildSyncDeps({
     env: d.env, rpc, log, tokens, fetch: d.fetch, sleep: d.sleep, now: d.now, minIntervalMs: d.minIntervalMs, maxAttempts: WORKER_MAX_ATTEMPTS,
   });
+  // the ship job replays a completed session into the tool with the same engine poa-intake uses for the live chain
+  if (d.poa) sync.poaEngine = createSurenseEngine({ api: sync.api, dp: d.poa.dp, managerId: d.poa.managerId, log, now: d.now });
   const stats: WorkerStats = { claimed: 0, done: 0, skipped: 0, failed: 0, batches: 0, disabled: false };
 
   while (now() - start < budget - MIN_CLAIM_HEADROOM_MS) {
