@@ -895,6 +895,30 @@ function nativeSetup(o: { script?: Script; storagePut?: (p: string) => Promise<"
   return { ...base, handler, puts };
 }
 
+Deno.test("native start: the licence holder comes from api.poa_config (ops.config poa_licensee_*) when the function secrets are unset; a malformed row is no licensee", async () => {
+  const build = (cfgLicensee: unknown) => {
+    let fromConfig: typeof LICENSEE | null = null;
+    const base = setup({ script: { ...NATIVE_CFG, poa_config: { ...NATIVE_CFG.poa_config, licensee: cfgLicensee }, poa_engine_ref_set: { ok: true } } });
+    const handler = createPoaHandler({
+      env: testEnv({ TURNSTILE_SECRET_KEY: "ts-secret" }), rpc: base.rpc, log: silentLog(base.lines), engine: null,
+      native: createNativeEngine({ licensee: () => fromConfig, fonts: rubikFonts, log: silentLog(), now: () => NOW, newSid: () => "sid-native-1" }),
+      setLicensee: (l) => { fromConfig = l; }, storage: null, fetch: base.f.fetch, now: () => NOW, wait: async () => {},
+    });
+    return { ...base, handler };
+  };
+  const ok = build(LICENSEE);
+  const res = await ok.handler(post("start", IDENTITY));
+  assert.equal(res.status, 200);
+  const ref = ok.rpc.calls.find((c) => c.fn === "poa_engine_ref_set")!.args.p_ref as Record<string, unknown>;
+  assert.equal(ref.l_license, LICENSEE.license, "the snapshot carries the configured licence holder");
+  assert.equal(ref.l_email, LICENSEE.email);
+  const bad = build({ name: "Zz", license: "bad license!", phone: "x", email: "not-an-email" });
+  const r2 = await bad.handler(post("start", IDENTITY));
+  assert.equal(r2.status, 503);
+  assert.deepEqual(await r2.json(), { error: "unavailable" });
+  assert.ok(!bad.rpc.calls.some((c) => c.fn === "poa_engine_ref_set"), "nothing stored without a valid licence holder");
+});
+
 Deno.test("native start: no Surense gate, no tool call; the reference stored holds the identity and licensee snapshot; refused without a licensee", async () => {
   const s = nativeSetup();
   const res = await s.handler(post("start", IDENTITY));

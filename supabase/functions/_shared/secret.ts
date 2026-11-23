@@ -24,9 +24,29 @@ export async function hasCronSecret(req: Request, expected: string | null): Prom
   return await timingSafeEqual(got, expected);
 }
 
-export async function requireCronSecret(req: Request, expected: string | null): Promise<void> {
-  if (!expected) throw new HttpError("unavailable", "Not configured");
-  if (!(await hasCronSecret(req, expected))) throw new HttpError("unauthenticated", "Bad cron secret");
+/** A second opinion on the presented secret: the database compares it with Vault 'edge_cron_secret' (api.cron_secret_ok,
+ *  service role). With it, the function secret EDGE_CRON_SECRET is optional and the Vault is the single source of truth
+ *  (2026-11-23: the manual copy of the Vault value into the function secret was never completed and every tick got 401). */
+export type CronSecretCheck = (presented: string) => Promise<boolean>;
+
+export function cronSecretViaRpc(rpc: { call(fn: string, args: Record<string, unknown>): Promise<unknown> }): CronSecretCheck {
+  return async (presented) => {
+    try {
+      return (await rpc.call("cron_secret_ok", { p_secret: presented })) === true;
+    } catch {
+      return false; // an older schema without the RPC, or a database hiccup: fail closed
+    }
+  };
+}
+
+/** Accepts the request when the header equals EDGE_CRON_SECRET, or else when the database says it equals the Vault secret.
+ *  503 only when neither source exists; 401 for a missing or wrong header. */
+export async function requireCronSecret(req: Request, expected: string | null, viaDb?: CronSecretCheck): Promise<void> {
+  if (!expected && !viaDb) throw new HttpError("unavailable", "Not configured");
+  if (expected && (await hasCronSecret(req, expected))) return;
+  const got = req.headers.get("x-cron-secret");
+  if (viaDb && got && got.length >= 16 && got.length <= 256 && (await viaDb(got))) return;
+  throw new HttpError("unauthenticated", "Bad cron secret");
 }
 
 /** A keyed labeller: HMAC-SHA-256 under a random 32-byte key that never leaves memory, first 6 bytes in hex.

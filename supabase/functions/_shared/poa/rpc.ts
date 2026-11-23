@@ -6,6 +6,7 @@
 import { type Rpc, RpcError } from "../db.ts";
 import { type EngineRef, type ModuleFlags, POA_KINDS, type PoaIdentity, type PoaKind, type PoaLicensee } from "./engine/types.ts";
 import { HASH_RE } from "./session.ts";
+import { parseLicensee } from "./config.ts";
 
 export interface PoaModuleState { enabled: boolean; required: boolean; performed: boolean }
 export type PoaModules = Record<PoaKind, PoaModuleState>;
@@ -19,6 +20,9 @@ export interface PoaConfig {
   engine: "surense" | "native";
   turnstileRequired: boolean;
   modules: ModuleFlags;
+  /** ops.config poa_licensee_* (name, licence number, phone, email of the licence holder printed by the native engine);
+   *  null until the owner fills all four (an older api.poa_config has no such key) */
+  licensee: PoaLicensee | null;
 }
 
 export interface PoaSession {
@@ -137,6 +141,7 @@ export function createPoaRpc(rpc: Rpc) {
         engine: o.engine === "native" ? "native" : "surense",
         turnstileRequired: bool(o.turnstile_required, true),
         modules: { maslaka: bool(m.maslaka, false), harbit: bool(m.harbit, false), policies: bool(m.policies, false) },
+        licensee: parseLicensee(o.licensee && typeof o.licensee === "object" ? o.licensee as Record<string, unknown> : null),
       };
     },
 

@@ -33,9 +33,14 @@ Deno.test("auth: wrong/missing secret 401, unset EDGE_CRON_SECRET 503, GET 405",
   assert.equal((await h(cron({ "x-cron-secret": "nope" }))).status, 401);
   assert.equal((await h(new Request("https://x", { method: "POST" }))).status, 401);
   assert.equal((await h(new Request("https://x", { method: "GET" }))).status, 405);
-  const u = setup(queue([]), { EDGE_CRON_SECRET: "" });
-  assert.equal((await u.h(cron())).status, 503);
-  assert.equal(rpc.calls.length + u.rpc.calls.length, 0);
+  // 503 only when neither the function secret nor the database (api.cron_secret_ok) can answer
+  const u = createWorkerHandler({ env: testEnv({ EDGE_CRON_SECRET: "" }), rpc: null, log: silentLog(), defer: collectingDefer().defer });
+  assert.equal((await u(cron())).status, 503);
+  // without the function secret the database decides: a wrong value is 401 after one cron_secret_ok call
+  const v = setup((fn) => (fn === "cron_secret_ok" ? false : fn === "outbox_claim" ? [] : null), { EDGE_CRON_SECRET: "" });
+  assert.equal((await v.h(cron())).status, 401);
+  assert.deepEqual(v.rpc.calls.map((c) => c.fn), ["cron_secret_ok"]);
+  assert.equal(rpc.calls.length, 0);
 });
 
 Deno.test("202 at once; work in background: claim -> Resend (outbox-<id>) -> complete -> job_finish(run)", async () => {

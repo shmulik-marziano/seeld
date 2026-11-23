@@ -10,7 +10,7 @@ import { auditSink, MIN_INTERVAL_MS, tokenSourceFor } from "../_shared/surense/c
 import { createDpClient } from "../_shared/poa/dp.ts";
 import { loadPoaEnv, poaEnvPresence } from "../_shared/poa/config.ts";
 import { createSurenseEngine } from "../_shared/poa/engine/surense.ts";
-import type { PoaEngine } from "../_shared/poa/engine/types.ts";
+import type { PoaEngine, PoaLicensee } from "../_shared/poa/engine/types.ts";
 import { createObjectReader } from "../_shared/poa/storage.ts";
 import { createFinalDocFetcher } from "../_shared/poa/finaldocs.ts";
 import { createStorage } from "../_shared/surense/storage.ts";
@@ -42,8 +42,11 @@ if (rpc && tokens) {
     log.error("poa engine not built", { reason: "bad_dp_settings" });
   }
 }
-// the native engine (own rendering; the tool is fed by the ship job): needs only the licence holder's details
-const native = createNativeEngine({ licensee: poaEnv.licensee, fonts: rubikFonts, log });
+// the native engine (own rendering; the tool is fed by the ship job): needs only the licence holder's details, read from
+// ops.config (poa_licensee_*) at every start through api.poa_config; the POA_LICENSEE_* secrets remain as the fallback
+let configuredLicensee: PoaLicensee | null = null;
+const native = createNativeEngine({ licensee: () => configuredLicensee ?? poaEnv.licensee, fonts: rubikFonts, log });
+const setLicensee = (l: PoaLicensee | null) => { configuredLicensee = l; };
 const storage = env.supabaseUrl && env.secretKey ? createObjectReader({ url: env.supabaseUrl, apikey: env.secretKey }) : null;
 
 // final documents: pre-signed links fetched without credentials (host-locked), written with the service key
@@ -55,4 +58,4 @@ const finalDocs = env.supabaseUrl && env.secretKey
 // overrides when the site rotates it); POA_ZIP_LOOKUP=off disables the lookup and the visitor types the zip
 const zip = (Deno.env.get("POA_ZIP_LOOKUP") ?? "").trim().toLowerCase() === "off" ? null : createZipLookup({ log, key: Deno.env.get("ISRAEL_POST_KEY") });
 
-Deno.serve(createPoaHandler({ env, rpc, log, engine, native, storage, finalDocs, zip, startMinMs: poaEnv.startMinMs, startBucketMs: poaEnv.startBucketMs }));
+Deno.serve(createPoaHandler({ env, rpc, log, engine, native, setLicensee, storage, finalDocs, zip, startMinMs: poaEnv.startMinMs, startBucketMs: poaEnv.startBucketMs }));

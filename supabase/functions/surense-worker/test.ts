@@ -38,9 +38,28 @@ Deno.test("auth: wrong/missing secret 401, unset EDGE_CRON_SECRET 503, GET 405, 
   assert.equal((await h(cron({ "x-cron-secret": "nope" }))).status, 401);
   assert.equal((await h(new Request("https://x", { method: "POST" }))).status, 401);
   assert.equal((await h(new Request("https://x", { method: "GET" }))).status, 405);
-  const u = createSurenseWorkerHandler({ env: testEnv({ EDGE_CRON_SECRET: "" }), rpc: mockRpc(), log: silentLog(), defer: collectingDefer().defer, tokens: null });
+  const u = createSurenseWorkerHandler({ env: testEnv({ EDGE_CRON_SECRET: "" }), rpc: null, log: silentLog(), defer: collectingDefer().defer, tokens: null });
   assert.equal((await u(cron())).status, 503);
   assert.equal(rpc.calls.length, 0);
+});
+
+Deno.test("auth: without EDGE_CRON_SECRET the database decides (api.cron_secret_ok against the Vault); a refusal is 401", async () => {
+  // low-entropy fixtures on purpose: the CI secret scanner must not mistake them for a real key
+  const VAULT_VALUE = "vault-value-for-tests-aaaaaaaaaa";
+  const OTHER_VALUE = "someone-elses-value-aaaaaaaaaa";
+  const seen: unknown[] = [];
+  const script: RpcScript = (fn, a) => {
+    if (fn === "cron_secret_ok") { seen.push(a.p_secret); return a.p_secret === VAULT_VALUE; }
+    return fn === "surense_job_claim" ? [] : null;
+  };
+  const rpc = mockRpc(script);
+  const h = createSurenseWorkerHandler({ env: testEnv({ EDGE_CRON_SECRET: "" }), rpc, log: silentLog(), defer: collectingDefer().defer, tokens: null });
+  assert.equal((await h(cron({ "x-cron-secret": VAULT_VALUE }))).status, 202);
+  assert.equal((await h(cron({ "x-cron-secret": OTHER_VALUE }))).status, 401);
+  assert.deepEqual(seen, [VAULT_VALUE, OTHER_VALUE]);
+  // a stale function secret no longer blocks the tick: the Vault answer wins
+  const stale = createSurenseWorkerHandler({ env: testEnv({ EDGE_CRON_SECRET: "old-copy-that-never-matched" }), rpc, log: silentLog(), defer: collectingDefer().defer, tokens: null });
+  assert.equal((await stale(cron({ "x-cron-secret": VAULT_VALUE }))).status, 202);
 });
 
 Deno.test("no Surense credentials: nothing claimed, run fails with surense_not_configured", async () => {
