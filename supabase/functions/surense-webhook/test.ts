@@ -49,6 +49,24 @@ Deno.test("eventType: a well-formed string type, else unknown", () => {
   assert.equal(eventType(null), "unknown");
 });
 
+Deno.test("eventType: real Surense bodies (flat, PascalCase eventType, verified 2026-11-23) map to our dotted names", () => {
+  assert.equal(eventType({ eventType: "NispahAlefProxyApproved", customerId: "c0000000-0000-4000-8000-000000000001" }), "dataproxy.aleph.approved");
+  assert.equal(eventType({ eventType: "NispahBetProxyApproved" }), "dataproxy.bet.approved");
+  assert.equal(eventType({ eventType: "NispahHeiProxyApproved" }), "dataproxy.hei.approved");
+  assert.equal(eventType({ eventType: "HarbDataLoaded" }), "harb.uploaded");
+  assert.equal(eventType({ eventType: "SwiftnessE9100Completed" }), "swiftness.e9100.completed");
+  assert.equal(eventType({ eventType: "SwiftnessE9100Submitted" }), "swiftness.e9100.submitted");
+  assert.equal(eventType({ eventType: "CustomerCreated" }), "customer.created");
+  assert.equal(eventType({ eventType: "CustomerUpdated" }), "customer.updated");
+  assert.equal(eventType({ eventType: "CustomerDeleted" }), "customer.deleted");
+  assert.equal(eventType({ eventType: "LeadCreated" }), "lead.created");
+  assert.equal(eventType({ eventType: "DocumentUploaded" }), "document.uploaded", "an unlisted PascalCase name splits mechanically");
+  assert.equal(eventType({ eventType: "Bad Type" }), "unknown");
+  assert.equal(eventType({ eventType: 7 }), "unknown");
+  assert.equal(eventType({ customerId: "c0000000-0000-4000-8000-000000000001" }), "unknown", "the Svix sample without a type");
+  assert.equal(eventType({ eventType: "CustomerCreated", type: "x" }), "customer.created", "eventType wins over type");
+});
+
 Deno.test("signed delivery is stored once; a redelivery is a 200 duplicate (Svix must not retry)", async () => {
   const { h, rpc, lines } = setup();
   const r1 = await h(await delivery(BODY));
