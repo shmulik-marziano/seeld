@@ -32,7 +32,9 @@
 | `SEELD_SECRET_KEY` | המפתח מ-1.2 | גישת הפונקציות למסד; בלעדיו `staff-invite` מחזירה 503 |
 | `EDGE_CRON_SECRET` | (רשות מאז 23.11) הערך של Vault `edge_cron_secret` | אימות קריאות ה-cron. מאז 23.11 הפונקציות בודקות מול ה-Vault דרך `api.cron_secret_ok`, ולכן אין צורך בהעתקה ידנית |
 | `TURNSTILE_SECRET_KEY` | מהווידג'ט ב-2.1 | בלעדיו כל ליד מקבל 503 |
-| `RESEND_API_KEY` | מחשבון Resend | שליחת מיילים לצוות ולהתראות |
+| `RESEND_API_KEY` | מחשבון Resend (מפתח `seeld-site`, Sending access, דומיין `seeld.co.il`; הוגדר 23.11.2026) | שליחת מיילים לצוות ולהתראות |
+| `SMS_API_TOKEN` | טוקן ממיקרופיי (ניהול חשבון → טוקנים לממשקים; הרשאת שירותי סמס בלבד; הוגדר 23.11.2026) | קודי כניסה חד-פעמיים לאזור האישי (`_shared/sms/micropay.ts`); בדיקה: `select ops.call_function('sms-health')` |
+| `SMS_SENDER_ID` | (רשות) זיהוי שולח שאושר במיקרופיי, למשל `SEELD` | שם השולח בהודעות; בלעדיו ברירת המחדל של החשבון |
 | `GOOGLE_AI_API_KEY` | אותו מפתח Gemini שבטוקיו, מוזן מחדש | הצ'אט |
 | `ALLOWED_ORIGINS` | `https://seeld.co.il,https://www.seeld.co.il` | רק האתר יכול לשלוח טפסים |
 | `ENV` | `production` | מצב ייצור מפורש |

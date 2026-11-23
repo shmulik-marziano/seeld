@@ -132,6 +132,8 @@ verify_jwt = false
 verify_jwt = true
 [functions.surense-health]     # staff probe of the Surense credentials (read only, no token returned); deployed v1
 verify_jwt = true
+[functions.sms-health]         # Micropay token probe (balance only, nothing sent); x-cron-secret like the workers
+verify_jwt = false
 [functions.poa-intake]         # public POA wizard backend; Origin + Turnstile + session token + ops.config switches (poa_*) in the function and DB
 verify_jwt = false
 [functions.client-docs]        # staff download of stored client documents; JWT + staff aal2/fresh MFA checked in the DB (staff.client_doc_get)
