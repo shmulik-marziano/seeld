@@ -50,7 +50,7 @@ export const ART_BY_SLUG: Record<string, KnowledgeArt> = {
   "pension-deducted-missing-in-fund": { spot: "magnifier", icon: "search" },
   "why-projected-pension-looks-low": { spot: "tea-hourglass", icon: "hourglass" },
   // פנסיה לעצמאים
-  "self-employed-mandatory-pension": { spot: "seal-check", icon: "checklist" },
+  "self-employed-mandatory-pension": { spot: "pen", icon: "checklist" },
   "employee-and-self-employed-pension-top-up": { spot: "scales", icon: "chart" },
   "pension-tax-saving-deduction-vs-credit": { spot: "coins-stacks", icon: "wallet" },
   "seasonal-business-pension": { spot: "compass", icon: "growth" },
@@ -62,7 +62,7 @@ export const ART_BY_SLUG: Record<string, KnowledgeArt> = {
   // תכנון פרישה
   "first-month-after-retirement-income": { spot: "tea-hourglass", icon: "retirement" },
   "form-161-before-severance-decision": { spot: "scroll-ribbon", icon: "document" },
-  "pension-tax-exemption-after-fixing-rights": { spot: "seal-check", icon: "checklist" },
+  "pension-tax-exemption-after-fixing-rights": { spot: "scales", icon: "checklist" },
   "survivors-pension-vs-guaranteed-payments": { spot: "family-figures", icon: "family" },
   "old-age-pension-while-working": { spot: "olive-canopy", icon: "hourglass" },
   "withdrawing-severance-between-jobs": { spot: "compass", icon: "briefcase" },
@@ -77,14 +77,14 @@ export const ART_BY_SLUG: Record<string, KnowledgeArt> = {
   "disability-pension-fund-or-private-insurance": { spot: "shield-blue", icon: "umbrella" },
   "life-insurance-after-mortgage-paid": { spot: "key-brass", icon: "key" },
   "two-health-policies-one-receipt": { spot: "heart-pink", icon: "heart" },
-  "critical-illness-diagnosis-payout": { spot: "seal-check", icon: "claim" },
+  "critical-illness-diagnosis-payout": { spot: "coins-stacks", icon: "claim" },
   // מיסוי החיסכון הפנסיוני
   "three-tax-stations": { spot: "compass", icon: "compass" },
   "provident-funds": { spot: "coins-stacks", icon: "coins" },
   "training-funds": { spot: "pen", icon: "bank" },
   "managers-insurance": { spot: "shield-navy", icon: "shield" },
   "pension-funds": { spot: "olive-sapling", icon: "retirement" },
-  "realization-fixing-rights-190": { spot: "seal-check", icon: "checklist" },
+  "realization-fixing-rights-190": { spot: "key-brass", icon: "checklist" },
   numbers: { spot: "scales", icon: "chart" },
 };
 
@@ -101,7 +101,7 @@ const ARTICLE_POOL: KnowledgeArt[] = [
   { spot: "car-key", icon: "car" }, { spot: "stone-house", icon: "home" }, { spot: "treasure-chest", icon: "wallet" },
   { spot: "family-figures", icon: "family" }, { spot: "olive-sapling", icon: "growth" }, { spot: "compass", icon: "compass" },
   { spot: "magnifier", icon: "search" }, { spot: "scales", icon: "chart" }, { spot: "key-brass", icon: "key" },
-  { spot: "tea-hourglass", icon: "hourglass" }, { spot: "pillows", icon: "umbrella" }, { spot: "seal-check", icon: "claim" },
+  { spot: "tea-hourglass", icon: "hourglass" }, { spot: "pillows", icon: "umbrella" }, { spot: "passport", icon: "document" },
   { spot: "scroll-ribbon", icon: "document" }, { spot: "briefcase", icon: "briefcase" }, { spot: "sailboat", icon: "growth" },
 ];
 
