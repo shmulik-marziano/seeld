@@ -6,6 +6,7 @@ import { BrandIcon } from "@/components/brand/BrandIcon";
 import { stories } from "@/data/stories";
 import { SdBand, SdStory, tintStyle, useSdFont } from "@/components/sd/primitives";
 import { PUB_TOPICS, PubArticleCard, PubHead, PubHero } from "@/components/sd/pub";
+import { KnowledgeBar } from "@/components/sd/knowledge";
 import { ROUTE_BY_PATH, labelFromTitle } from "@/data/seo/routes";
 import { GUIDE_CATALOG, GUIDE_CATEGORIES, TAX_BASE, categoryFor, pathOf } from "@/data/knowledge";
 import type { GuideCategoryKey } from "@/data/knowledge/types";
@@ -56,6 +57,11 @@ export default function GuidesHub() {
               <Link to={TAX_BASE} className="sd-link">מיסוי החיסכון הפנסיוני{arrow}</Link>
             </>
           }
+        />
+
+        <KnowledgeBar
+          items={[{ id: "all-guides", label: "כל המדריכים" }, { id: "tax", label: "מיסוי" }]}
+          home={{ to: "/learn", label: "ידע וכלים" }}
         />
 
         {story && (
