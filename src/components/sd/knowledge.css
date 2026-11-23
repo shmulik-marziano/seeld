@@ -1,0 +1,91 @@
+/* SEELD kit: knowledge section (design pass 23.11.2026). Prefix .sd-kn-* (reading paper, drawing plate, stamp,
+   section bar) and .sd-gl-* (glossary rail). Relies on the variables of sd.css. Every image here is decorative. */
+
+/* ── reading paper: the band is the desk (category tint + ruling motif), the column is the sheet ── */
+.sd-kn-paper { --kp: var(--tint); --kp-deep: var(--tint-deep); --kp-ink: rgba(32, 57, 87, .09);
+  background-color: color-mix(in srgb, var(--kp) 42%, #fff); background-image: var(--kp-motif, none), var(--tex); }
+.sd-kn-paper.sd-band::before { background: var(--gold-line); }
+.sd-kn-ruled { --kp-motif: repeating-linear-gradient(to bottom, transparent 0 35px, var(--kp-ink) 35px 36px); }
+.sd-kn-dots { --kp-motif: radial-gradient(var(--kp-ink) 1.1px, transparent 1.3px); background-size: 22px 22px, 160px 160px; }
+.sd-kn-grid { --kp-motif: linear-gradient(var(--kp-ink) 1px, transparent 1px), linear-gradient(90deg, var(--kp-ink) 1px, transparent 1px); background-size: 36px 36px, 36px 36px, 160px 160px; }
+.sd-kn-margin { --kp-motif: linear-gradient(90deg, transparent calc(100% - 72px), rgba(173, 131, 62, .35) calc(100% - 72px), rgba(173, 131, 62, .35) calc(100% - 70px), transparent calc(100% - 70px)); }
+.sd-kn-sheet { position: relative; background: rgba(255, 255, 255, .78); border: 1px solid var(--line); border-radius: 22px;
+  padding: clamp(20px, 3vw, 44px) clamp(18px, 3vw, 44px) clamp(24px, 3vw, 48px); box-shadow: 0 1px 1px rgba(32,57,87,.04), 0 18px 40px -24px rgba(32,57,87,.28); }
+.sd-kn-sheet::before { content: ""; position: absolute; inset-block: 0; inset-inline-start: clamp(12px, 2vw, 28px); width: 1.5px; background: rgba(187, 83, 43, .28); border-radius: 2px; pointer-events: none; }
+.sd-kn-sheet > * { position: relative; }
+@media (max-width: 640px) { .sd-kn-sheet { border-radius: 16px; padding: 18px 16px 22px; } .sd-kn-sheet::before { inset-inline-start: 8px; } }
+
+/* ── the drawing: one pencil spot inside the column, on a soft plate with a hand-drawn ring ── */
+.sd-kn-plate { position: relative; display: grid; place-items: center; margin: 32px auto 36px; width: min(100%, 300px); aspect-ratio: 1; isolation: isolate; }
+.sd-kn-plate::before { content: ""; position: absolute; inset: 6%; z-index: -1; border-radius: 48% 52% 46% 54% / 52% 44% 56% 48%; background: radial-gradient(90% 90% at 50% 60%, var(--kp-deep, var(--tint-deep)) 0%, color-mix(in srgb, var(--kp, var(--tint)) 60%, #fff) 70%, transparent 100%); }
+.sd-kn-plate::after { content: ""; position: absolute; inset: 2%; z-index: -1; border-radius: 50% 46% 54% 50% / 46% 54% 50% 50%; border: 1.5px dashed rgba(173, 131, 62, .55); rotate: -4deg; }
+.sd-kn-plate img { width: 72%; height: auto; max-height: 72%; object-fit: contain; filter: drop-shadow(0 14px 18px rgba(32, 57, 87, .2)); rotate: -3deg; }
+.sd-kn-plate-tag { position: absolute; inset-block-end: 4%; inset-inline-end: 6%; display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; font-size: 13px; font-weight: 700; color: var(--gold-d); background: rgba(255,255,255,.9); border: 1px solid var(--line); border-radius: 999px; }
+.sd-kn-plate-tag img { width: 20px; height: 20px; filter: none; rotate: 0deg; }
+@media (min-width: 1024px) { .sd-kn-plate { float: inline-end; margin: 6px 0 24px 32px; width: 260px; shape-outside: circle(50%); } }
+@media (max-width: 640px) { .sd-kn-plate { width: min(100%, 220px); margin: 24px auto 28px; } }
+@media print { .sd-kn-plate, .sd-kn-stamp img { display: none !important; } .sd-kn-sheet { box-shadow: none; border: 0; padding: 0; } .sd-kn-paper { background: #fff !important; } }
+
+/* ── stamp: the kit icon next to the reading time (hero meta) ── */
+.sd-kn-stamp { display: inline-flex; align-items: center; gap: 10px; }
+.sd-kn-stamp img { width: 34px; height: 34px; padding: 5px; background: rgba(255,255,255,.85); border: 1px solid var(--line); border-radius: 50%; box-shadow: var(--shadow); }
+
+/* ── section bar: one sticky strip on every knowledge page (pills, active state, edge fades on phones) ── */
+.sd-subnav-kn .sd-subnav-in { gap: 4px; padding-block: 6px; }
+.sd-subnav-kn a { min-height: 44px; font-weight: 600; }
+.sd-subnav-kn a[aria-current="true"] { box-shadow: 0 6px 14px -8px rgba(32,57,87,.6); }
+.sd-subnav-kn .sd-subnav-home { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding-inline: 4px 14px; margin-inline-end: 6px; font-size: 13px; font-weight: 700; letter-spacing: .06em; color: var(--gold-d); border-inline-end: 1px solid var(--line); border-radius: 0; }
+.sd-subnav-kn .sd-subnav-home:hover { color: var(--ink); background: none; }
+@media (max-width: 767px) {
+  .sd-subnav-kn .sd-subnav-in { scroll-snap-type: x proximity; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 30px), transparent); mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 30px), transparent); }
+  .sd-subnav-kn a { scroll-snap-align: center; }
+}
+@media (min-width: 1024px) { .sd-subnav-article { display: none; } }
+.sd-toc a[aria-current="true"] { color: var(--ink); font-weight: 700; padding-inline-start: 12px; border-inline-start: 3px solid var(--gold); margin-inline-start: -2px; }
+
+/* reading pages on phones: the hero stays compact (no stage), the sheet starts right away */
+.sd-kn-hero.sd-pub-compact .sd-h1 { font-size: clamp(30px, 4.2vw, 50px); }
+@media (max-width: 1023px) { .sd-kn-hero .sd-hero-grid { padding-block: 20px 28px; } .sd-kn-hero .sd-pub-lead { margin-top: 14px; font-size: 17px; } }
+
+/* ── glossary: alphabet rail (serif letters), grouped terms with a big outlined letter and a letter mark per term ── */
+.sd-gl-top { display: grid; gap: 16px; margin-bottom: clamp(24px, 3vw, 36px); }
+@media (min-width: 720px) { .sd-gl-top { grid-template-columns: minmax(0, 420px) auto; align-items: end; justify-content: space-between; } }
+.sd-gl-count { font-size: 15px; color: var(--muted); }
+.sd-gl-count b { font-family: var(--serif); font-size: 20px; color: var(--ink); }
+.sd-gl { display: grid; gap: 28px; }
+@media (min-width: 900px) { .sd-gl { grid-template-columns: 150px minmax(0, 1fr); gap: 56px; align-items: start; } }
+.sd-gl-rail { position: sticky; z-index: 20; top: calc(var(--header-h) + 54px); display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 8px 2px; margin-inline: -2px; background: color-mix(in srgb, var(--band, var(--cream)) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 16px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 26px), transparent); mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 26px), transparent); }
+.sd-gl-rail::-webkit-scrollbar { display: none; }
+@media (min-width: 900px) { .sd-gl-rail { top: calc(var(--header-h) + 72px); display: grid; grid-template-columns: repeat(3, 44px); gap: 4px; overflow: visible; padding: 10px; background: rgba(255,255,255,.72); border: 1px solid var(--line); box-shadow: var(--shadow); -webkit-mask-image: none; mask-image: none; } }
+.sd-gl-rail a, .sd-gl-rail span { flex: none; display: grid; place-items: center; width: 44px; height: 44px; font-family: var(--serif); font-size: 21px; font-weight: 700; line-height: 1; border-radius: 12px; color: var(--ink); scroll-snap-align: center; transition: background-color .15s, color .15s, transform .15s; }
+.sd-gl-rail span { color: rgba(32,57,87,.28); }
+.sd-gl-rail a:hover { background: rgba(32,57,87,.08); }
+.sd-gl-rail a[aria-current="true"] { background: var(--ink); color: #E7C98B; }
+/* groups flow in two newspaper columns from 1000px (a group never breaks across columns) */
+.sd-gl-groups { column-gap: 48px; }
+@media (min-width: 1000px) { .sd-gl-groups { columns: 2; } }
+.sd-gl-group { position: relative; display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 0 14px; padding-block: 14px 18px; break-inside: avoid; page-break-inside: avoid; border-top: 1px solid var(--line); scroll-margin-top: calc(var(--header-h) + 112px); }
+.sd-gl-letter { font-family: var(--serif); font-weight: 700; font-size: 54px; line-height: 1; margin-top: 2px; color: transparent; -webkit-text-stroke: 1.4px var(--ink); letter-spacing: -.02em; user-select: none; text-align: center;
+  background: linear-gradient(180deg, transparent 58%, color-mix(in srgb, var(--gold) 55%, transparent) 58% 80%, transparent 80%); -webkit-background-clip: text; background-clip: text; }
+.sd-gl-list { display: grid; gap: 0; min-width: 0; }
+.sd-gl-term { border-top: 1px dashed rgba(32,57,87,.16); }
+.sd-gl-list > .sd-gl-term:first-child { border-top: 0; }
+.sd-gl-term summary { list-style: none; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; align-items: center; min-height: 48px; padding: 8px 0; cursor: default; }
+.sd-gl-term summary::-webkit-details-marker { display: none; }
+.sd-gl-mark { display: grid; place-items: center; width: 34px; height: 34px; font-family: var(--serif); font-size: 18px; font-weight: 700; line-height: 1; color: var(--ink); background: var(--band-deep, var(--tint-deep)); border-radius: 10px 10px 10px 3px; rotate: -4deg; }
+.sd-gl-dt { font-family: var(--serif); font-size: 21px; font-weight: 700; line-height: 1.3; color: var(--ink); }
+.sd-gl-dt mark, .sd-gl-dd mark { background: linear-gradient(transparent 55%, rgba(231,201,139,.75) 55%); color: inherit; }
+.sd-gl-dd { padding: 0 0 12px 0; margin-inline-start: 46px; font-size: 15.5px; line-height: 1.75; color: var(--text); max-width: 60ch; }
+.sd-gl-dd .sd-link { font-size: 14.5px; min-height: 36px; margin-top: 2px; }
+.sd-gl-empty { padding-block: 24px; }
+/* phones: definitions fold under the term (open while searching); the summary shows a +/− */
+@media (max-width: 899px) {
+  .sd-gl-term summary { cursor: pointer; }
+  .sd-gl-term summary::after { content: "+"; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,.75); border: 1px solid var(--line); font-size: 18px; line-height: 1; color: var(--ink); }
+  .sd-gl-term[open] summary::after { content: "−"; background: var(--ink); color: #fff; border-color: var(--ink); }
+  .sd-gl-group { grid-template-columns: 44px minmax(0, 1fr); gap: 0 10px; }
+  .sd-gl-letter { font-size: 44px; }
+  .sd-gl-dd { margin-inline-start: 0; }
+}
+@media (min-width: 900px) { .sd-gl-term summary::after { content: none; } .sd-gl-term summary { pointer-events: none; } }

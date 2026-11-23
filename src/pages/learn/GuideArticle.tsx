@@ -7,8 +7,12 @@ import NotFound from "@/pages/NotFound";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { SdBand, tintStyle, useSdFont } from "@/components/sd/primitives";
 import {
-  PubArticleCard, PubClose, PubHead, PubHero, PubTocAside, PubTocInline, companionArt,
+  PubArticleCard, PubClose, PubHead, PubHero, PubTocAside, companionArt,
 } from "@/components/sd/pub";
+import { KnowledgeBar, KnowledgePlate, KnowledgeStamp } from "@/components/sd/knowledge";
+import { SdProgress } from "@/components/sd/primitives";
+import type { SpotName } from "@/components/sd/spots";
+import { PAPER_BY_CATEGORY, artForSlug } from "@/data/knowledge/art";
 import { ROUTE_BY_PATH, labelFromTitle } from "@/data/seo/routes";
 import { EXAMPLE_LABEL, TAX_YEAR, type GuideBlock, type GuideSource } from "@/data/knowledge/types";
 import { RP_CASE_LABEL, RP_CONTACT } from "@/data/retirementPlanning";
@@ -19,6 +23,7 @@ import {
 } from "@/data/knowledge";
 import "@/components/sd/sd.css";
 import "@/components/sd/pub.css";
+import "@/components/sd/knowledge.css";
 import "@/components/retire/retire.css";
 
 // One reading page for /learn/guides/:slug and /learn/pension-tax/:slug. Copy lives in
@@ -141,6 +146,8 @@ export default function GuideArticle() {
   const cat = categoryFor(hit.entry.category);
   const isTax = hit.section === "tax";
   const hubPath = isTax ? TAX_BASE : "/learn/guides";
+  const art = artForSlug(hit.entry.slug);
+  const paper = `sd-kn-paper sd-kn-${PAPER_BY_CATEGORY[hit.entry.category]}`;
 
   if (mod === undefined) {
     return (
@@ -167,6 +174,7 @@ export default function GuideArticle() {
   });
 
   let h2n = 0;
+  let plated = false;
   const crumbs = isTax
     ? [{ label: "דף הבית", to: "/" }, { label: "מדריכים", to: "/learn/guides" }, { label: cat.title, to: TAX_BASE }]
     : [{ label: "דף הבית", to: "/" }, { label: "מדריכים", to: "/learn/guides" }, { label: cat.title }];
@@ -182,10 +190,13 @@ export default function GuideArticle() {
           lead={guide.lead}
           art={cat.art}
           tint={cat.tone}
+          spot={art.spot as SpotName}
+          compact
+          className="sd-kn-hero"
           meta={
-            <span>
+            <KnowledgeStamp art={art}>
               <span dir="ltr" className="tabular-nums">{hit.entry.readMinutes}</span> דקות קריאה
-            </span>
+            </KnowledgeStamp>
           }
         >
           <div className="sd-brief">
@@ -194,14 +205,20 @@ export default function GuideArticle() {
           </div>
         </PubHero>
 
-        <SdBand tone="white" id="post" art={false}>
+        {toc.length > 1 && <SdProgress />}
+        <KnowledgeBar items={toc} home={{ to: hubPath, label: isTax ? "פרקי המיסוי" : "המדריכים" }} article ariaLabel="תוכן העניינים" />
+
+        <SdBand tone="white" id="post" art={false} className={paper}>
           <div className="sd-wrap sd-read-layout">
-            <article className="sd-read-col">
-              <PubTocInline items={toc} />
+            <article className="sd-read-col sd-kn-sheet">
               <div className="sd-prose">
                 {guide.blocks.map((b, i) => {
                   switch (b.t) {
                     case "p":
+                      if (!plated) {
+                        plated = true;
+                        return [<p key={i}>{b.text}</p>, <KnowledgePlate key={`plate-${i}`} art={art} label={cat.title} />];
+                      }
                       return <p key={i}>{b.text}</p>;
                     case "h2":
                       return <h2 key={i} id={`sec-${++h2n}`}>{b.text}</h2>;
