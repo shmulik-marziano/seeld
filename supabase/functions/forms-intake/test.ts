@@ -122,6 +122,7 @@ Deno.test("parseStep / parseSubmit: keys, versions, the signer", () => {
   assert.throws(() => parseSubmit({ ...SUBMIT, signer: { ...SUBMIT.signer, kind: "drawn" } }), /invalid_signature/);
   assert.throws(() => parseSubmit({ ...SUBMIT, signer: { ...SUBMIT.signer, hash: "zz" } }), /invalid_signer_hash/);
   assert.throws(() => parseSubmit({ ...SUBMIT, signer: { ...SUBMIT.signer, name: "D" } }), /invalid_signer_name/);
+  assert.deepEqual(parseSubmit({ ...SUBMIT, signer: { kind: "none", hash: HASH } }).signer, { name: "", kind: "none", hash: HASH });
   assert.throws(() => parseSubmit({ ...SUBMIT, signer: { ...SUBMIT.signer, extra: 1 } }), /unknown_key/);
 });
 

@@ -125,6 +125,8 @@ select is((api.form_submit(current_setting('t.sid')::uuid, 'personal', 'personal
   jsonb_build_object('name', 'Zz Test', 'kind', 'typed', 'hash', repeat('b', 64)), '203.0.113.7', 'ua-test', 100)) ->> 'duplicate', 'true', 'a second submit changes nothing');
 select throws_ok($$select api.form_step_save(current_setting('t.sid')::uuid, 'personal', 'personal', 1, 'first_name', '{"first_name":"Zz"}'::jsonb, '{}'::jsonb, 2, 10)$$,
   'PT409', 'already_submitted', 'a submitted questionnaire takes no more steps');
+select is((api.form_submit(current_setting('t.sid')::uuid, 'risk', 'risk-profile', 1, '{"sleep_drop":2}'::jsonb, '{"risk_level":"medium"}'::jsonb,
+  jsonb_build_object('kind', 'none', 'hash', repeat('c', 64)), '203.0.113.7', 'ua-test', 100)) ->> 'duplicate', 'false', 'a questionnaire without a signature step submits with signer kind none');
 select is((select x ->> 'status' from jsonb_array_elements((api.form_session_get(decode(current_setting('t.tha'), 'hex'))) -> 'submissions') x where x ->> 'questionnaire_key' = 'personal'), 'submitted', 'state: submitted');
 select ok((select x -> 'answers' is null or jsonb_typeof(x -> 'answers') = 'null' from jsonb_array_elements((api.form_session_get(decode(current_setting('t.tha'), 'hex'))) -> 'submissions') x where x ->> 'questionnaire_key' = 'personal'),
   'state: a submitted questionnaire returns no answers');
@@ -166,8 +168,9 @@ select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-0000000
 select throws_ok($$select * from staff.form_submission_list()$$, 'PT403', 'forbidden:admin_fresh_totp', 'an agent cannot list submissions');
 select set_config('request.jwt.claims', jsonb_build_object('sub', '00000000-0000-0000-0000-0000000000f4', 'role', 'authenticated', 'aal', 'aal2',
   'amr', jsonb_build_array(jsonb_build_object('method', 'totp', 'timestamp', extract(epoch from now())::bigint)))::text, true);
-select is((select count(*)::int from staff.form_submission_list()), 2, 'the admin lists the two submissions of the session');
-select is((select id_masked from staff.form_submission_list(p_status => 'submitted')), '*****0018', 'the list shows a masked national id');
+select is((select count(*)::int from staff.form_submission_list()), 3, 'the admin lists the three submissions of the session');
+select is((select count(*)::int from staff.form_submission_list(p_status => 'submitted')), 2, 'the status filter');
+select is((select id_masked from staff.form_submission_list(p_card => 'personal')), '*****0018', 'the list shows a masked national id');
 select is((select first_name from staff.form_submission_list(p_card => 'personal')), 'Zz', 'the list shows the first name');
 select is((select jsonb_array_length(documents) from staff.form_submission_list(p_card => 'personal')), 1, 'the list shows the document');
 select set_config('t.fid', (select id::text from staff.form_submission_list(p_card => 'personal')), true);

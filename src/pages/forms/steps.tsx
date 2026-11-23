@@ -100,7 +100,7 @@ export function IdentityStep({ api, card, onStarted, onFail }: { api: FormsApi; 
         )}
         <p className="sd-q-fine">הפרטים נשמרים מוצפנים ומשמשים את הצוות לטיפול בבקשה בלבד.</p>
       </section>
-      <div className="sd-q-bar" role="toolbar" aria-label="ניווט">
+      <div className="sd-rk-bar sd-poa-bar" role="toolbar" aria-label="ניווט">
         <Link to="/forms" className="sd-q-btn is-quiet">לכל השאלונים</Link>
         <button type="submit" className="sd-q-btn" disabled={busy} aria-busy={busy || undefined}>{busy ? "רגע…" : "ממשיכים"}{!busy && <BrandIcon name="arrow-left" size={18} />}</button>
       </div>
@@ -180,7 +180,7 @@ export function DocumentsStep({ api, card, uploaded, onUploaded, onDone, onFail 
           })}
         </ul>
       </section>
-      <div className="sd-q-bar" role="toolbar" aria-label="ניווט">
+      <div className="sd-rk-bar sd-poa-bar" role="toolbar" aria-label="ניווט">
         <Link to="/forms" className="sd-q-btn is-quiet">לכל השאלונים</Link>
         <button type="button" className="sd-q-btn" onClick={onDone} disabled={busy !== null}>{uploaded.length ? "סיימתי" : "אמשיך בלי מסמכים"}<BrandIcon name="arrow-left" size={18} /></button>
       </div>

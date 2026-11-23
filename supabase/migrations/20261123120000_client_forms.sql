@@ -280,8 +280,11 @@ begin
     raise exception 'invalid_input:signer' using errcode = 'PT400';
   end if;
   if coalesce(p_signer ->> 'hash', '') !~ '^[0-9a-f]{64}$' then raise exception 'invalid_input:signer_hash' using errcode = 'PT400'; end if;
-  if char_length(btrim(coalesce(p_signer ->> 'name', ''))) not between 2 and 80 then raise exception 'invalid_input:signer_name' using errcode = 'PT400'; end if;
-  if coalesce(p_signer ->> 'kind', '') not in ('drawn', 'typed') then raise exception 'invalid_input:signer_kind' using errcode = 'PT400'; end if;
+  -- kind 'none': a questionnaire without a signature step (the risk profile); the name is then optional
+  if coalesce(p_signer ->> 'kind', '') not in ('drawn', 'typed', 'none') then raise exception 'invalid_input:signer_kind' using errcode = 'PT400'; end if;
+  if (p_signer ->> 'kind') <> 'none' and char_length(btrim(coalesce(p_signer ->> 'name', ''))) not between 2 and 80 then
+    raise exception 'invalid_input:signer_name' using errcode = 'PT400';
+  end if;
   if (p_signer ->> 'kind') = 'drawn' and coalesce(p_signer ->> 'png', '') !~ '^data:image/png;base64,[A-Za-z0-9+/=]+$' then
     raise exception 'invalid_input:signature' using errcode = 'PT400';
   end if;

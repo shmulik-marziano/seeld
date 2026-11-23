@@ -182,17 +182,17 @@ export function parseStep(b: Record<string, unknown>): ParsedStep {
   };
 }
 
-export interface ParsedSubmit { card: string; questionnaire: string; version: number; answers: Record<string, unknown>; derived: Record<string, unknown>; signer: { name: string; kind: "drawn" | "typed"; png?: string; hash: string }; completion: number }
+export interface ParsedSubmit { card: string; questionnaire: string; version: number; answers: Record<string, unknown>; derived: Record<string, unknown>; signer: { name: string; kind: "drawn" | "typed" | "none"; png?: string; hash: string }; completion: number }
 
-/** pure: /submit body -> validated submission */
+/** pure: /submit body -> validated submission. Signer kind "none" = a questionnaire without a signature step (the risk profile). */
 export function parseSubmit(b: Record<string, unknown>): ParsedSubmit {
   onlyKeys(b, SUBMIT_KEYS);
   if (!isObj(b.signer)) throw bad("invalid_signer");
   onlyKeys(b.signer, SIGNER_KEYS);
-  const name = cleanName(b.signer.name);
-  if (!name || name.length < 2) throw bad("invalid_signer_name");
   const kind = b.signer.kind;
-  if (kind !== "drawn" && kind !== "typed") throw bad("invalid_signer_kind");
+  if (kind !== "drawn" && kind !== "typed" && kind !== "none") throw bad("invalid_signer_kind");
+  const name = kind === "none" ? (cleanName(b.signer.name) ?? "") : cleanName(b.signer.name);
+  if (name === null || (kind !== "none" && name.length < 2)) throw bad("invalid_signer_name");
   const hash = b.signer.hash;
   if (typeof hash !== "string" || !/^[0-9a-f]{64}$/.test(hash)) throw bad("invalid_signer_hash");
   let png: string | undefined;
