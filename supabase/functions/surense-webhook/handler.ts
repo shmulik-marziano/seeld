@@ -1,7 +1,8 @@
 // surense-webhook: Surense -> Svix -> here. Server to server (no Origin, no CORS). Order matters:
 //   POST only -> secret + DB configured (else 503, fail closed) -> memory limit per sender tag -> body <= 256 KB ->
 //   Svix signature against SURENSE_WEBHOOK_SECRET or SURENSE_WEBHOOK_SECRET_NEXT (rotation; the matching slot NAME is
-//   logged) (before ANY DB call: unsigned traffic writes nothing) -> JSON with a string `type` ->
+//   logged) (before ANY DB call: unsigned traffic writes nothing) -> JSON whose `eventType` (real Surense, PascalCase) or
+//   `type` is mapped to our dotted name by _shared/surense/events.ts (anything else is stored as "unknown") ->
 //   api.surense_event_ingest (switch surense_webhook_enabled, DB rate limit, idempotent by svix-id, payload encrypted,
 //   one surense.event job queued) -> 200 {ok:true}. A duplicate is also 200: Svix retries any non-2xx for about a day.
 // Logs: svix-id, event type, inbox id, codes. Never the body.
@@ -14,13 +15,13 @@ import { type RateLimiter, rateLimitHeaders } from "../_shared/rateLimit.ts";
 import { requestIdFor } from "../_shared/request.ts";
 import { shortHash } from "../_shared/secret.ts";
 import { type WebhookSecretSlot, webhookSecrets } from "../_shared/surense/env.ts";
+import { eventTypeOf } from "../_shared/surense/events.ts";
 import { type SvixResult, verifyWebhook } from "../_shared/surense/svix.ts";
 
 export const MAX_BODY_BYTES = 262_144;
 export const MEMORY_LIMIT_PER_MIN = 300;
 /** Sent with the 503 while surense_webhook_enabled is off: a hint to Svix (best effort), its own schedule still runs. */
 export const DISABLED_RETRY_AFTER_SEC = 300;
-const TYPE = /^[a-z0-9_.]{1,80}$/;
 
 export interface WebhookDeps {
   env: Env;
@@ -30,11 +31,9 @@ export interface WebhookDeps {
   nowSec?: () => number;
 }
 
-// TODO(real API): Surense event body schema unknown (Svix shows no schema); only a string `type` is read here.
-/** Pure part of the ingest contract: the event type we store for a verified body. */
+/** Pure part of the ingest contract: the event type we store for a verified body (see _shared/surense/events.ts). */
 export function eventType(body: unknown): string {
-  const t = body && typeof body === "object" ? (body as { type?: unknown }).type : undefined;
-  return typeof t === "string" && TYPE.test(t) ? t : "unknown";
+  return eventTypeOf(body);
 }
 
 /** Reads the body as bytes and stops (413) as soon as it passes `max`: a chunked body without content-length is

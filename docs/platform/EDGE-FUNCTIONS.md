@@ -210,6 +210,13 @@ status, duration. Writes leave one `audit.log` ACTION row through `api.surense_a
   that customer's documents; `swiftness.e9100.completed` -> E9100 download; `customer.created/updated` -> pull the
   customer; `customer.deleted`/`document.deleted` -> mark deleted; `lead.*` -> the lead's customer when named; anything
   else `skipped no_handler`), `surense.pull_customers` (cursor pass; an unfinished pass re-queues itself),
+  **Real event bodies** (verified 2026-11-23 on the first 40 deliveries): a FLAT object with `eventType` in PascalCase and
+  `customerId`/`tenantId`/`agencyId`/`date` plus the entity's fields at top level; no `type`, no `data` wrapper.
+  `_shared/surense/events.ts` maps `NispahAlef|Bet|HeiProxyApproved` -> `dataproxy.aleph|bet|hei.approved`,
+  `HarbDataLoaded` -> `harb.uploaded`, `SwiftnessE9100Completed|Submitted` -> `swiftness.e9100.completed|submitted`
+  (the completion carries `txId` = the download's eventId, plus `misparMislaka`), and splits any other PascalCase name
+  mechanically (`CustomerCreated` -> `customer.created`, `LeadCreated` -> `lead.created`). Until that fix every event
+  was stored as `unknown` and skipped `no_handler`; the 40 were re-typed and re-queued by hand the same day.
   `surense.pull_documents`, `surense.e9100_download`, `surense.e9100_submit`, `surense.poa_ship` (a POA session completed on our
   side replayed into the tool: gate -> `poa_ship_get` -> engine start + consents -> `poa_ship_set`; then the E9100 launch). Failed jobs back off 1m/5m/30m/2h; attempt 5 -> dead + critical
   alert `surense_job_dead`. Without `SURENSE_CLIENT_ID`/`SURENSE_CLIENT_SECRET`: nothing claimed,

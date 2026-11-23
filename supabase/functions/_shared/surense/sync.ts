@@ -355,9 +355,9 @@ export async function portfolio(
 }
 
 // ---------------------------------------------------------------- webhook events
-/** Ids found in a webhook payload. TODO(real API): Svix shows "No schema available" for Surense events; until the
- *  first deliveries are inspected we look for uuid-shaped ids in payload, payload.data, payload.payload and
- *  payload.object, under the obvious names. Nothing else in the payload is read. */
+/** Ids found in a webhook payload. Real Surense bodies (verified 2026-11-23) are flat: customerId at top level, txId on
+ *  SwiftnessE9100Completed, swiftnessEventId on SwiftnessE9100Submitted, leadId on LeadCreated. The wrapped shapes
+ *  (payload.data / payload.payload / payload.object) stay accepted. Nothing else in the payload is read. */
 export function eventRefs(payload: unknown): { id: string | null; customerId: string | null; eventId: string | null; documentId: string | null } {
   const layers: Record<string, unknown>[] = [];
   if (payload && typeof payload === "object") {
@@ -372,7 +372,8 @@ export function eventRefs(payload: unknown): { id: string | null; customerId: st
   return {
     id: pick("id", "entityId"),
     customerId: pick("customerId", "customer_id", "cid"),
-    eventId: pick("eventId", "e9100EventId", "event_id"),
+    // txId: the clearing-house transaction on SwiftnessE9100Completed (the download endpoint's optional eventId)
+    eventId: pick("eventId", "e9100EventId", "event_id", "txId", "swiftnessEventId"),
     documentId: pick("documentId", "docId", "document_id"),
   };
 }
