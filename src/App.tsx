@@ -188,6 +188,8 @@ const OpsRoutes = lazy(() => import("@/pages/app/ops/OpsRoutes"));
 const QuestionnairesRoutes = lazy(() => import("@/pages/app/questionnaires/QuestionnairesRoutes"));
 const ReportsRoutes = lazy(() => import("@/pages/app/reports/ReportsRoutes"));
 const PoaFlow = lazy(() => import("@/pages/report-order/PoaFlow"));
+// Client area (docs/product/CLIENT-AREA-SPEC.md): /my/*, noindex, off by default (CLIENT_AREA_ENABLED redirects home).
+const MyArea = lazy(() => import("@/pages/my/MyArea"));
 // Client forms (docs/product/CLIENT-FORMS.md): the hub is a public page; the flow under /forms/:card is noindex.
 const FormsHub = lazy(() => import("@/pages/forms/FormsHub"));
 const FormsFlow = lazy(() => import("@/pages/forms/FormsFlow"));
@@ -465,6 +467,8 @@ const App = () => (
                 <Route path="/report/start/*" element={hold(<ReportsRoutes />)} />
                 {/* POA wizard (docs/product/POA-WIZARD-SPEC.md §2): outside hold(); a static path outranks /report/start/* in React Router 6. Off by default. */}
                 <Route path="/report/start/order" element={POA_ENABLED ? <PoaFlow /> : <Navigate to="/report/start" replace />} />
+                {/* Client area (owner decision 2026-11-23): sign-in by ID + mobile + one-time code; the page itself redirects home when the switch is off. */}
+                <Route path="/my/*" element={<MyArea />} />
                 {/* Client forms hub + one session for all questionnaires (docs/product/CLIENT-FORMS.md). The flow is off by default (FORMS_FLOW_ENABLED). */}
                 <Route path="/forms" element={<FormsHub />} />
                 <Route path="/forms/:card" element={<FormsFlow />} />

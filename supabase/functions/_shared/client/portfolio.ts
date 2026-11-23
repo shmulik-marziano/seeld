@@ -141,7 +141,9 @@ export function shapeProduct(p: MirrorProduct): ShapedProduct {
   };
   const plan = text(d.shemTohnit);
   if (plan) out.plan = plan;
-  const balance = num(d.accumulation) ?? num(d.totalErkeiPidion) ?? num(d.honAccumulation) ?? num(d.customerChoiceAccumulation);
+  // live 2026-11-23: production-mode rows carry totalHonAccumulation / allowanceAccumulation, pre-advice rows accumulation*
+  const balance = num(d.accumulation) ?? num(d.accumulationILS) ?? num(d.totalHonAccumulation) ?? num(d.allowanceAccumulation)
+    ?? num(d.totalErkeiPidion) ?? num(d.honAccumulation) ?? num(d.customerChoiceAccumulation);
   if (balance !== undefined) out.balance = balance;
   const premium = num(d.totalMonthlyPremia) ?? num(d.totalPremia) ?? num(cover0.premia);
   if (premium !== undefined) out.premium = premium;

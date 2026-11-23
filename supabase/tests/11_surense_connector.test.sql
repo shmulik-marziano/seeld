@@ -20,8 +20,8 @@ end $$;
 -- switches: present and off; a missing key also reads as closed
 select set_eq($$ select key || '=' || value from ops.config where key like 'surense%' $$,
   $$ values ('surense_enabled=false'), ('surense_write_enabled=false'), ('surense_e9100_enabled=false'), ('surense_webhook_enabled=false'),
-            ('surense_retention_enabled=false') $$,
-  'five Surense switches, all off');
+            ('surense_retention_enabled=false'), ('surense_portfolio_enabled=false') $$,
+  'six Surense switches, all off (surense_portfolio_enabled since 20261124090000)');
 select ok(not private.flag('surense_enabled') and not private.flag('surense_write_enabled') and not private.flag('surense_webhook_enabled')
           and not private.flag('surense_retention_enabled') and not private.flag('surense_e9100_enabled'),
   'private.flag reads them closed');

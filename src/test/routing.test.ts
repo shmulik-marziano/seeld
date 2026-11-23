@@ -31,6 +31,7 @@ describe("sitemap", () => {
     "/report/start",
     "/report/start/*",
     "/report/start/order", // POA wizard: personal-data flow, noindex, never in the sitemap
+    "/my/*", // client area: behind a sign-in, noindex, never in the sitemap
     "/site-admin",
     "/style-guide",
     "/personal-area",

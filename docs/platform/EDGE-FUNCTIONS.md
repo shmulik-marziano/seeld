@@ -11,7 +11,7 @@ for the five functions T2 owns. `staff-invite` belongs to T1 and is documented t
 | `fetch-cma-data` | pg_cron `cma-sync-weekly` (Sun 03:00 UTC) | false | `x-cron-secret` | `cma_upsert_batch`, `cma_finish_sync`, `job_continue`, `job_finish` |
 | `health` | site-watch / anyone | false | none (coarse); `x-cron-secret` or staff JWT for detail | `api.health` (anon-granted); `staff.ops_health` with a staff JWT |
 | `surense-webhook` | Surense via Svix | false | Svix signature + memory limit | `surense_event_ingest` |
-| `surense-worker` | pg_cron `surense-worker-tick` (every minute, since 20261122180000) | false | `x-cron-secret` | `surense_job_claim`, `surense_job_complete`, `surense_job_enqueue`, mirror RPCs, `poa_ship_get`, `poa_ship_set`, `surense_gate`, `surense_audit`, `job_finish` |
+| `surense-worker` | pg_cron `surense-worker-tick` (every minute, since 20261122180000) | false | `x-cron-secret` | `surense_job_claim`, `surense_job_complete`, `surense_job_enqueue`, mirror RPCs (incl. `surense_portfolio_store`, `surense_portfolio_due`), `poa_ship_get`, `poa_ship_set`, `surense_gate`, `surense_audit`, `job_finish` |
 | `surense-sync` | staff app (admin) | true | staff JWT -> `staff.admin_assert_fresh` (admin + fresh TOTP) | `surense_gate`, mirror RPCs, `surense_audit` |
 | `surense-health` | owner / staff, by hand | true | platform JWT check only (read-only probe) | none (calls Surense only) |
 | `sms-health` | owner, by hand (`select ops.call_function('sms-health')`, answer in `net._http_response`) | false | `x-cron-secret` (function secret or Vault via `cron_secret_ok`) | `cron_secret_ok`; calls Micropay `act=credit` only (balance; nothing is sent) |
@@ -221,7 +221,11 @@ status, duration. Writes leave one `audit.log` ACTION row through `api.surense_a
   mechanically (`CustomerCreated` -> `customer.created`, `LeadCreated` -> `lead.created`). Until that fix every event
   was stored as `unknown` and skipped `no_handler`; the 40 were re-typed and re-queued by hand the same day.
   `surense.pull_documents`, `surense.e9100_download`, `surense.e9100_submit`, `surense.poa_ship` (a POA session completed on our
-  side replayed into the tool: gate -> `poa_ship_get` -> engine start + consents -> `poa_ship_set`; then the E9100 launch). Failed jobs back off 1m/5m/30m/2h; attempt 5 -> dead + critical
+  side replayed into the tool: gate -> `poa_ship_get` -> engine start + consents -> `poa_ship_set`; then the E9100 launch),
+  `surense.portfolio_pull {customer_id}` (the customer's production portfolio into `crm.surense_portfolios/_products` via
+  `surense_portfolio_store`; queued by the daily `surense.portfolio_sweep` for everyone whose snapshot is missing or older
+  than 30 days (`surense_portfolio_due`), and as the follow-up of a `harb.uploaded`, `swiftness.e9100.completed` or
+  `customer.updated` event; switch `surense_portfolio_enabled`, migration 20261124090000, see `docs/product/CLIENT-AREA.md`). Failed jobs back off 1m/5m/30m/2h; attempt 5 -> dead + critical
   alert `surense_job_dead`. Without `SURENSE_CLIENT_ID`/`SURENSE_CLIENT_SECRET`: nothing claimed,
   `job_finish(false,'surense_not_configured')`. No cron job yet (owner decision 6.18).
 - **surense-sync** (`verify_jwt=true`): POST `{action, ...}` with an admin JWT; `staff.admin_assert_fresh` must pass, then
@@ -379,6 +383,9 @@ the client's wizard sessions (`crm.documents`, joined on the national id hmac). 
 ```
 pg_cron 'notify-worker-tick' (* * * * *)   -> select ops.call_function('notify-worker')
 pg_cron 'cma-sync-weekly'   (0 3 * * 0)    -> select ops.call_function('fetch-cma-data')
+pg_cron 'surense-worker-tick' (* * * * *)  -> select ops.call_function('surense-worker')
+pg_cron 'surense-portfolio-sweep' (30 2 * * *)  -> select ops.surense_portfolio_sweep_enqueue()   (queues one sweep job; no-op while surense_portfolio_enabled is off)
+pg_cron 'surense-customers-weekly' (0 2 * * 1)  -> select ops.surense_customers_pull_enqueue()    (queues the full customer pass; same switch)
 ops.call_function: returns null while ops.config edge_cron_enabled <> 'true'; otherwise inserts ops.job_runs and calls
 ops.http_invoke(run, name, body): Vault project_url + '/functions/v1/<name>?forceFunctionRegion=eu-central-1',
 headers x-cron-secret (Vault edge_cron_secret), x-request-id, x-job-run; timeout 5000 ms (functions answer 202 at once).

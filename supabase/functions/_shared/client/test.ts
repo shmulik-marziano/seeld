@@ -49,6 +49,14 @@ Deno.test("portfolio: company label falls back to 'חברה <id>'; the mirror's 
   assert.equal(companyLabel({}, 42), "חברה 42");
   assert.equal(companyLabel({}, null), "חברה");
   assert.equal(companyLabel({ companyName: "Zz Insurer" }, 42), "Zz Insurer");
+  // a production-mode row (live keys): the balance comes from totalHonAccumulation; beneficiaries and employers never come out
+  const prod = shapeProduct({ id: P2, source: "פרודוקציה_פרט", company_id: 3, product_type: 8, modified_at: null, details: {
+    totalHonAccumulation: 250000, allowanceAccumulation: 1000, totalPremia: 300, totalPremiaFrequency: "חודשית", mutavim: [{ name: "Zz Heir" }], employer: { name: "Zz Corp" }, employers: [{ name: "Zz Corp" }],
+  } });
+  assert.equal(prod.balance, 250000);
+  assert.equal(prod.premium, 300);
+  assert.equal(prod.source, "production");
+  assert.ok(!JSON.stringify(prod).includes("Zz Heir") && !JSON.stringify(prod).includes("Zz Corp"));
   const p = shapeProduct({ id: P2, source: "הר_הביטוח", company_id: null, product_type: 13, modified_at: null, details: {} });
   assert.equal(p.type_label, "ביטוח חיים");
   assert.equal(p.source, "harbit");

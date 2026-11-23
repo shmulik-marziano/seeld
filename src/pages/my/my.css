@@ -1,0 +1,53 @@
+/* Client area (/my). Prefix .sd-my-*. Builds on questionnaires.css (.sd-q-*), risk.css (.sd-rk-*) and poa.css
+   (.sd-poa-page/.sd-poa-wrap/.sd-poa-h1/.sd-poa-rows/.sd-poa-done). Light only. Logical properties (RTL). */
+.sd-my-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.sd-my-logout { font-size: 14px; }
+.sd-my-nav { display: flex; gap: 6px; margin: 0 0 14px; padding: 4px; border-radius: 14px; background: rgba(255,255,255,.6); border: 1px solid var(--q-line); }
+.sd-my-nav a { flex: 1; text-align: center; padding: 10px 12px; border-radius: 10px; font-size: 15.5px; font-weight: 600; color: var(--q-navy); text-decoration: none; }
+.sd-my-nav a:hover { background: #f7f9fc; }
+.sd-my-nav a.active { background: var(--q-navy); color: #fff; }
+.sd-my-nav a:focus-visible { outline: 3px solid var(--q-gold); outline-offset: 2px; }
+
+.sd-my-card { padding-bottom: 26px; }
+.sd-my-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.sd-my-card-head .sd-q-qtitle { padding-inline-end: 0; }
+.sd-my-asof { margin: 0 0 12px; font-size: 13.5px; font-weight: 600; letter-spacing: .02em; color: var(--q-muted); }
+.sd-my-h3 { margin: 18px 0 8px; font-size: 17px; font-weight: 700; color: var(--q-navy); display: flex; align-items: baseline; gap: 8px; }
+.sd-my-count { font-size: 13px; font-weight: 600; color: var(--q-muted); }
+.sd-my-empty { margin: 14px 0; padding: 14px 16px; border-radius: 12px; background: var(--q-cream); color: #2d435d; }
+
+/* login */
+.sd-my-field .sd-q-input { min-height: 58px; font-size: 20px; letter-spacing: .04em; }
+.sd-my-links { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; margin: 4px 0 0; }
+.sd-my-links .sd-q-fine { margin: 0; }
+.sd-my-join a { color: var(--q-navy); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--q-gold); font-weight: 600; }
+.sd-my-bar { margin-top: 18px; }
+
+/* home tiles */
+.sd-my-tiles { list-style: none; margin: 0 0 6px; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.sd-my-tile { display: grid; gap: 2px; padding: 14px 16px; border-radius: 14px; background: #fff; border: 1px solid var(--q-line); text-decoration: none; color: var(--q-navy); transition: border-color .12s, transform .08s; }
+.sd-my-tile:hover { border-color: var(--q-navy); }
+.sd-my-tile:active { transform: scale(.985); }
+.sd-my-tile:focus-visible { outline: 3px solid var(--q-gold); outline-offset: 2px; }
+.sd-my-tile-n { font-size: 26px; font-weight: 700; line-height: 1.1; }
+.sd-my-tile-l { font-size: 14px; color: var(--q-muted); }
+.sd-my-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 6px; }
+.sd-my-actions .sd-q-btn { gap: 8px; }
+.sd-my-contact { margin: 18px 0 10px; }
+.sd-my-contact .sd-q-sublabel { margin-bottom: 8px; }
+
+/* portfolio rows */
+.sd-my-cat { margin-top: 6px; scroll-margin-top: 140px; }
+.sd-my-row { margin: 0 0 8px; border: 1px solid var(--q-line); border-radius: 12px; background: #fff; }
+.sd-my-row summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; cursor: pointer; list-style: none; }
+.sd-my-row summary::-webkit-details-marker { display: none; }
+.sd-my-row summary:focus-visible { outline: 3px solid var(--q-gold); outline-offset: -3px; border-radius: 12px; }
+.sd-my-row[open] summary { border-bottom: 1px solid var(--q-line); }
+.sd-my-row-main { display: grid; gap: 2px; min-width: 0; }
+.sd-my-row-title { font-size: 16px; font-weight: 600; color: var(--q-navy); }
+.sd-my-row-sub { font-size: 13.5px; color: var(--q-muted); }
+.sd-my-row-num { flex: none; font-size: 16px; font-weight: 700; color: var(--q-navy); font-variant-numeric: tabular-nums; }
+.sd-my-rows { padding: 12px 14px 14px; }
+
+/* documents */
+.sd-my-docs .sd-q-btn { gap: 8px; }
