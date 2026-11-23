@@ -195,27 +195,32 @@ describe("POA page", () => {
     expect(screen.getByRole("button", { name: "תיקון" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /אישור הפרטים והמשך/ }));
 
-    await waitFor(() => expect(h2()).toBe("שלב 3 מתוך 4: המסלקה הפנסיונית"));
+    // ס4–ס6 in one screen (owner decision 2026-11-23): both open documents listed, each with its card and its check,
+    // one button at the end. The policies document is disabled in this mock: no signature pad, "אישור וסיום".
+    await waitFor(() => expect(h2()).toBe("שלב 3 מתוך 3: המסמכים לאישור"));
     await waitFor(() => expect(document.activeElement).toBe(h2El()));
-    expect(screen.getByText("במסמך מופיע בעל הרישיון שמטפל בתיק שלכם.")).toBeInTheDocument();
-    expect(screen.getByText("למי פונים")).toBeInTheDocument();
+    expect(screen.getAllByText("במסמך מופיע בעל הרישיון שמטפל בתיק שלכם.")).toHaveLength(2);
+    expect(screen.getAllByText("למי פונים")).toHaveLength(2);
     expect(screen.queryByText("תוקף")).toBeNull(); // template not approved: validity row hidden
-    await waitFor(() => expect(screen.getByRole("button", { name: "צפייה במסמך" })).toBeEnabled(), { timeout: 5000 }); // the mock builds a real PDF: slow under a full parallel run
-    fireEvent.click(screen.getByRole("button", { name: /אישור והמשך/ }));
-    expect(await screen.findByText("כדי להמשיך צריך לסמן את האישור.")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("checkbox", { name: /למסלקה הפנסיונית בשמי/ }));
-    fireEvent.click(screen.getByRole("button", { name: /אישור והמשך/ }));
-
-    await waitFor(() => expect(h2()).toBe("שלב 4 מתוך 4: הר הביטוח"));
+    expect(screen.getByText("מכאן מגיע המידע על הפנסיה, קופות הגמל וקרנות ההשתלמות שלכם.")).toBeInTheDocument();
+    expect(screen.getByText("מכאן מגיע המידע על הביטוחים שלכם בכל החברות.")).toBeInTheDocument();
     expect(screen.queryByLabelText("תאריך לידה")).toBeNull(); // the dates were answered in ס1
     expect(screen.getByText("במסמך מופיעים תאריך הלידה ותאריך ההנפקה שמסרתם.")).toBeInTheDocument();
-    await waitFor(() => expect(screen.getByRole("button", { name: /אישור והמשך/ })).toBeEnabled(), { timeout: 5000 }); // the mock builds a real PDF: slow under a full parallel run
-    fireEvent.click(screen.getByRole("button", { name: /אישור והמשך/ }));
-    expect(await screen.findByText("כדי להמשיך צריך לסמן את האישור.")).toBeInTheDocument();
+    expect(screen.queryByText("חתימה על ייפוי כוח פוליסות")).toBeNull();
+    // the mock builds two real PDFs: slow under a full parallel run
+    await waitFor(() => expect(screen.getAllByRole("button", { name: "צפייה במסמך" })).toHaveLength(2), { timeout: 8000 });
+    await waitFor(() => expect(screen.getByRole("button", { name: /אישור וסיום/ })).toBeEnabled(), { timeout: 8000 });
+    // nothing ticked: both errors, focus on the first
+    fireEvent.click(screen.getByRole("button", { name: /אישור וסיום/ }));
+    expect(await screen.findAllByText("כדי להמשיך צריך לסמן את האישור.")).toHaveLength(2);
+    await waitFor(() => expect(document.activeElement?.id).toBe("poa-check-maslaka"));
+    fireEvent.click(screen.getByRole("checkbox", { name: /למסלקה הפנסיונית בשמי/ }));
+    fireEvent.click(screen.getByRole("button", { name: /אישור וסיום/ }));
+    expect(await screen.findAllByText("כדי להמשיך צריך לסמן את האישור.")).toHaveLength(1);
     fireEvent.click(screen.getByRole("checkbox", { name: /הר הביטוח בשמי/ }));
-    fireEvent.click(screen.getByRole("button", { name: /אישור והמשך/ }));
+    fireEvent.click(screen.getByRole("button", { name: /אישור וסיום/ }));
 
-    await waitFor(() => expect(h2()).toBe("קיבלנו את האישורים"));
+    await waitFor(() => expect(h2()).toBe("קיבלנו את האישורים"), { timeout: 8000 });
     await waitFor(() => expect(document.activeElement).toBe(h2El()));
     expect(screen.getAllByRole("button", { name: /הורדה/ })).toHaveLength(2);
     expect(screen.getAllByText("סימון")).toHaveLength(2);

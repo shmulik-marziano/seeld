@@ -82,6 +82,20 @@ export const POA_COPY = {
     fix: "תיקון",
     cta: "אישור הפרטים והמשך",
   },
+  /**
+   * ס4–ס6 in one screen (owner decision 2026-11-23: one screen for all the checks, transmission only at the end). The
+   * per-document texts below (s4/s5/s6: lead, check, declaration, signature) are reused inside it.
+   */
+  s3: {
+    title: "המסמכים לאישור",
+    lead: "קוראים כל מסמך ומסמנים. חותמים פעם אחת בסוף, והפנייה לגופים יוצאת רק אחרי האישור האחרון.",
+    /** the one button while the approvals are sent in order */
+    preparing: (n: number, m: number) => `מכינים את המסמכים… ${n} מתוך ${m}`,
+    /** when the policies document is not among the open ones (else ס6's "חתימה וסיום") */
+    cta: "אישור וסיום",
+    /** a document approved earlier in the session (after an error and "נסו שוב") */
+    doneLine: "אושר ונשמר",
+  },
   card: {
     labels: { whom: "למי פונים", scope: "איזה מידע", validity: "תוקף", revoke: "אפשר לבטל" },
     fixedLine: "במסמך מופיע בעל הרישיון שמטפל בתיק שלכם.",
