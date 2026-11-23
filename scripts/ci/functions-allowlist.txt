@@ -4,6 +4,7 @@
 # [functions.<name>] block in supabase/config.toml (scripts/ci/check-supabase-config.mjs).
 _shared
 chat-bot
+client-area
 client-docs
 fetch-cma-data
 forms-intake
