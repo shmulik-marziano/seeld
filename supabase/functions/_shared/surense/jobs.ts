@@ -7,7 +7,7 @@ import { RpcError } from "../db.ts";
 import { InputError, SurenseError, type SurenseFailureKind } from "./errors.ts";
 import { StorageError } from "./storage.ts";
 import {
-  type DocPullStats, type DownloadStats, e9100Download, e9100Submit, latestProductionMonth, linkPoaDocument, MAX_OFFSET, PAGE_SIZE, planEvent, portfolio,
+  type DocPullStats, type DownloadStats, e9100Download, e9100Submit, linkPoaDocument, MAX_OFFSET, PAGE_SIZE, planEvent, portfolio, portfolioTargets,
   pullCustomer, pullCustomers, pullDocuments, type SyncDeps,
 } from "./sync.ts";
 import { isUuid } from "./api.ts";
@@ -129,12 +129,21 @@ export const HANDLERS: Record<string, JobHandler> = {
   "surense.portfolio_pull": async (d, job) => {
     const customerId = str(job.params, "customer_id");
     if (!isUuid(customerId)) return { result: "skipped", code: "bad_input" };
-    // a production portfolio needs its month (40001 without it, verified live 2026-11-23): the latest one from the history;
-    // a customer with no production snapshot yet is skipped (the next sweep asks again)
-    const month = await latestProductionMonth(d, customerId.toLowerCase());
-    if (!month) return { result: "skipped", code: "no_production_data" };
-    const s = await portfolio(d, { customerId: customerId.toLowerCase(), mode: "production", month });
-    return { result: "done", stats: { snapshotId: s.snapshotId ?? -1, products: s.products, bad: s.bad, month } };
+    // the history says what exists (verified live 2026-11-23): production needs its month, pre-advice its clearing-house
+    // request number; both are pulled when present (one product row per id either way). Nothing at all = skipped.
+    const id = customerId.toLowerCase();
+    const t = await portfolioTargets(d, id);
+    if (!t.productionMonth && !t.preAdvice) return { result: "skipped", code: "no_portfolio_data" };
+    const stats: Record<string, number | string | boolean> = {};
+    if (t.productionMonth) {
+      const s = await portfolio(d, { customerId: id, mode: "production", month: t.productionMonth });
+      Object.assign(stats, { prodSnapshot: s.snapshotId ?? -1, prodProducts: s.products, prodBad: s.bad, month: t.productionMonth });
+    }
+    if (t.preAdvice) {
+      const s = await portfolio(d, { customerId: id, mode: "pre_advice", misparMislaka: t.preAdvice.misparMislaka, ...(t.preAdvice.validityDate ? { hbValidityDate: t.preAdvice.validityDate } : {}) });
+      Object.assign(stats, { preSnapshot: s.snapshotId ?? -1, preProducts: s.products, preBad: s.bad });
+    }
+    return { result: "done", stats };
   },
   // the daily sweep: every customer whose production snapshot is missing or older than PORTFOLIO_MAX_AGE_DAYS gets one
   // pull job (dedupe per customer). A slice cut by the deadline or by SWEEP_BATCH hands over to a follow-up sweep.

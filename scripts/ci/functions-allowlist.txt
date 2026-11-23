@@ -14,6 +14,7 @@ poa-intake
 sms-health
 staff-invite
 surense-health
+surense-probe
 surense-sync
 surense-webhook
 surense-worker

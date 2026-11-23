@@ -188,7 +188,9 @@ export interface E9100DownloadResponse {
 
 // ---- portfolio ----
 export interface PortfolioRequest {
-  mode: "טרום_טיפול" | "פרודוקציה";
+  /** coded enum (verified live 2026-11-23: the Hebrew names of the OpenAPI are read as null): 1 = טרום_טיפול (pre-advice,
+   *  needs misparMislaka), 2 = פרודוקציה (production, needs month) */
+  mode: 1 | 2;
   misparMislaka?: string;
   hbValidityDate?: string;
   month?: string;

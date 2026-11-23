@@ -346,13 +346,29 @@ export function historyMonth(h: PortfolioHistoryEntry | null | undefined): strin
   return null;
 }
 
-/** The latest production month the customer has (GET /customers/{id}/portfolio/history), or null when there is no
- *  production snapshot at all. Verified 2026-11-23 against the live API: a production portfolio request without `month`
- *  is refused with 40001 (invalid input), so the month is resolved here first. */
-export async function latestProductionMonth(d: SyncDeps, customerId: string): Promise<string | null> {
+export interface PortfolioTargets {
+  /** latest production month ("YYYY-MM"), null when the customer has no production entry */
+  productionMonth: string | null;
+  /** latest pre-advice (clearing-house) snapshot: its request number and validity date; null when there is none */
+  preAdvice: { misparMislaka: string; validityDate: string | null } | null;
+}
+
+/** What can be pulled for a customer, from GET /customers/{id}/portfolio/history. Verified live 2026-11-23: a production
+ *  request needs `month` ("The month must be provided"), a pre-advice request needs `misparMislaka`; the same customer
+ *  usually has both (production = the agency's own book incl. insurance policies, pre-advice = the full clearing-house
+ *  picture), so the pull takes both and the product table keeps one row per product id. */
+export async function portfolioTargets(d: SyncDeps, customerId: string): Promise<PortfolioTargets> {
   const hist = await d.api.customers.portfolioHistory(customerId);
-  const months = (Array.isArray(hist) ? hist : []).filter((h) => h?.production === true).map(historyMonth).filter((m): m is string => !!m).sort();
-  return months.length ? months[months.length - 1] : null;
+  const entries = Array.isArray(hist) ? hist.filter((h): h is PortfolioHistoryEntry => !!h && typeof h === "object") : [];
+  const months = entries.filter((h) => h.production === true).map(historyMonth).filter((m): m is string => !!m).sort();
+  const pre = entries
+    .filter((h) => h.production !== true && typeof h.misparMislaka === "string" && /^[A-Za-z0-9_-]{1,64}$/.test(h.misparMislaka))
+    .sort((a, b) => String(a.validityDate ?? "").localeCompare(String(b.validityDate ?? "")))
+    .pop();
+  return {
+    productionMonth: months.length ? months[months.length - 1] : null,
+    preAdvice: pre ? { misparMislaka: pre.misparMislaka as string, validityDate: typeof pre.validityDate === "string" && /^\d{4}-\d{2}-\d{2}/.test(pre.validityDate) ? pre.validityDate.slice(0, 10) : null } : null,
+  };
 }
 
 export async function portfolio(
@@ -360,7 +376,7 @@ export async function portfolio(
   o: { customerId: string; mode: "production" | "pre_advice"; month?: string; misparMislaka?: string; hbValidityDate?: string },
 ) {
   const res = await d.api.customers.portfolio(o.customerId, {
-    mode: o.mode === "production" ? "פרודוקציה" : "טרום_טיפול",
+    mode: o.mode === "production" ? 2 : 1,
     ...(o.month ? { month: o.month } : {}),
     ...(o.misparMislaka ? { misparMislaka: o.misparMislaka } : {}),
     ...(o.hbValidityDate ? { hbValidityDate: o.hbValidityDate } : {}),

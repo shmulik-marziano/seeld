@@ -510,17 +510,24 @@ Deno.test("jobs: portfolio_pull stores the production snapshot and its product r
     (fn) => (fn === "surense_portfolio_store" ? { snapshot_id: 77, products: 1 } : null));
   const job: JobRow = { id: 3, kind: "surense.portfolio_pull", params: { customer_id: CID.toUpperCase() }, event_id: null, event_type: null, payload: null, attempts: 1 };
   const out = await runJob(d, job, Date.now() + 60_000);
-  assert.deepEqual(out, { result: "done", stats: { snapshotId: 77, products: 1, bad: 1, month: "2026-10" } });
-  // the history is read first; the production request carries the latest production month (40001 without it, verified live)
+  assert.deepEqual(out, { result: "done", stats: { prodSnapshot: 77, prodProducts: 1, prodBad: 1, month: "2026-10", preSnapshot: 77, preProducts: 1, preBad: 1 } });
+  // the history is read first; then production (coded mode 2 + the latest production month) and pre-advice (mode 1 + the
+  // latest clearing-house request number); verified live 2026-11-23
   const hi = f.calls.findIndex((c) => c.url.endsWith("/portfolio/history"));
-  const pi = f.calls.findIndex((c) => c.url.endsWith(`/${CID}/portfolio`));
-  assert.ok(hi >= 0 && pi > hi, "history first, then the portfolio");
-  const sent = JSON.parse(f.calls[pi].body);
-  assert.deepEqual(sent, { mode: "פרודוקציה", month: "2026-10" });
-  // no production snapshot on Surense's side: skipped without a portfolio call
+  const ps = f.calls.map((c, i) => ({ c, i })).filter(({ c }) => c.url.endsWith(`/${CID}/portfolio`));
+  assert.ok(hi >= 0 && ps.length === 2 && ps[0].i > hi, "history first, then two portfolio calls");
+  assert.deepEqual(JSON.parse(ps[0].c.body), { mode: 2, month: "2026-10" });
+  assert.deepEqual(JSON.parse(ps[1].c.body), { mode: 1, misparMislaka: "m-1", hbValidityDate: "2026-11-02" });
+  const modes = rpc.calls.filter((c) => c.fn === "surense_portfolio_store").map((c) => c.args.p_mode);
+  assert.deepEqual(modes, ["production", "pre_advice"]);
+  // nothing in the history: skipped without a portfolio call; production only: one call
   const none = syncSetup((url) => url.endsWith("/portfolio/history") ? json([{ production: false, validityDate: "2026-11-02" }]) : json({}, 404));
-  assert.deepEqual(await runJob(none.d, job, Date.now() + 60_000), { result: "skipped", code: "no_production_data" });
-  assert.ok(!none.f.calls.some((c) => c.url.endsWith(`/${CID}/portfolio`)), "no portfolio call without a month");
+  assert.deepEqual(await runJob(none.d, job, Date.now() + 60_000), { result: "skipped", code: "no_portfolio_data" });
+  assert.ok(!none.f.calls.some((c) => c.url.endsWith(`/${CID}/portfolio`)), "no portfolio call without a target");
+  const prodOnly = syncSetup((url) => url.endsWith("/portfolio/history") ? json([{ production: true, validityMonth: "2026-07" }]) : url.endsWith(`/${CID}/portfolio`) ? json(PORTFOLIO_BODY) : json({}, 404),
+    (fn) => (fn === "surense_portfolio_store" ? { snapshot_id: 78, products: 1 } : null));
+  const po = await runJob(prodOnly.d, job, Date.now() + 60_000);
+  assert.deepEqual(po.stats, { prodSnapshot: 78, prodProducts: 1, prodBad: 1, month: "2026-07" });
   const store = rpc.calls.find((c) => c.fn === "surense_portfolio_store")!;
   assert.equal(store.args.p_customer, CID);
   assert.equal(store.args.p_mode, "production");
