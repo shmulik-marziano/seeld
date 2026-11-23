@@ -1,0 +1,39 @@
+/* Client forms (/forms): the hub cards, the progress rail of the flow, the identity and documents steps.
+   Builds on questionnaires.css (.sd-q-*) and poa.css (.sd-poa-*); colours through the same variables. */
+.sd-forms-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.sd-forms-card { position: relative; display: flex; flex-direction: column; gap: 10px; background: var(--q-paper, #fffdf8); border: 1px solid var(--q-line, #e6e1d3); border-radius: 18px; padding: 20px 20px 18px; min-height: 100%; }
+.sd-forms-card .sd-forms-spot { align-self: flex-start; max-width: 96px; height: auto; }
+.sd-forms-card h3 { margin: 4px 0 0; font-family: "Frank Ruhl Libre", Rubik, serif; font-size: 1.25rem; color: var(--q-navy, #203957); }
+.sd-forms-card p { margin: 0; color: var(--q-ink, #2b2b2b); line-height: 1.55; font-size: 15px; }
+.sd-forms-meta { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 13px; color: var(--q-muted, #55677c); margin-top: auto; padding-top: 6px; }
+.sd-forms-status { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+.sd-forms-status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #c8c2b0; }
+.sd-forms-status.is-in-progress::before { background: #d9a441; }
+.sd-forms-status.is-submitted::before { background: #4f8a5b; }
+.sd-forms-card .sd-q-btn { align-self: flex-start; }
+.sd-forms-num { position: absolute; inset-inline-end: 16px; top: 14px; font-size: 13px; font-weight: 700; color: var(--q-muted, #55677c); }
+.sd-forms-note { max-width: 720px; margin: 14px auto 0; font-size: 14px; color: var(--q-muted, #55677c); }
+
+/* the rail: six steps, the current one marked */
+.sd-forms-rail { list-style: none; margin: 0 0 16px; padding: 0; display: flex; gap: 6px; flex-wrap: wrap; }
+.sd-forms-rail li { flex: 1 1 90px; display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: var(--q-muted, #55677c); min-width: 0; }
+.sd-forms-rail li i { display: block; height: 5px; border-radius: 3px; background: #e6e1d3; }
+.sd-forms-rail li.is-submitted i { background: #4f8a5b; }
+.sd-forms-rail li.is-in-progress i { background: #d9a441; }
+.sd-forms-rail li.is-cur { color: var(--q-navy, #203957); font-weight: 700; }
+.sd-forms-rail li.is-cur i { outline: 2px solid var(--q-navy, #203957); outline-offset: 1px; }
+.sd-forms-rail li span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* identity + documents steps */
+.sd-forms-fields { display: grid; gap: 4px; }
+.sd-forms-fields .sd-q-subfield { margin-bottom: 8px; }
+.sd-forms-fields .sd-q-input { min-height: 54px; font-size: 18px; }
+.sd-forms-docs { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; }
+.sd-forms-doc { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 12px 14px; border: 1px dashed var(--q-line, #d6cfb9); border-radius: 14px; }
+.sd-forms-doc.is-done { border-style: solid; background: #f1f6ef; }
+.sd-forms-doc strong { flex: 1 1 200px; font-weight: 600; color: var(--q-navy, #203957); }
+.sd-forms-doc input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.sd-forms-doc .sd-q-btn { padding-inline: 16px; }
+.sd-forms-doc small { color: var(--q-muted, #55677c); }
+.sd-forms-done-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.sd-forms-soon { display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 999px; background: #f4e7c3; color: #7c5c22; font-size: 13px; font-weight: 600; }

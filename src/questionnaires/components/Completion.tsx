@@ -101,8 +101,12 @@ export function SignStep({ def, answers, sensitive, onBack, onSigned }: { def: Q
   );
 }
 
-export function DoneStep({ def, answers, signed, sensitive, onClear, exitTo, exitLabel, submitEnabled }: {
+export function DoneStep({ def, answers, signed, sensitive, onClear, exitTo, exitLabel, submitEnabled, next, saveState }: {
   def: Questionnaire; answers: Answers; signed: SignedResult; sensitive: boolean; onClear: () => void; exitTo: string; exitLabel: string; submitEnabled: boolean;
+  /** the client flow's "next questionnaire" action */
+  next?: { label: string; to: string; note?: string };
+  /** the final submit's state ("saving" | "saved" | "error" | ...), for the sentence under the title */
+  saveState?: string;
 }) {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
@@ -133,8 +137,17 @@ export function DoneStep({ def, answers, signed, sensitive, onClear, exitTo, exi
         <p className="sd-q-p">חתמת ב־<time dateTime={signed.signedAt}>{new Date(signed.signedAt).toLocaleString("he-IL", { dateStyle: "long", timeStyle: "short" })}</time>.</p>
         <div className="sd-q-next">
           <h3>מה קורה עכשיו</h3>
-          <p>{submitEnabled ? "התשובות נשלחו לצוות." : "בשלב זה לא נשלח כלום. העותק נשאר אצלך בלבד, והתשובות נמחקות מהדפדפן כשסוגרים או לוחצים על 'ניקוי'."}</p>
-          <p>כדאי להוריד עותק חתום ולשמור אותו, ולהעביר לצוות כשנבקש.</p>
+          <p>
+            {!submitEnabled
+              ? "בשלב זה לא נשלח כלום. העותק נשאר אצלך בלבד, והתשובות נמחקות מהדפדפן כשסוגרים או לוחצים על 'ניקוי'."
+              : saveState === "error"
+              ? "השליחה לצוות לא הצליחה. אפשר להוריד את העותק החתום ולנסות שוב מאוחר יותר, או להעביר אותו אלינו."
+              : saveState === "saving"
+              ? "שולחים לצוות…"
+              : "התשובות נשלחו לצוות."}
+          </p>
+          <p>{next ? (next.note ?? "כדאי להוריד עותק חתום לעצמך. את המסמך הזה אנחנו כבר קיבלנו.") : "כדאי להוריד עותק חתום ולשמור אותו, ולהעביר לצוות כשנבקש."}</p>
+          {next && <Link to={next.to} className="sd-q-btn sd-q-bigbtn" style={{ marginTop: 8 }}>{next.label}</Link>}
         </div>
         <div className="sd-q-done-actions">
           {sensitive && !confirmHealth ? (

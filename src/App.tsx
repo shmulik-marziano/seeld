@@ -188,6 +188,9 @@ const OpsRoutes = lazy(() => import("@/pages/app/ops/OpsRoutes"));
 const QuestionnairesRoutes = lazy(() => import("@/pages/app/questionnaires/QuestionnairesRoutes"));
 const ReportsRoutes = lazy(() => import("@/pages/app/reports/ReportsRoutes"));
 const PoaFlow = lazy(() => import("@/pages/report-order/PoaFlow"));
+// Client forms (docs/product/CLIENT-FORMS.md): the hub is a public page; the flow under /forms/:card is noindex.
+const FormsHub = lazy(() => import("@/pages/forms/FormsHub"));
+const FormsFlow = lazy(() => import("@/pages/forms/FormsFlow"));
 const QuestionnaireClient = lazy(() => import("@/pages/QuestionnaireClient"));
 const ReportPublic = lazy(() => import("@/pages/Report"));
 const AuthPage = lazy(() => import("@/pages/AuthPage"));
@@ -462,6 +465,9 @@ const App = () => (
                 <Route path="/report/start/*" element={hold(<ReportsRoutes />)} />
                 {/* POA wizard (docs/product/POA-WIZARD-SPEC.md §2): outside hold(); a static path outranks /report/start/* in React Router 6. Off by default. */}
                 <Route path="/report/start/order" element={POA_ENABLED ? <PoaFlow /> : <Navigate to="/report/start" replace />} />
+                {/* Client forms hub + one session for all questionnaires (docs/product/CLIENT-FORMS.md). The flow is off by default (FORMS_FLOW_ENABLED). */}
+                <Route path="/forms" element={<FormsHub />} />
+                <Route path="/forms/:card" element={<FormsFlow />} />
 
                 {/* ═══ AGENT APP ROUTES (/app/*) ═══ */}
                 {IS_V2 ? (

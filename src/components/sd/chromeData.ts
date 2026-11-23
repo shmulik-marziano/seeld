@@ -56,6 +56,7 @@ export const SERVICE_LINKS: ChromeLink[] = [
   { href: "/portfolio-review", label: "אפיון צרכים" },
   { href: "/rights-extraction", label: "מיצוי זכויות" },
   { href: "/report/start/order?from=join", label: "להצטרפות" },
+  { href: "/forms", label: "שאלונים ומסמכים" },
   { href: "/direct-debit", label: "מילוי טופס הו״ק" },
 ];
 

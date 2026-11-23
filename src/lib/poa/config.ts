@@ -21,7 +21,7 @@ export const POA_ROUTE = "/report/start/order";
  * Entry contexts (spec §2 ס0 "נקודות כניסה"): the wizard is the one conversion step every marketing page leads to
  * (`?from=<key>`); only the first line of ס0 changes with it. Unknown or missing = "default". Never stored, never sent.
  */
-export const POA_ENTRIES = ["default", "insurance", "finance", "portfolio", "join"] as const;
+export const POA_ENTRIES = ["default", "insurance", "finance", "portfolio", "join", "forms"] as const;
 export type PoaEntry = (typeof POA_ENTRIES)[number];
 export function poaEntryOf(search: string): PoaEntry {
   const v = new URLSearchParams(search).get("from") ?? "";
