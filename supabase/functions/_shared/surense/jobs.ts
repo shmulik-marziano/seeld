@@ -7,8 +7,8 @@ import { RpcError } from "../db.ts";
 import { InputError, SurenseError, type SurenseFailureKind } from "./errors.ts";
 import { StorageError } from "./storage.ts";
 import {
-  type DocPullStats, type DownloadStats, e9100Download, e9100Submit, linkPoaDocument, MAX_OFFSET, PAGE_SIZE, planEvent, portfolio, pullCustomer,
-  pullCustomers, pullDocuments, type SyncDeps,
+  type DocPullStats, type DownloadStats, e9100Download, e9100Submit, latestProductionMonth, linkPoaDocument, MAX_OFFSET, PAGE_SIZE, planEvent, portfolio,
+  pullCustomer, pullCustomers, pullDocuments, type SyncDeps,
 } from "./sync.ts";
 import { isUuid } from "./api.ts";
 import { pickSwiftnessAccount } from "../poa/engine/surense.ts";
@@ -129,8 +129,12 @@ export const HANDLERS: Record<string, JobHandler> = {
   "surense.portfolio_pull": async (d, job) => {
     const customerId = str(job.params, "customer_id");
     if (!isUuid(customerId)) return { result: "skipped", code: "bad_input" };
-    const s = await portfolio(d, { customerId: customerId.toLowerCase(), mode: "production" });
-    return { result: "done", stats: { snapshotId: s.snapshotId ?? -1, products: s.products, bad: s.bad } };
+    // a production portfolio needs its month (40001 without it, verified live 2026-11-23): the latest one from the history;
+    // a customer with no production snapshot yet is skipped (the next sweep asks again)
+    const month = await latestProductionMonth(d, customerId.toLowerCase());
+    if (!month) return { result: "skipped", code: "no_production_data" };
+    const s = await portfolio(d, { customerId: customerId.toLowerCase(), mode: "production", month });
+    return { result: "done", stats: { snapshotId: s.snapshotId ?? -1, products: s.products, bad: s.bad, month } };
   },
   // the daily sweep: every customer whose production snapshot is missing or older than PORTFOLIO_MAX_AGE_DAYS gets one
   // pull job (dedupe per customer). A slice cut by the deadline or by SWEEP_BATCH hands over to a follow-up sweep.
@@ -151,9 +155,9 @@ export const HANDLERS: Record<string, JobHandler> = {
       if (r?.duplicate) duplicates++;
       else enqueued++;
     }
-    // a full batch means more may be due (those just queued are not yet pulled, so the next sweep re-reads the list after
-    // the pulls landed: it is dedupe-safe either way)
-    const more = cut || due.length >= SWEEP_BATCH;
+    // a full batch means more may be due, but only when this slice actually queued something new: a list made of
+    // customers already in the queue (duplicates) must not chain sweeps forever (seen live 2026-11-23: 500+ pulls in minutes)
+    const more = cut || (due.length >= SWEEP_BATCH && enqueued > 0);
     return {
       result: "done",
       stats: { due: due.length, enqueued, duplicates, cut },
