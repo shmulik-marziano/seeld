@@ -63,6 +63,10 @@
 .sd-poa-approve .sd-poa-doc { margin-top: 10px; }
 .sd-poa-approve > li.is-done .sd-poa-doc { opacity: .85; }
 .sd-poa-approved { margin: 12px 0 0; padding: 10px 14px; border-radius: 12px; background: #eef5ec; color: var(--q-navy); font-weight: 600; }
+/* the one signature pad under the list (stamped on every document) */
+.sd-poa-sign { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--q-line); }
+.sd-poa-sign > .sd-q-sublabel { margin-bottom: 2px; }
+.sd-poa-sign > .sd-q-fine { margin: 0 0 10px; }
 
 /* summary */
 .sd-poa-done { list-style: none; margin: 12px 0; padding: 0; display: grid; gap: 12px; }

@@ -231,7 +231,8 @@ export function createPoaRpc(rpc: Rpc) {
       const r = obj(await rpc.call("poa_consent_record", {
         p_session: a.sessionId,
         p_kind: a.kind,
-        p_method: a.kind === "policies" && !a.replay ? "signature" : "check",
+        // `signature` whenever the drawn signature travels with the approval (any module since 2026-11-23), `check` otherwise
+        p_method: a.signature && !a.replay ? "signature" : "check",
         p_preview_sha256: a.previewSha256,
         p_signature: a.signature,
         p_ip: a.clientIp,

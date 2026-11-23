@@ -37,7 +37,7 @@ export interface ConsentReq {
   /** harbit: ISO yyyy-mm-dd */
   birth_date?: string;
   issue_date?: string;
-  /** policies: PNG data URL of the drawn signature */
+  /** the drawn signature as a PNG data URL: required for policies, sent with every approval since 2026-11-23 (stamped on each final document) */
   signature_png?: string;
 }
 export interface ConsentRes {
@@ -177,13 +177,16 @@ export function createMockPoaApi(opts: MockOpts = {}): PoaApi {
       // the server refuses an approval of anything but the last file it showed (spec §3)
       if (!lastPreview[kind] || r.preview_sha256 !== lastPreview[kind]) throw new PoaApiError("generic");
       if (kind === "harbit" && (!/^\d{4}-\d{2}-\d{2}$/.test(r.birth_date ?? "") || !/^\d{4}-\d{2}-\d{2}$/.test(r.issue_date ?? ""))) throw new PoaApiError("generic");
-      if (kind === "policies" && !/^data:image\/png;base64,/.test(r.signature_png ?? "")) throw new PoaApiError("generic");
+      // the signature is required for policies; any module may carry it (since 2026-11-23 the page sends the one signature with every approval)
+      const signed = /^data:image\/png;base64,/.test(r.signature_png ?? "");
+      if (r.signature_png !== undefined && !signed) throw new PoaApiError("generic");
+      if (kind === "policies" && !signed) throw new PoaApiError("generic");
       m.performed = true;
       const at = now().getTime();
       s.approvedAt[kind] = at;
       return {
         kind,
-        method: kind === "policies" ? "signature" : "check",
+        method: signed ? "signature" : "check",
         approved_at: new Date(at).toISOString(),
         valid_until: null, // from the approved template only (spec §4)
         modules: copyModules(s.modules),

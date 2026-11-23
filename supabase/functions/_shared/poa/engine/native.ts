@@ -71,9 +71,11 @@ export function createNativeEngine(d: NativeEngineDeps): PoaEngine {
       if (kind === "harbit") {
         if (!data.birthDate || !data.issueDate) throw bad();
         if ("error" in harbitDates(data.birthDate, data.issueDate, now())) throw bad();
-      } else if (kind === "policies") {
-        if (!data.signaturePng || !pngBase64(data.signaturePng)) throw bad();
       }
+      // the signature is required for policies (as in the tool); the other two carry the same one since 2026-11-23 and must
+      // not carry anything else
+      if (kind === "policies" && !data.signaturePng) throw bad();
+      if (data.signaturePng !== undefined && !pngBase64(data.signaturePng)) throw bad();
       return {};
     },
 
@@ -83,7 +85,7 @@ export function createNativeEngine(d: NativeEngineDeps): PoaEngine {
 
     async final(ref, kind, evidence: ApprovalEvidence) {
       let signature: RawImage | undefined;
-      if (kind === "policies") {
+      if (kind === "policies" || evidence.signaturePng !== undefined) {
         const b64 = evidence.signaturePng ? pngBase64(evidence.signaturePng) : null;
         if (!b64) throw new PoaToolError("generic", "bad_consent_data");
         try {

@@ -1,6 +1,7 @@
 // Server-side rendering of the three documents (the "native" engine, spec 1ב): the approved wording of templates.ts laid out
 // like the tool's own files (A4, right to left, Rubik), the personal values filled in, and, for a final document, the
-// evidence block (name, date, time, address) and the drawn signature (policies only, as in the tool). A preview carries no
+// evidence block (name, date, time, address) and the drawn signature in the client's slot of every document (owner decision
+// 2026-11-23: one signature, stamped on all three; the tool itself asks for it only on policies). A preview carries no
 // evidence and a visible "not yet approved" mark. Pure: bytes in, bytes out; nothing is logged.
 import { PdfDoc, type RawImage, type Rgb } from "../pdfkit/writer.ts";
 import type { TtfInfo } from "../pdfkit/ttf.ts";
@@ -25,7 +26,7 @@ export interface Evidence {
   /** approval instant */
   at: Date;
   ip: string;
-  /** decoded signature image (policies) */
+  /** decoded signature image, drawn in the client's slot of the document */
   signature?: RawImage;
 }
 export interface RenderInput {
@@ -197,10 +198,10 @@ function renderMaslaka(doc: PdfDoc, v: Record<string, string>, ev: Evidence | un
   fl.para(T.validity, { bold: true, align: "center" });
   fl.gap(8);
   fl.para(T.witness, { bold: true });
-  fl.gap(26);
+  fl.gap(ev?.signature ? 10 : 26);
   const name = v.name;
   const line = evidenceLine(ev, name);
-  signatureRow(fl, { rightLabel: T.signClient, leftLabel: T.signDate, rightLines: line ? doc.wrap(line, 150, 9.5, true) : [], leftLines: dateLines(ev), bold: true });
+  signatureRow(fl, { rightLabel: T.signClient, leftLabel: T.signDate, rightLines: line ? doc.wrap(line, 150, 9.5, true) : [], leftLines: dateLines(ev), image: ev?.signature, bold: true });
   if (line) {
     fl.gap(6);
     fl.para(line, { size: 10, bold: true, align: "center" });
@@ -267,8 +268,8 @@ function renderHarbit(doc: PdfDoc, v: Record<string, string>, ev: Evidence | und
   fl.para(T.clause2, { size: 11 });
   fl.gap(22);
   const line = evidenceLine(ev, v.name);
-  signatureRow(fl, { rightLabel: T.signInsured, leftLabel: T.signDate, rightLines: line ? doc.wrap(line, 150, 9.5, true) : [], leftLines: dateLines(ev), bold: true });
-  fl.gap(40);
+  signatureRow(fl, { rightLabel: T.signInsured, leftLabel: T.signDate, rightLines: line ? doc.wrap(line, 150, 9.5, true) : [], leftLines: dateLines(ev), image: ev?.signature, bold: true });
+  fl.gap(ev?.signature ? 20 : 40);
   fl.para(fill(T.licenseeIntro, v), { size: 11 });
   fl.gap(6);
   for (const c of T.licenseeClauses) {

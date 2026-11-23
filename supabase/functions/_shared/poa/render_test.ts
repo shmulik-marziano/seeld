@@ -45,21 +45,24 @@ Deno.test("png: the fixture decodes; junk is refused with a code", async () => {
   await assert.rejects(() => decodePng(new Uint8Array([1, 2, 3])), (e: unknown) => e instanceof PngError && e.code === "png_signature");
 });
 
-Deno.test("render: preview and final of the three documents are PDFs with the expected pages; the final policies carries the signature", async () => {
+Deno.test("render: preview and final of the three documents are PDFs with the expected pages; every final carries the one signature", async () => {
   const f = fonts();
   const signature = await decodePng(fromBase64(PNG_B64));
   for (const kind of POA_KINDS) {
     const preview = await renderPoa({ kind, identity: IDENTITY, licensee: LICENSEE, now: new Date(0) }, f);
     const final = await renderPoa({
       kind, identity: IDENTITY, licensee: LICENSEE, now: new Date(0),
-      evidence: { at: new Date(Date.UTC(2026, 10, 21, 22, 6, 0)), ip: "203.0.113.9", signature: kind === "policies" ? signature : undefined },
+      evidence: { at: new Date(Date.UTC(2026, 10, 21, 22, 6, 0)), ip: "203.0.113.9", signature },
     }, f);
-    for (const b of [preview, final]) {
+    // a final without a signature (an approval recorded by an older page) still renders, without the image
+    const unsigned = await renderPoa({ kind, identity: IDENTITY, licensee: LICENSEE, now: new Date(0), evidence: { at: new Date(Date.UTC(2026, 10, 21, 22, 6, 0)), ip: "203.0.113.9" } }, f);
+    for (const b of [preview, final, unsigned]) {
       assert.equal(text(b.subarray(0, 5)), "%PDF-");
       assert.equal(pages(b), kind === "maslaka" ? 2 : 1, `${kind}: pages`);
       assert.ok(text(b).includes("/Direction /R2L"));
     }
-    assert.ok(text(final).includes("/Subtype /Image") === (kind === "policies"), `${kind}: image only in the signed policies`);
+    assert.ok(text(final).includes("/Subtype /Image"), `${kind}: the signature image is in the signed document`);
+    assert.ok(!text(preview).includes("/Subtype /Image") && !text(unsigned).includes("/Subtype /Image"), `${kind}: no image without a signature`);
     assert.ok(preview.byteLength > 20_000 && final.byteLength > 20_000, "fonts embedded");
     assert.ok(text(final).includes(`/Title <FEFF${[...DOC_TITLE[kind]].map((c) => c.codePointAt(0)!.toString(16).padStart(4, "0")).join("").toUpperCase()}>`), `${kind}: title`);
   }

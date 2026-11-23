@@ -40,7 +40,7 @@ async function inflated(pdf: Uint8Array): Promise<string> {
   return out;
 }
 
-Deno.test("native preview: a PDF with the preview mark; final: the evidence block, the signature on policies only, no mark", async () => {
+Deno.test("native preview: a PDF with the preview mark; final: the evidence block, the one signature on every document, no mark", async () => {
   const e = engine();
   const ref = await e.start(WHO, ALL);
   const preview = await e.preview(ref, "harbit");
@@ -51,22 +51,28 @@ Deno.test("native preview: a PDF with the preview mark; final: the evidence bloc
   assert.ok(!finalText.includes("0.45 0.45 0.45 rg"), "no mark on a final document");
   assert.ok(finalText.includes(utf16("203.0.113.9")), "the evidence carries the address (ActualText)");
   assert.ok(finalText.includes(utf16("21/11/2026")), "the evidence carries the Israel date (NOW is 12:00 UTC = 14:00 Israel, 21/11)");
-  assert.ok(!text(final).includes("/Subtype /Image"), "no image on harbit");
-  const policies = await e.final!(ref, "policies", { atMs: NOW, ip: "203.0.113.9", signaturePng: PNG_URL });
-  assert.ok(text(policies).includes("/Subtype /Image"), "the signature is drawn on policies");
+  assert.ok(!text(final).includes("/Subtype /Image"), "an approval without a signature (older page) renders without the image");
+  for (const kind of ["maslaka", "harbit", "policies"] as const) {
+    const signed = await e.final!(ref, kind, { atMs: NOW, ip: "203.0.113.9", signaturePng: PNG_URL });
+    assert.ok(text(signed).includes("/Subtype /Image"), `the signature is drawn on ${kind}`);
+  }
   await assert.rejects(() => e.final!(ref, "policies", { atMs: NOW, ip: "203.0.113.9" }), (x: unknown) => x instanceof PoaToolError && x.code === "bad_consent_data");
-  await assert.rejects(() => e.final!(ref, "policies", { atMs: NOW, ip: "203.0.113.9", signaturePng: "data:image/png;base64,iVBORw0KGgoAAAA" }), (x: unknown) => x instanceof PoaToolError && x.kind === "generic");
+  for (const kind of ["maslaka", "harbit", "policies"] as const) {
+    await assert.rejects(() => e.final!(ref, kind, { atMs: NOW, ip: "203.0.113.9", signaturePng: "data:image/png;base64,iVBORw0KGgoAAAA" }), (x: unknown) => x instanceof PoaToolError && x.kind === "generic");
+  }
   // a reference without the snapshot (an older session) cannot render
   await assert.rejects(() => e.preview({ customerId: null, urlId: NATIVE_URL_ID, sid: "x", existing: false }, "maslaka"), (x: unknown) => x instanceof PoaToolError && x.code === "native_ref_incomplete");
 });
 
-Deno.test("native consent: validates like the tool (harbit dates, policies signature) and sends nothing", async () => {
+Deno.test("native consent: validates like the tool (harbit dates, policies signature; the same signature accepted on all three) and sends nothing", async () => {
   const e = engine();
   const ref = await e.start(WHO, ALL);
   assert.deepEqual(await e.consent(ref, "maslaka", {}), {});
+  assert.deepEqual(await e.consent(ref, "maslaka", { signaturePng: PNG_URL }), {});
   assert.deepEqual(await e.consent(ref, "harbit", { birthDate: "1990-05-17", issueDate: "2015-01-01" }), {});
+  assert.deepEqual(await e.consent(ref, "harbit", { birthDate: "1990-05-17", issueDate: "2015-01-01", signaturePng: PNG_URL }), {});
   assert.deepEqual(await e.consent(ref, "policies", { signaturePng: PNG_URL }), {});
-  for (const [kind, data] of [["harbit", {}], ["harbit", { birthDate: "1990-05-17", issueDate: "1980-01-01" }], ["policies", {}], ["policies", { signaturePng: "data:text/html;base64,AAAA" }]] as const) {
+  for (const [kind, data] of [["harbit", {}], ["harbit", { birthDate: "1990-05-17", issueDate: "1980-01-01" }], ["policies", {}], ["policies", { signaturePng: "data:text/html;base64,AAAA" }], ["maslaka", { signaturePng: "data:text/html;base64,AAAA" }], ["harbit", { birthDate: "1990-05-17", issueDate: "2015-01-01", signaturePng: "data:text/html;base64,AAAA" }]] as const) {
     await assert.rejects(() => e.consent(ref, kind, data), (x: unknown) => x instanceof PoaToolError && x.code === "bad_consent_data");
   }
 });
