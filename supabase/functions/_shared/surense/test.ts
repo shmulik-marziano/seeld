@@ -489,3 +489,81 @@ Deno.test("sync: a document pass cut by the deadline continues in a follow-up jo
   const bad = await runJob(d, { ...job, params: { customer_id: CID, start_row: 150 } }, 2);
   assert.deepEqual([bad.result, bad.code], ["skipped", "bad_input"]);
 });
+
+// ---------------------------------------------------------------- portfolio pipeline (20261124090000): pull, sweep, event follow-ups
+const PORTFOLIO_BODY = { misparMislaka: "123456", productiaMonth: "2026-10", products: [
+  { id: EVT, customerId: CID, source: "מסלקה_פנסיונית", companyId: 12, type: 1, accountPolicyNumber: "999999", hidden: false },
+  { id: "not-a-uuid" },
+] };
+const eventJob = (type: string, body: Record<string, unknown>): JobRow =>
+  ({ id: 9, kind: "surense.event", params: null, event_id: 1, event_type: type, payload: JSON.stringify(body), attempts: 1 });
+
+Deno.test("jobs: portfolio_pull stores the production snapshot and its product rows; a bad id is skipped; a permanent 4xx is skipped", async () => {
+  const { d, rpc, f } = syncSetup((url) => url.endsWith(`/customers/${CID}/portfolio`) ? json(PORTFOLIO_BODY) : json({}, 404),
+    (fn) => (fn === "surense_portfolio_store" ? { snapshot_id: 77, products: 1 } : null));
+  const job: JobRow = { id: 3, kind: "surense.portfolio_pull", params: { customer_id: CID.toUpperCase() }, event_id: null, event_type: null, payload: null, attempts: 1 };
+  const out = await runJob(d, job, Date.now() + 60_000);
+  assert.deepEqual(out, { result: "done", stats: { snapshotId: 77, products: 1, bad: 1 } });
+  const sent = JSON.parse(f.calls.find((c) => c.url.endsWith("/portfolio"))!.body);
+  assert.deepEqual(sent, { mode: "פרודוקציה" });
+  const store = rpc.calls.find((c) => c.fn === "surense_portfolio_store")!;
+  assert.equal(store.args.p_customer, CID);
+  assert.equal(store.args.p_mode, "production");
+  assert.equal((store.args.p_products as unknown[]).length, 1, "the malformed product is counted, not stored");
+  assert.deepEqual(await runJob(d, { ...job, params: { customer_id: "nope" } }, Date.now() + 60_000), { result: "skipped", code: "bad_input" });
+  const gone = syncSetup(() => json({ statusCode: 400, errors: [{ code: 40000, message: "zz no access" }] }, 400));
+  const g = await runJob(gone.d, job, Date.now() + 60_000);
+  assert.deepEqual([g.result, g.code], ["skipped", "surense_400_40000"], "no such customer: skipped, never retried");
+});
+
+Deno.test("jobs: portfolio_sweep queues one pull per due customer (dedupe per customer) and hands over when cut", async () => {
+  const ids = [CID, EVT, "nope"];
+  let dupes = 0;
+  const { d, rpc } = syncSetup(() => json({}, 404), (fn) => {
+    if (fn === "surense_portfolio_due") return ids.map((surense_id) => ({ surense_id }));
+    if (fn === "surense_job_enqueue") return { id: 1, duplicate: dupes++ > 0 };
+    return null;
+  });
+  const job: JobRow = { id: 4, kind: "surense.portfolio_sweep", params: {}, event_id: null, event_type: null, payload: null, attempts: 1 };
+  const out = await runJob(d, job, Date.now() + 60_000);
+  assert.deepEqual(out, { result: "done", stats: { due: 3, enqueued: 1, duplicates: 1, cut: false } });
+  const due = rpc.calls.find((c) => c.fn === "surense_portfolio_due")!;
+  assert.deepEqual(due.args, { p_max_age_days: 30, p_limit: 200 });
+  const queued = rpc.calls.filter((c) => c.fn === "surense_job_enqueue").map((c) => c.args);
+  assert.deepEqual(queued, [
+    { p_kind: "surense.portfolio_pull", p_params: { customer_id: CID }, p_dedupe: `portfolio:${CID}` },
+    { p_kind: "surense.portfolio_pull", p_params: { customer_id: EVT }, p_dedupe: `portfolio:${EVT}` },
+  ], "two valid ids queued; the malformed one is skipped");
+  // cut by the deadline: nothing queued, a follow-up sweep continues
+  const cut = await runJob(d, job, Date.now() - 1);
+  assert.equal(cut.result, "done");
+  assert.deepEqual(cut.next, { kind: "surense.portfolio_sweep", params: {}, dedupe: "portfolio_sweep" });
+  assert.equal(cut.stats?.enqueued, 0);
+  // a full batch also hands over
+  const full = syncSetup(() => json({}, 404), (fn) => (fn === "surense_portfolio_due" ? Array.from({ length: 200 }, () => ({ surense_id: CID })) : { id: 1, duplicate: true }));
+  const big = await runJob(full.d, job, Date.now() + 60_000);
+  assert.deepEqual(big.next, { kind: "surense.portfolio_sweep", params: {}, dedupe: "portfolio_sweep" });
+  assert.deepEqual([big.stats?.due, big.stats?.duplicates], [200, 200]);
+});
+
+Deno.test("jobs: harb.uploaded, swiftness.e9100.completed and customer.updated queue the portfolio pull as their follow-up; others do not", async () => {
+  const { d } = syncSetup((url) => {
+    if (url.endsWith("/documents/search")) return json({ results: [], hasNextPage: false });
+    if (url.endsWith("/swiftness/e9100/download")) return json({ files: [] });
+    if (url.endsWith(`/customers/${CID}`)) return json({ id: CID });
+    return json({}, 404);
+  }, (fn) => (fn === "surense_customers_upsert" ? { upserted: 1 } : fn === "surense_documents_upsert" ? { upserted: 0 } : null));
+  const next = { kind: "surense.portfolio_pull", params: { customer_id: CID }, dedupe: `portfolio:${CID}` };
+  const harb = await runJob(d, eventJob("harb.uploaded", { eventType: "HarbDataLoaded", customerId: CID }), Date.now() + 60_000);
+  assert.deepEqual([harb.result, harb.next], ["done", next]);
+  const e9100 = await runJob(d, eventJob("swiftness.e9100.completed", { eventType: "SwiftnessE9100Completed", customerId: CID, txId: EVT }), Date.now() + 60_000);
+  assert.deepEqual([e9100.result, e9100.next], ["done", next]);
+  const upd = await runJob(d, eventJob("customer.updated", { eventType: "CustomerUpdated", customerId: CID }), Date.now() + 60_000);
+  assert.deepEqual([upd.result, upd.next], ["done", next]);
+  const created = await runJob(d, eventJob("customer.created", { eventType: "CustomerCreated", customerId: CID }), Date.now() + 60_000);
+  assert.deepEqual([created.result, created.next], ["done", undefined], "a new customer waits for the sweep");
+  const doc = await runJob(d, eventJob("document.uploaded", { eventType: "DocumentUploaded", customerId: CID }), Date.now() + 60_000);
+  assert.deepEqual([doc.result, doc.next], ["done", undefined], "a document alone changes no portfolio");
+  const hei = await runJob(d, eventJob("dataproxy.hei.approved", { eventType: "NispahHeiProxyApproved", customerId: CID }), Date.now() + 60_000);
+  assert.deepEqual([hei.result, hei.next], ["done", undefined], "a POA approval links documents; the portfolio waits for the file");
+});

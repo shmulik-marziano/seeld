@@ -34,13 +34,13 @@ select set_eq(
             ('surense_gate'), ('surense_event_ingest'), ('surense_job_enqueue'), ('surense_job_claim'), ('surense_job_complete'),
             ('surense_sync_state_get'), ('surense_sync_state_set'), ('surense_customers_upsert'), ('surense_customer_mark_deleted'),
             ('surense_documents_upsert'), ('surense_document_mark_deleted'), ('surense_file_record'), ('surense_portfolio_store'),
-            ('surense_audit'),
+            ('surense_audit'), ('surense_portfolio_due'),
             ('poa_session_start'), ('poa_session_get'), ('poa_engine_ref_set'), ('poa_preview_set'), ('poa_consent_record'),
             ('poa_session_fail'), ('poa_session_complete'), ('poa_document_link'), ('poa_document_stored'), ('poa_document_from_url'), ('poa_doc_get'), ('poa_doc_claim'), ('poa_config'),
             ('poa_ship_enqueue'), ('poa_ship_get'), ('poa_ship_set'), ('cron_secret_ok'),
             ('form_config'), ('form_session_start'), ('form_session_get'), ('form_step_save'), ('form_submit'), ('form_session_fail'),
             ('form_document_add'), ('form_document_stored') $$,
-  'service-only RPCs in api (53)');
+  'service-only RPCs in api (54)');
 
 -- the documented advisor exceptions (lints 0028/0029): exactly these SECURITY DEFINER functions are callable by API roles
 select set_eq(
@@ -61,8 +61,9 @@ select set_eq(
 
 select is_empty($$ select jobname from cron.job where command ~* 'http|secret|bearer|apikey' $$, 'cron commands carry no URL or secret');
 select set_eq($$ select jobname from cron.job $$,
-  $$ values ('ops-cleanup'), ('cma-freshness-monthly'), ('notify-worker-tick'), ('cma-sync-weekly'), ('ops-watchdog'), ('surense-worker-tick') $$,
-  'exactly six cron jobs');
+  $$ values ('ops-cleanup'), ('cma-freshness-monthly'), ('notify-worker-tick'), ('cma-sync-weekly'), ('ops-watchdog'), ('surense-worker-tick'),
+            ('surense-portfolio-sweep'), ('surense-customers-weekly') $$,
+  'exactly eight cron jobs');
 
 select is_empty($$ select schemaname || '.' || tablename || ':' || policyname from pg_policies
                     where schemaname in ('crm', 'core') and 'anon' = any (roles) and qual is distinct from 'false' $$,

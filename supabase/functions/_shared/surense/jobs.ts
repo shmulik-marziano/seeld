@@ -7,7 +7,7 @@ import { RpcError } from "../db.ts";
 import { InputError, SurenseError, type SurenseFailureKind } from "./errors.ts";
 import { StorageError } from "./storage.ts";
 import {
-  type DocPullStats, type DownloadStats, e9100Download, e9100Submit, linkPoaDocument, MAX_OFFSET, PAGE_SIZE, planEvent, pullCustomer,
+  type DocPullStats, type DownloadStats, e9100Download, e9100Submit, linkPoaDocument, MAX_OFFSET, PAGE_SIZE, planEvent, portfolio, pullCustomer,
   pullCustomers, pullDocuments, type SyncDeps,
 } from "./sync.ts";
 import { isUuid } from "./api.ts";
@@ -71,6 +71,24 @@ export function failureOutcome(e: unknown): JobOutcome {
 
 const str = (p: Record<string, unknown> | null, k: string) => (p && typeof p[k] === "string" ? (p[k] as string) : undefined);
 
+/** the follow-up that refreshes a customer's processed portfolio in our mirror (client area; 20261124090000) */
+export const portfolioNext = (customerId: string) =>
+  ({ kind: "surense.portfolio_pull", params: { customer_id: customerId.toLowerCase() }, dedupe: `portfolio:${customerId.toLowerCase()}` });
+
+/** events after which the portfolio changes on Surense's side: pull it again the same day, not at the next sweep */
+const PORTFOLIO_EVENTS = new Set(["harb.uploaded", "swiftness.e9100.completed", "customer.updated"]);
+
+/** adds the portfolio follow-up to a done outcome that carries no other follow-up (one `next` per job; a paged pull that
+ *  continues keeps its own continuation and the sweep covers the portfolio) */
+function withPortfolio(out: JobOutcome, eventType: string | null, customerId: string): JobOutcome {
+  if (out.result !== "done" || out.next || !eventType || !PORTFOLIO_EVENTS.has(eventType)) return out;
+  return { ...out, next: portfolioNext(customerId) };
+}
+
+/** how many customers one sweep slice may queue before handing over to a follow-up sweep */
+export const SWEEP_BATCH = 200;
+export const PORTFOLIO_MAX_AGE_DAYS = 30;
+
 export const HANDLERS: Record<string, JobHandler> = {
   "surense.event": async (d, job, deadline) => {
     let payload: unknown;
@@ -84,7 +102,7 @@ export const HANDLERS: Record<string, JobHandler> = {
       case "skip":
         return { result: "skipped", code: plan.reason };
       case "pull_customer":
-        return { result: "done", stats: await pullCustomer(d, plan.customerId) };
+        return withPortfolio({ result: "done", stats: await pullCustomer(d, plan.customerId) }, job.event_type, plan.customerId);
       case "mark_customer_deleted":
         await d.rpc.call("surense_customer_mark_deleted", { p_id: plan.customerId });
         return { result: "done" };
@@ -92,7 +110,9 @@ export const HANDLERS: Record<string, JobHandler> = {
         await d.rpc.call("surense_document_mark_deleted", { p_surense_id: plan.documentId });
         return { result: "done" };
       case "pull_documents": {
-        if (!plan.poaKind) return docsOutcome(await pullDocuments(d, { customerId: plan.customerId, deadline }), plan.customerId, undefined);
+        if (!plan.poaKind) {
+          return withPortfolio(docsOutcome(await pullDocuments(d, { customerId: plan.customerId, deadline }), plan.customerId, undefined), job.event_type, plan.customerId);
+        }
         // a POA wizard approval (dataproxy.aleph|hei|bet): after the pull, link the document to the session
         const seen: SurenseDocument[] = [];
         const pulled = await pullDocuments(d, { customerId: plan.customerId, deadline, onRows: (rows) => seen.push(...rows) });
@@ -101,8 +121,44 @@ export const HANDLERS: Record<string, JobHandler> = {
         return { ...out, stats: { ...(out.stats ?? {}), poaLinked: link.linked, poaComplete: link.complete, poaHashed: link.hashed } };
       }
       case "e9100_download":
-        return e9100Outcome(await e9100Download(d, { customerId: plan.customerId, eventId: plan.eventId, deadline }));
+        return withPortfolio(e9100Outcome(await e9100Download(d, { customerId: plan.customerId, eventId: plan.eventId, deadline })), job.event_type, plan.customerId);
     }
+  },
+  // one customer's processed portfolio (production) into the mirror; a permanent Surense refusal (no such customer, no
+  // access) ends skipped through failureOutcome, everything else retries with the queue's backoff
+  "surense.portfolio_pull": async (d, job) => {
+    const customerId = str(job.params, "customer_id");
+    if (!isUuid(customerId)) return { result: "skipped", code: "bad_input" };
+    const s = await portfolio(d, { customerId: customerId.toLowerCase(), mode: "production" });
+    return { result: "done", stats: { snapshotId: s.snapshotId ?? -1, products: s.products, bad: s.bad } };
+  },
+  // the daily sweep: every customer whose production snapshot is missing or older than PORTFOLIO_MAX_AGE_DAYS gets one
+  // pull job (dedupe per customer). A slice cut by the deadline or by SWEEP_BATCH hands over to a follow-up sweep.
+  "surense.portfolio_sweep": async (d, _job, deadline) => {
+    const now = d.now ?? Date.now;
+    const due = (await d.rpc.call<{ surense_id: string }[]>("surense_portfolio_due", { p_max_age_days: PORTFOLIO_MAX_AGE_DAYS, p_limit: SWEEP_BATCH })) ?? [];
+    let enqueued = 0;
+    let duplicates = 0;
+    let cut = false;
+    for (const row of due) {
+      if (now() >= deadline) {
+        cut = true;
+        break;
+      }
+      if (!isUuid(row?.surense_id)) continue;
+      const n = portfolioNext(row.surense_id);
+      const r = await d.rpc.call<{ duplicate?: boolean }>("surense_job_enqueue", { p_kind: n.kind, p_params: n.params, p_dedupe: n.dedupe });
+      if (r?.duplicate) duplicates++;
+      else enqueued++;
+    }
+    // a full batch means more may be due (those just queued are not yet pulled, so the next sweep re-reads the list after
+    // the pulls landed: it is dedupe-safe either way)
+    const more = cut || due.length >= SWEEP_BATCH;
+    return {
+      result: "done",
+      stats: { due: due.length, enqueued, duplicates, cut },
+      ...(more ? { next: { kind: "surense.portfolio_sweep", params: {}, dedupe: "portfolio_sweep" } } : {}),
+    };
   },
   "surense.pull_customers": async (d, _job, deadline) => {
     const s = await pullCustomers(d, { deadline });
