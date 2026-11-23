@@ -1,6 +1,6 @@
 import { CONTACTS } from "@/lib/contacts";
 import { BRAND_YEAR } from "@/lib/brandYear";
-import { useState, useEffect, useCallback, Component, type ReactNode } from "react";
+import { lazy, Suspense, useState, useEffect, useCallback, Component, type ReactNode } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { siteSupabase, SITE_SUPABASE_URL } from "@/integrations/supabase/site-client";
 import type { Tables } from "@/integrations/supabase/site-types";
@@ -73,9 +73,12 @@ type AdminTab =
   | "leads"
   | "client-invites"
   | "agent-management"
-  | "onboarding"
+  | "forms"
   | "directdebit"
   | "settings";
+
+// The questionnaires tab talks to the seeld-site staff RPCs (docs/product/CLIENT-FORMS.md); lazy so the admin shell stays light.
+const FormsModule = lazy(() => import("@/pages/admin/FormsModule"));
 
 const TABS: { id: AdminTab; label: string; icon: typeof LayoutDashboard }[] = [
   { id: "overview", label: "סקירה כללית", icon: LayoutDashboard },
@@ -84,7 +87,7 @@ const TABS: { id: AdminTab; label: string; icon: typeof LayoutDashboard }[] = [
   { id: "leads", label: "לידים ופניות", icon: MessageSquare },
   { id: "client-invites", label: "הזמנת לקוחות", icon: Link2 },
   { id: "agent-management", label: "ניהול סוכנים", icon: UserPlus },
-  { id: "onboarding", label: "שאלוני הצטרפות", icon: Users },
+  { id: "forms", label: "שאלונים", icon: Users },
   { id: "directdebit", label: "טפסי הוראת קבע", icon: CreditCard },
   { id: "settings", label: "הגדרות", icon: Settings },
 ];
@@ -546,7 +549,7 @@ function SiteAdminInner() {
           {activeTab === "leads" && <LeadsModule />}
           {activeTab === "client-invites" && <ClientInvitesModule />}
           {activeTab === "agent-management" && <AgentManagementModule />}
-          {activeTab === "onboarding" && <OnboardingModule />}
+          {activeTab === "forms" && <Suspense fallback={<div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#203957]" /></div>}><FormsModule /></Suspense>}
           {activeTab === "directdebit" && <DirectDebitModule />}
           {activeTab === "settings" && <SettingsModule />}
         </div>
@@ -1933,88 +1936,9 @@ function AgentManagementModule() {
 }
 
 // ══════════════════════════════════════════════════════
-//  MODULE: Onboarding Submissions (migrated from old Admin)
+//  MODULE: Onboarding Submissions: replaced by the questionnaires tab (src/pages/admin/FormsModule.tsx), 2026-11-23.
+//  The legacy /onboarding form is gone (it redirects to the POA wizard) and its Tokyo table is no longer read here.
 // ══════════════════════════════════════════════════════
-
-function OnboardingModule() {
-  const [submissions, setSubmissions] = useState<Tables<"onboarding_submissions">[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    const fetch = async () => {
-      const { data } = await siteSupabase
-        .from("onboarding_submissions")
-        .select("*")
-        .order("created_at", { ascending: false });
-      setSubmissions(data ?? []);
-      setLoading(false);
-    };
-    fetch();
-  }, []);
-
-  const filtered = submissions.filter(s => {
-    const name = `${s.first_name ?? ""} ${s.last_name ?? ""}`.toLowerCase();
-    return !search || name.includes(search.toLowerCase()) || (s.phone ?? "").includes(search) || (s.email ?? "").includes(search.toLowerCase());
-  });
-
-  if (loading) return <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-[#203957]" /></div>;
-
-  return (
-    <div>
-      <ModuleHeader
-        title="שאלוני הצטרפות"
-        subtitle={`${submissions.length} שאלונים`}
-        action={
-          <div className="relative">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#55677C]" />
-            <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="חפש..." className="pr-10 rounded-full h-10 w-[200px] border-[#D9DEE4]" />
-          </div>
-        }
-      />
-
-      {filtered.length === 0 ? (
-        <EmptyState icon={<Users className="w-8 h-8" />} title="אין שאלונים" subtitle="טרם הוגשו שאלוני הצטרפות" />
-      ) : (
-        <div className="space-y-3">
-          {filtered.map(s => {
-            const fullName = [s.first_name, s.last_name].filter(Boolean).join(" ") || "—";
-            return (
-              <div key={s.id} className="bg-white rounded-xl p-4 border shadow-sm">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#EEF2EC] flex items-center justify-center text-[#203957] font-bold text-sm">
-                      {(s.first_name?.[0] || "?").toUpperCase()}
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-[#203957]">{fullName}</h4>
-                      <div className="flex items-center gap-3 mt-0.5 text-xs text-[#55677C]">
-                        {s.phone && <span dir="ltr">{s.phone}</span>}
-                        {s.email && <span>{s.email}</span>}
-                        {s.city && <span>{s.city}</span>}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-[#55677C]">
-                    <span className={cn(
-                      "px-2 py-0.5 rounded-full text-[10px] font-medium",
-                      s.status === "new" ? "bg-[#DFE9DC] text-[#55677C]" :
-                      s.status === "in_progress" ? "bg-[#F5EEE0] text-[#7C5C22]" :
-                      s.status === "closed" ? "bg-[#DFE9DC] text-[#2F6B4E]" : "bg-[#DFE9DC] text-[#55677C]"
-                    )}>
-                      {s.status === "new" ? "חדש" : s.status === "in_progress" ? "בטיפול" : s.status === "closed" ? "סגור" : s.status}
-                    </span>
-                    <span>{new Date(s.created_at).toLocaleDateString("he-IL")}</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
 
 // ══════════════════════════════════════════════════════
 //  MODULE: Direct Debit

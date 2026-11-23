@@ -16,6 +16,7 @@ for the five functions T2 owns. `staff-invite` belongs to T1 and is documented t
 | `surense-health` | owner / staff, by hand | true | platform JWT check only (read-only probe) | none (calls Surense only) |
 | `poa-intake` | POA wizard (browser) | false | Origin allowlist + Turnstile + session token (SHA-256 only to the DB) + `poa_*` switches | `poa_config` (optional), `poa_session_*`, `poa_engine_ref_set`, `poa_preview_set`, `poa_consent_record`, `poa_document_from_url`, `poa_document_stored`, `poa_doc_get`, `poa_doc_claim`, `poa_ship_enqueue`, `surense_gate`, `surense_job_enqueue`, `surense_audit` |
 | `client-docs` | staff app | true | staff JWT -> `staff.client_doc_get` (staff aal2 + fresh MFA + access log) | none with the service key (storage read only) |
+| `forms-intake` | client forms `/forms` (browser) | false | Origin allowlist + Turnstile + session token (SHA-256 only to the DB) + `forms_*` switches | `form_config`, `form_session_start`, `form_session_get`, `form_step_save`, `form_submit`, `form_session_fail`, `form_document_add`, `form_document_stored` |
 
 `verify_jwt=false` everywhere here on purpose: the platform JWT check also accepts the publishable and secret API keys,
 so it authenticates nothing for these callers (research/SUPABASE.md, "Securing Edge Functions"). Each function does its
@@ -298,15 +299,34 @@ Backend of the browser wizard (`src/lib/poa`). Switches in `ops.config`, all off
   (staff aal2, fresh MFA, access log), then the object streams from the private bucket with `content-disposition: attachment`,
   `cache-control: no-store`, `referrer-policy: no-referrer`. No signed URL.
 
+## Client forms backend (`forms-intake`; contract: `docs/product/CLIENT-FORMS.md`; built 2026-11-23, off by default)
+
+One client session for all the questionnaires of `/forms` (identity once, then the questionnaires of a card one after
+another). Switches in `ops.config`: `forms_enabled` (master, off), `forms_health_enabled` (store the health answers; off =
+only the derived screening result is kept), `forms_turnstile_required` (default true). No new secret.
+
+- **forms-intake** (`verify_jwt=false`): `POST /start` (identity + consent + Turnstile -> `api.form_session_start`; the token
+  goes back once, only its SHA-256 reaches the database), `GET /state` (submissions with the draft answers for resume,
+  documents), `POST /step` (one step of one questionnaire; `draft_version` must be the one the server last answered, else
+  409 `stale_draft`), `POST /submit` (final answers + signer evidence, idempotent), `POST /document` (base64 JSON, up to 6 MB,
+  file signature checked against the extension; the row is created first so the database names the path
+  `forms/{agency}/{session}/{kind}-{document}.{ext}`, the bytes go to `client-docs`, then `api.form_document_stored`).
+  Order: preflight -> Origin (403) -> per-isolate reject counter (429) -> route + body cap + key whitelist -> switch
+  (`api.form_config`, 503 `inactive`) -> Turnstile -> RPC. Errors are `{"error": "<kind>", "code": "<short code>"}`; the
+  code is the database's short word (`stale_draft`, `already_submitted`, `feature_disabled:forms_enabled`) or the function's
+  own (`invalid_phone`, `turnstile_rejected`), never a value. Logs: route, kind, code, session id.
+- **Staff**: `staff.form_submission_list` / `form_submission_get` / `form_submission_set_status` (admin, fresh TOTP, access
+  log); client uploads download through `client-docs` like POA documents (`staff.client_doc_get` joins both session kinds).
+
 ## Environment (Edge Function secrets; NAMES only)
 
 | Name | Used by | Required | Notes |
 |---|---|---|---|
 | `SEELD_SECRET_KEY` | lead-intake, notify-worker, chat-bot, fetch-cma-data | recommended | dedicated `sb_secret_*` (name it `automations`); falls back to the injected `SUPABASE_SECRET_KEYS` |
 | `EDGE_CRON_SECRET` | notify-worker, fetch-cma-data, health (detail) | yes for cron | must equal Vault `edge_cron_secret` |
-| `ALLOWED_ORIGINS` | lead-intake, chat-bot, health, poa-intake, client-docs | optional | comma list; default seeld.co.il + www; staging adds its preview origin |
+| `ALLOWED_ORIGINS` | lead-intake, chat-bot, health, poa-intake, client-docs, forms-intake | optional | comma list; default seeld.co.il + www; staging adds its preview origin |
 | `ENV` | all | recommended | `production` / `staging` / `development`; unset = production (fail closed) |
-| `TURNSTILE_SECRET_KEY` | lead-intake, poa-intake | yes in production | test secret on branches |
+| `TURNSTILE_SECRET_KEY` | lead-intake, poa-intake, forms-intake | yes in production | test secret on branches |
 | `RESEND_API_KEY` | notify-worker | yes | |
 | `NOTIFY_FROM` | notify-worker | optional | default `SEELD <no-reply@seeld.co.il>` (domain must be verified in Resend) |
 | `NOTIFY_TO_INSURANCE`, `NOTIFY_TO_FINANCE`, `NOTIFY_TO_GENERAL` | notify-worker | optional | defaults Moshe@ / Shmulik@ / Shmulik@seeld.info |
@@ -384,10 +404,10 @@ docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4
   deno test --no-prompt _shared/test.ts lead-intake/ notify-worker/ chat-bot/ fetch-cma-data/ health/
 docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4 \
   deno test --no-prompt _shared/surense/ surense-webhook/ surense-worker/ surense-sync/
-docker run --rm -v "$PWD:/w" -w /w/supabase/functions denoland/deno:alpine-2.1.4   deno test --no-prompt --node-modules-dir=none _shared/poa/ poa-intake/ client-docs/
+docker run --rm -v "$PWD:/w" -w /w/supabase/functions denoland/deno:alpine-2.1.4   deno test --no-prompt --node-modules-dir=none _shared/poa/ poa-intake/ client-docs/ forms-intake/
 docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4 \
   deno check lead-intake/index.ts notify-worker/index.ts chat-bot/index.ts fetch-cma-data/index.ts health/index.ts \
-    surense-webhook/index.ts surense-worker/index.ts surense-sync/index.ts poa-intake/index.ts client-docs/index.ts
+    surense-webhook/index.ts surense-worker/index.ts surense-sync/index.ts poa-intake/index.ts client-docs/index.ts forms-intake/index.ts
 # vitest keeps covering the shared modules from the web side
 npx vitest run src/test/edge-shared.test.ts src/test/surense-shared.test.ts
 npx eslint supabase/functions

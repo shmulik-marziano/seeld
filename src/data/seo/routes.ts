@@ -336,6 +336,13 @@ export const ROUTES: RouteEntry[] = [
     description: "בדיקת זכויות וכספים שנשכחו: החזרי מס, קצבאות ביטוח לאומי, הטבות מס לעצמאים וקופות פנסיוניות. הבדיקה נעשית בשיחה אישית.",
     related: ["/portfolio-review", "/savings/pension-funds", "/contact"],
   }),
+  r({
+    path: "/forms", kind: "service", group: "about", changefreq: "monthly", priority: 0.7,
+    title: "שאלונים ומסמכים | הזמנת מידעים, פרטים, בריאות, פיננסי ואפיון סיכון | SEELD",
+    description: "מקום אחד למילוי השאלונים של שילד: הזמנת מידעים בייפוי כוח, פרטים אישיים ומסמכים, שאלון בריאות, שאלון פיננסי ומורחב ואפיון סיכון. ממלאים בזה אחר זה, והצוות מקבל הכול מסודר.",
+    related: ["/portfolio-review", "/rights-extraction", "/direct-debit", "/contact"],
+  }),
+  // /forms/:card (the flow itself) is noindex and never in the sitemap: a personal-data flow, not a page.
   // /onboarding is a redirect to the POA wizard (/report/start/order?from=join, noindex) since 2026-11-22: not a page.
   r({
     path: "/direct-debit", kind: "flow", group: "about", changefreq: "monthly", priority: 0.5,

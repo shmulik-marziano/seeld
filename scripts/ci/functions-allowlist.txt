@@ -6,6 +6,7 @@ _shared
 chat-bot
 client-docs
 fetch-cma-data
+forms-intake
 health
 lead-intake
 notify-worker

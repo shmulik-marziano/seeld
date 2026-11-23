@@ -7,7 +7,7 @@ import { isUnknown } from "../types";
 import { computeFlow, computeProgress, isAnswered, validateQuestion } from "../logic";
 import { initialState, reducer } from "../reducer";
 import { buildSubmitPayload, defaultStore, disabledSubmitAdapter, newSessionId } from "../adapters";
-import type { QuestionnaireStore, SubmitAdapter } from "../adapters";
+import type { QuestionnaireStore, SubmitAdapter, SubmitSigner } from "../adapters";
 import { HEALTH_PRIVACY_NOTE, NOT_SENT_NOTICE, sectionCopy, whyWeAsk } from "../copy";
 import { ageFromBirth } from "../validators";
 import { BmiNote, SimpleInput } from "./fields";
@@ -28,12 +28,16 @@ export interface RunnerProps {
   /** where the exit link leads */
   exitTo?: string;
   exitLabel?: string;
+  /** the action offered on the thank-you screen (the client flow: "ממשיכים לשאלון הבא") */
+  next?: { label: string; to: string; note?: string };
+  /** called once the final submit answered (saved, duplicate or error); the client flow moves on from here */
+  onSubmitted?: (result: "saved" | "error") => void;
 }
 
 const AUTO_ADVANCE_MS = 260;
 const MODE_LABEL: Record<RunnerMode, string> = { agent: "מילוי עם הלקוח", "client-link": "מילוי עצמאי", meeting: "תיעוד מהיר" };
 
-export function Runner({ def, mode, store = defaultStore, submit = disabledSubmitAdapter, requestToken = null, initialAnswers, initialKey = null, exitTo = "/app/questionnaires", exitLabel = "לכל השאלונים" }: RunnerProps) {
+export function Runner({ def, mode, store = defaultStore, submit = disabledSubmitAdapter, requestToken = null, initialAnswers, initialKey = null, exitTo = "/app/questionnaires", exitLabel = "לכל השאלונים", next, onSubmitted }: RunnerProps) {
   const sensitive = def.key === "health";
   const needsConsent = !!def.intro;
   const [state, dispatch] = useReducer(reducer, undefined, () => initialState(def.key, mode, needsConsent));
@@ -80,15 +84,18 @@ export function Runner({ def, mode, store = defaultStore, submit = disabledSubmi
   // ---- focus the heading on every screen change
   useEffect(() => { headingRef.current?.focus({ preventScroll: false }); }, [resolvedKey, state.phase]);
 
-  const saveStep = useCallback(async (stepKey: string | null, isSubmit = false) => {
-    if (!submit.enabled) { dispatch({ type: "save", state: { status: "disabled", at: new Date().toISOString() } }); return; }
+  const saveStep = useCallback(async (stepKey: string | null, isSubmit = false, signer?: SubmitSigner) => {
+    if (!submit.enabled) { dispatch({ type: "save", state: { status: "disabled", at: new Date().toISOString() } }); if (isSubmit) onSubmitted?.("saved"); return; }
     dispatch({ type: "save", state: { status: "saving", at: null } });
+    let outcome: "saved" | "error" = "saved";
     try {
       const payload = buildSubmitPayload({ def, answers: answersRef.current, mode, sessionId: sessionId.current, requestToken, stepKey, submit: isSubmit });
-      const r = await (isSubmit ? submit.submit(payload) : submit.saveStep(payload));
-      dispatch({ type: "save", state: { status: r.status === "error" ? "error" : "saved", at: r.savedAt ?? new Date().toISOString() } });
-    } catch { dispatch({ type: "save", state: { status: "error", at: null } }); }
-  }, [def, mode, requestToken, submit]);
+      const r = await (isSubmit ? submit.submit(payload, signer) : submit.saveStep(payload));
+      outcome = r.status === "error" ? "error" : "saved";
+      dispatch({ type: "save", state: { status: outcome, at: r.savedAt ?? new Date().toISOString() } });
+    } catch { outcome = "error"; dispatch({ type: "save", state: { status: "error", at: null } }); }
+    if (isSubmit) onSubmitted?.(outcome);
+  }, [def, mode, requestToken, submit, onSubmitted]);
 
   // ---- navigation
   const go = (key: string | null, d: "fwd" | "back" = "fwd") => { setDir(d); if (key) dispatch({ type: "goto", key }); else { dispatch({ type: "review" }); } };
@@ -232,11 +239,16 @@ export function Runner({ def, mode, store = defaultStore, submit = disabledSubmi
   if (state.phase === "sign") {
     return chrome(
       <SignStep def={def} answers={state.answers} sensitive={sensitive} onBack={back}
-        onSigned={(res) => { setSigned(res); void saveStep(null, true); store.clear(def.key); dispatch({ type: "done" }); }} />,
+        onSigned={(res) => {
+          setSigned(res);
+          void saveStep(null, true, { name: res.signerName, kind: res.signature.kind, png: res.signature.png, hash: res.hash, signedAt: res.signedAt });
+          store.clear(def.key);
+          dispatch({ type: "done" });
+        }} />,
     );
   }
   if (state.phase === "done" && signed) {
-    return chrome(<DoneStep def={def} answers={state.answers} signed={signed} sensitive={sensitive} onClear={clearAll} exitTo={exitTo} exitLabel={exitLabel} submitEnabled={submit.enabled} />);
+    return chrome(<DoneStep def={def} answers={state.answers} signed={signed} sensitive={sensitive} onClear={clearAll} exitTo={exitTo} exitLabel={exitLabel} submitEnabled={submit.enabled} next={next} saveState={state.save.status} />);
   }
   if (!step) {
     return chrome(<section className="sd-q-card"><p className="sd-q-p">אין שאלות להצגה.</p></section>);
@@ -340,7 +352,7 @@ export function Runner({ def, mode, store = defaultStore, submit = disabledSubmi
           <SdSpot name={isGate ? "heart-pink" : "olive-sapling"} size={60} className="sd-q-spot-corner" />
         </section>
         <p className="sd-q-remaining" aria-live="polite">{remainingInSection > 0 ? `עוד ${remainingInSection} שאלות בחלק הזה` : "זו השאלה האחרונה בחלק הזה"}</p>
-        {mode !== "meeting" && <p className="sd-q-fine">{sensitive ? HEALTH_PRIVACY_NOTE : NOT_SENT_NOTICE}</p>}
+        {mode !== "meeting" && (sensitive ? <p className="sd-q-fine">{HEALTH_PRIVACY_NOTE}</p> : !submit.enabled ? <p className="sd-q-fine">{NOT_SENT_NOTICE}</p> : null)}
         <button type="button" className="sd-q-linkbtn sd-q-clear" onClick={clearAll}>ניקוי כל התשובות מהדפדפן</button>
       </main>
       <div className="sd-q-bar" role="toolbar" aria-label="ניווט בשאלון">

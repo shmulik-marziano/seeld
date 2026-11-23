@@ -90,13 +90,23 @@ export interface SubmitResult {
   savedAt?: string;
   version?: number;
 }
+/** The signer evidence the Runner collected at the signature step (sent with the final submit). */
+export interface SubmitSigner {
+  name: string;
+  kind: "drawn" | "typed";
+  /** PNG data URL of the drawn signature */
+  png?: string;
+  /** SHA-256 of the signed payload, as shown in the PDF footer */
+  hash: string;
+  signedAt: string;
+}
 export interface SubmitAdapter {
   readonly enabled: boolean;
   readonly label: string;
   /** Per-screen autosave. Idempotent by payload.idempotencyKey; versioned by the server. */
   saveStep(payload: SubmitPayload): Promise<SubmitResult>;
-  /** Final submit. */
-  submit(payload: SubmitPayload): Promise<SubmitResult>;
+  /** Final submit, with the signer evidence when the questionnaire has a signature step. */
+  submit(payload: SubmitPayload, signer?: SubmitSigner): Promise<SubmitResult>;
 }
 /** Default: disabled "coming soon" no-op. No network. */
 export const disabledSubmitAdapter: SubmitAdapter = {

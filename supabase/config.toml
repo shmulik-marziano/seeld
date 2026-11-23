@@ -136,6 +136,8 @@ verify_jwt = true
 verify_jwt = false
 [functions.client-docs]        # staff download of stored client documents; JWT + staff aal2/fresh MFA checked in the DB (staff.client_doc_get)
 verify_jwt = true
+[functions.forms-intake]       # public client forms backend (/forms); Origin + Turnstile + session token + ops.config switches (forms_*) in the function and DB
+verify_jwt = false
 # Platform scaffolds kept until the owner decides (park them, or keep and fix). Never public.
 [functions.api-v1]
 verify_jwt = true
