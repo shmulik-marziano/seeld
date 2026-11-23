@@ -85,7 +85,7 @@ export function SdProgress() {
  */
 export function SdStageSpot({ art, index = 0, name }: { art: ArtName | string; index?: number; name?: SpotName }) {
   const pool = [name ?? spotAt(art, index), spotAt(art, index + 1), spotAt(art, index + 2), spotAt(art, index + 3), spotAt(art, index + 4)];
-  const extra: SpotName[] = ["olive-sapling", "seal-check", "pen", "shield-blue", "key-brass"];
+  const extra: SpotName[] = ["olive-sapling", "compass", "pen", "shield-blue", "key-brass"];
   const names = [...new Set<SpotName>([...pool, ...extra])].slice(0, 5);
   const sizes = [124, 100, 92, 132, 108];
   return (

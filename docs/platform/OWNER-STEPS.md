@@ -30,7 +30,7 @@
 | שם | ערך | למה |
 |---|---|---|
 | `SEELD_SECRET_KEY` | המפתח מ-1.2 | גישת הפונקציות למסד; בלעדיו `staff-invite` מחזירה 503 |
-| `EDGE_CRON_SECRET` | הערך של Vault `edge_cron_secret` | אימות קריאות ה-cron |
+| `EDGE_CRON_SECRET` | (רשות מאז 23.11) הערך של Vault `edge_cron_secret` | אימות קריאות ה-cron. מאז 23.11 הפונקציות בודקות מול ה-Vault דרך `api.cron_secret_ok`, ולכן אין צורך בהעתקה ידנית |
 | `TURNSTILE_SECRET_KEY` | מהווידג'ט ב-2.1 | בלעדיו כל ליד מקבל 503 |
 | `RESEND_API_KEY` | מחשבון Resend | שליחת מיילים לצוות ולהתראות |
 | `GOOGLE_AI_API_KEY` | אותו מפתח Gemini שבטוקיו, מוזן מחדש | הצ'אט |
@@ -40,7 +40,8 @@
 | `NOTIFY_TO_INSURANCE`, `NOTIFY_TO_FINANCE`, `NOTIFY_TO_GENERAL` | תיבות המחלקות (אם רוצים לשנות מברירת המחדל) | ניתוב לידים |
 
 - **אסור:** `SEELD_ENV` בפרויקט הזה (מדליק מצב שבו קישורי הזמנה חוזרים לאדמין).
-- **העתקת `EDGE_CRON_SECRET`:** ב-SQL Editor `select decrypted_secret from vault.decrypted_secrets where name = 'edge_cron_secret';`, להעתיק ישר לשדה הסוד, ולסגור את התוצאה. לא להדביק בשום מקום אחר.
+- **העתקת `EDGE_CRON_SECRET` (רשות):** ב-SQL Editor `select decrypted_secret from vault.decrypted_secrets where name = 'edge_cron_secret';`, להעתיק ישר לשדה הסוד, ולסגור את התוצאה. לא להדביק בשום מקום אחר. מאז 23.11 העותק אינו נדרש: ה-Vault הוא מקור האמת (`api.cron_secret_ok`).
+- **פרטי בעל הרישיון למסמכי ייפוי הכוח (מנוע עצמי):** לא סודות אלא שורות ב-`ops.config`: `poa_licensee_name`, `poa_licensee_license`, `poa_licensee_phone`, `poa_licensee_email` (SQL Editor: `update ops.config set value = '...' where key = '...'`). הסודות `POA_LICENSEE_*` הם גיבוי בלבד.
 - **בדיקה:** `curl -H "x-cron-secret: <הערך>" https://qxhpolktdfgcbxtfxgov.supabase.co/functions/v1/health` מחזיר `edge` עם רשימת השמות המוגדרים.
 
 ### 1.4 נאמנות מפתחות ההצפנה

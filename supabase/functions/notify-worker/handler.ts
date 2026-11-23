@@ -9,7 +9,7 @@ import type { Logger } from "../_shared/logger.ts";
 import { requestIdFor } from "../_shared/request.ts";
 import { type FetchFn, type Rpc, RpcError } from "../_shared/db.ts";
 import type { Env } from "../_shared/env.ts";
-import { requireCronSecret } from "../_shared/secret.ts";
+import { cronSecretViaRpc, requireCronSecret } from "../_shared/secret.ts";
 import { type Defer, jobRunId } from "../_shared/background.ts";
 import { type Email, escapeHtml, sendEmail } from "../_shared/resend.ts";
 
@@ -197,7 +197,7 @@ export function createWorkerHandler(d: WorkerDeps): (req: Request) => Promise<Re
     const log = d.log.child({ requestId: rid });
     try {
       if (req.method !== "POST") throw new HttpError("method_not_allowed", "POST only");
-      await requireCronSecret(req, d.env.cronSecret);
+      await requireCronSecret(req, d.env.cronSecret, d.rpc ? cronSecretViaRpc(d.rpc) : undefined);
       if (!d.rpc) throw new HttpError("unavailable", "Not configured");
       const rpc = d.rpc;
       const run = jobRunId(req);

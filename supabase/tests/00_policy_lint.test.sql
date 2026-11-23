@@ -37,10 +37,10 @@ select set_eq(
             ('surense_audit'),
             ('poa_session_start'), ('poa_session_get'), ('poa_engine_ref_set'), ('poa_preview_set'), ('poa_consent_record'),
             ('poa_session_fail'), ('poa_session_complete'), ('poa_document_link'), ('poa_document_stored'), ('poa_document_from_url'), ('poa_doc_get'), ('poa_doc_claim'), ('poa_config'),
-            ('poa_ship_enqueue'), ('poa_ship_get'), ('poa_ship_set'),
+            ('poa_ship_enqueue'), ('poa_ship_get'), ('poa_ship_set'), ('cron_secret_ok'),
             ('form_config'), ('form_session_start'), ('form_session_get'), ('form_step_save'), ('form_submit'), ('form_session_fail'),
             ('form_document_add'), ('form_document_stored') $$,
-  'service-only RPCs in api (52)');
+  'service-only RPCs in api (53)');
 
 -- the documented advisor exceptions (lints 0028/0029): exactly these SECURITY DEFINER functions are callable by API roles
 select set_eq(

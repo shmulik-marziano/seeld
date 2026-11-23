@@ -19,7 +19,7 @@ end $$;
 select ok(current_setting('t.has_vault')::boolean, 'Vault is present (the POA flow needs it)');
 
 -- ---------------------------------------------------------------- switches
-select set_eq($$ select key || '=' || value from ops.config where key like 'poa%' $$,
+select set_eq($$ select key || '=' || value from ops.config where key like 'poa%' and key not like 'poa_licensee%' $$,
   $$ values ('poa_enabled=false'), ('poa_docs_enabled=false'), ('poa_engine=surense'), ('poa_native_shadow=false'),
             ('poa_surense_url_id='), ('poa_module_maslaka=true'), ('poa_module_harbit=true'), ('poa_module_policies=true'),
             ('poa_turnstile_required=true') $$,

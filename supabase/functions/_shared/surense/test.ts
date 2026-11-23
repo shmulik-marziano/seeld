@@ -8,6 +8,7 @@ import { surenseApi } from "./api.ts";
 import { verifyWebhook } from "./svix.ts";
 import { CUSTOMER_INDEX_KEYS, DOCUMENT_INDEX_KEYS, mapCustomer, mapDocument, mapProduct, PRODUCT_INDEX_KEYS, TRANSPORT_KEYS } from "./mirror.ts";
 import { eventRefs, planEvent, pullCustomers, pullDocuments, e9100Download } from "./sync.ts";
+import { eventTypeOf, normalizeEventType } from "./events.ts";
 import { failureOutcome, runJob, type JobRow } from "./jobs.ts";
 import { InputError } from "./errors.ts";
 import { RpcError } from "../db.ts";
@@ -376,6 +377,28 @@ Deno.test("events: refs and plans by type (payload schema unknown: ids only)", (
   assert.deepEqual(planEvent("lead.created", { data: { id: EVT } }), { action: "skip", reason: "no_lead_mirror" });
   assert.deepEqual(planEvent("meeting.created", {}), { action: "skip", reason: "no_handler" });
   assert.deepEqual(planEvent("dataproxy.aleph.approved", { data: {} }), { action: "skip", reason: "no_customer_ref" });
+});
+
+Deno.test("events: real Surense bodies (flat, PascalCase eventType; verified 2026-11-23) route end to end", () => {
+  const flat = (eventType: string, more: Record<string, unknown> = {}) => ({
+    eventType, customerId: CID.toUpperCase(), tenantId: EVT, agencyId: EVT, date: "2026-11-23T12:50:21Z", firstName: "Zz", lastName: "Zz", ...more,
+  });
+  const route = (body: Record<string, unknown>) => planEvent(eventTypeOf(body), body);
+  assert.deepEqual(route(flat("NispahAlefProxyApproved", { approvalDate: "2026-11-23T12:50:21.824+00:00" })), { action: "pull_documents", customerId: CID, poaKind: "maslaka" });
+  assert.deepEqual(route(flat("NispahHeiProxyApproved")), { action: "pull_documents", customerId: CID, poaKind: "harbit" });
+  assert.deepEqual(route(flat("NispahBetProxyApproved")), { action: "pull_documents", customerId: CID, poaKind: "policies" });
+  assert.deepEqual(route(flat("HarbDataLoaded", { hbValidityDate: "2027-05-23" })), { action: "pull_documents", customerId: CID });
+  assert.deepEqual(route(flat("SwiftnessE9100Completed", { txId: EVT.toUpperCase(), misparMislaka: "123456" })), { action: "e9100_download", customerId: CID, eventId: EVT });
+  assert.deepEqual(route(flat("SwiftnessE9100Submitted", { swiftnessEventId: EVT })), { action: "skip", reason: "no_handler" }, "the submission is ours; the completion does the work");
+  assert.deepEqual(route(flat("CustomerCreated", { idNumber: "000000018" })), { action: "pull_customer", customerId: CID });
+  assert.deepEqual(route(flat("CustomerUpdated", { diff: {} })), { action: "pull_customer", customerId: CID });
+  assert.deepEqual(route(flat("CustomerDeleted")), { action: "mark_customer_deleted", customerId: CID });
+  assert.deepEqual(route(flat("LeadCreated", { leadId: EVT, leadNumber: 7 })), { action: "pull_customer", customerId: CID });
+  assert.deepEqual(route({ customerId: CID, fullName: "Zz Zz" }), { action: "skip", reason: "no_handler" }, "the Svix sample body has no type");
+  assert.equal(normalizeEventType("dataproxy.hei.approved"), "dataproxy.hei.approved", "already dotted: unchanged");
+  assert.equal(normalizeEventType("  CustomerCreated "), "customer.created");
+  assert.equal(normalizeEventType("X".repeat(81)), "unknown");
+  assert.equal(normalizeEventType(null), "unknown");
 });
 
 Deno.test("jobs: failure mapping keeps codes only", () => {

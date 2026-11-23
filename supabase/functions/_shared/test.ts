@@ -2,7 +2,8 @@
 import assert from "node:assert/strict";
 import { loadEnv, parseEmailList, parseStage, pickKey } from "./env.ts";
 import { clientIp, isPublicIp } from "./ip.ts";
-import { createTagger, hasCronSecret, shortHash, timingSafeEqual } from "./secret.ts";
+import { createTagger, cronSecretViaRpc, hasCronSecret, requireCronSecret, shortHash, timingSafeEqual } from "./secret.ts";
+import { HttpError } from "./errors.ts";
 import { createRpc, RpcError } from "./db.ts";
 import { verifyTurnstile } from "./turnstile.ts";
 import { sendEmail } from "./resend.ts";
@@ -52,6 +53,26 @@ Deno.test("secret: constant-time compare and fail-closed cron check", async () =
   assert.equal(await hasCronSecret(req("nope"), "s3cret"), false);
   assert.equal(await hasCronSecret(req(), "s3cret"), false);
   assert.equal(await hasCronSecret(req("anything"), null), false);
+});
+
+Deno.test("secret: requireCronSecret accepts the function secret or the Vault answer, 503 only when neither source exists", async () => {
+  const req = (v?: string) => new Request("http://x", { headers: v ? { "x-cron-secret": v } : {} });
+  const asked: string[] = [];
+  const viaDb = (ok: boolean) => async (s: string) => (asked.push(s), ok);
+  await requireCronSecret(req("s3cret"), "s3cret", viaDb(false));
+  assert.deepEqual(asked, [], "the function secret matched: the database is not asked");
+  await requireCronSecret(req("vault-value-for-tests-aaaaaaaaaa"), "s3cret", viaDb(true));
+  assert.deepEqual(asked, ["vault-value-for-tests-aaaaaaaaaa"], "a mismatch with the function secret asks the database");
+  await requireCronSecret(req("vault-value-for-tests-aaaaaaaaaa"), null, viaDb(true));
+  await assert.rejects(() => requireCronSecret(req("vault-value-for-tests-aaaaaaaaaa"), null, viaDb(false)), (e: unknown) => e instanceof HttpError && e.code === "unauthenticated");
+  await assert.rejects(() => requireCronSecret(req("short"), null, viaDb(true)), (e: unknown) => e instanceof HttpError && e.code === "unauthenticated");
+  assert.equal(asked.filter((s) => s === "short").length, 0, "a short header never reaches the database");
+  await assert.rejects(() => requireCronSecret(req(), null, viaDb(true)), (e: unknown) => e instanceof HttpError && e.code === "unauthenticated");
+  await assert.rejects(() => requireCronSecret(req("anything-long-enough-0123"), null), (e: unknown) => e instanceof HttpError && e.code === "unavailable");
+  // the RPC wrapper: true only on an exact `true`; an error (older schema) is a refusal
+  assert.equal(await cronSecretViaRpc({ call: async () => true })("vault-value-for-tests-aaaaaaaaaa"), true);
+  assert.equal(await cronSecretViaRpc({ call: async () => "true" })("vault-value-for-tests-aaaaaaaaaa"), false);
+  assert.equal(await cronSecretViaRpc({ call: async () => { throw new Error("PGRST202"); } })("vault-value-for-tests-aaaaaaaaaa"), false);
 });
 
 Deno.test("db: apikey header only, schema profile, PT errors keep the short code", async () => {

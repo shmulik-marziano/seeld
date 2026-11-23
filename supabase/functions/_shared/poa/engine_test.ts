@@ -447,7 +447,11 @@ Deno.test("rpc: argument names follow the migration, bytea literals, answers par
   assert.equal(nextOf(parseModules(MODS)), "maslaka");
   assert.equal(await createPoaRpc(mockRpc(() => { throw rpcError(404, "PGRST202"); })).config(), null, "no api.poa_config in the database");
   const cfg = await createPoaRpc(mockRpc(() => ({ poa_enabled: true, modules: { maslaka: true } }))).config();
-  assert.deepEqual(cfg, { poaEnabled: true, engine: "surense", turnstileRequired: true, modules: { maslaka: true, harbit: false, policies: false } });
+  assert.deepEqual(cfg, { poaEnabled: true, engine: "surense", turnstileRequired: true, modules: { maslaka: true, harbit: false, policies: false }, licensee: null });
+  const withLic = await createPoaRpc(mockRpc(() => ({ poa_enabled: true, engine: "native", licensee: { name: "Zz Agent", license: "L-00000000", phone: "050-000-0000", email: "agent@example.com" } }))).config();
+  assert.deepEqual(withLic?.licensee, { name: "Zz Agent", license: "L-00000000", phone: "050-000-0000", email: "agent@example.com" });
+  const partial = await createPoaRpc(mockRpc(() => ({ poa_enabled: true, licensee: { name: "Zz Agent", license: "", phone: "", email: "" } }))).config();
+  assert.equal(partial?.licensee, null, "empty ops.config rows are no licensee");
 });
 
 Deno.test("session token: 32 random bytes, base64url, only the hash is stored; env settings", async () => {
