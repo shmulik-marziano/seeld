@@ -61,6 +61,50 @@ export function createObjectReader(o: { url: string; apikey: string; fetch?: Fet
   };
 }
 
+export interface ObjectSigner {
+  /** a short-lived download URL for one object of the private bucket; null when the object does not exist */
+  sign(path: string, expiresInSec: number): Promise<string | null>;
+}
+
+/** Signed URLs for the client area (Storage REST `object/sign`, service key). Used only after the database confirmed the
+ *  caller owns the document; the URL lives a few minutes and is never logged. */
+export function createObjectSigner(o: { url: string; apikey: string; fetch?: FetchFn; timeoutMs?: number }): ObjectSigner {
+  const doFetch = o.fetch ?? fetch;
+  return {
+    async sign(path, expiresInSec) {
+      if (!PATH.test(path) || path.includes("..") || path.includes("//")) throw new StorageError(400);
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), o.timeoutMs ?? 10_000);
+      try {
+        let res: Response;
+        try {
+          res = await doFetch(`${o.url}/storage/v1/object/sign/${BUCKET}/${path}`, {
+            method: "POST",
+            headers: { apikey: o.apikey, authorization: `Bearer ${o.apikey}`, "content-type": "application/json", "cache-control": "no-store" },
+            body: JSON.stringify({ expiresIn: Math.max(30, Math.min(900, Math.floor(expiresInSec))) }),
+            signal: ctrl.signal,
+          });
+        } catch {
+          throw new StorageError(0);
+        }
+        if (res.status === 404 || res.status === 400) {
+          await res.body?.cancel();
+          return null;
+        }
+        if (!res.ok) {
+          await res.body?.cancel();
+          throw new StorageError(res.status);
+        }
+        const j = (await res.json().catch(() => ({}))) as { signedURL?: unknown };
+        if (typeof j.signedURL !== "string" || !j.signedURL.startsWith("/")) throw new StorageError(502);
+        return `${o.url}/storage/v1${j.signedURL}`;
+      } finally {
+        clearTimeout(timer);
+      }
+    },
+  };
+}
+
 /** Headers for a PDF the browser saves: attachment, never cached, no referrer, no sniffing. */
 export function downloadHeaders(requestId: string, fileName: string, sha256?: string | null): Record<string, string> {
   return {

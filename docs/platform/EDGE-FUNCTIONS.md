@@ -18,6 +18,7 @@ for the five functions T2 owns. `staff-invite` belongs to T1 and is documented t
 | `poa-intake` | POA wizard (browser) | false | Origin allowlist + Turnstile + session token (SHA-256 only to the DB) + `poa_*` switches | `poa_config` (optional), `poa_session_*`, `poa_engine_ref_set`, `poa_preview_set`, `poa_consent_record`, `poa_document_from_url`, `poa_document_stored`, `poa_doc_get`, `poa_doc_claim`, `poa_ship_enqueue`, `surense_gate`, `surense_job_enqueue`, `surense_audit` |
 | `client-docs` | staff app | true | staff JWT -> `staff.client_doc_get` (staff aal2 + fresh MFA + access log) | none with the service key (storage read only) |
 | `forms-intake` | client forms `/forms` (browser) | false | Origin allowlist + Turnstile + session token (SHA-256 only to the DB) + `forms_*` switches | `form_config`, `form_session_start`, `form_session_get`, `form_step_save`, `form_submit`, `form_session_fail`, `form_document_add`, `form_document_stored` |
+| `client-area` | personal client area `/my` (browser) | false | Origin allowlist + Turnstile on `/login/start` + one-time code to the mobile on file (Micropay) + session token (`Authorization: Bearer`, SHA-256 only to the DB) + `client_area_*` switches | `client_area_config`, `client_login_start`, `client_login_challenge_use`, `client_login_verify`, `client_session_get`, `client_portfolio_get`, `client_documents_list`, `client_document_get`, `client_logout` |
 
 `verify_jwt=false` everywhere here on purpose: the platform JWT check also accepts the publishable and secret API keys,
 so it authenticates nothing for these callers (research/SUPABASE.md, "Securing Edge Functions"). Each function does its
@@ -319,15 +320,41 @@ only the derived screening result is kept), `forms_turnstile_required` (default 
 - **Staff**: `staff.form_submission_list` / `form_submission_get` / `form_submission_set_status` (admin, fresh TOTP, access
   log); client uploads download through `client-docs` like POA documents (`staff.client_doc_get` joins both session kinds).
 
+## Client area backend (`client-area`; contract: `docs/product/CLIENT-AREA.md`; built 2026-11-24, off by default)
+
+The personal area of a client on the site (`/my`). Login by unique data only: the national id and the mobile number we
+already hold (`crm.customers`, filled by the POA wizard and the Tokyo import), then a one-time code to that mobile
+(Micropay, `_shared/sms/micropay.ts`), then a 30-day session. Data: the Surense mirror (`crm.surense_products`,
+decrypted inside `api.client_portfolio_get` for one call, shaped by `_shared/client/portfolio.ts`) and the POA files of
+the client's wizard sessions (`crm.documents`, joined on the national id hmac). Switches in `ops.config`:
+`client_area_enabled` (master, off), `client_area_turnstile_required` (default true), `client_area_retention_enabled`
+(off: nothing is deleted until the owner opens it).
+
+- **client-area** (`verify_jwt=false`): `POST /login/start` (`api.client_login_start`: one challenge row for a hit and a miss
+  alike; a hit sends the code with `otpSend`; the answer and the padded duration are the same either way), `POST /login/verify`
+  (`api.client_login_challenge_use` counts the attempt and hands the mobile to the function for `otpVerify`; a valid code
+  opens the session through `api.client_login_verify`, the token goes back once), `GET /me`, `GET /portfolio`,
+  `GET /documents`, `GET /documents/:id` (a signed Storage link, 5 minutes, after `api.client_document_get` confirmed the
+  owner and wrote the access log), `POST /logout`. Order: preflight -> Origin (403) -> per-isolate reject counter (429) ->
+  route + body cap (4 KB) + key whitelist -> switch (`api.client_area_config`, 503 `inactive`) -> Turnstile -> RPC.
+  Errors are `{"error": {"code": "<code>"}}` with `inactive | unauthenticated | wrong_code (+tries_left) | max_tries |
+  expired | generic | rate_limited | unavailable | not_found`; never a value. Logs: route, code, ids; never a phone, an id,
+  a code, a token or a url.
+- **Staff**: `staff.client_sessions_revoke(p_customer)` signs a client out everywhere (staff, own agency, audit row).
+- **Retention**: pg_cron `client-area-cleanup` (daily) -> `ops.client_area_cleanup()`; deletes only while
+  `client_area_retention_enabled` is on (challenges after 1 day, sessions 30 days past expiry or revocation).
+
 ## Environment (Edge Function secrets; NAMES only)
 
 | Name | Used by | Required | Notes |
 |---|---|---|---|
 | `SEELD_SECRET_KEY` | lead-intake, notify-worker, chat-bot, fetch-cma-data | recommended | dedicated `sb_secret_*` (name it `automations`); falls back to the injected `SUPABASE_SECRET_KEYS` |
 | `EDGE_CRON_SECRET` | notify-worker, fetch-cma-data, health (detail) | yes for cron | must equal Vault `edge_cron_secret` |
-| `ALLOWED_ORIGINS` | lead-intake, chat-bot, health, poa-intake, client-docs, forms-intake | optional | comma list; default seeld.co.il + www; staging adds its preview origin |
+| `ALLOWED_ORIGINS` | lead-intake, chat-bot, health, poa-intake, client-docs, forms-intake, client-area | optional | comma list; default seeld.co.il + www; staging adds its preview origin |
+| `SMS_API_TOKEN` | client-area, sms-health | yes for the client area | Micropay token with the SMS permission only (`_shared/sms/micropay.ts`); without it `/login/start` answers `unavailable` |
+| `SMS_SENDER_ID` | client-area | optional | an approved Micropay sender id (number or name); absent = the account default |
 | `ENV` | all | recommended | `production` / `staging` / `development`; unset = production (fail closed) |
-| `TURNSTILE_SECRET_KEY` | lead-intake, poa-intake, forms-intake | yes in production | test secret on branches |
+| `TURNSTILE_SECRET_KEY` | lead-intake, poa-intake, forms-intake, client-area | yes in production | test secret on branches |
 | `RESEND_API_KEY` | notify-worker | yes | |
 | `NOTIFY_FROM` | notify-worker | optional | default `SEELD <no-reply@seeld.co.il>` (domain must be verified in Resend) |
 | `NOTIFY_TO_INSURANCE`, `NOTIFY_TO_FINANCE`, `NOTIFY_TO_GENERAL` | notify-worker | optional | defaults Moshe@ / Shmulik@ / Shmulik@seeld.info |
@@ -407,8 +434,11 @@ docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4
   deno test --no-prompt _shared/surense/ surense-webhook/ surense-worker/ surense-sync/
 docker run --rm -v "$PWD:/w" -w /w/supabase/functions denoland/deno:alpine-2.1.4   deno test --no-prompt --node-modules-dir=none _shared/poa/ poa-intake/ client-docs/ forms-intake/
 docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4 \
+  deno test --no-prompt _shared/sms/ _shared/client/ sms-health/ client-area/
+docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4 \
   deno check lead-intake/index.ts notify-worker/index.ts chat-bot/index.ts fetch-cma-data/index.ts health/index.ts \
-    surense-webhook/index.ts surense-worker/index.ts surense-sync/index.ts poa-intake/index.ts client-docs/index.ts forms-intake/index.ts
+    surense-webhook/index.ts surense-worker/index.ts surense-sync/index.ts poa-intake/index.ts client-docs/index.ts forms-intake/index.ts \
+    sms-health/index.ts client-area/index.ts
 # vitest keeps covering the shared modules from the web side
 npx vitest run src/test/edge-shared.test.ts src/test/surense-shared.test.ts
 npx eslint supabase/functions
