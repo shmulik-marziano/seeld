@@ -80,7 +80,7 @@ describe("poa copy: verbatim from the spec", () => {
     c.q.consent.title, c.q.consent.termsParts.join(""), c.q.consent.marketing, c.q.consent.err,
     c.q.errDate, c.q.errFuture, c.q.errAge, c.q.errOrder, c.q.cta, c.q.skip,
     c.s2a.title, c.s2a.fix, c.s2a.cta,
-    c.s3.title, c.s3.lead, c.s3.cta, c.s3.doneLine,
+    c.s3.title, c.s3.lead, c.s3.sigLabel, c.s3.sigLine, c.s3.doneLine,
     ...Object.values(c.card.labels), c.card.fixedLine, c.card.view,
     c.s4.title, c.s4.lead, c.s4.check, c.s4.err, c.s4.cta,
     c.s5.title, c.s5.lead, c.s5.datesLine, c.s5.check, c.s5.errCheck, c.s5.cta,

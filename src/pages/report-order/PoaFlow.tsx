@@ -120,7 +120,7 @@ export function PoaWizard({ api: injected, entry: injectedEntry }: { api?: PoaAp
    * stops the sequence on the error screen; the approvals already recorded stay recorded, "נסו שוב" returns to the
    * approve screen with those documents marked done.
    */
-  const approveAll = async (signaturePng: string | null) => {
+  const approveAll = async (signaturePng: string) => {
     if (!modules) return;
     const kinds = openKinds(modules);
     setBusy(true);
@@ -128,9 +128,8 @@ export function PoaWizard({ api: injected, entry: injectedEntry }: { api?: PoaAp
       for (let i = 0; i < kinds.length; i++) {
         const k = kinds[i];
         setSeq({ n: i + 1, m: kinds.length });
-        const extra: Record<string, string> = k === "harbit"
-          ? { birth_date: state.details.birth, issue_date: state.details.issue }
-          : k === "policies" && signaturePng ? { signature_png: signaturePng } : {};
+        // the one signature goes with every approval (the server stamps it on every final document); harbit adds its dates
+        const extra: Record<string, string> = { signature_png: signaturePng, ...(k === "harbit" ? { birth_date: state.details.birth, issue_date: state.details.issue } : {}) };
         const res = await api.consent(k, { preview_sha256: previews[k]?.sha ?? "", ...extra });
         dispatch({ type: "CONSENTED", res });
       }

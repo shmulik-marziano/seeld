@@ -19,7 +19,7 @@ const signature = await decodePng(fromBase64(PNG_B64));
 for (const kind of POA_KINDS) {
   await Deno.writeFile(`${out}/${kind}-preview.pdf`, await renderPoa({ kind, identity, licensee, now: new Date() }, fonts));
   await Deno.writeFile(`${out}/${kind}-final.pdf`, await renderPoa({
-    kind, identity, licensee, now: new Date(), evidence: { at: new Date(), ip: "203.0.113.9", signature: kind === "policies" ? signature : undefined },
+    kind, identity, licensee, now: new Date(), evidence: { at: new Date(), ip: "203.0.113.9", signature },
   }, fonts));
 }
 console.log(`wrote 6 files to ${out}`);

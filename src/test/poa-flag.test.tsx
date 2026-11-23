@@ -196,7 +196,12 @@ describe("POA page", () => {
     fireEvent.click(screen.getByRole("button", { name: /אישור הפרטים והמשך/ }));
 
     // ס4–ס6 in one screen (owner decision 2026-11-23): both open documents listed, each with its card and its check,
-    // one button at the end. The policies document is disabled in this mock: no signature pad, "אישור וסיום".
+    // ONE signature pad at the end (stamped on every document) and one button. The policies document is disabled in this mock.
+    // jsdom has no canvas: a do-nothing 2D context, a fixed PNG export and pointer capture are enough for the pad
+    const ctx = new Proxy({}, { get: () => () => undefined, set: () => true });
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(ctx as unknown as CanvasRenderingContext2D);
+    vi.spyOn(HTMLCanvasElement.prototype, "toDataURL").mockReturnValue("data:image/png;base64,iVBORw0KGgoAAAA");
+    if (!HTMLElement.prototype.setPointerCapture) HTMLElement.prototype.setPointerCapture = () => undefined;
     await waitFor(() => expect(h2()).toBe("שלב 3 מתוך 3: המסמכים לאישור"));
     await waitFor(() => expect(document.activeElement).toBe(h2El()));
     expect(screen.getAllByText("במסמך מופיע בעל הרישיון שמטפל בתיק שלכם.")).toHaveLength(2);
@@ -206,24 +211,37 @@ describe("POA page", () => {
     expect(screen.getByText("מכאן מגיע המידע על הביטוחים שלכם בכל החברות.")).toBeInTheDocument();
     expect(screen.queryByLabelText("תאריך לידה")).toBeNull(); // the dates were answered in ס1
     expect(screen.getByText("במסמך מופיעים תאריך הלידה ותאריך ההנפקה שמסרתם.")).toBeInTheDocument();
-    expect(screen.queryByText("חתימה על ייפוי כוח פוליסות")).toBeNull();
+    expect(screen.queryByText("חתימה על ייפוי כוח פוליסות")).toBeNull(); // the per-document label of the old ס6 screen
+    expect(screen.getByText("חתימה על ייפויי הכוח", { selector: "p" })).toBeInTheDocument(); // the one pad, also without policies
+    expect(screen.getByText("החתימה מוטבעת בכל מסמך שאישרתם.")).toBeInTheDocument();
     // the mock builds two real PDFs: slow under a full parallel run
     await waitFor(() => expect(screen.getAllByRole("button", { name: "צפייה במסמך" })).toHaveLength(2), { timeout: 8000 });
-    await waitFor(() => expect(screen.getByRole("button", { name: /אישור וסיום/ })).toBeEnabled(), { timeout: 8000 });
-    // nothing ticked: both errors, focus on the first
-    fireEvent.click(screen.getByRole("button", { name: /אישור וסיום/ }));
+    await waitFor(() => expect(screen.getByRole("button", { name: /חתימה וסיום/ })).toBeEnabled(), { timeout: 8000 });
+    // nothing ticked, nothing signed: both check errors and the signature error, focus on the first check
+    fireEvent.click(screen.getByRole("button", { name: /חתימה וסיום/ }));
     expect(await screen.findAllByText("כדי להמשיך צריך לסמן את האישור.")).toHaveLength(2);
+    expect(screen.getByText("צריך לחתום במסגרת כדי להמשיך.")).toBeInTheDocument();
     await waitFor(() => expect(document.activeElement?.id).toBe("poa-check-maslaka"));
     fireEvent.click(screen.getByRole("checkbox", { name: /למסלקה הפנסיונית בשמי/ }));
-    fireEvent.click(screen.getByRole("button", { name: /אישור וסיום/ }));
-    expect(await screen.findAllByText("כדי להמשיך צריך לסמן את האישור.")).toHaveLength(1);
     fireEvent.click(screen.getByRole("checkbox", { name: /הר הביטוח בשמי/ }));
-    fireEvent.click(screen.getByRole("button", { name: /אישור וסיום/ }));
+    // both ticked, still unsigned: only the signature error, focus on the signature group
+    fireEvent.click(screen.getByRole("button", { name: /חתימה וסיום/ }));
+    expect(screen.queryByText("כדי להמשיך צריך לסמן את האישור.")).toBeNull();
+    expect(await screen.findByText("צריך לחתום במסגרת כדי להמשיך.")).toBeInTheDocument();
+    await waitFor(() => expect(document.activeElement?.id).toBe("poa-sig"));
+    expect(document.getElementById("poa-sig")?.getAttribute("aria-describedby")).toContain("poa-sig-err");
+    // one stroke on the pad = the signature
+    const canvas = screen.getByRole("img", { name: "חתימה על ייפויי הכוח" });
+    fireEvent.pointerDown(canvas, { clientX: 10, clientY: 10, pointerId: 1 });
+    fireEvent.pointerUp(canvas, { clientX: 12, clientY: 12, pointerId: 1 });
+    await waitFor(() => expect(screen.queryByText("צריך לחתום במסגרת כדי להמשיך.")).toBeNull());
+    fireEvent.click(screen.getByRole("button", { name: /חתימה וסיום/ }));
 
     await waitFor(() => expect(h2()).toBe("קיבלנו את האישורים"), { timeout: 8000 });
     await waitFor(() => expect(document.activeElement).toBe(h2El()));
     expect(screen.getAllByRole("button", { name: /הורדה/ })).toHaveLength(2);
-    expect(screen.getAllByText("סימון")).toHaveLength(2);
+    expect(screen.getAllByText("חתימה")).toHaveLength(2); // the one signature went with both approvals (method `signature`)
+    expect(screen.queryByText("סימון")).toBeNull();
     expect(screen.queryByText("תוקף")).toBeNull(); // no approved template: no validity row on the summary
     expect(set).not.toHaveBeenCalled();
     set.mockRestore();

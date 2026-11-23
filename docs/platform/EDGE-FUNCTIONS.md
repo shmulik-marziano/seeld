@@ -265,7 +265,7 @@ Backend of the browser wizard (`src/lib/poa`). Switches in `ops.config`, all off
 
 - **poa-intake** (`verify_jwt=false`): routes `POST /start`, `POST /maslaka|/harbit|/policies`, `GET /state`,
   `GET /preview/:kind`, `GET /doc/:kind`. Order: preflight -> Origin allowlist (403) -> per-isolate reject counter (429) ->
-  route + body cap (8 KB; 2 KB per consent; ~300 KB for the signature) with a key whitelist per route -> `/start`: `api.poa_config` when the database has it
+  route + body cap (8 KB for `/start`; ~300 KB per consent, since every consent may carry the drawn signature) with a key whitelist per route -> `/start`: `api.poa_config` when the database has it
   (switch off -> 503 `{"error":"inactive"}` before anything is spent; without it the kill switches inside `api.poa_session_start` answer the same) -> Turnstile when `poa_turnstile_required` (token in body
   `turnstile_token`; missing or rejected -> 400) -> identity validation (id check digit, Israeli mobile only, names) ->
   `api.poa_session_start` (token generated here, only its SHA-256 sent as bytea) -> `api.surense_gate(write, invite-proxies)` -> engine
@@ -284,7 +284,7 @@ Backend of the browser wizard (`src/lib/poa`). Switches in `ops.config`, all off
   the tool while the client is in the wizard. `/start` keeps a snapshot of the identity and the licence holder (`POA_LICENSEE_*`)
   inside the encrypted engine reference; previews and the signed final documents are rendered by `_shared/poa/render.ts` from
   `_shared/poa/templates.ts` (the tool's wording letter for letter; A4, Rubik from `_shared/pdfkit/fonts.ts`, the signature PNG
-  decoded by `_shared/pdfkit/png.ts`) and stored right after each consent (`api.poa_document_from_url(..., 'native')`). The last
+  decoded by `_shared/pdfkit/png.ts` and drawn in the client's slot of every document that came with one) and stored right after each consent (`api.poa_document_from_url(..., 'native')`). The last
   consent queues `surense.poa_ship`; the worker replays the session into the tool with the surense engine and then queues the
   E9100 launch. Staff: `staff.poa_session_list` (ship columns) and `staff.poa_ship_retry`.
 - **Final documents and launch** (surense engine): the webhook events `dataproxy.aleph|hei|bet.approved` plan a document pull

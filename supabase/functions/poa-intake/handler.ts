@@ -35,9 +35,8 @@ import { type FinalDocsDeps, storeFinalDocuments, storeRenderedDocument } from "
 import type { ZipLookup } from "../_shared/poa/zip.ts";
 
 export const MAX_START_BYTES = 8 * 1024;
-export const MAX_CONSENT_BYTES = 2 * 1024;
-/** a drawn signature as a PNG data URL */
-export const MAX_POLICIES_BYTES = MAX_SIGNATURE_CHARS + 2 * 1024;
+/** every consent may carry the drawn signature as a PNG data URL (owner decision 2026-11-23: one signature, stamped on all three documents) */
+export const MAX_CONSENT_BYTES = MAX_SIGNATURE_CHARS + 2 * 1024;
 /** floor of the /start duration; an overrun is rounded up to a multiple of START_BUCKET_MS (both overridable: POA_START_MIN_MS / _BUCKET_MS) */
 export const START_MIN_MS = DEFAULT_START_MIN_MS;
 export const START_BUCKET_MS = DEFAULT_START_BUCKET_MS;
@@ -50,11 +49,18 @@ const START_KEYS = ["first_name", "last_name", "national_id", "phone", "email", 
 export const ZIP_LIMIT = 30;
 export const ZIP_WINDOW_SEC = 600;
 const CONSENT_KEYS: Record<PoaKind, string[]> = {
-  maslaka: ["preview_sha256"],
-  harbit: ["preview_sha256", "birth_date", "issue_date"],
+  maslaka: ["preview_sha256", "signature_png"],
+  harbit: ["preview_sha256", "birth_date", "issue_date", "signature_png"],
   policies: ["preview_sha256", "signature_png"],
 };
-const METHOD: Record<PoaKind, "check" | "signature"> = { maslaka: "check", harbit: "check", policies: "signature" };
+/** the drawn signature of the body, validated; required for policies (as in the tool), optional for the other two (the wizard
+ *  sends the one signature with every approval; an older page may still send none) */
+function signatureOf(kind: PoaKind, body: Record<string, unknown>, bad: (code: string) => PoaHttpError): string | null {
+  if (body.signature_png === undefined && kind !== "policies") return null;
+  if (!pngBase64(body.signature_png)) throw bad("invalid_signature");
+  return body.signature_png as string;
+}
+const methodOf = (signature: string | null): "check" | "signature" => (signature ? "signature" : "check");
 const SECURITY_HEADERS = { "cache-control": "no-store", "referrer-policy": "no-referrer", "x-content-type-options": "nosniff" };
 
 export interface PoaIntakeDeps {
@@ -430,7 +436,7 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
       if (replay) {
         let body: Record<string, unknown>;
         try {
-          body = await readJson(req, kind === "policies" ? MAX_POLICIES_BYTES : MAX_CONSENT_BYTES);
+          body = await readJson(req, MAX_CONSENT_BYTES);
           onlyKeys(body, CONSENT_KEYS[kind]);
         } catch (e) {
           if (e instanceof PoaHttpError) return rejectEarly(rname, e);
@@ -440,9 +446,11 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
         if (typeof rsha !== "string" || !HASH_RE.test(rsha)) throw bad("invalid_preview_sha256");
         if (session.previewSha256[kind] !== rsha) throw bad("preview_mismatch");
         if (!ip) throw bad("no_client_ip");
+        // the signature is validated but not stored again: the recorded approval stands; `method` mirrors what the page sent
+        const replayMethod = methodOf(signatureOf(kind, body, bad));
         const again = await poa.consentRecord({ sessionId: session.sessionId, kind, previewSha256: rsha, birthDate: null, issueDate: null, signature: null, clientIp: ip, userAgent: ua, replay: true });
         log.info("poa consent replay", { session: session.sessionId, kind });
-        return json({ kind, method: METHOD[kind], approved_at: again.approvedAt, valid_until: again.validUntil, modules: modulesView(again.modules), next: again.next });
+        return json({ kind, method: replayMethod, approved_at: again.approvedAt, valid_until: again.validUntil, modules: modulesView(again.modules), next: again.next });
       }
 
       const engine = engineFor(session.engine);
@@ -480,7 +488,7 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
       // consent
       let body: Record<string, unknown>;
       try {
-        body = await readJson(req, kind === "policies" ? MAX_POLICIES_BYTES : MAX_CONSENT_BYTES);
+        body = await readJson(req, MAX_CONSENT_BYTES);
         onlyKeys(body, CONSENT_KEYS[kind]);
       } catch (e) {
         if (e instanceof PoaHttpError) return rejectEarly(rname, e);
@@ -491,7 +499,6 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
       if (session.previewSha256[kind] !== sha) throw bad("preview_mismatch");
       let birth: string | null = null;
       let issue: string | null = null;
-      let signature: string | null = null;
       if (kind === "harbit") {
         // the same rule as api.poa_consent_record (issue strictly after birth; today = Israel today): the database must never
         // refuse what the tool already accepted
@@ -500,10 +507,8 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
         birth = hd.birth;
         issue = hd.issue;
       }
-      if (kind === "policies") {
-        if (!pngBase64(body.signature_png)) throw bad("invalid_signature");
-        signature = body.signature_png as string;
-      }
+      // the one drawn signature travels with every approval and is stamped on every final document (method `signature`)
+      const signature = signatureOf(kind, body, bad);
       if (!ip) throw bad("no_client_ip");
 
       let finalUrls: FinalUrls = {};
@@ -590,7 +595,7 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
       }
       return json({
         kind,
-        method: METHOD[kind],
+        method: methodOf(signature),
         approved_at: rec.approvedAt,
         valid_until: rec.validUntil,
         modules: modulesView(rec.modules),

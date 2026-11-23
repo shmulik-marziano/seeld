@@ -38,9 +38,9 @@ All calls need an `Origin` in `ALLOWED_ORIGINS` (403 otherwise). The session tok
 |---|---|---|
 | `POST /start` | `first_name`, `last_name`, `national_id` (9 digits, check digit), `phone` (`05XXXXXXXX` or `+9725XXXXXXXX`), `email` (string or null), `street` (street + house number, 2-80 chars, required), `city` (2-80 chars, required), `zip` (7 digits, required), `terms_privacy_approved` (must be `true`), `marketing_approved` (bool), `turnstile_token` | `session_token`, `expires_at`, `modules`, `next` |
 | `GET /zip?street=&city=` | query only, no session (the address question runs before `/start`); Origin-gated, 30 lookups per client address per 10 minutes | `{"zip": "1234567"}` or `{"zip": null}`. Server-side lookup against Israel Post's locate-zip backend (`_shared/poa/zip.ts`; `POA_ZIP_LOOKUP=off` disables, `ISRAEL_POST_KEY` overrides the public key). Best effort: null means the visitor types it. |
-| `POST /maslaka` | `preview_sha256` | `kind`, `method` (`check`), `approved_at`, `valid_until`, `modules`, `next` |
-| `POST /harbit` | `preview_sha256`, `birth_date`, `issue_date` (ISO `YYYY-MM-DD`, not in the future) | same as above |
-| `POST /policies` | `preview_sha256`, `signature_png` (PNG data URL, up to 300 KB) | same as above, `method` is `signature` |
+| `POST /maslaka` | `preview_sha256`, `signature_png` (optional; the wizard sends the one signature with every approval since 2026-11-23) | `kind`, `method` (`signature` when a signature came, else `check`), `approved_at`, `valid_until`, `modules`, `next` |
+| `POST /harbit` | `preview_sha256`, `birth_date`, `issue_date` (ISO `YYYY-MM-DD`, not in the future), `signature_png` (optional, as above) | same as above |
+| `POST /policies` | `preview_sha256`, `signature_png` (PNG data URL, up to 300 KB, required) | same as above, `method` is `signature` |
 | `GET /state` | none | `status` (`open`/`completed`/`expired`/`locked`), `expires_at`, `modules`, `next` |
 | `GET /preview/:kind` | none | the PDF (`application/pdf`); header `x-poa-preview-sha256` carries the SHA-256 hex of the bytes (also stored in the session) |
 | `GET /doc/:kind` | none | the stored final PDF, once, within 30 minutes of completion; `content-disposition: attachment`, `cache-control: no-store`, `referrer-policy: no-referrer`, `x-content-type-options: nosniff` |
@@ -126,8 +126,9 @@ With `poa_engine = native` nothing reaches the tool while the client is in the w
    letter for letter; `_shared/poa/render.ts`, A4, Rubik embedded from `_shared/pdfkit/fonts.ts`) with a visible "תצוגה מקדימה,
    טרם אושר" mark; the hash is recorded exactly like the tool's preview.
 3. `POST /maslaka|/harbit|/policies`: the engine validates like the tool would (dates, PNG signature), `api.poa_consent_record`
-   records the approval, then the FINAL document is rendered with the evidence block (name, Israel date and time, client address;
-   the drawn signature on policies) and stored at once: `api.poa_document_from_url(session, kind, sha256, 'native')` ->
+   records the approval, then the FINAL document is rendered with the evidence block (name, Israel date and time, client address)
+   and the drawn signature in the client's slot of every document that came with one (owner decision 2026-11-23: the wizard
+   sends the one signature with all three) and stored at once: `api.poa_document_from_url(session, kind, sha256, 'native')` ->
    `poa/{agency}/{session}/{kind}-{document}.pdf` -> `api.poa_document_stored`. A render or storage failure never fails the
    consent: a `docs_*` code lands on the session (staff see it).
 4. The last module completes the session and queues the ship: `api.poa_ship_enqueue(session)` (`ship_status = pending`, one
@@ -163,8 +164,9 @@ The signatures are those of migration `20261121150000_poa_flow.sql` (section "Da
   (flat, snake_case, encrypted whole); `poa_session_get` returns it decrypted, only while the session is open. The identity is
   never returned by itself (the native renderer reads the snapshot inside the reference).
 - `poa_preview_set(session, kind, sha256)` after every preview; `poa_consent_record(session, kind, method, preview sha, signature
-  data URL, ip, user agent, {birth_date, issue_date})` after the tool accepted the approval (method `check`, `signature` for
-  `policies`); the last enabled module completes the session; `poa_session_complete` is called afterwards (idempotent). If the
+  data URL, ip, user agent, {birth_date, issue_date})` after the tool accepted the approval (method `signature` whenever the
+  drawn signature came with the approval, which the wizard does for all three since 2026-11-23; `check` otherwise); the last
+  enabled module completes the session; `poa_session_complete` is called afterwards (idempotent). If the
   record fails after the tool accepted, a code `consent_record_<code>` is stored on the session; the retry (the tool answers 409
   `completed`) records the approval. A consent for a module already performed is a REPLAY: 200 with the recorded approval, also on
   a completed session; nothing reaches the tool and no launch is queued. The harbit dates use one rule in the function and in
@@ -256,9 +258,11 @@ Job kinds `surense.e9100_submit` (params `customer_id`, `proxy_approval_date`; d
 
 Owner decision after the first real run ("את הסימונים וי לסמן במסך אחד", "רק בסוף יהיה שידור"): the three documents are
 approved on ONE screen (`screens/Approve.tsx`, machine screen `approve`). The screen fetches every open document's preview
-at once (`GET /preview/:kind`, one per document), shows each with its card, "צפייה במסמך" and its check (signature pad for
-`policies`), and one button sends the approvals in display order (`POST /maslaka`, `/harbit`, `/policies`: the server
-contract is unchanged, one call per document, each rendering and storing its final file). The Surense ship job is queued
+at once (`GET /preview/:kind`, one per document), shows each with its card, "צפייה במסמך" and its check (the declaration for
+`policies`), then ONE signature pad at the end (owner, the same evening, after the first native run showed the signature in
+one file only: "החתימה אמורה להיות מושתלת בשלושת ייפויי הכוח"), and one button sends the approvals in display order
+(`POST /maslaka`, `/harbit`, `/policies`, each with the same `signature_png`: one call per document, each rendering and
+storing its final file with the signature in the client's slot). The Surense ship job is queued
 by the server only after the last approval, as before. A failure mid-sequence shows the error screen; the approvals already
 recorded stay recorded and "נסו שוב" returns to the approve screen with those documents marked "אושר ונשמר". The old
 per-document screens (`Maslaka.tsx`, `Harbit.tsx`, `Policies.tsx`) are no longer routed.

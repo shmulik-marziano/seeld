@@ -439,6 +439,25 @@ Deno.test("consent maslaka: exact response keys, engine called, database records
   assert.ok(!s.rpc.calls.some((c) => c.fn === "surense_job_enqueue"), "not the last module: no launch");
 });
 
+Deno.test("consent maslaka/harbit with the one signature (owner decision 2026-11-23): method `signature`, the PNG recorded and handed to the engine", async () => {
+  const s = setup({ script: { poa_consent_record: { kind: "maslaka", method: "signature", approved_at: "2026-11-21T12:00:01Z", valid_until: null, modules: MODS({ maslaka: true }), next: "harbit", complete: false } } });
+  const res = await s.handler(post("maslaka", { preview_sha256: HASH, signature_png: PNG_URL }, withSession));
+  assert.equal(res.status, 200);
+  assert.equal((await res.json()).method, "signature");
+  const rec = s.rpc.calls.find((c) => c.fn === "poa_consent_record")!;
+  assert.equal(rec.args.p_method, "signature");
+  assert.equal(rec.args.p_signature, PNG_URL);
+  assert.equal(rec.args.p_extra, null);
+  assert.equal((s.eng.calls[0].args[2] as { signaturePng?: string }).signaturePng, PNG_URL, "the engine sees the signature");
+  const h = setup({ script: { poa_consent_record: { kind: "harbit", method: "signature", approved_at: "2026-11-21T12:00:02Z", valid_until: null, modules: MODS({ harbit: true }), next: "policies", complete: false } } });
+  const r2 = await h.handler(post("harbit", { preview_sha256: HASH, birth_date: "1990-05-17", issue_date: "2015-01-01", signature_png: PNG_URL }, withSession));
+  assert.equal(r2.status, 200);
+  const rec2 = h.rpc.calls.find((c) => c.fn === "poa_consent_record")!;
+  assert.equal(rec2.args.p_method, "signature");
+  assert.equal(rec2.args.p_signature, PNG_URL);
+  assert.deepEqual(rec2.args.p_extra, { birth_date: "1990-05-17", issue_date: "2015-01-01" });
+});
+
 Deno.test("consent: wrong or missing preview hash, unknown keys, bad dates and bad signatures are refused before the tool", async () => {
   const s = setup();
   const tries: [string, unknown][] = [
@@ -453,6 +472,8 @@ Deno.test("consent: wrong or missing preview hash, unknown keys, bad dates and b
     ["harbit", { preview_sha256: HASH, birth_date: "17/05/1990", issue_date: "2015-01-01" }],
     ["policies", { preview_sha256: HASH }],
     ["policies", { preview_sha256: HASH, signature_png: "data:text/html;base64,AAAA" }],
+    ["maslaka", { preview_sha256: HASH, signature_png: "data:text/html;base64,AAAA" }],
+    ["harbit", { preview_sha256: HASH, birth_date: "1990-05-17", issue_date: "2015-01-01", signature_png: "data:text/html;base64,AAAA" }],
   ];
   for (const [kind, body] of tries) {
     const r = await s.handler(post(kind, body, withSession));

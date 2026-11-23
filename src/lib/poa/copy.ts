@@ -91,8 +91,10 @@ export const POA_COPY = {
     lead: "קוראים כל מסמך ומסמנים. חותמים פעם אחת בסוף, והפנייה לגופים יוצאת רק אחרי האישור האחרון.",
     /** the one button while the approvals are sent in order */
     preparing: (n: number, m: number) => `מכינים את המסמכים… ${n} מתוך ${m}`,
-    /** when the policies document is not among the open ones (else ס6's "חתימה וסיום") */
-    cta: "אישור וסיום",
+    /** the one signature pad at the end of the screen (owner decision 2026-11-23): the same signature is stamped on every
+     *  document approved here, so it is asked once, whichever documents are open */
+    sigLabel: "חתימה על ייפויי הכוח",
+    sigLine: "החתימה מוטבעת בכל מסמך שאישרתם.",
     /** a document approved earlier in the session (after an error and "נסו שוב") */
     doneLine: "אושר ונשמר",
   },
