@@ -13,7 +13,7 @@ import type { Env } from "../_shared/env.ts";
 import { errorResponse, HttpError, jsonResponse } from "../_shared/errors.ts";
 import type { Logger } from "../_shared/logger.ts";
 import { requestIdFor } from "../_shared/request.ts";
-import { requireCronSecret } from "../_shared/secret.ts";
+import { cronSecretViaRpc, requireCronSecret } from "../_shared/secret.ts";
 import type { TokenSource } from "../_shared/surense/auth.ts";
 import { buildSyncDeps } from "../_shared/surense/connector.ts";
 import { type JobRow, runJob } from "../_shared/surense/jobs.ts";
@@ -104,7 +104,7 @@ export function createSurenseWorkerHandler(d: SurenseWorkerDeps): (req: Request)
     const log = d.log.child({ requestId: rid });
     try {
       if (req.method !== "POST") throw new HttpError("method_not_allowed", "POST only");
-      await requireCronSecret(req, d.env.cronSecret);
+      await requireCronSecret(req, d.env.cronSecret, d.rpc ? cronSecretViaRpc(d.rpc) : undefined);
       if (!d.rpc) throw new HttpError("unavailable", "Not configured");
       const rpc = d.rpc;
       const run = jobRunId(req);

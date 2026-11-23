@@ -22,7 +22,7 @@ import { clientIp } from "../_shared/ip.ts";
 import { requestIdFor } from "../_shared/request.ts";
 import { shortHash } from "../_shared/secret.ts";
 import { hostnamesFromOrigins, verifyTurnstile } from "../_shared/turnstile.ts";
-import { POA_KINDS, type EngineName, type EngineRef, type FinalUrls, type ModuleFlags, type PoaEngine, type PoaKind } from "../_shared/poa/engine/types.ts";
+import { POA_KINDS, type EngineName, type EngineRef, type FinalUrls, type ModuleFlags, type PoaEngine, type PoaKind, type PoaLicensee } from "../_shared/poa/engine/types.ts";
 import { PoaHttpError, PoaToolError, poaErrorResponse, toPoaError } from "../_shared/poa/errors.ts";
 import {
   cleanAddress, cleanEmail, cleanName, cleanZip, harbitDates, splitStreet, isValidIsraeliId, MAX_SIGNATURE_CHARS, pngBase64, todayIsrael, toE164IsraeliMobile,
@@ -66,6 +66,9 @@ export interface PoaIntakeDeps {
   engine: PoaEngine | null;
   /** the "native" engine (own rendering, the tool fed afterwards by the ship job); null/absent = not configured */
   native?: PoaEngine | null;
+  /** receives the licence holder of the switch snapshot (ops.config poa_licensee_*) before every native start, so the
+   *  owner edits it in the database and no function secret is needed */
+  setLicensee?: (licensee: PoaLicensee | null) => void;
   /** final documents; null when storage is not configured */
   storage: ObjectReader | null;
   /** fetch + store the three final documents right after the policies step; null/absent = skipped (the webhook path stays) */
@@ -282,6 +285,7 @@ export function createPoaHandler(d: PoaIntakeDeps): (req: Request) => Promise<Re
         // optional switch snapshot: without api.poa_config the SQL kill switches (PT423) and Turnstile-required apply
         const cfg = await poa.config();
         if (cfg && !cfg.poaEnabled) throw new PoaHttpError("inactive", "switch_off", { status: 503 });
+        if (cfg) d.setLicensee?.(cfg.licensee);
         let engine = cfg ? engineFor(cfg.engine) : null;
         if (cfg && !engine) throw new PoaHttpError("unavailable", "engine_not_configured");
 

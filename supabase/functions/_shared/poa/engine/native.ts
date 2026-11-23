@@ -18,8 +18,9 @@ export const NATIVE_URL_ID = "native";
 export const MAX_SIGNATURE_PIXELS = 1_000_000;
 
 export interface NativeEngineDeps {
-  /** the licence holder printed in the documents; null = not configured (every call answers `unavailable`) */
-  licensee: PoaLicensee | null;
+  /** the licence holder printed in the documents, a value or a getter read at every start() (ops.config through api.poa_config
+   *  first, the POA_LICENSEE_* secrets as the fallback); null = not configured (start answers `unavailable`) */
+  licensee: PoaLicensee | null | (() => PoaLicensee | null);
   /** the two Rubik faces (bytes); parsed once, lazily */
   fonts: () => { regular: Uint8Array; bold: Uint8Array };
   log: Logger;
@@ -57,9 +58,10 @@ export function createNativeEngine(d: NativeEngineDeps): PoaEngine {
 
     async start(who, modules) {
       if (!modules.maslaka && !modules.harbit && !modules.policies) throw new PoaToolError("generic", "no_modules");
-      if (!d.licensee) throw new PoaToolError("unavailable", "licensee_not_configured");
+      const licensee = typeof d.licensee === "function" ? d.licensee() : d.licensee;
+      if (!licensee) throw new PoaToolError("unavailable", "licensee_not_configured");
       d.log.info("poa engine started", { engine: "native", modules: Object.keys(modules).filter((k) => modules[k as PoaKind]).length });
-      return { customerId: null, urlId: NATIVE_URL_ID, sid: newSid(), existing: false, identity: who, licensee: d.licensee, modules: { ...modules } as ModuleFlags };
+      return { customerId: null, urlId: NATIVE_URL_ID, sid: newSid(), existing: false, identity: who, licensee, modules: { ...modules } as ModuleFlags };
     },
 
     // the same refusals the tool would give; nothing is stored here (the handler records the consent and stores the file)

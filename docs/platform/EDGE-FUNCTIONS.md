@@ -63,7 +63,9 @@ supabase/functions/
 - **Keys**: service RPCs use `SEELD_SECRET_KEY` in the `apikey` header only. If it is not set, the platform-injected
   `SUPABASE_SECRET_KEYS` (`default` entry) is used, so the functions work before the owner creates the dedicated key;
   `health` shows which one (`edge.secret_key`). `SUPABASE_SERVICE_ROLE_KEY` is never read (CI greps for it).
-- **Cron contract**: `x-cron-secret` must equal `EDGE_CRON_SECRET` (missing secret = 503, wrong = 401) -> answer `202`
+- **Cron contract**: `x-cron-secret` must equal `EDGE_CRON_SECRET`, or else the database must confirm it equals Vault
+  `edge_cron_secret` (`api.cron_secret_ok`, service role, digest comparison; since 2026-11-23 the Vault is the source of truth and
+  the function secret is an optional fast path; 503 only when neither exists, wrong = 401) -> answer `202`
   at once -> work inside `EdgeRuntime.waitUntil` -> report ONLY through `api.job_finish(x-job-run)`. A call without
   `x-job-run` (manual run) does the work and finishes no run.
 
@@ -312,7 +314,7 @@ Backend of the browser wizard (`src/lib/poa`). Switches in `ops.config`, all off
 | `SURENSE_MANAGER_ID` | poa-intake, surense-worker | yes for the wizard and the ship job | uuid of the Surense user that owns customers the wizard creates (`POST /customers` requires `managerId`); without it `/start` answers `unavailable` |
 | `SURENSE_DP_HOST` | poa-intake, surense-worker | optional | bare hostname of the public page API, default `dp.surense.com`; the only host besides `api.surense.com` the engine may reach |
 | `SURENSE_DP_BASE` | poa-intake, surense-worker | optional | path prefix of the public page API, default `/api/v1/ifs/public` (verified 2026-11-22) |
-| `POA_LICENSEE_NAME`, `POA_LICENSEE_LICENSE`, `POA_LICENSEE_PHONE`, `POA_LICENSEE_EMAIL` | poa-intake | yes for the native engine | the licence holder printed in the documents (name 2-80 chars, licence `[A-Za-z0-9-]{3,20}`, phone, e-mail); all four or the native engine answers `unavailable` at `/start` |
+| `POA_LICENSEE_NAME`, `POA_LICENSEE_LICENSE`, `POA_LICENSEE_PHONE`, `POA_LICENSEE_EMAIL` | poa-intake | optional (fallback) | the licence holder printed in the documents. Primary source since 2026-11-23: `ops.config` rows `poa_licensee_name` / `_license` / `_phone` / `_email`, returned by `api.poa_config` and read at every `/start` (name 2-80 chars, licence `[A-Za-z0-9-]{3,20}`, phone, e-mail); the secrets are used only when the rows are empty; neither = the native engine answers `unavailable` at `/start` |
 | `POA_START_MIN_MS` | poa-intake | optional | floor of the `/start` duration in ms (0..20000, default 6000); tune after the full run |
 | `POA_START_BUCKET_MS` | poa-intake | optional | an overrunning `/start` is rounded up to a multiple of this (500..20000, default 3000) |
 | injected: `SUPABASE_URL`, `SUPABASE_SECRET_KEYS`, `SUPABASE_PUBLISHABLE_KEYS`, `SB_REGION`, `DENO_DEPLOYMENT_ID` | all | platform | never set by hand |
@@ -330,9 +332,9 @@ headers x-cron-secret (Vault edge_cron_secret), x-request-id, x-job-run; timeout
 Day-2 enable (owner, SQL Editor, in this order):
 1. Vault: `project_url` and `edge_cron_secret` exist (created 2026-11-18 by T2 on seeld-site; check with
    `select name from vault.secrets`).
-2. Edge secret `EDGE_CRON_SECRET` = the Vault value (copy it in the SQL Editor with
-   `select decrypted_secret from vault.decrypted_secrets where name = 'edge_cron_secret';` and paste it into
-   Edge Functions > Secrets; never into chat, git or a ticket).
+2. (optional since 2026-11-23) Edge secret `EDGE_CRON_SECRET` = the Vault value. The functions now ask the database
+   (`api.cron_secret_ok`) when the header does not match the function secret, so a missing or stale copy no longer blocks the
+   ticks (the stale copy of 2026-11-21 made every tick answer 401 until this change).
 3. `RESEND_API_KEY` set and `insert into ops.alert_recipients (email) values ('<address>');`
 4. `update ops.config set value = 'true', updated_at = now() where key = 'edge_cron_enabled';`
 5. Within 2 minutes: `select job, ok, finished_at, error from ops.job_runs order by id desc limit 5;` shows

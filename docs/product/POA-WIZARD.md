@@ -24,8 +24,10 @@ E9100 request, `surense_e9100_enabled`. The browser switch (`VITE_POA_FLOW`) sta
 Server environment (names only): `ALLOWED_ORIGINS`, `TURNSTILE_SECRET_KEY`, `SURENSE_CLIENT_ID`, `SURENSE_CLIENT_SECRET`,
 `SURENSE_MANAGER_ID` (the Surense user that owns created customers; required, fail closed with `unavailable` when missing),
 `SURENSE_DP_HOST` (default `dp.surense.com`, bare hostname only), `SURENSE_DP_BASE` (path prefix of the public-page API,
-default `/api/v1/ifs/public`), and for the native engine `POA_LICENSEE_NAME`, `POA_LICENSEE_LICENSE`, `POA_LICENSEE_PHONE`,
-`POA_LICENSEE_EMAIL` (the licence holder printed in the documents; all four or the native engine answers `unavailable`).
+default `/api/v1/ifs/public`). The native engine prints the licence holder from `ops.config` (`poa_licensee_name`,
+`poa_licensee_license`, `poa_licensee_phone`, `poa_licensee_email`, returned by `api.poa_config` and read at every `/start`);
+the secrets `POA_LICENSEE_NAME`, `POA_LICENSEE_LICENSE`, `POA_LICENSEE_PHONE`, `POA_LICENSEE_EMAIL` are only a fallback
+(neither = the native engine answers `unavailable`).
 
 ## 2. Routes (JSON, snake_case; base `/functions/v1/poa-intake`, `verify_jwt=false`)
 
@@ -118,7 +120,7 @@ The wizard never talks to Surense; `poa-intake` does (`_shared/poa/engine/surens
 With `poa_engine = native` nothing reaches the tool while the client is in the wizard (`_shared/poa/engine/native.ts`):
 
 1. `/start` takes no network call: the engine reference is a snapshot of the validated identity and of the licence holder
-   (`POA_LICENSEE_*`), stored encrypted by `api.poa_engine_ref_set` as flat `i_*` / `l_*` keys (`customer_id` absent, `url_id = native`).
+   (`ops.config poa_licensee_*`, fallback `POA_LICENSEE_*`), stored encrypted by `api.poa_engine_ref_set` as flat `i_*` / `l_*` keys (`customer_id` absent, `url_id = native`).
    `api.surense_gate` is not consulted (nothing is written to the tool).
 2. `GET /preview/:kind` renders the unsigned document from the approved templates (`_shared/poa/templates.ts`, the tool's wording
    letter for letter; `_shared/poa/render.ts`, A4, Rubik embedded from `_shared/pdfkit/fonts.ts`) with a visible "תצוגה מקדימה,
