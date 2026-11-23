@@ -252,6 +252,17 @@ Error codes: `PT400 invalid_input:<field>`, `PT423 feature_disabled:<key>`, `PT4
 Job kinds `surense.e9100_submit` (params `customer_id`, `proxy_approval_date`; dedupe `e9100:<id>`) and `surense.poa_ship` (params `session_id`; dedupe `poa_ship:<session>`) are accepted by `ops.surense_jobs` and `api.surense_job_enqueue`. `crm.poa_sessions` carries `ship_status`, `ship_error`, `ship_attempts`, `shipped_at` (migration `20261122180000_poa_native.sql`, pgTAP `13_poa_native.test.sql`); the same migration schedules `surense-worker-tick` (every minute through `ops.call_function`, a no-op while `edge_cron_enabled` is false).
 `ops.watchdog` has a `poa` step: a completed session older than one hour that lacks a document for an enabled module raises `poa_docs_missing` (count and first id, once per 24 h).
 
+## Browser flow (since 2026-11-23)
+
+Owner decision after the first real run ("את הסימונים וי לסמן במסך אחד", "רק בסוף יהיה שידור"): the three documents are
+approved on ONE screen (`screens/Approve.tsx`, machine screen `approve`). The screen fetches every open document's preview
+at once (`GET /preview/:kind`, one per document), shows each with its card, "צפייה במסמך" and its check (signature pad for
+`policies`), and one button sends the approvals in display order (`POST /maslaka`, `/harbit`, `/policies`: the server
+contract is unchanged, one call per document, each rendering and storing its final file). The Surense ship job is queued
+by the server only after the last approval, as before. A failure mid-sequence shows the error screen; the approvals already
+recorded stay recorded and "נסו שוב" returns to the approve screen with those documents marked "אושר ונשמר". The old
+per-document screens (`Maslaka.tsx`, `Harbit.tsx`, `Policies.tsx`) are no longer routed.
+
 ## Browser switches
 
 Build-time, in the site build (Vite env). All off by default; nothing in the repo turns them on.

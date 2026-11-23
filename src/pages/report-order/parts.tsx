@@ -26,12 +26,12 @@ export function StepCard({ id, title, dir, headingRef, prog, children }: {
   );
 }
 
-export function Bar({ onBack, cta, busy }: { onBack?: () => void; cta: string; busy: boolean }) {
+export function Bar({ onBack, cta, busy, busyText }: { onBack?: () => void; cta: string; busy: boolean; busyText?: string }) {
   return (
     <div className="sd-rk-bar sd-poa-bar" role="toolbar" aria-label={C.common.navLabel}>
       {onBack && <button type="button" className="sd-q-btn is-quiet" onClick={onBack} disabled={busy}>{C.common.back}</button>}
-      <button type="submit" className="sd-q-btn" disabled={busy} aria-busy={busy || undefined}>
-        {busy ? C.common.loading : cta}{!busy && <BrandIcon name="arrow-left" size={18} />}
+      <button type="submit" className="sd-q-btn" disabled={busy} aria-busy={busy || undefined} aria-live={busyText ? "polite" : undefined}>
+        {busy ? busyText ?? C.common.loading : cta}{!busy && <BrandIcon name="arrow-left" size={18} />}
       </button>
     </div>
   );

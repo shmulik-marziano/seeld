@@ -1,14 +1,15 @@
 // POA wizard state machine: pure, no React, no DOM, no network. The server (adapter) drives the next document
-// through `next` and `modules`; this file only resolves it to a screen, skips disabled / performed modules both ways,
-// derives "שלב N מתוך M" from the modules, and decides the time warning and expiry (spec §2, §3, ס8).
+// through `next` and `modules`; this file only resolves it to a screen, derives "שלב N מתוך M" from the modules, and
+// decides the time warning and expiry (spec §2, §3, ס8). Since 2026-11-23 (owner decision) every open document is
+// approved on ONE screen, "approve": the component sends the approvals in order and the screen ends when `next` is done.
 // ס1 is one question per screen (owner decision 2026-11-22): `q` is the index into Q_KEYS, every answer is validated
 // before the next question opens. Personal details live in this state only (component memory): no storage.
 import { POA_KINDS, POA_LIMITS, type PoaKind } from "./config";
 import { POA_COPY as C } from "./copy";
-import { nextOf, type ConsentRes, type ErrorKind, type PoaModules, type PoaNext, type StartRes } from "./api";
+import { type ConsentRes, type ErrorKind, type PoaModules, type PoaNext, type StartRes } from "./api";
 import { ageFromBirth, isMobile, validateDate, validateEmail, validateIsraeliId, validateIsraeliPhone, validatePersonName, validateText, validateZip } from "@/questionnaires/validators";
 
-export type Screen = "s0" | "q" | "s2a" | PoaKind | "s7" | "error";
+export type Screen = "s0" | "q" | "s2a" | "approve" | "s7" | "error";
 
 /** The questions of ס1, in order. E-mail is the one optional answer; `consent` is the terms (+ marketing) screen. */
 export const Q_KEYS = ["first", "last", "id", "birth", "issue", "street", "city", "zip", "phone", "email", "consent"] as const;
@@ -78,15 +79,14 @@ export const initialState = (): PoaState => ({
   warnDismissedFor: null,
 });
 
-const isKind = (s: Screen): s is PoaKind => (POA_KINDS as readonly string[]).includes(s);
 const open = (m: PoaModules, k: PoaKind) => m[k].enabled && !m[k].performed;
+/** Enabled documents not yet approved, in display order: what the approve screen asks for. */
+export const openKinds = (m: PoaModules): PoaKind[] => POA_KINDS.filter((k) => open(m, k));
 
-/** Server `next` to a screen: "done" ends the flow; a disabled or performed module is skipped to the next open one. */
+/** Server `next` to a screen: "done" ends the flow; anything still open is approved on the one approve screen. */
 export function resolveNext(modules: PoaModules, next: PoaNext): Screen {
   if (next === "done") return "s7";
-  if (open(modules, next)) return next;
-  const n = nextOf(modules);
-  return n === "done" ? "s7" : n;
+  return openKinds(modules).length ? "approve" : "s7";
 }
 
 /** Screen BACK goes to, or null when there is no way back. On "q" with q > 0 it is the previous question. */
@@ -94,11 +94,7 @@ export function backOf(s: PoaState): Screen | null {
   switch (s.screen) {
     case "q": return s.q > 0 ? "q" : "s0";
     case "s2a": return s.started ? null : "q";
-    case "maslaka": case "harbit": case "policies": {
-      const i = POA_KINDS.indexOf(s.screen);
-      for (let j = i - 1; j >= 0; j--) if (s.modules && open(s.modules, POA_KINDS[j])) return POA_KINDS[j];
-      return "s2a";
-    }
+    case "approve": return "s2a";
     default: return null;
   }
 }
@@ -135,10 +131,11 @@ export function reduce(s: PoaState, e: PoaEvent): PoaState {
       const done = { ...s.done, [res.kind]: { method: res.method, approved_at: res.approved_at, valid_until: res.valid_until } };
       // a late answer on the error screen: keep the summary accurate, stay on the error screen
       if (s.screen === "error") {
-        const resumeTo = s.resumeTo === res.kind ? resolveNext(res.modules, res.next) : s.resumeTo;
+        const resumeTo = s.resumeTo === "approve" ? resolveNext(res.modules, res.next) : s.resumeTo;
         return { ...s, modules: res.modules, done, resumeTo };
       }
-      if (s.screen !== res.kind) return s;
+      if (s.screen !== "approve") return s;
+      // the approve screen stays until the server says the flow is done (the component sends the approvals in order)
       return { ...s, modules: res.modules, done, screen: resolveNext(res.modules, res.next) };
     }
     case "BACK": {
@@ -150,7 +147,7 @@ export function reduce(s: PoaState, e: PoaEvent): PoaState {
     }
     case "FORWARD":
       if (s.screen !== "s2a" || !s.started || !s.modules) return s;
-      return { ...s, screen: resolveNext(s.modules, nextOf(s.modules)) };
+      return { ...s, screen: openKinds(s.modules).length ? "approve" : "s7" };
     case "FAIL":
       return { ...s, error: e.code, resumeTo: s.screen === "error" ? s.resumeTo : s.screen, screen: "error" };
     case "RETRY":
@@ -166,7 +163,7 @@ export function reduce(s: PoaState, e: PoaEvent): PoaState {
 }
 
 /** Screens on which the session clock matters (the summary keeps its own 30-minute download window). */
-const isActive = (s: PoaState) => s.screen === "s2a" || isKind(s.screen);
+const isActive = (s: PoaState) => s.screen === "s2a" || s.screen === "approve";
 
 export const msLeft = (s: PoaState, now: Date) => (s.session ? new Date(s.session.expires_at).getTime() - now.getTime() : Infinity);
 
@@ -177,11 +174,11 @@ export function shouldWarn(s: PoaState, now: Date): boolean {
   return left > 0 && left <= POA_LIMITS.warnBeforeMinutes * 60_000;
 }
 
-/** Steps inside the indicator: the questions (as one step), s2a and every enabled module not already performed at start. */
+/** Steps inside the indicator: the questions (as one step), s2a and the one approve screen when anything is left to approve. */
 export function steps(s: PoaState): Screen[] {
   // before the start call the modules are unknown: the list assumes all three (only used once modules are known)
-  const kinds = POA_KINDS.filter((k) => (s.modules ? s.modules[k].enabled : true) && !s.preDone.includes(k));
-  return ["q", "s2a", ...kinds];
+  const any = POA_KINDS.some((k) => (s.modules ? s.modules[k].enabled : true) && !s.preDone.includes(k));
+  return any ? ["q", "s2a", "approve"] : ["q", "s2a"];
 }
 
 /**

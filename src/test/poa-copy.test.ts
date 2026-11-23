@@ -80,6 +80,7 @@ describe("poa copy: verbatim from the spec", () => {
     c.q.consent.title, c.q.consent.termsParts.join(""), c.q.consent.marketing, c.q.consent.err,
     c.q.errDate, c.q.errFuture, c.q.errAge, c.q.errOrder, c.q.cta, c.q.skip,
     c.s2a.title, c.s2a.fix, c.s2a.cta,
+    c.s3.title, c.s3.lead, c.s3.cta, c.s3.doneLine,
     ...Object.values(c.card.labels), c.card.fixedLine, c.card.view,
     c.s4.title, c.s4.lead, c.s4.check, c.s4.err, c.s4.cta,
     c.s5.title, c.s5.lead, c.s5.datesLine, c.s5.check, c.s5.errCheck, c.s5.cta,
@@ -97,8 +98,10 @@ describe("poa copy: verbatim from the spec", () => {
     expect(c.q.phone.err).toBe("צריך מספר נייד שמתחיל ב־05");
     expect(poaStep(2, 6)).toBe("שלב 2 מתוך 6");
     expect(c.q.counter(3, 11)).toBe("שאלה 3 מתוך 11");
+    expect(c.s3.preparing(2, 3)).toBe("מכינים את המסמכים… 2 מתוך 3");
     expect(SPEC).toContain("שאלה N מתוך M");
     expect(SPEC).toContain("שלב N מתוך M");
+    expect(SPEC).toContain("מכינים את המסמכים… N מתוך M");
   });
 });
 

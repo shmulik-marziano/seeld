@@ -55,6 +55,15 @@
 .sd-poa-declaration { margin: 14px 0 4px; font-size: 16.5px; line-height: 1.7; color: #2d435d; font-weight: 500; }
 .sd-poa-alt { margin-top: 10px; }
 
+/* ס4–ס6 in one screen (owner decision 2026-11-23): one list, one bar at the end */
+.sd-poa-approve { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 6px; }
+.sd-poa-approve > li { padding: 10px 0 20px; border-bottom: 1px solid var(--q-line); }
+.sd-poa-approve > li:last-child { border-bottom: 0; padding-bottom: 4px; }
+.sd-poa-approve > li > .sd-q-hint { margin-bottom: 0; }
+.sd-poa-approve .sd-poa-doc { margin-top: 10px; }
+.sd-poa-approve > li.is-done .sd-poa-doc { opacity: .85; }
+.sd-poa-approved { margin: 12px 0 0; padding: 10px 14px; border-radius: 12px; background: #eef5ec; color: var(--q-navy); font-weight: 600; }
+
 /* summary */
 .sd-poa-done { list-style: none; margin: 12px 0; padding: 0; display: grid; gap: 12px; }
 .sd-poa-done li { padding: 14px 16px; border-radius: 14px; background: #fff; border: 1px solid var(--q-line); display: grid; gap: 10px; }
