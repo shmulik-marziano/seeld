@@ -1,5 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { MessageCircle } from "lucide-react";
+import { isQuietRoute } from "@/lib/quietRoutes";
 import { LiveDot } from "@/components/brand/Live";
 import ChatLauncher from "@/components/ChatLauncher";
 import ChatNudge from "@/components/ChatNudge";
@@ -26,6 +28,7 @@ const AIChatBotLoader = () => {
   const [mounted, setMounted] = useState(false);
   const openOnMount = useRef(false);
   const prefill = useRef("");
+  const quiet = isQuietRoute(useLocation().pathname);
 
   useEffect(() => {
     const openEarly = (e: Event) => {
@@ -45,6 +48,9 @@ const AIChatBotLoader = () => {
       </Suspense>
     );
   }
+
+  // Reading routes stay quiet: no launcher and no nudge until the page's own "ask" button opens the chat.
+  if (quiet) return null;
 
   if (LIVE_MARK) {
     return (

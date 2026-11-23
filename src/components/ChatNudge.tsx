@@ -15,7 +15,8 @@ const SCROLL_RATIO = 0.6;
 const MIN_SCROLL_Y = 200;
 const MIN_SCROLLABLE = 400;
 const QUIET_MS = 7 * 24 * 60 * 60 * 1000;
-const EXCLUDED = ["/app", "/q/", "/report", "/contact", "/privacy", "/terms", "/accessibility", "/auth", "/admin"];
+// Reading routes (/learn, /article) are quiet too: see src/lib/quietRoutes.ts.
+const EXCLUDED = ["/app", "/q/", "/report", "/contact", "/privacy", "/terms", "/accessibility", "/auth", "/admin", "/learn", "/article"];
 
 function readSession(k: string): string | null {
   try { return window.sessionStorage.getItem(k); } catch { return null; }

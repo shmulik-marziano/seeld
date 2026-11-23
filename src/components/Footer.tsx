@@ -131,7 +131,7 @@ const Footer = () => {
           </p>
           <div className="sd-chrome-foot-row">
             <p>
-              &copy; {BRAND_YEAR} שילד ביטוח ופיננסים · סוכנות ביטוח הפועלת מאז 2025, מבית עמיתים הון · מספר רישיון{" "}
+              &copy; {BRAND_YEAR} שילד ביטוח ופיננסים · מספר רישיון{" "}
               <bdi className="tabular-nums">138666</bdi>
             </p>
             <ul>

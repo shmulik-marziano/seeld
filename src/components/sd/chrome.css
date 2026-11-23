@@ -162,6 +162,8 @@
   .sd-chrome-fab-wa, .sd-chrome-fab-a11y { display: none; }
   .sd-chrome-fab { width: 44px; height: 44px; --base: calc(12px + var(--float-lift, 0px) + env(safe-area-inset-bottom, 0px)); }
   .sd-chrome-fab-chat { left: 12px; }
+  /* reading routes (src/lib/quietRoutes.ts): WhatsApp is the only floating action, so it takes the launcher's place */
+  .sd-chrome-fab-wa.is-solo { display: inline-flex; --o: 0px; left: 12px; }
   html[data-sd-cookie] .sd-chrome-fab { opacity: 0; visibility: hidden; pointer-events: none; }
   body:has(input:focus, textarea:focus, select:focus) .sd-chrome-fab { opacity: 0; visibility: hidden; pointer-events: none; }
   .sd-chrome-a11y-panel { right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }

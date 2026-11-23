@@ -2,7 +2,12 @@ import { useParams, Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import NotFound from "@/pages/NotFound";
-import { getArticleById, getRelatedArticles } from "@/data/articles";
+import { articles, getArticleById, getRelatedArticles } from "@/data/articles";
+import { artForArticle } from "@/data/knowledge/art";
+import { KnowledgeBar, KnowledgePlate, KnowledgeStamp } from "@/components/sd/knowledge";
+import { SdProgress } from "@/components/sd/primitives";
+import type { SpotName } from "@/components/sd/spots";
+import "@/components/sd/knowledge.css";
 import { usePageSeo } from "@/hooks/usePageSeo";
 import { buildArticleGraph } from "@/lib/structuredData";
 import { Facebook, Twitter, Linkedin, Link2 } from "lucide-react";
@@ -10,7 +15,7 @@ import { toast } from "sonner";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { isStockPhoto } from "@/lib/coverArt";
 import { SdBand, tintStyle, useSdFont } from "@/components/sd/primitives";
-import { PubArticleCard, PubClose, PubHead, PubHero, PubTocAside, PubTocInline, artForText, fullMonthDate } from "@/components/sd/pub";
+import { PubArticleCard, PubClose, PubHead, PubHero, PubTocAside, artForText, fullMonthDate } from "@/components/sd/pub";
 import "@/components/sd/sd.css";
 
 // Article in the kit design: hero with a contextual illustration (by topic), one reading column in serif
@@ -40,6 +45,7 @@ const Article = () => {
   const { art, tone } = artForText(article.category, article.title);
   const toc = article.content.sections.map((s, i) => ({ id: `sec-${i + 1}`, label: s.heading }));
   const hasPhoto = !isStockPhoto(article.image);
+  const drawing = artForArticle(article.id, article.category, articles.filter((a) => a.category === article.category).map((a) => a.id));
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -97,19 +103,25 @@ const Article = () => {
           lead={article.subtitle}
           art={art}
           tint={tone}
+          spot={drawing.spot as SpotName}
+          compact
+          className="sd-kn-hero"
           meta={
-            <>
+            <KnowledgeStamp art={drawing}>
               <span className="tabular-nums whitespace-nowrap">{fullMonthDate(article.date)}</span>
-              <span aria-hidden="true">·</span>
+              <span aria-hidden="true"> · </span>
               <span><span dir="ltr" className="tabular-nums whitespace-nowrap">{article.readTime}</span> קריאה</span>
-            </>
+            </KnowledgeStamp>
           }
         />
 
+        {toc.length > 1 && <SdProgress />}
+        <KnowledgeBar items={toc} home={{ to: "/blog", label: "הבלוג" }} article ariaLabel="תוכן העניינים" />
+
         {/* THE READING SURFACE */}
-        <SdBand tone="white" id="article">
+        <SdBand tone="white" id="article" art={false} className="sd-kn-paper sd-kn-ruled">
           <div className="sd-wrap sd-read-layout">
-            <div className="sd-read-col">
+            <div className="sd-read-col sd-kn-sheet">
               {hasPhoto && (
                 <div className="rounded-2xl overflow-hidden mb-10 border bg-white" style={{ borderColor: "var(--line)" }}>
                   <img src={article.image} alt={article.title} className="w-full aspect-[16/9] object-cover" decoding="async" />
@@ -128,11 +140,10 @@ const Article = () => {
                 <ShareRow />
               </div>
 
-              <PubTocInline items={toc} />
-
               {/* Article content */}
               <div className="sd-prose">
                 <p>{article.content.introduction}</p>
+                <KnowledgePlate art={drawing} label={article.category} />
                 {article.content.sections.flatMap((section, index) => [
                   <h2 key={`h-${index}`} id={`sec-${index + 1}`}>{section.heading}</h2>,
                   <p key={`p-${index}`}>{section.content}</p>,

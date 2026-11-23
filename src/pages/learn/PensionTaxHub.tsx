@@ -5,6 +5,7 @@ import { BrandIcon } from "@/components/brand/BrandIcon";
 import { stories } from "@/data/stories";
 import { SdBand, SdStory, tintStyle, useSdFont } from "@/components/sd/primitives";
 import { PubArticleCard, PubClose, PubHead, PubHero } from "@/components/sd/pub";
+import { KnowledgeBar } from "@/components/sd/knowledge";
 import { ROUTE_BY_PATH, labelFromTitle } from "@/data/seo/routes";
 import { TAX_CATALOG, categoryFor, pathOf } from "@/data/knowledge";
 import { KNOWLEDGE_REG_LINE } from "@/data/knowledge/regLine";
@@ -48,6 +49,11 @@ export default function PensionTaxHub() {
               <Link to={numbersPath} className="sd-link">לוח המספרים{arrow}</Link>
             </>
           }
+        />
+
+        <KnowledgeBar
+          items={[{ id: "chapters", label: "הפרקים" }, { id: "numbers", label: "לוח המספרים" }]}
+          home={{ to: "/learn/guides", label: "המדריכים" }}
         />
 
         {story && (
