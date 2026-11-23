@@ -28,10 +28,14 @@ Deno.test("micropay: balance = act=credit on the sending endpoint; the token tra
   assert.ok(!f.calls[0].url.includes(TOKEN), "never in the URL");
 });
 
-Deno.test("micropay: a bad token is a short code, never the provider's text", async () => {
+Deno.test("micropay: a bad token is a short code plus the provider's bounded ASCII detail; one call only", async () => {
   const f = mockFetch(() => json({ status: 0, action: "credit", message: "ERROR", data: { description: "token parameter, invalid or missing", remoteIP: "x" } }));
   const r = await smsBalance({ token: TOKEN, fetch: f.fetch });
-  assert.deepEqual(r, { ok: false, code: "bad_token", status: 200, retryable: false });
+  assert.deepEqual(r, { ok: false, code: "bad_token", status: 200, retryable: false, detail: "token parameter, invalid or missing" });
+  assert.equal(f.calls.length, 1);
+  const he = mockFetch(() => json({ status: 0, message: "ERROR", data: { description: "phone 0501234567 שגוי" } }));
+  const p = await smsBalance({ token: TOKEN, fetch: he.fetch }) as { detail?: string };
+  assert.equal(p.detail, "phone # ", "digits runs and non-ASCII never travel in the detail");
 });
 
 Deno.test("micropay: http and network failures carry a status code and a retryable flag", async () => {

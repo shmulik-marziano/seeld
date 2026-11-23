@@ -25,6 +25,9 @@ export type MicropayFailure = {
   retryable: boolean;
   /** verification: how many wrong attempts are left (WRONG_CODE only) */
   triesLeft?: number;
+  /** the provider's own description of a parameter error, ASCII only, bounded: for the health probe and logs (no personal data: it
+   *  names a parameter, never echoes a phone or a code) */
+  detail?: string;
 };
 export type MicropayResult<T> = { ok: true; data: T } | MicropayFailure;
 
@@ -57,6 +60,9 @@ function descriptionCode(d: unknown): string {
   return "error";
 }
 
+/** JSON mode (Content-Type application/json, token in the body, uniform answer). Verified against the live API on
+ *  2026-11-23: the JSON transport is read correctly ("token parameter is not valid" came back for a mistyped token), so
+ *  no other transport is tried. The token never goes in a URL. */
 async function post(o: MicropayClientOptions, url: string, body: Record<string, unknown>): Promise<MicropayResult<Uniform>> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), o.timeoutMs ?? TIMEOUT_MS);
@@ -76,7 +82,9 @@ async function post(o: MicropayClientOptions, url: string, body: Record<string, 
     }
     if (!j || typeof j !== "object") return { ok: false, code: "bad_response", status: res.status, retryable: true };
     if (j.status === 0 || j.message === "ERROR") {
-      return { ok: false, code: descriptionCode(j.data?.description), status: res.status, retryable: false };
+      const d = j.data?.description;
+      const detail = typeof d === "string" ? d.replace(/[^\x20-\x7e]/g, "").replace(/\d{7,}/g, "#").slice(0, 120) : undefined;
+      return { ok: false, code: descriptionCode(d), status: res.status, retryable: false, ...(detail ? { detail } : {}) };
     }
     return { ok: true, data: j };
   } catch {

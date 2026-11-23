@@ -26,5 +26,5 @@ Deno.test("sms-health: cron secret required; 503 without the token; balance with
   const bad = mockFetch(() => json({ status: 0, action: "credit", message: "ERROR", data: { description: "token parameter, invalid or missing" } }));
   const r502 = await createSmsHealthHandler({ env: testEnv({ SMS_API_TOKEN: "micropay-token-for-tests-aaaaaaaaaa" }), rpc: mockRpc(), log: silentLog(), fetch: bad.fetch })(new Request("http://x", { headers: secret }));
   assert.equal(r502.status, 502);
-  assert.deepEqual(await r502.json(), { ok: false, configured: true, sender: false, code: "bad_token" });
+  assert.deepEqual(await r502.json(), { ok: false, configured: true, sender: false, code: "bad_token", detail: "token parameter, invalid or missing" });
 });

@@ -31,8 +31,8 @@ export function createSmsHealthHandler(d: SmsHealthDeps): (req: Request) => Prom
       }
       const r = await smsBalance({ token: d.env.smsApiToken, fetch: d.fetch });
       if (!r.ok) {
-        log.warn("sms balance probe failed", { code: r.code, status: r.status });
-        return jsonResponse({ ok: false, configured: true, sender: !!d.env.smsSenderId, code: r.code }, rid, { status: 502 });
+        log.warn("sms balance probe failed", { code: r.code, status: r.status, detail: r.detail ?? null });
+        return jsonResponse({ ok: false, configured: true, sender: !!d.env.smsSenderId, code: r.code, detail: r.detail ?? null }, rid, { status: 502 });
       }
       log.info("sms balance probe", { credit: r.data.credit });
       return jsonResponse({ ok: true, configured: true, sender: !!d.env.smsSenderId, credit: r.data.credit }, rid);
