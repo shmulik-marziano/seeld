@@ -12,6 +12,7 @@ health
 lead-intake
 notify-worker
 poa-intake
+sms-health
 staff-invite
 surense-health
 surense-sync
