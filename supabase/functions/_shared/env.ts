@@ -17,6 +17,10 @@ export interface Env {
   cronSecret: string | null;
   turnstileSecret: string | null;
   resendApiKey: string | null;
+  /** Micropay API token (SMS_API_TOKEN) for one-time codes to the client's mobile; optional sender id (SMS_SENDER_ID, an
+   *  approved number or name). Names only in logs. */
+  smsApiToken: string | null;
+  smsSenderId: string | null;
   notifyFrom: string;
   notifyTo: { insurance: string[]; finance: string[]; general: string[] };
   notifyIncludePii: boolean;
@@ -101,6 +105,8 @@ export function loadEnv(get: EnvSource): Env {
     cronSecret: clean(get("EDGE_CRON_SECRET")),
     turnstileSecret: clean(get("TURNSTILE_SECRET_KEY")),
     resendApiKey: clean(get("RESEND_API_KEY")),
+    smsApiToken: clean(get("SMS_API_TOKEN")),
+    smsSenderId: clean(get("SMS_SENDER_ID")),
     notifyFrom: clean(get("NOTIFY_FROM")) ?? DEFAULT_NOTIFY_FROM,
     notifyTo: {
       insurance: list("NOTIFY_TO_INSURANCE", DEFAULT_NOTIFY_TO.insurance),
@@ -131,6 +137,8 @@ export function envPresence(env: Env): Record<string, unknown> {
     EDGE_CRON_SECRET: !!env.cronSecret,
     TURNSTILE_SECRET_KEY: !!env.turnstileSecret,
     RESEND_API_KEY: !!env.resendApiKey,
+    SMS_API_TOKEN: !!env.smsApiToken,
+    SMS_SENDER_ID: !!env.smsSenderId,
     GOOGLE_AI_API_KEY: !!env.googleAiKey,
     NOTIFY_INCLUDE_PII: env.notifyIncludePii,
     SURENSE_CLIENT_ID: !!env.surenseClientId,
