@@ -13,8 +13,10 @@ import { GUIDE_CATALOG, categoryFor, pathOf } from "@/data/knowledge";
 import { SdBand, SdStory, tintStyle, useSdFont } from "@/components/sd/primitives";
 import { PUB_TOPICS, PubArticleCard, PubClose, PubHead, PubHero, spreadArts, toneAt } from "@/components/sd/pub";
 import { PASTELS } from "@/components/sd/topics";
+import { Glossary, KnowledgeBar } from "@/components/sd/knowledge";
 import { RUST_TEXT, SAND_TEXT } from "@/lib/brand";
 import "@/components/sd/sd.css";
+import "@/components/sd/knowledge.css";
 
 /*
   מידע ולמידה — the knowledge hub, in the kit design. Three layers, deliberately:
@@ -120,7 +122,7 @@ export default function Learn() {
   const [postsLoading, setPostsLoading] = useState(true);
   const [guideQuery, setGuideQuery] = useState("");
   const [guideCategory, setGuideCategory] = useState<string | null>(null);
-  const [query, setQuery] = useState("");
+  const openChat = () => window.dispatchEvent(new Event("seeld:open-chat"));
 
   useEffect(() => {
     siteSupabase
@@ -152,16 +154,13 @@ export default function Learn() {
   const ret = (v: number | null) => (v === null ? "אין נתון" : `${v > 0 ? "+" : ""}${v.toFixed(2)}%`);
   const cost = (v: number | null) => (v === null ? "אין נתון" : `${v.toFixed(2)}%`);
 
-  const normalized = query.trim().toLowerCase();
-  const glossary = normalized
-    ? GLOSSARY.filter((g) => g.term.toLowerCase().includes(normalized) || g.body.toLowerCase().includes(normalized))
-    : GLOSSARY;
-
+  // Reading order (design pass 23.11.2026): the live figures hook first, then our own guides (the editorial core),
+  // the glossary as the reference beside them, the blog, and the tools last.
   const sections = [
     { id: "market", label: "מה קורה בשוק" },
-    { id: "glossary", label: "המונחים" },
     { id: "kn-guides", label: "מדריכי שילד" },
-    { id: "guides", label: "מדריכים" },
+    { id: "glossary", label: "המונחים" },
+    { id: "guides", label: "מהבלוג" },
     { id: "tools", label: "כלים" },
   ];
 
@@ -180,7 +179,7 @@ export default function Learn() {
           actions={
             <>
               <a href="#market" className="sd-btn">מה קורה בשוק{arrow}</a>
-              <button type="button" className="sd-link" onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}>
+              <button type="button" className="sd-link" onClick={openChat}>
                 <BrandIcon name="message" size={18} />
                 שאלו את היועץ הדיגיטלי
               </button>
@@ -188,11 +187,7 @@ export default function Learn() {
           }
         />
 
-        <nav className="sd-subnav" aria-label="תוכן העמוד">
-          <div className="sd-wrap sd-subnav-in">
-            {sections.map((s) => <a key={s.id} href={`#${s.id}`}>{s.label}</a>)}
-          </div>
-        </nav>
+        <KnowledgeBar items={sections} />
 
         {story && (
           <SdBand tone={p1} id="moment">
@@ -268,57 +263,6 @@ export default function Learn() {
           </div>
         </SdBand>
 
-        {/* GLOSSARY — searchable */}
-        <SdBand tone={p2} id="glossary">
-          <div className="sd-wrap">
-            <PubHead title="המונחים שפוגשים בדוח" lede="המונחים שחוזרים כמעט בכל דוח שנתי, בלי שפה משפטית." />
-
-            <div className="max-w-md mb-8">
-              <label htmlFor="glossary-search" className="block text-[14px] font-bold mb-1.5" style={{ color: "var(--ink)" }}>
-                חיפוש מונח
-              </label>
-              <input
-                id="glossary-search"
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="field"
-                autoComplete="off"
-              />
-            </div>
-
-            {glossary.length === 0 ? (
-              <div className="py-10">
-                <p className="text-[17px] font-bold" style={{ color: "var(--ink)" }}>לא נמצאו תוצאות</p>
-                <p className="mt-2 text-[16px]">נסו מילה אחרת, או שאלו את היועץ הדיגיטלי.</p>
-                <div className="mt-5 flex flex-wrap items-center gap-5">
-                  <button type="button" onClick={() => setQuery("")} className="btn-secondary">ניקוי החיפוש</button>
-                  <button
-                    type="button"
-                    onClick={() => window.dispatchEvent(new Event("seeld:open-chat"))}
-                    className="sd-link"
-                  >
-                    <BrandIcon name="message" size={18} />
-                    שאלו את היועץ הדיגיטלי
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <dl className="sd-gloss">
-                {glossary.map((g) => (
-                  <div key={g.term} className="sd-gloss-row">
-                    <dt>{g.term}</dt>
-                    <dd>
-                      {g.body}
-                      {g.more && <> <Link to={g.more} className="sd-link">להרחבה</Link></>}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            )}
-          </div>
-        </SdBand>
-
         {/* SEELD GUIDES — static knowledge section */}
         <SdBand tone="white" id="kn-guides">
           <div className="sd-wrap">
@@ -342,11 +286,19 @@ export default function Learn() {
           </div>
         </SdBand>
 
-        {/* LATEST GUIDES */}
+        {/* GLOSSARY: alphabet rail, grouped terms, live search */}
+        <SdBand tone={p2} id="glossary">
+          <div className="sd-wrap">
+            <PubHead title="המונחים שפוגשים בדוח" lede="המונחים שחוזרים כמעט בכל דוח שנתי, בלי שפה משפטית. לפי האלף־בית, עם חיפוש." />
+            <Glossary terms={GLOSSARY} onAsk={openChat} />
+          </div>
+        </SdBand>
+
+        {/* LATEST FROM THE BLOG */}
         {(postsLoading || posts.length > 0) && (
           <SdBand tone="white" id="guides">
             <div className="sd-wrap">
-              <PubHead title="מדריכים אחרונים" />
+              <PubHead title="מהבלוג" lede="הרשומות האחרונות, לפי נושא." />
 
               {postsLoading ? (
                 <p className="text-[16px]" style={{ color: "var(--muted)" }} role="status">טוענים את המדריכים האחרונים.</p>

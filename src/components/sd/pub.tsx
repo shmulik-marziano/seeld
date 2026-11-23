@@ -1,11 +1,12 @@
 import type { CSSProperties, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
+import { useActiveSection } from "@/components/inst/useActiveSection";
 import { SdArtLayer, SdBand, SdCrumbs, SdPic, SdProgress, SdStageSpot, tintStyle } from "./primitives";
 import { PASTELS, type ArtName, type Pastel, type Topic } from "./topics";
 import { SdSpot } from "./SdSpot";
 import { ContactIcons } from "./ContactIcons";
-import { spotAt } from "./spots";
+import { spotAt, type SpotName } from "./spots";
 import "./sd.css";
 import "./pub.css";
 
@@ -140,7 +141,7 @@ const arrow = <BrandIcon name="arrow-left" size={18} />;
 
 /** Hero of a public page: crumbs, eyebrow, serif h1, lead, actions, and the illustration stage. */
 export function PubHero({
-  crumbs, eyebrow, title, lead, art, tint, actions, meta, compact, children,
+  crumbs, eyebrow, title, lead, art, tint, actions, meta, compact, spot, className = "", children,
 }: {
   crumbs: { label: string; to?: string }[];
   eyebrow?: string;
@@ -151,10 +152,13 @@ export function PubHero({
   actions?: ReactNode;
   meta?: ReactNode;
   compact?: boolean;
+  /** The page's own spot: floats first on the stage (knowledge pages echo their drawing here). */
+  spot?: SpotName;
+  className?: string;
   children?: ReactNode;
 }) {
   return (
-    <section className={`sd-hero ${compact ? "sd-pub-compact" : ""}`} style={tintStyle(tint)}>
+    <section className={`sd-hero ${compact ? "sd-pub-compact" : ""} ${className}`} style={tintStyle(tint)}>
       <SdArtLayer name={companionArt(art)} className="sd-hero-art" />
       <div className="sd-wrap sd-hero-grid">
         <div className="sd-hero-copy">
@@ -168,7 +172,7 @@ export function PubHero({
         </div>
         <div className="sd-stage" aria-hidden="true">
           <SdPic name={art} sizes="(min-width:1024px) 520px, 90vw" priority />
-          <SdStageSpot art={art} />
+          <SdStageSpot art={art} name={spot} />
         </div>
       </div>
     </section>
@@ -288,15 +292,16 @@ export function PubTocInline({ items }: { items: { id: string; label: string }[]
   );
 }
 
-/** Sticky aside of reading pages: table of contents and a contextual illustration (desktop only). */
+/** Sticky aside of reading pages: table of contents (the active section is marked) and a contextual illustration (desktop only). */
 export function PubTocAside({ items, art, tone }: { items: { id: string; label: string }[]; art: ArtName; tone: Pastel }) {
   const band = { ["--band" as string]: PASTELS[tone].bg } as CSSProperties;
+  const active = useActiveSection(items.map((s) => s.id));
   return (
     <aside className="sd-read-aside">
       {items.length > 1 && (
         <nav className="sd-toc" aria-label="תוכן העניינים (צד)">
           <b>בעמוד הזה</b>
-          {items.map((s) => <a key={s.id} href={`#${s.id}`}>{s.label}</a>)}
+          {items.map((s) => <a key={s.id} href={`#${s.id}`} aria-current={active === s.id ? "true" : undefined}>{s.label}</a>)}
         </nav>
       )}
       <div className="sd-read-art" style={band} aria-hidden="true"><SdPic name={art} sizes="300px" /></div>
