@@ -11,7 +11,7 @@ import { mapCustomer, mapDocument, mapProduct } from "./mirror.ts";
 import { extOf, objectPath, sha256Hex, type Storage } from "./storage.ts";
 import type { PoaEngine, PoaKind } from "../poa/engine/types.ts";
 import { poaStoragePath } from "../poa/storage.ts";
-import type { E9100SubmitRequest, ProxiesInviteRequest, SearchFilter, SurenseDocument } from "./types.ts";
+import type { E9100SubmitRequest, PortfolioHistoryEntry, ProxiesInviteRequest, SearchFilter, SurenseDocument } from "./types.ts";
 
 export interface SyncDeps {
   api: SurenseApi;
@@ -338,12 +338,46 @@ export async function inviteProxies(d: SyncDeps, req: ProxiesInviteRequest) {
   return { url: typeof r?.url === "string" ? r.url : null, partnerUrl: typeof r?.partnerUrl === "string" ? r.partnerUrl : null };
 }
 
+/** "YYYY-MM" of a history entry: validityMonth as Surense gives it, else the month of validityDate; null when neither. */
+export function historyMonth(h: PortfolioHistoryEntry | null | undefined): string | null {
+  if (!h) return null;
+  if (typeof h.validityMonth === "string" && /^\d{4}-\d{2}/.test(h.validityMonth)) return h.validityMonth.slice(0, 7);
+  if (typeof h.validityDate === "string" && /^\d{4}-\d{2}/.test(h.validityDate)) return h.validityDate.slice(0, 7);
+  return null;
+}
+
+export interface PortfolioTargets {
+  /** latest production month ("YYYY-MM"), null when the customer has no production entry */
+  productionMonth: string | null;
+  /** latest pre-advice (clearing-house) snapshot: its request number and validity date; null when there is none */
+  preAdvice: { misparMislaka: string; validityDate: string | null } | null;
+}
+
+/** What can be pulled for a customer, from GET /customers/{id}/portfolio/history. Verified live 2026-11-23: a production
+ *  request needs `month` ("The month must be provided"), a pre-advice request needs `misparMislaka`; the same customer
+ *  usually has both (production = the agency's own book incl. insurance policies, pre-advice = the full clearing-house
+ *  picture), so the pull takes both and the product table keeps one row per product id. */
+export async function portfolioTargets(d: SyncDeps, customerId: string): Promise<PortfolioTargets> {
+  const hist = await d.api.customers.portfolioHistory(customerId);
+  const entries = Array.isArray(hist) ? hist.filter((h): h is PortfolioHistoryEntry => !!h && typeof h === "object") : [];
+  const months = entries.filter((h) => h.production === true).map(historyMonth).filter((m): m is string => !!m).sort();
+  const pre = entries
+    .filter((h) => h.production !== true && typeof h.misparMislaka === "string" && /^[A-Za-z0-9_-]{1,64}$/.test(h.misparMislaka))
+    .sort((a, b) => String(a.validityDate ?? "").localeCompare(String(b.validityDate ?? "")))
+    .pop();
+  return {
+    productionMonth: months.length ? months[months.length - 1] : null,
+    preAdvice: pre ? { misparMislaka: pre.misparMislaka as string, validityDate: typeof pre.validityDate === "string" && /^\d{4}-\d{2}-\d{2}/.test(pre.validityDate) ? pre.validityDate.slice(0, 10) : null } : null,
+  };
+}
+
 export async function portfolio(
   d: SyncDeps,
-  o: { customerId: string; mode: "production" | "pre_advice"; misparMislaka?: string; hbValidityDate?: string },
+  o: { customerId: string; mode: "production" | "pre_advice"; month?: string; misparMislaka?: string; hbValidityDate?: string },
 ) {
   const res = await d.api.customers.portfolio(o.customerId, {
-    mode: o.mode === "production" ? "פרודוקציה" : "טרום_טיפול",
+    mode: o.mode === "production" ? 2 : 1,
+    ...(o.month ? { month: o.month } : {}),
     ...(o.misparMislaka ? { misparMislaka: o.misparMislaka } : {}),
     ...(o.hbValidityDate ? { hbValidityDate: o.hbValidityDate } : {}),
   });

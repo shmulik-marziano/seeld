@@ -7,9 +7,15 @@ the platform notes section by section as the parts land; the product spec of the
 
 ## Data pipeline (migration `20261124090000_surense_portfolio_pull`; worker kinds `surense.portfolio_pull`, `surense.portfolio_sweep`)
 
-What the client area shows is the customer's processed portfolio as Surense computes it (`POST /customers/{id}/portfolio`,
-mode `production`: products with company, type, policy number, coverages, premiums, balances, plus totals and
-distributions). The pipeline keeps a copy of it in our mirror:
+What the client area shows is the customer's processed portfolio as Surense computes it (`POST /customers/{id}/portfolio`:
+products with company, type, policy number, coverages, premiums, balances, plus totals and distributions). Verified live
+on 2026-11-23: `mode` is a **coded enum** (1 = pre-advice / טרום_טיפול, needs `misparMislaka`; 2 = production /
+פרודוקציה, needs `month`; the Hebrew names of the OpenAPI are read as null), and the same customer usually has both:
+production is the agency's own book (incl. insurance policies with `type`/`sivugPolisa`), pre-advice is the full
+clearing-house picture (every pension product, any agent). The pull reads `GET /customers/{id}/portfolio/history` first and
+takes **both** snapshots when they exist (latest production month, latest pre-advice request number); `crm.surense_products`
+keeps one row per product id either way. A customer with neither ends `skipped no_portfolio_data`. The pipeline keeps the
+copies in our mirror:
 
 - **Where it lands:** `crm.surense_portfolios` (one encrypted snapshot per pull, `mode = 'production'`, `product_count`,
   `fetched_at`) and `crm.surense_products` (one row per product, indexable columns = Surense ids, company id, product

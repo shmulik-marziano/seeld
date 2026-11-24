@@ -499,19 +499,41 @@ const eventJob = (type: string, body: Record<string, unknown>): JobRow =>
   ({ id: 9, kind: "surense.event", params: null, event_id: 1, event_type: type, payload: JSON.stringify(body), attempts: 1 });
 
 Deno.test("jobs: portfolio_pull stores the production snapshot and its product rows; a bad id is skipped; a permanent 4xx is skipped", async () => {
-  const { d, rpc, f } = syncSetup((url) => url.endsWith(`/customers/${CID}/portfolio`) ? json(PORTFOLIO_BODY) : json({}, 404),
+  const HISTORY = [
+    { production: false, source: 2, misparMislaka: "m-1", validityDate: "2026-11-02" },
+    { production: true, source: 1, validityDate: "2026-09-30", validityMonth: "2026-09" },
+    { production: true, source: 1, validityDate: "2026-10-31", validityMonth: "2026-10" },
+  ];
+  const { d, rpc, f } = syncSetup((url) =>
+    url.endsWith(`/customers/${CID}/portfolio/history`) ? json(HISTORY)
+      : url.endsWith(`/customers/${CID}/portfolio`) ? json(PORTFOLIO_BODY) : json({}, 404),
     (fn) => (fn === "surense_portfolio_store" ? { snapshot_id: 77, products: 1 } : null));
   const job: JobRow = { id: 3, kind: "surense.portfolio_pull", params: { customer_id: CID.toUpperCase() }, event_id: null, event_type: null, payload: null, attempts: 1 };
   const out = await runJob(d, job, Date.now() + 60_000);
-  assert.deepEqual(out, { result: "done", stats: { snapshotId: 77, products: 1, bad: 1 } });
-  const sent = JSON.parse(f.calls.find((c) => c.url.endsWith("/portfolio"))!.body);
-  assert.deepEqual(sent, { mode: "פרודוקציה" });
+  assert.deepEqual(out, { result: "done", stats: { prodSnapshot: 77, prodProducts: 1, prodBad: 1, month: "2026-10", preSnapshot: 77, preProducts: 1, preBad: 1 } });
+  // the history is read first; then production (coded mode 2 + the latest production month) and pre-advice (mode 1 + the
+  // latest clearing-house request number); verified live 2026-11-23
+  const hi = f.calls.findIndex((c) => c.url.endsWith("/portfolio/history"));
+  const ps = f.calls.map((c, i) => ({ c, i })).filter(({ c }) => c.url.endsWith(`/${CID}/portfolio`));
+  assert.ok(hi >= 0 && ps.length === 2 && ps[0].i > hi, "history first, then two portfolio calls");
+  assert.deepEqual(JSON.parse(ps[0].c.body), { mode: 2, month: "2026-10" });
+  assert.deepEqual(JSON.parse(ps[1].c.body), { mode: 1, misparMislaka: "m-1", hbValidityDate: "2026-11-02" });
+  const modes = rpc.calls.filter((c) => c.fn === "surense_portfolio_store").map((c) => c.args.p_mode);
+  assert.deepEqual(modes, ["production", "pre_advice"]);
+  // nothing in the history: skipped without a portfolio call; production only: one call
+  const none = syncSetup((url) => url.endsWith("/portfolio/history") ? json([{ production: false, validityDate: "2026-11-02" }]) : json({}, 404));
+  assert.deepEqual(await runJob(none.d, job, Date.now() + 60_000), { result: "skipped", code: "no_portfolio_data" });
+  assert.ok(!none.f.calls.some((c) => c.url.endsWith(`/${CID}/portfolio`)), "no portfolio call without a target");
+  const prodOnly = syncSetup((url) => url.endsWith("/portfolio/history") ? json([{ production: true, validityMonth: "2026-07" }]) : url.endsWith(`/${CID}/portfolio`) ? json(PORTFOLIO_BODY) : json({}, 404),
+    (fn) => (fn === "surense_portfolio_store" ? { snapshot_id: 78, products: 1 } : null));
+  const po = await runJob(prodOnly.d, job, Date.now() + 60_000);
+  assert.deepEqual(po.stats, { prodSnapshot: 78, prodProducts: 1, prodBad: 1, month: "2026-07" });
   const store = rpc.calls.find((c) => c.fn === "surense_portfolio_store")!;
   assert.equal(store.args.p_customer, CID);
   assert.equal(store.args.p_mode, "production");
   assert.equal((store.args.p_products as unknown[]).length, 1, "the malformed product is counted, not stored");
   assert.deepEqual(await runJob(d, { ...job, params: { customer_id: "nope" } }, Date.now() + 60_000), { result: "skipped", code: "bad_input" });
-  const gone = syncSetup(() => json({ statusCode: 400, errors: [{ code: 40000, message: "zz no access" }] }, 400));
+  const gone = syncSetup((url) => url.endsWith("/portfolio/history") ? json(HISTORY) : json({ statusCode: 400, errors: [{ code: 40000, message: "zz no access" }] }, 400));
   const g = await runJob(gone.d, job, Date.now() + 60_000);
   assert.deepEqual([g.result, g.code], ["skipped", "surense_400_40000"], "no such customer: skipped, never retried");
 });
@@ -539,11 +561,16 @@ Deno.test("jobs: portfolio_sweep queues one pull per due customer (dedupe per cu
   assert.equal(cut.result, "done");
   assert.deepEqual(cut.next, { kind: "surense.portfolio_sweep", params: {}, dedupe: "portfolio_sweep" });
   assert.equal(cut.stats?.enqueued, 0);
-  // a full batch also hands over
-  const full = syncSetup(() => json({}, 404), (fn) => (fn === "surense_portfolio_due" ? Array.from({ length: 200 }, () => ({ surense_id: CID })) : { id: 1, duplicate: true }));
+  // a full batch that queued something hands over; a full batch of customers already in the queue does NOT (seen live
+  // 2026-11-23: sweeps chained forever while the pulls were still pending)
+  const full = syncSetup(() => json({}, 404), (fn) => (fn === "surense_portfolio_due" ? Array.from({ length: 200 }, () => ({ surense_id: CID })) : { id: 1, duplicate: false }));
   const big = await runJob(full.d, job, Date.now() + 60_000);
   assert.deepEqual(big.next, { kind: "surense.portfolio_sweep", params: {}, dedupe: "portfolio_sweep" });
-  assert.deepEqual([big.stats?.due, big.stats?.duplicates], [200, 200]);
+  assert.deepEqual([big.stats?.due, big.stats?.enqueued], [200, 200]);
+  const stuck = syncSetup(() => json({}, 404), (fn) => (fn === "surense_portfolio_due" ? Array.from({ length: 200 }, () => ({ surense_id: CID })) : { id: 1, duplicate: true }));
+  const same = await runJob(stuck.d, job, Date.now() + 60_000);
+  assert.equal(same.next, undefined, "all duplicates: no follow-up sweep");
+  assert.deepEqual([same.stats?.due, same.stats?.duplicates], [200, 200]);
 });
 
 Deno.test("jobs: harb.uploaded, swiftness.e9100.completed and customer.updated queue the portfolio pull as their follow-up; others do not", async () => {

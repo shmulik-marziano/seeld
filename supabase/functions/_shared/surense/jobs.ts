@@ -7,8 +7,8 @@ import { RpcError } from "../db.ts";
 import { InputError, SurenseError, type SurenseFailureKind } from "./errors.ts";
 import { StorageError } from "./storage.ts";
 import {
-  type DocPullStats, type DownloadStats, e9100Download, e9100Submit, linkPoaDocument, MAX_OFFSET, PAGE_SIZE, planEvent, portfolio, pullCustomer,
-  pullCustomers, pullDocuments, type SyncDeps,
+  type DocPullStats, type DownloadStats, e9100Download, e9100Submit, linkPoaDocument, MAX_OFFSET, PAGE_SIZE, planEvent, portfolio, portfolioTargets,
+  pullCustomer, pullCustomers, pullDocuments, type SyncDeps,
 } from "./sync.ts";
 import { isUuid } from "./api.ts";
 import { pickSwiftnessAccount } from "../poa/engine/surense.ts";
@@ -129,8 +129,21 @@ export const HANDLERS: Record<string, JobHandler> = {
   "surense.portfolio_pull": async (d, job) => {
     const customerId = str(job.params, "customer_id");
     if (!isUuid(customerId)) return { result: "skipped", code: "bad_input" };
-    const s = await portfolio(d, { customerId: customerId.toLowerCase(), mode: "production" });
-    return { result: "done", stats: { snapshotId: s.snapshotId ?? -1, products: s.products, bad: s.bad } };
+    // the history says what exists (verified live 2026-11-23): production needs its month, pre-advice its clearing-house
+    // request number; both are pulled when present (one product row per id either way). Nothing at all = skipped.
+    const id = customerId.toLowerCase();
+    const t = await portfolioTargets(d, id);
+    if (!t.productionMonth && !t.preAdvice) return { result: "skipped", code: "no_portfolio_data" };
+    const stats: Record<string, number | string | boolean> = {};
+    if (t.productionMonth) {
+      const s = await portfolio(d, { customerId: id, mode: "production", month: t.productionMonth });
+      Object.assign(stats, { prodSnapshot: s.snapshotId ?? -1, prodProducts: s.products, prodBad: s.bad, month: t.productionMonth });
+    }
+    if (t.preAdvice) {
+      const s = await portfolio(d, { customerId: id, mode: "pre_advice", misparMislaka: t.preAdvice.misparMislaka, ...(t.preAdvice.validityDate ? { hbValidityDate: t.preAdvice.validityDate } : {}) });
+      Object.assign(stats, { preSnapshot: s.snapshotId ?? -1, preProducts: s.products, preBad: s.bad });
+    }
+    return { result: "done", stats };
   },
   // the daily sweep: every customer whose production snapshot is missing or older than PORTFOLIO_MAX_AGE_DAYS gets one
   // pull job (dedupe per customer). A slice cut by the deadline or by SWEEP_BATCH hands over to a follow-up sweep.
@@ -151,9 +164,9 @@ export const HANDLERS: Record<string, JobHandler> = {
       if (r?.duplicate) duplicates++;
       else enqueued++;
     }
-    // a full batch means more may be due (those just queued are not yet pulled, so the next sweep re-reads the list after
-    // the pulls landed: it is dedupe-safe either way)
-    const more = cut || due.length >= SWEEP_BATCH;
+    // a full batch means more may be due, but only when this slice actually queued something new: a list made of
+    // customers already in the queue (duplicates) must not chain sweeps forever (seen live 2026-11-23: 500+ pulls in minutes)
+    const more = cut || (due.length >= SWEEP_BATCH && enqueued > 0);
     return {
       result: "done",
       stats: { due: due.length, enqueued, duplicates, cut },

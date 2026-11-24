@@ -134,6 +134,8 @@ verify_jwt = true
 verify_jwt = true
 [functions.sms-health]         # Micropay token probe (balance only, nothing sent); x-cron-secret like the workers
 verify_jwt = false
+[functions.surense-probe]      # read-only diagnostic of one customer's portfolio endpoints (statuses, shapes, error text); x-cron-secret
+verify_jwt = false
 [functions.poa-intake]         # public POA wizard backend; Origin + Turnstile + session token + ops.config switches (poa_*) in the function and DB
 verify_jwt = false
 [functions.client-area]        # public client area backend (/my); Origin + Turnstile + one-time code (Micropay) + session token + ops.config switches (client_area_*)
