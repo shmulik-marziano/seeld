@@ -42,6 +42,8 @@
     { "source": "/app/:path*", "destination": "/_shell.html" },
     { "source": "/report/start", "destination": "/_shell.html" },
     { "source": "/report/start/:path*", "destination": "/_shell.html" },
+    { "source": "/my", "destination": "/_shell.html" },
+    { "source": "/my/:path*", "destination": "/_shell.html" },
     { "source": "/portal/:path*", "destination": "/_shell.html" },
     { "source": "/client/:path*", "destination": "/_shell.html" },
     { "source": "/execution-portal/:path*", "destination": "/_shell.html" },
