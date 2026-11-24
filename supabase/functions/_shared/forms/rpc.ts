@@ -1,5 +1,5 @@
 // Typed wrappers around the api.form_* RPCs (service key). Argument names and result keys are the ones of migration
-// 20261123120000_client_forms.sql (docs/product/CLIENT-FORMS.md). A malformed answer is an RpcError (502, bad_shape), which
+// 20261125090000_client_forms.sql (docs/product/CLIENT-FORMS.md). A malformed answer is an RpcError (502, bad_shape), which
 // forms-intake shows as `unavailable`. The token never leaves the function: the database gets its SHA-256 as a bytea literal.
 import { type Rpc, RpcError } from "../db.ts";
 import { HASH_RE } from "../poa/session.ts";
