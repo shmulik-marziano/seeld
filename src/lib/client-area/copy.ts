@@ -1,6 +1,7 @@
 // Every visible string of the client area (האזור האישי). Verbatim from docs/product/CLIENT-AREA-SPEC.md (the copy test
 // checks it). Site copy rules: no "ייעוץ", no "בטוח", no promises, no gendered slash forms, no names, no licence text.
 import type { CategoryKey, DocKind } from "./config";
+import type { HarbReason } from "./api";
 
 export const MY_COPY = {
   common: {
@@ -70,6 +71,35 @@ export const MY_COPY = {
     opening: "פותחים…",
     notDownloadable: "זמין דרך הסוכנות",
     kinds: { maslaka: "ייפוי כוח מסלקה", harbit: "ייפוי כוח הר הביטוח", policies: "ייפוי כוח העתקי פוליסות", surense: "מסמך מהתיק" } satisfies Record<DocKind, string>,
+  },
+  harb: {
+    title: "קובץ הר הביטוח",
+    lead: "הר הביטוח הוא המאגר הממשלתי של הביטוחים שלכם. הקובץ משם משלים את התמונה בתיק.",
+    stepsTitle: "איך מורידים את הקובץ",
+    steps: [
+      "נכנסים לאתר הר הביטוח ומזדהים בהזדהות הממשלתית.",
+      "בדף התוצאות לוחצים על \"יצוא לאקסל\" ושומרים את הקובץ.",
+      "חוזרים לכאן, בוחרים את הקובץ ושולחים.",
+    ],
+    siteLink: "לאתר הר הביטוח",
+    cta: "שליחת הקובץ",
+    sending: "שולחים…",
+    received: "הקובץ התקבל. תודה!",
+    duplicate: "את הקובץ הזה כבר קיבלנו.",
+    last: (date: string) => `הקובץ האחרון התקבל ב־${date}.`,
+    processed: "הנתונים נקלטו בתיק.",
+    privacy: "הקובץ נבדק ונשמר אצלנו, ומשמש רק לתיק שלכם.",
+    closed: "שליחת הקובץ סגורה כרגע.",
+    reasons: {
+      not_xlsx: "זה לא קובץ האקסל של הר הביטוח. כדאי להוריד אותו שוב.",
+      too_large: "הקובץ גדול מדי.",
+      too_many_sheets: "לא הצלחנו לקרוא את הקובץ. כדאי להוריד אותו שוב מהאתר.",
+      too_many_rows: "לא הצלחנו לקרוא את הקובץ. כדאי להוריד אותו שוב מהאתר.",
+      bad_layout: "לא הצלחנו לקרוא את הקובץ. כדאי להוריד אותו שוב מהאתר.",
+      bad_file: "לא הצלחנו לקרוא את הקובץ. כדאי להוריד אותו שוב מהאתר.",
+      empty: "בקובץ לא מופיעות פוליסות, אז אין מה לשלוח.",
+      id_mismatch: "הקובץ שייך לתעודת זהות אחרת. אפשר לשלוח רק את הקובץ שלכם.",
+    } satisfies Record<HarbReason, string>,
   },
   errors: {
     inactive: "האזור האישי סגור כרגע",

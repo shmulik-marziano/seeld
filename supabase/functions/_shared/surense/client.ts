@@ -28,6 +28,11 @@ export const DOCS_HOST = "surense-accounts-docs.s3.eu-west-1.amazonaws.com";
 export const ALLOWED_HOSTS: readonly string[] = [SURENSE_HOST, DOCS_HOST];
 /** pre-signed UPLOAD links: the S3 download host is not approved for uploads */
 export const UPLOAD_HOSTS: readonly string[] = [SURENSE_HOST];
+/** pre-signed data-import upload links (POST /data-import/initiate -> uploadUrl; the Har HaBituach push). EMPTY on purpose:
+ *  the host is not confirmed by Surense yet (the OpenAPI example shows surense.data-import.files.s3.eu-west-1.amazonaws.com,
+ *  which is an example, not a contract). Until the owner approves a host here, the harb import job ends
+ *  `skipped upload_host_not_approved` before any Surense call. */
+export const DATA_IMPORT_UPLOAD_HOSTS: readonly string[] = [];
 export const RETRY_STATUSES: readonly number[] = [429, 502, 503, 504];
 export const TIMEOUT_MS = 15_000;
 export const MAX_ATTEMPTS = 3;
@@ -91,8 +96,9 @@ export interface SurenseClient {
   request<T>(path: string, opts?: RequestOptions): Promise<T>;
   /** Raw call (same lock/retry/timeout/auth); resolves to an OK Response with its body unread. */
   surenseFetch(path: string, init?: RequestOptions & { headers?: Record<string, string>; rawBody?: BodyInit }): Promise<Response>;
-  /** PUT bytes to a pre-signed upload URL (host-locked, no Authorization header, no retry). */
-  putUpload(url: string, bytes: Uint8Array, contentType: string): Promise<number>;
+  /** PUT bytes to a pre-signed upload URL (host-locked, no Authorization header, no retry). `hosts` narrows the allowlist
+   *  for one kind of link (data-import uploads pass DATA_IMPORT_UPLOAD_HOSTS); default: the client's upload hosts. */
+  putUpload(url: string, bytes: Uint8Array, contentType: string, hosts?: readonly string[]): Promise<number>;
   /** GET a file link handed back by Surense (host-locked; bearer only on api.surense.com; size-capped). */
   downloadFile(url: string, maxBytes?: number): Promise<{ bytes: Uint8Array; mime: string | null }>;
 }
@@ -261,8 +267,8 @@ export function createSurenseClient(o: ClientOptions): SurenseClient {
         throw new SurenseError(res.status, "bad_json", "permanent");
       }
     },
-    async putUpload(url: string, bytes: Uint8Array, contentType: string): Promise<number> {
-      const u = assertAllowedUrl(url, o.allowedHosts ?? UPLOAD_HOSTS);
+    async putUpload(url: string, bytes: Uint8Array, contentType: string, hosts?: readonly string[]): Promise<number> {
+      const u = assertAllowedUrl(url, hosts ?? o.allowedHosts ?? UPLOAD_HOSTS);
       const started = now();
       const res = await once(u.href, { method: "PUT", headers: { "content-type": contentType }, body: bytes });
       await res.body?.cancel();

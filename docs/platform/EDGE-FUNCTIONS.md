@@ -11,7 +11,7 @@ for the five functions T2 owns. `staff-invite` belongs to T1 and is documented t
 | `fetch-cma-data` | pg_cron `cma-sync-weekly` (Sun 03:00 UTC) | false | `x-cron-secret` | `cma_upsert_batch`, `cma_finish_sync`, `job_continue`, `job_finish` |
 | `health` | site-watch / anyone | false | none (coarse); `x-cron-secret` or staff JWT for detail | `api.health` (anon-granted); `staff.ops_health` with a staff JWT |
 | `surense-webhook` | Surense via Svix | false | Svix signature + memory limit | `surense_event_ingest` |
-| `surense-worker` | pg_cron `surense-worker-tick` (every minute, since 20261122180000) | false | `x-cron-secret` | `surense_job_claim`, `surense_job_complete`, `surense_job_enqueue`, mirror RPCs (incl. `surense_portfolio_store`, `surense_portfolio_due`), `poa_ship_get`, `poa_ship_set`, `surense_gate`, `surense_audit`, `job_finish` |
+| `surense-worker` | pg_cron `surense-worker-tick` (every minute, since 20261122180000) | false | `x-cron-secret` | `surense_job_claim`, `surense_job_complete`, `surense_job_enqueue`, mirror RPCs (incl. `surense_portfolio_store`, `surense_portfolio_due`), `poa_ship_get`, `poa_ship_set`, `harb_import_get`, `harb_import_set`, `surense_gate`, `surense_audit`, `job_finish` |
 | `surense-sync` | staff app (admin) | true | staff JWT -> `staff.admin_assert_fresh` (admin + fresh TOTP) | `surense_gate`, mirror RPCs, `surense_audit` |
 | `surense-health` | owner / staff, by hand | true | platform JWT check only (read-only probe) | none (calls Surense only) |
 | `sms-health` | owner, by hand (`select ops.call_function('sms-health')`, answer in `net._http_response`) | false | `x-cron-secret` (function secret or Vault via `cron_secret_ok`) | `cron_secret_ok`; calls Micropay `act=credit` only (balance; nothing is sent) |
@@ -19,7 +19,7 @@ for the five functions T2 owns. `staff-invite` belongs to T1 and is documented t
 | `poa-intake` | POA wizard (browser) | false | Origin allowlist + Turnstile + session token (SHA-256 only to the DB) + `poa_*` switches | `poa_config` (optional), `poa_session_*`, `poa_engine_ref_set`, `poa_preview_set`, `poa_consent_record`, `poa_document_from_url`, `poa_document_stored`, `poa_doc_get`, `poa_doc_claim`, `poa_ship_enqueue`, `surense_gate`, `surense_job_enqueue`, `surense_audit` |
 | `client-docs` | staff app | true | staff JWT -> `staff.client_doc_get` (staff aal2 + fresh MFA + access log) | none with the service key (storage read only) |
 | `forms-intake` | client forms `/forms` (browser) | false | Origin allowlist + Turnstile + session token (SHA-256 only to the DB) + `forms_*` switches | `form_config`, `form_session_start`, `form_session_get`, `form_step_save`, `form_submit`, `form_session_fail`, `form_document_add`, `form_document_stored` |
-| `client-area` | personal client area `/my` (browser) | false | Origin allowlist + Turnstile on `/login/start` + one-time code to the mobile on file (Micropay) + session token (`Authorization: Bearer`, SHA-256 only to the DB) + `client_area_*` switches | `client_area_config`, `client_login_start`, `client_login_challenge_use`, `client_login_verify`, `client_session_get`, `client_portfolio_get`, `client_documents_list`, `client_document_get`, `client_logout` |
+| `client-area` | personal client area `/my` (browser) | false | Origin allowlist + Turnstile on `/login/start` + one-time code to the mobile on file (Micropay) + session token (`Authorization: Bearer`, SHA-256 only to the DB) + `client_area_*` switches | `client_area_config`, `client_login_start`, `client_login_challenge_use`, `client_login_verify`, `client_session_get`, `client_portfolio_get`, `client_documents_list`, `client_document_get`, `client_logout`, `client_harb_status`, `client_harb_add`, `client_harb_stored` (+ storage write of the Har HaBituach file) |
 
 `verify_jwt=false` everywhere here on purpose: the platform JWT check also accepts the publishable and secret API keys,
 so it authenticates nothing for these callers (research/SUPABASE.md, "Securing Edge Functions"). Each function does its
@@ -343,9 +343,16 @@ the client's wizard sessions (`crm.documents`, joined on the national id hmac). 
   owner and wrote the access log), `POST /logout`. Order: preflight -> Origin (403) -> per-isolate reject counter (429) ->
   route + body cap (4 KB) + key whitelist -> switch (`api.client_area_config`, 503 `inactive`) -> Turnstile -> RPC.
   Errors are `{"error": {"code": "<code>"}}` with `inactive | unauthenticated | wrong_code (+tries_left) | max_tries |
-  expired | generic | rate_limited | unavailable | not_found`; never a value. Logs: route, code, ids; never a phone, an id,
+  expired | generic | rate_limited | unavailable | not_found | harb_invalid (+reason)`; never a value. Logs: route, code, ids; never a phone, an id,
   a code, a token or a url.
-- **Staff**: `staff.client_sessions_revoke(p_customer)` signs a client out everywhere (staff, own agency, audit row).
+- **Har HaBituach** (20261125120000, switches `client_area_harb_upload_enabled` / `surense_harb_import_enabled`, both off):
+  `GET /harb` (the card), `POST /harb {bytes_base64}` (2 MB cap; `_shared/harb/xlsx.ts` checks ZIP, caps, layout and ONE
+  national id in column A; `api.client_harb_add` compares it with the client's hmac; bytes to `client-docs` at the
+  DB-named path; `api.client_harb_stored` queues `surense.harb_import`). The worker side (`_shared/surense/harb.ts`):
+  providers -> initiate -> ZIP PUT (host-locked to `DATA_IMPORT_UPLOAD_HOSTS`, empty until the owner approves the host)
+  -> start -> poll. Details and open items: `docs/product/CLIENT-AREA.md` (Har HaBituach).
+- **Staff**: `staff.client_sessions_revoke(p_customer)` signs a client out everywhere (staff, own agency, audit row);
+  `staff.harb_fallback_list(p_days)` lists harbit POA signatures of the last business days with no uploaded file.
 - **Retention**: pg_cron `client-area-cleanup` (daily) -> `ops.client_area_cleanup()`; deletes only while
   `client_area_retention_enabled` is on (challenges after 1 day, sessions 30 days past expiry or revocation).
 
@@ -442,7 +449,7 @@ docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4
   deno test --no-prompt _shared/surense/ surense-webhook/ surense-worker/ surense-sync/
 docker run --rm -v "$PWD:/w" -w /w/supabase/functions denoland/deno:alpine-2.1.4   deno test --no-prompt --node-modules-dir=none _shared/poa/ poa-intake/ client-docs/ forms-intake/
 docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4 \
-  deno test --no-prompt _shared/sms/ _shared/client/ sms-health/ client-area/
+  deno test --no-prompt _shared/sms/ _shared/client/ _shared/harb/ sms-health/ client-area/
 docker run --rm -v "$PWD/supabase/functions:/w" -w /w denoland/deno:alpine-2.1.4 \
   deno check lead-intake/index.ts notify-worker/index.ts chat-bot/index.ts fetch-cma-data/index.ts health/index.ts \
     surense-webhook/index.ts surense-worker/index.ts surense-sync/index.ts poa-intake/index.ts client-docs/index.ts forms-intake/index.ts \

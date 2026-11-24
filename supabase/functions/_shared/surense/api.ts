@@ -57,6 +57,8 @@ export interface SurenseApi {
     initiate(req: DataImportInitiateRequest): Promise<DataImportInitiateResponse>;
     start(id: Uuid): Promise<DataImportRecord>;
     get(id: Uuid): Promise<DataImportRecord>;
+    /** PUT the ZIP to the uploadUrl of initiate (host-locked to `hosts`; no bearer, no retry) */
+    put(uploadUrl: string, zip: Uint8Array, hosts: readonly string[]): Promise<number>;
   };
   licensees: {
     list(): Promise<Licensee[]>;
@@ -111,6 +113,8 @@ export function surenseApi(c: SurenseClient): SurenseApi {
       // documented as idempotent (a second start returns the current record)
       start: (id) => c.request<DataImportRecord>(`/data-import/${seg(id)}/start`, { method: "POST", idempotent: true, audit: "data_import.start", auditRef: id }),
       get: (id) => read<DataImportRecord>(`/data-import/${seg(id)}`),
+      put: (url, zip, hosts) => c.putUpload(url, zip, "application/zip", hosts),
+      // deliberately no revert: our code never undoes an import (README section 5)
     },
     licensees: {
       list: () => read<Licensee[]>("/licensees"),

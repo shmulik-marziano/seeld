@@ -296,6 +296,10 @@ export interface DataImportProvider {
   description?: string;
   properties?: Record<string, unknown>;
   subProviders?: Array<{ id: Uuid; name?: string }>;
+  enabled?: boolean;
+  allowMultipleFiles?: boolean;
+  acceptedRegexes?: string[];
+  acceptedFiles?: Record<string, string[]>;
 }
 export interface DataImportInitiateRequest {
   provider: Uuid;

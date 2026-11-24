@@ -75,6 +75,8 @@ answers exactly like a hit, no "unknown customer".
 | `GET /portfolio` | Bearer | `{as_of, categories: [{key, label, products: [{id, type_code, type_label, company_label, policy_number_masked, source, status, plan?, balance?, premium?, premium_frequency?, coverage?, start?, end?, track?}]}]}` |
 | `GET /documents` | Bearer | `{documents: [{id, title, kind, created_at, size_bytes, downloadable}]}` |
 | `GET /documents/:id` | Bearer | `{url, expires_in_sec}`: a signed Storage link (5 minutes) for one POA file of this client |
+| `GET /harb` | Bearer | `{enabled, last_upload: {created_at, processed} \| null}` |
+| `POST /harb` | Bearer, `{bytes_base64}` | `{document_id, duplicate, queued}`; 422 `harb_invalid` + `reason` (`not_xlsx`, `too_large`, `too_many_sheets`, `too_many_rows`, `bad_layout`, `empty`, `id_mismatch`, `bad_file`) |
 | `POST /logout` | Bearer | 204 |
 
 Codes: `inactive` (503, switch off), `unauthenticated` (401, bad or expired token), `wrong_code`, `max_tries`, `expired`,
@@ -104,6 +106,63 @@ product id ever leaves the function.
 - Tests: `supabase/tests/16_client_area.test.sql` (pgTAP), `supabase/functions/client-area/test.ts`,
   `_shared/client/test.ts`, `_shared/sms/test.ts` (Deno).
 
+## Har HaBituach, client path (migration `20261125120000_harb_client_upload`; worker kind `surense.harb_import`)
+
+Har HaBituach (`harb.cma.gov.il`, the government insurance registry) has no API. A client can sign in there with the
+government identification and download an .xlsx of all their policies ("יצוא לאקסל"). The personal area takes that file
+from the client and, when the owner turns it on, pushes it into Surense's data import (the same parsing as "טעינת קבצים ->
+קבצי הר הביטוח" in their UI), so the policies land in the processed portfolio the area shows.
+
+1. **Card** (`GET /harb` -> `{enabled, last_upload: {created_at, processed} | null}`): the home screen shows it only while
+   `client_area_harb_upload_enabled` is on. Three short lines on how to download the file, a link to the registry, one
+   button (screen ס7 in `CLIENT-AREA-SPEC.md`).
+2. **Upload** (`POST /harb {bytes_base64}`, at most 2 MB of file): the function checks the file itself
+   (`_shared/harb/xlsx.ts`, no dependency: a minimal ZIP reader over the runtime's `DecompressionStream("deflate-raw")` with
+   a per-entry output cap, declared-size and CRC check): ZIP magic, `[Content_Types].xml` (spreadsheetml) +
+   `xl/workbook.xml`, at most 10 sheets, 5,000 rows, 100 entries, 4 MB per inflated part. Column A: up to 10 text cells before the first id row
+   (the export has a title row and the header "תעודת זהות"), every other non-empty value a national id (5..9 digits,
+   normalised to 9; the export writes it as a number), at least one, and exactly one distinct id. The format was checked
+   against real exports locally (counts only; no real file is in the repo).
+3. **Is it the client's?** `api.client_harb_add(token_hash, national_id, sha256, rows)` compares the id with the session's
+   customer (`private.national_id_hmac` = `crm.customers.national_id_hmac`). A different id is not stored, not raised: it
+   answers `{ok:false, error:'id_mismatch'}` and writes an audit row with the code only. 10 attempts per customer per day.
+   The same file again (same sha256, stored) answers `duplicate`.
+4. **Storage**: a `crm.documents` row (`kind harb_xlsx`, `source client`, `customer_id` = the client, no POA session),
+   bytes in the private `client-docs` bucket at the path the database names
+   (`harb/{agency}/{customer}/harb_xlsx-{document}.xlsx`), then `api.client_harb_stored` sets the path. Audit rows:
+   `client_harb_add` (kind, rows), `client_harb_stored` (queued), `harb_import_set` (status, code).
+5. **Push** (only with `surense_harb_import_enabled` on at store time; the job waits in the queue while `surense_enabled`
+   is off): `ops.surense_jobs` `surense.harb_import {document_id}` (dedupe `harb:<document>`). The worker
+   (`_shared/surense/harb.ts`) reads `api.harb_import_get` (PT423 unless BOTH harb switches are on -> `skipped
+   harb_switch_off`), then, before any Surense call: the upload-host allowlist must not be empty
+   (`DATA_IMPORT_UPLOAD_HOSTS`, empty in code) and `surense_harb_provider_match` must be set, else `skipped` with a code.
+   Then `GET /data-import/providers` (exactly one enabled provider whose id equals the match or whose name contains it;
+   a provider that needs `validityMonth`, a sub-provider or a manager without a known customer is `skipped` with a code),
+   `POST /data-import/initiate` (one file `harb_<date>.xlsx`, `params.customerId` = the client's Surense id from our
+   mirror when known), the PUT of a stored ZIP holding the file to `uploadUrl` (host-locked, no bearer; audited as
+   `data_import.upload`), `POST /data-import/{id}/start`, and a follow-up job that polls `GET /data-import/{id}`
+   (retry every 2 minutes, then the queue backoff; dead + alert at attempt 5). `PROCESSED` queues the portfolio pull of
+   that customer. Every phase is written on the row (`import_status queued|initiated|uploaded|sent|processed|failed|skipped`,
+   `import_id`, `import_code`), so a retry resumes (an `uploaded` row only starts again). 403 on initiate (another import of
+   the same user is running) retries after 15 minutes. Our code never calls revert.
+6. **Staff fallback** `staff.harb_fallback_list(p_days default 5)`: POA wizard sessions of the caller's agency with a
+   `poa_harbit` consent signed less than `p_days` Israeli business days ago (Sunday..Thursday; holidays not counted) and no
+   Har HaBituach file of that person stored since the signing, so the agent pulls it by hand before the window closes.
+   Admin + fresh TOTP + access log; masked id and phone tail only. No staff screen yet.
+
+Enable order (owner, after the migration is applied and `client-area` + `surense-worker` are deployed): owner uploads his
+own export with only `client_area_harb_upload_enabled` on (stored, nothing queued) -> Surense confirms the provider and the
+upload host -> a code PR adds the host to `DATA_IMPORT_UPLOAD_HOSTS` -> `surense_harb_provider_match` set ->
+`surense_harb_import_enabled` on. Files stored while the push switch was off are not queued by themselves; to push them:
+`select api.surense_job_enqueue('surense.harb_import', jsonb_build_object('document_id', id), 'harb:' || id) from crm.documents
+where kind = 'harb_xlsx' and storage_path is not null and import_status is null;` (needs `surense_enabled`).
+
+**Open with Surense (owner):** the exact name or id of the Har HaBituach provider in `GET /data-import/providers` (and its
+`properties`: `managerRequired`, `validityMonthRequired`, sub-providers) and the host of the data-import `uploadUrl` (the
+OpenAPI example shows `surense.data-import.files.s3.eu-west-1.amazonaws.com`; it is not added until confirmed). Not in
+this part: an SMS / notice to the client after the import, a staff download of the uploaded file, a retention window for
+the files (no-delete rule: nothing is deleted).
+
 ## Switches
 
 | Key | Default | Meaning |
@@ -111,6 +170,9 @@ product id ever leaves the function.
 | `client_area_enabled` | false | master switch; every RPC refuses (PT423 -> 503 `inactive`) while off |
 | `client_area_turnstile_required` | true | Turnstile on `/login/start` |
 | `client_area_retention_enabled` | false | the cleanup deletes nothing while off |
+| `client_area_harb_upload_enabled` | false | the Har HaBituach card and upload (`/harb`); also required by the Surense push |
+| `surense_harb_import_enabled` | false | queue the Surense push of an uploaded file (needs the upload switch and `surense_enabled`) |
+| `surense_harb_provider_match` | `''` | the data-import provider (id or part of its name); empty = the push ends `skipped` before any call |
 
 Browser (Vite, Vercel): `VITE_CLIENT_AREA=on` shows `/my`; `VITE_CLIENT_AREA_URL` is the function base
 (`https://<project>.supabase.co/functions/v1/client-area`). Secrets: `SMS_API_TOKEN` (Micropay), optional `SMS_SENDER_ID`,

@@ -19,8 +19,9 @@ select ok(current_setting('t.has_vault')::boolean, 'Vault is present (the client
 
 -- ---------------------------------------------------------------- switches, structure, privileges
 select set_eq($$ select key || '=' || value from ops.config where key like 'client_area%' $$,
-  $$ values ('client_area_enabled=false'), ('client_area_turnstile_required=true'), ('client_area_retention_enabled=false') $$,
-  'three client-area keys seeded; the master switch is off');
+  $$ values ('client_area_enabled=false'), ('client_area_turnstile_required=true'), ('client_area_retention_enabled=false'),
+            ('client_area_harb_upload_enabled=false') $$,
+  'client-area keys seeded (the harb upload switch since 20261125120000); the master switch is off');
 select is((select count(*)::int from pg_class c join pg_namespace n on n.oid = c.relnamespace
             where n.nspname = 'crm' and c.relname in ('client_login_challenges', 'client_sessions') and c.relrowsecurity), 2, 'RLS on both tables');
 select is_empty($$ select r || ' ' || c.relname from pg_class c join pg_namespace n on n.oid = c.relnamespace
