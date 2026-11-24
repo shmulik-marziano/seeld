@@ -12,7 +12,7 @@
 | מסמכים | אחרי "פרטים אישיים" | צילום ת"ז, תלוש, דוח או מסמך אחר (PDF/JPG/PNG/HEIC עד 6 MB, עד 12 לסשן) לדלי הפרטי `client-docs` ולשורת `crm.documents` |
 | אפיון סיכון | כרטיסיית `risk` | שאלון הסיכון הקיים (`RiskQuiz`), התוצאה נשמרת כשאלון `risk-profile` עם `derived.risk_level` |
 | שרת | `supabase/functions/forms-intake` | `POST /start`, `GET /state`, `POST /step`, `POST /submit`, `POST /document`. אותו שלד של `poa-intake`: Origin, Turnstile, אסימון סשן ב-`x-forms-session` (רק ה-SHA-256 מגיע למסד), תקרות גוף, רשימת מפתחות מותרת לכל נתיב, שגיאה `{error, code}` בלי ערכים, לוגים בלי ערכים |
-| מסד | `20261123120000_client_forms.sql` | `crm.form_sessions`, `crm.form_submissions`, הרחבת `crm.documents`, `api.form_*`, `staff.form_submission_*`, `staff.client_doc_get` מורחב, pgTAP `14_client_forms` |
+| מסד | `20261125090000_client_forms.sql` (נקרא קודם `20261123120000`; הוזז אחרי `20261124100000_client_area`, האחרונה שהוחלה, כדי ש-`migrate.yml` לא ייעצר על "out of order") | `crm.form_sessions`, `crm.form_submissions`, הרחבת `crm.documents`, `api.form_*`, `staff.form_submission_*`, `staff.client_doc_get` מורחב, pgTAP `14_client_forms` |
 | לצוות | לשונית "שאלונים" ב-`/site-admin` (`src/pages/admin/FormsModule.tsx`) | טבלה עם סינון לפי סוג וסטטוס, חיפוש, מיון, מגירה עם התשובות לפי פרקים (`ResponseViewer`), תוצאות נגזרות, מסמכים (הורדה דרך `client-docs`), "סומן כטופל"; ולמטה מצב הזמנות המידעים (`staff.poa_session_list`: מנוע, שיגור). מחליפה את לשונית "שאלוני הצטרפות" הישנה שקראה מטוקיו |
 
 ## 2. מיפוי הכרטיסיות (`src/forms/catalog.ts`)
@@ -48,7 +48,7 @@
 | `VITE_FORMS_ADAPTER=mock` | לא מוגדר | פיתוח: מתאם בזיכרון, בלי שרת |
 
 ## 5. מה הסשן ההורה עושה אחרי המיזוג
-1. להחיל את המיגרציה `20261123120000_client_forms.sql` (MCP `apply_migration`, ואז יישור הגרסה ב-`schema_migrations` ל-`20261123120000`).
+1. להחיל את המיגרציה `20261125090000_client_forms.sql`: דרך `migrate.yml` (GitHub, ריצה יבשה ואז החלה, באישור הבעלים), או MCP `apply_migration` ואז יישור הגרסה ב-`schema_migrations` ל-`20261125090000`.
 2. לפרוס `forms-intake` (`npx supabase functions deploy forms-intake --project-ref qxhpolktdfgcbxtfxgov --use-api --yes`). אין סודות חדשים: משתמשת ב-`SEELD_SECRET_KEY`/`SUPABASE_SECRET_KEYS`, `TURNSTILE_SECRET_KEY`, `ALLOWED_ORIGINS`.
 3. Vercel: `VITE_FORMS_FLOW=on` (ייצור), ואז `update ops.config set value='true' where key='forms_enabled'` עם שורת ביקורת.
 4. הרצת בדיקה עם נתוני דמה: זיהוי → שאלון פיננסי → בריאות (לוודא ש-`answers_stored=false`) → מסמך → לשונית הצוות.
