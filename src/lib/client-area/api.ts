@@ -1,21 +1,27 @@
 // Client-area adapter: the interface the screens talk to, an in-memory mock (development, tests) and the HTTP adapter
-// for the client-area Edge Function (routes login/start, login/verify, me, portfolio, documents, documents/:id, logout;
+// for the client-area Edge Function (routes login/start, login/verify, me, portfolio, documents, documents/:id, harb, logout;
 // snake_case JSON; the session token travels as `Authorization: Bearer`). The contract is docs/product/CLIENT-AREA.md.
 import { SUPABASE_URL } from "@/integrations/supabase/config";
 import { CATEGORY_KEYS, CLIENT_AREA_URL, type CategoryKey, type DocKind } from "./config";
 import { createBrowserSessionStore, createMemorySessionStore, type SessionStore } from "./session";
 
-export type ClientErrorKind = "inactive" | "unavailable" | "unauthenticated" | "wrong_code" | "max_tries" | "expired" | "generic";
-export const CLIENT_ERROR_KINDS: readonly ClientErrorKind[] = ["inactive", "unavailable", "unauthenticated", "wrong_code", "max_tries", "expired", "generic"];
+export type ClientErrorKind = "inactive" | "unavailable" | "unauthenticated" | "wrong_code" | "max_tries" | "expired" | "generic" | "harb_invalid";
+export const CLIENT_ERROR_KINDS: readonly ClientErrorKind[] = ["inactive", "unavailable", "unauthenticated", "wrong_code", "max_tries", "expired", "generic", "harb_invalid"];
+
+/** why a Har HaBituach file was refused (the server's `reason` code) */
+export const HARB_REASONS = ["not_xlsx", "too_large", "too_many_sheets", "too_many_rows", "bad_layout", "empty", "id_mismatch", "bad_file"] as const;
+export type HarbReason = (typeof HARB_REASONS)[number];
 
 export class ClientApiError extends Error {
   readonly kind: ClientErrorKind;
   readonly triesLeft?: number;
-  constructor(kind: ClientErrorKind, triesLeft?: number) {
+  readonly reason?: HarbReason;
+  constructor(kind: ClientErrorKind, triesLeft?: number, reason?: HarbReason) {
     super(kind);
     this.name = "ClientApiError";
     this.kind = kind;
     this.triesLeft = triesLeft;
+    this.reason = reason;
   }
 }
 export const errorKindOf = (e: unknown): ClientErrorKind => (e instanceof ClientApiError ? e.kind : "generic");
@@ -51,6 +57,11 @@ export interface PortfolioCategory { key: CategoryKey; label: string; products: 
 export interface PortfolioRes { as_of: string | null; categories: PortfolioCategory[] }
 export interface ClientDocument { id: string; title: string; kind: DocKind; created_at: string; size_bytes: number | null; downloadable: boolean }
 export interface DocumentsRes { documents: ClientDocument[] }
+/** the Har HaBituach card: shown only while the server switch is on */
+export interface HarbStatusRes { enabled: boolean; last_upload: { created_at: string | null; processed: boolean } | null }
+export interface HarbUploadRes { document_id: string; duplicate: boolean; queued: boolean }
+/** the largest file the browser sends (the server cap is the same) */
+export const HARB_MAX_BYTES = 2 * 1024 * 1024;
 
 export interface ClientApi {
   hasSession(): boolean;
@@ -61,7 +72,17 @@ export interface ClientApi {
   documents(): Promise<DocumentsRes>;
   /** a short-lived download link (the browser opens it) */
   documentUrl(id: string): Promise<string>;
+  harbStatus(): Promise<HarbStatusRes>;
+  /** the bytes of the client's Har HaBituach export (.xlsx); the server checks it */
+  harbUpload(bytes: Uint8Array): Promise<HarbUploadRes>;
   logout(): Promise<void>;
+}
+
+/** base64 of the file bytes for the JSON body (chunked: no argument-count limit) */
+export function bytesToBase64(bytes: Uint8Array): string {
+  let s = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(s);
 }
 
 // ---------------------------------------------------------------- mock
@@ -73,6 +94,10 @@ export interface MockOptions {
   code?: string;
   store?: SessionStore;
   now?: () => Date;
+  /** the Har HaBituach card (default: shown) */
+  harbEnabled?: boolean;
+  /** every upload is refused with this reason */
+  harbReason?: HarbReason;
 }
 
 const MOCK_FIRST = "ישראל";
@@ -109,6 +134,7 @@ export function createMockClientApi(o: MockOptions = {}): ClientApi {
   const challenges = new Map<string, { tries: number; matched: boolean }>();
   const session = () => { const t = store.read(); if (!t) throw new ClientApiError("unauthenticated"); return t; };
   const expiresAt = () => new Date(now().getTime() + 30 * 24 * 3600 * 1000).toISOString();
+  let harbLast: HarbStatusRes["last_upload"] = null;
   return {
     hasSession: () => !!store.read(),
     async loginStart(r) {
@@ -156,6 +182,19 @@ export function createMockClientApi(o: MockOptions = {}): ClientApi {
       if (!d) throw new ClientApiError("generic");
       return URL.createObjectURL(new Blob([`%PDF-1.4 mock ${d.title}`], { type: "application/pdf" }));
     },
+    async harbStatus() {
+      await wait(); guard(); session();
+      return { enabled: o.harbEnabled ?? true, last_upload: harbLast };
+    },
+    async harbUpload(bytes) {
+      await wait(); guard(); session();
+      if (o.harbEnabled === false) throw new ClientApiError("inactive");
+      if (o.harbReason) throw new ClientApiError("harb_invalid", undefined, o.harbReason);
+      // a real export is a ZIP ("PK"): the mock refuses anything else, as the server would
+      if (bytes.length < 4 || bytes[0] !== 0x50 || bytes[1] !== 0x4b) throw new ClientApiError("harb_invalid", undefined, "not_xlsx");
+      harbLast = { created_at: now().toISOString(), processed: false };
+      return { document_id: "harb-1", duplicate: false, queued: true };
+    },
     async logout() {
       await wait();
       store.clear();
@@ -172,11 +211,15 @@ export interface HttpOptions {
 }
 
 function errorKindOfResponse(status: number, body: unknown): ClientApiError {
-  const code = body && typeof body === "object" && (body as { error?: { code?: unknown; tries_left?: unknown } }).error;
+  const code = body && typeof body === "object" && (body as { error?: { code?: unknown; tries_left?: unknown; reason?: unknown } }).error;
   const c = code && typeof code.code === "string" ? code.code : "";
   const left = code && typeof code.tries_left === "number" ? code.tries_left : undefined;
   if (status === 401) return new ClientApiError("unauthenticated");
   if (status === 503 && c === "inactive") return new ClientApiError("inactive");
+  if (c === "harb_invalid") {
+    const r = code && typeof code.reason === "string" && (HARB_REASONS as readonly string[]).includes(code.reason) ? (code.reason as HarbReason) : "bad_file";
+    return new ClientApiError("harb_invalid", undefined, r);
+  }
   if (c === "wrong_code") return new ClientApiError("wrong_code", left);
   if (c === "max_tries") return new ClientApiError("max_tries");
   if (c === "expired") return new ClientApiError("expired");
@@ -253,6 +296,17 @@ export function createHttpClientApi(opts: HttpOptions = {}): ClientApi {
       const res = await json<{ url?: unknown }>(await send(`documents/${id}`, { method: "GET", auth: true }));
       if (typeof res?.url !== "string" || !/^https:\/\//.test(res.url)) throw new ClientApiError("generic");
       return res.url;
+    },
+    async harbStatus() {
+      const res = await json<HarbStatusRes>(await send("harb", { method: "GET", auth: true }));
+      if (typeof res?.enabled !== "boolean") throw new ClientApiError("generic");
+      return { enabled: res.enabled, last_upload: res.last_upload && typeof res.last_upload === "object" ? res.last_upload : null };
+    },
+    async harbUpload(bytes) {
+      if (bytes.byteLength > HARB_MAX_BYTES) throw new ClientApiError("harb_invalid", undefined, "too_large");
+      const res = await json<HarbUploadRes>(await send("harb", { method: "POST", auth: true, body: { bytes_base64: bytesToBase64(bytes) } }));
+      if (typeof res?.document_id !== "string") throw new ClientApiError("generic");
+      return res;
     },
     async logout() {
       try { await send("logout", { method: "POST", auth: true }); } catch { /* the server session may already be gone */ }

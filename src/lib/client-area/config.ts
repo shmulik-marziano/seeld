@@ -10,6 +10,9 @@ export const CLIENT_AREA_ENABLED: boolean = import.meta.env.VITE_CLIENT_AREA ===
 
 export const MY_ROUTE = "/my";
 
+/** Har HaBituach, the government insurance registry: the client downloads their own export there (opens in a new tab) */
+export const HARB_SITE_URL = "https://harb.cma.gov.il/";
+
 /** Product categories, in display order (the server groups products into these keys). */
 export const CATEGORY_KEYS = ["pension", "gemel", "hishtalmut", "insurance_life", "insurance_health", "insurance_general", "savings", "other"] as const;
 export type CategoryKey = (typeof CATEGORY_KEYS)[number];

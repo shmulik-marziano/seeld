@@ -41,8 +41,9 @@ select set_eq(
             ('form_config'), ('form_session_start'), ('form_session_get'), ('form_step_save'), ('form_submit'), ('form_session_fail'),
             ('form_document_add'), ('form_document_stored'),
             ('client_area_config'), ('client_login_start'), ('client_login_challenge_use'), ('client_login_verify'), ('client_session_get'),
-            ('client_portfolio_get'), ('client_documents_list'), ('client_document_get'), ('client_logout') $$,
-  'service-only RPCs in api (63)');
+            ('client_portfolio_get'), ('client_documents_list'), ('client_document_get'), ('client_logout'),
+            ('client_harb_status'), ('client_harb_add'), ('client_harb_stored'), ('harb_import_get'), ('harb_import_set') $$,
+  'service-only RPCs in api (68)');
 
 -- the documented advisor exceptions (lints 0028/0029): exactly these SECURITY DEFINER functions are callable by API roles
 select set_eq(
@@ -59,8 +60,8 @@ select set_eq(
             ('staff.admin_staff_enable'), ('staff.admin_alert_resolve'),
             ('staff.poa_session_list'), ('staff.poa_session_verify'), ('staff.client_doc_get'), ('staff.poa_ship_retry'),
             ('staff.form_submission_list'), ('staff.form_submission_get'), ('staff.form_submission_set_status'),
-            ('staff.client_sessions_revoke') $$,
-  'lint 0029 exception list (authenticated, 23 entries)');
+            ('staff.client_sessions_revoke'), ('staff.harb_fallback_list') $$,
+  'lint 0029 exception list (authenticated, 24 entries)');
 
 select is_empty($$ select jobname from cron.job where command ~* 'http|secret|bearer|apikey' $$, 'cron commands carry no URL or secret');
 select set_eq($$ select jobname from cron.job $$,

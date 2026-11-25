@@ -9,9 +9,13 @@
 //   GET  /portfolio          categories with shaped products (labels, masked policy numbers)
 //   GET  /documents          the client's documents (POA files; Surense metadata)
 //   GET  /documents/:id      {url}: a signed download link (5 minutes) for one POA file of this client
+//   GET  /harb               {enabled, last_upload}: the Har HaBituach upload card (switch client_area_harb_upload_enabled)
+//   POST /harb               {bytes_base64}: the client's Har HaBituach export (.xlsx). Checked here (ZIP, caps, layout, one
+//                            id in column A), the id compared with the client's in SQL (hmac), stored privately, queued
+//                            for Surense when surense_harb_import_enabled is on -> {document_id, duplicate, queued}
 //   POST /logout
 // Errors: {"error": {"code": "<code>", ...}} with codes inactive | unauthenticated | wrong_code (+tries_left) | max_tries |
-// expired | generic | rate_limited | unavailable. Never a message, a value or an upstream text.
+// expired | generic | rate_limited | unavailable | harb_invalid (+reason). Never a message, a value or an upstream text.
 // Logs: route, status, codes, ids. Never a body, a phone, a national id, a code, a token or a url.
 import { corsHeaders } from "../_shared/cors.ts";
 import { type FetchFn, type Rpc, RpcError } from "../_shared/db.ts";
@@ -26,8 +30,15 @@ import { generateToken, hashToken, sha256Hex, TOKEN_RE } from "../_shared/poa/se
 import type { ObjectSigner } from "../_shared/poa/storage.ts";
 import { normalizeIsraeliPhone, otpSend, otpVerify } from "../_shared/sms/micropay.ts";
 import { type MirrorProduct, POA_DOC_TITLE, shapePortfolio, summarize } from "../_shared/client/portfolio.ts";
+import type { Storage } from "../_shared/surense/storage.ts";
+import { HARB_LIMITS, type HarbFileCode, HarbFileError, inspectHarbXlsx } from "../_shared/harb/xlsx.ts";
 
 export const MAX_BODY_BYTES = 4 * 1024;
+/** the Har HaBituach upload as base64 JSON (HARB_LIMITS.maxBytes of file) */
+export const MAX_HARB_JSON_BYTES = Math.ceil(HARB_LIMITS.maxBytes * 4 / 3) + 1024;
+export const XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+/** reasons of `harb_invalid` (the browser shows one line per reason) */
+export type HarbReason = HarbFileCode;
 export const REJECT_LIMIT = 30;
 export const REJECT_WINDOW_SEC = 600;
 /** floor of the /login/start and /login/verify durations (ms): a hit and a miss take the same time */
@@ -41,10 +52,14 @@ const VERIFY_KEYS = ["challenge_id", "code"];
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const SECURITY_HEADERS = { "cache-control": "no-store", "referrer-policy": "no-referrer", "x-content-type-options": "nosniff" };
 
-export type ClientErrorCode = "inactive" | "unauthenticated" | "wrong_code" | "max_tries" | "expired" | "generic" | "rate_limited" | "unavailable" | "not_found";
+export type ClientErrorCode = "inactive" | "unauthenticated" | "wrong_code" | "max_tries" | "expired" | "generic" | "rate_limited" | "unavailable" | "not_found" | "harb_invalid";
 const STATUS: Record<ClientErrorCode, number> = {
   inactive: 503, unauthenticated: 401, wrong_code: 400, max_tries: 400, expired: 400, generic: 400, rate_limited: 429, unavailable: 503, not_found: 404,
+  harb_invalid: 422,
 };
+
+/** a refused Har HaBituach file: the reason is a code, never a value of the file */
+export const harbInvalid = (reason: HarbReason) => new ClientHttpError("harb_invalid", `harb_${reason}`, { extra: { reason } });
 
 /** An error already shaped for the browser: a code (and a few safe extras), never a message. */
 export class ClientHttpError extends Error {
@@ -121,6 +136,8 @@ export interface ClientAreaDeps {
   log: Logger;
   /** signed links for the client's own POA files; null = /documents/:id answers unavailable */
   signer: ObjectSigner | null;
+  /** the private bucket writer for the Har HaBituach upload; null/absent = POST /harb answers unavailable */
+  storage?: Storage | null;
   fetch?: FetchFn;
   now?: () => number;
   /** pause used to pad the login routes (tests inject a spy) */
@@ -130,7 +147,7 @@ export interface ClientAreaDeps {
 }
 
 type Route =
-  | { name: "login_start" | "login_verify" | "me" | "portfolio" | "documents" | "logout" }
+  | { name: "login_start" | "login_verify" | "me" | "portfolio" | "documents" | "logout" | "harb_status" | "harb_upload" }
   | { name: "document"; id: string };
 
 /** "/functions/v1/client-area/documents/<uuid>" -> {name:"document", id}; null when not a route */
@@ -146,7 +163,25 @@ export function parseRoute(method: string, pathname: string): Route | "method" |
   if (rest.length === 1 && rest[0] === "documents") return want("GET", { name: "documents" });
   if (rest.length === 2 && rest[0] === "documents" && UUID.test(rest[1])) return want("GET", { name: "document", id: rest[1].toLowerCase() });
   if (rest.length === 1 && rest[0] === "logout") return want("POST", { name: "logout" });
+  if (rest.length === 1 && rest[0] === "harb") {
+    return method === "GET" ? { name: "harb_status" } : method === "POST" ? { name: "harb_upload" } : "method";
+  }
   return null;
+}
+
+/** pure: POST /harb body -> the file bytes (base64 decoded; size and shape only, the content is checked by inspectHarbXlsx) */
+export function parseHarbUpload(b: Record<string, unknown>): Uint8Array {
+  onlyKeys(b, ["bytes_base64"]);
+  const b64 = b.bytes_base64;
+  if (typeof b64 !== "string" || !b64 || !/^[A-Za-z0-9+/]+=*$/.test(b64)) throw harbInvalid("not_xlsx");
+  if (Math.floor(b64.length * 3 / 4) > HARB_LIMITS.maxBytes + 3) throw harbInvalid("too_large");
+  let bin: string;
+  try {
+    bin = atob(b64);
+  } catch {
+    throw harbInvalid("not_xlsx");
+  }
+  return Uint8Array.from(bin, (c) => c.charCodeAt(0));
 }
 
 const bad = (detail: string, status = 400) => new ClientHttpError("generic", detail, { status });
@@ -431,6 +466,56 @@ export function createClientAreaHandler(d: ClientAreaDeps): (req: Request) => Pr
         if (!signed) throw new ClientHttpError("not_found", "object_missing");
         log.info("client document link issued", { document: route.id, kind: str(doc.kind) });
         return json({ url: signed, expires_in_sec: SIGNED_URL_SEC });
+      }
+      // ------------------------------------------------------------------ Har HaBituach (client path)
+      if (route.name === "harb_status") {
+        const st = (await rpc.call<Record<string, unknown>>("client_harb_status", { p_token_hash: tokenHash })) ?? {};
+        const last = isObj(st.last) ? st.last : null;
+        return json({
+          enabled: st.enabled === true,
+          last_upload: last ? { created_at: str(last.created_at), processed: last.import_status === "processed" } : null,
+        });
+      }
+      if (route.name === "harb_upload") {
+        if (!d.storage) throw new ClientHttpError("unavailable", "storage_not_configured");
+        let bytes: Uint8Array;
+        try {
+          bytes = parseHarbUpload(await readJson(req, MAX_HARB_JSON_BYTES));
+        } catch (e) {
+          if (e instanceof ClientHttpError && e.detail === "too_large") throw harbInvalid("too_large");
+          throw e;
+        }
+        let rows: number;
+        let nationalId: string;
+        try {
+          ({ rows, nationalId } = await inspectHarbXlsx(bytes));
+        } catch (e) {
+          if (e instanceof HarbFileError) throw harbInvalid(e.code);
+          throw e;
+        }
+        const sha = await sha256Hex(bytes);
+        // the id goes to the database only to be compared with the client's (hmac); it is never stored or logged
+        const added = (await rpc.call<Record<string, unknown>>("client_harb_add", {
+          p_token_hash: tokenHash, p_national_id: nationalId, p_sha256: sha, p_rows: rows,
+        })) ?? {};
+        if (added.ok === false) throw harbInvalid(added.error === "id_mismatch" ? "id_mismatch" : "bad_file");
+        const docId = str(added.document_id);
+        if (!docId || !UUID.test(docId)) throw new ClientHttpError("unavailable", "db_bad_shape");
+        if (added.duplicate === true) {
+          log.info("harb file already received", { document: docId });
+          return json({ document_id: docId, duplicate: true, queued: false });
+        }
+        const path = str(added.storage_path);
+        if (!path) throw new ClientHttpError("unavailable", "db_bad_shape");
+        try {
+          await d.storage.put(path, bytes, XLSX_MIME);
+        } catch (e) {
+          log.warn("harb file not stored", { document: docId, code: e instanceof Error ? e.name : "unknown" });
+          throw new ClientHttpError("unavailable", "doc_storage");
+        }
+        const stored = (await rpc.call<Record<string, unknown>>("client_harb_stored", { p_token_hash: tokenHash, p_document: docId, p_path: path })) ?? {};
+        log.info("harb file stored", { document: docId, rows, queued: stored.queued === true });
+        return json({ document_id: docId, duplicate: false, queued: stored.queued === true });
       }
       throw bad("no_route", 404);
     } catch (e) {

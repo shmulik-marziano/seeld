@@ -91,7 +91,7 @@ export function MyShell({ api: injected }: { api?: ClientApi }) {
     body = (
       <Routes>
         <Route index element={<Navigate to={`${MY_ROUTE}/home`} replace />} />
-        <Route path="home" element={<Home me={phase.me} />} />
+        <Route path="home" element={<Home me={phase.me} api={api} onAuthLost={authLost} />} />
         <Route path="portfolio" element={<Portfolio api={api} onAuthLost={authLost} />} />
         <Route path="documents" element={<Documents api={api} onAuthLost={authLost} />} />
         <Route path="*" element={<Navigate to={`${MY_ROUTE}/home`} replace />} />

@@ -1,11 +1,15 @@
 // deno test supabase/functions/client-area/  (synthetic data only; no network: RPC, SMS provider, Turnstile and storage are mocks)
 import assert from "node:assert/strict";
 import { json, mockFetch, mockRpc, rpcError, silentLog, testEnv } from "../_shared/test_helpers.ts";
-import { type ClientAreaDeps, createClientAreaHandler, LOGIN_BUCKET_MS, LOGIN_MIN_MS, parseRoute, parseStart, parseVerify, toClientError } from "./handler.ts";
+import {
+  type ClientAreaDeps, createClientAreaHandler, LOGIN_BUCKET_MS, LOGIN_MIN_MS, MAX_HARB_JSON_BYTES, parseRoute, parseStart, parseVerify, toClientError, XLSX_MIME,
+} from "./handler.ts";
 import { MICROPAY_OTP_URL } from "../_shared/sms/micropay.ts";
 import { sha256Hex, TOKEN_RE } from "../_shared/poa/session.ts";
 import { SYNTH_ID } from "../_shared/poa/fixtures.ts";
 import type { ObjectSigner } from "../_shared/poa/storage.ts";
+import type { Storage } from "../_shared/surense/storage.ts";
+import { buildHarbXlsx, OTHER_HARB_ID, SYNTH_HARB_ID } from "../_shared/harb/fixtures.ts";
 
 const BASE = "https://example.supabase.co/functions/v1/client-area";
 const ORIGIN = "https://seeld.co.il";
@@ -21,7 +25,13 @@ const NOW = Date.UTC(2026, 10, 23, 20, 0, 0);
 
 type Script = Record<string, unknown | ((args: Record<string, unknown>) => unknown)>;
 
-function setup(o: { script?: Script; env?: Record<string, string>; sms?: (body: Record<string, unknown>) => Response; signer?: ObjectSigner | null; noSms?: boolean } = {}) {
+const HARB_DOC = "d7000000-0000-4000-8000-000000000001";
+const HARB_PATH = `harb/5eed0000-0000-4000-8000-000000000001/c5000000-0000-4000-8000-000000000001/harb_xlsx-${HARB_DOC}.xlsx`;
+
+function setup(o: {
+  script?: Script; env?: Record<string, string>; sms?: (body: Record<string, unknown>) => Response; signer?: ObjectSigner | null; noSms?: boolean;
+  storage?: Storage | null;
+} = {}) {
   const lines: string[] = [];
   let clock = NOW;
   const waits: number[] = [];
@@ -38,6 +48,9 @@ function setup(o: { script?: Script; env?: Record<string, string>; sms?: (body: 
     client_documents_list: { poa: [{ id: DOC, kind: "maslaka", created_at: "2026-11-22T10:00:00Z", downloadable: true }], surense: [{ id: "d5200000-0000-4000-8000-000000000001", name: "Zz-Doc.pdf", size_bytes: 1234, created_at: "2026-11-01T10:00:00Z", downloadable: false }] },
     client_document_get: { storage_path: "poa/a/b/maslaka-c.pdf", sha256: null, kind: "maslaka" },
     client_logout: { revoked: true },
+    client_harb_status: { enabled: true, last: null },
+    client_harb_add: { ok: true, duplicate: false, document_id: HARB_DOC, storage_path: HARB_PATH },
+    client_harb_stored: { stored: true, queued: true },
   };
   const script = { ...defaults, ...(o.script ?? {}) };
   const rpc = mockRpc((fn, args) => {
@@ -57,12 +70,14 @@ function setup(o: { script?: Script; env?: Record<string, string>; sms?: (body: 
   const signer: ObjectSigner | null = o.signer === undefined
     ? { sign: async (path) => `https://example.supabase.co/storage/v1/object/sign/client-docs/${path}?token=signed-for-tests` }
     : o.signer;
+  const puts: Array<{ path: string; bytes: Uint8Array; contentType: string }> = [];
+  const storage: Storage | null = o.storage === undefined ? { put: async (path, bytes, contentType) => { puts.push({ path, bytes, contentType }); return "stored"; } } : o.storage;
   const handler = createClientAreaHandler({
     env: testEnv({ TURNSTILE_SECRET_KEY: "ts-secret", ...(o.noSms ? {} : { SMS_API_TOKEN: SMS_TOKEN, SMS_SENDER_ID: "SEELD" }), ...(o.env ?? {}) }),
-    rpc, log: silentLog(lines), signer, fetch: f.fetch, now: () => clock,
+    rpc, log: silentLog(lines), signer, storage, fetch: f.fetch, now: () => clock,
     wait: async (ms) => { waits.push(ms); clock += ms; },
   });
-  return { handler, rpc, lines, f, waits, tick: (ms: number) => (clock += ms) };
+  return { handler, rpc, lines, f, waits, puts, tick: (ms: number) => (clock += ms) };
 }
 
 const hdr = (extra: Record<string, string> = {}) => ({ origin: ORIGIN, "cf-connecting-ip": IP, "user-agent": "test-agent", ...extra });
@@ -270,4 +285,87 @@ Deno.test("unconfigured function: 503 unavailable; unknown route 404; wrong meth
 Deno.test("deps shape", () => {
   const d: ClientAreaDeps = { env: testEnv(), rpc: null, log: silentLog(), signer: null };
   assert.ok(d);
+});
+
+// ---------------------------------------------------------------- Har HaBituach (client path)
+const b64 = (bytes: Uint8Array) => {
+  let s = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(s);
+};
+const harbPost = async (bytes: Uint8Array, extra: Record<string, string> = auth) => post("harb", { bytes_base64: b64(bytes) }, extra);
+
+Deno.test("harb: routes; the card follows the switch and shows the last file without its import details", async () => {
+  assert.deepEqual(parseRoute("GET", "/client-area/harb"), { name: "harb_status" });
+  assert.deepEqual(parseRoute("POST", "/client-area/harb"), { name: "harb_upload" });
+  assert.equal(parseRoute("PUT", "/client-area/harb"), "method");
+  const off = setup({ script: { client_harb_status: { enabled: false, last: null } } });
+  assert.deepEqual(await (await off.handler(get("harb", auth))).json(), { enabled: false, last_upload: null });
+  const on = setup({ script: { client_harb_status: { enabled: true, last: { id: HARB_DOC, created_at: "2026-11-25T08:00:00Z", import_status: "processed" } } } });
+  assert.deepEqual(await (await on.handler(get("harb", auth))).json(), { enabled: true, last_upload: { created_at: "2026-11-25T08:00:00Z", processed: true } });
+  assert.equal((await on.handler(get("harb"))).status, 401, "a session is required");
+});
+
+Deno.test("harb: a valid export -> id compared in SQL, bytes stored at the DB path, stored mark; nothing personal logged", async () => {
+  const s = setup();
+  const xlsx = await buildHarbXlsx();
+  const res = await s.handler(await harbPost(xlsx));
+  assert.equal(res.status, 200);
+  assert.deepEqual(await res.json(), { document_id: HARB_DOC, duplicate: false, queued: true });
+  const add = s.rpc.calls.find((c) => c.fn === "client_harb_add")!;
+  assert.deepEqual(add.args, { p_token_hash: bytea(await sha256Hex(TOKEN)), p_national_id: SYNTH_HARB_ID, p_sha256: await sha256Hex(xlsx), p_rows: 3 });
+  assert.equal(s.puts.length, 1);
+  assert.equal(s.puts[0].path, HARB_PATH);
+  assert.equal(s.puts[0].contentType, XLSX_MIME);
+  assert.deepEqual(s.puts[0].bytes, xlsx);
+  assert.deepEqual(s.rpc.calls.find((c) => c.fn === "client_harb_stored")!.args, { p_token_hash: bytea(await sha256Hex(TOKEN)), p_document: HARB_DOC, p_path: HARB_PATH });
+  const logs = s.lines.join("\n");
+  assert.ok(!logs.includes(SYNTH_HARB_ID) && !logs.includes("12344"), "the id is never logged");
+});
+
+Deno.test("harb: refusals carry a reason code; a file of someone else never reaches storage", async () => {
+  const reason = async (r: Response) => ({ status: r.status, body: await r.json() });
+  const notX = setup();
+  assert.deepEqual(await reason(await notX.handler(await harbPost(new TextEncoder().encode("Zz not a spreadsheet, just text bytes ".repeat(5))))),
+    { status: 422, body: { error: { code: "harb_invalid", reason: "not_xlsx" } } });
+  assert.equal(notX.rpc.calls.filter((c) => c.fn === "client_harb_add").length, 0, "refused before the database");
+
+  const two = setup();
+  assert.deepEqual((await reason(await two.handler(await harbPost(await buildHarbXlsx({ ids: [12344, Number(OTHER_HARB_ID)] }))))).body,
+    { error: { code: "harb_invalid", reason: "id_mismatch" } });
+  const empty = setup();
+  assert.deepEqual((await reason(await empty.handler(await harbPost(await buildHarbXlsx({ ids: [] }))))).body, { error: { code: "harb_invalid", reason: "empty" } });
+
+  const notMine = setup({ script: { client_harb_add: { ok: false, error: "id_mismatch" } } });
+  const nm = await notMine.handler(await harbPost(await buildHarbXlsx()));
+  assert.deepEqual(await reason(nm), { status: 422, body: { error: { code: "harb_invalid", reason: "id_mismatch" } } });
+  assert.equal(notMine.puts.length, 0, "nothing stored");
+  assert.equal(notMine.rpc.calls.filter((c) => c.fn === "client_harb_stored").length, 0);
+
+  const big = setup();
+  const huge = new Request(`${BASE}/harb`, { method: "POST", headers: { ...hdr(auth), "content-type": "application/json" }, body: "x".repeat(MAX_HARB_JSON_BYTES + 10) });
+  assert.deepEqual((await reason(await big.handler(huge))).body, { error: { code: "harb_invalid", reason: "too_large" } });
+  const shape = setup();
+  assert.equal((await shape.handler(post("harb", { bytes_base64: "AAAA", extra: 1 }, auth))).status, 400, "unknown keys refused");
+  assert.deepEqual((await reason(await shape.handler(post("harb", { bytes_base64: "not base64!" }, auth)))).body, { error: { code: "harb_invalid", reason: "not_xlsx" } });
+});
+
+Deno.test("harb: duplicate, switch off, storage down and an unconfigured bucket", async () => {
+  const dup = setup({ script: { client_harb_add: { ok: true, duplicate: true, document_id: HARB_DOC } } });
+  const d = await dup.handler(await harbPost(await buildHarbXlsx()));
+  assert.deepEqual(await d.json(), { document_id: HARB_DOC, duplicate: true, queued: false });
+  assert.equal(dup.puts.length, 0);
+
+  const off = setup({ script: { client_harb_add: rpcError(423, "PT423", "feature_disabled:client_area_harb_upload_enabled") } });
+  const o = await off.handler(await harbPost(await buildHarbXlsx()));
+  assert.equal(o.status, 503);
+  assert.deepEqual(await o.json(), { error: { code: "inactive" } });
+
+  const down = setup({ storage: { put: async () => { throw new Error("boom"); } } });
+  const dn = await down.handler(await harbPost(await buildHarbXlsx()));
+  assert.equal(dn.status, 503);
+  assert.equal(down.rpc.calls.filter((c) => c.fn === "client_harb_stored").length, 0, "no stored mark without the bytes");
+
+  const none = setup({ storage: null });
+  assert.equal((await none.handler(await harbPost(await buildHarbXlsx()))).status, 503);
 });

@@ -8,6 +8,7 @@ import { createTokenSource, type TokenSource } from "./auth.ts";
 import { type AuditSink, createSurenseClient } from "./client.ts";
 import { credentials } from "./env.ts";
 import { createStorage } from "./storage.ts";
+import { createObjectReader } from "../poa/storage.ts";
 import type { SyncDeps } from "./sync.ts";
 
 /** pacing between Surense calls (rate limits are undocumented; README section 6א) */
@@ -49,5 +50,8 @@ export function buildSyncDeps(o: {
   const storage = o.env.supabaseUrl && o.env.secretKey
     ? createStorage({ url: o.env.supabaseUrl, apikey: o.env.secretKey, fetch: o.fetch })
     : null;
-  return { api: surenseApi(client), client, rpc: o.rpc, log: o.log, storage, now: o.now };
+  const objects = o.env.supabaseUrl && o.env.secretKey
+    ? createObjectReader({ url: o.env.supabaseUrl, apikey: o.env.secretKey, fetch: o.fetch })
+    : null;
+  return { api: surenseApi(client), client, rpc: o.rpc, log: o.log, storage, objects, now: o.now };
 }

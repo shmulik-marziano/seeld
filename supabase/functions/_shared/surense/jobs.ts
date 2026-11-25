@@ -17,6 +17,7 @@ import { PoaToolError } from "../poa/errors.ts";
 import { createPoaRpc } from "../poa/rpc.ts";
 import { todayIsrael } from "../poa/formatters.ts";
 import type { SurenseDocument } from "./types.ts";
+import { harbImportJob } from "./harb.ts";
 
 export interface JobRow {
   id: number;
@@ -264,6 +265,21 @@ export const HANDLERS: Record<string, JobHandler> = {
     const eventId = str(job.params, "event_id");
     if (!isUuid(customerId) || !isUuid(eventId)) return { result: "skipped", code: "bad_input" };
     return e9100Outcome(await e9100Download(d, { customerId, eventId, deadline }));
+  },
+  // Har HaBituach, client path (20261125120000): the client's uploaded file -> Surense data import (harb.ts). A permanent
+  // refusal from Surense is written back on the document (status skipped + code) before the queue closes the job.
+  "surense.harb_import": async (d, job) => {
+    try {
+      const { portfolioFor, ...out } = await harbImportJob(d, job.params);
+      return portfolioFor && !out.next ? { ...out, next: portfolioNext(portfolioFor) } : out;
+    } catch (e) {
+      const out = failureOutcome(e);
+      const docId = str(job.params, "document_id");
+      if (out.result === "skipped" && isUuid(docId)) {
+        await d.rpc.call("harb_import_set", { p_document: docId.toLowerCase(), p_status: "skipped", p_import_id: null, p_code: out.code ?? "error" }).catch(() => {});
+      }
+      throw e;
+    }
   },
 };
 

@@ -197,4 +197,75 @@ describe("client area on the mock", () => {
     fireEvent.click(screen.getByRole("button", { name: /שליחת קוד לנייד/ }));
     expect(await screen.findByText("האזור האישי סגור כרגע")).toBeInTheDocument();
   });
+
+  describe("Har HaBituach card", () => {
+    const signedIn = () => {
+      const store = createMemorySessionStore();
+      store.write("t", new Date(Date.now() + 60_000).toISOString());
+      return store;
+    };
+    const zipLike = () => new File([new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0x14, 0x00])], "harb.xlsx", { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    const send = (file: File) => fireEvent.change(screen.getByLabelText("שליחת הקובץ"), { target: { files: [file] } });
+
+    it("switch on: steps, the registry link, a sent file and the last-file line", async () => {
+      flag.on = true;
+      await renderArea({ store: signedIn() }, "/my/home");
+      expect(await screen.findByRole("heading", { name: "קובץ הר הביטוח" })).toBeInTheDocument();
+      expect(screen.getByText("נכנסים לאתר הר הביטוח ומזדהים בהזדהות הממשלתית.")).toBeInTheDocument();
+      const link = screen.getByRole("link", { name: "לאתר הר הביטוח" });
+      expect(link).toHaveAttribute("href", "https://harb.cma.gov.il/");
+      expect(link).toHaveAttribute("target", "_blank");
+      expect(link.getAttribute("rel")).toContain("noopener");
+      expect(screen.getByLabelText("שליחת הקובץ")).toHaveAttribute("accept", expect.stringContaining(".xlsx"));
+      send(zipLike());
+      expect(await screen.findByText("הקובץ התקבל. תודה!")).toBeInTheDocument();
+      expect(screen.getByText(/^הקובץ האחרון התקבל ב־\d{2}\/\d{2}\/\d{4}\.$/)).toBeInTheDocument();
+    });
+
+    it("refusals show one plain line per reason; not a zip is refused before the server", async () => {
+      flag.on = true;
+      const first = await renderArea({ store: signedIn(), harbReason: "id_mismatch" }, "/my/home");
+      await screen.findByRole("heading", { name: "קובץ הר הביטוח" });
+      send(zipLike());
+      expect(await screen.findByRole("alert")).toHaveTextContent("הקובץ שייך לתעודת זהות אחרת. אפשר לשלוח רק את הקובץ שלכם.");
+      first.unmount();
+      await renderArea({ store: signedIn() }, "/my/home");
+      await screen.findByRole("heading", { name: "קובץ הר הביטוח" });
+      send(new File(["not a spreadsheet"], "x.xlsx"));
+      expect(await screen.findByRole("alert")).toHaveTextContent("זה לא קובץ האקסל של הר הביטוח. כדאי להוריד אותו שוב.");
+    });
+
+    it("switch off: no card at all", async () => {
+      flag.on = true;
+      await renderArea({ store: signedIn(), harbEnabled: false }, "/my/home");
+      await waitFor(() => expect(h2()).toBe("שלום, ישראל"));
+      await new Promise((r) => setTimeout(r, 10));
+      expect(screen.queryByRole("heading", { name: "קובץ הר הביטוח" })).toBeNull();
+      expect(screen.queryByLabelText("שליחת הקובץ")).toBeNull();
+    });
+  });
+});
+
+describe("http adapter: Har HaBituach", () => {
+  const res = (status: number, body: unknown) => new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
+  it("sends base64 JSON with the bearer token and maps the refusal reason", async () => {
+    const store = createMemorySessionStore();
+    store.write("abc", new Date(Date.now() + 60_000).toISOString());
+    const calls: { url: string; method?: string; body: string | null }[] = [];
+    let answer = res(422, { error: { code: "harb_invalid", reason: "empty" } });
+    const fetchImpl: typeof fetch = async (url, init) => {
+      calls.push({ url: String(url), method: init?.method, body: typeof init?.body === "string" ? init.body : null });
+      if (String(url).endsWith("/harb") && init?.method === "GET") return res(200, { enabled: true, last_upload: null });
+      return answer;
+    };
+    const api = createHttpClientApi({ baseUrl: "https://x.test/client-area", fetchImpl, store });
+    await expect(api.harbStatus()).resolves.toEqual({ enabled: true, last_upload: null });
+    await expect(api.harbUpload(new Uint8Array([0x50, 0x4b, 1, 2]))).rejects.toMatchObject({ kind: "harb_invalid", reason: "empty" });
+    expect(calls[1]).toMatchObject({ url: "https://x.test/client-area/harb", method: "POST", body: JSON.stringify({ bytes_base64: "UEsBAg==" }) });
+    answer = res(422, { error: { code: "harb_invalid", reason: "something-new" } });
+    await expect(api.harbUpload(new Uint8Array([1]))).rejects.toMatchObject({ kind: "harb_invalid", reason: "bad_file" });
+    answer = res(200, { document_id: "d1", duplicate: false, queued: true });
+    await expect(api.harbUpload(new Uint8Array([1]))).resolves.toEqual({ document_id: "d1", duplicate: false, queued: true });
+    await expect(api.harbUpload(new Uint8Array(2 * 1024 * 1024 + 1))).rejects.toMatchObject({ kind: "harb_invalid", reason: "too_large" });
+  });
 });
