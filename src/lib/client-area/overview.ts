@@ -12,7 +12,7 @@ export const CORE_PROTECTIONS: ProtectionKey[] = ["health", "nursing", "life", "
 export const ENDING_DAYS = 60;
 
 export type Frequency = "month" | "year" | "other";
-export function frequencyOf(p: PortfolioProduct): Frequency {
+export function frequencyOf(p: Pick<PortfolioProduct, "premium_frequency">): Frequency {
   const f = (p.premium_frequency ?? "").replace(/_/g, " ");
   if (f === "חודשית") return "month";
   if (f === "שנתית") return "year";

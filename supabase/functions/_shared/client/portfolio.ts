@@ -104,8 +104,43 @@ export interface ShapedProduct {
   last_deposit?: string;
   /** names of the live covers (coverTypeDescription), for the policy card */
   covers?: string[];
+  /** one line per live cover type: its premium (summed over the insured, one frequency) and its sum insured when the
+   *  insured share one amount. No insured name ever: the lines are by cover type only. */
+  cover_lines?: CoverLine[];
   /** which protection tiles this live product proves (see PROTECTION_KEYS) */
   protects?: ProtectionKey[];
+}
+
+export interface CoverLine { name: string; premium?: number; premium_frequency?: string; amount?: number }
+/** the generic cover rows carry the policy's own price: shown under a plain name, not dropped */
+const COVER_NAME: Record<string, string> = { "פוליסה": "בסיס הפוליסה", "אחר": "כיסויים נוספים" };
+const MAX_COVER_LINES = 8;
+
+/** live covers grouped by type, in their first-seen order */
+export function coverLines(liveCovers: Record<string, unknown>[]): CoverLine[] {
+  const groups = new Map<string, Record<string, unknown>[]>();
+  for (const c of liveCovers) {
+    const raw = text(c.coverTypeDescription, 40);
+    if (!raw) continue;
+    const name = COVER_NAME[raw] ?? raw;
+    if (!groups.has(name)) groups.set(name, []);
+    groups.get(name)!.push(c);
+  }
+  const out: CoverLine[] = [];
+  for (const [name, list] of groups) {
+    const line: CoverLine = { name };
+    const priced = list.filter((c) => typeof c.premia === "number" && Number.isFinite(c.premia) && (c.premia as number) > 0);
+    if (priced.length) {
+      const freq = enumText(priced[0].premiaFrequency, 20);
+      const same = priced.filter((c) => enumText(c.premiaFrequency, 20) === freq);
+      line.premium = Math.round(same.reduce((n, c) => n + (c.premia as number), 0) * 100) / 100;
+      if (freq) line.premium_frequency = freq;
+    }
+    const amounts = [...new Set(list.map((c) => c.insuranceAmount).filter((a): a is number => typeof a === "number" && Number.isFinite(a) && a > 0))];
+    if (amounts.length === 1) line.amount = Math.round(amounts[0]);
+    out.push(line);
+  }
+  return out.slice(0, MAX_COVER_LINES);
 }
 
 /** the protection tiles of the home screen; a tile is "exists" only when a live product proves it */
@@ -215,6 +250,8 @@ export function shapeProduct(p: MirrorProduct): ShapedProduct {
   if (months.length) out.last_deposit = months[months.length - 1];
   const names = [...new Set(liveCovers.map((c) => text(c.coverTypeDescription, 40)).filter((x): x is string => !!x && !GENERIC_COVERS.has(x)))];
   if (names.length) out.covers = names.slice(0, 8);
+  const lines = coverLines(liveCovers);
+  if (lines.length) out.cover_lines = lines;
   if (out.active) {
     const prot = new Set<ProtectionKey>();
     if (type !== null && PROTECT_BY_TYPE[type]) prot.add(PROTECT_BY_TYPE[type]);

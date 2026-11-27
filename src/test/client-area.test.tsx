@@ -207,7 +207,11 @@ describe("client area on the mock", () => {
     // insurance: live policies with covers and the end of the home policy
     fireEvent.click(tab("ביטוחים"));
     await waitFor(() => expect(h2()).toBe("הביטוחים שלכם"));
-    expect(screen.getByText("ניתוחים · השתלות · תרופות")).toBeInTheDocument();
+    const lines = within(screen.getByRole("list", { name: "מה כלול ובכמה: ביטוח בריאות" }));
+    expect(lines.getByText("ניתוחים")).toBeInTheDocument();
+    expect(lines.getByText("ניתוחים").closest("li")?.textContent).toMatch(/118.*לחודש/);
+    const home = within(screen.getByRole("list", { name: "מה כלול ובכמה: ביטוח דירה" }));
+    expect(home.getByText("מבנה").closest("li")?.textContent).toMatch(/סכום ביטוח .*1,800,000.*890.*לשנה/);
     expect(screen.getByText("פוליסות פעילות: 3")).toBeInTheDocument();
     expect(screen.getByText(/^תקופת הביטוח מסתיימת ב־\d{2}\/\d{2}\/\d{4}$/)).toBeInTheDocument();
 

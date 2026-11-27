@@ -46,7 +46,16 @@ export function Insurance() {
                   <span className="ma-premium"><b>{amountOf(p.premium, hidden)}</b><small>{C.insurance.per[frequencyOf(p)]}</small></span>
                 )}
               </div>
-              {p.covers && p.covers.length > 0 && <p className="ma-covers">{p.covers.slice(0, 4).join(" · ")}{p.covers.length > 4 ? " …" : ""}</p>}
+              {p.cover_lines && p.cover_lines.length > 0 ? (
+                <ul className="ma-lines" aria-label={`${C.insurance.coversLabel}: ${p.type_label}`}>
+                  {p.cover_lines.map((l) => (
+                    <li key={l.name}>
+                      <span><b>{l.name}</b>{typeof l.amount === "number" && <small>{C.insurance.coverAmount(amountOf(l.amount, hidden))}</small>}</span>
+                      {typeof l.premium === "number" && <span className="ma-line-cost">{amountOf(l.premium, hidden)} <small>{C.insurance.per[frequencyOf(l)]}</small></span>}
+                    </li>
+                  ))}
+                </ul>
+              ) : p.covers && p.covers.length > 0 && <p className="ma-covers">{p.covers.slice(0, 4).join(" · ")}{p.covers.length > 4 ? " …" : ""}</p>}
               {g.key === "insurance_general" && p.end && <p className="ma-ends">{C.insurance.ends(dateHe(p.end))}</p>}
             </article>
           ))}

@@ -103,6 +103,8 @@ export const MY_COPY = {
     groups: { insurance_health: "בריאות וסיעוד", insurance_life: "חיים ואובדן כושר עבודה", insurance_general: "דירה, רכב ועוד" } as Partial<Record<CategoryKey, string>>,
     per: { month: "לחודש", year: "לשנה", other: "" },
     ends: (date: string) => `תקופת הביטוח מסתיימת ב־${date}`,
+    coversLabel: "מה כלול ובכמה",
+    coverAmount: (amount: string) => `סכום ביטוח ${amount}`,
     inactiveMore: (n: number) => `ועוד פוליסות לא פעילות: ${n}`,
     empty: "אין ביטוחים פעילים להצגה.",
     ask: "שאלה על הביטוחים",

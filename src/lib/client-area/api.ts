@@ -60,8 +60,11 @@ export interface PortfolioProduct {
   /** "YYYY-MM" */
   last_deposit?: string;
   covers?: string[];
+  /** one line per live cover type: its premium and, when shared, its sum insured */
+  cover_lines?: CoverLine[];
   protects?: ProtectionKey[];
 }
+export interface CoverLine { name: string; premium?: number; premium_frequency?: string; amount?: number }
 export const PROTECTION_KEYS = ["health", "nursing", "life", "disability", "accidents", "critical", "home", "car"] as const;
 export type ProtectionKey = (typeof PROTECTION_KEYS)[number];
 export const REQUEST_TOPICS = ["insurance", "savings", "details", "other"] as const;
@@ -140,13 +143,16 @@ function mockProducts(now: Date): PortfolioCategory[] {
       { id: "h1", type_code: 7, type_label: "קרן השתלמות", company_label: "אלטשולר שחם", policy_number_masked: "****9032", source: "maslaka", status: "פעיל", active: true, balance: 86200, track: "מניות", ytd_return_pct: 9.4, fee_balance_pct: 0.7, last_deposit: "2026-10" },
     ] },
     { key: "insurance_life", label: "ביטוח חיים", products: [
-      { id: "l1", type_code: 13, type_label: "ביטוח חיים", company_label: "הראל", policy_number_masked: "****5520", source: "production", status: "פעיל", active: true, premium: 96, premium_frequency: "חודשית", covers: ["ביטוח חיים למקרה מוות"], protects: ["life"] },
+      { id: "l1", type_code: 13, type_label: "ביטוח חיים", company_label: "הראל", policy_number_masked: "****5520", source: "production", status: "פעיל", active: true, premium: 96, premium_frequency: "חודשית", covers: ["ביטוח חיים למקרה מוות"], protects: ["life"],
+        cover_lines: [{ name: "ביטוח חיים למקרה מוות", premium: 96, premium_frequency: "חודשית", amount: 1000000 }] },
     ] },
     { key: "insurance_health", label: "בריאות וסיעוד", products: [
-      { id: "b1", type_code: 12, type_label: "ביטוח בריאות", company_label: "כלל ביטוח", policy_number_masked: "****7718", source: "harbit", status: "פעיל", active: true, premium: 210, premium_frequency: "חודשית", covers: ["ניתוחים", "השתלות", "תרופות"], protects: ["health"] },
+      { id: "b1", type_code: 12, type_label: "ביטוח בריאות", company_label: "כלל ביטוח", policy_number_masked: "****7718", source: "harbit", status: "פעיל", active: true, premium: 210, premium_frequency: "חודשית", covers: ["ניתוחים", "השתלות", "תרופות"], protects: ["health"],
+        cover_lines: [{ name: "ניתוחים", premium: 118, premium_frequency: "חודשית" }, { name: "השתלות", premium: 34, premium_frequency: "חודשית" }, { name: "תרופות", premium: 58, premium_frequency: "חודשית" }] },
     ] },
     { key: "insurance_general", label: "ביטוח כללי", products: [
-      { id: "d1", type_code: 10, type_label: "ביטוח דירה", company_label: "הפניקס", policy_number_masked: "****3391", source: "harbit", status: "פעיל", active: true, premium: 1479, premium_frequency: "שנתית", end: ends, covers: ["מבנה"], protects: ["home"] },
+      { id: "d1", type_code: 10, type_label: "ביטוח דירה", company_label: "הפניקס", policy_number_masked: "****3391", source: "harbit", status: "פעיל", active: true, premium: 1479, premium_frequency: "שנתית", end: ends, covers: ["מבנה", "תכולה"], protects: ["home"],
+        cover_lines: [{ name: "מבנה", premium: 890, premium_frequency: "שנתית", amount: 1800000 }, { name: "תכולה", premium: 589, premium_frequency: "שנתית", amount: 250000 }] },
     ] },
   ];
 }
