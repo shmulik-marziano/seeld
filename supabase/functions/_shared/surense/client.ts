@@ -158,6 +158,22 @@ export function createSurenseClient(o: ClientOptions): SurenseClient {
     return res;
   }
 
+  /** the body is read under the same timeout as the headers: a server that sends headers and then stalls is cut */
+  async function within<T>(res: Response, read: () => Promise<T>): Promise<T> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const stall = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => {
+        res.body?.cancel().catch(() => {});
+        reject(new SurenseError(0, "timeout", "unavailable"));
+      }, timeoutMs);
+    });
+    try {
+      return await Promise.race([read(), stall]);
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   async function surenseFetch(
     path: string,
     opts: RequestOptions & { headers?: Record<string, string>; rawBody?: BodyInit } = {},
@@ -227,7 +243,7 @@ export function createSurenseClient(o: ClientOptions): SurenseClient {
         status = res.status;
         o.log.info("surense call", { method, path: label, status, attempt, ms: now() - started });
         if (res.ok) return res;
-        const text = await res.text();
+        const text = await within(res, () => res.text());
         if (res.status === 401 && !refreshed) {
           refreshed = true;
           o.tokens.invalidate();
@@ -259,7 +275,14 @@ export function createSurenseClient(o: ClientOptions): SurenseClient {
     surenseFetch,
     async request<T>(path: string, opts: RequestOptions = {}): Promise<T> {
       const res = await surenseFetch(path, opts);
-      const text = await res.text();
+      let text: string;
+      try {
+        text = await within(res, () => res.text());
+      } catch (e) {
+        // a write answered 2xx and then stalled: it took effect, so it must not be retried
+        const write = !(opts.idempotent ?? (opts.method ?? "GET") === "GET");
+        throw write && e instanceof SurenseError ? e.asAmbiguous() : e;
+      }
       if (!text) return null as T;
       try {
         return JSON.parse(text) as T;
@@ -292,7 +315,7 @@ export function createSurenseClient(o: ClientOptions): SurenseClient {
         await res.body?.cancel();
         throw new SurenseError(res.status, "file_too_large", "permanent");
       }
-      const bytes = new Uint8Array(await res.arrayBuffer());
+      const bytes = new Uint8Array(await within(res, () => res.arrayBuffer()));
       if (bytes.byteLength > maxBytes) throw new SurenseError(res.status, "file_too_large", "permanent");
       const mime = (res.headers.get("content-type") ?? "").split(";")[0].trim().toLowerCase();
       return { bytes, mime: /^[a-z0-9.+-]+\/[a-z0-9.+-]+$/.test(mime) ? mime : null };

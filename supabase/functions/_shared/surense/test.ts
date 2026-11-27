@@ -420,6 +420,9 @@ Deno.test("jobs: failure mapping keeps codes only", () => {
   assert.deepEqual(failureOutcome(new RpcError(503, "55000", "vault_secret_missing:pii_enc_key")), { result: "failed", code: "db_55000", kind: "db" });
   assert.deepEqual(failureOutcome(new Error("Zz secret text")), { result: "failed", code: "internal", kind: "internal" });
   assert.deepEqual(failureOutcome(new InputError("bad_id")), { result: "skipped", code: "bad_input", kind: "input" });
+  // a write that may have taken effect is never retried by the queue
+  assert.deepEqual(failureOutcome(new SurenseError(0, "timeout", "unavailable").asAmbiguous()), { result: "skipped", code: "ambiguous_timeout", kind: "unavailable" });
+  assert.deepEqual(failureOutcome(new SurenseError(504, "http_504", "unavailable").asAmbiguous()), { result: "skipped", code: "ambiguous_http_504", kind: "unavailable" });
   assert.deepEqual(failureOutcome(new TypeError("x is not iterable")), { result: "failed", code: "internal", kind: "internal" },
     "a runtime bug retries and dead-letters");
 });
@@ -604,4 +607,12 @@ Deno.test("jobs: harb.uploaded, swiftness.e9100.completed and customer.updated q
   assert.deepEqual([doc.result, doc.next], ["done", undefined], "a document alone changes no portfolio");
   const hei = await runJob(d, eventJob("dataproxy.hei.approved", { eventType: "NispahHeiProxyApproved", customerId: CID }), Date.now() + 60_000);
   assert.deepEqual([hei.result, hei.next], ["done", undefined], "a POA approval links documents; the portfolio waits for the file");
+});
+
+Deno.test("client: a body that stalls after the headers is cut by the same timeout; a stalled write is ambiguous", async () => {
+  const stalled = () => new Response(new ReadableStream({ start() {} }), { status: 200, headers: { "content-type": "application/json" } });
+  const f = mockFetch((url) => (url === TOKEN_URL ? tokenOk() : stalled()));
+  const c = createSurenseClient({ tokens: tokens(f.fetch), log: silentLog(), fetch: f.fetch, sleep: noSleep, timeoutMs: 30, maxAttempts: 1 });
+  await assert.rejects(c.request("/user/info"), (e) => e instanceof SurenseError && e.code === "timeout" && !e.ambiguous);
+  await assert.rejects(c.request("/customers", { method: "POST", body: { firstName: "zz" } }), (e) => e instanceof SurenseError && e.code === "timeout" && e.ambiguous);
 });

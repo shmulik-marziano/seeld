@@ -51,6 +51,9 @@ const safe = (s: string) => s.replace(/[^A-Za-z0-9_.:-]/g, "_").slice(0, 120);
 /** error -> outcome. Codes only (Surense numeric code, SQLSTATE, HTTP status); never a message. */
 export function failureOutcome(e: unknown): JobOutcome {
   if (e instanceof SurenseError) {
+    // a write that may have taken effect (timeout, lost connection, 502/504) is never retried: a second customer, consent
+    // SMS or clearing-house request would follow. Ended skipped; api.surense_job_complete raises a warning to check Surense.
+    if (e.ambiguous) return { result: "skipped", code: safe(`ambiguous_${e.code}`), kind: e.kind };
     if (e.retryable || e.kind === "auth") {
       return { result: "failed", code: safe(`surense_${e.code}`), kind: e.kind, retryAfterSec: e.retryAfterSec };
     }

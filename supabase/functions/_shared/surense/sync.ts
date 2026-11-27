@@ -217,10 +217,12 @@ const POA_PATH = /^poa\/[0-9a-f-]{36}\/[0-9a-f-]{36}\/(maslaka|harbit|policies)-
  *  a failure: nothing is linked. Ids and booleans only. */
 export async function linkPoaDocument(d: SyncDeps, o: { customerId: string; kind: PoaKind; docs: SurenseDocument[] }): Promise<PoaLinkStats> {
   if (!isUuid(o.customerId)) throw new InputError("bad_id");
-  const candidates = o.docs.filter((x) => isUuid(x?.id)).sort((a, b) => String(b.createdDate ?? "").localeCompare(String(a.createdDate ?? "")))
+  const customerId = o.customerId.toLowerCase();
+  // the search's customerId filter is not verified live: a document that names another customer is never a candidate
+  const candidates = o.docs.filter((x) => isUuid(x?.id) && (x.customerId === undefined || x.customerId === null || String(x.customerId).toLowerCase() === customerId))
+    .sort((a, b) => String(b.createdDate ?? "").localeCompare(String(a.createdDate ?? "")))
     .slice(0, MAX_LINK_CANDIDATES);
   if (candidates.length === 0) return NO_LINK;
-  const customerId = o.customerId.toLowerCase();
   let docId = "";
   const link = async (sha: string | null): Promise<LinkResult | null> => {
     try {
