@@ -63,6 +63,16 @@ select is((api.surense_job_enqueue('surense.portfolio_pull', '{"customer_id":"c6
 select is((api.surense_job_enqueue('surense.portfolio_pull', '{"customer_id":"c6000000-0000-4000-8000-000000000003"}'::jsonb, 'portfolio:c6000000-0000-4000-8000-000000000003')) ->> 'duplicate',
   'true', 'the same open dedupe key is one job');
 reset role;
+-- 20261128090000: a customer pulled (any outcome) within min(age, 7) days is not due again; production age unchanged
+insert into ops.surense_jobs (kind, params, dedupe_key, status, created_at, processed_at) values
+  ('surense.portfolio_pull', '{"customer_id":"c6000000-0000-4000-8000-000000000004"}', 'portfolio:c6000000-0000-4000-8000-000000000004', 'skipped', now() - interval '3 days', now() - interval '3 days'),
+  ('surense.portfolio_pull', '{"customer_id":"c6000000-0000-4000-8000-000000000001"}', 'portfolio:c6000000-0000-4000-8000-000000000001', 'done', now() - interval '10 days', now() - interval '10 days');
+set local role service_role;
+select set_eq($$ select surense_id from api.surense_portfolio_due() $$,
+  $$ values ('c6000000-0000-4000-8000-000000000001'::uuid) $$,
+  'due: not the customer queued just now (3), not the one pulled 3 days ago (4); the stale one pulled 10 days ago still is');
+select is((select count(*)::int from api.surense_portfolio_due(3)), 2, 'a 3-day age shortens the wait to 3 days: 1 and 4 are due');
+reset role;
 
 -- ---------------------------------------------------------------- the cron enqueuers, both switches on
 select ok(ops.surense_portfolio_sweep_enqueue() is not null, 'sweep queued');

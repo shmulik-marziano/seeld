@@ -130,8 +130,8 @@ verify_jwt = false
 verify_jwt = false
 [functions.surense-sync]       # admin only; fresh session + TOTP checked in the DB (staff.admin_assert_fresh)
 verify_jwt = true
-[functions.surense-health]     # staff probe of the Surense credentials (read only, no token returned); deployed v1
-verify_jwt = true
+[functions.surense-health]     # probe of the Surense credentials (read only, no token returned); x-cron-secret like sms-health
+verify_jwt = false
 [functions.sms-health]         # Micropay token probe (balance only, nothing sent); x-cron-secret like the workers
 verify_jwt = false
 [functions.surense-probe]      # read-only diagnostic of one customer's portfolio endpoints (statuses, shapes, error text); x-cron-secret

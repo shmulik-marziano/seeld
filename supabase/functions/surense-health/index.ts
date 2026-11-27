@@ -1,5 +1,6 @@
 // surense-health: read-only probe of the Surense API credentials.
-// Deployed to Supabase project seeld-site (qxhpolktdfgcbxtfxgov) on 2026-11-20 as version 1, verify_jwt=true.
+// Deployed to Supabase project seeld-site (qxhpolktdfgcbxtfxgov) on 2026-11-20 as version 1, verify_jwt=true; since
+// 2026-11-28 verify_jwt=false and x-cron-secret is the auth, like sms-health (run it with ops.call_function).
 // Repo copy (feat/surense-connector) of the deployed v1 source, kept also in the HQ knowledge base
 // (functions/surense-health/index.ts); config.toml [functions.surense-health] verify_jwt = true. Superseded later
 // by the surense-sync action "health"; until then it stays read-only and never returns a token.
@@ -7,6 +8,10 @@
 // Reads SURENSE_CLIENT_ID / SURENSE_CLIENT_SECRET by name, requests an OAuth2
 // client-credentials token, and calls read-only endpoints. Returns only
 // statuses, counts, names and key lists. Never returns the token or any secret.
+
+import { denoEnv } from "../_shared/env.ts";
+import { createRpc } from "../_shared/db.ts";
+import { cronSecretViaRpc, requireCronSecret } from "../_shared/secret.ts";
 
 const TOKEN_URL = "https://api.surense.com/oauth/token";
 const BASE = "https://api.surense.com/api/v1";
@@ -68,8 +73,17 @@ async function call(token: string, path: string, steps: Step[], summarize: (b: u
   } finally { t.clear(); }
 }
 
+const env = denoEnv();
+const rpc = env.supabaseUrl && env.secretKey ? createRpc({ url: env.supabaseUrl, apikey: env.secretKey }) : null;
+
 Deno.serve(async (req) => {
   if (req.method !== "GET" && req.method !== "POST") return new Response("method", { status: 405 });
+  // x-cron-secret is the auth (2026-11-27 review: verify_jwt alone accepted any project JWT); 401 without it
+  try {
+    await requireCronSecret(req, env.cronSecret, rpc ? cronSecretViaRpc(rpc) : undefined);
+  } catch {
+    return new Response("unauthorized", { status: 401 });
+  }
   const id = Deno.env.get("SURENSE_CLIENT_ID") ?? "";
   const secret = Deno.env.get("SURENSE_CLIENT_SECRET") ?? "";
   const steps: Step[] = [];
