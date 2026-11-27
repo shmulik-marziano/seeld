@@ -1,8 +1,9 @@
 // deno test supabase/functions/client-area/  (synthetic data only; no network: RPC, SMS provider, Turnstile and storage are mocks)
 import assert from "node:assert/strict";
+import { collectingDefer } from "../_shared/background.ts";
 import { json, mockFetch, mockRpc, rpcError, silentLog, testEnv } from "../_shared/test_helpers.ts";
 import {
-  type ClientAreaDeps, createClientAreaHandler, LOGIN_BUCKET_MS, LOGIN_MIN_MS, MAX_HARB_JSON_BYTES, parseRequestCreate, parseRoute, parseStart, parseVerify, toClientError, XLSX_MIME,
+  type ClientAreaDeps, createClientAreaHandler, LOGIN_BUCKET_MS, LOGIN_MIN_MS, MAX_HARB_JSON_BYTES, OTP, parseRequestCreate, parseRoute, parseStart, parseVerify, toClientError, XLSX_MIME,
 } from "./handler.ts";
 import { MICROPAY_OTP_URL } from "../_shared/sms/micropay.ts";
 import { sha256Hex, TOKEN_RE } from "../_shared/poa/session.ts";
@@ -74,12 +75,13 @@ function setup(o: {
     : o.signer;
   const puts: Array<{ path: string; bytes: Uint8Array; contentType: string }> = [];
   const storage: Storage | null = o.storage === undefined ? { put: async (path, bytes, contentType) => { puts.push({ path, bytes, contentType }); return "stored"; } } : o.storage;
+  const bg = collectingDefer();
   const handler = createClientAreaHandler({
     env: testEnv({ TURNSTILE_SECRET_KEY: "ts-secret", ...(o.noSms ? {} : { SMS_API_TOKEN: SMS_TOKEN, SMS_SENDER_ID: "SEELD" }), ...(o.env ?? {}) }),
     rpc, log: silentLog(lines), signer, storage, fetch: f.fetch, now: () => clock,
-    wait: async (ms) => { waits.push(ms); clock += ms; },
+    wait: async (ms) => { waits.push(ms); clock += ms; }, defer: bg.defer,
   });
-  return { handler, rpc, lines, f, waits, puts, tick: (ms: number) => (clock += ms) };
+  return { handler, rpc, lines, f, waits, puts, settle: bg.settle, tick: (ms: number) => (clock += ms) };
 }
 
 const hdr = (extra: Record<string, string> = {}) => ({ origin: ORIGIN, "cf-connecting-ip": IP, "user-agent": "test-agent", ...extra });
@@ -121,6 +123,8 @@ Deno.test("login/start: a match sends the code with the documented options and a
   assert.equal(res.headers.get("access-control-allow-origin"), ORIGIN);
   const start = s.rpc.calls.find((c) => c.fn === "client_login_start")!;
   assert.deepEqual(start.args, { p_national_id: SYNTH_ID, p_phone: PHONE, p_ip: IP, p_ua_hash: bytea(await sha256Hex("test-agent")) });
+  // the SMS goes out after the answer (background), so the answer never waits on the provider
+  await s.settle();
   const sms = s.f.calls.find((c) => c.url === MICROPAY_OTP_URL)!;
   assert.deepEqual(JSON.parse(sms.body), {
     token: SMS_TOKEN, phone: PHONE, type: "sms", codelen: "6", minvalid: "10", maxsms: "2", maxtries: "5", clearcodes: "send", smsfrom: "SEELD", lang: "he", webotp: "seeld.co.il",
@@ -144,13 +148,20 @@ Deno.test("login/start: a miss answers the same keys, sends nothing and takes th
   assert.ok(LOGIN_BUCKET_MS > 0);
 });
 
-Deno.test("login/start: the provider's quota keeps the same answer; a provider outage is unavailable; Turnstile is skipped when the switch says so", async () => {
+Deno.test("login/start: the provider's quota and a provider outage keep the same answer; an outage is reported to staff; Turnstile is skipped when the switch says so", async () => {
   const quota = setup({ sms: () => json({ status: 1, message: "MAX_SENT", data: { remoteIP: "x" } }) });
   assert.equal((await quota.handler(post("login/start", START))).status, 200);
+  await quota.settle();
+  assert.equal(quota.rpc.calls.filter((c) => c.fn === "sms_report").length, 0, "the client's own quota is not a provider failure");
   const down = setup({ sms: () => new Response("busy", { status: 503 }) });
   const r = await down.handler(post("login/start", START));
-  assert.equal(r.status, 503);
-  assert.deepEqual(await r.json(), { error: { code: "unavailable" } });
+  assert.equal(r.status, 200, "a hit answers like a miss even while the provider is down");
+  assert.deepEqual(keys(await r.json()), ["challenge_id", "expires_in_sec", "phone_tail"]);
+  assert.deepEqual(down.waits, [LOGIN_MIN_MS]);
+  await down.settle();
+  const rep = down.rpc.calls.find((c) => c.fn === "sms_report")!;
+  assert.equal(rep.args.p_ok, false);
+  assert.match(String(rep.args.p_code), /^[a-z0-9_]{1,40}$/);
   const noTs = setup({ script: { client_area_config: { enabled: true, turnstile_required: false } } });
   assert.equal((await noTs.handler(post("login/start", { national_id: SYNTH_ID, phone: PHONE }))).status, 200);
   assert.equal(noTs.f.calls.filter((c) => c.url.includes("siteverify")).length, 0);
@@ -199,7 +210,8 @@ Deno.test("login/verify: the right code opens a session (token returned once, ha
 
   const wrong = await s.handler(post("login/verify", { challenge_id: CH, code: "000000" }));
   assert.equal(wrong.status, 400);
-  assert.deepEqual(await wrong.json(), { error: { code: "wrong_code", tries_left: 3 } });
+  // the count comes from the challenge (attempt 1 of OTP.maxTries), not from the provider's own number
+  assert.deepEqual(await wrong.json(), { error: { code: "wrong_code", tries_left: 4 } });
 
   const locked = setup({ sms: () => json({ status: 1, message: "MAX_TRIES", data: { remoteIP: "x" } }) });
   assert.deepEqual(await (await locked.handler(post("login/verify", { challenge_id: CH, code: "000000" }))).json(), { error: { code: "max_tries" } });
@@ -209,9 +221,22 @@ Deno.test("login/verify: the right code opens a session (token returned once, ha
   assert.deepEqual(await (await expired.handler(post("login/verify", { challenge_id: CH, code: "123456" }))).json(), { error: { code: "expired" } });
   const miss = setup({ script: { client_login_challenge_use: { status: "pending", matched: false, attempts: 2, phone: null } } });
   const m = await miss.handler(post("login/verify", { challenge_id: CH, code: "123456" }));
-  assert.deepEqual(await m.json(), { error: { code: "wrong_code", tries_left: 8 } });
+  assert.deepEqual(await m.json(), { error: { code: "wrong_code", tries_left: 3 } });
   assert.equal(miss.f.calls.filter((c) => c.url === MICROPAY_OTP_URL).length, 0, "no provider call without a match");
   assert.ok(!miss.rpc.calls.some((c) => c.fn === "client_login_verify"));
+});
+
+Deno.test("login/verify: a hit and a miss answer alike on every attempt (2026-11-27 review: 10 - n against 5 - n told who is a client)", async () => {
+  for (let n = 1; n <= OTP.maxTries + 2; n++) {
+    const hit = setup({ script: { client_login_challenge_use: { status: "pending", matched: true, attempts: n, phone: PHONE } } });
+    const miss = setup({ script: { client_login_challenge_use: { status: "pending", matched: false, attempts: n, phone: null } } });
+    const a = await hit.handler(post("login/verify", { challenge_id: CH, code: "000000" }));
+    const b = await miss.handler(post("login/verify", { challenge_id: CH, code: "000000" }));
+    assert.equal(a.status, b.status, `attempt ${n}: status`);
+    assert.deepEqual(await a.json(), await b.json(), `attempt ${n}: body`);
+    if (n > OTP.maxTries) assert.equal(hit.f.calls.filter((c) => c.url === MICROPAY_OTP_URL).length, 0, "past the limit the provider is not asked");
+    assert.deepEqual(hit.waits, miss.waits, `attempt ${n}: padded time`);
+  }
 });
 
 Deno.test("session routes: Bearer token required; an unknown token is 401 and counts as a refusal", async () => {

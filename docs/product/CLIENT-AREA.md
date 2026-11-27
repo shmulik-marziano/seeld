@@ -52,10 +52,13 @@ once (first pull of everyone) -> check `select kind, status, count(*) from ops.s
    national id (hmac) AND that mobile. Hit or miss, one `crm.client_login_challenges` row is written and the same answer
    comes back (`challenge_id`, `phone_tail` of the number typed, `expires_in_sec` 600); only on a hit the function sends a
    6-digit code to the mobile through Micropay (`type sms`, valid 10 minutes, 2 sends, 5 wrong tries, WebOTP line for
-   `seeld.co.il`). The function pads both paths to the same duration. Limits (per hour): 5 starts per national id, 10 per
+   `seeld.co.il`). The SMS goes out in the background after the answer (since 2026-11-28), so a hit and a miss answer alike
+   in content and time even while the provider is slow or down; a failed send raises `sms_unavailable` through
+   `api.sms_report`. The function pads both paths to the same duration. Limits (per hour): 5 starts per national id, 10 per
    client address, 3 per mobile; Turnstile when `client_area_turnstile_required` is on.
 2. `POST /login/verify` with the challenge id and the code. The database counts the attempt (10 lock the challenge) and
-   hands the mobile to the function for the provider check; Micropay keeps the code (never our database). A valid code
+   hands the mobile to the function for the provider check. `tries_left` is `5 - attempts` for a hit and a miss alike, and
+   attempt 6 on answers `max_tries` without asking the provider (2026-11-27 review: a miss used to show `10 - n`); Micropay keeps the code (never our database). A valid code
    opens a 30-day `crm.client_sessions` row; the token (32 random bytes, base64url) goes back once and only its SHA-256 is
    stored. A challenge opens one session only; the encrypted mobile is cleared at verification.
 3. Every other route carries `Authorization: Bearer <token>`; `POST /logout` revokes it; staff can revoke every session of
