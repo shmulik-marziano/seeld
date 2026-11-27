@@ -396,8 +396,7 @@ Deno.test("requests: list and create go through the token-scoped RPCs; the messa
   assert.deepEqual(await res.json(), { id: REQ, created_at: "2026-11-27T08:00:00Z" });
   assert.deepEqual(s.rpc.calls.find((c) => c.fn === "client_request_create")!.args,
     { p_token_hash: bytea(await sha256Hex(TOKEN)), p_topic: "insurance", p_message: "Zz-private-words", p_contact: "phone" });
-  assert.ok(!s.lines.join("
-").includes("Zz-private-words"), "the message is not logged");
+  assert.ok(!s.lines.join("\n").includes("Zz-private-words"), "the message is not logged");
   assert.equal((await s.handler(post("requests", { topic: "x", contact: "phone" }, auth))).status, 400);
   assert.equal((await s.handler(get("requests"))).status, 401, "a session is required");
   const off = setup({ script: { client_requests_list: { enabled: false, requests: [] } } });
