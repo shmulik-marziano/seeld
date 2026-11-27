@@ -50,7 +50,8 @@ insert into net._http_response (id, status_code, timed_out, created) values (991
 insert into ops.job_runs (job, started_at, request_id) values ('sms-health', now() - interval '50 minutes', 991004),
                                                               ('sms-health', now() - interval '45 minutes', 991005);
 
-select ops.watchdog();
+select is((ops.watchdog()) -> 'failed_steps', '[]'::jsonb, 'no watchdog step fails');
+select diag(coalesce((select string_agg(summary, ' | ') from ops.alerts where kind = 'watchdog_step_failed'), 'no step failure'));
 select is((select error from ops.job_runs where id = current_setting('t.timeout_run')::bigint), 'http_timeout', 'late timed-out run closed as http_timeout');
 select ok((select finished_at is not null and ok = false from ops.job_runs where id = current_setting('t.timeout_run')::bigint), 'closed, ok=false');
 select ok((select finished_at is null from ops.job_runs where id = current_setting('t.fresh_run')::bigint), 'a timed-out run inside its budget stays open');
