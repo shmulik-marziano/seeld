@@ -42,8 +42,9 @@ select set_eq(
             ('form_document_add'), ('form_document_stored'),
             ('client_area_config'), ('client_login_start'), ('client_login_challenge_use'), ('client_login_verify'), ('client_session_get'),
             ('client_portfolio_get'), ('client_documents_list'), ('client_document_get'), ('client_logout'),
-            ('client_harb_status'), ('client_harb_add'), ('client_harb_stored'), ('harb_import_get'), ('harb_import_set') $$,
-  'service-only RPCs in api (68)');
+            ('client_harb_status'), ('client_harb_add'), ('client_harb_stored'), ('harb_import_get'), ('harb_import_set'),
+            ('client_request_create'), ('client_requests_list') $$,
+  'service-only RPCs in api (70)');
 
 -- the documented advisor exceptions (lints 0028/0029): exactly these SECURITY DEFINER functions are callable by API roles
 select set_eq(

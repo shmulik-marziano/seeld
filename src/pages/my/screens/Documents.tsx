@@ -5,7 +5,7 @@ import { BrandIcon } from "@/components/brand/BrandIcon";
 import { CaError, CaLoading } from "@/components/sd/client";
 import { MY_COPY as C } from "@/lib/client-area/copy";
 import { type ClientApi, type ClientDocument, errorKindOf } from "@/lib/client-area/api";
-import { MyCard, dateHe } from "../parts";
+import { dateHe } from "../parts";
 
 const kb = (n: number | null) => (typeof n === "number" && n > 0 ? `${Math.max(1, Math.round(n / 1024))} KB` : "");
 
@@ -40,26 +40,29 @@ export function Documents({ api, onAuthLost }: { api: ClientApi; onAuthLost: () 
   };
 
   return (
-    <MyCard id="my-docs" title={C.documents.title} headingRef={heading}>
-      <p className="sd-q-hint">{C.documents.lead}</p>
+    <div className="ma-stack">
+      <div className="ma-greet">
+        <h2 ref={heading} tabIndex={-1} className="ma-h1">{C.documents.title}</h2>
+        <p className="ma-muted">{C.documents.lead}</p>
+      </div>
       {err && <CaError title={err} onRetry={() => setTick((t) => t + 1)} actionLabel={C.errors.retry} />}
       {!err && !docs && <CaLoading label={C.common.loading} tone="sage" />}
       {docs && docs.length === 0 && <p className="sd-my-empty">{C.documents.empty}</p>}
       {docs && docs.length > 0 && (
-        <ul className="sd-poa-done sd-my-docs">
+        <ul className="ma-card ma-rows">
           {docs.map((d) => (
-            <li key={d.id}>
-              <p className="sd-poa-doc-title">{d.title}</p>
-              <p className="sd-q-fine">{C.documents.kinds[d.kind] ?? d.kind} · {dateHe(d.created_at)}{kb(d.size_bytes) ? ` · ${kb(d.size_bytes)}` : ""}</p>
+            <li key={d.id} className="ma-doc">
+              <span className="ma-doc-ic" aria-hidden="true">PDF</span>
+              <span className="ma-doc-txt"><b>{d.title}</b><small>{dateHe(d.created_at)}{kb(d.size_bytes) ? ` · ${kb(d.size_bytes)}` : ""}</small></span>
               {d.downloadable
-                ? <button type="button" className="sd-q-btn is-quiet" disabled={opening === d.id} onClick={() => void open(d)}>
-                    <BrandIcon name="download" size={18} />{opening === d.id ? C.documents.opening : C.documents.download}
+                ? <button type="button" className="ma-iconbtn" aria-label={`${opening === d.id ? C.documents.opening : C.documents.download} ${d.title}`} disabled={opening === d.id} onClick={() => void open(d)}>
+                    <BrandIcon name="download" size={18} />
                   </button>
-                : <p className="sd-q-fine">{C.documents.notDownloadable}</p>}
+                : <small className="ma-muted">{C.documents.notDownloadable}</small>}
             </li>
           ))}
         </ul>
       )}
-    </MyCard>
+    </div>
   );
 }

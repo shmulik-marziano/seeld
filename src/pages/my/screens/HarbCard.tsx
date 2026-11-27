@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { MY_COPY as C } from "@/lib/client-area/copy";
 import { HARB_SITE_URL } from "@/lib/client-area/config";
 import { type ClientApi, ClientApiError, errorKindOf, HARB_MAX_BYTES, type HarbStatusRes } from "@/lib/client-area/api";
-import { MyCard, dateHe } from "../parts";
+import { dateHe } from "../parts";
 
 const ACCEPT = ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
@@ -62,9 +62,10 @@ export function HarbCard({ api, onAuthLost }: { api: ClientApi; onAuthLost: () =
 
   const last = status.last_upload;
   return (
-    <MyCard id="my-harb" title={C.harb.title}>
-      <p className="sd-q-hint">{C.harb.lead}</p>
-      <h3 className="sd-my-h3">{C.harb.stepsTitle}</h3>
+    <section className="ma-card" aria-labelledby="my-harb-h">
+      <h3 id="my-harb-h" className="ma-h2">{C.harb.title}</h3>
+      <p className="ma-muted">{C.harb.lead}</p>
+      <h4 className="ma-h3">{C.harb.stepsTitle}</h4>
       <ol className="sd-my-steps">
         {C.harb.steps.map((s) => <li key={s}>{s}</li>)}
       </ol>
@@ -77,10 +78,10 @@ export function HarbCard({ api, onAuthLost }: { api: ClientApi; onAuthLost: () =
           ref={input} id="my-harb-file" className="sd-my-file" type="file" accept={ACCEPT} disabled={busy}
           onChange={(e) => void pick(e.target.files?.[0])}
         />
-        <label htmlFor="my-harb-file" className="sd-q-btn" aria-disabled={busy || undefined} aria-live="polite">{busy ? C.harb.sending : C.harb.cta}</label>
+        <label htmlFor="my-harb-file" className="ma-btn" aria-disabled={busy || undefined} aria-live="polite">{busy ? C.harb.sending : C.harb.cta}</label>
       </div>
       {msg && <p className={msg.tone === "err" ? "sd-q-error" : "sd-q-fine"} role={msg.tone === "err" ? "alert" : "status"}>{msg.text}</p>}
-      <p className="sd-q-fine">{C.harb.privacy}</p>
-    </MyCard>
+      <p className="ma-fine">{C.harb.privacy}</p>
+    </section>
   );
 }

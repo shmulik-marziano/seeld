@@ -72,11 +72,13 @@ answers exactly like a hit, no "unknown customer".
 | `POST /login/start` | `{national_id, phone, turnstile_token?}` | `{challenge_id, phone_tail, expires_in_sec}` |
 | `POST /login/verify` | `{challenge_id, code}` | `{token, expires_at, client: {first_name, last_name}}`; 400 `wrong_code` (+`tries_left`), `max_tries`, `expired` |
 | `GET /me` | Bearer | `{client: {first_name, last_name, agency_name}, data_as_of, summary: {products, categories: [{key, label, count}]}, session: {expires_at}}` |
-| `GET /portfolio` | Bearer | `{as_of, categories: [{key, label, products: [{id, type_code, type_label, company_label, policy_number_masked, source, status, plan?, balance?, premium?, premium_frequency?, coverage?, start?, end?, track?}]}]}` |
+| `GET /portfolio` | Bearer | `{as_of, categories: [{key, label, products: [{id, type_code, type_label, company_label, policy_number_masked, source, status, active, plan?, balance?, premium?, premium_frequency?, coverage?, start?, end?, track?, ytd_return_pct?, fee_balance_pct?, fee_deposit_pct?, last_deposit?, covers?, protects?}]}]}` |
 | `GET /documents` | Bearer | `{documents: [{id, title, kind, created_at, size_bytes, downloadable}]}` |
 | `GET /documents/:id` | Bearer | `{url, expires_in_sec}`: a signed Storage link (5 minutes) for one POA file of this client |
 | `GET /harb` | Bearer | `{enabled, last_upload: {created_at, processed} \| null}` |
 | `POST /harb` | Bearer, `{bytes_base64}` | `{document_id, duplicate, queued}`; 422 `harb_invalid` + `reason` (`not_xlsx`, `too_large`, `too_many_sheets`, `too_many_rows`, `bad_layout`, `empty`, `id_mismatch`, `bad_file`) |
+| `GET /requests` | Bearer | `{enabled, requests: [{id, topic, message, contact, created_at, status: received\|done}]}` (off: `{enabled:false, requests:[]}`) |
+| `POST /requests` | Bearer, `{topic: insurance\|savings\|details\|other, message?, contact: phone\|whatsapp\|email}` | 201 `{id, created_at}`; a `crm.leads` row (source `client_area`) |
 | `POST /logout` | Bearer | 204 |
 
 Codes: `inactive` (503, switch off), `unauthenticated` (401, bad or expired token), `wrong_code`, `max_tries`, `expired`,
@@ -85,6 +87,28 @@ Codes: `inactive` (503, switch off), `unauthenticated` (401, bad or expired toke
 product type 1..46; labels in `portfolio.ts`). `source`: `maslaka | harbit | production | manual | other`. Policy numbers
 are masked to the last four digits; hidden products are left out; no national id and no Surense internal id beyond the
 product id ever leaves the function.
+
+Product fields added 2026-11-27 (shaped in `portfolio.ts`): `status` is the Surense status label (live answers send
+`{code, shortDescription}`), `active` = status code 1 / 4 / 7 / 8; `ytd_return_pct`, `fee_balance_pct`,
+`fee_deposit_pct` are percents of the reported fractions (`netReturnPercentStartYear`, `accumulationFee`, `depositFee`),
+left out when implausible (|return| > 50%, balance fee > 5%, deposit fee > 10%); `last_deposit` = the latest
+`lastDeposit.hafkadot[].month`; `covers` = names of the live covers (`coverTypeDescription`, not expired);
+`protects` = the home-screen protection tiles a LIVE product proves (by product type and cover type; a mortgage life
+policy never counts as life cover). The home screen is computed in the browser from this answer
+(`src/lib/client-area/overview.ts`): sums of reported balances and premiums only.
+
+## Requests (migration `20261127090000_client_area_dashboard`)
+
+A request from the "פנייה לסוכן" sheet is an ordinary lead: `api.client_request_create` writes `crm.leads` (kind by topic:
+insurance -> `insurance` desk, savings -> `pension` (finance desk), details / other -> `contact` (general); name, mobile
+and e-mail from `crm.customers`; payload `{origin, customer_id, topic, contact}`; consent version `client-area-1`) and
+queues `lead.created`, so notify-worker e-mails the desk (`NOTIFY_TO_INSURANCE` / `_FINANCE` / `_GENERAL`) and the
+lead shows in the staff leads list. The client sees `received` while the lead is `new`, `done` for any other status
+(spam is hidden). 6 requests per client per day. A text message to the desk is a follow-up (the Micropay sending API is
+not documented in our files yet).
+
+The same migration fills `crm.surense_products.product_type` / `.source` from the stored snapshots: Surense sends both
+as objects (`{code, description}`), so the mirror had stored NULL for every product (fixed in `mirror.ts`).
 
 ## Database
 
@@ -173,6 +197,7 @@ the files (no-delete rule: nothing is deleted).
 | `client_area_harb_upload_enabled` | false | the Har HaBituach card and upload (`/harb`); also required by the Surense push |
 | `surense_harb_import_enabled` | false | queue the Surense push of an uploaded file (needs the upload switch and `surense_enabled`) |
 | `surense_harb_provider_match` | `''` | the data-import provider (id or part of its name); empty = the push ends `skipped` before any call |
+| `client_area_requests_enabled` | false | the requests tab and sheet (`/requests`); off = the area shows the contact icons instead |
 
 Browser (Vite, Vercel): `VITE_CLIENT_AREA=on` shows `/my`; `VITE_CLIENT_AREA_URL` is the function base
 (`https://<project>.supabase.co/functions/v1/client-area`). Secrets: `SMS_API_TOKEN` (Micropay), optional `SMS_SENDER_ID`,

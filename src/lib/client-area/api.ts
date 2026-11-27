@@ -1,5 +1,5 @@
 // Client-area adapter: the interface the screens talk to, an in-memory mock (development, tests) and the HTTP adapter
-// for the client-area Edge Function (routes login/start, login/verify, me, portfolio, documents, documents/:id, harb, logout;
+// for the client-area Edge Function (routes login/start, login/verify, me, portfolio, documents, documents/:id, harb, requests, logout;
 // snake_case JSON; the session token travels as `Authorization: Bearer`). The contract is docs/product/CLIENT-AREA.md.
 import { SUPABASE_URL } from "@/integrations/supabase/config";
 import { CATEGORY_KEYS, CLIENT_AREA_URL, type CategoryKey, type DocKind } from "./config";
@@ -52,7 +52,28 @@ export interface PortfolioProduct {
   start?: string | null;
   end?: string | null;
   track?: string | null;
+  /** the status keeps the product (or its cover) alive */
+  active?: boolean;
+  ytd_return_pct?: number;
+  fee_balance_pct?: number;
+  fee_deposit_pct?: number;
+  /** "YYYY-MM" */
+  last_deposit?: string;
+  covers?: string[];
+  /** one line per live cover type: its premium and, when shared, its sum insured */
+  cover_lines?: CoverLine[];
+  protects?: ProtectionKey[];
 }
+export interface CoverLine { name: string; premium?: number; premium_frequency?: string; amount?: number }
+export const PROTECTION_KEYS = ["health", "nursing", "life", "disability", "accidents", "critical", "home", "car"] as const;
+export type ProtectionKey = (typeof PROTECTION_KEYS)[number];
+export const REQUEST_TOPICS = ["insurance", "savings", "details", "other"] as const;
+export type RequestTopic = (typeof REQUEST_TOPICS)[number];
+export const REQUEST_CONTACTS = ["phone", "whatsapp", "email"] as const;
+export type RequestContact = (typeof REQUEST_CONTACTS)[number];
+export interface ClientRequest { id: string; topic: RequestTopic; message: string | null; contact: RequestContact | null; created_at: string; status: "received" | "done" }
+export interface RequestsRes { enabled: boolean; requests: ClientRequest[] }
+export interface RequestCreateReq { topic: RequestTopic; message?: string | null; contact: RequestContact }
 export interface PortfolioCategory { key: CategoryKey; label: string; products: PortfolioProduct[] }
 export interface PortfolioRes { as_of: string | null; categories: PortfolioCategory[] }
 export interface ClientDocument { id: string; title: string; kind: DocKind; created_at: string; size_bytes: number | null; downloadable: boolean }
@@ -75,6 +96,9 @@ export interface ClientApi {
   harbStatus(): Promise<HarbStatusRes>;
   /** the bytes of the client's Har HaBituach export (.xlsx); the server checks it */
   harbUpload(bytes: Uint8Array): Promise<HarbUploadRes>;
+  /** the client's requests to the agent; enabled=false while the server switch is off */
+  requests(): Promise<RequestsRes>;
+  requestCreate(r: RequestCreateReq): Promise<{ id: string; created_at: string }>;
   logout(): Promise<void>;
 }
 
@@ -98,27 +122,40 @@ export interface MockOptions {
   harbEnabled?: boolean;
   /** every upload is refused with this reason */
   harbReason?: HarbReason;
+  /** the requests sheet (default: on) */
+  requestsEnabled?: boolean;
 }
 
 const MOCK_FIRST = "ישראל";
 const MOCK_LAST = "ישראלי";
-const MOCK_PRODUCTS: PortfolioCategory[] = [
-  { key: "pension", label: "פנסיה", products: [
-    { id: "p1", type_code: 1, type_label: "קרן פנסיה חדשה מקיפה", company_label: "מנורה מבטחים", policy_number_masked: "••••4471", source: "מסלקה_פנסיונית", status: "פעיל", balance: 412350, premium: 2140, premium_frequency: "חודשית", track: "מסלול כללי" },
-  ] },
-  { key: "hishtalmut", label: "קרנות השתלמות", products: [
-    { id: "h1", type_code: 8, type_label: "קרן השתלמות", company_label: "אלטשולר שחם", policy_number_masked: "••••9032", source: "מסלקה_פנסיונית", status: "פעיל", balance: 86200, track: "מניות" },
-  ] },
-  { key: "gemel", label: "קופות גמל", products: [
-    { id: "g1", type_code: 4, type_label: "קופת גמל להשקעה", company_label: "מיטב", policy_number_masked: "••••1180", source: "מסלקה_פנסיונית", status: "פעיל", balance: 25400 },
-  ] },
-  { key: "insurance_life", label: "ביטוח חיים", products: [
-    { id: "l1", type_code: 20, type_label: "ביטוח חיים (ריסק)", company_label: "הראל", policy_number_masked: "••••5520", source: "הר_הביטוח", status: "פעיל", premium: 96, premium_frequency: "חודשית", coverage: 1000000, start: "2019-03-01" },
-  ] },
-  { key: "insurance_health", label: "בריאות וסיעוד", products: [
-    { id: "b1", type_code: 24, type_label: "ביטוח בריאות", company_label: "כלל ביטוח", policy_number_masked: "••••7718", source: "הר_הביטוח", status: "פעיל", premium: 210, premium_frequency: "חודשית", start: "2021-07-01" },
-  ] },
-];
+/** fictional products (no real client): every figure is made up */
+function mockProducts(now: Date): PortfolioCategory[] {
+  const ends = new Date(now.getTime() + 24 * 24 * 3600 * 1000).toISOString().slice(0, 10);
+  return [
+    { key: "pension", label: "פנסיה", products: [
+      { id: "p1", type_code: 1, type_label: "קרן פנסיה חדשה מקיפה", company_label: "מנורה מבטחים", policy_number_masked: "****4471", source: "maslaka", status: "פעיל", active: true, balance: 412350, track: "מסלול לבני 50 ומטה", ytd_return_pct: 7.9, fee_balance_pct: 0.22, fee_deposit_pct: 1.5, last_deposit: "2026-10" },
+    ] },
+    { key: "gemel", label: "קופות גמל", products: [
+      { id: "g1", type_code: 4, type_label: "קופת גמל להשקעה", company_label: "מיטב", policy_number_masked: "****1180", source: "maslaka", status: "פעיל", active: true, balance: 25400, ytd_return_pct: 5.2, fee_balance_pct: 0.6, last_deposit: "2026-06" },
+      { id: "g2", type_code: 3, type_label: "קופת גמל לתגמולים ופיצויים", company_label: "הראל", policy_number_masked: "****4506", source: "maslaka", status: "לא פעיל", active: false, balance: 0 },
+    ] },
+    { key: "hishtalmut", label: "קרנות השתלמות", products: [
+      { id: "h1", type_code: 7, type_label: "קרן השתלמות", company_label: "אלטשולר שחם", policy_number_masked: "****9032", source: "maslaka", status: "פעיל", active: true, balance: 86200, track: "מניות", ytd_return_pct: 9.4, fee_balance_pct: 0.7, last_deposit: "2026-10" },
+    ] },
+    { key: "insurance_life", label: "ביטוח חיים", products: [
+      { id: "l1", type_code: 13, type_label: "ביטוח חיים", company_label: "הראל", policy_number_masked: "****5520", source: "production", status: "פעיל", active: true, premium: 96, premium_frequency: "חודשית", covers: ["ביטוח חיים למקרה מוות"], protects: ["life"],
+        cover_lines: [{ name: "ביטוח חיים למקרה מוות", premium: 96, premium_frequency: "חודשית", amount: 1000000 }] },
+    ] },
+    { key: "insurance_health", label: "בריאות וסיעוד", products: [
+      { id: "b1", type_code: 12, type_label: "ביטוח בריאות", company_label: "כלל ביטוח", policy_number_masked: "****7718", source: "harbit", status: "פעיל", active: true, premium: 210, premium_frequency: "חודשית", covers: ["ניתוחים", "השתלות", "תרופות"], protects: ["health"],
+        cover_lines: [{ name: "ניתוחים", premium: 118, premium_frequency: "חודשית" }, { name: "השתלות", premium: 34, premium_frequency: "חודשית" }, { name: "תרופות", premium: 58, premium_frequency: "חודשית" }] },
+    ] },
+    { key: "insurance_general", label: "ביטוח כללי", products: [
+      { id: "d1", type_code: 10, type_label: "ביטוח דירה", company_label: "הפניקס", policy_number_masked: "****3391", source: "harbit", status: "פעיל", active: true, premium: 1479, premium_frequency: "שנתית", end: ends, covers: ["מבנה", "תכולה"], protects: ["home"],
+        cover_lines: [{ name: "מבנה", premium: 890, premium_frequency: "שנתית", amount: 1800000 }, { name: "תכולה", premium: 589, premium_frequency: "שנתית", amount: 250000 }] },
+    ] },
+  ];
+}
 const MOCK_DOCS: ClientDocument[] = [
   { id: "d1", title: "ייפוי כוח מסלקה", kind: "maslaka", created_at: "2026-11-23T19:00:00Z", size_bytes: 48210, downloadable: true },
   { id: "d2", title: "ייפוי כוח הר הביטוח", kind: "harbit", created_at: "2026-11-23T19:00:10Z", size_bytes: 31870, downloadable: true },
@@ -135,6 +172,10 @@ export function createMockClientApi(o: MockOptions = {}): ClientApi {
   const session = () => { const t = store.read(); if (!t) throw new ClientApiError("unauthenticated"); return t; };
   const expiresAt = () => new Date(now().getTime() + 30 * 24 * 3600 * 1000).toISOString();
   let harbLast: HarbStatusRes["last_upload"] = null;
+  const products = mockProducts(now());
+  const requests: ClientRequest[] = [
+    { id: "r2", topic: "details", message: "כתובת חדשה", contact: "phone", created_at: "2026-11-12T09:00:00Z", status: "done" },
+  ];
   return {
     hasSession: () => !!store.read(),
     async loginStart(r) {
@@ -164,13 +205,13 @@ export function createMockClientApi(o: MockOptions = {}): ClientApi {
       return {
         client: { first_name: MOCK_FIRST, last_name: MOCK_LAST, agency_name: "שילד ביטוח ופיננסים" },
         data_as_of: "2026-11-01",
-        summary: { products: MOCK_PRODUCTS.reduce((n, c) => n + c.products.length, 0), categories: MOCK_PRODUCTS.map((c) => ({ key: c.key, label: c.label, count: c.products.length })) },
+        summary: { products: products.reduce((n, c) => n + c.products.length, 0), categories: products.map((c) => ({ key: c.key, label: c.label, count: c.products.length })) },
         session: { expires_at: expiresAt() },
       };
     },
     async portfolio() {
       await wait(); guard(); session();
-      return { as_of: "2026-11-01", categories: MOCK_PRODUCTS };
+      return { as_of: "2026-11-01", categories: products };
     },
     async documents() {
       await wait(); guard(); session();
@@ -194,6 +235,18 @@ export function createMockClientApi(o: MockOptions = {}): ClientApi {
       if (bytes.length < 4 || bytes[0] !== 0x50 || bytes[1] !== 0x4b) throw new ClientApiError("harb_invalid", undefined, "not_xlsx");
       harbLast = { created_at: now().toISOString(), processed: false };
       return { document_id: "harb-1", duplicate: false, queued: true };
+    },
+    async requests() {
+      await wait(); guard(); session();
+      return { enabled: o.requestsEnabled ?? true, requests: [...requests] };
+    },
+    async requestCreate(r) {
+      await wait(); guard(); session();
+      if (o.requestsEnabled === false) throw new ClientApiError("inactive");
+      const created_at = now().toISOString();
+      const id = `r-${Math.random().toString(36).slice(2, 10)}`;
+      requests.unshift({ id, topic: r.topic, message: r.message?.trim() || null, contact: r.contact, created_at, status: "received" });
+      return { id, created_at };
     },
     async logout() {
       await wait();
@@ -307,6 +360,19 @@ export function createHttpClientApi(opts: HttpOptions = {}): ClientApi {
       const res = await json<HarbUploadRes>(await send("harb", { method: "POST", auth: true, body: { bytes_base64: bytesToBase64(bytes) } }));
       if (typeof res?.document_id !== "string") throw new ClientApiError("generic");
       return res;
+    },
+    async requests() {
+      const res = await json<RequestsRes>(await send("requests", { method: "GET", auth: true }));
+      if (typeof res?.enabled !== "boolean" || !Array.isArray(res.requests)) throw new ClientApiError("generic");
+      return {
+        enabled: res.enabled,
+        requests: res.requests.filter((x) => x && typeof x.id === "string" && (REQUEST_TOPICS as readonly string[]).includes(x.topic)),
+      };
+    },
+    async requestCreate(r) {
+      const res = await json<{ id?: unknown; created_at?: unknown }>(await send("requests", { method: "POST", auth: true, body: { topic: r.topic, contact: r.contact, message: r.message ?? null } }));
+      if (typeof res?.id !== "string") throw new ClientApiError("generic");
+      return { id: res.id, created_at: typeof res.created_at === "string" ? res.created_at : new Date().toISOString() };
     },
     async logout() {
       try { await send("logout", { method: "POST", auth: true }); } catch { /* the server session may already be gone */ }

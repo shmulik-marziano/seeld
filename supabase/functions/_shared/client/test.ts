@@ -39,7 +39,7 @@ Deno.test("portfolio: a product is shaped with labels and figures; nothing perso
   });
   assert.deepEqual(p, {
     id: P1, type_code: 1, type_label: "קרן פנסיה חדשה מקיפה", company_label: "הראל", policy_number_masked: "****6789", source: "maslaka",
-    status: "פעיל", plan: "Zz-Plan", balance: 123456.57, premium: 1200.5, premium_frequency: "חודשית", coverage: 500000,
+    status: "פעיל", active: true, plan: "Zz-Plan", balance: 123456.57, premium: 1200.5, premium_frequency: "חודשית", coverage: 500000,
     start: "2015-03-01", end: "2040-01-01", track: "Zz-Track",
   });
   assert.ok(!JSON.stringify(p).includes("Zz Person") && !JSON.stringify(p).includes("000000018") && !JSON.stringify(p).includes("123456789"));
@@ -77,4 +77,70 @@ Deno.test("portfolio: categories keep the fixed order and the summary counts the
     categories: [{ key: "pension", label: "פנסיה", count: 1 }, { key: "insurance_life", label: "ביטוח חיים ואובדן כושר עבודה", count: 1 }, { key: "other", label: "אחר", count: 1 }],
   });
   assert.equal(POA_DOC_TITLE.maslaka, "ייפוי כוח למסלקה הפנסיונית");
+});
+
+Deno.test("portfolio: live Surense enums arrive as objects: status, frequency and type are read from them", () => {
+  const s = shapeProduct({ id: P1, source: "פרודוקציה_פרט", company_id: null, product_type: null, modified_at: null, details: {
+    type: { code: 12, description: "ביטוח בריאות" }, status: { code: 1, shortDescription: "פעיל", description: "פעיל" },
+    totalPremiaFrequency: { code: 1, description: "חודשית" }, totalMonthlyPremia: 210.4,
+  } });
+  assert.equal(s.type_code, 12);
+  assert.equal(s.status, "פעיל");
+  assert.equal(s.active, true);
+  assert.equal(s.premium_frequency, "חודשית");
+  assert.equal(s.source, "production");
+  const off = shapeProduct({ id: P2, source: null, company_id: null, product_type: 3, modified_at: null, details: { status: { code: 2, shortDescription: "לא פעיל" } } });
+  assert.equal(off.active, false);
+  assert.equal(off.status, "לא פעיל");
+  assert.equal(shapeProduct({ id: P2, source: null, company_id: null, product_type: 3, modified_at: null, details: { status: "מוקפא_מסולק_לא_פעיל" } }).status, "מוקפא מסולק לא פעיל");
+});
+
+Deno.test("portfolio: fees and the year's return are percents of the reported fractions; implausible values are left out", () => {
+  const s = shapeProduct({ id: P1, source: null, company_id: null, product_type: 1, modified_at: null, details: {
+    accumulationFee: 0.0022, depositFee: 0.015, netReturnPercentStartYear: 0.079,
+    lastDeposit: { hafkadot: [{ month: "2026-09" }, { month: "2026-10" }, { month: "bad" }] },
+  } });
+  assert.equal(s.fee_balance_pct, 0.22);
+  assert.equal(s.fee_deposit_pct, 1.5);
+  assert.equal(s.ytd_return_pct, 7.9);
+  assert.equal(s.last_deposit, "2026-10");
+  const odd = shapeProduct({ id: P1, source: null, company_id: null, product_type: 1, modified_at: null, details: { netReturnPercentStartYear: -1, accumulationFee: 0.2 } });
+  assert.equal(odd.ytd_return_pct, undefined);
+  assert.equal(odd.fee_balance_pct, undefined);
+});
+
+Deno.test("portfolio: protection tiles come only from live products and live covers; mortgage life never counts as life", () => {
+  const active = { code: 1 };
+  const health = shapeProduct({ id: P1, source: null, company_id: null, product_type: 12, modified_at: null, details: {
+    status: active, covers: [{ coverType: 11, coverTypeDescription: "ניתוחים" }, { coverType: 18, coverTypeDescription: "מחלות קשות", expired: true },
+      { coverType: 1, coverTypeDescription: "פוליסה" }],
+  } });
+  assert.deepEqual(health.protects, ["health"]);
+  assert.deepEqual(health.covers, ["ניתוחים"]);
+  const mortgage = shapeProduct({ id: P2, source: null, company_id: null, product_type: 14, modified_at: null, details: { status: active, covers: [{ coverType: 19 }] } });
+  assert.equal(mortgage.protects, undefined);
+  const lapsed = shapeProduct({ id: P2, source: null, company_id: null, product_type: 13, modified_at: null, details: { status: { code: 3 } } });
+  assert.equal(lapsed.protects, undefined);
+  const combo = shapeProduct({ id: P2, source: null, company_id: null, product_type: 17, modified_at: null, details: { status: active } });
+  assert.deepEqual(combo.protects, ["life", "disability"]);
+});
+
+Deno.test("portfolio: one cost line per live cover type, summed over the insured; the sum insured only when they share it", () => {
+  const monthly = { code: 1, description: "חודשית" };
+  const s = shapeProduct({ id: P1, source: null, company_id: null, product_type: 12, modified_at: null, details: {
+    status: { code: 1 },
+    covers: [
+      { coverType: 11, coverTypeDescription: "ניתוחים", premia: 100, premiaFrequency: monthly, insuranceAmount: 0, insuredFullName: "Zz One" },
+      { coverType: 11, coverTypeDescription: "ניתוחים", premia: 40.5, premiaFrequency: monthly, insuredFullName: "Zz Two" },
+      { coverType: 19, coverTypeDescription: "ביטוח חיים למקרה מוות", premia: 60, premiaFrequency: monthly, insuranceAmount: 500000 },
+      { coverType: 1, coverTypeDescription: "פוליסה", premia: 12, premiaFrequency: monthly },
+      { coverType: 18, coverTypeDescription: "מחלות קשות", premia: 30, expired: true },
+    ],
+  } });
+  assert.deepEqual(s.cover_lines, [
+    { name: "ניתוחים", premium: 140.5, premium_frequency: "חודשית" },
+    { name: "ביטוח חיים למקרה מוות", premium: 60, premium_frequency: "חודשית", amount: 500000 },
+    { name: "בסיס הפוליסה", premium: 12, premium_frequency: "חודשית" },
+  ]);
+  assert.ok(!JSON.stringify(s).includes("Zz One") && !JSON.stringify(s).includes("Zz Two"), "no insured name");
 });

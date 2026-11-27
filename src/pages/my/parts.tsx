@@ -1,6 +1,6 @@
 // Shared pieces of the client area screens: the card with its focusable h2, a text field with the house error pattern
 // (aria-invalid + aria-describedby + p.sd-q-error[role=alert]), and small formatters. Ids are prefixed `my-`.
-import type { ReactNode, RefObject } from "react";
+import { useEffect, useRef, type ReactNode, type RefObject } from "react";
 import { BrandIcon } from "@/components/brand/BrandIcon";
 import { MY_COPY as C } from "@/lib/client-area/copy";
 
@@ -59,6 +59,36 @@ export function focusFirst(order: string[], errors: Record<string, string | unde
 
 const ILS = new Intl.NumberFormat("he-IL", { style: "currency", currency: "ILS", maximumFractionDigits: 0 });
 export const money = (n: number) => ILS.format(n);
+/** the amount, or a mask when the client hid the amounts */
+export const amountOf = (n: number, hidden: boolean) => (hidden ? "₪ ••••" : money(n));
+/** 7.9 -> "+7.9%", -1.25 -> "-1.25%" (two decimals at most) */
+export const signedPct = (n: number) => `${n > 0 ? "+" : n < 0 ? "-" : ""}${Math.abs(Math.round(n * 100) / 100)}%`;
+export const plainPct = (n: number) => `${Math.round(n * 100) / 100}%`;
+/** "2026-10" -> "10/2026" */
+export const monthHe = (ym: string) => (/^\d{4}-\d{2}$/.test(ym) ? `${ym.slice(5, 7)}/${ym.slice(0, 4)}` : ym);
+
+/** Bottom sheet dialog: focus moves to its close button, Escape and the backdrop close it, focus returns on close. */
+export function Sheet({ label, onClose, children }: { label: string; onClose: () => void; children: ReactNode }) {
+  const closeBtn = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    const back = document.activeElement as HTMLElement | null;
+    closeBtn.current?.focus();
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = prev; back?.focus?.(); };
+  }, [onClose]);
+  return (
+    <div className="ma-backdrop" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="ma-sheet" role="dialog" aria-modal="true" aria-label={label}>
+        <span className="ma-grab" aria-hidden="true" />
+        <button ref={closeBtn} type="button" className="ma-x" aria-label={C.common.close} onClick={onClose}><BrandIcon name="close" size={18} /></button>
+        {children}
+      </div>
+    </div>
+  );
+}
 export function dateHe(iso: string | null | undefined): string {
   if (!iso) return "";
   const d = new Date(iso.length === 10 ? `${iso}T00:00:00` : iso);

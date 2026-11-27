@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { MY_COPY, myAllStrings } from "@/lib/client-area/copy";
 import { ClientApiError, createHttpClientApi, type createMockClientApi } from "@/lib/client-area/api";
@@ -132,16 +132,23 @@ describe("client area on the mock", () => {
     return { ...view, api };
   };
   const h2 = () => document.querySelector(".sd-my-q h2")?.textContent ?? "";
+  const tab = (name: string) => within(screen.getByRole("navigation", { name: "ניווט באזור האישי" })).getByRole("link", { name });
+  const signedIn = () => {
+    const store = createMemorySessionStore();
+    store.write("t", new Date(Date.now() + 60_000).toISOString());
+    return store;
+  };
 
   it("flag off: /my redirects home", async () => {
     await renderArea();
     expect(await screen.findByText("home page")).toBeInTheDocument();
   });
 
-  it("flag on: id + phone -> code -> home -> portfolio -> documents -> logout", async () => {
+  it("flag on: id + phone -> code -> home with the picture -> tabs -> a request -> documents -> logout", async () => {
     flag.on = true;
     const { api } = await renderArea();
     expect(h2()).toBe("כניסה לאזור האישי");
+    expect(screen.getByRole("heading", { level: 1, name: "האזור האישי שלכם" })).toBeInTheDocument();
     expect(document.querySelector('meta[name="robots"]')?.getAttribute("content")).toBe("noindex, nofollow");
     // nothing typed: both errors, focus on the id
     fireEvent.click(screen.getByRole("button", { name: /שליחת קוד לנייד/ }));
@@ -156,7 +163,6 @@ describe("client area on the mock", () => {
     const code = screen.getByLabelText("הקוד מההודעה");
     expect(code).toHaveAttribute("autocomplete", "one-time-code");
     expect(code).toHaveAttribute("inputmode", "numeric");
-    // a wrong code reports the tries left; the right one signs in
     fireEvent.change(code, { target: { value: "000000" } });
     fireEvent.click(screen.getByRole("button", { name: /^כניסה/ }));
     expect(await screen.findByText("הקוד לא נכון. נשארו 4 ניסיונות.")).toBeInTheDocument();
@@ -164,32 +170,92 @@ describe("client area on the mock", () => {
     fireEvent.click(screen.getByRole("button", { name: /^כניסה/ }));
     await waitFor(() => expect(h2()).toBe("שלום, ישראל"));
     expect(api.hasSession()).toBe(true);
-    expect(screen.getByText("5 מוצרים")).toBeInTheDocument();
-    expect(screen.getByText("נכון ל־01/11/2026")).toBeInTheDocument();
-    // portfolio
-    fireEvent.click(screen.getByRole("link", { name: "התיק שלי" }));
-    await waitFor(() => expect(h2()).toBe("התיק שלי"));
-    expect(await screen.findByText("קרן פנסיה חדשה מקיפה")).toBeInTheDocument();
-    expect(screen.getByText("••••4471")).toBeInTheDocument();
-    expect(screen.getAllByText("המסלקה הפנסיונית").length).toBe(3); // the source row of the three clearing-house products
-    expect(screen.queryByText(/\d{9}/)).toBeNull(); // no full id or policy number anywhere
+
+    // home: the total, the split, what is paid, protections, notices; never an agent's name
+    expect(await screen.findByText("סך החיסכון שלכם")).toBeInTheDocument();
+    expect(screen.getByText("עודכן לאחרונה ב־01/11/2026")).toBeInTheDocument();
+    const total = screen.getByText((_, el) => el?.classList.contains("ma-hero-num") ?? false);
+    expect(total.textContent).toMatch(/523,950/);
+    fireEvent.click(screen.getByRole("button", { name: "הסתרת הסכומים" }));
+    expect(total.textContent).toBe("₪ ••••");
+    fireEvent.click(screen.getByRole("button", { name: "הצגת הסכומים" }));
+    const have = within(screen.getByRole("list", { name: "יש לכם" }));
+    const missing = within(screen.getByRole("list", { name: "לא מופיע אצלנו" }));
+    expect(have.getByText("בריאות")).toBeInTheDocument();
+    expect(have.getByText("ביטוח דירה")).toBeInTheDocument();
+    expect(missing.getByText("סיעוד")).toBeInTheDocument();
+    expect(missing.queryByText("בריאות")).toBeNull();
+    expect(screen.getByText(/^ביטוח דירה מסתיים ב־\d{2}\/\d{2}\/\d{4}$/)).toBeInTheDocument();
+    expect(screen.getByText("קופות לא פעילות בלי יתרה: 1")).toBeInTheDocument();
+    expect(document.body.textContent).not.toMatch(/שמוליק|משה|המלצה/);
+
+    // savings: cards, the year's return, the product sheet
+    fireEvent.click(tab("חסכונות"));
+    await waitFor(() => expect(h2()).toBe("החסכונות שלכם"));
+    expect(screen.getByText("+7.9% מתחילת השנה · דמי ניהול 0.22%")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "לא פעילות" })).toBeInTheDocument();
+    expect(screen.getByText("בלי יתרה")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /קרן פנסיה חדשה מקיפה/ }));
+    const sheet = within(await screen.findByRole("dialog", { name: "פרטי המוצר" }));
+    expect(sheet.getByText("מסלול השקעה")).toBeInTheDocument();
+    expect(sheet.getByText("המסלקה הפנסיונית")).toBeInTheDocument();
+    fireEvent.click(sheet.getByRole("button", { name: "סגירה" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    fireEvent.click(screen.getByRole("button", { name: /^גמל/ }));
+    expect(screen.queryByText("קרן פנסיה חדשה מקיפה")).toBeNull();
+
+    // insurance: live policies with covers and the end of the home policy
+    fireEvent.click(tab("ביטוחים"));
+    await waitFor(() => expect(h2()).toBe("הביטוחים שלכם"));
+    const lines = within(screen.getByRole("list", { name: "מה כלול ובכמה: ביטוח בריאות" }));
+    expect(lines.getByText("ניתוחים")).toBeInTheDocument();
+    expect(lines.getByText("ניתוחים").closest("li")?.textContent).toMatch(/118.*לחודש/);
+    const home = within(screen.getByRole("list", { name: "מה כלול ובכמה: ביטוח דירה" }));
+    expect(home.getByText("מבנה").closest("li")?.textContent).toMatch(/סכום ביטוח .*1,800,000.*890.*לשנה/);
+    expect(screen.getByText("פוליסות פעילות: 3")).toBeInTheDocument();
+    expect(screen.getByText(/^תקופת הביטוח מסתיימת ב־\d{2}\/\d{2}\/\d{4}$/)).toBeInTheDocument();
+
+    // a request: the topic is required; after sending it shows in the list as received
+    fireEvent.click(screen.getByRole("button", { name: "שאלה על הביטוחים" }));
+    let req = within(await screen.findByRole("dialog", { name: "פנייה לסוכן" }));
+    fireEvent.click(req.getByRole("button", { name: "ביטוח" }));
+    expect(req.getByRole("button", { name: "ביטוח" })).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(req.getByRole("button", { name: "סגירה" }));
+    fireEvent.click(tab("בית"));
+    await waitFor(() => expect(h2()).toBe("שלום, ישראל"));
+    const asks = screen.getAllByRole("button", { name: "פנייה לסוכן" });
+    expect(asks.length).toBe(2); // the home-policy notice and the question card
+    fireEvent.click(asks[asks.length - 1]);
+    req = within(await screen.findByRole("dialog", { name: "פנייה לסוכן" }));
+    fireEvent.click(req.getByRole("button", { name: "שליחה לסוכן" }));
+    expect(req.getByRole("alert")).toHaveTextContent("צריך לבחור נושא, כדי שהפנייה תגיע לסוכן הנכון.");
+    fireEvent.click(req.getByRole("button", { name: "חיסכון ופנסיה" }));
+    fireEvent.change(req.getByLabelText(/כמה מילים, אם רוצים/), { target: { value: "שאלה על הקרן" } });
+    fireEvent.click(req.getByRole("button", { name: "וואטסאפ" }));
+    fireEvent.click(req.getByRole("button", { name: "שליחה לסוכן" }));
+    expect(await req.findByText("הפנייה התקבלה")).toBeInTheDocument();
+    expect(req.getByText("הסוכן שלכם יחזור אליכם בהודעת וואטסאפ. הפנייה מופיעה בלשונית פניות.")).toBeInTheDocument();
+    fireEvent.click(req.getByRole("button", { name: "לפניות שלי" }));
+    await waitFor(() => expect(h2()).toBe("הפניות שלכם"));
+    expect(await screen.findByText("שאלה על הקרן")).toBeInTheDocument();
+    expect(screen.getByText("התקבלה")).toBeInTheDocument();
+    expect(screen.getByText("טופלה")).toBeInTheDocument();
+
     // documents
-    fireEvent.click(screen.getByRole("link", { name: "מסמכים" }));
+    fireEvent.click(tab("מסמכים"));
     await waitFor(() => expect(h2()).toBe("המסמכים שלי"));
     expect((await screen.findAllByRole("button", { name: /הורדה/ })).length).toBe(3);
-    expect(screen.getByText("זמין דרך הסוכנות")).toBeInTheDocument();
+    expect(screen.queryByText(/\d{9}/)).toBeNull(); // no full id or policy number anywhere
     // logout
     fireEvent.click(screen.getByRole("button", { name: "יציאה" }));
     await waitFor(() => expect(h2()).toBe("כניסה לאזור האישי"));
     expect(api.hasSession()).toBe(false);
   });
 
-  it("flag on: a stored session goes straight to home; a failing adapter shows the error screen", async () => {
+  it("flag on: an old /my/portfolio link lands on savings; a failing adapter shows the error screen", async () => {
     flag.on = true;
-    const store = createMemorySessionStore();
-    store.write("t", new Date(Date.now() + 60_000).toISOString());
-    const first = await renderArea({ store }, "/my/portfolio");
-    await waitFor(() => expect(h2()).toBe("התיק שלי"));
+    const first = await renderArea({ store: signedIn() }, "/my/portfolio");
+    await waitFor(() => expect(h2()).toBe("החסכונות שלכם"));
     first.unmount();
     await renderArea({ fail: { code: "inactive" } });
     fireEvent.change(screen.getByLabelText("מספר תעודת זהות"), { target: { value: "123456782" } });
@@ -198,18 +264,23 @@ describe("client area on the mock", () => {
     expect(await screen.findByText("האזור האישי סגור כרגע")).toBeInTheDocument();
   });
 
-  describe("Har HaBituach card", () => {
-    const signedIn = () => {
-      const store = createMemorySessionStore();
-      store.write("t", new Date(Date.now() + 60_000).toISOString());
-      return store;
-    };
+  it("requests switch off: no requests tab and no request buttons", async () => {
+    flag.on = true;
+    await renderArea({ store: signedIn(), requestsEnabled: false }, "/my/home");
+    await waitFor(() => expect(h2()).toBe("שלום, ישראל"));
+    await screen.findByText("סך החיסכון שלכם");
+    await new Promise((r) => setTimeout(r, 10));
+    expect(screen.queryByRole("link", { name: /פניות/ })).toBeNull();
+    expect(screen.queryByRole("button", { name: "פנייה לסוכן" })).toBeNull();
+  });
+
+  describe("Har HaBituach card (documents tab)", () => {
     const zipLike = () => new File([new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0x14, 0x00])], "harb.xlsx", { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     const send = (file: File) => fireEvent.change(screen.getByLabelText("שליחת הקובץ"), { target: { files: [file] } });
 
     it("switch on: steps, the registry link, a sent file and the last-file line", async () => {
       flag.on = true;
-      await renderArea({ store: signedIn() }, "/my/home");
+      await renderArea({ store: signedIn() }, "/my/documents");
       expect(await screen.findByRole("heading", { name: "קובץ הר הביטוח" })).toBeInTheDocument();
       expect(screen.getByText("נכנסים לאתר הר הביטוח ומזדהים בהזדהות הממשלתית.")).toBeInTheDocument();
       const link = screen.getByRole("link", { name: "לאתר הר הביטוח" });
@@ -224,12 +295,12 @@ describe("client area on the mock", () => {
 
     it("refusals show one plain line per reason; not a zip is refused before the server", async () => {
       flag.on = true;
-      const first = await renderArea({ store: signedIn(), harbReason: "id_mismatch" }, "/my/home");
+      const first = await renderArea({ store: signedIn(), harbReason: "id_mismatch" }, "/my/documents");
       await screen.findByRole("heading", { name: "קובץ הר הביטוח" });
       send(zipLike());
       expect(await screen.findByRole("alert")).toHaveTextContent("הקובץ שייך לתעודת זהות אחרת. אפשר לשלוח רק את הקובץ שלכם.");
       first.unmount();
-      await renderArea({ store: signedIn() }, "/my/home");
+      await renderArea({ store: signedIn() }, "/my/documents");
       await screen.findByRole("heading", { name: "קובץ הר הביטוח" });
       send(new File(["not a spreadsheet"], "x.xlsx"));
       expect(await screen.findByRole("alert")).toHaveTextContent("זה לא קובץ האקסל של הר הביטוח. כדאי להוריד אותו שוב.");
@@ -237,12 +308,39 @@ describe("client area on the mock", () => {
 
     it("switch off: no card at all", async () => {
       flag.on = true;
-      await renderArea({ store: signedIn(), harbEnabled: false }, "/my/home");
-      await waitFor(() => expect(h2()).toBe("שלום, ישראל"));
+      await renderArea({ store: signedIn(), harbEnabled: false }, "/my/documents");
+      await waitFor(() => expect(h2()).toBe("המסמכים שלי"));
       await new Promise((r) => setTimeout(r, 10));
       expect(screen.queryByRole("heading", { name: "קובץ הר הביטוח" })).toBeNull();
       expect(screen.queryByLabelText("שליחת הקובץ")).toBeNull();
     });
+  });
+});
+
+describe("overview (pure)", () => {
+  it("sums reported balances and live premiums, proves protections, and lists at most three notices", async () => {
+    const { buildOverview } = await import("@/lib/client-area/overview");
+    const today = new Date(2026, 10, 27);
+    const ov = buildOverview([
+      { key: "pension", label: "", products: [{ id: "a", type_code: 1, type_label: "x", company_label: "c", policy_number_masked: "****1", source: "maslaka", active: true, balance: 1000 }] },
+      { key: "gemel", label: "", products: [{ id: "b", type_code: 3, type_label: "x", company_label: "c", policy_number_masked: "****2", source: "maslaka", active: false, balance: 0 }] },
+      { key: "insurance_life", label: "", products: [{ id: "m", type_code: 14, type_label: "x", company_label: "c", policy_number_masked: "****3", source: "production", active: true, premium: 50, premium_frequency: "חודשית" }] },
+      { key: "insurance_general", label: "", products: [
+        { id: "d", type_code: 10, type_label: "ביטוח דירה", company_label: "c", policy_number_masked: "****4", source: "harbit", active: true, premium: 1200, premium_frequency: "שנתית", end: "2026-12-20", protects: ["home"] },
+        { id: "o", type_code: 9, type_label: "ביטוח רכב", company_label: "c", policy_number_masked: "****5", source: "harbit", active: true, premium: 100, premium_frequency: "חודשית", end: "2027-06-01", protects: ["car"] },
+        { id: "x", type_code: 9, type_label: "ביטוח רכב", company_label: "c", policy_number_masked: "****6", source: "harbit", active: false, premium: 999, premium_frequency: "חודשית", end: "2026-12-01", protects: ["car"] },
+      ] },
+    ], today);
+    expect(ov.savingsTotal).toBe(1000);
+    expect(ov.split).toEqual([{ key: "pension", amount: 1000, pct: 100 }]);
+    expect(ov.monthlyPremium).toBe(150);
+    expect(ov.yearlyPremium).toBe(1200);
+    expect(ov.policiesActive).toBe(3);
+    expect(ov.policiesInactive).toBe(1);
+    expect(ov.protections.find((p) => p.key === "life")?.exists).toBe(false); // mortgage life is not life cover
+    expect(ov.protections.map((p) => p.key)).toContain("car");
+    expect(ov.notices.map((n) => n.kind)).toEqual(["ending", "inactive_empty"]);
+    expect(ov.notices[0].kind === "ending" && ov.notices[0].days).toBe(23);
   });
 });
 

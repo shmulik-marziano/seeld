@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { json, mockFetch, mockRpc, rpcError, silentLog, testEnv } from "../_shared/test_helpers.ts";
 import {
-  type ClientAreaDeps, createClientAreaHandler, LOGIN_BUCKET_MS, LOGIN_MIN_MS, MAX_HARB_JSON_BYTES, parseRoute, parseStart, parseVerify, toClientError, XLSX_MIME,
+  type ClientAreaDeps, createClientAreaHandler, LOGIN_BUCKET_MS, LOGIN_MIN_MS, MAX_HARB_JSON_BYTES, parseRequestCreate, parseRoute, parseStart, parseVerify, toClientError, XLSX_MIME,
 } from "./handler.ts";
 import { MICROPAY_OTP_URL } from "../_shared/sms/micropay.ts";
 import { sha256Hex, TOKEN_RE } from "../_shared/poa/session.ts";
@@ -51,6 +51,8 @@ function setup(o: {
     client_harb_status: { enabled: true, last: null },
     client_harb_add: { ok: true, duplicate: false, document_id: HARB_DOC, storage_path: HARB_PATH },
     client_harb_stored: { stored: true, queued: true },
+    client_requests_list: { enabled: true, requests: [{ id: REQ, topic: "insurance", message: "Zz-question", contact: "phone", created_at: "2026-11-27T08:00:00Z", status: "received" }] },
+    client_request_create: { id: REQ, created_at: "2026-11-27T08:00:00Z" },
   };
   const script = { ...defaults, ...(o.script ?? {}) };
   const rpc = mockRpc((fn, args) => {
@@ -368,4 +370,35 @@ Deno.test("harb: duplicate, switch off, storage down and an unconfigured bucket"
 
   const none = setup({ storage: null });
   assert.equal((await none.handler(await harbPost(await buildHarbXlsx()))).status, 503);
+});
+
+const REQ = "d5300000-0000-4000-8000-000000000001";
+
+Deno.test("requests: routes and the body parser (closed lists, trimmed message, 1000 max)", () => {
+  assert.deepEqual(parseRoute("GET", "/client-area/requests"), { name: "requests_list" });
+  assert.deepEqual(parseRoute("POST", "/client-area/requests"), { name: "request_create" });
+  assert.equal(parseRoute("DELETE", "/client-area/requests"), "method");
+  assert.deepEqual(parseRequestCreate({ topic: "savings", contact: "whatsapp", message: "  Zz  " }), { topic: "savings", message: "Zz", contact: "whatsapp" });
+  assert.deepEqual(parseRequestCreate({ topic: "other", contact: "phone" }), { topic: "other", message: null, contact: "phone" });
+  assert.throws(() => parseRequestCreate({ topic: "claims", contact: "phone" }));
+  assert.throws(() => parseRequestCreate({ topic: "insurance", contact: "fax" }));
+  assert.throws(() => parseRequestCreate({ topic: "insurance", contact: "phone", message: "x".repeat(1001) }));
+  assert.throws(() => parseRequestCreate({ topic: "insurance", contact: "phone", extra: 1 }));
+});
+
+Deno.test("requests: list and create go through the token-scoped RPCs; the message is never logged", async () => {
+  const s = setup();
+  const list = await s.handler(get("requests", auth));
+  assert.equal(list.status, 200);
+  assert.deepEqual(await list.json(), { enabled: true, requests: [{ id: REQ, topic: "insurance", message: "Zz-question", contact: "phone", created_at: "2026-11-27T08:00:00Z", status: "received" }] });
+  const res = await s.handler(post("requests", { topic: "insurance", contact: "phone", message: "Zz-private-words" }, auth));
+  assert.equal(res.status, 201);
+  assert.deepEqual(await res.json(), { id: REQ, created_at: "2026-11-27T08:00:00Z" });
+  assert.deepEqual(s.rpc.calls.find((c) => c.fn === "client_request_create")!.args,
+    { p_token_hash: bytea(await sha256Hex(TOKEN)), p_topic: "insurance", p_message: "Zz-private-words", p_contact: "phone" });
+  assert.ok(!s.lines.join("\n").includes("Zz-private-words"), "the message is not logged");
+  assert.equal((await s.handler(post("requests", { topic: "x", contact: "phone" }, auth))).status, 400);
+  assert.equal((await s.handler(get("requests"))).status, 401, "a session is required");
+  const off = setup({ script: { client_requests_list: { enabled: false, requests: [] } } });
+  assert.deepEqual(await (await off.handler(get("requests", auth))).json(), { enabled: false, requests: [] });
 });
