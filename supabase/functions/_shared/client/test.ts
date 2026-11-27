@@ -39,7 +39,7 @@ Deno.test("portfolio: a product is shaped with labels and figures; nothing perso
   });
   assert.deepEqual(p, {
     id: P1, type_code: 1, type_label: "קרן פנסיה חדשה מקיפה", company_label: "הראל", policy_number_masked: "****6789", source: "maslaka",
-    status: "פעיל", plan: "Zz-Plan", balance: 123456.57, premium: 1200.5, premium_frequency: "חודשית", coverage: 500000,
+    status: "פעיל", active: true, plan: "Zz-Plan", balance: 123456.57, premium: 1200.5, premium_frequency: "חודשית", coverage: 500000,
     start: "2015-03-01", end: "2040-01-01", track: "Zz-Track",
   });
   assert.ok(!JSON.stringify(p).includes("Zz Person") && !JSON.stringify(p).includes("000000018") && !JSON.stringify(p).includes("123456789"));
