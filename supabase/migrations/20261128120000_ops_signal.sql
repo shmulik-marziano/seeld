@@ -49,7 +49,7 @@ create or replace function ops.watchdog()
 returns jsonb language plpgsql security definer set search_path = '' as $$
 declare
   v_run bigint; v_failed text[] := '{}'; v_copied integer := 0; v_fail integer; v_locked integer := 0; r record;
-  v_n bigint; v_min bigint; v_poa_first uuid; v_late record;
+  v_n bigint; v_min bigint; v_poa_first uuid; v_late record; v_close record;
   v_actions text := coalesce((select value from ops.config where key = 'auth_failure_actions'), '');
 begin
   insert into ops.job_runs (job) values ('ops-watchdog') returning id into v_run;
@@ -85,15 +85,15 @@ begin
   begin
     -- 20261128120000: a late run whose HTTP call timed out or failed is closed with that reason (the next tick runs again);
     -- past its budget, a function that was reached would have finished. Five such closures in an hour raise one warning.
-    -- read first, then update by id: an UPDATE ... FROM net._http_response fails (SQLSTATE 55000) on the pg_net table
-    for v_late in
-      select j.id, case when coalesce(r.timed_out, false) then 'http_timeout' else 'http_' || coalesce(r.status_code::text, 'error') end as reason
-        from ops.job_runs j join net._http_response r on r.id = j.request_id
+    -- (alias h, not r: r is this function's record variable, and r.id would read it)
+    for v_close in
+      select j.id, case when coalesce(h.timed_out, false) then 'http_timeout' else 'http_' || coalesce(h.status_code::text, 'error') end as reason
+        from ops.job_runs j join net._http_response h on h.id = j.request_id
        where j.finished_at is null and j.id <> v_run
          and j.started_at < now() - ops.job_budget(j.job)
-         and (coalesce(r.timed_out, false) or r.status_code is null or r.status_code >= 400)
+         and (coalesce(h.timed_out, false) or h.status_code is null or h.status_code >= 400)
     loop
-      update ops.job_runs set finished_at = now(), ok = false, error = v_late.reason where id = v_late.id and finished_at is null;
+      update ops.job_runs set finished_at = now(), ok = false, error = v_close.reason where id = v_close.id and finished_at is null;
     end loop;
     if (select count(*) from ops.job_runs j
          where j.error = 'http_timeout' and j.started_at > now() - interval '3 hours' and j.finished_at > now() - interval '1 hour') >= 5 then
