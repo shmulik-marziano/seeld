@@ -179,10 +179,12 @@ describe("client area on the mock", () => {
     fireEvent.click(screen.getByRole("button", { name: "הסתרת הסכומים" }));
     expect(total.textContent).toBe("₪ ••••");
     fireEvent.click(screen.getByRole("button", { name: "הצגת הסכומים" }));
-    const prot = within(screen.getByRole("region", { name: "ההגנות שלכם" }));
-    expect(prot.getByText("בריאות").nextSibling?.textContent).toBe("קיים");
-    expect(prot.getByText("סיעוד").nextSibling?.textContent).toBe("לא מופיע");
-    expect(prot.getByText("ביטוח דירה").nextSibling?.textContent).toBe("קיים");
+    const have = within(screen.getByRole("list", { name: "יש לכם" }));
+    const missing = within(screen.getByRole("list", { name: "לא מופיע אצלנו" }));
+    expect(have.getByText("בריאות")).toBeInTheDocument();
+    expect(have.getByText("ביטוח דירה")).toBeInTheDocument();
+    expect(missing.getByText("סיעוד")).toBeInTheDocument();
+    expect(missing.queryByText("בריאות")).toBeNull();
     expect(screen.getByText(/^ביטוח דירה מסתיים ב־\d{2}\/\d{2}\/\d{4}$/)).toBeInTheDocument();
     expect(screen.getByText("קופות לא פעילות בלי יתרה: 1")).toBeInTheDocument();
     expect(document.body.textContent).not.toMatch(/שמוליק|משה|המלצה/);
@@ -190,8 +192,9 @@ describe("client area on the mock", () => {
     // savings: cards, the year's return, the product sheet
     fireEvent.click(tab("חסכונות"));
     await waitFor(() => expect(h2()).toBe("החסכונות שלכם"));
-    expect(screen.getByText("+7.9% מתחילת השנה")).toBeInTheDocument();
-    expect(screen.getByText("דמי ניהול 0.22% מצבירה · 1.5% מהפקדה")).toBeInTheDocument();
+    expect(screen.getByText("+7.9% מתחילת השנה · דמי ניהול 0.22%")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "לא פעילות" })).toBeInTheDocument();
+    expect(screen.getByText("בלי יתרה")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /קרן פנסיה חדשה מקיפה/ }));
     const sheet = within(await screen.findByRole("dialog", { name: "פרטי המוצר" }));
     expect(sheet.getByText("מסלול השקעה")).toBeInTheDocument();
@@ -204,7 +207,8 @@ describe("client area on the mock", () => {
     // insurance: live policies with covers and the end of the home policy
     fireEvent.click(tab("ביטוחים"));
     await waitFor(() => expect(h2()).toBe("הביטוחים שלכם"));
-    expect(screen.getByText("ניתוחים")).toBeInTheDocument();
+    expect(screen.getByText("ניתוחים · השתלות · תרופות")).toBeInTheDocument();
+    expect(screen.getByText("פוליסות פעילות: 3")).toBeInTheDocument();
     expect(screen.getByText(/^תקופת הביטוח מסתיימת ב־\d{2}\/\d{2}\/\d{4}$/)).toBeInTheDocument();
 
     // a request: the topic is required; after sending it shows in the list as received

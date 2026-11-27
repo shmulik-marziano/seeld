@@ -22,10 +22,15 @@ export function Insurance() {
     <div className="ma-stack">
       <div className="ma-greet">
         <h2 ref={heading} tabIndex={-1} className="ma-h1">{C.insurance.title}</h2>
-        {ov && ov.policiesActive > 0 && (
-          <p className="ma-muted">{C.insurance.summary(amountOf(ov.monthlyPremium, hidden), ov.policiesActive)}{ov.yearlyPremium > 0 ? ` · ${C.insurance.yearly(amountOf(ov.yearlyPremium, hidden))}` : ""}</p>
-        )}
       </div>
+      {ov && ov.policiesActive > 0 && (
+        <section className="ma-card ma-sum" aria-label={C.insurance.title}>
+          <p className="ma-big">{amountOf(ov.monthlyPremium, hidden)} <small>{C.insurance.per.month}</small>
+            {ov.yearlyPremium > 0 && <small className="ma-big-sub">{C.insurance.yearly(amountOf(ov.yearlyPremium, hidden))}</small>}
+          </p>
+          <p className="ma-muted">{C.insurance.count(ov.policiesActive)}</p>
+        </section>
+      )}
       {portfolio.state === "loading" && <CaLoading label={C.common.loading} tone="sage" />}
       {portfolio.state === "error" && <CaError title={portfolio.text} onRetry={reloadPortfolio} actionLabel={C.errors.retry} />}
       {portfolio.state === "ok" && groups.length === 0 && <p className="sd-my-empty">{C.insurance.empty}</p>}
@@ -36,15 +41,12 @@ export function Insurance() {
             <article key={p.id} className="ma-policy">
               <div className="ma-prod-head">
                 <span className="ma-mono" aria-hidden="true">{mono(p.company_label)}</span>
-                <span className="ma-prod-title">
-                  <b>{p.type_label}</b>
-                  <small>{p.company_label}{p.policy_number_masked ? <> · <bdi>{p.policy_number_masked}</bdi></> : null}</small>
-                </span>
+                <span className="ma-prod-title"><b>{p.type_label}</b><small>{p.company_label}</small></span>
                 {typeof p.premium === "number" && (
                   <span className="ma-premium"><b>{amountOf(p.premium, hidden)}</b><small>{C.insurance.per[frequencyOf(p)]}</small></span>
                 )}
               </div>
-              {p.covers && p.covers.length > 0 && <ul className="ma-tags">{p.covers.map((c) => <li key={c}>{c}</li>)}</ul>}
+              {p.covers && p.covers.length > 0 && <p className="ma-covers">{p.covers.slice(0, 4).join(" · ")}{p.covers.length > 4 ? " …" : ""}</p>}
               {g.key === "insurance_general" && p.end && <p className="ma-ends">{C.insurance.ends(dateHe(p.end))}</p>}
             </article>
           ))}

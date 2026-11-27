@@ -13,10 +13,11 @@ import { amountOf, dateHe, monthHe, plainPct, Sheet, signedPct } from "../parts"
 
 const mono = (s: string) => s.trim().charAt(0) || "·";
 
-function feeLine(p: PortfolioProduct): string {
+/** one line under the balance: the year's return as reported, and the fee on the balance */
+function metaLine(p: PortfolioProduct): string {
   const parts: string[] = [];
-  if (typeof p.fee_balance_pct === "number") parts.push(C.savings.feeBalance(plainPct(p.fee_balance_pct)));
-  if (typeof p.fee_deposit_pct === "number") parts.push(C.savings.feeDeposit(plainPct(p.fee_deposit_pct)));
+  if (typeof p.ytd_return_pct === "number") parts.push(C.savings.ytd(signedPct(p.ytd_return_pct)));
+  if (typeof p.fee_balance_pct === "number") parts.push(C.savings.feeShort(plainPct(p.fee_balance_pct)));
   return parts.join(" · ");
 }
 
@@ -38,6 +39,7 @@ function ProductSheet({ p, asOf, onClose }: { p: PortfolioProduct; asOf: string 
           <h2 className="ma-h2">{p.type_label}</h2>
           <p className="ma-muted">{p.company_label}{p.policy_number_masked ? <> · <bdi>{p.policy_number_masked}</bdi></> : null}</p>
         </div>
+        <b className={p.active !== false ? "ma-pill is-ok" : "ma-pill"}>{p.active !== false ? C.savings.active : C.savings.inactive}</b>
       </div>
       {typeof p.balance === "number" && (
         <div className="ma-sheet-num">
@@ -68,6 +70,8 @@ export function Savings() {
   const asked = params.get("f") as CategoryKey | null;
   const filter: CategoryKey | "all" = asked && cats.some((c) => c.key === asked) ? asked : "all";
   const shown = filter === "all" ? all : all.filter((p) => p.cat === filter);
+  const live = shown.filter((p) => p.active !== false);
+  const off = shown.filter((p) => p.active === false);
   const total = all.reduce((n, p) => n + (typeof p.balance === "number" && p.balance > 0 ? p.balance : 0), 0);
   const asOf = portfolio.state === "ok" ? portfolio.data.as_of : null;
 
@@ -90,32 +94,37 @@ export function Savings() {
           ))}
         </div>
       )}
-      <ul className="ma-list">
-        {shown.map((p) => (
-          <li key={p.id}>
-            <button type="button" className="ma-prod" onClick={() => setOpen(p)}>
-              <span className="ma-prod-head">
-                <span className="ma-mono" aria-hidden="true">{mono(p.company_label)}</span>
-                <span className="ma-prod-title">
-                  <b>{p.type_label}</b>
-                  <small>{p.company_label}{p.policy_number_masked ? <> · <bdi>{p.policy_number_masked}</bdi></> : null}</small>
+      {live.length > 0 && (
+        <ul className="ma-list">
+          {live.map((p) => (
+            <li key={p.id}>
+              <button type="button" className="ma-prod" onClick={() => setOpen(p)}>
+                <span className="ma-prod-head">
+                  <span className="ma-mono" aria-hidden="true">{mono(p.company_label)}</span>
+                  <span className="ma-prod-title"><b>{p.type_label}</b><small>{p.company_label}</small></span>
+                  <b className="ma-prod-amt">{typeof p.balance === "number" ? amountOf(p.balance, hidden) : ""}</b>
                 </span>
-                <b className={p.active !== false ? "ma-pill is-ok" : "ma-pill"}>{p.active !== false ? C.savings.active : C.savings.inactive}</b>
-              </span>
-              <span className="ma-prod-num">
-                <b>{typeof p.balance === "number" ? amountOf(p.balance, hidden) : ""}</b>
-                {typeof p.ytd_return_pct === "number" && <small className={p.ytd_return_pct >= 0 ? "is-up" : "is-down"}><bdi>{C.savings.ytd(signedPct(p.ytd_return_pct))}</bdi></small>}
-              </span>
-              {(feeLine(p) || p.last_deposit) && (
-                <span className="ma-prod-foot">
-                  {feeLine(p) && <span>{feeLine(p)}</span>}
-                  {p.last_deposit && <span>{C.savings.lastDeposit(monthHe(p.last_deposit))}</span>}
-                </span>
-              )}
-            </button>
-          </li>
-        ))}
-      </ul>
+                {metaLine(p) && <span className={`ma-prod-meta${(p.ytd_return_pct ?? 0) < 0 ? " is-down" : ""}`}><bdi>{metaLine(p)}</bdi></span>}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      {off.length > 0 && (
+        <section className="ma-stack-s" aria-labelledby="ma-off-h">
+          <h3 id="ma-off-h" className="ma-group">{C.savings.inactiveTitle}</h3>
+          <ul className="ma-card ma-rows">
+            {off.map((p) => (
+              <li key={p.id}>
+                <button type="button" className="ma-row" onClick={() => setOpen(p)}>
+                  <span><b>{p.type_label}</b><small>{p.company_label}</small></span>
+                  <span className="ma-muted">{typeof p.balance === "number" && p.balance > 0 ? amountOf(p.balance, hidden) : C.savings.noBalance}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       {all.length > 0 && <p className="ma-disclaimer">{C.savings.disclaimer}</p>}
       {open && <ProductSheet p={open} asOf={asOf} onClose={() => setOpen(null)} />}
     </div>

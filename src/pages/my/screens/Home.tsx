@@ -56,28 +56,26 @@ export function Home() {
       )}
 
       {ov && ov.hasData && (
-        <div className="ma-pair">
-          <Link to={`${MY_ROUTE}/insurance`} className="ma-tile">
-            <span className="ma-tile-k">{C.home.paysTitle}</span>
-            <span className="ma-tile-n">{amountOf(ov.monthlyPremium, hidden)}</span>
-            <span className="ma-tile-k">{C.home.perMonth}{ov.yearlyPremium > 0 ? ` · ${C.home.plusYearly(amountOf(ov.yearlyPremium, hidden))}` : ""}</span>
-          </Link>
-          <Link to={`${MY_ROUTE}/savings`} className="ma-tile">
-            <span className="ma-tile-k">{C.home.savingsTile}</span>
-            <span className="ma-tile-n">{C.home.activeCount(ov.savingsActive)}</span>
-            <span className="ma-tile-k">{C.home.ofProducts(ov.savingsCount)}</span>
-          </Link>
-        </div>
-      )}
-
-      {ov && ov.hasData && (
-        <section className="ma-card" aria-labelledby="ma-prot-h">
-          <h3 id="ma-prot-h" className="ma-h2">{C.home.protectionsTitle}</h3>
-          <ul className="ma-prot">
-            {ov.protections.map((p) => (
-              <li key={p.key}><span>{C.protections[p.key]}</span><b className={p.exists ? "ma-pill is-ok" : "ma-pill"}>{p.exists ? C.home.exists : C.home.missing}</b></li>
-            ))}
-          </ul>
+        <section className="ma-card" aria-labelledby="ma-ins-h">
+          <div className="ma-card-head">
+            <h3 id="ma-ins-h" className="ma-h2">{C.insurance.title}</h3>
+            <Link to={`${MY_ROUTE}/insurance`} className="ma-more">{C.home.toInsurance}<BrandIcon name="arrow-left" size={15} /></Link>
+          </div>
+          {ov.policiesActive > 0 ? (
+            <p className="ma-big">{amountOf(ov.monthlyPremium, hidden)} <small>{C.home.perMonth}</small>
+              {ov.yearlyPremium > 0 && <small className="ma-big-sub">{C.home.plusYearly(amountOf(ov.yearlyPremium, hidden))}</small>}
+            </p>
+          ) : <p className="ma-muted">{C.insurance.empty}</p>}
+          <div className="ma-cov">
+            {ov.protections.some((p) => p.exists) && (
+              <div><p className="ma-cov-k">{C.home.haveTitle}</p>
+                <ul className="ma-tags is-ok" aria-label={C.home.haveTitle}>{ov.protections.filter((p) => p.exists).map((p) => <li key={p.key}>{C.protections[p.key]}</li>)}</ul></div>
+            )}
+            {ov.protections.some((p) => !p.exists) && (
+              <div><p className="ma-cov-k">{C.home.missingTitle}</p>
+                <ul className="ma-tags is-off" aria-label={C.home.missingTitle}>{ov.protections.filter((p) => !p.exists).map((p) => <li key={p.key}>{C.protections[p.key]}</li>)}</ul></div>
+            )}
+          </div>
           <p className="ma-fine">{C.home.protectionsNote}</p>
         </section>
       )}
