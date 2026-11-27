@@ -85,13 +85,16 @@ begin
   begin
     -- 20261128120000: a late run whose HTTP call timed out or failed is closed with that reason (the next tick runs again);
     -- past its budget, a function that was reached would have finished. Five such closures in an hour raise one warning.
-    update ops.job_runs j
-       set finished_at = now(), ok = false,
-           error = case when coalesce(r.timed_out, false) then 'http_timeout' else 'http_' || coalesce(r.status_code::text, 'error') end
-      from net._http_response r
-     where r.id = j.request_id and j.finished_at is null and j.id <> v_run
-       and j.started_at < now() - ops.job_budget(j.job)
-       and (coalesce(r.timed_out, false) or r.status_code is null or r.status_code >= 400);
+    -- read first, then update by id: an UPDATE ... FROM net._http_response fails (SQLSTATE 55000) on the pg_net table
+    for v_late in
+      select j.id, case when coalesce(r.timed_out, false) then 'http_timeout' else 'http_' || coalesce(r.status_code::text, 'error') end as reason
+        from ops.job_runs j join net._http_response r on r.id = j.request_id
+       where j.finished_at is null and j.id <> v_run
+         and j.started_at < now() - ops.job_budget(j.job)
+         and (coalesce(r.timed_out, false) or r.status_code is null or r.status_code >= 400)
+    loop
+      update ops.job_runs set finished_at = now(), ok = false, error = v_late.reason where id = v_late.id and finished_at is null;
+    end loop;
     if (select count(*) from ops.job_runs j
          where j.error = 'http_timeout' and j.started_at > now() - interval '3 hours' and j.finished_at > now() - interval '1 hour') >= 5 then
       perform ops.raise_alert('warning', 'cron_http_timeouts', '5+ cron calls closed as http_timeout in the last hour', 'cron_http_timeouts',
