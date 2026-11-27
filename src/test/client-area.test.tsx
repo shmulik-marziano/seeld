@@ -171,27 +171,32 @@ describe("client area on the mock", () => {
     await waitFor(() => expect(h2()).toBe("שלום, ישראל"));
     expect(api.hasSession()).toBe(true);
 
-    // home: the total, the split, what is paid, protections, notices; never an agent's name
-    expect(await screen.findByText("סך החיסכון שלכם")).toBeInTheDocument();
+    // the general picture: money saved and what is paid, protections with their source, the split, notices; never a name
+    expect(await screen.findByText("כסף שנצבר")).toBeInTheDocument();
     expect(screen.getByText("עודכן לאחרונה ב־01/11/2026")).toBeInTheDocument();
-    const total = screen.getByText((_, el) => el?.classList.contains("ma-hero-num") ?? false);
+    const [total, paid] = screen.getAllByText((_, el) => el?.classList.contains("ma-hero-num") ?? false);
     expect(total.textContent).toMatch(/523,950/);
+    expect(paid.textContent).toMatch(/306.*לחודש/);
     fireEvent.click(screen.getByRole("button", { name: "הסתרת הסכומים" }));
     expect(total.textContent).toBe("₪ ••••");
     fireEvent.click(screen.getByRole("button", { name: "הצגת הסכומים" }));
-    const have = within(screen.getByRole("list", { name: "יש לכם" }));
-    const missing = within(screen.getByRole("list", { name: "לא מופיע אצלנו" }));
-    expect(have.getByText("בריאות")).toBeInTheDocument();
-    expect(have.getByText("ביטוח דירה")).toBeInTheDocument();
-    expect(missing.getByText("סיעוד")).toBeInTheDocument();
-    expect(missing.queryByText("בריאות")).toBeNull();
+    const prot = within(screen.getByRole("list", { name: "ההגנות שלכם" }));
+    const row = (name: string) => prot.getByText(name).closest("li")?.textContent ?? "";
+    expect(row("בריאות")).toMatch(/ביטוח בריאות · כלל ביטוח/);
+    expect(row("ביטוח דירה")).toMatch(/הפניקס/);
+    // the pension fund carries disability and survivors cover: never listed as missing
+    expect(row("אובדן כושר עבודה")).toMatch(/קרן פנסיה חדשה מקיפה · מנורה מבטחים/);
+    expect(row("ביטוח למקרה מוות")).toMatch(/ביטוח חיים · הראל ועוד 1/);
+    expect(row("סיעוד")).toMatch(/לא מופיע אצלנו/);
+    expect(row("בריאות")).not.toMatch(/לא מופיע אצלנו/);
+    expect(screen.getByRole("heading", { name: "איך הכסף מתחלק" })).toBeInTheDocument();
     expect(screen.getByText(/^ביטוח דירה מסתיים ב־\d{2}\/\d{2}\/\d{4}$/)).toBeInTheDocument();
     expect(screen.getByText("קופות לא פעילות בלי יתרה: 1")).toBeInTheDocument();
     expect(document.body.textContent).not.toMatch(/שמוליק|משה|המלצה/);
 
     // savings: cards, the year's return, the product sheet
-    fireEvent.click(tab("חסכונות"));
-    await waitFor(() => expect(h2()).toBe("החסכונות שלכם"));
+    fireEvent.click(tab("כסף"));
+    await waitFor(() => expect(h2()).toBe("הכסף שלכם"));
     expect(screen.getByText("+7.9% מתחילת השנה · דמי ניהול 0.22%")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "לא פעילות" })).toBeInTheDocument();
     expect(screen.getByText("בלי יתרה")).toBeInTheDocument();
@@ -199,6 +204,7 @@ describe("client area on the mock", () => {
     const sheet = within(await screen.findByRole("dialog", { name: "פרטי המוצר" }));
     expect(sheet.getByText("מסלול השקעה")).toBeInTheDocument();
     expect(sheet.getByText("המסלקה הפנסיונית")).toBeInTheDocument();
+    expect(sheet.getByRole("link", { name: /כולל כיסוי ביטוחי/ })).toHaveAttribute("href", "/my/insurance");
     fireEvent.click(sheet.getByRole("button", { name: "סגירה" }));
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     fireEvent.click(screen.getByRole("button", { name: /^גמל/ }));
@@ -214,6 +220,12 @@ describe("client area on the mock", () => {
     expect(home.getByText("מבנה").closest("li")?.textContent).toMatch(/סכום ביטוח .*1,800,000.*890.*לשנה/);
     expect(screen.getByText("פוליסות פעילות: 3")).toBeInTheDocument();
     expect(screen.getByText(/^תקופת הביטוח מסתיימת ב־\d{2}\/\d{2}\/\d{4}$/)).toBeInTheDocument();
+    // the insurance inside the pension fund, as the fund reports it; no cost on these lines
+    expect(screen.getByRole("heading", { name: "ביטוח בתוך החיסכון הפנסיוני" })).toBeInTheDocument();
+    const fund = within(screen.getByRole("list", { name: "מה כלול ובכמה: קרן פנסיה חדשה מקיפה" }));
+    expect(fund.getByText("אובדן כושר עבודה").closest("li")?.textContent).toMatch(/קצבה חודשית של .*9,200.* · 75% מהשכר המבוטח/);
+    expect(fund.getByText("קצבת שארים לבן או לבת הזוג").closest("li")?.textContent).toMatch(/60% מהשכר המבוטח/);
+    expect(fund.getByText("קצבת שארים ליתומים").closest("li")?.textContent).toMatch(/40% מהשכר המבוטח/);
 
     // a request: the topic is required; after sending it shows in the list as received
     fireEvent.click(screen.getByRole("button", { name: "שאלה על הביטוחים" }));
@@ -221,7 +233,7 @@ describe("client area on the mock", () => {
     fireEvent.click(req.getByRole("button", { name: "ביטוח" }));
     expect(req.getByRole("button", { name: "ביטוח" })).toHaveAttribute("aria-pressed", "true");
     fireEvent.click(req.getByRole("button", { name: "סגירה" }));
-    fireEvent.click(tab("בית"));
+    fireEvent.click(tab("תמונה כללית"));
     await waitFor(() => expect(h2()).toBe("שלום, ישראל"));
     const asks = screen.getAllByRole("button", { name: "פנייה לסוכן" });
     expect(asks.length).toBe(2); // the home-policy notice and the question card
@@ -255,7 +267,7 @@ describe("client area on the mock", () => {
   it("flag on: an old /my/portfolio link lands on savings; a failing adapter shows the error screen", async () => {
     flag.on = true;
     const first = await renderArea({ store: signedIn() }, "/my/portfolio");
-    await waitFor(() => expect(h2()).toBe("החסכונות שלכם"));
+    await waitFor(() => expect(h2()).toBe("הכסף שלכם"));
     first.unmount();
     await renderArea({ fail: { code: "inactive" } });
     fireEvent.change(screen.getByLabelText("מספר תעודת זהות"), { target: { value: "123456782" } });
@@ -268,7 +280,7 @@ describe("client area on the mock", () => {
     flag.on = true;
     await renderArea({ store: signedIn(), requestsEnabled: false }, "/my/home");
     await waitFor(() => expect(h2()).toBe("שלום, ישראל"));
-    await screen.findByText("סך החיסכון שלכם");
+    await screen.findByText("כסף שנצבר");
     await new Promise((r) => setTimeout(r, 10));
     expect(screen.queryByRole("link", { name: /פניות/ })).toBeNull();
     expect(screen.queryByRole("button", { name: "פנייה לסוכן" })).toBeNull();
@@ -322,7 +334,7 @@ describe("overview (pure)", () => {
     const { buildOverview } = await import("@/lib/client-area/overview");
     const today = new Date(2026, 10, 27);
     const ov = buildOverview([
-      { key: "pension", label: "", products: [{ id: "a", type_code: 1, type_label: "x", company_label: "c", policy_number_masked: "****1", source: "maslaka", active: true, balance: 1000 }] },
+      { key: "pension", label: "", products: [{ id: "a", type_code: 1, type_label: "x", company_label: "c", policy_number_masked: "****1", source: "maslaka", active: true, balance: 1000, protects_unclear: ["disability", "life"] }] },
       { key: "gemel", label: "", products: [{ id: "b", type_code: 3, type_label: "x", company_label: "c", policy_number_masked: "****2", source: "maslaka", active: false, balance: 0 }] },
       { key: "insurance_life", label: "", products: [{ id: "m", type_code: 14, type_label: "x", company_label: "c", policy_number_masked: "****3", source: "production", active: true, premium: 50, premium_frequency: "חודשית" }] },
       { key: "insurance_general", label: "", products: [
@@ -337,7 +349,11 @@ describe("overview (pure)", () => {
     expect(ov.yearlyPremium).toBe(1200);
     expect(ov.policiesActive).toBe(3);
     expect(ov.policiesInactive).toBe(1);
-    expect(ov.protections.find((p) => p.key === "life")?.exists).toBe(false); // mortgage life is not life cover
+    // an active pension fund without its insurance figures: disability and death cover are not claimed missing
+    expect(ov.protections.map((p) => p.key)).not.toContain("disability");
+    expect(ov.protections.map((p) => p.key)).not.toContain("life");
+    expect(ov.embedded.map((p) => p.id)).toEqual(["a"]);
+    expect(ov.protections.find((p) => p.key === "home")?.from.map((p) => p.id)).toEqual(["d"]);
     expect(ov.protections.map((p) => p.key)).toContain("car");
     expect(ov.notices.map((n) => n.kind)).toEqual(["ending", "inactive_empty"]);
     expect(ov.notices[0].kind === "ending" && ov.notices[0].days).toBe(23);

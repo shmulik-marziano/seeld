@@ -72,7 +72,7 @@ answers exactly like a hit, no "unknown customer".
 | `POST /login/start` | `{national_id, phone, turnstile_token?}` | `{challenge_id, phone_tail, expires_in_sec}` |
 | `POST /login/verify` | `{challenge_id, code}` | `{token, expires_at, client: {first_name, last_name}}`; 400 `wrong_code` (+`tries_left`), `max_tries`, `expired` |
 | `GET /me` | Bearer | `{client: {first_name, last_name, agency_name}, data_as_of, summary: {products, categories: [{key, label, count}]}, session: {expires_at}}` |
-| `GET /portfolio` | Bearer | `{as_of, categories: [{key, label, products: [{id, type_code, type_label, company_label, policy_number_masked, source, status, active, plan?, balance?, premium?, premium_frequency?, coverage?, start?, end?, track?, ytd_return_pct?, fee_balance_pct?, fee_deposit_pct?, last_deposit?, covers?, protects?}]}]}` |
+| `GET /portfolio` | Bearer | `{as_of, categories: [{key, label, products: [{id, type_code, type_label, company_label, policy_number_masked, source, status, active, plan?, balance?, premium?, premium_frequency?, coverage?, start?, end?, track?, ytd_return_pct?, fee_balance_pct?, fee_deposit_pct?, last_deposit?, covers?, cover_lines?, protects?, protects_unclear?, pension_cover?}]}]}` |
 | `GET /documents` | Bearer | `{documents: [{id, title, kind, created_at, size_bytes, downloadable}]}` |
 | `GET /documents/:id` | Bearer | `{url, expires_in_sec}`: a signed Storage link (5 minutes) for one POA file of this client |
 | `GET /harb` | Bearer | `{enabled, last_upload: {created_at, processed} \| null}` |
@@ -94,7 +94,14 @@ Product fields added 2026-11-27 (shaped in `portfolio.ts`): `status` is the Sure
 left out when implausible (|return| > 50%, balance fee > 5%, deposit fee > 10%); `last_deposit` = the latest
 `lastDeposit.hafkadot[].month`; `covers` = names of the live covers (`coverTypeDescription`, not expired);
 `protects` = the home-screen protection tiles a LIVE product proves (by product type and cover type; a mortgage life
-policy never counts as life cover). The home screen is computed in the browser from this answer
+policy never counts as life cover). `pension_cover` (pension funds 1/2/19 only) = `{disability_monthly?, disability_pct?,
+partner_pct?, orphan_pct?}` from `disabilityAllowance` (shekels a month) and `pensionDisabilityCoverage` / `partnerCoverage` /
+`orphanCoverage` (fractions of the insured salary, live 0.75 / 0.6 / 0.4; outside 0.05..1 left out); the insured salary never
+comes out. An active fund lights `disability` / `life` from those figures; when they did not arrive it returns
+`protects_unclear` instead and the home screen shows neither tile (owner 2026-11-27: never tell an active pension member they
+have no disability cover). A managers' policy (type 8) is in the `pension` category (its balance is money, its deposits are
+not a premium); its `cover_lines` leave out coverType 37 (the savings part) and `shumBituahLeMikreMavet` > 0 lights `life`.
+The home screen is computed in the browser from this answer
 (`src/lib/client-area/overview.ts`): sums of reported balances and premiums only.
 
 ## Requests (migration `20261127090000_client_area_dashboard`)

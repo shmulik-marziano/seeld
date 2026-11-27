@@ -11,6 +11,7 @@ Deno.test("portfolio: every Surense type 1..46 has a label and a category; unkno
     assert.ok(CATEGORY_ORDER.includes(categoryOf(t)));
   }
   assert.equal(categoryOf(1), "pension");
+  assert.equal(categoryOf(8), "pension", "a managers' policy is savings first");
   assert.equal(categoryOf(7), "hishtalmut");
   assert.equal(categoryOf(12), "insurance_health");
   assert.equal(categoryOf(29), "insurance_general");
@@ -40,7 +41,7 @@ Deno.test("portfolio: a product is shaped with labels and figures; nothing perso
   assert.deepEqual(p, {
     id: P1, type_code: 1, type_label: "קרן פנסיה חדשה מקיפה", company_label: "הראל", policy_number_masked: "****6789", source: "maslaka",
     status: "פעיל", active: true, plan: "Zz-Plan", balance: 123456.57, premium: 1200.5, premium_frequency: "חודשית", coverage: 500000,
-    start: "2015-03-01", end: "2040-01-01", track: "Zz-Track",
+    start: "2015-03-01", end: "2040-01-01", track: "Zz-Track", protects_unclear: ["disability", "life"],
   });
   assert.ok(!JSON.stringify(p).includes("Zz Person") && !JSON.stringify(p).includes("000000018") && !JSON.stringify(p).includes("123456789"));
 });
@@ -143,4 +144,40 @@ Deno.test("portfolio: one cost line per live cover type, summed over the insured
     { name: "בסיס הפוליסה", premium: 12, premium_frequency: "חודשית" },
   ]);
   assert.ok(!JSON.stringify(s).includes("Zz One") && !JSON.stringify(s).includes("Zz Two"), "no insured name");
+});
+
+Deno.test("portfolio: an active pension fund shows the insurance it reports and is never short of disability or survivors cover", () => {
+  const fund = shapeProduct({ id: P1, source: null, company_id: null, product_type: 1, modified_at: null, details: {
+    status: { code: 1 }, disabilityAllowance: 8994.89, pensionDisabilityAllowance: 8994.89, pensionDisabilityCoverage: 0.75,
+    partnerCoverage: 0.6, orphanCoverage: 0.4, insuredSalary: 11993, disabilityCost: 99.97,
+  } });
+  assert.deepEqual(fund.pension_cover, { disability_monthly: 8995, disability_pct: 75, partner_pct: 60, orphan_pct: 40 });
+  assert.deepEqual(fund.protects, ["life", "disability"]);
+  assert.equal(fund.protects_unclear, undefined);
+  assert.ok(!JSON.stringify(fund).includes("11993"), "the insured salary does not come out");
+  // the figures did not arrive (or a share is a unit error): nothing is claimed either way
+  const bare = shapeProduct({ id: P2, source: null, company_id: null, product_type: 19, modified_at: null, details: {
+    status: { code: 4 }, pensionDisabilityCoverage: 0.0075, partnerCoverage: 0,
+  } });
+  assert.equal(bare.pension_cover, undefined);
+  assert.equal(bare.protects, undefined);
+  assert.deepEqual(bare.protects_unclear, ["disability", "life"]);
+  const closed = shapeProduct({ id: P2, source: null, company_id: null, product_type: 1, modified_at: null, details: { status: { code: 2 }, partnerCoverage: 0.6 } });
+  assert.equal(closed.protects, undefined);
+  assert.equal(closed.protects_unclear, undefined);
+});
+
+Deno.test("portfolio: a managers' policy lists its covers without the savings part; its death sum lights the life tile", () => {
+  const monthly = { code: 1, description: "חודשית" };
+  const m = shapeProduct({ id: P1, source: null, company_id: null, product_type: 8, modified_at: null, details: {
+    status: { code: 1 }, totalHonAccumulation: 180000, totalMonthlyPremia: 2400, shumBituahLeMikreMavet: 300000,
+    covers: [
+      { coverType: 37, coverTypeDescription: "תוכנית משולבת חיסכון", premia: 2100, premiaFrequency: monthly, insuranceAmount: 180000 },
+      { coverType: 35, coverTypeDescription: "אבדן כושר עבודה", premia: 210, premiaFrequency: monthly, insuranceAmount: 9000 },
+    ],
+  } });
+  assert.deepEqual(m.cover_lines, [{ name: "אבדן כושר עבודה", premium: 210, premium_frequency: "חודשית", amount: 9000 }]);
+  assert.deepEqual(m.protects, ["life", "disability"]);
+  assert.equal(m.pension_cover, undefined);
+  assert.deepEqual(shapePortfolio([{ id: P1, source: null, company_id: null, product_type: 8, modified_at: null, details: {} }]).map((c) => c.key), ["pension"]);
 });

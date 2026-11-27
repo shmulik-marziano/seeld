@@ -63,7 +63,12 @@ export interface PortfolioProduct {
   /** one line per live cover type: its premium and, when shared, its sum insured */
   cover_lines?: CoverLine[];
   protects?: ProtectionKey[];
+  /** an active pension fund whose insurance figures did not arrive: neither shown as existing nor as missing */
+  protects_unclear?: ProtectionKey[];
+  /** the insurance inside a pension fund as the fund reports it; percents of the insured salary */
+  pension_cover?: PensionCover;
 }
+export interface PensionCover { disability_monthly?: number; disability_pct?: number; partner_pct?: number; orphan_pct?: number }
 export interface CoverLine { name: string; premium?: number; premium_frequency?: string; amount?: number }
 export const PROTECTION_KEYS = ["health", "nursing", "life", "disability", "accidents", "critical", "home", "car"] as const;
 export type ProtectionKey = (typeof PROTECTION_KEYS)[number];
@@ -133,7 +138,8 @@ function mockProducts(now: Date): PortfolioCategory[] {
   const ends = new Date(now.getTime() + 24 * 24 * 3600 * 1000).toISOString().slice(0, 10);
   return [
     { key: "pension", label: "פנסיה", products: [
-      { id: "p1", type_code: 1, type_label: "קרן פנסיה חדשה מקיפה", company_label: "מנורה מבטחים", policy_number_masked: "****4471", source: "maslaka", status: "פעיל", active: true, balance: 412350, track: "מסלול לבני 50 ומטה", ytd_return_pct: 7.9, fee_balance_pct: 0.22, fee_deposit_pct: 1.5, last_deposit: "2026-10" },
+      { id: "p1", type_code: 1, type_label: "קרן פנסיה חדשה מקיפה", company_label: "מנורה מבטחים", policy_number_masked: "****4471", source: "maslaka", status: "פעיל", active: true, balance: 412350, track: "מסלול לבני 50 ומטה", ytd_return_pct: 7.9, fee_balance_pct: 0.22, fee_deposit_pct: 1.5, last_deposit: "2026-10",
+        pension_cover: { disability_monthly: 9200, disability_pct: 75, partner_pct: 60, orphan_pct: 40 }, protects: ["life", "disability"] },
     ] },
     { key: "gemel", label: "קופות גמל", products: [
       { id: "g1", type_code: 4, type_label: "קופת גמל להשקעה", company_label: "מיטב", policy_number_masked: "****1180", source: "maslaka", status: "פעיל", active: true, balance: 25400, ytd_return_pct: 5.2, fee_balance_pct: 0.6, last_deposit: "2026-06" },

@@ -2,8 +2,10 @@
 // the year's return as the fund reported it, fees, last deposit) and a sheet with the facts and one action: a question about
 // this product to the agent. The data is the shell's GET /portfolio.
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { BrandIcon } from "@/components/brand/BrandIcon";
 import { CaError, CaLoading } from "@/components/sd/client";
+import { MY_ROUTE } from "@/lib/client-area/config";
 import { MY_COPY as C } from "@/lib/client-area/copy";
 import type { CategoryKey } from "@/lib/client-area/config";
 import type { PortfolioProduct } from "@/lib/client-area/api";
@@ -51,6 +53,9 @@ function ProductSheet({ p, asOf, onClose }: { p: PortfolioProduct; asOf: string 
         <dl className="ma-facts">
           {facts.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
         </dl>
+      )}
+      {(p.pension_cover || (p.cover_lines?.length ?? 0) > 0) && (
+        <Link to={`${MY_ROUTE}/insurance`} className="ma-more">{C.product.inInsurance}<BrandIcon name="arrow-left" size={15} /></Link>
       )}
       {requestsEnabled && <button type="button" className="ma-btn is-wide" onClick={() => { onClose(); openRequest("savings"); }}>{C.product.ask}</button>}
     </Sheet>
