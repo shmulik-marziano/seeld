@@ -32,10 +32,12 @@ export const TYPE_LABEL: Record<number, string> = {
 };
 
 const CATEGORY_OF: Record<number, CategoryKey> = {
-  1: "pension", 2: "pension", 19: "pension",
+  // a managers' policy (8) is pension savings first: its balance is money, its deposits are not an insurance premium; its
+  // insurance covers are shown with the pension funds' cover (Insurance tab, "ביטוח בתוך החיסכון")
+  1: "pension", 2: "pension", 19: "pension", 8: "pension",
   3: "gemel", 4: "gemel", 5: "gemel", 40: "gemel", 43: "gemel", 46: "gemel",
   7: "hishtalmut",
-  8: "insurance_life", 13: "insurance_life", 14: "insurance_life", 15: "insurance_life", 17: "insurance_life", 22: "insurance_life",
+  13: "insurance_life", 14: "insurance_life", 15: "insurance_life", 17: "insurance_life", 22: "insurance_life",
   33: "insurance_life", 35: "insurance_life", 36: "insurance_life", 39: "insurance_life",
   11: "insurance_health", 12: "insurance_health", 16: "insurance_health", 21: "insurance_health", 23: "insurance_health", 27: "insurance_health",
   32: "insurance_health", 34: "insurance_health", 38: "insurance_health",
@@ -109,17 +111,29 @@ export interface ShapedProduct {
   cover_lines?: CoverLine[];
   /** which protection tiles this live product proves (see PROTECTION_KEYS) */
   protects?: ProtectionKey[];
+  /** tiles this live product usually carries but whose figures were not reported (an active pension fund without its
+   *  insurance fields): never shown as missing, never shown as existing */
+  protects_unclear?: ProtectionKey[];
+  /** the insurance inside a pension fund, as the fund reports it (live 2026-11-27: disabilityAllowance in shekels a month,
+   *  pensionDisabilityCoverage / partnerCoverage / orphanCoverage as fractions of the insured salary, 0.75 / 0.6 / 0.4) */
+  pension_cover?: PensionCover;
 }
+
+export interface PensionCover { disability_monthly?: number; disability_pct?: number; partner_pct?: number; orphan_pct?: number }
 
 export interface CoverLine { name: string; premium?: number; premium_frequency?: string; amount?: number }
 /** the generic cover rows carry the policy's own price: shown under a plain name, not dropped */
 const COVER_NAME: Record<string, string> = { "פוליסה": "בסיס הפוליסה", "אחר": "כיסויים נוספים" };
 const MAX_COVER_LINES = 8;
 
-/** live covers grouped by type, in their first-seen order */
+/** coverType 37 "תוכנית משולבת חיסכון" is the savings part of a managers' policy, not a cover */
+const SAVINGS_COVER = 37;
+
+/** live covers grouped by type, in their first-seen order (the savings part of a managers' policy left out) */
 export function coverLines(liveCovers: Record<string, unknown>[]): CoverLine[] {
   const groups = new Map<string, Record<string, unknown>[]>();
   for (const c of liveCovers) {
+    if (Number(c.coverType) === SAVINGS_COVER) continue;
     const raw = text(c.coverTypeDescription, 40);
     if (!raw) continue;
     const name = COVER_NAME[raw] ?? raw;
@@ -160,6 +174,24 @@ const PROTECT_BY_COVER: Record<number, ProtectionKey> = {
 };
 /** a mortgage life policy covers the bank, not the family: it never lights the life tile */
 const MORTGAGE_LIFE = 14;
+/** pension funds: the insurance is part of the fund (disability and survivors) */
+const PENSION_FUND = new Set([1, 2, 19]);
+/** a share of the insured salary outside this range is a unit error in the source and is left out */
+const share = (v: unknown): number | undefined =>
+  typeof v === "number" && Number.isFinite(v) && v >= 0.05 && v <= 1 ? Math.round(v * 1000) / 10 : undefined;
+
+export function pensionCover(d: Record<string, unknown>): PensionCover | undefined {
+  const out: PensionCover = {};
+  const monthly = [d.disabilityAllowance, d.pensionDisabilityAllowance].find((v) => typeof v === "number" && Number.isFinite(v) && v > 0);
+  if (typeof monthly === "number") out.disability_monthly = Math.round(monthly);
+  const dis = share(d.pensionDisabilityCoverage);
+  if (dis !== undefined) out.disability_pct = dis;
+  const partner = share(d.partnerCoverage);
+  if (partner !== undefined) out.partner_pct = partner;
+  const orphan = share(d.orphanCoverage);
+  if (orphan !== undefined) out.orphan_pct = orphan;
+  return Object.keys(out).length ? out : undefined;
+}
 const ACTIVE_CODES = new Set([1, 4, 7, 8]);
 const ACTIVE_NAMES = new Set(["פעיל", "ריסק זמני", "ריסק זמני אוטומטי", "שמירת כיסוי ביטוחי"]);
 const GENERIC_COVERS = new Set(["פוליסה", "אחר"]);
@@ -248,10 +280,12 @@ export function shapeProduct(p: MirrorProduct): ShapedProduct {
   const months = deposits.map((h) => obj(h).month).filter((m): m is string => typeof m === "string" && MONTH.test(m))
     .map((m) => MONTH.exec(m)!.slice(1, 3).join("-")).sort();
   if (months.length) out.last_deposit = months[months.length - 1];
-  const names = [...new Set(liveCovers.map((c) => text(c.coverTypeDescription, 40)).filter((x): x is string => !!x && !GENERIC_COVERS.has(x)))];
+  const names = [...new Set(liveCovers.filter((c) => Number(c.coverType) !== SAVINGS_COVER).map((c) => text(c.coverTypeDescription, 40)).filter((x): x is string => !!x && !GENERIC_COVERS.has(x)))];
   if (names.length) out.covers = names.slice(0, 8);
   const lines = coverLines(liveCovers);
   if (lines.length) out.cover_lines = lines;
+  const pc = type !== null && PENSION_FUND.has(type) ? pensionCover(d) : undefined;
+  if (pc) out.pension_cover = pc;
   if (out.active) {
     const prot = new Set<ProtectionKey>();
     if (type !== null && PROTECT_BY_TYPE[type]) prot.add(PROTECT_BY_TYPE[type]);
@@ -261,6 +295,16 @@ export function shapeProduct(p: MirrorProduct): ShapedProduct {
         const k = PROTECT_BY_COVER[Number(c.coverType)];
         if (k) prot.add(k);
       }
+      // managers' and savings policies report the death cover as a top-level sum
+      if (type !== null && !PENSION_FUND.has(type) && (num(d.shumBituahLeMikreMavet) ?? 0) > 0) prot.add("life");
+    }
+    if (type !== null && PENSION_FUND.has(type)) {
+      // owner 2026-11-27: an active pension fund carries disability and survivors cover; it is shown when the fund reports
+      // it and is never listed as missing when the figures did not arrive
+      if (pc?.disability_monthly || pc?.disability_pct) prot.add("disability");
+      if (pc?.partner_pct || pc?.orphan_pct) prot.add("life");
+      const unclear = (["disability", "life"] as ProtectionKey[]).filter((k) => !prot.has(k));
+      if (unclear.length) out.protects_unclear = unclear;
     }
     if (prot.size) out.protects = PROTECTION_KEYS.filter((k) => prot.has(k));
   }

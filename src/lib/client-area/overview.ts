@@ -1,4 +1,4 @@
-// The home screen of the client area, computed from the portfolio the server already shapes (GET /portfolio). Pure: the
+// The general picture of the client area, computed from the portfolio the server already shapes (GET /portfolio). Pure: the
 // same input gives the same picture. Only figures the data states are shown: sums of reported balances and premiums, the
 // protections a live product proves, and at most three plain notices. No forecast, no profit, no advice.
 import type { CategoryKey } from "./config";
@@ -20,6 +20,8 @@ export function frequencyOf(p: Pick<PortfolioProduct, "premium_frequency">): Fre
 }
 
 export interface SplitPart { key: CategoryKey; amount: number; pct: number }
+/** a protection tile; `from` = the live products that prove it, dedicated policies first */
+export interface Protection { key: ProtectionKey; exists: boolean; from: PortfolioProduct[] }
 export type Notice =
   | { kind: "ending"; product: PortfolioProduct; days: number }
   | { kind: "inactive_empty"; count: number };
@@ -33,7 +35,9 @@ export interface Overview {
   yearlyPremium: number;
   policiesActive: number;
   policiesInactive: number;
-  protections: { key: ProtectionKey; exists: boolean }[];
+  protections: Protection[];
+  /** live savings products that carry insurance (a pension fund's disability and survivors cover, a managers' policy) */
+  embedded: PortfolioProduct[];
   notices: Notice[];
 }
 
@@ -59,10 +63,15 @@ export function buildOverview(categories: PortfolioCategory[], today: Date): Ove
   const liveInsurance = insurance.filter(isActive);
   const premium = (f: Frequency) => liveInsurance.filter((p) => frequencyOf(p) === f && typeof p.premium === "number" && p.premium > 0)
     .reduce((n, p) => n + (p.premium as number), 0);
-  const proven = new Set<ProtectionKey>(categories.flatMap((c) => c.products).filter(isActive).flatMap((p) => p.protects ?? []));
+  const live = [...insurance, ...categories.filter((c) => !INSURANCE_KEYS.includes(c.key)).flatMap((c) => c.products)].filter(isActive);
+  const from = new Map<ProtectionKey, PortfolioProduct[]>();
+  for (const p of live) for (const k of p.protects ?? []) from.set(k, [...(from.get(k) ?? []), p]);
+  // owner 2026-11-27: an active pension fund is never shown as short of the cover it usually carries
+  const unclear = new Set<ProtectionKey>(live.flatMap((p) => p.protects_unclear ?? []));
   const protections = PROTECTION_KEYS
-    .filter((k) => CORE_PROTECTIONS.includes(k) || proven.has(k))
-    .map((key) => ({ key, exists: proven.has(key) }));
+    .filter((k) => from.has(k) || (CORE_PROTECTIONS.includes(k) && !unclear.has(k)))
+    .map((key) => ({ key, exists: from.has(key), from: from.get(key) ?? [] }));
+  const embedded = savings.filter((p) => isActive(p) && (!!p.pension_cover || (p.cover_lines?.length ?? 0) > 0 || (p.protects_unclear?.length ?? 0) > 0));
 
   const notices: Notice[] = [];
   for (const p of byKey(categories, ["insurance_general"]).filter(isActive)) {
@@ -85,6 +94,7 @@ export function buildOverview(categories: PortfolioCategory[], today: Date): Ove
     policiesActive: liveInsurance.length,
     policiesInactive: insurance.length - liveInsurance.length,
     protections,
+    embedded,
     notices: notices.slice(0, 3),
   };
 }

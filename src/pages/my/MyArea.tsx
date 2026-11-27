@@ -65,8 +65,8 @@ type Phase = { kind: "checking" } | { kind: "out" } | { kind: "in"; me: MeRes } 
 
 const TABS: { to: string; label: string; icon: BrandIconName; requests?: boolean }[] = [
   { to: "home", label: C.common.nav.home, icon: "home" },
-  { to: "savings", label: C.common.nav.savings, icon: "chart" },
   { to: "insurance", label: C.common.nav.insurance, icon: "shield" },
+  { to: "savings", label: C.common.nav.savings, icon: "chart" },
   { to: "requests", label: C.common.nav.requests, icon: "message", requests: true },
   { to: "documents", label: C.common.nav.documents, icon: "document" },
 ];
