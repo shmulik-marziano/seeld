@@ -50,6 +50,16 @@ insert into net._http_response (id, status_code, timed_out, created) values (991
 insert into ops.job_runs (job, started_at, request_id) values ('sms-health', now() - interval '50 minutes', 991004),
                                                               ('sms-health', now() - interval '45 minutes', 991005);
 
+-- diagnostics: each piece of the jobs step on its own (an error prints its message)
+select lives_ok($$ select ops.job_budget('x') $$, 'diag: job_budget');
+select lives_ok($$ select count(*) from ops.job_runs j join net._http_response r on r.id = j.request_id
+                    where j.finished_at is null and j.started_at < now() - ops.job_budget(j.job) $$, 'diag: join');
+select lives_ok($$ select count(*) from ops.job_runs j where j.error = 'http_timeout' and j.started_at > now() - interval '3 hours' $$, 'diag: count');
+select lives_ok($$ do $d$ declare v record; begin
+  for v in select j.job, count(*)::int as n from ops.job_runs j where j.finished_at is null and j.started_at < now() - ops.job_budget(j.job) group by j.job loop
+    perform ops.raise_alert('warning', 'zz_diag', v.job || ': ' || v.n, 'zz_diag:' || v.job, interval '24 hours');
+  end loop; end $d$ $$, 'diag: loop');
+delete from ops.alerts where kind = 'zz_diag';
 select is((ops.watchdog()) -> 'failed_steps', '[]'::jsonb, 'no watchdog step fails');
 select diag(coalesce((select string_agg(summary, ' | ') from ops.alerts where kind = 'watchdog_step_failed'), 'no step failure'));
 select is((select error from ops.job_runs where id = current_setting('t.timeout_run')::bigint), 'http_timeout', 'late timed-out run closed as http_timeout');
