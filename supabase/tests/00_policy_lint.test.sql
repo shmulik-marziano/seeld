@@ -43,8 +43,8 @@ select set_eq(
             ('client_area_config'), ('client_login_start'), ('client_login_challenge_use'), ('client_login_verify'), ('client_session_get'),
             ('client_portfolio_get'), ('client_documents_list'), ('client_document_get'), ('client_logout'),
             ('client_harb_status'), ('client_harb_add'), ('client_harb_stored'), ('harb_import_get'), ('harb_import_set'),
-            ('client_request_create'), ('client_requests_list') $$,
-  'service-only RPCs in api (70)');
+            ('client_request_create'), ('client_requests_list'), ('sms_report') $$,
+  'service-only RPCs in api (71)');
 
 -- the documented advisor exceptions (lints 0028/0029): exactly these SECURITY DEFINER functions are callable by API roles
 select set_eq(
@@ -67,8 +67,8 @@ select set_eq(
 select is_empty($$ select jobname from cron.job where command ~* 'http|secret|bearer|apikey' $$, 'cron commands carry no URL or secret');
 select set_eq($$ select jobname from cron.job $$,
   $$ values ('ops-cleanup'), ('cma-freshness-monthly'), ('notify-worker-tick'), ('cma-sync-weekly'), ('ops-watchdog'), ('surense-worker-tick'),
-            ('surense-portfolio-sweep'), ('surense-customers-weekly'), ('client-area-cleanup') $$,
-  'exactly nine cron jobs');
+            ('surense-portfolio-sweep'), ('surense-customers-weekly'), ('client-area-cleanup'), ('sms-health-hourly') $$,
+  'exactly ten cron jobs');
 
 select is_empty($$ select schemaname || '.' || tablename || ':' || policyname from pg_policies
                     where schemaname in ('crm', 'core') and 'anon' = any (roles) and qual is distinct from 'false' $$,

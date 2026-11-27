@@ -3,6 +3,7 @@
 // '{"customer_id":"<uuid>","month":"2026-10"}')` then net._http_response. x-cron-secret is the auth (verify_jwt=false).
 // Returns statuses, shapes (keys, counts), the Surense error message bounded and with digit runs masked. No personal
 // values: product rows are reduced to counts and key lists. Never the token.
+import { jobRunId } from "../_shared/background.ts";
 import { createRpc } from "../_shared/db.ts";
 import { denoEnv, envPresence } from "../_shared/env.ts";
 import { errorResponse, jsonResponse } from "../_shared/errors.ts";
@@ -42,8 +43,11 @@ async function call(token: string, path: string, body?: unknown) {
 
 Deno.serve(async (req) => {
   const rid = requestIdFor(req);
+  let authed = false;
+  let ok = false;
   try {
     await requireCronSecret(req, env.cronSecret, rpc ? cronSecretViaRpc(rpc) : undefined);
+    authed = true;
     if (!tokens) return jsonResponse({ ok: false, code: "surense_not_configured" }, rid, { status: 503 });
     const body = (await req.json().catch(() => ({}))) as { customer_id?: unknown; month?: unknown };
     const id = typeof body.customer_id === "string" && isUuid(body.customer_id) ? body.customer_id.toLowerCase() : null;
@@ -84,9 +88,14 @@ Deno.serve(async (req) => {
         error: r.ok ? null : mask(r.text),
       });
     }
+    ok = true;
     return jsonResponse({ ok: true, ...out }, rid);
   } catch (e) {
     log.warn("probe failed", { code: e instanceof Error ? e.name : "unknown" });
     return errorResponse(e, rid);
+  } finally {
+    // the run opened by ops.call_function is closed (2026-11-27: open runs re-raised job_not_finished for a day)
+    const run = authed ? jobRunId(req) : null;
+    if (run && rpc) await rpc.call("job_finish", { p_run: run, p_ok: ok, p_stats: {}, p_error: ok ? null : "probe_failed" }).catch(() => {});
   }
 });

@@ -60,6 +60,7 @@
 | `ops-watchdog` | כל 10 דק' | `select ops.watchdog()` |
 | `ops-cleanup` | כל שעה ב-:17 | `ops.cleanup()` לפי מדיניות השימור |
 | `cma-freshness-monthly` | 12 בחודש 04:30 | `content.cma_check_freshness()` |
+| `sms-health-hourly` | כל שעה ב-:41 | `select ops.call_function('sms-health')`: בדיקת יתרה ב-Micropay, בלי שליחה (`20261128120000`) |
 
 כל עוד `ops.config` מכיל `edge_cron_enabled=false` (המצב היום), `ops.call_function` לא קוראת לשום פונקציה ולא רושמת `job_runs`. ה-watchdog וה-cleanup כן רצים.
 
@@ -116,6 +117,8 @@
 - `ok=false` עם `error`: הסיבה בקוד קצר בלבד. בצעדי ה-watchdog נרשם רק SQLSTATE, בלי טקסט (כדי לא לשאת ערכים).
 - `stats` של `cma-refresh`: כולל `upserted`, `hidden`, ולפעמים `collisions`, `unmapped_companies`, `unmapped_funds`.
 - `notify-worker` עם `error='resend_not_configured'`: חסר `RESEND_API_KEY`.
+- `error='http_timeout'` או `http_<status>`: ה-watchdog סגר ריצה שעברה את התקציב שלה (`ops.job_budget`) והקריאה אליה נכשלה, כך שהפונקציה לא הגיעה אליה. הטיק הבא רץ מחדש. 5 כאלה בשעה מעלים `cron_http_timeouts` (`20261128120000`).
+- ריצה שעברה את התקציב בלי כישלון HTTP מעלה `job_not_finished` פעם אחת ליממה לכל משימה, עם שם המשימה ומספר הריצות (`job_not_finished:<job>`). עד 27.11.2026 כל ריצה כזו התריעה כל שעה במשך יממה.
 
 ### ב.3 `api.health` ו-`degraded`
 
@@ -228,6 +231,7 @@ select at, pk, new_data ->> 'op' as op, new_data ->> 'status' as status from aud
 | Resend | `job_runs` של `notify-worker` עם `resend_not_configured`; שורות outbox עם `last_error` חוזר ומצטברות ל-`dead`; התראת `outbox_dead` | לבדוק את `RESEND_API_KEY` ואת אימות הדומיין של `NOTIFY_FROM` ב-Resend. בלוג: `resend idempotency mismatch; treated as sent` = שורה שסומנה כנשלחה בלי ודאות מסירה |
 | Turnstile | כל ליד מקבל 403 turnstile, או 503 אם הסוד חסר | Cloudflare: הווידג'ט כולל `seeld.co.il` ו-`www`; זוג המפתחות תואם |
 | Gemini | הצ'אט עונה בהודעת "עמוס" או 503 | `GOOGLE_AI_API_KEY` קיים; מכסה ב-Google AI Studio |
+| Micropay | התראה קריטית `sms_unavailable` (עם הקוד, למשל `bad_token`), מ-`sms-health` השעתי או ממסרון כניסה שנכשל; אזהרה `sms_low_credit` מתחת ל-`ops.config sms_low_credit_threshold` (200) | לקוחות לא מקבלים קוד כניסה. לבדוק את `SMS_API_TOKEN` ואת היתרה ב-Micropay, ואז `select ops.call_function('sms-health')` וב-`net._http_response` לראות `ok:true`. המסך ללקוח לא משתנה בזמן התקלה (כדי לא לחשוף מי לקוח) |
 | data.gov.il | `job_runs` של `fetch-cma-data` עם `ok=false` | ריצה חוזרת ידנית (ד.2); `node scripts/tracks/check-tracks-source.mjs 202609` |
 
 ### ב.9 החלת מיגרציה חדשה

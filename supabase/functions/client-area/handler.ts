@@ -21,6 +21,7 @@
 // Errors: {"error": {"code": "<code>", ...}} with codes inactive | unauthenticated | wrong_code (+tries_left) | max_tries |
 // expired | generic | rate_limited | unavailable | harb_invalid (+reason). Never a message, a value or an upstream text.
 // Logs: route, status, codes, ids. Never a body, a phone, a national id, a code, a token or a url.
+import { type Defer, runtimeDefer } from "../_shared/background.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { type FetchFn, type Rpc, RpcError } from "../_shared/db.ts";
 import type { Env } from "../_shared/env.ts";
@@ -146,6 +147,8 @@ export interface ClientAreaDeps {
   now?: () => number;
   /** pause used to pad the login routes (tests inject a spy) */
   wait?: (ms: number) => Promise<void>;
+  /** background work after the answer (EdgeRuntime.waitUntil; tests collect and settle it) */
+  defer?: Defer;
   loginMinMs?: number;
   loginBucketMs?: number;
 }
@@ -260,6 +263,7 @@ const bytea = (hex: string) => `\\x${hex}`;
 export function createClientAreaHandler(d: ClientAreaDeps): (req: Request) => Promise<Response> {
   const now = d.now ?? Date.now;
   const wait = d.wait ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
+  const defer = d.defer ?? runtimeDefer();
   const minMs = d.loginMinMs ?? LOGIN_MIN_MS;
   const bucketMs = Math.max(1, d.loginBucketMs ?? LOGIN_BUCKET_MS);
   const turnstileHosts = hostnamesFromOrigins(d.env.allowedOrigins);
@@ -362,15 +366,16 @@ export function createClientAreaHandler(d: ClientAreaDeps): (req: Request) => Pr
           if (!challengeId) throw new ClientHttpError("unavailable", "db_bad_shape");
           const phone = r?.matched === true ? str(r?.phone) : null;
           if (phone) {
-            const sent = await otpSend({ token: smsToken, fetch: d.fetch }, { phone, type: "sms", ...OTP, sender: d.env.smsSenderId });
-            if (!sent.ok) {
-              // the quota of the validity window is the client's own earlier requests: the answer stays the same (anti-enumeration)
-              if (sent.code === "max_sent") log.info("otp quota reached", { challenge: challengeId });
-              else {
-                log.error("otp send failed", { challenge: challengeId, code: sent.code, status: sent.status });
-                throw new ClientHttpError("unavailable", `sms_${sent.code}`);
-              }
-            } else log.info("otp sent", { challenge: challengeId, channel: sent.data.channel });
+            // the SMS goes out after the answer (2026-11-27 review): a hit and a miss answer alike in content and in time, even
+            // while the provider is slow or down. A failure reaches staff through api.sms_report (critical sms_unavailable).
+            defer((async () => {
+              const sent = await otpSend({ token: smsToken, fetch: d.fetch }, { phone, type: "sms", ...OTP, sender: d.env.smsSenderId });
+              if (sent.ok) return log.info("otp sent", { challenge: challengeId, channel: sent.data.channel });
+              // the quota of the validity window is the client's own earlier requests, not a provider failure
+              if (sent.code === "max_sent") return log.info("otp quota reached", { challenge: challengeId });
+              log.error("otp send failed", { challenge: challengeId, code: sent.code, status: sent.status });
+              await rpc.call("sms_report", { p_ok: false, p_code: sent.code, p_credit: null });
+            })().catch((e) => log.error("otp send crashed", { challenge: challengeId, error: e instanceof Error ? e.name : "unknown" })));
           } else log.info("login start without a match", { challenge: challengeId });
           return json({ challenge_id: challengeId, phone_tail: tail, expires_in_sec: typeof r?.expires_in_sec === "number" ? r.expires_in_sec : 600 });
         });
@@ -391,15 +396,17 @@ export function createClientAreaHandler(d: ClientAreaDeps): (req: Request) => Pr
         return await padded(async () => {
           const use = await rpc.call<Record<string, unknown>>("client_login_challenge_use", { p_challenge: parsed.challengeId });
           if (use?.status === "failed") throw new ClientHttpError("max_tries", "challenge_locked");
+          // one count for a hit and a miss (2026-11-27 review: a miss showed 10 - n and a hit the provider's 5 - n, which told
+          // who is a client): this attempt is number `attempts` of the challenge, OTP.maxTries are allowed, then max_tries
+          const attempts = typeof use?.attempts === "number" ? use.attempts : null;
+          if (attempts !== null && attempts > OTP.maxTries) throw new ClientHttpError("max_tries", "challenge_tries");
+          const left = attempts === null ? undefined : { tries_left: Math.max(0, OTP.maxTries - attempts) };
           const phone = use?.matched === true ? str(use?.phone) : null;
-          if (!phone) {
-            // no customer behind this challenge: a wrong code, as far as the visitor can tell
-            const left = typeof use?.attempts === "number" ? Math.max(0, 10 - use.attempts) : undefined;
-            throw new ClientHttpError("wrong_code", "no_match", { extra: left === undefined ? undefined : { tries_left: left } });
-          }
+          // no customer behind this challenge: a wrong code, as far as the visitor can tell
+          if (!phone) throw new ClientHttpError("wrong_code", "no_match", { extra: left });
           const v = await otpVerify({ token: smsToken, fetch: d.fetch }, { phone, code: parsed.code });
           if (!v.ok) {
-            if (v.code === "wrong_code") throw new ClientHttpError("wrong_code", "provider_wrong_code", { extra: v.triesLeft === undefined ? undefined : { tries_left: v.triesLeft } });
+            if (v.code === "wrong_code") throw new ClientHttpError("wrong_code", "provider_wrong_code", { extra: left });
             if (v.code === "max_tries") throw new ClientHttpError("max_tries", "provider_max_tries");
             log.error("otp verify failed", { challenge: parsed.challengeId, code: v.code, status: v.status });
             throw new ClientHttpError("unavailable", `sms_${v.code}`);
