@@ -121,6 +121,14 @@ export function mapDocument(d: SurenseDocument): DocumentRow {
   };
 }
 
+/** "מסלקה_פנסיונית" (enum) or {code, description: "מסלקה פנסיונית"} -> "מסלקה_פנסיונית" */
+export function productSource(v: unknown): string | null {
+  const s = label(v, 40);
+  if (s) return s;
+  const d = v && typeof v === "object" ? label((v as { description?: unknown }).description, 40) : null;
+  return d ? d.replace(/\s+/g, "_") : null;
+}
+
 export function mapProduct(p: PortfolioProduct, customerId: string): ProductRow {
   const id = uuid(p.id);
   if (!id) throw new InputError("bad_product_id");
@@ -129,10 +137,11 @@ export function mapProduct(p: PortfolioProduct, customerId: string): ProductRow 
   return {
     surense_id: id,
     customer_surense_id: uuid(p.customerId) ?? uuid(customerId),
-    source: label(p.source, 40),
+    source: productSource(p.source),
     company_id: int(p.companyId),
     product_id: int(p.productId),
-    product_type: int(p.type),
+    // live answers carry type / source as objects ({code, description, ...}), not the integer / enum the OpenAPI promises
+    product_type: code(p.type),
     hidden: bool(p.hidden),
     surense_modified_at: ts(p.lastModifiedDate),
     details: rest(p as Record<string, unknown>, used), // policy number, balances, coverages: encrypted

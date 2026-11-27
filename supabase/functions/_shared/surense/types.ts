@@ -200,10 +200,12 @@ export interface PortfolioProduct {
   id: Uuid;
   customerId?: Uuid;
   hidden?: boolean;
-  source?: string;
+  /** the OpenAPI says an enum string; live answers carry {code, description} */
+  source?: string | { code?: number; description?: string };
   companyId?: number;
   productId?: number;
-  type?: number;
+  /** the OpenAPI says an integer; live answers carry {code, description, ...} */
+  type?: number | { code?: number; description?: string };
   lastModifiedDate?: string;
   [personal: string]: unknown;
 }

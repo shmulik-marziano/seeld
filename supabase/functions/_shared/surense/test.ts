@@ -362,6 +362,17 @@ Deno.test("mirror: document and product rows keep names, notes and policy number
   noPiiIn(prod, PRODUCT_INDEX_KEYS);
   assert.equal(prod.customer_surense_id, CID);
   assert.equal((prod.details as Record<string, unknown>).accountPolicyNumber, "999999");
+  assert.equal(prod.product_type, 1);
+  assert.equal(prod.source, "מסלקה_פנסיונית");
+});
+
+Deno.test("mirror: product type and source as live objects ({code, description}) still reach their columns", () => {
+  const prod = mapProduct({ id: EVT, source: { code: 3, description: "פרודוקציה פרט" }, companyId: 12,
+    type: { code: 12, description: "ביטוח בריאות" }, hidden: false }, CID);
+  assert.equal(prod.product_type, 12);
+  assert.equal(prod.source, "פרודוקציה_פרט");
+  assert.equal("type" in (prod.details as Record<string, unknown>), false, "type stays a column, not a detail");
+  assert.equal(mapProduct({ id: EVT, type: { description: "x" } }, CID).product_type, null);
 });
 
 // ---------------------------------------------------------------- event routing

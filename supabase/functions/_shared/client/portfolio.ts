@@ -94,7 +94,40 @@ export interface ShapedProduct {
   start?: string;
   end?: string;
   track?: string;
+  /** the status code keeps the product (or its cover) alive: פעיל, ריסק זמני, שמירת כיסוי */
+  active?: boolean;
+  /** percent, as the fund reported it (fraction x 100); left out when implausible */
+  ytd_return_pct?: number;
+  fee_balance_pct?: number;
+  fee_deposit_pct?: number;
+  /** "YYYY-MM" of the latest deposit */
+  last_deposit?: string;
+  /** names of the live covers (coverTypeDescription), for the policy card */
+  covers?: string[];
+  /** which protection tiles this live product proves (see PROTECTION_KEYS) */
+  protects?: ProtectionKey[];
 }
+
+/** the protection tiles of the home screen; a tile is "exists" only when a live product proves it */
+export const PROTECTION_KEYS = ["health", "nursing", "life", "disability", "accidents", "critical", "home", "car"] as const;
+export type ProtectionKey = (typeof PROTECTION_KEYS)[number];
+const PROTECT_BY_TYPE: Record<number, ProtectionKey> = {
+  12: "health", 23: "health", 11: "nursing", 38: "nursing", 13: "life", 36: "life", 15: "disability", 22: "disability",
+  32: "accidents", 33: "accidents", 21: "critical", 10: "home", 24: "home", 25: "home", 26: "home",
+  9: "car", 28: "car", 29: "car", 30: "car", 31: "car",
+};
+const PROTECT_BOTH: Record<number, ProtectionKey[]> = { 17: ["life", "disability"], 39: ["life", "disability"] };
+/** Surense coverType codes -> tile (live list 2026-11-27: 19 life, 11/10/15/55/12 health, 8 nursing, 17/21/34 accidents,
+ *  18 critical illness, 35/23 disability) */
+const PROTECT_BY_COVER: Record<number, ProtectionKey> = {
+  19: "life", 11: "health", 10: "health", 15: "health", 55: "health", 12: "health", 8: "nursing",
+  17: "accidents", 21: "accidents", 34: "accidents", 18: "critical", 35: "disability", 23: "disability",
+};
+/** a mortgage life policy covers the bank, not the family: it never lights the life tile */
+const MORTGAGE_LIFE = 14;
+const ACTIVE_CODES = new Set([1, 4, 7, 8]);
+const ACTIVE_NAMES = new Set(["פעיל", "ריסק זמני", "ריסק זמני אוטומטי", "שמירת כיסוי ביטוחי"]);
+const GENERIC_COVERS = new Set(["פוליסה", "אחר"]);
 
 export interface ShapedCategory {
   key: CategoryKey;
@@ -123,11 +156,30 @@ export function companyLabel(details: Record<string, unknown>, companyId: number
   return companyId !== null ? `חברה ${companyId}` : "חברה";
 }
 
+const obj = (v: unknown): Record<string, unknown> => (v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : {});
+/** a Surense enum that arrives as a string or as {code, description, shortDescription} */
+function enumText(v: unknown, max = 40): string | undefined {
+  return text(v, max)?.replace(/_/g, " ") ?? text(obj(v).shortDescription, max) ?? text(obj(v).description, max);
+}
+const pct = (v: unknown, bound: number): number | undefined => {
+  const n = typeof v === "number" && Number.isFinite(v) ? v : undefined;
+  return n !== undefined && Math.abs(n) <= bound ? Math.round(n * 10000) / 100 : undefined;
+};
+const MONTH = /^(\d{4})-(\d{2})/;
+
+export function isActiveStatus(v: unknown): boolean {
+  const c = obj(v).code;
+  if (typeof c === "number") return ACTIVE_CODES.has(c);
+  const t = enumText(v);
+  return t !== undefined && ACTIVE_NAMES.has(t);
+}
+
 export function shapeProduct(p: MirrorProduct): ShapedProduct {
   const d = p.details ?? {};
-  const type = typeof d.type === "number" ? d.type : p.product_type;
+  const type = typeof d.type === "number" ? d.type : typeof obj(d.type).code === "number" ? (obj(d.type).code as number) : p.product_type;
   const covers = Array.isArray(d.covers) ? (d.covers as Record<string, unknown>[]) : [];
   const cover0 = covers.find((c) => c && typeof c === "object") ?? {};
+  const liveCovers = covers.filter((c) => c && typeof c === "object" && c.expired !== true);
   const tracks = Array.isArray(d.masluleiAshkaa) ? (d.masluleiAshkaa as Record<string, unknown>[]) : [];
   const track = tracks.length ? text(tracks[0]?.shemMaslul) ?? text(tracks[0]?.name) ?? text(tracks[0]?.maslul) : undefined;
   const out: ShapedProduct = {
@@ -137,7 +189,8 @@ export function shapeProduct(p: MirrorProduct): ShapedProduct {
     company_label: companyLabel(d, p.company_id),
     policy_number_masked: maskPolicyNumber(d.accountPolicyNumber),
     source: (p.source && SOURCE_CODE[p.source]) || "other",
-    status: text(d.status, 40) ?? null,
+    status: enumText(d.status) ?? null,
+    active: isActiveStatus(d.status),
   };
   const plan = text(d.shemTohnit);
   if (plan) out.plan = plan;
@@ -147,8 +200,33 @@ export function shapeProduct(p: MirrorProduct): ShapedProduct {
   if (balance !== undefined) out.balance = balance;
   const premium = num(d.totalMonthlyPremia) ?? num(d.totalPremia) ?? num(cover0.premia);
   if (premium !== undefined) out.premium = premium;
-  const freq = text(d.totalPremiaFrequency, 20) ?? text(cover0.premiaFrequency, 20);
+  const freq = enumText(d.totalPremiaFrequency, 20) ?? enumText(cover0.premiaFrequency, 20);
   if (freq) out.premium_frequency = freq;
+  // fractions in the source (0.005 = 0.5%); a value outside the bound is a data error and is left out
+  const ytd = pct(d.netReturnPercentStartYear, 0.5);
+  if (ytd !== undefined) out.ytd_return_pct = ytd;
+  const feeBal = pct(d.accumulationFee, 0.05);
+  if (feeBal !== undefined) out.fee_balance_pct = feeBal;
+  const feeDep = pct(d.depositFee, 0.1);
+  if (feeDep !== undefined) out.fee_deposit_pct = feeDep;
+  const deposits = Array.isArray(obj(d.lastDeposit).hafkadot) ? (obj(d.lastDeposit).hafkadot as unknown[]) : [];
+  const months = deposits.map((h) => obj(h).month).filter((m): m is string => typeof m === "string" && MONTH.test(m))
+    .map((m) => MONTH.exec(m)!.slice(1, 3).join("-")).sort();
+  if (months.length) out.last_deposit = months[months.length - 1];
+  const names = [...new Set(liveCovers.map((c) => text(c.coverTypeDescription, 40)).filter((x): x is string => !!x && !GENERIC_COVERS.has(x)))];
+  if (names.length) out.covers = names.slice(0, 8);
+  if (out.active) {
+    const prot = new Set<ProtectionKey>();
+    if (type !== null && PROTECT_BY_TYPE[type]) prot.add(PROTECT_BY_TYPE[type]);
+    if (type !== null && PROTECT_BOTH[type]) PROTECT_BOTH[type].forEach((k) => prot.add(k));
+    if (type !== MORTGAGE_LIFE) {
+      for (const c of liveCovers) {
+        const k = PROTECT_BY_COVER[Number(c.coverType)];
+        if (k) prot.add(k);
+      }
+    }
+    if (prot.size) out.protects = PROTECTION_KEYS.filter((k) => prot.has(k));
+  }
   const coverage = num(d.shumBituahLeMikreMavet) ?? num(cover0.insuranceAmount);
   if (coverage !== undefined) out.coverage = coverage;
   const start = date(d.subscriptionDate) ?? date(d.initialSubscriptionDate) ?? date(cover0.insurancePeriodStart);

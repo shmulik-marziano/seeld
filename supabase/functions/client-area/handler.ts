@@ -13,6 +13,10 @@
 //   POST /harb               {bytes_base64}: the client's Har HaBituach export (.xlsx). Checked here (ZIP, caps, layout, one
 //                            id in column A), the id compared with the client's in SQL (hmac), stored privately, queued
 //                            for Surense when surense_harb_import_enabled is on -> {document_id, duplicate, queued}
+//   GET  /requests           {enabled, requests:[{id, topic, message, contact, created_at, status received|done}]} (switch
+//                            client_area_requests_enabled; off = {enabled:false, requests:[]})
+//   POST /requests           {topic insurance|savings|details|other, message?, contact phone|whatsapp|email} -> 201 {id,
+//                            created_at}: a crm.leads row for the right desk (the lead.created e-mail goes out as for any lead)
 //   POST /logout
 // Errors: {"error": {"code": "<code>", ...}} with codes inactive | unauthenticated | wrong_code (+tries_left) | max_tries |
 // expired | generic | rate_limited | unavailable | harb_invalid (+reason). Never a message, a value or an upstream text.
@@ -147,7 +151,7 @@ export interface ClientAreaDeps {
 }
 
 type Route =
-  | { name: "login_start" | "login_verify" | "me" | "portfolio" | "documents" | "logout" | "harb_status" | "harb_upload" }
+  | { name: "login_start" | "login_verify" | "me" | "portfolio" | "documents" | "logout" | "harb_status" | "harb_upload" | "requests_list" | "request_create" }
   | { name: "document"; id: string };
 
 /** "/functions/v1/client-area/documents/<uuid>" -> {name:"document", id}; null when not a route */
@@ -166,7 +170,27 @@ export function parseRoute(method: string, pathname: string): Route | "method" |
   if (rest.length === 1 && rest[0] === "harb") {
     return method === "GET" ? { name: "harb_status" } : method === "POST" ? { name: "harb_upload" } : "method";
   }
+  if (rest.length === 1 && rest[0] === "requests") {
+    return method === "GET" ? { name: "requests_list" } : method === "POST" ? { name: "request_create" } : "method";
+  }
   return null;
+}
+
+/** the request sheet's choices (the database maps a topic to the desk) */
+export const REQUEST_TOPICS = ["insurance", "savings", "details", "other"] as const;
+export const REQUEST_CONTACTS = ["phone", "whatsapp", "email"] as const;
+export const REQUEST_MESSAGE_MAX = 1000;
+
+/** pure: POST /requests body -> RPC arguments; anything else is invalid_input */
+export function parseRequestCreate(b: Record<string, unknown>): { topic: string; message: string | null; contact: string } {
+  onlyKeys(b, ["topic", "message", "contact"]);
+  const topic = b.topic, contact = b.contact, message = b.message ?? null;
+  if (typeof topic !== "string" || !(REQUEST_TOPICS as readonly string[]).includes(topic)) throw bad("invalid_input:topic", 400);
+  if (typeof contact !== "string" || !(REQUEST_CONTACTS as readonly string[]).includes(contact)) throw bad("invalid_input:contact", 400);
+  if (message !== null && typeof message !== "string") throw bad("invalid_input:message", 400);
+  const m = typeof message === "string" ? message.trim() : "";
+  if (m.length > REQUEST_MESSAGE_MAX) throw bad("invalid_input:message", 400);
+  return { topic, message: m || null, contact };
 }
 
 /** pure: POST /harb body -> the file bytes (base64 decoded; size and shape only, the content is checked by inspectHarbXlsx) */
@@ -516,6 +540,25 @@ export function createClientAreaHandler(d: ClientAreaDeps): (req: Request) => Pr
         const stored = (await rpc.call<Record<string, unknown>>("client_harb_stored", { p_token_hash: tokenHash, p_document: docId, p_path: path })) ?? {};
         log.info("harb file stored", { document: docId, rows, queued: stored.queued === true });
         return json({ document_id: docId, duplicate: false, queued: stored.queued === true });
+      }
+      // ------------------------------------------------------------------ requests to the agent ("פנייה לסוכן")
+      if (route.name === "requests_list") {
+        const r = (await rpc.call<Record<string, unknown>>("client_requests_list", { p_token_hash: tokenHash })) ?? {};
+        const rows = (Array.isArray(r.requests) ? (r.requests as unknown[]) : []).filter(isObj).map((x) => ({
+          id: str(x.id) ?? "", topic: str(x.topic) ?? "other", message: str(x.message), contact: str(x.contact),
+          created_at: str(x.created_at), status: x.status === "done" ? "done" : "received",
+        })).filter((x) => UUID.test(x.id));
+        return json({ enabled: r.enabled === true, requests: rows });
+      }
+      if (route.name === "request_create") {
+        const a = parseRequestCreate(await readJson(req, MAX_BODY_BYTES));
+        const r = (await rpc.call<Record<string, unknown>>("client_request_create", {
+          p_token_hash: tokenHash, p_topic: a.topic, p_message: a.message, p_contact: a.contact,
+        })) ?? {};
+        const id = str(r.id);
+        if (!id || !UUID.test(id)) throw new ClientHttpError("unavailable", "db_bad_shape");
+        log.info("client request created", { lead: id, topic: a.topic });
+        return json({ id, created_at: str(r.created_at) }, 201);
       }
       throw bad("no_route", 404);
     } catch (e) {

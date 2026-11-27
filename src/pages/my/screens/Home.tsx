@@ -1,52 +1,123 @@
-// Home (spec ס3): greeting, the data date, the portfolio at a glance (count per category) and the two ways onward.
-// Below it the Har HaBituach card (spec ס7), shown only while the server switch is on.
-import { useEffect, useRef } from "react";
+// Home (spec ס3): the total of the savings with its split, what the client pays for insurance, the protection tiles, at most
+// three plain notices (each with one action), and the request card. Everything comes from GET /portfolio (shell context);
+// nothing here is computed beyond sums of reported figures (lib/client-area/overview.ts).
+import { useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
 import { BrandIcon } from "@/components/brand/BrandIcon";
+import { CaError, CaLoading } from "@/components/sd/client";
 import { ContactIcons } from "@/components/sd/ContactIcons";
-import { MY_COPY as C } from "@/lib/client-area/copy";
 import { MY_ROUTE } from "@/lib/client-area/config";
-import type { ClientApi, MeRes } from "@/lib/client-area/api";
-import { MyCard, dateHe } from "../parts";
-import { HarbCard } from "./HarbCard";
+import { MY_COPY as C } from "@/lib/client-area/copy";
+import { buildOverview, frequencyOf } from "@/lib/client-area/overview";
+import { useArea } from "../context";
+import { amountOf, dateHe } from "../parts";
 
-export function Home({ me, api, onAuthLost }: { me: MeRes; api?: ClientApi; onAuthLost?: () => void }) {
+const SPLIT_COLOR: Record<string, string> = { pension: "#C9DBC4", hishtalmut: "#D7B77A", gemel: "#8FA6C4", savings: "#E7D3B0" };
+
+export function Home() {
+  const { me, portfolio, reloadPortfolio, hidden, toggleHidden, requestsEnabled, openRequest } = useArea();
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => { heading.current?.focus(); }, []);
-  const cats = me.summary.categories.filter((c) => c.count > 0);
+  const asOf = portfolio.state === "ok" ? portfolio.data.as_of : me.data_as_of;
+  const ov = useMemo(() => (portfolio.state === "ok" ? buildOverview(portfolio.data.categories, new Date()) : null), [portfolio]);
+
   return (
-    <>
-      <MyCard id="my-home" title={C.home.title(me.client.first_name)} headingRef={heading}>
-        <p className="sd-q-hint">{C.home.lead}</p>
-        {me.data_as_of && <p className="sd-my-asof">{C.home.asOf(dateHe(me.data_as_of))}</p>}
-        {me.summary.products === 0 ? (
-          <p className="sd-my-empty">{C.home.noData}</p>
-        ) : (
-          <>
-            <h3 className="sd-my-h3">{C.home.summaryTitle} <span className="sd-my-count">{C.home.productsCount(me.summary.products)}</span></h3>
-            <ul className="sd-my-tiles">
-              {cats.map((c) => (
-                <li key={c.key}>
-                  <Link to={`${MY_ROUTE}/portfolio#${c.key}`} className="sd-my-tile">
-                    <span className="sd-my-tile-n">{c.count}</span>
-                    <span className="sd-my-tile-l">{C.portfolio.categories[c.key] ?? c.label}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-        <div className="sd-my-actions">
-          <Link to={`${MY_ROUTE}/portfolio`} className="sd-q-btn">{C.home.cta}<BrandIcon name="arrow-left" size={18} /></Link>
-          <Link to={`${MY_ROUTE}/documents`} className="sd-q-btn is-quiet">{C.home.docsCta}</Link>
+    <div className="ma-stack">
+      <div className="ma-greet">
+        <h2 ref={heading} tabIndex={-1} className="ma-h1">{C.home.title(me.client.first_name)}</h2>
+        {asOf && <p className="ma-muted">{C.home.asOf(dateHe(asOf))}</p>}
+      </div>
+
+      {portfolio.state === "loading" && <CaLoading label={C.common.loading} tone="sage" />}
+      {portfolio.state === "error" && <CaError title={portfolio.text} onRetry={reloadPortfolio} actionLabel={C.errors.retry} />}
+      {ov && !ov.hasData && <p className="sd-my-empty">{C.home.noData}</p>}
+
+      {ov && ov.savingsTotal > 0 && (
+        <section className="ma-hero" aria-label={C.home.savingsTotal}>
+          <div className="ma-hero-top">
+            <div>
+              <p className="ma-hero-label">{C.home.savingsTotal}</p>
+              <p className="ma-hero-num">{amountOf(ov.savingsTotal, hidden)}</p>
+            </div>
+            <button type="button" className="ma-eye" onClick={toggleHidden} aria-pressed={hidden} aria-label={hidden ? C.common.showAmounts : C.common.hideAmounts}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" /></svg>
+            </button>
+          </div>
+          <div className="ma-bar" role="img" aria-label={ov.split.map((s) => `${C.savings.filters[s.key] ?? ""} ${s.pct}%`).join(", ")}>
+            {ov.split.map((s) => <span key={s.key} style={{ width: `${Math.max(s.pct, 2)}%`, background: SPLIT_COLOR[s.key] }} />)}
+          </div>
+          <ul className="ma-legend">
+            {ov.split.map((s) => (
+              <li key={s.key}><span><i style={{ background: SPLIT_COLOR[s.key] }} />{C.savings.filters[s.key]}</span><b>{amountOf(s.amount, hidden)}</b></li>
+            ))}
+          </ul>
+          <Link to={`${MY_ROUTE}/savings`} className="ma-hero-link">{C.home.toSavings}<BrandIcon name="arrow-left" size={16} /></Link>
+        </section>
+      )}
+
+      {ov && ov.hasData && (
+        <div className="ma-pair">
+          <Link to={`${MY_ROUTE}/insurance`} className="ma-tile">
+            <span className="ma-tile-k">{C.home.paysTitle}</span>
+            <span className="ma-tile-n">{amountOf(ov.monthlyPremium, hidden)}</span>
+            <span className="ma-tile-k">{C.home.perMonth}{ov.yearlyPremium > 0 ? ` · ${C.home.plusYearly(amountOf(ov.yearlyPremium, hidden))}` : ""}</span>
+          </Link>
+          <Link to={`${MY_ROUTE}/savings`} className="ma-tile">
+            <span className="ma-tile-k">{C.home.savingsTile}</span>
+            <span className="ma-tile-n">{C.home.activeCount(ov.savingsActive)}</span>
+            <span className="ma-tile-k">{C.home.ofProducts(ov.savingsCount)}</span>
+          </Link>
         </div>
-        <div className="sd-my-contact">
-          <p className="sd-q-sublabel">{C.common.contact}</p>
-          <ContactIcons dept="general" tone="dark" />
+      )}
+
+      {ov && ov.hasData && (
+        <section className="ma-card" aria-labelledby="ma-prot-h">
+          <h3 id="ma-prot-h" className="ma-h2">{C.home.protectionsTitle}</h3>
+          <ul className="ma-prot">
+            {ov.protections.map((p) => (
+              <li key={p.key}><span>{C.protections[p.key]}</span><b className={p.exists ? "ma-pill is-ok" : "ma-pill"}>{p.exists ? C.home.exists : C.home.missing}</b></li>
+            ))}
+          </ul>
+          <p className="ma-fine">{C.home.protectionsNote}</p>
+        </section>
+      )}
+
+      {ov && ov.notices.length > 0 && (
+        <section className="ma-stack-s" aria-labelledby="ma-notes-h">
+          <h3 id="ma-notes-h" className="ma-h2">{C.home.noticesTitle}</h3>
+          {ov.notices.map((n) => n.kind === "ending" ? (
+            <article key={n.product.id} className="ma-note">
+              <span className="ma-note-ic is-gold" aria-hidden="true"><BrandIcon name="calendar" size={20} /></span>
+              <div className="ma-note-body">
+                <h4>{C.home.ending(n.product.type_label, dateHe(n.product.end))}</h4>
+                <p>{n.product.company_label}{typeof n.product.premium === "number" ? ` · ${amountOf(n.product.premium, hidden)} ${C.insurance.per[frequencyOf(n.product)]}` : ""}. {C.home.endingText}</p>
+                {requestsEnabled && <button type="button" className="ma-btn is-line is-s" onClick={() => openRequest("insurance")}>{C.home.askCta}</button>}
+              </div>
+            </article>
+          ) : (
+            <article key="inactive" className="ma-note">
+              <span className="ma-note-ic" aria-hidden="true"><BrandIcon name="folder" size={20} /></span>
+              <div className="ma-note-body">
+                <h4>{C.home.inactiveEmpty(n.count)}</h4>
+                <p>{C.home.inactiveEmptyText}</p>
+                <Link to={`${MY_ROUTE}/savings?f=gemel`} className="ma-btn is-line is-s">{C.home.view}</Link>
+              </div>
+            </article>
+          ))}
+        </section>
+      )}
+
+      <section className="ma-ask" aria-labelledby="ma-ask-h">
+        <div>
+          <h3 id="ma-ask-h" className="ma-h3">{C.home.askTitle}</h3>
+          <p>{C.home.askText}</p>
         </div>
-        <p className="sd-q-fine">{C.home.sessionLine(dateHe(me.session.expires_at))}</p>
-      </MyCard>
-      {api && onAuthLost && <HarbCard api={api} onAuthLost={onAuthLost} />}
-    </>
+        {requestsEnabled
+          ? <button type="button" className="ma-btn" onClick={() => openRequest(null)}>{C.home.askCta}</button>
+          : requestsEnabled === false && <ContactIcons dept="general" tone="dark" />}
+      </section>
+
+      <p className="ma-disclaimer">{C.home.disclaimer}</p>
+    </div>
   );
 }
